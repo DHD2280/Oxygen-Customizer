@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="fill_horizontal|center" android:id="@android:id/background">
+        <shape android:tint="#ff282c33">
+            <solid android:color="#ffffffff" />
+            <size android:height="40.0dip" />
+            <corners android:radius="12.0dip" />
+        </shape>
+    </item>
+    <item android:gravity="fill_horizontal|center" android:id="@android:id/progress">
+        <clip>
+            <!-- Utilizziamo una forma rettangolare per rappresentare la barra di progresso -->
+            <shape android:shape="rectangle">
+                <solid android:color="?colorPrimary"/> <!-- Cambia questo colore con quello desiderato -->
+                <corners android:radius="12.0dip" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

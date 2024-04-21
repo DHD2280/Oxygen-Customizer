@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:autoMirrored="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:priv-android="http://schemas.android.com/apk/prv/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#ffffffff" />
+            <corners android:radius="12.0dip" />
+            <gradient android:startColor="#ff335dff" android:endColor="#ff577aff" android:angle="0.0" />
+        </shape>
+    </item>
+</layer-list>

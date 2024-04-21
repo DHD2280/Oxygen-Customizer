@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="quick_settings_tiles_customize"
+        android:title="@string/quick_settings_tiles_main"
+        android:summaryOn="@string/general_on"
+        android:summaryOff="@string/general_off"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="quick_settings_quick_tiles"
+        android:title="@string/quick_settings_tiles_qqs"
+        app:defaultValue="5"
+        app:iconSpaceReserved="false"
+        app:maxVal="6"
+        app:minVal="1"
+        app:tickInterval="1" />
+
+    <PreferenceCategory
+        android:title="@string/quick_settings_tiles_portrait"
+        android:key="qs_tile_potrait"
+        search:ignore="true"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="quick_settings_tiles_rows"
+            android:title="@string/quick_settings_tiles_horizontal_rows"
+            app:defaultValue="3"
+            app:iconSpaceReserved="false"
+            app:maxVal="6"
+            app:minVal="1" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="quick_settings_tiles_horizontal_columns"
+            android:title="@string/quick_settings_tiles_horizontal_columns"
+            app:defaultValue="4"
+            app:iconSpaceReserved="false"
+            app:maxVal="7"
+            app:minVal="1"
+            app:tickInterval="1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/quick_settings_tiles_landscape"
+        android:key="qs_tile_landscape"
+        search:ignore="true"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="quick_settings_tiles_vertical_columns"
+            android:title="@string/quick_settings_tiles_vertical_columns"
+            app:defaultValue="4"
+            app:iconSpaceReserved="false"
+            app:maxVal="6"
+            app:minVal="1"
+            app:tickInterval="1" />
+
+    </PreferenceCategory>
+
+    <!-- <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="quick_settings_disable_lockscreen"
+        android:title="@string/quick_settings_tiles_disable_qs_title"
+        android:summary="@string/quick_settings_tiles_disable_qs_summary"
+        app:iconSpaceReserved="false" /> -->
+
+</PreferenceScreen>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dip"
+    android:layout_marginTop="6dip"
+    android:layout_marginEnd="6dip"
+    android:layout_marginBottom="6dip"
+    android:layout_weight="1"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        style="?android:attr/textAppearanceListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center" />
+
+    <TextView
+        android:id="@+id/summary"
+        style="?android:attr/textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_widget"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:stepSize="1"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="100" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reset_button"
+            style="@style/MaterialButtonIcon"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_reset"
+            app:iconTint="@drawable/reset_button" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

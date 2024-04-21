@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:paddingStart="6dp"
+    android:paddingEnd="24dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:visibility="gone"
+        app:tint="?attr/colorPrimary" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginVertical="22dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@id/color_widget"
+        android:layout_toEndOf="@id/icon"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="?android:attr/textAppearanceListItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toTopOf="@+id/summary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/summary"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/color_widget"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/preview_color_picker" />
+
+</RelativeLayout>

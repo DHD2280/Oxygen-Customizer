@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/quick_settings_tiles_customize_category_title"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_tile_active_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_active_color_title"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_active_color"
+            android:title="@string/quick_settings_tiles_customize_active_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_tile_inactive_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_inactive_color_title"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_inactive_color"
+            android:title="@string/quick_settings_tiles_customize_inactive_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_tile_disabled_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_disabled_color_title"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_disabled_color"
+            android:title="@string/quick_settings_tiles_customize_disabled_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/quick_settings_tiles_customize_labels">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_hide_labels"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/quick_settings_tiles_customize_hide_labels"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_tile_label_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/quick_settings_tiles_customize_labels_color_switch"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_label"
+            android:title="@string/quick_settings_tiles_customize_labels_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/brightness_slider">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="customize_brightness_slider"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/customize_brightness_slider_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/brightness_slider_style_entries"
+            android:entryValues="@array/brightness_slider_style_values"
+            app:useSimpleSummaryProvider="true"
+            android:key="brightness_slider_progress_color_mode"
+            android:title="@string/brightness_slider_progress_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="brightness_slider_color"
+            android:title="@string/custom_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="brightness_slider_background_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/brightness_slider_background_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="brightness_slider_background_color"
+            android:title="@string/custom_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

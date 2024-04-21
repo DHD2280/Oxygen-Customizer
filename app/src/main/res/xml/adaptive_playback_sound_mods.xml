@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="adaptive_playback_header"
+        app:lottie_rawRes="@raw/lottie_adaptive_playback"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:key="sound_adaptive_playback_main_switch"
+        android:title="@string/adaptive_playback_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.TopIntroPreference
+        android:key="gesture_adaptive_playback_intro_text"
+        android:title="@string/adaptive_playback_intro_text"/>
+
+    <PreferenceCategory
+        android:key="sound_adaptive_playback_category"
+        android:title="@string/adaptive_playback_timeout_title"/>
+
+</PreferenceScreen>

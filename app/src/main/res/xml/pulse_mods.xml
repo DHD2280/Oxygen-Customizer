@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:key="navbar_pulse_enabled"
+        android:title="@string/show_navbar_pulse_title"
+        android:summary="@string/show_navbar_pulse_summary"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:key="lockscreen_pulse_enabled"
+        android:title="@string/show_lockscreen_pulse_title"
+        android:summary="@string/show_lockscreen_pulse_summary"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:key="ambient_pulse_enabled"
+        android:title="@string/show_ambient_pulse_title"
+        android:summary="@string/show_ambient_pulse_summary"/>
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="pulse_render_style"
+        app:useSimpleSummaryProvider="true"
+        android:title="@string/pulse_render_mode_title"
+        android:entries="@array/pulse_render_mode_entries"
+        android:entryValues="@array/pulse_render_mode_values"
+        android:defaultValue="1"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:key="pulse_smoothing_enabled"
+        android:title="@string/pulse_smoothing_enabled_title"
+        android:summary="@string/pulse_smoothing_enabled_summary"
+        android:defaultValue="false"/>
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true"
+        android:key="pulse_color_mode"
+        android:title="@string/pulse_color_mode_title"
+        android:entries="@array/pulse_color_mode_entries"
+        android:entryValues="@array/pulse_color_mode_values"
+        android:defaultValue="2"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="pulse_color_user"
+        app:iconSpaceReserved="false"
+        android:title="@string/pulse_color_user_title"
+        app:cpv_showAlphaSlider="true"
+        android:defaultValue="0x92FFFFFF"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="pulse_lavalamp_speed"
+        android:title="@string/pulse_lavalamp_speed_title"
+        app:defaultValue="10000"
+        app:maxVal="30000"
+        app:minVal="200"
+        app:tickInterval="200" />
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="pulse_fading_bars_category"
+        android:title="@string/pulse_legacy_mode_advanced_category">
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_custom_dimen"
+            android:title="@string/pulse_custom_dimen"
+            app:defaultValue="14"
+            app:maxVal="30"
+            app:minVal="1"
+            android:dependency="pulse_fading_bars_category"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_custom_div"
+            android:title="@string/pulse_custom_div"
+            app:defaultValue="16"
+            app:maxVal="44"
+            app:minVal="2"
+            app:tickInterval="2"
+            android:dependency="pulse_fading_bars_category"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_filled_block_size"
+            android:title="@string/pulse_filled_block_size"
+            app:defaultValue="4"
+            app:maxVal="8"
+            app:minVal="4"
+            android:dependency="pulse_fading_bars_category"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_empty_block_size"
+            android:title="@string/pulse_empty_block_size"
+            app:defaultValue="1"
+            app:maxVal="4"
+            app:minVal="0"
+            android:dependency="pulse_fading_bars_category"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_custom_fudge_factor"
+            android:title="@string/pulse_custom_fudge_factor"
+            app:defaultValue="4"
+            app:maxVal="6"
+            app:minVal="2"
+            android:dependency="pulse_fading_bars_category"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="pulse_2"
+        android:title="@string/pulse_solid_dimen_category">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="pulse_solid_units_rounded"
+            android:title="@string/pulse_solid_units_rounded_title"
+            android:summary="@string/pulse_solid_units_rounded_summary"
+            android:defaultValue="false"
+            android:dependency="pulse_2"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_solid_units_opacity"
+            android:title="@string/pulse_solid_units_opacity"
+            app:defaultValue="200"
+            app:maxVal="255"
+            app:minVal="0"
+            android:dependency="pulse_2"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_solid_units_count"
+            android:title="@string/pulse_solid_units_count"
+            app:defaultValue="32"
+            app:maxVal="128"
+            app:minVal="16"
+            app:tickInterval="16"
+            android:dependency="pulse_2"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_solid_fudge_factor"
+            android:title="@string/pulse_custom_fudge_factor"
+            app:defaultValue="4"
+            app:maxVal="6"
+            app:minVal="2"
+            android:dependency="pulse_2"/>
+    </PreferenceCategory>
+
+    <it.dhd.oxygencustomizer.customprefs.FooterPreference
+        android:key="pulse_settings_footer"
+        android:selectable="false"
+        android:title="@string/pulse_help_policy_notice_summary"/>
+</PreferenceScreen>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+
+    <it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference
+        android:key="searchPreference" />
+
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_rawRes="@raw/main" />
+
+    <Preference
+        android:icon="@drawable/ic_statusbar"
+        android:key="statusbar"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar"
+        android:title="@string/statusbar_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_qs"
+        android:key="quick_settings"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings"
+        android:title="@string/quick_settings_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_mods_qs_header"
+        android:key="qs_header"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeader"
+        android:title="@string/qs_header_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_navigationbar"
+        android:key="navbar"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Navigation"
+        android:title="@string/navbar_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_buttons"
+        android:key="buttons"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Buttons"
+        android:title="@string/buttons_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_navbar_home"
+        android:key="launcher"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Launcher"
+        android:title="@string/launcher_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_mods_lockscreen"
+        android:key="lockscreen"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen"
+        android:title="@string/lockscreen_title"
+        search:ignore="true"/>
+
+    <Preference
+        android:icon="@drawable/ic_volume"
+        android:key="sound"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Sound"
+        android:title="@string/sound"
+        search:ignore="true"/>
+
+    <!-- not ready <Preference
+        android:icon="@drawable/ic_mods_package_manager"
+        android:key="package_manager"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$PackageManager"
+        android:title="@string/package_manager"
+        search:ignore="true"/> -->
+
+    <Preference
+        android:icon="@drawable/ic_mods_misc"
+        android:key="misc"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Misc"
+        android:title="@string/misc"
+        search:ignore="true"/>
+
+</PreferenceScreen>

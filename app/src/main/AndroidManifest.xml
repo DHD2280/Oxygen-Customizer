@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <!-- Weather Updater -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- OmniJaws -->
+    <uses-permission android:name="it.dhd.oxygencustomizer.READ_WEATHER" />
+
+    <!-- Auth For Advanced Power Menu -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.permission.GET_INSTALLED_APPS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <application
+        android:name=".OxygenCustomizer"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.OxygenCustomizer" >
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="@string/xposeddescription" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="93" />
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.OxygenCustomizer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.AuthActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Translucent"/>
+
+        <activity
+            android:name=".ui.activity.LocationBrowseActivity"
+            android:exported="true"
+            android:theme="@style/Theme.OxygenCustomizer"/>
+
+        <provider
+            android:name=".xposed.utils.RemotePrefProvider"
+            android:authorities="it.dhd.oxygencustomizer"
+            android:directBootAware="true"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+
+        <service
+            android:name=".weather.WeatherUpdateService"
+            android:exported="true"
+            android:enabled="true"
+            android:foregroundServiceType="location"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <provider
+            android:name=".weather.WeatherContentProvider"
+            android:authorities="it.dhd.oxygencustomizer.provider"
+            android:exported="true" />
+
+        <receiver
+            android:name=".weather.receivers.SystemReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- name is used a prefix +"_" for images e.g. weather_<condition_id>
+             weather_foo_<condition_id> -->
+        <activity
+            android:name=".google"
+            android:exported="false"
+            android:label="Google">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".outline"
+            android:exported="false"
+            android:label="Outline">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_color"
+            android:exported="false"
+            android:label="LockClock">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weatherclient"
+            android:exported="false"
+            android:label="Weather Client" >
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="Stickers"
+            android:name=".stickers"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="Marshmallow"
+            android:name=".marshmallow"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="Color Hand"
+            android:name=".icons8_color_hand"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".weather_faded"
+            android:label="Faded"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_weezle"
+            android:label="Weezle"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_gs6"
+            android:label="Galaxy S6"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_gnw"
+            android:label="Google Now"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_miui"
+            android:label="MIUI"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_sthul"
+            android:label="Sthul"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_tapas"
+            android:label="Tapas"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_magical"
+            android:label="Magical"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,391 @@
+package it.dhd.oxygencustomizer.xposed.utils;
+
+import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
+import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.DownloadManager;
+import android.app.usage.NetworkStatsManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CameraMetadata;
+import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.PowerManager;
+import android.os.SystemClock;
+import android.os.UserManager;
+import android.os.VibrationAttributes;
+import android.os.VibrationEffect;
+import android.os.VibratorManager;
+import android.telephony.TelephonyManager;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.jetbrains.annotations.Contract;
+
+import it.dhd.oxygencustomizer.BuildConfig;
+
+public class SystemUtils {
+    private static final int THREAD_PRIORITY_BACKGROUND = 10;
+    public static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
+    public static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
+    public static final String LENS_URI = "google://lens";
+    public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
+
+    @SuppressLint("StaticFieldLeak")
+    static SystemUtils instance;
+    Context mContext;
+    PackageManager mPackageManager;
+    CameraManager mCameraManager;
+    VibratorManager mVibrationManager;
+    AudioManager mAudioManager;
+    BatteryManager mBatteryManager;
+    PowerManager mPowerManager;
+    ConnectivityManager mConnectivityManager;
+    TelephonyManager mTelephonyManager;
+    AlarmManager mAlarmManager;
+    DownloadManager mDownloadManager = null;
+    NetworkStatsManager mNetworkStatsManager = null;
+    boolean mHasVibrator = false;
+    int maxFlashLevel = -1;
+    static boolean isTorchOn = false;
+
+    //ArrayList<ChangeListener> mFlashlightLevelListeners = new ArrayList<>();
+    //ArrayList<ChangeListener> mVolumeChangeListeners = new ArrayList<>();
+    private WifiManager mWifiManager;
+    private WindowManager mWindowManager;
+    private UserManager mUserManager;
+
+    public static void killSelf()
+    {
+        BootLoopProtector.resetCounter(android.os.Process.myProcessName());
+
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    public static void sleep(int millis)
+    {
+        try {
+            Thread.sleep(millis);
+        } catch (Throwable ignored) {}
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static AudioManager AudioManager() {
+        return instance == null
+                ? null
+                : instance.getAudioManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static BatteryManager BatteryManager() {
+        return instance == null
+                ? null
+                : instance.getBatteryManager();
+    }
+
+    private CameraManager getCameraManager() {
+        if(mCameraManager == null)
+        {
+            try {
+                HandlerThread thread = new HandlerThread("", THREAD_PRIORITY_BACKGROUND);
+                thread.start();
+                Handler mHandler = new Handler(thread.getLooper());
+                mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+
+                mCameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
+                    @Override
+                    public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
+                        super.onTorchModeChanged(cameraId, enabled);
+                        isTorchOn = enabled;
+                    }
+                }, mHandler);
+            } catch (Throwable t) {
+                mCameraManager = null;
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mCameraManager;
+    }
+
+    public SystemUtils(Context context) {
+        mContext = context;
+
+        instance = this;
+    }
+
+    public static boolean isGSAEnabled(Context context) {
+        try {
+            return context.getPackageManager().getApplicationInfo(GSA_PACKAGE, 0).enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private PowerManager getPowerManager() {
+        if(mPowerManager == null)
+        {
+            try {
+                mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("OxygenCustomizer Error getting power manager");
+                    log(t);
+                }
+            }
+        }
+        return mPowerManager;
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static PowerManager PowerManager() {
+        return instance == null
+                ? null
+                : instance.getPowerManager();
+    }
+
+    public static boolean isDarkMode() {
+        return instance != null
+                && instance.getIsDark();
+    }
+
+    private boolean getIsDark() {
+        return (mContext.getResources().getConfiguration().uiMode & UI_MODE_NIGHT_YES) == UI_MODE_NIGHT_YES;
+    }
+
+    public static void sleep() {
+        if (instance != null)
+        {
+            try {
+                callMethod(PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+            } catch (Throwable ignored) {}
+        }
+    }
+
+    static boolean darkSwitching = false;
+
+    public static void doubleToggleDarkMode() {
+        boolean isDark = isDarkMode();
+        new Thread(() -> {
+            try {
+                while (darkSwitching) {
+                    Thread.currentThread().wait(100);
+                }
+                darkSwitching = true;
+
+                ShellUtils.execCommand("cmd uimode night " + (isDark ? "no" : "yes"), false);
+                Thread.sleep(1000);
+                ShellUtils.execCommand("cmd uimode night " + (isDark ? "yes" : "no"), false);
+
+                Thread.sleep(500);
+                darkSwitching = false;
+            } catch (Exception ignored) {
+            }
+        }).start();
+    }
+
+    private AudioManager getAudioManager() {
+        if (mAudioManager == null) {
+            try {
+                mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mAudioManager;
+    }
+
+    private BatteryManager getBatteryManager() {
+        if (mBatteryManager == null) {
+            try {
+                mBatteryManager = (BatteryManager) mContext.getSystemService(Context.BATTERY_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mBatteryManager;
+    }
+
+    private VibratorManager getVibrationManager()
+    {
+        if(mVibrationManager == null)
+        {
+            try {
+                mVibrationManager = (VibratorManager) mContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+                mHasVibrator = mVibrationManager.getDefaultVibrator().hasVibrator();
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("Oxygen Customizer Error getting vibrator");
+                    log(t);
+                }
+            }
+        }
+        return mVibrationManager;
+    }
+
+    private boolean hasVibrator() {
+        return getVibrationManager() != null && mHasVibrator;
+    }
+
+    public static void vibrate(int effect, @Nullable Integer vibrationUsage) {
+        vibrate(VibrationEffect.createPredefined(effect), vibrationUsage);
+    }
+
+    @SuppressLint("MissingPermission")
+    public static void vibrate(VibrationEffect effect, @Nullable Integer vibrationUsage) {
+        if (instance == null || !instance.hasVibrator()) return;
+        try {
+            if(vibrationUsage != null) {
+                instance.getVibrationManager().getDefaultVibrator().vibrate(effect, VibrationAttributes.createForUsage(vibrationUsage));
+            }
+            else
+            {
+                instance.getVibrationManager().getDefaultVibrator().vibrate(effect);
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    public static boolean isFlashOn() {
+        return isTorchOn;
+    }
+
+    public static void toggleFlash() {
+        if (instance != null)
+            instance.toggleFlashInternal();
+    }
+
+    public static void shutdownFlash() {
+        if (instance != null)
+            instance.shutdownFlashInternal();
+    }
+
+    private void shutdownFlashInternal() {
+        setFlashInternal(false);
+    }
+
+    private void toggleFlashInternal() {
+        setFlashInternal(!isTorchOn);
+    }
+
+
+    private boolean supportsFlashLevelsInternal() {
+        if(getCameraManager() == null)
+        {
+            return false;
+        }
+
+        try {
+            String flashID = getFlashID(mCameraManager);
+            if (flashID.equals("")) {
+                return false;
+            }
+            if (maxFlashLevel == -1) {
+                @SuppressWarnings("unchecked")
+                CameraCharacteristics.Key<Integer> FLASH_INFO_STRENGTH_MAXIMUM_LEVEL = (CameraCharacteristics.Key<Integer>) getStaticObjectField(CameraCharacteristics.class, "FLASH_INFO_STRENGTH_MAXIMUM_LEVEL");
+                maxFlashLevel = mCameraManager.getCameraCharacteristics(flashID).get(FLASH_INFO_STRENGTH_MAXIMUM_LEVEL);
+            }
+            return maxFlashLevel > 1;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
+    private void setFlashInternal(boolean enabled) {
+        if(getCameraManager() == null)
+            return;
+
+        try {
+            String flashID = getFlashID(mCameraManager);
+            if (flashID.equals("")) {
+                return;
+            }
+            if (enabled
+                    && Xprefs.getBoolean("leveledFlashTile", false)
+                    && Xprefs.getBoolean("isFlashLevelGlobal", false)
+                    && supportsFlashLevelsInternal()) {
+                float currentPct = Xprefs.getFloat("flashPCT", 0.5f);
+                setFlashInternal(true, currentPct);
+                return;
+            }
+
+            mCameraManager.setTorchMode(flashID, enabled);
+        } catch (Throwable t) {
+            if (BuildConfig.DEBUG) {
+                log("Oxygen Customizer Error in setting flashlight");
+                log(t);
+            }
+        }
+    }
+
+    private void setFlashInternal(boolean enabled, float pct) {
+        if(getCameraManager() == null)
+        {
+            return;
+        }
+
+        try {
+            String flashID = getFlashID(mCameraManager);
+            if (flashID.equals("")) {
+                return;
+            }
+            if (maxFlashLevel == -1) {
+                @SuppressWarnings("unchecked")
+                CameraCharacteristics.Key<Integer> FLASH_INFO_STRENGTH_MAXIMUM_LEVEL = (CameraCharacteristics.Key<Integer>) getStaticObjectField(CameraCharacteristics.class, "FLASH_INFO_STRENGTH_MAXIMUM_LEVEL");
+                maxFlashLevel = mCameraManager.getCameraCharacteristics(flashID).get(FLASH_INFO_STRENGTH_MAXIMUM_LEVEL);
+            }
+            if (enabled) {
+                if (maxFlashLevel > 1) //good news. we can set levels
+                {
+                    callMethod(mCameraManager, "turnOnTorchWithStrengthLevel", flashID, Math.max(Math.round(pct * maxFlashLevel), 1));
+                } else //flash doesn't support levels: go normal
+                {
+                    setFlashInternal(true);
+                }
+            } else {
+                mCameraManager.setTorchMode(flashID, false);
+            }
+        } catch (Throwable t) {
+            if (BuildConfig.DEBUG) {
+                log("Oxygen Customizer Error in setting flashlight");
+                log(t);
+            }
+        }
+    }
+
+
+    private String getFlashID(@NonNull CameraManager cameraManager) throws CameraAccessException {
+        String[] ids = cameraManager.getCameraIdList();
+        for (String id : ids) {
+            if (cameraManager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) == CameraMetadata.LENS_FACING_BACK) {
+                if (cameraManager.getCameraCharacteristics(id).get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
+                    return id;
+                }
+            }
+        }
+        return "";
+    }
+
+}

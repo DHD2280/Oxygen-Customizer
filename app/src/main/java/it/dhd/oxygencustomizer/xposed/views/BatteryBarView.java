@@ -1,0 +1,306 @@
+package it.dhd.oxygencustomizer.xposed.views;
+
+
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.getCurrentLevel;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isCharging;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isFastCharging;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isPowerSaving;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import androidx.core.graphics.ColorUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
+
+public class BatteryBarView extends FrameLayout {
+    private static int[] shadeColors;
+    private final boolean RTL;
+    private static float[] shadeLevels = new float[0];
+    private final ShapeDrawable mDrawable = new ShapeDrawable();
+    FrameLayout maskLayout;
+    private boolean colorful = false;
+    private int alphaPct = 100;
+    private int singleColorTone = Color.WHITE;
+    private boolean isCenterBased = false;
+    private int barHeight = 10;
+    private final ImageView barView;
+    private boolean onTop = true;
+    @SuppressLint("StaticFieldLeak")
+    private static BatteryBarView instance = null;
+    private boolean onlyWhileCharging = false;
+    private boolean mIsEnabled = true;
+    private boolean mIsHidden = false;
+    private static List<Float> batteryLevels = Arrays.asList(20f, 40f);
+    private static int[] batteryColors = new int[]{Color.RED, Color.YELLOW};
+    private static int chargingColor = Color.WHITE;
+    private static int fastChargingColor = Color.WHITE;
+    private static boolean indicateCharging = false;
+    private static boolean indicateFastCharging = false;
+    private static boolean transitColors = false;
+    private static boolean indicatePowerSave = false;
+    private static int powerSaveColor = Color.YELLOW;
+    private static boolean animateCharging = true;
+    private boolean isAnimating = false;
+    // Total animation duration
+    private static final int ANIM_DURATION = 1000; // 5 seconds
+
+    public static void setStaticColor(List<Float> batteryLevels, int[] batteryColors, boolean indicateCharging,
+                                      int chargingColor, boolean indicateFastCharging, int fastChargingColor,
+                                      boolean indicatePowerSave, int powerSaveColor, boolean transitColors) {
+        BatteryBarView.transitColors = transitColors;
+        BatteryBarView.batteryLevels = batteryLevels;
+        BatteryBarView.batteryColors = batteryColors;
+        BatteryBarView.chargingColor = chargingColor;
+        BatteryBarView.fastChargingColor = fastChargingColor;
+        BatteryBarView.indicatePowerSave = indicatePowerSave;
+        BatteryBarView.powerSaveColor = powerSaveColor;
+        BatteryBarView.indicateCharging = indicateCharging;
+        BatteryBarView.indicateFastCharging = indicateFastCharging;
+    }
+
+    public void setOnTop(boolean onTop) {
+        this.onTop = onTop;
+
+        refreshLayout();
+    }
+
+    public void setOnlyWhileCharging(boolean state) {
+        onlyWhileCharging = state;
+        refreshLayout();
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        refreshLayout();
+    }
+
+    public void refreshLayout() {
+        if (!isAttachedToWindow()) return;
+
+        refreshVisibility();
+
+        if (barView.getVisibility() == GONE) return;
+        maskLayout.setLayoutParams(maskLayoutParams());
+        barView.setLayoutParams(barLayoutParams());
+
+        refreshColors(barView.getWidth(), barView.getHeight());
+        mDrawable.invalidateSelf();
+
+        //if (isCharging() && animateCharging)
+            //start();
+    }
+
+    private LayoutParams maskLayoutParams() {
+        LayoutParams result = new LayoutParams(Math.round(getWidth() * getCurrentLevel() / 100f), ViewGroup.LayoutParams.MATCH_PARENT);
+        result.gravity = (isCenterBased) ? Gravity.CENTER : Gravity.START;
+        return result;
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    @Override
+    public void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        refreshLayout();
+    }
+
+    public BatteryBarView(Context context) {
+        super(context);
+        instance = this;
+
+        this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+        mDrawable.setShape(new RectShape());
+        this.setSingleColorTone(singleColorTone);
+        this.setAlphaPct(alphaPct);
+
+        barView = new ImageView(context);
+        barView.setImageDrawable(mDrawable);
+
+        maskLayout = new FrameLayout(context);
+
+        maskLayout.addView(barView);
+        maskLayout.setClipChildren(true);
+
+        this.addView(maskLayout);
+        //this.addView(mChargerLayout);
+        this.setClipChildren(true);
+
+        RTL = (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL);
+
+        //StatusbarMods.registerClockVisibilityCallback(this::setVisible);
+
+        refreshLayout();
+
+        BatteryBarView instance = this;
+        BatteryDataProvider.registerInfoCallback(() -> instance.post(instance::refreshLayout));
+    }
+
+    @Override
+    public void setLayoutDirection(int direction) {
+        super.setLayoutDirection(direction);
+    }
+
+    private LayoutParams barLayoutParams() {
+        LayoutParams result = new LayoutParams(getWidth(), barHeight);
+
+        result.gravity = (isCenterBased) ? Gravity.CENTER : Gravity.START;
+
+        result.gravity |= (onTop) ? Gravity.TOP : Gravity.BOTTOM;
+
+        return result;
+    }
+
+    private LayoutParams chargerLayoutParams() {
+        return new LayoutParams(140, ViewGroup.LayoutParams.MATCH_PARENT);
+
+    }
+
+    public void setBarHeight(int height) {
+        barHeight = height;
+        refreshLayout();
+    }
+
+    public void setColorful(boolean colorful) {
+        this.colorful = colorful;
+        refreshLayout();
+    }
+
+    public void setSingleColorTone(int colorTone) {
+        this.singleColorTone = colorTone;
+        refreshLayout();
+    }
+
+    public void refreshColors(int lenX, int lenY) {
+        if (lenX == 0) return; //we're not ready yet
+        refreshShadeColors();
+        Paint mPaint = mDrawable.getPaint();
+        mPaint.setShader(null);
+        mDrawable.setIntrinsicWidth(lenX);
+        mDrawable.setIntrinsicHeight(lenY);
+        if (isFastCharging() && indicateFastCharging) //fast charging color
+        {
+            mPaint.setColor(fastChargingColor);
+        } else if (isCharging() && indicateCharging) //normal charging color
+        {
+            mPaint.setColor(chargingColor);
+        } else if (isPowerSaving() && indicatePowerSave) { //power save color
+            mPaint.setColor(powerSaveColor);
+        } else if (!colorful || shadeColors == null) {                    //not charging color
+            for (int i = 0; i < batteryLevels.size(); i++) {
+                if (getCurrentLevel() <= batteryLevels.get(i)) {
+                    if (transitColors && i > 0) {
+                        float range = batteryLevels.get(i) - batteryLevels.get(i - 1);
+                        float currentPos = getCurrentLevel() - batteryLevels.get(i - 1);
+                        float ratio = currentPos / range;
+                        mPaint.setColor(ColorUtils.blendARGB(batteryColors[i - 1], batteryColors[i], ratio));
+                    } else {
+                        mPaint.setColor(batteryColors[i]);
+                    }
+                    return;
+                }
+            }
+            mPaint.setColor(singleColorTone);
+        } else                                    //it's colorful
+        {
+            float cX = isCenterBased ? lenX / 2f : ((RTL) ? lenX : 0);
+            float cY = isCenterBased ? lenY / 2f : ((RTL) ? lenY : 0);
+            float radius = isCenterBased ? lenX / 2f : lenX;
+
+            RadialGradient colorfulShader = new RadialGradient(cX, cY, radius, shadeColors, shadeLevels, Shader.TileMode.CLAMP);
+            mPaint.setShader(colorfulShader);
+        }
+    }
+
+    private static void refreshShadeColors() {
+        if (batteryColors == null || batteryLevels.isEmpty()) return;
+
+        shadeColors = new int[batteryLevels.size() * 2 + 2];
+        shadeLevels = new float[shadeColors.length];
+        float prev = 0;
+        for (int i = 0; i < batteryLevels.size(); i++) {
+            float rangeLength = batteryLevels.get(i) - prev;
+            shadeLevels[2 * i] = (prev + rangeLength * .3f) / 100;
+            shadeColors[2 * i] = batteryColors[i];
+
+            shadeLevels[2 * i + 1] = (batteryLevels.get(i) - rangeLength * .3f) / 100;
+            shadeColors[2 * i + 1] = batteryColors[i];
+
+            prev = batteryLevels.get(i);
+        }
+
+        shadeLevels[shadeLevels.length - 2] = (batteryLevels.get(batteryLevels.size() - 1) + (100 - batteryLevels.get(batteryLevels.size() - 1)) * .3f) / 100;
+        shadeColors[shadeColors.length - 2] = Color.GREEN;
+        shadeLevels[shadeLevels.length - 1] = 1f;
+        shadeColors[shadeColors.length - 1] = Color.GREEN;
+    }
+
+
+    public void setAlphaPct(int alphaPct) {
+        this.alphaPct = alphaPct;
+        mDrawable.setAlpha(Math.round(alphaPct * 2.55f));
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.mIsEnabled = enabled;
+        refreshVisibility();
+    }
+
+    public void setVisible(boolean visible) {
+        this.mIsHidden = !visible;
+        refreshVisibility();
+    }
+
+    private void refreshVisibility() {
+        if (!mIsEnabled || mIsHidden || (onlyWhileCharging && !isCharging())) {
+            barView.setVisibility(GONE);
+        } else {
+            barView.setVisibility(VISIBLE);
+        }
+    }
+
+    public static BatteryBarView getInstance(Context context) {
+        if (instance != null) return instance;
+        return new BatteryBarView(context);
+    }
+
+    public static BatteryBarView getInstance() {
+        return instance;
+    }
+
+    public static boolean hasInstance() {
+        return (instance != null);
+    }
+
+    public void setCenterBased(boolean bbSetCentered) {
+        isCenterBased = bbSetCentered;
+    }
+
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/shape">
+        <shape android:shape="rectangle">
+            <solid android:color="?colorPrimary"/>
+            <corners android:radius="?android:dialogCornerRadius" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/qs_header_preview_border" />
+</layer-list>

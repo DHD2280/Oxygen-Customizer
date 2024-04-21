@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch" >
+
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sound_illustration"
+        app:lottie_rawRes="@raw/sound_illustration" />
+
+    <PreferenceCategory
+        android:title="@string/misc_category"
+        app:iconSpaceReserved="false" >
+
+        <!-- Pulse music visualizer -->
+        <Preference
+            android:key="pulse_settings"
+            app:iconSpaceReserved="false"
+            android:title="@string/pulse_settings"
+            android:summary="@string/pulse_settings_summary"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.PulseSettings"/>
+
+
+    </PreferenceCategory>
+
+    <!-- Adaptive Playback -->
+    <Preference
+        android:key="sound_adaptive_playback_summary"
+        app:iconSpaceReserved="false"
+        android:title="@string/adaptive_playback_screen_title"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings" />
+
+    <!-- Volume panel -->
+    <PreferenceCategory
+        android:key="volume_panel"
+        android:title="@string/volume_panel_category"
+        app:iconSpaceReserved="false">
+
+        <!-- Volume Styles
+        <ListPreference
+            android:key="custom_volume_styles"
+            android:title="@string/volume_style_title"
+            app:iconSpaceReserved="false"
+            android:entries="@array/volume_styles_entries"
+            android:entryValues="@array/volume_styles_values"
+            android:summary="%s"
+            android:defaultValue="0" />
+
+        <SwitchPreferenceCompat
+            android:key="VOLUME_TEXTVIEW"
+            android:title="@string/volume_persen_switch_title"
+            app:iconSpaceReserved="false"
+            android:summary="@string/volume_persen_switch_summary"
+            android:defaultValue="false" />
+
+        <ListPreference
+            android:key="VOLUME_TEXTVIEW_STYLE"
+            android:title="@string/volume_persen_style_title"
+            android:icon="@drawable/ic_settings_sound"
+            android:summary="%s"
+            android:dialogTitle="@string/volume_persen_style_title"
+            android:entries="@array/volume_persen_style_entries"
+            android:dependency="VOLUME_TEXTVIEW"
+            android:entryValues="@array/volume_persen_style_values"
+            android:defaultValue="0" />-->
+
+        <!-- <SwitchPreferenceCompat
+            android:key="volume_panel_on_left"
+            app:iconSpaceReserved="false"
+            android:title="@string/volume_panel_on_left_title" /> -->
+
+        <ListPreference
+            android:key="volume_panel_position"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/volume_panel_position_title"
+            android:entries="@array/volume_panel_position_entries"
+            android:entryValues="@array/volume_panel_position_values"
+            android:defaultValue="0" />
+
+        <Preference
+            android:key="volume_panel_custom"
+            app:iconSpaceReserved="false"
+            android:title="@string/volume_panel_custom_title"
+            android:summary="@string/volume_panel_custom_summary"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$VolumePanelCustomizations" />
+
+        <SwitchPreferenceCompat
+            android:key="volume_disable_volume_warning"
+            app:iconSpaceReserved="false"
+            android:title="@string/volume_disable_volume_warning"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="volume_dialog_timeout"
+            android:title="@string/volume_dialog_timeout_title"
+            app:defaultValue="3"
+            app:maxVal="10"
+            app:minVal="1" />
+    </PreferenceCategory>
+</PreferenceScreen>

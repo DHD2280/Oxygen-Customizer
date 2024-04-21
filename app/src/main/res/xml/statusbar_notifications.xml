@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_rawRes="@raw/notification_illustration" />
+
+<PreferenceCategory
+    app:iconSpaceReserved="false"
+    android:title="@string/statusbar_notifications_cat">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="statusbar_notification_app_icon"
+        android:title="@string/statusbar_use_app_icon"
+        android:summaryOn="@string/general_on"
+        android:summaryOff="@string/general_off"
+        app:iconSpaceReserved="false"/>
+    <it.dhd.oxygencustomizer.customprefs.FooterPreference
+        android:title="@string/requires_sysui_restart"
+        android:selectable="false"/>
+</PreferenceCategory>
+
+    <!--<SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="statusbar_notification_count"
+        android:title="@string/statusbar_notification_count"
+        app:iconSpaceReserved="false"/> -->
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/statusbar_notifications_related">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="remove_charging_complete_notification"
+            android:title="@string/remove_charging_complete_notification_title"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="remove_dev_mode"
+            android:title="@string/remove_dev_mode_notification"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="remove_flashlight_notification"
+            android:title="@string/remove_flashlight_notification"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="remove_low_battery_notification"
+            android:title="@string/remove_low_battery_notification"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

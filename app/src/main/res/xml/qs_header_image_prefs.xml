@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        android:key="qs_header_image_enabled"
+        android:title="@string/qs_header_image_enabled_title"
+        android:summary="@string/qs_header_image_enabled_summary"
+        app:iconSpaceReserved="false"
+        android:defaultValue="false" />
+
+    <!-- not ready <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="qs_header_provider"
+        android:title="@string/qs_header_provider_title"
+        android:entries="@array/qs_header_provider_entries"
+        android:entryValues="@array/qs_header_provider_values"
+        app:useSimpleSummaryProvider="true"
+        android:dependency="qs_header_image_enabled" />
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="daylight_header_pack"
+        android:title="@string/qs_header_daylight_pack_title"
+        android:dependency="qs_header_image_enabled" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="custom_header_browse"
+        android:title="@string/qs_header_browse_title"
+        android:summary="@string/qs_header_browse_summary"
+        android:dependency="qs_header_image_enabled">
+        <intent
+            android:targetPackage="it.dhd.oxygencustomizer"
+            android:targetClass="it.dhd.oxygencustomizer.ui.activity.BrowseHeaderActivity" />
+    </Preference> -->
+
+    <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+        android:key="qs_header_image"
+        android:title="@string/qs_header_image_title"
+        android:summary="@string/qs_header_image_summary"
+        android:dependency="qs_header_image_enabled"
+        android:defaultValue="-1"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="qs_header_image_file"
+        android:title="@string/file_header_select_title"
+        android:summary="@string/file_header_select_summary"
+        android:persistent="false"
+        android:dependency="qs_header_image_enabled"
+        app:iconSpaceReserved="false"/>
+
+    <ListPreference
+        android:key="qs_header_image_tint"
+        android:title="@string/qs_header_image_tint_title"
+        android:entries="@array/qs_header_image_tint_entries"
+        android:dependency="qs_header_image_enabled"
+        android:entryValues="@array/qs_header_image_tint_values"
+        android:defaultValue="0"
+        app:useSimpleSummaryProvider="true"
+        app:iconSpaceReserved="false"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_tint_intensity"
+        android:title="@string/qs_header_image_tint_intensity_title"
+        app:maxVal="85"
+        app:minVal="25"
+        app:tickInterval="5"
+        app:defaultValue="50"
+        android:dependency="qs_header_image_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="qs_header_image_tint_custom"
+        android:title="@string/qs_header_image_tint_custom_title"
+        android:dependency="qs_header_image_enabled"
+        android:defaultValue="0xffffffff"
+        app:iconSpaceReserved="false"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_alpha"
+        android:title="@string/qs_header_image_alpha_title"
+        app:defaultValue="255"
+        app:maxVal="255"
+        app:minVal="0"
+        android:dependency="qs_header_image_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_bottom_fade"
+        android:title="@string/qs_header_image_bottom_fade_title"
+        app:maxVal="120"
+        app:minVal="0"
+        app:defaultValue="40"
+        android:dependency="qs_header_image_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_height_portrait"
+        android:title="@string/qs_header_image_height_portrait_title"
+        app:maxVal="550"
+        app:minVal="50"
+        app:defaultValue="325"
+        android:dependency="qs_header_image_enabled" />
+
+    <SwitchPreferenceCompat
+        android:key="qs_header_image_landscape_enabled"
+        android:title="@string/qs_header_image_landscape_enabled_title"
+        android:summary="@string/qs_header_image_landscape_enabled_summary"
+        android:dependency="qs_header_image_enabled"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_padding_side"
+        android:title="@string/qs_header_image_padding_side_title"
+        app:maxVal="100"
+        app:minVal="-100"
+        app:defaultValue="-50"
+        android:dependency="qs_header_image_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="qs_header_image_padding_top"
+        android:title="@string/qs_header_image_padding_top_title"
+        app:maxVal="150"
+        app:minVal="-100"
+        app:defaultValue="0"
+        android:dependency="qs_header_image_enabled" />
+
+    <SwitchPreferenceCompat
+        android:key="qs_header_image_zoom_to_fit"
+        android:title="@string/qs_header_image_zoomtofit_title"
+        app:iconSpaceReserved="false"
+        android:defaultValue="false"
+        android:summary="@string/qs_header_image_zoomtofit_summary" />
+
+
+</PreferenceScreen>

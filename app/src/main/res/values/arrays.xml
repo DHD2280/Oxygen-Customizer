@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="xposed_scope">
+        <item>android</item>
+        <item>com.android.systemui</item>
+        <item>com.android.settings</item>
+        <item>com.android.launcher</item>
+        <item>com.coloros.smartsidebar</item>
+    </string-array>
+
+    <!-- Quick Pulldown -->
+    <string-array name="quick_pulldown_side_entries">
+        <item>@string/quick_pulldown_side_left</item>
+        <item>@string/quick_pulldown_side_right</item>
+    </string-array>
+    <string-array name="quick_pulldown_side_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="brightness_slider_style_entries">
+        <item>@string/default_value</item>
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="brightness_slider_style_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="gesture_holdback_mode_entries">
+        <item>@string/gesture_override_back_hold_mode_default</item>
+        <item>@string/gesture_override_back_hold_mode_per_side</item>
+    </string-array>
+    <string-array name="gesture_holdback_mode_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <!-- QS header image -->
+    <string-array name="qs_header_image_tint_entries" translatable="false">
+        <item>@string/qs_header_image_tint_none</item>
+        <item>@string/qs_header_image_tint_accent</item>
+        <item>@string/qs_header_image_tint_primary</item>
+        <item>@string/qs_header_image_tint_primary_inverse</item>
+        <item>@string/qs_header_image_tint_custom</item>
+    </string-array>
+
+    <string-array name="qs_header_image_tint_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!-- QS header clock Stock Red One -->
+    <string-array name="qs_header_stock_clock_red_one_entries" translatable="false">
+        <item>@string/default_value</item>
+        <item>@string/qs_header_stock_clock_red_one_disable</item>
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="qs_header_stock_clock_red_one_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- QS Header Clock - Custom hour color-->
+    <string-array name="qs_header_clock_custom_color_hour_mode_entries" translatable="false">
+        <item>@string/qs_header_clock_custom_color_hour_mode_default</item>
+        <item>@string/qs_header_clock_custom_color_hour_mode_disabled</item>
+        <item>@string/qs_header_clock_custom_color_hour_mode_like_time</item>
+        <item>@string/qs_header_clock_custom_color_hour_mode_first_digit</item>
+        <item>@string/qs_header_clock_custom_color_hour_mode_one</item>
+    </string-array>
+    <string-array name="qs_header_clock_custom_color_hour_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!-- QS Header Clock - Custom Time color-->
+    <string-array name="qs_header_clock_custom_color_time_mode_entries" translatable="false">
+        <item>@string/qs_header_clock_custom_color_time_mode_default</item>
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="qs_header_clock_custom_color_time_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="qs_header_stock_clock_background_chip_color_mode_entries" translatable="false">
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="qs_header_stock_clock_background_chip_color_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- QS Header Clock - Separator color, only for clock 1 -->
+    <string-array name="qs_header_clock_separator_color_entries" translatable="false">
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="qs_header_clock_separator_color_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="gesture_holdback_commands_entries">
+        <item>@string/gesture_override_back_hold_command_switch_app</item>
+        <!-- <item>@string/gesture_override_back_hold_command_close_recents</item> -->
+        <item>@string/gesture_override_back_hold_command_kill_app</item>
+        <item>@string/gesture_override_back_hold_command_screenshot</item>
+        <item>@string/gesture_override_back_hold_command_quick_settings</item>
+        <item>@string/gesture_override_back_hold_command_power_menu</item>
+        <item>@string/gesture_override_back_hold_command_notification_panel</item>
+        <item>@string/gesture_override_back_hold_command_screen_off</item>
+    </string-array>
+    <string-array name="gesture_holdback_commands_values">
+        <item>0</item>
+        <!-- <item>1</item> -->
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+
+    <!-- Statusbar Clock -->
+    <string-array name="status_bar_clock_position_entries" translatable="false">
+        <item>@string/status_bar_clock_position_right</item>
+        <item>@string/status_bar_clock_position_center</item>
+        <item>@string/status_bar_clock_position_left</item>
+    </string-array>
+
+    <string-array name="status_bar_clock_position_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="status_bar_am_pm_entries" translatable="false">
+        <item>@string/status_bar_am_pm_hidden</item>
+        <item>@string/status_bar_am_pm_normal</item>
+        <item>@string/status_bar_am_pm_small</item>
+    </string-array>
+
+    <string-array name="status_bar_am_pm_values" translatable="false">
+        <item>2</item>
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="clock_date_position_entries" translatable="false">
+        <item>@string/clock_date_left</item>
+        <item>@string/clock_date_right</item>
+    </string-array>
+
+    <string-array name="clock_date_position_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="status_bar_date_entries">
+        <item>@string/status_bar_date_none</item>
+        <item>@string/status_bar_date_small</item>
+        <item>@string/status_bar_date_normal</item>
+    </string-array>
+
+    <string-array name="status_bar_date_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="status_bar_date_style_entries">
+        <item>@string/status_bar_date_style_normal</item>
+        <item>@string/status_bar_date_style_lowercase</item>
+        <item>@string/status_bar_date_style_uppercase</item>
+    </string-array>
+
+    <string-array name="status_bar_date_style_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="status_bar_date_format_entries_values" translatable="false">
+        <item>dd/MM/yy</item>
+        <item>MM/dd/yy</item>
+        <item>yyyy-MM-dd</item>
+        <item>yyyy-dd-MM</item>
+        <item>dd-MM-yyyy</item>
+        <item>MM-dd-yyyy</item>
+        <item>MMM dd</item>
+        <item>MMM dd, yyyy</item>
+        <item>MMMM dd, yyyy</item>
+        <item>EEE</item>
+        <item>EEE dd</item>
+        <item>EEE dd/MM</item>
+        <item>EEE MM/dd</item>
+        <item>EEE dd MMM</item>
+        <item>EEE MMM dd</item>
+        <item>EEE MMMM dd</item>
+        <item>EEEE dd/MM</item>
+        <item>EEEE MM/dd</item>
+        <!-- <item>@string/status_bar_date_format_custom</item> -->
+    </string-array>
+
+    <!-- Lockscreen Stock Red One -->
+    <string-array name="lockscreen_stock_clock_red_one_entries" translatable="false">
+        <item>@string/default_value</item>
+        <item>@string/lockscreen_stock_clock_red_one_disable</item>
+        <item>@string/accent_color</item>
+        <item>@string/custom_color</item>
+    </string-array>
+    <string-array name="lockscreen_stock_clock_red_one_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Pulse -->
+    <string-array name="pulse_render_mode_entries">
+        <item>@string/pulse_render_mode_fading_bars</item>
+        <item>@string/pulse_render_mode_solid_lines</item>
+    </string-array>
+
+    <string-array name="pulse_render_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="pulse_color_mode_entries">
+        <item>@string/pulse_color_accent</item>
+        <item>@string/pulse_color_custom</item>
+        <item>@string/pulse_color_lava_lamp</item>
+    </string-array>
+    <string-array name="pulse_color_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Volume Panel -->
+    <string-array name="volume_panel_position_entries" translatable="false">
+        <item>@string/default_value</item>
+        <item>@string/volume_panel_position_right</item>
+        <item>@string/volume_panel_position_left</item>
+    </string-array>
+    <string-array name="volume_panel_position_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Qs Header Image -->
+    <!-- QS Header -->
+    <string-array name="qs_header_provider_entries" translatable="false">
+        <item>@string/qs_header_daylight_provider_title</item>
+        <item>@string/qs_header_static_provider_title</item>
+        <item>@string/qs_header_file_provider_title</item>
+    </string-array>
+
+    <string-array name="qs_header_provider_values" translatable="false">
+        <item>daylight</item>
+        <item>static</item>
+        <item>file</item>
+    </string-array>
+
+    <string-array name="provider_entries" translatable="false">
+        <item>@string/provider_openweathermap</item>
+        <item>@string/provider_metnorway</item>
+    </string-array>
+    <string-array name="provider_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="units_entries" translatable="false">
+        <item>@string/unit_metric</item>
+        <item>@string/unit_imperial</item>
+    </string-array>
+    <string-array name="units_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="update_interval_entries" translatable="false">
+        <item>@string/interval_1_hour</item>
+        <item>@string/interval_2_hour</item>
+        <item>@string/interval_4_hour</item>
+        <item>@string/interval_6_hour</item>
+        <item>@string/interval_12_hour</item>
+    </string-array>
+    <string-array name="update_interval_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="color_theme_entries" translatable="false">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_system</item>
+    </string-array>
+    <string-array name="color_theme_values" translatable="false">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

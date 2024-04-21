@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_rawRes="@raw/nav_illustration" />
+    <Preference
+        android:key="gesturenav_header"
+        android:title="@string/gesture_navigation_title"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture"
+        app:iconSpaceReserved="false"
+        search:ignore="true" />
+    <!-- Not Ready Yet <Preference
+        android:key="threebutton_header"
+        android:title="@string/three_button_navigation_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true" /> -->
+</PreferenceScreen>

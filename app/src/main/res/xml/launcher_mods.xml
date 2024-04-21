@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+
+    <it.dhd.oxygencustomizer.customprefs.TopIntroPreference
+        android:key="launcher_intro"
+        app:iconSpaceReserved="false"
+        android:title="@string/launcher_intro_title"
+        android:layout="@layout/preference_clock_layout"
+        search:ignore="true"/>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/launcher_folder_layout">
+
+        <SwitchPreferenceCompat
+            android:key="rearrange_folder"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_folder_edit_layout"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="folder_columns"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_folder_columns"
+            app:minVal="3"
+            app:maxVal="7"
+            app:tickInterval="1"
+            app:defaultValue="3"
+            android:dependency="rearrange_folder"/>
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="folder_rows"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_folder_rows"
+            app:minVal="3"
+            app:maxVal="7"
+            app:tickInterval="1"
+            app:defaultValue="3"
+            android:dependency="rearrange_folder"/>
+        <SwitchPreferenceCompat
+            android:key="rearrange_preview"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_folder_update_preview"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/drawer">
+
+        <SwitchPreferenceCompat
+            android:key="rearrange_drawer"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_drawer_edit_columns"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="drawer_columns"
+            app:iconSpaceReserved="false"
+            android:title="@string/drawer_columns"
+            app:minVal="3"
+            app:maxVal="7"
+            app:tickInterval="1"
+            app:defaultValue="4"
+            android:dependency="rearrange_drawer"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/launcher_recents">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_app_details_title"
+            android:summary="@string/launcher_app_details_summary"
+            android:key="launcher_open_app_details"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

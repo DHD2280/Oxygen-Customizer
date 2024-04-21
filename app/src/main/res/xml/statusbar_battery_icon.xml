@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="battery_icon_customize"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:title="@string/battery_icon_customize_title"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+        android:defaultValue="3"
+        android:entries="@array/custom_battery_style"
+        android:entryValues="@array/custom_battery_style_values"
+        android:key="battery_icon_style"
+        android:title="@string/battery_icon_style"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="battery_icon_change_charging_icon"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:title="@string/battery_icon_change_charging_icon_title"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
+        android:key="category_battery_icon_settings"
+        android:title="@string/battery_icon_settings"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_width"
+            android:title="@string/battery_width_title"
+            app:defaultValue="20"
+            app:maxVal="30"
+            app:minVal="10" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_height"
+            android:title="@string/battery_height_title"
+            app:defaultValue="20"
+            app:maxVal="30"
+            app:minVal="10" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_hide_percentage"
+            android:summary="@string/hide_percentage_desc"
+            android:title="@string/hide_percentage_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_inside_percentage"
+            android:summary="@string/inside_percentage_desc"
+            android:title="@string/inside_percentage_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_hide_battery"
+            android:summary="@string/hide_battery_desc"
+            android:title="@string/hide_battery_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_reverse_layout"
+            android:summary="@string/reverse_layout_desc"
+            android:title="@string/reverse_layout_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_rotate_layout"
+            android:summary="@string/rotate_layout_desc"
+            android:title="@string/rotate_layout_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_battery_colors"
+        android:title="@string/battery_icon_color"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="battery_perimeter_alpha"
+            android:summary="@string/perimeter_alpha_desc"
+            android:title="@string/perimeter_alpha_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_fill_alpha"
+            android:summary="@string/fill_alpha_desc"
+            android:title="@string/fill_alpha_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_rainbow_color"
+            android:summary="@string/rainbow_color_desc"
+            android:title="@string/rainbow_color_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="battery_blend_color"
+            android:summary="@string/blend_color_desc"
+            android:title="@string/blend_color_title"
+            app:iconSpaceReserved="false" />
+
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_fill_color"
+            android:summary="@string/fill_color_desc"
+            android:title="@string/fill_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_fill_gradient_color"
+            android:summary="@string/fill_gradient_color_desc"
+            android:title="@string/fill_gradient_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_charging_fill_color"
+            android:summary="@string/charging_fill_color_desc"
+            android:title="@string/charging_fill_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_fast_charging_fill_color"
+            android:summary="@string/fast_charging_fill_color_desc"
+            android:title="@string/fast_charging_fill_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_powersave_fill_color"
+            android:summary="@string/powersave_fill_color_desc"
+            android:title="@string/powersave_fill_color_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="battery_powersave_icon_color"
+            android:summary="@string/powersave_indicator_color_desc"
+            android:title="@string/powersave_indicator_color_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_battery_margins"
+        android:title="@string/battery_icon_margins"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="battery_custom_margins"
+            android:title="@string/custom_margins_title"
+            app:iconSpaceReserved="false"
+            app:summaryText="@string/custom_margins_desc" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_margin_left"
+            android:title="@string/battery_margin_left_title"
+            app:defaultValue="4"
+            app:maxVal="8"
+            app:minVal="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_margin_right"
+            android:title="@string/battery_margin_right_title"
+            app:defaultValue="4"
+            app:maxVal="8"
+            app:minVal="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_margin_top"
+            android:title="@string/battery_margin_top_title"
+            app:defaultValue="0"
+            app:maxVal="8"
+            app:minVal="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_margin_bottom"
+            android:title="@string/battery_margin_bottom_title"
+            app:defaultValue="0"
+            app:maxVal="8"
+            app:minVal="0" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_battery_charging_icon"
+        android:title="@string/battery_charging_icon"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:key="battery_charging_icon_style"
+            android:title="@string/charging_icon_style_title"
+            app:entries="@array/custom_charging_icon_style"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_charging_icon_margin_left"
+            android:title="@string/charging_icon_margin_left_title"
+            app:defaultValue="1"
+            app:maxVal="6"
+            app:minVal="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_charging_icon_margin_right"
+            android:title="@string/charging_icon_margin_right_title"
+            app:defaultValue="1"
+            app:maxVal="6"
+            app:minVal="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="battery_charging_icon_size"
+            android:title="@string/charging_icon_size_title"
+            app:defaultValue="14"
+            app:maxVal="20"
+            app:minVal="8" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="category_battery_stock_prefs"
+        android:title="@string/battery_stock_prefs">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="customize_stock_percentage_size"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/battery_edit_percentage_size_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:defaultValue="14"
+            android:key="stock_percentage_size"
+            android:title="@string/battery_percentage_size"
+            app:maxVal="24"
+            app:minVal="8" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

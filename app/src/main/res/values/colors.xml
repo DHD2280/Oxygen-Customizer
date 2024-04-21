@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="seed">#00897B</color>
+    <color name="md_theme_light_primary">#006B5F</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#74F8E4</color>
+    <color name="md_theme_light_onPrimaryContainer">#00201C</color>
+    <color name="md_theme_light_secondary">#4A635E</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#CCE8E2</color>
+    <color name="md_theme_light_onSecondaryContainer">#06201C</color>
+    <color name="md_theme_light_tertiary">#456179</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#CBE6FF</color>
+    <color name="md_theme_light_onTertiaryContainer">#001E31</color>
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+    <color name="md_theme_light_background">#FAFDFB</color>
+    <color name="md_theme_light_onBackground">#191C1B</color>
+    <color name="md_theme_light_outline">#6F7976</color>
+    <color name="md_theme_light_inverseOnSurface">#EFF1EF</color>
+    <color name="md_theme_light_inverseSurface">#2D3130</color>
+    <color name="md_theme_light_inversePrimary">#54DBC8</color>
+    <color name="md_theme_light_shadow">#000000</color>
+    <color name="md_theme_light_surfaceTint">#006B5F</color>
+    <color name="md_theme_light_outlineVariant">#BEC9C5</color>
+    <color name="md_theme_light_scrim">#000000</color>
+    <color name="md_theme_light_surface">#F7FAF8</color>
+    <color name="md_theme_light_onSurface">#191C1B</color>
+    <color name="md_theme_light_surfaceVariant">#DAE5E1</color>
+    <color name="md_theme_light_onSurfaceVariant">#3F4946</color>
+    <color name="md_theme_dark_primary">#54DBC8</color>
+    <color name="md_theme_dark_onPrimary">#003731</color>
+    <color name="md_theme_dark_primaryContainer">#005048</color>
+    <color name="md_theme_dark_onPrimaryContainer">#74F8E4</color>
+    <color name="md_theme_dark_secondary">#B1CCC6</color>
+    <color name="md_theme_dark_onSecondary">#1C3531</color>
+    <color name="md_theme_dark_secondaryContainer">#334B47</color>
+    <color name="md_theme_dark_onSecondaryContainer">#CCE8E2</color>
+    <color name="md_theme_dark_tertiary">#ADCAE5</color>
+    <color name="md_theme_dark_onTertiary">#143349</color>
+    <color name="md_theme_dark_tertiaryContainer">#2D4A60</color>
+    <color name="md_theme_dark_onTertiaryContainer">#CBE6FF</color>
+    <color name="md_theme_dark_error">#FFB4AB</color>
+    <color name="md_theme_dark_errorContainer">#93000A</color>
+    <color name="md_theme_dark_onError">#690005</color>
+    <color name="md_theme_dark_onErrorContainer">#FFDAD6</color>
+    <color name="md_theme_dark_background">#191C1B</color>
+    <color name="md_theme_dark_onBackground">#E0E3E1</color>
+    <color name="md_theme_dark_outline">#899390</color>
+    <color name="md_theme_dark_inverseOnSurface">#191C1B</color>
+    <color name="md_theme_dark_inverseSurface">#E0E3E1</color>
+    <color name="md_theme_dark_inversePrimary">#006B5F</color>
+    <color name="md_theme_dark_shadow">#000000</color>
+    <color name="md_theme_dark_surfaceTint">#54DBC8</color>
+    <color name="md_theme_dark_outlineVariant">#3F4946</color>
+    <color name="md_theme_dark_scrim">#000000</color>
+    <color name="md_theme_dark_surface">#101413</color>
+    <color name="md_theme_dark_onSurface">#C4C7C5</color>
+    <color name="md_theme_dark_surfaceVariant">#3F4946</color>
+    <color name="md_theme_dark_onSurfaceVariant">#BEC9C5</color>
+
+    <color name="settingslib_protection_color">?backgroundColor</color>
+
+    <color name="error">#DA000E</color>
+    <color name="success">#008753</color>
+    <color name="trasp">#00000000</color>
+
+    <color name="option_border_default">#5f6368</color>
+    <color name="rippleDark">#66000000</color>
+    <color name="dialer_divider_line_color">#5C5C5C</color>
+
+    <color name="textColorPrimary">@android:color/system_neutral1_900</color>
+
+    <drawable name="notification_number_text_color">#ff000000</drawable>
+
+    <color name="colorContainer">@android:color/system_neutral2_50</color>
+    <color name="colorContainerOverlay">@color/color_container_overlay_light</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>

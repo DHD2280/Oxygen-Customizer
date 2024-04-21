@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/volume_panel_custom_title">
+
+        <SwitchPreferenceCompat
+            android:key="volume_panel_seekbar_color_enabled"
+            android:title="@string/volume_panel_custom_enabled_title"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="volume_panel_seekbar_link_primary"
+            android:title="@string/volume_panel_seekbar_link_primary"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="volume_panel_seekbar_color"
+            android:title="@string/custom_color"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xffffffff" />
+
+        <!-- Not Ready Yet <SwitchPreference
+            android:key="volume_panel_icon_color_enabled"
+            android:title="@string/volume_panel_icon_color"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="volume_panel_icon_accent"
+            android:title="@string/volume_panel_icon_accent"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="volume_panel_icon_color"
+            android:title="@string/custom_color"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xff000000" /> -->
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

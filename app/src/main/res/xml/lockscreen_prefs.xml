@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_rawRes="@raw/lockscreen_illustration" />
+
+    <PreferenceCategory
+        android:title="@string/lockscreen_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
+
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen$LockscreenClock"
+            android:key="lockscreen_clock_main"
+            android:title="@string/lockscreen_clock"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather"
+            android:key="lockscreen_weather"
+            android:title="@string/lockscreen_weather"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/lockscreen_fingerprint"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_fp_remove_icon"
+            android:title="@string/lockscreen_fp_remove_icon"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_fp_custom_icon"
+            android:title="@string/lockscreen_fp_custom_icon"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+            android:key="lockscreen_fp_icon_custom"
+            android:title="@string/lockscreen_fp_icon_title"
+            android:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="lockscreen_fp_icon_picker"
+            android:title="@string/lockscreen_fp_icon_picker_title"
+            android:summary="@string/lockscreen_fp_icon_picker_summary"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="lockscreen_fp_icon_scaling"
+            android:title="@string/lockscreen_fp_icon_scale"
+            app:defaultValue="1.0"
+            app:iconSpaceReserved="false"
+            app:maxVal="2.0"
+            app:minVal="0.5"
+            app:tickInterval=".1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="lockscreen_misc_category"
+        android:title="@string/misc"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="disable_power_on_lockscreen"
+            android:summary="@string/lockscreen_hide_power_menu_summary"
+            android:title="@string/lockscreen_hide_power_menu"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="hide_sos_lockscreen"
+            android:title="@string/lockscreen_remove_sos_title"
+            android:summary="@string/lockscreen_remove_sos_summary"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

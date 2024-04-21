@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/qs_header_image_title"
+        search:ignore="true">
+
+        <Preference
+            android:title="@string/qs_header_image_title"
+            app:iconSpaceReserved="false"
+            android:key="qs_header_image_main"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/qs_header_clock"
+        search:ignore="true">
+
+        <Preference
+            android:title="@string/qs_header_clock"
+            app:iconSpaceReserved="false"
+            android:key="qs_header_clock_main"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

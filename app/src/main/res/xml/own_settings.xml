@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/misc"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:icon="@drawable/ic_delete"
+            android:key="deleteAllPrefs"
+            android:summary="@string/delete_all_summary"
+            android:title="@string/delete_all_title" />
+
+        <Preference
+            app:icon="@drawable/ic_export"
+            android:key="export"
+            android:summary="@string/export_summary"
+            android:title="@string/export_title" />
+
+        <Preference
+            app:icon="@drawable/ic_import"
+            android:key="import"
+            android:summary="@string/import_summary"
+            android:title="@string/import_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_about_section_title"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="GitHubRepo"
+            android:summary="@string/github_repo_summary"
+            android:title="@string/github_repo_title"
+            app:icon="@drawable/ic_github" />
+
+        <Preference
+            app:icon="@drawable/ic_credits"
+            android:key="credits"
+            android:summary="@string/credits_summary"
+            android:title="@string/credits_title" />
+
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>
