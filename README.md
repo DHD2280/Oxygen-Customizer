@@ -1,7 +1,7 @@
 # Oxygen Customizer
 
 <div align="center">
-  <img src=".github/resources/banner.png" width="75%" alt="banner" />
+  <img src=".github/resources/banner.png" width="90%" alt="banner" />
 </div>
 <p align="center">
   <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge" alt="Release"></a>

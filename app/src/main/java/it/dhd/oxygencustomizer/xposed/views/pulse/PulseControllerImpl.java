@@ -18,13 +18,14 @@ import android.widget.FrameLayout;
 import java.util.concurrent.Executor;
 
 import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 
 public class PulseControllerImpl {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     @SuppressLint("StaticFieldLeak")
     private static PulseControllerImpl instance = null;
     private final String STREAM_MUTE_CHANGED_ACTION = "android.media.STREAM_MUTE_CHANGED_ACTION";

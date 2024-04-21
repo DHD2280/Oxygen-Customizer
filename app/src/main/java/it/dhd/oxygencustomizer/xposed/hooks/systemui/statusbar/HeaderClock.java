@@ -291,6 +291,8 @@ public class HeaderClock extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) {
                 if (!showHeaderClock) return;
 
+                if (getObjectField(param.thisObject, "mQsFooterClock") == null) return;
+
                 float f = (float) param.args[0];
                 Interpolator mAlphaAnimInterpolator = (Interpolator) getObjectField(param.thisObject, "mAlphaAnimInterpolator");
                 Interpolator mQsCoveredInterpolator = (Interpolator) getObjectField(param.thisObject, "mQsCoveredInterpolator");
