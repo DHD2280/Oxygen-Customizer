@@ -17,8 +17,8 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.3"
+        versionCode = 4
+        versionName = "beta-4"
         setProperty("archivesBaseName", "OxygenCustomizer.apk")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
