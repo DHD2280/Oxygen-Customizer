@@ -7,6 +7,7 @@
   <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases" alt="Release"></a>
   <a href="https://github.com/DHD2280/Oxygen-Customizer"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/DHD2280/Oxygen-Customizer?style=for-the-badge"></a>
   <a href="https://github.com/DHD2280/Oxygen-Customizer/actions"><img src="https://img.shields.io/github/actions/workflow/status/DHD2280/Oxygen-Customizer/build_debug.yml?branch=beta&label=Debug%20Build&style=for-the-badge" alt="Debug Build"></a>
+  <a href="https://t.me/oneplusitaliabcgroup"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"></a>
 </p>
 <div align="center">
 
