@@ -1,4 +1,4 @@
-name: Make Canary Release
+name: Make Beta Release
 
 on:
   push:

@@ -4,7 +4,7 @@ NEWVERCODE=$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d
 NEWVERNAME="beta-$NEWVERCODE"
 
 sed -i 's/versionCode.*/versionCode = '$NEWVERCODE'/' app/build.gradle.kts
-sed -i 's/versionName.*/versionName = "'$NEWVERNAME'"/' app/build.gradle.kts
+sed -i 's/versionName =.*/versionName = "'$NEWVERNAME'"/' app/build.gradle.kts
 
 sed -i 's/"version":.*/"version": "'$NEWVERNAME'",/' latestBeta.json
 sed -i 's/"versionCode":.*/"versionCode": '$NEWVERCODE',/' latestBeta.json
