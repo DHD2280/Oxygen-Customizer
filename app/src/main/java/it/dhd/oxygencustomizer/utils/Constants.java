@@ -430,6 +430,9 @@ public class Constants {
         public static final String LOCKSCREEN_WEATHER_WIND = "weather_show_wind";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH = "weather_custom_color_switch";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR = "weather_custom_color";
+        public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGINS = "weather_custom_margins";
+        public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT = "weather_margin_left";
+        public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP = "weather_margin_top";
 
         public static final String[] LOCKSCREEN_WEATHER_PREFS = {
                 LOCKSCREEN_WEATHER_SWITCH,
@@ -447,6 +450,12 @@ public class Constants {
                 LOCKSCREEN_WEATHER_SHOW_CONDITION,
                 LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
                 LOCKSCREEN_WEATHER_CUSTOM_COLOR
+        };
+
+        public static final String[] LOCKSCREEN_WEATHER_MARGINS = {
+                LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
+                LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT,
+                LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP
         };
 
     }

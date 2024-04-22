@@ -263,9 +263,9 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
                 mCurrentImage.setImageDrawable(d);
                 mRightText.setText(mWeatherInfo.temp + " " + mWeatherInfo.tempUnits);
                 mLeftText.setText(mWeatherInfo.city);
-                mLeftText.setVisibility(View.VISIBLE);
+                mLeftText.setVisibility(mShowWeatherLocation ? View.VISIBLE : View.GONE);
                 mWeatherText.setText(" · "  + formattedCondition);
-                mWeatherText.setVisibility(View.VISIBLE);
+                mWeatherText.setVisibility(mShowWeatherText ? View.VISIBLE : View.GONE);
 
                 mHumImage.setImageDrawable(mHumDrawable);
                 mHumText.setText(mWeatherInfo.humidity);
@@ -284,7 +284,7 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
 
     public static void updateWeatherSettings(boolean showLocation, boolean showText,
                                              boolean showHumidity, boolean showWind) {
-        log(TAG + "updateWeatherSettings " + (instance!=null));
+        if (BuildConfig.DEBUG) log(TAG + "updateWeatherSettings " + (instance!=null));
         instance.mShowWeatherLocation = showLocation;
         instance.mShowWeatherText = showText;
         instance.mShowWeatherHumidity = showHumidity;

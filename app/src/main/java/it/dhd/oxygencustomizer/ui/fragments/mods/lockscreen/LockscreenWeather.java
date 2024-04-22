@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -63,7 +64,7 @@ public class LockscreenWeather
         Preference.OnPreferenceChangeListener {
 
     private static final String DEFAULT_WEATHER_ICON_PACKAGE = "it.dhd.oxygencustomizer.google";
-    private SharedPreferences mPrefs = PreferenceHelper.instance.mPreferences;
+    private SharedPreferences mPrefs;
     private ListPreference mProvider;
     private SwitchPreferenceCompat mCustomLocation;
     private ListPreference mUnits;
@@ -119,13 +120,22 @@ public class LockscreenWeather
     public void onResume() {
         super.onResume();
         mWeatherClient.addObserver(this);
-        doLoadPreferences();
+        //doLoadPreferences();
         // values can be changed from outside
         if (mTriggerPermissionCheck) {
             checkLocationPermissions(true);
             mTriggerPermissionCheck = false;
         }
         queryAndUpdateWeather();
+    }
+
+    private boolean hasPermissions() {
+        return requireContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && requireContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && requireContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     ActivityResultLauncher<Intent> mCustomLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -145,11 +155,12 @@ public class LockscreenWeather
             });
 
     private void checkLocationPermissions(boolean force) {
-        if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        Log.d("LockscreenWeather", "checking location permissions");
+        if (requireContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
-                || getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                || requireContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED ||
-                getContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                requireContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -205,6 +216,20 @@ public class LockscreenWeather
         dialog.show();
     }
 
+    private void showPermissionDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(R.string.weather_permission_dialog_title);
+        builder.setMessage(R.string.weather_permission_dialog_message);
+        builder.setCancelable(false);
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
+            intent.setData(uri);
+            startActivity(intent);
+        });
+        builder.show();
+    }
+
     private void disableService() {
         // stop any pending
         WeatherUpdateService.cancelAllUpdate(getContext());
@@ -221,6 +246,14 @@ public class LockscreenWeather
     }
 
     public void doLoadPreferences() {
+
+        if (mPrefs == null) {
+            if (PreferenceHelper.instance != null) {
+                mPrefs = PreferenceHelper.instance.mPreferences;
+            } else {
+                mPrefs = getContext().createDeviceProtectedStorageContext().getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
+            }
+        }
 
         final PreferenceScreen prefScreen = getPreferenceScreen();
         mEnable = findPreference(LOCKSCREEN_WEATHER_SWITCH);
@@ -405,6 +438,9 @@ public class LockscreenWeather
         if (preference == mEnable) {
             Config.setEnabled(getContext(), (Boolean) newValue);
             if ((Boolean) newValue) {
+                if (!hasPermissions()) {
+                    showPermissionDialog();
+                }
                 enableService();
                 if (!mCustomLocation.isChecked()) {
                     checkLocationEnabledInitial();

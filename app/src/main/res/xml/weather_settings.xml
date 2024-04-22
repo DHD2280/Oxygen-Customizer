@@ -159,4 +159,30 @@
         android:title="@string/weather_icon_pack_title"
         android:dependency="lockscreen_weather_enabled" />
 
+    <SwitchPreferenceCompat
+        android:key="weather_custom_margins"
+        android:title="@string/weather_custom_margins"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="weather_margin_top"
+        android:title="@string/weather_margin_top"
+        app:minVal="0"
+        app:maxVal="100"
+        app:defaultValue="0"
+        android:dependency="weather_custom_margins"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="weather_margin_left"
+        android:title="@string/weather_margin_left"
+        app:minVal="0"
+        app:maxVal="100"
+        app:defaultValue="0"
+        android:dependency="weather_custom_margins"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

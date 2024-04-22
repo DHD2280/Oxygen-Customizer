@@ -4,6 +4,9 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_LOCATION;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGINS;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_HUMIDITY;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_IMAGE_SIZE;
@@ -364,6 +367,10 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
             }
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP,
+                    LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
+            }
 
             // Volume Panel Customization
             case "volume_panel_seekbar_link_primary" -> {
@@ -545,6 +552,8 @@ public class PreferenceHelper {
             // Lockscreen Weather
             case LOCKSCREEN_WEATHER_IMAGE_SIZE -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18) + "dp";
             case LOCKSCREEN_WEATHER_TEXT_SIZE -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16) + "sp";
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
 
             // Sound Prefs
             case "volume_dialog_timeout" -> instance.mPreferences.getSliderInt("volume_dialog_timeout", 3) + " s";

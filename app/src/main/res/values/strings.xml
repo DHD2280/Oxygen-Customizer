@@ -636,20 +636,8 @@
     <string name="advanced_reboot_hide_lockscreen">Hide in Lockscreen</string>
     <string name="show_entry_settings_title">Show entry in Settings</string>
 
-    <!-- Sensor block per-package -->
-    <string name="sensor_block_title">Sensor block per-package</string>
-    <string name="sensor_block_summary">Block access to certain sensors for some apps to save battery</string>
-    <string name="sensor_block_app_picker_title">Block sensors for these apps</string>
-    <string name="add_sensor_block_package_title">Add apps for Sensor block</string>
-    <string name="add_sensor_block_package_summary">Significant motion, accelerometer, linear acceleration sensors will be blocked for these apps</string>
-    <string name="delete">Delete</string>
-    <string name="delete_message">Remove selected item?</string>
-    <string name="choose_app">Choose app</string>
-    <string name="enable">Enable</string>
-
     <!-- Hooks Fragment -->
     <string name="hooks_title">Hooks</string>
-    <string name="reboot_pending">Reboot pending</string>
     <string name="hooked_packages_title">Connected packages</string>
     <string name="package_hooked_successful">Package responsive</string>
     <string name="package_not_hook_enabled">Package not enabled in LSposed</string>
@@ -663,6 +651,31 @@
     <string name="package_not_launchable">Package is not launch-able</string>
     <string name="menu_launch_app">Launch app</string>
     <string name="menu_restart_app">Restart app</string>
+
+    <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">In addition to the normal text, dynamic variables are also available, like Date, Data usage and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P&lt;format&gt; : Persian date, based on format*\n$Nrx : Total Downloads in specified period ** ***\n$Ntx: Total Uploads in specified period ** ***\n$Nall : Total Traffic in specified period ** ***\n$Nssid : WiFi SSID name (if applicable)\n\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"\n**You can specify the statistics period in PixelXpert/Miscellaneous menu/Network Statistics Settings\n***If you replace $N with $Nc you will get with mobile data statistics (e.g. $Ncrx instead of Nrx)</string>
+    <string name="update_channel_name">Updates</string>
+    <string name="update_notification_title">Update downloaded</string>
+    <string name="update_notification_text">Tap here to install</string>
+    <string name="download_failed">Failed to download the update</string>
+    <string name="try_again_later">Please try again later</string>
+    <string name="update_flavor_title">Update channel</string>
+    <string name="stable_flavor">Stable</string>
+    <string name="canary_flavor" translatable="false">Canary</string>
+    <string name="update_type_title">Package Type</string>
+    <string name="full_type">Full</string>
+    <string name="xposed_type">Xposed Only</string>
+    <string name="currentVersionTitle">Installed version: </string>
+    <string name="lastestVersionTitle">Latest version: </string>
+    <string name="root_not_here">ROOT ACCESS NOT GRANTED!</string>
+    <string name="reboot_pending">Reboot pending</string>
+    <string name="reboot_word">Reboot device now</string>
+    <string name="update_checking">Checking…</string>
+    <string name="update_download_started">Downloading - Please tap on the notification once completed</string>
+    <string name="update_word">Update</string>
+    <string name="switch_branches">Switch branch</string>
+    <string name="reinstall_word">Reinstall</string>
+    <string name="changelog_title">Changelog</string>
 
     <!-- Advanced Reboot -->
     <string name="advanced_reboot_title">Advanced Reboot</string>
@@ -756,6 +769,12 @@
     <string name="color_theme_title">Theme</string>
     <string name="location_browse_activity_title">Select location</string>
     <string name="location_query_hint">Search for a location</string>
+    <string name="weather_custom_margins">Custom Margins</string>
+    <string name="weather_margin_top">Top margin</string>
+    <string name="weather_centered">Center Layout</string>
+    <string name="weather_margin_left">Left Margin</string>
+    <string name="weather_permission_dialog_title">Enable Location Permissions</string>
+    <string name="weather_permission_dialog_message">Location permissions are required to fetch weather data. Click OK to open Settings.</string>
 
     <!-- Weather -->
     <string name="weather_condition_clouds">Cloudy</string>

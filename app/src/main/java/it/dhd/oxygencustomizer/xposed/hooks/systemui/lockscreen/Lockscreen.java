@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Environment;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -49,6 +50,7 @@ public class Lockscreen extends XposedMods {
     private int fingerprintStyle = 0;
     private Object mFpIcon;
     private float mFpScale = 1.0f;
+    private Drawable mFpDrawable = null;
 
     public Lockscreen(Context context) {
         super(context);
@@ -62,6 +64,15 @@ public class Lockscreen extends XposedMods {
         customFingerprint = Xprefs.getBoolean(LOCKSCREEN_CUSTOM_FINGERPRINT, false);
         fingerprintStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_FINGERPRINT_STYLE, "0"));
         mFpScale = Xprefs.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f);
+
+        if (Key.length > 0) {
+            if (Key[0].equals(LOCKSCREEN_FINGERPRINT_STYLE)
+                || Key[0].equals(LOCKSCREEN_CUSTOM_FINGERPRINT)
+                || Key[0].equals(LOCKSCREEN_HIDE_FINGERPRINT)
+                || Key[0].equals(LOCKSCREEN_FINGERPRINT_SCALING)) {
+                updateDrawable();
+            }
+        }
     }
 
     private boolean isMethodSecure() {
@@ -149,38 +160,42 @@ public class Lockscreen extends XposedMods {
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
         if (mFpIcon == null) mFpIcon = getObjectField(param.thisObject, "mFpIcon");
 
-        log(TAG + "updateFingerprintIcon");
-        AtomicReference<Drawable> d = new AtomicReference<>(null);
-        if (customFingerprint) {
-            if (fingerprintStyle != -1) {
-                @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("fingerprint_" + fingerprintStyle,"drawable", BuildConfig.APPLICATION_ID);
-                d.set(ResourcesCompat.getDrawable(ResourceManager.modRes,
-                        resId,
-                        mContext.getTheme()));
-            } else {
-                try {
-                    ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_fp_icon.png"));
-                    d.set(ImageDecoder.decodeDrawable(source));
-                    if (d.get() instanceof AnimatedImageDrawable) {
-                        ((AnimatedImageDrawable) d.get()).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
-                        ((AnimatedImageDrawable) d.get()).start();
-                    }
-                } catch (Throwable ignored) {}
-            }
-        }
-        if (d.get() == null) {
+        if (BuildConfig.DEBUG) log(TAG + "updateFingerprintIcon");
+
+        if (mFpDrawable == null) {
             setObjectField(param.thisObject, "mFadeInAnimDrawable", null);
             setObjectField(param.thisObject, "mFadeOutAnimDrawable", null);
         }
-        //Drawable scaled = (Drawable) scaleDrawable(mContext, d.get(), mFpScale);
-        setObjectField(param.thisObject, "mImMobileDrawable", d.get());
+        setObjectField(param.thisObject, "mImMobileDrawable", mFpDrawable);
         if (mFpIcon != null) {
-            callMethod(mFpIcon, "setImageDrawable", d.get() == null ? null : d.get());
+            callMethod(mFpIcon, "setImageDrawable", mFpDrawable == null ? null : mFpDrawable);
         }
         if (hideFingerprint && isStartMethod) {
             param.setResult(null);
         }
         //if (!isStartMethod) callMethod(param.thisObject, "updateFpIconColor");
+    }
+
+    private void updateDrawable() {
+        if (customFingerprint) {
+            if (fingerprintStyle != -1) {
+                @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("fingerprint_" + fingerprintStyle,"drawable", BuildConfig.APPLICATION_ID);
+                mFpDrawable = (ResourcesCompat.getDrawable(ResourceManager.modRes,
+                        resId,
+                        mContext.getTheme()));
+            } else {
+                try {
+                    ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_fp_icon.png"));
+                    mFpDrawable = ImageDecoder.decodeDrawable(source);
+                    if (mFpDrawable instanceof AnimatedImageDrawable) {
+                        ((AnimatedImageDrawable) mFpDrawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                        ((AnimatedImageDrawable) mFpDrawable).start();
+                    }
+                } catch (Throwable ignored) {}
+            }
+        } else {
+            mFpDrawable = null;
+        }
     }
 
     @Override

@@ -273,25 +273,14 @@ public class DrawableConverter {
     }
 
     public static BitmapDrawable scaleDrawable(Context context, Drawable drawable, float scale) {
-        // Ottieni le dimensioni originali del Drawable
         int width = drawable.getIntrinsicWidth();
         int height = drawable.getIntrinsicHeight();
-
-        // Calcola le nuove dimensioni scalate
         int newWidth = (int) (width * scale);
         int newHeight = (int) (height * scale);
-
-        // Crea una Bitmap vuota con le nuove dimensioni
         Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
-
-        // Crea un Canvas per disegnare la Bitmap scalata
         Canvas canvas = new Canvas(scaledBitmap);
-
-        // Disegna il Drawable scalato sulla Bitmap
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
-
-        // Ritorna il Drawable scalato come BitmapDrawable
         return new BitmapDrawable(context.getResources(), scaledBitmap);
     }
 

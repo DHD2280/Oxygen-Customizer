@@ -17,8 +17,8 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.3"
         setProperty("archivesBaseName", "Oxygen Customizer v$versionName")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -146,6 +146,8 @@ dependencies {
     implementation("org.greenrobot:eventbus:3.3.1")
 
     implementation("com.crossbowffs.remotepreferences:remotepreferences:0.8")
+
+    implementation("com.github.tiagohm.MarkdownView:library:0.19.0")
 }
 
 tasks.register("printVersionName") {
