@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -44,6 +45,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int HEADER_COUNT = 24;
     String mSelectedImage;
     String mAppliedImage;
+    int prevPos = -1;
 
 
     public ListPreferenceAdapter(CharSequence[] entries,
@@ -174,16 +176,16 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
             if (TextUtils.equals(mEntryValues[position].toString(), mValue)) {
+                prevPos = position;
                 ((ViewHolder)holder).binding.rootLayout.setStrokeColor(getAppContext().getColor(android.R.color.system_accent1_400));
             } else {
                 ((ViewHolder)holder).binding.rootLayout.setStrokeColor(Color.TRANSPARENT);
             }
 
             ((ViewHolder)holder).binding.rootLayout.setOnClickListener(v -> {
-                int previousPosition = Integer.parseInt(mValue);
                 onItemClickListener.onItemClick(v, position);
-                mValue = String.valueOf(position);
-                notifyItemChanged(previousPosition);
+                mValue = String.valueOf(mEntryValues[position]);
+                notifyItemChanged(prevPos);
                 notifyItemChanged(position);
             });
         }
