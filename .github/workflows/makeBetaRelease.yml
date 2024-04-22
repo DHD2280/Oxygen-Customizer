@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Source Code Download
-        run: git clone --branch canary --single-branch --recurse-submodules https://github.com/DHD2280/Oxygen-Customizer.git .
+        run: git clone --branch beta --single-branch --recurse-submodules https://github.com/DHD2280/Oxygen-Customizer.git .
 
       - name: JDK 17 Setup
         uses: actions/setup-java@v4.1.0
