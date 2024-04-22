@@ -75,6 +75,6 @@ jobs:
           push-branch: 'beta'
           commit-message: 'Version update: Release'
           force-add: 'true'
-          files: app/build.gradle latestVersion.json BetaChangelog.md latestBeta.json
+          files: app/build.gradle.kts latestVersion.json BetaChangelog.md latestBeta.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
