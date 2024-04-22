@@ -172,10 +172,10 @@ public class Lockscreen extends XposedMods {
             setObjectField(param.thisObject, "mFadeInAnimDrawable", null);
             setObjectField(param.thisObject, "mFadeOutAnimDrawable", null);
         }
-        Drawable scaled = (Drawable) scaleDrawable(mContext, d.get(), mFpScale);
-        setObjectField(param.thisObject, "mImMobileDrawable", scaled);
+        //Drawable scaled = (Drawable) scaleDrawable(mContext, d.get(), mFpScale);
+        setObjectField(param.thisObject, "mImMobileDrawable", d.get());
         if (mFpIcon != null) {
-            callMethod(mFpIcon, "setImageDrawable", d.get() == null ? null : scaled);
+            callMethod(mFpIcon, "setImageDrawable", d.get() == null ? null : d.get());
         }
         if (hideFingerprint && isStartMethod) {
             param.setResult(null);

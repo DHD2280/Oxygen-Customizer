@@ -524,4 +524,7 @@ public class Constants {
     public static final String CLOCK_TAG = "clock";
     public static final String DATE_TAG = "date";
 
+    public static final String LATEST_VERSION_URL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/stable/latestVersion.json";
+    public static final String LATEST_BETA_URL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/beta/latestBeta.json";
+
 }

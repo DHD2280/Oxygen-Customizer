@@ -58,14 +58,14 @@
             android:summary="@string/lockscreen_fp_icon_picker_summary"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <!-- <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="lockscreen_fp_icon_scaling"
             android:title="@string/lockscreen_fp_icon_scale"
             app:defaultValue="1.0"
             app:iconSpaceReserved="false"
             app:maxVal="2.0"
             app:minVal="0.5"
-            app:tickInterval=".1" />
+            app:tickInterval=".1" /> -->
 
     </PreferenceCategory>
 
