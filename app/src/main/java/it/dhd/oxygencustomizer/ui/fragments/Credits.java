@@ -49,7 +49,7 @@ public class Credits extends Fragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siavash", """
                 For helping with Xposed
                 And his amazing work with PixelXpert
-                github/Siavash""", "", R.drawable.ic_default_person));
+                github/Siavash""", "https://github.com/siavash79", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "DrDisagree", """
                 For his amazing work with Iconify
                 github/Mahmud0808""", "https://github.com/Mahmud0808", ResourcesCompat.getDrawable(getResources(), R.drawable.drdisagree, requireContext().getTheme())));
