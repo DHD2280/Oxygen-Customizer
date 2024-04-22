@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -73,7 +74,11 @@ public class CreditsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void bind(CreditsModel model) {
             binding.title.setText(model.getTitle());
-            binding.desc.setText(model.getSummary());
+            if (!TextUtils.isEmpty(model.getSummary())) {
+                binding.desc.setVisibility(View.VISIBLE);
+                binding.desc.setText(model.getSummary());
+            } else
+                binding.desc.setVisibility(View.GONE);
             if (model.getIcon() != 0) {
                 binding.icon.setImageResource(model.getIcon());
             } else {

@@ -260,7 +260,8 @@ public class LockscreenWeather
             getAvailableWeatherIconPacks(entries, values, drawables);
             mWeatherIconPack.setEntries(entries.toArray(new String[0]));
             mWeatherIconPack.setEntryValues(values.toArray(new String[0]));
-            mWeatherIconPack.createDefaultAdapter(drawables.toArray(new Drawable[0]));
+            mWeatherIconPack.createDefaultAdapter(drawables.toArray(new Drawable[0]),
+                    (position) -> mWeatherIconPack.setSummary(entries.get(position)));
             int valueIndex = mWeatherIconPack.findIndexOfValue(settingHeaderPackage);
             if (valueIndex == -1) {
                 // no longer found
@@ -272,7 +273,7 @@ public class LockscreenWeather
             mWeatherIconPack.setSummary(mWeatherIconPack.getEntry());
             mWeatherIconPack.setOnPreferenceChangeListener(this);
         } else {
-            prefScreen.removePreference(mWeatherIconPack);
+            if (mWeatherIconPack != null) prefScreen.removePreference(mWeatherIconPack);
         }
         mUpdateStatus = findPreference(PREF_KEY_UPDATE_STATUS);
         if (mUpdateStatus != null) {

@@ -144,4 +144,26 @@ public class ListWithPopUpPreference extends ListPreference {
                     }
                 });
     }
+
+    public void createDefaultAdapter(Drawable[] drawables, onItemClick listener) {
+        mHasImages = true;
+        mEntryDrawables = drawables;
+        mAdapter = new ListPreferenceAdapter(getEntries(),
+                getEntryValues(),
+                drawables,
+                getKey(),
+                mHasImages,
+                (view1, position) -> {
+                    if (callChangeListener(getEntryValues()[position].toString())) {
+                        setValueIndex(position);
+                    }
+                    if (listener != null) {
+                        listener.onItemClick(position);
+                    }
+                });
+    }
+
+    public interface onItemClick {
+        void onItemClick(int position);
+    }
 }

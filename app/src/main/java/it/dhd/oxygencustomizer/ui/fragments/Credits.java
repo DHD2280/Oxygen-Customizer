@@ -66,6 +66,12 @@ public class Credits extends Fragment {
         For some customizations
         github/SuperiorExtended""", "https://github.com/SuperiorExtended/", R.drawable.ic_superior));
 
+        credits.add(new CreditsModel("Testers"));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Pasqui1978", "", "", R.drawable.ic_default_person));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "", R.drawable.ic_default_person));
+
         CreditsAdapter adapter = new CreditsAdapter(credits);
         binding.creditsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.creditsRecyclerView.setAdapter(adapter);
