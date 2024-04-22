@@ -150,7 +150,7 @@ public class StatusbarClock extends XposedMods {
         mClockPosition = Integer.parseInt(Xprefs.getString("status_bar_clock", String.valueOf(POSITION_LEFT)));
         mClockCustomColor = Xprefs.getBoolean("status_bar_custom_clock_color", false);
         mClockColor = Xprefs.getInt("status_bar_clock_color", Color.WHITE);
-        mClockSize = Xprefs.getSliderInt("status_bar_clock_size", 14);
+        mClockSize = Xprefs.getSliderInt("status_bar_clock_size", 12);
 
         // gradients prefs
         clockChip = Xprefs.getBoolean("status_bar_clock_background_chip_switch", false);

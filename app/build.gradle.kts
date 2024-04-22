@@ -98,6 +98,9 @@ dependencies {
     // Recycler View
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+    implementation("androidx.constraintlayout:constraintlayout-core:1.0.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
     // Work
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.concurrent:concurrent-futures:1.1.0")
