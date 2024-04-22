@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NEWVERCODE=$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')+1))
-NEWVERNAME="canary-$NEWVERCODE"
+NEWVERNAME="beta-$NEWVERCODE"
 
 sed -i 's/versionCode.*/versionCode = '$NEWVERCODE'/' app/build.gradle.kts
 sed -i 's/versionName.*/versionName = "'$NEWVERNAME'"/' app/build.gradle.kts

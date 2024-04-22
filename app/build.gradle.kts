@@ -19,7 +19,7 @@ android {
         targetSdk = 34
         versionCode = 3
         versionName = "1.0.3"
-        setProperty("archivesBaseName", "Oxygen Customizer v$versionName")
+        setProperty("archivesBaseName", "OxygenCustomizer.apk")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
