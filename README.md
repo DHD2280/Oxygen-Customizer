@@ -16,7 +16,7 @@
 <p align="center">
 Oxygen Customizer is an open-source Android application aimed at providing users with the ability to tweak and customize various aspects of Oxygen OS UI.
 <br><br>
-Furthermore, the open-source nature of Iconify encourages community contributions and continuous improvement, ensuring a dynamic and evolving user experience.
+Furthermore, the open-source nature of Oxygen Customizer encourages community contributions and continuous improvement, ensuring a dynamic and evolving user experience.
 </p>
 
 ## Table of Contents
