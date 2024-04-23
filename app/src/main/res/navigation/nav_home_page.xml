@@ -10,6 +10,11 @@
         android:label="@string/app_name">
     </fragment>
     <fragment
+        android:id="@+id/updates"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.UpdateFragment"
+        android:label="@string/update">
+    </fragment>
+    <fragment
         android:id="@+id/hooks"
         android:name="it.dhd.oxygencustomizer.ui.fragments.Hooks"
         android:label="@string/navbar_hooks">

@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -24,6 +25,8 @@ import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.PrefManager;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.UpdateScheduler;
+import it.dhd.oxygencustomizer.utils.UpdateWorker;
 
 public class Settings extends PreferenceFragmentCompat {
 
@@ -31,6 +34,10 @@ public class Settings extends PreferenceFragmentCompat {
     private static final int REQUEST_EXPORT = 99;
 
     Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref;
+
+    // Updater Prefs
+    Preference updatePref;
+    SwitchPreferenceCompat autoUpdatePref, checkOnWifiPref;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -41,6 +48,9 @@ public class Settings extends PreferenceFragmentCompat {
         exportPref = findPreference("export");
         importPref = findPreference("import");
         creditsPref = findPreference("credits");
+        updatePref = findPreference("updates");
+        autoUpdatePref = findPreference("autoUpdate");
+        checkOnWifiPref = findPreference("checkOnWifi");
 
         if (ghPref != null) {
             ghPref.setOnPreferenceClickListener(preference -> {
@@ -78,6 +88,26 @@ public class Settings extends PreferenceFragmentCompat {
         if (creditsPref != null) {
             creditsPref.setOnPreferenceClickListener(preference -> {
                 MainActivity.replaceFragment(new Credits());
+                return true;
+            });
+        }
+
+        if (updatePref != null) {
+            updatePref.setSummary(
+                    String.format(
+                            getString(R.string.check_updates_summary),
+                            BuildConfig.VERSION_NAME
+                    )
+            );
+            updatePref.setOnPreferenceClickListener(preference -> {
+                MainActivity.replaceFragment(new UpdateFragment());
+                return true;
+            });
+
+            autoUpdatePref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if ((boolean) newValue) {
+                    UpdateScheduler.scheduleUpdateNow(requireContext());
+                }
                 return true;
             });
         }
