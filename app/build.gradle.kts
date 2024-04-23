@@ -17,9 +17,8 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 5
-        versionName = "beta-5"
-        setProperty("archivesBaseName", "OxygenCustomizer.apk")
+        versionCode = 4
+        versionName = "1.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -124,7 +123,7 @@ dependencies {
 
     // Preference
     implementation("androidx.preference:preference:1.2.1")
-    implementation("org.apache.commons:commons-text:${rootProject.extra["commonsTextVersion"]}")
+    implementation("org.apache.commons:commons-text:1.11.0")
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     // ColorPicker
@@ -162,5 +161,5 @@ dependencies {
 }
 
 tasks.register("printVersionName") {
-    println(android.defaultConfig.versionName)
+    println(android.defaultConfig.versionName?.replace("-(Stable|Beta)".toRegex(), ""))
 }
