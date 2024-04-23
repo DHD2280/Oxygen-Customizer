@@ -1,3 +1,6 @@
+**beta-5**  
+- Fix providers  
+  
 **beta-4**  
 - Added Lockscreen Weather Margin
 - Fixed Fingerprint Icon Scale
