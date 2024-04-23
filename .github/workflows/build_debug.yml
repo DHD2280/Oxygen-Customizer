@@ -1,4 +1,4 @@
-name: Build Debug APK
+name: Build Nightly APK
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs:
           fi
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleRelease
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
