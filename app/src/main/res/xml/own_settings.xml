@@ -27,6 +27,31 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/update">
+
+        <Preference
+            app:icon="@drawable/ic_update"
+            android:key="updates"
+            android:title="@string/check_updates" />
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_check_updates"
+            android:key="autoUpdate"
+            android:summary="@string/auto_update_summary"
+            android:title="@string/auto_update_title"
+            android:defaultValue="true" />
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_wifi_only"
+            android:key="checkOnWifi"
+            android:summary="@string/update_over_wifi_summary"
+            android:title="@string/update_over_wifi_title" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:title="@string/settings_about_section_title"
         app:iconSpaceReserved="false">
 

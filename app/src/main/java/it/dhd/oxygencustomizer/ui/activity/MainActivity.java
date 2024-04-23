@@ -4,6 +4,7 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -42,6 +43,7 @@ import it.dhd.oxygencustomizer.ui.events.ColorSelectedEvent;
 import it.dhd.oxygencustomizer.ui.fragments.Hooks;
 import it.dhd.oxygencustomizer.ui.fragments.Mods;
 import it.dhd.oxygencustomizer.ui.fragments.Settings;
+import it.dhd.oxygencustomizer.ui.fragments.UpdateFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Buttons;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Launcher;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
@@ -86,6 +88,26 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             setHeader(this, savedInstanceState.getCharSequence(TITLE_TAG));
         }
 
+        if (getIntent() != null && getIntent().getBooleanExtra("updateTapped", false)) {
+            Log.d("MainActivity", "onCreate: updateTapped");
+            Intent intent = getIntent();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
+            bundle.putString("filePath", intent.getStringExtra("filePath"));
+            UpdateFragment updateFragment = new UpdateFragment();
+            updateFragment.setArguments(bundle);
+            replaceFragment(updateFragment);
+        } else if (getIntent() != null && "true".equals(getIntent().getStringExtra("migratePrefs"))) {
+            Intent intent = getIntent();
+            Bundle bundle = new Bundle();
+            bundle.putString("migratePrefs", intent.getStringExtra("migratePrefs"));
+            UpdateFragment updateFragment = new UpdateFragment();
+            updateFragment.setArguments(bundle);
+            replaceFragment(updateFragment);
+        } else if (getIntent() != null && getIntent().getBooleanExtra("newUpdate", false)) {
+            replaceFragment(new UpdateFragment());
+        }
+
         prefsList.add(new Object[]{R.xml.mods, R.string.mods_title, new Mods()});
         prefsList.add(new Object[]{R.xml.statusbar, R.string.statusbar_title, new Statusbar()});
         prefsList.add(new Object[]{R.xml.statusbar_clock, R.string.status_bar_clock_title, new Statusbar.Clock()});
@@ -126,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(
                         R.id.mods,
+                        R.id.updates,
                         R.id.hooks,
                         R.id.settings
                 ).build();
@@ -147,14 +170,19 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                 binding.bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 setHeader(this, getString(R.string.app_name));
                 backButtonDisabled();
+            } else if (Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
+                selectedFragment = R.id.updates;
+                binding.bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                setHeader(this, getString(R.string.update));
+                backButtonDisabled();
             } else if (Objects.equals(tag, Hooks.class.getSimpleName())) {
                 selectedFragment = R.id.hooks;
-                binding.bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(2).setChecked(true);
                 setHeader(this, getString(R.string.hooked_packages_title));
                 backButtonDisabled();
             } else if (Objects.equals(tag, Settings.class.getSimpleName())) {
                 selectedFragment = R.id.settings;
-                binding.bottomNavigationView.getMenu().getItem(2).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(3).setChecked(true);
                 setHeader(this, getString(R.string.navbar_settings));
                 backButtonDisabled();
             }
@@ -168,6 +196,13 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                     if (!Objects.equals(tag, Mods.class.getSimpleName())) {
                         selectedFragment = R.id.mods;
                         replaceFragment(new Mods());
+                    }
+                    return true;
+                }
+                case R.id.updates -> {
+                    if (!Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
+                        selectedFragment = R.id.updates;
+                        replaceFragment(new UpdateFragment());
                     }
                     return true;
                 }
@@ -202,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
 
             if (topFragment instanceof Mods)
                 fragment[0] = Mods.class.getSimpleName();
+            else if (topFragment instanceof UpdateFragment)
+                fragment[0] = UpdateFragment.class.getSimpleName();
             else if (topFragment instanceof Hooks)
                 fragment[0] = Hooks.class.getSimpleName();
             else if (topFragment instanceof Settings)

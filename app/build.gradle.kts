@@ -17,9 +17,9 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.3"
-        setProperty("archivesBaseName", "Oxygen Customizer v$versionName")
+        versionCode = 4
+        versionName = "beta-4"
+        setProperty("archivesBaseName", "OxygenCustomizer.apk")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,6 +59,17 @@ android {
         getByName("debug") {
             versionNameSuffix = ".debug"
         }
+    }
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "OxygenCustomizer.apk"
+                println("OutputFileName: $outputFileName")
+                output.outputFileName = outputFileName
+            }
     }
 
     buildFeatures{
@@ -113,7 +124,7 @@ dependencies {
 
     // Preference
     implementation("androidx.preference:preference:1.2.1")
-    implementation("org.apache.commons:commons-text:1.11.0")
+    implementation("org.apache.commons:commons-text:${rootProject.extra["commonsTextVersion"]}")
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     // ColorPicker
@@ -151,5 +162,5 @@ dependencies {
 }
 
 tasks.register("printVersionName") {
-    println(android.defaultConfig.versionName?.replace("-(Stable|Beta)".toRegex(), ""))
+    println(android.defaultConfig.versionName)
 }

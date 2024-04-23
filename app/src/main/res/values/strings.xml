@@ -661,7 +661,7 @@
     <string name="try_again_later">Please try again later</string>
     <string name="update_flavor_title">Update channel</string>
     <string name="stable_flavor">Stable</string>
-    <string name="canary_flavor" translatable="false">Canary</string>
+    <string name="beta_flavor" translatable="false">Beta</string>
     <string name="update_type_title">Package Type</string>
     <string name="full_type">Full</string>
     <string name="xposed_type">Xposed Only</string>
@@ -697,6 +697,14 @@
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>
+    <string name="check_updates">Check Updates</string>
+    <string name="check_updates_summary">Current version: %s</string>
+    <string name="check_auto_updates">Check for updates automatically</string>
+    <string name="check_auto_updates_summary">Check for new updates </string>
+    <string name="notification_channel_update">Updates</string>
+    <string name="notification_channel_update_desc">This channel shows notification about the latest updates.</string>
+    <string name="new_update_title">Update available</string>
+    <string name="new_update_desc">A new version of PixelXpert is available</string>
     <string name="usage_title">Usage</string>
     <string name="usage_summary">Open wiki page</string>
     <string name="credits_title">Credits</string>
@@ -725,6 +733,9 @@
     <string name="weather_retrieve_location_dialog_enable_button">Enable</string>
     <string name="settings_title">Settings</string>
     <string name="auto_update_title">Automatic updates</string>
+    <string name="auto_update_summary">Check for new versions once in a while</string>
+    <string name="update_over_wifi_title">Check updates over WiFi only</string>
+    <string name="update_over_wifi_summary">Check for updates in background only when connected to wifi</string>
     <string name="unit_metric">Metric (\u00b0C)</string>
     <string name="unit_imperial">Imperial (\u00b0F)</string>
     <string name="update">Update</string>

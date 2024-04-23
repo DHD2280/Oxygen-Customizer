@@ -196,6 +196,8 @@ public class Lockscreen extends XposedMods {
         } else {
             mFpDrawable = null;
         }
+        if (mFpScale != 1.0f && mFpDrawable != null)
+            mFpDrawable = scaleDrawable(mContext, mFpDrawable, mFpScale);
     }
 
     @Override

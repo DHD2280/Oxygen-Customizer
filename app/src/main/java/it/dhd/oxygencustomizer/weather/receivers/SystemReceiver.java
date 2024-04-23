@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 import it.dhd.oxygencustomizer.weather.Config;
 import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
 
@@ -39,6 +40,7 @@ public class SystemReceiver extends BroadcastReceiver {
                 WeatherUpdateService.scheduleUpdatePeriodic(context);
                 WeatherUpdateService.scheduleUpdateNow(context);
             }
+            UpdateScheduler.scheduleUpdates(context);
         }
     }
 }

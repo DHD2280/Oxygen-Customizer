@@ -13,8 +13,17 @@
     <!-- OmniJaws -->
     <uses-permission android:name="it.dhd.oxygencustomizer.READ_WEATHER" />
 
+    <!-- Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Install New APK -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Auth For Advanced Power Menu -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!-- Updater -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.android.permission.GET_INSTALLED_APPS" />
@@ -57,6 +66,7 @@
             android:theme="@style/Theme.OxygenCustomizer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.RUN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -83,6 +93,17 @@
             android:enabled="true"
             android:foregroundServiceType="location"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
 
         <provider
             android:name=".weather.WeatherContentProvider"

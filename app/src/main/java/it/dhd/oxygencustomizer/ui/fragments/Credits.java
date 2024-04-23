@@ -72,6 +72,9 @@ public class Credits extends Fragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Pasqui1978", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "", R.drawable.ic_default_person));
 
+        credits.add(new CreditsModel("Translators"));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Osean22", "Russian", "https://t.me/Osean22", R.drawable.flag_ru));
+
         CreditsAdapter adapter = new CreditsAdapter(credits);
         binding.creditsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.creditsRecyclerView.setAdapter(adapter);

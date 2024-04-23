@@ -28,7 +28,7 @@
             android:title="@string/clock_font_size_title"
             app:maxVal="20"
             app:minVal="4"
-            app:defaultValue="14" />
+            app:defaultValue="12" />
 
         <Preference
             app:iconSpaceReserved="false"

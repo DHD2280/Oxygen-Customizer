@@ -187,6 +187,10 @@ public class PreferenceHelper {
             case "category_battery_stock_prefs" -> {
                 return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false);
             }
+            case "stock_percentage_size" -> {
+                return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false) &&
+                    instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
+            }
             // Battery Icon Dimensions
             case "battery_margin_left", "battery_margin_right", "battery_margin_top", "battery_margin_bottom" -> {
                 return instance.mPreferences.getBoolean("battery_custom_dimensions", false);
@@ -356,7 +360,8 @@ public class PreferenceHelper {
                     LOCKSCREEN_WEATHER_ICON_PACK,
                     LOCKSCREEN_WEATHER_SHOW_LOCATION,
                     LOCKSCREEN_WEATHER_SHOW_CONDITION,
-                    LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH-> {
+                    LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
+                    LOCKSCREEN_WEATHER_CUSTOM_MARGINS -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
             }
             case "weather_custom_location" -> {

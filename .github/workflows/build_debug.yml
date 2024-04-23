@@ -1,4 +1,4 @@
-name: Build Debug APK
+name: Build Nightly APK
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
 
   build:
-    name: Build Debug APK
+    name: Build Nightly APK
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Get application version name
-        run: echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_ENV
+        run: echo "VERSION_NAME=beta-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
 
       - name: Bump application version code
         uses: chkfung/android-version-actions@v1.2.3
@@ -44,11 +44,11 @@ jobs:
           fi
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleRelease
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: "Oxygen Customizer v${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
-          path: app/build/outputs/apk/debug/*.apk
+          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
+          path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
