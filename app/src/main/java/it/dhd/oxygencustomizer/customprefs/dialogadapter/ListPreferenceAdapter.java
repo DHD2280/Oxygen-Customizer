@@ -152,17 +152,17 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 ((BatteryIconsViewHolder)holder).binding.batteryIcon.setVisibility(View.GONE);
 
             if (TextUtils.equals(mEntryValues[position].toString(), mValue)) {
+                prevPos = position;
                 ((BatteryIconsViewHolder)holder).binding.rootLayout.setStrokeColor(getAppContext().getColor(android.R.color.system_accent1_400));
             } else {
                 ((BatteryIconsViewHolder)holder).binding.rootLayout.setStrokeColor(Color.TRANSPARENT);
             }
 
             ((BatteryIconsViewHolder)holder).binding.rootLayout.setOnClickListener(v -> {
-                int prev = Integer.parseInt(mValue);
                 onItemClickListener.onItemClick(v, position);
-                notifyItemChanged(prev);
+                mValue = String.valueOf(mEntryValues[position]);
+                notifyItemChanged(prevPos);
                 notifyItemChanged(position);
-                mValue = String.valueOf(position);
             });
         } else {
             ((ViewHolder)holder).binding.text.setText(mEntries[position]);

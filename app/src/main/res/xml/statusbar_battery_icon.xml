@@ -237,9 +237,9 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:defaultValue="14"
             android:key="stock_percentage_size"
             android:title="@string/battery_percentage_size"
+            app:defaultValue="12"
             app:maxVal="24"
             app:minVal="8" />
 
