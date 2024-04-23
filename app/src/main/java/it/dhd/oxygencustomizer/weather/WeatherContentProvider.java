@@ -92,7 +92,7 @@ public class WeatherContentProvider extends ContentProvider {
             COLUMN_ICON_PACK
     };
 
-    public static final String AUTHORITY = "it.dhd.oxygencustomizer.provider";
+    public static final String AUTHORITY = "it.dhd.oxygencustomizer.weatherprovider";
 
     private static final UriMatcher sUriMatcher;
     static {

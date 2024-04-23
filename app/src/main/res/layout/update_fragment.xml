@@ -75,43 +75,6 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
                 android:textColor="?attr/colorOnSurface" />
         </RadioGroup>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/update_type_title"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/updateChannelRadioGroup"
-            app:layout_constraintTop_toBottomOf="@+id/updateChannelRadioGroup" />
-
-        <RadioGroup
-            android:id="@+id/packageTypeRadioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-            <RadioButton
-                android:id="@+id/fullTypeID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/full_type"
-                android:textColor="?attr/colorOnSurface" />
-
-            <RadioButton
-                android:id="@+id/XposedTypeID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xposed_type"
-                android:textColor="?attr/colorOnSurface" />
-        </RadioGroup>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/latestVersionTitleID"
@@ -122,7 +85,7 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
             android:textColor="?attr/colorOnSurface"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/packageTypeRadioGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/updateChannelRadioGroup" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/latestVersionValueID"

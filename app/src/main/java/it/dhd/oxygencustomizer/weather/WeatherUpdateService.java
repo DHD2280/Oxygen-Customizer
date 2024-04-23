@@ -267,6 +267,7 @@ public class WeatherUpdateService extends JobService {
                     if (w != null) {
                         Config.setWeatherData(w, WeatherUpdateService.this);
                         WeatherContentProvider.updateCachedWeatherInfo(WeatherUpdateService.this);
+                        Log.d(TAG, "Weather updated updateCachedWeatherInfo");
                         //WeatherAppWidgetProvider.updateAllWidgets(WeatherUpdateService.this);
                         // we are outa here
                         break;
@@ -287,6 +288,7 @@ public class WeatherUpdateService extends JobService {
             } finally {
                 if (w == null) {
                     // error
+                    if (DEBUG) Log.d(TAG, "error updating weather");
                     Config.setUpdateError(WeatherUpdateService.this, true);
                 }
                 // send broadcast that something has changed

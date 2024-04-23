@@ -107,7 +107,7 @@
 
         <provider
             android:name=".weather.WeatherContentProvider"
-            android:authorities="it.dhd.oxygencustomizer.provider"
+            android:authorities="it.dhd.oxygencustomizer.weatherprovider"
             android:exported="true" />
 
         <receiver

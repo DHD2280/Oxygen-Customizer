@@ -63,9 +63,6 @@ import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
 public class UpdateFragment extends Fragment {
     public static final String MOD_NAME = "OxygenCustomizer";
-    public static final String MAGISK_UPDATE_DIR = "/data/adb/modules_update";
-    public static final String MAGISK_MODULES_DIR = "/data/adb/modules";
-    private static final String updateRoot = String.format("%s/%s", MAGISK_UPDATE_DIR, MOD_NAME);
 
     public static final String UPDATES_CHANNEL_ID = "Updates";
     private static final String stableUpdatesURL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/stable/latestStable.json";
@@ -75,8 +72,6 @@ public class UpdateFragment extends Fragment {
     static boolean betaUpdate = BuildConfig.VERSION_NAME.toLowerCase().contains("beta");
     HashMap<String, Object> latestVersion = null;
     private String downloadedFilePath;
-    private static final String updateDir = String.format("%s/%s", MAGISK_UPDATE_DIR, MOD_NAME);
-    private static final String moduleDir = String.format("%s/%s", MAGISK_MODULES_DIR, MOD_NAME);
 
     final BroadcastReceiver downloadCompletionReceiver = new BroadcastReceiver() {
 
@@ -87,7 +82,6 @@ public class UpdateFragment extends Fragment {
 
 
             boolean successful = false;
-            Log.d("UpdateFragment", "onReceive: " + intent.getAction());
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction()) && intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) == downloadID) {
                 try (Cursor downloadData = downloadManager.query(
                         new DownloadManager.Query()
@@ -97,7 +91,6 @@ public class UpdateFragment extends Fragment {
                     int uriColIndex = downloadData.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
 
                     File downloadedFile = new File(URI.create(downloadData.getString(uriColIndex)));
-                    Log.d("UpdateFragment", "downloadedFile = " + downloadData.getString(uriColIndex));
 
                     if (downloadedFile.exists()) {
                         downloadedFilePath = new File(URI.create(downloadData.getString(uriColIndex))).getAbsolutePath();
@@ -157,7 +150,6 @@ public class UpdateFragment extends Fragment {
     }
 
     private void installApk(String downloadPath) {
-        Log.d("UpdateFragment", "installApk: " + downloadPath);
         Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(
                 FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(downloadPath)),
                 "application/vnd.android.package-archive");
@@ -250,7 +242,7 @@ public class UpdateFragment extends Fragment {
                                 {
                                     BtnText = R.string.reinstall_word;
                                 }
-                                enable = true; //stable version is ALWAYS flashable, so that user can revert from canary or repair installation
+                                enable = true; //stable version is ALWAYS flashable, so that user can revert from beta or repair installation
                             } else {
                                 if (latestCode > currentVersionCode || (currentVersionType == 1)) {
                                     enable = true;
@@ -267,8 +259,6 @@ public class UpdateFragment extends Fragment {
 
         binding.updateChannelRadioGroup.setOnCheckedChangeListener(onCheckChangedListener);
 
-        binding.packageTypeRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> onCheckChangedListener.onCheckedChanged(view.findViewById(R.id.updateChannelRadioGroup), 0));
-
         binding.updateBtn.setOnClickListener(view1 -> {
             if (rebootPending) {
                 Shell.cmd("reboot");
@@ -283,12 +273,6 @@ public class UpdateFragment extends Fragment {
                 binding.updateBtn.setText(R.string.update_download_started);
             }
         });
-
-        if (currentVersionType == 1) {
-            ((RadioButton) view.findViewById(R.id.fullTypeID)).setChecked(true);
-        } else {
-            ((RadioButton) view.findViewById(R.id.XposedTypeID)).setChecked(true);
-        }
 
         if (currentVersionName.toLowerCase().contains("beta")) {
             ((RadioButton) view.findViewById(R.id.betaID)).setChecked(true);
@@ -323,7 +307,6 @@ public class UpdateFragment extends Fragment {
 
         //noinspection ConstantConditions
         if (getContext() != null) {
-            Log.d("UpdateFragment", "startDownload: " + downloadID);
             getContext().registerReceiver(downloadCompletionReceiver, filters, RECEIVER_EXPORTED);
         }
     }
@@ -339,8 +322,6 @@ public class UpdateFragment extends Fragment {
             Log.w("UpdateFragment", "notifyInstall: context is null");
             return;
         }
-
-        Log.d("UpdateFragment", "notifyInstall: " + downloadedFilePath);
 
         Intent notificationIntent = new Intent(getContext(), MainActivity.class);
         notificationIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

@@ -51,11 +51,11 @@ public class OmniJawsClient {
     private static final boolean DEBUG = true;
     public static final String SERVICE_PACKAGE = BuildConfig.APPLICATION_ID;
     public static final Uri WEATHER_URI
-            = Uri.parse("content://it.dhd.oxygencustomizer.provider/weather");
+            = Uri.parse("content://it.dhd.oxygencustomizer.weatherprovider/weather");
     public static final Uri SETTINGS_URI
-            = Uri.parse("content://it.dhd.oxygencustomizer.provider/settings");
+            = Uri.parse("content://it.dhd.oxygencustomizer.weatherprovider/settings");
     public static final Uri CONTROL_URI
-            = Uri.parse("content://it.dhd.oxygencustomizer.provider/control");
+            = Uri.parse("content://it.dhd.oxygencustomizer.weatherprovider/control");
 
     private static final String ICON_PACKAGE_DEFAULT = BuildConfig.APPLICATION_ID;
     private static final String ICON_PREFIX_DEFAULT = "google";
