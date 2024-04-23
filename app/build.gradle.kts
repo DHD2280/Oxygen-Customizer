@@ -113,7 +113,7 @@ dependencies {
 
     // Preference
     implementation("androidx.preference:preference:1.2.1")
-    implementation("org.apache.commons:commons-text:1.11.0")
+    implementation("org.apache.commons:commons-text:${rootProject.extra["commonsTextVersion"]}")
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     // ColorPicker

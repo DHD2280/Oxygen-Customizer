@@ -661,7 +661,7 @@
     <string name="try_again_later">Please try again later</string>
     <string name="update_flavor_title">Update channel</string>
     <string name="stable_flavor">Stable</string>
-    <string name="canary_flavor" translatable="false">Canary</string>
+    <string name="beta_flavor" translatable="false">Beta</string>
     <string name="update_type_title">Package Type</string>
     <string name="full_type">Full</string>
     <string name="xposed_type">Xposed Only</string>
