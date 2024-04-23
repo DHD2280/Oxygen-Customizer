@@ -162,5 +162,5 @@ dependencies {
 }
 
 tasks.register("printVersionName") {
-    println(android.defaultConfig.versionName?.replace("-(Stable|Beta)".toRegex(), ""))
+    println(android.defaultConfig.versionName)
 }
