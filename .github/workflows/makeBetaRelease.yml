@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.1
         with:
           name: OxygenCustomizer.apk
-          path: output
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Oxygen Customizer Binary Release
         uses: ncipollo/release-action@v1.14.0
