@@ -221,7 +221,6 @@ public class StatusbarClock extends XposedMods {
 
         Class<?> ClockClass = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
         Class<?> CollapsedStatusBarFragmentClass = findClass("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
-        Class<?> StatClockClass = findClass("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
         Class<?> TaskStackListenerImpl = findClass("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);

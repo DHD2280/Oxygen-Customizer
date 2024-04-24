@@ -54,7 +54,6 @@ public class FeatureEnabler extends XposedMods {
     private int centerY;
     private int radius;
     private Class<?> SystemUIDialogClass;
-    private Class<?> OplusThemeSystemUiDialog;
     private boolean broadcastRegistered = false;
 
     final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -97,11 +96,15 @@ public class FeatureEnabler extends XposedMods {
             mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
-        Class<?> ShutdownViewControl = findClass("com.oplus.systemui.shutdown.ShutdownViewControl", lpparam.classLoader);
+        //Class<?> ShutdownViewControl = findClass("com.oplus.systemui.shutdown.ShutdownViewControl", lpparam.classLoader);
         SystemUIDialogClass = findClass("com.android.systemui.statusbar.phone.SystemUIDialog", lpparam.classLoader);
-        OplusThemeSystemUiDialog = findClass("com.oplus.systemui.common.dialog.OplusThemeSystemUiDialog", lpparam.classLoader);
 
-        Class<?> ShutdownView = findClass("com.oplus.systemui.shutdown.OplusShutdownView", lpparam.classLoader);
+        Class<?> ShutdownView;
+        try {
+            ShutdownView = findClass("com.oplus.systemui.shutdown.OplusShutdownView", lpparam.classLoader);
+        } catch (Throwable t) {
+            ShutdownView = findClass("com.oplusos.systemui.controls.OplusShutdownView", lpparam.classLoader); // OOS 13
+        }
 
         findAndHookMethod(ShutdownView, "onDraw", Canvas.class, new XC_MethodHook() {
             @Override
@@ -146,7 +149,12 @@ public class FeatureEnabler extends XposedMods {
             }
         });
 
-        Class<?> FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        Class<?> FeatureOptions;
+        try {
+            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        } catch (Throwable t) {
+            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        }
 
 
         hookAllMethods(FeatureOptions, "isOplusVolumeKeyInRight", new XC_MethodHook() {

@@ -92,9 +92,18 @@ public class GestureNavbarManager extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
-        Class<?> SideGestureDetector = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader);
-        Class<?> SideGestureNavView = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader);
-        Class<?> ScreenShotRunnable = findClass("com.oplus.systemui.qs.tiles.ScreenshotTile$ScreenShotRunnable", lpparam.classLoader);
+        Class<?> SideGestureDetector;
+        try {
+            SideGestureDetector = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader);
+        } catch (Throwable t) {
+            SideGestureDetector = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader); // OOS 13
+        }
+        Class<?> SideGestureNavView;
+        try {
+          SideGestureNavView = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader);
+        } catch (Throwable t) {
+            SideGestureNavView = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader); // OOS 13
+        }
 
 
         hookAllConstructors(SideGestureDetector, new XC_MethodHook() {

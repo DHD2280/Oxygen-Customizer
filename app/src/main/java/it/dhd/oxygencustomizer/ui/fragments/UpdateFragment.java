@@ -7,6 +7,8 @@ import static androidx.core.content.FileProvider.getUriForFile;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -75,6 +77,7 @@ public class UpdateFragment extends Fragment {
 
     final BroadcastReceiver downloadCompletionReceiver = new BroadcastReceiver() {
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
             if (getContext() != null)
@@ -109,16 +112,6 @@ public class UpdateFragment extends Fragment {
                         .setContentText(requireContext().getText(R.string.try_again_later))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    ShellUtils.execCommand(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID), true); //will ask root if not granted yet
-                }
                 NotificationManagerCompat.from(requireContext()).notify(2, builder.build());
             }
         }
@@ -175,6 +168,8 @@ public class UpdateFragment extends Fragment {
 
         //Android 13 requires notification permission to be granted or it won't allow it
         ShellUtils.execCommand(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID), true); //will ask root if not granted yet
+
+        createChannels();
 
         if (!ShellUtils.checkRootPermission()) {
             currentVersionName = getString(R.string.root_not_here);
@@ -285,6 +280,18 @@ public class UpdateFragment extends Fragment {
         new ChangelogReceiver(URL, callback).start();
     }*/
 
+    private void createChannels() {
+        if (getContext() == null) {
+            Log.w("UpdateFragment", "createChannels: context is null");
+            return;
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = new NotificationChannel(getContext().getString(R.string.notification_channel_update), getContext().getString(R.string.notification_channel_update), NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(getContext().getString(R.string.notification_channel_update_desc));
+        notificationManager.createNotificationChannel(channel);
+    }
+
     private void getCurrentVersion() {
         rebootPending = false;
         currentVersionName = BuildConfig.VERSION_NAME;
@@ -317,6 +324,7 @@ public class UpdateFragment extends Fragment {
         binding = null;
     }
 
+    @SuppressLint("MissingPermission")
     public void notifyInstall() {
         if (getContext() == null) {
             Log.w("UpdateFragment", "notifyInstall: context is null");
@@ -341,9 +349,6 @@ public class UpdateFragment extends Fragment {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            ShellUtils.execCommand(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID), true); //will ask root if not granted yet
-        }
         NotificationManagerCompat.from(getContext()).notify(1, builder.build());
     }
 

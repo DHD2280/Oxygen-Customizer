@@ -225,15 +225,17 @@ public class PulseViewHook extends XposedMods {
         });
 
         // Stole Screen Pinning
-        hookAllMethods(NavigationBarView, "setInScreenPinning", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (PulseControllerImpl.hasInstance()) {
-                    //log(TAG + "Screen pinning: " + (boolean)param.args[0]);
-                    PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
+        try {
+            hookAllMethods(NavigationBarView, "setInScreenPinning", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (PulseControllerImpl.hasInstance()) {
+                        //log(TAG + "Screen pinning: " + (boolean)param.args[0]);
+                        PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Throwable ignored){}
 
     }
 

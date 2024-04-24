@@ -124,7 +124,12 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
-        Class<?> OplusQSTileBaseView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        Class<?> OplusQSTileBaseView;
+        try {
+            OplusQSTileBaseView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            OplusQSTileBaseView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        }
 
         /*
         TESTING CUSTOMIZATIONS
@@ -240,7 +245,12 @@ public class QsTileCustomization extends XposedMods {
 
         hookAllMethods(OplusQSTileBaseView, "generateDrawable", colorHook);
 
-        Class<?> OplusQSHighlightTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
+        Class<?> OplusQSHighlightTileView;
+        try {
+            OplusQSHighlightTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            OplusQSHighlightTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
+        }
         hookAllMethods(OplusQSHighlightTileView, "generateDrawable", colorHook);
 
 
@@ -261,7 +271,12 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
-        Class<?> OplusQSTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader);
+        Class<?> OplusQSTileView;
+        try {
+            OplusQSTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            OplusQSTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader); // OOS 13
+        }
         hookAllMethods(OplusQSTileView, "createLabel", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -287,7 +302,12 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
-        Class<?> OplusToggleSliderView = findClass("com.oplus.systemui.qs.widget.OplusToggleSliderView", lpparam.classLoader);
+        Class<?> OplusToggleSliderView;
+        try {
+            OplusToggleSliderView = findClass("com.oplus.systemui.qs.widget.OplusToggleSliderView", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            OplusToggleSliderView = findClass("com.oplusos.systemui.qs.widget.OplusToggleSliderView", lpparam.classLoader);
+        }
 
         findAndHookMethod(OplusToggleSliderView, "onShapeChanged",
                 int.class,

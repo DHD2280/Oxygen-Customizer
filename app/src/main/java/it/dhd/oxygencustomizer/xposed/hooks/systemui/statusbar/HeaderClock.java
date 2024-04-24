@@ -225,7 +225,11 @@ public class HeaderClock extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        final Class<?> QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        Class<?> QuickStatusBarHeader;
+        try { QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        } catch (Throwable t) {
+            QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
+        }
 
         mClockChipDrawale = new GradientDrawable();
         mDateChipDrawale = new GradientDrawable();
@@ -239,7 +243,12 @@ public class HeaderClock extends XposedMods {
         });
 
         //OplusQSFooterImpl
-        Class<?> OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        Class<?> OplusQSFooterImpl;
+        try {
+            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        }
         hookAllMethods(OplusQSFooterImpl, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
@@ -284,7 +293,12 @@ public class HeaderClock extends XposedMods {
             }
         });
 
-        Class<?> QsFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        Class<?> QsFragmentHelper;
+        try {
+            QsFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        } catch (Throwable t) {
+            QsFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        }
 
         hookAllMethods(QsFragmentHelper, "onFractionUpdated", new XC_MethodHook() {
             @Override
@@ -304,7 +318,12 @@ public class HeaderClock extends XposedMods {
             }
         });
 
-        Class<?> OplusClockExImpl = findClass("com.oplus.systemui.common.clock.OplusClockExImpl", lpparam.classLoader);
+        Class<?> OplusClockExImpl ;
+        try {
+            OplusClockExImpl = findClass("com.oplus.systemui.common.clock.OplusClockExImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusClockExImpl = findClass("com.oplusos.systemui.ext.BaseClockExt", lpparam.classLoader);
+        }
         hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -341,18 +360,6 @@ public class HeaderClock extends XposedMods {
                 }
             }
         });
-
-        /*hookAllMethods(OplusQSFooterImpl, "updateQsClockView", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                log("updateQsClockView");
-                boolean z;
-                ConstraintSet set = new ConstraintSet();
-                set.setTranslation(mQsClockContainer.getId(), 10f, 10f);
-                set.applyTo((ConstraintLayout) mQsClockContainer.getParent());
-                //z = ConstraintSetExt.updateScaleY(this.mTmpConstraintSet, this.mClockView.getId(), 1.0f) | ConstraintSetExt.updateTranslationX(this.mTmpConstraintSet, this.mClockView.getId(), 0.0f) | false | ConstraintSetExt.updateTranslationY(this.mTmpConstraintSet, this.mClockView.getId(), 0.0f) | ConstraintSetExt.updateScaleX(this.mTmpConstraintSet, this.mClockView.getId(), 1.0f);
-            }
-        });*/
 
         hookAllMethods(QuickStatusBarHeader, "updateResources", new XC_MethodHook() {
             @Override

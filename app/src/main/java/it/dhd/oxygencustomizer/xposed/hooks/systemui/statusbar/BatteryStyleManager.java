@@ -589,7 +589,7 @@ public class BatteryStyleManager extends XposedMods {
                 }
                 updating = true;
                 ShellUtils.execCommand("settings put system display_battery_style 2", true);
-                Thread.sleep(750);
+                Thread.sleep(500);
                 ShellUtils.execCommand("settings put system display_battery_style 3", true);
 
                 Thread.sleep(500);
