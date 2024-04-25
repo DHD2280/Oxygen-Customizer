@@ -87,11 +87,8 @@ public class Lockscreen extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
-
-        KeyguardHelper = findClass("com.oplus.systemui.common.helper.KeyguardHelper", lpparam.classLoader);
-
-        Class<?> OplusEmergencyButtonExImpl = findClass("com.oplus.keyguard.OplusEmergencyButtonExImpl", lpparam.classLoader);
         try {
+            Class<?> OplusEmergencyButtonExImpl = findClass("com.oplus.keyguard.OplusEmergencyButtonExImpl", lpparam.classLoader);
             findAndHookMethod(OplusEmergencyButtonExImpl, "disableShowEmergencyButton", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -99,10 +96,15 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "disableShowEmergencyButton not found");
+            log(TAG + "OplusEmergencyButtonExImpl not found");
         }
 
-        Class<?> OnScreenFingerprint = findClass("com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMach", lpparam.classLoader);
+        Class<?> OnScreenFingerprint;
+        try {
+            OnScreenFingerprint = findClass("com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMach", lpparam.classLoader);
+        } catch (Throwable t) {
+            OnScreenFingerprint = findClass("com.oplus.systemui.keyguard.finger.onscreenfingerprint.OnScreenFingerprintUiMech", lpparam.classLoader);
+        }
         hookAllMethods(OnScreenFingerprint, "initFpIconWin", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

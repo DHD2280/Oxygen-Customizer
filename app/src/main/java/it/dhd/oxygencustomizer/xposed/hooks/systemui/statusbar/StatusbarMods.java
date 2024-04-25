@@ -113,6 +113,7 @@ public class StatusbarMods extends XposedMods {
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private boolean mNotificationCount;
+    private boolean oos13 = false;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -191,6 +192,7 @@ public class StatusbarMods extends XposedMods {
         try {
             NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
         } catch (Throwable e) {
+            oos13 = true;
             NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
         }
         Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
@@ -199,11 +201,13 @@ public class StatusbarMods extends XposedMods {
         try {
             QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
         } catch (Throwable e) {
+            oos13 = true;
             QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
         }
         Class<?> QuickStatusBarHeaderClass;
         try { QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
         } catch (Throwable t) {
+            oos13 = true;
             QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
         }
 
@@ -297,7 +301,14 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        Class<?> OplusQSFooterImpl;
+        try {
+            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); // OOS 13
+        }
+
         LongClickListener onLongClick = new LongClickListener();
         hookAllMethods(OplusQSFooterImpl, "onFinishInflate", new XC_MethodHook() {
             @Override
@@ -345,8 +356,15 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> QuickSettingsController = findClass("com.android.systemui.shade.QuickSettingsController", lpparam.classLoader);
+        Class<?> QuickSettingsController;
+        try {
+            QuickSettingsController = findClass("com.android.systemui.shade.QuickSettingsController", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            QuickSettingsController = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
+        }
         Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+
 
         hookAllMethods(QuickSettingsController, "isOpenQsEvent", new XC_MethodHook() {
             @Override
@@ -369,8 +387,12 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
-
+        Class<?> OplusBrightnessControllerExImpl;
+        try {
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.OplusBrightnessControllerExImpl", lpparam.classLoader); // OOS 13
+        }
 
         hookAllConstructors(OplusBrightnessControllerExImpl, new XC_MethodHook() {
             @Override
@@ -400,13 +422,22 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
-        findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
+        if (!oos13) {
+            Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
+            findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
+                }
+            });
+        } else {
+            try {
+                mQuickQsOffsetHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("notification_quick_qs_offset_height", "dimen", listenPackage));
+            } catch (Throwable t) {
+                log("notification_quick_qs_offset_height not found");
             }
-        });
+        }
+
 
 
         hookAllMethods(PhoneStatusBarViewControllerClass, "onTouch", new XC_MethodHook() {
@@ -463,7 +494,6 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
 
         // Notifications
         NotificationIconAreaController = findClass("com.android.systemui.statusbar.phone.NotificationIconAreaController", lpparam.classLoader);
@@ -480,8 +510,6 @@ public class StatusbarMods extends XposedMods {
                 mNotificationIconContainer = param.thisObject;
             }
         });
-        Class<?> ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
-        Class<?> FwkResIdLoader = findClass("com.oplusos.systemui.common.util.FwkResIdLoader", lpparam.classLoader);
         Class<?> DrawableSize = findClass("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,

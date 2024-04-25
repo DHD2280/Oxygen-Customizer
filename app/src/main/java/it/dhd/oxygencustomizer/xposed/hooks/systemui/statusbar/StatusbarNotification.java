@@ -89,7 +89,12 @@ public class StatusbarNotification extends XposedMods {
                     }
                 });
 
-        Class<?> FlashlightNotification = findClass("com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", lpparam.classLoader);
+        Class<?> FlashlightNotification;
+        try {
+            FlashlightNotification = findClass("com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", lpparam.classLoader);
+        } catch (Throwable t) {
+            FlashlightNotification = findClass("com.oplusos.systemui.flashlight.FlashlightNotification", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(FlashlightNotification, "sendNotification",
                 boolean.class, new XC_MethodHook() {
                     @Override

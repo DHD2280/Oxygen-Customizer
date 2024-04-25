@@ -131,8 +131,8 @@ public class HeaderClock extends XposedMods {
 
     private int stockClockDateBackgroundChipStyle;
     private int mAccent;
-    private GradientDrawable mClockChipDrawale;
-    private GradientDrawable mDateChipDrawale;
+    private GradientDrawable mClockChipDrawale = new GradientDrawable();
+    private GradientDrawable mDateChipDrawale = new GradientDrawable();
     private Typeface mStockClockTypeface, mStockDateTypeface;
     private Object OQC = null;
     private Object mActivityStarter = null;
@@ -231,9 +231,6 @@ public class HeaderClock extends XposedMods {
             QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
         }
 
-        mClockChipDrawale = new GradientDrawable();
-        mDateChipDrawale = new GradientDrawable();
-
         Class<?> Clock = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
         hookAllConstructors(Clock, new XC_MethodHook() {
             @Override
@@ -327,8 +324,6 @@ public class HeaderClock extends XposedMods {
         hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
-                //log("setTextWithRedOneStyleInternal BEFORE");
-                //log("showHeaderClock: " + showHeaderClock + " stockClockRedStyle: " + stockClockRedStyle + " stockClockRedOverrideColor: " + stockClockRedOverrideColor + " param: " + (showHeaderClock || stockClockRedStyle == 1));
                 if (showHeaderClock || stockClockRedStyle == 1 ) {
                     param.setResult(null);
                     return;
@@ -401,7 +396,12 @@ public class HeaderClock extends XposedMods {
         }
 
 
-        Class<?> QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
+        Class<?> QSSecurityFooterUtilsClass;
+        try {
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
+        } catch (Throwable t) {
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
+        }
         hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

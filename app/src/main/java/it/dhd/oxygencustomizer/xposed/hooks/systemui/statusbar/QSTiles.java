@@ -111,24 +111,6 @@ public class QSTiles extends XposedMods {
             }
         });
 
-        Class<?> OplusHeaderTileLayout = findClass("com.oplus.systemui.qs.widget.OplusHeaderTileLayout", lpparam.classLoader);
-        hookAllMethods(OplusHeaderTileLayout, "updateColumns",
-                new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mCustomizeQSTiles) return;
-
-                log("OplusHeaderTileLayout updateColumns");
-
-                int mColumns = getIntField(param.thisObject, "mColumns");
-                int orientation = mContext.getResources().getConfiguration().orientation;
-                int newColumns = orientation == Configuration.ORIENTATION_PORTRAIT ? QSColQty : QSColQtyL;
-                setIntField(param.thisObject, "mColumns", 8);
-                param.setResult(mColumns != 8);
-
-            }
-        });
-
     }
 
     @Override
