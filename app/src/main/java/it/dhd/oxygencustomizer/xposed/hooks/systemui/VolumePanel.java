@@ -88,7 +88,12 @@ public class VolumePanel extends XposedMods {
             sliderCustomizable = false;
         }
 
-        Class<?> OplusVolumeDialogImpl = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
+        Class<?> OplusVolumeDialogImpl;
+        try {
+            OplusVolumeDialogImpl = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusVolumeDialogImpl = findClass("com.oplusos.systemui.volume.VolumeDialogImplEx", lpparam.classLoader); // OOS 13
+        }
         hookAllMethods(OplusVolumeDialogImpl, "computeTimeoutH", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {

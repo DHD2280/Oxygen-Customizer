@@ -15,6 +15,13 @@
     <string name="opt_selected2">Selected: %s%s</string>
     <string name="requires_sysui_restart">This section requires SystemUI restart\nTap on menu to restart.</string>
 
+    <!-- Main Activity -->
+    <!-- App kill Alert -->
+    <string name="app_kill_alert_title">Notice</string>
+    <string name="app_kill_ok_btn">OK</string>
+    <!-- Reboot alert -->
+    <string name="reboot_alert_body">A system reboot is required for the settings to apply</string>
+
     <!-- General Strings -->
     <string name="btn_select">Select</string>
     <string name="battery_charging">Battery Charging</string>
@@ -698,6 +705,10 @@
     <string name="export_summary">Export settings</string>
     <string name="import_title">Import</string>
     <string name="import_summary">Import settings</string>
+    <string name="export_success">Export successful</string>
+    <string name="export_failed">Export failed</string>
+    <string name="import_success">Import successful</string>
+    <string name="import_failed">Import failed</string>
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>

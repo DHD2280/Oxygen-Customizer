@@ -109,6 +109,7 @@ public class StatusbarMods extends XposedMods {
 
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
+    private Class<?> DrawableSize = null;
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
@@ -510,7 +511,9 @@ public class StatusbarMods extends XposedMods {
                 mNotificationIconContainer = param.thisObject;
             }
         });
-        Class<?> DrawableSize = findClass("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+        try {
+            DrawableSize = findClass("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+        } catch (Throwable ignored) {}
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,
                 "getIcon",
@@ -525,7 +528,6 @@ public class StatusbarMods extends XposedMods {
                         Object statusBarIcon = param.args[2];
 
                         String pkgName = (String) getObjectField(statusBarIcon, "pkg");
-                        int userId = (int) callMethod(getObjectField(statusBarIcon, "user"), "getIdentifier");
                         try {
                             if (!pkgName.contains("systemui")) {
                                 icon = mContext.getPackageManager().getApplicationIcon(pkgName);
@@ -539,12 +541,15 @@ public class StatusbarMods extends XposedMods {
                             dimen = 48;
                             float density = mContext.getResources().getDisplayMetrics().density;
                             int dimensionPixelSize = Math.round(dimen * density);
-                            Drawable icon2 = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, dimensionPixelSize, dimensionPixelSize);
-                            if (icon2 != null) {
-                                param.setResult(icon2);
+                            if (DrawableSize != null) {
+                                Drawable icon2 = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, dimensionPixelSize, dimensionPixelSize);
+                                if (icon2 != null) {
+                                    param.setResult(icon2);
+                                }
+                            } else {
+                                param.setResult(icon);
                             }
                         }
-
 
                     }
                 });

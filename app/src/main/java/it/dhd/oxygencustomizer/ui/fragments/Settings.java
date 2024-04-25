@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
+import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.app.Activity;
@@ -11,6 +12,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -38,6 +42,7 @@ public class Settings extends PreferenceFragmentCompat {
     // Updater Prefs
     Preference updatePref;
     SwitchPreferenceCompat autoUpdatePref, checkOnWifiPref;
+    boolean export = true;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -63,7 +68,8 @@ public class Settings extends PreferenceFragmentCompat {
         if (deleteAllPref != null) {
             deleteAllPref.setOnPreferenceClickListener(preference -> {
                 // Delete all data
-                PrefManager.clearPrefs(requireContext().createDeviceProtectedStorageContext().getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE));
+                SharedPreferences prefs = getDefaultSharedPreferences(requireContext().createDeviceProtectedStorageContext());
+                PrefManager.clearPrefs(prefs);
                 AppUtils.restartAllScope(new String[]{SYSTEM_UI});
                 return true;
             });
@@ -116,10 +122,10 @@ public class Settings extends PreferenceFragmentCompat {
 
     private void importExportSettings(boolean export) {
         Intent fileIntent = new Intent();
+        this.export = export;
         fileIntent.setAction(export ? Intent.ACTION_CREATE_DOCUMENT : Intent.ACTION_GET_CONTENT);
         fileIntent.setType("*/*");
         fileIntent.putExtra(Intent.EXTRA_TITLE, "OxygenCustomizer_Config" + ".bin");
-        fileIntent.putExtra("export", export);
         mImportExportLauncher.launch(fileIntent);
     }
 
@@ -128,19 +134,31 @@ public class Settings extends PreferenceFragmentCompat {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     if (data == null) return;
-                    boolean export = data.getBooleanExtra("export", true);
 
-                    SharedPreferences prefs = requireContext().createDeviceProtectedStorageContext().getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", Context.MODE_PRIVATE);
+                    SharedPreferences prefs = getDefaultSharedPreferences(requireContext().createDeviceProtectedStorageContext());
+
+                    Log.d("Settings", "importExportSettings: export? " + export + " " + data.getData());
 
                     if (export) {
                         try {
-                            PrefManager.exportPrefs(prefs, requireContext().getContentResolver().openOutputStream(data.getData()));
+                            if (PrefManager.exportPrefs(prefs, getContext().getContentResolver().openOutputStream(data.getData()))) {
+                                AppUtils.showToast(requireContext(), getString(R.string.export_success));
+                            } else {
+                                AppUtils.showToast(requireContext(), getString(R.string.export_failed));
+                            }
+
                         } catch (Exception ignored) {
                         }
                     } else {
                         try {
-                            PrefManager.importPath(prefs, requireContext().getContentResolver().openInputStream(data.getData()));
-                        } catch (Exception ignored) {
+                            if (PrefManager.importPath(prefs, getContext().getContentResolver().openInputStream(data.getData()))) {
+                                AppUtils.showToast(requireContext(), getString(R.string.import_success));
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> AppUtils.restartAllScope(new String[]{SYSTEM_UI}), 1000);
+                            } else {
+                                AppUtils.showToast(requireContext(), getString(R.string.import_failed));
+                            }
+                        } catch (Exception e) {
+                            Log.d("Settings", "importExportSettings: " + e.getMessage());
                         }
                     }
                 }

@@ -2,7 +2,11 @@ package it.dhd.oxygencustomizer.ui.activity;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
+import static it.dhd.oxygencustomizer.ui.fragments.UpdateFragment.UPDATES_CHANNEL_ID;
+
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,8 +29,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+import com.topjohnwu.superuser.Shell;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -76,11 +82,12 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragmentManager = getSupportFragmentManager();
+        tryMigratePrefs();
 
+        fragmentManager = getSupportFragmentManager();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        createChannels();
 
         if (savedInstanceState == null) {
             replaceFragment(new Mods());
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         prefsList.add(new Object[]{R.xml.misc_prefs, R.string.misc, new Mods.Misc()});
 
         PreferenceHelper.init(ExtendedSharedPreferences.from(getDefaultSharedPreferences(createDeviceProtectedStorageContext())));
+
 
         // Setup navigation
         setSupportActionBar(binding.toolbar);
@@ -365,4 +373,34 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         modsFragment = new Mods();
         new Handler(getMainLooper()).post(() -> modsFragment.onSearchResultClicked(result));
     }
+
+    private void createChannels() {
+        CharSequence name = getString(R.string.update_channel_name);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+        NotificationChannel channel = new NotificationChannel(UPDATES_CHANNEL_ID, name, importance);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+
+    private void tryMigratePrefs() {
+        String migrateFileName = "OC_migrate.tmp";
+        @SuppressLint("SdCardPath")
+        String migrateFilePath = "/sdcard/" + migrateFileName;
+        if (Shell.cmd(String.format("stat %s", migrateFilePath)).exec().getOut().size() > 0) {
+            String OCPrefsPath = "/data/user_de/0/it.dhd.oxygencustomizer/shared_prefs/it.dhd.oxygencustomizer_preferences.xml";
+            Shell.cmd(String.format("mv %s %s", migrateFilePath, OCPrefsPath)).exec();
+            Shell.cmd(String.format("chmod 777 %s", OCPrefsPath)).exec(); //system will correct the permissions upon next launch. let's just give it access to do so
+
+            new MaterialAlertDialogBuilder(this, R.style.MaterialComponents_MaterialAlertDialog)
+                    .setTitle(R.string.app_kill_alert_title)
+                    .setMessage(R.string.reboot_alert_body)
+                    .setPositiveButton(R.string.reboot_word, (dialog, which) -> AppUtils.restartScope("system"))
+                    .setCancelable(false)
+                    .show();
+        }
+
+    }
+
 }

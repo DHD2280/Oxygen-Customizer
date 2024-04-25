@@ -511,8 +511,8 @@ public class StatusbarClock extends XposedMods {
                 targetArea = ((ViewGroup) mSystemIconArea.getParent());
             }
         }
-        parent.removeView(mClockView);
         if (targetArea != null) {
+        parent.removeView(mClockView);
             if (index != null) {
                 targetArea.addView(mClockView, index);
             } else {
@@ -557,11 +557,12 @@ public class StatusbarClock extends XposedMods {
             mClockChipDrawale.setStroke(chipStrokeWidth, chipUseAccent ? mAccent : chipGradient1);
         }
         mClockChipDrawale.invalidateSelf();
+        setupChip();
     }
 
     private void setupChip() {
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, 2), 0, dp2px(mContext, 2), 0);
+            mClockView.setPadding(dp2px(mContext, 1), 0, dp2px(mContext, 1), 0);
             mClockView.setBackground(mClockChipDrawale);
         } else {
             mClockView.setPadding(0, 0, 0, 0);

@@ -54,6 +54,7 @@ public class PrefManager {
 
         for (Map.Entry<String, Object> e : map.entrySet()) {
             // Unfortunately, the editor only provides typed setters
+            Log.d(TAG, "Importing " + e.getKey() + " with value " + e.getValue());
             if (e.getValue() instanceof Boolean) {
                 editor.putBoolean(e.getKey(), (Boolean) e.getValue());
             } else if (e.getValue() instanceof String) {

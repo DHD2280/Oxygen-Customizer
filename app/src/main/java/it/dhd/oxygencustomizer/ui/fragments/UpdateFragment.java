@@ -169,8 +169,6 @@ public class UpdateFragment extends Fragment {
         //Android 13 requires notification permission to be granted or it won't allow it
         ShellUtils.execCommand(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID), true); //will ask root if not granted yet
 
-        createChannels();
-
         if (!ShellUtils.checkRootPermission()) {
             currentVersionName = getString(R.string.root_not_here);
             currentVersionType = -1;
@@ -279,18 +277,6 @@ public class UpdateFragment extends Fragment {
 /*    private void getChangelog(String URL, TaskDoneCallback callback) {
         new ChangelogReceiver(URL, callback).start();
     }*/
-
-    private void createChannels() {
-        if (getContext() == null) {
-            Log.w("UpdateFragment", "createChannels: context is null");
-            return;
-        }
-
-        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(getContext().getString(R.string.notification_channel_update), getContext().getString(R.string.notification_channel_update), NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription(getContext().getString(R.string.notification_channel_update_desc));
-        notificationManager.createNotificationChannel(channel);
-    }
 
     private void getCurrentVersion() {
         rebootPending = false;
