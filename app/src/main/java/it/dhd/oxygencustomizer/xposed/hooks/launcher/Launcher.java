@@ -125,6 +125,7 @@ public class Launcher extends XposedMods {
         findAndHookMethod(OplusPageIndicator, "onDraw", Canvas.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
                 View v = (View) param.thisObject;
                 switch (v.getParent().getClass().getCanonicalName()) {
                     case "com.android.launcher3.OplusDragLayer":
