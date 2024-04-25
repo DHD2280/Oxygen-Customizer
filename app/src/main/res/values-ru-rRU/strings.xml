@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="BB_Opacity_title">Непрозрачность полосы</string>
     <string name="BB_Thickness_title">Толщина стержня</string>
@@ -335,7 +335,6 @@
     <string name="package_not_found">Пакет не найден</string>
     <string name="package_not_hook_enabled">Пакет не включен в LSposed</string>
     <string name="package_not_launchable">Пакет не может быть запущен</string>
-    <string name="percentage_text">%d%%</string>
     <string name="perimeter_alpha_desc">Сделайте периметр батареи полупрозрачным</string>
     <string name="perimeter_alpha_title">Альфа-периметр</string>
     <string name="power_button_category_title">Power Button</string>
