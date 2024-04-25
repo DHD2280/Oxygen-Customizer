@@ -309,6 +309,26 @@ public class BatteryStyleManager extends XposedMods {
                         singleToneColor = (int) param.args[0];
                         frameColor = (int) param.args[1];
                         backgroundColor = (int) param.args[2];
+                        if (mBatteryIcon != null) {
+                            if (mBatteryIcon.getDrawable() instanceof BatteryDrawable mBatteryDrawable) {
+                                mBatteryDrawable.setColors(frameColor, backgroundColor, singleToneColor);
+                                mBatteryDrawable.customizeBatteryDrawable(
+                                        mBatteryLayoutReverse,
+                                        mScaledPerimeterAlpha,
+                                        mScaledFillAlpha,
+                                        mCustomBlendColor,
+                                        mRainbowFillColor,
+                                        mCustomFillColor,
+                                        mCustomFillGradColor,
+                                        mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
+                                        mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                                        mCustomPowerSaveColor,
+                                        mCustomPowerSaveFillColor,
+                                        mChargingIconSwitch
+                                );
+                                mBatteryIcon.setImageDrawable(mBatteryDrawable);
+                            }
+                        }
                     }
                 });
 
