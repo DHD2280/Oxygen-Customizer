@@ -101,10 +101,10 @@ public class HeaderClock extends XposedMods {
     private TextView mOplusCarrier = null;
 
     // Custom Clock Prefs
-    private boolean showHeaderClock;
-    private int clockStyle;
+    private boolean showHeaderClock = false;
+    private int clockStyle = 0;
 
-    private boolean centeredClockView;
+    private boolean centeredClockView = false;
 
     // Stock Clock Prefs
     private int stockClockRedStyle;
@@ -131,8 +131,8 @@ public class HeaderClock extends XposedMods {
 
     private int stockClockDateBackgroundChipStyle;
     private int mAccent;
-    private GradientDrawable mClockChipDrawale;
-    private GradientDrawable mDateChipDrawale;
+    private static final GradientDrawable mClockChipDrawale = new GradientDrawable();
+    private static final GradientDrawable mDateChipDrawale = new GradientDrawable();
     private Typeface mStockClockTypeface, mStockDateTypeface;
     private Object OQC = null;
     private Object mActivityStarter = null;
@@ -446,9 +446,6 @@ public class HeaderClock extends XposedMods {
 
     private void setupChips() {
 
-        mClockChipDrawale = new GradientDrawable();
-        mDateChipDrawale = new GradientDrawable();
-
         log(TAG + "updateChips: " + stockClockTimeBackgroundChip + " " + stockClockDateBackgroundChip);
 
         mAccent = getPrimaryColor(mContext);
@@ -514,6 +511,7 @@ public class HeaderClock extends XposedMods {
             mDateChipDrawale.setStroke(stockDateStrokeWidth, stockClockDateUseAccent ? mAccent : stockClockDateChipGradient1);
         }
         mDateChipDrawale.invalidateSelf();
+        updateChips();
 
     }
 
@@ -524,6 +522,10 @@ public class HeaderClock extends XposedMods {
             removeChip(mOplusClock);
         }
         if (!stockClockHideDate && stockClockDateBackgroundChip) {
+            if (mOplusDate != null) {
+                mOplusDate.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                mOplusDate.requestLayout();
+            }
             applyChip(mOplusDate);
         } else {
             removeChip(mOplusDate);
