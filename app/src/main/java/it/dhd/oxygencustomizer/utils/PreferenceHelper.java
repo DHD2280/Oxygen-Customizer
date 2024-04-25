@@ -32,8 +32,17 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BatteryPrefs;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_BOTTOM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_TOP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_LINE_HEIGHT;
@@ -550,6 +559,16 @@ public class PreferenceHelper {
             case "qs_header_clock_top_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_top_margin", 0) + "dp";
             case "qs_header_clock_left_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_left_margin", 0) + "dp";
 
+            // Battery
+            case CUSTOM_BATTERY_WIDTH -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_WIDTH, 20) + "dp";
+            case CUSTOM_BATTERY_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20) + "dp";
+            case CUSTOM_BATTERY_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_LEFT, 4) + "dp";
+            case CUSTOM_BATTERY_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_RIGHT, 4) + "dp";
+            case CUSTOM_BATTERY_MARGIN_TOP -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_TOP, 0) + "dp";
+            case CUSTOM_BATTERY_MARGIN_BOTTOM -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_BOTTOM, 0) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
 
             // Gesture Prefs
             case "gesture_left_height" -> instance.mPreferences.getSliderInt("gesture_left_height", 100) + "%";

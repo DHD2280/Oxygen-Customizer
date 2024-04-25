@@ -434,6 +434,7 @@ public class BatteryStyleManager extends XposedMods {
                     progress.setProgress(0);
                     progress.setVisibility(View.GONE);
                 } else {
+                    batteryPercentInView.setVisibility(View.VISIBLE);
                     if (customizePercSize) {
                         batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
                     }
