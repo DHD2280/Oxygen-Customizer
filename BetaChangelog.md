@@ -1,3 +1,7 @@
+**beta-6**  
+- Added the ability to hide Lockscreen Affordance  
+- Initial Support OOS13  
+  
 **beta-5**  
 - Fix providers  
   
