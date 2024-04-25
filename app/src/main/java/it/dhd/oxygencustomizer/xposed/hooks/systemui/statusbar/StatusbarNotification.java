@@ -103,7 +103,12 @@ public class StatusbarNotification extends XposedMods {
                     }
                 });
 
-        Class<?> SystemPromptController = findClass("com.oplus.systemui.statusbar.controller.SystemPromptController", lpparam.classLoader);
+        Class<?> SystemPromptController;
+        try {
+            SystemPromptController = findClass("com.oplus.systemui.statusbar.controller.SystemPromptController", lpparam.classLoader);
+        } catch (Throwable t) {
+            SystemPromptController = findClass("com.oplusos.systemui.controller.SystemPromptController", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(SystemPromptController, "updateDeveloperMode", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
