@@ -70,9 +70,39 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/lockscreen_affordance"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_affordance_remove_left"
+            android:title="@string/lockscreen_affordance_remove_left"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_affordance_remove_right"
+            android:title="@string/lockscreen_affordance_remove_right"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="lockscreen_misc_category"
         android:title="@string/misc"
         app:iconSpaceReserved="false">
+
+        <!-- <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_hide_lock_icon"
+            android:title="@string/lockscreen_hide_lock_icon"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false" /> -->
 
         <SwitchPreferenceCompat
             android:defaultValue="false"

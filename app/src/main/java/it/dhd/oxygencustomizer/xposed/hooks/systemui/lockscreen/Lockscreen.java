@@ -9,9 +9,14 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_FINGERPRINT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_LEFT_AFFORDANCE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_RIGHT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_FINGERPRINT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LEFT_AFFORDANCE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LOCK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_SOS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
@@ -23,7 +28,11 @@ import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
@@ -51,6 +60,10 @@ public class Lockscreen extends XposedMods {
     private Object mFpIcon;
     private float mFpScale = 1.0f;
     private Drawable mFpDrawable = null;
+    private boolean removeLeftAffordance = false, removeRightAffordance = false;
+    private boolean removeLockIcon = false;
+    private View mStartButton = null, mEndButton = null;
+    private ImageView mLockIcon = null;
 
     public Lockscreen(Context context) {
         super(context);
@@ -64,6 +77,9 @@ public class Lockscreen extends XposedMods {
         customFingerprint = Xprefs.getBoolean(LOCKSCREEN_CUSTOM_FINGERPRINT, false);
         fingerprintStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_FINGERPRINT_STYLE, "0"));
         mFpScale = Xprefs.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f);
+        removeLockIcon = Xprefs.getBoolean(LOCKSCREEN_REMOVE_LOCK, false);
+        removeLeftAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE, false);
+        removeRightAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE, false);
 
         if (Key.length > 0) {
             if (Key[0].equals(LOCKSCREEN_FINGERPRINT_STYLE)
@@ -71,6 +87,9 @@ public class Lockscreen extends XposedMods {
                 || Key[0].equals(LOCKSCREEN_HIDE_FINGERPRINT)
                 || Key[0].equals(LOCKSCREEN_FINGERPRINT_SCALING)) {
                 updateDrawable();
+            } else if (Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE)
+                    || Key[0].equals(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE)) {
+                updateAffordance();
             }
         }
     }
@@ -157,6 +176,12 @@ public class Lockscreen extends XposedMods {
             log(TAG + "startFadeInAnimation not found");
         }
 
+        // Affordance Section
+        hookAffordance(lpparam);
+
+        // Lock Icon
+        hookLockIcon(lpparam);
+
     }
 
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
@@ -200,6 +225,71 @@ public class Lockscreen extends XposedMods {
         }
         if (mFpScale != 1.0f && mFpDrawable != null)
             mFpDrawable = scaleDrawable(mContext, mFpDrawable, mFpScale);
+    }
+
+    private void updateAffordance() {
+        if (removeLeftAffordance || removeRightAffordance) {
+            if (mStartButton != null) mStartButton.setVisibility(removeLeftAffordance ? View.GONE : View.VISIBLE);
+            if (mEndButton != null) mEndButton.setVisibility(removeRightAffordance ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    private void hookAffordance(XC_LoadPackage.LoadPackageParam lpparam) {
+        Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder", lpparam.classLoader);
+        hookAllMethods(KeyguardBottomAreaView, "updateButton", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (!(removeLeftAffordance || removeRightAffordance)) return;
+                ImageView view = (ImageView) param.args[0];
+                if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                    mStartButton = view;
+                    if (removeLeftAffordance) {
+                        view.setVisibility(View.GONE);
+                    }
+                } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage))
+                    mEndButton = view;
+                    if (removeRightAffordance) {
+                        view.setVisibility(View.GONE);
+                    }
+                }
+        });
+        /*
+        "com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder".toClass().apply {
+            method { name = "updateButton" }.hook {
+                before {
+                    if ((leftButton || rightButton).not()) return@before
+                    val view = args().first().cast<View>() ?: return@before
+                    when (safeOfNull { view.resources.getResourceEntryName(view.id) }) {
+                        "start_button" -> if (leftButton) {
+                            view.isVisible = false
+                            resultNull()
+                        }
+
+                        "end_button" -> if (rightButton) {
+                            view.isVisible = false
+                            resultNull()
+                        }
+                    }
+                }
+            }
+        }
+         */
+    }
+
+    private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
+        Class<?> OplusAuthBiometricFingerprintView = findClass("com.oplus.systemui.biometrics.OplusAuthBiometricFingerprintView", lpparam.classLoader);
+        findAndHookMethod(OplusAuthBiometricFingerprintView, "updateIcon",
+                int.class,
+                int.class,
+                new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (removeLockIcon) {
+                    mLockIcon.setImageDrawable(null);
+                    param.setResult(null);
+                }
+            }
+        });
     }
 
     @Override

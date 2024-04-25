@@ -367,6 +367,13 @@ public class Constants {
             public static final String LOCKSCREEN_CUSTOM_FINGERPRINT = "lockscreen_fp_custom_icon";
             public static final String LOCKSCREEN_FINGERPRINT_STYLE = "lockscreen_fp_icon_custom";
             public static final String LOCKSCREEN_FINGERPRINT_SCALING = "lockscreen_fp_icon_scaling";
+            public static final String LOCKSCREEN_REMOVE_LOCK = "lockscreen_hide_lock_icon";
+            public static final String LOCKSCREEN_REMOVE_LEFT_AFFORDANCE = "lockscreen_affordance_remove_left";
+            public static final String LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE = "lockscreen_affordance_remove_right";
+            public static final String LOCKSCREEN_CUSTOM_LEFT_AFFORDANCE = "lockscreen_affordance_custom_left";
+            public static final String LOCKSCREEN_CUSTOM_RIGHT_AFFORDANCE = "lockscreen_affordance_custom_left";
+            public static final String LOCKSCREEN_AFFORDANCE_LEFT = "lockscreen_affordance_left";
+            public static final String LOCKSCREEN_AFFORDANCE_RIGHT = "lockscreen_affordance_right";
         }
 
         public static class LockscreenClock {
