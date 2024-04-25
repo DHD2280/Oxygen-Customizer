@@ -370,8 +370,10 @@ public class HeaderClock extends XposedMods {
         hookAllMethods(QuickStatusBarHeader, "updateResources", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                updateClockView();
+                updateStockPrefs();
+                setupChips();
                 updateChips();
+                updateClockView();
             }
         });
 
