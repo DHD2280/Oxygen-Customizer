@@ -125,7 +125,6 @@ public class FeatureEnabler extends XposedMods {
                     double distanceFromCenter = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
                     if (distanceFromCenter <= radius) {
-                        Object mTouchEventListener = getObjectField(param.thisObject, "mTouchEventListener");
 
                         if (useAuthForAdvancedReboot && ((BiometricManager) mContext.getSystemService(BiometricManager.class)).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
                             showAuth();
@@ -184,7 +183,6 @@ public class FeatureEnabler extends XposedMods {
     private void showDialog() throws Exception {
         log("Oxygen Customizer - Advanced Reboot Dialog");
         final AlertDialog dialog = (AlertDialog) SystemUIDialogClass.getConstructor(Context.class).newInstance(mContext);
-        //final AlertDialog dialog = (AlertDialog) OplusThemeSystemUiDialog.getConstructor(Context.class, int.class).newInstance(mContext, ResourcesCompat.get);
         dialog.setTitle(modRes.getString(R.string.advanced_reboot_title));
         ListView listView = new ListView(mContext);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
@@ -223,9 +221,6 @@ public class FeatureEnabler extends XposedMods {
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         int viewWidth = (int) callMethod(param, "getWidth");
-        int viewHeight = (int) callMethod(param, "getHeight");
-
-        int buttonWidth = dp2px(mContext, 150);
 
         radius = mContext.getResources().getDimensionPixelSize(
                 mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage));

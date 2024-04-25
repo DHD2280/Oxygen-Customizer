@@ -434,6 +434,8 @@ public class BatteryStyleManager extends XposedMods {
                             lp.setMargins(left, 0, right, mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("battery_margin_bottom", "dimen", mContext.getPackageName())));
                             mStockChargingIcon.setLayoutParams(lp);
                         }
+                    } else {
+                        mStockChargingIcon.setVisibility(View.GONE);
                     }
                 }
             }
