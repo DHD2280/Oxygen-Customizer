@@ -13,9 +13,6 @@
     <!-- OmniJaws -->
     <uses-permission android:name="it.dhd.oxygencustomizer.READ_WEATHER" />
 
-    <!-- Notifications -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <!-- Install New APK -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 

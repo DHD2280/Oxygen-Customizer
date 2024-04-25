@@ -335,14 +335,15 @@ public class HeaderClock extends XposedMods {
         hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
+                TextView textView = (TextView) param.args[0];
                 if (showHeaderClock || stockClockRedStyle == 1 ) {
                     param.setResult(null);
+                    if (showHeaderClock) textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
                     return;
                 }
 
                 if (stockClockRedStyle == 2 || stockClockRedStyle == 3) {
                     CharSequence charSequence = (CharSequence) param.args[1];
-                    TextView textView = (TextView) param.args[0];
                     StringBuilder sb = new StringBuilder(charSequence);
                     int length = sb.length();
                     for (int i = 0; i < length; i++) {
@@ -370,10 +371,8 @@ public class HeaderClock extends XposedMods {
         hookAllMethods(QuickStatusBarHeader, "updateResources", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                updateStockPrefs();
-                setupChips();
-                updateChips();
                 updateClockView();
+                updateChips();
             }
         });
 
