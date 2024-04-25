@@ -667,6 +667,11 @@ public class HeaderClock extends XposedMods {
         String customFont = Environment.getExternalStorageDirectory() + "/.oxygencustomizer_files/headerclock_font.ttf";
         int mAccent = getPrimaryColor(mContext);
         boolean customColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
+        int textColor = Color.BLACK;
+        try {
+            textColor = mContext.getColor(mContext.getResources().getIdentifier("status_bar_qs_footer_clock", "color", listenPackage));
+        } catch (Throwable ignored) {
+        }
 
         int accent1 = Xprefs.getInt(
                 QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
@@ -682,11 +687,11 @@ public class HeaderClock extends XposedMods {
         );
         int textPrimary = Xprefs.getInt(
                 QS_HEADER_CLOCK_COLOR_CODE_TEXT1,
-                getColorResCompat(mContext, android.R.attr.textColorPrimary)
+                textColor
         );
         int text2 = Xprefs.getInt(
                 QS_HEADER_CLOCK_COLOR_CODE_TEXT2,
-                getColorResCompat(mContext, android.R.attr.textColorPrimary)
+                textColor
         );
 
         Typeface typeface = null;
@@ -707,8 +712,8 @@ public class HeaderClock extends XposedMods {
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : mAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : mAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", customColor ? accent3 : mAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", customColor ? textPrimary : getColorResCompat(mContext, android.R.attr.textColorPrimary));
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", customColor ? text2 : getColorResCompat(mContext, android.R.attr.textColorPrimary));
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", customColor ? textPrimary : textColor);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", customColor ? text2 : textColor);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "backgroundAccent", customColor ? accent1 : mAccent);
 
         if (typeface != null) {
