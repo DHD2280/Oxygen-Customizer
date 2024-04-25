@@ -253,27 +253,6 @@ public class Lockscreen extends XposedMods {
                     }
                 }
         });
-        /*
-        "com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder".toClass().apply {
-            method { name = "updateButton" }.hook {
-                before {
-                    if ((leftButton || rightButton).not()) return@before
-                    val view = args().first().cast<View>() ?: return@before
-                    when (safeOfNull { view.resources.getResourceEntryName(view.id) }) {
-                        "start_button" -> if (leftButton) {
-                            view.isVisible = false
-                            resultNull()
-                        }
-
-                        "end_button" -> if (rightButton) {
-                            view.isVisible = false
-                            resultNull()
-                        }
-                    }
-                }
-            }
-        }
-         */
     }
 
     private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
