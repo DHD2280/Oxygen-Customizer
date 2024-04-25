@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
 import static android.content.Context.BATTERY_SERVICE;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
 
 import android.content.res.Configuration;
@@ -9,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
+import androidx.preference.SwitchPreferenceCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
@@ -75,7 +79,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
     @Override
     public String[] getScopes() {
-        return new String[]{Constants.Packages.SYSTEM_UI};
+        return new String[]{SYSTEM_UI};
     }
 
 
@@ -129,7 +133,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
         @Override
         public String[] getScopes() {
-            return new String[]{Constants.Packages.SYSTEM_UI};
+            return new String[]{SYSTEM_UI};
         }
     }
 
@@ -157,7 +161,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
         @Override
         public String[] getScopes() {
-            return new String[]{Constants.Packages.SYSTEM_UI};
+            return new String[]{SYSTEM_UI};
         }
     }
 
@@ -272,6 +276,14 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                 mChargingIcon.createDefaultAdapter();
                 mChargingIcon.setAdapterType(ListPreferenceAdapter.TYPE_BATTERY_ICONS);
             }
+
+            SwitchPreferenceCompat mBatteryCustomize = findPreference("battery_icon_customize");
+            if (mBatteryCustomize != null) {
+                mBatteryCustomize.setOnPreferenceChangeListener((preference, newValue) -> {
+                    AppUtils.restartAllScope(new String[]{SYSTEM_UI});
+                    return true;
+                });
+            }
         }
 
         @Override
@@ -286,7 +298,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
         @Override
         public String[] getScopes() {
-            return new String[]{Constants.Packages.SYSTEM_UI};
+            return new String[]{SYSTEM_UI};
         }
     }
 
@@ -316,7 +328,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
         @Override
         public String[] getScopes() {
-            return new String[]{Constants.Packages.SYSTEM_UI};
+            return new String[]{SYSTEM_UI};
         }
     }
 
