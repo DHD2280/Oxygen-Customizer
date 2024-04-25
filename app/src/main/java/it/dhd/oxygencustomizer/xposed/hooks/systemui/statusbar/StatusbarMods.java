@@ -512,7 +512,7 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
-            DrawableSize = findClass("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+            DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
         } catch (Throwable ignored) {}
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,

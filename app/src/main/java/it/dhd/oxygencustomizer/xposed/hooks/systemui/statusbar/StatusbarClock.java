@@ -19,6 +19,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -560,14 +561,25 @@ public class StatusbarClock extends XposedMods {
         setupChip();
     }
 
+    @SuppressLint("RtlHardcoded")
     private void setupChip() {
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, 1), 0, dp2px(mContext, 1), 0);
+            mClockView.setPadding(dp2px(mContext, 8), dp2px(mContext, 2), dp2px(mContext, 8), dp2px(mContext, 2));
+            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             mClockView.setBackground(mClockChipDrawale);
         } else {
             mClockView.setPadding(0, 0, 0, 0);
+            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mClockView.setBackground(null);
         }
+        switch (mClockDatePosition) {
+            case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER_VERTICAL);
+            case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        }
+        mClockView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        mClockView.requestLayout();
+        if (mCenteredIconArea != null) mCenteredIconArea.requestLayout();
     }
 
     private void updateShowClock() {

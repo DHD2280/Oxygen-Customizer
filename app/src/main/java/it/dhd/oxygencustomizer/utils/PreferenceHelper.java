@@ -535,7 +535,7 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
 
             // Statusbar
-            case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 14) + "sp";
+            case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_hdur_summary) + "\n" +
                             instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_hduration", 60) + " " +

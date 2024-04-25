@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
+import android.os.Build;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -32,7 +33,12 @@ public class StatusbarIcons extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         try {
-            Class<?> OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
+            Class<?> OplusPhoneStatusBarPolicyExImpl;
+            try {
+                OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
+            } catch (Throwable t) {
+                OplusPhoneStatusBarPolicyExImpl = findClass("com.oplusos.systemui.statusbar.phone.PhoneStatusBarPolicyEx", lpparam.classLoader);
+            }
 
             // private final void updateBluetoothIcon(int i, int i2, CharSequence charSequence, boolean z) {
             findAndHookMethod(OplusPhoneStatusBarPolicyExImpl, "updateBluetoothIcon",
@@ -46,7 +52,7 @@ public class StatusbarIcons extends XposedMods {
 
                     if (!enabled || !hideBluetooth) return;
 
-                    Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                    Object bluetoothController = getObjectField(param.thisObject, Build.VERSION.SDK_INT >= 34 ? "bluetoothController" : "mBluetooth");
                     boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
 
                     if (!connected)
