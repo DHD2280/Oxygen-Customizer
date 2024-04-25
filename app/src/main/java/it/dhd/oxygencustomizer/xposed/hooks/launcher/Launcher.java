@@ -135,6 +135,8 @@ public class Launcher extends XposedMods {
                         v.setVisibility(View.GONE);
                         if (mRemoveFolderPagination) param.setResult(null);
                         break;
+                    default:
+                        break;
                 }
             }
         });

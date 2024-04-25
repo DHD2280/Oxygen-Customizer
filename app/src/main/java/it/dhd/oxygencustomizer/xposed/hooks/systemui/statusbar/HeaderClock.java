@@ -101,10 +101,10 @@ public class HeaderClock extends XposedMods {
     private TextView mOplusCarrier = null;
 
     // Custom Clock Prefs
-    private boolean showHeaderClock;
-    private int clockStyle;
+    private boolean showHeaderClock = false;
+    private int clockStyle = 0;
 
-    private boolean centeredClockView;
+    private boolean centeredClockView = false;
 
     // Stock Clock Prefs
     private int stockClockRedStyle;
