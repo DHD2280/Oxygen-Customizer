@@ -45,7 +45,18 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_HEIGHT_PORTRAIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_LANDSCAPE_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_SIDE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_TOP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_CUSTOM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_INTENSITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -245,11 +256,23 @@ public class PreferenceHelper {
             }
 
             // Header Image
+            // Header Image
+            case QS_HEADER_IMAGE_TINT,
+                    QS_HEADER_IMAGE_ALPHA,
+                    QS_HEADER_IMAGE_BOTTOM_FADE,
+                    QS_HEADER_IMAGE_HEIGHT_PORTRAIT,
+                    QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
+                    QS_HEADER_IMAGE_PADDING_SIDE,
+                    QS_HEADER_IMAGE_PADDING_TOP,
+                    QS_HEADER_IMAGE_URI,
+                    QS_HEADER_IMAGE_ZOOM_TO_FIT -> {
+                return instance.mPreferences.getBoolean(QS_HEADER_IMAGE_ENABLED, false);
+            }
             case "qs_header_image_tint_custom" -> {
-                return instance.mPreferences.getString("qs_header_image_tint", "0").equals("4");
+                return isVisible(QS_HEADER_IMAGE_TINT) && instance.mPreferences.getString("qs_header_image_tint", "0").equals("4");
             }
             case "qs_header_image_tint_intensity" -> {
-                return !instance.mPreferences.getString("qs_header_image_tint", "0").equals("0");
+                return isVisible(QS_HEADER_IMAGE_TINT) && !instance.mPreferences.getString("qs_header_image_tint", "0").equals("0");
             }
 
             // Header Clock
