@@ -48,6 +48,14 @@
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:defaultValue="false"/>
+
+        <SwitchPreferenceCompat
+            android:key="remove_folder_pagination"
+            app:iconSpaceReserved="false"
+            android:title="@string/remove_folder_pagination_title"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -83,6 +91,20 @@
             android:summary="@string/launcher_app_details_summary"
             android:key="launcher_open_app_details"
             android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/misc_category"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="remove_home_pagination"
+            app:iconSpaceReserved="false"
+            android:title="@string/remove_home_pagination"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

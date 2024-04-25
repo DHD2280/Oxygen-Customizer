@@ -447,13 +447,14 @@
     <string name="launcher_folder_columns">Columns</string>
     <string name="launcher_folder_rows">Rows</string>
     <string name="launcher_folder_update_preview">Update preview</string>
+    <string name="remove_folder_pagination_title">Remove Folder Pagination</string>
     <string name="drawer">Drawer</string>
     <string name="launcher_drawer_edit_columns">Edit columns</string>
     <string name="drawer_columns">Columns</string>
     <string name="launcher_recents">Recents</string>
     <string name="launcher_app_details_title">Open App Details</string>
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
-
+    <string name="remove_home_pagination">Remove Home Pagination</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
