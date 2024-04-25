@@ -262,7 +262,11 @@ public class StatusbarClock extends XposedMods {
                         }
 
                         ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-                        if (mStatusbarStartSide == null) mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
+                        try {
+                            mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
+                        } catch (Throwable t) {
+                            mStatusbarStartSide = null;
+                        }
 
                         try {
                             mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
@@ -508,11 +512,14 @@ public class StatusbarClock extends XposedMods {
             }
         }
         parent.removeView(mClockView);
-        if (index != null) {
-            targetArea.addView(mClockView, index);
-        } else {
-            targetArea.addView(mClockView);
+        if (targetArea != null) {
+            if (index != null) {
+                targetArea.addView(mClockView, index);
+            } else {
+                targetArea.addView(mClockView);
+            }
         }
+
     }
 
     private void setClockSize() {

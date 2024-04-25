@@ -235,24 +235,51 @@ public class Lockscreen extends XposedMods {
     }
 
     private void hookAffordance(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder", lpparam.classLoader);
-        hookAllMethods(KeyguardBottomAreaView, "updateButton", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!(removeLeftAffordance || removeRightAffordance)) return;
-                ImageView view = (ImageView) param.args[0];
-                if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
-                    mStartButton = view;
-                    if (removeLeftAffordance) {
-                        view.setVisibility(View.GONE);
-                    }
-                } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage))
-                    mEndButton = view;
+        if (Build.VERSION.SDK_INT == 34) {
+            Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder", lpparam.classLoader);
+            hookAllMethods(KeyguardBottomAreaView, "updateButton", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!(removeLeftAffordance || removeRightAffordance)) return;
+                    ImageView view = (ImageView) param.args[0];
+                    if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                        mStartButton = view;
+                        if (removeLeftAffordance) {
+                            view.setVisibility(View.GONE);
+                        }
+                    } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage))
+                        mEndButton = view;
                     if (removeRightAffordance) {
                         view.setVisibility(View.GONE);
                     }
                 }
-        });
+            });
+        } else {
+            Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
+            hookAllMethods(KeyguardBottomAreaView, "updateCameraVisibility", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mEndButton = (View) getObjectField(param.thisObject, "mRightAffordanceView");
+                    if (removeRightAffordance) {
+                        mEndButton.setVisibility(View.GONE);
+                    }
+                }
+            });
+            hookAllMethods(KeyguardBottomAreaView, "updateLeftAffordanceVisibility", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mStartButton = (View) getObjectField(param.thisObject, "mLeftAffordanceView");
+                    if (removeLeftAffordance) {
+                        mStartButton.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+
+        /*
+
+         */
     }
 
     private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
