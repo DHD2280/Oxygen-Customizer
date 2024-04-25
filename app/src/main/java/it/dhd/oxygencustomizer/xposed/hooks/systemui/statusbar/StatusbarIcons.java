@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -11,6 +12,7 @@ import android.content.Context;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class StatusbarIcons extends XposedMods {
@@ -29,27 +31,31 @@ public class StatusbarIcons extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
+        try {
+            Class<?> OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
 
-        // private final void updateBluetoothIcon(int i, int i2, CharSequence charSequence, boolean z) {
-        findAndHookMethod(OplusPhoneStatusBarPolicyExImpl, "updateBluetoothIcon",
-                int.class,
-                int.class,
-                CharSequence.class,
-                boolean.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                boolean enabled = (boolean) param.args[3];
+            // private final void updateBluetoothIcon(int i, int i2, CharSequence charSequence, boolean z) {
+            findAndHookMethod(OplusPhoneStatusBarPolicyExImpl, "updateBluetoothIcon",
+                    int.class,
+                    int.class,
+                    CharSequence.class,
+                    boolean.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    boolean enabled = (boolean) param.args[3];
 
-                if (!enabled || !hideBluetooth) return;
+                    if (!enabled || !hideBluetooth) return;
 
-                Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
-                boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                    Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                    boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
 
-                if (!connected)
-                    param.setResult(connected);
-            }
-        });
+                    if (!connected)
+                        param.setResult(connected);
+                }
+            });
+        } catch (Throwable t) {
+            log(this.getClass().getSimpleName() + " - Class Not Found " + t.toString());
+        }
 
     }
 
