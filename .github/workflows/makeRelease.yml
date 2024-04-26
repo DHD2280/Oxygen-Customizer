@@ -1,0 +1,80 @@
+name: Make Release
+
+on:
+  push:
+    tags: '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Source Code Download
+        run: git clone --branch stable --single-branch --recurse-submodules https://github.com/DHD2280/Oxygen-Customizer.git .
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4.1.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Shell Scripts Permissions
+        run: chmod +x .github/*.sh
+
+      - name: Version Bump
+        run: .github/bumpVersion.sh
+
+      - name: Gradlew Permissions
+        run: chmod +x gradlew
+
+      - name: Signature files preparation
+        run: |
+          if [ ! -z "${{ secrets.KEYSTORE }}" ]; then
+            echo storePassword='${{ secrets.KEYSTORE_PASSWORD }}' >> keystore.properties
+            echo keyAlias='${{ secrets.KEY_ALIAS }}' >> keystore.properties
+            echo keyPassword='${{ secrets.KEY_PASSWORD }}' >> keystore.properties
+            echo storeFile='${{ github.workspace }}/key.jks' >> keystore.properties
+            echo ${{ secrets.KEYSTORE }} | base64 --decode > ${{ github.workspace }}/key.jks
+          fi
+
+      - name: Gradle Build
+        run: ./gradlew assembleRelease
+
+      - name: Magisk Module Generation
+        run: .github/make_zip.sh
+
+      - name: Upload Zip
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: OxygenCustomizer
+          path: output
+
+      - name: Release the binaries
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          tag: ${{ github.ref }}
+          name: ${{ github.ref_name }}
+          prerelease: false
+          draft: false
+          artifacts: 'app/build/outputs/apk/release/*.apk'
+          bodyFile: 'releaseNotes.md'
+
+      - name: Commit version bump
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'stable'
+          commit-message: 'Version update: Release'
+          force-add: 'true'
+          files: app/build.gradle.kts latestStable.json StableChangelog.md
+          name: GitHub
+          email: OxygenCustomizer@dhd.it
+
+      - name: Telegram Channel Post
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.OC_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TK }}
+          message: ${{ env.TMessage }}
+          format: markdown
