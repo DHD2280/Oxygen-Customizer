@@ -88,7 +88,7 @@ public class BackgroundChipPreference extends DialogPreference {
     protected void onClick() {
         bottomSheetDialog = new BottomSheetDialog(getContext());
         mAccentColor = ThemeUtils.getPrimaryColor(getContext());
-        SharedPreferences prefs = PreferenceHelper.instance.mPreferences;
+        SharedPreferences prefs = getSharedPreferences();
 
         // def props
         backgroundChipStyle = prefs.getInt(getStyle(getKey()), 0);
