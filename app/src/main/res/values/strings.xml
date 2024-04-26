@@ -811,7 +811,6 @@
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Windy</string>
     <string name="weather_condition_mist">Misty</string>
-
     <string name="lockscreen_weather">Lockscreen Weather</string>
 
 </resources>
