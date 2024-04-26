@@ -81,13 +81,10 @@ public class Lockscreen extends XposedMods {
         removeLeftAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE, false);
         removeRightAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE, false);
 
+        updateDrawable();
+
         if (Key.length > 0) {
-            if (Key[0].equals(LOCKSCREEN_FINGERPRINT_STYLE)
-                || Key[0].equals(LOCKSCREEN_CUSTOM_FINGERPRINT)
-                || Key[0].equals(LOCKSCREEN_HIDE_FINGERPRINT)
-                || Key[0].equals(LOCKSCREEN_FINGERPRINT_SCALING)) {
-                updateDrawable();
-            } else if (Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE)
+            if (Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE)
                     || Key[0].equals(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE)) {
                 updateAffordance();
             }
@@ -212,13 +209,23 @@ public class Lockscreen extends XposedMods {
                         mContext.getTheme()));
             } else {
                 try {
-                    ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_fp_icon.png"));
-                    mFpDrawable = ImageDecoder.decodeDrawable(source);
-                    if (mFpDrawable instanceof AnimatedImageDrawable) {
-                        ((AnimatedImageDrawable) mFpDrawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
-                        ((AnimatedImageDrawable) mFpDrawable).start();
-                    }
-                } catch (Throwable ignored) {}
+                    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+                    executor.scheduleAtFixedRate(() -> {
+                        File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
+
+                        if (Android.isDirectory()) {
+                            try {
+                                ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_fp_icon.png"));
+                                mFpDrawable = ImageDecoder.decodeDrawable(source);
+                                if (mFpDrawable instanceof AnimatedImageDrawable) {
+                                    ((AnimatedImageDrawable) mFpDrawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                                    ((AnimatedImageDrawable) mFpDrawable).start();
+                                }
+                            } catch (Throwable ignored) {}
+                        }
+                    }, 0, 5, TimeUnit.SECONDS);
+                } catch (Throwable ignored) {
+                }
             }
         } else {
             mFpDrawable = null;
