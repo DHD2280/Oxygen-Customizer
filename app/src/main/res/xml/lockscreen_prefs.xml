@@ -106,6 +106,31 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
+            android:key="lockscreen_hide_carrier"
+            android:title="@string/lockscreen_hide_carrier"
+            android:summary="@string/lockscreen_hide_carrier_summary"
+            app:iconSpaceReserved="false" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="lockscreen_carrier_replacement"
+            android:title="@string/lockscreen_carrier_replacement"
+            android:summary="@string/lockscreen_carrier_replacement_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_hide_capsule"
+            android:title="@string/lockscreen_hide_capsule"
+            android:summary="@string/lockscreen_hide_capsule_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_hide_statusbar"
+            android:title="@string/lockscreen_hide_statusbar"
+            android:summary="@string/lockscreen_hide_statusbar_summary"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
             android:key="disable_power_on_lockscreen"
             android:summary="@string/lockscreen_hide_power_menu_summary"
             android:title="@string/lockscreen_hide_power_menu"

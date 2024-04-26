@@ -362,8 +362,10 @@ public class Constants {
             public static final String LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE = "lockscreen_affordance_remove_right";
             public static final String LOCKSCREEN_CUSTOM_LEFT_AFFORDANCE = "lockscreen_affordance_custom_left";
             public static final String LOCKSCREEN_CUSTOM_RIGHT_AFFORDANCE = "lockscreen_affordance_custom_left";
-            public static final String LOCKSCREEN_AFFORDANCE_LEFT = "lockscreen_affordance_left";
-            public static final String LOCKSCREEN_AFFORDANCE_RIGHT = "lockscreen_affordance_right";
+            public static final String LOCKSCREEN_HIDE_CARRIER = "lockscreen_hide_carrier";
+            public static final String LOCKSCREEN_HIDE_STATUSBAR = "lockscreen_hide_statusbar";
+            public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
+            public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
 
         public static class LockscreenClock {

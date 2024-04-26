@@ -4,8 +4,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_FINGERPRINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CAPSULE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CARRIER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_STATUSBAR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
@@ -111,7 +115,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
     @Override
     public String[] getScopes() {
-        return new String[]{Constants.Packages.SYSTEM_UI};
+        return new String[]{SYSTEM_UI};
     }
 
     @Override
@@ -163,6 +167,24 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                 return true;
             });
         }
+
+        SwitchPreferenceCompat hideCarrier, hideCapsule, hideStatusbar;
+        hideCarrier = findPreference(LOCKSCREEN_HIDE_CARRIER);
+        hideCapsule = findPreference(LOCKSCREEN_HIDE_CAPSULE);
+        hideStatusbar = findPreference(LOCKSCREEN_HIDE_STATUSBAR);
+        OnPreferenceChangeListener listener = (preference, newValue) -> {
+            AppUtils.restartScope(SYSTEM_UI);
+            return true;
+        };
+        if (hideCarrier != null) {
+            hideCarrier.setOnPreferenceChangeListener(listener);
+        }
+        if (hideCapsule != null) {
+            hideCapsule.setOnPreferenceChangeListener(listener);
+        }
+        if (hideStatusbar != null) {
+            hideStatusbar.setOnPreferenceChangeListener(listener);
+        }
     }
 
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
@@ -203,7 +225,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
         @Override
         public String[] getScopes() {
-            return new String[]{Constants.Packages.SYSTEM_UI};
+            return new String[]{SYSTEM_UI};
         }
 
         private int type = 0;

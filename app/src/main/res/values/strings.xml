@@ -492,6 +492,14 @@
 
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Lockscreen</string>
+    <string name="lockscreen_hide_carrier">Hide Carrier</string>
+    <string name="lockscreen_hide_carrier_summary">Hide carrier name on lockscreen</string>
+    <string name="lockscreen_carrier_replacement">LS carrier replacement</string>
+    <string name="lockscreen_carrier_replacement_summary">Replace carrier name on lockscreen.\nKeep blank to disable</string>
+    <string name="lockscreen_hide_statusbar">Hide Statusbar</string>
+    <string name="lockscreen_hide_statusbar_summary">Hide statusbar on lockscreen</string>
+    <string name="lockscreen_hide_capsule">Hide Capsule</string>
+    <string name="lockscreen_hide_capsule_summary">Hide capsule on lockscreen (Call/Hotspot/etc)</string>
     <string name="lockscreen_hide_power_menu">Hide power menu</string>
     <string name="lockscreen_hide_power_menu_summary">Hide power menu on secure lockscreen</string>
     <string name="lockscreen_remove_sos_title">Hide SOS button</string>
