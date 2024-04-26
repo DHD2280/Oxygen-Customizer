@@ -128,7 +128,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
                 modRes.getIdentifier("ic_humidity_symbol", "drawable", BuildConfig.APPLICATION_ID),
                 context.getTheme()
         );
-        mHumImage.setImageDrawable(mHumDrawable);
 
         mHumText = new TextView(context);
         mHumText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -152,7 +151,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
                 modRes.getIdentifier("ic_wind_symbol", "drawable", BuildConfig.APPLICATION_ID),
                 context.getTheme()
         );
-        mWindImage.setImageDrawable(mWindDrawable);
 
         mWindText = new TextView(context);
         mWindText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -199,7 +197,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
     }
 
     private void setErrorView() {
-        log(TAG + "setErrorView");
         setTextRecursively(instance, "");
         mCurrentImage.setImageDrawable(null);
         mHumImage.setImageDrawable(null);
@@ -232,7 +229,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
 
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
-        log(TAG + "queryAndUpdateWeather");
         try {
             if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
                 setErrorView();
@@ -241,7 +237,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
             mWeatherClient.queryWeather();
             mWeatherInfo = mWeatherClient.getWeatherInfo();
             if (mWeatherInfo != null) {
-                log(TAG + "Weather query successful");
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_clouds);
@@ -258,7 +253,6 @@ public class CurrentWeatherView extends LinearLayout  implements OmniJawsClient.
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_mist);
                 }
-                log("right: " + mWeatherInfo.temp + " " + mWeatherInfo.tempUnits);
                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 mCurrentImage.setImageDrawable(d);
                 mRightText.setText(mWeatherInfo.temp + " " + mWeatherInfo.tempUnits);

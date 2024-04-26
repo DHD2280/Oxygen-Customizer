@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <!-- Xposed Description -->
+    <string name="xposeddescription">Personalizza Oxygen OS</string>
+
+    <!-- Preferences Strings -->
+    <string name="default_value">Predefinito</string>
+    <string name="settingslib_learn_more_text">Scopri di più</string>
+    <string name="settings_label">Impostazioni</string>
+    <string name="toast_rename_file">Rinomina il file in qualcosa di più semplice</string>
+    <string name="toast_applied">Applicato</string>
+    <string name="opt_selected1">Selezionato: %s</string>
+    <string name="opt_selected2">Selezionato: %s%s</string>
+    <string name="requires_sysui_restart">Questa sezione richiede il riavvio di SystemUI\nCliccal sul menu per riavviarlo.</string>
+
+    <!-- General Strings -->
+    <string name="btn_select">Seleziona</string>
+    <string name="battery_charging">In Carica</string>
+    <string name="battery_discharging">In Scarica</string>
+    <string name="battery_full">Batteria Carica</string>
+    <string name="battery_level_percentage">Livello Batteria</string>
+    <string name="seconds">Secondi</string>
+    <string name="milliseconds">Millisecondi</string>
+    <string name="steps">Steps</string>
+    <string name="general_color_accent1">Accento 1</string>
+    <string name="general_color_accent2">Accento 2</string>
+    <string name="general_color_accent3">Accento 3</string>
+    <string name="general_color_text1">Testo 1</string>
+    <string name="general_color_text2">Testo 2</string>
+
+    <!-- Search Preference -->
+    <string name="searchpreference_search">Cerca…</string>
+    <string name="searchpreference_clear">Cancella</string>
+    <string name="searchpreference_history_entry">Storia</string>
+    <string name="searchpreference_more">Di più</string>
+    <string name="searchpreference_clear_history">Cancella storia</string>
+    <string name="searchpreference_no_results">Nessun risultato</string>
+
+    <!-- Menu Strings -->
+    <string name="restart_scopes">Riavvia gli scopi</string>
+    <string name="restart_module">Riavvia i processi</string>
+    <string name="restart_page_scope">Riavvia solo lo scopo di questa pagina</string>
+    <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
+
+    <!-- NavBar Strings -->
+    <string name="navbar_customizations">Personalizzazioni</string>
+    <string name="navbar_mods">Mod</string>
+    <string name="navbar_hooks">Hooks</string>
+    <string name="navbar_settings">Impostazioni</string>
+
+    <!-- Mods Strings -->
+    <string name="mods_title">Mods</string>
+    <string name="statusbar_title">Barra di stato</string>
+    <string name="launcher_title">Launcher</string>
+    <string name="quick_settings_title">Quick Settings</string>
+    <string name="qs_header_title">Header Quick Settings</string>
+    <string name="sound">Suono</string>
+    <string name="misc">Varie</string>
+    <string name="package_manager">Package Manager</string>
+
+    <!-- General Strings -->
+    <string name="general_on">On</string>
+    <string name="general_off">Off</string>
+    <string name="accent_color">Colore Accento</string>
+    <string name="custom_color">Colore Personalizzato</string>
+    <string name="battery_info_button_title">Info batteria…</string>
+
+    <!-- Statusbar Strings -->
+    <string name="statusbar_options">Opzioni barra di stato</string>
+    <string name="statusbar_double_tap_sleep">Doppio tocco per spegnere</string>
+    <string name="status_bar_toggle_brightness_title">Controllo luminosità</string>
+    <string name="status_bar_toggle_brightness_summary">Imposta la luminosità trascinando sulla barra di stato</string>
+    <string name="statusbar_batterybar_title">Impostazioni Barra Batteria</string>
+    <string name="statusbar_battery_icon_options">Icone Batteria</string>
+    <string name="statusbar_icons">Icone Barra di Stato</string>
+
+    <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">Notifiche</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">Notifiche barra di stato</string>
+    <string name="statusbar_use_app_icon">Usa icone app per notifiche</string>
+    <string name="statusbar_notification_count">Mostra conteggio notifiche</string>
+    <string name="statusbar_notifications_related">Impostazioni notifiche</string>
+    <string name="remove_charging_complete_notification_title">Rimuovi notifica carica completa</string>
+    <string name="remove_dev_mode_notification">Rimuovi notifica sviluppatore</string>
+    <string name="remove_flashlight_notification">Rimuovi notifica torcia</string>
+    <string name="remove_low_battery_notification">Rimuovi notifica batteria scarica</string>
+
+    <!-- Statusbar Clock Strings -->
+    <!-- Status bar - Clock -->
+    <string name="status_bar_clock_title">Ora &amp; data</string>
+    <string name="status_bar_clock_summary">Personalizza Ora &amp; data</string>
+    <string name="status_bar_clock_seconds_title">Mostra Secondi</string>
+    <string name="status_bar_clock_seconds_summary">Mostra secondi nell\'orologio nella barra di stato</string>
+    <string name="status_bar_clock_position_title">Posizione Orologio</string>
+    <string name="status_bar_clock_position_right">Destra</string>
+    <string name="status_bar_clock_position_left">Sinistra</string>
+    <string name="status_bar_clock_position_center">Centro</string>
+    <string name="status_bar_clock_position_hidden">Nascosto</string>
+    <string name="status_bar_clock_auto_hide_title">Nascondi automaticamente</string>
+    <string name="status_bar_clock_auto_hide_launcher_summary">Nascondi l\'orologio quando è visibile il launcher</string>
+    <string name="status_bar_clock_auto_hide_summary">Nascondi l\'orologio ad intervalli</string>
+    <string name="status_bar_clock_auto_hide_hdur_title">Durata nascosto</string>
+    <string name="status_bar_clock_auto_hide_hdur_summary">Numero di secondi in cui nascondere l\'orologio</string>
+    <string name="status_bar_clock_auto_hide_sdur_title">Durata mostrato</string>
+    <string name="status_bar_clock_auto_hide_sdur_summary">Numero di secondi da aspettare prima che sia nascosto l\'orologio</string>
+    <string name="status_bar_am_pm_title">Stile AM/PM</string>
+    <string name="status_bar_am_pm_normal">Normale</string>
+    <string name="status_bar_am_pm_small">Piccolo</string>
+    <string name="status_bar_am_pm_hidden">Nascosto</string>
+    <string name="status_bar_date_title">Data</string>
+    <string name="status_bar_date_none">Nascosta</string>
+    <string name="status_bar_date_small">Piccola</string>
+    <string name="status_bar_date_normal">Normale</string>
+    <string name="status_bar_date_format_title">Formato data</string>
+    <string name="status_bar_date_style">Stile data</string>
+    <string name="status_bar_date_style_normal">Normale</string>
+    <string name="status_bar_date_style_lowercase">Lowercase</string>
+    <string name="status_bar_date_style_uppercase">Uppercase</string>
+    <string name="status_bar_date_format_custom">Formato java personalizzato</string>
+    <string name="status_bar_date_string_edittext_title">Deve essere in DateFormat eg. MM/dd/yy</string>
+    <string name="status_bar_date_string_edittext_summary">Inserisci stringa</string>
+    <string name="clock_date_position">Posizione data</string>
+    <string name="clock_date_right">A destra dell\'ora</string>
+    <string name="clock_date_left">A sinistra dell\'ora</string>
+    <string name="clock_font_size_title">Grandezza font Orologio</string>
+    <string name="status_bar_clock_font_style_title">Stile Font Orologio</string>
+    <string name="status_bar_clock_color_title">Colore personalizzato Orologio</string>
+    <string name="status_bar_custom_clock_color_title">Colore personalizzato Orologio</string>
+    <string name="status_bar_custom_clock_color_summary">Colore orologio</string>
+    <string name="status_bar_clock_background_chip_title">Chip di sfondo</string>
+    <string name="status_bar_clock_background_chip_style_title">Stile Chip di sfondo</string>
+
+    <!-- Status bar padding -->
+    <string name="statusbar_padding">Padding barra di stato</string>
+    <string name="statusbar_top_padding">Padding superiore</string>
+    <string name="sb_padding_title">Paddin sinistro e destro</string>
+    <string name="sb_padding_summary">Setting the values to min/max is equivalent to device Default</string>
+    <string name="statusbar_left_padding">Padding sinistro</string>
+    <string name="statusbar_right_padding">Padding destro</string>
+
+    <!-- Battery Bar Strings -->
+    <string name="BB_enable_title">Abilita barra batteria</string>
+    <string name="BB_onlycharging_title">Solo durante la ricarica</string>
+    <string name="BB_move_SB_bottom_title">Sotto la barra di stato</string>
+    <string name="BB_colorful_title">Rendila colorata</string>
+    <string name="BB_Opacity_title">Opacità barra</string>
+    <string name="BB_center_align_title">Allinea al centro</string>
+    <string name="BB_Thickness_title">Spessore barra</string>
+    <string name="BB_indicate_charging">Indica la ricarica</string>
+    <string name="BB_indicate_power_save">Indica risparmio energetico</string>
+    <string name="BB_indicate_fast_charging">Indica ricarica rapida</string>
+    <string name="BB_warning_level">Range livello critico</string>
+    <string name="BB_warning_tip">Imposta entrambi a 0 per disabilitare i colori per livello batteria</string>
+    <string name="BB_batteryCriticalColor">Colore livello critico</string>
+    <string name="BB_batteryWarningColor">Colore livello attenzione</string>
+    <string name="BB_batteryChargingColor">Colore di ricarica</string>
+    <string name="BB_batteryPowerSaveColor">Colore risparmio energetico</string>
+    <string name="BB_batteryFastChargingColor">Colore ricarica rapida</string>
+    <string name="BB_transit_colors">Shade colors between this range</string>
+    <string name="colored_battery_percentage_title">Percentuale batteria colorata quando in ricarica</string>
+
+    <!-- Battery Icon Strings -->
+    <string name="battery_icon_customize_title">Personalizza Icona Batteria</string>
+    <string name="battery_icon_style">Stile Icona Batteria</string>
+    <string name="battery_icon_change_charging_icon_title">Icona Ricarica Personalizzata</string>
+    <string name="battery_icon_change_charging_icon_summary">Cambia l\'icona di ricarica con una personalizzata</string>
+    <string name="battery_icon_settings">Preferenze Icona Batteria</string>
+    <string name="battery_width_title">Larghezza Batteria</string>
+    <string name="battery_height_title">Altezza Batteria</string>
+    <string name="battery_margin_title">Margine Batteria</string>
+    <string name="hide_battery_title">Nascondi Batteria</string>
+    <string name="hide_battery_desc">Lascia solo icona ricarica e percentuale</string>
+    <string name="custom_charging_icon_title">Icona di ricarica personalizzata</string>
+
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Nuvoloso</string>
+    <string name="weather_condition_rain">Piovoso</string>
+    <string name="weather_condition_clear">Soleggiato</string>
+    <string name="weather_condition_storm">Tempesta</string>
+    <string name="weather_condition_snow">Neve</string>
+    <string name="weather_condition_wind">Vento</string>
+    <string name="weather_condition_mist">Nebbioso</string>
+
+    <string name="lockscreen_weather">Meteo schermata di blocco</string>
+
+</resources>

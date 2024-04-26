@@ -15,11 +15,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.graphics.ColorUtils;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -32,7 +40,9 @@ public class Launcher extends XposedMods {
     private static final String listenPackage = Constants.Packages.LAUNCHER;
 
     private int mFolderRows, mFolderColumns, mDrawerColumns;
-    private boolean mFolderRearrange, mFolderPreview, mDrawerRearrange, mOpenAppDetails;
+    private boolean mFolderRearrange = false, mFolderPreview = false, mDrawerRearrange = false, mOpenAppDetails;
+    private boolean mRemoveShortcut = false, mRemoveClone = false;
+    private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
 
     public Launcher(Context context) {
         super(context);
@@ -49,17 +59,10 @@ public class Launcher extends XposedMods {
         mFolderPreview = Xprefs.getBoolean("rearrange_preview", true);
         mDrawerRearrange = Xprefs.getBoolean("rearrange_drawer", true);
         mOpenAppDetails = Xprefs.getBoolean("launcher_open_app_details", false);
-
-        if (Key.length > 0 &&(
-                Key[0].equals("folder_rows") ||
-                Key[0].equals("folder_columns") ||
-                Key[0].equals("drawer_columns") ||
-                Key[0].equals("rearrange_folder") ||
-                Key[0].equals("rearrange_preview") ||
-                Key[0].equals("rearrange_drawer")
-                )) {
-            //onConfigChanged();
-        }
+        mRemoveShortcut = Xprefs.getBoolean("remove_shortcut_badge_title", false);
+        mRemoveClone = Xprefs.getBoolean("remove_clone_badge", false);
+        mRemoveFolderPagination = Xprefs.getBoolean("remove_folder_pagination", false);
+        mRemoveHomePagination = Xprefs.getBoolean("remove_home_pagination", false);
 
     }
 
@@ -117,6 +120,37 @@ public class Launcher extends XposedMods {
                 iconView.setOnLongClickListener(clickListener);
             }
         });
+
+        Class<?> OplusPageIndicator = findClass("com.android.launcher.pageindicators.OplusPageIndicator", lpparam.classLoader);
+        findAndHookMethod(OplusPageIndicator, "onDraw", Canvas.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
+                View v = (View) param.thisObject;
+                switch (v.getParent().getClass().getCanonicalName()) {
+                    case "com.android.launcher3.OplusDragLayer":
+                        v.setVisibility(View.GONE);
+                        if (mRemoveHomePagination) param.setResult(null);
+                        break;
+                    case "android.widget.FrameLayout":
+                        v.setVisibility(View.GONE);
+                        if (mRemoveFolderPagination) param.setResult(null);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        try {
+            Class<?> PageIndicatorTouchHelper = findClass("com.android.launcher.pageindicators.PageIndicatorTouchHelper", lpparam.classLoader);
+            findAndHookMethod(PageIndicatorTouchHelper, "dispatchTouchEvent", MotionEvent.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (mRemoveHomePagination) param.setResult(false);
+                }
+            });
+        } catch (Throwable ignored) {}
 
     }
 

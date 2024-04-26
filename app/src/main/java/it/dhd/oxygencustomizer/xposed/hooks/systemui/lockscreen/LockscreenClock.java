@@ -266,7 +266,12 @@ public class LockscreenClock extends XposedMods {
             }
         });
 
-        Class<?> SingleClockView = findClass("com.oplus.systemui.shared.clocks.SingleClockView", lpparam.classLoader);
+        Class<?> SingleClockView;
+        try {
+            SingleClockView = findClass("com.oplus.systemui.shared.clocks.SingleClockView", lpparam.classLoader);
+        } catch (Throwable t) {
+            SingleClockView = findClass("com.oplusos.systemui.keyguard.clock.SingleClockView", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(SingleClockView, "updateStandardTime", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -282,7 +287,12 @@ public class LockscreenClock extends XposedMods {
             }
         });
 
-        Class<?> RedTextClock = findClass("com.oplus.systemui.shared.clocks.RedTextClock", lpparam.classLoader);
+        Class<?> RedTextClock;
+        try {
+            RedTextClock = findClass("com.oplus.systemui.shared.clocks.RedTextClock", lpparam.classLoader);
+        } catch (Throwable t) {
+            RedTextClock = findClass("com.oplusos.systemui.keyguard.clock.RedTextClock", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(RedTextClock, "onTimeChanged", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

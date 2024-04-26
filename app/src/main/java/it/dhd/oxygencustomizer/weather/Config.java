@@ -18,6 +18,7 @@ package it.dhd.oxygencustomizer.weather;
  *
  */
 
+import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_OWM_KEY;
@@ -58,9 +59,9 @@ public class Config {
         try {
             if (Xprefs != null)
                 return Xprefs;
-            return context.createDeviceProtectedStorageContext().getSharedPreferences(SharedXPref, Context.MODE_PRIVATE);
+            return getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
         } catch (Throwable t) {
-            return context.createDeviceProtectedStorageContext().getSharedPreferences(SharedXPref, Context.MODE_PRIVATE);
+            return getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
         }
     }
 
@@ -128,7 +129,7 @@ public class Config {
             Xprefs.edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
             Xprefs.edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
         } catch (Throwable ignored) {
-            SharedPreferences prefs = context.createDeviceProtectedStorageContext().getSharedPreferences(SharedXPref, Context.MODE_PRIVATE);
+            SharedPreferences prefs = getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
             prefs.edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
             prefs.edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
         }

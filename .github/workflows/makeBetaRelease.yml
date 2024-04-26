@@ -53,8 +53,8 @@ jobs:
       - name: Upload Xposed Artifact to Actions
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: OxygenCustomizer.apk
-          path: output
+          name: OxygenCustomizer
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Oxygen Customizer Binary Release
         uses: ncipollo/release-action@v1.14.0
@@ -66,7 +66,7 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           draft: false
-          artifacts: 'output/*.*'
+          artifacts: 'app/build/outputs/apk/release/*.apk'
 
       - name: Version Bump Commit
         uses: github-actions-x/commit@v2.9
@@ -78,3 +78,27 @@ jobs:
           files: app/build.gradle.kts BetaChangelog.md latestBeta.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
+
+      - name: Telegram Channel Post
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.OC_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TK }}
+          message: ${{ env.TMessage }}
+          format: markdown
+
+      - name: Telegram Channel Post
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.OC_CHANNEL2 }}
+          token: ${{ secrets.TELEGRAM_TK }}
+          message: ${{ env.TMessage }}
+          format: markdown
+
+      - name: Telegram File Attachment
+        run: |
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.apk"
+
+      - name: Telegram File Attachment
+        run: |
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL2 }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.apk"

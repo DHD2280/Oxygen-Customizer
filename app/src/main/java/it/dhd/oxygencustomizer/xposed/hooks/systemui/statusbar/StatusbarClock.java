@@ -19,6 +19,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -30,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spannable;
@@ -123,7 +125,7 @@ public class StatusbarClock extends XposedMods {
     private int chipTopSxRound, chipTopDxRound, chipBottomSxRound,chipBottomDxRound;
     private int mAccent;
     private final GradientDrawable mClockChipDrawale = new GradientDrawable();
-    private int mClockSize = 14;
+    private int mClockSize = 12;
 
 
     public StatusbarClock(Context context) {
@@ -221,7 +223,6 @@ public class StatusbarClock extends XposedMods {
 
         Class<?> ClockClass = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
         Class<?> CollapsedStatusBarFragmentClass = findClass("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
-        Class<?> StatClockClass = findClass("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
         Class<?> TaskStackListenerImpl = findClass("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -235,6 +236,21 @@ public class StatusbarClock extends XposedMods {
             }
         });
 
+        if (Build.VERSION.SDK_INT == 33) {
+            try {
+                Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
+                hookAllMethods(PhoneStatusBarView, "onFinishInflate", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        FrameLayout mStatusBar = (FrameLayout) param.thisObject;
+                        mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_left_side", "id", mContext.getPackageName()));
+                    }
+                });
+            } catch (Throwable ignored) {}
+        } else {
+            mStatusbarStartSide = null;
+        }
+
         findAndHookMethod(CollapsedStatusBarFragmentClass,
                 "onViewCreated", View.class, Bundle.class, new XC_MethodHook() {
                     @SuppressLint("DiscouragedApi")
@@ -247,9 +263,17 @@ public class StatusbarClock extends XposedMods {
                         }
 
                         ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-                        mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
+                        try {
+                            mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
+                        } catch (Throwable t) {
+                            mStatusbarStartSide = null;
+                        }
 
-                        mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
+                        try {
+                            mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
+                        } catch (Throwable t) {
+                            mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("system_icon_area", "id", mContext.getPackageName())); // OOS 13
+                        }
 
 
                         try {
@@ -270,6 +294,8 @@ public class StatusbarClock extends XposedMods {
                         setupChip();
                     }
                 });
+
+
 
         hookAllMethods(ClockClass, "updateClockVisibility", new XC_MethodHook() {
             @Override
@@ -486,12 +512,15 @@ public class StatusbarClock extends XposedMods {
                 targetArea = ((ViewGroup) mSystemIconArea.getParent());
             }
         }
+        if (targetArea != null) {
         parent.removeView(mClockView);
-        if (index != null) {
-            targetArea.addView(mClockView, index);
-        } else {
-            targetArea.addView(mClockView);
+            if (index != null) {
+                targetArea.addView(mClockView, index);
+            } else {
+                targetArea.addView(mClockView);
+            }
         }
+
     }
 
     private void setClockSize() {
@@ -529,16 +558,28 @@ public class StatusbarClock extends XposedMods {
             mClockChipDrawale.setStroke(chipStrokeWidth, chipUseAccent ? mAccent : chipGradient1);
         }
         mClockChipDrawale.invalidateSelf();
+        setupChip();
     }
 
+    @SuppressLint("RtlHardcoded")
     private void setupChip() {
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, 4), 0, dp2px(mContext, 4), 0);
+            mClockView.setPadding(dp2px(mContext, 8), dp2px(mContext, 2), dp2px(mContext, 8), dp2px(mContext, 2));
+            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             mClockView.setBackground(mClockChipDrawale);
         } else {
             mClockView.setPadding(0, 0, 0, 0);
+            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mClockView.setBackground(null);
         }
+        switch (mClockDatePosition) {
+            case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER_VERTICAL);
+            case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        }
+        mClockView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        mClockView.requestLayout();
+        if (mCenteredIconArea != null) mCenteredIconArea.requestLayout();
     }
 
     private void updateShowClock() {

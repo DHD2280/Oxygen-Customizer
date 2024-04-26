@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="BB_Opacity_title">Непрозрачность полосы</string>
     <string name="BB_Thickness_title">Толщина стержня</string>
@@ -95,11 +95,7 @@
     <string name="battery_landscape_r_style_b">Пейзаж в стиле R B</string>
     <string name="battery_landscape_smiley">Пейзажный смайлик</string>
     <string name="battery_level_percentage">Уровень заряда батареи</string>
-    <string name="battery_margin_bottom_title">Нижний запас заряда батареи</string>
-    <string name="battery_margin_left_title">Оставшийся запас заряда батареи</string>
-    <string name="battery_margin_right_title">Правый запас заряда батареи</string>
     <string name="battery_margin_title">Запас заряда батареи</string>
-    <string name="battery_margin_top_title">Максимальный запас заряда батареи</string>
     <string name="battery_percentage_size">Процентный размер</string>
     <string name="battery_portrait_airoo">Portrait Airoo</string>
     <string name="battery_portrait_capsule">Portrait Capsule</string>
@@ -154,8 +150,6 @@
     <string name="custom_color">Пользовательский цвет</string>
     <string name="custom_header_image_notice">Набор изображений заголовка</string>
     <string name="custom_location_title">Пользовательское местоположение</string>
-    <string name="custom_margins_desc">Установите пользовательские поля для значка батареи</string>
-    <string name="custom_margins_title">Настраиваемые поля</string>
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
     <string name="default_user_name">User</string>
     <string name="default_value">По умолчанию</string>
@@ -280,7 +274,6 @@
     <string name="lockscreen_hide_power_menu_summary">Скрыть меню включения на защищенном экране блокировки</string>
     <string name="lockscreen_remove_sos_summary">Скрыть нижнюю кнопку SOS на экране блокировки</string>
     <string name="lockscreen_remove_sos_title">Скрыть кнопку SOS</string>
-    <string name="lockscreen_scramble_pin">Scramble PIN</string>
     <string name="lockscreen_stock_clock_red_one_color">Цвет в течение 1 часа</string>
     <string name="lockscreen_stock_clock_red_one_disable">Отключите Красный Индикатор</string>
     <string name="lockscreen_stock_clock_red_one_title">Поведение Красного Одина</string>
@@ -335,7 +328,6 @@
     <string name="package_not_found">Пакет не найден</string>
     <string name="package_not_hook_enabled">Пакет не включен в LSposed</string>
     <string name="package_not_launchable">Пакет не может быть запущен</string>
-    <string name="percentage_text">%d%%</string>
     <string name="perimeter_alpha_desc">Сделайте периметр батареи полупрозрачным</string>
     <string name="perimeter_alpha_title">Альфа-периметр</string>
     <string name="power_button_category_title">Power Button</string>

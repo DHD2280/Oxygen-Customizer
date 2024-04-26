@@ -9,9 +9,8 @@
     </item>
     <item android:gravity="fill_horizontal|center" android:id="@android:id/progress">
         <clip>
-            <!-- Utilizziamo una forma rettangolare per rappresentare la barra di progresso -->
             <shape android:shape="rectangle">
-                <solid android:color="?colorPrimary"/> <!-- Cambia questo colore con quello desiderato -->
+                <solid android:color="?colorPrimary"/>
                 <corners android:radius="12.0dip" />
             </shape>
         </clip>

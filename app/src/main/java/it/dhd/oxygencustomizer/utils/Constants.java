@@ -31,11 +31,7 @@ public class Constants {
         public static class BatteryPrefs {
             public static final String CUSTOMIZE_BATTERY_ICON = "battery_icon_customize";
             public static final String CUSTOM_BATTERY_LAYOUT_REVERSE = "battery_rotate_layout";
-            public static final String CUSTOM_BATTERY_MARGINS = "category_battery_margins";
-            public static final String CUSTOM_BATTERY_MARGIN_LEFT = "battery_margin_left";
-            public static final String CUSTOM_BATTERY_MARGIN_TOP = "battery_margin_top";
-            public static final String CUSTOM_BATTERY_MARGIN_RIGHT = "battery_margin_right";
-            public static final String CUSTOM_BATTERY_MARGIN_BOTTOM = "battery_margin_bottom";
+            public static final String CATEGORY_CUSTOM_BATTERY_MARGINS = "category_battery_margins";
             public static final String CUSTOM_BATTERY_PERIMETER_ALPHA = "battery_perimeter_alpha";
             public static final String CUSTOM_BATTERY_FILL_ALPHA = "battery_fill_alpha";
             public static final String CUSTOM_BATTERY_RAINBOW_FILL_COLOR = "battery_rainbow_color";
@@ -64,11 +60,6 @@ public class Constants {
             public static final String[] BatteryPrefs = {
                     CUSTOMIZE_BATTERY_ICON,
                     CUSTOM_BATTERY_LAYOUT_REVERSE,
-                    CUSTOM_BATTERY_MARGINS,
-                    CUSTOM_BATTERY_MARGIN_LEFT,
-                    CUSTOM_BATTERY_MARGIN_TOP,
-                    CUSTOM_BATTERY_MARGIN_RIGHT,
-                    CUSTOM_BATTERY_MARGIN_BOTTOM,
                     CUSTOM_BATTERY_PERIMETER_ALPHA,
                     CUSTOM_BATTERY_FILL_ALPHA,
                     CUSTOM_BATTERY_RAINBOW_FILL_COLOR,
@@ -91,7 +82,6 @@ public class Constants {
                     CUSTOM_BATTERY_STYLE,
                     CUSTOM_BATTERY_WIDTH,
                     CUSTOM_BATTERY_HEIGHT
-
             };
 
             // Battery styles
@@ -367,6 +357,15 @@ public class Constants {
             public static final String LOCKSCREEN_CUSTOM_FINGERPRINT = "lockscreen_fp_custom_icon";
             public static final String LOCKSCREEN_FINGERPRINT_STYLE = "lockscreen_fp_icon_custom";
             public static final String LOCKSCREEN_FINGERPRINT_SCALING = "lockscreen_fp_icon_scaling";
+            public static final String LOCKSCREEN_REMOVE_LOCK = "lockscreen_hide_lock_icon";
+            public static final String LOCKSCREEN_REMOVE_LEFT_AFFORDANCE = "lockscreen_affordance_remove_left";
+            public static final String LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE = "lockscreen_affordance_remove_right";
+            public static final String LOCKSCREEN_CUSTOM_LEFT_AFFORDANCE = "lockscreen_affordance_custom_left";
+            public static final String LOCKSCREEN_CUSTOM_RIGHT_AFFORDANCE = "lockscreen_affordance_custom_left";
+            public static final String LOCKSCREEN_HIDE_CARRIER = "lockscreen_hide_carrier";
+            public static final String LOCKSCREEN_HIDE_STATUSBAR = "lockscreen_hide_statusbar";
+            public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
+            public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
 
         public static class LockscreenClock {

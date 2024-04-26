@@ -26,9 +26,9 @@
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="status_bar_clock_size"
             android:title="@string/clock_font_size_title"
+            app:defaultValue="12"
             app:maxVal="20"
-            app:minVal="4"
-            app:defaultValue="12" />
+            app:minVal="4" />
 
         <Preference
             app:iconSpaceReserved="false"

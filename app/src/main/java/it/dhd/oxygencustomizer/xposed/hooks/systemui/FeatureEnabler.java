@@ -54,7 +54,6 @@ public class FeatureEnabler extends XposedMods {
     private int centerY;
     private int radius;
     private Class<?> SystemUIDialogClass;
-    private Class<?> OplusThemeSystemUiDialog;
     private boolean broadcastRegistered = false;
 
     final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -97,11 +96,15 @@ public class FeatureEnabler extends XposedMods {
             mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
-        Class<?> ShutdownViewControl = findClass("com.oplus.systemui.shutdown.ShutdownViewControl", lpparam.classLoader);
+        //Class<?> ShutdownViewControl = findClass("com.oplus.systemui.shutdown.ShutdownViewControl", lpparam.classLoader);
         SystemUIDialogClass = findClass("com.android.systemui.statusbar.phone.SystemUIDialog", lpparam.classLoader);
-        OplusThemeSystemUiDialog = findClass("com.oplus.systemui.common.dialog.OplusThemeSystemUiDialog", lpparam.classLoader);
 
-        Class<?> ShutdownView = findClass("com.oplus.systemui.shutdown.OplusShutdownView", lpparam.classLoader);
+        Class<?> ShutdownView;
+        try {
+            ShutdownView = findClass("com.oplus.systemui.shutdown.OplusShutdownView", lpparam.classLoader);
+        } catch (Throwable t) {
+            ShutdownView = findClass("com.oplusos.systemui.controls.OplusShutdownView", lpparam.classLoader); // OOS 13
+        }
 
         findAndHookMethod(ShutdownView, "onDraw", Canvas.class, new XC_MethodHook() {
             @Override
@@ -122,7 +125,6 @@ public class FeatureEnabler extends XposedMods {
                     double distanceFromCenter = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
                     if (distanceFromCenter <= radius) {
-                        Object mTouchEventListener = getObjectField(param.thisObject, "mTouchEventListener");
 
                         if (useAuthForAdvancedReboot && ((BiometricManager) mContext.getSystemService(BiometricManager.class)).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
                             showAuth();
@@ -146,15 +148,18 @@ public class FeatureEnabler extends XposedMods {
             }
         });
 
-        Class<?> FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        Class<?> FeatureOptions;
+        try {
+            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        } catch (Throwable t) {
+            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        }
 
 
         hookAllMethods(FeatureOptions, "isOplusVolumeKeyInRight", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log("FeatureOption isOplusVolumeKeyInRight");
                 if (volumePanelPosition == 0) return;
-
 
                 if (volumePanelPosition == 1)
                     param.setResult(true);
@@ -176,7 +181,6 @@ public class FeatureEnabler extends XposedMods {
     private void showDialog() throws Exception {
         log("Oxygen Customizer - Advanced Reboot Dialog");
         final AlertDialog dialog = (AlertDialog) SystemUIDialogClass.getConstructor(Context.class).newInstance(mContext);
-        //final AlertDialog dialog = (AlertDialog) OplusThemeSystemUiDialog.getConstructor(Context.class, int.class).newInstance(mContext, ResourcesCompat.get);
         dialog.setTitle(modRes.getString(R.string.advanced_reboot_title));
         ListView listView = new ListView(mContext);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
@@ -215,9 +219,6 @@ public class FeatureEnabler extends XposedMods {
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         int viewWidth = (int) callMethod(param, "getWidth");
-        int viewHeight = (int) callMethod(param, "getHeight");
-
-        int buttonWidth = dp2px(mContext, 150);
 
         radius = mContext.getResources().getDimensionPixelSize(
                 mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage));

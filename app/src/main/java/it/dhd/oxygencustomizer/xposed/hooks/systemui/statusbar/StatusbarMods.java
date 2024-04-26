@@ -109,10 +109,12 @@ public class StatusbarMods extends XposedMods {
 
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
+    private Class<?> DrawableSize = null;
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private boolean mNotificationCount;
+    private boolean oos13 = false;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -180,18 +182,35 @@ public class StatusbarMods extends XposedMods {
         mLockscreenDoubleTapToSleep = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(@NonNull MotionEvent e) {
-                if (mStatusBar!=null)
+                if (mStatusBar != null)
                     mStatusBar.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
                 SystemUtils.sleep();
                 return true;
             }
         });
 
-        Class<?> NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        Class<?> NotificationPanelViewControllerClass;
+        try {
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
+        }
         Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
         Class<?> PhoneStatusBarViewControllerClass = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", lpparam.classLoader);
-        Class<?> QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
-        Class<?> QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        Class<?> QSSecurityFooterUtilsClass;
+        try {
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
+        }
+        Class<?> QuickStatusBarHeaderClass;
+        try { QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        } catch (Throwable t) {
+            oos13 = true;
+            QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
+        }
 
         hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
             @Override
@@ -215,13 +234,16 @@ public class StatusbarMods extends XposedMods {
 
                             callMethod(mBatteryRemainingIcon, "setOnClickListener", clickListener);
                             callMethod(mBatteryRemainingIcon, "setOnLongClickListener", clickListener);
-                        } catch (Throwable e) {e.printStackTrace();}
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
         try { //13 QPR3
             hookTouchHandler(PhoneStatusBarViewControllerClass);
-        }catch (Throwable ignored){}
+        } catch (Throwable ignored) {
+        }
 
         hookAllConstructors(PhoneStatusBarView, new XC_MethodHook() {
             @Override
@@ -259,8 +281,8 @@ public class StatusbarMods extends XposedMods {
                 GestureDetector pullUpDetector = new GestureDetector(mContext, getPullUpListener());
                 try {
                     hookTouchHandler(getObjectField(param.thisObject, "mStatusBarViewTouchEventHandler").getClass());
+                } catch (Throwable ignored) {
                 }
-                catch (Throwable ignored){}
                 hookAllMethods(mTouchHandler.getClass(), "onTouchEvent", new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -280,13 +302,20 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        Class<?> OplusQSFooterImpl;
+        try {
+            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); // OOS 13
+        }
+
         LongClickListener onLongClick = new LongClickListener();
         hookAllMethods(OplusQSFooterImpl, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
                 View mSettingsButton = (View) getObjectField(param.thisObject, "mSettingsButton");
-                try{
+                try {
                     callMethod(mSettingsButton, "setOnLongClickListener", onLongClick);
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -328,8 +357,15 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> QuickSettingsController = findClass("com.android.systemui.shade.QuickSettingsController", lpparam.classLoader);
+        Class<?> QuickSettingsController;
+        try {
+            QuickSettingsController = findClass("com.android.systemui.shade.QuickSettingsController", lpparam.classLoader);
+        } catch (Throwable e) {
+            oos13 = true;
+            QuickSettingsController = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
+        }
         Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+
 
         hookAllMethods(QuickSettingsController, "isOpenQsEvent", new XC_MethodHook() {
             @Override
@@ -352,8 +388,12 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
-
+        Class<?> OplusBrightnessControllerExImpl;
+        try {
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.OplusBrightnessControllerExImpl", lpparam.classLoader); // OOS 13
+        }
 
         hookAllConstructors(OplusBrightnessControllerExImpl, new XC_MethodHook() {
             @Override
@@ -383,13 +423,22 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
-        findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
+        if (!oos13) {
+            Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
+            findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
+                }
+            });
+        } else {
+            try {
+                mQuickQsOffsetHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("notification_quick_qs_offset_height", "dimen", listenPackage));
+            } catch (Throwable t) {
+                log("notification_quick_qs_offset_height not found");
             }
-        });
+        }
+
 
 
         hookAllMethods(PhoneStatusBarViewControllerClass, "onTouch", new XC_MethodHook() {
@@ -446,7 +495,6 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
 
         // Notifications
         NotificationIconAreaController = findClass("com.android.systemui.statusbar.phone.NotificationIconAreaController", lpparam.classLoader);
@@ -463,9 +511,9 @@ public class StatusbarMods extends XposedMods {
                 mNotificationIconContainer = param.thisObject;
             }
         });
-        Class<?> ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
-        Class<?> FwkResIdLoader = findClass("com.oplusos.systemui.common.util.FwkResIdLoader", lpparam.classLoader);
-        Class<?> DrawableSize = findClass("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+        try {
+            DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+        } catch (Throwable ignored) {}
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,
                 "getIcon",
@@ -473,36 +521,38 @@ public class StatusbarMods extends XposedMods {
                 Context.class,
                 "com.android.internal.statusbar.StatusBarIcon",
                 new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mNewIconStyle) return;
-                Drawable icon = null;
-                Object statusBarIcon = param.args[2];
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!mNewIconStyle) return;
+                        Drawable icon = null;
+                        Object statusBarIcon = param.args[2];
 
-                String pkgName = (String) getObjectField(statusBarIcon, "pkg");
-                int userId = (int) callMethod(getObjectField(statusBarIcon, "user"), "getIdentifier");
-                try {
-                    if (!pkgName.contains("systemui")) {
-                        icon = mContext.getPackageManager().getApplicationIcon(pkgName);
+                        String pkgName = (String) getObjectField(statusBarIcon, "pkg");
+                        try {
+                            if (!pkgName.contains("systemui")) {
+                                icon = mContext.getPackageManager().getApplicationIcon(pkgName);
+                            }
+                        } catch (Throwable e) {
+                            return;
+                        }
+
+                        int dimen;
+                        if (icon != null) {
+                            dimen = 48;
+                            float density = mContext.getResources().getDisplayMetrics().density;
+                            int dimensionPixelSize = Math.round(dimen * density);
+                            if (DrawableSize != null) {
+                                Drawable icon2 = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, dimensionPixelSize, dimensionPixelSize);
+                                if (icon2 != null) {
+                                    param.setResult(icon2);
+                                }
+                            } else {
+                                param.setResult(icon);
+                            }
+                        }
+
                     }
-                } catch (Throwable e) {
-                    return;
-                }
-
-                int dimen;
-                if (icon != null) {
-                    dimen = 48;
-                    float density = mContext.getResources().getDisplayMetrics().density;
-                    int dimensionPixelSize = Math.round(dimen * density);
-                    Drawable icon2 = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, dimensionPixelSize, dimensionPixelSize);
-                    if (icon2 != null) {
-                        param.setResult(icon2);
-                    }
-                }
-
-
-            }
-        });
+                });
 
         hookAllConstructors(StatusBarIconView, new XC_MethodHook() {
             @Override
@@ -567,7 +617,8 @@ public class StatusbarMods extends XposedMods {
 
     //region icon tap related
     class ClickListener implements View.OnClickListener, View.OnLongClickListener {
-        public ClickListener() {}
+        public ClickListener() {
+        }
 
         @Override
         public void onClick(View v) {
@@ -581,7 +632,7 @@ public class StatusbarMods extends XposedMods {
         public boolean onLongClick(View v) {
             String name = mContext.getResources().getResourceName(v.getId());
 
-            if(name.endsWith("batteryRemainingIcon")) {
+            if (name.endsWith("batteryRemainingIcon")) {
                 showBatteryPage();
                 return true;
             }
@@ -737,20 +788,25 @@ public class StatusbarMods extends XposedMods {
     private void updateStatusbarHeight() {
         try {
             callMethod(PSBV, "updateStatusBarHeight");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     private void updateResources() {
         try {
             callMethod(PSBV, "updateResources");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         try {
             callMethod(PSBV, "updateLayoutForCutout");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         try {
             callMethod(PSBV, "requestLayout");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
+
     private void updateNotificationIcons() {
         try {
             callMethod(mNotificationIconAreaController, "updateStatusBarIcons");

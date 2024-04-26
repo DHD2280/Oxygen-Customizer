@@ -30,10 +30,16 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BatteryPrefs;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CATEGORY_CUSTOM_BATTERY_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_LINE_HEIGHT;
@@ -45,7 +51,18 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_HEIGHT_PORTRAIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_LANDSCAPE_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_SIDE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_TOP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_CUSTOM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_INTENSITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -191,10 +208,6 @@ public class PreferenceHelper {
                 return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false) &&
                     instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
             }
-            // Battery Icon Dimensions
-            case "battery_margin_left", "battery_margin_right", "battery_margin_top", "battery_margin_bottom" -> {
-                return instance.mPreferences.getBoolean("battery_custom_dimensions", false);
-            }
 
             // QuickSettings Prefs
             case "quick_pulldown_side", "quick_pulldown_length" -> {
@@ -245,11 +258,23 @@ public class PreferenceHelper {
             }
 
             // Header Image
+            // Header Image
+            case QS_HEADER_IMAGE_TINT,
+                    QS_HEADER_IMAGE_ALPHA,
+                    QS_HEADER_IMAGE_BOTTOM_FADE,
+                    QS_HEADER_IMAGE_HEIGHT_PORTRAIT,
+                    QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
+                    QS_HEADER_IMAGE_PADDING_SIDE,
+                    QS_HEADER_IMAGE_PADDING_TOP,
+                    QS_HEADER_IMAGE_URI,
+                    QS_HEADER_IMAGE_ZOOM_TO_FIT -> {
+                return instance.mPreferences.getBoolean(QS_HEADER_IMAGE_ENABLED, false);
+            }
             case "qs_header_image_tint_custom" -> {
-                return instance.mPreferences.getString("qs_header_image_tint", "0").equals("4");
+                return isVisible(QS_HEADER_IMAGE_TINT) && instance.mPreferences.getString("qs_header_image_tint", "0").equals("4");
             }
             case "qs_header_image_tint_intensity" -> {
-                return !instance.mPreferences.getString("qs_header_image_tint", "0").equals("0");
+                return isVisible(QS_HEADER_IMAGE_TINT) && !instance.mPreferences.getString("qs_header_image_tint", "0").equals("0");
             }
 
             // Header Clock
@@ -436,8 +461,7 @@ public class PreferenceHelper {
 
         return switch(key) {
             case "category_battery_icon_settings",
-                    "battery_icon_style",
-                    "category_battery_margins" -> showCommonCustomizations;
+                    "battery_icon_style" -> showCommonCustomizations;
             case "category_battery_charging_icon" -> showChargingIconCustomization;
             case "battery_perimeter_alpha",
                     "battery_fill_alpha",
@@ -512,7 +536,7 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
 
             // Statusbar
-            case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 14) + "sp";
+            case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_hdur_summary) + "\n" +
                             instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_hduration", 60) + " " +
@@ -527,6 +551,12 @@ public class PreferenceHelper {
             case "qs_header_clock_top_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_top_margin", 0) + "dp";
             case "qs_header_clock_left_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_left_margin", 0) + "dp";
 
+            // Battery
+            case CUSTOM_BATTERY_WIDTH -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_WIDTH, 20) + "dp";
+            case CUSTOM_BATTERY_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
 
             // Gesture Prefs
             case "gesture_left_height" -> instance.mPreferences.getSliderInt("gesture_left_height", 100) + "%";

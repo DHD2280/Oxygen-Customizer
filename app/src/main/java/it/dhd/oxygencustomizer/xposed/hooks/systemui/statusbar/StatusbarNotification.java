@@ -65,7 +65,12 @@ public class StatusbarNotification extends XposedMods {
         //Class<?> OplusGutsContent = findClass("com.oplus.systemui.statusbar.notification.row.OpNotificationGuts.OplusGutsContent", lpparam.classLoader);
         //Class<?> NotificationMenuRowExtImpl = findClass("com.oplus.systemui.statusbar.notification.row.NotificationMenuRowExtImpl", lpparam.classLoader);
 
-        Class<?> OplusPowerNotificationWarnings = findClass("com.oplus.systemui.statusbar.notification.power.OplusPowerNotificationWarnings", lpparam.classLoader);
+        Class<?> OplusPowerNotificationWarnings;
+        try {
+            OplusPowerNotificationWarnings = findClass("com.oplus.systemui.statusbar.notification.power.OplusPowerNotificationWarnings", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusPowerNotificationWarnings = findClass("com.oplusos.systemui.notification.power.OplusPowerNotificationWarnings", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(OplusPowerNotificationWarnings, "showChargeErrorDialog",
                 int.class, new XC_MethodHook() {
                     @Override
@@ -84,7 +89,12 @@ public class StatusbarNotification extends XposedMods {
                     }
                 });
 
-        Class<?> FlashlightNotification = findClass("com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", lpparam.classLoader);
+        Class<?> FlashlightNotification;
+        try {
+            FlashlightNotification = findClass("com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", lpparam.classLoader);
+        } catch (Throwable t) {
+            FlashlightNotification = findClass("com.oplusos.systemui.flashlight.FlashlightNotification", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(FlashlightNotification, "sendNotification",
                 boolean.class, new XC_MethodHook() {
                     @Override
@@ -93,7 +103,12 @@ public class StatusbarNotification extends XposedMods {
                     }
                 });
 
-        Class<?> SystemPromptController = findClass("com.oplus.systemui.statusbar.controller.SystemPromptController", lpparam.classLoader);
+        Class<?> SystemPromptController;
+        try {
+            SystemPromptController = findClass("com.oplus.systemui.statusbar.controller.SystemPromptController", lpparam.classLoader);
+        } catch (Throwable t) {
+            SystemPromptController = findClass("com.oplusos.systemui.statusbar.policy.SystemPromptController", lpparam.classLoader); // OOS 13
+        }
         findAndHookMethod(SystemPromptController, "updateDeveloperMode", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {

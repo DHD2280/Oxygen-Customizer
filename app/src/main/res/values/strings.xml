@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="app_name" translatable="false">Oxygen Customizer</string>
 
@@ -13,6 +14,13 @@
     <string name="opt_selected1">Selected: %s</string>
     <string name="opt_selected2">Selected: %s%s</string>
     <string name="requires_sysui_restart">This section requires SystemUI restart\nTap on menu to restart.</string>
+
+    <!-- Main Activity -->
+    <!-- App kill Alert -->
+    <string name="app_kill_alert_title">Notice</string>
+    <string name="app_kill_ok_btn">OK</string>
+    <!-- Reboot alert -->
+    <string name="reboot_alert_body">A system reboot is required for the settings to apply</string>
 
     <!-- General Strings -->
     <string name="btn_select">Select</string>
@@ -202,12 +210,6 @@
     <string name="powersave_indicator_color_title">Powersave Indicator Color</string>
     <string name="powersave_indicator_color_desc">Change color of powersave indicator</string>
     <string name="battery_icon_margins">Battery icon margins</string>
-    <string name="custom_margins_title">Custom Margins</string>
-    <string name="custom_margins_desc">Set custom margins for battery icon</string>
-    <string name="battery_margin_left_title">Battery Margin Left</string>
-    <string name="battery_margin_right_title">Battery Margin Right</string>
-    <string name="battery_margin_top_title">Battery Margin Top</string>
-    <string name="battery_margin_bottom_title">Battery Margin Bottom</string>
     <string name="reverse_layout_title">Reverse Layout</string>
     <string name="reverse_layout_desc">Show percentage on the opposite side</string>
     <string name="rotate_layout_title">Rotate Layout</string>
@@ -439,13 +441,14 @@
     <string name="launcher_folder_columns">Columns</string>
     <string name="launcher_folder_rows">Rows</string>
     <string name="launcher_folder_update_preview">Update preview</string>
+    <string name="remove_folder_pagination_title">Remove Folder Pagination</string>
     <string name="drawer">Drawer</string>
     <string name="launcher_drawer_edit_columns">Edit columns</string>
     <string name="drawer_columns">Columns</string>
     <string name="launcher_recents">Recents</string>
     <string name="launcher_app_details_title">Open App Details</string>
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
-
+    <string name="remove_home_pagination">Remove Home Pagination</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
@@ -487,10 +490,16 @@
     <string name="volbtn_music_controls_title">Volume button music controls</string>
     <string name="volbtn_music_controls_summary">Control music playback with volume buttons</string>
 
-
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Lockscreen</string>
-    <string name="lockscreen_scramble_pin">Scramble PIN</string>
+    <string name="lockscreen_hide_carrier">Hide Carrier</string>
+    <string name="lockscreen_hide_carrier_summary">Hide carrier name on lockscreen</string>
+    <string name="lockscreen_carrier_replacement">LS carrier replacement</string>
+    <string name="lockscreen_carrier_replacement_summary">Replace carrier name on lockscreen.\nKeep blank to disable</string>
+    <string name="lockscreen_hide_statusbar">Hide Statusbar</string>
+    <string name="lockscreen_hide_statusbar_summary">Hide statusbar on lockscreen</string>
+    <string name="lockscreen_hide_capsule">Hide Capsule</string>
+    <string name="lockscreen_hide_capsule_summary">Hide capsule on lockscreen (Call/Hotspot/etc)</string>
     <string name="lockscreen_hide_power_menu">Hide power menu</string>
     <string name="lockscreen_hide_power_menu_summary">Hide power menu on secure lockscreen</string>
     <string name="lockscreen_remove_sos_title">Hide SOS button</string>
@@ -502,6 +511,11 @@
     <string name="lockscreen_fp_icon_picker_title">Pick Custom Icon</string>
     <string name="lockscreen_fp_icon_picker_summary">Pick your custom icon.\nThe recommended image resolution is around 216 x 216.</string>
     <string name="lockscreen_fp_icon_scale">Fingerprint Icon Scaling</string>
+    <string name="lockscreen_affordance">Lockscreen Affordance</string>
+    <string name="lockscreen_affordance_remove_left">Remove Left Affordance</string>
+    <string name="lockscreen_affordance_remove_right">Remove Right Affordance</string>
+    <string name="lockscreen_hide_lock_icon">Hide lock icon</string>
+    <string name="lockscreen_weather">Lockscreen Weather</string>
 
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">Lockscreen Clock</string>
@@ -694,6 +708,10 @@
     <string name="export_summary">Export settings</string>
     <string name="import_title">Import</string>
     <string name="import_summary">Import settings</string>
+    <string name="export_success">Export successful</string>
+    <string name="export_failed">Export failed</string>
+    <string name="import_success">Import successful</string>
+    <string name="import_failed">Import failed</string>
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>
@@ -795,7 +813,5 @@
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Windy</string>
     <string name="weather_condition_mist">Misty</string>
-
-    <string name="lockscreen_weather">Lockscreen Weather</string>
 
 </resources>

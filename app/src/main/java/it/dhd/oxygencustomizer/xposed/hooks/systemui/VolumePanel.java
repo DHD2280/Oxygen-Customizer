@@ -88,7 +88,12 @@ public class VolumePanel extends XposedMods {
             sliderCustomizable = false;
         }
 
-        Class<?> OplusVolumeDialogImpl = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
+        Class<?> OplusVolumeDialogImpl;
+        try {
+            OplusVolumeDialogImpl = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusVolumeDialogImpl = findClass("com.oplusos.systemui.volume.VolumeDialogImplEx", lpparam.classLoader); // OOS 13
+        }
         hookAllMethods(OplusVolumeDialogImpl, "computeTimeoutH", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -111,17 +116,8 @@ public class VolumePanel extends XposedMods {
             }
         });
 
-        Class<?> VolumeDialogImpl = findClass("com.android.systemui.volume.VolumeDialogImpl", lpparam.classLoader);
-        hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (mDisableVolumeWarning) {
-                    param.setResult(null);
-                }
-            }
-        });
 
-        Class<?> OplusVolumeDialog = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
+
         hookAllConstructors(OplusVolumeDialogImpl, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -129,7 +125,7 @@ public class VolumePanel extends XposedMods {
             }
         });
 
-        hookAllMethods(OplusVolumeDialog, "initRow", new XC_MethodHook() {
+        hookAllMethods(OplusVolumeDialogImpl, "initRow", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!sliderCustomizable) return;
@@ -209,12 +205,22 @@ public class VolumePanel extends XposedMods {
                 }            }
         });
 
-        hookAllMethods(OplusVolumeDialog, "updateVolumeRowH", volumeIconHook);
+        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowH", volumeIconHook);
 
-        hookAllMethods(OplusVolumeDialog, "updateVolumeRowSliderH", volumeIconHook);
-        hookAllMethods(OplusVolumeDialog, "updateVolumeRowTintH", volumeIconHook);
-        hookAllMethods(OplusVolumeDialog, "refreshVisibleRow", volumeIconHook);
+        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowSliderH", volumeIconHook);
+        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowTintH", volumeIconHook);
+        hookAllMethods(OplusVolumeDialogImpl, "refreshVisibleRow", volumeIconHook);
 
+
+        Class<?> VolumeDialogImpl = findClass("com.android.systemui.volume.VolumeDialogImpl", lpparam.classLoader);
+        hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (mDisableVolumeWarning) {
+                    param.setResult(null);
+                }
+            }
+        });
 
     }
 

@@ -138,7 +138,12 @@ public class PulseViewHook extends XposedMods {
             }
         });*/
 
-        Class<?> NotificationShadeWindowView = findClass("com.android.systemui.shade.NotificationShadeWindowView", lpparam.classLoader);
+        Class<?> NotificationShadeWindowView;
+        try {
+            NotificationShadeWindowView = findClass("com.android.systemui.shade.NotificationShadeWindowView", lpparam.classLoader);
+        } catch (Throwable t) {
+            NotificationShadeWindowView = findClass("com.android.systemui.statusbar.phone.NotificationShadeWindowView", lpparam.classLoader);
+        }
         hookAllConstructors(NotificationShadeWindowView, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -156,7 +161,12 @@ public class PulseViewHook extends XposedMods {
             }
         });
 
-        Class<?> AodRootLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodRootLayout", lpparam.classLoader);
+        Class<?> AodRootLayout;
+        try {
+            AodRootLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodRootLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            AodRootLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodRootLayout", lpparam.classLoader);
+        }
         hookAllConstructors(AodRootLayout, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -175,18 +185,10 @@ public class PulseViewHook extends XposedMods {
                 try {
                     mStartButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("start_button", "id", Constants.Packages.SYSTEM_UI));
                     mEndButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("end_button", "id", Constants.Packages.SYSTEM_UI));
-                } catch (Throwable e) {
-                    e.printStackTrace();
+                } catch (Throwable t) {
+                    log(TAG + "Failed to find start/end button");
                 }
                 updateLockscreenIcons();
-            }
-        });
-
-
-        hookAllConstructors(CentralSurfacesImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
             }
         });
 
@@ -225,15 +227,17 @@ public class PulseViewHook extends XposedMods {
         });
 
         // Stole Screen Pinning
-        hookAllMethods(NavigationBarView, "setInScreenPinning", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (PulseControllerImpl.hasInstance()) {
-                    //log(TAG + "Screen pinning: " + (boolean)param.args[0]);
-                    PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
+        try {
+            hookAllMethods(NavigationBarView, "setInScreenPinning", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (PulseControllerImpl.hasInstance()) {
+                        //log(TAG + "Screen pinning: " + (boolean)param.args[0]);
+                        PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Throwable ignored){}
 
     }
 

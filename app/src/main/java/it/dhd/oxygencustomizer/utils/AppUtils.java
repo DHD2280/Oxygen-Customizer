@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.topjohnwu.superuser.Shell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,4 +112,26 @@ public class AppUtils {
         }, 0);
     }
 
+    public static void restartScope(String what) {
+        switch (what.toLowerCase())
+        {
+            case "systemui":
+                Shell.cmd("killall com.android.systemui").exec();
+                break;
+            case "system":
+                Shell.cmd("am start -a android.intent.action.REBOOT").exec();
+                break;
+            case "zygote":
+            case "android":
+                Shell.cmd("kill $(pidof zygote)").submit();
+                Shell.cmd("kill $(pidof zygote64)").submit();
+                break;
+            default:
+                Shell.cmd(String.format("killall %s", what)).exec();
+        }
+    }
+
+    public static void showToast(Context context, String string) {
+        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
+    }
 }

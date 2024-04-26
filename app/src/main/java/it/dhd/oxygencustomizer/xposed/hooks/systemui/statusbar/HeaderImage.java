@@ -119,8 +119,17 @@ public class HeaderImage extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> OplusQSContainerImpl = findClass("com.oplus.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);;
-        Class<?> QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);;
+
+        Class<?> OplusQSContainerImpl;
+        try {
+            OplusQSContainerImpl = findClass("com.oplus.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); // OOS 13
+        }
+        Class<?> QuickStatusBarHeader = null;
+        try {
+           QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);;
+        } catch (Throwable ignored){}
 
         try {
             log(TAG + "Hooking");
@@ -129,7 +138,6 @@ public class HeaderImage extends XposedMods {
                 protected void afterHookedMethod(MethodHookParam param) {
                     log(TAG + "onFinishInflate");
                     FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
-                    mQuickStatusBarHeader.setBackgroundColor(Color.TRANSPARENT);
 
                     mQsHeaderLayout = new FadingEdgeLayout(mContext);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
@@ -158,18 +166,23 @@ public class HeaderImage extends XposedMods {
                 }
             });
 
-            hookAllMethods(QuickStatusBarHeader, "onMeasure", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    View mDatePrivacyView = (View) getObjectField(param.thisObject, "mPrivacyContainer");
-                    int mTopViewMeasureHeight = getIntField(param.thisObject, "mTopViewMeasureHeight");
+        } catch (Throwable ignored) {}
 
-                    if ((int) callMethod(mDatePrivacyView, "getMeasuredHeight") != mTopViewMeasureHeight) {
-                        setObjectField(param.thisObject, "mTopViewMeasureHeight", callMethod(mDatePrivacyView, "getMeasuredHeight"));
-                        callMethod(param.thisObject, "updateAnimators");
+        try {
+            if (QuickStatusBarHeader != null) {
+                hookAllMethods(QuickStatusBarHeader, "onMeasure", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        View mDatePrivacyView = (View) getObjectField(param.thisObject, "mPrivacyContainer");
+                        int mTopViewMeasureHeight = getIntField(param.thisObject, "mTopViewMeasureHeight");
+
+                        if ((int) callMethod(mDatePrivacyView, "getMeasuredHeight") != mTopViewMeasureHeight) {
+                            setObjectField(param.thisObject, "mTopViewMeasureHeight", callMethod(mDatePrivacyView, "getMeasuredHeight"));
+                            callMethod(param.thisObject, "updateAnimators");
+                        }
                     }
-                }
-            });
+                });
+            }
         } catch (Throwable ignored) {}
     }
 

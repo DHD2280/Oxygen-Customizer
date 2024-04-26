@@ -37,8 +37,8 @@ public class SettingsLibUtilsProvider extends XposedMods {
 
         try {
             return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, 0);
-        } catch (Throwable ignored) { //13 QPR1
-            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", resID, context);
+        } catch (Throwable ignored) { //OOS 13
+            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID);
         }
     }
 
