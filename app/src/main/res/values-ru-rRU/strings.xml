@@ -95,11 +95,7 @@
     <string name="battery_landscape_r_style_b">Пейзаж в стиле R B</string>
     <string name="battery_landscape_smiley">Пейзажный смайлик</string>
     <string name="battery_level_percentage">Уровень заряда батареи</string>
-    <string name="battery_margin_bottom_title">Нижний запас заряда батареи</string>
-    <string name="battery_margin_left_title">Оставшийся запас заряда батареи</string>
-    <string name="battery_margin_right_title">Правый запас заряда батареи</string>
     <string name="battery_margin_title">Запас заряда батареи</string>
-    <string name="battery_margin_top_title">Максимальный запас заряда батареи</string>
     <string name="battery_percentage_size">Процентный размер</string>
     <string name="battery_portrait_airoo">Portrait Airoo</string>
     <string name="battery_portrait_capsule">Portrait Capsule</string>
@@ -154,8 +150,6 @@
     <string name="custom_color">Пользовательский цвет</string>
     <string name="custom_header_image_notice">Набор изображений заголовка</string>
     <string name="custom_location_title">Пользовательское местоположение</string>
-    <string name="custom_margins_desc">Установите пользовательские поля для значка батареи</string>
-    <string name="custom_margins_title">Настраиваемые поля</string>
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
     <string name="default_user_name">User</string>
     <string name="default_value">По умолчанию</string>

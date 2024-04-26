@@ -30,6 +30,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BatteryPrefs;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CATEGORY_CUSTOM_BATTERY_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
@@ -38,10 +39,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_BOTTOM;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_TOP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
@@ -210,10 +207,6 @@ public class PreferenceHelper {
             case "stock_percentage_size" -> {
                 return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false) &&
                     instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
-            }
-            // Battery Icon Dimensions
-            case "battery_margin_left", "battery_margin_right", "battery_margin_top", "battery_margin_bottom" -> {
-                return instance.mPreferences.getBoolean("battery_custom_margins", false);
             }
 
             // QuickSettings Prefs
@@ -468,8 +461,7 @@ public class PreferenceHelper {
 
         return switch(key) {
             case "category_battery_icon_settings",
-                    "battery_icon_style",
-                    "category_battery_margins" -> showCommonCustomizations;
+                    "battery_icon_style" -> showCommonCustomizations;
             case "category_battery_charging_icon" -> showChargingIconCustomization;
             case "battery_perimeter_alpha",
                     "battery_fill_alpha",
@@ -562,10 +554,6 @@ public class PreferenceHelper {
             // Battery
             case CUSTOM_BATTERY_WIDTH -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_WIDTH, 20) + "dp";
             case CUSTOM_BATTERY_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20) + "dp";
-            case CUSTOM_BATTERY_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_LEFT, 4) + "dp";
-            case CUSTOM_BATTERY_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_RIGHT, 4) + "dp";
-            case CUSTOM_BATTERY_MARGIN_TOP -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_TOP, 0) + "dp";
-            case CUSTOM_BATTERY_MARGIN_BOTTOM -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_MARGIN_BOTTOM, 0) + "dp";
             case CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14) + "dp";
             case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
             case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";

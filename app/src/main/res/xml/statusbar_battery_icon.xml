@@ -147,46 +147,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="category_battery_margins"
-        android:title="@string/battery_icon_margins"
-        app:iconSpaceReserved="false">
-
-        <SwitchPreferenceCompat
-            android:key="battery_custom_margins"
-            android:title="@string/custom_margins_title"
-            app:iconSpaceReserved="false"
-            app:summaryText="@string/custom_margins_desc" />
-
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="battery_margin_left"
-            android:title="@string/battery_margin_left_title"
-            app:defaultValue="4"
-            app:maxVal="8"
-            app:minVal="0" />
-
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="battery_margin_right"
-            android:title="@string/battery_margin_right_title"
-            app:defaultValue="4"
-            app:maxVal="8"
-            app:minVal="0" />
-
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="battery_margin_top"
-            android:title="@string/battery_margin_top_title"
-            app:defaultValue="0"
-            app:maxVal="8"
-            app:minVal="0" />
-
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="battery_margin_bottom"
-            android:title="@string/battery_margin_bottom_title"
-            app:defaultValue="0"
-            app:maxVal="8"
-            app:minVal="0" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="category_battery_charging_icon"
         android:title="@string/battery_charging_icon"
         app:iconSpaceReserved="false">

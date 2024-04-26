@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -60,11 +61,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_INSIDE_PERCENTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_LAYOUT_REVERSE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGINS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_BOTTOM;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_MARGIN_TOP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_PERIMETER_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_POWERSAVE_FILL_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_POWERSAVE_INDICATOR_COLOR;
@@ -87,10 +83,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -158,11 +156,6 @@ public class BatteryStyleManager extends XposedMods {
     private static boolean CustomBatteryEnabled = false;
     private static int mBatteryScaleWidth = 20;
     private static int mBatteryScaleHeight = 20;
-    private static boolean mBatteryCustomDimension = false;
-    private static int mBatteryMarginLeft = 0;
-    private static int mBatteryMarginTop = 0;
-    private static int mBatteryMarginRight = 0;
-    private static int mBatteryMarginBottom = 0;
     private static int mBatteryStockMarginLeft = 0, mBatteryStockMarginRight = 0;
     private boolean DefaultLandscapeBatteryEnabled = false;
     private int frameColor = Color.WHITE;
@@ -188,10 +181,12 @@ public class BatteryStyleManager extends XposedMods {
     private boolean mIsChargingImpl = false;
     private boolean mIsCharging = false;
     private ImageView mStockChargingIcon = null, mBatteryIcon = null;
+    private ImageView mBatteryOOS13 = null;
     private Object BatteryControllerImpl = null;
     private boolean updating = false;
     private boolean customizePercSize = false;
-    private int mBatteryPercSize = 14;
+    private int mBatteryPercSize = 12;
+    private static boolean oos13 = false;
 
     public BatteryStyleManager(Context context) {
         super(context);
@@ -229,7 +224,6 @@ public class BatteryStyleManager extends XposedMods {
         mShowPercentInside = insidePercentage && (defaultInsidePercentage || !hidePercentage);
         mHideBattery = Xprefs.getBoolean(CUSTOM_BATTERY_HIDE_BATTERY, false);
         mBatteryLayoutReverse = Xprefs.getBoolean(CUSTOM_BATTERY_LAYOUT_REVERSE, false);
-        mBatteryCustomDimension = Xprefs.getBoolean(CUSTOM_BATTERY_MARGINS, false);
         mBatteryScaleWidth = Xprefs.getSliderInt(CUSTOM_BATTERY_WIDTH, 20);
         mBatteryScaleHeight = Xprefs.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20);
         mScaledPerimeterAlpha = Xprefs.getBoolean(CUSTOM_BATTERY_PERIMETER_ALPHA, false);
@@ -247,20 +241,15 @@ public class BatteryStyleManager extends XposedMods {
         mChargingIconML = Xprefs.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1);
         mChargingIconMR = Xprefs.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 0);
         mChargingIconWH = Xprefs.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14);
-        mBatteryMarginLeft = dp2px(mContext, Xprefs.getSliderInt(CUSTOM_BATTERY_MARGIN_LEFT, mBatteryStockMarginLeft));
-        mBatteryMarginTop = dp2px(mContext, Xprefs.getSliderInt(CUSTOM_BATTERY_MARGIN_TOP, 0));
-        mBatteryMarginRight = dp2px(mContext, Xprefs.getSliderInt(CUSTOM_BATTERY_MARGIN_RIGHT, mBatteryStockMarginRight));
-        mBatteryMarginBottom = dp2px(mContext, Xprefs.getSliderInt(CUSTOM_BATTERY_MARGIN_BOTTOM, 0));
 
         // Stock Style
         customizePercSize = Xprefs.getBoolean(STOCK_CUSTOMIZE_PERCENTAGE_SIZE, false);
-        mBatteryPercSize = Xprefs.getSliderInt(STOCK_PERCENTAGE_SIZE, 14);
+        mBatteryPercSize = Xprefs.getSliderInt(STOCK_PERCENTAGE_SIZE, 12);
 
         if (Key.length > 0 && (Key[0].equals(CUSTOMIZE_BATTERY_ICON) ||
                 Key[0].equals(CUSTOM_BATTERY_STYLE) ||
                 Key[0].equals(CUSTOM_BATTERY_HIDE_PERCENTAGE) ||
                 Key[0].equals(CUSTOM_BATTERY_LAYOUT_REVERSE) ||
-                Key[0].equals(CUSTOM_BATTERY_MARGINS) ||
                 Key[0].equals(CUSTOM_BATTERY_PERIMETER_ALPHA) ||
                 Key[0].equals(CUSTOM_BATTERY_FILL_ALPHA) ||
                 Key[0].equals(CUSTOM_BATTERY_RAINBOW_FILL_COLOR) ||
@@ -276,10 +265,6 @@ public class BatteryStyleManager extends XposedMods {
                 Key[0].equals(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT) ||
                 Key[0].equals(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT) ||
                 Key[0].equals(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT) ||
-                Key[0].equals(CUSTOM_BATTERY_MARGIN_LEFT) ||
-                Key[0].equals(CUSTOM_BATTERY_MARGIN_TOP) ||
-                Key[0].equals(CUSTOM_BATTERY_MARGIN_RIGHT) ||
-                Key[0].equals(CUSTOM_BATTERY_MARGIN_BOTTOM) ||
                 Key[0].equals(CUSTOM_BATTERY_INSIDE_PERCENTAGE) ||
                 Key[0].equals(CUSTOM_BATTERY_WIDTH) ||
                 Key[0].equals(CUSTOM_BATTERY_HEIGHT) ||
@@ -297,6 +282,11 @@ public class BatteryStyleManager extends XposedMods {
         if (Build.VERSION.SDK_INT >= 34) {
             hookBattery(lpparam); // OOS 14
         } else {
+            if (mBatteryOOS13 == null) {
+                mBatteryOOS13 = new ImageView(mContext);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                mBatteryOOS13.setLayoutParams(lp);
+            }
             hookBattery13(lpparam); // OOS 13
         }
 
@@ -474,7 +464,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void hookBattery13(XC_LoadPackage.LoadPackageParam lpparam) {
-
+        oos13 = true;
         Class<?> TwoBatteryMeterDrawable = findClass("com.oplusos.systemui.statusbar.widget.TwoBatteryMeterDrawable", lpparam.classLoader);
         findAndHookMethod(TwoBatteryMeterDrawable, "setColors",
                 int.class,
@@ -517,7 +507,8 @@ public class BatteryStyleManager extends XposedMods {
                 mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
                 batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
 
-                if (CustomBatteryEnabled && mBatteryIcon != null) {
+                if (CustomBatteryEnabled && mBatteryOOS13 != null) {
+
                     if (mHidePercentage)
                         batteryPercentOutView.setVisibility(View.GONE);
                     else {
@@ -546,8 +537,10 @@ public class BatteryStyleManager extends XposedMods {
                                 mCustomPowerSaveFillColor,
                                 mChargingIconSwitch
                         );
+                        if (mBatteryIcon.getScaleType() != mBatteryOOS13.getScaleType())
+                            mBatteryIcon.setScaleType(mBatteryOOS13.getScaleType());
                         mBatteryIcon.setImageDrawable(mBatteryDrawable);
-
+                        mBatteryIcon.setVisibility(View.VISIBLE);
                     }
 
                     scaleBatteryMeterViews(mBatteryIcon);
@@ -682,17 +675,16 @@ public class BatteryStyleManager extends XposedMods {
             int batteryWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mBatteryScaleWidth, mBatteryIconView.getContext().getResources().getDisplayMetrics());
             int batteryHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mBatteryScaleHeight, mBatteryIconView.getContext().getResources().getDisplayMetrics());
 
-            LinearLayout.LayoutParams scaledLayoutParams = (LinearLayout.LayoutParams) mBatteryIconView.getLayoutParams();
+            LinearLayout.LayoutParams scaledLayoutParams;
+            if (!oos13) scaledLayoutParams = (LinearLayout.LayoutParams) mBatteryIconView.getLayoutParams();
+            else scaledLayoutParams = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
             scaledLayoutParams.width = (int) (batteryWidth * iconScaleFactor);
             scaledLayoutParams.height = (int) (batteryHeight * iconScaleFactor);
-            if (mBatteryCustomDimension) {
-                scaledLayoutParams.setMargins(mBatteryMarginLeft, mBatteryMarginTop, mBatteryMarginRight, mBatteryMarginBottom);
-            } else {
-                scaledLayoutParams.setMargins(mBatteryStockMarginLeft, 0, mBatteryStockMarginRight, context.getResources().getDimensionPixelOffset(context.getResources().getIdentifier("battery_margin_bottom", "dimen", context.getPackageName())));
-            }
+            scaledLayoutParams.setMargins(mBatteryStockMarginLeft, 0, mBatteryStockMarginRight, context.getResources().getDimensionPixelOffset(context.getResources().getIdentifier("battery_margin_bottom", "dimen", context.getPackageName())));
 
             mBatteryIconView.setLayoutParams(scaledLayoutParams);
             mBatteryIconView.setVisibility(mHideBattery ? View.GONE : View.VISIBLE);
+            mBatteryIconView.requestLayout();
         } catch (Throwable throwable) {
             log(TAG + throwable);
         }
