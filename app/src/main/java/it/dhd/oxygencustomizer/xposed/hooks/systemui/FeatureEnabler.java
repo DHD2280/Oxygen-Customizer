@@ -159,9 +159,7 @@ public class FeatureEnabler extends XposedMods {
         hookAllMethods(FeatureOptions, "isOplusVolumeKeyInRight", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log("FeatureOption isOplusVolumeKeyInRight");
                 if (volumePanelPosition == 0) return;
-
 
                 if (volumePanelPosition == 1)
                     param.setResult(true);
