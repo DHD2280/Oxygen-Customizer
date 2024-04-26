@@ -280,7 +280,6 @@
     <string name="lockscreen_hide_power_menu_summary">Скрыть меню включения на защищенном экране блокировки</string>
     <string name="lockscreen_remove_sos_summary">Скрыть нижнюю кнопку SOS на экране блокировки</string>
     <string name="lockscreen_remove_sos_title">Скрыть кнопку SOS</string>
-    <string name="lockscreen_scramble_pin">Scramble PIN</string>
     <string name="lockscreen_stock_clock_red_one_color">Цвет в течение 1 часа</string>
     <string name="lockscreen_stock_clock_red_one_disable">Отключите Красный Индикатор</string>
     <string name="lockscreen_stock_clock_red_one_title">Поведение Красного Одина</string>
