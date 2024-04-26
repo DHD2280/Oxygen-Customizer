@@ -499,15 +499,30 @@ public class BatteryStyleManager extends XposedMods {
             }
         });
 
-
         Class<?> StatBatteryMeterView = findClass("com.oplusos.systemui.statusbar.widget.StatBatteryMeterView", lpparam.classLoader);
-        findAndHookMethod(StatBatteryMeterView, "initViews", Context.class, new XC_MethodHook() {
+        findAndHookMethod(StatBatteryMeterView, "onBatteryLevelChanged",
+                int.class,
+                boolean.class,
+                boolean.class,
+                new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
                 batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
 
-                if (CustomBatteryEnabled && mBatteryOOS13 != null) {
+                /*
+                public void onBatteryLevelChanged(int i, boolean z, boolean z2) {
+
+                TwoBatteryMeterDrawable twoBatteryMeterDrawable = this.mTwoDrawable;
+                if (twoBatteryMeterDrawable != null) {
+                    twoBatteryMeterDrawable.setCharging(z2);
+                    twoBatteryMeterDrawable.setBatteryLevel(i);
+                }
+                 */
+
+                int batteryLevel = (int) param.args[0];
+                mIsCharging = (boolean) param.args[2];
+                if (CustomBatteryEnabled && mBatteryIcon != null) {
 
                     if (mHidePercentage)
                         batteryPercentOutView.setVisibility(View.GONE);
@@ -517,7 +532,7 @@ public class BatteryStyleManager extends XposedMods {
                     BatteryDrawable mBatteryDrawable = getNewBatteryDrawable(mContext);
                     if (mBatteryDrawable == null) return;
                     if (mBatteryDrawable != null) {
-                        mBatteryDrawable.setBatteryLevel(getCurrentLevel());
+                        mBatteryDrawable.setBatteryLevel(batteryLevel);
                         mBatteryDrawable.setChargingEnabled(mIsCharging, isFastCharging());
                         mBatteryDrawable.setPowerSavingEnabled(isPowerSaving());
                         mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);
@@ -537,10 +552,9 @@ public class BatteryStyleManager extends XposedMods {
                                 mCustomPowerSaveFillColor,
                                 mChargingIconSwitch
                         );
-                        if (mBatteryIcon.getScaleType() != mBatteryOOS13.getScaleType())
-                            mBatteryIcon.setScaleType(mBatteryOOS13.getScaleType());
+                        mBatteryIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+                        mBatteryIcon.setLayerType(View.LAYER_TYPE_NONE, null);
                         mBatteryIcon.setImageDrawable(mBatteryDrawable);
-                        mBatteryIcon.setVisibility(View.VISIBLE);
                     }
 
                     scaleBatteryMeterViews(mBatteryIcon);
@@ -552,6 +566,11 @@ public class BatteryStyleManager extends XposedMods {
                             batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
                     }
                 }
+            }
+        });
+        findAndHookMethod(StatBatteryMeterView, "initViews", Context.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
             }
         });

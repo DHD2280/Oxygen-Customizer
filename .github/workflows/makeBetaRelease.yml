@@ -53,7 +53,7 @@ jobs:
       - name: Upload Xposed Artifact to Actions
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: OxygenCustomizer.zip
+          name: OxygenCustomizer
           path: app/build/outputs/apk/release/*.apk
 
       - name: Oxygen Customizer Binary Release

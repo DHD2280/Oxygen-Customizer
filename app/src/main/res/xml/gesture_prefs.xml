@@ -43,7 +43,7 @@
         <SwitchPreferenceCompat
             android:key="gesture_override_holdback"
             android:title="@string/gesture_override_back_hold"
-            android:defaultValue="true"
+            android:defaultValue="false"
             app:iconSpaceReserved="false"/>
 
         <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
