@@ -213,7 +213,7 @@ public class PreferenceHelper {
             }
             // Battery Icon Dimensions
             case "battery_margin_left", "battery_margin_right", "battery_margin_top", "battery_margin_bottom" -> {
-                return instance.mPreferences.getBoolean("battery_custom_dimensions", false);
+                return instance.mPreferences.getBoolean("battery_custom_margins", false);
             }
 
             // QuickSettings Prefs

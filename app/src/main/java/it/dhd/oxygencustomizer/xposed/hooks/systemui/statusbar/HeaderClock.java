@@ -330,7 +330,7 @@ public class HeaderClock extends XposedMods {
         try {
             OplusClockExImpl = findClass("com.oplus.systemui.common.clock.OplusClockExImpl", lpparam.classLoader);
         } catch (Throwable t) {
-            OplusClockExImpl = findClass("com.oplusos.systemui.ext.BaseClockExt", lpparam.classLoader);
+            OplusClockExImpl = findClass("com.oplusos.systemui.ext.BaseClockExt", lpparam.classLoader); // OOS 13
         }
         hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
             @Override
