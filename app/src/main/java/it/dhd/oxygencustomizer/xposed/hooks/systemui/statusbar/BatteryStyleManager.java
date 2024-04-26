@@ -5,7 +5,9 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_LANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_RLANDSCAPE;
@@ -85,6 +87,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -291,7 +294,15 @@ public class BatteryStyleManager extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listensTo(lpparam.packageName)) return;
 
-        //Class<?> StatBatteryMeterView = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.view.StatBatteryMeterView", lpparam.classLoader);
+        if (Build.VERSION.SDK_INT >= 34) {
+            hookBattery(lpparam); // OOS 14
+        } else {
+            hookBattery13(lpparam); // OOS 13
+        }
+
+    }
+
+    private void hookBattery(XC_LoadPackage.LoadPackageParam lpparam) {
         Class<?> BatteryIconColor = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.model.BatteryIconColor", lpparam.classLoader);
 
         findAndHookConstructor(BatteryIconColor,
@@ -434,10 +445,9 @@ public class BatteryStyleManager extends XposedMods {
                     progress.setProgress(0);
                     progress.setVisibility(View.GONE);
                 } else {
-                    batteryPercentInView.setVisibility(View.VISIBLE);
                     if (customizePercSize) {
-                        batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
-                    }
+                        if (batteryPercentOutView != null && batteryPercentOutView.getVisibility() == View.VISIBLE)
+                            batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);                    }
                 }
 
 
@@ -459,6 +469,97 @@ public class BatteryStyleManager extends XposedMods {
                         mStockChargingIcon.setVisibility(View.GONE);
                     }
                 }
+            }
+        });
+    }
+
+    private void hookBattery13(XC_LoadPackage.LoadPackageParam lpparam) {
+
+        Class<?> TwoBatteryMeterDrawable = findClass("com.oplusos.systemui.statusbar.widget.TwoBatteryMeterDrawable", lpparam.classLoader);
+        findAndHookMethod(TwoBatteryMeterDrawable, "setColors",
+                int.class,
+                int.class,
+                int.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                /*
+                    this.mOutlineColor = i3;
+                    setColors(i, i2);
+                    public void setColors(int i, int i2) {
+                        int argb = Color.argb((int) (Color.alpha(i) * 0.85f), Color.red(i), Color.green(i), Color.blue(i));
+                        int argb2 = Color.argb((int) (Color.alpha(i2) * 0.85f), Color.red(i2), Color.green(i2), Color.blue(i2));
+                        this.mCircleBackPaint.setColor(argb2);
+                        this.mCircleFrontPaint.setColor(argb);
+                        this.mCircleChargingPaint.setColor(argb);
+                        super.setColors(argb, argb2);
+                    }
+                    public void setColors(int i, int i2) {
+                        this.mIconTint = i;
+                        this.mFramePaint.setColor(i2);
+                        this.mBoltPaint.setColor(i);
+                        this.mChargeColor = i;
+                        invalidateSelf();
+                    }
+
+                 */
+                backgroundColor = (int) param.args[0];
+                frameColor = (int) param.args[1];
+                singleToneColor = (int) param.args[1];
+
+            }
+        });
+
+
+        Class<?> StatBatteryMeterView = findClass("com.oplusos.systemui.statusbar.widget.StatBatteryMeterView", lpparam.classLoader);
+        findAndHookMethod(StatBatteryMeterView, "initViews", Context.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
+                batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
+
+                if (CustomBatteryEnabled && mBatteryIcon != null) {
+                    if (mHidePercentage)
+                        batteryPercentOutView.setVisibility(View.GONE);
+                    else {
+                        batteryPercentOutView.setVisibility(View.VISIBLE);
+                    }
+                    BatteryDrawable mBatteryDrawable = getNewBatteryDrawable(mContext);
+                    if (mBatteryDrawable == null) return;
+                    if (mBatteryDrawable != null) {
+                        mBatteryDrawable.setBatteryLevel(getCurrentLevel());
+                        mBatteryDrawable.setChargingEnabled(mIsCharging, isFastCharging());
+                        mBatteryDrawable.setPowerSavingEnabled(isPowerSaving());
+                        mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);
+                        mBatteryDrawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
+                        mBatteryDrawable.setColors(frameColor, backgroundColor, singleToneColor);
+                        mBatteryDrawable.customizeBatteryDrawable(
+                                mBatteryLayoutReverse,
+                                mScaledPerimeterAlpha,
+                                mScaledFillAlpha,
+                                mCustomBlendColor,
+                                mRainbowFillColor,
+                                mCustomFillColor,
+                                mCustomFillGradColor,
+                                mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
+                                mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                                mCustomPowerSaveColor,
+                                mCustomPowerSaveFillColor,
+                                mChargingIconSwitch
+                        );
+                        mBatteryIcon.setImageDrawable(mBatteryDrawable);
+
+                    }
+
+                    scaleBatteryMeterViews(mBatteryIcon);
+                    updateBatteryRotation(mBatteryIcon);
+                    updateFlipper(mBatteryIcon.getParent());
+                } else {
+                    if (customizePercSize) {
+                        if (batteryPercentOutView != null && batteryPercentOutView.getVisibility() == View.VISIBLE)
+                            batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
+                    }
+                }
+
             }
         });
     }
