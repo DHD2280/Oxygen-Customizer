@@ -83,7 +83,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.OC_CHANNEL }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
+          token: ${{ secrets.TELEGRAM_TK }}
           message: ${{ env.TMessage }}
           format: markdown
 
@@ -91,7 +91,7 @@ jobs:
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.OC_CHANNEL2 }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
+          token: ${{ secrets.TELEGRAM_TK }}
           message: ${{ env.TMessage }}
           format: markdown
 

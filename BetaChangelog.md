@@ -1,6 +1,5 @@
 **beta-7**  
-- Added Lockscreen Statusbar customizations  
-- Added Lockscreen Statusbar customizations  
+- Added Lockscreen Statusbar customizations
 - Battery Style improvement  
 - Added the ability to hide Launcher Pagination  
   
