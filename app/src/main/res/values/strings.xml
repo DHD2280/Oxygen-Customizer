@@ -498,7 +498,6 @@
 
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Lockscreen</string>
-    <string name="lockscreen_scramble_pin">Scramble PIN</string>
     <string name="lockscreen_hide_power_menu">Hide power menu</string>
     <string name="lockscreen_hide_power_menu_summary">Hide power menu on secure lockscreen</string>
     <string name="lockscreen_remove_sos_title">Hide SOS button</string>
@@ -514,6 +513,7 @@
     <string name="lockscreen_affordance_remove_left">Remove Left Affordance</string>
     <string name="lockscreen_affordance_remove_right">Remove Right Affordance</string>
     <string name="lockscreen_hide_lock_icon">Hide lock icon</string>
+    <string name="lockscreen_weather">Lockscreen Weather</string>
 
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">Lockscreen Clock</string>
@@ -811,6 +811,5 @@
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Windy</string>
     <string name="weather_condition_mist">Misty</string>
-    <string name="lockscreen_weather">Lockscreen Weather</string>
 
 </resources>
