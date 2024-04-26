@@ -446,8 +446,6 @@ public class HeaderClock extends XposedMods {
 
     private void setupChips() {
 
-        log(TAG + "updateChips: " + stockClockTimeBackgroundChip + " " + stockClockDateBackgroundChip);
-
         mAccent = getPrimaryColor(mContext);
         mClockChipDrawale.setShape(GradientDrawable.RECTANGLE);
         mClockChipDrawale.setGradientType(GradientDrawable.LINEAR_GRADIENT);
