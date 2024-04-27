@@ -722,7 +722,7 @@
     <string name="notification_channel_update">Updates</string>
     <string name="notification_channel_update_desc">This channel shows notification about the latest updates.</string>
     <string name="new_update_title">Update available</string>
-    <string name="new_update_desc">A new version of PixelXpert is available</string>
+    <string name="new_update_desc">A new version of Oxygen Customizer is available</string>
     <string name="usage_title">Usage</string>
     <string name="usage_summary">Open wiki page</string>
     <string name="credits_title">Credits</string>
