@@ -98,6 +98,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
+import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -494,8 +495,10 @@ public class LockscreenClock extends XposedMods {
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : systemAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : systemAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", customColor ? accent3 : systemAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", customColor ? text1 : Color.WHITE);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", customColor ? text2 : Color.WHITE);
+        if (customColor) {
+            ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", text1);
+            ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", text2);
+        }
 
         if (typeface != null) {
             ViewHelper.applyFontRecursively((ViewGroup) clockView, typeface);
@@ -544,14 +547,14 @@ public class LockscreenClock extends XposedMods {
     private void initBatteryStatus() {
         if (mBatteryStatusView != null) {
             if (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
-                mBatteryStatusView.setText(R.string.battery_charging);
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_charging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING ||
                     mBatteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
-                mBatteryStatusView.setText(R.string.battery_discharging);
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_discharging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
-                mBatteryStatusView.setText(R.string.battery_full);
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_full));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
-                mBatteryStatusView.setText(R.string.battery_level_percentage);
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_level_percentage));
             }
         }
 
