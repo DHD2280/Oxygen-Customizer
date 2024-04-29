@@ -309,6 +309,44 @@
     <string name="brightness_slider_progress_color_title">Brightness Slider Color Mode</string>
     <string name="brightness_slider_background_color_title">Customize background color</string>
 
+    <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_title">Tiles animation</string>
+    <string name="qs_tile_animation_style_title">Animation style</string>
+    <string name="qs_tile_animation_duration_title">Animation duration</string>
+    <string name="qs_tile_animation_interpolator_title">Tiles animation interpolator</string>
+    <string name="qs_tile_animation_style_off">No animation</string>
+    <string name="qs_tile_animation_style_flip">Flip</string>
+    <string name="qs_tile_animation_style_rotate">Rotate</string>
+    <string name="qs_tile_animation_duration_low">Low</string>
+    <string name="qs_tile_animation_duration_default">Default</string>
+    <string name="qs_tile_animation_duration_fast">Fast</string>
+    <string name="qs_tile_animation_interpolator_linearInterpolator">Linear</string>
+    <string name="qs_tile_animation_interpolator_accelerateInterpolator">Accelerate</string>
+    <string name="qs_tile_animation_interpolator_decelerateInterpolator">Decelerate</string>
+    <string name="qs_tile_animation_interpolator_accelerateDecelerateInterpolator">Accelerate decelerate</string>
+    <string name="qs_tile_animation_interpolator_bounceInterpolator">Bounce</string>
+    <string name="qs_tile_animation_interpolator_overshootInterpolator">Overshoot</string>
+    <string name="qs_tile_animation_interpolator_anticipateInterpolator">Anticipate</string>
+    <string name="qs_tile_animation_interpolator_anticipateOvershootInterpolator">Anticipate overshoot</string>
+
+    <!-- QS Page Transitions -->
+    <string name="qs_transitions_title_switch_title">Enable QS Page Transitions</string>
+    <string name="qs_transitions_title">QS Page Transitions</string>
+    <string name="qs_transitions_cube_in">Cube In</string>
+    <string name="qs_transitions_cube_out">Cube Out</string>
+    <string name="qs_transitions_accordion">Accordion</string>
+    <string name="qs_transitions_background_to_foreground">Background to Foreground</string>
+    <string name="qs_transitions_depth_page">Depth page</string>
+    <string name="qs_transitions_fade">Fade</string>
+    <string name="qs_transitions_foreground_to_background">Foreground to Background</string>
+    <string name="qs_transitions_rotate_down">Rotate down</string>
+    <string name="qs_transitions_rotate_up">Rotate up</string>
+    <string name="qs_transitions_stack">Stack</string>
+    <string name="qs_transitions_tablet">Tablet</string>
+    <string name="qs_transitions_zoom_in">Zoom in</string>
+    <string name="qs_transitions_zoom_out">Zoom out</string>
+    <string name="qs_transitions_zoom_out_slide">Zoom out slide</string>
+
     <!-- QS Header Image Strings -->
     <string name="qs_header_image_title">Header image</string>
     <string name="qs_header_image_summary">Select QS background header image</string>
@@ -667,7 +705,7 @@
     <string name="menu_restart_app">Restart app</string>
 
     <!-- Update Fragment -->
-    <string name="string_formatter_manual_body_v3">In addition to the normal text, dynamic variables are also available, like Date, Data usage and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P&lt;format&gt; : Persian date, based on format*\n$Nrx : Total Downloads in specified period ** ***\n$Ntx: Total Uploads in specified period ** ***\n$Nall : Total Traffic in specified period ** ***\n$Nssid : WiFi SSID name (if applicable)\n\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"\n**You can specify the statistics period in PixelXpert/Miscellaneous menu/Network Statistics Settings\n***If you replace $N with $Nc you will get with mobile data statistics (e.g. $Ncrx instead of Nrx)</string>
+    <string name="string_formatter_manual_body_v3">In addition to the normal text, dynamic variables are also available, like Date, Data usage and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P&lt;format&gt; : Persian date, based on format*\n$Nrx : Total Downloads in specified period ** ***\n$Ntx: Total Uploads in specified period ** ***\n$Nall : Total Traffic in specified period ** ***\n$Nssid : WiFi SSID name (if applicable)\n\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"\n**You can specify the statistics period in Oxygen Customizer/Miscellaneous menu/Network Statistics Settings\n***If you replace $N with $Nc you will get with mobile data statistics (e.g. $Ncrx instead of Nrx)</string>
     <string name="update_channel_name">Updates</string>
     <string name="update_notification_title">Update downloaded</string>
     <string name="update_notification_text">Tap here to install</string>

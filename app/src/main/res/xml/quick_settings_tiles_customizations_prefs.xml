@@ -47,6 +47,61 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        android:title="@string/qs_tile_animation_title">
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            android:key="qs_tile_animation_style"
+            android:title="@string/qs_tile_animation_style_title"
+            android:entries="@array/qs_tile_animation_style_entries"
+            android:entryValues="@array/qs_tile_animation_style_values"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="0" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_animation_duration"
+            android:title="@string/qs_tile_animation_duration_title"
+            app:minVal="1"
+            app:maxVal="5"
+            app:defaultValue="1"
+            android:max="5"
+            android:min="1" />
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true"
+            android:key="qs_tile_animation_interpolator"
+            android:title="@string/qs_tile_animation_interpolator_title"
+            android:entries="@array/qs_tile_animation_interpolator_entries"
+            android:entryValues="@array/qs_tile_animation_interpolator_values"
+            android:defaultValue="0" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/qs_transitions_title">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_transitions_title_switch"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_transitions_title_switch_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            android:key="qs_tile_transformations"
+            android:entries="@array/qs_transitions_entries"
+            android:entryValues="@array/qs_transitions_values"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="1"
+            android:title="@string/qs_transitions_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/quick_settings_tiles_customize_labels">
 
         <SwitchPreferenceCompat

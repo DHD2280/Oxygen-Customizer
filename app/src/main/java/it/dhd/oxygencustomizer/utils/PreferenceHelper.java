@@ -63,6 +63,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_INTENSITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -240,6 +245,16 @@ public class PreferenceHelper {
             }
             case "brightness_slider_background_color" -> {
                 return instance.mPreferences.getBoolean("brightness_slider_background_color_enabled", false);
+            }
+            case QS_TILE_ANIMATION_INTERPOLATOR,
+                    QS_TILE_ANIMATION_DURATION -> {
+                return !instance.mPreferences.getString(QS_TILE_ANIMATION_STYLE, "0").equals("0");
+            }
+            case QS_TILE_ANIMATION_TRANSFORMATIONS -> {
+                return instance.mPreferences.getBoolean(QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH, false);
+            }
+            case "qs_tile_label" -> {
+                return instance.mPreferences.getBoolean("qs_tile_label_enabled", false);
             }
 
             // Gesture Prefs
