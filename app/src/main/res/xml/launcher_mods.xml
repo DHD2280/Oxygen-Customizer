@@ -8,7 +8,6 @@
         android:key="launcher_intro"
         app:iconSpaceReserved="false"
         android:title="@string/launcher_intro_title"
-        android:layout="@layout/preference_clock_layout"
         search:ignore="true"/>
 
     <PreferenceCategory

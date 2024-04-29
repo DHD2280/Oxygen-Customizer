@@ -603,6 +603,7 @@ public class LockscreenClock extends XposedMods {
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         mActivityManager.getMemoryInfo(memoryInfo);
         long usedMemory = memoryInfo.totalMem - memoryInfo.availMem;
+        if (memoryInfo.totalMem == 0) return;
         int usedMemoryPercentage = (int) ((usedMemory * 100) / memoryInfo.totalMem);
 
         if (mRamUsageArcProgress != null) {

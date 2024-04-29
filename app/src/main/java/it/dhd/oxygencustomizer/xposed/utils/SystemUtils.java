@@ -99,6 +99,14 @@ public class SystemUtils {
                 : instance.getBatteryManager();
     }
 
+    @Nullable
+    @Contract(pure = true)
+    public static UserManager UserManager() {
+        return instance == null
+                ? null
+                : instance.getUserManager();
+    }
+
     private CameraManager getCameraManager() {
         if(mCameraManager == null)
         {
@@ -226,6 +234,19 @@ public class SystemUtils {
             }
         }
         return mBatteryManager;
+    }
+
+    private UserManager getUserManager() {
+        if (mUserManager == null) {
+            try {
+                mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mUserManager;
     }
 
     private VibratorManager getVibrationManager()
