@@ -18,6 +18,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -28,8 +29,17 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AbsSeekBar;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -41,11 +51,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.slider.Slider;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -54,6 +67,8 @@ import it.dhd.oxygencustomizer.xposed.XPrefs;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.viewpager.ABaseTransformer;
+import it.dhd.oxygencustomizer.xposed.utils.viewpager.*;
 
 public class QsTileCustomization extends XposedMods {
 
@@ -73,6 +88,11 @@ public class QsTileCustomization extends XposedMods {
     private ImageView mExpandIndicator = null;
     private boolean advancedCustom = true;
     private static final ArrayList<Object> qsViews = new ArrayList<>();
+    private int mAnimStyle = 0;
+    private int mInterpolatorType = 0;
+    private int mAnimDuration = 0;
+    private boolean mTrasformationsEnabled = false;
+    private int mTrasformations = 1;
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -82,20 +102,32 @@ public class QsTileCustomization extends XposedMods {
     public void updatePrefs(String... Key) {
         if (Xprefs == null) return;
 
+        // Qs Colors
         qsActiveColorEnabled = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
         qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, Color.RED);
         qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
         qsDisabledColorEnabled = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
         qsDisabledColor = Xprefs.getInt(QS_TILE_DISABLED_COLOR, Color.DKGRAY);
+
+        // Brightness Slider
         qsBrightnessSliderCustomize = Xprefs.getBoolean(QS_BRIGHTNESS_SLIDER_CUSTOMIZE, false);
         qsBrightnessSliderColorMode = Integer.parseInt(Xprefs.getString(QS_BRIGHTNESS_SLIDER_COLOR_MODE, "0"));
         qsBrightnessSliderColor = Xprefs.getInt(QS_BRIGHTNESS_SLIDER_COLOR, getPrimaryColor(mContext));
         qsBrightnessBackgroundCustomize = Xprefs.getBoolean(QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED, false);
         qsBrightnessBackgroundColor = Xprefs.getInt(QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR, Color.TRANSPARENT);
+
+        // Labels
         qsLabelsHide = Xprefs.getBoolean(QS_TILE_HIDE_LABELS, false);
         qsLabelsColorEnabled = Xprefs.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
         qsLabelsColor = Xprefs.getInt(QS_TILE_LABELS_CUSTOM_COLOR, Color.WHITE);
+
+        // Qs Animations
+        mAnimStyle = Integer.parseInt(Xprefs.getString(QS_TILE_ANIMATION_STYLE, "0"));
+        mInterpolatorType = Integer.parseInt(Xprefs.getString(QS_TILE_ANIMATION_INTERPOLATOR, "0"));
+        mAnimDuration = Xprefs.getSliderInt(QS_TILE_ANIMATION_DURATION, 1);
+        mTrasformationsEnabled = Xprefs.getBoolean(QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH, false);
+        mTrasformations = Integer.parseInt(Xprefs.getString(QS_TILE_ANIMATION_TRANSFORMATIONS, "1"));
 
         if (Key.length > 0) {
             for(String k : QS_UPDATE_PREFS) {
@@ -243,7 +275,17 @@ public class QsTileCustomization extends XposedMods {
             }
         };
 
+        final XC_MethodHook animationHook = new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                View qsTile = (View) param.thisObject;
+                qsTile.post(()->getTileAnimation(qsTile));
+            }
+        };
+
         hookAllMethods(OplusQSTileBaseView, "generateDrawable", colorHook);
+
+        hookAllMethods(OplusQSTileBaseView, "performClick", animationHook);
 
         Class<?> OplusQSHighlightTileView;
         try {
@@ -252,6 +294,7 @@ public class QsTileCustomization extends XposedMods {
             OplusQSHighlightTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
         }
         hookAllMethods(OplusQSHighlightTileView, "generateDrawable", colorHook);
+        hookAllMethods(OplusQSHighlightTileView, "performClick", animationHook);
 
 
         Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
@@ -382,6 +425,103 @@ public class QsTileCustomization extends XposedMods {
 
         } catch (Throwable ignored) {}
 
+        try {
+            Class<?> PagedTileLayout = findClass("com.android.systemui.qs.PagedTileLayout", lpparam.classLoader);
+            hookAllConstructors(PagedTileLayout, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
+                    Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
+                    Object vPager = param.thisObject;
+                    hookAllMethods(VPagerListener.getClass(),
+                            "onPageScrolled", new XC_MethodHook() {
+                                @Override
+                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                                    if (!mTrasformationsEnabled) return;
+                                    final int childCount = (int) callMethod(vPager, "getChildCount");
+                                    for (int i = 0; i < childCount; i++) {
+                                        final View child = (View) callMethod(vPager, "getChildAt", i);
+                                        final Object lp = callMethod(child, "getLayoutParams");
+                                        if (getBooleanField(lp, "isDecor")) continue;
+                                        final float transformPos = (float) (child.getLeft() - (int)callMethod(vPager, "getScrollX")) / child.getWidth();
+                                        getCustomTransitions().transformPage(child, transformPos);
+                                    }
+                                }
+                            });
+                }
+            });
+        } catch (Throwable t) {
+            log(this.getClass().getSimpleName() + " error: " + t.getMessage());
+        }
+
+    }
+
+
+    private ViewPager.PageTransformer getCustomTransitions() {
+        return switch (mTrasformations) {
+            case 1 -> new CubeInTransformer();
+            case 2 -> new CubeOutTransformer();
+            case 3 -> new AccordionTransformer();
+            case 4 -> new BackgroundToForegroundTransformer();
+            case 5 -> new DepthPageTransformer();
+            case 6 -> new FadeTransformer();
+            case 7 -> new ForegroundToBackgroundTransformer();
+            case 8 -> new RotateDownTransformer();
+            case 9 -> new RotateUpTransformer();
+            case 10 -> new StackTransformer();
+            case 11 -> new TabletTransformer();
+            case 12 -> new ZoomInTransformer();
+            case 13 -> new ZoomOutTransformer();
+            case 14 -> new ZoomOutSlideTransformer();
+            default -> null;
+        };
+
+    }
+
+    private void getTileAnimation(View v) {
+        ObjectAnimator animTile = null;
+
+        switch (mAnimStyle) {
+            case 1:
+                animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
+                break;
+            case 2:
+                animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
+                break;
+            default:
+                return;
+        }
+
+        switch (mInterpolatorType) {
+            case 0:
+                animTile.setInterpolator(new LinearInterpolator());
+                break;
+            case 1:
+                animTile.setInterpolator(new AccelerateInterpolator());
+                break;
+            case 2:
+                animTile.setInterpolator(new DecelerateInterpolator());
+                break;
+            case 3:
+                animTile.setInterpolator(new AccelerateDecelerateInterpolator());
+                break;
+            case 4:
+                animTile.setInterpolator(new BounceInterpolator());
+                break;
+            case 5:
+                animTile.setInterpolator(new OvershootInterpolator());
+                break;
+            case 6:
+                animTile.setInterpolator(new AnticipateInterpolator());
+                break;
+            case 7:
+                animTile.setInterpolator(new AnticipateOvershootInterpolator());
+                break;
+            default:
+                break;
+        }
+        animTile.setDuration(mAnimDuration * 1000L);
+        animTile.start();
     }
 
     @Override

@@ -321,4 +321,76 @@
         <item>1</item>
     </string-array>
 
+    <!-- Qs Animations -->
+    <!-- QS Tiles animation style -->
+    <string-array name="qs_tile_animation_style_entries" translatable="false">
+        <item>@string/qs_tile_animation_style_off</item>
+        <item>@string/qs_tile_animation_style_flip</item>
+        <item>@string/qs_tile_animation_style_rotate</item>
+    </string-array>
+
+    <string-array name="qs_tile_animation_style_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- QS Tiles animation interpolator -->
+    <string-array name="qs_tile_animation_interpolator_entries" translatable="false">
+        <item>@string/qs_tile_animation_interpolator_linearInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_accelerateInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_decelerateInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_accelerateDecelerateInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_bounceInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_overshootInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_anticipateInterpolator</item>
+        <item>@string/qs_tile_animation_interpolator_anticipateOvershootInterpolator</item>
+    </string-array>
+
+    <string-array name="qs_tile_animation_interpolator_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+
+    <!-- QS Page Transitions -->
+    <string-array name="qs_transitions_entries" translatable="false">
+        <item>@string/qs_transitions_cube_in</item>
+        <item>@string/qs_transitions_cube_out</item>
+        <item>@string/qs_transitions_accordion</item>
+        <item>@string/qs_transitions_background_to_foreground</item>
+        <item>@string/qs_transitions_depth_page</item>
+        <item>@string/qs_transitions_fade</item>
+        <item>@string/qs_transitions_foreground_to_background</item>
+        <item>@string/qs_transitions_rotate_down</item>
+        <item>@string/qs_transitions_rotate_up</item>
+        <item>@string/qs_transitions_stack</item>
+        <item>@string/qs_transitions_tablet</item>
+        <item>@string/qs_transitions_zoom_in</item>
+        <item>@string/qs_transitions_zoom_out</item>
+        <item>@string/qs_transitions_zoom_out_slide</item>
+    </string-array>
+
+    <string-array name="qs_transitions_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+    </string-array>
+
 </resources>

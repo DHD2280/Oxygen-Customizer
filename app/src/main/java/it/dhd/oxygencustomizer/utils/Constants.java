@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.utils;
 
+import android.content.Context;
 import android.os.Environment;
 
 import java.util.Arrays;
@@ -196,6 +197,11 @@ public class Constants {
             public static final String QS_BRIGHTNESS_SLIDER_COLOR = "brightness_slider_color";
             public static final String QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED = "brightness_slider_background_color_enabled";
             public static final String QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR = "brightness_slider_background_color";
+            public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";
+            public static final String QS_TILE_ANIMATION_INTERPOLATOR = "qs_tile_animation_interpolator";
+            public static final String QS_TILE_ANIMATION_DURATION = "qs_tile_animation_duration";
+            public static final String QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH = "qs_transitions_title_switch";
+            public static final String QS_TILE_ANIMATION_TRANSFORMATIONS = "qs_tile_transformations";
 
             public static final String[] QS_UPDATE_PREFS = {
                     QS_TILE_ACTIVE_COLOR_ENABLED,
@@ -531,8 +537,5 @@ public class Constants {
 
     public static final String CLOCK_TAG = "clock";
     public static final String DATE_TAG = "date";
-
-    public static final String LATEST_VERSION_URL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/stable/latestVersion.json";
-    public static final String LATEST_BETA_URL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/beta/latestBeta.json";
 
 }
