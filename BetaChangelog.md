@@ -1,3 +1,10 @@
+**beta-8**  
+- Two more LS Clock (Lottie)  
+- Added Root Provider Proxy to enqueue root commands  
+- Revamped Settings Shortcut  
+- Added QS Animations  
+- Added Lockscreen Statusbar customizations  
+  
 **beta-7**  
 - Added Lockscreen Statusbar customizations
 - Battery Style improvement  
