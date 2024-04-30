@@ -374,6 +374,10 @@
         <item>@string/qs_transitions_zoom_in</item>
         <item>@string/qs_transitions_zoom_out</item>
         <item>@string/qs_transitions_zoom_out_slide</item>
+        <item>@string/qs_transitions_raise_from_center</item>
+        <item>@string/qs_transitions_rotate_about_bottom</item>
+        <item>@string/qs_transitions_translate_y_ttb</item>
+        <item>@string/qs_transitions_translate_y_btt</item>
     </string-array>
 
     <string-array name="qs_transitions_values" translatable="false">
@@ -391,6 +395,10 @@
         <item>12</item>
         <item>13</item>
         <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
     </string-array>
 
 </resources>

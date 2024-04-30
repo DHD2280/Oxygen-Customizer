@@ -346,6 +346,10 @@
     <string name="qs_transitions_zoom_in">Zoom in</string>
     <string name="qs_transitions_zoom_out">Zoom out</string>
     <string name="qs_transitions_zoom_out_slide">Zoom out slide</string>
+    <string name="qs_transitions_raise_from_center">Raise from center</string>
+    <string name="qs_transitions_rotate_about_bottom">Rotate about bottom</string>
+    <string name="qs_transitions_translate_y_ttb">Translate Y top to bottom</string>
+    <string name="qs_transitions_translate_y_btt">Translate Y bottom to top</string>
 
     <!-- QS Header Image Strings -->
     <string name="qs_header_image_title">Header image</string>
