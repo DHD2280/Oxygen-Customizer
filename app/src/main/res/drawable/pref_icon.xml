@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size android:height="32dp" android:width="32dp"/>
+            <solid android:color="@android:color/system_accent1_400"/>
+        </shape>
+    </item>
+    <item android:height="24dp" android:width="24dp" android:drawable="@drawable/ic_notification_foreground" android:top="4dp" android:start="4dp"/>
+</layer-list>

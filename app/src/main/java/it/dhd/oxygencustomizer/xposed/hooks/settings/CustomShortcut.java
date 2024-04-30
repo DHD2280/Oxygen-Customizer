@@ -3,27 +3,44 @@ package it.dhd.oxygencustomizer.xposed.hooks.settings;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.util.AttributeSet;
+
+import androidx.core.content.res.ResourcesCompat;
+
+import org.w3c.dom.Attr;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class CustomShortcut extends XposedMods {
 
     private final String packageName = Constants.Packages.SETTINGS;
-    private Object TopLevelSettings;
     private boolean showInSettings = true;
+    private AttributeSet attrs;
+    private Context c;
+    private int i1, i2;
 
     public CustomShortcut(Context context) {
         super(context);
+
     }
 
     @Override
@@ -35,15 +52,28 @@ public class CustomShortcut extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(packageName)) return;
 
-        Class<?> SettingsPreferenceFragmentClass = findClass("com.android.settings.SettingsPreferenceFragment", lpparam.classLoader);
-        Class<?> HomeTopCategory = findClass("com.oplus.settings.feature.homepage.HomepageTopCategory", lpparam.classLoader);
         Class<?> TopHomePreferenceClass = findClass("com.oplus.settings.widget.preference.SettingsSimpleJumpPreference", lpparam.classLoader);
-
-        Class<?> TopLevelSettingsClass = findClass("com.oplus.settings.feature.homepage.OplusTopLevelSettings", lpparam.classLoader);
+        findAndHookConstructor(TopHomePreferenceClass,
+                Context.class,
+                AttributeSet.class,
+                int.class,
+                int.class,
+                new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (attrs == null) {
+                    c = (Context) param.args[0];
+                    attrs = (AttributeSet) param.args[1];
+                    i1 = (int) param.args[2];
+                    i2 = (int) param.args[3];
+                }
+            }
+        });
+        Class<?> TopLevelSettingsClass = findClass("com.android.settings.homepage.TopLevelSettings", lpparam.classLoader);
         hookAllMethods(TopLevelSettingsClass, "onPreferenceTreeClick", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if("Oxygen Customizer".equals(getObjectField(param.args[0], "mTitle"))) {
+                if ("Oxygen Customizer".equals(getObjectField(param.args[0], "mTitle"))) {
                     param.setResult(true);
 
                     Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(BuildConfig.APPLICATION_ID);
@@ -52,27 +82,20 @@ public class CustomShortcut extends XposedMods {
             }
         });
 
-        hookAllConstructors(TopLevelSettingsClass, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                TopLevelSettings = param.thisObject;
-            }
-        });
-
-        hookAllMethods(SettingsPreferenceFragmentClass, "setPreferenceScreen", new XC_MethodHook() {
+        hookAllMethods(TopLevelSettingsClass, "onCreateAdapter", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if(!showInSettings) return;
 
-                Object OCPreference = TopHomePreferenceClass.getConstructor(Context.class).newInstance(mContext);
+                Object OCPreference = TopHomePreferenceClass.getConstructor(Context.class)
+                        .newInstance(c);
 
-                //personalized_customization_entrance
                 Object mWallpaperCategory = callMethod(param.args[0], "findPreference", "notification_settings_category");
-                Object mPersonalizePref = callMethod(param.args[0], "findPreference", "personalized_customization_entrance");
-                Object resId = callMethod(mPersonalizePref, "getIcon");
 
                 callMethod(OCPreference, "setIcon",
-                        resId);
+                        ResourcesCompat.getDrawable(ResourceManager.modRes,
+                                R.drawable.pref_icon,
+                                mContext.getTheme()));
                 callMethod(OCPreference, "setTitle", "Oxygen Customizer");
                 callMethod(OCPreference, "setOrder", 1);
                 callMethod(OCPreference, "setKey", "oxygen_customizer");
@@ -86,7 +109,6 @@ public class CustomShortcut extends XposedMods {
     public boolean listensTo(String packageName) {
         return packageName.equals(this.packageName);
     }
-
 
 
 }
