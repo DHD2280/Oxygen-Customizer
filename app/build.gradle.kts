@@ -113,9 +113,6 @@ dependencies {
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.concurrent:concurrent-futures:1.1.0")
 
-    // Palette
-    implementation("androidx.palette:palette:1.0.0")
-
     // Biometric Auth
     implementation("androidx.biometric:biometric:1.1.0")
 
@@ -129,12 +126,6 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     // ColorPicker
     implementation("com.jaredrummler:colorpicker:1.1.0") //Color Picker Component for UI
-
-    // ViewPager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
-
-    // Circle Indicator
-    implementation("me.relex:circleindicator:2.1.6")
 
     // Lottie
     implementation("com.airbnb.android:lottie:6.4.0")
