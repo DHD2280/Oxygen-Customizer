@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- LottieAnimationView for the background -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:tag="lottie"
+        android:layout_centerInParent="true"
+        tools:ignore="UselessLeaf" />
+
+    <LinearLayout
+        android:layout_marginTop="65.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top">
+
+        <!-- Hour TextClock -->
+        <TextClock
+            android:id="@+id/clockHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="4dp"
+            android:format12Hour="hh"
+            android:format24Hour="kk"
+            android:textColor="@android:color/system_accent1_300"
+            android:tag="accent1"
+            android:textSize="108sp" />
+
+        <!-- Minute TextClock -->
+        <TextClock
+            android:id="@+id/clockMinute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="4dp"
+            android:tag="text1"
+            android:format12Hour="mm"
+            android:format24Hour="mm"
+            android:textColor="@android:color/white"
+            android:textSize="56sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
