@@ -41,6 +41,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
+import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -305,7 +306,6 @@ public class GestureNavbarManager extends XposedMods {
 
     private void killForegroundApp() {
         Handler mainHandler = new Handler(Looper.getMainLooper());
-        Log.d("KillAppNow", "Killing foreground app");
         mainHandler.post(() -> {
             try {
                 ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
@@ -314,17 +314,13 @@ public class GestureNavbarManager extends XposedMods {
                 String foregroundApp = null;
                 String[] appInfo = getForegroundApp();
                 foregroundApp = appInfo[0];
-                String uid = appInfo[1];
-                log("Foreground app: " + foregroundApp + " with UID: " + uid);
-
 
                 if (foregroundApp != null && !foregroundApp.equals(Constants.Packages.SYSTEM_UI) && !foregroundApp.equals(getDefaultLauncherPackageName())) {
                     //am.killBackgroundProcesses(foregroundApp);
                     if (ShellUtils.checkRootPermission()) {
-                        List<String> commands = new ArrayList<>();
-                        commands.add("killall " + foregroundApp);
-                        commands.add("am force-stop " + foregroundApp);
-                        ShellUtils.execCommand(commands, true);
+                        String finalForegroundApp = foregroundApp;
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + finalForegroundApp));
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("am force-stop " + finalForegroundApp));
                     }
                     String appLabel = getApplicationLabel(foregroundApp, mContext.getPackageManager());
                     Toast.makeText(mContext, "Killed: " + appLabel, Toast.LENGTH_SHORT).show();
