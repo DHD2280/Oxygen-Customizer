@@ -358,6 +358,8 @@ public class ViewHelper {
         }
         String rawResName = "lottie_lockscreen_clock_" + currentStyleIndex;
 
+        Log.d("Oxygen Customizer Loading Lottie", "Loading Lottie Animation: " + rawResName + " (Style: " + currentStyleIndex + ")");
+
         Object lottieAnimView;
         if (isXposedMode) {
             if (lottieAnimationViewClass == null) {
@@ -399,7 +401,7 @@ public class ViewHelper {
         if (isXposedMode) {
             try {
                 callMethod(lottieAnimView, "setLayoutParams", animationParams);
-                callMethod(lottieAnimView, "setAnimation", rawRes, "cacheKey");
+                callMethod(lottieAnimView, "setAnimation", rawRes, "cacheKey_" + styleIndex);
                 callMethod(lottieAnimView, "setRepeatCount", LottieDrawable.INFINITE);
                 callMethod(lottieAnimView, "setScaleType", ImageView.ScaleType.FIT_CENTER);
                 callMethod(lottieAnimView, "setAdjustViewBounds", true);
@@ -409,7 +411,7 @@ public class ViewHelper {
         } else {
             LottieAnimationView lottieAnimationView = (LottieAnimationView) lottieAnimView;
             lottieAnimationView.setLayoutParams(animationParams);
-            lottieAnimationView.setAnimation(rawRes, "cacheKey");
+            lottieAnimationView.setAnimation(rawRes, "cacheKey_" + styleIndex);
             lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
             lottieAnimationView.setRenderMode(RenderMode.HARDWARE);
             lottieAnimationView.setScaleType(ImageView.ScaleType.FIT_CENTER);
