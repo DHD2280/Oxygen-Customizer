@@ -348,14 +348,12 @@ public class Constants {
                     getBottomDxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP)
             };
         }
-
         public static class Buttons {
             public static final String BUTTONS_POWER_LONGPRESS_TORCH = "torch_long_press_power_gesture";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT_SWITCH = "torch_long_press_power_gesture_enable_timeout";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT = "torch_long_press_power_timeout";
             public static final String BUTTONS_VOLUME_MUSIC = "volbtn_music_controls";
         }
-
         public static class Lockscreen {
             public static final String DISABLE_POWER = "disable_power_on_lockscreen";
             public static final String LOCKSCREEN_REMOVE_SOS = "hide_sos_lockscreen";
@@ -373,7 +371,6 @@ public class Constants {
             public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
-
         public static class LockscreenClock {
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";

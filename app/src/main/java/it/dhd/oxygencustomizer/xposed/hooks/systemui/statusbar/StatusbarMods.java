@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -19,6 +20,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProv
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -45,6 +47,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
@@ -57,6 +60,8 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 public class StatusbarMods extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+
+    private static final String TAG = "StatusbarMods: ";
 
     // general use
     private Object PSBV;
@@ -96,6 +101,7 @@ public class StatusbarMods extends XposedMods {
     private DisplayManager mDisplayManager = null;
     private Object mCollapsedStatusBarFragment = null;
     private ViewGroup mStatusBar;
+    private Class<?> FwkResIdLoader = null;
     private boolean doubleTapToSleepStatusbarEnabled;
     GestureDetector mLockscreenDoubleTapToSleep; //event callback for double tap to sleep detection of statusbar only
 
@@ -109,12 +115,12 @@ public class StatusbarMods extends XposedMods {
 
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
-    private Class<?> DrawableSize = null;
+    private Class<?> DrawableSize = null, ScalingDrawableWrapper = null;
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
-    private boolean mNotificationCount;
     private boolean oos13 = false;
+    boolean force = true;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -155,7 +161,6 @@ public class StatusbarMods extends XposedMods {
 
         // Notifications
         mNewIconStyle = Xprefs.getBoolean("statusbar_notification_app_icon", false);
-        mNotificationCount = Xprefs.getBoolean("statusbar_notification_count", false);
 
         if (paddings.size() > 1) {
             SBPaddingStart = paddings.get(0);
@@ -168,7 +173,6 @@ public class StatusbarMods extends XposedMods {
                         "statusbar_top_padding" -> updateStatusbarHeight();
                 case "statusbar_padding_enabled" -> updateResources();
                 case "statusbar_notification_app_icon" -> updateNotificationIcons();
-                case "statusbar_notification_count" -> enableCount();
             }
         }
 
@@ -512,7 +516,13 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
+            FwkResIdLoader = findClass("com.android.systemui.util.FwkResIdLoader", lpparam.classLoader);
+        } catch (Throwable ignored) {}
+        try {
             DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
+        } catch (Throwable ignored) {}
+        try {
+            ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
         } catch (Throwable ignored) {}
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,
@@ -524,6 +534,8 @@ public class StatusbarMods extends XposedMods {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (!mNewIconStyle) return;
+                        Context sysuiContext = (Context) param.args[0];
+                        Context context = (Context) param.args[1];
                         Drawable icon = null;
                         Object statusBarIcon = param.args[2];
 
@@ -535,84 +547,38 @@ public class StatusbarMods extends XposedMods {
                         } catch (Throwable e) {
                             return;
                         }
+                        int dimen = 0;
+                        try {
+                            dimen = (int) callMethod(FwkResIdLoader, "dimen", "notification_small_icon_size");
+                        } catch (Throwable e) {
+                        }
+                        TypedValue typedValue = new TypedValue();
+                        sysuiContext.getResources().getValue(
+                                sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
+                                typedValue, true);
+                        float scaleFactor = typedValue.getFloat();
 
-                        int dimen;
                         if (icon != null) {
-                            dimen = 48;
-                            float density = mContext.getResources().getDisplayMetrics().density;
-                            int dimensionPixelSize = Math.round(dimen * density);
                             if (DrawableSize != null) {
-                                Drawable icon2 = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, dimensionPixelSize, dimensionPixelSize);
-                                if (icon2 != null) {
-                                    param.setResult(icon2);
-                                }
+                                Resources res = sysuiContext.getResources();
+                                int maxIconSize = dimen;
+                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, maxIconSize, maxIconSize);
                             } else {
                                 param.setResult(icon);
                             }
                         }
 
+                        // No need to scale the icon, so return it as is.
+                        if (scaleFactor == 1.f && icon != null) {
+                            param.setResult(icon);
+                        }
+
+                        // Scale the icon to the desired size.
+                        param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
                     }
                 });
 
-        hookAllConstructors(StatusBarIconView, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Paint mNumberPain = (Paint) getObjectField(param.thisObject, "mNumberPain");
-                mNumberPain.setColor(Color.RED);
 
-            }
-        });
-
-        hookAllMethods(StatusBarIconView, "set", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mNotificationCount) return;
-                Object statusBarIcon = param.args[0];
-                Object statusBarIcon3 = getObjectField(param.thisObject, "mIcon");
-                boolean z4 = statusBarIcon3 != null && getIntField(statusBarIcon3, "number") == getIntField(statusBarIcon, "number");
-                Drawable mNumberBackground = (Drawable) getObjectField(param.thisObject, "mNumberBackground");
-                if (!z4) {
-                    if (getIntField(statusBarIcon, "number") > 0) {
-                        if (mNumberBackground == null) {
-                            log("mNumberBackground == null");
-                            GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{
-                                    Color.BLACK,
-                                    Color.BLACK
-                            });
-                            Drawable d = ResourcesCompat.getDrawable(mContext.getResources(),
-                                    mContext.getResources().getIdentifier("ic_notification_overlay", "drawable", listenPackage),
-                                    mContext.getTheme());
-                            setObjectField(param.thisObject, "mNumberBackground", gradient);
-                        }
-                        /*Paint mNumberPain = (Paint) getObjectField(param.thisObject, "mNumberPain");
-                        mNumberPain.setColor(Color.RED);*/
-                        log("placeNumber");
-                        if (getObjectField(param.thisObject, "mIcon") != null) {
-                            callMethod(param.thisObject, "placeNumber");
-                            log("placeNumber");
-                        }
-
-                        //callMethod(param.thisObject, "placeNumber");
-                    } else {
-                        setObjectField(param.thisObject, "mNumberBackground", (Drawable) null);
-                        setObjectField(param.thisObject, "mNumberText", null);
-                    }
-                    log("invalidate"
-                    );
-                    callMethod(param.thisObject, "invalidate");
-                }
-
-
-            }
-        });
-
-    }
-
-    private void enableCount() {
-        XC_InitPackageResources.InitPackageResourcesParam ourResparam = resparams.get(Constants.Packages.SYSTEM_UI);
-        if (ourResparam == null) return;
-        log("enableCount");
-        ourResparam.res.setReplacement("com.android.systemui", "bool", "config_statusBarShowNumber", mNotificationCount);
     }
 
     //region icon tap related
