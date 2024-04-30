@@ -26,6 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricManager;
+import android.os.RemoteException;
 import android.view.MotionEvent;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,8 +35,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.IRootProviderProxy;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
@@ -195,11 +198,11 @@ public class FeatureEnabler extends XposedMods {
         listView.setScrollContainer(false);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             switch (position) {
-                case 0 -> ShellUtils.execCommand("reboot recovery", true);
-                case 1 -> ShellUtils.execCommand("reboot bootloader", true);
-                case 2 -> ShellUtils.execCommand("reboot safemode", true);
-                case 3 -> ShellUtils.execCommand("killall zygote", true);
-                case 4 -> restartAllScope(new String[]{SYSTEM_UI});
+                case 0 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));//ShellUtils.execCommand("reboot recovery", true);
+                case 1 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));//ShellUtils.execCommand("reboot bootloader", true);
+                case 2 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));//ShellUtils.execCommand("reboot safemode", true);
+                case 3 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));//ShellUtils.execCommand("killall zygote", true);
+                case 4 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));//restartAllScope(new String[]{SYSTEM_UI});
             }
         });
 

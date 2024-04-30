@@ -7,21 +7,32 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.BuildConfig.APPLICATION_ID;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.isBootLooped;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.sleep;
 
 import android.annotation.SuppressLint;
 import android.app.Instrumentation;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.IRootProviderProxy;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
-public class XPLauncher {
+public class XPLauncher implements ServiceConnection {
 
     public static boolean isChildProcess = false;
     public static String processName = "";
@@ -29,6 +40,8 @@ public class XPLauncher {
     public static ArrayList<XposedMods> runningMods = new ArrayList<>();
     public Context mContext = null;
 
+    private static IRootProviderProxy rootProxyIPC;
+    private static final Queue<ProxyRunnable> proxyQueue = new LinkedList<>();
     @SuppressLint("StaticFieldLeak")
     static XPLauncher instance;
 
@@ -106,6 +119,7 @@ public class XPLauncher {
     }
 
     private void loadModpacks(XC_LoadPackage.LoadPackageParam lpparam) {
+        forceConnectRootService();
         for (Class<? extends XposedMods> mod : ModPacks.getMods(lpparam.packageName)) {
             try {
                 XposedMods instance = mod.getConstructor(Context.class).newInstance(mContext);
@@ -141,4 +155,81 @@ public class XPLauncher {
 
         onXPrefsReady(lpparam);
     }
+
+    private void forceConnectRootService()
+    {
+        new Thread(() -> {
+            while(SystemUtils.UserManager() == null
+                    || !SystemUtils.UserManager().isUserUnlocked()) //device is still CE encrypted
+            {
+                sleep(2000);
+            }
+            sleep(5000); //wait for the unlocked account to settle down a bit
+
+            while(rootProxyIPC == null)
+            {
+                connectRootService();
+                sleep(5000);
+            }
+        }).start();
+    }
+
+    private void connectRootService()
+    {
+        try {
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(APPLICATION_ID, APPLICATION_ID + ".services.RootProviderProxy"));
+            mContext.bindService(intent, instance, Context.BIND_AUTO_CREATE | Context.BIND_ADJUST_WITH_ACTIVITY);
+        }
+        catch (Throwable t)
+        {
+            log(t);
+        }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        rootProxyIPC = IRootProviderProxy.Stub.asInterface(service);
+        synchronized (proxyQueue)
+        {
+            while(!proxyQueue.isEmpty())
+            {
+                try
+                {
+                    Objects.requireNonNull(proxyQueue.poll()).run(rootProxyIPC);
+                }
+                catch (Throwable ignored){}
+            }
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        rootProxyIPC = null;
+
+        forceConnectRootService();
+    }
+
+    public static void enqueueProxyCommand(ProxyRunnable runnable)
+    {
+        if(rootProxyIPC != null)
+        {
+            try {
+                runnable.run(rootProxyIPC);
+            } catch (RemoteException ignored) {}
+        }
+        else
+        {
+            synchronized (proxyQueue) {
+                proxyQueue.add(runnable);
+            }
+            instance.forceConnectRootService();
+        }
+    }
+
+    public interface ProxyRunnable
+    {
+        void run(IRootProviderProxy proxy) throws RemoteException;
+    }
+
 }
