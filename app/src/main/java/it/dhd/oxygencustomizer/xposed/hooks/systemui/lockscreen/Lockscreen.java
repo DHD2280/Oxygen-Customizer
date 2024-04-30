@@ -197,11 +197,11 @@ public class Lockscreen extends XposedMods {
             hookAllMethods(OnScreenFingerprint, "startFadeOutAnimation", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) param.setResult(null);
+                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, true);
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "startFadeInAnimation not found");
+            log(TAG + "startFadeOutAnimation not found");
         }
 
         // Affordance Section
