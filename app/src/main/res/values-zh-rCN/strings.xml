@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xposed Description -->
+    <string name="xposeddescription">自定义OxygenOs</string>
+    <!-- Preferences Strings -->
+    <string name="default_value">默认</string>
+    <string name="settingslib_learn_more_text">了解更多</string>
+    <string name="settings_label">设置</string>
+    <string name="toast_rename_file">重命名文件未一些简单的</string>
+    <string name="toast_applied">应用</string>
+    <string name="opt_selected1">已选择: %s</string>
+    <string name="opt_selected2">已选择: %s%s</string>
+    <string name="requires_sysui_restart">这个选择需要系统界面重启\n点击菜单来重启</string>
+    <!-- Main Activity -->
+    <!-- App kill Alert -->
+    <string name="app_kill_alert_title">通知</string>
+    <string name="app_kill_ok_btn">确定</string>
+    <!-- Reboot alert -->
+    <string name="reboot_alert_body">需要重启系统才能应用设置</string>
+    <!-- General Strings -->
+    <string name="btn_select">选择</string>
+    <string name="battery_charging">电池充电中</string>
+    <string name="battery_discharging">电池未充电</string>
+    <string name="battery_full">电池已满</string>
+    <string name="battery_level_percentage">电量</string>
+    <string name="seconds">秒</string>
+    <string name="milliseconds">毫秒</string>
+    <string name="steps">步骤</string>
+    <string name="general_color_accent1">强调色 1</string>
+    <string name="general_color_accent2">强调色 2</string>
+    <string name="general_color_accent3">强调色 3</string>
+    <string name="general_color_text1">文本 1</string>
+    <string name="general_color_text2">文本 2</string>
+    <!-- Search Preference -->
+    <string name="searchpreference_search">搜索...</string>
+    <string name="searchpreference_clear">清空</string>
+    <string name="searchpreference_history_entry">历史记录</string>
+    <string name="searchpreference_more">更多</string>
+    <string name="searchpreference_clear_history">清空历史记录</string>
+    <string name="searchpreference_no_results">无结果</string>
+    <!-- Menu Strings -->
+    <string name="restart_scopes">重启范围</string>
+    <string name="restart_module">重启作用域进程</string>
+    <string name="restart_page_scope">仅重启此页面</string>
+    <string name="restart_scope_message">你确定要重启除系统框架之外的所有作用域进程吗\n如果模块不工作，请使用此功能\n确保所有相关作用域都被选中！</string>
+    <!-- NavBar Strings -->
+    <string name="navbar_customizations">个性化</string>
+    <string name="navbar_mods">模组</string>
+    <string name="navbar_hooks">钩子</string>
+    <string name="navbar_settings">设置</string>
+    <!-- Mods Strings -->
+    <string name="mods_title">模组</string>
+    <string name="statusbar_title">状态栏</string>
+    <string name="launcher_title">启动器</string>
+    <string name="quick_settings_title">快捷设置</string>
+    <string name="qs_header_title">快速设置标题</string>
+    <string name="sound">声音</string>
+    <string name="misc">其他</string>
+    <string name="package_manager">包管理器</string>
+    <!-- General Strings -->
+    <string name="general_on">开启</string>
+    <string name="general_off">关闭</string>
+    <string name="accent_color">强调色</string>
+    <!-- Statusbar Strings -->
+    <!-- Statusbar notification strings -->
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Statusbar Clock Strings -->
+    <!-- Status bar - Clock -->
+    <!-- Status bar padding -->
+    <!-- Battery Bar Strings -->
+    <!-- Battery Icon Strings -->
+    <!-- Battery Stock Prefs -->
+    <!-- Battery Icon Styles -->
+    <!-- Statusbar Icons Strinsg -->
+    <!-- Quick Settings Mods -->
+    <!-- Quick Settings Tiles -->
+    <!-- Quick Settings Tiles Customizations -->
+    <!-- QS Tiles animation -->
+    <!-- QS Page Transitions -->
+    <!-- QS Header Image Strings -->
+    <!-- Omni Provider" -->
+    <string name="qs_header_image_tint_accent">强调色</string>
+    <!-- QS Header Clock Strings -->
+    <!-- Qs Header Per Clock Prefs -->
+    <!-- Hour only color -->
+    <!-- Time color -->
+    <string name="qs_header_clock_custom_color_time_mode_accent">强调色</string>
+    <!-- Separator Color, Only for first clock -->
+    <string name="qs_header_clock_custom_color_separator_mode_accent">强调色</string>
+    <!-- QS Header Clock Margins -->
+    <!-- Chip Styles Strings -->
+    <string name="chip_use_accent">使用强调色</string>
+    <string name="chip_color_accent">使用强调</string>
+    <!-- Launcher Mods -->
+    <!-- NavBar Strings -->
+    <!-- Gesture Strings -->
+    <!-- Buttons Title -->
+    <!-- Lockscreen Strings -->
+    <!-- Lockscreen Clock Strings -->
+    <!-- Lockscreen 9 Strings -->
+    <!-- Sound Mods -->
+    <!-- Pulse music visualizer -->
+    <string name="pulse_color_accent">强调</string>
+    <!-- Volume Steps -->
+    <!-- Adaptive Playback -->
+    <!-- Volume panel -->
+    <!-- Volume Panel Customizations -->
+    <string name="volume_panel_icon_accent">将图标链接到主色调</string>
+    <!-- Volume Styles -->
+    <!-- Package Manager -->
+    <!-- Misc Strings -->
+    <!-- Hooks Fragment -->
+    <!-- Update Fragment -->
+    <!-- Advanced Reboot -->
+    <!-- Own Settings -->
+    <!-- Omni Jaws Strings -->
+    <!-- Weather -->
+</resources>
