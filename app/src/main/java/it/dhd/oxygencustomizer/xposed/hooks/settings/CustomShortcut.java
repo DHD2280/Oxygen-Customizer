@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.settings;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -12,6 +13,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -81,7 +83,8 @@ public class CustomShortcut extends XposedMods {
                 }
             }
         });
-
+        Class<?> COUITintUtil = findClass("com.coui.appcompat.tintimageview.COUITintUtil", lpparam.classLoader);
+        Class<?> ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
         hookAllMethods(TopLevelSettingsClass, "onCreateAdapter", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -92,10 +95,17 @@ public class CustomShortcut extends XposedMods {
 
                 Object mWallpaperCategory = callMethod(param.args[0], "findPreference", "notification_settings_category");
 
+                Drawable OCIcon = ResourcesCompat.getDrawable(ResourceManager.modRes,
+                        R.drawable.pref_icon,
+                        mContext.getTheme());
+                Drawable tinted;
+                try {
+                    tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
+                } catch (Throwable t) {
+                    tinted = OCIcon;
+                }
                 callMethod(OCPreference, "setIcon",
-                        ResourcesCompat.getDrawable(ResourceManager.modRes,
-                                R.drawable.pref_icon,
-                                mContext.getTheme()));
+                        tinted);
                 callMethod(OCPreference, "setTitle", "Oxygen Customizer");
                 callMethod(OCPreference, "setOrder", 1);
                 callMethod(OCPreference, "setKey", "oxygen_customizer");
@@ -103,6 +113,7 @@ public class CustomShortcut extends XposedMods {
             }
         });
     }
+
 
 
     @Override
