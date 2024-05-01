@@ -17,6 +17,7 @@ public class Constants {
         public static final String TELECOM_SERVER_PACKAGE = "com.android.server.telecom";
         public static final String LAUNCHER = "com.android.launcher";
         public static final String SETTINGS = "com.android.settings";
+        public static final String SCREENSHOT = "com.oplus.screenshot";
     }
 
     public static class Preferences {
@@ -435,6 +436,7 @@ public class Constants {
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGINS = "weather_custom_margins";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT = "weather_margin_left";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP = "weather_margin_top";
+        public static final String LOCKSCREEN_WEATHER_BACKGROUND = "weather_background";
 
         public static final String[] LOCKSCREEN_WEATHER_PREFS = {
                 LOCKSCREEN_WEATHER_SWITCH,
@@ -451,7 +453,8 @@ public class Constants {
                 LOCKSCREEN_WEATHER_SHOW_LOCATION,
                 LOCKSCREEN_WEATHER_SHOW_CONDITION,
                 LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
-                LOCKSCREEN_WEATHER_CUSTOM_COLOR
+                LOCKSCREEN_WEATHER_CUSTOM_COLOR,
+                LOCKSCREEN_WEATHER_BACKGROUND
         };
 
         public static final String[] LOCKSCREEN_WEATHER_MARGINS = {
