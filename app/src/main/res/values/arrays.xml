@@ -6,7 +6,7 @@
         <item>com.android.systemui</item>
         <item>com.android.settings</item>
         <item>com.android.launcher</item>
-        <item>com.coloros.smartsidebar</item>
+        <item>com.oplus.screenshot</item>
     </string-array>
 
     <!-- Quick Pulldown -->
@@ -399,6 +399,31 @@
         <item>16</item>
         <item>17</item>
         <item>18</item>
+    </string-array>
+
+    <!-- Lockscreen Weather styles -->
+    <string-array name="lockscreen_weather_bg_entries" translatable="false">
+        <item>@string/lockscreen_weather_selection_default</item>
+        <item>@string/lockscreen_weather_selection_str_box</item>
+        <item>@string/lockscreen_weather_selection_str_round</item>
+        <item>@string/lockscreen_weather_selection_qbeta_style</item>
+        <item>@string/lockscreen_weather_selection_str_accent</item>
+        <item>@string/lockscreen_weather_selection_str_accent_transparent</item>
+        <item>@string/lockscreen_weather_selection_str_gradient</item>
+        <item>@string/lockscreen_weather_selection_str_border_accent</item>
+        <item>@string/lockscreen_weather_selection_str_border_gradient</item>
+    </string-array>
+
+    <string-array name="lockscreen_weather_bg_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
     </string-array>
 
 </resources>

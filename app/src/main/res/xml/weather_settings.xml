@@ -185,4 +185,14 @@
         android:dependency="weather_custom_margins"
         app:iconSpaceReserved="false" />
 
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_background"
+        android:title="@string/lockscreen_weather_selection_title"
+        android:entries="@array/lockscreen_weather_bg_entries"
+        android:entryValues="@array/lockscreen_weather_bg_values"
+        android:defaultValue="0"
+        app:useSimpleSummaryProvider="true"
+        android:dependency="lockscreen_weather_enabled" />
+
 </PreferenceScreen>

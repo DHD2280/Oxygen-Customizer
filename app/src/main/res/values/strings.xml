@@ -267,6 +267,10 @@
     <!-- Statusbar Icons Strinsg -->
     <string name="statusbar_icons_bluetooth_hide">Hide Bluetooth icon</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Hide Bluetooth icon when not connected.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">Hide In Out Wifi</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">Disable/Enable WiFi to show changes.</string>
+    <string name="statusbar_icons_inout_mobile_hide_title">Hide In Out Mobile</string>
+    <string name="statusbar_icons_inout_mobile_hide_summary">Disable/Enable Mobile data to show changes.</string>
 
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown">Quick Pulldown</string>
@@ -691,6 +695,12 @@
     <string name="use_auth_for_advanced_reboot_summary">Require authentication to use advanced reboot options.</string>
     <string name="advanced_reboot_hide_lockscreen">Hide in Lockscreen</string>
     <string name="show_entry_settings_title">Show entry in Settings</string>
+    <string name="screenshot">Screenshot</string>
+    <string name="screenshots_prefs">Screenshot Options</string>
+    <string name="disable_secure_screenshot">Disable FLAG_SECURE</string>
+    <string name="disable_secure_screenshot_summary">Allow screenshots in secure apps.\nRequires full reboot.</string>
+    <string name="disable_screenshot_observer">Disable screenshot detection</string>
+    <string name="disable_screenshot_observer_summary">This will disable the detection of the screenshots, requires A14+.\nRequires full reboot.</string>
 
     <!-- Hooks Fragment -->
     <string name="hooks_title">Hooks</string>
@@ -846,6 +856,18 @@
     <string name="weather_margin_left">Left Margin</string>
     <string name="weather_permission_dialog_title">Enable Location Permissions</string>
     <string name="weather_permission_dialog_message">Location permissions are required to fetch weather data. Click OK to open Settings.</string>
+
+    <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_title">Weather Background Style</string>
+    <string name="lockscreen_weather_selection_default">Default</string>
+    <string name="lockscreen_weather_selection_str_box">Semi-transparent box</string>
+    <string name="lockscreen_weather_selection_str_round">Semi-transparent box (round)</string>
+    <string name="lockscreen_weather_selection_qbeta_style">Q-Beta pill</string>
+    <string name="lockscreen_weather_selection_str_accent">Rounded, simple and with accent</string>
+    <string name="lockscreen_weather_selection_str_accent_transparent">Rounded, transparent and with accent</string>
+    <string name="lockscreen_weather_selection_str_gradient">Gradient</string>
+    <string name="lockscreen_weather_selection_str_border_accent">Dark with accented borders</string>
+    <string name="lockscreen_weather_selection_str_border_gradient">Dark with gradient borders</string>
 
     <!-- Weather -->
     <string name="weather_condition_clouds">Cloudy</string>
