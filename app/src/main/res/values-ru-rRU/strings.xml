@@ -201,7 +201,6 @@
     <string name="gesture_override_back_hold_mode_per_side">Выберите команду для каждой стороны</string>
     <string name="gesture_override_back_hold_right">Правая боковая команда</string>
     <string name="gesture_right_title">Правая часть экрана</string>
-    <string name="github_repo_summary">DHD22800/OxygenCustomizer</string>
     <string name="github_repo_title">Репозиторий на GitHub</string>
     <string name="header_creator_label">Создатель:</string>
     <string name="header_location_local">Local</string>
@@ -305,7 +304,6 @@
     <string name="omnijaws_service_error">Ошибка при загрузке погодных данных</string>
     <string name="omnijaws_service_error_location">Нет доступного местоположения</string>
     <string name="omnijaws_service_error_long">Ошибка при загрузке погодных данных</string>
-    <string name="omnijaws_service_error_marker">*</string>
     <string name="omnijaws_service_error_network">Сеть не найдена</string>
     <string name="omnijaws_service_init">Ожидание…</string>
     <string name="omnijaws_service_last_update">Последнее обновление:</string>
@@ -314,9 +312,6 @@
     <string name="omnijaws_service_waiting">Ожидание …</string>
     <string name="opt_selected1">Selected: %s</string>
     <string name="opt_selected2" formatted="false">Selected: %s%s</string>
-    <string name="owm_api_key">2eaba923f653cc4b4b1b1b5849349db6</string>
-    <string name="owm_api_key_1">c071025e890429c585e4df3aeeae0640</string>
-    <string name="owm_api_key_2">bf2e711833265643fa9749dfbc9c2d54</string>
     <string name="owm_key">Пользовательский ключ OWM</string>
     <string name="package_activated">Пакет успешно активирован</string>
     <string name="package_activation_failed">Не удалось активировать пакет</string>
@@ -335,8 +330,6 @@
     <string name="powersave_fill_color_title">Экономичный цвет заливки</string>
     <string name="powersave_indicator_color_desc">Измените цвет индикатора энергосбережения</string>
     <string name="powersave_indicator_color_title">Цвет индикатора энергосбережения</string>
-    <string name="provider_metnorway">MET Norway</string>
-    <string name="provider_openweathermap">Открытая погодная карта</string>
     <string name="provider_title">Поставщик прогнозов погоды</string>
     <string name="pulse_color_accent">Акцент</string>
     <string name="pulse_color_auto">Альбом</string>
@@ -567,7 +560,6 @@
     <string name="status_bar_date_style_normal">Нормальный</string>
     <string name="status_bar_date_style_uppercase">Верхний регистр</string>
     <string name="status_bar_date_title">Дата</string>
-    <string name="status_bar_notification_info_overflow">∞</string>
     <string name="status_bar_toggle_brightness_summary">Отрегулируйте яркость, перемещая ее по строке состояния</string>
     <string name="status_bar_toggle_brightness_title">Регулировка яркости</string>
     <string name="statusbar_battery_icon_options">Значок батареи</string>
