@@ -68,7 +68,6 @@ public class Lockscreen extends XposedMods {
     private boolean removeSOS;
     private boolean hideFingerprint = false, customFingerprint = false;
     private int fingerprintStyle = 0;
-    private Object mFpIcon;
     private float mFpScale = 1.0f;
     private Drawable mFpDrawable = null;
     private boolean removeLeftAffordance = false, removeRightAffordance = false;
@@ -77,7 +76,6 @@ public class Lockscreen extends XposedMods {
     private ImageView mLockIcon = null;
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private String lockscreenCarrierReplacement = "";
-    private static Object carrierTextController;
 
     public Lockscreen(Context context) {
         super(context);
@@ -111,6 +109,9 @@ public class Lockscreen extends XposedMods {
                     Key[0].equals(LOCKSCREEN_HIDE_CAPSULE)
             ) {
                 hideLockscreenStuff();
+            }
+            if (Key[0].equals(LOCKSCREEN_REMOVE_LOCK)) {
+                if (mLockIcon != null) mLockIcon.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
             }
         }
 
@@ -150,7 +151,7 @@ public class Lockscreen extends XposedMods {
         try {
             OnScreenFingerprint = findClass("com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMach", lpparam.classLoader);
         } catch (Throwable t) {
-            OnScreenFingerprint = findClass("com.oplus.systemui.keyguard.finger.onscreenfingerprint.OnScreenFingerprintUiMech", lpparam.classLoader);
+            OnScreenFingerprint = findClass("com.oplus.systemui.keyguard.finger.onscreenfingerprint.OnScreenFingerprintUiMech", lpparam.classLoader); // OOS 13
         }
         hookAllMethods(OnScreenFingerprint, "initFpIconWin", new XC_MethodHook() {
             @Override
@@ -173,11 +174,11 @@ public class Lockscreen extends XposedMods {
             hookAllMethods(OnScreenFingerprint, "startFadeInAnimation", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, true);
+                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, false);
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "startFadeInAnimation not found");
+            log(TAG + "loadAnimDrawables not found");
         }
 
         try {
@@ -193,17 +194,6 @@ public class Lockscreen extends XposedMods {
             log(TAG + "updateFpIconColor not found");
         }
 
-        try {
-            hookAllMethods(OnScreenFingerprint, "startFadeOutAnimation", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, true);
-                }
-            });
-        } catch (Throwable t) {
-            log(TAG + "startFadeOutAnimation not found");
-        }
-
         // Affordance Section
         hookAffordance(lpparam);
 
@@ -216,7 +206,7 @@ public class Lockscreen extends XposedMods {
     }
 
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
-        if (mFpIcon == null) mFpIcon = getObjectField(param.thisObject, "mFpIcon");
+        Object mFpIcon = getObjectField(param.thisObject, "mFpIcon");
 
         if (BuildConfig.DEBUG) log(TAG + "updateFingerprintIcon");
 
@@ -228,7 +218,7 @@ public class Lockscreen extends XposedMods {
         if (mFpIcon != null) {
             callMethod(mFpIcon, "setImageDrawable", mFpDrawable == null ? null : mFpDrawable);
         }
-        if (hideFingerprint && isStartMethod) {
+        if (isStartMethod) {
             param.setResult(null);
         }
         //if (!isStartMethod) callMethod(param.thisObject, "updateFpIconColor");
@@ -319,7 +309,20 @@ public class Lockscreen extends XposedMods {
     }
 
     private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
-
+        try {
+            Class<?> LockIconView = findClass("com.android.keyguard.LockIconView", lpparam.classLoader);
+            hookAllMethods(LockIconView, "onFinishInflate", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mLockIcon = (ImageView) getObjectField(param.thisObject, "mLockIcon");
+                    if (removeLockIcon) {
+                        mLockIcon.setVisibility(View.GONE);
+                    }
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "LockIconViewController not found");
+        }
     }
 
     private void hookCarrier(XC_LoadPackage.LoadPackageParam lpparam) {
