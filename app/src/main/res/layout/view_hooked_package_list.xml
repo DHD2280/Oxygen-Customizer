@@ -56,19 +56,5 @@
             android:textSize="14sp"
             android:textStyle="normal" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/activate_in_lsposed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/desc"
-            android:layout_alignStart="@id/desc"
-            android:layout_marginTop="6dp"
-            android:animateLayoutChanges="true"
-            android:minHeight="0dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
-            android:text="@string/activate_in_lsposed"
-            android:visibility="gone" />
-
     </RelativeLayout>
 </LinearLayout>
