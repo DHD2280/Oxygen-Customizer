@@ -107,6 +107,7 @@ import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -166,9 +167,9 @@ public class BatteryStyleManager extends XposedMods {
     private static int mBatteryScaleHeight = 20;
     private static int mBatteryStockMarginLeft = 0, mBatteryStockMarginRight = 0;
     private boolean DefaultLandscapeBatteryEnabled = false;
-    private int frameColor = Color.WHITE;
-    private int backgroundColor = Color.WHITE;
-    private int singleToneColor = Color.WHITE;
+    private static int frameColor = Color.WHITE;
+    private static int backgroundColor = Color.WHITE;
+    private static int singleToneColor = Color.WHITE;
     private boolean mBatteryLayoutReverse = false;
     private boolean mScaledPerimeterAlpha = false;
     private boolean mScaledFillAlpha = false;
@@ -341,6 +342,9 @@ public class BatteryStyleManager extends XposedMods {
         hookAllConstructors(StatBatteryMeterView, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
+                if (BuildConfig.DEBUG) log(TAG + "StatBatteryMeterView constructor called");
+
                 ((View) param.thisObject).addOnAttachStateChangeListener(listener);
 
                 if (!CustomBatteryEnabled) return;
@@ -354,6 +358,8 @@ public class BatteryStyleManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 //((View) param.thisObject).addOnAttachStateChangeListener(listener);
+
+                if (BuildConfig.DEBUG) log(TAG + "StatBatteryMeterView onFinishInflate called");
 
                 if (!CustomBatteryEnabled) return;
 
@@ -383,10 +389,14 @@ public class BatteryStyleManager extends XposedMods {
                         this.foregroundColor = i2;
                         this.backgroundColor = i3;
                          */
+
+                        if (BuildConfig.DEBUG) log(TAG + "BatteryIconColor constructor called");
+
                         if (!CustomBatteryEnabled) return;
                         singleToneColor = (int) param.args[0];
                         frameColor = (int) param.args[1];
                         backgroundColor = (int) param.args[2];
+                        updateIconsColor();
                         updateIconsColor();
                     }
                 });
@@ -533,7 +543,7 @@ public class BatteryStyleManager extends XposedMods {
 
     private void refreshAllBatteryIcons() {
         for (View view : batteryViews) {
-            updateBatteryViewValues(view);
+            view.post(() -> updateBatteryViewValues(view));
         }
     }
 
@@ -578,7 +588,7 @@ public class BatteryStyleManager extends XposedMods {
             updateFlipper(batteryIcon.getParent());
             mIsCharging = isCharging();
             mIsPowerSaving = isPowerSaving();
-            batteryIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            batteryIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
             if (batteryOutPercentage != null) {
                 if (mHidePercentage) {
                     batteryOutPercentage.setVisibility(View.GONE);
@@ -626,6 +636,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconsColor() {
+        if (BuildConfig.DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         for (View v : batteryViews) {
             if (v instanceof ImageView) {
@@ -731,7 +742,7 @@ public class BatteryStyleManager extends XposedMods {
                 }
                  */
                 //batteryLevel = (int) param.args[0];
-                log(TAG + "onBatteryLevelChanged");
+                if (BuildConfig.DEBUG) log(TAG + "onBatteryLevelChanged");
                 mIsCharging = (boolean) param.args[2];
                 mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
                 batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
@@ -849,6 +860,20 @@ public class BatteryStyleManager extends XposedMods {
             mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);
             mBatteryDrawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
             mBatteryDrawable.setColors(frameColor, backgroundColor, singleToneColor);
+            mBatteryDrawable.customizeBatteryDrawable(
+                    mBatteryLayoutReverse,
+                    mScaledPerimeterAlpha,
+                    mScaledFillAlpha,
+                    mCustomBlendColor,
+                    mRainbowFillColor,
+                    mCustomFillColor,
+                    mCustomFillGradColor,
+                    mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
+                    mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                    mCustomPowerSaveColor,
+                    mCustomPowerSaveFillColor,
+                    mChargingIconSwitch
+            );
         }
 
         return mBatteryDrawable;
