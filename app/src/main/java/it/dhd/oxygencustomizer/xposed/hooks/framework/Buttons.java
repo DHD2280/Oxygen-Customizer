@@ -40,7 +40,6 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 public class Buttons extends XposedMods {
 
     private final String TAG = "Oxygen Customizer - Buttons ";
-    public static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static boolean holdVolumeToSkip = false;
     private static boolean holdVolumeToTorch = false;
     private static boolean volumeToTorchHasTimeout = false;

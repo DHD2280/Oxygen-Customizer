@@ -48,7 +48,7 @@ import it.dhd.oxygencustomizer.weather.Config;
 
 public class OmniJawsClient {
     private static final String TAG = "OmniJawsClient";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     public static final String SERVICE_PACKAGE = BuildConfig.APPLICATION_ID;
     public static final Uri WEATHER_URI
             = Uri.parse("content://it.dhd.oxygencustomizer.weatherprovider/weather");

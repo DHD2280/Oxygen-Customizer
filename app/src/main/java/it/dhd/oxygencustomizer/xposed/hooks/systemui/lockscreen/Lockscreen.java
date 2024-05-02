@@ -174,7 +174,7 @@ public class Lockscreen extends XposedMods {
             hookAllMethods(OnScreenFingerprint, "startFadeInAnimation", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, false);
+                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, true);
                 }
             });
         } catch (Throwable t) {
@@ -221,7 +221,7 @@ public class Lockscreen extends XposedMods {
         if (isStartMethod) {
             param.setResult(null);
         }
-        //if (!isStartMethod) callMethod(param.thisObject, "updateFpIconColor");
+        if (!isStartMethod) callMethod(param.thisObject, "updateFpIconColor");
     }
 
     private void updateDrawable() {
