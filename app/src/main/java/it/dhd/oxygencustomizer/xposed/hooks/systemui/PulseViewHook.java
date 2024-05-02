@@ -7,6 +7,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_AMBIENT;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_CENTER_MIRRORED;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_COLOR_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_COLOR_USER;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_CUSTOM_DIMEN;
@@ -14,6 +15,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_CUSTOM_DI
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_EMPTY_BLOCK_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_FILLED_BLOCK_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_FUDGE_FACTOR;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_GRAVITY;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LAVA_SPEED;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LOCKSCREEN;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_NAVBAR;
@@ -24,6 +26,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_FUD
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_UNITS_COUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_UNITS_OPACITY;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_UNITS_ROUNDED;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_VERTICAL_MIRROR;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
@@ -58,6 +61,8 @@ public class PulseViewHook extends XposedMods {
     private View mStartButton = null, mEndButton = null;
     private FrameLayout mAodRootLayout = null;
     private FrameLayout mNavigationBar = null;
+    private boolean mCenterMirrored = false, mVerticalMirror = false;
+    private int mGravity = 0;
 
 
     public PulseViewHook(Context context) {
@@ -98,6 +103,11 @@ public class PulseViewHook extends XposedMods {
         mPulseSolidOpacity = Xprefs.getSliderInt(PULSE_SOLID_UNITS_OPACITY, 200);
         mPulseSolidCount = Xprefs.getSliderInt(PULSE_SOLID_UNITS_COUNT, 32);
         mPulseSolidFudgeFactor = Xprefs.getSliderInt(PULSE_SOLID_FUDGE_FACTOR, 4);
+
+        // Pulse Mirror and Gravity
+        mCenterMirrored = Xprefs.getBoolean(PULSE_CENTER_MIRRORED, false);
+        mVerticalMirror = Xprefs.getBoolean(PULSE_VERTICAL_MIRROR, false);
+        mGravity = Xprefs.getInt(PULSE_GRAVITY, 0);
 
         mPulseEnabled = mNavBarPulse || mLockScreenPulse || mAmbientPulse;
 
@@ -304,13 +314,15 @@ public class PulseViewHook extends XposedMods {
     private void refreshPulseSolidLineRenderer(SolidLineRenderer solidLineRenderer) {
         if (solidLineRenderer == null) return;
 
-        solidLineRenderer.updateSettings(mPulseSolidFudgeFactor, mPulseSmoothing, mPulseSolidRounded, mPulseSolidCount, mPulseSolidOpacity);
+        solidLineRenderer.updateSettings(mPulseSolidFudgeFactor, mPulseSmoothing, mPulseSolidRounded, mPulseSolidCount, mPulseSolidOpacity,
+                mCenterMirrored, mVerticalMirror, mGravity);
     }
 
     private void refreshPulseFadingBlockRenderer(FadingBlockRenderer fadingBlockRenderer) {
         if (fadingBlockRenderer == null) return;
 
-        fadingBlockRenderer.updateSettings(mPulseEmptyBlock, mPulseCustomDimen, mPulseDiv, mPulseFudgeFactor, mPulseFilledBlock);
+        fadingBlockRenderer.updateSettings(mPulseEmptyBlock, mPulseCustomDimen, mPulseDiv, mPulseFudgeFactor, mPulseFilledBlock,
+                mCenterMirrored, mVerticalMirror, mGravity);
         fadingBlockRenderer.updateSmoothingEnabled(mPulseSmoothing);
     }
 

@@ -636,6 +636,16 @@
     <string name="pulse_filled_block_size">Block size</string>
     <string name="pulse_empty_block_size">Block spacing</string>
 
+    <!-- Pulse Gravity n Mirror Options -->
+    <string name="pulse_custom_gravity_title">Gravity</string>
+    <string name="pulse_custom_gravity_bottom">Bottom</string>
+    <string name="pulse_custom_gravity_top">Top</string>
+    <string name="pulse_custom_gravity_center">Center</string>
+    <string name="visualizer_center_mirrored_title">Center mirrored</string>
+    <string name="visualizer_center_mirrored_summary">Set the visualizer in center mirrored mode</string>
+    <string name="pulse_vertical_mirror_title">Vertical Mirror</string>
+    <string name="pulse_vertical_mirror_summary">Create other pulse and flip vertically</string>
+
     <!-- Volume Steps -->
     <string name="volume_steps_title">Volume Steps</string>
     <string name="volume_steps_summary">Control the granularity of each stream</string>

@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.utils;
 import android.content.Context;
 import android.os.Environment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,12 +24,6 @@ public class Constants {
     public static class Preferences {
         public static class General {
             public static final List<String> PREF_UPDATE_EXCLUSIONS = Arrays.asList(BootLoopProtector.LOAD_TIME_KEY_KEY, BootLoopProtector.PACKAGE_STRIKE_KEY_KEY);
-        }
-        public static class Framework {
-            public static final String SENSOR_BLOCK = "sensor_block";
-            public static final String SENSOR_BLOCK_APP_LIST = "sensor_block_app_list";
-            public static final String SENSOR_BLOCKED_APP = "sensor_blocked_app";
-            public static final String SENSOR_BLOCK_APP_DUMMY = "sensor_blocked_app_dummy";
         }
         public static class BatteryPrefs {
             public static final String CUSTOMIZE_BATTERY_ICON = "battery_icon_customize";
@@ -373,6 +368,9 @@ public class Constants {
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
         public static class LockscreenClock {
+
+            public static final List<Integer> LOCKSCREEN_CLOCK_IMAGES = Arrays.asList(25);
+
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH = "lockscreen_custom_color_switch";
@@ -487,6 +485,9 @@ public class Constants {
         public static final String PULSE_SOLID_UNITS_OPACITY = "pulse_solid_units_opacity";
         public static final String PULSE_SOLID_UNITS_COUNT = "pulse_solid_units_count";
         public static final String PULSE_SOLID_FUDGE_FACTOR = "pulse_solid_fudge_factor";
+        public static final String PULSE_CENTER_MIRRORED = "pulse_center_mirrored";
+        public static final String PULSE_VERTICAL_MIRROR = "pulse_vertical_mirror";
+        public static final String PULSE_GRAVITY = "pulse_gravity";
 
         public static final String[] PULSE_PREFS = {
                 PULSE_NAVBAR,
@@ -505,7 +506,10 @@ public class Constants {
                 PULSE_SOLID_UNITS_ROUNDED,
                 PULSE_SOLID_UNITS_OPACITY,
                 PULSE_SOLID_UNITS_COUNT,
-                PULSE_SOLID_FUDGE_FACTOR
+                PULSE_SOLID_FUDGE_FACTOR,
+                PULSE_CENTER_MIRRORED,
+                PULSE_VERTICAL_MIRROR,
+                PULSE_GRAVITY
         };
     }
 
@@ -515,21 +519,13 @@ public class Constants {
     public static final String ACTION_CLEAR_ALL_TASKS = BuildConfig.APPLICATION_ID + ".ACTION_CLEAR_ALL_TASKS_OC";
     public static final String ACTION_POWER_MENU = BuildConfig.APPLICATION_ID + ".ACTION_POWER_MENU_OC";
     public static final String ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT = BuildConfig.APPLICATION_ID + ".ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT_OC";
-
     public static final String ACTION_MAX_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_MAX_CHANGED_OC";
-
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
     public static final String HEADER_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_font.ttf";
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
-
-    // View Tags
-    public static final String MEDIA_PROGRESSBAR = "media_progressbar";
-    public static final String MEDIA_PROGRESSBAR_VALUE = "media_progress_value";
-    public static final String BATTERY_PROGRESSBAR = "battery_progressbar";
-    public static final String BATTERY_PROGRESSBAR_VALUE = "battery_progress_value";
 
     // Resource names
     public static final String LOCKSCREEN_CLOCK_LAYOUT = "preview_lockscreen_clock_";
