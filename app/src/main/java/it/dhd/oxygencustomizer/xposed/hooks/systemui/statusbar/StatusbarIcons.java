@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -10,16 +11,20 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.os.Build;
+import android.view.View;
+import android.widget.ImageView;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class StatusbarIcons extends XposedMods {
 
+    private static final String TAG = "Oxygen Customizer - Statusbar Icons: ";
     private final static String listenPackage = SYSTEM_UI;
-    private boolean hideBluetooth;
+    private boolean hideBluetooth, mHideWifiActivity = false, mHideMobileActivity = false;
 
     public StatusbarIcons(Context context) {
         super(context);
@@ -28,6 +33,8 @@ public class StatusbarIcons extends XposedMods {
     @Override
     public void updatePrefs(String... Key) {
         hideBluetooth = Xprefs.getBoolean("hide_bluetooth_when_disconnected", false);
+        mHideWifiActivity = Xprefs.getBoolean("hide_inout_wifi", false);
+        mHideMobileActivity = Xprefs.getBoolean("hide_inout_mobile", false);
     }
 
     @Override
@@ -60,7 +67,45 @@ public class StatusbarIcons extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(this.getClass().getSimpleName() + " - Class Not Found " + t.toString());
+            log(TAG + "Class Not Found " + t.getMessage());
+        }
+
+        try {
+            Class<?> OplusStatusBarSignalPolicyExImpl;
+            try {
+                OplusStatusBarSignalPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.signal.OplusStatusBarSignalPolicyExImpl", lpparam.classLoader);
+            } catch (Throwable t) {
+                OplusStatusBarSignalPolicyExImpl = findClass("com.oplusos.systemui.statusbar.phone.StatusBarSignalPolicyEx", lpparam.classLoader);
+            }
+
+            hookAllMethods(OplusStatusBarSignalPolicyExImpl, "getWifiActivityId", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (mHideWifiActivity)
+                        param.setResult(0);
+                }
+            });
+
+        } catch (Throwable t) {
+            log(TAG + " getWifiActivityId " + t.getMessage());
+        }
+
+        try {
+            Class<?> OplusStatusBarMobileViewExImpl = findClass("com.oplus.systemui.statusbar.phone.signal.OplusStatusBarMobileViewExImpl", lpparam.classLoader);
+            hookAllMethods(OplusStatusBarMobileViewExImpl, "updateState", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!mHideMobileActivity) return;
+                    ImageView mDataActivity = (ImageView) getObjectField(param.thisObject, "mDataActivity");
+                    mDataActivity.setVisibility(View.GONE);
+                    ImageView mIn = (ImageView) getObjectField(param.thisObject, "mIn");
+                    mIn.setVisibility(View.GONE);
+                    ImageView mOut = (ImageView) getObjectField(param.thisObject, "mOut");
+                    mOut.setVisibility(View.GONE);
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + " - Class Not Found " + t.toString());
         }
 
     }
