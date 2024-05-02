@@ -254,6 +254,18 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="pulse_custom_gravity_entries">
+        <item>@string/pulse_custom_gravity_bottom</item>
+        <item>@string/pulse_custom_gravity_top</item>
+        <item>@string/pulse_custom_gravity_center</item>
+    </string-array>
+
+    <string-array name="pulse_custom_gravity_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <!-- Volume Panel -->
     <string-array name="volume_panel_position_entries" translatable="false">
         <item>@string/default_value</item>
