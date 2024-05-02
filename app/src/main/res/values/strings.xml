@@ -708,8 +708,13 @@
     <string name="package_hooked_successful">Package responsive</string>
     <string name="package_not_hook_enabled">Package not enabled in LSposed</string>
     <string name="package_hook_no_response">Package not responding</string>
-    <string name="package_hook_bootlooped">Package disable because bootloops</string>
+    <string name="package_hook_bootlooped">Package disabled because bootloops</string>
     <string name="package_not_found">Package not found</string>
+    <string name="info_hooks">Hooks Info</string>
+    <string name="info_hooks_desc">Explanation\n\n
+        Package responsive means that everything works fine,\n\n
+        Package disabled because bootloops means that there are errors in hooking, so the package is disabled from hooking. Get in touch with the dev to solve.\n\n
+        Package not responding means that the app probably isn\'t enabled in LSPosed or is closed, try to launch the app and check if package is responsive.</string>
     <string name="package_checking">Loading %s</string>
     <string name="package_activated">Package successfully activated</string>
     <string name="package_activation_failed">Package activation failed</string>
