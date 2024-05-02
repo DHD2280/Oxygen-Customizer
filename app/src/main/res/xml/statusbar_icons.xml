@@ -5,8 +5,23 @@
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
+        android:defaultValue="false"
         android:title="@string/statusbar_icons_bluetooth_hide"
         android:summary="@string/statusbar_icons_bluetooth_hide_summary"
         android:key="hide_bluetooth_when_disconnected"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:defaultValue="false"
+        android:title="@string/statusbar_icons_inout_wifi_hide_title"
+        android:summary="@string/statusbar_icons_inout_wifi_hide_summary"
+        android:key="hide_inout_wifi"/>
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        android:defaultValue="false"
+        android:title="@string/statusbar_icons_inout_mobile_hide_title"
+        android:summary="@string/statusbar_icons_inout_mobile_hide_summary"
+        android:key="hide_inout_mobile"/>
 
 </PreferenceScreen>
