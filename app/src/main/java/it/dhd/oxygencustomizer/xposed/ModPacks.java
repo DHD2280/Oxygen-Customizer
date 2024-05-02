@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
+import it.dhd.oxygencustomizer.xposed.hooks.screenshot.ScreenshotSecureFlag;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
@@ -39,9 +41,11 @@ public class ModPacks {
         modPacks.add(HookTester.class);
         modPacks.add(SettingsLibUtilsProvider.class);
 
-
         switch (packageName) {
-            case Constants.Packages.FRAMEWORK -> modPacks.add(Buttons.class);
+            case Constants.Packages.FRAMEWORK -> {
+                modPacks.add(PhoneWindowManager.class);
+                modPacks.add(Buttons.class);
+            }
             case Constants.Packages.SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
                     // Battery Data Provider
@@ -87,6 +91,7 @@ public class ModPacks {
             }
             case Constants.Packages.SETTINGS -> modPacks.add(CustomShortcut.class);
             case Constants.Packages.LAUNCHER -> modPacks.add(Launcher.class);
+            case Constants.Packages.SCREENSHOT -> modPacks.add(ScreenshotSecureFlag.class);
         }
 
         return modPacks;

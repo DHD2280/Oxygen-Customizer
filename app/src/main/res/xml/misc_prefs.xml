@@ -39,6 +39,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/screenshot">
+
+        <Preference
+            android:key="screenshot_prefs"
+            android:title="@string/screenshots_prefs"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Screenshot"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/app_name"
         app:iconSpaceReserved="false">
 

@@ -16,6 +16,7 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.resparams;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider.convertGammaToLinearFloat;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider.getGammaMax;
+import static it.dhd.oxygencustomizer.xposed.utils.Deoptimizer.deoptimizeMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -45,11 +46,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -120,7 +125,6 @@ public class StatusbarMods extends XposedMods {
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private boolean oos13 = false;
-    boolean force = true;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -370,10 +374,11 @@ public class StatusbarMods extends XposedMods {
         }
         Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
 
-
+        deoptimizeMethod(QuickSettingsController, "isOpenQsEvent");
         hookAllMethods(QuickSettingsController, "isOpenQsEvent", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                log(TAG + "isOpenQsEvent " + oneFingerPulldownEnabled);
 
                 if (!oneFingerPulldownEnabled) return;
 
