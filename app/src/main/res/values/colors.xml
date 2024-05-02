@@ -84,4 +84,6 @@
 
     <color name="ic_launcher_background">#2F3B49</color>
 
+    <color name="changelog_bg">@android:color/system_neutral1_50</color>
+
 </resources>
