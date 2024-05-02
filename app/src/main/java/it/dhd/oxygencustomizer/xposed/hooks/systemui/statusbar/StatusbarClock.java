@@ -68,7 +68,7 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class StatusbarClock extends XposedMods {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = "Oxygen Customizer - Statusbar Clock: ";
     private static final String listenPackage = SYSTEM_UI;
 
     private static final int AM_PM_STYLE_NORMAL = 0;
@@ -295,7 +295,16 @@ public class StatusbarClock extends XposedMods {
                     }
                 });
 
-
+        findAndHookMethod(CollapsedStatusBarFragmentClass, "animateShow",
+                View.class, boolean.class,
+                new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (param.args[0] == mClockView) {
+                    updateClockColor();
+                }
+            }
+        });
 
         hookAllMethods(ClockClass, "updateClockVisibility", new XC_MethodHook() {
             @Override
@@ -304,6 +313,8 @@ public class StatusbarClock extends XposedMods {
                 if (param.thisObject != mClockView)
                     return;
 
+                if (mClockCustomColor)
+                    mClockView.post(() -> mClockView.setTextColor(mClockColor));
 
                 if (!mClockAutoHide) return;
 
@@ -487,9 +498,9 @@ public class StatusbarClock extends XposedMods {
 
     private void updateClockColor() {
         if (mClockCustomColor)
-            ((TextView)mClockView).setTextColor(mClockColor);
+            mClockView.post(() -> ((TextView)mClockView).setTextColor(mClockColor));
         else
-            ((TextView)mClockView).setTextColor(Color.WHITE);
+            mClockView.post(() -> ((TextView)mClockView).setTextColor(mClockColor));
     }
 
     private void placeClock() {

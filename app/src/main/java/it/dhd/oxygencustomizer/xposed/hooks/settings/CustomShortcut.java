@@ -1,44 +1,33 @@
 package it.dhd.oxygencustomizer.xposed.hooks.settings;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
 
 import androidx.core.content.res.ResourcesCompat;
-
-import org.w3c.dom.Attr;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class CustomShortcut extends XposedMods {
 
-    private final String packageName = Constants.Packages.SETTINGS;
+    private final String listenPackage = SETTINGS;
     private boolean showInSettings = true;
-    private AttributeSet attrs;
     private Context c;
-    private int i1, i2;
 
     public CustomShortcut(Context context) {
         super(context);
@@ -52,7 +41,7 @@ public class CustomShortcut extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(packageName)) return;
+        if (!lpparam.packageName.equals(listenPackage)) return;
 
         Class<?> TopHomePreferenceClass = findClass("com.oplus.settings.widget.preference.SettingsSimpleJumpPreference", lpparam.classLoader);
         findAndHookConstructor(TopHomePreferenceClass,
@@ -63,11 +52,8 @@ public class CustomShortcut extends XposedMods {
                 new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (attrs == null) {
+                if (c == null) {
                     c = (Context) param.args[0];
-                    attrs = (AttributeSet) param.args[1];
-                    i1 = (int) param.args[2];
-                    i2 = (int) param.args[3];
                 }
             }
         });
@@ -113,12 +99,9 @@ public class CustomShortcut extends XposedMods {
             }
         });
     }
-
-
-
     @Override
     public boolean listensTo(String packageName) {
-        return packageName.equals(this.packageName);
+        return packageName.equals(this.listenPackage);
     }
 
 

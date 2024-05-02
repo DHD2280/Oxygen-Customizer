@@ -272,14 +272,14 @@ public class DrawableConverter {
         return ColorUtils.LABToColor(low, a, b);
     }
 
-    public static BitmapDrawable scaleDrawable(Context context, Drawable drawable, float scale) {
+    public static Drawable scaleDrawable(Context context, Drawable drawable, float scale) {
         int width = drawable.getIntrinsicWidth();
         int height = drawable.getIntrinsicHeight();
         int newWidth = (int) (width * scale);
         int newHeight = (int) (height * scale);
         Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(scaledBitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.setBounds(0, 0, newWidth, newHeight);
         drawable.draw(canvas);
         return new BitmapDrawable(context.getResources(), scaledBitmap);
     }

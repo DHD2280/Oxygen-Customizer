@@ -54,6 +54,7 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.Buttons;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Launcher;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar;
+import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage;
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         prefsList.add(new Object[]{R.xml.statusbar_notifications, R.string.statusbar_notifications, new Statusbar.Notifications()});
         prefsList.add(new Object[]{R.xml.battery_bar_settings, R.string.statusbar_batterybar_title, new Statusbar.BatteryBar()});
         prefsList.add(new Object[]{R.xml.statusbar_battery_icon, R.string.statusbar_battery_icon_options, new Statusbar.BatteryIcon()});
+        prefsList.add(new Object[]{R.xml.statusbar_icons, R.string.statusbar_icons, new Statusbar.Icons()});
         prefsList.add(new Object[]{R.xml.quick_settings_mods, R.string.quick_settings_title, new QuickSettings()});
         prefsList.add(new Object[]{R.xml.quick_settings_tiles_prefs, R.string.quick_settings_tiles_title, new QuickSettingsTiles()});
         prefsList.add(new Object[]{R.xml.quick_settings_tiles_customizations_prefs, R.string.quick_settings_tiles_customization_title, new QuickSettingsCustomization()});
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             prefsList.add(new Object[]{R.xml.launcher_mods, R.string.launcher_title, new Launcher()});
         prefsList.add(new Object[]{R.xml.lockscreen_prefs, R.string.lockscreen_title, new Lockscreen()});
         prefsList.add(new Object[]{R.xml.lockscreen_clock, R.string.lockscreen_clock, new Lockscreen.LockscreenClock()});
+        prefsList.add(new Object[]{R.xml.weather_settings, R.string.lockscreen_weather, new LockscreenWeather()});
         prefsList.add(new Object[]{R.xml.sound_mods, R.string.sound, new Mods.Sound()});
         prefsList.add(new Object[]{R.xml.package_manager_prefs, R.string.package_manager, new Mods.PackageManager()});
         prefsList.add(new Object[]{R.xml.misc_prefs, R.string.misc, new Mods.Misc()});
