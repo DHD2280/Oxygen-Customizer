@@ -42,6 +42,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_IMAGES;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_LINE_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
@@ -375,6 +376,12 @@ public class PreferenceHelper {
             }
             case "lockscreen_clock_custom_user_image_picker" -> {
                 return isVisible("lockscreen_clock_custom_user_image") && instance.mPreferences.getBoolean("lockscreen_clock_custom_user_image", false);
+            }
+            case "lockscreen_clock_custom_image_switch" -> {
+                return LOCKSCREEN_CLOCK_IMAGES.contains(instance.mPreferences.getInt("lockscreen_custom_clock_style", 0));
+            }
+            case "lockscreen_clock_custom_image" -> {
+                return instance.mPreferences.getBoolean("lockscreen_clock_custom_image_switch", false);
             }
             case "lockscreen_clock_stock_prefs" -> {
                 return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);

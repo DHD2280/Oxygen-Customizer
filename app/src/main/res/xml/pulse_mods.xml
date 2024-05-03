@@ -32,7 +32,7 @@
 
     <ListPreference
         app:iconSpaceReserved="false"
-        android:key="pulse_custom_gravity"
+        android:key="pulse_gravity"
         android:title="@string/pulse_custom_gravity_title"
         android:entries="@array/pulse_custom_gravity_entries"
         android:entryValues="@array/pulse_custom_gravity_values"
@@ -41,7 +41,7 @@
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
-        android:key="visualizer_center_mirrored"
+        android:key="pulse_center_mirrored"
         android:title="@string/visualizer_center_mirrored_title"
         android:summary="@string/visualizer_center_mirrored_summary"
         android:defaultValue="false"/>
