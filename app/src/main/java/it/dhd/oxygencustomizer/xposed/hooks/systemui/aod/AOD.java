@@ -42,7 +42,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class AOD extends XposedMods {
-
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static final String TAG = "Oxygen Customizer: AOD ";
     private RelativeLayout mRootLayout = null;

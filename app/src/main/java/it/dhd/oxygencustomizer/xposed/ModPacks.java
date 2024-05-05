@@ -18,6 +18,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AOD;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.navbar.GestureNavbarManager;
@@ -58,7 +59,7 @@ public class ModPacks {
                     modPacks.add(FeatureEnabler.class);
 
                     // AOD
-                    //modPacks.add(AOD.class);
+                    modPacks.add(AOD.class);
 
                     // Statusbar
                     modPacks.add(StatusbarMods.class);
