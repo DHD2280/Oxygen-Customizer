@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start|top"
+    android:gravity="start|top"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
+                android:tag="accent1"
+                android:background="@android:color/system_accent1_400" />
+
+            <TextClock
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="hh:mm"
+                android:format24Hour="HH:mm"
+                android:tag="text1"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
+                android:tag="accent1"
+                android:background="@android:color/system_accent1_400" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/relax" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
+                android:tag="accent2"
+                android:background="@android:color/system_accent2_400" />
+
+            <TextClock
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="dd MMM"
+                android:format24Hour="dd MMM"
+                android:tag="text2"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
+                android:tag="accent2"
+                android:background="@android:color/system_accent2_400" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

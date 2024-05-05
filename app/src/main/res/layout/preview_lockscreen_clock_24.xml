@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start|top"
+    android:gravity="start|top"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="25dp"
+        android:orientation="vertical">
+
+    <TextClock
+        android:id="@+id/day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:format12Hour="EEEE"
+        android:format24Hour="EEEE"
+        android:tag="text1"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp" />
+
+    <View
+        android:layout_marginTop="12dp"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:background="@android:color/system_accent1_400" />
+
+    <TextClock
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:format12Hour="dd MMMM"
+        android:format24Hour="dd MMMM"
+        android:tag="text2"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp" />
+
+    <TextClock
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:format12Hour="hh:mm"
+        android:format24Hour="HH:mm"
+        android:tag="text2"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="accent2"
+            android:textColor="@android:color/system_accent2_400"
+            android:text="·"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="accent3"
+            android:textColor="@android:color/system_accent3_400"
+            android:text="·"
+            android:textSize="40sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="accent2"
+            android:textColor="@android:color/system_accent2_400"
+            android:text="·"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="accent3"
+            android:textColor="@android:color/system_accent3_400"
+            android:text="·"
+            android:textSize="40sp" />
+
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
