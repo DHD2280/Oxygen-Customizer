@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xposed Description -->
+    <!-- Preferences Strings -->
+    <!-- Main Activity -->
+    <!-- App kill Alert -->
+    <!-- Reboot alert -->
+    <!-- General Strings -->
+    <!-- Search Preference -->
+    <!-- Menu Strings -->
+    <!-- NavBar Strings -->
+    <!-- Mods Strings -->
+    <!-- General Strings -->
+    <!-- Statusbar Strings -->
+    <!-- Statusbar notification strings -->
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Statusbar Clock Strings -->
+    <!-- Status bar - Clock -->
+    <!-- Status bar padding -->
+    <!-- Battery Bar Strings -->
+    <!-- Battery Icon Strings -->
+    <!-- Battery Stock Prefs -->
+    <!-- Battery Icon Styles -->
+    <!-- Statusbar Icons Strinsg -->
+    <!-- Quick Settings Mods -->
+    <!-- Quick Settings Tiles -->
+    <!-- Quick Settings Tiles Customizations -->
+    <!-- QS Tiles animation -->
+    <!-- QS Page Transitions -->
+    <!-- QS Header Image Strings -->
+    <!-- Omni Provider" -->
+    <!-- QS Header Clock Strings -->
+    <!-- Qs Header Per Clock Prefs -->
+    <!-- Hour only color -->
+    <!-- Time color -->
+    <!-- Separator Color, Only for first clock -->
+    <!-- QS Header Clock Margins -->
+    <!-- Chip Styles Strings -->
+    <!-- Launcher Mods -->
+    <!-- NavBar Strings -->
+    <!-- Gesture Strings -->
+    <!-- Buttons Title -->
+    <!-- Lockscreen Strings -->
+    <!-- Lockscreen Clock Strings -->
+    <!-- Lockscreen 9 Strings -->
+    <!-- Sound Mods -->
+    <!-- Pulse music visualizer -->
+    <!-- Pulse Gravity n Mirror Options -->
+    <!-- Volume Steps -->
+    <!-- Adaptive Playback -->
+    <!-- Volume panel -->
+    <!-- Volume Panel Customizations -->
+    <!-- Volume Styles -->
+    <!-- Package Manager -->
+    <!-- Misc Strings -->
+    <!-- Hooks Fragment -->
+    <!-- Update Fragment -->
+    <!-- Advanced Reboot -->
+    <!-- Own Settings -->
+    <!-- Omni Jaws Strings -->
+    <!-- Lockscreen Weather styles -->
+    <!-- Weather -->
+</resources>
