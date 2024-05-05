@@ -378,7 +378,6 @@ public class StatusbarMods extends XposedMods {
         hookAllMethods(QuickSettingsController, "isOpenQsEvent", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log(TAG + "isOpenQsEvent " + oneFingerPulldownEnabled);
 
                 if (!oneFingerPulldownEnabled) return;
 
