@@ -280,22 +280,22 @@ public class GestureNavbarManager extends XposedMods {
 
         float topLeft = backGestureHeightFractionLeft.get(1) / 100f;
         float topRight = backGestureHeightFractionRight.get(1) / 100f;
-        float bottomLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(0) : 0 / 100f;
-        float bottomRight = backGestureHeightFractionRight.size() == 2 ? backGestureHeightFractionRight.get(0) : 0 / 100f;
+        float bottomLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(0) / 100f : 0 / 100f;
+        float bottomRight = backGestureHeightFractionRight.size() == 2 ? backGestureHeightFractionRight.get(0) / 100f : 0 / 100f;
 
         return isLeftSide ?
-                y <= (mDisplaySize.y
+                y < (mDisplaySize.y
                         - mBottomGestureHeight
-                        - mDisplaySize.y * topLeft)
-                        || y >= (mDisplaySize.y
+                        - Math.round(mDisplaySize.y * topLeft))
+                        || y > (mDisplaySize.y
                         - mBottomGestureHeight
-                        - mDisplaySize.y * bottomLeft) :
-                y <= (mDisplaySize.y
+                        - Math.round(mDisplaySize.y * bottomLeft)) :
+                y < (mDisplaySize.y
                         - mBottomGestureHeight
-                        - mDisplaySize.y * topRight)
-                        && y >= (mDisplaySize.y
+                        - Math.round(mDisplaySize.y * topRight))
+                        || y > (mDisplaySize.y
                         - mBottomGestureHeight
-                        - mDisplaySize.y * bottomRight);
+                        - Math.round(mDisplaySize.y * bottomRight));
 
         /*int mEdgeHeight = isLeftSide ?
                 Math.round(mDisplaySize.y * backGestureHeightFractionLeft) :
