@@ -246,6 +246,10 @@
     <!-- Statusbar Icons Strinsg -->
     <string name="statusbar_icons_bluetooth_hide">Nascondi icona Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Nascondi l\'icona Bluetooth quando non è connesso.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">Nascondi In-Out WiFi</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">Disattiva/Attiva WiFi per mostrare le modifiche.</string>
+    <string name="statusbar_icons_inout_mobile_hide_title">Nascondi In-Out Mobile</string>
+    <string name="statusbar_icons_inout_mobile_hide_summary">Disattiva/Attiva dati mobili per mostrare le modifiche.</string>
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown">Discesa Rapida</string>
     <string name="quick_pulldown_length">Lunghezza discesa rapida</string>
@@ -591,6 +595,15 @@
     <string name="pulse_custom_div">Spaziatura barra</string>
     <string name="pulse_filled_block_size">Dimensione blocco</string>
     <string name="pulse_empty_block_size">Spaziatura blocchi</string>
+    <!-- Pulse Gravity n Mirror Options -->
+    <string name="pulse_custom_gravity_title">Gravità</string>
+    <string name="pulse_custom_gravity_bottom">In basso</string>
+    <string name="pulse_custom_gravity_top">In alto</string>
+    <string name="pulse_custom_gravity_center">Centro</string>
+    <string name="visualizer_center_mirrored_title">Al centro specchiato</string>
+    <string name="visualizer_center_mirrored_summary">Imposta il visualizzatore in modalità specchiata centrale</string>
+    <string name="pulse_vertical_mirror_title">Specchio Verticale</string>
+    <string name="pulse_vertical_mirror_summary">Crea ulteriori Pulse e capovolgi verticalmente</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">Livelli Volume</string>
     <string name="volume_steps_summary">Controlla la granularità di ciascun flusso</string>
@@ -644,6 +657,12 @@
     <string name="use_auth_for_advanced_reboot_summary">Richiede autenticazione per utilizzare le opzioni avanzate di riavvio.</string>
     <string name="advanced_reboot_hide_lockscreen">Nascondi nella schermata di blocco</string>
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
+    <string name="screenshot">Screenshot</string>
+    <string name="screenshots_prefs">Opzioni screenshot</string>
+    <string name="disable_secure_screenshot">Disabilita FLAG_SECURE</string>
+    <string name="disable_secure_screenshot_summary">Consenti screenshot in app sicure.\nRichiede il riavvio completo.</string>
+    <string name="disable_screenshot_observer">Disabilita rilevamento screenshot</string>
+    <string name="disable_screenshot_observer_summary">Questo disabiliterà il rilevamento degli screenshot, richiede A14+.\nRichiede il riavvio completo.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Pacchetti</string>
     <string name="hooked_packages_title">Pacchetti connessi</string>
@@ -652,6 +671,11 @@
     <string name="package_hook_no_response">Pacchetto non risponde</string>
     <string name="package_hook_bootlooped">Pacchetto disabilitato perché causa bootloop</string>
     <string name="package_not_found">Pacchetto non trovato</string>
+    <string name="info_hooks">Hooks Info</string>
+    <string name="info_hooks_desc">Spiegazione\n\n
+         Il pacchetto è reattivo significa che tutto funziona bene,\n\n
+         Pacchetto disabilitato per bootloop significa che ci sono errori nell\'hook, quindi il pacchetto è disabilitato dall\'hook. Contatta lo sviluppatore per risolvere.\n\n
+         Il pacchetto non risponde significa che probabilmente l\'app non è abilitata in LSPosed o è chiusa, prova ad avviare l\'app e controlla se il pacchetto risponde.</string>
     <string name="package_checking">Caricamento %s</string>
     <string name="package_activated">Pacchetto attivato con successo</string>
     <string name="package_activation_failed">Attivazione pacchetto fallita</string>
@@ -789,6 +813,17 @@
     <string name="weather_margin_left">Margine Sinistro</string>
     <string name="weather_permission_dialog_title">Abilita Permessi Posizione</string>
     <string name="weather_permission_dialog_message">I permessi di localizzazione sono necessari per recuperare i dati meteo. Fare clic su OK per aprire le impostazioni.</string>
+    <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_title">Stile Sfondo Meteo</string>
+    <string name="lockscreen_weather_selection_default">Predefinito</string>
+    <string name="lockscreen_weather_selection_str_box">Riquadro semi-trasparente</string>
+    <string name="lockscreen_weather_selection_str_round">Riquadro semi-trasparente (arrotondato)</string>
+    <string name="lockscreen_weather_selection_qbeta_style">Pillola Q Beta</string>
+    <string name="lockscreen_weather_selection_str_accent">Arrotondata, semplice e con accento</string>
+    <string name="lockscreen_weather_selection_str_accent_transparent">Arrotondato, trasparente e con accento</string>
+    <string name="lockscreen_weather_selection_str_gradient">Gradiente</string>
+    <string name="lockscreen_weather_selection_str_border_accent">Scuro con bordi accentati</string>
+    <string name="lockscreen_weather_selection_str_border_gradient">Scuro con bordi sfumati</string>
     <!-- Weather -->
     <string name="weather_condition_clouds">Nuvoloso</string>
     <string name="weather_condition_rain">Piovoso</string>

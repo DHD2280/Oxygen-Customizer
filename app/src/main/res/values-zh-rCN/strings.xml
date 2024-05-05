@@ -101,6 +101,7 @@
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <string name="pulse_color_accent">强调</string>
+    <!-- Pulse Gravity n Mirror Options -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
     <!-- Volume panel -->
@@ -114,5 +115,6 @@
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
     <!-- Omni Jaws Strings -->
+    <!-- Lockscreen Weather styles -->
     <!-- Weather -->
 </resources>
