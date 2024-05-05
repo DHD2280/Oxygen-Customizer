@@ -44,7 +44,7 @@ public class VisualizerStreamHandler {
     }
 
     protected static final String TAG = VisualizerStreamHandler.class.getSimpleName();
-    protected static final boolean ENABLE_WAVEFORM = false;
+    protected static final boolean ENABLE_WAVEFORM = true;
 
     protected static final int MSG_STREAM_VALID = 55;
     protected static final int MSG_STREAM_INVALID = 56;

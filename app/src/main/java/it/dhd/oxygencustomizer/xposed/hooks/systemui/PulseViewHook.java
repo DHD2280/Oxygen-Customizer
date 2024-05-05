@@ -17,6 +17,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_FILLED_BL
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_FUDGE_FACTOR;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_GRAVITY;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LAVA_SPEED;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LINE_SHOW_FLASH;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LINE_WAVE_OPACITY;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LINE_WAVE_STROKE;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_LOCKSCREEN;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_NAVBAR;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_PREFS;
@@ -43,6 +46,7 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 import it.dhd.oxygencustomizer.xposed.views.pulse.ColorController;
 import it.dhd.oxygencustomizer.xposed.views.pulse.FadingBlockRenderer;
+import it.dhd.oxygencustomizer.xposed.views.pulse.LineRenderer;
 import it.dhd.oxygencustomizer.xposed.views.pulse.PulseControllerImpl;
 import it.dhd.oxygencustomizer.xposed.views.pulse.SolidLineRenderer;
 
@@ -63,6 +67,9 @@ public class PulseViewHook extends XposedMods {
     private FrameLayout mNavigationBar = null;
     private boolean mCenterMirrored = false, mVerticalMirror = false;
     private int mGravity = 0;
+    private boolean mShowFlash = true;
+    private int mWaveOpacity = 200;
+    private float mWaveStroke = 5f;
 
 
     public PulseViewHook(Context context) {
@@ -79,7 +86,7 @@ public class PulseViewHook extends XposedMods {
         mAmbientPulse = Xprefs.getBoolean(PULSE_AMBIENT, false);
 
         // Render Mode
-        mPulseStyle = Integer.parseInt(Xprefs.getString(PULSE_RENDER_STYLE, "1"));
+        mPulseStyle = Integer.parseInt(Xprefs.getString(PULSE_RENDER_STYLE, "0"));
 
         // Pulse Smoothing
         mPulseSmoothing = Xprefs.getBoolean(PULSE_SMOOTHING, false);
@@ -107,7 +114,12 @@ public class PulseViewHook extends XposedMods {
         // Pulse Mirror and Gravity
         mCenterMirrored = Xprefs.getBoolean(PULSE_CENTER_MIRRORED, false);
         mVerticalMirror = Xprefs.getBoolean(PULSE_VERTICAL_MIRROR, false);
-        mGravity = Xprefs.getInt(PULSE_GRAVITY, 0);
+        mGravity = Integer.parseInt(Xprefs.getString(PULSE_GRAVITY, "0"));
+
+        // Line Renderer
+        mShowFlash = Xprefs.getBoolean(PULSE_LINE_SHOW_FLASH, true);
+        mWaveStroke = Xprefs.getSliderFloat(PULSE_LINE_WAVE_STROKE, 5f);
+        mWaveOpacity = Xprefs.getSliderInt(PULSE_LINE_WAVE_OPACITY, 200);
 
         mPulseEnabled = mNavBarPulse || mLockScreenPulse || mAmbientPulse;
 
@@ -303,11 +315,15 @@ public class PulseViewHook extends XposedMods {
         if (SolidLineRenderer.hasInstance()) {
             refreshPulseSolidLineRenderer(SolidLineRenderer.getInstance());
         }
-        if (ColorController.hasInstance()) {
-            refreshPulseColorController(ColorController.getInstance());
-        }
         if (FadingBlockRenderer.hasInstance()) {
             refreshPulseFadingBlockRenderer(FadingBlockRenderer.getInstance());
+        }
+        if (LineRenderer.hasInstance()) {
+            refreshPulseLineRenderer(LineRenderer.getInstance());
+        }
+
+        if (ColorController.hasInstance()) {
+            refreshPulseColorController(ColorController.getInstance());
         }
     }
 
@@ -324,6 +340,12 @@ public class PulseViewHook extends XposedMods {
         fadingBlockRenderer.updateSettings(mPulseEmptyBlock, mPulseCustomDimen, mPulseDiv, mPulseFudgeFactor, mPulseFilledBlock,
                 mCenterMirrored, mVerticalMirror, mGravity);
         fadingBlockRenderer.updateSmoothingEnabled(mPulseSmoothing);
+    }
+
+    private void refreshPulseLineRenderer(LineRenderer lineRenderer) {
+        if (lineRenderer == null) return;
+
+        lineRenderer.updateSettings(mShowFlash, mWaveStroke, mWaveOpacity);
     }
 
     private void refreshPulseColorController(ColorController colorController) {

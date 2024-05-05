@@ -615,6 +615,7 @@
     <string name="pulse_render_mode_title">Render mode</string>
     <string name="pulse_render_mode_fading_bars">Fading blocks</string>
     <string name="pulse_render_mode_solid_lines">Solid lines</string>
+    <string name="pulse_render_mode_waveform">Waveform</string>
     <string name="pulse_legacy_mode_advanced_category">Fading blocks mode settings</string>
     <string name="pulse_custom_fudge_factor">Sanity level</string>
     <string name="pulse_lavalamp_speed_title">Lava lamp speed</string>
@@ -635,6 +636,13 @@
     <string name="pulse_custom_div">Bar spacing</string>
     <string name="pulse_filled_block_size">Block size</string>
     <string name="pulse_empty_block_size">Block spacing</string>
+    <string name="pulse_lines_category">Waveform Settings</string>
+    <string name="pulse_line_show_flash_title">Show flash</string>
+    <string name="pulse_line_show_flash_summary">Show a prominent Wave when the amplitude is bigger</string>
+    <string name="pulse_line_wave_stroke">Waveform Stroke</string>
+    <string name="pulse_line_wave_opacity">Waveform Opacity</string>
+    <string name="pulse_line_wave_rotate_keyguard_title">Rotate in Keyguard</string>
+    <string name="pulse_line_wave_rotate_keyguard_summary">Rotate the waveform in Lockscreen/Ambient Display</string>
 
     <!-- Pulse Gravity n Mirror Options -->
     <string name="pulse_custom_gravity_title">Gravity</string>

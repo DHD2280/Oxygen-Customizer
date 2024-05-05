@@ -29,8 +29,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BatteryPrefs;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CATEGORY_CUSTOM_BATTERY_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
@@ -47,7 +45,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_HIDE_DATE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR;
@@ -60,8 +57,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_SIDE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_PADDING_TOP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_CUSTOM;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT_INTENSITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
@@ -77,10 +72,8 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceGroup;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
@@ -581,8 +574,8 @@ public class PreferenceHelper {
             case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
 
             // Gesture Prefs
-            case "gesture_left_height" -> instance.mPreferences.getSliderInt("gesture_left_height", 100) + "%";
-            case "gesture_right_height" -> instance.mPreferences.getSliderInt("gesture_right_height", 100) + "%";
+            case "gesture_left_height_double" -> getGestureHeight(key);
+            case "gesture_right_height_double" -> getGestureHeight(key);
             // Launcher Prefs
             case "folder_columns" -> String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));
             case "folder_rows" -> String.valueOf(instance.mPreferences.getSliderInt("folder_rows", 3));
@@ -634,11 +627,24 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("pulse_solid_units_count", 32));
             case "pulse_solid_fudge_factor" ->
                     String.valueOf(instance.mPreferences.getSliderInt("pulse_solid_fudge_factor", 4));
+            case "pulse_line_wave_stroke" ->
+                    instance.mPreferences.getSliderInt("pulse_line_wave_stroke", 5) + " px";
+            case "pulse_line_wave_opacity" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("pulse_line_wave_opacity", 200));
 
 
             default -> null;
         };
 
+    }
+
+    public static String getGestureHeight(String key) {
+        List<Float> height = instance.mPreferences.getSliderValues(key, 100f);
+        if (height.size() == 2) {
+            return height.get(0).intValue() + "% - " + height.get(1).intValue() + "%";
+        } else {
+            return "100%";
+        }
     }
 
     /**

@@ -236,11 +236,13 @@
     <string-array name="pulse_render_mode_entries">
         <item>@string/pulse_render_mode_fading_bars</item>
         <item>@string/pulse_render_mode_solid_lines</item>
+        <item>@string/pulse_render_mode_waveform</item>
     </string-array>
 
     <string-array name="pulse_render_mode_values" translatable="false">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string-array name="pulse_color_mode_entries">
