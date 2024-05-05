@@ -1,3 +1,15 @@
+**beta-9**  
+- More Lockscreen Clocks  
+- Added the ability to change back swipe gesture in both direction  
+- Added Pulse Waveform  
+- Added Pulse Mirror and Gravity  
+- Added remove FLAG_SECURE to screenshot  
+- Added in/out wifi and mobile  
+- Added Weather background  
+- Update Translations  
+- Added Hide Lock icon in Lockscreen  
+- More QS Page Animations  
+  
 **beta-8**  
 - Two more LS Clock (Lottie)  
 - Added Root Provider Proxy to enqueue root commands  
