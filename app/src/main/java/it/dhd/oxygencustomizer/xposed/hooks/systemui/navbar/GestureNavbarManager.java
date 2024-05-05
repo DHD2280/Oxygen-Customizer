@@ -278,24 +278,36 @@ public class GestureNavbarManager extends XposedMods {
         }
 
 
-        float topLeft = backGestureHeightFractionLeft.get(1) / 100f;
-        float topRight = backGestureHeightFractionRight.get(1) / 100f;
-        float bottomLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(0) / 100f : 0 / 100f;
-        float bottomRight = backGestureHeightFractionRight.size() == 2 ? backGestureHeightFractionRight.get(0) / 100f : 0 / 100f;
+        float topLeft = 1f, bottomLeft = 0f, topRight = 1f, bottomRight = 0f;
+        if (backGestureHeightFractionLeft.size() == 2) {
+            topLeft = backGestureHeightFractionLeft.get(1) / 100f;
+            bottomLeft = backGestureHeightFractionLeft.get(0) / 100f;
+        } else {
+            topLeft = backGestureHeightFractionLeft.get(0) / 100f;
+            bottomLeft = 0;
+        }
+
+        if (backGestureHeightFractionRight.size() == 2) {
+            topRight = backGestureHeightFractionRight.get(1) / 100f;
+            bottomRight = backGestureHeightFractionRight.get(0) / 100f;
+        } else {
+            topRight = backGestureHeightFractionRight.get(0) / 100f;
+            bottomRight = 0;
+        }
 
         return isLeftSide ?
-                y < (mDisplaySize.y
+                y <= (mDisplaySize.y
                         - mBottomGestureHeight
-                        - Math.round(mDisplaySize.y * topLeft))
-                        || y > (mDisplaySize.y
+                        - mDisplaySize.y * topLeft)
+                        || y >= (mDisplaySize.y
                         - mBottomGestureHeight
-                        - Math.round(mDisplaySize.y * bottomLeft)) :
-                y < (mDisplaySize.y
+                        - mDisplaySize.y * bottomLeft) :
+                y <= (mDisplaySize.y
                         - mBottomGestureHeight
-                        - Math.round(mDisplaySize.y * topRight))
-                        || y > (mDisplaySize.y
+                        - mDisplaySize.y * topRight)
+                        && y >= (mDisplaySize.y
                         - mBottomGestureHeight
-                        - Math.round(mDisplaySize.y * bottomRight));
+                        - mDisplaySize.y * bottomRight);
 
         /*int mEdgeHeight = isLeftSide ?
                 Math.round(mDisplaySize.y * backGestureHeightFractionLeft) :
