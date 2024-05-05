@@ -13,11 +13,12 @@
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="gesture_left_height"
+            android:key="gesture_left_height_double"
             android:title="@string/gesture_height_title"
-            app:minVal="10"
+            app:minVal="0"
             app:maxVal="100"
             app:defaultValue="100"
+            app:valueCount="2"
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>
         <SwitchPreferenceCompat
@@ -26,11 +27,12 @@
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            android:key="gesture_right_height"
+            android:key="gesture_right_height_double"
             android:title="@string/gesture_height_title"
-            app:minVal="10"
+            app:minVal="0"
             app:maxVal="100"
             app:defaultValue="100"
+            app:valueCount="2"
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>
 

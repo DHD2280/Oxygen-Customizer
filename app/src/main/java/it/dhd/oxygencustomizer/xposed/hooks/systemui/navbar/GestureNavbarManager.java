@@ -55,8 +55,8 @@ public class GestureNavbarManager extends XposedMods {
     private Object SideGestureConfigurationEx;
 
     //region Back gesture
-    private float backGestureHeightFractionLeft = 1f; // % of screen height. can be anything between 0 to 1
-    private float backGestureHeightFractionRight = 1f; // % of screen height. can be anything between 0 to 1
+    private List<Float> backGestureHeightFractionLeft = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
+    private List<Float> backGestureHeightFractionRight = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
     private boolean leftEnabled = true;
     private boolean rightEnabled = true;
     private boolean onRotationToo = true;
@@ -80,8 +80,8 @@ public class GestureNavbarManager extends XposedMods {
         //region Back gesture
         leftEnabled = Xprefs.getBoolean("gesture_left", true);
         rightEnabled = Xprefs.getBoolean("gesture_right", true);
-        backGestureHeightFractionLeft = Xprefs.getSliderInt( "gesture_left_height", 100) / 100f;
-        backGestureHeightFractionRight = Xprefs.getSliderInt( "gesture_right_height", 100) / 100f;
+        backGestureHeightFractionLeft = Xprefs.getSliderValues( "gesture_left_height_double", 100f);
+        backGestureHeightFractionRight = Xprefs.getSliderValues( "gesture_right_height_double", 100f) ;
         onRotationToo = Xprefs.getBoolean("gesture_on_rotate", true);
         overrideBack = Xprefs.getBoolean("gesture_override_holdback", false);
         overrideMode = Integer.parseInt(Xprefs.getString("gesture_override_holdback_mode", "0"));
@@ -277,14 +277,34 @@ public class GestureNavbarManager extends XposedMods {
             return true;
         }
 
-        int mEdgeHeight = isLeftSide ?
+
+        float topLeft = backGestureHeightFractionLeft.get(1) / 100f;
+        float topRight = backGestureHeightFractionRight.get(1) / 100f;
+        float bottomLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(0) : 0 / 100f;
+        float bottomRight = backGestureHeightFractionRight.size() == 2 ? backGestureHeightFractionRight.get(0) : 0 / 100f;
+
+        return isLeftSide ?
+                y <= (mDisplaySize.y
+                        - mBottomGestureHeight
+                        - mDisplaySize.y * topLeft)
+                        || y >= (mDisplaySize.y
+                        - mBottomGestureHeight
+                        - mDisplaySize.y * bottomLeft) :
+                y <= (mDisplaySize.y
+                        - mBottomGestureHeight
+                        - mDisplaySize.y * topRight)
+                        && y >= (mDisplaySize.y
+                        - mBottomGestureHeight
+                        - mDisplaySize.y * bottomRight);
+
+        /*int mEdgeHeight = isLeftSide ?
                 Math.round(mDisplaySize.y * backGestureHeightFractionLeft) :
                 Math.round(mDisplaySize.y * backGestureHeightFractionRight);
 
         return mEdgeHeight != 0
                 && y < (mDisplaySize.y
                 - mBottomGestureHeight
-                - mEdgeHeight);
+                - mEdgeHeight);*/
     }
     //endregion
 
