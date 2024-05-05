@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Xposed Description -->
-    <string name="xposeddescription">Personnaliser Oxygen OS</string>
+    <string name="xposeddescription">Customizar Oxygen OS</string>
     <!-- Preferences Strings -->
-    <string name="default_value">Par défaut</string>
-    <string name="settingslib_learn_more_text">En savoir plus</string>
-    <string name="settings_label">Réglages</string>
-    <string name="toast_rename_file">Renommer le fichier en quelque chose de plus simple</string>
-    <string name="toast_applied">Appliqué</string>
-    <string name="opt_selected1">Sélectionné : %s</string>
-    <string name="opt_selected2">Sélectionné: %s%s</string>
-    <string name="requires_sysui_restart">Cette section nécessite un redémarrage de SystemUI\nAppuyez sur le menu pour redémarrer.</string>
+    <string name="default_value">Predefinido</string>
+    <string name="settingslib_learn_more_text">Mais informações</string>
+    <string name="settings_label">Configurações</string>
+    <string name="toast_rename_file">Renomear arquivo para algo mais simples</string>
+    <string name="toast_applied">Aplicado</string>
+    <string name="opt_selected1">Selecionado: %s</string>
+    <string name="opt_selected2">Selecionado: %s%s</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
-    <string name="app_kill_alert_title">Remarque</string>
+    <string name="app_kill_alert_title">Observação</string>
     <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
-    <string name="reboot_alert_body">Un redémarrage du système est nécessaire pour appliquer les paramètres</string>
+    <string name="reboot_alert_body">É necessária uma reinicialização do sistema para as configurações serem aplicadas</string>
     <!-- General Strings -->
+    <string name="btn_select">Selecionar</string>
     <!-- Search Preference -->
+    <string name="searchpreference_more">Mais</string>
     <!-- Menu Strings -->
     <!-- NavBar Strings -->
+    <string name="navbar_mods">Mods</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Mods</string>
     <!-- General Strings -->
+    <string name="general_on">Ativo</string>
+    <string name="general_off">Desativado</string>
     <!-- Statusbar Strings -->
     <!-- Statusbar notification strings -->
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_position_left">Esquerda</string>
+    <string name="status_bar_date_title">Data</string>
     <!-- Status bar padding -->
     <!-- Battery Bar Strings -->
     <!-- Battery Icon Strings -->
@@ -35,15 +42,20 @@
     <!-- Battery Icon Styles -->
     <!-- Statusbar Icons Strinsg -->
     <!-- Quick Settings Mods -->
+    <string name="quick_pulldown_side_left">Esquerda</string>
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Tiles Customizations -->
     <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_style_flip">Inverter</string>
+    <string name="qs_tile_animation_duration_low">Baixa</string>
+    <string name="qs_tile_animation_duration_fast">Rápido</string>
     <!-- QS Page Transitions -->
     <!-- QS Header Image Strings -->
     <!-- Omni Provider" -->
     <!-- QS Header Clock Strings -->
     <!-- Qs Header Per Clock Prefs -->
     <!-- Hour only color -->
+    <string name="qs_header_clock_custom_color_hour_mode_disabled">Nenhuma</string>
     <!-- Time color -->
     <!-- Separator Color, Only for first clock -->
     <!-- QS Header Clock Margins -->
@@ -60,6 +72,7 @@
     <!-- Pulse Gravity n Mirror Options -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
+    <string name="adaptive_playback_disabled_summary">Desativado</string>
     <!-- Volume panel -->
     <!-- Volume Panel Customizations -->
     <!-- Volume Styles -->
@@ -67,9 +80,11 @@
     <!-- Misc Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
+    <string name="update_channel_name">Atualizações</string>
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
     <!-- Omni Jaws Strings -->
+    <string name="omnijaws_current_text">Agora</string>
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
 </resources>
