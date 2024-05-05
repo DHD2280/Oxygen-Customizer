@@ -95,7 +95,6 @@ public class QsTileCustomization extends XposedMods {
     private TextView mTitle = null, mSubtitle = null;
     private ImageView mExpandIndicator = null;
     private boolean advancedCustom = true;
-    private static final ArrayList<Object> qsViews = new ArrayList<>();
     private int mAnimStyle = 0;
     private int mInterpolatorType = 0;
     private int mAnimDuration = 0;
@@ -546,25 +545,10 @@ public class QsTileCustomization extends XposedMods {
 
         int currentShape = 0;
         try {
-            currentShape = Integer.parseInt(ShellUtils.execCommand("settings get system qs_personality_shape_type", true).successMsg);
-        } catch (Throwable ignored) {}
-        int finalCurrentShape = currentShape;
-        /*new Thread(() -> {
-            try {
-                while (updating) {
-                    Thread.currentThread().wait(500);
-                }
-                updating = true;
-
-                ShellUtils.execCommand("settings set system qs_personality_shape_type 0", false);
-                Thread.sleep(500);
-                ShellUtils.execCommand("settings get system qs_personality_shape_type " + finalCurrentShape, false);
-
-                Thread.sleep(500);
-                updating = false;
-            } catch (Exception ignored) {
-            }
-        }).start();*/
+            currentShape = (int) callMethod(mPersonalityManager, "getLastShapeType");
+        } catch (Throwable t) {
+            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+        }
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }
 
