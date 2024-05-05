@@ -470,13 +470,13 @@
     <string name="gesture_right_title">Lato destro dello schermo</string>
     <string name="gesture_height_title">Altezza del gesto</string>
     <string name="gesture_back_on_rotate">Abilita anche in orizzontale</string>
-    <string name="gesture_override_back_hold">Ignora il gesto indietro</string>
-    <string name="gesture_override_back_hold_mode">Ignora la modalità Indietro</string>
+    <string name="gesture_override_back_hold">Sostituisci gesto indietro</string>
+    <string name="gesture_override_back_hold_mode">Metodo di sostituzione</string>
     <string name="gesture_override_back_hold_mode_default">Entrambi i comandi per i lati sinistro e destro</string>
     <string name="gesture_override_back_hold_mode_per_side">Scegli il comando per ogni lato</string>
     <string name="gesture_override_back_hold_left">Comando lato sinistro</string>
     <string name="gesture_override_back_hold_right">Comando lato destro</string>
-    <string name="gesture_override_back_hold_common">Mantieni Il Comando Indietro</string>
+    <string name="gesture_override_back_hold_common">Tieni premuto indietro</string>
     <string name="gesture_override_back_hold_command_switch_app">Passa all\'app precedente</string>
     <string name="gesture_override_back_hold_command_close_recents">Cancella tutti i recenti</string>
     <string name="gesture_override_back_hold_command_kill_app">Termina app attiva</string>
