@@ -71,6 +71,7 @@
     <!-- Lockscreen 9 Strings -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
+    <!-- Pulse Gravity n Mirror Options -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
     <!-- Volume panel -->
@@ -83,5 +84,6 @@
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
     <!-- Omni Jaws Strings -->
+    <!-- Lockscreen Weather styles -->
     <!-- Weather -->
 </resources>
