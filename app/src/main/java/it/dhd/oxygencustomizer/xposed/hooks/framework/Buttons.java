@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static android.content.Context.RECEIVER_EXPORTED;
+import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -56,26 +57,18 @@ public class Buttons extends XposedMods {
     private static SensorEventListener proximitySensorListener;
     private static boolean shouldTorch = false;
     Handler mHandler;
-
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                log("Received broadcast: " + action);
-                if (action.equals(Constants.ACTION_POWER_MENU)) {
-                    showPowerMenu();
-                }
-            } catch (Throwable ignored) {}
-        }
-    };
+    private static Object PWM;
 
     public Buttons(Context context) {
         super(context);
     }
 
+    private boolean settingsUpdated = false;
+
     @Override
     public void updatePrefs(String... Key) {
+
+        if (settingsUpdated) return;
 
         holdVolumeToSkip = Xprefs.getBoolean(BUTTONS_VOLUME_MUSIC, false);
         disablePowerOnLockscreen = Xprefs.getBoolean(DISABLE_POWER, false);
@@ -83,7 +76,24 @@ public class Buttons extends XposedMods {
         volumeToTorchHasTimeout = Xprefs.getBoolean("volbtn_torch_enable_timeout", false);
         volumeToTorchTimeout = Xprefs.getSliderInt("volbtn_torch_timeout", 5) * 1000;
         volumeToTorchProximity = Xprefs.getBoolean("volbtn_torch_use_proximity", false);
+
+        settingsUpdated = true;
     }
+
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                String action = intent.getAction();
+                if (action.equals(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT)) {
+                    settingsUpdated = false;
+                    updatePrefs();
+                }
+            } catch (Throwable t) {
+                log("Oxygen Customizer - Buttons: " + t.getMessage());
+            }
+        }
+    };
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -92,7 +102,7 @@ public class Buttons extends XposedMods {
             broadcastRegistered = true;
 
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.ACTION_POWER_MENU);
+            intentFilter.addAction(Constants.ACTION_SETTINGS_CHANGED);
             mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
@@ -180,6 +190,17 @@ public class Buttons extends XposedMods {
                     log(TAG + " ERROR IN mVolumeLongPressTorch\n" + t);
                 }
             };
+
+            try {
+                hookAllConstructors(PhoneWindowManagerClass, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        PWM = param.thisObject;
+                    }
+                });
+            } catch (Throwable t) {
+                log(t);
+            }
 
             hookAllMethods(PhoneWindowManagerExtImpl, "overrideInit", new XC_MethodHook() {
                 @Override
@@ -274,9 +295,16 @@ public class Buttons extends XposedMods {
         }
     }
 
-    public static void showPowerMenu() {
-        if (PWMExImpl == null) return;
-        callMethod(PWMExImpl, "overrideShowGlobalActionsInternal");
+    public static void toggleNotifications() {
+        if (PWM != null) {
+            Object statusBarService = callMethod(PWM, "getStatusBarService");
+            try {
+                if (statusBarService != null)
+                    callMethod(PWM, "statusBarService");
+            } catch (Throwable t) {
+                log(t);
+            }
+        }
     }
 
     @Override
