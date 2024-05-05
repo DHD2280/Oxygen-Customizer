@@ -59,7 +59,7 @@ public class ModPacks {
                     modPacks.add(FeatureEnabler.class);
 
                     // AOD
-                    modPacks.add(AOD.class);
+                    //modPacks.add(AOD.class);
 
                     // Statusbar
                     modPacks.add(StatusbarMods.class);
