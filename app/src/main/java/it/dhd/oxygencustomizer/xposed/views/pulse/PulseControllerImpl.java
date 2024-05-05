@@ -35,6 +35,9 @@ public class PulseControllerImpl {
     private static final String TAG = PulseControllerImpl.class.getSimpleName();
     private static final int RENDER_STYLE_LEGACY = 0;
     private static final int RENDER_STYLE_CM = 1;
+    private static final int RENDER_STYLE_LINE = 2;
+    private static final int RENDER_STYLE_CIRCLE = 3;
+    private static final int RENDER_STYLE_CIRCLE_BAR = 4;
 
     private final Context mContext;
     private static AudioManager mAudioManager;
@@ -65,8 +68,6 @@ public class PulseControllerImpl {
     private boolean mKeyguardGoingAway;
     private FrameLayout mNavBar = null;
     private FrameLayout mAodRootLayout = null;
-    private FrameLayout mNotificationShadeView;
-    private FrameLayout mKeyguardLayout = null;
     private Executor mBgHandler = command -> new Handler(Looper.getMainLooper()).post(command);
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -273,14 +274,6 @@ public class PulseControllerImpl {
         mAodRootLayout = aodRootLayout;
     }
 
-    public void setStatusbar(FrameLayout notificationShadeView) {
-        mNotificationShadeView = notificationShadeView;
-    }
-
-    public void setKeyguardLayout(FrameLayout keyguardLayout) {
-        mKeyguardLayout = keyguardLayout;
-    }
-
     public static boolean hasInstance() {
         return instance != null;
     }
@@ -370,11 +363,14 @@ public class PulseControllerImpl {
     }
 
     private Renderer getRenderer() {
-        if (mPulseStyle == RENDER_STYLE_CM) {
-            return new SolidLineRenderer(mContext, mHandler, mPulseView, instance, mColorController);
-        } else {
-            return new FadingBlockRenderer(mContext, mHandler, mPulseView, instance, mColorController);
-        }
+        return switch (mPulseStyle) {
+            case RENDER_STYLE_CM ->
+                    new SolidLineRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+            case RENDER_STYLE_LINE ->
+                    new LineRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+            default ->
+                    new FadingBlockRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+        };
     }
 
     private boolean isMusicMuted(int streamType) {

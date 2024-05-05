@@ -488,6 +488,9 @@ public class Constants {
         public static final String PULSE_CENTER_MIRRORED = "pulse_center_mirrored";
         public static final String PULSE_VERTICAL_MIRROR = "pulse_vertical_mirror";
         public static final String PULSE_GRAVITY = "pulse_gravity";
+        public static final String PULSE_LINE_SHOW_FLASH = "pulse_line_show_flash";
+        public static final String PULSE_LINE_WAVE_STROKE = "pulse_line_wave_stroke";
+        public static final String PULSE_LINE_WAVE_OPACITY = "pulse_line_wave_opacity";
 
         public static final String[] PULSE_PREFS = {
                 PULSE_NAVBAR,
@@ -509,7 +512,10 @@ public class Constants {
                 PULSE_SOLID_FUDGE_FACTOR,
                 PULSE_CENTER_MIRRORED,
                 PULSE_VERTICAL_MIRROR,
-                PULSE_GRAVITY
+                PULSE_GRAVITY,
+                PULSE_LINE_SHOW_FLASH,
+                PULSE_LINE_WAVE_STROKE,
+                PULSE_LINE_WAVE_OPACITY
         };
     }
 

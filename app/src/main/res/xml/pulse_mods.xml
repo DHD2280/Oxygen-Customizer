@@ -170,6 +170,38 @@
             android:dependency="pulse_2"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="pulse_line"
+        android:title="@string/pulse_lines_category">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="pulse_line_show_flash"
+            android:title="@string/pulse_line_show_flash_title"
+            android:summary="@string/pulse_line_show_flash_summary"
+            android:defaultValue="false"
+            android:dependency="pulse_line"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_line_wave_stroke"
+            android:title="@string/pulse_line_wave_stroke"
+            app:defaultValue="5"
+            app:maxVal="10"
+            app:minVal="1"
+            android:dependency="pulse_line"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="pulse_line_wave_opacity"
+            android:title="@string/pulse_line_wave_opacity"
+            app:defaultValue="200"
+            app:maxVal="255"
+            app:minVal="20"
+            app:tickInterval="5"
+            android:dependency="pulse_line"/>
+
+    </PreferenceCategory>
+
     <it.dhd.oxygencustomizer.customprefs.FooterPreference
         android:key="pulse_settings_footer"
         android:selectable="false"

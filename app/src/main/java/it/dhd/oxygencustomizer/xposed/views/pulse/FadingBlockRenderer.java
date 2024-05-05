@@ -120,59 +120,65 @@ public class FadingBlockRenderer extends Renderer {
 
     @Override
     public void onFFTUpdate(byte[] bytes) {
+        if (bytes == null || mDivisions <= 0) return;
         int fudgeFactor = mKeyguardShowing ? mDbFuzzFactor * 4 : mDbFuzzFactor;
         mFFTBytes = bytes;
-        if (mFFTBytes != null) {
-            if (mFFTPoints == null || mFFTPoints.length < mFFTBytes.length * 4) {
-                mFFTPoints = new float[mFFTBytes.length * 4];
+        if (mFFTPoints == null || mFFTPoints.length < mFFTBytes.length * 4) {
+            mFFTPoints = new float[mFFTBytes.length * 4];
+        }
+        int divisionLength = mFFTBytes.length / mDivisions;
+        if (divisionLength < 2) return;
+        if (mSmoothingEnabled) {
+            if (mFFTAverage == null || mFFTAverage.length != divisionLength) {
+                setupFFTAverage(divisionLength);
             }
-            int divisionLength = mFFTBytes.length / mDivisions;
-            if (mSmoothingEnabled) {
-                if (mFFTAverage == null || mFFTAverage.length != divisionLength) {
-                    setupFFTAverage(divisionLength);
-                }
+        } else {
+            mFFTAverage = null;
+        }
+        int i = 0;
+        for (; i < (mCenterMirrored ? (divisionLength / 2) : divisionLength); i++) {
+            if (mVertical) {
+                mFFTPoints[i * 4 + 1] = i * 4 * mDivisions;
+                mFFTPoints[i * 4 + 3] = i * 4 * mDivisions;
             } else {
-                mFFTAverage = null;
+                mFFTPoints[i * 4] = i * 4 * mDivisions;
+                mFFTPoints[i * 4 + 2] = i * 4 * mDivisions;
             }
-            int i = 0;
-            for (; i < (mCenterMirrored ? (divisionLength / 2) : divisionLength); i++) {
-                if (mVertical) {
-                    mFFTPoints[i * 4 + 1] = i * 4 * mDivisions;
-                    mFFTPoints[i * 4 + 3] = i * 4 * mDivisions;
-                } else {
-                    mFFTPoints[i * 4] = i * 4 * mDivisions;
-                    mFFTPoints[i * 4 + 2] = i * 4 * mDivisions;
-                }
-                rfk = mFFTBytes[mDivisions * i];
-                ifk = mFFTBytes[mDivisions * i + 1];
-                magnitude = (rfk * rfk + ifk * ifk);
-                dbValue = magnitude > 0 ? (int) (10 * Math.log10(magnitude)) : 0;
+            if ((mDivisions * i + 1) < mFFTBytes.length) {
+                byte rfk = mFFTBytes[mDivisions * i];
+                byte ifk = mFFTBytes[mDivisions * i + 1];
+                float magnitude = (rfk * rfk + ifk * ifk);
+                int dbValue = magnitude > 0 ? (int) (10 * Math.log10(magnitude)) : 0;
                 if (mSmoothingEnabled) {
                     dbValue = mFFTAverage[i].average(dbValue);
                 }
                 if (mVertical) {
+                    int correctionFactor = 1;
                     float startPoint = mWidth;
                     if (mGravity == GRAVITY_BOTTOM) {
                         startPoint = (float) mWidth;
                     } else if (mGravity == GRAVITY_TOP) {
                         startPoint = 0f;
+                        correctionFactor*=-1;
                     } else if (mGravity == GRAVITY_CENTER) {
                         startPoint = (float) mWidth / 2f;
                     }
                     mFFTPoints[i * 4] = mLeftInLandscape ? 0 : startPoint;
                     mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * fudgeFactor + DBFUZZ)
-                            : (startPoint - (dbValue * fudgeFactor + DBFUZZ));
+                            : (startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ));
                 } else {
+                    int correctionFactor = 1;
                     float startPoint = mHeight;
                     if (mGravity == GRAVITY_BOTTOM) {
                         startPoint = (float) mHeight;
                     } else if (mGravity == GRAVITY_TOP) {
                         startPoint = 0f;
+                        correctionFactor*=-1;
                     } else if (mGravity == GRAVITY_CENTER) {
                         startPoint = (float) mHeight / 2f;
                     }
                     mFFTPoints[i * 4 + 1] = startPoint;
-                    mFFTPoints[i * 4 + 3] = startPoint - (dbValue * fudgeFactor + DBFUZZ);
+                    mFFTPoints[i * 4 + 3] = startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ);
                 }
             }
             if (mCenterMirrored) {
@@ -193,33 +199,37 @@ public class FadingBlockRenderer extends Renderer {
                         dbValue = mFFTAverage[i].average(dbValue);
                     }
                     if (mVertical) {
+                        int correctionFactor = 1;
                         float startPoint = mWidth;
                         if (mGravity == GRAVITY_BOTTOM) {
                             startPoint = (float) mWidth;
                         } else if (mGravity == GRAVITY_TOP) {
                             startPoint = 0f;
+                            correctionFactor*=-1;
                         } else if (mGravity == GRAVITY_CENTER) {
                             startPoint = (float) mWidth / 2f;
                         }
                         mFFTPoints[i * 4] = mLeftInLandscape ? 0 : startPoint;
                         mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * fudgeFactor + DBFUZZ)
-                                : (startPoint - (dbValue * fudgeFactor + DBFUZZ));
+                                : (startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ));
                     } else {
+                        int correctionFactor = 1;
                         float startPoint = mHeight;
                         if (mGravity == GRAVITY_BOTTOM) {
                             startPoint = (float) mHeight;
                         } else if (mGravity == GRAVITY_TOP) {
                             startPoint = 0f;
+                            correctionFactor*=-1;
                         } else if (mGravity == GRAVITY_CENTER) {
                             startPoint = (float) mHeight / 2f;
                         }
                         mFFTPoints[i * 4 + 1] = startPoint;
-                        mFFTPoints[i * 4 + 3] = startPoint - (dbValue * fudgeFactor + DBFUZZ);
+                        mFFTPoints[i * 4 + 3] = startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ);
                     }
                 }
             }
         }
-        if (mCanvas != null) {
+        if (mCanvas != null && mFFTPoints != null) {
             mCanvas.drawLines(mFFTPoints, mPaint);
             mCanvas.drawPaint(mFadePaint);
         }

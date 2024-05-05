@@ -10,7 +10,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 
 public class PulseSettings extends ControlledPreferenceFragmentCompat {
 
-    private PreferenceCategory mFading, mSolid;
+    private PreferenceCategory mFading, mSolid, mLine;
 
     @Override
     public String getTitle() {
@@ -32,16 +32,20 @@ public class PulseSettings extends ControlledPreferenceFragmentCompat {
         super.onCreatePreferences(savedInstanceState, rootKey);
         mFading = findPreference("pulse_fading_bars_category");
         mSolid = findPreference("pulse_2");
+        mLine = findPreference("pulse_line");
     }
 
     @Override
     public void updateScreen(String key) {
         super.updateScreen(key);
         if (mFading != null) {
-            mFading.setEnabled(Integer.parseInt(mPreferences.getString("pulse_render_style", "1")) == 0);
+            mFading.setEnabled(Integer.parseInt(mPreferences.getString("pulse_render_style", "0")) == 0);
         }
         if (mSolid != null) {
-            mSolid.setEnabled(Integer.parseInt(mPreferences.getString("pulse_render_style", "1")) == 1);
+            mSolid.setEnabled(Integer.parseInt(mPreferences.getString("pulse_render_style", "0")) == 1);
+        }
+        if (mLine != null) {
+            mLine.setEnabled(Integer.parseInt(mPreferences.getString("pulse_render_style", "0")) == 2);
         }
     }
 
