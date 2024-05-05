@@ -17,7 +17,7 @@
             android:title="@string/gesture_height_title"
             app:minVal="0"
             app:maxVal="100"
-            app:defaultValue="100"
+            app:defaultValue="0,100"
             app:valueCount="2"
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>
@@ -31,7 +31,7 @@
             android:title="@string/gesture_height_title"
             app:minVal="0"
             app:maxVal="100"
-            app:defaultValue="100"
+            app:defaultValue="0,100"
             app:valueCount="2"
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>

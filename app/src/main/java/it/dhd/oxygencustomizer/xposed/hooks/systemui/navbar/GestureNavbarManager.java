@@ -11,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.toggleNotifications;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -223,14 +224,8 @@ public class GestureNavbarManager extends XposedMods {
                 ? "expandToQs" //A14
                 : "expandWithQs"; //A13
 
-        hookAllConstructors(NotificationPanelViewControllerClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                NotificationPanelViewController = param.thisObject;
-            }
-        });
 
-        hookAllMethods(NotificationPanelViewControllerClass, "createTouchHandler", new XC_MethodHook() {
+        hookAllConstructors(NotificationPanelViewControllerClass, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 NotificationPanelViewController = param.thisObject;
@@ -262,6 +257,7 @@ public class GestureNavbarManager extends XposedMods {
             case 3 -> takeScreenshot();
             case 4 -> showQs();
             case 5 -> showPowerMenu();
+            case 6 -> toggleNotifications();
             case 7 -> callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
         }
     }
@@ -361,16 +357,14 @@ public class GestureNavbarManager extends XposedMods {
         if (TextUtils.isEmpty(QSExpandMethodName) || NotificationPanelViewController == null) return;
 
         try {
-            callMethod(NotificationPanelViewController, QSExpandMethodName);
+            new Handler(Looper.getMainLooper()).post(() -> callMethod(NotificationPanelViewController, QSExpandMethodName));
         } catch (Throwable t) {
             Log.e("ShowQs", "Error in showQs", t);
         }
     }
 
     private void showPowerMenu() {
-        Intent broadcast = new Intent(Constants.ACTION_POWER_MENU);
-        broadcast.setPackage(BuildConfig.APPLICATION_ID);
-        mContext.sendBroadcast(broadcast);
+
     }
 
     private String getDefaultLauncherPackageName() {
