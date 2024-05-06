@@ -170,7 +170,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         enableUpdates();
     }
 
-    public static void updateSizes(int weatherTextSize, int weatherImageSize) {
+    public void updateSizes(int weatherTextSize, int weatherImageSize) {
         if (instance == null) return;
         instance.mCurrentImage.setLayoutParams(new LinearLayout.LayoutParams(dp2px(instance.mContext, weatherImageSize), dp2px(instance.mContext, weatherImageSize)));
         instance.mHumImage.setLayoutParams(new LinearLayout.LayoutParams(dp2px(instance.mContext, weatherImageSize), dp2px(instance.mContext, weatherImageSize)));
@@ -178,7 +178,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         applyTextSizeRecursively(instance, weatherTextSize);
     }
 
-    public static void updateColors(int color) {
+    public void updateColors(int color) {
         if (instance == null) return;
         ViewHelper.findViewWithTagAndChangeColor(instance, "text", color);
     }
@@ -277,7 +277,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         }
     }
 
-    public static void updateWeatherBg(int selection) {
+    public void updateWeatherBg(int selection) {
         if (instance == null) return;
         instance.mWeatherBgSelection = selection;
         instance.updateWeatherBg();
@@ -288,6 +288,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             switch (mWeatherBgSelection) {
                 case 0: // default
                     bg = null;
+                    mWeatherHorPadding = 0;
+                    mWeatherVerPadding = 0;
                     break;
                 case 1: // semi-transparent box
                     bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_box_str_border, mContext.getTheme());
@@ -335,10 +337,10 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
     public void setViewBackground(Drawable drawRes, int bgAlpha) {
         setBackground(drawRes);
-        getBackground().setAlpha(bgAlpha);
+        if (drawRes != null) getBackground().setAlpha(bgAlpha);
     }
 
-    public static void updateWeatherSettings(boolean showLocation, boolean showText,
+    public void updateWeatherSettings(boolean showLocation, boolean showText,
                                              boolean showHumidity, boolean showWind) {
         if (BuildConfig.DEBUG) log(TAG + "updateWeatherSettings " + (instance!=null));
         instance.mShowWeatherLocation = showLocation;

@@ -699,6 +699,9 @@ public class LockscreenClock extends XposedMods {
             } catch (Throwable ignored) {
             }
             mClockViewContainer.addView(currentWeatherView);
+            WeatherUpdateService.cancelAllUpdate(mContext);
+            WeatherUpdateService.scheduleUpdateNow(mContext);
+            WeatherUpdateService.scheduleUpdatePeriodic(mContext);
             refreshWeatherView(currentWeatherView);
             updateMargins(currentWeatherView);
         } catch (Throwable ignored) {
@@ -713,16 +716,17 @@ public class LockscreenClock extends XposedMods {
         } else {
             params.setMargins(weatherStartPadding, 0, weatherStartPadding, 0);
         }
-
+        weatherView.setLayoutParams(params);
     }
 
     private void refreshWeatherView(CurrentWeatherView currentWeatherView) {
         if (currentWeatherView == null) return;
-        CurrentWeatherView.updateSizes(weatherTextSize, weatherImageSize);
-        CurrentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE);
-        CurrentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind);
+        currentWeatherView.updateSizes(weatherTextSize, weatherImageSize);
+        currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE);
+        currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind);
         currentWeatherView.setVisibility(weatherEnabled ? View.VISIBLE : View.GONE);
-        CurrentWeatherView.updateWeatherBg(mWeatherBackground);
+        currentWeatherView.updateWeatherBg(mWeatherBackground);
+        updateMargins(currentWeatherView);
     }
 
     private void updateWeatherView() {
