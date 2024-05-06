@@ -6,7 +6,10 @@ import static androidx.navigation.fragment.FragmentKt.findNavController;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.backButtonDisabled;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -224,6 +227,21 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         @Override
         public String[] getScopes() {
             return new String[]{Constants.Packages.SCREENSHOT};
+        }
+
+        @Override
+        public void updateScreen(String key) {
+            super.updateScreen(key);
+            Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
+
+            broadcast.putExtra("packageName", FRAMEWORK);
+            broadcast.putExtra("className", it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager.class.getSimpleName());
+
+            broadcast.setPackage(FRAMEWORK);
+
+            if (getContext() != null)
+                getContext().sendBroadcast(broadcast);
+
         }
     }
 

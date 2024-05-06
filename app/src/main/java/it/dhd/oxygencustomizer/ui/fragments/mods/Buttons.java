@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Intent;
@@ -36,11 +37,13 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
 
     @Override
     public void updateScreen(String key) {
+        super.updateScreen(key);
         Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
 
-        broadcast.putExtra("packageName", SYSTEM_UI);
+        broadcast.putExtra("packageName", FRAMEWORK);
+        broadcast.putExtra("className", it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.class.getSimpleName());
 
-        broadcast.setPackage(SYSTEM_UI);
+        broadcast.setPackage(FRAMEWORK);
 
         if (getContext() != null)
             getContext().sendBroadcast(broadcast);

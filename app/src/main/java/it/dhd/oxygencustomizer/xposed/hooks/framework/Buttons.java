@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
@@ -85,9 +86,14 @@ public class Buttons extends XposedMods {
         public void onReceive(Context context, Intent intent) {
             try {
                 String action = intent.getAction();
-                if (action.equals(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT)) {
-                    settingsUpdated = false;
-                    updatePrefs();
+                if (action == null) return;
+                String className = intent.getStringExtra("class");
+                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
+                    if (!TextUtils.isEmpty(className) && this.getClass().getSimpleName().contains(className)) {
+                        log("Buttons: Intent received - will update preferences");
+                        settingsUpdated = false;
+                        updatePrefs();
+                    }
                 }
             } catch (Throwable t) {
                 log("Oxygen Customizer - Buttons: " + t.getMessage());

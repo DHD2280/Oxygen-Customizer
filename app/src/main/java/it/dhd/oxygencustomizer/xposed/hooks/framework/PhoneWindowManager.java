@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
@@ -7,8 +8,12 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.Deoptimizer.deoptimizeMethod;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
+import android.text.TextUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,12 +22,15 @@ import java.util.function.BiPredicate;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class PhoneWindowManager extends XposedMods {
 
     private final static String TAG = "Oxygen Customizer - PhoneWindowManager: ";
     private boolean mDisableSecure = false, mDisableScreenshotObserver = false;
+    private boolean settingsUpdated = false;
+    private boolean broadcastRegistered = false;
 
     public PhoneWindowManager(Context context) {
         super(context);
@@ -30,12 +38,45 @@ public class PhoneWindowManager extends XposedMods {
 
     @Override
     public void updatePrefs(String... Key) {
+        if (Xprefs == null) return;
+
+        if (settingsUpdated) return;
+
         mDisableSecure = Xprefs.getBoolean("disable_secure_screenshot", false);
         mDisableScreenshotObserver = Xprefs.getBoolean("disable_screenshot_observer", false);
+
+        settingsUpdated = true;
     }
+
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                String action = intent.getAction();
+                if (action == null) return;
+                String className = intent.getStringExtra("className");
+                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
+                    if (!TextUtils.isEmpty(className) && this.getClass().getSimpleName().contains(className)) {
+                        settingsUpdated = false;
+                        updatePrefs();
+                    }
+                }
+            } catch (Throwable t) {
+                log("Oxygen Customizer - PhoneWindowManager: " + t.getMessage());
+            }
+        }
+    };
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+        if (!broadcastRegistered) {
+            broadcastRegistered = true;
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Constants.ACTION_SETTINGS_CHANGED);
+            mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
+        }
 
         if (mDisableSecure) {
             try {
