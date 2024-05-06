@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_LOCATION;
@@ -401,7 +402,8 @@ public class PreferenceHelper {
                     LOCKSCREEN_WEATHER_SHOW_LOCATION,
                     LOCKSCREEN_WEATHER_SHOW_CONDITION,
                     LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
-                    LOCKSCREEN_WEATHER_CUSTOM_MARGINS -> {
+                    LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
+                    LOCKSCREEN_WEATHER_BACKGROUND -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
             }
             case "weather_custom_location" -> {
@@ -632,6 +634,8 @@ public class PreferenceHelper {
             case "pulse_line_wave_opacity" ->
                     String.valueOf(instance.mPreferences.getSliderInt("pulse_line_wave_opacity", 200));
 
+            // Buttons
+            case "volbtn_torch_enable_timeout" -> instance.mPreferences.getSliderInt("volbtn_torch_enable_timeout", 5) + " s";
 
             default -> null;
         };
