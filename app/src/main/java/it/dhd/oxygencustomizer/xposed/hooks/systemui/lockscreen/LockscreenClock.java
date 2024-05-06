@@ -699,9 +699,6 @@ public class LockscreenClock extends XposedMods {
             } catch (Throwable ignored) {
             }
             mClockViewContainer.addView(currentWeatherView);
-            WeatherUpdateService.cancelAllUpdate(mContext);
-            WeatherUpdateService.scheduleUpdateNow(mContext);
-            WeatherUpdateService.scheduleUpdatePeriodic(mContext);
             refreshWeatherView(currentWeatherView);
             updateMargins(currentWeatherView);
         } catch (Throwable ignored) {
