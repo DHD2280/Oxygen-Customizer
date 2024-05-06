@@ -54,15 +54,17 @@ public class PhoneWindowManager extends XposedMods {
             try {
                 String action = intent.getAction();
                 if (action == null) return;
-                String className = intent.getStringExtra("className");
+                String className = intent.getStringExtra("class");
+                log("PhoneWindowManager: Intent received - action: " + action + " class: " + className);
                 if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
-                    if (!TextUtils.isEmpty(className) && this.getClass().getSimpleName().contains(className)) {
+                    if (!TextUtils.isEmpty(className) && className.equals(PhoneWindowManager.class.getSimpleName())) {
+                        log("PhoneWindowManager: Intent received - will update preferences");
                         settingsUpdated = false;
                         updatePrefs();
                     }
                 }
             } catch (Throwable t) {
-                log("Oxygen Customizer - PhoneWindowManager: " + t.getMessage());
+                log("PhoneWindowManager Customizer - Buttons: " + t.getMessage());
             }
         }
     };

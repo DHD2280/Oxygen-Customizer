@@ -41,9 +41,7 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
         Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
 
         broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("className", it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.class.getSimpleName());
-
-        broadcast.setPackage(FRAMEWORK);
+        broadcast.putExtra("class", it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.class.getSimpleName());
 
         if (getContext() != null)
             getContext().sendBroadcast(broadcast);
