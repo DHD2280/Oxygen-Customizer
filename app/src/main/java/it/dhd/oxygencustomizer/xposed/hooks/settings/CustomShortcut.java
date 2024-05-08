@@ -28,6 +28,7 @@ public class CustomShortcut extends XposedMods {
     private final String listenPackage = SETTINGS;
     private boolean showInSettings = true;
     private Context c;
+    private Class<?> ThemeUtils = null;
 
     public CustomShortcut(Context context) {
         super(context);
@@ -69,8 +70,8 @@ public class CustomShortcut extends XposedMods {
                 }
             }
         });
-        Class<?> COUITintUtil = findClass("com.coui.appcompat.tintimageview.COUITintUtil", lpparam.classLoader);
-        Class<?> ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
+        try { ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
+        } catch (Throwable ignored) {}
         hookAllMethods(TopLevelSettingsClass, "onCreateAdapter", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -85,11 +86,17 @@ public class CustomShortcut extends XposedMods {
                         R.drawable.pref_icon,
                         mContext.getTheme());
                 Drawable tinted;
-                try {
-                    tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
-                } catch (Throwable t) {
+                if (ThemeUtils == null) {
                     tinted = OCIcon;
+                } else {
+                    try {
+                        if (ThemeUtils == null) throw new Throwable();
+                        tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
+                    } catch (Throwable t) {
+                        tinted = OCIcon;
+                    }
                 }
+
                 callMethod(OCPreference, "setIcon",
                         tinted);
                 callMethod(OCPreference, "setTitle", "Oxygen Customizer");
