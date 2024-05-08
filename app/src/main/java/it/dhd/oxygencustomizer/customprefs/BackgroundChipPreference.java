@@ -1,17 +1,17 @@
 package it.dhd.oxygencustomizer.customprefs;
 
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getBottomDxR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getBottomSxR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getGradientNum;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getGradientOrientation;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getRoundedCorners;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getStrokeColor;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getStrokeWidth;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getStyle;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getTopDxR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getTopSxR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getUseAccentColor;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.getUseGradient;
+import static it.dhd.oxygencustomizer.utils.Constants.getBottomDxR;
+import static it.dhd.oxygencustomizer.utils.Constants.getBottomSxR;
+import static it.dhd.oxygencustomizer.utils.Constants.getGradientNum;
+import static it.dhd.oxygencustomizer.utils.Constants.getGradientOrientation;
+import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
+import static it.dhd.oxygencustomizer.utils.Constants.getStrokeColor;
+import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
+import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
+import static it.dhd.oxygencustomizer.utils.Constants.getTopDxR;
+import static it.dhd.oxygencustomizer.utils.Constants.getTopSxR;
+import static it.dhd.oxygencustomizer.utils.Constants.getUseAccentColor;
+import static it.dhd.oxygencustomizer.utils.Constants.getUseGradient;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
@@ -88,7 +88,8 @@ public class BackgroundChipPreference extends DialogPreference {
     protected void onClick() {
         bottomSheetDialog = new BottomSheetDialog(getContext());
         mAccentColor = ThemeUtils.getPrimaryColor(getContext());
-        SharedPreferences prefs = getSharedPreferences();
+        SharedPreferences prefs = PreferenceHelper.getModulePrefs();
+
 
         // def props
         backgroundChipStyle = prefs.getInt(getStyle(getKey()), 0);
@@ -106,6 +107,7 @@ public class BackgroundChipPreference extends DialogPreference {
         gradientType = GradientDrawable.LINEAR_GRADIENT;
         strokeWidth = prefs.getInt(getStrokeWidth(getKey()), 10);
         strokeColor = prefs.getInt(getStrokeColor(getKey()), mAccentColor);
+        roundCorners = prefs.getBoolean(getRoundedCorners(getKey()), false);
         topSxR = prefs.getInt(getTopSxR(getKey()), 28);
         topDxR = prefs.getInt(getTopDxR(getKey()), 28);
         bottomSxR = prefs.getInt(getBottomSxR(getKey()), 28);
@@ -296,8 +298,8 @@ public class BackgroundChipPreference extends DialogPreference {
             gradientDrawable.setCornerRadii(new float[]{
                     dp2px(getContext(), topSxR), dp2px(getContext(), topSxR),
                     dp2px(getContext(), topDxR), dp2px(getContext(), topDxR),
-                    dp2px(getContext(), bottomSxR), dp2px(getContext(), bottomSxR),
-                    dp2px(getContext(), bottomDxR), dp2px(getContext(), bottomDxR)
+                    dp2px(getContext(), bottomDxR), dp2px(getContext(), bottomDxR),
+                    dp2px(getContext(), bottomSxR), dp2px(getContext(), bottomSxR)
             });
         } else {
             gradientDrawable.setCornerRadius(0);

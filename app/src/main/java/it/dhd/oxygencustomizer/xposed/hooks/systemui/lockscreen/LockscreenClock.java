@@ -373,6 +373,7 @@ public class LockscreenClock extends XposedMods {
         } else {
             if (mClockView != null && mClockView.getVisibility() != View.VISIBLE) mClockView.setVisibility(View.VISIBLE);
             if (mMediaHostContainer != null && mMediaHostContainer.getVisibility() != View.VISIBLE) mMediaHostContainer.setVisibility(View.VISIBLE);
+            return;
         }
 
 

@@ -28,4 +28,24 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock" />
 
     </PreferenceCategory>
+
+    <!-- <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/qs_header_misc"
+        search:ignore="true">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="@string/qs_header_system_icons_chip"
+            android:key="qs_header_system_icons_chip_switch"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.BackgroundChipPreference
+            app:iconSpaceReserved="false"
+            android:title="@string/qs_header_system_icons_chip_style"
+            android:key="qs_header_system_icons_chip" />
+
+    </PreferenceCategory> -->
 </PreferenceScreen>
