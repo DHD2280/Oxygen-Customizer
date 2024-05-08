@@ -131,7 +131,7 @@
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="lockscreen_top_margin"
-            app:defaultValue="100"
+            app:defaultValue="0"
             app:maxVal="600"
             app:minVal="0"
             android:title="@string/lockscreen_clock_top_margin_title" />
