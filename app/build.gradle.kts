@@ -117,9 +117,10 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
 
     // Material Design
-    implementation("com.google.android.material:material:1.12.0-beta01")
+    implementation("com.google.android.material:material:1.12.0")
 
     // Preference
+    //noinspection KtxExtensionAvailable
     implementation("androidx.preference:preference:1.2.1")
     implementation("org.apache.commons:commons-text:${rootProject.extra["commonsTextVersion"]}")
     // SwipeRefreshLayout
@@ -150,6 +151,10 @@ dependencies {
     implementation("com.crossbowffs.remotepreferences:remotepreferences:0.8")
 
     implementation("com.github.tiagohm.MarkdownView:library:0.19.0")
+
+    //Google Subject Segmentation - MLKit
+    implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
+    implementation("com.google.android.gms:play-services-base:18.4.0")
 }
 
 tasks.register("printVersionName") {

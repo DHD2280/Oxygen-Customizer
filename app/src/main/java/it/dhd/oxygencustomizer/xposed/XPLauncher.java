@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
@@ -29,6 +30,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.IRootProviderProxy;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
@@ -119,7 +121,10 @@ public class XPLauncher implements ServiceConnection {
     }
 
     private void loadModpacks(XC_LoadPackage.LoadPackageParam lpparam) {
-        forceConnectRootService();
+        if (Arrays.asList(ResourceManager.modRes.getStringArray(R.array.root_requirement)).contains(lpparam.packageName)) {
+            log("Root required package: " + lpparam.packageName);
+            forceConnectRootService();
+        }
         for (Class<? extends XposedMods> mod : ModPacks.getMods(lpparam.packageName)) {
             try {
                 XposedMods instance = mod.getConstructor(Context.class).newInstance(mContext);

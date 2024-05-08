@@ -144,7 +144,7 @@ public class UpdateFragment extends Fragment {
 
     private void installApk(String downloadPath) {
         Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(
-                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(downloadPath)),
+                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(downloadPath)),
                 "application/vnd.android.package-archive");
         promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

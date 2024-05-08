@@ -594,6 +594,7 @@ public class PreferenceHelper {
 
             // Lockscreen
             case LOCKSCREEN_FINGERPRINT_SCALING -> instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
+            case "DWOpacity" -> instance.mPreferences.getSliderInt("DWOpacity", 192) + "dp";
 
             // Lockscreen Clock
             case LOCKSCREEN_CLOCK_LINE_HEIGHT -> instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 100) + "dp";

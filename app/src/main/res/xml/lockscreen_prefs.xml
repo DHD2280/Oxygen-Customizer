@@ -92,6 +92,30 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/depth_wallpaper_category"
+        app:iconSpaceReserved="false">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        app:allowDividerAbove="true"
+        android:key="DWallpaperEnabled"
+        android:summary="@string/depth_wallpaper_summary"
+        android:title="@string/depth_wallpaper_title"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="DWOpacity"
+        android:title="@string/depth_wallpaper_opacity_title"
+        app:defaultValue="192"
+        app:iconSpaceReserved="false"
+        app:maxVal="255"
+        app:minVal="25"
+        app:tickInterval="1"
+        app:valueCount="1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="lockscreen_misc_category"
         android:title="@string/misc"
         app:iconSpaceReserved="false">

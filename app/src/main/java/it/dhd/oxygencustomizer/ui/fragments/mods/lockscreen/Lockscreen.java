@@ -51,6 +51,7 @@ import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
@@ -91,6 +92,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreferenceCompat;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
     @Override
@@ -185,6 +188,14 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         if (hideStatusbar != null) {
             hideStatusbar.setOnPreferenceChangeListener(listener);
         }
+
+        new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->
+                findPreference("DWallpaperEnabled")
+                        .setSummary(
+                                moduleAvailabilityResponse.areModulesAvailable()
+                                        ? R.string.depth_wallpaper_model_ready
+                                        : R.string.depth_wallpaper_model_not_available));
+
     }
 
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
@@ -202,6 +213,31 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     }
                 }
             });
+
+    @Override
+    public void updateScreen(String key) {
+        super.updateScreen(key);
+
+        if (key == null) return;
+
+        switch (key) {
+            case "DWallpaperEnabled":
+                try {
+                    boolean DepthEffectEnabled = mPreferences.getBoolean("DWallpaperEnabled", false);
+
+                    if (DepthEffectEnabled) {
+                        new MaterialAlertDialogBuilder(getContext(), R.style.MaterialComponents_MaterialAlertDialog)
+                                .setTitle(R.string.depth_effect_alert_title)
+                                .setMessage(getString(R.string.depth_effect_alert_body, getString(R.string.sysui_restart_needed)))
+                                .setPositiveButton(R.string.depth_effect_ok_btn, (dialog, which) -> AppUtils.restartScope("systemui"))
+                                .setCancelable(false)
+                                .show();
+                    }
+                } catch (Exception ignored) {
+                }
+                break;
+        }
+    }
 
     public static class LockscreenClock extends ControlledPreferenceFragmentCompat {
         @Override

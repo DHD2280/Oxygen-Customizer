@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.IRootProviderProxy;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 
 public class RootProviderProxy extends Service {
     @Nullable
@@ -43,7 +45,7 @@ public class RootProviderProxy extends Service {
             catch (Throwable ignored){}
             rootGranted = Shell.getShell().isRoot();
 
-            rootAllowedPacks = Arrays.asList(context.getResources().getStringArray(R.array.xposed_scope));
+            rootAllowedPacks = Arrays.asList(context.getResources().getStringArray(R.array.root_requirement));
         }
 
         /** @noinspection RedundantThrows*/
@@ -58,6 +60,44 @@ public class RootProviderProxy extends Service {
             catch (Throwable t)
             {
                 return new String[0];
+            }
+        }
+
+        @Override
+        public void extractSubject(Bitmap input, String resultPath) throws RemoteException {
+            ensureEnvironment();
+
+            try {
+                new BitmapSubjectSegmenter(getApplicationContext()).segmentSubject(input, new BitmapSubjectSegmenter.SegmentResultListener() {
+                    @Override
+                    public void onSuccess(Bitmap result) {
+                        try {
+                            File tempFile = File.createTempFile("lswt", ".png");
+
+                            Log.d(TAG,"DepthWallpaper extractSubject: " + tempFile.getAbsolutePath() + " -> " + resultPath);
+
+                            FileOutputStream outputStream = new FileOutputStream(tempFile);
+                            result.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+
+                            outputStream.close();
+                            result.recycle();
+
+                            Shell.cmd("cp -F " + tempFile.getAbsolutePath() + " " + resultPath).exec();
+                            Shell.cmd("chmod 644 " + resultPath).exec();
+                            Log.d(TAG, "DepthWallpaper onSuccess: BitmapSubjectSegmenter " + resultPath);
+                            Log.d(TAG, "DepthWallpaper onSuccess: BitmapSubjectSegmenter");
+                        } catch (Throwable t) {
+                            Log.e(TAG, "onSuccess: BitmapSubjectSegmenter", t);
+                        }
+                    }
+
+                    @Override
+                    public void onFail() {
+                        Log.d(TAG, "onFail: BitmapSubjectSegmenter");
+                    }
+                });
+            } catch (Throwable t) {
+                Log.e(TAG, "extractSubject: BitmapSubjectSegmenter", t);
             }
         }
 

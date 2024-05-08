@@ -215,6 +215,27 @@ public class Constants {
 
         }
 
+        public static class QsHeaderSystemIcons {
+
+            public static final String QS_SYSTEM_ICON_CHIP_SWITCH = "qs_header_system_icons_chip_switch";
+            public static final String QS_SYSTEM_ICON_CHIP = "qs_header_system_icons_chip";
+
+            public static final String[] QS_HEADER_SYSTEM_ICON_CHIP = {
+                    QS_SYSTEM_ICON_CHIP_SWITCH,
+                    getStyle(QS_SYSTEM_ICON_CHIP),
+                    getUseGradient(QS_SYSTEM_ICON_CHIP),
+                    getGradientNum(QS_SYSTEM_ICON_CHIP, 1),
+                    getGradientNum(QS_SYSTEM_ICON_CHIP, 2),
+                    getGradientOrientation(QS_SYSTEM_ICON_CHIP),
+                    getStrokeWidth(QS_SYSTEM_ICON_CHIP),
+                    getRoundedCorners(QS_SYSTEM_ICON_CHIP),
+                    getTopSxR(QS_SYSTEM_ICON_CHIP),
+                    getTopDxR(QS_SYSTEM_ICON_CHIP),
+                    getBottomSxR(QS_SYSTEM_ICON_CHIP),
+                    getBottomDxR(QS_SYSTEM_ICON_CHIP)
+            };
+        }
+
         public static class QsHeaderClock {
             // Custom Switch
             public static final String QS_HEADER_CLOCK_CUSTOM_ENABLED = "qs_header_clock_custom_enabled";
@@ -251,44 +272,6 @@ public class Constants {
             public static final String QS_HEADER_CLOCK_COLOR_CODE_ACCENT3 = "qs_header_clock_color_code_accent3";
             public static final String QS_HEADER_CLOCK_COLOR_CODE_TEXT1 = "qs_header_clock_color_code_text1";
             public static final String QS_HEADER_CLOCK_COLOR_CODE_TEXT2 = "qs_header_clock_color_code_text2";
-
-            public static String getStyle(String key) {
-                return key + "_STYLE";
-            }
-
-            public static String getUseAccentColor(String key) {
-                return key + "_USE_ACCENT_COLOR";
-            }
-            public static String getUseGradient(String key) {
-                return key + "_USE_GRADIENT";
-            }
-            public static String getGradientNum(String key, int num) {
-                return key + "_GRADIENT_" + num;
-            }
-            public static String getGradientOrientation(String key) {
-                return key + "_GRADIENT_ORIENTATION";
-            }
-            public static String getStrokeWidth(String key) {
-                return key + "_STROKE_WIDTH";
-            }
-            public static String getStrokeColor(String key) {
-                return key + "_STROKE_COLOR";
-            }
-            public static String getRoundedCorners(String key) {
-                return key + "_ROUNDED_CORNERS";
-            }
-            public static String getTopSxR(String key) {
-                return key + "_TOP_LEFT_RADIUS";
-            }
-            public static String getTopDxR(String key) {
-                return key + "_TOP_RIGHT_RADIUS";
-            }
-            public static String getBottomSxR(String key) {
-                return key + "_BOTTOM_LEFT_RADIUS";
-            }
-            public static String getBottomDxR(String key) {
-                return key + "_BOTTOM_RIGHT_RADIUS";
-            }
 
             public static final String[] QS_HEADER_PREFS = {
                     QS_HEADER_CLOCK_STOCK_RED_MODE,
@@ -539,5 +522,53 @@ public class Constants {
 
     public static final String CLOCK_TAG = "clock";
     public static final String DATE_TAG = "date";
+
+    public static String getStyle(String key) {
+        return key + "_STYLE";
+    }
+
+    public static String getUseAccentColor(String key) {
+        return key + "_USE_ACCENT_COLOR";
+    }
+    public static String getUseGradient(String key) {
+        return key + "_USE_GRADIENT";
+    }
+    public static String getGradientNum(String key, int num) {
+        return key + "_GRADIENT_" + num;
+    }
+    public static String getGradientOrientation(String key) {
+        return key + "_GRADIENT_ORIENTATION";
+    }
+    public static String getStrokeWidth(String key) {
+        return key + "_STROKE_WIDTH";
+    }
+    public static String getStrokeColor(String key) {
+        return key + "_STROKE_COLOR";
+    }
+    public static String getRoundedCorners(String key) {
+        return key + "_ROUNDED_CORNERS";
+    }
+    public static String getTopSxR(String key) {
+        return key + "_TOP_LEFT_RADIUS";
+    }
+    public static String getTopDxR(String key) {
+        return key + "_TOP_RIGHT_RADIUS";
+    }
+    public static String getBottomSxR(String key) {
+        return key + "_BOTTOM_LEFT_RADIUS";
+    }
+    public static String getBottomDxR(String key) {
+        return key + "_BOTTOM_RIGHT_RADIUS";
+    }
+
+    public static String getLockScreenSubjectCachePath(Context context)
+    {
+        return context.getCacheDir().getAbsolutePath() + "/lswt.png";
+    }
+
+    public static String getLockScreenBitmapCachePath(Context context)
+    {
+        return context.getCacheDir().getAbsolutePath() + "/lsw.jpg";
+    }
 
 }

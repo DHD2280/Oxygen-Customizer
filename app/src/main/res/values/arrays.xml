@@ -8,6 +8,9 @@
         <item>com.android.launcher</item>
         <item>com.oplus.screenshot</item>
     </string-array>
+    <string-array name="root_requirement">
+        <item>com.android.systemui</item> <!-- systemUI -->
+    </string-array>
 
     <!-- Quick Pulldown -->
     <string-array name="quick_pulldown_side_entries">
