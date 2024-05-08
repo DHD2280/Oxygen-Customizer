@@ -274,8 +274,8 @@ public class GestureNavbarManager extends XposedMods {
         }
 
 
-        float topLeft = backGestureHeightFractionLeft.get(1) / 100f;
-        float topRight = backGestureHeightFractionRight.get(1) / 100f;
+        float topLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(1) / 100f : 1f;
+        float topRight = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionRight.get(1) / 100f : 1f;
         float bottomLeft = backGestureHeightFractionLeft.size() == 2 ? backGestureHeightFractionLeft.get(0) / 100f : 0 / 100f;
         float bottomRight = backGestureHeightFractionRight.size() == 2 ? backGestureHeightFractionRight.get(0) / 100f : 0 / 100f;
 
