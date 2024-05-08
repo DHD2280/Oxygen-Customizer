@@ -126,10 +126,6 @@ public class HeaderImage extends XposedMods {
         } catch (Throwable t) {
             OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); // OOS 13
         }
-        Class<?> QuickStatusBarHeader = null;
-        try {
-           QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);;
-        } catch (Throwable ignored){}
 
         try {
             log(TAG + "Hooking");
@@ -168,22 +164,6 @@ public class HeaderImage extends XposedMods {
 
         } catch (Throwable ignored) {}
 
-        try {
-            if (QuickStatusBarHeader != null) {
-                hookAllMethods(QuickStatusBarHeader, "onMeasure", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        View mDatePrivacyView = (View) getObjectField(param.thisObject, "mPrivacyContainer");
-                        int mTopViewMeasureHeight = getIntField(param.thisObject, "mTopViewMeasureHeight");
-
-                        if ((int) callMethod(mDatePrivacyView, "getMeasuredHeight") != mTopViewMeasureHeight) {
-                            setObjectField(param.thisObject, "mTopViewMeasureHeight", callMethod(mDatePrivacyView, "getMeasuredHeight"));
-                            callMethod(param.thisObject, "updateAnimators");
-                        }
-                    }
-                });
-            }
-        } catch (Throwable ignored) {}
     }
 
     @Override
