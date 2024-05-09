@@ -70,6 +70,41 @@
             android:title="@string/notif_default_expansion_title"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="customizeClearButton"
+            android:title="@string/customize_clear_all_button"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="linkBackgroundAccent"
+            android:title="@string/clear_all_link_bg_accent"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="clearButtonBgColor"
+            android:title="@string/clear_all_bg_color"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="0x555555"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:key="linkIconAccent"
+            android:title="@string/clear_all_link_bg_icon_accent"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="clearButtonIconColor"
+            android:title="@string/clear_all_icon_color"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="0xffffff"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

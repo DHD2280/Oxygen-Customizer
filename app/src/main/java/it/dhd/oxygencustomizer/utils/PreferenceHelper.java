@@ -65,6 +65,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_LINK_ACCENT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -177,6 +182,19 @@ public class PreferenceHelper {
             case "status_bar_clock_background_chip" -> {
                 return instance.mPreferences.getBoolean("status_bar_clock_background_chip_switch", false);
             }
+
+            // Notification
+            case CLEAR_BUTTON_BG_LINK_ACCENT,
+                    CLEAR_BUTTON_ICON_LINK_ACCENT -> instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
+            case CLEAR_BUTTON_BG_COLOR -> {
+                return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false) &&
+                        !instance.mPreferences.getBoolean(CLEAR_BUTTON_BG_LINK_ACCENT, false);
+            }
+            case CLEAR_BUTTON_ICON_COLOR -> {
+                return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false) &&
+                        !instance.mPreferences.getBoolean(CLEAR_BUTTON_ICON_LINK_ACCENT, false);
+            }
+
 
             // Battery Icon
             case "battery_icon_style",

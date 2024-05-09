@@ -8,12 +8,21 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_ALL_BUTTON_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_LINK_ACCENT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.Collection;
 
@@ -39,6 +48,12 @@ public class StatusbarNotification extends XposedMods {
     private Object Scroller;
     private Object NotifCollection = null;
 
+    private ImageView mClearAllButton = null;
+
+    // Close All Notification Button
+    private boolean customizeClearButton = false, linkBackgroundAccent = true, linkIconAccent = false;
+    private int clearButtonBgColor = Color.GRAY, clearButtonIconColor = Color.WHITE;
+    private static Drawable defaultClearAllIcon = null, defaultClearAllBg = null;
 
     public StatusbarNotification(Context context) {
         super(context);
@@ -51,15 +66,23 @@ public class StatusbarNotification extends XposedMods {
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
         notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
+        customizeClearButton = Xprefs.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
+        linkBackgroundAccent = Xprefs.getBoolean(CLEAR_BUTTON_BG_LINK_ACCENT, true);
+        linkIconAccent = Xprefs.getBoolean(CLEAR_BUTTON_ICON_LINK_ACCENT, false);
+        clearButtonBgColor = Xprefs.getInt(CLEAR_BUTTON_BG_COLOR, Color.GRAY);
+        clearButtonIconColor = Xprefs.getInt(CLEAR_BUTTON_ICON_COLOR, Color.WHITE);
 
-
+        if (Key.length > 0) {
+            for (String k : CLEAR_ALL_BUTTON_PREFS)
+                if (k.equals(Key[0])) {
+                    updateButton();
+                }
+        }
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
-
-
 
         Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
 
@@ -164,6 +187,26 @@ public class StatusbarNotification extends XposedMods {
             }
         });
 
+        Class<?> OplusClearAllButton;
+        try {
+            OplusClearAllButton = findClass("com.oplus.systemui.statusbar.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 14
+        }
+        catch (Throwable t) {
+            OplusClearAllButton = findClass("com.oplusos.systemui.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 13
+        }
+
+        hookAllConstructors(OplusClearAllButton, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                mClearAllButton = (ImageView) param.thisObject;
+                if (defaultClearAllIcon == null && mClearAllButton != null) {
+                    defaultClearAllIcon = mClearAllButton.getDrawable();
+                }
+                if (defaultClearAllBg == null && mClearAllButton != null) {
+                    defaultClearAllBg = mClearAllButton.getBackground();
+                }
+            }
+        });
     }
 
     public void expandAll(boolean expand) {
@@ -198,5 +241,31 @@ public class StatusbarNotification extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
+
+    private void updateButton() {
+        if (mClearAllButton == null) return;
+        if (customizeClearButton) {
+            Drawable customBg = defaultClearAllBg;
+            if (linkBackgroundAccent) {
+                customBg.setTint(getPrimaryColor(mContext));
+            } else {
+                customBg.setTint(clearButtonBgColor);
+            }
+            Drawable icon = defaultClearAllIcon;
+            if (linkIconAccent)
+                icon.setTint(getPrimaryColor(mContext));
+            else
+                icon.setTint(clearButtonIconColor);
+            mClearAllButton.setBackground(customBg);
+            mClearAllButton.setImageDrawable(icon);
+        } else {
+            if (defaultClearAllIcon != null) {
+                mClearAllButton.setImageDrawable(defaultClearAllBg);
+            }
+            if (defaultClearAllBg != null) {
+                mClearAllButton.setBackground(defaultClearAllBg);
+            }
+        }
+    }
 
 }

@@ -353,7 +353,6 @@ public class Constants {
         public static class LockscreenClock {
 
             public static final List<Integer> LOCKSCREEN_CLOCK_IMAGES = Arrays.asList(25);
-
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH = "lockscreen_custom_color_switch";
@@ -391,6 +390,21 @@ public class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT3,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT1,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2
+            };
+        }
+
+        public static class StatusbarNotificationPrefs {
+            public static final String CUSTOMIZE_CLEAR_BUTTON = "customizeClearButton";
+            public static final String CLEAR_BUTTON_BG_LINK_ACCENT = "linkBackgroundAccent";
+            public static final String CLEAR_BUTTON_BG_COLOR = "clearButtonBgColor";
+            public static final String CLEAR_BUTTON_ICON_LINK_ACCENT = "linkIconAccent";
+            public static final String CLEAR_BUTTON_ICON_COLOR = "clearButtonIconColor";
+            public static final String[] CLEAR_ALL_BUTTON_PREFS = {
+                    CUSTOMIZE_CLEAR_BUTTON,
+                    CLEAR_BUTTON_BG_LINK_ACCENT,
+                    CLEAR_BUTTON_BG_COLOR,
+                    CLEAR_BUTTON_ICON_LINK_ACCENT,
+                    CLEAR_BUTTON_ICON_COLOR
             };
         }
 
@@ -563,12 +577,14 @@ public class Constants {
 
     public static String getLockScreenSubjectCachePath(Context context)
     {
-        return context.getCacheDir().getAbsolutePath() + "/lswt.png";
+        return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lswt.png";
+        //return context.getCacheDir().getAbsolutePath() + "/lswt.png";
     }
 
     public static String getLockScreenBitmapCachePath(Context context)
     {
-        return context.getCacheDir().getAbsolutePath() + "/lsw.jpg";
+        return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lsw.jpg";
+        //return context.getCacheDir().getAbsolutePath() + "/lsw.jpg";
     }
 
 }
