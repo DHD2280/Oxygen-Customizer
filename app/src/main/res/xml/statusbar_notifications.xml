@@ -61,6 +61,14 @@
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off" />
 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/notif_default_expansion_entries"
+            android:entryValues="@array/notif_default_expansion_values"
+            android:key="notificationDefaultExpansion"
+            android:summary="%s"
+            android:title="@string/notif_default_expansion_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 

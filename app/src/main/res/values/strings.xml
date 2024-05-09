@@ -97,6 +97,9 @@
     <string name="remove_dev_mode_notification">Remove dev mode notification</string>
     <string name="remove_flashlight_notification">Remove flashlight notification</string>
     <string name="remove_low_battery_notification">Remove low battery notification</string>
+    <string name="notif_default_expansion_title">Notification default expansion</string>
+    <string name="notif_always_expand">Always expand</string>
+    <string name="notif_always_collapse">Always collapse</string>
 
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->

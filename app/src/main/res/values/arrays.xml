@@ -221,6 +221,18 @@
         <!-- <item>@string/status_bar_date_format_custom</item> -->
     </string-array>
 
+    <string-array name="notif_default_expansion_entries">
+        <item>@string/default_value</item>
+        <item>@string/notif_always_expand</item>
+        <item>@string/notif_always_collapse</item>
+    </string-array>
+
+    <string-array name="notif_default_expansion_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <!-- Lockscreen Stock Red One -->
     <string-array name="lockscreen_stock_clock_red_one_entries" translatable="false">
         <item>@string/default_value</item>

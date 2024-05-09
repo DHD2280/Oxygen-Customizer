@@ -1,7 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
@@ -12,6 +14,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+
+import java.util.Collection;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -26,6 +30,16 @@ public class StatusbarNotification extends XposedMods {
     private View mStatusBar;
     private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery;
 
+    // Notification Expander
+    private static final int DEFAULT = 0;
+    private static final int EXPAND_ALWAYS = 1;
+    /** @noinspection unused*/
+    private static final int COLLAPSE_ALWAYS = 2;
+    private static int notificationDefaultExpansion = DEFAULT;
+    private Object Scroller;
+    private Object NotifCollection = null;
+
+
     public StatusbarNotification(Context context) {
         super(context);
     }
@@ -36,6 +50,8 @@ public class StatusbarNotification extends XposedMods {
         removeDevMode = Xprefs.getBoolean("remove_dev_mode", false);
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
+        notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
+
 
     }
 
@@ -116,6 +132,65 @@ public class StatusbarNotification extends XposedMods {
             }
         });
 
+        Class<?> NotificationStackScrollLayoutClass = findClass("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout", lpparam.classLoader);
+        Class<?> NotifCollectionClass = findClassIfExists("com.android.systemui.statusbar.notification.collection.NotifCollection", lpparam.classLoader);
+        Class<?> NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+
+        //region default notification state
+        hookAllMethods(NotificationPanelViewControllerClass, "notifyExpandingStarted", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
+                if(notificationDefaultExpansion != DEFAULT)
+                    expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
+            }
+        });
+        //endregion
+
+        //grab notification container manager
+        if (NotifCollectionClass != null) {
+            hookAllConstructors(NotifCollectionClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    NotifCollection = param.thisObject;
+                }
+            });
+        }
+
+        //grab notification scroll page
+        hookAllConstructors(NotificationStackScrollLayoutClass, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Scroller = param.thisObject;
+            }
+        });
+
+    }
+
+    public void expandAll(boolean expand) {
+        if (NotifCollection == null) return;
+
+        if (!expand) {
+            callMethod(
+                    Scroller,
+                    "setOwnScrollY",
+                    /* pisition */0,
+                    /* animate */ true);
+        }
+
+        Collection<Object> entries;
+        //noinspection unchecked
+        entries = (Collection<Object>) getObjectField(NotifCollection, "mReadOnlyNotificationSet");
+        for (Object entry : entries.toArray()) {
+            Object row = getObjectField(entry, "row");
+            if (row != null) {
+                setRowExpansion(row, expand);
+            }
+        }
+
+    }
+
+    private void setRowExpansion(Object row, boolean expand) {
+        callMethod(row, "setUserExpanded", expand, true);
     }
 
     @Override
