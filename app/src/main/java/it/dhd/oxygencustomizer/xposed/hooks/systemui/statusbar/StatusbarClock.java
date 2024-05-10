@@ -483,8 +483,6 @@ public class StatusbarClock extends XposedMods {
     private void updateClockColor() {
         if (mClockCustomColor)
             mClockView.post(() -> ((TextView)mClockView).setTextColor(mClockColor));
-        else
-            mClockView.post(() -> ((TextView)mClockView).setTextColor(Color.WHITE));
     }
 
     private void placeClock() {
