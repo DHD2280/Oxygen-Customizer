@@ -771,7 +771,7 @@ public class HeaderClock extends XposedMods {
         float clockScale = Xprefs.getSliderFloat(QS_HEADER_CLOCK_TEXT_SCALING, 1.0f);
         int sideMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_LEFT_MARGIN, 0);
         int topMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_TOP_MARGIN, 8);
-        String customFont = Environment.getExternalStorageDirectory() + "/.oxygencustomizer_files/header_clock_font.ttf";
+        String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/header_clock_font.ttf";
         int mAccent = getPrimaryColor(mContext);
         boolean customColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
