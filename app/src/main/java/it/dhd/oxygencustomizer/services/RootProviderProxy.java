@@ -85,7 +85,6 @@ public class RootProviderProxy extends Service {
                             Shell.cmd("cp -F " + tempFile.getAbsolutePath() + " " + resultPath).exec();
                             Shell.cmd("chmod 644 " + resultPath).exec();
                             Log.d(TAG, "DepthWallpaper onSuccess: BitmapSubjectSegmenter " + resultPath);
-                            Log.d(TAG, "DepthWallpaper onSuccess: BitmapSubjectSegmenter");
                         } catch (Throwable t) {
                             Log.e(TAG, "onSuccess: BitmapSubjectSegmenter", t);
                         }
