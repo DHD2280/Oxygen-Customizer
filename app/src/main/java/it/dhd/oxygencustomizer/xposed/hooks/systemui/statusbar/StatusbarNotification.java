@@ -157,7 +157,12 @@ public class StatusbarNotification extends XposedMods {
 
         Class<?> NotificationStackScrollLayoutClass = findClass("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout", lpparam.classLoader);
         Class<?> NotifCollectionClass = findClassIfExists("com.android.systemui.statusbar.notification.collection.NotifCollection", lpparam.classLoader);
-        Class<?> NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        Class<?> NotificationPanelViewControllerClass;
+        try {
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        } catch (Throwable e) {
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
+        }
 
         //region default notification state
         hookAllMethods(NotificationPanelViewControllerClass, "notifyExpandingStarted", new XC_MethodHook() {
@@ -205,6 +210,7 @@ public class StatusbarNotification extends XposedMods {
                 if (defaultClearAllBg == null && mClearAllButton != null) {
                     defaultClearAllBg = mClearAllButton.getBackground();
                 }
+                updateButton();
             }
         });
     }

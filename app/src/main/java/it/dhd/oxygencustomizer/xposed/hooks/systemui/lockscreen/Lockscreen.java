@@ -201,7 +201,11 @@ public class Lockscreen extends XposedMods {
         hookLockIcon(lpparam);
 
         // Custom Carrier
-        hookCarrier(lpparam);
+        try {
+            hookCarrier(lpparam);
+        } catch (Throwable t) {
+            log(TAG + "Carrier not found");
+        }
 
     }
 
