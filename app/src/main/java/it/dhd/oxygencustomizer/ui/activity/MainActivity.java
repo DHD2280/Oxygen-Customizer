@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ import com.topjohnwu.superuser.Shell;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -149,6 +151,14 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         setupBottomNavigationView();
 
         colorPickerDialog = ColorPickerDialog.newBuilder();
+
+        if (!AppUtils.hasStoragePermission()) {
+            AppUtils.requestStoragePermission(this);
+        }
+        File modDir = new File(Constants.XPOSED_RESOURCE_TEMP_DIR);
+        if (!modDir.exists()) {
+            Shell.cmd("mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR).exec();
+        }
     }
 
     private void setupNavigation() {
