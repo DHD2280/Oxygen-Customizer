@@ -47,7 +47,7 @@
     <!-- Battery Icon Strings -->
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
-    <!-- Statusbar Icons Strinsg -->
+    <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Tiles Customizations -->
@@ -61,16 +61,19 @@
     <!-- Time color -->
     <!-- Separator Color, Only for first clock -->
     <!-- QS Header Clock Margins -->
+    <!-- QS Header Misc -->
     <!-- Chip Styles Strings -->
     <!-- Launcher Mods -->
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
+    <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
+    <!-- Pulse Gravity n Mirror Options -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
     <!-- Volume panel -->
@@ -83,5 +86,6 @@
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
     <!-- Omni Jaws Strings -->
+    <!-- Lockscreen Weather styles -->
     <!-- Weather -->
 </resources>
