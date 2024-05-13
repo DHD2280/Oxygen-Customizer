@@ -70,6 +70,7 @@ public class PulseViewHook extends XposedMods {
     private boolean mShowFlash = true;
     private int mWaveOpacity = 200;
     private float mWaveStroke = 5f;
+    private boolean DWallpaperEnabled = false;
 
 
     public PulseViewHook(Context context) {
@@ -122,6 +123,8 @@ public class PulseViewHook extends XposedMods {
         mWaveOpacity = Xprefs.getSliderInt(PULSE_LINE_WAVE_OPACITY, 200);
 
         mPulseEnabled = mNavBarPulse || mLockScreenPulse || mAmbientPulse;
+
+        DWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
 
         if (Key.length > 0) {
             for(String PulsePref : PULSE_PREFS) {
@@ -243,7 +246,11 @@ public class PulseViewHook extends XposedMods {
                 if (PulseControllerImpl.hasInstance()) {
                     //log(TAG + "Keyguard is showing: " + param.args[0]);
                     PulseControllerImpl.getInstance().setKeyguardShowing((boolean) param.args[0]);
-                    if (mLockScreenPulse) new Handler(Looper.getMainLooper()).postDelayed(() -> updateLockscreenIcons(), 200);
+                    if (VisualizerView.getInstance() != null && DWallpaperEnabled) {
+                        VisualizerView.getInstance().bringToFront();
+                        VisualizerView.getInstance().requestLayout();
+                    }
+                    updateLockscreenIcons();
                 }
             }
         });
