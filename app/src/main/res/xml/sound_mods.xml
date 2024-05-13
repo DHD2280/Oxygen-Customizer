@@ -36,39 +36,6 @@
         android:title="@string/volume_panel_category"
         app:iconSpaceReserved="false">
 
-        <!-- Volume Styles
-        <ListPreference
-            android:key="custom_volume_styles"
-            android:title="@string/volume_style_title"
-            app:iconSpaceReserved="false"
-            android:entries="@array/volume_styles_entries"
-            android:entryValues="@array/volume_styles_values"
-            android:summary="%s"
-            android:defaultValue="0" />
-
-        <SwitchPreferenceCompat
-            android:key="VOLUME_TEXTVIEW"
-            android:title="@string/volume_persen_switch_title"
-            app:iconSpaceReserved="false"
-            android:summary="@string/volume_persen_switch_summary"
-            android:defaultValue="false" />
-
-        <ListPreference
-            android:key="VOLUME_TEXTVIEW_STYLE"
-            android:title="@string/volume_persen_style_title"
-            android:icon="@drawable/ic_settings_sound"
-            android:summary="%s"
-            android:dialogTitle="@string/volume_persen_style_title"
-            android:entries="@array/volume_persen_style_entries"
-            android:dependency="VOLUME_TEXTVIEW"
-            android:entryValues="@array/volume_persen_style_values"
-            android:defaultValue="0" />-->
-
-        <!-- <SwitchPreferenceCompat
-            android:key="volume_panel_on_left"
-            app:iconSpaceReserved="false"
-            android:title="@string/volume_panel_on_left_title" /> -->
-
         <ListPreference
             android:key="volume_panel_position"
             app:iconSpaceReserved="false"
