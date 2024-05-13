@@ -65,6 +65,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
@@ -232,6 +236,12 @@ public class PreferenceHelper {
             // QuickSettings Prefs
             case "quick_pulldown_side", "quick_pulldown_length" -> {
                 return instance.mPreferences.getBoolean("quick_pulldown", false);
+            }
+            case QS_TRANSPARENCY_VAL -> {
+                return instance.mPreferences.getBoolean(QS_TRANSPARENCY_SWITCH, false);
+            }
+            case BLUR_RADIUS_VALUE -> {
+                return instance.mPreferences.getBoolean(QSPANEL_BLUR_SWITCH, false);
             }
 
             // Qs Tiles
@@ -571,7 +581,10 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_horizontal_columns", 4));
             case "quick_settings_tiles_vertical_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
-
+            case QS_TRANSPARENCY_VAL ->
+                    instance.mPreferences.getSliderInt(QS_TRANSPARENCY_VAL, 40) + "%";
+            case BLUR_RADIUS_VALUE ->
+                    instance.mPreferences.getSliderInt(BLUR_RADIUS_VALUE, 60) + "%";
             // Statusbar
             case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->
