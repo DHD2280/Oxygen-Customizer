@@ -293,6 +293,11 @@
     <string name="quick_settings_tiles_title">Quick Settings Tiles</string>
     <string name="quick_settings_tiles_number">Quick settings tile count settings</string>
     <string name="quick_settings_tiles_main">Customize Quick Settings Tiles</string>
+    <string name="qs_transparency">QS Transparency &amp; Blur</string>
+    <string name="qs_transparency_title">Customize QS Transparency</string>
+    <string name="qs_transparency_value">QS Transparency</string>
+    <string name="qs_transparency_blur_title">Window Level Blur</string>
+    <string name="qs_blur_intentisy">Blur Intensity</string>
     <string name="quick_settings_tiles_qqs">Quick QS Tiles</string>
     <string name="quick_settings_tiles_portrait">In portrait orientation</string>
     <string name="quick_settings_tiles_horizontal_rows">Quick Settings Rows</string>

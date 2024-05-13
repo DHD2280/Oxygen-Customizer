@@ -165,6 +165,12 @@ public class Constants {
                     QS_HEADER_IMAGE_ZOOM_TO_FIT
             };
         }
+        public static class QuickSettings {
+            public static final String QS_TRANSPARENCY_SWITCH = "qs_transparency_switch";
+            public static final String QS_TRANSPARENCY_VAL = "qs_transparency_value";
+            public static final String QSPANEL_BLUR_SWITCH = "qs_transparency_blur_switch";
+            public static final String BLUR_RADIUS_VALUE = "qs_transparency_blur_radius";
+        }
         public static class QsTiles {
             public static final String QS_CUSTOMIZE_TILES = "quick_settings_tiles_customize";
             public static final String QS_QUICK_TILES = "quick_settings_quick_tiles";
@@ -352,7 +358,7 @@ public class Constants {
         }
         public static class LockscreenClock {
 
-            public static final List<Integer> LOCKSCREEN_CLOCK_IMAGES = Arrays.asList(25);
+            public static final List<Integer> LOCKSCREEN_CLOCK_IMAGES = List.of(25);
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH = "lockscreen_custom_color_switch";

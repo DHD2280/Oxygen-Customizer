@@ -27,6 +27,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryStyleManag
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderImage;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTiles;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomization;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
@@ -69,6 +70,7 @@ public class ModPacks {
                     modPacks.add(StatusbarIcons.class);
                     modPacks.add(BatteryStyleManager.class);
                     // QS
+                    modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
                     modPacks.add(HeaderImage.class);

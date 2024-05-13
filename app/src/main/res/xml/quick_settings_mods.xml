@@ -30,6 +30,48 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        android:title="@string/qs_transparency"
+        search:ignore="true">
+
+        <SwitchPreferenceCompat
+            android:key="qs_transparency_switch"
+            app:iconSpaceReserved="false"
+            android:title="@string/qs_transparency_title"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_transparency_value"
+            android:title="@string/qs_transparency_value"
+            app:iconSpaceReserved="false"
+            app:defaultValue="40"
+            app:minVal="0"
+            app:maxVal="100"
+            app:tickInterval="1" />
+
+        <SwitchPreferenceCompat
+            android:key="qs_transparency_blur_switch"
+            app:iconSpaceReserved="false"
+            android:title="@string/qs_transparency_blur_title"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_transparency_blur_radius"
+            android:title="@string/qs_blur_intentisy"
+            app:iconSpaceReserved="false"
+            app:defaultValue="40"
+            app:minVal="0"
+            app:maxVal="100"
+            app:tickInterval="1" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/quick_pulldown"
         search:ignore="true">
 
