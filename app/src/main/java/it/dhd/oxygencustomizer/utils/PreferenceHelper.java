@@ -185,7 +185,9 @@ public class PreferenceHelper {
 
             // Notification
             case CLEAR_BUTTON_BG_LINK_ACCENT,
-                    CLEAR_BUTTON_ICON_LINK_ACCENT -> instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
+                    CLEAR_BUTTON_ICON_LINK_ACCENT -> {
+                return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
+            }
             case CLEAR_BUTTON_BG_COLOR -> {
                 return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false) &&
                         !instance.mPreferences.getBoolean(CLEAR_BUTTON_BG_LINK_ACCENT, false);

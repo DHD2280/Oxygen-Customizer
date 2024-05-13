@@ -210,7 +210,7 @@ public class StatusbarNotification extends XposedMods {
                 if (defaultClearAllBg == null && mClearAllButton != null) {
                     defaultClearAllBg = mClearAllButton.getBackground();
                 }
-                updateButton();
+                if (customizeClearButton) updateButton();
             }
         });
     }
