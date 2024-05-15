@@ -164,6 +164,9 @@ public class LineRenderer extends Renderer {
     @Override
     public void draw(Canvas canvas) {
         if (DEBUG) log("Pulse LineRenderer draw " + drawAmplitude + " " + amplitude);
+        if (mPoints == null) {
+            return;
+        }
         canvas.drawLines(mPoints, mPaint);
         if (drawAmplitude && mShowFlash) {
             canvas.drawLines(mPoints, mFlashPaint);
