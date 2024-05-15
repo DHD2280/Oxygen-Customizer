@@ -15,7 +15,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 import android.view.Gravity;
@@ -24,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.graphics.ColorUtils;
 
 import java.util.List;
@@ -40,9 +44,9 @@ public class VolumePanel extends XposedMods {
     private int mTimeOut;
     private int mDesiredTimeout;
     private boolean mDisableVolumeWarning;
-    private boolean customizeVolumeProgress, customizeVolumeIcon;
-    private boolean volumeProgressPrimary, volumeIconPrimary;
-    private int volumeProgressColor, volumeIconColor;
+    private boolean customizeVolumeProgress, customizeVolumeBg;
+    private boolean volumeProgressPrimary;
+    private int volumeProgressColor, volumeBgColor;
     private Object OVDI;
     private boolean sliderCustomizable = false;
 
@@ -58,19 +62,17 @@ public class VolumePanel extends XposedMods {
         mTimeOut = mDesiredTimeout * 1000;
         mDisableVolumeWarning = Xprefs.getBoolean("disable_volume_warning", false);
         customizeVolumeProgress = Xprefs.getBoolean("volume_panel_seekbar_color_enabled", false);
-        customizeVolumeIcon = Xprefs.getBoolean("volume_panel_icon_color_enabled", false);
+        customizeVolumeBg = Xprefs.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
         volumeProgressPrimary = Xprefs.getBoolean("volume_panel_seekbar_link_primary", false);
-        volumeIconPrimary = Xprefs.getBoolean("volume_panel_icon_accent", false);
         volumeProgressColor = Xprefs.getInt("volume_panel_seekbar_color", 0);
-        volumeIconColor = Xprefs.getInt("volume_panel_icon_color", 0);
+        volumeBgColor = Xprefs.getInt("volume_panel_seekbar_bg_color", Color.GRAY);
 
         if (Key.length > 0) {
             if (Key[0].equals("volume_panel_seekbar_color_enabled") ||
                     Key[0].equals("volume_panel_seekbar_link_primary") ||
                     Key[0].equals("volume_panel_seekbar_color") ||
-                    Key[0].equals("volume_panel_icon_color_enabled") ||
-                    Key[0].equals("volume_panel_icon_accent") ||
-                    Key[0].equals("volume_panel_icon_color")) {
+                    Key[0].equals("volume_panel_seekbar_bg_color_enabled") ||
+                    Key[0].equals("volume_panel_seekbar_bg_color")) {
                 updateVolumePanel();
             }
         }
@@ -116,7 +118,15 @@ public class VolumePanel extends XposedMods {
             }
         });
 
-
+        Class<?> VolumeDialogImpl = findClass("com.android.systemui.volume.VolumeDialogImpl", lpparam.classLoader);
+        hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (mDisableVolumeWarning) {
+                    param.setResult(null);
+                }
+            }
+        });
 
         hookAllConstructors(OplusVolumeDialogImpl, new XC_MethodHook() {
             @Override
@@ -138,87 +148,10 @@ public class VolumePanel extends XposedMods {
                     else
                         callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
                 }
-
-                if (customizeVolumeIcon) {
-                    ImageView icon = (ImageView) getObjectField(VolumeRow, "icon");
-                    int colorToApply = -1;
-                    if (volumeIconPrimary)
-                        colorToApply = getPrimaryColor(mContext);
-                    else
-                        colorToApply = volumeIconColor;
-
-                    if (colorToApply != -1) {
-                        int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, colorToApply, 1.0f);
-                        icon.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
-                    }
-                    callMethod(icon, "setSupportImageTintList", ColorStateList.valueOf(colorToApply));
-                    callMethod(slider, "setIcon", icon);
+                if (customizeVolumeBg) {
+                    callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
                 }
 
-            }
-        });
-
-        final XC_MethodHook volumeIconHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object VolumeRow = param.args[0];
-                Object slider = getObjectField(VolumeRow, "slider");
-
-                if (customizeVolumeIcon) {
-                    ImageView icon = (ImageView) getObjectField(VolumeRow, "icon");
-                    int colorToApply = -1;
-                    if (volumeIconPrimary)
-                        colorToApply = getPrimaryColor(mContext);
-                    else
-                        colorToApply = volumeIconColor;
-
-                    if (colorToApply != -1) {
-                        int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, colorToApply, 1.0f);
-                        icon.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
-                    }
-                    callMethod(icon, "setSupportImageTintList", ColorStateList.valueOf(colorToApply));
-                    callMethod(slider, "setIcon", icon);
-                }
-            }
-        };
-
-        Class<?> VolumeSeekBarChangeListener = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl$VolumeSeekBarChangeListener", lpparam.classLoader);
-        hookAllConstructors(VolumeSeekBarChangeListener, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object VolumeRow = getObjectField(param.thisObject, "mRow");
-
-                if (customizeVolumeIcon) {
-                    ImageView icon = (ImageView) getObjectField(VolumeRow, "icon");
-                    if (icon == null) return;
-                    int colorToApply = -1;
-                    if (volumeIconPrimary)
-                        colorToApply = getPrimaryColor(mContext);
-                    else
-                        colorToApply = volumeIconColor;
-
-                    if (colorToApply != -1) {
-                        int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, colorToApply, 1.0f);
-                        icon.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
-                    }
-                    callMethod(icon, "setSupportImageTintList", ColorStateList.valueOf(colorToApply));
-                }            }
-        });
-
-        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowH", volumeIconHook);
-
-        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowSliderH", volumeIconHook);
-        hookAllMethods(OplusVolumeDialogImpl, "updateVolumeRowTintH", volumeIconHook);
-        hookAllMethods(OplusVolumeDialogImpl, "refreshVisibleRow", volumeIconHook);
-
-
-        Class<?> VolumeDialogImpl = findClass("com.android.systemui.volume.VolumeDialogImpl", lpparam.classLoader);
-        hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (mDisableVolumeWarning) {
-                    param.setResult(null);
-                }
             }
         });
 
@@ -238,20 +171,8 @@ public class VolumePanel extends XposedMods {
                 else
                     callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
             }
-
-            if (customizeVolumeIcon) {
-                ImageView icon = (ImageView) getObjectField(VolumeRow, "icon");
-                int colorToApply = -1;
-                if (volumeIconPrimary)
-                    colorToApply = getPrimaryColor(mContext);
-                else
-                    colorToApply = volumeIconColor;
-
-                if (colorToApply != -1) {
-                    int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, colorToApply, 1.0f);
-                    icon.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
-                }
-                callMethod(slider, "setIcon", icon);
+            if (customizeVolumeBg) {
+                callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
             }
         }
     }

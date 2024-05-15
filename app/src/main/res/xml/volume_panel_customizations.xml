@@ -28,27 +28,19 @@
             app:iconSpaceReserved="false"
             android:defaultValue="0xffffffff" />
 
-        <!-- Not Ready Yet <SwitchPreference
-            android:key="volume_panel_icon_color_enabled"
-            android:title="@string/volume_panel_icon_color"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            app:iconSpaceReserved="false"
-            android:defaultValue="false" />
-
-        <SwitchPreference
-            android:key="volume_panel_icon_accent"
-            android:title="@string/volume_panel_icon_accent"
+        <SwitchPreferenceCompat
+            android:key="volume_panel_seekbar_bg_color_enabled"
+            android:title="@string/volume_panel_bg_color"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             app:iconSpaceReserved="false"
             android:defaultValue="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            android:key="volume_panel_icon_color"
+            android:key="volume_panel_seekbar_bg_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false"
-            android:defaultValue="0xff000000" /> -->
+            android:defaultValue="-7829368" />
 
     </PreferenceCategory>
 

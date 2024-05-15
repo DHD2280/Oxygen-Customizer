@@ -727,6 +727,7 @@
     <string name="volume_panel_seekbar_link_primary">Link Progress to primary color</string>
     <string name="volume_panel_icon_color">Customize Icon Color</string>
     <string name="volume_panel_icon_accent">Link Icon to primary color</string>
+    <string name="volume_panel_bg_color">Custom Background Color</string>
 
     <!-- Volume Styles -->
     <string name="volume_style_title">Volume panel styles</string>
