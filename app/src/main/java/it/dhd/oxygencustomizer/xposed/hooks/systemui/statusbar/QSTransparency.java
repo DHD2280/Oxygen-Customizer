@@ -66,8 +66,6 @@ public class QSTransparency extends XposedMods {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!qsTransparencyActive) return;
 
-                log(TAG + "QS Transparency enabled");
-
                 int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
                 String scrimState = getObjectField(param.thisObject, "mState").toString();
 
