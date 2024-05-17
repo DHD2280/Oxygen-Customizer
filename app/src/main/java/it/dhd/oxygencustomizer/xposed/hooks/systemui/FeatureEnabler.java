@@ -52,7 +52,6 @@ public class FeatureEnabler extends XposedMods {
     private int mAdvancedRebootTopMargin;
     private Paint buttonPaint;
     private Paint textPaint;
-    private String buttonText = "Advanced Reboot";
     private int centerX;
     private int centerY;
     private int radius;
@@ -241,6 +240,7 @@ public class FeatureEnabler extends XposedMods {
 
         float textX = (float) viewWidth / 2;
         float textY = centerY + radius + 75;
+        String buttonText = modRes.getString(R.string.advanced_reboot_title);
         canvas.drawText(buttonText, textX, textY, textPaint);
     }
 
