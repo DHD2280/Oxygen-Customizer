@@ -91,6 +91,9 @@
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
     <string name="statusbar_notifications_cat">Statusbar Notifications</string>
     <string name="statusbar_use_app_icon">Use app icon for notifications</string>
+    <string name="statusbar_notifications_transparency">Notifications Transparency</string>
+    <string name="statusbar_notification_transparency">Notification transparency</string>
+    <string name="statusbar_notification_transparency_value">Transparency amount</string>
     <string name="statusbar_notification_count">Show notification count</string>
     <string name="statusbar_notifications_related">Notifications Prefs</string>
     <string name="remove_charging_complete_notification_title">Remove charging complete notification</string>

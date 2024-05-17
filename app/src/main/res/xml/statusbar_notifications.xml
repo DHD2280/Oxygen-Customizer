@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/notification_illustration" />
@@ -23,11 +22,26 @@
         android:selectable="false"/>
 </PreferenceCategory>
 
-    <!--<SwitchPreferenceCompat
-        android:defaultValue="false"
-        android:key="statusbar_notification_count"
-        android:title="@string/statusbar_notification_count"
-        app:iconSpaceReserved="false"/> -->
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/statusbar_notifications_transparency">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="statusbar_notification_transparency"
+            android:title="@string/statusbar_notification_transparency"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            app:iconSpaceReserved="false"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="statusbar_notification_transparency_value"
+            android:title="@string/statusbar_notification_transparency_value"
+            app:defaultValue="25"
+            app:maxVal="255"
+            app:minVal="0"/>
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"

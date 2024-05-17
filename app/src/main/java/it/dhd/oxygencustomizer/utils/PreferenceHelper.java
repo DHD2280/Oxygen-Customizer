@@ -74,6 +74,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -188,6 +189,9 @@ public class PreferenceHelper {
             }
 
             // Notification
+            case "statusbar_notification_transparency_value" -> {
+                return instance.mPreferences.getBoolean("statusbar_notification_transparency", false);
+            }
             case CLEAR_BUTTON_BG_LINK_ACCENT,
                     CLEAR_BUTTON_ICON_LINK_ACCENT -> {
                 return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
@@ -595,6 +599,8 @@ public class PreferenceHelper {
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_sdur_summary) + "\n" +
                             instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_sduration", 5) + " " +
                             fragmentCompat.getString(R.string.seconds);
+            case NOTIF_TRANSPARENCY_VALUE ->
+                    String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
 
             // Header Clock
             case "qs_header_clock_text_scaling" -> instance.mPreferences.getSliderFloat("qs_header_clock_text_scaling", 1.0f) + "%";

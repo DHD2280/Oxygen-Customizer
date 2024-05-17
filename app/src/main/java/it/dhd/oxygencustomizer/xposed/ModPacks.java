@@ -1,7 +1,17 @@
 package it.dhd.oxygencustomizer.xposed;
 
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
+import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.findClass;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+
+import android.content.Context;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
@@ -26,6 +36,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryBar;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryStyleManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderImage;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.NotificationTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTiles;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomization;
@@ -48,7 +59,7 @@ public class ModPacks {
                 modPacks.add(PhoneWindowManager.class);
                 modPacks.add(Buttons.class);
             }
-            case Constants.Packages.SYSTEM_UI -> {
+            case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);
@@ -69,6 +80,7 @@ public class ModPacks {
                     modPacks.add(StatusbarClock.class);
                     modPacks.add(StatusbarIcons.class);
                     modPacks.add(BatteryStyleManager.class);
+                    modPacks.add(NotificationTransparency.class);
                     // QS
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);

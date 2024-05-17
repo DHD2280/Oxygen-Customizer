@@ -400,6 +400,8 @@ public class Constants {
         }
 
         public static class StatusbarNotificationPrefs {
+            public static final String NOTIF_TRANSPARENCY = "statusbar_notification_transparency";
+            public static final String NOTIF_TRANSPARENCY_VALUE = "statusbar_notification_transparency_value";
             public static final String CUSTOMIZE_CLEAR_BUTTON = "customizeClearButton";
             public static final String CLEAR_BUTTON_BG_LINK_ACCENT = "linkBackgroundAccent";
             public static final String CLEAR_BUTTON_BG_COLOR = "clearButtonBgColor";
