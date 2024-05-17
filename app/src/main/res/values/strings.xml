@@ -591,7 +591,7 @@
 
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Attention</string>
-    <string name="depth_effect_alert_body">Use a suitable lockscreen wallpaper where the foreground elements do not obstruct the entire clock on your lock screen, ensuring both visual appeal and functional clarity on your lock screen.\n\nNote: %s.</string>
+    <string name="depth_effect_alert_body">Use a suitable lockscreen wallpaper where the foreground elements do not obstruct the entire clock on your lock screen, ensuring both visual appeal and functional clarity on your lock screen.\nAfter enabling, set a Lockscreen Wallpaper, the AI model will automatically try to extract the Subject from the Wallpaper.\n\nNote: %s.</string>
     <string name="depth_effect_ok_btn">OK</string>
 
     <!-- Lockscreen Clock Strings -->
