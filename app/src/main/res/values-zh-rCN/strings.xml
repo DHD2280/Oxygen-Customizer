@@ -71,7 +71,7 @@
     <!-- Battery Icon Strings -->
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
-    <!-- Statusbar Icons Strinsg -->
+    <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Tiles Customizations -->
@@ -88,6 +88,7 @@
     <!-- Separator Color, Only for first clock -->
     <string name="qs_header_clock_custom_color_separator_mode_accent">强调色</string>
     <!-- QS Header Clock Margins -->
+    <!-- QS Header Misc -->
     <!-- Chip Styles Strings -->
     <string name="chip_use_accent">使用强调色</string>
     <string name="chip_color_accent">使用强调</string>
@@ -96,11 +97,13 @@
     <!-- Gesture Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
+    <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <string name="pulse_color_accent">强调</string>
+    <!-- Pulse Gravity n Mirror Options -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
     <!-- Volume panel -->
@@ -114,5 +117,6 @@
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
     <!-- Omni Jaws Strings -->
+    <!-- Lockscreen Weather styles -->
     <!-- Weather -->
 </resources>
