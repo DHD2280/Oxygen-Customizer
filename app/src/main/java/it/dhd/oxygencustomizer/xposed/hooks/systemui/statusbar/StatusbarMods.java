@@ -544,6 +544,7 @@ public class StatusbarMods extends XposedMods {
                         Object statusBarIcon = param.args[2];
 
                         String pkgName = (String) getObjectField(statusBarIcon, "pkg");
+                        if (pkgName.contains("com.android") || pkgName.contains("systemui")) return;
                         try {
                             if (!pkgName.contains("systemui")) {
                                 icon = mContext.getPackageManager().getApplicationIcon(pkgName);
