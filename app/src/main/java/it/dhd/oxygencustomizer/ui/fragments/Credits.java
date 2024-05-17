@@ -70,11 +70,15 @@ public class Credits extends Fragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Pasqui1978", "", "", R.drawable.ic_default_person));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "", R.drawable.ic_default_person));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "https://github.com/Pronegate", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ℤ\uD835\uDD56\uD835\uDD5F\uD835\uDD60 \uD835\uDD4F", "OOS 13 Tester", "", R.drawable.ic_default_person));
 
         credits.add(new CreditsModel("Translators"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Osean22", "Russian", "https://t.me/Osean22", R.drawable.flag_ru));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "tugaia59\nPasqui1978", "Italian", "", R.drawable.flag_it));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "W I N Z O R T", "Turkish", "https://crowdin.com/profile/mikropsoft", R.drawable.flag_tr));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "凌天", "Chinese Simplified", "https://crowdin.com/profile/lingtian", R.drawable.flag_cn));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "serge.croise", "French", "https://crowdin.com/profile/serge.croise", R.drawable.flag_fr));
 
         CreditsAdapter adapter = new CreditsAdapter(credits);
         binding.creditsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
