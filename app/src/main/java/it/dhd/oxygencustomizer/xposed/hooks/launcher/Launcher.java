@@ -41,7 +41,6 @@ public class Launcher extends XposedMods {
 
     private int mFolderRows, mFolderColumns, mDrawerColumns;
     private boolean mFolderRearrange = false, mFolderPreview = false, mDrawerRearrange = false, mOpenAppDetails;
-    private boolean mRemoveShortcut = false, mRemoveClone = false;
     private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
 
     public Launcher(Context context) {
@@ -59,8 +58,6 @@ public class Launcher extends XposedMods {
         mFolderPreview = Xprefs.getBoolean("rearrange_preview", true);
         mDrawerRearrange = Xprefs.getBoolean("rearrange_drawer", true);
         mOpenAppDetails = Xprefs.getBoolean("launcher_open_app_details", false);
-        mRemoveShortcut = Xprefs.getBoolean("remove_shortcut_badge_title", false);
-        mRemoveClone = Xprefs.getBoolean("remove_clone_badge", false);
         mRemoveFolderPagination = Xprefs.getBoolean("remove_folder_pagination", false);
         mRemoveHomePagination = Xprefs.getBoolean("remove_home_pagination", false);
 
@@ -74,7 +71,6 @@ public class Launcher extends XposedMods {
 
             @Override
             protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-                log("InvariantDeviceProfile$GridOption constructor called");
                 if (mFolderRearrange) {
                     XposedHelpers.setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
                     XposedHelpers.setIntField(param.thisObject, "numFolderRows", mFolderRows);

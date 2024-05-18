@@ -831,24 +831,6 @@ public class BatteryStyleManager extends XposedMods {
         batteryView.setLayoutDirection(mSwapPercentage ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
     }
 
-    private void notifyUpdate() {
-        new Thread(() -> {
-            try {
-                while (updating) {
-                    Thread.currentThread().wait(500);
-                }
-                updating = true;
-                ShellUtils.execCommand("settings put system display_battery_style 2", true);
-                Thread.sleep(500);
-                ShellUtils.execCommand("settings put system display_battery_style 3", true);
-
-                Thread.sleep(500);
-                updating = false;
-            } catch (Exception ignored) {
-            }
-        }).start();
-    }
-
     private void updateBatteryRotation(View mBatteryIconView) {
         mBatteryIconView.setRotation(!DefaultLandscapeBatteryEnabled && mBatteryLayoutReverse ? 180 : mBatteryRotation);
     }
