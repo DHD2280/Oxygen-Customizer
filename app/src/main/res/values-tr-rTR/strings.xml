@@ -77,6 +77,9 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Durum Çubuğu Bildirimleri</string>
     <string name="statusbar_use_app_icon">Bildirimler için uygulama simgesini kullanın</string>
+    <string name="statusbar_notifications_transparency">Bildirim Şeffaflığı</string>
+    <string name="statusbar_notification_transparency">Bildirim Şeffaflığı</string>
+    <string name="statusbar_notification_transparency_value">Şeffaflık Değeri</string>
     <string name="statusbar_notification_count">Bildirim sayısını göster</string>
     <string name="statusbar_notifications_related">Bildirim Tercihleri</string>
     <string name="remove_charging_complete_notification_title">Ücretlendirme tamamlandı bildirimini kaldır</string>
@@ -554,6 +557,7 @@
     <string name="depth_wallpaper_model_not_available">Yapay zeka modeli cihazda mevcut değil (henüz)</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Dikkat</string>
+    <string name="depth_effect_alert_body">Kilit ekranınızda hem görsel çekicilik hem de işlevsel netlik sağlamak için ön plan öğelerinin kilit ekranınızdaki saatin tamamını engellemediği uygun bir kilit ekranı duvar kağıdı kullanın.\nEtkinleştirdikten sonra, bir Kilit Ekranı Duvar Kağıdı ayarlayın, AI modeli otomatik olarak Konuyu Duvar Kağıdından çıkarmaya çalışacaktır.\n\nNot: %s.</string>
     <string name="depth_effect_ok_btn">Tamam</string>
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">Kilitli Ekran Saati</string>
