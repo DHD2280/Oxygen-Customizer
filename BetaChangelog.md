@@ -1,5 +1,3 @@
-**beta-11**  
-  
 **beta-9**  
 - More Lockscreen Clocks  
 - Added the ability to change back swipe gesture in both direction  
