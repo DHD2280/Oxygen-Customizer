@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.adapters;
 
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 
 import android.annotation.SuppressLint;
@@ -57,7 +58,8 @@ public class ClockPreviewAdapter extends RecyclerView.Adapter<ClockPreviewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(
-                Objects.equals(prefSwitch, LOCKSCREEN_CLOCK_SWITCH) ?
+                Objects.equals(prefSwitch, LOCKSCREEN_CLOCK_SWITCH) ||
+                        Objects.equals(prefSwitch, AOD_CLOCK_SWITCH) ?
                         R.layout.view_clock_preview_lockscreen :
                         R.layout.view_clock_preview_header,
                 parent,

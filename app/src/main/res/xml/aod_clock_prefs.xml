@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    <SwitchPreferenceCompat
+        android:key="aod_custom_clock_switch"
+        android:title="@string/aod_clock_switch"
+        android:summaryOn="@string/general_on"
+        android:summaryOff="@string/general_off"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.RecyclerPreference
+        android:key="aod_clock_custom"
+        android:title="@string/aod_clock_custom"
+        android:summary="@string/aod_clock_custom_summary" />
+
+    <PreferenceCategory
+        android:key="aod_clock_font_prefs"
+        android:title="@string/lockscreen_clock_font_prefs_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="aod_custom_font"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_clock_font_custom_enabled"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="aod_clock_font_custom"
+            android:summary="@string/lockscreen_clock_font_custom_summary"
+            android:title="@string/lockscreen_clock_font_custom_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="aod_clock_prefs"
+        android:title="@string/aod_clock_prefs"
+        search:ignore="true">
+
+        <SwitchPreferenceCompat
+            android:key="aod_custom_color_switch"
+            android:title="@string/aod_clock_custom_color_title"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="aod_clock_color_code_accent1"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xff006781"
+            android:title="@string/general_color_accent1" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="aod_clock_color_code_accent2"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xff006781"
+            android:title="@string/general_color_accent2" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="aod_clock_color_code_accent3"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xff006781"
+            android:title="@string/general_color_accent3" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="aod_clock_color_code_text1"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xffffffff"
+            android:title="@string/general_color_text1" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="aod_clock_color_code_text2"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0xffffffff"
+            android:title="@string/general_color_text2" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="aod_clock_line_height"
+            app:defaultValue="0"
+            app:maxVal="120"
+            app:minVal="-120"
+            android:title="@string/aod_font_line_height_title" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="aod_text_scaling"
+            app:defaultValue="1.0"
+            app:iconSpaceReserved="false"
+            app:maxVal="1.5"
+            app:minVal="0.5"
+            app:tickInterval=".1"
+            android:title="@string/aod_clock_text_scaling" />
+
+        <SwitchPreferenceCompat
+            android:key="aod_clock_custom_user_switch"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/aod_clock_custom_user"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:key="aod_clock_custom_user"
+            android:title="@string/aod_clock_custom_user_title"
+            android:defaultValue="User"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="aod_clock_custom_user_image"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/aod_clock_custom_user_image"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="aod_clock_custom_user_image_picker"
+            android:title="@string/aod_clock_custom_user_image_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

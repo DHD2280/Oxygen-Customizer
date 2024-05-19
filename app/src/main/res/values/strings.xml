@@ -636,6 +636,29 @@
     <string name="lockscreen_9_calendar">Calendar</string>
     <string name="lockscreen_9_day_title">Today is</string>
 
+    <!-- Aod Strings -->
+    <string name="aod_title">Always On Display</string>
+
+    <!-- Aod Clock -->
+    <string name="aod_clock">AOD Clock</string>
+    <string name="aod_clock_switch">Custom AOD Clock</string>
+    <string name="aod_clock_custom">Clock Style</string>
+    <string name="aod_clock_custom_summary">Pick a style of your choice.</string>
+    <string name="aod_clock_font_prefs_title">Font</string>
+    <string name="aod_clock_font_custom_enabled">Use Custom font</string>
+    <string name="aod_clock_font_custom_title">Pick Font</string>
+    <string name="aod_clock_font_custom_summary">Pick your font.\nDo not select file from Recent.</string>
+    <string name="aod_clock_prefs">AOD Clock Prefs</string>
+    <string name="aod_clock_custom_color_title">Custom Color Clock</string>
+    <string name="aod_clock_custom_color_summary">Custom color instead of primary color</string>
+    <string name="aod_clock_text_scaling">Text Scaling</string>
+    <string name="aod_clock_custom_user">Use Custom User Name</string>
+    <string name="aod_clock_custom_user_title">User Name</string>
+    <string name="aod_clock_custom_user_image">Use Custom User Image</string>
+    <string name="aod_clock_custom_user_image_title">User Image</string>
+    <string name="aod_clock_custom_user_image_summary">Click to pick an image.</string>
+    <string name="aod_font_line_height_title">Line Height</string>
+
     <!-- Sound Mods -->
     <string name="misc_category">Miscellaneous</string>
 

@@ -20,6 +20,16 @@ import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCRE
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UPDATE_INTERVAL;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_WIND;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT3;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_TEXT1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_TEXT2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_LINE_HEIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT_LANDSCAPE;
@@ -456,6 +466,29 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
             }
 
+            // Aod Clocks
+            case "aod_clock_custom",
+                    "aod_clock_font_prefs",
+                    "aod_clock_prefs" -> {
+                return instance.mPreferences.getBoolean(AOD_CLOCK_SWITCH, false);
+            }
+            case AOD_CLOCK_COLOR_CODE_ACCENT1,
+                    AOD_CLOCK_COLOR_CODE_ACCENT2,
+                    AOD_CLOCK_COLOR_CODE_ACCENT3,
+                    AOD_CLOCK_COLOR_CODE_TEXT1,
+                    AOD_CLOCK_COLOR_CODE_TEXT2 -> {
+                return instance.mPreferences.getBoolean(AOD_CLOCK_CUSTOM_COLOR, false);
+            }
+            case "aod_clock_custom_user" -> {
+                return instance.mPreferences.getBoolean(AOD_CLOCK_CUSTOM_USER, false);
+            }
+            case "aod_clock_custom_user_image_picker" -> {
+                return instance.mPreferences.getBoolean("aod_clock_custom_user_image", false);
+            }
+            case "aod_clock_font_custom" -> {
+                return instance.mPreferences.getBoolean("aod_custom_font", false);
+            }
+
             // Volume Panel Customization
             case "volume_panel_seekbar_link_primary" -> {
                 return instance.mPreferences.getBoolean("volume_panel_seekbar_color_enabled", false);
@@ -651,6 +684,10 @@ public class PreferenceHelper {
             case LOCKSCREEN_WEATHER_TEXT_SIZE -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16) + "sp";
             case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
             case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
+
+            // Aod Clock
+            case AOD_CLOCK_LINE_HEIGHT -> instance.mPreferences.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 100) + "dp";
+            case AOD_CLOCK_TEXT_SCALING -> instance.mPreferences.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f) + "%";
 
             // Sound Prefs
             case "volume_dialog_timeout" -> instance.mPreferences.getSliderInt("volume_dialog_timeout", 3) + " s";

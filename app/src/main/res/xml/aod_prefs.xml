@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="aod_clock"
+        android:title="@string/aod_clock"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock"/>
+
+</PreferenceScreen>

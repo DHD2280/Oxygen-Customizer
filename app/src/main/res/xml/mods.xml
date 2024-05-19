@@ -60,6 +60,13 @@
         search:ignore="true"/>
 
     <Preference
+        android:icon="@drawable/ic_aod"
+        android:key="aod"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Aod"
+        android:title="@string/aod_title"
+        search:ignore="true"/>
+
+    <Preference
         android:icon="@drawable/ic_volume"
         android:key="sound"
         app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Sound"

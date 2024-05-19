@@ -277,4 +277,35 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         }
     }
 
+    public static class Aod extends ControlledPreferenceFragmentCompat {
+
+        public Aod() {
+        }
+
+        @Override
+        public String getTitle() {
+            return getString(R.string.aod_title);
+        }
+
+        @Override
+        public boolean backButtonEnabled() {
+            return true;
+        }
+
+        @Override
+        public int getLayoutResource() {
+            return R.xml.aod_prefs;
+        }
+
+        @Override
+        public boolean hasMenu() {
+            return false;
+        }
+
+        @Override
+        public String[] getScopes() {
+            return null;
+        }
+    }
+
 }

@@ -398,6 +398,24 @@ public class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2
             };
         }
+        public static class AodClock {
+            public static final String AOD_CLOCK_SWITCH = "aod_custom_clock_switch";
+            public static final String AOD_CLOCK_STYLE = "aod_custom_clock_style";
+            public static final String AOD_CLOCK_CUSTOM_COLOR_SWITCH = "aod_custom_color_switch";
+            public static final String AOD_CLOCK_CUSTOM_COLOR = "aod_custom_color";
+            public static final String AOD_CLOCK_LINE_HEIGHT = "aod_clock_line_height";
+            public static final String AOD_CLOCK_CUSTOM_FONT = "aod_custom_font";
+            public static final String AOD_CLOCK_TEXT_SCALING = "aod_text_scaling";
+            public static final String AOD_CLOCK_COLOR_CODE_ACCENT1 = "aod_clock_color_code_accent1";
+            public static final String AOD_CLOCK_COLOR_CODE_ACCENT2 = "aod_clock_color_code_accent2";
+            public static final String AOD_CLOCK_COLOR_CODE_ACCENT3 = "aod_clock_color_code_accent3";
+            public static final String AOD_CLOCK_COLOR_CODE_TEXT1 = "aod_clock_color_code_text1";
+            public static final String AOD_CLOCK_COLOR_CODE_TEXT2 = "aod_clock_color_code_text2";
+            public static final String AOD_CLOCK_CUSTOM_USER = "aod_clock_custom_user_switch";
+            public static final String AOD_CLOCK_CUSTOM_USER_VALUE = "aod_clock_custom_user";
+            public static final String AOD_CLOCK_CUSTOM_USER_IMAGE = "aod_clock_custom_user_image";
+
+        }
 
         public static class StatusbarNotificationPrefs {
             public static final String NOTIF_TRANSPARENCY = "statusbar_notification_transparency";
@@ -536,6 +554,8 @@ public class Constants {
     public static final String HEADER_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_font.ttf";
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";
+    public static final String AOD_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_user_image.png";
+    public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
 
     // Resource names

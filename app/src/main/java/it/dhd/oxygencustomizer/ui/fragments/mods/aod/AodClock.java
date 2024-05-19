@@ -1,0 +1,164 @@
+package it.dhd.oxygencustomizer.ui.fragments.mods.aod;
+
+import static it.dhd.oxygencustomizer.utils.Constants.AOD_CLOCK_FONT_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.AOD_USER_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
+import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.preference.Preference;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
+import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.customprefs.RecyclerPreference;
+import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
+import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.models.ClockModel;
+import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
+import it.dhd.oxygencustomizer.utils.Constants;
+
+public class AodClock extends ControlledPreferenceFragmentCompat {
+    @Override
+    public String getTitle() {
+        return getString(R.string.aod_clock);
+    }
+
+    @Override
+    public boolean backButtonEnabled() {
+        return true;
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.xml.aod_clock_prefs;
+    }
+
+    @Override
+    public boolean hasMenu() {
+        return true;
+    }
+
+    @Override
+    public String[] getScopes() {
+        return new String[]{Constants.Packages.SYSTEM_UI};
+    }
+
+    private int type = 0;
+
+
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String path = getRealPath(data);
+                    String destination = "";
+                    if (type == 0)
+                        destination = AOD_USER_IMAGE;
+                    else
+                        destination = AOD_CLOCK_FONT_DIR;
+
+                    if (path != null && moveToOCHiddenDir(path, destination)) {
+                        Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
+
+        RecyclerPreference mLockscreenClockStyles = findPreference("aod_clock_custom");
+        if (mLockscreenClockStyles != null) {
+            mLockscreenClockStyles.setLayoutManager(new CarouselLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
+            mLockscreenClockStyles.setAdapter(initLockscreenClockStyles());
+            mLockscreenClockStyles.setPreference(AOD_CLOCK_STYLE, 0);
+        }
+
+        Preference mLockscreenUserImage = findPreference("aod_clock_custom_user_image_picker");
+        if (mLockscreenUserImage != null) {
+            mLockscreenUserImage.setOnPreferenceClickListener(preference -> {
+                pick("image");
+                type = 0;
+                return true;
+            });
+        }
+
+        Preference mLockscreenCustomFont = findPreference("aod_clock_font_custom");
+        if (mLockscreenCustomFont != null) {
+            mLockscreenCustomFont.setOnPreferenceClickListener(preference -> {
+                pick("font");
+                type = 1;
+                return true;
+            });
+        }
+
+    }
+
+    private void pick(String what) {
+        if (!AppUtils.hasStoragePermission()) {
+            AppUtils.requestStoragePermission(requireContext());
+        } else {
+            if (what.equals("font"))
+                launchFilePicker(startActivityIntent, "font/*");
+            else if (what.equals("image"))
+                launchFilePicker(startActivityIntent, "image/*");
+        }
+    }
+
+    private ClockPreviewAdapter initLockscreenClockStyles() {
+        ArrayList<ClockModel> aod_clock = new ArrayList<>();
+
+        int maxIndex = 0;
+        while (requireContext()
+                .getResources()
+                .getIdentifier(
+                        "preview_lockscreen_clock_" + maxIndex,
+                        "layout",
+                        BuildConfig.APPLICATION_ID
+                ) != 0) {
+            maxIndex++;
+        }
+
+        for (int i = 0; i < maxIndex; i++) {
+            aod_clock.add(new ClockModel(
+                    i == 0 ?
+                            "No Clock" :
+                            "Clock Style " + i,
+                    requireContext()
+                            .getResources()
+                            .getIdentifier(
+                                    LOCKSCREEN_CLOCK_LAYOUT + i,
+                                    "layout",
+                                    BuildConfig.APPLICATION_ID
+                            )
+            ));
+        }
+
+        return new ClockPreviewAdapter(requireContext(), aod_clock, AOD_CLOCK_SWITCH, AOD_CLOCK_STYLE);
+    }
+
+
+}
