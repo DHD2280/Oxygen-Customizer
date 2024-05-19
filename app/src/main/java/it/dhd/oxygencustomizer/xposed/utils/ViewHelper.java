@@ -346,19 +346,17 @@ public class ViewHelper {
         }
 
         boolean isXposedMode = true;
-        int currentStyleIndex;
         try {
-            currentStyleIndex = Xprefs.getInt(LOCKSCREEN_CLOCK_STYLE, 0);
+            Xprefs.getInt(LOCKSCREEN_CLOCK_STYLE, 0);
         } catch (Throwable ignored) {
             if (styleIndex == null) {
                 throw new IllegalStateException("Parameter \"styleIndex\" cannot be null");
             }
             isXposedMode = false;
-            currentStyleIndex = styleIndex;
         }
-        String rawResName = "lottie_lockscreen_clock_" + currentStyleIndex;
+        String rawResName = "lottie_lockscreen_clock_" + styleIndex;
 
-        Log.d("Oxygen Customizer Loading Lottie", "Loading Lottie Animation: " + rawResName + " (Style: " + currentStyleIndex + ")");
+        Log.d("Oxygen Customizer Loading Lottie", "Loading Lottie Animation: " + rawResName + " (Style: " + styleIndex + ")");
 
         Object lottieAnimView;
         if (isXposedMode) {
