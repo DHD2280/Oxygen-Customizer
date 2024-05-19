@@ -2,8 +2,6 @@ package it.dhd.oxygencustomizer.utils;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
-import androidx.work.ListenableWorker;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
