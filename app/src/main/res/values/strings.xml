@@ -504,6 +504,10 @@
 
     <!-- Launcher Mods -->
     <string name="launcher_intro_title">Launcher Options requires Launcher Restart.\nTap on menu to restart.</string>
+    <string name="launcher_layout">Home Layout</string>
+    <string name="launcher_edit_layout">Edit home layout</string>
+    <string name="launcher_columns">Home Columns</string>
+    <string name="launcher_rows">Home Rows</string>
     <string name="launcher_folder_layout">Folder layout</string>
     <string name="launcher_folder_edit_layout">Edit layout</string>
     <string name="launcher_folder_columns">Columns</string>

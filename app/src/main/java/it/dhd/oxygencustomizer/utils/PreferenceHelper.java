@@ -168,6 +168,9 @@ public class PreferenceHelper {
             case "drawer_columns" -> {
                 return instance.mPreferences.getBoolean("rearrange_drawer", false);
             }
+            case "launcher_max_columns", "launcher_max_rows" -> {
+                return instance.mPreferences.getBoolean("rearrange_home", false);
+            }
 
             // Statusbar Prefs
             case "statusbar_top_padding", "statusbarPaddings" -> {
@@ -621,6 +624,8 @@ public class PreferenceHelper {
             case "folder_columns" -> String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));
             case "folder_rows" -> String.valueOf(instance.mPreferences.getSliderInt("folder_rows", 3));
             case "drawer_columns" -> String.valueOf(instance.mPreferences.getSliderInt("drawer_columns", 4));
+            case "launcher_max_columns" -> String.valueOf(instance.mPreferences.getSliderInt("launcher_max_columns", 5));
+            case "launcher_max_rows" -> String.valueOf(instance.mPreferences.getSliderInt("launcher_max_rows", 6));
 
             // Header Image
             case "qs_header_image_alpha" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_alpha", 255));

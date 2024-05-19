@@ -12,6 +12,40 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        android:title="@string/launcher_layout">
+
+        <SwitchPreferenceCompat
+            android:key="rearrange_home"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_edit_layout"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="launcher_max_columns"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_columns"
+            app:minVal="4"
+            app:maxVal="8"
+            app:tickInterval="1"
+            app:defaultValue="4"
+            android:dependency="rearrange_home"/>
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="launcher_max_rows"
+            app:iconSpaceReserved="false"
+            android:title="@string/launcher_rows"
+            app:minVal="3"
+            app:maxVal="10"
+            app:tickInterval="1"
+            app:defaultValue="4"
+            android:dependency="rearrange_home"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         android:title="@string/launcher_folder_layout">
 
         <SwitchPreferenceCompat
