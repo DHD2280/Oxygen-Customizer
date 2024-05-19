@@ -37,6 +37,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimatio
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Environment;
@@ -108,15 +109,24 @@ public class AodClock extends XposedMods {
         });
                 //mPaintList*/
 
-        Class<?> AodData = findClass("com.oplus.systemui.aod.aodclock.constant.AodData", lpparam.classLoader);
-        hookAllMethods(AodData, "shouldUseNewRenderMethod", new XC_MethodHook() {
+        //initResource
+        /*Class<?> OplusAodCurvedDisplayView = findClass("com.oplus.systemui.aod.surface.OplusAodCurvedDisplayView", lpparam.classLoader);
+        hookAllMethods(OplusAodCurvedDisplayView, "initResource", new XC_MethodHook() {
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                //param.setResult(false);
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Bitmap mViewLeft = (Bitmap) getObjectField(param.thisObject, "mViewLeft");
+                Bitmap mViewRight = (Bitmap) getObjectField(param.thisObject, "mViewRight");
+                mViewLeft.colo
             }
-        });
+        });*/
 
-        Class<?> AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
+        Class<?> AodClockLayout;
+        try {
+            AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            AodClockLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
+        }
+
         hookAllConstructors(AodClockLayout, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -159,6 +169,12 @@ public class AodClock extends XposedMods {
                 log(TAG + " initForAodApk");
                 updateClockView2();
                 //updateClockView();
+            }
+        });
+        hookAllMethods(AodClockLayout, "performTimeUpdate", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                updateClockView2();
             }
         });
         hookAllMethods(AodClockLayout, "initGlobalThemeLayout", new XC_MethodHook() {
