@@ -1,17 +1,9 @@
 package it.dhd.oxygencustomizer.xposed;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
-import android.content.Context;
-
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
