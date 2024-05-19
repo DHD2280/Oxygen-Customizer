@@ -17,10 +17,9 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 34
-        versionCode = 11
-        versionName = "beta-11"
+        versionCode = 9
+        versionName = "beta-9"
         setProperty("archivesBaseName", "OxygenCustomizer.apk")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -86,7 +85,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-        useLibrary ("org.apache.http.legacy")
+    useLibrary ("org.apache.http.legacy")
 }
 
 dependencies {
