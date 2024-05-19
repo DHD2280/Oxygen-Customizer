@@ -1,4 +1,15 @@
-**beta-11**  
+**beta-10**
+- Updated Translations
+- Added Launcher Layout modifications
+- Fix Statusbar App Icons
+- Added Notification Transparency
+- Added Volume Panel Slider background color (New Volume Panel UI)
+- Added QS Transparency and Blur
+- Added Clear All Notification button customization
+- Added Notification Expansion behaviour
+- Introduce Depth Wallpaper
+- Fix gesture height on some scenarios
+- Fix weather background and update it each time SystemUI restarts
   
 **beta-9**  
 - More Lockscreen Clocks  
