@@ -775,6 +775,10 @@
     <string name="use_auth_for_advanced_reboot_summary">Require authentication to use advanced reboot options.</string>
     <string name="advanced_reboot_hide_lockscreen">Hide in Lockscreen</string>
     <string name="show_entry_settings_title">Show entry in Settings</string>
+    <string name="remove_usb_dialog">Remove USB Dialog</string>
+    <string name="remove_usb_dialog_summary">If enabled, the USB dialog will be hidden and MTP option will be chosen automatically.</string>
+
+    <!-- Screenshot Strings -->
     <string name="screenshot">Screenshot</string>
     <string name="screenshots_prefs">Screenshot Options</string>
     <string name="disable_secure_screenshot">Disable FLAG_SECURE</string>

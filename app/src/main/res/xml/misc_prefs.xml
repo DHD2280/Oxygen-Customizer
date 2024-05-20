@@ -11,6 +11,13 @@
         android:summaryOn="@string/general_on"
         android:summaryOff="@string/general_off"
         app:iconSpaceReserved="false" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="remove_usb_dialog"
+        android:title="@string/remove_usb_dialog"
+        android:summary="@string/remove_usb_dialog_summary"
+        app:iconSpaceReserved="false" />
+
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
