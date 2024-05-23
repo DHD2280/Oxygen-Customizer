@@ -5,7 +5,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_FINGERPRINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CAPSULE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CARRIER;
@@ -17,25 +16,20 @@ import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.Preference;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.SwitchPreferenceCompat;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,54 +40,11 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.RecyclerPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
-import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
-import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
-import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.utils.PreferenceHelper;
-import it.dhd.oxygencustomizer.weather.Config;
-import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
-import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
-
-import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreferenceCompat;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
     @Override
@@ -297,7 +248,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
             RecyclerPreference mLockscreenClockStyles = findPreference("lockscreen_clock_custom");
             if (mLockscreenClockStyles != null) {
-                mLockscreenClockStyles.setLayoutManager(new CarouselLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
                 mLockscreenClockStyles.setAdapter(initLockscreenClockStyles());
                 mLockscreenClockStyles.setPreference(LOCKSCREEN_CLOCK_STYLE, 0);
             }
