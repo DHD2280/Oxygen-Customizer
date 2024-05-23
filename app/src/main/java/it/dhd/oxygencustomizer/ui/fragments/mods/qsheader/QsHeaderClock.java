@@ -90,7 +90,6 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
 
         RecyclerPreference mQsClockStyle = findPreference("qs_header_clock_custom");
         if (mQsClockStyle != null) {
-            mQsClockStyle.setLayoutManager(new CarouselLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
             mQsClockStyle.setAdapter(initHeaderClockStyles());
             mQsClockStyle.setPreference(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);
         }

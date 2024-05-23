@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.adapters.SnapOnScrollListener;
+import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 
 public class RecyclerPreference extends Preference {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
     private String mKey;
     private int mDefaultValue;
@@ -46,7 +46,8 @@ public class RecyclerPreference extends Preference {
         super.onBindViewHolder(holder);
 
         mRecyclerView = (RecyclerView) holder.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        // Create a new LayoutManager instance for each RecyclerView
+        mRecyclerView.setLayoutManager(new CarouselLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         mRecyclerView.setAdapter(mAdapter);
         //mRecyclerView.setHasFixedSize(true);
         mRecyclerView.scrollToPosition(PreferenceHelper.instance.mPreferences.getInt(mKey, mDefaultValue));
@@ -60,10 +61,6 @@ public class RecyclerPreference extends Preference {
 
     public void setAdapter(RecyclerView.Adapter adapter) {
         mAdapter = adapter;
-    }
-
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        mLayoutManager = layoutManager;
     }
 
 }
