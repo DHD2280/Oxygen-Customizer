@@ -44,6 +44,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.databinding.ActivityMainBinding;
+import it.dhd.oxygencustomizer.ui.base.BaseActivity;
 import it.dhd.oxygencustomizer.ui.events.ColorDismissedEvent;
 import it.dhd.oxygencustomizer.ui.events.ColorSelectedEvent;
 import it.dhd.oxygencustomizer.ui.fragments.Hooks;
@@ -67,7 +68,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
-public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
+public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
 
     private Integer selectedFragment = null;
     private NavHostFragment navHostFragment;
@@ -83,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        tryMigratePrefs();
 
         fragmentManager = getSupportFragmentManager();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -301,18 +300,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         return true;
     }
 
-    public void setHeader(Context context, int title) {
-        Toolbar toolbar = ((AppCompatActivity) context).findViewById(R.id.toolbar);
-        ((AppCompatActivity) context).setSupportActionBar(toolbar);
-        toolbar.setTitle(title);
-    }
-
-    public void setHeader(Context context, CharSequence title) {
-        Toolbar toolbar = ((AppCompatActivity) context).findViewById(R.id.toolbar);
-        ((AppCompatActivity) context).setSupportActionBar(toolbar);
-        toolbar.setTitle(title);
-    }
-
     public static void backButtonEnabled() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -395,26 +382,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         NotificationChannel channel = new NotificationChannel(UPDATES_CHANNEL_ID, name, importance);
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-    }
-
-
-    private void tryMigratePrefs() {
-        String migrateFileName = "OC_migrate.tmp";
-        @SuppressLint("SdCardPath")
-        String migrateFilePath = "/sdcard/" + migrateFileName;
-        if (Shell.cmd(String.format("stat %s", migrateFilePath)).exec().getOut().size() > 0) {
-            String OCPrefsPath = "/data/user_de/0/it.dhd.oxygencustomizer/shared_prefs/it.dhd.oxygencustomizer_preferences.xml";
-            Shell.cmd(String.format("mv %s %s", migrateFilePath, OCPrefsPath)).exec();
-            Shell.cmd(String.format("chmod 777 %s", OCPrefsPath)).exec(); //system will correct the permissions upon next launch. let's just give it access to do so
-
-            new MaterialAlertDialogBuilder(this, R.style.MaterialComponents_MaterialAlertDialog)
-                    .setTitle(R.string.app_kill_alert_title)
-                    .setMessage(R.string.reboot_alert_body)
-                    .setPositiveButton(R.string.reboot_word, (dialog, which) -> AppUtils.restartScope("system"))
-                    .setCancelable(false)
-                    .show();
-        }
-
     }
 
 }

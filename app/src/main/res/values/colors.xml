@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- UI -->
+    <color name="colorAccent">@android:color/system_accent1_600</color>
     <color name="seed">#00897B</color>
     <color name="md_theme_light_primary">#006B5F</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
@@ -85,5 +87,12 @@
     <color name="ic_launcher_background">#2F3B49</color>
 
     <color name="changelog_bg">@android:color/system_neutral1_50</color>
+
+    <color name="colorBackground">@android:color/system_neutral2_50</color>
+
+    <!-- Splash screen -->
+    <color name="splash_logo">@color/colorAccent</color>
+
+    <color name="colorAppbarOverlay">@color/color_appbar_overlay</color>
 
 </resources>
