@@ -20,6 +20,7 @@ android {
         versionCode = 10
         versionName = "beta-10"
         setProperty("archivesBaseName", "OxygenCustomizer.apk")
+        buildConfigField("int", "MIN_SDK_VERSION", "$minSdk")
     }
 
     val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -85,6 +86,29 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    packaging {
+        jniLibs.excludes += setOf(
+            "/META-INF/*",
+            "/META-INF/versions/**",
+            "/org/bouncycastle/**",
+            "/kotlin/**",
+            "/kotlinx/**"
+        )
+
+        resources.excludes += setOf(
+            "/META-INF/*",
+            "/META-INF/versions/**",
+            "/org/bouncycastle/**",
+            "/kotlin/**",
+            "/kotlinx/**",
+            "rebel.xml",
+            "/*.txt",
+            "/*.bin",
+            "/*.json"
+        )
+
+        jniLibs.useLegacyPackaging = true
+    }
     useLibrary ("org.apache.http.legacy")
 }
 
@@ -117,6 +141,9 @@ dependencies {
 
     // Material Design
     implementation("com.google.android.material:material:1.12.0")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Preference
     //noinspection KtxExtensionAvailable
@@ -154,6 +181,15 @@ dependencies {
     //Google Subject Segmentation - MLKit
     implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
     implementation("com.google.android.gms:play-services-base:18.4.0")
+
+    // APK Signer
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.77")
+
+    // Zip Util
+    implementation("net.lingala.zip4j:zip4j:2.11.5")
+
+    // Dots Indicator
+    implementation("com.tbuonomo:dotsindicator:5.0")
 }
 
 tasks.register("printVersionName") {
