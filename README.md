@@ -110,7 +110,7 @@ We highly appreciate and welcome all forms of contributions, ranging from code, 
 <details>
   <summary>What is the difference between Release build and Debug build?</summary>
 
-- [Release build](https://github.com/DHD2280/Oxygen-Customizer/releases/latest) is an optimized version intended for distribution to end-users, while [Debug build](https://github.com/DHD2280/Iconify/actions) includes additional features and information for debugging and development purposes.
+- [Release build](https://github.com/DHD2280/Oxygen-Customizer/releases/latest) is an optimized version intended for distribution to end-users, while [Debug build](https://github.com/DHD2280/Oxygen-Customizer/actions) includes additional features and information for debugging and development purposes.
 </details>
 
 <details>
