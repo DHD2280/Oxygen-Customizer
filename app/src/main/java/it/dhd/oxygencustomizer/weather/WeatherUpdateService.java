@@ -31,13 +31,11 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationRequest;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

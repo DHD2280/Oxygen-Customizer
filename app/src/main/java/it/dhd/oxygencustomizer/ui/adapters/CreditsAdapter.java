@@ -89,6 +89,8 @@ public class CreditsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             if (!TextUtils.isEmpty(model.getUrl())) {
                 binding.listInfoItem.setOnClickListener(v -> v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(model.getUrl()))));
+            } else {
+                binding.listInfoItem.setOnClickListener(null);
             }
         }
     }

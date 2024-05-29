@@ -11,9 +11,59 @@
     <string name="settings_label">Settings</string>
     <string name="toast_rename_file">Rename file to something simpler</string>
     <string name="toast_applied">Applied</string>
+    <string name="toast_disabled">Disabled</string>
+    <string name="toast_error">Something went wrong</string>
     <string name="opt_selected1">Selected: %s</string>
     <string name="opt_selected2">Selected: %s%s</string>
     <string name="requires_sysui_restart">This section requires SystemUI restart\nTap on menu to restart.</string>
+
+    <!-- Onboarding -->
+    <string name="init_module_installation">Initializing setup</string>
+    <string name="step">Step</string>
+    <string name="module_installation_step1">Creating module shell</string>
+    <string name="module_installation_step2">Extracting necessary files</string>
+    <string name="module_installation_step3">Creating overlay APKs</string>
+    <string name="module_installation_step4">Aligning overlay APKs</string>
+    <string name="module_installation_step5">Signing overlay APKs</string>
+    <string name="module_installation_step6">Cleaning directories</string>
+    <string name="onboarding_title_1">Got Bored of Stock UI ?</string>
+    <string name="onboarding_subtitle_1">Let\'s customize everything to our likings.</string>
+    <string name="onboarding_desc_1">Ditch the stock UI monotony – personalize every tech detail to match your style and preferences.</string>
+    <string name="onboarding_title_2">Is My Device Supported ?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer supports OOS-based ROMs.</string>
+    <string name="onboarding_desc_2">Compatible with all OOS-based ROMs, ensuring broad support for Android devices.</string>
+    <string name="onboarding_title_3">Shall We Begin Now ?</string>
+    <string name="onboarding_subtitle_3">It is time for Oxygen Customizer to do some internal work.</string>
+    <string name="onboarding_desc_3">Starting internal tasks, marking the initiation of essential work. Ready to begin?</string>
+    <string name="need_storage_perm_title">Need Storage Permission</string>
+    <string name="need_storage_perm_desc">Storage permission is required to build the necessary files.</string>
+    <string name="compatible_root_not_found_title">Could Not Find Compatible Root Method</string>
+    <string name="compatible_root_not_found_desc">Use any popular root solutions to proceed.</string>
+    <string name="root_not_found_title">Root Is Not Accessible</string>
+    <string name="root_not_found_desc">Looks like your device is not rooted!</string>
+    <string name="need_reboot_title">Need Device Reboot</string>
+    <string name="need_reboot_desc">Reboot your device to put all files in place.</string>
+    <string name="installation_failed_title">Oops Did Not Expect That</string>
+    <string name="installation_failed_desc">Logs have been saved in documents folder.</string>
+    <string name="logs">Logs</string>
+    <string name="toast_skipped_installation">Installation skipped. Some features may not function properly.</string>
+
+    <!-- Buttons -->
+    <string name="btn_select">Select</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_lets_go">Let\'s Go</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_reboot_now">Reboot Now</string>
+    <string name="btn_reboot">Reboot</string>
+    <string name="btn_enable">Enable</string>
+    <string name="btn_disable">Disable</string>
+    <string name="btn_apply">Apply</string>
+
+    <!-- Dialogs -->
+    <string name="installing">Installing</string>
+    <string name="loading_dialog_wait">Please Wait</string>
 
     <!-- Main Activity -->
     <!-- App kill Alert -->
@@ -23,7 +73,6 @@
     <string name="reboot_alert_body">A system reboot is required for the settings to apply</string>
 
     <!-- General Strings -->
-    <string name="btn_select">Select</string>
     <string name="battery_charging">Battery Charging</string>
     <string name="battery_discharging">Battery Discharging</string>
     <string name="battery_full">Battery Full</string>
@@ -38,6 +87,7 @@
     <string name="general_color_text1">Text 1</string>
     <string name="general_color_text2">Text 2</string>
     <string name="sysui_restart_needed">Requires a SystemUI restart to apply</string>
+    <string name="one_time_reboot_needed">Reboot your device!</string>
 
     <!-- Search Preference -->
     <string name="searchpreference_search">Search…</string>
@@ -54,7 +104,7 @@
     <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
 
     <!-- NavBar Strings -->
-    <string name="navbar_customizations">Customizations</string>
+    <string name="navbar_ui">UI</string>
     <string name="navbar_mods">Mods</string>
     <string name="navbar_hooks">Hooks</string>
     <string name="navbar_settings">Settings</string>
@@ -966,5 +1016,50 @@
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Windy</string>
     <string name="weather_condition_mist">Misty</string>
+
+    <!-- UI Strings -->
+    <string name="style_category">Themes and Styles</string>
+    <string name="icon_theme_category">Icon pack and Styles</string>
+
+    <!-- UI styles -->
+    <string name="theme_customization_ui_style_title">UI Style</string>
+    <string name="theme_customization_ui_style_summary">Set custom style for your interface</string>
+    <string name="notifications_customizations">Notifications</string>
+    <string name="theme_customization_notification_style_summary">Set custom style for notifications</string>
+
+
+    <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Icon pack</string>
+    <string name="theme_customization_icon_pack_summary">Set custom icon pack style</string>
+    <string name="theme_customization_signal_icon_title">Signal icon style</string>
+    <string name="theme_customization_signal_icon_summary">Set custom signal icon style</string>
+    <string name="theme_customization_wifi_icon_title">WiFi icon style</string>
+    <string name="theme_customization_wifi_icon_summary">Set custom wifi icon style</string>
+    <string name="theme_customization_navbar_title">Navbar style</string>
+    <string name="theme_customization_navbar_summary">Set custom navigation bar style</string>
+    <string name="theme_customization_toast_frame_title">Toast Frame</string>
+    <string name="theme_customization_toast_frame_summary">Change toast notification style</string>
+
+    <!-- Notification -->
+    <string name="notification_styles">Notification Styles</string>
+    <string name="notif_preview_desc">Notification Preview.\nClick to apply this style.</string>
+
+    <!-- Toast Styles -->
+    <string name="toast_styles">Toast Styles</string>
+    <string name="toast_message">Toast Message</string>
+
+    <!-- Style List -->
+    <string name="style_0">None</string>
+    <string name="style_1">Style 1</string>
+    <string name="style_2">Style 2</string>
+    <string name="style_3">Style 3</string>
+    <string name="style_4">Style 4</string>
+    <string name="style_5">Style 5</string>
+    <string name="style_6">Style 6</string>
+    <string name="style_7">Style 7</string>
+    <string name="style_8">Style 8</string>
+    <string name="style_9">Style 9</string>
+    <string name="style_10">Style 10</string>
+    <string name="style_11">Style 11</string>
 
 </resources>

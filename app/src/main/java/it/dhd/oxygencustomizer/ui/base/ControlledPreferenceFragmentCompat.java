@@ -2,7 +2,8 @@ package it.dhd.oxygencustomizer.ui.base;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
-import android.content.Context;
+import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
+
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -98,7 +99,7 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
     public void onResume() {
         super.onResume();
         if (getContext() != null) {
-            ((MainActivity) requireActivity()).setHeader(getContext(), getTitle());
+            setHeader(getContext(), getTitle());
             ((MainActivity) getContext()).getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled());
         }
     }

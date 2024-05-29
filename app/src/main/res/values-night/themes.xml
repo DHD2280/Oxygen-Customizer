@@ -28,7 +28,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
         <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
         <item name="snackbarStyle">@style/Widget.Material3.Snackbar</item>
-        <item name="android:navigationBarColor">?colorSurfaceContainer</item>
+        <item name="android:navigationBarColor">@color/trasp</item>
         <item name="android:statusBarColor">@color/trasp</item>
         <item name="android:windowLightStatusBar">false</item>
 

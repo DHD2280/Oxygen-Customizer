@@ -61,13 +61,26 @@
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="subject_segment" /> <!-- ML Kit download -->
         <activity
+            android:name=".ui.activity.OnboardingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.OxygenCustomizer.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.OxygenCustomizer">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.RUN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity

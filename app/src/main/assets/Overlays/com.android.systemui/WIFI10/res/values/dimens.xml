@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="wifi_icon_height">15.0dip</dimen>
+    <dimen name="wifi_icon_width">15.0dip</dimen>
+    <dimen name="wifi_icon_inset_left">0.59997606dip</dimen>
+    <dimen name="wifi_icon_inset_right">1.5999756dip</dimen>
+</resources>

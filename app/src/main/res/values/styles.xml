@@ -89,9 +89,49 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="IconRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">?attr/colorSurfaceVariant</item>
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="Widget.MaterialButton" parent="Widget.Material3.Button">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">40dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">40dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="Widget.MaterialButton.Red" parent="Widget.MaterialButton">
+        <item name="backgroundTint">?attr/colorError</item>
+        <item name="android:textColor">?attr/colorOnError</item>
+    </style>
+
+    <style name="OptionTitleTextAppearance" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">15sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="Widget.BottomNavigationView" parent="Base.Widget.Material3.BottomNavigationView">
+        <item name="android:background">@drawable/bottom_navbar_bg</item>
+        <item name="itemRippleColor">@color/rippleAccent</item>
+        <item name="itemIconTint">@color/text_color_primary</item>
+        <item name="itemTextColor">@color/text_color_primary</item>
     </style>
 
 </resources>

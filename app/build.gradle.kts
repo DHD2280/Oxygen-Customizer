@@ -172,6 +172,9 @@ dependencies {
     // Optional: Provides remote file system support
     implementation("com.github.topjohnwu.libsu:nio:${libsuVersion}")
 
+    // Constraint
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
     implementation("org.greenrobot:eventbus:3.3.1")
 
     implementation("com.crossbowffs.remotepreferences:remotepreferences:0.8")
@@ -190,6 +193,9 @@ dependencies {
 
     // Dots Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
+
+    // Flexbox
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
 
 tasks.register("printVersionName") {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_home"
+    app:startDestination="@id/mods">
+    <fragment
+        android:id="@+id/mods"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.Mods"
+        android:label="@string/app_name">
+    </fragment>
+    <fragment
+        android:id="@+id/updates"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.UpdateFragment"
+        android:label="@string/update">
+    </fragment>
+    <fragment
+        android:id="@+id/hooks"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.Hooks"
+        android:label="@string/navbar_hooks">
+    </fragment>
+    <fragment
+        android:id="@+id/settings"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.Settings"
+        android:label="@string/navbar_settings">
+    </fragment>
+
+</navigation>

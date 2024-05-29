@@ -1,11 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
-import static it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter.VIEW_TYPE_HEADER;
 import static it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter.VIEW_TYPE_ITEM;
+import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +32,7 @@ public class Credits extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = CreditsFragmentViewBinding.inflate(inflater, container, false);
-        ((MainActivity)requireActivity()).setHeader(getContext(), R.string.credits_title);
+        setHeader(getContext(), R.string.credits_title);
         return binding.getRoot();
 
     }
@@ -65,6 +62,9 @@ public class Credits extends Fragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Superior Extended", """
         For some customizations
         github/SuperiorExtended""", "https://github.com/SuperiorExtended/", R.drawable.ic_superior));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ℙ\uD835\uDD52\uD835\uDD5F\uD835\uDD43","PUI Theme",
+                "https://t.me/PUINewsroom",
+                ResourcesCompat.getDrawable(getResources(), R.drawable.panl, requireContext().getTheme())));
 
         credits.add(new CreditsModel("Testers"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));

@@ -9,6 +9,19 @@
 
     <color name="colorBackground">@android:color/system_neutral2_900</color>
 
-    <color name="colorAppbarOverlay">@color/color_appbar_overlay</color>
+    <color name="colorAppbarOverlay">@color/color_appbar_overlay_dark</color>
+    <color name="colorNavbarOverlay">@color/color_navbar_overlay_dark</color>
+
+    <color name="color_background_alpha">@color/color_background_alpha_dark</color>
+
+    <!-- Previews -->
+    <color name="offStateColor">@android:color/system_neutral2_800</color>
+    <color name="offStateColor2">#1AFFFFFF</color>
+    <color name="offStateColor4">#99000000</color>
+    <color name="shadow">#40000000</color>
+    <color name="neumorph_outline_start">#FF363636</color>
+    <color name="neumorph_outline_end">#FF0F0F0F</color>
+
+    <color name="rippleAccent">@color/color_accent_alpha_dark</color>
 
 </resources>

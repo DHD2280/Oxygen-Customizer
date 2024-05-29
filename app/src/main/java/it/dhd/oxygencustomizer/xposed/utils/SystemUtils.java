@@ -37,13 +37,11 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.xposed.XPLauncher;
 
 public class SystemUtils {
     private static final int THREAD_PRIORITY_BACKGROUND = 10;
     public static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
-    public static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
-    public static final String LENS_URI = "google://lens";
-    public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
 
     @SuppressLint("StaticFieldLeak")
     static SystemUtils instance;
@@ -74,6 +72,16 @@ public class SystemUtils {
         BootLoopProtector.resetCounter(android.os.Process.myProcessName());
 
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    public static void restartSystemUI() {
+        BootLoopProtector.resetCounter("com.android.systemui");
+
+        XPLauncher.enqueueProxyCommand(proxy -> {
+            try {
+                proxy.runCommand("killall com.android.systemui");
+            } catch (Throwable ignored) {}
+        });
     }
 
     public static void sleep(int millis)

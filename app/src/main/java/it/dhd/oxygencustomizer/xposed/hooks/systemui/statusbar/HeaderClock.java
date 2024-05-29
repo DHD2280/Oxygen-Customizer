@@ -39,7 +39,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getColorResCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +50,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.text.Spannable;
@@ -167,8 +164,6 @@ public class HeaderClock extends XposedMods {
 
     @Override
     public void updatePrefs(String... Key) {
-        if (Xprefs == null) return;
-
         // Custom Header Prefs
         showHeaderClock = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_ENABLED, false);
         clockStyle = Xprefs.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);
@@ -293,7 +288,6 @@ public class HeaderClock extends XposedMods {
                 FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;//getObjectField(param.thisObject, "mSettingsContainer");
 
                 // qs_footer_side_padding
-                int dimen = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("qs_footer_side_padding", "dimen", listenPackage));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 mQsClockContainer.setLayoutParams(layoutParams);
                 mQsClockContainer.setPaddingRelative(0, -10, 0, 0);
@@ -305,7 +299,6 @@ public class HeaderClock extends XposedMods {
                 }
 
                 mQuickStatusBarHeader.addView(mQsClockContainer, mQuickStatusBarHeader.getChildCount());
-                //((ViewGroup) mSettingsContainer).addView(mQsClockContainer, ((ViewGroup) mSettingsContainer).getChildCount() - 1);
 
                 // Hide stock clock, date and carrier group
                 try {

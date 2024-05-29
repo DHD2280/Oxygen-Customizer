@@ -45,7 +45,6 @@
     <string name="restart_page_scope">Yalnızca bu sayfa kapsamını yeniden başlat</string>
     <string name="restart_scope_message">Sistem çerçevesi dışındaki tüm kapsamlı işlemleri yeniden başlatmak istediğinizden emin misiniz?\nModül çalışmıyorsa bunu kullanın!\nİlgili tüm kapsamların kontrol edildiğinden emin olun!</string>
     <!-- NavBar Strings -->
-    <string name="navbar_customizations">Özelleştirmeler</string>
     <string name="navbar_mods">Modlar</string>
     <string name="navbar_hooks">Kancalar</string>
     <string name="navbar_settings">Ayarlar</string>

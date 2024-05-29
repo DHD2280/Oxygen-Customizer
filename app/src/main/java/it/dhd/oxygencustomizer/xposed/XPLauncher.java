@@ -11,7 +11,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.sleep;
 
 import android.annotation.SuppressLint;
 import android.app.Instrumentation;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;

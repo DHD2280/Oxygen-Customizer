@@ -16,22 +16,21 @@ package it.dhd.oxygencustomizer.weather.providers;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import android.content.Context;
+import android.content.res.Resources;
+import android.location.Location;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.location.Location;
-
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;

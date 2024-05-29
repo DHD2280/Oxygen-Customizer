@@ -15,11 +15,9 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class QSTransparency extends XposedMods {

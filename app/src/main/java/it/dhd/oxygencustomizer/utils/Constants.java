@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
-import android.content.Context;
 import android.os.Environment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -436,6 +434,9 @@ public class Constants {
 
         public static final String ADAPTIVE_PLAYBACK_ENABLED = "sound_adaptive_playback_main_switch";
         public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
+
+        public static final String SELECTED_TOAST_FRAME = "selectedToastFrame";
+
     }
 
     public static class LockscreenWeather {
@@ -603,16 +604,12 @@ public class Constants {
         return key + "_BOTTOM_RIGHT_RADIUS";
     }
 
-    public static String getLockScreenSubjectCachePath(Context context)
-    {
+    public static String getLockScreenSubjectCachePath() {
         return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lswt.png";
-        //return context.getCacheDir().getAbsolutePath() + "/lswt.png";
     }
 
-    public static String getLockScreenBitmapCachePath(Context context)
-    {
+    public static String getLockScreenBitmapCachePath() {
         return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lsw.jpg";
-        //return context.getCacheDir().getAbsolutePath() + "/lsw.jpg";
     }
 
 }

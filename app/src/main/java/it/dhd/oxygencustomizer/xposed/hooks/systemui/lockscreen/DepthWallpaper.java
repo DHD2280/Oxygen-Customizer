@@ -15,7 +15,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.annotation.SuppressLint;
-import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
-import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -229,7 +227,7 @@ public class DepthWallpaper extends XposedMods {
 
                             if(!cacheIsValid)
                             {
-                                XPLauncher.enqueueProxyCommand(proxy -> proxy.extractSubject(finalScaledWallpaperBitmap, Constants.getLockScreenSubjectCachePath(mContext)));
+                                XPLauncher.enqueueProxyCommand(proxy -> proxy.extractSubject(finalScaledWallpaperBitmap, Constants.getLockScreenSubjectCachePath()));
                             }
                         }
                     }
@@ -283,7 +281,7 @@ public class DepthWallpaper extends XposedMods {
         boolean cacheIsValid = false;
         try
         {
-            File wallpaperCacheFile = new File(Constants.getLockScreenBitmapCachePath(mContext));
+            File wallpaperCacheFile = new File(Constants.getLockScreenBitmapCachePath());
             if (DEBUG) log(TAG + "Checking cache: " + wallpaperCacheFile.getAbsolutePath());
             ByteArrayOutputStream compressedBitmap = new ByteArrayOutputStream();
             wallpaperBitmap.compress(Bitmap.CompressFormat.JPEG, 100, compressedBitmap);
@@ -358,11 +356,11 @@ public class DepthWallpaper extends XposedMods {
         if (DEBUG) log(TAG + "Setting Depth Wallpaper ScrimState: " + state + " showSubject: " + showSubject + " lockScreenSubjectCacheValid: " + lockScreenSubjectCacheValid);
 
         if(showSubject) {
-            if (DEBUG) log(TAG + "Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(Constants.getLockScreenSubjectCachePath(mContext)).exists());
-            if(!lockScreenSubjectCacheValid && new File(Constants.getLockScreenSubjectCachePath(mContext)).exists())
+            if (DEBUG) log(TAG + "Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(Constants.getLockScreenSubjectCachePath()).exists());
+            if(!lockScreenSubjectCacheValid && new File(Constants.getLockScreenSubjectCachePath()).exists())
             {
                 if (DEBUG) log(TAG + "lockScreenSubjectCacheValid false");
-                try (FileInputStream inputStream = new FileInputStream(Constants.getLockScreenSubjectCachePath(mContext)))
+                try (FileInputStream inputStream = new FileInputStream(Constants.getLockScreenSubjectCachePath()))
                 {
                     if (DEBUG) log(TAG + "Loading Lock Screen Subject Cache file exists");
                     Drawable bitmapDrawable = BitmapDrawable.createFromStream(inputStream, "");
@@ -424,7 +422,7 @@ public class DepthWallpaper extends XposedMods {
         }
         try {
             //noinspection ResultOfMethodCallIgnored
-            new File(Constants.getLockScreenSubjectCachePath(mContext)).delete();
+            new File(Constants.getLockScreenSubjectCachePath()).delete();
         }
         catch (Throwable ignored){}
     }

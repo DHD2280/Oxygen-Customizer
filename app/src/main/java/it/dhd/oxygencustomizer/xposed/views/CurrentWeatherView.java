@@ -25,20 +25,14 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setTextRecursively
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

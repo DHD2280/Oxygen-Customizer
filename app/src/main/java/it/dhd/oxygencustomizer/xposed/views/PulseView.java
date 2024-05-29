@@ -27,7 +27,6 @@ package it.dhd.oxygencustomizer.xposed.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 

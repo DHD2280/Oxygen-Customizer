@@ -1,11 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.hooks.screenshot;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.utils.Deoptimizer.deoptimizeMethod;
 
 import android.content.Context;
 

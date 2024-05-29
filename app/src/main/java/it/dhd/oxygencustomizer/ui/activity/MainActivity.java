@@ -2,11 +2,11 @@ package it.dhd.oxygencustomizer.ui.activity;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.fragments.UpdateFragment.UPDATES_CHANNEL_ID;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,8 +15,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,7 +26,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.topjohnwu.superuser.Shell;
@@ -63,9 +60,12 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles;
+import it.dhd.oxygencustomizer.ui.fragments.UserInterface;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
@@ -73,7 +73,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
     private Integer selectedFragment = null;
     private NavHostFragment navHostFragment;
     private ActivityMainBinding binding;
-    private BottomNavigationView navigationView;
     private static FragmentManager fragmentManager;
     private static final String TITLE_TAG = "mainActivityTitle";
     private static ActionBar actionBar;
@@ -85,30 +84,26 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d("MainActivity", "onCreate: ");
+
         fragmentManager = getSupportFragmentManager();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         createChannels();
 
         if (savedInstanceState == null) {
-            replaceFragment(new Mods());
+            replaceFragment(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ?
+                    new Mods() :
+                    new UserInterface());
         } else {
             setHeader(this, savedInstanceState.getCharSequence(TITLE_TAG));
         }
 
         if (getIntent() != null && getIntent().getBooleanExtra("updateTapped", false)) {
-            Log.d("MainActivity", "onCreate: updateTapped");
             Intent intent = getIntent();
             Bundle bundle = new Bundle();
             bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
             bundle.putString("filePath", intent.getStringExtra("filePath"));
-            UpdateFragment updateFragment = new UpdateFragment();
-            updateFragment.setArguments(bundle);
-            replaceFragment(updateFragment);
-        } else if (getIntent() != null && "true".equals(getIntent().getStringExtra("migratePrefs"))) {
-            Intent intent = getIntent();
-            Bundle bundle = new Bundle();
-            bundle.putString("migratePrefs", intent.getStringExtra("migratePrefs"));
             UpdateFragment updateFragment = new UpdateFragment();
             updateFragment.setArguments(bundle);
             replaceFragment(updateFragment);
@@ -147,7 +142,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         // Setup navigation
         setSupportActionBar(binding.toolbar);
         actionBar = getSupportActionBar();
-        setupNavigation();
         setupBottomNavigationView();
 
         colorPickerDialog = ColorPickerDialog.newBuilder();
@@ -161,49 +155,41 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         }
     }
 
-    private void setupNavigation() {
-        //navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-        if (navHostFragment == null) return;
 
-        NavController navController = navHostFragment.getNavController();
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(
-                        R.id.mods,
-                        R.id.updates,
-                        R.id.hooks,
-                        R.id.settings
-                ).build();
-
-        NavigationUI.setupWithNavController(
-                binding.toolbar, navController, appBarConfiguration);
-        navigationView = binding.bottomNavigationView;
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> NavigationUI.onNavDestinationSelected(item, navController));
-
-    }
 
     @SuppressLint("NonConstantResourceId")
     private void setupBottomNavigationView() {
+        if (Prefs.getBoolean(XPOSED_ONLY_MODE, true)) {
+            Log.d("MainActivity", "setupNavigation: Xposed only mode");
+            binding.bottomNavigationView.getMenu().clear();
+            binding.bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_xposed_only);
+        }
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             String tag = getTopFragment();
 
-            if (Objects.equals(tag, Mods.class.getSimpleName())) {
-                selectedFragment = R.id.mods;
+            if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
+                selectedFragment = R.id.ui;
                 binding.bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 setHeader(this, getString(R.string.app_name));
                 backButtonDisabled();
+            } else if (Objects.equals(tag, Mods.class.getSimpleName())) {
+                selectedFragment = R.id.mods;
+                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 0 : 1).setChecked(true);
+                setHeader(this, Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? getString(R.string.app_name) : getString(R.string.mods_title));
+                backButtonDisabled();
             } else if (Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
                 selectedFragment = R.id.updates;
-                binding.bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 1 : 2).setChecked(true);
                 setHeader(this, getString(R.string.update));
                 backButtonDisabled();
             } else if (Objects.equals(tag, Hooks.class.getSimpleName())) {
                 selectedFragment = R.id.hooks;
-                binding.bottomNavigationView.getMenu().getItem(2).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 2 : 3).setChecked(true);
                 setHeader(this, getString(R.string.hooked_packages_title));
                 backButtonDisabled();
             } else if (Objects.equals(tag, Settings.class.getSimpleName())) {
                 selectedFragment = R.id.settings;
-                binding.bottomNavigationView.getMenu().getItem(3).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 3 : 4).setChecked(true);
                 setHeader(this, getString(R.string.navbar_settings));
                 backButtonDisabled();
             }
@@ -213,6 +199,13 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             String tag = getTopFragment();
 
             switch (item.getItemId()) {
+                case R.id.ui -> {
+                    if (!Objects.equals(tag, UserInterface.class.getSimpleName())) {
+                        selectedFragment = R.id.ui;
+                        replaceFragment(new UserInterface());
+                    }
+                    return true;
+                }
                 case R.id.mods -> {
                     if (!Objects.equals(tag, Mods.class.getSimpleName())) {
                         selectedFragment = R.id.mods;
@@ -256,7 +249,9 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         if (last >= 0) {
             Fragment topFragment = getSupportFragmentManager().getFragments().get(last);
 
-            if (topFragment instanceof Mods)
+            if (topFragment instanceof UserInterface)
+                fragment[0] = UserInterface.class.getSimpleName();
+            else if (topFragment instanceof Mods)
                 fragment[0] = Mods.class.getSimpleName();
             else if (topFragment instanceof UpdateFragment)
                 fragment[0] = UpdateFragment.class.getSimpleName();
@@ -274,9 +269,12 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out, R.anim.fragment_fade_in, R.anim.fragment_fade_out);
         fragmentTransaction.replace(R.id.frame_layout, fragment, tag);
-        if (Objects.equals(tag, Mods.class.getSimpleName())) {
+        if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        } else if (Objects.equals(tag, Hooks.class.getSimpleName()) ||
+        } else if (Objects.equals(tag, Mods.class.getSimpleName()) && Prefs.getBoolean(XPOSED_ONLY_MODE, true)) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else if (Objects.equals(tag, Mods.class.getSimpleName()) ||
+                Objects.equals(tag, Hooks.class.getSimpleName()) ||
                 Objects.equals(tag, Settings.class.getSimpleName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentTransaction.addToBackStack(tag);
@@ -356,7 +354,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 .setShowAlphaSlider(showAlphaSlider)
                 .setShowColorShades(showColorShades);
         colorPickerDialog.show(this);
-        Log.d("ColorPickerDialog", "showColorPickerDialog: " + dialogId);
     }
 
     @Override

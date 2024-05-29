@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Intent;
 

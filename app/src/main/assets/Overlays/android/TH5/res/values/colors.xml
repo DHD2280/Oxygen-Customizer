@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<resources>
+    <color name="system_neutral1_0">#ededed</color>
+    <color name="system_neutral1_10">#ededed</color>
+    <color name="system_neutral1_50">#bababa</color>
+    <color name="system_neutral1_100">#bababa</color>
+    <color name="system_neutral1_200">#868686</color>
+    <color name="system_neutral1_300">#868686</color>
+    <color name="system_neutral1_400">#6278a9</color>
+    <color name="system_neutral1_500">#4c5d83</color>
+    <color name="system_neutral1_600">#36425d</color>
+    <color name="system_neutral1_700">#202737</color>
+    <color name="system_neutral1_800">#202737</color>
+    <color name="system_neutral1_900">#0a0c11</color>
+    <color name="system_neutral1_1000">#0a0c11</color>
+
+    <color name="system_neutral2_0">#ededed</color>
+    <color name="system_neutral2_10">#ededed</color>
+    <color name="system_neutral2_50">#bababa</color>
+    <color name="system_neutral2_100">#bababa</color>
+    <color name="system_neutral2_200">#868686</color>
+    <color name="system_neutral2_300">#868686</color>
+    <color name="system_neutral2_400">#6278a9</color>
+    <color name="system_neutral2_500">#4c5d83</color>
+    <color name="system_neutral2_600">#36425d</color>
+    <color name="system_neutral2_700">#202737</color>
+    <color name="system_neutral2_800">#202737</color>
+    <color name="system_neutral2_900">#0a0c11</color>
+    <color name="system_neutral2_1000">#0a0c11</color>
+</resources>

@@ -16,12 +16,12 @@ package it.dhd.oxygencustomizer.weather;
  * limitations under the License.
  */
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import android.content.Context;
-import android.content.res.Resources;
 
 public class WeatherInfo {
     private static final DecimalFormat sNoDigitsFormat = new DecimalFormat("0");

@@ -44,7 +44,6 @@
     <string name="restart_page_scope">Riavvia solo lo scopo di questa pagina</string>
     <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
     <!-- NavBar Strings -->
-    <string name="navbar_customizations">Personalizzazioni</string>
     <string name="navbar_mods">Mod</string>
     <string name="navbar_hooks">Hooks</string>
     <string name="navbar_settings">Impostazioni</string>

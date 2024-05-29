@@ -1,8 +1,5 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.navbar;
 
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
-
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
-import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class Gesture extends ControlledPreferenceFragmentCompat {
 

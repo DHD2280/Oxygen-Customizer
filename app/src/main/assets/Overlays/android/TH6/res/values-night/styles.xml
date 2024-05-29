@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DeviceDefault theme for a window that should look like the Settings app.  -->
+    <style name="Theme.DeviceDefault.Settings" parent="@*android:style/Theme.DeviceDefault">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">?*android:attr/colorBackground</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="android:colorPrimary">@*android:color/primary_dark_device_default_settings</item>
+        <item name="android:colorPrimaryDark">@*android:color/primary_dark_device_default_settings</item>
+        <item name="android:colorBackground">@*android:color/primary_dark_device_default_settings</item>
+        <item name="android:colorEdgeEffect">@*android:color/edge_effect_device_default_dark</item>
+
+        <item name="*android:colorListDivider">@*android:color/list_divider_color_dark</item>
+        <item name="*android:opacityListDivider">@*android:color/list_divider_opacity_device_default_dark</item>
+        <item name="android:windowBackground">@*android:drawable/box</item>
+    </style>
+
+    <!-- DeviceDefault theme for day/night activities. Chaos -->
+    <style name="Theme.DeviceDefault.DayNight" parent="@*android:style/Theme.DeviceDefault">
+        <item name="android:windowBackground">@*android:drawable/box</item>
+    </style>
+
+</resources>

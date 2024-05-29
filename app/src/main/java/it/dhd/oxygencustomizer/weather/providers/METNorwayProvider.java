@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-
 import java.util.TimeZone;
 
 import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;

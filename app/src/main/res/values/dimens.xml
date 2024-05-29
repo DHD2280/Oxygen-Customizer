@@ -61,4 +61,8 @@
     <dimen name="widget_date_accent_box_padding_hor">10dp</dimen>
     <dimen name="widget_date_accent_box_padding_ver">6dp</dimen>
 
+    <!-- Icon Preview -->
+    <dimen name="preview_margin">3dp</dimen>
+    <dimen name="preview_icon_size">18dp</dimen>
+
 </resources>

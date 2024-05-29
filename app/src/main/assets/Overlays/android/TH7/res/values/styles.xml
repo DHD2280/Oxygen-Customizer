@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DeviceDefault theme for a window that should look like the Settings app.  -->
+    <style name="Theme.DeviceDefault.Settings" parent="@*android:style/Theme.DeviceDefault.Light">
+        <!-- From Theme.Material.Light.LightStatusBar -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- From Theme.Material.Settings -->
+        <item name="android:homeAsUpIndicator">@*android:drawable/ic_ab_back_material_settings</item>
+        <item name="android:presentationTheme">@*android:style/Theme.Material.Settings.Dialog.Presentation</item>
+        <item name="*android:searchDialogTheme">@*android:style/Theme.Material.Settings.SearchBar</item>
+        <item name="*android:panelMenuListTheme">@*android:style/Theme.Material.Settings.CompactMenu</item>
+
+        <!-- action bar -->
+        <item name="android:actionBarStyle">@*android:style/Widget.DeviceDefault.Light.ActionBar.Solid</item>
+        <item name="android:actionBarTheme">@*android:style/ThemeOverlay.DeviceDefault.ActionBar</item>
+        <item name="android:popupTheme">@*android:style/ThemeOverlay.DeviceDefault.Popup.Light</item>
+
+        <!-- Color palette -->
+        <item name="android:colorBackground">@*android:color/background_device_default_light</item>
+        <item name="android:colorPrimary">@*android:color/primary_device_default_settings_light</item>
+        <item name="android:colorPrimaryDark">@*android:color/primary_dark_device_default_settings_light</item>
+        <item name="android:colorSecondary">@*android:color/secondary_device_default_settings_light</item>
+        <item name="android:colorAccent">@*android:color/accent_device_default_light</item>
+        <item name="*android:colorAccentPrimary">@*android:color/accent_primary_device_default</item>
+        <item name="*android:colorAccentSecondary">@*android:color/accent_secondary_device_default</item>
+        <item name="*android:colorAccentTertiary">@*android:color/accent_tertiary_device_default</item>
+        <item name="*android:colorAccentPrimaryVariant">@*android:color/accent_primary_variant_light_device_default</item>
+        <item name="*android:colorAccentSecondaryVariant">@*android:color/accent_secondary_variant_light_device_default</item>
+        <item name="*android:colorAccentTertiaryVariant">@*android:color/accent_tertiary_variant_light_device_default</item>
+        <item name="*android:colorSurface">@*android:color/surface_light</item>
+        <item name="*android:colorSurfaceHighlight">@*android:color/surface_highlight_light</item>
+        <item name="*android:colorSurfaceVariant">@*android:color/surface_variant_light</item>
+        <item name="*android:colorSurfaceHeader">@*android:color/surface_header_light</item>
+        <item name="android:colorError">@*android:color/error_color_device_default_light</item>
+        <item name="android:colorEdgeEffect">@*android:color/edge_effect_device_default_light</item>
+
+        <!-- Add white nav bar with divider that matches material -->
+        <item name="android:navigationBarDividerColor">@null</item>
+        <item name="android:navigationBarColor">?*android:attr/colorBackground</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- Dialog attributes -->
+        <item name="android:dialogCornerRadius">@*android:dimen/config_dialogCornerRadius</item>
+
+        <!-- Button styles -->
+        <item name="android:buttonCornerRadius">@*android:dimen/config_buttonCornerRadius</item>
+        <item name="android:buttonBarButtonStyle">@*android:style/Widget.DeviceDefault.Button.ButtonBar.AlertDialog</item>
+
+        <!-- Progress bar attributes -->
+        <item name="*android:progressBarCornerRadius">@*android:dimen/config_progressBarCornerRadius</item>
+
+        <item name="*android:colorListDivider">@*android:color/list_divider_color_light</item>
+        <item name="*android:opacityListDivider">@*android:color/list_divider_opacity_device_default_light</item>
+
+        <!-- Transparency -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowShowWallpaper">true</item>   <!--Nukes navbar fade-out on Android 8.1: No fixes-->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+    <!-- DeviceDefault theme for day/night activities. Chaos -->
+    <style name="Theme.DeviceDefault.DayNight" parent="@*android:style/Theme.DeviceDefault.Light">
+        <!-- Transparency -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowShowWallpaper">true</item>   <!--Nukes navbar fade-out on Android 8.1: No fixes-->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+</resources>

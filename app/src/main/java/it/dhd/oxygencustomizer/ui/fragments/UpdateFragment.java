@@ -2,21 +2,14 @@ package it.dhd.oxygencustomizer.ui.fragments;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 
-import static androidx.core.content.FileProvider.getUriForFile;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.icu.util.LocaleData;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,12 +26,10 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.topjohnwu.superuser.Shell;
 
@@ -48,7 +39,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.security.auth.callback.Callback;
 
@@ -59,8 +49,6 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.UpdateFragmentBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
-import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
 public class UpdateFragment extends Fragment {

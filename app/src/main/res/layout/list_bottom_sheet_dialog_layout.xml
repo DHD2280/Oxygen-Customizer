@@ -13,8 +13,7 @@
         android:id="@+id/toolbar_preference"
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_dialog_toolbar_height"
-        android:layout_marginTop="-20dp"
-        android:background="@null" />
+        android:layout_marginTop="-20dp" />
 
     <View
         android:id="@+id/breakpointsDiv"

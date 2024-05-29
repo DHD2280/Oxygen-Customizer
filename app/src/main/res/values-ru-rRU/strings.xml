@@ -47,7 +47,6 @@
 Используйте это, если модуль не работает!
 Убедитесь, что все соответствующие области проверены!</string>
     <!-- NavBar Strings -->
-    <string name="navbar_customizations">Настройки</string>
     <string name="navbar_mods">Модов</string>
     <string name="navbar_hooks">Хуки </string>
     <string name="navbar_settings">Настройки</string>

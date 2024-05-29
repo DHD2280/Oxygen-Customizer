@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
 import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
@@ -134,4 +135,21 @@ public class AppUtils {
     public static void showToast(Context context, String string) {
         Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
     }
+
+    public static void restartDevice() {
+        Shell.cmd("am start -a android.intent.action.REBOOT").exec();
+    }
+
+    public static String[] getSplitLocations(String packageName) {
+        try {
+            String[] splitLocations = OxygenCustomizer.getAppContext().getPackageManager().getApplicationInfo(packageName, 0).splitSourceDirs;
+            if (splitLocations == null) {
+                splitLocations = new String[]{OxygenCustomizer.getAppContext().getPackageManager().getApplicationInfo(packageName, 0).sourceDir};
+            }
+            return splitLocations;
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+        return new String[0];
+    }
+
 }

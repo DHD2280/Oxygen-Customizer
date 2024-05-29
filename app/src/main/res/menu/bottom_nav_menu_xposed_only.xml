@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mods"
+        android:enabled="true"
+        android:icon="@drawable/ic_navbar_mods"
+        android:title="@string/mods_title" />
+    <item
+        android:id="@+id/updates"
+        android:enabled="true"
+        android:icon="@drawable/ic_updates"
+        android:title="@string/update" />
+    <item
+        android:id="@+id/hooks"
+        android:enabled="true"
+        android:icon="@drawable/ic_hooks"
+        android:title="@string/navbar_hooks" />
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_navbar_settings"
+        android:title="@string/navbar_settings" />
+</menu>

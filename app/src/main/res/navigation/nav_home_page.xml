@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_home"
-    app:startDestination="@id/mods">
+    app:startDestination="@id/ui">
+    <fragment
+        android:id="@+id/ui"
+        android:name="it.dhd.oxygencustomizer.ui.fragments.UserInterface"
+        android:label="@string/app_name">
+    </fragment>
     <fragment
         android:id="@+id/mods"
         android:name="it.dhd.oxygencustomizer.ui.fragments.Mods"
-        android:label="@string/app_name">
+        android:label="@string/navbar_mods">
     </fragment>
     <fragment
         android:id="@+id/updates"

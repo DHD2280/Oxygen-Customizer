@@ -33,8 +33,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_VERTICAL_
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;

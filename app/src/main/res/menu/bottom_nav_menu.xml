@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/ui"
+        android:enabled="true"
+        android:icon="@drawable/ic_navbar_ui"
+        android:title="@string/navbar_ui" />
+    <item
         android:id="@+id/mods"
         android:enabled="true"
         android:icon="@drawable/ic_navbar_mods"

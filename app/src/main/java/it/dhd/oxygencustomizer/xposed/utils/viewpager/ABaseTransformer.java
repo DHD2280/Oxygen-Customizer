@@ -1,8 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.utils.viewpager;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
-import android.view.View;
 
 public abstract class ABaseTransformer implements ViewPager.PageTransformer {
     protected abstract void onTransform(View view, float f);

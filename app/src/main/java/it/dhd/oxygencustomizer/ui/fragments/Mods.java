@@ -1,37 +1,26 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 
-import static androidx.navigation.fragment.FragmentKt.findNavController;
-
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.backButtonDisabled;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
-import it.dhd.oxygencustomizer.databinding.ActivityMainBinding;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
-import it.dhd.oxygencustomizer.ui.fragments.mods.Launcher;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.Prefs;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
 
@@ -39,12 +28,14 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     @Override
     public String getTitle() {
-        return getString(R.string.app_name);
+        return Prefs.getBoolean(XPOSED_ONLY_MODE, true) ?
+                getString(R.string.app_name) :
+                getString(R.string.mods_title);
     }
 
     @Override
     public boolean backButtonEnabled() {
-        return false;
+        return !Prefs.getBoolean(XPOSED_ONLY_MODE, true);
     }
 
     @Override

@@ -320,11 +320,13 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int, priv
         val chargingParseColor = Color.parseColor("#ff3ab74e")
         val powerSaveParseColor = Color.parseColor("#fffdd015")
         chargingAlphaPaint.color =
-            if (fastCharging && fastChargingColor != black) fastChargingColor
-            else if (customBlendColor && chargingColor != black) chargingColor else chargingParseColor
+            if (customBlendColor && fastCharging && fastChargingColor != black) fastChargingColor
+            else if (customBlendColor && chargingColor != black) chargingColor
+            else chargingParseColor
         chargingPaint.color =
-            if (fastCharging && fastChargingColor != black) fastChargingColor
-            else if (customBlendColor && chargingColor != black) chargingColor else chargingParseColor
+            if (customBlendColor && fastCharging && fastChargingColor != black) fastChargingColor
+            else if (customBlendColor && chargingColor != black) chargingColor
+            else chargingParseColor
         powerSavePaint.color =
             if (customBlendColor && powerSaveColor != black) powerSaveColor else powerSaveParseColor
         powerSaveFillPaint.color =

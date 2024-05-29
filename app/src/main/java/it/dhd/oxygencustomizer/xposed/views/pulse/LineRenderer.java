@@ -14,19 +14,13 @@ import static it.dhd.oxygencustomizer.xposed.views.pulse.PulseControllerImpl.DEB
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.icu.text.ListFormatter;
 import android.os.Handler;
-import android.util.Log;
-import android.util.TypedValue;
 
 import androidx.core.graphics.ColorUtils;
 

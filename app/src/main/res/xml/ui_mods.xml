@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_rawRes="@raw/ui_illustration" />
+
+    <PreferenceCategory
+        android:title="@string/style_category"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.UiStyle"
+            android:icon="@drawable/ic_ui_styles"
+            android:key="android.theme.customization.style"
+            android:summary="@string/theme_customization_ui_style_summary"
+            android:title="@string/theme_customization_ui_style_title" />
+
+        <!-- Notification Style -->
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NotificationStyle"
+            android:icon="@drawable/ic_notification_style"
+            android:key="android.theme.customization.notifications"
+            android:summary="@string/theme_customization_notification_style_summary"
+            android:title="@string/notification_styles" />
+
+
+        <!-- Navbar Style -->
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NavbarStyle"
+            android:icon="@drawable/ic_navbar"
+            android:key="android.theme.customization.navbar"
+            android:summary="@string/theme_customization_navbar_summary"
+            android:title="@string/theme_customization_navbar_title" />
+
+        <!-- Toast Frame
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.ToastFrame"
+            android:icon="@drawable/ic_toast_frame"
+            android:key="android.theme.customization.toast_frame"
+            android:summary="@string/theme_customization_toast_frame_summary"
+            android:title="@string/theme_customization_toast_frame_title" />-->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/icon_theme_category"
+        app:iconSpaceReserved="false">
+
+        <!-- Icon pack
+        <Preference
+            android:key="android.theme.customization.icon_pack"
+            android:icon="@drawable/ic_drawing"
+            android:title="@string/theme_customization_icon_pack_title"
+            android:summary="@string/theme_customization_icon_pack_summary"
+            android:fragment="com.crdroid.settings.fragments.ui.StatusbarIcons"/> -->
+
+        <!-- Signal icon style -->
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.SignalIcons"
+            android:icon="@drawable/ic_signal"
+            android:key="android.theme.customization.signal_icon"
+            android:summary="@string/theme_customization_signal_icon_summary"
+            android:title="@string/theme_customization_signal_icon_title" />
+
+        <!-- Wifi icon style -->
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.WifiIcons"
+            android:icon="@drawable/ic_wifi"
+            android:key="android.theme.customization.wifi_icon"
+            android:summary="@string/theme_customization_wifi_icon_summary"
+            android:title="@string/theme_customization_wifi_icon_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
