@@ -12,7 +12,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT3;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_TEXT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_TEXT2;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER_IMAGE;
@@ -376,11 +376,12 @@ public class AodClock extends XposedMods {
 
             testView.addView(clockView, 0);
             modifyClockView(clockView);
+
         }
     }
 
     private void modifyClockView(View clockView) {
-        boolean customColor = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_COLOR, false);
+        boolean customColor = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_COLOR_SWITCH, false);
         float clockScale = Xprefs.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f);
         String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/aod_clock_font.ttf";
         int lineHeight = Xprefs.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 0);
@@ -402,6 +403,8 @@ public class AodClock extends XposedMods {
         }
 
         ViewHelper.setMargins(clockView, mContext, 0, 0, 0, 0);
+
+        log(TAG + " customColor: " + customColor);
 
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : systemAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : systemAccent);
