@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SELECTED_TOAST_FRAME;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_TOAST_FRAME;
 
@@ -100,7 +101,7 @@ public class ToastFrame extends BaseFragment {
                         AtomicBoolean hasErroredOut = new AtomicBoolean(false);
 
                         try {
-                            hasErroredOut.set(OnDemandCompiler.buildOverlay("TSTFRM", finalI, FRAMEWORK, true));
+                            hasErroredOut.set(OnDemandCompiler.buildOverlay("TSTFRM", finalI, SYSTEM_UI, true));
                         } catch (IOException e) {
                             hasErroredOut.set(true);
                             Log.e("ToastFrame", e.toString());

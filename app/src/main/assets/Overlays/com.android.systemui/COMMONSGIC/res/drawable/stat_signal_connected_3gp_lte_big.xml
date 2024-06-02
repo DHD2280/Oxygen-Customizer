@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:insetLeft="-2dp"
-    android:insetTop="-2dp">
+    android:insetTop="-1.5dp">
     <vector android:height="13.0dip" android:width="21.0dip" android:viewportWidth="21.0" android:viewportHeight="12.0"
       xmlns:android="http://schemas.android.com/apk/res/android">
         <path android:fillColor="#ff000000" android:pathData="M11.8493,1.8275V2.6767H12.5493V1.8275H13.3983V1.1275H12.5493V0.2784H11.8493V1.1275H11V1.8275H11.8493Z" android:strokeAlpha="0.85" android:fillType="evenOdd" />

@@ -128,7 +128,7 @@ public class OnDemandCompiler {
         }
 
         // Clean temp directory
-        //Shell.cmd("rm -rf " + TEMP_DIR).exec();
+        Shell.cmd("rm -rf " + TEMP_DIR).exec();
         Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/CompileOnDemand").exec();
     }
 
