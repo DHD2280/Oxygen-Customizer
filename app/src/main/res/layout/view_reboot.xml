@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reboot_reminder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="18dp"
+    android:layout_marginBottom="@dimen/container_margin"
+    android:background="@drawable/container_outline"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="start|center"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/container_semi_transparent"
+            android:backgroundTint="@color/colorAccent">
+
+            <ImageView
+                android:id="@+id/list_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_app_updated"
+                android:backgroundTint="@color/textColorPrimary" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/oxygen_customizer_updated_title"
+                android:textColor="@color/text_color_primary" />
+
+            <TextView
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/oxygen_customizer_updated_desc"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color_secondary" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
