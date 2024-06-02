@@ -21,9 +21,10 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.CreditsFragmentViewBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter;
+import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.models.CreditsModel;
 
-public class Credits extends Fragment {
+public class Credits extends BaseFragment {
 
     private CreditsFragmentViewBinding binding;
 
@@ -32,7 +33,6 @@ public class Credits extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = CreditsFragmentViewBinding.inflate(inflater, container, false);
-        setHeader(getContext(), R.string.credits_title);
         return binding.getRoot();
 
     }
@@ -66,6 +66,9 @@ public class Credits extends Fragment {
                 "https://t.me/PUINewsroom",
                 ResourcesCompat.getDrawable(getResources(), R.drawable.panl, requireContext().getTheme())));
 
+        credits.add(new CreditsModel("Contributors"));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "tugaia59", "OOS Themer", "https://t.me/OnePlus_Mods_Theme", R.drawable.tugaia));
+
         credits.add(new CreditsModel("Testers"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
@@ -92,4 +95,13 @@ public class Credits extends Fragment {
         binding = null;
     }
 
+    @Override
+    public String getTitle() {
+        return getString(R.string.credits_title);
+    }
+
+    @Override
+    public boolean backButtonEnabled() {
+        return true;
+    }
 }
