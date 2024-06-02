@@ -10,6 +10,10 @@
     <string name="toast_applied">Aplicado</string>
     <string name="opt_selected1">Selecionado: %s</string>
     <string name="opt_selected2">Selecionado: %s%s</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <string name="btn_select">Selecionar</string>
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Observação</string>
@@ -17,7 +21,6 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">É necessária uma reinicialização do sistema para as configurações serem aplicadas</string>
     <!-- General Strings -->
-    <string name="btn_select">Selecionar</string>
     <!-- Search Preference -->
     <string name="searchpreference_more">Mais</string>
     <!-- Menu Strings -->
@@ -69,6 +72,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -80,6 +85,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <string name="update_channel_name">Atualizações</string>
@@ -89,4 +95,11 @@
     <string name="omnijaws_current_text">Agora</string>
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>

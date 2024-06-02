@@ -11,6 +11,9 @@
     <string name="opt_selected1">Sélectionné : %s</string>
     <string name="opt_selected2">Sélectionné: %s%s</string>
     <string name="requires_sysui_restart">Cette section nécessite un redémarrage de SystemUI\nAppuyez sur le menu pour redémarrer.</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Remarque</string>
@@ -57,6 +60,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -67,6 +72,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <!-- Advanced Reboot -->
@@ -74,4 +80,11 @@
     <!-- Omni Jaws Strings -->
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>
