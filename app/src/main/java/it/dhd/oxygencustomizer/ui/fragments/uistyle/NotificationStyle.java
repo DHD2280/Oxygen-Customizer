@@ -1,6 +1,10 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
+import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NOTIFICATIONS;
+import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +24,7 @@ import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.NotificationAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.ui.models.NotificationModel;
 
 public class NotificationStyle extends BaseFragment {
@@ -41,27 +46,6 @@ public class NotificationStyle extends BaseFragment {
         binding.recyclerViewFragment.setHasFixedSize(true);
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        /*if (isAtleastA14 && Prefs.getBoolean(SHOW_NOTIFICATION_NORMAL_WARN, true)) {
-            try {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.attention)
-                        .setMessage(R.string.requires_lsposed_for_a14)
-                        .setPositiveButton(requireContext().getResources().getString(R.string.understood), (dialog, which) -> dialog.dismiss())
-                        .setNegativeButton(requireContext().getResources().getString(R.string.dont_show_again), (dialog, which) -> {
-                            dialog.dismiss();
-                            Prefs.putBoolean(SHOW_NOTIFICATION_NORMAL_WARN, false);
-                        })
-                        .setCancelable(true)
-                        .show();
-            } catch (Exception ignored) {
-            }
-        }*/
     }
 
     private NotificationAdapter initNotifItems() {
@@ -87,6 +71,25 @@ public class NotificationStyle extends BaseFragment {
         notif_list.add(new NotificationModel("Pitch Black", R.drawable.notif_pitch_black));
         notif_list.add(new NotificationModel("Duoline", R.drawable.notif_duoline));
         notif_list.add(new NotificationModel("iOS", R.drawable.notif_ios));
+        /*notif_list.add(new NotificationModel("Layers Transparent", R.drawable.notif_layers));
+        notif_list.add(new NotificationModel("Thin Outline Transparent", R.drawable.notif_thin_outline));
+        notif_list.add(new NotificationModel("Bottom Outline Transparent", R.drawable.notif_bottom_outline));
+        notif_list.add(new NotificationModel("Neumorph Transparent", R.drawable.notif_neumorph));
+        notif_list.add(new NotificationModel("Stack Transparent", R.drawable.notif_stack));
+        notif_list.add(new NotificationModel("Side Stack Transparent", R.drawable.notif_side_stack));
+        notif_list.add(new NotificationModel("Outline Transparent", R.drawable.notif_outline));
+        notif_list.add(new NotificationModel("Leafy Outline Transparent", R.drawable.notif_leafy_outline));
+        notif_list.add(new NotificationModel("Lighty Transparent", R.drawable.notif_lighty));
+        notif_list.add(new NotificationModel("Neumorph Outline Transparent", R.drawable.notif_neumorph_outline));
+        notif_list.add(new NotificationModel("Cyberponk Transparent", R.drawable.notif_cyberponk));
+        notif_list.add(new NotificationModel("Cyberponk v2 Transparent", R.drawable.notif_cyberponk_v2));
+        notif_list.add(new NotificationModel("Thread Line Transparent", R.drawable.notif_thread_line));
+        notif_list.add(new NotificationModel("Faded Transparent", R.drawable.notif_faded));
+        notif_list.add(new NotificationModel("Dumbbell Transparent", R.drawable.notif_dumbbell));
+        notif_list.add(new NotificationModel("Pitch Black Transparent", R.drawable.notif_pitch_black));
+        notif_list.add(new NotificationModel("Duoline Transparent", R.drawable.notif_duoline));
+        notif_list.add(new NotificationModel("iOS Transparent", R.drawable.notif_ios));*/
+
 
         return new NotificationAdapter(requireContext(), notif_list, loadingDialog);
     }

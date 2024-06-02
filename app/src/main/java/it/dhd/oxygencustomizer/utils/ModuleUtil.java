@@ -144,7 +144,7 @@ public class ModuleUtil {
     }
 
     public static boolean checkModuleVersion(Context context) {
-        if (ModuleUtil.moduleExists() && RootUtil.deviceProperlyRooted() && OverlayUtil.overlayExists()) {
+        if (RootUtil.deviceProperlyRooted() && OverlayUtil.overlayExists()) {
             String version = getStringFromOverlay(context, "OxygenCustomizerComponentOCV.overlay", "oxygen_customizer_module_version");
             return version != null && version.equals(MODULE_VERSION_NAME);
         }

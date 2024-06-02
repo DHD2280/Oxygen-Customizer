@@ -1,12 +1,17 @@
 package it.dhd.oxygencustomizer.utils.overlay;
 
 import android.content.Context;
+import android.content.om.OverlayInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.RemoteException;
+import android.util.Log;
 
 import com.topjohnwu.superuser.Shell;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -159,7 +164,7 @@ public class OverlayUtil {
             return res.getString(resId);
         }
         catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e("OverlayUtil", "getStringFromOverlay: " + e.getMessage());
         }
         return null;
     }

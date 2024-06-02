@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetRight="3.0dip">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="15dp"
     android:height="15dp"
     android:viewportWidth="24.0"
@@ -19,4 +21,5 @@
         android:pathData="M21.00,18.08L21.00,3.90C21.00,1.37,17.00,1.37,17.00,3.90L17.00,18.08L17.00,20.10C17.00,22.63,21.00,22.63,21.00,20.10L21.00,18.08z"
         android:strokeLineCap="square"
         android:strokeLineJoin="miter" />
-</vector>
+    </vector>
+</inset>

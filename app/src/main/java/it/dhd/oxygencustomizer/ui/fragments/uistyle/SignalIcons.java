@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 
+import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
@@ -32,8 +33,6 @@ public class SignalIcons extends BaseFragment {
         binding = FragmentRecyclerBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        // Header
-        setHeader(getContext(), getString(R.string.theme_customization_signal_icon_title));
         // Loading dialog while enabling or disabling pack
         loadingDialog = new LoadingDialog(requireContext());
 
@@ -50,14 +49,14 @@ public class SignalIcons extends BaseFragment {
         for (int i = 0; i<TOTAL_SIGNAL_ICONS; i++) {
             signalIcons.add(
                     new IconModel(
-                            getStringFromOverlay(getContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "theme_name"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_0"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_1"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_2"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_3")));
+                            getStringFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "theme_name"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_0"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_1"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_2"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_3")));
         }
 
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", "COMMONSGIC");
+        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC");
     }
 
     @Override

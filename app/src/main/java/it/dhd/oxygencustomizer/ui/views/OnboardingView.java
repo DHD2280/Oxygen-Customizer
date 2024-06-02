@@ -298,23 +298,23 @@ public class OnboardingView extends FrameLayout {
         protected Integer doInBackground(Void... voids) {
             int step = 0;
 
-            logger = "Creating blank module template";
+            logger = "I: Creating blank module template";
             publishProgress(++step);
             ModuleUtil.handleModule();
 
             logger = null;
             publishProgress(++step);
             try {
-                logger = "Cleaning oxygen customizer data directory";
+                logger = "I: Cleaning oxygen customizer data directory";
                 publishProgress(step);
                 // Clean data directory
                 Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/Overlays").exec();
 
-                logger = "Extracting overlays from assets";
+                logger = "I: Extracting overlays from assets";
                 publishProgress(step);
                 if (skippedInstallation) {
                     waiter(100);
-                    logger = "Skipped...";
+                    logger = "I: Skipped...";
                     publishProgress(step);
                     waiter(100);
                 } else {
@@ -322,7 +322,7 @@ public class OnboardingView extends FrameLayout {
                     FileUtil.copyAssets("Overlays");
                 }
 
-                logger = "Creating temporary directories";
+                logger = "I: Creating temporary directories";
                 publishProgress(step);
                 // Create temp directory
                 Shell.cmd("mkdir -p " + ModuleConstants.TEMP_OVERLAY_DIR).exec();
@@ -338,7 +338,7 @@ public class OnboardingView extends FrameLayout {
             publishProgress(++step);
             File dir;
             if (skippedInstallation) {
-                logger = "Skipping overlay builder...";
+                logger = "I: Skipping overlay builder...";
                 publishProgress(step);
                 waiter(100);
             } else {
@@ -357,7 +357,7 @@ public class OnboardingView extends FrameLayout {
                                         hasErroredOut = true;
                                     }
 
-                                    logger = "Building Overlay for " + overlay_name;
+                                    logger = "I: Building Overlay for " + overlay_name;
                                     publishProgress(step);
 
                                     if (!hasErroredOut && OnboardingCompiler.runAapt(overlay.getAbsolutePath(), overlay_name)) {
@@ -375,7 +375,7 @@ public class OnboardingView extends FrameLayout {
             logger = null;
             publishProgress(++step);
             if (skippedInstallation) {
-                logger = "Skipping zipalign process...";
+                logger = "I: Skipping zipalign process...";
                 publishProgress(step);
                 waiter(100);
             } else {
@@ -388,7 +388,7 @@ public class OnboardingView extends FrameLayout {
                         if (!overlay.isDirectory()) {
                             String overlay_name = overlay.toString().replace(ModuleConstants.UNSIGNED_UNALIGNED_DIR + '/', "").replace("-unaligned", "");
 
-                            logger = "Zip aligning Overlay " + overlay_name.replace("-unsigned.apk", "");
+                            logger = "I: Zip aligning Overlay " + overlay_name.replace("-unsigned.apk", "");
                             publishProgress(step);
 
                             if (OnboardingCompiler.zipAlign(overlay.getAbsolutePath(), overlay_name)) {
@@ -403,7 +403,7 @@ public class OnboardingView extends FrameLayout {
             logger = null;
             publishProgress(++step);
             if (skippedInstallation) {
-                logger = "Skipping signing process...";
+                logger = "W: Skipping signing process...";
                 publishProgress(step);
                 waiter(100);
             } else {
@@ -416,7 +416,7 @@ public class OnboardingView extends FrameLayout {
                         if (!overlay.isDirectory()) {
                             String overlay_name = overlay.toString().replace(ModuleConstants.UNSIGNED_DIR + '/', "").replace("-unsigned", "");
 
-                            logger = "Signing Overlay " + overlay_name.replace(".apk", "");
+                            logger = "I: Signing Overlay " + overlay_name.replace(".apk", "");
                             publishProgress(step);
 
                             int attempt = 3;
@@ -432,7 +432,7 @@ public class OnboardingView extends FrameLayout {
                 }
             }
 
-            logger = "Moving overlays to system directory";
+            logger = "I: Moving overlays to system directory";
             publishProgress(++step);
             if (skippedInstallation) {
                 waiter(100);
@@ -460,13 +460,13 @@ public class OnboardingView extends FrameLayout {
             Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/Overlays").exec();
 
             if (!hasErroredOut) {
-                logger = "Installation process finished";
+                logger = "I: Installation process finished";
                 publishProgress(step);
                 waiter(100);
 
                 logger = "You should reboot your device";
             } else {
-                logger = "Installation process failed";
+                logger = "E: Installation process failed";
             }
 
             publishProgress(step);

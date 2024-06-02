@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:insetLeft="-2dp"
-    android:insetTop="-3dp">
+    android:insetTop="-2dp">
     <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="21.0dip"
-        android:height="12.0dip"
+        android:height="13.0dip"
         android:viewportWidth="21.0"
         android:viewportHeight="12.0">
         <group>

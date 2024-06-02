@@ -26,7 +26,6 @@ public class QSTransparency extends XposedMods {
     private static final String TAG = "Oxygen Customizer - " + QSTransparency.class.getSimpleName() + ": ";
     private final float keyguard_alpha = 0.85f;
     boolean qsTransparencyActive = false;
-    boolean keepLockScreenShade = false;
     private float alpha = 40;
     private boolean blurEnabled = false;
     private int blurRadius = 60;
@@ -67,11 +66,7 @@ public class QSTransparency extends XposedMods {
                 int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
                 String scrimState = getObjectField(param.thisObject, "mState").toString();
 
-                if (scrimState.equals("KEYGUARD")) {
-                    if(!keepLockScreenShade) {
-                        param.args[alphaIndex] = 0.0f;
-                    }
-                } else if (scrimState.contains("BOUNCER")) {
+                if (scrimState.contains("BOUNCER")) {
                     param.args[alphaIndex] = (Float) param.args[alphaIndex] * keyguard_alpha;
                 } else {
                     String scrimName = "unknown_scrim";

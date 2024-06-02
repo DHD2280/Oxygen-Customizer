@@ -1,4 +1,6 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetRight="3.0dip">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="15dp"
     android:height="15dp"
     android:viewportWidth="24.0"
@@ -27,4 +29,5 @@
         android:strokeColor="#FF000000"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
-</vector>
+    </vector>
+</inset>

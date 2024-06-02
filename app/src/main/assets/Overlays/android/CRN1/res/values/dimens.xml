@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="harmful_app_name_padding_top">28.0dip</dimen>
+    <dimen name="harmful_app_name_padding_right">26.0dip</dimen>
+    <dimen name="harmful_app_name_padding_left">24.0dip</dimen>
+    <dimen name="harmful_app_name_padding_bottom">22.0dip</dimen>
+</resources>

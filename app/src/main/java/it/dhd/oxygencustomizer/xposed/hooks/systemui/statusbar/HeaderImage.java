@@ -2,7 +2,10 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.findField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
@@ -31,13 +34,11 @@ import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
@@ -86,6 +87,7 @@ public class HeaderImage extends XposedMods {
     private int mColorTextPrimary;
     private int mColorTextPrimaryInverse;
     private int bottomFadeAmount = 0;
+    private boolean newControlCenter = false;
 
     public HeaderImage(Context context) {
         super(context);
@@ -124,10 +126,17 @@ public class HeaderImage extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        Class<?> NewBrightnessSlider;
+        try {
+            NewBrightnessSlider = findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
+            newControlCenter = true;
+            log(TAG + "New Control Center");
+        } catch (Throwable ignored) {}
 
         Class<?> OplusQSContainerImpl;
         try {
             OplusQSContainerImpl = findClass("com.oplus.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);
+
         } catch (Throwable t) {
             OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); // OOS 13
         }
@@ -138,6 +147,7 @@ public class HeaderImage extends XposedMods {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
                     log(TAG + "onFinishInflate");
+
                     FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
 
                     mQsHeaderLayout = new FadingEdgeLayout(mContext);
@@ -168,6 +178,43 @@ public class HeaderImage extends XposedMods {
             });
 
         } catch (Throwable ignored) {}
+
+        Class <?> QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        hookAllMethods(QSFragmentHelper, "springBackAll", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                log(TAG + "springBackAll");
+                if (mQsHeaderLayout != null) {
+                    log(TAG + callMethod(param.thisObject, "isInOverScroll", mQsHeaderLayout));
+                }
+            }
+        });
+
+        if (newControlCenter) {
+            try {
+                final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", lpparam.classLoader);
+
+                hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if(!qshiEnabled) return;
+                        if (mQsHeaderLayout == null) return;
+
+                        int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
+
+                        if (findField(ScrimControllerClass, "mScrimBehind").get(param.thisObject).equals(param.args[0])) {
+                            float qsAlpha = (float) param.args[alphaIndex];
+                            if (qsAlpha < .19f) {
+                                mQsHeaderLayout.setAlpha(0f);
+                            } else {
+                                mQsHeaderLayout.setAlpha(1f);
+                            }
+                        }
+                    }
+                });
+            } catch (Throwable t) {
+                log(TAG + "Error hooking new Control Center " + t.getMessage());
+            }
+        }
 
     }
 
@@ -220,27 +267,6 @@ public class HeaderImage extends XposedMods {
 
     }
 
-    private void addOrRemoveProperty(View view, int property, boolean flag) {
-        Object vParam = view.getLayoutParams();
-        if (vParam instanceof RelativeLayout.LayoutParams) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vParam;
-            if (flag) {
-                layoutParams.addRule(property);
-            } else {
-                layoutParams.removeRule(property);
-            }
-            view.setLayoutParams(layoutParams);
-        } else if (vParam instanceof LinearLayout.LayoutParams) {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) vParam;
-            if (flag) {
-                layoutParams.gravity = property;
-            } else {
-                layoutParams.gravity = Gravity.NO_GRAVITY;
-            }
-            view.setLayoutParams(layoutParams);
-        }
-    }
-
     private void loadImageOrGif(ImageView iv) {
         AtomicBoolean applyTint = new AtomicBoolean(false);
         int tintColor;
@@ -269,7 +295,7 @@ public class HeaderImage extends XposedMods {
         } else {
             try {
                 ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-                executor.scheduleAtFixedRate(() -> {
+                executor.scheduleWithFixedDelay(() -> {
                     File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
 
                     if (Android.isDirectory()) {

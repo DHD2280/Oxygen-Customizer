@@ -400,7 +400,6 @@ public class Constants {
             public static final String AOD_CLOCK_SWITCH = "aod_custom_clock_switch";
             public static final String AOD_CLOCK_STYLE = "aod_custom_clock_style";
             public static final String AOD_CLOCK_CUSTOM_COLOR_SWITCH = "aod_custom_color_switch";
-            public static final String AOD_CLOCK_CUSTOM_COLOR = "aod_custom_color";
             public static final String AOD_CLOCK_LINE_HEIGHT = "aod_clock_line_height";
             public static final String AOD_CLOCK_CUSTOM_FONT = "aod_custom_font";
             public static final String AOD_CLOCK_TEXT_SCALING = "aod_text_scaling";
@@ -436,6 +435,7 @@ public class Constants {
         public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
 
         public static final String SELECTED_TOAST_FRAME = "selectedToastFrame";
+        public static final String NOTIFICATION_CORNER_RADIUS = "notification_corner_radius";
 
     }
 

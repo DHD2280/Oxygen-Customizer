@@ -371,7 +371,10 @@ public class HeaderClock extends XposedMods {
                 TextView textView = (TextView) param.args[0];
                 if (showHeaderClock || stockClockRedStyle == 1 ) {
                     param.setResult(null);
-                    if (showHeaderClock) textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
+                    if (showHeaderClock) {
+                        textView.setText("");
+                        textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
+                    }
                     return;
                 }
 
@@ -458,7 +461,7 @@ public class HeaderClock extends XposedMods {
 
         try {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-            executor.scheduleAtFixedRate(() -> {
+            executor.scheduleWithFixedDelay(() -> {
                 File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
 
                 if (Android.isDirectory()) {

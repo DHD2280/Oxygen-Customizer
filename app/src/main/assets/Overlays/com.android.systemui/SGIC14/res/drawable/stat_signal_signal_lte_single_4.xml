@@ -1,4 +1,6 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetRight="3.0dip">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="15dp"
     android:height="15dp"
@@ -180,4 +182,5 @@
 
         </path>
     </group>
-</vector>
+    </vector>
+</inset>

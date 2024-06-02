@@ -1,4 +1,6 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="15.0dp"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetRight="3.0dip">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="15.0dp"
 android:height="15.0dp"
 android:viewportWidth="18"
 android:viewportHeight="18">
@@ -14,4 +16,5 @@ android:pathData="M14.76,5.61C14.61,5.63,14.5,5.66,14.39,5.72C14.31,5.77,13.18,6
 android:pathData="M14.62,10.46C14.51,10.48,14.38,10.55,14.29,10.61C14.19,10.68,11.59,12.8,11.46,12.92C11.04,13.29,10.99,13.88,11.32,14.3C11.52,14.55,11.78,14.67,12.12,14.67C12.34,14.67,12.51,14.61,12.68,14.5C12.72,14.46,12.98,14.25,13.25,14.04C13.52,13.81,14.14,13.31,14.62,12.92C15.1,12.53,15.54,12.16,15.59,12.11C15.77,11.93,15.85,11.71,15.85,11.41C15.85,11.26,15.84,11.2,15.81,11.12C15.7,10.83,15.48,10.6,15.21,10.49C15.13,10.46,15.06,10.45,14.89,10.45C14.78,10.45,14.65,10.45,14.62,10.46ZM14.62,10.46"/>
 <path   android:fillColor="#64000000"
 android:pathData="M1.51,8.99L1.51,15.26L8.99,15.27C13.11,15.28,16.48,15.28,16.48,15.28C16.49,15.27,10.39,5.83,10.34,5.79C10.33,5.77,1.78,2.8,1.55,2.73L1.51,2.71ZM1.51,8.99"/>
-</vector>
+    </vector>
+</inset>

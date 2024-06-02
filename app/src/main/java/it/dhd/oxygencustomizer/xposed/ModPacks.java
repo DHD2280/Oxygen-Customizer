@@ -75,10 +75,11 @@ public class ModPacks {
                     modPacks.add(BatteryStyleManager.class);
                     modPacks.add(NotificationTransparency.class);
                     // QS
+                    modPacks.add(HeaderImage.class); // Load first QS Header Image since we have to check ScrimView Alpha before set by QS Transparency
+                    modPacks.add(DepthWallpaper.class); // Load first Depth Wallpaper since we have to check ScrimView Alpha before set by QS Transparency
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
-                    modPacks.add(HeaderImage.class);
                     // Pulse View
                     modPacks.add(AudioDataProvider.class);
                     modPacks.add(PulseViewHook.class);
@@ -86,7 +87,6 @@ public class ModPacks {
                     // Lockscreen
                     modPacks.add(Lockscreen.class);
                     modPacks.add(LockscreenClock.class);
-                    modPacks.add(DepthWallpaper.class);
 
                     // Volume Panel
                     modPacks.add(VolumePanel.class);

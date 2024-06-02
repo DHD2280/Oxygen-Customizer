@@ -6,6 +6,11 @@
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/ui_illustration" />
 
+    <Preference
+        app:iconSpaceReserved="false"
+        android:layout="@layout/view_reboot"
+        android:key="reboot_pref" />
+
     <PreferenceCategory
         android:title="@string/style_category"
         app:iconSpaceReserved="false">
@@ -22,9 +27,16 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NotificationStyle"
             android:icon="@drawable/ic_notification_style"
             android:key="android.theme.customization.notifications"
-            android:summary="@string/theme_customization_notification_style_summary"
+            android:summary="@string/notification_styles_desc"
             android:title="@string/notification_styles" />
 
+        <!-- Notification Roundness -->
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NotificationRoundness"
+            android:icon="@drawable/ic_notification_style"
+            android:key="android.theme.customization.notifications_roundness"
+            android:summary="@string/notification_corner_radius_title"
+            android:title="@string/notification_corner_radius_title" />
 
         <!-- Navbar Style -->
         <Preference
@@ -40,7 +52,7 @@
             android:icon="@drawable/ic_toast_frame"
             android:key="android.theme.customization.toast_frame"
             android:summary="@string/theme_customization_toast_frame_summary"
-            android:title="@string/theme_customization_toast_frame_title" />-->
+            android:title="@string/theme_customization_toast_frame_title" /> -->
 
     </PreferenceCategory>
 

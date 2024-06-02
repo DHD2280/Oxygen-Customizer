@@ -17,8 +17,8 @@ public class NotificationManager {
             PreferenceHelper.getModulePrefs().edit().putBoolean("hasNotificationOverlays", true).apply();
             if (!hasOverlays) AppUtils.restartScope("systemui");
         }
-        if (!OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCR1.overlay") || !OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCR2.overlay")) {
-            OverlayUtil.enableOverlays("OxygenCustomizerComponentCR1.overlay", "OxygenCustomizerComponentCR2.overlay");
+        if (!OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCRN1.overlay") || !OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCRN1.overlay")) {
+            OverlayUtil.enableOverlays("OxygenCustomizerComponentCRN1.overlay", "OxygenCustomizerComponentCR1.overlay");
         }
     }
 

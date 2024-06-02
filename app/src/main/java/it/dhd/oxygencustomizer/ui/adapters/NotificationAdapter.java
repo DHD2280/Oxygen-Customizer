@@ -59,7 +59,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        setDrawable(holder.container, ContextCompat.getDrawable(context, itemList.get(position).getBackground()));
+        if (itemList.get(position).getBackground() != 0)
+            setDrawable(holder.container, ContextCompat.getDrawable(context, itemList.get(position).getBackground()));
+        else
+            setDrawable(holder.container, itemList.get(position).getDrawableBackground());
         holder.style_name.setText(itemList.get(position).getName());
         holder.ic_collapse_expand.setForeground(ContextCompat.getDrawable(context, R.drawable.ic_expand_arrow));
 

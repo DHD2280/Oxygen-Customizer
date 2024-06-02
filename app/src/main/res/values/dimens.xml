@@ -3,6 +3,7 @@
 
     <dimen name="ui_container_radius">24dp</dimen>
     <dimen name="ui_container_margin_side">16dp</dimen>
+    <dimen name="container_paddingSide">24dp</dimen>
 
     <!-- Padding of illustration -->
     <dimen name="settingslib_illustration_padding">16dp</dimen>

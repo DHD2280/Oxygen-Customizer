@@ -1022,11 +1022,11 @@
     <string name="icon_theme_category">Icon pack and Styles</string>
 
     <!-- UI styles -->
+    <string name="oxygen_customizer_updated_title">Oxygen Customizer Just Got Updated!</string>
+    <string name="oxygen_customizer_updated_desc">Reboot your phone to use the latest added features and options.\nTap here to reboot now.</string>
+    <string name="rebooting_desc">Rebooting in 5 seconds</string>
     <string name="theme_customization_ui_style_title">UI Style</string>
     <string name="theme_customization_ui_style_summary">Set custom style for your interface</string>
-    <string name="notifications_customizations">Notifications</string>
-    <string name="theme_customization_notification_style_summary">Set custom style for notifications</string>
-
 
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">Icon pack</string>
@@ -1042,7 +1042,12 @@
 
     <!-- Notification -->
     <string name="notification_styles">Notification Styles</string>
+    <string name="notification_styles_desc">Set custom style for notifications</string>
     <string name="notif_preview_desc">Notification Preview.\nClick to apply this style.</string>
+
+    <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Notification Corner Radius</string>
+    <string name="notif_roundness_preview_desc">Notification Preview.</string>
 
     <!-- Toast Styles -->
     <string name="toast_styles">Toast Styles</string>
