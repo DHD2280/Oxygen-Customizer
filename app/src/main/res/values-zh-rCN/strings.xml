@@ -11,6 +11,10 @@
     <string name="opt_selected1">已选择: %s</string>
     <string name="opt_selected2">已选择: %s%s</string>
     <string name="requires_sysui_restart">这个选择需要系统界面重启\n点击菜单来重启</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <string name="btn_select">选择</string>
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">通知</string>
@@ -18,7 +22,6 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">需要重启系统才能应用设置</string>
     <!-- General Strings -->
-    <string name="btn_select">选择</string>
     <string name="battery_charging">电池充电中</string>
     <string name="battery_discharging">电池未充电</string>
     <string name="battery_full">电池已满</string>
@@ -99,6 +102,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <string name="pulse_color_accent">强调</string>
@@ -111,6 +116,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <!-- Advanced Reboot -->
@@ -118,4 +124,11 @@
     <!-- Omni Jaws Strings -->
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>

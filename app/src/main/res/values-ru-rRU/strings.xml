@@ -12,6 +12,10 @@
     <string name="opt_selected2">Selected: %s%s</string>
     <string name="requires_sysui_restart">В этом разделе требуется перезагрузка SystemUI
 Нажмите на меню для перезагрузки.</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <string name="btn_select">Выбрать</string>
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Уведомление</string>
@@ -19,7 +23,6 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Для применения настроек требуется перезагрузка системы</string>
     <!-- General Strings -->
-    <string name="btn_select">Выбрать</string>
     <string name="battery_charging">Зарядка аккумулятора</string>
     <string name="battery_discharging">Разрядка аккумулятора</string>
     <string name="battery_full">Батарея полностью заряжена</string>
@@ -32,6 +35,7 @@
     <string name="general_color_accent3">Акцент 3</string>
     <string name="general_color_text1">Текст 1</string>
     <string name="general_color_text2">Текст 2</string>
+    <string name="sysui_restart_needed">Для применения требуется перезапуск SystemUI</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
@@ -78,12 +82,23 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Уведомления в строке состояния</string>
     <string name="statusbar_use_app_icon">Используйте значок приложения для уведомлений</string>
+    <string name="statusbar_notifications_transparency">Прозрачность уведомлений</string>
+    <string name="statusbar_notification_transparency">Прозрачность уведомлений</string>
+    <string name="statusbar_notification_transparency_value">Степень прозрачности</string>
     <string name="statusbar_notification_count">Показывать количество уведомлений</string>
     <string name="statusbar_notifications_related">Настройки уведомлений</string>
     <string name="remove_charging_complete_notification_title">Удалить уведомление о завершении зарядки</string>
     <string name="remove_dev_mode_notification">Удалить уведомление о режиме разработки</string>
     <string name="remove_flashlight_notification">Удалить уведомление о фонарике</string>
     <string name="remove_low_battery_notification">Удалить уведомление о низком заряде батареи</string>
+    <string name="notif_default_expansion_title">Расширение уведомлений по умолчанию</string>
+    <string name="notif_always_expand">Всегда разворачивать</string>
+    <string name="notif_always_collapse">Всегда сворачивать</string>
+    <string name="customize_clear_all_button">Настроить кнопку Очистить все</string>
+    <string name="clear_all_link_bg_accent">Связать фон с акцентом</string>
+    <string name="clear_all_bg_color">Пользовательский цвет фона</string>
+    <string name="clear_all_link_bg_icon_accent">Связать значок с акцентом</string>
+    <string name="clear_all_icon_color">Пользовательский цвета значков</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Часы и дата</string>
@@ -248,6 +263,10 @@
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Скрыть значок Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Скрывайте значок Bluetooth, когда он не подключен.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">Скрыть в сети Wi-Fi</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">Отключить/включить Wi-Fi, для отображения изменений.</string>
+    <string name="statusbar_icons_inout_mobile_hide_title">Скрыть в мобильных данных</string>
+    <string name="statusbar_icons_inout_mobile_hide_summary">Отключите/включите мобильные данные, чтобы отобразить изменения.</string>
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown">Быстрое опускание</string>
     <string name="quick_pulldown_length">Длина быстрого вытягивания</string>
@@ -259,6 +278,11 @@
     <string name="quick_settings_tiles_title">Плитки быстрой настройки</string>
     <string name="quick_settings_tiles_number">Быстрые настройки настройки количества плиток</string>
     <string name="quick_settings_tiles_main">Настройка плиток быстрых настроек</string>
+    <string name="qs_transparency">Прозрачность и размытие QS</string>
+    <string name="qs_transparency_title">Настройка прозрачности QS</string>
+    <string name="qs_transparency_value">Прозрачность QS</string>
+    <string name="qs_transparency_blur_title">Размытие на уровне окна</string>
+    <string name="qs_blur_intentisy">Интенсивность размытия</string>
     <string name="quick_settings_tiles_qqs">Быстрые плитки QS</string>
     <string name="quick_settings_tiles_portrait">В портретной ориентации</string>
     <string name="quick_settings_tiles_horizontal_rows">Строки быстрой настройки</string>
@@ -288,7 +312,45 @@
     <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
     <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_title">Анимация плиток</string>
+    <string name="qs_tile_animation_style_title">Стиль анимации</string>
+    <string name="qs_tile_animation_duration_title">Продолжительность анимации</string>
+    <string name="qs_tile_animation_interpolator_title">Интерполяция анимации плиток</string>
+    <string name="qs_tile_animation_style_off">Без анимации</string>
+    <string name="qs_tile_animation_style_flip">Переворот</string>
+    <string name="qs_tile_animation_style_rotate">Поворот</string>
+    <string name="qs_tile_animation_duration_low">Низко</string>
+    <string name="qs_tile_animation_duration_default">По умолчанию</string>
+    <string name="qs_tile_animation_duration_fast">Быстро</string>
+    <string name="qs_tile_animation_interpolator_linearInterpolator">Линейный</string>
+    <string name="qs_tile_animation_interpolator_accelerateInterpolator">Ускорение</string>
+    <string name="qs_tile_animation_interpolator_decelerateInterpolator">Замедление</string>
+    <string name="qs_tile_animation_interpolator_accelerateDecelerateInterpolator">Ускорение, замедление</string>
+    <string name="qs_tile_animation_interpolator_bounceInterpolator">Подпрыгивание</string>
+    <string name="qs_tile_animation_interpolator_overshootInterpolator">Превышение</string>
+    <string name="qs_tile_animation_interpolator_anticipateInterpolator">Опережение</string>
+    <string name="qs_tile_animation_interpolator_anticipateOvershootInterpolator">Опережение и вылет</string>
     <!-- QS Page Transitions -->
+    <string name="qs_transitions_title_switch_title">Включить переходы страниц QS</string>
+    <string name="qs_transitions_title">Переходы страниц QS</string>
+    <string name="qs_transitions_cube_in">Внутри куба</string>
+    <string name="qs_transitions_cube_out">Снаружи куба</string>
+    <string name="qs_transitions_accordion">Аккордеон</string>
+    <string name="qs_transitions_background_to_foreground">От фона к переднему плану</string>
+    <string name="qs_transitions_depth_page">Глубина страницы</string>
+    <string name="qs_transitions_fade">Затухание</string>
+    <string name="qs_transitions_foreground_to_background">От переднего плана к фону</string>
+    <string name="qs_transitions_rotate_down">Поворот вниз</string>
+    <string name="qs_transitions_rotate_up">Поворот вверх</string>
+    <string name="qs_transitions_stack">Слои</string>
+    <string name="qs_transitions_tablet">Планшет</string>
+    <string name="qs_transitions_zoom_in">Приближение</string>
+    <string name="qs_transitions_zoom_out">Отдаление</string>
+    <string name="qs_transitions_zoom_out_slide">Уменьшение слайда</string>
+    <string name="qs_transitions_raise_from_center">Появление из центра</string>
+    <string name="qs_transitions_rotate_about_bottom">Поворот снизу</string>
+    <string name="qs_transitions_translate_y_ttb">Перевести сверху вниз</string>
+    <string name="qs_transitions_translate_y_btt">Перевести снизу вверх</string>
     <!-- QS Header Image Strings -->
     <string name="qs_header_image_title">Изображение заголовка</string>
     <string name="qs_header_image_summary">Выберите фоновое изображение заголовка QS</string>
@@ -392,6 +454,8 @@
     <string name="qs_header_clock_top_margin">Верхний предел</string>
     <string name="qs_header_clock_left_margin">Левое поле</string>
     <!-- QS Header Misc -->
+    <string name="qs_header_misc">Разное в заголовке QS</string>
+    <string name="qs_header_system_icons_chip">Системные значки</string>
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Заполненный</string>
     <string name="chip_outlined">Упомянутый</string>
@@ -415,6 +479,10 @@
     <!-- Launcher Mods -->
     <string name="launcher_intro_title">Параметры запуска требуют перезапуска программы запуска.
 Нажмите на меню, чтобы перезапустить.</string>
+    <string name="launcher_layout">Макет домашнего экрана</string>
+    <string name="launcher_edit_layout">Редактирование макета</string>
+    <string name="launcher_columns">Столбцы</string>
+    <string name="launcher_rows">Строки</string>
     <string name="launcher_folder_layout">Расположение папок</string>
     <string name="launcher_folder_edit_layout">Редактировать макет</string>
     <string name="launcher_folder_columns">Столбцы</string>
@@ -492,7 +560,17 @@
     <string name="lockscreen_affordance_remove_right">Удалить доступность справа</string>
     <string name="lockscreen_hide_lock_icon">Скрыть значок замка</string>
     <string name="lockscreen_weather">Погода на экране блокировки</string>
+    <string name="depth_wallpaper_category">Глубина Обоев</string>
+    <string name="depth_wallpaper_title">Обои с эффектом глубины</string>
+    <string name="depth_wallpaper_summary">Динамически интегрируйте передний план обоев с часами</string>
+    <string name="depth_wallpaper_opacity_title">Непрозрачность обоев на переднем плане</string>
+    <string name="depth_wallpaper_aod_title">Также в режиме «Всегда на экране»</string>
+    <string name="depth_wallpaper_model_ready">Модель AI загружается на устройство</string>
+    <string name="depth_wallpaper_model_not_available">Модель AI недоступна на устройстве (пока)</string>
     <!-- Depth Effect Alert -->
+    <string name="depth_effect_alert_title">Внимание</string>
+    <string name="depth_effect_alert_body">Используйте подходящие обои для экрана блокировки, элементы переднего плана не загораживают часы на экране блокировки, обеспечивая как визуальную привлекательность, так и функциональную ясность на экране блокировки.\nПосле включения и установки обоев экрана блокировки модель AI автоматически попытается извлечь  Объект с обоев.\n\nПримечание: %s.</string>
+    <string name="depth_effect_ok_btn">ОК</string>
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">Часы на экране блокировки</string>
     <string name="lockscreen_clock_switch">Пользовательские часы на экране блокировки</string>
@@ -526,6 +604,19 @@
     <string name="lockscreen_9_time_title">Time is</string>
     <string name="lockscreen_9_calendar">Календарь</string>
     <string name="lockscreen_9_day_title">Today is</string>
+    <!-- Aod Strings -->
+    <string name="aod_title">Always On Display</string>
+    <!-- Aod Clock -->
+    <string name="aod_clock">Часы на AOD</string>
+    <string name="aod_clock_switch">Пользовательские часы AOD</string>
+    <string name="aod_clock_custom">Стиль часов</string>
+    <string name="aod_clock_custom_summary">Выберите стиль по своему усмотрению.</string>
+    <string name="aod_clock_font_prefs_title">Шрифт</string>
+    <string name="aod_clock_font_custom_enabled">Использовать собственный шрифт</string>
+    <string name="aod_clock_font_custom_title">Выберите шрифт</string>
+    <string name="aod_clock_font_custom_summary">Выберите свой шрифт.\nНе выбирайте файл из списка «Недавние».</string>
+    <string name="aod_clock_prefs">Настройки часов AOD</string>
+    <string name="aod_clock_custom_color_title">Пользовательский цвет часов</string>
     <!-- Sound Mods -->
     <string name="misc_category">Разнообразные</string>
     <!-- Pulse music visualizer -->
@@ -617,6 +708,7 @@
     <string name="use_auth_for_advanced_reboot_summary">Требуется проверка подлинности для использования расширенных параметров перезагрузки.</string>
     <string name="advanced_reboot_hide_lockscreen">Скрыть на экране блокировки</string>
     <string name="show_entry_settings_title">Показать запись в настройках</string>
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <string name="hooks_title">Хуки</string>
     <string name="hooked_packages_title">Подключенные пакеты</string>
@@ -770,4 +862,11 @@
     <string name="weather_condition_snow">Snowy</string>
     <string name="weather_condition_wind">Ветреный</string>
     <string name="weather_condition_mist">Туманный</string>
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>

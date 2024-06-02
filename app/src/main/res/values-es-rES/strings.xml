@@ -1,24 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Xposed Description -->
+    <string name="xposeddescription">Personalizar Oxygen OS</string>
     <!-- Preferences Strings -->
+    <string name="default_value">Predeterminado</string>
+    <string name="settingslib_learn_more_text">Más información</string>
+    <string name="settings_label">Ajustes</string>
+    <string name="toast_rename_file">Renombrar archivo a algo más simple</string>
+    <string name="toast_applied">Aplicado</string>
+    <string name="opt_selected1">Seleccionado: %s</string>
+    <string name="opt_selected2">Seleccionado: %s%s</string>
+    <string name="requires_sysui_restart">Esta sección requiere un reinicio de la Interfaz del Sistema\nPresiona en el menú para reiniciar.</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <string name="btn_select">Seleccionar</string>
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
+    <string name="app_kill_alert_title">Aviso</string>
+    <string name="app_kill_ok_btn">Ok</string>
     <!-- Reboot alert -->
+    <string name="reboot_alert_body">Se requiere un reinicio del sistema para aplicar los ajustes</string>
     <!-- General Strings -->
+    <string name="battery_charging">Batería cargándose</string>
+    <string name="battery_discharging">Batería descargándose</string>
+    <string name="battery_full">Batería llena</string>
+    <string name="battery_level_percentage">Nivel de batería</string>
+    <string name="seconds">Segundos</string>
+    <string name="milliseconds">Milisegundos</string>
+    <string name="steps">Pasos</string>
+    <string name="general_color_accent1">Acento 1</string>
+    <string name="general_color_accent2">Acento 2</string>
+    <string name="general_color_accent3">Acento 3</string>
+    <string name="general_color_text1">Texto 1</string>
+    <string name="general_color_text2">Texto 2</string>
+    <string name="sysui_restart_needed">Requiere un reinicio de la Interfaz del Sistema para aplicar</string>
     <!-- Search Preference -->
+    <string name="searchpreference_search">Buscar…</string>
+    <string name="searchpreference_clear">Limpiar</string>
+    <string name="searchpreference_history_entry">Historial</string>
+    <string name="searchpreference_more">Más</string>
+    <string name="searchpreference_clear_history">Limpiar historial</string>
+    <string name="searchpreference_no_results">Sin resultados</string>
     <!-- Menu Strings -->
     <!-- NavBar Strings -->
+    <string name="navbar_mods">Mods</string>
+    <string name="navbar_settings">Ajustes</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Mods</string>
+    <string name="statusbar_title">Barra de estado</string>
+    <string name="launcher_title">Lanzador</string>
+    <string name="quick_settings_title">Ajustes rápidos</string>
+    <string name="qs_header_title">Encabezado de ajustes rápidos</string>
+    <string name="sound">Sonido</string>
+    <string name="misc">Misceláneos</string>
+    <string name="package_manager">Gestor de paquetes</string>
     <!-- General Strings -->
+    <string name="general_on">Encendido</string>
+    <string name="general_off">Apagado</string>
+    <string name="accent_color">Color de acento</string>
+    <string name="custom_color">Color personalizado</string>
+    <string name="battery_info_button_title">Información de la batería…</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">Opciones de la barra de estado</string>
+    <string name="status_bar_toggle_brightness_title">Control de brillo</string>
+    <string name="statusbar_batterybar_title">Ajustes de la barra de batería</string>
+    <string name="statusbar_battery_icon_options">Ícono de batería</string>
+    <string name="statusbar_icons">Íconos de la barra de estado</string>
     <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">Notificaciones</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">Notificaciones de la barra de estado</string>
+    <string name="statusbar_use_app_icon">Usar ícono de app para las notificaciones</string>
+    <string name="statusbar_notifications_transparency">Transparencia de las notificaciones</string>
+    <string name="statusbar_notification_transparency">Transparencia de notificación</string>
+    <string name="statusbar_notifications_related">Preferencias de notificaciones</string>
+    <string name="notif_always_expand">Siempre expandir</string>
+    <string name="notif_always_collapse">Siempre contraer</string>
+    <string name="clear_all_icon_color">Color de ícono personalizado</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_seconds_title">Segundos del reloj</string>
+    <string name="status_bar_clock_seconds_summary">Mostrar segundos junto al reloj en la barra de estado</string>
+    <string name="status_bar_clock_position_title">Estilo de reloj</string>
+    <string name="status_bar_clock_position_right">Derecha</string>
+    <string name="status_bar_clock_position_left">Izquierda</string>
+    <string name="status_bar_clock_position_center">Centro</string>
+    <string name="status_bar_clock_position_hidden">Oculto</string>
+    <string name="status_bar_clock_auto_hide_title">Auto ocultar</string>
+    <string name="status_bar_clock_auto_hide_launcher_summary">Ocultar reloj si el lanzador es visible</string>
+    <string name="status_bar_clock_auto_hide_summary">Ocultar reloj en intervalos regulares</string>
+    <string name="status_bar_clock_auto_hide_hdur_title">Ocultar duración</string>
+    <string name="status_bar_clock_auto_hide_hdur_summary">Número de segundos para ocultar reloj</string>
+    <string name="status_bar_clock_auto_hide_sdur_title">Mostrar duración</string>
+    <string name="status_bar_clock_auto_hide_sdur_summary">Número de segundos a esperar antes de ocultar reloj</string>
+    <string name="status_bar_am_pm_title">Formato AM/PM</string>
+    <string name="status_bar_am_pm_normal">Normal</string>
+    <string name="status_bar_am_pm_small">Pequeño</string>
+    <string name="status_bar_am_pm_hidden">Oculto</string>
+    <string name="status_bar_date_title">Fecha</string>
+    <string name="status_bar_date_none">Oculto</string>
+    <string name="status_bar_date_small">Pequeño</string>
+    <string name="status_bar_date_normal">Normal</string>
+    <string name="status_bar_date_format_title">Formato de fecha</string>
+    <string name="status_bar_date_style">Formato de fecha</string>
+    <string name="status_bar_date_style_normal">Normal</string>
+    <string name="status_bar_date_style_lowercase">Minúsculas</string>
+    <string name="status_bar_date_style_uppercase">Mayúsculas</string>
+    <string name="status_bar_date_format_custom">Formato personalizado de Java</string>
+    <string name="status_bar_date_string_edittext_title">Debe estar en formato de fecha. Por ejemplo, MM/dd/aa</string>
+    <string name="clock_date_position">Posición de la fecha</string>
+    <string name="status_bar_custom_clock_color_summary">Color del reloj</string>
     <!-- Status bar padding -->
     <!-- Battery Bar Strings -->
+    <string name="BB_colorful_title">Hazlo colorido</string>
+    <string name="BB_Opacity_title">Opacidad de la barra</string>
+    <string name="BB_center_align_title">Alineado al centro</string>
+    <string name="BB_Thickness_title">Grosor de la barra</string>
     <!-- Battery Icon Strings -->
+    <string name="hide_battery_title">Ocultar batería</string>
+    <string name="hide_percentage_title">Ocultar porcentaje</string>
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
     <!-- Statusbar Icons Strings -->
@@ -45,6 +146,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -55,11 +158,124 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
+    <string name="try_again_later">Por favor inténtalo de nuevo más tarde</string>
+    <string name="update_flavor_title">Canal de actualizaciones</string>
+    <string name="stable_flavor">Estable</string>
+    <string name="update_type_title">Tipos de paquete</string>
+    <string name="currentVersionTitle">Versión instalada: </string>
+    <string name="lastestVersionTitle">Última versión: </string>
+    <string name="root_not_here">¡ACCESO ROOT NO OTORGADO!</string>
+    <string name="reboot_pending">Reinicio pendiente</string>
+    <string name="reboot_word">Reiniciar el dispositivo ahora</string>
+    <string name="update_word">Actualizar</string>
+    <string name="switch_branches">Cambiar rama</string>
+    <string name="reinstall_word">Reinstalar</string>
+    <string name="changelog_title">Registro de cambios</string>
     <!-- Advanced Reboot -->
+    <string name="advanced_reboot_title">Reinicio Avanzado</string>
+    <string name="advanced_reboot_auth">Autenticación de reinicio avanzado</string>
+    <string name="advanced_reboot_auth_summary">Autenticar para mostrar opciones de reinicio avanzado</string>
+    <string name="advanced_reboot_recovery">Recuperación</string>
+    <string name="advanced_reboot_bootloader">Gestor de arranque</string>
+    <string name="advanced_reboot_safe_mode">Modo seguro</string>
+    <string name="advanced_reboot_fast_reboot">Reinicio rápido</string>
+    <string name="advanced_reboot_systemui">Reiniciar Interfaz del Sistema</string>
     <!-- Own Settings -->
+    <string name="delete_all_title">Eliminar todo</string>
+    <string name="delete_all_summary">Eliminar todos los ajustes</string>
+    <string name="export_title">Exportar</string>
+    <string name="export_summary">Exportar ajustes</string>
+    <string name="import_title">Importar</string>
+    <string name="import_summary">Importar ajustes</string>
+    <string name="settings_about_section_title">Acerca de</string>
+    <string name="github_repo_title">Repositorio de GitHub</string>
+    <string name="check_updates">Buscar actualizaciones</string>
+    <string name="check_updates_summary">Versión actual: %s</string>
+    <string name="check_auto_updates">Buscar actualizaciones automáticamente</string>
+    <string name="check_auto_updates_summary">Buscar nuevas actualizaciones </string>
+    <string name="notification_channel_update">Actualizaciones</string>
+    <string name="new_update_title">Actualización disponible</string>
+    <string name="usage_title">Uso</string>
+    <string name="usage_summary">Abrir página de wiki</string>
+    <string name="credits_title">Créditos</string>
+    <string name="credits_summary">Gracias a quienes hicieron esto posible.</string>
     <!-- Omni Jaws Strings -->
+    <string name="units_title">Unidad</string>
+    <string name="weather_show_location">Mostrar ubicación</string>
+    <string name="weather_show_condition">Mostrar condición</string>
+    <string name="weather_show_humidity">Mostrar humedad</string>
+    <string name="weather_show_wind">Mostrar viento</string>
+    <string name="weather_text_size">Tamaño del texto</string>
+    <string name="weather_progress_title">Verificando ubicación</string>
+    <string name="weather_select_location">Seleccionar ubicación</string>
+    <string name="custom_location_title">Ubicación personalizada</string>
+    <string name="weather_custom_location_dialog_title">Introducir ubicación</string>
+    <string name="weather_custom_location_title">Ubicación</string>
+    <string name="weather_custom_location_missing">Establecer ubicación personalizada</string>
+    <string name="weather_retrieve_location_dialog_title">¡No se puede obtener la ubicación!</string>
+    <string name="weather_retrieve_location_dialog_enable_button">Activar</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="auto_update_title">Actualizaciones automáticas</string>
+    <string name="unit_metric">Métrico (\u00b0C)</string>
+    <string name="unit_imperial">Imperial (\u00b0F)</string>
+    <string name="update">Actualizar</string>
+    <string name="enable_title">Habilitar</string>
+    <string name="update_interval_title">Intervalo de actualización</string>
+    <string name="interval_1_hour">1 hora</string>
+    <string name="interval_2_hour">2 horas</string>
+    <string name="interval_4_hour">4 horas</string>
+    <string name="interval_6_hour">6 horas</string>
+    <string name="interval_12_hour">12 horas</string>
+    <string name="weather_tile_title">Clima</string>
+    <string name="weather_icon_pack_playstore">Encontrar paquetes de íconos</string>
+    <string name="service_disabled">Deshabilitado</string>
+    <string name="service_error">Error</string>
+    <string name="omnijaws_service_waiting">Esperando \u2026</string>
+    <string name="omnijaws_service_unkown">Sin datos del clima</string>
+    <string name="omnijaws_service_error">Error al cargar datos del clima</string>
+    <string name="omnijaws_service_init">Esperando\u2026</string>
+    <string name="omnijaws_service_progress">Actualizando\u2026</string>
+    <string name="omnijaws_service_disabled">Servicio deshabilitado</string>
+    <string name="weather_widget">Clima</string>
+    <string name="omnijaws_current_text">Ahora</string>
+    <string name="show_background_title">Sombra de fondo</string>
+    <string name="weather_config_title">Ajustes del servicio</string>
+    <string name="omnijaws_city_unkown">Desconocido</string>
+    <string name="activity_title">Clima</string>
+    <string name="omnijaws_service_error_long">Error cargando datos del clima</string>
+    <string name="omnijaws_detail_header">Clima</string>
+    <string name="omnijaws_label_default">Clima</string>
+    <string name="omnijaws_service_last_update">Última actualización:</string>
+    <string name="omnijaws_service_error_location">Sin ubicación disponible</string>
+    <string name="omnijaws_service_error_network">No se encontró una red</string>
+    <string name="theme_system">Igual que el sistema</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="theme_light">Claro</string>
+    <string name="color_theme_title">Tema</string>
+    <string name="location_browse_activity_title">Seleccionar ubicación</string>
+    <string name="location_query_hint">Buscar ubicación</string>
+    <string name="weather_custom_margins">Márgenes personalizados</string>
+    <string name="weather_margin_top">Margen superior</string>
+    <string name="weather_margin_left">Margen izquierdo</string>
     <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_default">Predeterminado</string>
+    <string name="lockscreen_weather_selection_str_gradient">Gradiente</string>
     <!-- Weather -->
+    <string name="weather_condition_clouds">Nublado</string>
+    <string name="weather_condition_rain">Lluvioso</string>
+    <string name="weather_condition_clear">Soleado</string>
+    <string name="weather_condition_storm">Tormentoso</string>
+    <string name="weather_condition_snow">Nevado</string>
+    <string name="weather_condition_wind">Ventoso</string>
+    <string name="weather_condition_mist">Neblinado</string>
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>

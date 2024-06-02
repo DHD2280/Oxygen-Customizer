@@ -11,6 +11,10 @@
     <string name="opt_selected1">Wybrano: %s</string>
     <string name="opt_selected2">Wybrano: %s%s</string>
     <string name="requires_sysui_restart">Ta sekcja wymaga ponownego uruchomienia SystemUI\nDotknij menu, aby uruchomić ponownie.</string>
+    <!-- Onboarding -->
+    <!-- Buttons -->
+    <string name="btn_select">Wybierz</string>
+    <!-- Dialogs -->
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Uwaga</string>
@@ -18,7 +22,6 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Do zastosowania ustawień wymagane jest ponowne uruchomienie systemu</string>
     <!-- General Strings -->
-    <string name="btn_select">Wybierz</string>
     <string name="battery_charging">Ładowanie baterii</string>
     <string name="battery_discharging">Rozładowanie baterii</string>
     <string name="battery_full">Bateria naładowana</string>
@@ -85,6 +88,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -95,6 +100,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <!-- Advanced Reboot -->
@@ -102,4 +108,11 @@
     <!-- Omni Jaws Strings -->
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
+    <!-- UI Strings -->
+    <!-- UI styles -->
+    <!-- Icon pack -->
+    <!-- Notification -->
+    <!-- Notification Corner Radius -->
+    <!-- Toast Styles -->
+    <!-- Style List -->
 </resources>
