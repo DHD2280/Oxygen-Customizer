@@ -45,6 +45,7 @@
     <string name="restart_page_scope">Yalnızca bu sayfa kapsamını yeniden başlat</string>
     <string name="restart_scope_message">Sistem çerçevesi dışındaki tüm kapsamlı işlemleri yeniden başlatmak istediğinizden emin misiniz?\nModül çalışmıyorsa bunu kullanın!\nİlgili tüm kapsamların kontrol edildiğinden emin olun!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_customizations">Özelleştirmeler</string>
     <string name="navbar_mods">Modlar</string>
     <string name="navbar_hooks">Kancalar</string>
     <string name="navbar_settings">Ayarlar</string>
@@ -471,6 +472,10 @@
     <string name="chip_round_corners_bottom_dx_radius">Sağ Alt Yarıçap</string>
     <!-- Launcher Mods -->
     <string name="launcher_intro_title">Başlatıcı Seçenekleri, Başlatıcıyı Yeniden Başlatmayı gerektirir.\nYeniden başlatmak için menüye dokunun.</string>
+    <string name="launcher_layout">Ana Sayfa Düzeni</string>
+    <string name="launcher_edit_layout">Ana sayfa düzenini düzenle</string>
+    <string name="launcher_columns">Ana Sayfa Sütunları</string>
+    <string name="launcher_rows">Ana Sayfa Satırları</string>
     <string name="launcher_folder_layout">Klasör düzeni</string>
     <string name="launcher_folder_edit_layout">Düzeni düzenle</string>
     <string name="launcher_folder_columns">Sütunlar</string>
@@ -590,6 +595,27 @@
     <string name="lockscreen_9_time_title">Saat</string>
     <string name="lockscreen_9_calendar">Takvim</string>
     <string name="lockscreen_9_day_title">Bugün</string>
+    <!-- Aod Strings -->
+    <string name="aod_title">Her Zaman Açık Ekran</string>
+    <!-- Aod Clock -->
+    <string name="aod_clock">AOD Saat</string>
+    <string name="aod_clock_switch">Özel AOD Saati</string>
+    <string name="aod_clock_custom">Saat Stili</string>
+    <string name="aod_clock_custom_summary">İstediğiniz bir stili seçin.</string>
+    <string name="aod_clock_font_prefs_title">Yazı Tipi</string>
+    <string name="aod_clock_font_custom_enabled">Özel Yazı Tipi Kullan</string>
+    <string name="aod_clock_font_custom_title">Yazı Tipi Seç</string>
+    <string name="aod_clock_font_custom_summary">Yazı tipinizi seçin.\nSon kullanılanlar\'dan dosya seçmeyin.</string>
+    <string name="aod_clock_prefs">AOD Saat Tercihleri</string>
+    <string name="aod_clock_custom_color_title">Özel Saat Rengi</string>
+    <string name="aod_clock_custom_color_summary">Ana renk yerine özel renk</string>
+    <string name="aod_clock_text_scaling">Metin Ölçekleme</string>
+    <string name="aod_clock_custom_user">Özel Kullanıcı Adı Kullan</string>
+    <string name="aod_clock_custom_user_title">Kullanıcı Adı</string>
+    <string name="aod_clock_custom_user_image">Özel Kullanıcı Resmi Kullan</string>
+    <string name="aod_clock_custom_user_image_title">Kullanıcı Resmi</string>
+    <string name="aod_clock_custom_user_image_summary">Bir resim seçmek için tıklayın.</string>
+    <string name="aod_font_line_height_title">Çizgi Yüksekliği</string>
     <!-- Sound Mods -->
     <string name="misc_category">Çeşitli Hükümler</string>
     <!-- Pulse music visualizer -->
@@ -697,6 +723,9 @@
     <string name="use_auth_for_advanced_reboot_summary">Gelişmiş yeniden başlatma seçeneklerini kullanmak için kimlik doğrulaması gerektirir.</string>
     <string name="advanced_reboot_hide_lockscreen">Kilit Ekranında Gizle</string>
     <string name="show_entry_settings_title">Girdiyi Ayarlar\'da göster</string>
+    <string name="remove_usb_dialog">USB İletişim Kutusunu Kaldır</string>
+    <string name="remove_usb_dialog_summary">Etkinleştirilirse, USB iletişim kutusu gizlenecek ve MTP seçeneği otomatik olarak seçilecektir.</string>
+    <!-- Screenshot Strings -->
     <string name="screenshot">Ekran görüntüsü</string>
     <string name="screenshots_prefs">Ekran Görüntüsü Seçenekleri</string>
     <string name="disable_secure_screenshot">Flag_secure özelliğini devre dışı bırak</string>

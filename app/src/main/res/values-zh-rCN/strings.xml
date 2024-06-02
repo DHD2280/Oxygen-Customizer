@@ -44,6 +44,7 @@
     <string name="restart_page_scope">仅重启此页面</string>
     <string name="restart_scope_message">你确定要重启除系统框架之外的所有作用域进程吗\n如果模块不工作，请使用此功能\n确保所有相关作用域都被选中！</string>
     <!-- NavBar Strings -->
+    <string name="navbar_customizations">个性化</string>
     <string name="navbar_mods">模组</string>
     <string name="navbar_hooks">钩子</string>
     <string name="navbar_settings">设置</string>
@@ -99,6 +100,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <string name="pulse_color_accent">强调</string>
@@ -111,6 +114,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <!-- Advanced Reboot -->

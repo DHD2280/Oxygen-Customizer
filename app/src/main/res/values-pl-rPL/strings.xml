@@ -39,6 +39,7 @@
     <!-- Menu Strings -->
     <string name="restart_scopes"></string>
     <!-- NavBar Strings -->
+    <string name="navbar_customizations">Dostosowania</string>
     <string name="navbar_mods">Modyfikacje</string>
     <string name="navbar_settings">Ustawienia</string>
     <!-- Mods Strings -->
@@ -85,6 +86,8 @@
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -95,6 +98,7 @@
     <!-- Volume Styles -->
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <!-- Screenshot Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
     <!-- Advanced Reboot -->

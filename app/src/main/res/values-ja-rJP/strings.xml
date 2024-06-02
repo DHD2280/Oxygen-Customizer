@@ -1,65 +1,442 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Xposed Description -->
+    <string name="xposeddescription">Oxygen OS をカスタマイズ</string>
     <!-- Preferences Strings -->
+    <string name="default_value">デフォルト</string>
+    <string name="settings_label">設定</string>
+    <string name="opt_selected1">選択済み: %s</string>
+    <string name="opt_selected2">選択済み: %s%s</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
+    <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
     <!-- General Strings -->
+    <string name="btn_select">選択</string>
+    <string name="battery_charging">バッテリー充電中</string>
+    <string name="battery_discharging">バッテリー放電中</string>
+    <string name="battery_full">満充電</string>
+    <string name="battery_level_percentage">バッテリーレベル</string>
+    <string name="seconds">秒</string>
+    <string name="milliseconds">ミリ秒</string>
+    <string name="steps">ステップ</string>
+    <string name="general_color_accent1">アクセント 1</string>
+    <string name="general_color_accent2">アクセント 2</string>
+    <string name="general_color_accent3">アクセント 3</string>
+    <string name="general_color_text1">テキスト 1</string>
+    <string name="general_color_text2">テキスト 2</string>
     <!-- Search Preference -->
+    <string name="searchpreference_search">検索…</string>
+    <string name="searchpreference_clear">消去</string>
+    <string name="searchpreference_history_entry">履歴のエントリ</string>
+    <string name="searchpreference_clear_history">履歴を消去</string>
+    <string name="searchpreference_no_results">結果なし</string>
     <!-- Menu Strings -->
+    <string name="restart_scopes">スコープを再起動</string>
+    <string name="restart_module">スコープされたプロセスを再起動</string>
+    <string name="restart_page_scope">このページのスコープのみを再起動</string>
     <!-- NavBar Strings -->
+    <string name="navbar_customizations">カスタマイズ</string>
+    <string name="navbar_mods">Mod</string>
+    <string name="navbar_hooks">フック</string>
+    <string name="navbar_settings">設定</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Mod</string>
+    <string name="statusbar_title">ステータスバー</string>
+    <string name="launcher_title">ランチャー</string>
+    <string name="quick_settings_title">クイック設定</string>
+    <string name="qs_header_title">クイック設定のヘッダー</string>
+    <string name="sound">サウンド</string>
+    <string name="misc">その他</string>
+    <string name="package_manager">パッケージマネージャー</string>
     <!-- General Strings -->
+    <string name="general_on">ON</string>
+    <string name="general_off">OFF</string>
+    <string name="accent_color">アクセントカラー</string>
+    <string name="custom_color">カスタムカラー</string>
+    <string name="battery_info_button_title">バッテリー情報…</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">ステータスバーのオプション</string>
+    <string name="statusbar_double_tap_sleep">ダブルタップでスリープ</string>
+    <string name="status_bar_toggle_brightness_title">明るさのコントロール</string>
+    <string name="statusbar_batterybar_title">バッテリーバーの設定</string>
+    <string name="statusbar_battery_icon_options">バッテリーアイコン</string>
+    <string name="statusbar_icons">ステータスバーアイコン</string>
     <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">通知</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">ステータスバー通知</string>
+    <string name="statusbar_use_app_icon">通知にアプリアイコンを使用する</string>
+    <string name="statusbar_notifications_transparency">通知の透過度</string>
+    <string name="statusbar_notification_transparency">通知の透過度</string>
+    <string name="clear_all_bg_color">カスタム背景色</string>
+    <string name="clear_all_icon_color">カスタムアイコン色</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_title">時計と日付</string>
+    <string name="status_bar_clock_summary">時計と日付をカスタマイズします</string>
+    <string name="status_bar_clock_position_title">時計のスタイル</string>
+    <string name="status_bar_clock_position_right">右</string>
+    <string name="status_bar_clock_position_left">左</string>
+    <string name="status_bar_clock_position_center">中央</string>
+    <string name="status_bar_clock_position_hidden">非表示</string>
+    <string name="status_bar_clock_auto_hide_title">自動的に隠す</string>
+    <string name="status_bar_am_pm_title">午前/午後のスタイル</string>
+    <string name="status_bar_am_pm_normal">通常</string>
+    <string name="status_bar_am_pm_small">小</string>
+    <string name="status_bar_am_pm_hidden">非表示</string>
+    <string name="status_bar_date_title">日付</string>
+    <string name="status_bar_date_none">非表示</string>
+    <string name="status_bar_date_small">小</string>
+    <string name="status_bar_date_normal">通常</string>
+    <string name="status_bar_date_format_title">日付のフォーマット</string>
+    <string name="status_bar_date_style">日付のスタイル</string>
+    <string name="status_bar_date_style_normal">通常</string>
+    <string name="status_bar_date_style_lowercase">小文字</string>
+    <string name="status_bar_date_style_uppercase">大文字</string>
+    <string name="status_bar_date_format_custom">カスタム Java フォーマット</string>
+    <string name="clock_font_size_title">時計のフォントの大きさ</string>
+    <string name="status_bar_clock_font_style_title">時計のフォントのスタイル</string>
+    <string name="status_bar_clock_color_title">時計のカスタム色</string>
+    <string name="status_bar_custom_clock_color_title">時計のカスタム色</string>
     <!-- Status bar padding -->
     <!-- Battery Bar Strings -->
+    <string name="BB_enable_title">バッテリーバーを有効化する</string>
+    <string name="BB_warning_level">警告レベルの範囲</string>
+    <string name="BB_batteryChargingColor">充電中の色</string>
+    <string name="BB_batteryFastChargingColor">急速充電の色</string>
     <!-- Battery Icon Strings -->
+    <string name="battery_icon_style">バッテリーアイコンのスタイル</string>
+    <string name="battery_icon_change_charging_icon_title">充電中アイコンのカスタマイズ</string>
+    <string name="battery_icon_settings">バッテリーアイコンの設定</string>
+    <string name="hide_battery_title">バッテリーを非表示</string>
+    <string name="battery_icon_margins">バッテリーアイコンの余白</string>
+    <string name="reverse_layout_title">レイアウトを反転</string>
+    <string name="hide_percentage_title">パーセンテージを非表示</string>
+    <string name="hide_percentage_desc">バッテリーパーセンテージテキストを非表示</string>
+    <string name="battery_icon_color">バッテリーアイコンの色</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_stock_prefs">デフォルトバッテリーアイコンの設定</string>
+    <string name="battery_edit_percentage_size_title">パーセンテージの大きさをカスタマイズ</string>
+    <string name="battery_percentage_size">パーセンテージの大きさ</string>
     <!-- Battery Icon Styles -->
+    <string name="battery_default">デフォルト</string>
     <!-- Statusbar Icons Strings -->
+    <string name="statusbar_icons_bluetooth_hide">Bluetooth アイコンを非表示</string>
     <!-- Quick Settings Mods -->
+    <string name="quick_pulldown">クイックプルダウン</string>
+    <string name="quick_pulldown_side_left">左</string>
+    <string name="quick_pulldown_side_right">右</string>
     <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_title">クイック設定タイル</string>
+    <string name="qs_transparency_value">クイック設定の透過度</string>
+    <string name="qs_transparency_blur_title">ウィンドウレベルのぼかし</string>
+    <string name="qs_blur_intentisy">ぼかしの強さ</string>
+    <string name="quick_settings_tiles_qqs">クイック設定タイルを即座に表示</string>
     <!-- Quick Settings Tiles Customizations -->
+    <string name="quick_settings_tiles_customization_title">クイック設定のカスタマイズ</string>
+    <string name="quick_settings_tiles_customize_active_color">クイック設定のアクティブ色</string>
+    <string name="qs_tile_inactive_color_title">タイルの非アクティブ色をカスタマイズ</string>
+    <string name="quick_settings_tiles_customize_inactive_color">クイック設定の非アクティブ色</string>
+    <string name="quick_settings_tiles_customize_labels">クイック設定のラベル</string>
+    <string name="quick_settings_tiles_customize_hide_labels">クイック設定のラベルを非表示</string>
+    <string name="quick_settings_tiles_customize_labels_color_switch">クイック設定のテキスト色をカスタマイズ</string>
+    <string name="quick_settings_tiles_customize_labels_color">クイック設定のテキスト色</string>
+    <string name="quick_settings_tiles_customize_labels_title_color">クイック設定のタイル色</string>
+    <string name="brightness_slider">明るさのスライダー</string>
+    <string name="customize_brightness_slider_title">明るさのスライダーをカスタマイズ</string>
+    <string name="brightness_slider_progress_color_title">明るさのスライダーのカラーモード</string>
+    <string name="brightness_slider_background_color_title">背景色のカスタマイズ</string>
     <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_title">タイルのアニメーション</string>
+    <string name="qs_tile_animation_style_title">アニメーションのスタイル</string>
+    <string name="qs_tile_animation_duration_title">アニメーションの長さ</string>
+    <string name="qs_tile_animation_style_off">アニメーションなし</string>
+    <string name="qs_tile_animation_style_flip">フリップ</string>
+    <string name="qs_tile_animation_style_rotate">回転</string>
+    <string name="qs_tile_animation_duration_default">デフォルト</string>
+    <string name="qs_tile_animation_duration_fast">高速</string>
     <!-- QS Page Transitions -->
+    <string name="qs_transitions_tablet">タブレット</string>
+    <string name="qs_transitions_zoom_in">ズームイン</string>
+    <string name="qs_transitions_zoom_out">ズームアウト</string>
     <!-- QS Header Image Strings -->
     <!-- Omni Provider" -->
+    <string name="qs_header_daylight_provider_title">画像コレクション</string>
+    <string name="qs_header_file_provider_title">カスタム画像</string>
+    <string name="header_creator_label">作者: \u003a</string>
+    <string name="download_header_notice">ヘッダーをダウンロード中です</string>
+    <string name="download_header_failed_notice">ヘッダーのダウンロードに失敗しました</string>
+    <string name="custom_header_image_notice">ヘッダー画像を設定</string>
+    <string name="header_location_online">オンライン</string>
+    <string name="header_location_local">ローカル</string>
+    <string name="qs_header_image_tint_accent">アクセントカラー</string>
+    <string name="qs_header_image_tint_primary">プライマリカラー</string>
+    <string name="qs_header_image_tint_custom">カスタムカラー</string>
     <!-- QS Header Clock Strings -->
+    <string name="qs_header_clock_custom">時計のスタイル</string>
+    <string name="qs_header_clock_custom_user_image_title">ユーザー画像</string>
+    <string name="qs_header_stock_clock_red_one_disable">赤い 1 を無効化</string>
+    <string name="qs_header_stock_clock_date_hide">日付を非表示</string>
+    <string name="qs_header_stock_clock_date_custom_color">日付のカスタムカラー</string>
+    <string name="qs_header_stock_clock_hide_carrier_label">キャリアラベルを非表示</string>
+    <string name="qs_header_clock_font_prefs_title">フォント</string>
+    <string name="qs_header_clock_font_custom_enabled">カスタムフォントを使用</string>
+    <string name="qs_header_clock_font_custom_title">フォントを選択</string>
+    <string name="qs_header_clock_prefs">時計のカスタム設定</string>
+    <string name="qs_header_clock_custom_color_title">時計のカスタムカラー</string>
+    <string name="qs_header_clock_text_scaling">テキストの大きさ</string>
     <!-- Qs Header Per Clock Prefs -->
     <!-- Hour only color -->
+    <string name="qs_header_clock_custom_color_hour_mode_default">デフォルト</string>
+    <string name="qs_header_clock_custom_color_hour_mode_disabled">なし</string>
     <!-- Time color -->
+    <string name="qs_header_clock_custom_color_time_mode_default">デフォルト</string>
+    <string name="qs_header_clock_custom_color_time_mode_accent">アクセントカラー</string>
+    <string name="qs_header_clock_custom_color_time_mode_custom">カスタムカラー</string>
+    <string name="qs_header_clock_custom_color_time_color">時間のカスタム色</string>
     <!-- Separator Color, Only for first clock -->
+    <string name="qs_header_clock_custom_color_separator_mode">セパレーターのカラーモード</string>
+    <string name="qs_header_clock_custom_color_separator_mode_accent">アクセントカラー</string>
+    <string name="qs_header_clock_custom_color_separator_mode_custom">カスタムカラー</string>
+    <string name="qs_header_clock_custom_color_separator_color">カスタムカラーのセパレーター</string>
     <!-- QS Header Clock Margins -->
+    <string name="qs_header_clock_custom_margins">時計の余白</string>
+    <string name="qs_header_clock_top_margin">上部の余白</string>
+    <string name="qs_header_clock_left_margin">左の余白</string>
     <!-- QS Header Misc -->
+    <string name="qs_header_misc">クイック設定ヘッダーのその他</string>
     <!-- Chip Styles Strings -->
+    <string name="chip_color_props">色のプロパティ</string>
+    <string name="chip_use_accent">アクセントカラーを使用する</string>
+    <string name="chip_color_accent">アクセントを使用</string>
     <!-- Launcher Mods -->
+    <string name="launcher_layout">ホームのレイアウト</string>
+    <string name="launcher_folder_layout">フォルダのレイアウト</string>
+    <string name="launcher_folder_edit_layout">レイアウトを編集</string>
+    <string name="launcher_folder_columns">カラム</string>
+    <string name="launcher_folder_update_preview">プレビューを更新</string>
+    <string name="drawer">ドロワー</string>
+    <string name="launcher_drawer_edit_columns">カラムを編集</string>
+    <string name="drawer_columns">カラム</string>
+    <string name="launcher_app_details_title">アプリ情報を開く</string>
     <!-- NavBar Strings -->
+    <string name="navbar_title">ナビゲーションバー</string>
+    <string name="gesture_navigation_title">ジェスチャーナビゲーション</string>
+    <string name="three_button_navigation_title">3 ボタンナビゲーション</string>
     <!-- Gesture Strings -->
+    <string name="gesture_back_title">戻るジェスチャーの設定</string>
+    <string name="gesture_override_back_hold_command_quick_settings">クイック設定を開く</string>
+    <string name="gesture_override_back_hold_command_power_menu">電源メニューを開く</string>
+    <string name="gesture_override_back_hold_command_notification_panel">通知パネルを開く</string>
+    <string name="gesture_override_back_hold_command_screen_off">画面 OFF</string>
     <!-- Buttons Title -->
+    <string name="buttons_title">ボタン</string>
+    <string name="power_button_category_title">電源ボタン</string>
+    <string name="buttons_power_button_customize">電源ボタンのカスタマイズ</string>
+    <string name="torch_long_press_volbtn_torch_title">音量ボタンで懐中電灯</string>
+    <string name="torch_long_press_volbtn_torch_timeout_title">タイムアウト</string>
+    <string name="volume_buttons_category_title">音量ボタン</string>
+    <string name="volbtn_music_controls_title">音量ボタンで音楽のコントロール</string>
     <!-- Lockscreen Strings -->
+    <string name="lockscreen_title">ロック画面</string>
+    <string name="lockscreen_hide_carrier">キャリアを非表示</string>
+    <string name="lockscreen_hide_statusbar">ステータスバーを非表示</string>
+    <string name="lockscreen_hide_capsule">カプセルを非表示</string>
+    <string name="lockscreen_hide_power_menu">電源メニューを非表示</string>
+    <string name="lockscreen_fingerprint">指紋認証アイコン</string>
+    <string name="lockscreen_fp_remove_icon">指紋認証アイコンを削除</string>
+    <string name="lockscreen_fp_custom_icon">指紋認証アイコンのカスタマイズ</string>
+    <string name="lockscreen_fp_icon_title">指紋認証アイコンのプリセット</string>
+    <string name="lockscreen_fp_icon_picker_title">カスタムアイコンを選択</string>
+    <string name="lockscreen_weather">ロック画面の天気</string>
     <!-- Depth Effect Alert -->
+    <string name="depth_effect_ok_btn">OK</string>
     <!-- Lockscreen Clock Strings -->
+    <string name="lockscreen_clock">ロック画面の時計</string>
+    <string name="lockscreen_clock_switch">ロック画面の時計をカスタマイズ</string>
+    <string name="lockscreen_clock_custom">時計のスタイル</string>
+    <string name="lockscreen_clock_font_prefs_title">フォント</string>
+    <string name="lockscreen_clock_font_custom_enabled">カスタムフォントを使用</string>
+    <string name="lockscreen_clock_font_custom_title">フォントを選択</string>
+    <string name="lockscreen_clock_custom_user_title">ユーザー名</string>
+    <string name="lockscreen_clock_custom_user_image">カスタムユーザー画像を使用</string>
+    <string name="lockscreen_clock_custom_user_image_title">ユーザー画像</string>
+    <string name="lockscreen_clock_custom_margins">時計の余白</string>
+    <string name="lockscreen_clock_top_margin_title">上部の余白</string>
+    <string name="lockscreen_clock_bottom_margin_title">下部の余白</string>
+    <string name="default_user_name">ユーザー</string>
     <!-- Lockscreen 9 Strings -->
+    <string name="lockscreen_9_calendar">カレンダー</string>
+    <!-- Aod Strings -->
+    <!-- Aod Clock -->
+    <string name="aod_clock">AOD 時計</string>
+    <string name="aod_clock_switch">AOD 時計のカスタマイズ</string>
+    <string name="aod_clock_custom">時計のスタイル</string>
+    <string name="aod_clock_font_prefs_title">フォント</string>
+    <string name="aod_clock_font_custom_enabled">カスタムフォントを使用</string>
+    <string name="aod_clock_font_custom_title">フォントを選択</string>
+    <string name="aod_clock_custom_user">カスタムユーザー名を使用</string>
+    <string name="aod_clock_custom_user_title">ユーザー名</string>
+    <string name="aod_clock_custom_user_image">カスタムユーザー画像を使用</string>
+    <string name="aod_clock_custom_user_image_title">ユーザー画像</string>
     <!-- Sound Mods -->
+    <string name="misc_category">その他</string>
     <!-- Pulse music visualizer -->
+    <string name="pulse_help_policy_notice_title">Pulse について</string>
+    <string name="pulse_settings">Pulse</string>
+    <string name="show_navbar_pulse_title">ナビゲーションバーの Pulse</string>
+    <string name="show_lockscreen_pulse_title">ロック画面の Pulse</string>
+    <string name="show_ambient_pulse_title">アンビエント画面の Pulse</string>
+    <string name="pulse_render_mode_title">レンダリングモード</string>
+    <string name="pulse_color_mode_title">色</string>
+    <string name="pulse_color_accent">アクセント</string>
+    <string name="pulse_color_custom">カスタム</string>
+    <string name="pulse_color_auto">アルバム</string>
+    <string name="pulse_color_user_title">色を選択</string>
     <!-- Pulse Gravity n Mirror Options -->
+    <string name="pulse_custom_gravity_bottom">下部</string>
+    <string name="pulse_custom_gravity_top">上部</string>
+    <string name="pulse_custom_gravity_center">中央</string>
     <!-- Volume Steps -->
+    <string name="volume_steps_title">音量ステップ</string>
+    <string name="max_music_volume_title">メディア</string>
+    <string name="max_call_volume_title">通話</string>
+    <string name="max_alarm_volume_title">アラーム</string>
+    <string name="steps_unit">%1s のステップ</string>
     <!-- Adaptive Playback -->
+    <string name="adaptive_playback_screen_title">スマートポーズ</string>
+    <string name="adaptive_playback_enabled">スマートポーズを使用</string>
+    <string name="adaptive_playback_disabled_summary">OFF</string>
+    <string name="adaptive_playback_timeout_none">タイムアウトなし</string>
+    <string name="adaptive_playback_timeout_none_summary">ON (タイムアウトなし)</string>
+    <string name="adaptive_playback_timeout_30_secs">30 秒</string>
+    <string name="adaptive_playback_timeout_30_secs_summary">ON (30 秒)</string>
+    <string name="adaptive_playback_timeout_1_min">1 分</string>
+    <string name="adaptive_playback_timeout_1_min_summary">ON (1 分)</string>
+    <string name="adaptive_playback_timeout_2_min">2 分</string>
+    <string name="adaptive_playback_timeout_2_min_summary">ON (2 分)</string>
+    <string name="adaptive_playback_timeout_5_min">5 分</string>
+    <string name="adaptive_playback_timeout_5_min_summary">ON (5 分)</string>
+    <string name="adaptive_playback_timeout_10_min">10 分</string>
+    <string name="adaptive_playback_timeout_10_min_summary">ON (10 分)</string>
     <!-- Volume panel -->
+    <string name="volume_panel_category">音量パネル</string>
+    <string name="volume_panel_position_title">音量パネルの位置</string>
+    <string name="volume_panel_position_right">右</string>
+    <string name="volume_panel_position_left">左</string>
+    <string name="volume_panel_custom_title">音量パネルのカスタマイズ</string>
+    <string name="volume_panel_custom_summary">音量パネルの色をカスタマイズします</string>
+    <string name="volume_disable_volume_warning">音量の警告を無効化</string>
+    <string name="volume_dialog_timeout_title">音量パネルのタイムアウト</string>
     <!-- Volume Panel Customizations -->
+    <string name="volume_panel_bg_color">カスタム背景色</string>
     <!-- Volume Styles -->
+    <string name="volume_style_title">音量パネルのスタイル</string>
+    <string name="volume_persen_switch_title">音量のパーセンテージを表示</string>
     <!-- Package Manager -->
     <!-- Misc Strings -->
+    <string name="misc_power_menu">電源メニュー</string>
+    <string name="misc_power_menu_hide_sos">電源メニューから SOS を非表示</string>
+    <string name="show_advanced_reboot_title">高度な再起動</string>
+    <string name="remove_usb_dialog">USB ダイアログを削除</string>
+    <!-- Screenshot Strings -->
+    <string name="screenshot">スクリーンショット</string>
+    <string name="screenshots_prefs">スクリーンショットのオプション</string>
+    <string name="disable_secure_screenshot">FLAG_SECURE を無効化</string>
     <!-- Hooks Fragment -->
+    <string name="hooks_title">フック</string>
+    <string name="package_not_found">パッケージがありません</string>
+    <string name="info_hooks">フック情報</string>
+    <string name="package_checking">%s を読み込み中</string>
+    <string name="menu_launch_app">アプリを起動</string>
+    <string name="menu_restart_app">アプリを再起動</string>
     <!-- Update Fragment -->
+    <string name="update_channel_name">アップデート</string>
+    <string name="update_notification_text">タップでインストール</string>
+    <string name="update_flavor_title">アップデートチャンネル</string>
+    <string name="stable_flavor">Stable</string>
+    <string name="update_type_title">パッケージタイプ</string>
+    <string name="full_type">完全</string>
+    <string name="xposed_type">Xposed のみ</string>
+    <string name="currentVersionTitle">インストール済みのバージョン: </string>
+    <string name="lastestVersionTitle">最新のバージョン: </string>
+    <string name="reboot_word">デバイスを再起動中です</string>
+    <string name="update_checking">確認中…</string>
+    <string name="update_word">アップデート</string>
+    <string name="switch_branches">ブランチを切り替え</string>
+    <string name="reinstall_word">再インストール</string>
+    <string name="changelog_title">更新履歴</string>
     <!-- Advanced Reboot -->
+    <string name="advanced_reboot_title">高度な再起動</string>
+    <string name="advanced_reboot_recovery">リカバリー</string>
+    <string name="advanced_reboot_bootloader">ブートローダー</string>
+    <string name="advanced_reboot_safe_mode">セーフモード</string>
+    <string name="advanced_reboot_fast_reboot">高速な再起動</string>
+    <string name="advanced_reboot_systemui">SystemUI を再起動</string>
     <!-- Own Settings -->
+    <string name="delete_all_title">すべて削除</string>
+    <string name="delete_all_summary">すべての設定を削除します</string>
+    <string name="export_title">エクスポート</string>
+    <string name="export_summary">設定をエクスポートします</string>
+    <string name="import_title">インポート</string>
+    <string name="import_summary">設定をインポートします</string>
+    <string name="export_success">エクスポートが成功しました</string>
+    <string name="export_failed">エクスポートに失敗しました</string>
+    <string name="import_success">インポートが成功しました</string>
+    <string name="import_failed">インポートに失敗しました</string>
+    <string name="settings_about_section_title">アプリについて</string>
+    <string name="github_repo_title">GitHub リポジトリ</string>
+    <string name="check_updates">アップデートを確認</string>
+    <string name="check_updates_summary">現在のバージョン: %s</string>
+    <string name="check_auto_updates">自動でアップデートを確認</string>
+    <string name="notification_channel_update">アップデート</string>
+    <string name="usage_summary">Wiki ページを開きます</string>
+    <string name="credits_title">クレジット</string>
     <!-- Omni Jaws Strings -->
+    <string name="provider_title">天気予報プロバイダー</string>
+    <string name="units_title">単位</string>
+    <string name="weather_show_location">場所を表示</string>
+    <string name="weather_text_size">テキストの大きさ</string>
+    <string name="weather_image_size">画像の大きさ</string>
+    <string name="weather_retrieve_location_dialog_enable_button">有効</string>
+    <string name="settings_title">設定</string>
+    <string name="auto_update_title">自動アップデート</string>
+    <string name="update">アップデート</string>
+    <string name="enable_title">有効</string>
+    <string name="update_interval_title">アップデート確認の間隔</string>
+    <string name="interval_1_hour">1 時間</string>
+    <string name="interval_2_hour">2 時間</string>
+    <string name="interval_4_hour">4 時間</string>
+    <string name="interval_6_hour">6 時間</string>
+    <string name="interval_12_hour">12 時間</string>
+    <string name="weather_tile_title">天気</string>
+    <string name="weather_icon_pack_playstore">アイコンパックを探す</string>
+    <string name="service_disabled">無効</string>
+    <string name="service_error">エラー</string>
+    <string name="weather_widget">天気</string>
+    <string name="show_background_title">背景の影</string>
+    <string name="weather_config_title">サービスの設定</string>
+    <string name="omnijaws_city_unkown">不明</string>
+    <string name="activity_title">天気</string>
+    <string name="omnijaws_detail_header">天気</string>
+    <string name="omnijaws_label_default">天気</string>
+    <string name="omnijaws_service_last_update">最終更新:</string>
+    <string name="theme_system">システムに従う</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_light">ライト</string>
+    <string name="color_theme_title">テーマ</string>
+    <string name="weather_centered">中央のレイアウト</string>
+    <string name="weather_margin_left">左の余白</string>
     <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_default">デフォルト</string>
+    <string name="lockscreen_weather_selection_qbeta_style">Q-Beta ピル</string>
     <!-- Weather -->
+    <string name="weather_condition_clouds">曇り</string>
+    <string name="weather_condition_rain">雨</string>
+    <string name="weather_condition_clear">晴れ</string>
+    <string name="weather_condition_storm">嵐</string>
+    <string name="weather_condition_snow">雪</string>
+    <string name="weather_condition_wind">強風</string>
+    <string name="weather_condition_mist">霧</string>
 </resources>

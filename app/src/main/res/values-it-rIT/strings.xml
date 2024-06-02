@@ -31,6 +31,7 @@
     <string name="general_color_accent3">Accento 3</string>
     <string name="general_color_text1">Testo 1</string>
     <string name="general_color_text2">Testo 2</string>
+    <string name="sysui_restart_needed">Richiede il riavvio di SystemUI</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -44,6 +45,7 @@
     <string name="restart_page_scope">Riavvia solo lo scopo di questa pagina</string>
     <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_customizations">Personalizzazioni</string>
     <string name="navbar_mods">Mod</string>
     <string name="navbar_hooks">Hooks</string>
     <string name="navbar_settings">Impostazioni</string>
@@ -75,12 +77,23 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Notifiche barra di stato</string>
     <string name="statusbar_use_app_icon">Usa icone app per notifiche</string>
+    <string name="statusbar_notifications_transparency">Trasparenza Notifiche</string>
+    <string name="statusbar_notification_transparency">Trasparenza notifica</string>
+    <string name="statusbar_notification_transparency_value">Valore della trasparenza</string>
     <string name="statusbar_notification_count">Mostra conteggio notifiche</string>
     <string name="statusbar_notifications_related">Impostazioni notifiche</string>
     <string name="remove_charging_complete_notification_title">Rimuovi notifica carica completa</string>
     <string name="remove_dev_mode_notification">Rimuovi notifica sviluppatore</string>
     <string name="remove_flashlight_notification">Rimuovi notifica torcia</string>
     <string name="remove_low_battery_notification">Rimuovi notifica batteria scarica</string>
+    <string name="notif_default_expansion_title">Espansione predefinita notifiche</string>
+    <string name="notif_always_expand">Espandi sempre</string>
+    <string name="notif_always_collapse">Comprimi sempre</string>
+    <string name="customize_clear_all_button">Personalizza il pulsante Cancella tutto</string>
+    <string name="clear_all_link_bg_accent">Collega sfondo all\'accento</string>
+    <string name="clear_all_bg_color">Colore sfondo personalizzato</string>
+    <string name="clear_all_link_bg_icon_accent">Collega icona all\'accento</string>
+    <string name="clear_all_icon_color">Personalizza Colore icona</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Ora &amp; data</string>
@@ -258,8 +271,13 @@
     <string name="quick_collapse">Comprimi Veloce</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Riquadri Impostazioni rapide</string>
-    <string name="quick_settings_tiles_number">Impostazioni del conteggio delle impostazioni rapide</string>
+    <string name="quick_settings_tiles_number">Conteggio Tile Impostazioni rapide</string>
     <string name="quick_settings_tiles_main">Personalizza Piastrelle Impostazioni Rapide</string>
+    <string name="qs_transparency">Trasparenza QS &amp; Sfocatura</string>
+    <string name="qs_transparency_title">Personalizza Trasparenza QS</string>
+    <string name="qs_transparency_value">Trasparenza QS</string>
+    <string name="qs_transparency_blur_title">Livello Sfocatura Finestra</string>
+    <string name="qs_blur_intentisy">Intensità sfocatura</string>
     <string name="quick_settings_tiles_qqs">Tile QS Rapidi</string>
     <string name="quick_settings_tiles_portrait">In orientamento verticale</string>
     <string name="quick_settings_tiles_horizontal_rows">Righe Impostazioni rapide</string>
@@ -429,6 +447,9 @@
     <string name="qs_header_clock_top_margin">Margine superiore</string>
     <string name="qs_header_clock_left_margin">Margine sinistro</string>
     <!-- QS Header Misc -->
+    <string name="qs_header_misc">Intestazione QS Varie</string>
+    <string name="qs_header_system_icons_chip">Bordo icone di sistema</string>
+    <string name="qs_header_system_icons_chip_style">Stile Bordo Icone di Sistema</string>
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Pieno</string>
     <string name="chip_outlined">Con bordo</string>
@@ -451,6 +472,10 @@
     <string name="chip_round_corners_bottom_dx_radius">Raggio inferiore destro</string>
     <!-- Launcher Mods -->
     <string name="launcher_intro_title">Le modifiche al Launcher richiedono il riavvio del Launcher.\nTocca il menu per riavviare.</string>
+    <string name="launcher_layout">Disposizione della home</string>
+    <string name="launcher_edit_layout">Modifica la disposizione della home</string>
+    <string name="launcher_columns">Colonne home</string>
+    <string name="launcher_rows">Righe home</string>
     <string name="launcher_folder_layout">Disposizione cartelle</string>
     <string name="launcher_folder_edit_layout">Modifica disposizione</string>
     <string name="launcher_folder_columns">Colonne</string>
@@ -527,7 +552,17 @@
     <string name="lockscreen_affordance_remove_right">Rimuovi Pulsante Destro</string>
     <string name="lockscreen_hide_lock_icon">Nascondi icona lucchetto</string>
     <string name="lockscreen_weather">Meteo schermata di blocco</string>
+    <string name="depth_wallpaper_category">Profondità Sfondo</string>
+    <string name="depth_wallpaper_title">Sfondo con effetto profondità</string>
+    <string name="depth_wallpaper_summary">Integra dinamicamente il primo piano dello sfondo con l\'orologio</string>
+    <string name="depth_wallpaper_opacity_title">Opacità dello sfondo in primo piano</string>
+    <string name="depth_wallpaper_aod_title">Anche su \"always on display\"</string>
+    <string name="depth_wallpaper_model_ready">Il modello AI è stato scaricato nel dispositivo</string>
+    <string name="depth_wallpaper_model_not_available">Il modello AI non è (ancora) disponibile nel dispositivo</string>
     <!-- Depth Effect Alert -->
+    <string name="depth_effect_alert_title">Attenzione</string>
+    <string name="depth_effect_alert_body">Usa uno sfondo adatto alla schermata di blocco in cui gli elementi di primo piano non ostacolano l\'intero orologio sulla schermata di blocco, garantendo sia il fascino visivo che la chiarezza funzionale sulla schermata di blocco.\nDopo l\'abilitazione, imposta uno sfondo della schermata di blocco, il modello AI proverà automaticamente ad estrarre l\'oggetto dallo sfondo.\n\nNota: %s.</string>
+    <string name="depth_effect_ok_btn">Ok</string>
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">Orologio schermata di blocco</string>
     <string name="lockscreen_clock_switch">Personalizza Orologio schermata di blocco</string>
@@ -560,6 +595,27 @@
     <string name="lockscreen_9_time_title">Il tempo è</string>
     <string name="lockscreen_9_calendar">Calendario</string>
     <string name="lockscreen_9_day_title">Oggi è</string>
+    <!-- Aod Strings -->
+    <string name="aod_title">Always On Display</string>
+    <!-- Aod Clock -->
+    <string name="aod_clock">Orologio AOD</string>
+    <string name="aod_clock_switch">Orologio AOD personalizzato</string>
+    <string name="aod_clock_custom">Stile Orologio</string>
+    <string name="aod_clock_custom_summary">Scegli uno stile a tua scelta.</string>
+    <string name="aod_clock_font_prefs_title">Carattere</string>
+    <string name="aod_clock_font_custom_enabled">Usa carattere personalizzato</string>
+    <string name="aod_clock_font_custom_title">Seleziona Carattere</string>
+    <string name="aod_clock_font_custom_summary">Scegli il tuo carattere.\nNon selezionare il file da Recenti.</string>
+    <string name="aod_clock_prefs">Preferenze orologio AOD</string>
+    <string name="aod_clock_custom_color_title">Personalizza colore orologio</string>
+    <string name="aod_clock_custom_color_summary">Colore personalizzato invece del colore primario</string>
+    <string name="aod_clock_text_scaling">Ridimensionamento testo</string>
+    <string name="aod_clock_custom_user">Usa Nome Utente personalizzato</string>
+    <string name="aod_clock_custom_user_title">Nome Utente</string>
+    <string name="aod_clock_custom_user_image">Usa immagine Utente personalizzata</string>
+    <string name="aod_clock_custom_user_image_title">Immagine Utente</string>
+    <string name="aod_clock_custom_user_image_summary">Fai clic per selezionare un\'immagine.</string>
+    <string name="aod_font_line_height_title">Altezza Linea</string>
     <!-- Sound Mods -->
     <string name="misc_category">Varie</string>
     <!-- Pulse music visualizer -->
@@ -652,6 +708,7 @@
     <string name="volume_panel_seekbar_link_primary">Collega barra progresso al colore primario</string>
     <string name="volume_panel_icon_color">Personalizza Colore Icona</string>
     <string name="volume_panel_icon_accent">Collega icona al colore primario</string>
+    <string name="volume_panel_bg_color">Colore sfondo personalizzato</string>
     <!-- Volume Styles -->
     <string name="volume_style_title">Stili pannello volume</string>
     <string name="volume_persen_switch_title">Mostra percentuale volume</string>
@@ -666,6 +723,9 @@
     <string name="use_auth_for_advanced_reboot_summary">Richiede autenticazione per utilizzare le opzioni avanzate di riavvio.</string>
     <string name="advanced_reboot_hide_lockscreen">Nascondi nella schermata di blocco</string>
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
+    <string name="remove_usb_dialog">Rimuovi Finestra Dialogo Usb</string>
+    <string name="remove_usb_dialog_summary">Se abilitata, la finestra di dialogo USB sarà nascosta e l\'opzione MTP verrà scelta automaticamente.</string>
+    <!-- Screenshot Strings -->
     <string name="screenshot">Screenshot</string>
     <string name="screenshots_prefs">Opzioni screenshot</string>
     <string name="disable_secure_screenshot">Disabilita FLAG_SECURE</string>
@@ -681,10 +741,10 @@
     <string name="package_hook_bootlooped">Pacchetto disabilitato perché causa bootloop</string>
     <string name="package_not_found">Pacchetto non trovato</string>
     <string name="info_hooks">Hooks Info</string>
-    <string name="info_hooks_desc">Spiegazione\n\n
-         Il pacchetto è reattivo significa che tutto funziona bene,\n\n
-         Pacchetto disabilitato per bootloop significa che ci sono errori nell\'hook, quindi il pacchetto è disabilitato dall\'hook. Contatta lo sviluppatore per risolvere.\n\n
-         Il pacchetto non risponde significa che probabilmente l\'app non è abilitata in LSPosed o è chiusa, prova ad avviare l\'app e controlla se il pacchetto risponde.</string>
+    <string name="info_hooks_desc">Spiegazione:\n\n
+         \"Pacchetto reattivo\" significa che tutto funziona bene,\n\n
+         \"Pacchetto disabilitato perché causa bootloop\" significa che ci sono errori nell\'hook, quindi il pacchetto è disabilitato dall\'hook. Contatta lo sviluppatore per risolvere.\n\n
+         \"Pacchetto non risponde\" significa che probabilmente l\'app non è abilitata in LSPosed o è chiusa, prova ad avviare l\'app e controlla se il pacchetto risponde.</string>
     <string name="package_checking">Caricamento %s</string>
     <string name="package_activated">Pacchetto attivato con successo</string>
     <string name="package_activation_failed">Attivazione pacchetto fallita</string>
