@@ -44,9 +44,11 @@ jobs:
           fi
 
       - name: Build with Gradle
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
         run: ./gradlew assembleRelease
 
       - name: Upload a Build Artifact
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
         uses: actions/upload-artifact@v4
         with:
           name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"

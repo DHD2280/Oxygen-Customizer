@@ -8,7 +8,7 @@
                 android:right="12.0dip"
                 android:top="6.0dip" />
             <solid android:color="@color/toast_color_bg" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
+            <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
         </shape>
     </item>
 </layer-list>
