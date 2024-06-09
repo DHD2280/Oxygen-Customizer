@@ -8,13 +8,56 @@
     <string name="settings_label">Beállítások</string>
     <string name="toast_rename_file">Nevezze át a fájlt valami egyszerűbbre</string>
     <string name="toast_applied">Alkalmazva</string>
+    <string name="toast_disabled">Letiltva</string>
+    <string name="toast_error">Valami hiba történt</string>
     <string name="opt_selected1">%s kiválasztva</string>
     <string name="opt_selected2">%s%s kijelölve</string>
     <string name="requires_sysui_restart">Ez a rész rendszerfelület-újraindítást követel\nÉrintse meg az újraindításhoz.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">A beállítás előkészítése</string>
+    <string name="step">Lépés</string>
+    <string name="module_installation_step1">Modulhéj-létrehozás</string>
+    <string name="module_installation_step2">A szükséges fájlok kibontása</string>
+    <string name="module_installation_step3">Alkalmazás-fedőréteg elkészítése</string>
+    <string name="module_installation_step4">Alkalmazás-fedőréteg igazítása</string>
+    <string name="module_installation_step5">Alkalmazás-fedőréteg aláírása</string>
+    <string name="module_installation_step6">Könyvtárak tisztítása</string>
+    <string name="onboarding_title_1">Tele van a töke a gyári felhasználói felülettel?</string>
+    <string name="onboarding_subtitle_1">Alakítson mindent saját ízlése szerint.</string>
+    <string name="onboarding_desc_1">Meneküljön a felhasználói felület monotóniájától – szabjon személyre minden technikai részletet saját stílusára és kedvére.</string>
+    <string name="onboarding_title_2">A készülékem támogatott?</string>
+    <string name="onboarding_subtitle_2">Az \'Oxygen Módosítások\' az összes OxygenOS-bázisú romon támogatott.</string>
+    <string name="onboarding_desc_2">Az összes OxygenOS-bázisú ROM-mal kompatibilis, széles körű támogatást biztosítva az Android készülékekhez.</string>
+    <string name="onboarding_title_3">Elkezdhetjük végre ?</string>
+    <string name="onboarding_subtitle_3">Itt az ideje, hogy az \'Oxygen Módosítások\' elvégezzen néhány belső munkát.</string>
+    <string name="onboarding_desc_3">Kezdődjenek a belső feladatok és a lényeges munkák. Készen áll?</string>
+    <string name="need_storage_perm_title">Tárhelyengedély szükséges</string>
+    <string name="need_storage_perm_desc">A szükséges fájlok létrehozásához tárhelyengedély szükséges.</string>
+    <string name="compatible_root_not_found_title">Nem érhető el a kompatibilis Root-módszer</string>
+    <string name="compatible_root_not_found_desc">A folytatáshoz használja valamelyik népszerű Root-megoldást.</string>
+    <string name="root_not_found_title">Nincs hozzáférhető Root</string>
+    <string name="root_not_found_desc">Nagyon úgy tűnik, az Ön készüléke nem rootolt!</string>
+    <string name="need_reboot_title">Újraindítás szükséges</string>
+    <string name="need_reboot_desc">Hogy az összes fájl a helyére kerülhessen, indítsa újra a készüléket.</string>
+    <string name="installation_failed_title">Hoppá! Erre nem lehetett számítani</string>
+    <string name="installation_failed_desc">A naplók a dokumentumok mappába kerültek.</string>
+    <string name="logs">Naplók</string>
+    <string name="toast_skipped_installation">A telepítés nem futott végig. Előfordulhat, hogy egyes funkciók nem működnek megfelelően.</string>
     <!-- Buttons -->
     <string name="btn_select">Kiválasztás</string>
+    <string name="btn_skip">Kihagyás</string>
+    <string name="btn_next">Következő</string>
+    <string name="btn_back">Vissza</string>
+    <string name="btn_lets_go">Gyerünk!</string>
+    <string name="btn_close">Bezárás</string>
+    <string name="btn_reboot_now">Újraindítás most</string>
+    <string name="btn_reboot">Újraindítás</string>
+    <string name="btn_enable">Engedélyezés</string>
+    <string name="btn_disable">Kikapcsolás</string>
+    <string name="btn_apply">Alkalmazás</string>
     <!-- Dialogs -->
+    <string name="installing">Telepítés</string>
+    <string name="loading_dialog_wait">Kérjük, várjon</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Megjegyzés</string>
@@ -35,6 +78,7 @@
     <string name="general_color_text1">Szöveg 1</string>
     <string name="general_color_text2">Szöveg 2</string>
     <string name="sysui_restart_needed">A beállítások érvényesítéséhez újra kell indítani a rendszerfelületet</string>
+    <string name="one_time_reboot_needed">Indítsa újra a készüléket!</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -48,6 +92,7 @@
     <string name="restart_page_scope">Csak az oldal ezen részét töltse be újra</string>
     <string name="restart_scope_message">Biztos benne, hogy újra akarja indítani az összes hatókör-folyamatot, kivéve a rendszerkeretet?\nHasználja ezt, ha a modul nem működik!\nLegyen biztos benne, hogy az összes vonatkozó hatókört ellenőrizte!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">Felhasználói felület</string>
     <string name="navbar_mods">Módosítások</string>
     <string name="navbar_hooks">Csapdák</string>
     <string name="navbar_settings">Beállítások</string>
@@ -755,7 +800,7 @@
     <string name="menu_launch_app">Az alkalmazás elindítása</string>
     <string name="menu_restart_app">Az alkalmazás újraindítása</string>
     <!-- Update Fragment -->
-    <string name="string_formatter_manual_body_v3">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum, az adathasználat és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátum, a \n$P&lt;format&gt; alapján : Perzsa dátum a \n$Nrx alapján : Az összes letöltés a megadott időszakban ** ***\n$Ntx: Az összes feltöltés a megadott időszakban ** ***\n$Nall : Az összes forgalom a megadott időszakban ** ***\n$Nssid : WiFi SSID neve (ha van)\n\n$T\&lt;format\&gt;[intervallum] : Hőmérséklet-formátum; \n b (akkuhoz), c (processzorhoz), g (GPU-hoz) and s (Szkinhez) \nVégül, van OPCIONÁLIS számú frissítési intervallum másodpercben (alapértelmezett: 60 másodperc)\n\n*formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre\n**A statisztikai időszakot az Oxigén testreszabása/Hasznos cuccok menü/Hálózati statisztika beállítások menüpontban adhatja meg.\n***Ha lecseréli a $N-t a $Nc-re, akkor mobiladat-statisztikát kap (pl. $Ncrx a Nrx helyett)</string>
+    <string name="string_formatter_manual_body_v3">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum, az adathasználat és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátum, a \n$P&lt;format&gt; alapján : Perzsa dátum a \n$Nrx alapján : Az összes letöltés a megadott időszakban ** ***\n$Ntx: Az összes feltöltés a megadott időszakban ** ***\n$Nall : Az összes forgalom a megadott időszakban ** ***\n$Nssid : WiFi SSID neve (ha van)\n\n$T\&lt;format\&gt;[intervallum] : Hőmérséklet-formátum; \n b (akkuhoz), c (processzorhoz), g (GPU-hoz) and s (Szkinhez) \nVégül, van OPCIONÁLIS számú frissítési intervallum másodpercben (alapértelmezett: 60 másodperc)\n\n*formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre\n**A statisztikai időszakot az Oxigén Módosítások/Hasznos cuccok menü/Hálózati statisztika beállítások menüpontban adhatja meg.\n***Ha lecseréli a $N-t a $Nc-re, akkor mobiladat-statisztikát kap (pl. $Ncrx a Nrx helyett)</string>
     <string name="update_channel_name">Frissítések</string>
     <string name="update_notification_title">A frissítés letöltve</string>
     <string name="update_notification_text">Telepítéshez érintse meg</string>
@@ -904,10 +949,47 @@
     <string name="weather_condition_wind">Szeles</string>
     <string name="weather_condition_mist">Ködös</string>
     <!-- UI Strings -->
+    <string name="style_category">Témák és Stílusok</string>
+    <string name="icon_theme_category">Ikoncsomagok és Stílusok</string>
     <!-- UI styles -->
+    <string name="oxygen_customizer_updated_title">Az \'Oxygen Módosítások\' épp most frissült!</string>
+    <string name="oxygen_customizer_updated_desc">A legújabb hozzáadott funkciók és opciók használatához indítsa újra telefonját.\nAz újraindításhoz koppintson ide.</string>
+    <string name="rebooting_desc">Újraindítás 5 másodpercen belül</string>
+    <string name="theme_customization_ui_style_title">Rendszerfelület-stílus</string>
+    <string name="theme_customization_ui_style_summary">Alakítsa saját ízlése szerint a kinézetet</string>
     <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Ikoncsomag</string>
+    <string name="theme_customization_icon_pack_summary">Egyéni ikoncsomag-stílus állítható be</string>
+    <string name="theme_customization_signal_icon_title">Térerőkijelzési-stílus</string>
+    <string name="theme_customization_signal_icon_summary">Egyéni térerő-ikonstílus állítható be</string>
+    <string name="theme_customization_wifi_icon_title">WiFi-ikon-stílus</string>
+    <string name="theme_customization_wifi_icon_summary">Egyéni Wi-Fi-ikonstílus állítható be</string>
+    <string name="theme_customization_navbar_title">Navigációs sáv stílus</string>
+    <string name="theme_customization_navbar_summary">Egyéni navigációssáv-stílus állítható be</string>
+    <string name="theme_customization_toast_frame_title">Buborékkeret</string>
+    <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
     <!-- Notification -->
+    <string name="notification_styles">Értesítésstílusok</string>
+    <string name="notification_styles_desc">Egyéni értesítsstílus állítható be</string>
+    <string name="notif_preview_desc">Értesítés-előnézet.\nKattintson a stílus alkalmazásához.</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Az értesítés saroksugara</string>
+    <string name="notif_roundness_preview_desc">Értesítés-előnézet</string>
     <!-- Toast Styles -->
+    <string name="toast_styles">Buborékstílusok</string>
+    <string name="toast_message">Üzenetbuborék</string>
     <!-- Style List -->
+    <string name="style_0">Nincs</string>
+    <string name="style_1">1. Stílus</string>
+    <string name="style_2">2. Stílus</string>
+    <string name="style_3">3. Stílus</string>
+    <string name="style_4">4. Stílus</string>
+    <string name="style_5">5. Stílus</string>
+    <string name="style_6">6. Stílus</string>
+    <string name="style_7">7. Stílus</string>
+    <string name="style_8">8. Stílus</string>
+    <string name="style_9">9. Stílus</string>
+    <string name="style_10">10. Stílus</string>
+    <string name="style_11">11. Stílus</string>
+    <string name="style_12">12. Stílus</string>
 </resources>
