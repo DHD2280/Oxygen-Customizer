@@ -17,6 +17,23 @@
     <string name="init_module_installation">Inizializzando il setup</string>
     <string name="step">Step</string>
     <string name="module_installation_step2">Estrazione file necessari</string>
+    <string name="onboarding_title_2">Il mio Dispositivo è supportato?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer supporta ROM basate su OOS.</string>
+    <string name="onboarding_desc_2">Compatibile con tutte le ROM basate su OOS, garantendo un ampio supporto per i dispositivi Android.</string>
+    <string name="onboarding_title_3">Iniziamo adesso?</string>
+    <string name="onboarding_desc_3">Avvia compiti interni, segnando l\'inizio del lavoro essenziale. Pronto per iniziare?</string>
+    <string name="need_storage_perm_title">Permesso Archiviazione Necessario</string>
+    <string name="need_storage_perm_desc">Per creare i file necessari è necessaria l\'autorizzazione di archiviazione.</string>
+    <string name="compatible_root_not_found_title">Impossibile trovare il metodo root compatibile</string>
+    <string name="compatible_root_not_found_desc">Utilizza qualsiasi soluzione root popolare per procedere.</string>
+    <string name="root_not_found_title">Root non accessibile</string>
+    <string name="root_not_found_desc">Sembra che il tuo dispositivo non sia rootato!</string>
+    <string name="need_reboot_title">Riavvio dispositivo necessario</string>
+    <string name="need_reboot_desc">Riavvia il dispositivo per mettere tutti i file in posizione.</string>
+    <string name="installation_failed_title">Ops, non me lo aspettavo</string>
+    <string name="installation_failed_desc">I registri sono stati salvati nella cartella dei documenti.</string>
+    <string name="logs">File di registro</string>
+    <string name="toast_skipped_installation">Installazione saltata. Alcune funzionalità potrebbero non funzionare correttamente.</string>
     <!-- Buttons -->
     <string name="btn_select">Seleziona</string>
     <string name="btn_skip">Salta</string>
@@ -929,9 +946,40 @@
     <string name="oxygen_customizer_updated_title">Oxygen Customizer è stato aggiornato!</string>
     <string name="oxygen_customizer_updated_desc">Riavvia il dispositivo per usare le ultime funzioni e opzioni.\nClicca qui per riavviare ora.</string>
     <string name="rebooting_desc">Riavvio in 5 secondi</string>
+    <string name="theme_customization_ui_style_title">Stile UI</string>
+    <string name="theme_customization_ui_style_summary">Imposta uno stile personalizzato per la tua interfaccia</string>
     <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Pacchetto icone</string>
+    <string name="theme_customization_signal_icon_title">Stile icona segnale</string>
+    <string name="theme_customization_signal_icon_summary">Imposta lo stile personalizzato dell\'icona del segnale</string>
+    <string name="theme_customization_wifi_icon_title">Stile icona Wi-Fi</string>
+    <string name="theme_customization_wifi_icon_summary">Imposta lo stile personalizzato dell\'icona del Wi-Fi</string>
+    <string name="theme_customization_navbar_title">Stile della barra di navigazione</string>
+    <string name="theme_customization_navbar_summary">Imposta lo stile personalizzato della barra di navigazione</string>
+    <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
+    <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Notification -->
+    <string name="notification_styles">Stili di notifica</string>
+    <string name="notification_styles_desc">Imposta uno stile personalizzato per le notifiche</string>
+    <string name="notif_preview_desc">Anteprima notifica.\nFai clic per applicare questo stile.</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Raggio Angolo Notifiche</string>
+    <string name="notif_roundness_preview_desc">Anteprima notifica.</string>
     <!-- Toast Styles -->
+    <string name="toast_styles">Stile Toast</string>
+    <string name="toast_message">Messaggio Toast</string>
     <!-- Style List -->
+    <string name="style_0">Nessuno</string>
+    <string name="style_1">Stile 1</string>
+    <string name="style_2">Stile 2</string>
+    <string name="style_3">Stile 3</string>
+    <string name="style_4">Stile 4</string>
+    <string name="style_5">Stile 5</string>
+    <string name="style_6">Stile 6</string>
+    <string name="style_7">Stile 7</string>
+    <string name="style_8">Stile 8</string>
+    <string name="style_9">Stile 9</string>
+    <string name="style_10">Stile 10</string>
+    <string name="style_11">Stile 11</string>
+    <string name="style_12">Stile 12</string>
 </resources>
