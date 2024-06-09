@@ -8,13 +8,56 @@
     <string name="settings_label">Ayarlar</string>
     <string name="toast_rename_file">Dosyayı daha basit bir şeyle yeniden adlandır</string>
     <string name="toast_applied">Uygulandı</string>
+    <string name="toast_disabled">Devre dışı</string>
+    <string name="toast_error">Bir sorun oluştu</string>
     <string name="opt_selected1">Seçildi: %s</string>
     <string name="opt_selected2">Seçildi: %s%s</string>
     <string name="requires_sysui_restart">Bu bölüm, SystemUI\'nin yeniden başlatılmasını gerektirir\nYeniden başlatmak için menüye dokunun.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Kurulum başlatılıyor</string>
+    <string name="step">Adım</string>
+    <string name="module_installation_step1">Modül kabuğu oluşturuluyor</string>
+    <string name="module_installation_step2">Gerekli dosyalar çıkarılıyor</string>
+    <string name="module_installation_step3">APK\'lar oluşturuluyor</string>
+    <string name="module_installation_step4">APK\'lar hizalanıyor</string>
+    <string name="module_installation_step5">APK\'lar imzalanıyor</string>
+    <string name="module_installation_step6">Dizinler temizleniyor</string>
+    <string name="onboarding_title_1">Stok Kullanıcı Arayüzünden Sıkıldınız mı?</string>
+    <string name="onboarding_subtitle_1">Her şeyi kendi zevkimize göre özelleştirelim.</string>
+    <string name="onboarding_desc_1">Stok kullanıcı arayüzü monotonluğundan kurtulun - her teknoloji detayını tarzınıza ve tercihlerinize uyacak şekilde özelleştirin.</string>
+    <string name="onboarding_title_2">Cihazım Destekleniyor mu?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer, OOS tabanlı ROM\'ları destekler.</string>
+    <string name="onboarding_desc_2">Tüm OOS tabanlı ROM\'larla uyumludur ve Android cihazlar için geniş destek sağlar.</string>
+    <string name="onboarding_title_3">Şimdi Başlayalım mı?</string>
+    <string name="onboarding_subtitle_3">Oxygen Customizer için bazı dahili işler yapmanın zamanı geldi.</string>
+    <string name="onboarding_desc_3">Dahili görevlerin başlatılması, temel çalışmaların başlatılmasını işaret eder. Başlamaya hazır mısınız?</string>
+    <string name="need_storage_perm_title">Depolama İzni Gerekiyor</string>
+    <string name="need_storage_perm_desc">Gerekli dosyaları oluşturmak için depolama izni gereklidir.</string>
+    <string name="compatible_root_not_found_title">Uyumlu Kök Yöntemi Bulunamadı</string>
+    <string name="compatible_root_not_found_desc">Devam etmek için popüler kök çözümlerden herhangi birini kullanın.</string>
+    <string name="root_not_found_title">Kök Erişilebilir Değil</string>
+    <string name="root_not_found_desc">Görünüşe göre cihazınız kök erişimine sahip değil!</string>
+    <string name="need_reboot_title">Cihazın Yeniden Başlatılması Gerekiyor</string>
+    <string name="need_reboot_desc">Tüm dosyaları yerine yerleştirmek için cihazınızı yeniden başlatın.</string>
+    <string name="installation_failed_title">Tüh Bunu Beklemiyordum</string>
+    <string name="installation_failed_desc">Günlükler belgeler klasörüne kaydedildi.</string>
+    <string name="logs">Günlükler</string>
+    <string name="toast_skipped_installation">Kurulum atlandı. Bazı özellikler düzgün çalışmayabilir.</string>
     <!-- Buttons -->
     <string name="btn_select">Seç</string>
+    <string name="btn_skip">Atla</string>
+    <string name="btn_next">Sonraki</string>
+    <string name="btn_back">Geri</string>
+    <string name="btn_lets_go">Hadi Başlayalım</string>
+    <string name="btn_close">Kapat</string>
+    <string name="btn_reboot_now">Şimdi Yeniden Başlat</string>
+    <string name="btn_reboot">Yeniden Başlat</string>
+    <string name="btn_enable">Etkinleştir</string>
+    <string name="btn_disable">Devre Dışı Bırak</string>
+    <string name="btn_apply">Uygula</string>
     <!-- Dialogs -->
+    <string name="installing">Kuruluyor</string>
+    <string name="loading_dialog_wait">Lütfen Bekleyin</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Bildirim</string>
@@ -35,6 +78,7 @@
     <string name="general_color_text1">Metin 1</string>
     <string name="general_color_text2">Metin 2</string>
     <string name="sysui_restart_needed">Uygulamak için bir SystemUI yeniden başlatması gerekir</string>
+    <string name="one_time_reboot_needed">Cihazınızı yeniden başlatın!</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Ara…</string>
     <string name="searchpreference_clear">Temizle</string>
@@ -48,6 +92,7 @@
     <string name="restart_page_scope">Yalnızca bu sayfa kapsamını yeniden başlat</string>
     <string name="restart_scope_message">Sistem çerçevesi dışındaki tüm kapsamlı işlemleri yeniden başlatmak istediğinizden emin misiniz?\nModül çalışmıyorsa bunu kullanın!\nİlgili tüm kapsamların kontrol edildiğinden emin olun!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">Arayüz</string>
     <string name="navbar_mods">Modlar</string>
     <string name="navbar_hooks">Kancalar</string>
     <string name="navbar_settings">Ayarlar</string>
@@ -904,10 +949,47 @@
     <string name="weather_condition_wind">Rüzgarlı</string>
     <string name="weather_condition_mist">Sisli</string>
     <!-- UI Strings -->
+    <string name="style_category">Temalar ve Stiller</string>
+    <string name="icon_theme_category">Simge paketi ve Stiller</string>
     <!-- UI styles -->
+    <string name="oxygen_customizer_updated_title">Oxygen Customizer Güncellendi!</string>
+    <string name="oxygen_customizer_updated_desc">En son eklenen özellikleri ve seçenekleri kullanmak için telefonunuzu yeniden başlatın.\nŞimdi yeniden başlatmak için buraya dokunun.</string>
+    <string name="rebooting_desc">5 saniye içinde yeniden başlatılıyor</string>
+    <string name="theme_customization_ui_style_title">Arayüz stili</string>
+    <string name="theme_customization_ui_style_summary">Arayüzünüz için özel stil belirleyin</string>
     <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Simge paketi</string>
+    <string name="theme_customization_icon_pack_summary">Özel simge paketi stili ayarlayın</string>
+    <string name="theme_customization_signal_icon_title">Sinyal simgesi stili</string>
+    <string name="theme_customization_signal_icon_summary">Özel sinyal simgesi stili ayarlayın</string>
+    <string name="theme_customization_wifi_icon_title">WiFi simgesi stili</string>
+    <string name="theme_customization_wifi_icon_summary">Özel wifi simge stili ayarlayın</string>
+    <string name="theme_customization_navbar_title">Gezinme çubuğu stili</string>
+    <string name="theme_customization_navbar_summary">Özel gezinme çubuğu stili ayarlayın</string>
+    <string name="theme_customization_toast_frame_title">Tost Çerçevesi</string>
+    <string name="theme_customization_toast_frame_summary">Tost bildirim stilini değiştir</string>
     <!-- Notification -->
+    <string name="notification_styles">Bildirim Stilleri</string>
+    <string name="notification_styles_desc">Bildirimler için özel stil ayarla</string>
+    <string name="notif_preview_desc">Bildirim Önizlemesi.\nBu stili uygulamak için tıklayın.</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Bildirim Köşesi Yarıçapı</string>
+    <string name="notif_roundness_preview_desc">Bildirim Önizlemesi</string>
     <!-- Toast Styles -->
+    <string name="toast_styles">Tost Stilleri</string>
+    <string name="toast_message">Toast Mesajları</string>
     <!-- Style List -->
+    <string name="style_0">Yok</string>
+    <string name="style_1">Stil 1</string>
+    <string name="style_2">Stil 2</string>
+    <string name="style_3">Stil 3</string>
+    <string name="style_4">Stil 4</string>
+    <string name="style_5">Stil 5</string>
+    <string name="style_6">Stil 6</string>
+    <string name="style_7">Stil 7</string>
+    <string name="style_8">Stil 8</string>
+    <string name="style_9">Stil 9</string>
+    <string name="style_10">Stil 10</string>
+    <string name="style_11">Stil 11</string>
+    <string name="style_12">Stil 12</string>
 </resources>
