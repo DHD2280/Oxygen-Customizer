@@ -35,8 +35,16 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NotificationRoundness"
             android:icon="@drawable/ic_notification_style"
             android:key="android.theme.customization.notifications_roundness"
-            android:summary="@string/notification_corner_radius_title"
+            android:summary="@string/notification_corner_radius_summary"
             android:title="@string/notification_corner_radius_title" />
+
+        <!-- USB Dialog
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.UsbDialog"
+            android:icon="@drawable/ic_usb"
+            android:key="android.theme.customization.usb_dialog"
+            android:summary="@string/theme_customization_usb_dialog_summary"
+            android:title="@string/theme_customization_usb_dialog_title" />  -->
 
         <!-- Navbar Style -->
         <Preference
@@ -60,13 +68,21 @@
         android:title="@string/icon_theme_category"
         app:iconSpaceReserved="false">
 
-        <!-- Icon pack
+        <!-- Icon pack -->
         <Preference
             android:key="android.theme.customization.icon_pack"
             android:icon="@drawable/ic_drawing"
             android:title="@string/theme_customization_icon_pack_title"
             android:summary="@string/theme_customization_icon_pack_summary"
-            android:fragment="com.crdroid.settings.fragments.ui.StatusbarIcons"/> -->
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.IconPacks"/>
+
+        <!-- Settings Icons -->
+        <Preference
+            android:key="android.theme.customization.settings_icons"
+            android:icon="@drawable/ic_settings_accent"
+            android:title="@string/theme_customization_settings_icons_title"
+            android:summary="@string/theme_customization_settings_icons_summary"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.SettingsIcons"/>
 
         <!-- Signal icon style -->
         <Preference

@@ -124,6 +124,10 @@ public class OverlayUtil {
         return Shell.cmd("[ -f /system/product/overlay/OxygenCustomizerComponentOCV.apk ] && echo \"found\" || echo \"not found\"").exec().getOut().get(0).equals("found");
     }
 
+    public static boolean overlayExist(String overlayName) {
+        return Shell.cmd("[ -f /system/product/overlay/OxygenCustomizerComponent" + overlayName + ".apk ] && echo \"found\" || echo \"not found\"").exec().getOut().get(0).equals("found");
+    }
+
     @SuppressWarnings("unused")
     public static boolean matchOverlayAgainstAssets() {
         try {
@@ -148,7 +152,10 @@ public class OverlayUtil {
             PackageManager pm = context.getPackageManager();
             Resources res = pm.getResourcesForApplication(pkg);
             int resId = res.getIdentifier(drawableName, "drawable", pkg);
-            return res.getDrawable(resId);
+            if (resId != 0X0)
+                return res.getDrawable(resId);
+            else
+                return null;
         }
         catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

@@ -66,6 +66,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
@@ -92,7 +93,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         createChannels();
 
         if (savedInstanceState == null) {
-            replaceFragment(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ?
+            replaceFragment(!OverlayUtil.overlayExists() ?
                     new Mods() :
                     new UserInterface());
         } else {
@@ -159,8 +160,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
 
     @SuppressLint("NonConstantResourceId")
     private void setupBottomNavigationView() {
-        if (Prefs.getBoolean(XPOSED_ONLY_MODE, true)) {
-            Log.d("MainActivity", "setupNavigation: Xposed only mode");
+        if (!OverlayUtil.overlayExists()) {
             binding.bottomNavigationView.getMenu().clear();
             binding.bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_xposed_only);
         }
@@ -174,22 +174,22 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 backButtonDisabled();
             } else if (Objects.equals(tag, Mods.class.getSimpleName())) {
                 selectedFragment = R.id.mods;
-                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 0 : 1).setChecked(true);
-                setHeader(this, Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? getString(R.string.app_name) : getString(R.string.mods_title));
+                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 0 : 1).setChecked(true);
+                setHeader(this, !OverlayUtil.overlayExists() ? getString(R.string.app_name) : getString(R.string.mods_title));
                 backButtonDisabled();
             } else if (Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
                 selectedFragment = R.id.updates;
-                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 1 : 2).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 1 : 2).setChecked(true);
                 setHeader(this, getString(R.string.update));
                 backButtonDisabled();
             } else if (Objects.equals(tag, Hooks.class.getSimpleName())) {
                 selectedFragment = R.id.hooks;
-                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 2 : 3).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 2 : 3).setChecked(true);
                 setHeader(this, getString(R.string.hooked_packages_title));
                 backButtonDisabled();
             } else if (Objects.equals(tag, Settings.class.getSimpleName())) {
                 selectedFragment = R.id.settings;
-                binding.bottomNavigationView.getMenu().getItem(Prefs.getBoolean(XPOSED_ONLY_MODE, true) ? 3 : 4).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 3 : 4).setChecked(true);
                 setHeader(this, getString(R.string.navbar_settings));
                 backButtonDisabled();
             }
@@ -271,7 +271,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         fragmentTransaction.replace(R.id.frame_layout, fragment, tag);
         if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        } else if (Objects.equals(tag, Mods.class.getSimpleName()) && Prefs.getBoolean(XPOSED_ONLY_MODE, true)) {
+        } else if (Objects.equals(tag, Mods.class.getSimpleName()) && !OverlayUtil.overlayExists()) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } else if (Objects.equals(tag, Mods.class.getSimpleName()) ||
                 Objects.equals(tag, Hooks.class.getSimpleName()) ||

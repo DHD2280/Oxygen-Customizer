@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:insetLeft="0.5dip" android:insetRight="0.5dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetLeft="2dp" android:insetRight="2dp">
+    <vector android:height="13.0dip" android:width="13.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <path android:fillColor="#00000000" android:pathData="M10,9H14L10,13H14" android:strokeColor="#ff000000" android:strokeWidth="2.4" android:strokeLineCap="round" android:strokeLineJoin="round" />
+        <path android:fillColor="#00000000" android:pathData="M7.5,19C8.155,20.748 9.922,22 12,22C12.245,22 12.485,21.983 12.719,21.949M16.5,19C16.233,19.713 15.781,20.343 15.198,20.839" android:strokeColor="#ff000000" android:strokeWidth="2.4" android:strokeLineCap="round" />
+        <path android:fillColor="#00000000" android:pathData="M9.107,2.674C9.984,2.242 10.965,2 12,2C15.727,2 18.749,5.136 18.749,9.005V9.71C18.749,10.555 18.99,11.382 19.442,12.085L20.55,13.809C21.561,15.384 20.789,17.525 19.03,18.023C14.427,19.326 9.573,19.326 4.97,18.023C3.211,17.525 2.439,15.384 3.45,13.809L4.558,12.085C5.01,11.382 5.251,10.555 5.251,9.71V9.005C5.251,7.931 5.484,6.913 5.9,6.003" android:strokeColor="#ff000000" android:strokeWidth="2.4" android:strokeLineCap="round" />
+    </vector></inset>
+</inset>

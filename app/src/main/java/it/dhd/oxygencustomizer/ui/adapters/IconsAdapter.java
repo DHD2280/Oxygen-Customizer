@@ -39,6 +39,12 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
     LoadingDialog loadingDialog;
     int selectedItem = -1;
     String mComponentName = "", mAdditionalComponent = "";
+    private onButtonClick mOnButtonClick = null;
+
+    public interface onButtonClick{
+        void onEnableClick(int position);
+        void onDisableClick(int position);
+    }
 
     public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName) {
         this.context = context;
@@ -59,6 +65,16 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
         this.mAdditionalComponent = additionalCompName;
 
         // Preference key
+        for (int i = 1; i <= itemList.size(); i++)
+            ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
+    }
+
+    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, onButtonClick onButtonClick) {
+        this.context = context;
+        this.itemList = itemList;
+        this.loadingDialog = loadingDialog;
+        this.mComponentName = compName;
+        this.mOnButtonClick = onButtonClick;
         for (int i = 1; i <= itemList.size(); i++)
             ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
@@ -157,14 +173,18 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
-                //IconPackManager.enableOverlay(holder.getBindingAdapterPosition() + 1);
-                for (int i = 1; i <= ICONPACK_KEY.size(); i++) {
-                    Prefs.putBoolean("OxygenCustomizerComponent" + mComponentName + i + ".overlay", i == holder.getBindingAdapterPosition());
-                    OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
+
+                if (mOnButtonClick != null) {
+                    mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition()+1);
+                } else {
+                    for (int i = 1; i <= ICONPACK_KEY.size(); i++) {
+                        Prefs.putBoolean("OxygenCustomizerComponent" + mComponentName + i + ".overlay", i == holder.getBindingAdapterPosition());
+                        OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
+                    }
+                    if (!TextUtils.isEmpty(mAdditionalComponent))
+                        OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
+                    OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
                 }
-                if (!TextUtils.isEmpty(mAdditionalComponent))
-                    OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
-                OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
 
 
                 ((Activity) context).runOnUiThread(() -> {
@@ -191,9 +211,13 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             Runnable runnable = () -> {
-                if (!TextUtils.isEmpty(mAdditionalComponent))
-                    OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
-                OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                if (mOnButtonClick != null) {
+                    mOnButtonClick.onDisableClick(holder.getBindingAdapterPosition()+1);
+                } else {
+                    if (!TextUtils.isEmpty(mAdditionalComponent))
+                        OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
+                    OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                }
 
                 ((Activity) context).runOnUiThread(() -> {
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {

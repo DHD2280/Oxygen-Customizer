@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SELECTED_TOAST_FRAME;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_TOAST_FRAME;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

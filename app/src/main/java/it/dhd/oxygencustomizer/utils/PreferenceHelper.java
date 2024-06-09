@@ -300,10 +300,10 @@ public class PreferenceHelper {
             }
 
             // Gesture Prefs
-            case "gesture_left_height" -> {
+            case "gesture_left_height_double" -> {
                 return instance.mPreferences.getBoolean("gesture_left", false);
             }
-            case "gesture_right_height" -> {
+            case "gesture_right_height_double" -> {
                 return instance.mPreferences.getBoolean("gesture_right", false);
             }
             case "gesture_override_holdback_left", "gesture_override_holdback_mode" -> {

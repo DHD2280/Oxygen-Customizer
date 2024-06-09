@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:insetLeft="0.5dip" android:insetRight="0.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetLeft="2dp" android:insetRight="2dp">
+    <vector android:height="14.0dip" android:width="14.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <path android:fillColor="#ff000000" android:pathData="M9.88,14.12 L9.73,14l-0.18,-0.1 -0.18,-0.05a1,1 0,0 0,-0.9 0.27,0.83 0.83,0 0,0 -0.22,0.33 0.94,0.94 0,0 0,0 0.76,1.07 1.07,0 0,0 0.54,0.54 1,1 0,0 0,0.38 0.08,1.09 1.09,0 0,0 0.39,-0.08 0.87,0.87 0,0 0,0.32 -0.22,1 1,0 0,0 0.22,-0.32 1,1 0,0 0,0.07 -0.38,0.84 0.84,0 0,0 -0.08,-0.38A0.93,0.93 0,0 0,9.88 14.12ZM3.51,8.76a1,1 0,0 0,0.71 -0.3L8.46,4.22a1,1 0,0 0,0 -1.41,1 1,0 0,0 -1.41,0L2.81,7.05a1,1 0,0 0,0 1.41A1,1 0,0 0,3.51 8.76ZM21.19,15.54a1,1 0,0 0,-1.41 0l-4.24,4.24a1,1 0,0 0,0.7 1.71,1 1,0 0,0 0.71,-0.3L21.19,17A1,1 0,0 0,21.19 15.54ZM21.36,9.88a3,3 0,0 0,-0.87 -2.12L16.24,3.51a3.08,3.08 0,0 0,-4.24 0L3.51,12a3,3 0,0 0,0 4.24l4.25,4.25h0a3,3 0,0 0,4.24 0L20.49,12A3,3 0,0 0,21.36 9.88ZM19.07,10.59 L10.59,19.07a1,1 0,0 1,-1.42 0h0L4.93,14.83a1,1 0,0 1,0 -1.42l8.48,-8.48a1,1 0,0 1,1.42 0l4.24,4.24a1,1 0,0 1,0 1.42Z" android:strokeColor="#ff000000" android:strokeWidth="0.552" />
+    </vector></inset>
+</inset>

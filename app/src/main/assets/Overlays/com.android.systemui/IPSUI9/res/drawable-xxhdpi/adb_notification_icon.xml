@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:name="ring" android:fillColor="#00000000" android:pathData="M 12 21 C 16.971 21 21 16.971 21 12 C 21 7.029 16.971 3 12 3 C 7.029 3 3 7.029 3 12 C 3 16.971 7.029 21 12 21 Z" android:strokeColor="#ffffffff" android:strokeWidth="2.0" />
+    <group android:name="group">
+        <clip-path android:pathData="M 20.5 12 C 20.5 16.694 16.694 20.5 12 20.5 C 7.306 20.5 3.5 16.694 3.5 12 C 3.5 7.306 7.306 3.5 12 3.5 C 16.694 3.5 20.5 7.306 20.5 12 Z" />
+        <path android:fillColor="#ffffffff" android:pathData="M 14.812 9.023 C 13.014 9.707 11.027 9.707 9.229 9.023 L 8.265 10.693 C 8.06 11.048 7.605 11.17 7.25 10.964 C 6.895 10.759 6.773 10.305 6.978 9.949 L 7.899 8.355 C 5.988 7.137 4.702 5.084 4.502 2.695 L 4.456 2.153 L 19.584 2.153 L 19.539 2.695 C 19.339 5.084 18.052 7.137 16.142 8.355 L 17.067 9.958 C 17.259 10.307 17.142 10.746 16.801 10.952 C 16.45 11.165 15.993 11.052 15.781 10.701 L 15.775 10.693 L 14.812 9.023 Z" />
+        <group android:name="stars">
+            <path android:fillColor="#ffffffff" android:pathData="                 M 7,14  h1v1h-1z                 M 13,15 h1v1h-1z                 M 14,11 h1v1h-1z                  M 11,17 h0.5v0.5h-0.5z                 M 10,15 h0.5v0.5h-0.5z                 M 13,18 h0.5v0.5h-0.5z                 M 17,15 h0.5v0.5h-0.5z                 M 15,14 h0.5v0.5h-0.5z                 M 18,12 h0.5v0.5h-0.5z                 M 5,13  h0.5v0.5h-0.5z                 M 5,10  h0.5v0.5h-0.5z                 M 9,11  h0.5v0.5h-0.5z                 M 8,17  h0.5v0.5h-0.5z                 M 12,12 h0.5v0.5h-0.5z             " />
+        </group>
+    </group>
+</vector>

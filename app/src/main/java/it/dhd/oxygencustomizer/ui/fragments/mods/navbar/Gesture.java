@@ -111,8 +111,8 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
             setVisibility(rightSwipeGestureIndicator, false, 400);
             setVisibility(leftSwipeGestureIndicator, false, 400);
 
-            setVisibility(rightBackGestureIndicator, PreferenceHelper.isVisible("gesture_right_height"), 400);
-            setVisibility(leftBackGestureIndicator, PreferenceHelper.isVisible("gesture_left_height"), 400);
+            setVisibility(rightBackGestureIndicator, PreferenceHelper.isVisible("gesture_right_height_double"), 400);
+            setVisibility(leftBackGestureIndicator, PreferenceHelper.isVisible("gesture_left_height_double"), 400);
 
             List<Float> prefs = mPreferences.getSliderValues("gesture_right_height_double", 100f);
             int bottomMargin, topMargin;
@@ -123,14 +123,6 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
                 bottomMargin = 0;
                 topMargin = Math.round(displayHeight * prefs.get(0) / 100f);
             }
-            //int edgeHeight = Math.round(displayHeight * mPreferences.getSliderInt("gesture_right_height", 100) / 100f);
-            /*lp = rightBackGestureIndicator.getLayoutParams();
-            lp.height = topMargin-bottomMargin;
-
-            setMargins(rightBackGestureIndicator, getContext(), 0, 0, 0, bottomMargin);
-            rightBackGestureIndicator.setLayoutParams(lp);*/
-//            rightBackGestureIndicator.setPadding(0, topMargin, 0, bottomMargin);
-            //setMargins(rightBackGestureIndicator, getContext(), 0, topMargin, 0, bottomMargin);
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(50, ViewGroup.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.RIGHT | Gravity.BOTTOM;
             layoutParams.topMargin = topMargin;

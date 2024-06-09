@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:drawable="@drawable/ic_bluetooth_connected"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -8,6 +8,7 @@ import android.os.Build;
 import com.topjohnwu.superuser.Shell;
 
 import java.io.File;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 
@@ -15,16 +16,15 @@ public class Dynamic {
 
     // Grab number of overlays dynamically for each variant
     public static final int TOTAL_ANDROID_THEMES = (Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentTH'").exec().getOut()).size();
+    public static final List<String> LIST_ANDROID_THEMES = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentTH'").exec().getOut();
     public static final int TOTAL_BRIGHTNESSBARS = (Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentBBN'").exec().getOut()).size();
     public static final int TOTAL_BRIGHTNESSBARSPIXEL = (Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentBBP'").exec().getOut()).size();
-    public static final int TOTAL_ICONPACKS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentIPAS'").exec().getOut().size();
-    public static final int TOTAL_TOAST_FRAME = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentTSTFRM'").exec().getOut().size();
+    public static final int TOTAL_ICON_PACKS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentIPSUI'").exec().getOut().size();
     public static final int TOTAL_NOTIFICATIONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentNFN'").exec().getOut().size();
     public static final int TOTAL_NAVBAR = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentNB'").exec().getOut().size();
     public static final int TOTAL_SIGNAL_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentSGIC'").exec().getOut().size();
     public static final int TOTAL_WIFI_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentWIFI'").exec().getOut().size();
-    public static final int TOTAL_QSSHAPES = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentQSSN'").exec().getOut().size();
-    public static final int TOTAL_QSSHAPESPIXEL = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentQSSP'").exec().getOut().size();
+    public static final int TOTAL_SETTINGS_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentICS'").exec().getOut().size();
 
     // Overlay compiler tools
     public static final String NATIVE_LIBRARY_DIR = OxygenCustomizer.getAppContext().getApplicationInfo().nativeLibraryDir;

@@ -122,7 +122,7 @@ dependencies {
     compileOnly(files("libs/api-82-sources.jar"))
 
     // App Compat
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")

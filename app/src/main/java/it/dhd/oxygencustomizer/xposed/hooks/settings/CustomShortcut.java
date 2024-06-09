@@ -90,7 +90,6 @@ public class CustomShortcut extends XposedMods {
                     tinted = OCIcon;
                 } else {
                     try {
-                        if (ThemeUtils == null) throw new Throwable();
                         tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
                     } catch (Throwable t) {
                         tinted = OCIcon;

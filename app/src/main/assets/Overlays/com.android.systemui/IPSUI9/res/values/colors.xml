@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ColorNight">#ff000000</color>
+    <color name="navbar_gesture_background">#00000000</color>
+    <color name="permissions_my_color_bg">@android:color/system_accent1_500</color>
+</resources>

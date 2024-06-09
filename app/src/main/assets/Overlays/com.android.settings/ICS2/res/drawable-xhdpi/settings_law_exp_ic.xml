@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="55.68" android:viewportHeight="55.68"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/monet_color" android:pathData="M8.84,39.84h38v4h-38z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+    <path android:fillColor="@color/monet_color" android:pathData="M47.84,45.84L7.84,45.84a2,2 0,0 0,-2 2v2L49.84,49.84L49.84,47.84A2,2 0,0 0,47.84 45.84Z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+    <path android:fillColor="@color/monet_color" android:pathData="M13.84,21.84h4v16h-4z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+    <path android:fillColor="@color/monet_color" android:pathData="M25.84,21.84h4v16h-4z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+    <path android:fillColor="@color/monet_color" android:pathData="M37.84,21.84h4v16h-4z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+    <path android:fillColor="@color/monet_color" android:pathData="M48.74,15.24 L27.84,5.84 6.94,15.24A2.1,2.1 0,0 0,5.84 17.04L5.84,17.84a2,2 0,0 0,2 2L47.84,19.84a2,2 0,0 0,2 -2v-0.8A2.1,2.1 0,0 0,48.74 15.24Z" android:strokeColor="@color/monet_color" android:strokeWidth="1.68" />
+</vector>

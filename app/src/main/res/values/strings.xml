@@ -1031,6 +1031,8 @@
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">Icon pack</string>
     <string name="theme_customization_icon_pack_summary">Set custom icon pack style</string>
+    <string name="theme_customization_settings_icons_title">Settings Icons</string>
+    <string name="theme_customization_settings_icons_summary">Set custom icons in Settings</string>
     <string name="theme_customization_signal_icon_title">Signal icon style</string>
     <string name="theme_customization_signal_icon_summary">Set custom signal icon style</string>
     <string name="theme_customization_wifi_icon_title">WiFi icon style</string>
@@ -1047,7 +1049,12 @@
 
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">Notification Corner Radius</string>
+    <string name="notification_corner_radius_summary">Set custom corner radius for notifications.</string>
     <string name="notif_roundness_preview_desc">Notification Preview.</string>
+
+    <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">USB Dialog Styles</string>
+    <string name="theme_customization_usb_dialog_summary">Set custom style for USB dialog.</string>
 
     <!-- Toast Styles -->
     <string name="toast_styles">Toast Styles</string>

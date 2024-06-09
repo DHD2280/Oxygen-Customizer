@@ -453,7 +453,7 @@ public class OnboardingView extends FrameLayout {
                 }
             }
 
-            logger = "Cleaning temporary directories";
+            logger = "I: Cleaning temporary directories";
             publishProgress(step);
             // Clean temp directory
             Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR).exec();
