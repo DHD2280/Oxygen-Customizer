@@ -47,16 +47,16 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
                     String path = getRealPath(data);
                     String destination;
                     if (type == 0)
-                        destination = HEADER_CLOCK_USER_IMAGE;
-                    else
                         destination = HEADER_CLOCK_FONT_DIR;
+                    else
+                        destination = HEADER_CLOCK_USER_IMAGE;
 
                     if (path != null && moveToOCHiddenDir(path, destination)) {
                         mPreferences.edit().putBoolean(
-                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_ENABLED : QS_HEADER_CLOCK_CUSTOM_FONT
+                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_FONT : QS_HEADER_CLOCK_CUSTOM_ENABLED
                                 , false).apply();
                         mPreferences.edit().putBoolean(
-                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_ENABLED : QS_HEADER_CLOCK_CUSTOM_FONT
+                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_FONT : QS_HEADER_CLOCK_CUSTOM_ENABLED
                                 , true).apply();
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     } else {
@@ -103,7 +103,7 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
             });
         }
 
-        Preference mClockImage = findPreference("");
+        Preference mClockImage = findPreference("qs_header_clock_custom_user_image_picker");
         if (mClockImage != null) {
             mClockImage.setOnPreferenceClickListener(preference -> {
                 pick("image");
