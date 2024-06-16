@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
+import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.ThemeAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.utils.PrefManager;
+import it.dhd.oxygencustomizer.utils.Prefs;
 
 public class UiStyle extends BaseFragment {
 
@@ -44,6 +47,9 @@ public class UiStyle extends BaseFragment {
         ArrayList<String> mThemeNames = new ArrayList<>();
         for (int i = 0; i<TOTAL_ANDROID_THEMES; i++) {
             mThemeNames.add(getStringFromOverlay(requireContext(), "OxygenCustomizerComponentTH" + (i+1) + ".overlay", "android_theme_name"));
+        }
+        if (getModulePrefs() != null) {
+            getModulePrefs().edit().putInt("UiStylesThemes", TOTAL_ANDROID_THEMES).apply();
         }
         return new ThemeAdapter(requireContext(), mThemeNames, loadingDialog, "TH");
     }

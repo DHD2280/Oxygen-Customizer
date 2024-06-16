@@ -1,5 +1,8 @@
 package it.dhd.oxygencustomizer.utils.overlay;
 
+import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
+import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
+
 import android.content.Context;
 import android.content.om.OverlayInfo;
 import android.content.pm.PackageManager;
@@ -51,6 +54,9 @@ public class OverlayUtil {
 
     public static void enableOverlay(String pkgName) {
         Prefs.putBoolean(pkgName, true);
+        if (getModulePrefs() != null) {
+            getModulePrefs().edit().putBoolean(pkgName, true).apply();
+        }
         Shell.cmd("cmd overlay enable --user current " + pkgName, "cmd overlay set-priority " + pkgName + " highest").submit();
     }
 
@@ -83,6 +89,9 @@ public class OverlayUtil {
 
     public static void disableOverlay(String pkgName) {
         Prefs.putBoolean(pkgName, false);
+        if (getModulePrefs() != null) {
+            getModulePrefs().edit().putBoolean(pkgName, false).apply();
+        }
         Shell.cmd("cmd overlay disable --user current " + pkgName).submit();
     }
 

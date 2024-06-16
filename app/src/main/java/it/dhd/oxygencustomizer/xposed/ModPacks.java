@@ -19,6 +19,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.DepthWallpaper;
@@ -54,6 +55,9 @@ public class ModPacks {
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
+                    // Theme Enabler
+                    modPacks.add(ThemeEnabler.class);
+
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);
 

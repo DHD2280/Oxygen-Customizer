@@ -10,4 +10,5 @@ interface IRootProviderProxy {
 	 */
 	String[] runCommand(String command);
 	void extractSubject(in Bitmap input, String resultPath);
+	void applyTheme(in String theme);
 }
