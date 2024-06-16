@@ -131,6 +131,8 @@ public class LockscreenClock extends XposedMods {
     private int mBatteryPercentage = 1;
     private ImageView mVolumeLevelArcProgress;
     private ImageView mRamUsageArcProgress;
+    private ImageView mBatteryArcProgress;
+    private ImageView mDayArcProgress;
     private static long lastUpdated = System.currentTimeMillis();
     private static final long thresholdTime = 500; // milliseconds
     private int accent1, accent2, accent3, text1, text2;
@@ -377,7 +379,6 @@ public class LockscreenClock extends XposedMods {
 
         long currentTime = System.currentTimeMillis();
         boolean isClockAdded = mClockViewContainer.findViewWithTag(OC_LOCKSCREEN_CLOCK_TAG) != null;
-        boolean isDepthClock = mClockViewContainer.getTag() == OC_DEPTH_WALLPAPER_TAG;
 
         if (!customLockscreenClock) {
             if (isClockAdded) mClockViewContainer.removeView(mClockViewContainer.findViewWithTag(OC_LOCKSCREEN_CLOCK_TAG));
@@ -400,35 +401,6 @@ public class LockscreenClock extends XposedMods {
             clockView.setTag(OC_LOCKSCREEN_CLOCK_TAG);
 
             int idx = 0;
-            LinearLayout dummyLayout = null;
-
-            if (isDepthClock) {
-                /*
-                 If the clock view container is the depth wallpaper container, we need to
-                 add the clock view to the middle of foreground and background images
-                 */
-                if (mClockViewContainer.getChildCount() > 0) {
-                    idx = 1;
-                }
-
-                // Add a dummy layout to the status view container so that we can still move notifications
-                if (mStatusViewContainer != null) {
-                    String dummy_tag = "dummy_layout";
-                    dummyLayout = mStatusViewContainer.findViewWithTag(dummy_tag);
-
-                    if (dummyLayout == null) {
-                        dummyLayout = new LinearLayout(mContext);
-                        dummyLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                350
-                        ));
-                        dummyLayout.setTag(dummy_tag);
-
-                        mStatusViewContainer.addView(dummyLayout, 0);
-                    }
-                }
-            }
-
             if (clockView.getParent() != null) {
                 ((ViewGroup) clockView.getParent()).removeView(clockView);
             }
@@ -438,14 +410,6 @@ public class LockscreenClock extends XposedMods {
             modifyClockView(clockView);
             initSoundManager();
             initBatteryStatus();
-
-            if (isDepthClock && dummyLayout != null) {
-                ViewGroup.MarginLayoutParams dummyParams = (ViewGroup.MarginLayoutParams) dummyLayout.getLayoutParams();
-                ViewGroup.MarginLayoutParams clockParams = (ViewGroup.MarginLayoutParams) clockView.getLayoutParams();
-                dummyParams.topMargin = clockParams.topMargin;
-                dummyParams.bottomMargin = clockParams.bottomMargin;
-                dummyLayout.setLayoutParams(dummyParams);
-            }
         }
     }
 
@@ -536,12 +500,25 @@ public class LockscreenClock extends XposedMods {
 
                 ((TextView) clockView.findViewById(R.id.device_name)).setText(Build.MODEL);
             }
+            case 27 -> {
+                // TextViews
+                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
+
+                // Image Views
+                mDayArcProgress = clockView.findViewById(R.id.day_progress);
+                mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
+                mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
+                mBatteryArcProgress = clockView.findViewById(R.id.battery_progress);
+            }
             default -> {
                 mBatteryStatusView = null;
                 mBatteryLevelView = null;
                 mVolumeLevelView = null;
                 mBatteryProgress = null;
                 mVolumeProgress = null;
+                mDayArcProgress = null;
+                mVolumeLevelArcProgress = null;
+                mBatteryArcProgress = null;
             }
         }
     }
@@ -565,6 +542,18 @@ public class LockscreenClock extends XposedMods {
             if (lockscreenClockStyle == 19) {
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
             }
+        }
+        if (mBatteryArcProgress != null) {
+            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
+                    mContext,
+                    mBatteryPercentage,
+                    appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage),
+                    32,
+                    "BATTERY",
+                    20,
+                    customColor ? accent1 : getPrimaryColor(mContext)
+            );
+            mBatteryArcProgress.setImageBitmap(widgetBitmap);
         }
         if (mBatteryLevelView != null) {
             mBatteryLevelView.setText(appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage));
@@ -652,7 +641,6 @@ public class LockscreenClock extends XposedMods {
     }
 
     private Drawable getCustomUserImage() {
-        Drawable customUserImage = null;
         try {
             ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_user_image.png"));
 

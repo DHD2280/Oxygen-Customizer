@@ -24,6 +24,7 @@ import java.util.Map;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.helper.BackupRestore;
 import it.dhd.oxygencustomizer.utils.helper.BinaryInstaller;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
@@ -38,7 +39,7 @@ public class ModuleUtil {
             Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR).exec();
 
             // Backup necessary files
-            //BackupRestore.backupFiles();
+            BackupRestore.backupFiles();
         }
         installModule();
     }
@@ -52,7 +53,7 @@ public class ModuleUtil {
         Shell.cmd("printf 'id=OxygenCustomizer\nname=Oxygen Customizer\nversion=" + MODULE_VERSION_NAME + "\nversionCode=" + MODULE_VERSION_CODE + "\nauthor=@DHD2280\ndescription=Systemless module for Oxygen Customizer. " + OxygenCustomizer.getAppContext().getResources().getString(R.string.xposeddescription) + ".\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/module.prop").exec();
         Shell.cmd("printf 'MODDIR=${0%%/*}\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh").exec();
         if (!skippedInstallation) {
-            Shell.cmd("printf 'MODDIR=${0%%/*}\n\nwhile [ \"$(getprop sys.boot_completed | tr -d \"\\r\")\" != \"1\" ]\ndo\n sleep 1\ndone\nsleep 5\n\nsh $MODDIR/post-exec.sh\n\nuntil [ -d /storage/emulated/0/Android ]; do\n  sleep 1\ndone\nsleep 3\n\n" + "sleep 6\n\nqspbd=$(cmd overlay list |  grep -E \"^.x..OxygenCustomizerComponentQSPBD.overlay\" | sed -E \"s/^.x..//\")\ndm=$(cmd overlay list |  grep -E \"^.x..OxygenCustomizerComponentDM.overlay\" | sed -E \"s/^.x..//\")\nif ([ ! -z \"$qspbd\" ] && [ -z \"$dm\" ])\nthen\n cmd overlay disable --user current OxygenCustomizerComponentQSPBD.overlay\n cmd overlay enable --user current OxygenCustomizerComponentQSPBD.overlay\n cmd overlay set-priority OxygenCustomizerComponentQSPBD.overlay highest\nfi\n\nqspba=$(cmd overlay list |  grep -E \"^.x..OxygenCustomizerComponentQSPBA.overlay\" | sed -E \"s/^.x..//\")\ndm=$(cmd overlay list |  grep -E \"^.x..OxygenCustomizerComponentDM.overlay\" | sed -E \"s/^.x..//\")\nif ([ ! -z \"$qspba\" ] && [ -z \"$dm\" ])\nthen\n cmd overlay disable --user current OxygenCustomizerComponentQSPBA.overlay\n cmd overlay enable --user current OxygenCustomizerComponentQSPBA.overlay\n cmd overlay set-priority OxygenCustomizerComponentQSPBA.overlay highest\nfi\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/service.sh").exec();
+            Shell.cmd("printf 'MODDIR=${0%%/*}\n\nwhile [ \"$(getprop sys.boot_completed | tr -d \"\\r\")\" != \"1\" ]\ndo\n sleep 1\ndone\nsleep 5\n\nsh $MODDIR/post-exec.sh\n\nuntil [ -d /storage/emulated/0/Android ]; do\n  sleep 1\ndone\nsleep 3\n\n" + "sleep 6\n\ntheme=$(cmd overlay list | grep \".x..OxygenCustomizerComponentTH\")\nnum=$(echo $theme | cut -d \"H\" -f 2 | cut -d \".\" -f 1)\nif [ \"${#num}\" -gt 0 ]\nthen\n cmd overlay enable OxygenCustomizerComponentTH$num.overlay\n cmd overlay set-priority OxygenCustomizerComponentTH$num.overlay highest highest\nfi\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/service.sh").exec();
         } else {
             Shell.cmd("printf 'MODDIR=${0%%/*}\n\nwhile [ \"$(getprop sys.boot_completed | tr -d \"\\r\")\" != \"1\" ]\ndo\n sleep 1\ndone\nsleep 5\n\nsh $MODDIR/post-exec.sh\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/service.sh").exec();
         }

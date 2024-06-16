@@ -268,7 +268,7 @@ public class Constants {
             // Custom Clock Prefs
             public static final String QS_HEADER_CLOCK_TEXT_SCALING = "qs_header_clock_text_scaling";
             public static final String QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH = "qs_header_clock_custom_color_switch";
-            public static final String QS_HEADER_CLOCK_CUSTOM_COLOR = "qs_header_clock_custom_color";
+            public static final String QS_HEADER_CLOCK_CUSTOM_USER_IMAGE = "qs_header_clock_custom_user_image";
             public static final String QS_HEADER_CLOCK_TOP_MARGIN = "qs_header_clock_top_margin";
             public static final String QS_HEADER_CLOCK_LEFT_MARGIN = "qs_header_clock_left_margin";
             public static final String QS_HEADER_CLOCK_COLOR_CODE_ACCENT1 = "qs_header_clock_color_code_accent1";
@@ -290,6 +290,7 @@ public class Constants {
                     QS_HEADER_CLOCK_CUSTOM_VALUE,
                     QS_HEADER_CLOCK_TEXT_SCALING,
                     QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH,
+                    QS_HEADER_CLOCK_CUSTOM_USER_IMAGE,
                     QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
                     QS_HEADER_CLOCK_COLOR_CODE_ACCENT2,
                     QS_HEADER_CLOCK_COLOR_CODE_ACCENT3,
@@ -552,6 +553,7 @@ public class Constants {
     public static final String ACTION_MAX_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_MAX_CHANGED_OC";
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
+    public static final String HEADER_CLOCK_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_user_image.png";
     public static final String HEADER_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_font.ttf";
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";

@@ -56,6 +56,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_HIDE_DATE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR;
@@ -365,15 +366,12 @@ public class PreferenceHelper {
                     "qs_header_clock_color_code_text2" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_color_switch", false);
             }
-            case "qs_header_clock_custom_user_switch",
-                    "qs_header_clock_custom_user_image" -> {
-                return instance.mPreferences.getInt("qs_header_custom_clock_style", 0) == 6;
-            }
-            case "qs_header_clock_custom_user" -> {
-                return isVisible("qs_header_clock_custom_user_switch") && instance.mPreferences.getBoolean("qs_header_clock_custom_user_switch", false);
+            case "qs_header_clock_custom_user_image" -> {
+                return instance.mPreferences.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0) == 6;
             }
             case "qs_header_clock_custom_user_image_picker" -> {
-                return isVisible("qs_header_clock_custom_user_image") && instance.mPreferences.getBoolean("qs_header_clock_custom_user_image", false);
+                return instance.mPreferences.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0) == 6 &&
+                        instance.mPreferences.getBoolean("qs_header_clock_custom_user_image", false);
             }
             case "qs_header_stock_clock_background_chip" -> {
                 return instance.mPreferences.getBoolean("qs_header_stock_clock_background_chip_switch", false);

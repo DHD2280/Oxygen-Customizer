@@ -2,6 +2,9 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.qsheader;
 
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_USER_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
@@ -34,16 +37,27 @@ import it.dhd.oxygencustomizer.utils.Constants;
 
 public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
 
+    private int type = 0;
+
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     String path = getRealPath(data);
+                    String destination;
+                    if (type == 0)
+                        destination = HEADER_CLOCK_USER_IMAGE;
+                    else
+                        destination = HEADER_CLOCK_FONT_DIR;
 
-                    if (path != null && moveToOCHiddenDir(path, HEADER_CLOCK_FONT_DIR)) {
-                        mPreferences.edit().putBoolean(QS_HEADER_CLOCK_CUSTOM_FONT, false).apply();
-                        mPreferences.edit().putBoolean(QS_HEADER_CLOCK_CUSTOM_FONT, true).apply();
+                    if (path != null && moveToOCHiddenDir(path, destination)) {
+                        mPreferences.edit().putBoolean(
+                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_ENABLED : QS_HEADER_CLOCK_CUSTOM_FONT
+                                , false).apply();
+                        mPreferences.edit().putBoolean(
+                                type == 0 ? QS_HEADER_CLOCK_CUSTOM_ENABLED : QS_HEADER_CLOCK_CUSTOM_FONT
+                                , true).apply();
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
@@ -76,6 +90,7 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
         return new String[]{Constants.Packages.SYSTEM_UI};
     }
 
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
@@ -83,7 +98,15 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
         Preference mClockFont = findPreference("qs_header_clock_font_custom");
         if (mClockFont != null) {
             mClockFont.setOnPreferenceClickListener(preference -> {
-                pickFile();
+                pick("font");
+                return true;
+            });
+        }
+
+        Preference mClockImage = findPreference("");
+        if (mClockImage != null) {
+            mClockImage.setOnPreferenceClickListener(preference -> {
+                pick("image");
                 return true;
             });
         }
@@ -97,11 +120,17 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
 
     }
 
-    private void pickFile() {
+    private void pick(String what) {
         if (!AppUtils.hasStoragePermission()) {
             AppUtils.requestStoragePermission(requireContext());
         } else {
-            launchFilePicker(startActivityIntent, "font/*");
+            if (what.equals("font")) {
+                launchFilePicker(startActivityIntent, "font/*");
+                type = 0;
+            } else if (what.equals("image")) {
+                launchFilePicker(startActivityIntent, "image/*");
+                type = 1;
+            }
         }
     }
 

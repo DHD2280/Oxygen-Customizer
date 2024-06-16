@@ -201,7 +201,6 @@ public class HeaderImage extends XposedMods {
 
                         int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
                         if (findField(ScrimControllerClass, "mScrimBehind").get(param.thisObject).equals(param.args[0])) {
-                            log(TAG + "ScrimControllerClass updateScrimColor " + ((float) param.args[alphaIndex]));
                             float qsAlpha = (float) param.args[alphaIndex];
                             boolean nightMode = (mQsHeaderLayout.getContext().getResources().getConfiguration().uiMode
                                     & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;

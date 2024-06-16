@@ -137,7 +137,7 @@ public class Buttons extends XposedMods {
                     keyIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
                     SystemUtils.AudioManager().dispatchMediaKeyEvent(mediaEvent);
 
-                    SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_ACCESSIBILITY);
+                    SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
                 } catch (Throwable t) {
                     log(TAG + " ERROR IN mVolumeLongPress\n" + t);
                 }
@@ -245,7 +245,7 @@ public class Buttons extends XposedMods {
                                 if (!SystemUtils.PowerManager().isInteractive() &&
                                         (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
                                                 Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                                    if (SystemUtils.AudioManager().isMusicActive()) {
+                                    if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
                                         isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
                                         mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
                                         param.setResult(0);

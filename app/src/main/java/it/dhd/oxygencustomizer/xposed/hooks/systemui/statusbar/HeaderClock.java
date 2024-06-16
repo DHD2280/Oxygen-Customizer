@@ -10,6 +10,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.DATE_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CHIP_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT2;
@@ -19,6 +20,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_LEFT_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP;
@@ -45,7 +47,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -66,6 +70,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.TextUtilsCompat;
 
 import java.io.File;
@@ -772,6 +777,7 @@ public class HeaderClock extends XposedMods {
         boolean customColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
         int textColor = nightMode ? Color.WHITE : Color.BLACK;
+        boolean useCustomImage = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_USER_IMAGE, false);
 
         int accent1 = Xprefs.getInt(
                 QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
@@ -822,7 +828,7 @@ public class HeaderClock extends XposedMods {
         switch (clockStyle) {
             case 6 -> {
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                imageView.setImageDrawable(getUserImage());
+                imageView.setImageDrawable(useCustomImage ? getCustomUserImage() : getUserImage());
             }
         }
     }
@@ -841,6 +847,23 @@ public class HeaderClock extends XposedMods {
         } catch (Throwable throwable) {
             log(TAG + throwable);
             return appContext.getResources().getDrawable(R.drawable.default_avatar);
+        }
+    }
+
+    private Drawable getCustomUserImage() {
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/header_clock_user_image.png"));
+
+            Drawable drawable = ImageDecoder.decodeDrawable(source);
+
+            if (drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                ((AnimatedImageDrawable) drawable).start();
+            }
+
+            return drawable;
+        } catch (Throwable ignored) {
+            return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.default_avatar, appContext.getTheme());
         }
     }
 

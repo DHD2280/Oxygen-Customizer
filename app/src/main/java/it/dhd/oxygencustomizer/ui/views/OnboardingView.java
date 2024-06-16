@@ -54,6 +54,7 @@ import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.utils.extension.TaskExecutor;
+import it.dhd.oxygencustomizer.utils.helper.BackupRestore;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.utils.overlay.compiler.OnboardingCompiler;
 
@@ -442,7 +443,7 @@ public class OnboardingView extends FrameLayout {
             // Move all generated overlays to system dir and flash as module
             if (!hasErroredOut) {
                 Shell.cmd("cp -a " + ModuleConstants.SIGNED_DIR + "/. " + ModuleConstants.TEMP_MODULE_OVERLAY_DIR).exec();
-                //BackupRestore.restoreFiles();
+                BackupRestore.restoreFiles();
 
                 try {
                     hasErroredOut = ModuleUtil.flashModule(ModuleUtil.createModule(ModuleConstants.TEMP_MODULE_DIR, ModuleConstants.TEMP_DIR + "/OxygenCustomizer.zip"));

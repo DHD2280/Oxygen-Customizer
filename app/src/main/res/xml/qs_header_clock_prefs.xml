@@ -174,20 +174,6 @@
             app:tickInterval=".1" />
 
         <SwitchPreferenceCompat
-            android:key="qs_header_clock_custom_user_switch"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/qs_header_clock_custom_user"
-            app:iconSpaceReserved="false" />
-
-        <EditTextPreference
-            android:key="qs_header_clock_custom_user"
-            android:title="@string/qs_header_clock_custom_user_title"
-            android:defaultValue="User"
-            app:useSimpleSummaryProvider="true"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
             android:key="qs_header_clock_custom_user_image"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
