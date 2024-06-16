@@ -26,7 +26,6 @@ public class ThemeEnabler extends XposedMods {
     @Override
     public void updatePrefs(String... Key) {
         if (Xprefs == null) return;
-        log("ThemeEnabler Updating Prefs " + Xprefs.getInt("UiStylesThemes", 0));
         for (int i = 0; i<Xprefs.getInt("UiStylesThemes", 0); i++) {
             if (Xprefs.getBoolean("OxygenCustomizerComponentTH" + (i+1) + ".overlay", false)) {
                 themeNum = (i+1);
@@ -44,7 +43,6 @@ public class ThemeEnabler extends XposedMods {
         hookAllMethods(ScrimController, "updateThemeColors", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                log("ThemeEnabler ScrimController updateThemeColors");
                 enableTheme();
             }
         });
@@ -52,7 +50,6 @@ public class ThemeEnabler extends XposedMods {
     }
 
     private void enableTheme() {
-        log("ThemeEnabler Enabling Themes " + themeNum);
         XPLauncher.enqueueProxyCommand(proxy -> proxy.applyTheme("OxygenCustomizerComponentTH" + themeNum + ".overlay"));
     }
 
