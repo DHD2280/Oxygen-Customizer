@@ -64,6 +64,17 @@ public class RootProviderProxy extends Service {
         }
 
         @Override
+        public void applyTheme(String theme) throws RemoteException {
+            ensureEnvironment();
+
+            try {
+                Shell.cmd("cmd overlay enable --user current " + theme, "cmd overlay set-priority " + theme + " highest").submit();
+            } catch (Throwable t) {
+                Log.e(TAG, "applyTheme: ", t);
+            }
+        }
+
+        @Override
         public void extractSubject(Bitmap input, String resultPath) throws RemoteException {
             ensureEnvironment();
 
