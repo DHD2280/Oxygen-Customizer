@@ -182,26 +182,6 @@ public class PulseControllerImpl {
         boolean allowNavPulse = vv != null && vv.isAttached()
                 && mNavPulseEnabled && !mKeyguardShowing && !mDozing;
 
-        /*if (mKeyguardGoingAway) {
-            detachPulseFrom(vv, allowNavPulse /*keep linked*//*);
-        } else if (allowNavPulse) {
-            detachPulseFrom(vv, allowNavPulse /*keep linked*//*);
-            attachPulseTo(mNavBar);
-        } else if (allowLsPulse) {
-            detachPulseFrom(mNavBar, allowLsPulse /*keep linked*//*);
-            if (mAmbPulseEnabled) detachPulseFrom(mAodRootLayout, allowLsPulse /*keep linked*//*);
-            attachPulseTo(vv);
-        } else if (allowAmbPulse) {
-            detachPulseFrom(mNavBar, allowAmbPulse /*keep linked*//*);
-            if (mLsPulseEnabled) detachPulseFrom(vv, allowAmbPulse /*keep linked*//*);
-            attachPulseTo(mAodRootLayout);
-        } else {
-            detachPulseFrom(mNavBar, false /*keep linked*//*);
-            detachPulseFrom(mAodRootLayout, false /*keep linked*//*);
-            detachPulseFrom(mKeyguardLayout, false /*keep linked*//*);
-            detachPulseFrom(vv, false /*keep linked*//*);
-        }*/
-
         if (mKeyguardGoingAway) {
             detachPulseFrom(vv, allowNavPulse /*keep linked*/);
         } else if (allowNavPulse) {
@@ -218,7 +198,6 @@ public class PulseControllerImpl {
         } else {
             detachPulseFrom(mNavBar, false /*keep linked*/);
             detachPulseFrom(mAodRootLayout, false /*keep linked*/);
-            //detachPulseFrom(mKeyguardLayout, false /*keep linked*/);
             detachPulseFrom(vv, false /*keep linked*/);
         }
     }

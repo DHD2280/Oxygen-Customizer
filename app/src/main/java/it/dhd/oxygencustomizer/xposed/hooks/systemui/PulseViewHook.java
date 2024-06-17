@@ -244,10 +244,8 @@ public class PulseViewHook extends XposedMods {
                 if (PulseControllerImpl.hasInstance()) {
                     //log(TAG + "Keyguard is showing: " + param.args[0]);
                     PulseControllerImpl.getInstance().setKeyguardShowing((boolean) param.args[0]);
-                    if (VisualizerView.getInstance() != null && DWallpaperEnabled) {
-                        VisualizerView.getInstance().bringToFront();
-                        VisualizerView.getInstance().requestLayout();
-                    }
+                    VisualizerView.getInstance().bringToFront();
+                    VisualizerView.getInstance().requestLayout();
                     updateLockscreenIcons();
                 }
             }
@@ -279,6 +277,7 @@ public class PulseViewHook extends XposedMods {
             mEndButton.bringToFront();
             mEndButton.requestLayout();
         }
+        mKeyguardBottomArea.bringToFront();
         mKeyguardBottomArea.requestLayout();
     }
     private void onPrimaryMetadataOrStateChanged(int state) {
