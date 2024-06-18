@@ -146,20 +146,6 @@ public class PulseViewHook extends XposedMods {
         CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
 
         Class<?> NavigationBarView = findClass("com.android.systemui.navigationbar.NavigationBarView", lpparam.classLoader);
-        /*hookAllMethods(NavigationBarView, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNavigationBar = (FrameLayout) param.thisObject;
-
-            }
-        });
-        hookAllMethods(CentralSurfacesImpl, "makeStatusBarView", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNotificationShadeView = (FrameLayout) callMethod(param.thisObject, "getNotificationShadeWindowView"); //callMethod(param.thisObject, "getNotificationShadeWindowView");//getObjectField(param.thisObject, "mNotificationShadeWindowView");
-                //mNotificationShadeView.addView(new VisualizerView(mContext));
-            }
-        });*/
 
         Class<?> NotificationShadeWindowView;
         try {

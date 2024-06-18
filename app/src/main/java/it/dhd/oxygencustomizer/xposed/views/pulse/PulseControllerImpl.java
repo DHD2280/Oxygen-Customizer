@@ -471,20 +471,6 @@ public class PulseControllerImpl {
         log("doLinkVisualizer() done " + mLinked);
     }
 
-    /*@Override
-    public void onPrimaryMetadataOrStateChanged(MediaMetadata metadata, @PlaybackState.State int state) {
-        boolean isPlaying = state == PlaybackState.STATE_PLAYING;
-        if (mIsMediaPlaying != isPlaying) {
-            mIsMediaPlaying = isPlaying;
-            doLinkage();
-        }
-    }
-
-    @Override
-    public void setMediaNotificationColor(int color) {
-        mColorController.setMediaNotificationColor(color);
-    }*/
-
     @Override
     public String toString() {
         return TAG + " " + getState();
