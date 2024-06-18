@@ -10,6 +10,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -473,7 +474,13 @@ public class StatusbarClock extends XposedMods {
         try {
             mClockView.post(() -> { //the builtin update method doesn't care about the format. Just the text sadly
                 callMethod(getObjectField(mClockView, "mCalendar"), "setTimeInMillis", System.currentTimeMillis());
-
+                if (mShowSeconds) {
+                    try {
+                        setBooleanField(mClockView, "mShowSeconds", true);
+                        callMethod(mClockView, "updateShowSeconds");
+                    } catch (Throwable ignored) {
+                    }
+                }
                 callMethod(mClockView, "updateClock");
             });
         }
