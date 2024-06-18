@@ -158,11 +158,7 @@ public class DrawableConverter {
     }
 
     public static Bitmap getGrayscaleBlurredImage(Context context, Bitmap image, float radius) {
-        Bitmap finalImage = Bitmap.createBitmap(
-                image.getWidth(), image.getHeight(),
-                Bitmap.Config.ARGB_8888);
-        finalImage = toGrayscale(getBlurredImage(context, image, radius));
-        return finalImage;
+        return toGrayscale(getBlurredImage(context, image, radius));
     }
 
     public static Bitmap getBlurredImage(Context context, Bitmap image) {

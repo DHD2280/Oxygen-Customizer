@@ -394,6 +394,14 @@ public class PreferenceHelper {
                     LOCKSCREEN_FINGERPRINT_SCALING -> {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
+            case "lockscreen_album_art_filter" -> {
+                return instance.mPreferences.getBoolean("lockscreen_album_art", false);
+            }
+            case "lockscreen_media_blur" -> {
+                return instance.mPreferences.getBoolean("lockscreen_album_art", false) &&
+                        (instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("3") ||
+                                instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("4"));
+            }
 
             // Lockscreen Clock
             case "lockscreen_clock_custom", "lockscreen_clock_prefs", "lockscreen_clock_custom_margins", "lockscreen_clock_font_prefs" -> {
@@ -670,6 +678,7 @@ public class PreferenceHelper {
             // Lockscreen
             case LOCKSCREEN_FINGERPRINT_SCALING -> instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
             case "DWOpacity" -> instance.mPreferences.getSliderInt("DWOpacity", 192) + "dp";
+            case "lockscreen_media_blur" -> instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
 
             // Lockscreen Clock
             case LOCKSCREEN_CLOCK_LINE_HEIGHT -> instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 100) + "dp";

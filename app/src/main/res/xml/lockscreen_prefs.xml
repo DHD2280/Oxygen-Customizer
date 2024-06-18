@@ -116,6 +116,36 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/media_art_title">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="lockscreen_album_art"
+            android:title="@string/media_art_title"
+            android:summary="@string/media_art_summary"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/lockscreen_albumart_filter_entries"
+            android:entryValues="@array/lockscreen_albumart_filter_values"
+            android:key="lockscreen_album_art_filter"
+            android:title="@string/lockscreen_albumart_filter_title"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="lockscreen_media_blur"
+            android:title="@string/lockscreen_media_blur_title"
+            app:defaultValue="30"
+            app:maxVal="100"
+            app:minVal="10"
+            app:tickInterval="5" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="lockscreen_misc_category"
         android:title="@string/misc"
         app:iconSpaceReserved="false">
