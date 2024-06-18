@@ -16,6 +16,7 @@ package it.dhd.oxygencustomizer.xposed.views;
  * limitations under the License.
  */
 
+import static android.view.Gravity.CENTER_VERTICAL;
 import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.applyTextSizeRecursively;
@@ -89,6 +90,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
         mCurrentImage = new ImageView(context);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp2px(mContext, 18), dp2px(mContext, 18));
+        imageParams.gravity = CENTER_VERTICAL;
+        imageParams.setMargins(dp2px(mContext, 1), 0, dp2px(mContext, 1), 0);
         mCurrentImage.setLayoutParams(imageParams);
 
         mRightText = new TextView(context);
