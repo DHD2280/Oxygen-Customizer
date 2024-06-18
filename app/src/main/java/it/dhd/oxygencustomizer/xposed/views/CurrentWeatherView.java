@@ -88,10 +88,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         mLeftText.setEllipsize(TextUtils.TruncateAt.END);
         mLeftText.setTag("text");
 
-        mCurrentImage = new ImageView(context);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp2px(mContext, 18), dp2px(mContext, 18));
-        imageParams.gravity = CENTER_VERTICAL;
-        imageParams.setMargins(dp2px(mContext, 1), 0, dp2px(mContext, 1), 0);
+        mCurrentImage = new ImageView(context);
         mCurrentImage.setLayoutParams(imageParams);
 
         mRightText = new TextView(context);
@@ -119,7 +117,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         setMargins(mHumLayout, context, 0, dp2px(context, 1), 0, 0);
 
         mHumImage = new ImageView(context);
-        mHumImage.setLayoutParams(new ViewGroup.LayoutParams(dp2px(context, 18), dp2px(context, 18)));
+        mHumImage.setLayoutParams(imageParams);
         mHumImage.setScaleType(ImageView.ScaleType.FIT_XY);
         mHumDrawable = ResourcesCompat.getDrawable(
                 modRes,
@@ -132,7 +130,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         mHumText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mHumText.setTextColor(Color.WHITE);
         mHumText.setTag("text");
-        setMargins(mHumText, context, dp2px(context, 2), 0, 0, 0);
+        setMargins(mHumText, context, dp2px(context, 1), 0, 0, 0);
 
         mHumLayout.addView(mHumImage);
         mHumLayout.addView(mHumText);
@@ -142,7 +140,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         setMargins(mWindLayout, context, 0, dp2px(context, 1), 0, 0);
 
         mWindImage = new ImageView(context);
-        mWindImage.setLayoutParams(new LayoutParams(dp2px(context, 18), dp2px(context, 18)));
+        mWindImage.setLayoutParams(imageParams);
         mWindImage.setScaleType(ImageView.ScaleType.FIT_XY);
         mWindDrawable = ResourcesCompat.getDrawable(
                 modRes,
@@ -155,7 +153,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         mWindText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mWindText.setTextColor(Color.WHITE);
         mWindText.setTag("text");
-        setMargins(mWindText, context, dp2px(context, 2), 0, 0, 0);
+        setMargins(mWindText, context, dp2px(context, 1), 0, 0, 0);
 
         mWindLayout.addView(mWindImage);
         mWindLayout.addView(mWindText);
@@ -169,10 +167,21 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
     public void updateSizes(int weatherTextSize, int weatherImageSize) {
         if (instance == null) return;
-        instance.mCurrentImage.setLayoutParams(new LinearLayout.LayoutParams(dp2px(instance.mContext, weatherImageSize), dp2px(instance.mContext, weatherImageSize)));
-        instance.mHumImage.setLayoutParams(new LinearLayout.LayoutParams(dp2px(instance.mContext, weatherImageSize), dp2px(instance.mContext, weatherImageSize)));
-        instance.mWindImage.setLayoutParams(new LinearLayout.LayoutParams(dp2px(instance.mContext, weatherImageSize), dp2px(instance.mContext, weatherImageSize)));
+        updateIconsSize(weatherImageSize);
         applyTextSizeRecursively(instance, weatherTextSize);
+    }
+
+    public static void updateIconsSize(int size) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp2px(instance.mContext, size), dp2px(instance.mContext, size));
+        params.gravity = CENTER_VERTICAL;
+        instance.mCurrentImage.setLayoutParams(params);
+        setMargins(instance.mCurrentImage, instance.mContext,
+                instance.mShowWeatherLocation ? dp2px(instance.mContext, 1) : dp2px(instance.mContext, 2),
+                0,
+                instance.mShowWeatherLocation ? dp2px(instance.mContext, 1) : dp2px(instance.mContext, 2),
+                0);
+        instance.mHumImage.setLayoutParams(params);
+        instance.mWindImage.setLayoutParams(params);
     }
 
     public void updateColors(int color) {
