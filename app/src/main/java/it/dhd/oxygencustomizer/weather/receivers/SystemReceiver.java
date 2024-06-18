@@ -36,7 +36,6 @@ public class SystemReceiver extends BroadcastReceiver {
         final String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             if (Config.isEnabled(context)) {
-                if (DEBUG) Log.d(TAG, "boot completed kick alarm");
                 WeatherUpdateService.scheduleUpdatePeriodic(context);
                 WeatherUpdateService.scheduleUpdateNow(context);
             }
