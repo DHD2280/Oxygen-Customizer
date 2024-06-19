@@ -119,6 +119,20 @@
         <Preference
             android:key="lockscreen_clock_custom_user_image_picker"
             android:title="@string/lockscreen_clock_custom_user_image_title"
+            android:summary="@string/lockscreen_clock_custom_user_image_summary"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="lockscreen_clock_custom_image_switch"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_clock_custom_image_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="lockscreen_clock_custom_image_picker"
+            android:title="@string/lockscreen_clock_custom_image_picker_title"
+            android:summary="@string/lockscreen_clock_custom_user_image_summary"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

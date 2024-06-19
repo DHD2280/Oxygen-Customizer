@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.aod;
 
 import static it.dhd.oxygencustomizer.utils.Constants.AOD_CLOCK_FONT_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.AOD_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.AOD_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
@@ -67,6 +68,8 @@ public class AodClock extends ControlledPreferenceFragmentCompat {
                     String destination = "";
                     if (type == 0)
                         destination = AOD_USER_IMAGE;
+                    else if (type == 2)
+                        destination = AOD_CUSTOM_IMAGE;
                     else
                         destination = AOD_CLOCK_FONT_DIR;
 
@@ -102,6 +105,15 @@ public class AodClock extends ControlledPreferenceFragmentCompat {
             mAodCustomFont.setOnPreferenceClickListener(preference -> {
                 pick("font");
                 type = 1;
+                return true;
+            });
+        }
+
+        Preference mAodCustomImage = findPreference("aod_clock_custom_image_picker");
+        if (mAodCustomImage != null) {
+            mAodCustomImage.setOnPreferenceClickListener(preference -> {
+                pick("image");
+                type = 2;
                 return true;
             });
         }

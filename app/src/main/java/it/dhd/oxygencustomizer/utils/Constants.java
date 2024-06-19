@@ -382,6 +382,7 @@ public class Constants {
             public static final String LOCKSCREEN_CLOCK_CUSTOM_USER = "lockscreen_clock_custom_user_switch";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE = "lockscreen_clock_custom_user";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE = "lockscreen_clock_custom_user_image";
+            public static final String LOCKSCREEN_CLOCK_CUSTOM_IMAGE = "lockscreen_clock_custom_image_switch";
 
             public static final String[] LOCKSCREEN_CLOCK_PREFS = {
                     LOCKSCREEN_CLOCK_SWITCH,
@@ -399,7 +400,8 @@ public class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT2,
                     LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT3,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT1,
-                    LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2
+                    LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2,
+                    LOCKSCREEN_CLOCK_CUSTOM_IMAGE
             };
         }
         public static class AodClock {
@@ -417,6 +419,7 @@ public class Constants {
             public static final String AOD_CLOCK_CUSTOM_USER = "aod_clock_custom_user_switch";
             public static final String AOD_CLOCK_CUSTOM_USER_VALUE = "aod_clock_custom_user";
             public static final String AOD_CLOCK_CUSTOM_USER_IMAGE = "aod_clock_custom_user_image";
+            public static final String AOD_CLOCK_CUSTOM_IMAGE = "aod_clock_custom_image_switch";
 
         }
 
@@ -562,7 +565,9 @@ public class Constants {
     public static final String HEADER_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_font.ttf";
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";
+    public static final String LOCKSCREEN_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_custom_image.png";
     public static final String AOD_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_user_image.png";
+    public static final String AOD_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_custom_image.png";
     public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
 

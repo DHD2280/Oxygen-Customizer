@@ -687,6 +687,8 @@
     <string name="lockscreen_clock_custom_user_image">Use Custom User Image</string>
     <string name="lockscreen_clock_custom_user_image_title">User Image</string>
     <string name="lockscreen_clock_custom_user_image_summary">Click to pick an image.</string>
+    <string name="lockscreen_clock_custom_image_title">Use Custom Image</string>
+    <string name="lockscreen_clock_custom_image_picker_title">Custom Image</string>
     <string name="lockscreen_font_line_height_title">Line Height</string>
     <string name="lockscreen_clock_custom_margins">Clock Margins</string>
     <string name="lockscreen_clock_top_margin_title">Top Margin</string>

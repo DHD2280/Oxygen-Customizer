@@ -31,6 +31,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE;
@@ -132,7 +133,6 @@ public class LockscreenClock extends XposedMods {
     private ImageView mVolumeLevelArcProgress;
     private ImageView mRamUsageArcProgress;
     private ImageView mBatteryArcProgress;
-    private ImageView mDayArcProgress;
     private static long lastUpdated = System.currentTimeMillis();
     private static final long thresholdTime = 500; // milliseconds
     private int accent1, accent2, accent3, text1, text2;
@@ -262,7 +262,6 @@ public class LockscreenClock extends XposedMods {
                 mClockView = KeyguardStatusView.findViewById(mContext.getResources().getIdentifier("keyguard_clock_container", "id", mContext.getPackageName()));
 
                 mMediaHostContainer = (View) getObjectField(param.thisObject, "mMediaHostContainer");
-
 
                 registerClockUpdater();
 
@@ -448,7 +447,8 @@ public class LockscreenClock extends XposedMods {
         boolean customFontEnabled = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_FONT, false);
         boolean useCustomName = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER, false);
         String customName = Xprefs.getString(LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE, getUserName());
-        boolean useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false);
+        boolean useCustomUserImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false);
+        boolean useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_IMAGE, false);
         int systemAccent = getPrimaryColor(mContext);
 
         Typeface typeface = null;
@@ -488,7 +488,7 @@ public class LockscreenClock extends XposedMods {
                 TextView usernameView = clockView.findViewById(R.id.summary);
                 usernameView.setText(useCustomName ? customName : getUserName());
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                imageView.setImageDrawable(useCustomImage ? getCustomUserImage() : getUserImage());
+                imageView.setImageDrawable(useCustomUserImage ? getCustomUserImage() : getUserImage());
             }
             case 19 -> {
                 mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
@@ -504,11 +504,15 @@ public class LockscreenClock extends XposedMods {
                 // TextViews
                 mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
 
-                // Image Views
-                mDayArcProgress = clockView.findViewById(R.id.day_progress);
                 mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
                 mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
                 mBatteryArcProgress = clockView.findViewById(R.id.battery_progress);
+            }
+            case 25 -> {
+                ImageView imageView = clockView.findViewById(R.id.custom_image);
+                if (useCustomImage) {
+                    imageView.setImageDrawable(getCustomImage());
+                }
             }
             default -> {
                 mBatteryStatusView = null;
@@ -516,7 +520,6 @@ public class LockscreenClock extends XposedMods {
                 mVolumeLevelView = null;
                 mBatteryProgress = null;
                 mVolumeProgress = null;
-                mDayArcProgress = null;
                 mVolumeLevelArcProgress = null;
                 mBatteryArcProgress = null;
             }
@@ -654,6 +657,23 @@ public class LockscreenClock extends XposedMods {
             return drawable;
         } catch (Throwable ignored) {
             return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.default_avatar, appContext.getTheme());
+        }
+    }
+
+    private Drawable getCustomImage() {
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_custom_image.png"));
+
+            Drawable drawable = ImageDecoder.decodeDrawable(source);
+
+            if (drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                ((AnimatedImageDrawable) drawable).start();
+            }
+
+            return drawable;
+        } catch (Throwable ignored) {
+            return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.relax, appContext.getTheme());
         }
     }
 

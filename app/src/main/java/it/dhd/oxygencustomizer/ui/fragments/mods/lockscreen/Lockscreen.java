@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -217,7 +218,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
         private int type = 0;
 
-
         ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -227,6 +227,8 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                         String destination = "";
                         if (type == 0)
                             destination = LOCKSCREEN_USER_IMAGE;
+                        else if (type == 2)
+                            destination = LOCKSCREEN_CUSTOM_IMAGE;
                         else
                             destination = LOCKSCREEN_CLOCK_FONT_DIR;
 
@@ -266,6 +268,15 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                 mLockscreenCustomFont.setOnPreferenceClickListener(preference -> {
                     pick("font");
                     type = 1;
+                    return true;
+                });
+            }
+
+            Preference mLockscreenCustomImage = findPreference("lockscreen_clock_custom_image_picker");
+            if (mLockscreenCustomImage != null) {
+                mLockscreenCustomImage.setOnPreferenceClickListener(preference -> {
+                    pick("image");
+                    type = 2;
                     return true;
                 });
             }

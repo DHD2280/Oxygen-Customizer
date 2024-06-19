@@ -445,6 +445,10 @@ public class PreferenceHelper {
             case "lockscreen_clock_custom_image_switch" -> {
                 return LOCKSCREEN_CLOCK_IMAGES.contains(instance.mPreferences.getInt("lockscreen_custom_clock_style", 0));
             }
+            case "lockscreen_clock_custom_image_picker" -> {
+                return isVisible("lockscreen_clock_custom_image_switch") &&
+                        instance.mPreferences.getBoolean("lockscreen_clock_custom_image_switch", false);
+            }
             case "lockscreen_clock_custom_image" -> {
                 return instance.mPreferences.getBoolean("lockscreen_clock_custom_image_switch", false);
             }
@@ -503,6 +507,10 @@ public class PreferenceHelper {
                     AOD_CLOCK_COLOR_CODE_TEXT2 -> {
                 return instance.mPreferences.getBoolean(AOD_CLOCK_CUSTOM_COLOR_SWITCH, false);
             }
+            case AOD_CLOCK_CUSTOM_USER,
+                    "aod_clock_custom_user_image" -> {
+                return instance.mPreferences.getInt("aod_custom_clock_style", 0) == 7;
+            }
             case "aod_clock_custom_user" -> {
                 return instance.mPreferences.getBoolean(AOD_CLOCK_CUSTOM_USER, false);
             }
@@ -511,6 +519,11 @@ public class PreferenceHelper {
             }
             case "aod_clock_font_custom" -> {
                 return instance.mPreferences.getBoolean("aod_custom_font", false);
+            }
+
+            case "aod_clock_custom_image_picker" -> {
+                return isVisible("aod_clock_custom_image_switch") &&
+                        instance.mPreferences.getBoolean("aod_clock_custom_image_switch", false);
             }
 
             // Volume Panel Customization

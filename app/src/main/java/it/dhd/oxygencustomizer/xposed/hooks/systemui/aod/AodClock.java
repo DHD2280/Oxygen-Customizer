@@ -14,6 +14,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_TEXT2;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER_VALUE;
@@ -21,45 +22,103 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimatedImageDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Environment;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class AodClock extends XposedMods {
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static final String TAG = "Oxygen Customizer: AOD ";
-    private FrameLayout mRootLayout = null;
-    private ViewGroup testView = null;
+    private ViewGroup mRootLayout = null;
     private Context appContext;
     Class<?> LottieAn = null;
     public static final String OC_AOD_CLOCK_TAG = "oxygencustomizer_aod_clock";
-    private boolean mAodClockEnabled = false;
+    private boolean mAodClockEnabled = false, customColor = false;
+    private int accent1, accent2, accent3, text1, text2;
     private int mAodClockStyle = 0;
+    private int mBatteryStatus = 1;
+    private int mBatteryPercentage = 1;
+    private UserManager mUserManager;
+    private AudioManager mAudioManager;
+    private ActivityManager mActivityManager;
+    private TextView mBatteryStatusView;
+    private TextView mBatteryLevelView;
+    private TextView mVolumeLevelView;
+    private ProgressBar mBatteryProgress;
+    private ProgressBar mVolumeProgress;
+    private ImageView mVolumeLevelArcProgress;
+    private ImageView mRamUsageArcProgress;
+    private ImageView mBatteryArcProgress;
 
     public AodClock(Context context) {
         super(context);
     }
+
+    private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)) {
+                mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 1);
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+                mBatteryPercentage = (level * 100) / scale;
+                initBatteryStatus();
+            }
+        }
+    };
+    private final BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initSoundManager();
+        }
+    };
 
     @Override
     public void updatePrefs(String... Key) {
@@ -67,6 +126,11 @@ public class AodClock extends XposedMods {
 
         mAodClockEnabled = Xprefs.getBoolean(AOD_CLOCK_SWITCH, false);
         mAodClockStyle = Xprefs.getInt(AOD_CLOCK_STYLE, 0);
+        accent1 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT1, getPrimaryColor(mContext));
+        accent2 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT2, getPrimaryColor(mContext));
+        accent3 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT3, getPrimaryColor(mContext));
+        text1 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT1, Color.WHITE);
+        text2 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT2, Color.WHITE);
 
     }
 
@@ -78,64 +142,25 @@ public class AodClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
-        /*Class<?> OplusAodCurvedDisplayView = findClass("com.oplus.systemui.aod.surface.OplusAodCurvedDisplayView", lpparam.classLoader);
-        hookAllMethods(OplusAodCurvedDisplayView, "recordColor", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log(TAG + "OpusAodCurvedDisplayView recordColor");
-                log(TAG + "str " + param.args[0].toString());
-            }
-        });
-        hookAllMethods(OplusAodCurvedDisplayView, "onDraw", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log("OpusAodCurvedDisplayView onDraw");
-                Paint[] mPaintList = (Paint[]) getObjectField(param.thisObject, "mPaintList");
-                for (Paint paint : mPaintList) {
-                    log(TAG + "Paint: " + paint.toString() + " color: " + paint.getColor());
-                }
-            }
-        });
-                //mPaintList*/
-
-        //initResource
-        /*Class<?> OplusAodCurvedDisplayView = findClass("com.oplus.systemui.aod.surface.OplusAodCurvedDisplayView", lpparam.classLoader);
-        hookAllMethods(OplusAodCurvedDisplayView, "initResource", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Bitmap mViewLeft = (Bitmap) getObjectField(param.thisObject, "mViewLeft");
-                Bitmap mViewRight = (Bitmap) getObjectField(param.thisObject, "mViewRight");
-                mViewLeft.colo
-            }
-        });*/
 
         Class<?> AodClockLayout;
         try {
             AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
         } catch (Throwable t) {
-            AodClockLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
+            AodClockLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader); //OOS 13
         }
 
-        hookAllConstructors(AodClockLayout, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object mAodData = getObjectField(param.thisObject, "mAodData");
-                log(TAG + " AodClockLayout constructor " + callMethod(mAodData, "shouldUseNewRenderMethod"));
 
-                log(TAG + " AodClockLayout constructor");
-            }
-        });
         hookAllMethods(AodClockLayout, "initForAodApk", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //mRootLayout = (FrameLayout) getObjectField(param.thisObject, "mClockLayout");
                 if (!mAodClockEnabled) return;
                 FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
                 for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
                     log(TAG + " mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
                     if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
                         for (int j = 0; j < v.getChildCount(); j++) {
-                            testView = v;
+                            mRootLayout = v;
                             if (v.getChildAt(j) instanceof ViewGroup v2) {
                                 for (int k = 0; k < v2.getChildCount(); k++) {
                                     v.getChildAt(k).setVisibility(View.GONE);
@@ -143,164 +168,18 @@ public class AodClock extends XposedMods {
                                 break;
                             }
                         }
-
-                        /*
-                        for (int j = 0; j < v.getChildCount(); j++) {
-                            log(TAG + " mAodViewFromApk group " + v.getChildAt(i).getClass().getCanonicalName());
-                            if (mAodViewFromApk.getChildAt(j) instanceof ViewGroup v2) {
-                                for (int k = 0; k < v2.getChildCount(); k++) {
-                                    log(TAG + " mAodViewFromApk group2 " + v2.getChildAt(i).getClass().getCanonicalName());
-                                }
-                            }
-                        }*/
                     }
                 }
                 log(TAG + " initForAodApk");
-                updateClockView2();
-                //updateClockView();
+                updateClockView();
             }
         });
         hookAllMethods(AodClockLayout, "performTimeUpdate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                updateClockView2();
-            }
-        });
-        hookAllMethods(AodClockLayout, "initGlobalThemeLayout", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //mRootLayout = (FrameLayout) getObjectField(param.thisObject, "mClockLayout");
-                //updateClockView2();
-            }
-        });
-        hookAllMethods(AodClockLayout, "updateLayout", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                log(TAG + " updateLayout after");
-
-                log(TAG + " updateLayout after " + (mRootLayout != null));
-                /*try {
-                    View v = (View) getObjectField(param.thisObject, "mDateLayout");
-                    if (v != null) v.setVisibility(View.INVISIBLE);
-                } catch (Throwable ignored) {}
-                updateClockView();*/
-            }
-        });
-
-        /*hookAllMethods(AodClockLayout, "updateClock", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
-                log(TAG + " updateClock after");
-
                 updateClockView();
             }
         });
-
-       /* findAndHookMethod(AodClockLayout, "updateLayout", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                log(TAG + " updateLayout after");
-                try {
-                    Object mAodViewFromApk = getObjectField(param.thisObject, "mAodViewFromApk");
-                    callMethod(mAodViewFromApk, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mClockLayout = getObjectField(param.thisObject, "mClockLayout");
-                    callMethod(mClockLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mDateLayout = getObjectField(param.thisObject, "mDateLayout");
-                    callMethod(mDateLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mAodGlobalThemeRootLayout = getObjectField(param.thisObject, "mAodGlobalThemeRootLayout");
-                    callMethod(mAodGlobalThemeRootLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mClockRootView = getObjectField(param.thisObject, "mClockRootView");
-                    callMethod(mClockRootView, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-                updateClockView();
-            }
-        });
-
-        hookAllMethods(AodClockLayout, "updateRamlessArea", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    Object mAodViewFromApk = getObjectField(param.thisObject, "mAodViewFromApk");
-                    callMethod(mAodViewFromApk, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mClockLayout = getObjectField(param.thisObject, "mClockLayout");
-                    callMethod(mClockLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mDateLayout = getObjectField(param.thisObject, "mDateLayout");
-                    callMethod(mDateLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mAodGlobalThemeRootLayout = getObjectField(param.thisObject, "mAodGlobalThemeRootLayout");
-                    callMethod(mAodGlobalThemeRootLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mClockRootView = getObjectField(param.thisObject, "mClockRootView");
-                    callMethod(mClockRootView, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-                updateClockView();
-            }
-        });
-
-        hookAllMethods(AodClockLayout, "setVisibleWithSetupAnimate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    Object mAodViewFromApk = getObjectField(param.thisObject, "mAodViewFromApk");
-                    callMethod(mAodViewFromApk, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mClockRootView = getObjectField(param.thisObject, "mClockRootView");
-                    callMethod(mClockRootView, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mDateLayout = getObjectField(param.thisObject, "mDateLayout");
-                    callMethod(mDateLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    Object mAodGlobalThemeRootLayout = getObjectField(param.thisObject, "mAodGlobalThemeRootLayout");
-                    callMethod(mAodGlobalThemeRootLayout, "setVisibility", View.GONE);
-                } catch (Throwable ignored) {
-                }
-
-                updateClockView();
-
-            }
-        });*/
 
     }
 
@@ -310,9 +189,6 @@ public class AodClock extends XposedMods {
 
         log(TAG + " updateClockView " + mRootLayout.getChildCount());
 
-        for (int i = 0; i < mRootLayout.getChildCount(); i++) {
-            mRootLayout.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
 
         View clockView = getClockView();
 
@@ -325,7 +201,6 @@ public class AodClock extends XposedMods {
 
         if (clockView != null) {
             clockView.setTag(OC_AOD_CLOCK_TAG);
-            ViewGroup.LayoutParams params = clockView.getLayoutParams();
 
             int idx = 0;
             LinearLayout dummyLayout = null;
@@ -337,46 +212,26 @@ public class AodClock extends XposedMods {
 
 //            TextUtil.convertTextViewsToTitleCase((ViewGroup) clockView);
 
-            mRootLayout.addView(clockView, idx);
+            mRootLayout.addView(clockView, 0);
             modifyClockView(clockView);
+            initSoundManager();
+            initBatteryStatus();
+
         }
     }
 
-    private void updateClockView2() {
-
-        if (testView == null) return;
-
-        log(TAG + " updateClockView " + testView.getChildCount());
-
-        /*for (int i = 0; i < testView.getChildCount(); i++) {
-            testView.getChildAt(i).setVisibility(View.INVISIBLE);
-        }*/
-
-        View clockView = getClockView();
-
-        boolean isClockAdded = testView.findViewWithTag(OC_AOD_CLOCK_TAG) != null;
-
-        // Remove existing clock view
-        if (isClockAdded) {
-            testView.removeView(testView.findViewWithTag(OC_AOD_CLOCK_TAG));
-        }
-
-        if (clockView != null) {
-            clockView.setTag(OC_AOD_CLOCK_TAG);
-
-            int idx = 0;
-            LinearLayout dummyLayout = null;
-
-
-            if (clockView.getParent() != null) {
-                ((ViewGroup) clockView.getParent()).removeView(clockView);
+    private void findClockView(ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                findClockView((ViewGroup) child);
+            } else if (child instanceof TextView textView) {
+                String tag = "TAG";
+                if (textView.getTag() != null) {
+                    tag = textView.getTag().toString();
+                }
+                log(TAG + " TextView: " + textView.getText() + " - " + tag);
             }
-
-//            TextUtil.convertTextViewsToTitleCase((ViewGroup) clockView);
-
-            testView.addView(clockView, 0);
-            modifyClockView(clockView);
-
         }
     }
 
@@ -388,14 +243,9 @@ public class AodClock extends XposedMods {
         boolean customFontEnabled = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_FONT, false);
         boolean useCustomName = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER, false);
         String customName = Xprefs.getString(AOD_CLOCK_CUSTOM_USER_VALUE, "TEST");
-        boolean useCustomImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER_IMAGE, false);
+        boolean useCustomUserImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER_IMAGE, false);
+        boolean useCustomImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_IMAGE, false);
         int systemAccent = getPrimaryColor(mContext);
-
-        int accent1 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT1, getPrimaryColor(mContext));
-        int accent2 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT2, getPrimaryColor(mContext));
-        int accent3 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT3, getPrimaryColor(mContext));
-        int text1 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT1, Color.WHITE);
-        int text2 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT2, Color.WHITE);
 
         Typeface typeface = null;
         if (customFontEnabled && (new File(customFont).exists())) {
@@ -424,6 +274,56 @@ public class AodClock extends XposedMods {
             ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, clockScale);
         }
         clockView.setVisibility(View.VISIBLE);
+
+        switch (mAodClockStyle) {
+            case 5 -> {
+                mBatteryStatusView = clockView.findViewById(R.id.battery_status);
+                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
+                mVolumeLevelView = clockView.findViewById(R.id.volume_level);
+                mBatteryProgress = clockView.findViewById(R.id.battery_progressbar);
+                mVolumeProgress = clockView.findViewById(R.id.volume_progressbar);
+            }
+            case 7 -> {
+                TextView usernameView = clockView.findViewById(R.id.summary);
+                usernameView.setText(useCustomName ? customName : getUserName());
+                ImageView imageView = clockView.findViewById(R.id.user_profile_image);
+                imageView.setImageDrawable(useCustomUserImage ? getCustomUserImage() : getUserImage());
+            }
+            case 19 -> {
+                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
+                mBatteryProgress = clockView.findViewById(R.id.battery_progressbar);
+                mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
+                mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
+
+                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
+
+                ((TextView) clockView.findViewById(R.id.device_name)).setText(Build.MODEL);
+            }
+            case 25 -> {
+                ImageView imageView = clockView.findViewById(R.id.custom_image);
+                if (useCustomImage) {
+                    imageView.setImageDrawable(getCustomImage());
+                }
+            }
+            case 27 -> {
+                // TextViews
+                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
+
+                // Image Views
+                mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
+                mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
+                mBatteryArcProgress = clockView.findViewById(R.id.battery_progress);
+            }
+            default -> {
+                mBatteryStatusView = null;
+                mBatteryLevelView = null;
+                mVolumeLevelView = null;
+                mBatteryProgress = null;
+                mVolumeProgress = null;
+                mVolumeLevelArcProgress = null;
+                mBatteryArcProgress = null;
+            }
+        }
     }
 
     @SuppressLint("DiscouragedApi")
@@ -452,6 +352,157 @@ public class AodClock extends XposedMods {
 
     }
 
+    private void initBatteryStatus() {
+        if (mBatteryStatusView != null) {
+            if (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_charging));
+            } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING ||
+                    mBatteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_discharging));
+            } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_full));
+            } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
+                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_level_percentage));
+            }
+        }
+
+        if (mBatteryProgress != null) {
+            mBatteryProgress.setProgress(mBatteryPercentage);
+            if (mAodClockStyle == 19) {
+                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
+            }
+        }
+        if (mBatteryArcProgress != null) {
+            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
+                    mContext,
+                    mBatteryPercentage,
+                    appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage),
+                    32,
+                    "BATTERY",
+                    20,
+                    customColor ? accent1 : getPrimaryColor(mContext)
+            );
+            mBatteryArcProgress.setImageBitmap(widgetBitmap);
+        }
+        if (mBatteryLevelView != null) {
+            mBatteryLevelView.setText(appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage));
+        }
+
+        initRamUsage();
+    }
+
+    private void initSoundManager() {
+        int volLevel = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVolLevel = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int volPercent = (int) (((float) volLevel / maxVolLevel) * 100);
+
+        if (mVolumeProgress != null) {
+            mVolumeProgress.setProgress(volPercent);
+        }
+        if (mVolumeLevelView != null) {
+            mVolumeLevelView.setText(appContext.getResources().getString(R.string.percentage_text, volPercent));
+        }
+
+        if (mVolumeLevelArcProgress != null) {
+            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
+                    mContext,
+                    volPercent,
+                    appContext.getResources().getString(R.string.percentage_text, volPercent),
+                    32,
+                    ContextCompat.getDrawable(appContext, R.drawable.ic_volume_up),
+                    36,
+                    customColor ? accent1 : getPrimaryColor(mContext)
+            );
+            mVolumeLevelArcProgress.setImageBitmap(widgetBitmap);
+        }
+    }
+
+    private void initRamUsage() {
+        if (mActivityManager == null) return;
+
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        mActivityManager.getMemoryInfo(memoryInfo);
+        long usedMemory = memoryInfo.totalMem - memoryInfo.availMem;
+        if (memoryInfo.totalMem == 0) return;
+        int usedMemoryPercentage = (int) ((usedMemory * 100) / memoryInfo.totalMem);
+
+        if (mRamUsageArcProgress != null) {
+            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
+                    mContext,
+                    usedMemoryPercentage,
+                    appContext.getResources().getString(R.string.percentage_text, usedMemoryPercentage),
+                    32,
+                    "RAM",
+                    20,
+                    customColor ? accent1 : getPrimaryColor(mContext)
+            );
+            mRamUsageArcProgress.setImageBitmap(widgetBitmap);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private String getUserName() {
+        if (mUserManager == null) {
+            return "User";
+        }
+
+        String username = mUserManager.getUserName();
+        return !username.isEmpty() ?
+                mUserManager.getUserName() :
+                appContext.getResources().getString(R.string.default_user_name);
+    }
+
+    @SuppressWarnings("all")
+    private Drawable getUserImage() {
+        if (mUserManager == null) {
+            return appContext.getResources().getDrawable(R.drawable.default_avatar);
+        }
+
+        try {
+            Method getUserIconMethod = mUserManager.getClass().getMethod("getUserIcon", int.class);
+            int userId = (int) UserHandle.class.getDeclaredMethod("myUserId").invoke(null);
+            Bitmap bitmapUserIcon = (Bitmap) getUserIconMethod.invoke(mUserManager, userId);
+            return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
+        } catch (Throwable throwable) {
+            log(TAG + throwable);
+            return appContext.getResources().getDrawable(R.drawable.default_avatar);
+        }
+    }
+
+    private Drawable getCustomUserImage() {
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/aod_user_image.png"));
+
+            Drawable drawable = ImageDecoder.decodeDrawable(source);
+
+            if (drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                ((AnimatedImageDrawable) drawable).start();
+            }
+
+            return drawable;
+        } catch (Throwable ignored) {
+            return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.default_avatar, appContext.getTheme());
+        }
+    }
+
+    private Drawable getCustomImage() {
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/aod_custom_image.png"));
+
+            Drawable drawable = ImageDecoder.decodeDrawable(source);
+
+            if (drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                ((AnimatedImageDrawable) drawable).start();
+            }
+
+            return drawable;
+        } catch (Throwable ignored) {
+            return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.relax, appContext.getTheme());
+        }
+    }
+
     private void initResources(Context context) {
         try {
             appContext = context.createPackageContext(
@@ -459,6 +510,19 @@ public class AodClock extends XposedMods {
                     Context.CONTEXT_IGNORE_SECURITY
             );
         } catch (PackageManager.NameNotFoundException ignored) {
+        }
+
+        mUserManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        try {
+            context.registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        } catch (Exception ignored) {
+        }
+        try {
+            context.registerReceiver(mVolumeReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
+        } catch (Exception ignored) {
         }
     }
 
