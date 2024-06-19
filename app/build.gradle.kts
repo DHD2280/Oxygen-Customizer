@@ -134,7 +134,7 @@ dependencies {
 
     // Work
     implementation("androidx.work:work-runtime:2.9.0")
-    implementation("androidx.concurrent:concurrent-futures:1.1.0")
+    implementation("androidx.concurrent:concurrent-futures:1.2.0")
 
     // Biometric Auth
     implementation("androidx.biometric:biometric:1.1.0")
@@ -183,7 +183,7 @@ dependencies {
 
     //Google Subject Segmentation - MLKit
     implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
-    implementation("com.google.android.gms:play-services-base:18.4.0")
+    implementation("com.google.android.gms:play-services-base:18.5.0")
 
     // APK Signer
     implementation("org.bouncycastle:bcpkix-jdk18on:1.77")
@@ -196,6 +196,9 @@ dependencies {
 
     // Flexbox
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // Palette
+    implementation("androidx.palette:palette:1.0.0")
 }
 
 tasks.register("printVersionName") {
