@@ -56,7 +56,7 @@
             android:format24Hour="dd MMM"
             android:inputType="text|textCapCharacters"
             android:tag="accent1"
-            android:textColor="@android:color/system_accent1_600"
+            android:textColor="@android:color/system_accent1_300"
             android:textSize="28sp" />
 
         <TextView
