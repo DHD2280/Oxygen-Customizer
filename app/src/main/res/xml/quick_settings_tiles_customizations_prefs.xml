@@ -46,6 +46,50 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/media_tile"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="qs_media_show_album_art"
+            android:summary="@string/media_art_title_qs_summary"
+            android:title="@string/media_art_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/qs_media_art_filter_entries"
+            android:entryValues="@array/qs_media_art_filter_values"
+            app:useSimpleSummaryProvider="true"
+            android:key="qs_media_art_filter"
+            android:title="@string/albumart_filter_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_media_blur_amount"
+            android:title="@string/albumart_blur_title"
+            app:minVal="10"
+            app:maxVal="100"
+            app:tickInterval="5"
+            app:defaultValue="30" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_media_art_tint_color"
+            android:title="@string/custom_color"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_media_art_tint_amount"
+            android:title="@string/albumart_tint_intensity_title"
+            app:minVal="20"
+            app:maxVal="70"
+            app:tickInterval="5"
+            app:defaultValue="30" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:iconSpaceReserved="false"
         android:title="@string/qs_tile_animation_title">
 

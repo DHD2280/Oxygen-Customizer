@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -112,6 +114,21 @@ public class DrawableConverter {
         final Rect rect = new Rect(0, 0, grayscaleBitmap.getWidth(), grayscaleBitmap.getHeight());
         cc.drawBitmap(grayscaleBitmap, rect, rect, pp);
         return grayscaleBitmap;
+    }
+
+    public static Bitmap getColoredBitmap(Drawable d, int color, int intensity) {
+        if (d == null) {
+            return null;
+        }
+        Bitmap colorBitmap = ((BitmapDrawable) d).getBitmap();
+        Bitmap filteredBitmap = Bitmap.createBitmap(colorBitmap.getWidth(), colorBitmap.getHeight(), colorBitmap.getConfig());
+        Canvas canvas = new Canvas(filteredBitmap);
+        Paint paint = new Paint();
+        int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, color, intensity / 100f);
+        paint.setColorFilter(new PorterDuffColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP));
+
+        canvas.drawBitmap(colorBitmap, 0, 0, paint);
+        return filteredBitmap;
     }
 
     public static Bitmap toGrayscale(Bitmap bmpOriginal) {

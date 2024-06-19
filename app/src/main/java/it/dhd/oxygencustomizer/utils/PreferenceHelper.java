@@ -71,6 +71,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
@@ -298,6 +303,19 @@ public class PreferenceHelper {
             }
             case "qs_tile_label" -> {
                 return instance.mPreferences.getBoolean("qs_tile_label_enabled", false);
+            }
+            case QS_MEDIA_ART_FILTER -> {
+                return instance.mPreferences.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
+            }
+            case QS_MEDIA_ART_BLUR_AMOUNT -> {
+                return instance.mPreferences.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false) &&
+                        (instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("3") ||
+                                instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("4"));
+            }
+            case QS_MEDIA_ART_TINT_COLOR,
+                    QS_MEDIA_ART_TINT_AMOUNT -> {
+                return instance.mPreferences.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false) &&
+                        (instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("5"));
             }
 
             // Gesture Prefs
@@ -631,6 +649,8 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_TRANSPARENCY_VAL, 40) + "%";
             case BLUR_RADIUS_VALUE ->
                     instance.mPreferences.getSliderInt(BLUR_RADIUS_VALUE, 60) + "%";
+            case QS_MEDIA_ART_BLUR_AMOUNT -> instance.mPreferences.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 35) + "%";
+            case QS_MEDIA_ART_TINT_AMOUNT -> instance.mPreferences.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 30) + "%";
             // Statusbar
             case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->

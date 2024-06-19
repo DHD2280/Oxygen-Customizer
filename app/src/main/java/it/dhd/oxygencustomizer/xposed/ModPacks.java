@@ -62,6 +62,9 @@ public class ModPacks {
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);
 
+                    // Audio Data Provider
+                    modPacks.add(AudioDataProvider.class);
+
                     // System Classes We need
                     modPacks.add(OpUtils.class);
 
@@ -85,8 +88,8 @@ public class ModPacks {
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
+
                     // Pulse View
-                    modPacks.add(AudioDataProvider.class);
                     modPacks.add(PulseViewHook.class);
 
                     // Lockscreen

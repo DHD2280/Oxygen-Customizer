@@ -131,13 +131,13 @@
             android:entries="@array/lockscreen_albumart_filter_entries"
             android:entryValues="@array/lockscreen_albumart_filter_values"
             android:key="lockscreen_album_art_filter"
-            android:title="@string/lockscreen_albumart_filter_title"
+            android:title="@string/albumart_filter_title"
             app:useSimpleSummaryProvider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="lockscreen_media_blur"
-            android:title="@string/lockscreen_media_blur_title"
+            android:title="@string/albumart_blur_title"
             app:defaultValue="30"
             app:maxVal="100"
             app:minVal="10"

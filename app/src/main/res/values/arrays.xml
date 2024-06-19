@@ -457,11 +457,11 @@
 
     <!-- Lockscreen album art filter -->
     <string-array name="lockscreen_albumart_filter_entries">
-        <item>@string/lockscreen_albumart_filter_none</item>
-        <item>@string/lockscreen_albumart_filter_grayscale</item>
-        <item>@string/lockscreen_albumart_filter_tint</item>
-        <item>@string/lockscreen_albumart_filter_blur</item>
-        <item>@string/lockscreen_albumart_filter_grayblur</item>
+        <item>@string/albumart_filter_none</item>
+        <item>@string/albumart_filter_grayscale</item>
+        <item>@string/albumart_filter_tint</item>
+        <item>@string/albumart_filter_blur</item>
+        <item>@string/albumart_filter_grayblur</item>
     </string-array>
 
     <string-array name="lockscreen_albumart_filter_values" translatable="false">
@@ -470,6 +470,25 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+    </string-array>
+
+    <!-- QS Album Art Filter -->
+    <string-array name="qs_media_art_filter_entries">
+        <item>@string/albumart_filter_none</item>
+        <item>@string/albumart_filter_grayscale</item>
+        <item>@string/albumart_filter_tint</item>
+        <item>@string/albumart_filter_blur</item>
+        <item>@string/albumart_filter_grayblur</item>
+        <item>@string/albumart_filter_custom_tint</item>
+    </string-array>
+
+    <string-array name="qs_media_art_filter_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
 </resources>

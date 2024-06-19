@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class AudioDataProvider extends XposedMods {
     private final ArrayList<AudioInfoCallbacks> mInfoCallbacks = new ArrayList<>();
     @SuppressLint("StaticFieldLeak")
     private static AudioDataProvider instance = null;
+    public Bitmap mArt;
 
     public AudioDataProvider(Context context) {
         super(context);
@@ -45,7 +47,11 @@ public class AudioDataProvider extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 //log("onPrimaryMetadataOrStateChanged: PlaybackState: " + param.args[1] + " Metadata: " + param.args[0]);
-                mMediaMetadata = (MediaMetadata) param.args[0];
+                MediaMetadata metaData = (MediaMetadata) param.args[0];
+                if (mMediaMetadata != metaData) {
+                    mMediaMetadata = metaData;
+                    mArt = getArtWork();
+                }
                 mPlaybackState = (int) param.args[1];
                 onPrimaryMetadataOrStateChanged((int) param.args[1]);
             }
@@ -91,5 +97,21 @@ public class AudioDataProvider extends XposedMods {
 
     public static MediaMetadata getMediaMetadata() {
         return instance.mMediaMetadata;
+    }
+
+    private Bitmap getArtWork() {
+        MediaMetadata mediaMetadata = instance.mMediaMetadata;
+        if (mediaMetadata == null) {
+            return null;
+        }
+        Bitmap art = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+        if (art == null) {
+            return mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
+        }
+        return art;
+    }
+
+    public static Bitmap getArt() {
+        return instance.mArt;
     }
 }

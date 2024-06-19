@@ -380,6 +380,8 @@
     <string name="brightness_slider_progress_color_title">Brightness Slider Color Mode</string>
     <string name="brightness_slider_background_color_title">Customize background color</string>
 
+    <!-- Media Tile -->
+    <string name="media_tile">Media Tile</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Tiles animation</string>
     <string name="qs_tile_animation_style_title">Animation style</string>
@@ -649,17 +651,18 @@
     <!-- Media art -->
     <string name="media_art_title">Media cover art</string>
     <string name="media_art_summary">Display media cover art when available</string>
+    <string name="media_art_title_qs_summary">Display media cover art as Tile background when available</string>
+    <string name="albumart_blur_title">Media Art Blur Level</string>
 
-    <!-- Lock screen cover art -->
-    <string name="lockscreen_media_blur_title">Media art blur level</string>
-
-    <!-- Lockscreen album art filter -->
-    <string name="lockscreen_albumart_filter_title">Media cover art filter</string>
-    <string name="lockscreen_albumart_filter_none">None</string>
-    <string name="lockscreen_albumart_filter_grayscale">Grayscale</string>
-    <string name="lockscreen_albumart_filter_tint">Accent tinted</string>
-    <string name="lockscreen_albumart_filter_blur">Blur</string>
-    <string name="lockscreen_albumart_filter_grayblur">Grayscale and blurred</string>
+    <!-- Album art filter -->
+    <string name="albumart_filter_title">Media cover art filter</string>
+    <string name="albumart_filter_none">None</string>
+    <string name="albumart_filter_grayscale">Grayscale</string>
+    <string name="albumart_filter_tint">Accent tinted</string>
+    <string name="albumart_filter_blur">Blur</string>
+    <string name="albumart_filter_grayblur">Grayscale and blurred</string>
+    <string name="albumart_filter_custom_tint">Custom Color</string>
+    <string name="albumart_tint_intensity_title">Custom Color Intensity</string>
 
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Attention</string>

@@ -13,6 +13,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_CUSTOMIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
@@ -29,14 +34,19 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_UPDATE_PREFS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -47,16 +57,20 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.CubeInTransformer;
@@ -97,6 +111,11 @@ public class QsTileCustomization extends XposedMods {
     private int mAnimDuration = 0;
     private boolean mTrasformationsEnabled = false;
     private int mTrasformations = 1;
+    private boolean showMediaArtMediaQs = false;
+    private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
+    private float mMediaQsArtBlurAmount = 7.5f;
+    private Bitmap mArt = null;
+    private int mColorOnAlbum = Color.WHITE;
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -113,6 +132,13 @@ public class QsTileCustomization extends XposedMods {
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
         qsDisabledColorEnabled = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
         qsDisabledColor = Xprefs.getInt(QS_TILE_DISABLED_COLOR, Color.DKGRAY);
+
+        // Media QS
+        showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
+        mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
+        mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
+        mMediaQsTintColor = Xprefs.getInt(QS_MEDIA_ART_TINT_COLOR, Color.WHITE);
+        mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
 
         // Brightness Slider
         qsBrightnessSliderCustomize = Xprefs.getBoolean(QS_BRIGHTNESS_SLIDER_CUSTOMIZE, false);
@@ -142,6 +168,14 @@ public class QsTileCustomization extends XposedMods {
                     notifyQsUpdate();
                 }
             }
+            if (Key[0].equals(QS_MEDIA_SHOW_ALBUM_ART) ||
+                    Key[0].equals(QS_MEDIA_ART_FILTER) ||
+                    Key[0].equals(QS_MEDIA_ART_BLUR_AMOUNT) ||
+                    Key[0].equals(QS_MEDIA_ART_TINT_COLOR) ||
+                    Key[0].equals(QS_MEDIA_ART_TINT_AMOUNT)) {
+                if (showMediaArtMediaQs) updateMediaQsBackground(3);
+                else updateMediaQs();
+            }
         }
 
 
@@ -150,6 +184,8 @@ public class QsTileCustomization extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenerPackage)) return;
+
+        AudioDataProvider.registerInfoCallback(this::updateMediaQsBackground);
 
         Class<?> PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
         hookAllConstructors(PersonalityManager, new XC_MethodHook() {
@@ -318,6 +354,15 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
+        hookAllMethods(OplusQsMediaPanelView, "bindTitleAndText", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (showMediaArtMediaQs) {
+                    setupOtherViews(mOplusQsMediaView, mColorOnAlbum);
+                }
+            }
+        });
+
         Class<?> OplusQSTileView;
         try {
             OplusQSTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader);
@@ -460,6 +505,77 @@ public class QsTileCustomization extends XposedMods {
 
     }
 
+    private void updateMediaQsBackground(int state) {
+        if (!showMediaArtMediaQs) return;
+        Bitmap oldArt = mArt;
+        mArt = getFilteredArt(getArt());
+        float radius = 0f;
+        try {
+            GradientDrawable defBg = (GradientDrawable) mOplusQsMediaDefaultBackground;
+            radius = defBg.getCornerRadius();
+        } catch (Throwable t) {
+            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+        }
+        Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
+        Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
+        Palette.Builder builder = new Palette.Builder(artRounded);
+        builder.generate(palette -> {
+            int dominantColor = palette.getDominantColor(Color.WHITE);
+            mColorOnAlbum =
+                    isColorDark(dominantColor) ?
+                            DrawableConverter.findContrastColorAgainstDark(Color.WHITE, dominantColor, true, 2) :
+                            DrawableConverter.findContrastColor(Color.BLACK, dominantColor, true, 2);
+            mOplusQsMediaView.post(() -> {
+                setupOtherViews(mOplusQsMediaView, mColorOnAlbum);
+            });
+        });
+
+        mOplusQsMediaView.post(() -> {
+            Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), oldArtRounded), new BitmapDrawable(mContext.getResources(), artRounded)};
+            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+            mOplusQsMediaView.setBackground(transitionDrawable);
+            transitionDrawable.startTransition(250);
+        });
+    }
+
+    private Bitmap getFilteredArt(Bitmap art) {
+        Bitmap finalArt;
+        switch (mMediaQsArtFilter) {
+            default -> finalArt = art;
+            case 1 -> finalArt = DrawableConverter.toGrayscale(art);
+            case 2 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                    getPrimaryColor(mContext));
+            case 3 -> finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 4 -> finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 5 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                    mMediaQsTintColor, mMediaQsTintAmount);
+        };
+        return finalArt;
+    }
+
+    private void setupOtherViews(View parent, int color) {
+        if (parent == null) return;
+
+        if (parent instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) parent).getChildCount(); i++) {
+                if (((ViewGroup) parent).getChildAt(i) instanceof ViewGroup) {
+                    setupOtherViews(((ViewGroup) parent).getChildAt(i), color);
+                } else {
+                    View v = ((ViewGroup) parent).getChildAt(i);
+                    if (v instanceof ImageButton imageButton) {
+                        imageButton.setImageTintList(ColorStateList.valueOf(color));
+                    } else if (v instanceof TextView text) {
+                        text.setTextColor(color);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isColorDark(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness >= 0.5;
+    }
 
     private ViewPager.PageTransformer getCustomTransitions() {
         return switch (mTrasformations) {
@@ -550,6 +666,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void updateMediaQs() {
+        if (showMediaArtMediaQs) return;
         if (qsInactiveColorEnabled) {
             if (mOplusQsMediaView != null && mOplusQsMediaDrawable != null) {
                 mOplusQsMediaDrawable.setTint(qsInactiveColor);

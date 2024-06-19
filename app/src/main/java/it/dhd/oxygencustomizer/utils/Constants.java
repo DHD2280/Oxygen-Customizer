@@ -189,6 +189,11 @@ public class Constants {
             public static final String QS_TILE_INACTIVE_COLOR = "qs_tile_inactive_color";
             public static final String QS_TILE_DISABLED_COLOR_ENABLED = "qs_tile_disabled_color_enabled";
             public static final String QS_TILE_DISABLED_COLOR = "qs_tile_disabled_color";
+            public static final String QS_MEDIA_SHOW_ALBUM_ART = "qs_media_show_album_art";
+            public static final String QS_MEDIA_ART_FILTER = "qs_media_art_filter";
+            public static final String QS_MEDIA_ART_BLUR_AMOUNT = "qs_media_blur_amount";
+            public static final String QS_MEDIA_ART_TINT_COLOR = "qs_media_art_tint_color";
+            public static final String QS_MEDIA_ART_TINT_AMOUNT = "qs_media_art_tint_amount";
             public static final String QS_TILE_HIDE_LABELS = "qs_hide_labels";
             public static final String QS_TILE_LABELS_CUSTOM_COLOR_ENABLED = "qs_tile_label_enabled";
             public static final String QS_TILE_LABELS_CUSTOM_COLOR = "qs_tile_label";
