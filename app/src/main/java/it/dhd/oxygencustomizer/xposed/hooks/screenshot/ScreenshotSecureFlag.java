@@ -31,15 +31,21 @@ public class ScreenshotSecureFlag extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        final XC_MethodHook nullReturner = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (mDisableSecure)
+                    param.setResult(null);
+            }
+        };
         try {
             Class<?> ScreenshotContext = findClass("com.oplus.screenshot.screenshot.core.ScreenshotContext", lpparam.classLoader);
-            final XC_MethodHook nullReturner = new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (mDisableSecure)
-                        param.setResult(null);
-                }
-            };
+            hookMethods(ScreenshotContext, nullReturner, "setScreenshotReject", "setLongshotReject");
+        } catch (Throwable t) {
+            log(TAG + "Error hooking methods: " + t.getMessage());
+        }
+        try {
+            Class<?> ScreenshotContext = findClass("com.oplus.screenshot.screenshot.core.ScreenshotContentContext", lpparam.classLoader);
             hookMethods(ScreenshotContext, nullReturner, "setScreenshotReject", "setLongshotReject");
         } catch (Throwable t) {
             log(TAG + "Error hooking methods: " + t.getMessage());
