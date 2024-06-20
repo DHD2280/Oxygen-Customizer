@@ -62,7 +62,8 @@ public class QuickSettings extends ControlledPreferenceFragmentCompat {
         } catch (Exception ignored) {}
         if (key != null && (key.equals(QS_TRANSPARENCY_SWITCH) ||
                 key.equals(QSPANEL_BLUR_SWITCH) ||
-                key.equals(BLUR_RADIUS_VALUE))) {
+                key.equals(BLUR_RADIUS_VALUE) ||
+                key.equals("qs_show_my_device"))) {
             AppUtils.restartAllScope(new String[]{SYSTEM_UI});
         }
     }

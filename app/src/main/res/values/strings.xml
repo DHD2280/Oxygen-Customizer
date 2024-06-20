@@ -341,6 +341,9 @@
     <string name="quick_pulldown_side_left">Left</string>
     <string name="quick_pulldown_side_right">Right</string>
     <string name="quick_collapse">Quick Collapse</string>
+    <string name="my_device">My Devices</string>
+    <string name="my_device_title">Force My Devices</string>
+    <string name="my_device_summary">Force to show My Devices in Control Center.\nNOTE: You need new Control Center and My Devices to be installed to properly use this feature.</string>
 
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Quick Settings Tiles</string>

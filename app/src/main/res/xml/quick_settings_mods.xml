@@ -110,4 +110,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/my_device"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="qs_show_my_device"
+            app:iconSpaceReserved="false"
+            android:title="@string/my_device_title"
+            android:summary="@string/my_device_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
