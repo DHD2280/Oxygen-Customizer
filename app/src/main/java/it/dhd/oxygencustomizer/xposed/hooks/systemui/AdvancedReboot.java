@@ -36,14 +36,11 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
-public class FeatureEnabler extends XposedMods {
+public class AdvancedReboot extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private Class<?> FeatureOptionsVolatile = null;
     private boolean hideSosPowerMenu, showAdvancedReboot, useAuthForAdvancedReboot;
-    private int volumePanelPosition;
     private Drawable mAdvancedRebootDrawable;
-    private int mAdvancedRebootTopMargin;
     private Paint buttonPaint;
     private Paint textPaint;
     private int centerX;
@@ -67,14 +64,13 @@ public class FeatureEnabler extends XposedMods {
         }
     };
 
-    public FeatureEnabler(Context context) {
+    public AdvancedReboot(Context context) {
         super(context);
         mAdvancedRebootDrawable = ResourcesCompat.getDrawable(mContext.getResources(), mContext.getResources().getIdentifier("oplus_reboot", "drawable", listenPackage), mContext.getTheme());
     }
 
     @Override
     public void updatePrefs(String... Key) {
-        volumePanelPosition = Integer.parseInt(Xprefs.getString("volume_panel_position", "0"));
         hideSosPowerMenu = Xprefs.getBoolean("power_menu_hide_sos", false);
         showAdvancedReboot = Xprefs.getBoolean("show_advanced_reboot", false);
         useAuthForAdvancedReboot = Xprefs.getBoolean("advanced_reboot_auth", false);
@@ -92,7 +88,6 @@ public class FeatureEnabler extends XposedMods {
             mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
-        //Class<?> ShutdownViewControl = findClass("com.oplus.systemui.shutdown.ShutdownViewControl", lpparam.classLoader);
         SystemUIDialogClass = findClass("com.android.systemui.statusbar.phone.SystemUIDialog", lpparam.classLoader);
 
         Class<?> ShutdownView;
@@ -140,26 +135,6 @@ public class FeatureEnabler extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (hideSosPowerMenu)
-                    param.setResult(false);
-            }
-        });
-
-        Class<?> FeatureOptions;
-        try {
-            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
-        } catch (Throwable t) {
-            FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
-        }
-
-
-        hookAllMethods(FeatureOptions, "isOplusVolumeKeyInRight", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (volumePanelPosition == 0) return;
-
-                if (volumePanelPosition == 1)
-                    param.setResult(true);
-                else
                     param.setResult(false);
             }
         });

@@ -14,7 +14,8 @@ import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureEnabler;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
@@ -69,7 +70,10 @@ public class ModPacks {
                     modPacks.add(OpUtils.class);
 
                     // Oplus Feature Enabler
-                    modPacks.add(FeatureEnabler.class);
+                    modPacks.add(FeatureOption.class);
+
+                    // Advanced Reboot
+                    modPacks.add(AdvancedReboot.class);
 
                     // AOD
                     modPacks.add(AodClock.class);
