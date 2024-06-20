@@ -99,13 +99,13 @@ public class AlbumArtLockscreen extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 shouldShowArt = (boolean) param.args[0];
+                updateAlbumArt();
             }
         });
 
         hookAllMethods(CentralSurfacesImplClass, "onKeyguardGoingAway", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                shouldShowArt = false;
                 updateAlbumArt();
             }
         });
