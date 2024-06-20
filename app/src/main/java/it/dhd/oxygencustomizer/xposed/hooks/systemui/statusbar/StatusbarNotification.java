@@ -22,6 +22,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
 
 import java.util.Collection;
 
@@ -199,6 +202,10 @@ public class StatusbarNotification extends XposedMods {
             OplusClearAllButton = findClass("com.oplusos.systemui.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 13
         }
 
+        final View.OnLayoutChangeListener listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (v.getVisibility() == View.VISIBLE) updateButton();
+        };
+
         hookAllConstructors(OplusClearAllButton, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -209,7 +216,8 @@ public class StatusbarNotification extends XposedMods {
                 if (defaultClearAllBg == null && mClearAllButton != null) {
                     defaultClearAllBg = mClearAllButton.getBackground();
                 }
-                if (customizeClearButton) updateButton();
+                updateButton();
+                mClearAllButton.addOnLayoutChangeListener(listener);
             }
         });
     }
