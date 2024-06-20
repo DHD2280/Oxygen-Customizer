@@ -412,6 +412,9 @@ public class PreferenceHelper {
                     LOCKSCREEN_FINGERPRINT_SCALING -> {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
+            case "DWOpacity" -> {
+                return instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+            }
             case "lockscreen_album_art_filter" -> {
                 return instance.mPreferences.getBoolean("lockscreen_album_art", false);
             }
