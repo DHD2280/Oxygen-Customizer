@@ -13,6 +13,8 @@ import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.canShowArt;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.showAlbumArt;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -352,7 +354,9 @@ public class DepthWallpaper extends XposedMods {
                 &&
                 (
                         state.contains("KEYGUARD") // OOS 13
-                );
+                )
+                &&
+                (showAlbumArt && !canShowArt);
         if (DEBUG) log(TAG + "Setting Depth Wallpaper ScrimState: " + state + " showSubject: " + showSubject + " lockScreenSubjectCacheValid: " + lockScreenSubjectCacheValid);
 
         if(showSubject) {

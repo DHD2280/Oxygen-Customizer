@@ -35,13 +35,14 @@ public class AlbumArtLockscreen extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     private Bitmap mArt;
-    private boolean showAlbumArt = true;
+    public static boolean showAlbumArt = true;
     private int albumArtFilter = 0;
     private float albumArtBlurAmount = 7.5f;
     private FrameLayout albumArtContainer;
     private ImageView albumArtView;
     private Object mScrimController;
     private boolean shouldShowArt = false;
+    public static boolean canShowArt = false;
 
     public AlbumArtLockscreen(Context context) {
         super(context);
@@ -123,13 +124,12 @@ public class AlbumArtLockscreen extends XposedMods {
     }
 
     private void onPrimaryMetadataOrStateChanged(int state) {
-        log("AlbumArtLockscreen: PlaybackState: " + getPlaybackState() + " Metadata: " + (getMediaMetadata() != null));
         boolean isMusicActive = false;
         if (SystemUtils.AudioManager() != null) {
             isMusicActive = SystemUtils.AudioManager().isMusicActive();
         }
-        boolean isPlaying = (isMusicActive || state == PlaybackState.STATE_PLAYING);
-        if (showAlbumArt && isPlaying) {
+        canShowArt = (getMediaMetadata() != null && (isMusicActive || state == PlaybackState.STATE_PLAYING));
+        if (showAlbumArt && canShowArt) {
             Bitmap oldArt = mArt;
             mArt = getArtFilter(getArt());
             Drawable[] layers = new Drawable[]{
