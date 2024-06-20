@@ -51,7 +51,7 @@ public class NotificationStyle extends BaseFragment {
     private NotificationAdapter initNotifItems() {
         ArrayList<NotificationModel> notif_list = new ArrayList<>();
 
-        notif_list.add(new NotificationModel("Default", R.drawable.notif_default));
+        notif_list.add(new NotificationModel("Monet", R.drawable.notif_default));
         notif_list.add(new NotificationModel("Layers", R.drawable.notif_layers));
         notif_list.add(new NotificationModel("Thin Outline", R.drawable.notif_thin_outline));
         notif_list.add(new NotificationModel("Bottom Outline", R.drawable.notif_bottom_outline));
@@ -71,25 +71,6 @@ public class NotificationStyle extends BaseFragment {
         notif_list.add(new NotificationModel("Pitch Black", R.drawable.notif_pitch_black));
         notif_list.add(new NotificationModel("Duoline", R.drawable.notif_duoline));
         notif_list.add(new NotificationModel("iOS", R.drawable.notif_ios));
-        /*notif_list.add(new NotificationModel("Layers Transparent", R.drawable.notif_layers));
-        notif_list.add(new NotificationModel("Thin Outline Transparent", R.drawable.notif_thin_outline));
-        notif_list.add(new NotificationModel("Bottom Outline Transparent", R.drawable.notif_bottom_outline));
-        notif_list.add(new NotificationModel("Neumorph Transparent", R.drawable.notif_neumorph));
-        notif_list.add(new NotificationModel("Stack Transparent", R.drawable.notif_stack));
-        notif_list.add(new NotificationModel("Side Stack Transparent", R.drawable.notif_side_stack));
-        notif_list.add(new NotificationModel("Outline Transparent", R.drawable.notif_outline));
-        notif_list.add(new NotificationModel("Leafy Outline Transparent", R.drawable.notif_leafy_outline));
-        notif_list.add(new NotificationModel("Lighty Transparent", R.drawable.notif_lighty));
-        notif_list.add(new NotificationModel("Neumorph Outline Transparent", R.drawable.notif_neumorph_outline));
-        notif_list.add(new NotificationModel("Cyberponk Transparent", R.drawable.notif_cyberponk));
-        notif_list.add(new NotificationModel("Cyberponk v2 Transparent", R.drawable.notif_cyberponk_v2));
-        notif_list.add(new NotificationModel("Thread Line Transparent", R.drawable.notif_thread_line));
-        notif_list.add(new NotificationModel("Faded Transparent", R.drawable.notif_faded));
-        notif_list.add(new NotificationModel("Dumbbell Transparent", R.drawable.notif_dumbbell));
-        notif_list.add(new NotificationModel("Pitch Black Transparent", R.drawable.notif_pitch_black));
-        notif_list.add(new NotificationModel("Duoline Transparent", R.drawable.notif_duoline));
-        notif_list.add(new NotificationModel("iOS Transparent", R.drawable.notif_ios));*/
-
 
         return new NotificationAdapter(requireContext(), notif_list, loadingDialog);
     }
