@@ -69,7 +69,6 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
@@ -339,33 +338,30 @@ public class QsTileCustomization extends XposedMods {
         hookAllMethods(OplusQsMediaPanelView, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                // Do something
                 mOplusQsMediaView = (View) param.thisObject;
                 mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                mOplusQsMediaDrawable = mOplusQsMediaView.getBackground();
+                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground;
                 if (qsInactiveColorEnabled) {
                     mOplusQsMediaDrawable.setTint(qsInactiveColor);
                     mOplusQsMediaDrawable.invalidateSelf();
                     mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
                 } else
                     mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+
+                // Listen for default tip change
+                View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
+                mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    if (v.getVisibility() == View.VISIBLE) {
+                        hideMediaQsBackground();
+                    }
+                });
             }
         });
 
         hookAllMethods(OplusQsMediaPanelView, "bindTitleAndText", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object mediaData = param.args[0];
-                if (mediaData == null && showMediaArtMediaQs) {
-                    Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), mArt), qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground};
-                    TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-                    mOplusQsMediaView.setBackground(transitionDrawable);
-                    transitionDrawable.startTransition(250);
-                    return;
-                }
-                if (showMediaArtMediaQs) {
-                    updateMediaQsBackground();
-                }
+                updateMediaQsBackground();
             }
         });
 
@@ -542,6 +538,11 @@ public class QsTileCustomization extends XposedMods {
             mOplusQsMediaView.setBackground(transitionDrawable);
             transitionDrawable.startTransition(250);
         });
+    }
+
+    private void hideMediaQsBackground() {
+        if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
+        mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
     }
 
     private Bitmap getFilteredArt(Bitmap art) {
