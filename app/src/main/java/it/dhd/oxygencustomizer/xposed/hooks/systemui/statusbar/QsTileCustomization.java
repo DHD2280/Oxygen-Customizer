@@ -173,7 +173,7 @@ public class QsTileCustomization extends XposedMods {
                     Key[0].equals(QS_MEDIA_ART_BLUR_AMOUNT) ||
                     Key[0].equals(QS_MEDIA_ART_TINT_COLOR) ||
                     Key[0].equals(QS_MEDIA_ART_TINT_AMOUNT)) {
-                if (showMediaArtMediaQs) updateMediaQsBackground(3);
+                if (showMediaArtMediaQs) updateMediaQsBackground();
                 else updateMediaQs();
             }
         }
@@ -184,8 +184,6 @@ public class QsTileCustomization extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenerPackage)) return;
-
-        AudioDataProvider.registerInfoCallback(this::updateMediaQsBackground);
 
         Class<?> PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
         hookAllConstructors(PersonalityManager, new XC_MethodHook() {
@@ -357,8 +355,16 @@ public class QsTileCustomization extends XposedMods {
         hookAllMethods(OplusQsMediaPanelView, "bindTitleAndText", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Object mediaData = param.args[0];
+                if (mediaData == null && showMediaArtMediaQs) {
+                    Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), mArt), qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground};
+                    TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+                    mOplusQsMediaView.setBackground(transitionDrawable);
+                    transitionDrawable.startTransition(250);
+                    return;
+                }
                 if (showMediaArtMediaQs) {
-                    setupOtherViews(mOplusQsMediaView, mColorOnAlbum);
+                    updateMediaQsBackground();
                 }
             }
         });
@@ -505,8 +511,8 @@ public class QsTileCustomization extends XposedMods {
 
     }
 
-    private void updateMediaQsBackground(int state) {
-        if (!showMediaArtMediaQs) return;
+    private void updateMediaQsBackground() {
+        if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
         Bitmap oldArt = mArt;
         mArt = getFilteredArt(getArt());
         float radius = 0f;
