@@ -926,6 +926,10 @@
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>
+    <string name="support_group_title">Support Group</string>
+    <string name="support_group_summary" translatable="false">t.me/OxygenCustomizerGroup</string>
+    <string name="translate_title">Translate in your language</string>
+    <string name="translate_summary">Help us to translate Oxygen Customizer into your language</string>
     <string name="check_updates">Check Updates</string>
     <string name="check_updates_summary">Current version: %s</string>
     <string name="check_auto_updates">Check for updates automatically</string>

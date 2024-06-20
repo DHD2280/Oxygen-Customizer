@@ -62,6 +62,18 @@
             app:icon="@drawable/ic_github" />
 
         <Preference
+            android:key="SupportGroup"
+            android:title="@string/support_group_title"
+            android:summary="@string/support_group_summary"
+            app:icon="@drawable/ic_group" />
+
+        <Preference
+            android:key="translate"
+            android:title="@string/translate_title"
+            android:summary="@string/translate_summary"
+            app:icon="@drawable/ic_translate" />
+
+        <Preference
             app:icon="@drawable/ic_credits"
             android:key="credits"
             android:summary="@string/credits_summary"

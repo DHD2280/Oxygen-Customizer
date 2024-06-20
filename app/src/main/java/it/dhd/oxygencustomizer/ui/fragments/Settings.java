@@ -34,7 +34,7 @@ public class Settings extends PreferenceFragmentCompat {
     private static final int REQUEST_IMPORT = 98;
     private static final int REQUEST_EXPORT = 99;
 
-    Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref;
+    Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
 
     // Updater Prefs
     Preference updatePref;
@@ -53,6 +53,8 @@ public class Settings extends PreferenceFragmentCompat {
         updatePref = findPreference("updates");
         autoUpdatePref = findPreference("autoUpdate");
         checkOnWifiPref = findPreference("checkOnWifi");
+        supportGroupPref = findPreference("SupportGroup");
+        translatePref = findPreference("translate");
 
         if (ghPref != null) {
             ghPref.setOnPreferenceClickListener(preference -> {
@@ -111,6 +113,22 @@ public class Settings extends PreferenceFragmentCompat {
                 if ((boolean) newValue) {
                     UpdateScheduler.scheduleUpdateNow(requireContext());
                 }
+                return true;
+            });
+        }
+
+        if (supportGroupPref != null) {
+            supportGroupPref.setOnPreferenceClickListener(preference -> {
+                // Open Telegram Group
+                requireActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/OxygenCustomizer")));
+                return true;
+            });
+        }
+
+        if (translatePref != null) {
+            translatePref.setOnPreferenceClickListener(preference -> {
+                // Open Crowdin
+                requireActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://crowdin.com/project/oxygen-customizer")));
                 return true;
             });
         }
