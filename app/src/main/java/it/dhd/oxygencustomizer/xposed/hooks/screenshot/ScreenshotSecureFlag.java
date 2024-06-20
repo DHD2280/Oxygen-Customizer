@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.screenshot;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SCREENSHOT;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
@@ -11,10 +12,12 @@ import java.util.Arrays;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class ScreenshotSecureFlag extends XposedMods {
 
+    private static final String listenPackage = SCREENSHOT;
     private static final String TAG = "Oxygen Customizer - Screenshot Secure Flag: ";
     private boolean mDisableSecure = false;
 
@@ -34,6 +37,7 @@ public class ScreenshotSecureFlag extends XposedMods {
         final XC_MethodHook nullReturner = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                log(TAG + " " + param.method.getName());
                 if (mDisableSecure)
                     param.setResult(null);
             }
@@ -61,6 +65,6 @@ public class ScreenshotSecureFlag extends XposedMods {
 
     @Override
     public boolean listensTo(String packageName) {
-        return false;
+        return listenPackage.equals(packageName);
     }
 }
