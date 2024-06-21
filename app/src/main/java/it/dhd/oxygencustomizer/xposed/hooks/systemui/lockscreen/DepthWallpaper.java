@@ -350,13 +350,18 @@ public class DepthWallpaper extends XposedMods {
     private void setDepthWallpaper()
     {
         String state = getObjectField(getScrimController(), "mState").toString();
+        boolean canShow = true;
+        if (showAlbumArt && !canShowArt) {
+            canShow = true;
+        } else if (showAlbumArt && canShowArt) {
+            canShow = false;
+        }
         boolean showSubject = DWallpaperEnabled
                 &&
                 (
                         state.contains("KEYGUARD") // OOS 13
                 )
-                &&
-                (showAlbumArt && !canShowArt);
+                && canShow;
         if (DEBUG) log(TAG + "Setting Depth Wallpaper ScrimState: " + state + " showSubject: " + showSubject + " lockScreenSubjectCacheValid: " + lockScreenSubjectCacheValid);
 
         if(showSubject) {

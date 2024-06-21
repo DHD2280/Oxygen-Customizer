@@ -128,7 +128,10 @@ public class AlbumArtLockscreen extends XposedMods {
         if (SystemUtils.AudioManager() != null) {
             isMusicActive = SystemUtils.AudioManager().isMusicActive();
         }
-        canShowArt = (getMediaMetadata() != null && (isMusicActive || state == PlaybackState.STATE_PLAYING));
+        canShowArt = (getMediaMetadata() != null &&
+                (isMusicActive ||
+                state == PlaybackState.STATE_PLAYING ||
+                        state == PlaybackState.STATE_PAUSED));
         if (showAlbumArt && canShowArt) {
             Bitmap oldArt = mArt;
             mArt = getArtFilter(getArt());
