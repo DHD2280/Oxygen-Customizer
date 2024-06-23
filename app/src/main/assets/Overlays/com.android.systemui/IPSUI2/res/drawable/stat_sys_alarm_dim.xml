@@ -1,8 +1,8 @@
 <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetLeft="2dp" android:insetRight="2dp">
     <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="17.0dp"
-    android:height="17.0dp"
+    android:width="14dp"
+    android:height="14dp"
     android:viewportWidth="17.0"
     android:viewportHeight="17.0">
     <group

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetLeft="2dp" android:insetRight="2dp">
     <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="17.0dip"
-    android:height="17.0dip"
+    android:width="14dp"
+    android:height="14dp"
     android:viewportWidth="17.0"
     android:viewportHeight="17.0">
     <path

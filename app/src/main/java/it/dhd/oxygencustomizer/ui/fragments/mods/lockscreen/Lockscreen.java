@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
+import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
@@ -17,7 +18,6 @@ import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -153,7 +153,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == RESULT_OK) {
                     Intent data = result.getData();
                     String path = getRealPath(data);
 
@@ -215,13 +215,12 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         public String[] getScopes() {
             return new String[]{SYSTEM_UI};
         }
-
         private int type = 0;
 
         ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+                    if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         String path = getRealPath(data);
                         String destination = "";

@@ -35,7 +35,6 @@ public class NotificationTransparency extends XposedMods {
     private boolean notificationTransparency = false;
     private int notificationTransparencyValue = 25;
     private boolean hasOverlays = false;
-    private boolean mHasOverlays = false;
 
     public NotificationTransparency(Context context) {
         super(context);
