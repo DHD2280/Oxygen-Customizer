@@ -56,7 +56,7 @@ public class SettingsIcons extends BaseFragment {
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "settings_system_breeno_ic")));
         }
 
-        return new IconsAdapter(requireContext(), settingsIcons, loadingDialog, "ICS");
+        return new IconsAdapter(requireContext(), settingsIcons, loadingDialog, "ICS", false);
     }
 
     @Override

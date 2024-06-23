@@ -245,6 +245,7 @@ public class StatusbarClock extends XposedMods {
                         try {
                             mClockView = (TextView) getObjectField(param.thisObject, "mClockView");
                         } catch (Throwable ignored) {
+                            log(TAG + "mClockView not found");
                         }
 
                         ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");

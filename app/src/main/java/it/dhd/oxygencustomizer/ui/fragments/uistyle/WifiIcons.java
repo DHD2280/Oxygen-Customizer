@@ -57,7 +57,7 @@ public class WifiIcons extends BaseFragment {
                             getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "stat_signal_wifi_signal_4")));
         }
 
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "WIFI", "COMMONWIFI");
+        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "WIFI", "COMMONWIFI", true);
     }
 
     @Override
