@@ -56,7 +56,7 @@ public class SignalIcons extends BaseFragment {
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentSGIC" + (i+1) + ".overlay", "stat_signal_signal_lte_single_3")));
         }
 
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", "COMMONSGIC");
+        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", "COMMONSGIC", true);
     }
 
     @Override

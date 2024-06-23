@@ -27,6 +27,7 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
@@ -40,29 +41,32 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
     int selectedItem = -1;
     String mComponentName = "", mAdditionalComponent = "";
     private onButtonClick mOnButtonClick = null;
+    private boolean needSystemUIRestart = false;
 
     public interface onButtonClick{
         void onEnableClick(int position);
         void onDisableClick(int position);
     }
 
-    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName) {
+    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, boolean needSysUiRestart) {
         this.context = context;
         this.itemList = itemList;
         this.loadingDialog = loadingDialog;
         this.mComponentName = compName;
+        this.needSystemUIRestart = needSysUiRestart;
 
         // Preference key
         for (int i = 1; i <= itemList.size(); i++)
             ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
 
-    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, String additionalCompName) {
+    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, String additionalCompName, boolean needSysUiRestart) {
         this.context = context;
         this.itemList = itemList;
         this.loadingDialog = loadingDialog;
         this.mComponentName = compName;
         this.mAdditionalComponent = additionalCompName;
+        this.needSystemUIRestart = needSysUiRestart;
 
         // Preference key
         for (int i = 1; i <= itemList.size(); i++)
@@ -75,6 +79,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
         this.loadingDialog = loadingDialog;
         this.mComponentName = compName;
         this.mOnButtonClick = onButtonClick;
+        this.needSystemUIRestart = false;
         for (int i = 1; i <= itemList.size(); i++)
             ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
@@ -196,7 +201,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                         holder.btn_enable.setVisibility(View.GONE);
                         holder.btn_disable.setVisibility(View.VISIBLE);
                         refreshBackground(holder);
-
+                        if (needSystemUIRestart) AppUtils.restartScope("systemui");
                         Toast.makeText(OxygenCustomizer.getAppContext(), context.getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     }, 3000);
                 });
@@ -228,7 +233,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                         holder.btn_disable.setVisibility(View.GONE);
                         holder.btn_enable.setVisibility(View.VISIBLE);
                         refreshBackground(holder);
-
+                        if (needSystemUIRestart) AppUtils.restartScope("systemui");
                         Toast.makeText(OxygenCustomizer.getAppContext(), context.getResources().getString(R.string.toast_disabled), Toast.LENGTH_SHORT).show();
                     }, 3000);
                 });

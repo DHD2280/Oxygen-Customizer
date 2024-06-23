@@ -23,6 +23,7 @@ import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.overlay.manager.IconPackManager;
 
 public class IconPacks extends BaseFragment {
@@ -72,11 +73,13 @@ public class IconPacks extends BaseFragment {
             @Override
             public void onEnableClick(int position) {
                 enableIconPack(position);
+                AppUtils.restartScope("systemui");
             }
 
             @Override
             public void onDisableClick(int position) {
                 disableIconPack(position);
+                AppUtils.restartScope("systemui");
             }
         });
     }
