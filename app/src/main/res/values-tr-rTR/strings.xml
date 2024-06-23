@@ -316,6 +316,9 @@
     <string name="quick_pulldown_side_left">Sol</string>
     <string name="quick_pulldown_side_right">Sağ</string>
     <string name="quick_collapse">Hızlı Daralt</string>
+    <string name="my_device">Cihazlarım</string>
+    <string name="my_device_title">Cihazlarımı Zorla</string>
+    <string name="my_device_summary">Denetim Merkezi\'nde Cihazlarım\'ı göstermeye zorla.\nNOT: Bu özelliği düzgün şekilde kullanmak için yeni Denetim Merkezi ve Cihazlarım\'ın yüklenmiş olması gerekir.</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Hızlı Ayar Döşemeleri</string>
     <string name="quick_settings_tiles_number">Hızlı ayarlar döşeme sayısı ayarları</string>
@@ -353,6 +356,8 @@
     <string name="customize_brightness_slider_title">Parlaklık Kaydırıcısını Özelleştir</string>
     <string name="brightness_slider_progress_color_title">Parlaklık Kaydırıcı Renk Modu</string>
     <string name="brightness_slider_background_color_title">Arka plan rengini özelleştir</string>
+    <!-- Media Tile -->
+    <string name="media_tile">Medya Kutucuğu</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Döşeme animasyonu</string>
     <string name="qs_tile_animation_style_title">Animasyon stili</string>
@@ -606,6 +611,20 @@
     <string name="depth_wallpaper_aod_title">Ayrıca \" her zaman ekranda \"</string>
     <string name="depth_wallpaper_model_ready">AI modeli cihaza indirilir</string>
     <string name="depth_wallpaper_model_not_available">Yapay zeka modeli cihazda mevcut değil (henüz)</string>
+    <!-- Media art -->
+    <string name="media_art_title">Medya kapak görüntüsü</string>
+    <string name="media_art_summary">Mevcut olduğunda medya kapak resmini görüntüle</string>
+    <string name="media_art_title_qs_summary">Medya kapak resmini mevcut olduğunda döşeme arka planı olarak göster</string>
+    <string name="albumart_blur_title">Medya Resmi Bulanıklık Seviyesi</string>
+    <!-- Album art filter -->
+    <string name="albumart_filter_title">Medya kapak resmi filtresi</string>
+    <string name="albumart_filter_none">Yok</string>
+    <string name="albumart_filter_grayscale">Gri tonlamalı</string>
+    <string name="albumart_filter_tint">Vurgu renkli</string>
+    <string name="albumart_filter_blur">Bulanık</string>
+    <string name="albumart_filter_grayblur">Gri tonlamalı ve bulanık</string>
+    <string name="albumart_filter_custom_tint">Özel Renk</string>
+    <string name="albumart_tint_intensity_title">Özel Renk Yoğunluğu</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Dikkat</string>
     <string name="depth_effect_alert_body">Kilit ekranınızda hem görsel çekicilik hem de işlevsel netlik sağlamak için ön plan öğelerinin kilit ekranınızdaki saatin tamamını engellemediği uygun bir kilit ekranı duvar kağıdı kullanın.\nEtkinleştirdikten sonra, bir Kilit Ekranı Duvar Kağıdı ayarlayın, AI modeli otomatik olarak Konuyu Duvar Kağıdından çıkarmaya çalışacaktır.\n\nNot: %s.</string>
@@ -628,6 +647,8 @@
     <string name="lockscreen_clock_custom_user_image">Özel Kullanıcı Resmi Kullan</string>
     <string name="lockscreen_clock_custom_user_image_title">Kullanıcı Resmi</string>
     <string name="lockscreen_clock_custom_user_image_summary">Bir resim seçmek için tıklayın.</string>
+    <string name="lockscreen_clock_custom_image_title">Özel Resim Kullan</string>
+    <string name="lockscreen_clock_custom_image_picker_title">Özel Resim</string>
     <string name="lockscreen_font_line_height_title">Satır Yüksekliği</string>
     <string name="lockscreen_clock_custom_margins">Saat Kenar Boşlukları</string>
     <string name="lockscreen_clock_top_margin_title">Üst Kenar Boşluğu</string>
@@ -844,6 +865,9 @@
     <string name="import_failed">İçe aktarılamadı</string>
     <string name="settings_about_section_title">Hakkında</string>
     <string name="github_repo_title">GitHub deposu</string>
+    <string name="support_group_title">Destek Grubu</string>
+    <string name="translate_title">Kendi dilinize çevirin</string>
+    <string name="translate_summary">Oxygen Customizer\'ı kendi dilinize çevirmemize yardımcı olun</string>
     <string name="check_updates">Güncellemeleri Kontrol Et</string>
     <string name="check_updates_summary">Mevcut sürüm: %s</string>
     <string name="check_auto_updates">Güncellemeleri otomatik olarak kontrol et</string>
@@ -960,6 +984,8 @@
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">Simge paketi</string>
     <string name="theme_customization_icon_pack_summary">Özel simge paketi stili ayarlayın</string>
+    <string name="theme_customization_settings_icons_title">Ayarlar Simgeleri</string>
+    <string name="theme_customization_settings_icons_summary">Ayarlar\'da özel simgeler ayarla</string>
     <string name="theme_customization_signal_icon_title">Sinyal simgesi stili</string>
     <string name="theme_customization_signal_icon_summary">Özel sinyal simgesi stili ayarlayın</string>
     <string name="theme_customization_wifi_icon_title">WiFi simgesi stili</string>
@@ -974,7 +1000,11 @@
     <string name="notif_preview_desc">Bildirim Önizlemesi.\nBu stili uygulamak için tıklayın.</string>
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">Bildirim Köşesi Yarıçapı</string>
+    <string name="notification_corner_radius_summary">Bildirimler için özel köşe yarıçapı ayarla.</string>
     <string name="notif_roundness_preview_desc">Bildirim Önizlemesi</string>
+    <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">USB Diyalog Stilleri</string>
+    <string name="theme_customization_usb_dialog_summary">USB diyaloğu için özel stil ayarla.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Tost Stilleri</string>
     <string name="toast_message">Toast Mesajları</string>

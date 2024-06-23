@@ -48,6 +48,7 @@
     <string name="quick_pulldown_side_left">Esquerda</string>
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Tiles Customizations -->
+    <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_style_flip">Inverter</string>
     <string name="qs_tile_animation_duration_low">Baixa</string>
@@ -69,6 +70,8 @@
     <!-- Gesture Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
+    <!-- Media art -->
+    <!-- Album art filter -->
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
@@ -100,6 +103,7 @@
     <!-- Icon pack -->
     <!-- Notification -->
     <!-- Notification Corner Radius -->
+    <!-- USB Dialog -->
     <!-- Toast Styles -->
     <!-- Style List -->
 </resources>

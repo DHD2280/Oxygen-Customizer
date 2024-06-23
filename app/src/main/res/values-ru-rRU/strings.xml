@@ -8,14 +8,57 @@
     <string name="settings_label">Настройки</string>
     <string name="toast_rename_file">Переименуйте файл во что-нибудь более простое</string>
     <string name="toast_applied">Applied</string>
+    <string name="toast_disabled">Откл</string>
+    <string name="toast_error">Что-то пошло не так</string>
     <string name="opt_selected1">Selected: %s</string>
     <string name="opt_selected2">Selected: %s%s</string>
     <string name="requires_sysui_restart">В этом разделе требуется перезагрузка SystemUI
 Нажмите на меню для перезагрузки.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Инициализация установки</string>
+    <string name="step">Шаг</string>
+    <string name="module_installation_step1">Создание оболочки модуля</string>
+    <string name="module_installation_step2">Извлечение необходимых файлов</string>
+    <string name="module_installation_step3">Создание оверлеев</string>
+    <string name="module_installation_step4">Выравнивание оверлеев</string>
+    <string name="module_installation_step5">Подписывание оверлеев</string>
+    <string name="module_installation_step6">Очистка каталогов</string>
+    <string name="onboarding_title_1">Вам надоел стандартный интерфейс?</string>
+    <string name="onboarding_subtitle_1">Давайте настроим все по своему вкусу.</string>
+    <string name="onboarding_desc_1">Избавьтесь от однообразия стандартного пользовательского интерфейса — персонализируйте каждую техническую деталь в соответствии со своим стилем и предпочтениями.</string>
+    <string name="onboarding_title_2">Поддерживается ли мое устройство?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer поддерживает ПЗУ на базе OOS.</string>
+    <string name="onboarding_desc_2">Совместим со всеми ПЗУ на базе OOS, обеспечивая широкую поддержку устройств Android.</string>
+    <string name="onboarding_title_3">Начнем сейчас?</string>
+    <string name="onboarding_subtitle_3">Настало время Oxygen Customizer проделать внутреннюю работу.</string>
+    <string name="onboarding_desc_3">Запуск внутренних задач, знаменующий начало важной работы. Готовы начать?</string>
+    <string name="need_storage_perm_title">Требуется разрешение на доступ к хранилищу</string>
+    <string name="need_storage_perm_desc">Разрешение на доступ к хранилищу требуется для создания необходимых файлов.</string>
+    <string name="compatible_root_not_found_title">Не удалось найти совместимый root метод</string>
+    <string name="compatible_root_not_found_desc">Для продолжения предоставьте root доступ любым известным способом.</string>
+    <string name="root_not_found_title">Рут недоступен</string>
+    <string name="root_not_found_desc">Похоже, ваше устройство не рутировано!</string>
+    <string name="need_reboot_title">Требуется перезагрузка устройства</string>
+    <string name="need_reboot_desc">Перезагрузите устройство, чтобы добавить все файлы.</string>
+    <string name="installation_failed_title">Упс, это не ожидалось</string>
+    <string name="installation_failed_desc">Логи сохранены в папке документов.</string>
+    <string name="logs">Логи</string>
+    <string name="toast_skipped_installation">Установка пропущена. Некоторые функции могут работать некорректно.</string>
     <!-- Buttons -->
     <string name="btn_select">Выбрать</string>
+    <string name="btn_skip">Пропустить</string>
+    <string name="btn_next">Дальше</string>
+    <string name="btn_back">Назад</string>
+    <string name="btn_lets_go">Вперёд</string>
+    <string name="btn_close">Закрыть</string>
+    <string name="btn_reboot_now">Перезагрузить сейчас</string>
+    <string name="btn_reboot">Перезагрузить</string>
+    <string name="btn_enable">Вкл</string>
+    <string name="btn_disable">Откл</string>
+    <string name="btn_apply">Применить</string>
     <!-- Dialogs -->
+    <string name="installing">Установка</string>
+    <string name="loading_dialog_wait">Пожалуйста Подождите</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Уведомление</string>
@@ -36,6 +79,7 @@
     <string name="general_color_text1">Текст 1</string>
     <string name="general_color_text2">Текст 2</string>
     <string name="sysui_restart_needed">Для применения требуется перезапуск SystemUI</string>
+    <string name="one_time_reboot_needed">Перезагрузите устройство!</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
@@ -51,6 +95,7 @@
 Используйте это, если модуль не работает!
 Убедитесь, что все соответствующие области проверены!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">Пользовательский Интерфейс</string>
     <string name="navbar_mods">Модов</string>
     <string name="navbar_hooks">Хуки </string>
     <string name="navbar_settings">Настройки</string>
@@ -274,6 +319,9 @@
     <string name="quick_pulldown_side_left">Слева</string>
     <string name="quick_pulldown_side_right">Справа</string>
     <string name="quick_collapse">Быстрый коллапс</string>
+    <string name="my_device">Мои Устройства</string>
+    <string name="my_device_title">Принудительно использовать мои устройства</string>
+    <string name="my_device_summary">Принудительно отображать «Мои устройства» в Центре управления.\nПРИМЕЧАНИЕ. Для правильного использования этой функции необходим новый Центр управления и Мои устройства.</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Плитки быстрой настройки</string>
     <string name="quick_settings_tiles_number">Быстрые настройки настройки количества плиток</string>
@@ -311,6 +359,8 @@
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
     <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
+    <!-- Media Tile -->
+    <string name="media_tile">Плитка Медиа</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Анимация плиток</string>
     <string name="qs_tile_animation_style_title">Стиль анимации</string>
@@ -456,6 +506,7 @@
     <!-- QS Header Misc -->
     <string name="qs_header_misc">Разное в заголовке QS</string>
     <string name="qs_header_system_icons_chip">Системные значки</string>
+    <string name="qs_header_system_icons_chip_style">Системные значки</string>
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Заполненный</string>
     <string name="chip_outlined">Упомянутый</string>
@@ -567,6 +618,14 @@
     <string name="depth_wallpaper_aod_title">Также в режиме «Всегда на экране»</string>
     <string name="depth_wallpaper_model_ready">Модель AI загружается на устройство</string>
     <string name="depth_wallpaper_model_not_available">Модель AI недоступна на устройстве (пока)</string>
+    <!-- Media art -->
+    <string name="media_art_title">Обложка альбома</string>
+    <string name="media_art_summary">Отображение обложки мультимедиа, если она доступна</string>
+    <string name="media_art_title_qs_summary">Отображать обложку мультимедиа в качестве фона плитки, если она доступна</string>
+    <string name="albumart_blur_title">Степень размытия обложки</string>
+    <!-- Album art filter -->
+    <string name="albumart_filter_title">Фильтр обложки альбома</string>
+    <string name="albumart_filter_none">Нет</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Внимание</string>
     <string name="depth_effect_alert_body">Используйте подходящие обои для экрана блокировки, элементы переднего плана не загораживают часы на экране блокировки, обеспечивая как визуальную привлекательность, так и функциональную ясность на экране блокировки.\nПосле включения и установки обоев экрана блокировки модель AI автоматически попытается извлечь  Объект с обоев.\n\nПримечание: %s.</string>
@@ -854,6 +913,15 @@
     <string name="weather_permission_dialog_title">Включить разрешения на определение местоположения</string>
     <string name="weather_permission_dialog_message">Для получения данных о погоде необходимы разрешения на определение местоположения. Нажмите «ОК», чтобы открыть «Настройки».</string>
     <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_default">По умолчанию</string>
+    <string name="lockscreen_weather_selection_str_box">Полупрозрачная подложка</string>
+    <string name="lockscreen_weather_selection_str_round">Полупрозрачная подложка (круглая)</string>
+    <string name="lockscreen_weather_selection_qbeta_style">Android Q</string>
+    <string name="lockscreen_weather_selection_str_accent">Скругленный, простой и с акцентом</string>
+    <string name="lockscreen_weather_selection_str_accent_transparent">Скругленный, прозрачный и с акцентом</string>
+    <string name="lockscreen_weather_selection_str_gradient">Градиент</string>
+    <string name="lockscreen_weather_selection_str_border_accent">Темный с акцентом границ</string>
+    <string name="lockscreen_weather_selection_str_border_gradient">Темный с градиентными границами</string>
     <!-- Weather -->
     <string name="weather_condition_clouds">Облачный</string>
     <string name="weather_condition_rain">Дождливый</string>
@@ -863,10 +931,52 @@
     <string name="weather_condition_wind">Ветреный</string>
     <string name="weather_condition_mist">Туманный</string>
     <!-- UI Strings -->
+    <string name="style_category">Темы и стили</string>
+    <string name="icon_theme_category">Пакет значков и стили</string>
     <!-- UI styles -->
+    <string name="oxygen_customizer_updated_title">Oxygen Customizer только что обновился!</string>
+    <string name="oxygen_customizer_updated_desc">Перезагрузите телефон, чтобы использовать новейшие добавленные функции и параметры.\nНажмите здесь, чтобы перезагрузить устройство сейчас.</string>
+    <string name="rebooting_desc">Перезагрузка через 5 секунд</string>
+    <string name="theme_customization_ui_style_title">Стиль Интерфейса</string>
+    <string name="theme_customization_ui_style_summary">Установите собственный стиль для вашего интерфейса</string>
     <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Пакет значков</string>
+    <string name="theme_customization_icon_pack_summary">Установить собственный стиль пакета значков</string>
+    <string name="theme_customization_settings_icons_title">Значки настроек</string>
+    <string name="theme_customization_settings_icons_summary">Установите собственные значки в настройках</string>
+    <string name="theme_customization_signal_icon_title">Стиль значка сети</string>
+    <string name="theme_customization_signal_icon_summary">Установить собственный стиль значка сети</string>
+    <string name="theme_customization_wifi_icon_title">Стиль значка Wi-Fi</string>
+    <string name="theme_customization_wifi_icon_summary">Установить собственный стиль значка Wi-Fi</string>
+    <string name="theme_customization_navbar_title">Стиль панели навигации</string>
+    <string name="theme_customization_navbar_summary">Установить собственный стиль панели навигации</string>
+    <string name="theme_customization_toast_frame_title">Рамка Тоста</string>
+    <string name="theme_customization_toast_frame_summary">Изменить стиль всплывающих уведомлений</string>
     <!-- Notification -->
+    <string name="notification_styles">Стиль уведомлений</string>
+    <string name="notification_styles_desc">Установить собственный стиль для уведомлений</string>
+    <string name="notif_preview_desc">Предварительный просмотр уведомления.\nНажмите, чтобы применить этот стиль.</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Радиус ушла уведомления</string>
+    <string name="notification_corner_radius_summary">Установите собственный радиус угла для уведомлений.</string>
+    <string name="notif_roundness_preview_desc">Предварительный просмотр уведомлений.</string>
+    <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">Стиль диалогового окна USB</string>
+    <string name="theme_customization_usb_dialog_summary">Установите собственный стиль для диалогового окна USB.</string>
     <!-- Toast Styles -->
+    <string name="toast_styles">Стили тостов</string>
+    <string name="toast_message">Всплывающее сообщение</string>
     <!-- Style List -->
+    <string name="style_0">Нет</string>
+    <string name="style_1">Стиль 1</string>
+    <string name="style_2">Стиль 2</string>
+    <string name="style_3">Стиль 3</string>
+    <string name="style_4">Стиль 4</string>
+    <string name="style_5">Стиль 5</string>
+    <string name="style_6">Стиль 6</string>
+    <string name="style_7">Стиль 7</string>
+    <string name="style_8">Стиль 8</string>
+    <string name="style_9">Стиль 9</string>
+    <string name="style_10">Стиль 10</string>
+    <string name="style_11">Стиль 11</string>
 </resources>

@@ -16,11 +16,20 @@
     <!-- Onboarding -->
     <string name="init_module_installation">Inizializzando il setup</string>
     <string name="step">Step</string>
+    <string name="module_installation_step1">Creazione della struttura del modulo</string>
     <string name="module_installation_step2">Estrazione file necessari</string>
+    <string name="module_installation_step3">Creazione sovrapposizione APK</string>
+    <string name="module_installation_step4">Allineamento sovrapposizione APK</string>
+    <string name="module_installation_step5">Firma sovrapposizione APK</string>
+    <string name="module_installation_step6">Cancellazione directory</string>
+    <string name="onboarding_title_1">Annoiato dall\'interfaccia utente di serie?</string>
+    <string name="onboarding_subtitle_1">Personalizziamo tutto a nostro piacimento.</string>
+    <string name="onboarding_desc_1">Abbandona la monotonia dell\'interfaccia utente standard: personalizza ogni dettaglio tecnico in base al tuo stile e alle tue preferenze.</string>
     <string name="onboarding_title_2">Il mio Dispositivo è supportato?</string>
     <string name="onboarding_subtitle_2">Oxygen Customizer supporta ROM basate su OOS.</string>
     <string name="onboarding_desc_2">Compatibile con tutte le ROM basate su OOS, garantendo un ampio supporto per i dispositivi Android.</string>
     <string name="onboarding_title_3">Iniziamo adesso?</string>
+    <string name="onboarding_subtitle_3">È tempo per Oxygen Customizer di fare qualche lavoro interno.</string>
     <string name="onboarding_desc_3">Avvia compiti interni, segnando l\'inizio del lavoro essenziale. Pronto per iniziare?</string>
     <string name="need_storage_perm_title">Permesso Archiviazione Necessario</string>
     <string name="need_storage_perm_desc">Per creare i file necessari è necessaria l\'autorizzazione di archiviazione.</string>
@@ -344,6 +353,8 @@
     <string name="customize_brightness_slider_title">Personalizza Cursore Luminosità</string>
     <string name="brightness_slider_progress_color_title">Modalità Colore Cursore Luminosità</string>
     <string name="brightness_slider_background_color_title">Personalizza colore sfondo</string>
+    <!-- Media Tile -->
+    <string name="media_tile">Tile Media</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Animazione Tile</string>
     <string name="qs_tile_animation_style_title">Stile animazione</string>
@@ -568,7 +579,7 @@
     <string name="lockscreen_title">Blocco Schermo</string>
     <string name="lockscreen_hide_carrier">Nascondi Operatore</string>
     <string name="lockscreen_hide_carrier_summary">Nascondi nome operatore nella schermata di blocco</string>
-    <string name="lockscreen_carrier_replacement">Sostituzione del vettore LS</string>
+    <string name="lockscreen_carrier_replacement">Sostituzione nome operatore LS</string>
     <string name="lockscreen_carrier_replacement_summary">Sostituisci il nome dell\'operatore nella schermata di blocco.\nTieni vuoto per disabilitare</string>
     <string name="lockscreen_hide_statusbar">Nascondi Barra Di Stato</string>
     <string name="lockscreen_hide_statusbar_summary">Nascondi la barra di stato nella schermata di blocco</string>
@@ -597,6 +608,17 @@
     <string name="depth_wallpaper_aod_title">Anche su \"always on display\"</string>
     <string name="depth_wallpaper_model_ready">Il modello AI è stato scaricato nel dispositivo</string>
     <string name="depth_wallpaper_model_not_available">Il modello AI non è (ancora) disponibile nel dispositivo</string>
+    <!-- Media art -->
+    <string name="media_art_title">Copertina Album</string>
+    <string name="media_art_summary">Mostra copertina album quando disponibile</string>
+    <string name="albumart_blur_title">Intensità Sfocature Copertina Album</string>
+    <!-- Album art filter -->
+    <string name="albumart_filter_none">Nessuno</string>
+    <string name="albumart_filter_grayscale">Scala di grigi</string>
+    <string name="albumart_filter_tint">Tinta Accento</string>
+    <string name="albumart_filter_blur">Sfocatura</string>
+    <string name="albumart_filter_grayblur">Scala di grigi e sfocatura</string>
+    <string name="albumart_filter_custom_tint">Colore personalizzato</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Attenzione</string>
     <string name="depth_effect_alert_body">Usa uno sfondo adatto alla schermata di blocco in cui gli elementi di primo piano non ostacolano l\'intero orologio sulla schermata di blocco, garantendo sia il fascino visivo che la chiarezza funzionale sulla schermata di blocco.\nDopo l\'abilitazione, imposta uno sfondo della schermata di blocco, il modello AI proverà automaticamente ad estrarre l\'oggetto dallo sfondo.\n\nNota: %s.</string>
@@ -835,6 +857,9 @@
     <string name="import_failed">Importazione fallita</string>
     <string name="settings_about_section_title">Informazioni</string>
     <string name="github_repo_title">Repository GitHub</string>
+    <string name="support_group_title">Gruppo di supporto</string>
+    <string name="translate_title">Traduci nella tua lingua</string>
+    <string name="translate_summary">Aiutaci a tradurre Oxygen Customizer nella tua lingua</string>
     <string name="check_updates">Controlla Aggiornamenti</string>
     <string name="check_updates_summary">Versione corrente: %s</string>
     <string name="check_auto_updates">Controlla automaticamente gli aggiornamenti</string>
@@ -950,6 +975,9 @@
     <string name="theme_customization_ui_style_summary">Imposta uno stile personalizzato per la tua interfaccia</string>
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">Pacchetto icone</string>
+    <string name="theme_customization_icon_pack_summary">Imposta un pacchetto di icone personalizzato</string>
+    <string name="theme_customization_settings_icons_title">Icone Impostazioni</string>
+    <string name="theme_customization_settings_icons_summary">Imposta icone personalizzate nelle Impostazioni</string>
     <string name="theme_customization_signal_icon_title">Stile icona segnale</string>
     <string name="theme_customization_signal_icon_summary">Imposta lo stile personalizzato dell\'icona del segnale</string>
     <string name="theme_customization_wifi_icon_title">Stile icona Wi-Fi</string>
@@ -965,6 +993,7 @@
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">Raggio Angolo Notifiche</string>
     <string name="notif_roundness_preview_desc">Anteprima notifica.</string>
+    <!-- USB Dialog -->
     <!-- Toast Styles -->
     <string name="toast_styles">Stile Toast</string>
     <string name="toast_message">Messaggio Toast</string>
