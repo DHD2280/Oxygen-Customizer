@@ -273,7 +273,7 @@ public class StatusbarNotification extends XposedMods {
             mClearAllButton.setImageDrawable(icon);
         } else {
             if (defaultClearAllIcon != null) {
-                mClearAllButton.setImageDrawable(defaultClearAllBg);
+                mClearAllButton.setImageDrawable(defaultClearAllIcon);
             }
             if (defaultClearAllBg != null) {
                 mClearAllButton.setBackground(defaultClearAllBg);
