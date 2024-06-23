@@ -113,12 +113,14 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
-                //IconPackManager.enableOverlay(holder.getBindingAdapterPosition() + 1);
                 for (int i = 1; i <= THEME_KEY.size(); i++) {
                     Prefs.putBoolean("OxygenCustomizerComponent" + mComponentName + i + ".overlay", i == holder.getBindingAdapterPosition());
                     OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
                 }
                 OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                if (OverlayUtil.overlayExist("COMMONSUITH")) {
+                    OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
+                }
 
                 ((Activity) context).runOnUiThread(() -> {
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -145,6 +147,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
 
             Runnable runnable = () -> {
                 OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                if (OverlayUtil.overlayExist("COMMONSUITH")) {
+                    OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
+                }
 
                 ((Activity) context).runOnUiThread(() -> {
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
