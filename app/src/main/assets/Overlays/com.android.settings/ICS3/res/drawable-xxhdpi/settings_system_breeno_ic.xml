@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="36.0dip" android:width="36.0dip" android:viewportWidth="90.0" android:viewportHeight="90.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/monet_color" android:pathData="M45,59C52.732,59 59,52.732 59,45C59,37.268 52.732,31 45,31C37.268,31 31,37.268 31,45C31,52.732 37.268,59 45,59ZM45,55C50.5229,55 55,50.5229 55,45C55,39.4772 50.5229,35 45,35C39.4772,35 35,39.4772 35,45C35,50.5229 39.4772,55 45,55Z" android:fillType="evenOdd" />
+    <path android:fillColor="@color/monet_color" android:pathData="M45,69C58.2548,69 69,58.2548 69,45C69,31.7452 58.2548,21 45,21C31.7452,21 21,31.7452 21,45C21,58.2548 31.7452,69 45,69ZM45,65C56.0457,65 65,56.0457 65,45C65,33.9543 56.0457,25 45,25C33.9543,25 25,33.9543 25,45C25,56.0457 33.9543,65 45,65Z" android:fillType="evenOdd" />
+    <path android:fillColor="@color/monet_color" android:pathData="M5,45C5,67.0914 22.9086,85 45,85C67.0914,85 85,67.0914 85,45C85,22.9086 67.0914,5 45,5C22.9086,5 5,22.9086 5,45ZM9,45C9,25.1178 25.1178,9 45,9C64.8823,9 81,25.1178 81,45C81,64.8823 64.8823,81 45,81C25.1178,81 9,64.8823 9,45Z" android:fillType="evenOdd" />
+</vector>
