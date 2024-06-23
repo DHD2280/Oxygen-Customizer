@@ -353,6 +353,7 @@
     <string name="customize_brightness_slider_title">明るさのスライダーをカスタマイズ</string>
     <string name="brightness_slider_progress_color_title">明るさのスライダーのカラーモード</string>
     <string name="brightness_slider_background_color_title">背景色のカスタマイズ</string>
+    <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">タイルのアニメーション</string>
     <string name="qs_tile_animation_style_title">アニメーションのスタイル</string>
@@ -606,6 +607,8 @@
     <string name="depth_wallpaper_aod_title">AOD 時でも適用</string>
     <string name="depth_wallpaper_model_ready">AI モデルがデバイスにダウンロードされます</string>
     <string name="depth_wallpaper_model_not_available">AI モデルはデバイスにまだ搭載されていません</string>
+    <!-- Media art -->
+    <!-- Album art filter -->
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">警告</string>
     <string name="depth_effect_ok_btn">OK</string>
@@ -974,6 +977,7 @@
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">通知のコーナーの半径</string>
     <string name="notif_roundness_preview_desc">通知のプレビュー。</string>
+    <!-- USB Dialog -->
     <!-- Toast Styles -->
     <string name="toast_styles">トーストのスタイル</string>
     <string name="toast_message">トーストメッセージ</string>

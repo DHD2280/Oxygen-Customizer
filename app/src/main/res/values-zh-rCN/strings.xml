@@ -77,6 +77,7 @@
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Tiles Customizations -->
+    <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <!-- QS Page Transitions -->
     <!-- QS Header Image Strings -->
@@ -99,6 +100,8 @@
     <!-- Gesture Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
+    <!-- Media art -->
+    <!-- Album art filter -->
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
     <!-- Lockscreen 9 Strings -->
@@ -129,6 +132,7 @@
     <!-- Icon pack -->
     <!-- Notification -->
     <!-- Notification Corner Radius -->
+    <!-- USB Dialog -->
     <!-- Toast Styles -->
     <!-- Style List -->
 </resources>

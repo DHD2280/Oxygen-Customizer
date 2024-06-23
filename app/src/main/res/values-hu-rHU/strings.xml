@@ -353,6 +353,8 @@
     <string name="customize_brightness_slider_title">Beállítható, milyen legyen a fényerőszabályozó-csúszka</string>
     <string name="brightness_slider_progress_color_title">A működő fényerő-csúszka színe</string>
     <string name="brightness_slider_background_color_title">Módosítható a háttérszín</string>
+    <!-- Media Tile -->
+    <string name="media_tile">Média-csempe</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Csempeanimációk</string>
     <string name="qs_tile_animation_style_title">Az animáció stílusa</string>
@@ -606,6 +608,20 @@
     <string name="depth_wallpaper_aod_title">\'Mindig bekapcsolva\' módban is</string>
     <string name="depth_wallpaper_model_ready">Az AI modell letöltődik a készülékére</string>
     <string name="depth_wallpaper_model_not_available">Az AI modell még nem elérhető erre a készülékre</string>
+    <!-- Media art -->
+    <string name="media_art_title">A média albumborítója</string>
+    <string name="media_art_summary">Ha elérhető, jelenítse meg a zenei album borítóját</string>
+    <string name="media_art_title_qs_summary">Ha elérhető, csempeháttérként jelenítse meg a zenei album borítóját</string>
+    <string name="albumart_blur_title">A médiaborító elhomályosítási szintje</string>
+    <!-- Album art filter -->
+    <string name="albumart_filter_title">Médiaborító-szűrő</string>
+    <string name="albumart_filter_none">Nincs</string>
+    <string name="albumart_filter_grayscale">Szürkeárnyalatos</string>
+    <string name="albumart_filter_tint">Kiemelőszínhez igazodó</string>
+    <string name="albumart_filter_blur">Homályosítás</string>
+    <string name="albumart_filter_grayblur">Szürkeárnyalatos és homályosított</string>
+    <string name="albumart_filter_custom_tint">Egyéni szín</string>
+    <string name="albumart_tint_intensity_title">Az egyéni szín erőssége</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Figyelem</string>
     <string name="depth_effect_alert_body">Használjon megfelelő záróképernyő-háttérképet, ahol az előtérben lévő elemek nem takarják el a lezárási képernyő teljes óráját, így biztosítva a lezárási képernyő vizuális vonzerejét és funkcionális tisztaságát.\nAz engedélyezés után állítson be egy záróképernyő-háttérképet, az AI-modell automatikusan megpróbálja kibontani a Tárgyat a háttérképről\n\nFigyelmeztetés:%s.</string>
@@ -628,6 +644,8 @@
     <string name="lockscreen_clock_custom_user_image">Egyéni felhasználókép</string>
     <string name="lockscreen_clock_custom_user_image_title">Felhasználókép</string>
     <string name="lockscreen_clock_custom_user_image_summary">Klikkeljen egy képre</string>
+    <string name="lockscreen_clock_custom_image_title">Egyéni kép használata</string>
+    <string name="lockscreen_clock_custom_image_picker_title">Egyedi kép</string>
     <string name="lockscreen_font_line_height_title">Sormagasság</string>
     <string name="lockscreen_clock_custom_margins">Óramargók</string>
     <string name="lockscreen_clock_top_margin_title">Felső margó</string>
@@ -960,6 +978,8 @@
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">Ikoncsomag</string>
     <string name="theme_customization_icon_pack_summary">Egyéni ikoncsomag-stílus állítható be</string>
+    <string name="theme_customization_settings_icons_title">Beállítás ikonok</string>
+    <string name="theme_customization_settings_icons_summary">Egyéni ikonokat állíthat be a Beállításokban</string>
     <string name="theme_customization_signal_icon_title">Térerőkijelzési-stílus</string>
     <string name="theme_customization_signal_icon_summary">Egyéni térerő-ikonstílus állítható be</string>
     <string name="theme_customization_wifi_icon_title">WiFi-ikon-stílus</string>
@@ -974,7 +994,11 @@
     <string name="notif_preview_desc">Értesítés-előnézet.\nKattintson a stílus alkalmazásához.</string>
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">Az értesítés saroksugara</string>
+    <string name="notification_corner_radius_summary">Egyéni sarok-kerekítés állítható be ez értesítésekhez.</string>
     <string name="notif_roundness_preview_desc">Értesítés-előnézet</string>
+    <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">Az USB-párbeszédpanel stílusa</string>
+    <string name="theme_customization_usb_dialog_summary">Egyedi stílust állíthat be a z USB-párbeszédpanelhez.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Buborékstílusok</string>
     <string name="toast_message">Üzenetbuborék</string>
