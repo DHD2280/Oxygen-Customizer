@@ -4,6 +4,7 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView.reloadWeatherBg;
 
 import android.content.Context;
 
@@ -11,6 +12,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 
 public class ThemeEnabler extends XposedMods {
 
@@ -42,6 +44,7 @@ public class ThemeEnabler extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 enableTheme();
+                reloadWeatherBg();
             }
         });
 

@@ -290,6 +290,11 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         instance.updateWeatherBg();
     }
 
+    public static void reloadWeatherBg() {
+        if (instance == null) return;
+        instance.updateWeatherBg();
+    }
+
     private void updateWeatherBg() {
         Drawable bg = null;
             switch (mWeatherBgSelection) {
