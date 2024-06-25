@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="6dp" android:insetRight="6dp" android:insetLeft="6dp" android:insetBottom="6dp"> <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="6dp" android:insetRight="6dp" android:insetLeft="6dp" android:insetBottom="6dp"> <vector xmlns:android="http://schemas.android.com/apk/res/android"
+<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="6dp" android:insetRight="6dp" android:insetLeft="6dp" android:insetBottom="6dp"> <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
@@ -33,4 +33,4 @@
     <path
         android:fillColor="@android:color/white"
         android:pathData="M22.08,8.43c0.15,0.15,0.34,0.22,0.53,0.22s0.38-0.07,0.53-0.22c0.29-0.29,0.29-0.77,0-1.06C20.16,4.39,16.21,2.75,12,2.75 S3.84,4.39,0.86,7.37c-0.29,0.29-0.29,0.77,0,1.06s0.77,0.29,1.06,0C4.62,5.74,8.19,4.25,12,4.25S19.38,5.74,22.08,8.43z" />
-</vector></inset></inset>
+</vector></inset>
