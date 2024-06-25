@@ -12,7 +12,6 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 
 public class ThemeEnabler extends XposedMods {
 
@@ -29,6 +28,8 @@ public class ThemeEnabler extends XposedMods {
         for (int i = 0; i<Xprefs.getInt("UiStylesThemes", 0); i++) {
             if (Xprefs.getBoolean("OxygenCustomizerComponentTH" + (i+1) + ".overlay", false)) {
                 themeNum = (i+1);
+            } else {
+                themeNum = -1;
             }
         }
     }
@@ -51,6 +52,7 @@ public class ThemeEnabler extends XposedMods {
     }
 
     private void enableTheme() {
+        if (themeNum == -1) return;
         XPLauncher.enqueueProxyCommand(proxy -> proxy.applyTheme("OxygenCustomizerComponentTH" + themeNum + ".overlay"));
     }
 
