@@ -2,13 +2,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt">
     <aapt:attr name="android:drawable">
-        <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="6dp" android:insetRight="6dp" android:insetLeft="6dp" android:insetBottom="6dp"> <vector
+        <vector
             android:name="vector"
             android:width="24dp"
             android:height="24dp"
             android:viewportWidth="24"
             android:viewportHeight="24">
-            <group android:name="group_1">
+            <group
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:translateX="3"
+                android:translateY="3">
                 <group android:name="vector_1">
                     <group android:name="group">
                         <path
@@ -30,7 +34,7 @@
                     </group>
                 </group>
             </group>
-            </vector></inset>
+            </vector>
     </aapt:attr>
     <target android:name="path">
         <aapt:attr name="android:animation">
