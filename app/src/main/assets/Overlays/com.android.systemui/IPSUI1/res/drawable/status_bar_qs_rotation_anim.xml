@@ -1,0 +1,71 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:translateX="3"
+                android:translateY="3">
+                <path
+                    android:name="path_3"
+                    android:pathData="M 14.5 10 L 18 10 C 19.5 10 21 11.5 21 13 L 21 18 C 21 19.5 19.5 21 18 21 L 9 21 C 7.5 21 6 19.5 6 18"
+                    android:fillColor="#00000000"
+                    android:strokeColor="#66000000"
+                    android:strokeWidth="2.016"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round"/>
+                <path
+                    android:name="path_4"
+                    android:pathData="M 6 3 L 11 3 C 11.527 3 12.044 3.139 12.5 3.402 C 12.956 3.665 13.335 4.044 13.598 4.5 C 13.861 4.956 14 5.473 14 6 L 14 15 C 14 15.527 13.861 16.044 13.598 16.5 C 13.335 16.956 12.956 17.335 12.5 17.598 C 12.044 17.861 11.527 18 11 18 L 6 18 C 5.205 18 4.441 17.684 3.879 17.121 C 3.316 16.559 3 15.795 3 15 L 3 6 C 3 5.205 3.316 4.441 3.879 3.879 C 4.441 3.316 5.205 3 6 3 Z"
+                    android:fillColor="#00000000"
+                    android:strokeColor="#FF000000"
+                    android:strokeWidth="2.016"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="path_3">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="trimPathStart"
+                    android:duration="424"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="trimPathOffset"
+                    android:startOffset="592"
+                    android:duration="116"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/linear_interpolator"/>
+                <objectAnimator
+                    android:propertyName="trimPathOffset"
+                    android:startOffset="130"
+                    android:duration="116"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/linear_interpolator"/>
+                <objectAnimator
+                    android:propertyName="trimPathStart"
+                    android:startOffset="436"
+                    android:duration="414"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
