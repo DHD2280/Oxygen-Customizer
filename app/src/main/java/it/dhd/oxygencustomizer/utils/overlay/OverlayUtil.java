@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils.overlay;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
+import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NAVBAR;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.content.Context;
@@ -43,6 +44,15 @@ public class OverlayUtil {
 
     public static boolean isOverlayDisabled(String pkgName) {
         return !isOverlayEnabled(pkgName);
+    }
+
+    public static void checkOverlayEnabledAndEnable(String componentName) {
+        List<String> component = Shell.cmd("cmd overlay list | grep \".x..OxygenCustomizerComponent" + componentName + "\"").exec().getOut();
+        if (!component.isEmpty()) {
+            String num = component.get(0).split("OxygenCustomizerComponent" + componentName)[1].split("\\.overlay")[0];
+            enableOverlay("OxygenCustomizerComponent" + componentName + num + ".overlay");
+            Log.d("OverlayUtil", "checkOverlayEnabledAndEnable: Enabled " + componentName + num);
+        }
     }
 
     static boolean isOverlayInstalled(List<String> enabledOverlays, String pkgName) {
@@ -165,11 +175,10 @@ public class OverlayUtil {
                 return res.getDrawable(resId);
             else
                 return null;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("OverlayUtil", "getDrawableFromOverlay: Package Not Found " + e.getMessage());
+            return null;
         }
-        catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static String getStringFromOverlay(Context context, String pkg, String stringName) {
@@ -177,11 +186,16 @@ public class OverlayUtil {
             PackageManager pm = context.getPackageManager();
             Resources res = pm.getResourcesForApplication(pkg);
             int resId = res.getIdentifier(stringName, "string", pkg);
-            return res.getString(resId);
+            if (resId != 0X0)
+                return res.getString(resId);
+            else
+                return null;
         }
         catch (PackageManager.NameNotFoundException e) {
-            Log.e("OverlayUtil", "getStringFromOverlay: " + e.getMessage());
+            Log.e("OverlayUtil", "getStringFromOverlay: Package Not Found" + e.getMessage());
+            return null;
         }
-        return null;
     }
+
+
 }
