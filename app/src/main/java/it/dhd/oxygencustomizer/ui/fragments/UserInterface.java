@@ -6,6 +6,7 @@ import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NAVBAR;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NOTIFICATIONS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_WIFI_ICONS;
+import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,7 +65,7 @@ public class UserInterface extends ControlledPreferenceFragmentCompat {
     public void updateScreen(String key) {
         super.updateScreen(key);
 
-        mRebootPreference.setVisible(!ModuleUtil.checkModuleVersion(getContext()));
+        mRebootPreference.setVisible(!ModuleUtil.checkModuleVersion(getContext()) && !skippedInstallation);
         mUiStyle.setVisible(TOTAL_ANDROID_THEMES > 0);
         mNotifications.setVisible(TOTAL_NOTIFICATIONS > 0);
         mNavBar.setVisible(TOTAL_NAVBAR > 0);
