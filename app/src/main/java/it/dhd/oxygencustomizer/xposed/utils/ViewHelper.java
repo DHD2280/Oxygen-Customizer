@@ -170,6 +170,16 @@ public class ViewHelper {
         }
     }
 
+    public static void recursivelyChangeViewColor(View v, int color) {
+        if (v instanceof ViewGroup vg) {
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                recursivelyChangeViewColor(vg.getChildAt(i), color);
+            }
+        } else {
+            changeViewColor(v, color);
+        }
+    }
+
     private static void checkTagAndChangeColor(View view, String tagContains, int color) {
         Object tagObject = view.getTag();
         if (tagObject != null && tagObject.toString().toLowerCase().contains(tagContains)) {

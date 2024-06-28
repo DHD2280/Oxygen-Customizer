@@ -6,8 +6,12 @@ import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static de.robv.android.xposed.XposedHelpers.setStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR;
@@ -36,17 +40,23 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.recursivelyChangeViewColor;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.text.TextUtils;
+import android.util.JsonReader;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -62,8 +72,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.BlendModeColorFilterCompat;
+import androidx.core.graphics.BlendModeCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
+
+import com.airbnb.lottie.SimpleColorFilter;
+import com.airbnb.lottie.value.LottieFrameInfo;
+import com.airbnb.lottie.value.LottieValueCallback;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -115,6 +134,9 @@ public class QsTileCustomization extends XposedMods {
     private float mMediaQsArtBlurAmount = 7.5f;
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
+    private Class<?> QsColorUtil = null;
+    private Object mOplusQsVolumeIconView = null;
+    private boolean shouldHook = false;
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -188,10 +210,13 @@ public class QsTileCustomization extends XposedMods {
         hookAllConstructors(PersonalityManager, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                // Do something
                 mPersonalityManager = param.thisObject;
             }
         });
+
+        try {
+            QsColorUtil = findClassIfExists("com.oplus.systemui.qs.util.QsColorUtil", lpparam.classLoader);
+        } catch (Throwable ignored) {}
 
         Class<?> OplusQSTileBaseView;
         try {
@@ -199,6 +224,19 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable ignored) {
             OplusQSTileBaseView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
         }
+
+        /*if (QsColorUtil != null) {
+            setStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR", Color.WHITE);
+            setStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_DARK_COLOR", Color.WHITE);
+        }*/
+        /*hookAllMethods(QsColorUtil, "isLightColor", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                setStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR", Color.WHITE);
+                setStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_DARK_COLOR", Color.WHITE);
+
+            }
+        });*/
 
         /*
         TESTING CUSTOMIZATIONS
@@ -375,7 +413,17 @@ public class QsTileCustomization extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
-                // Do something
+                mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
+                mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
+                mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
+                mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
+                setupLabels();
+            }
+        });
+
+        hookAllMethods(OplusQSTileView, "updateTextColor", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
                 mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
                 mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
@@ -387,7 +435,6 @@ public class QsTileCustomization extends XposedMods {
         hookAllMethods(OplusQSTileView, "handleStateChanged", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                // Do something
                 mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
                 mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
                 mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
@@ -442,6 +489,9 @@ public class QsTileCustomization extends XposedMods {
 
                 if (qsBrightnessBackgroundCustomize) {
                     callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                }  else {
+                    int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                    callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
                 }
             }
         });
@@ -457,11 +507,13 @@ public class QsTileCustomization extends XposedMods {
                 if (qsBrightnessSliderColorMode == 2) {
                     colorToApply = qsBrightnessSliderColor;
                 }
-
                 callMethod(slider, "setProgressColor", ColorStateList.valueOf(colorToApply));
 
                 if (qsBrightnessBackgroundCustomize) {
                     callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                }  else {
+                    int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                    callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
                 }
             }
         };
@@ -475,6 +527,88 @@ public class QsTileCustomization extends XposedMods {
             );
 
         } catch (Throwable ignored) {}
+
+        /*try {
+
+            Class<?> EffectiveCompositionFactory = findClass("com.oplus.anim.EffectiveCompositionFactory", lpparam.classLoader);
+            for (Method m : EffectiveCompositionFactory.getDeclaredMethods()) {
+                hookAllMethods(EffectiveCompositionFactory, m.getName(), new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        log("Oxygen Customizer - EffectiveCompositionFactory " + m.getName() + " | " + param.args.length);
+                    }
+                });
+            }
+            hookAllMethods(EffectiveCompositionFactory, "fromJsonReaderSyncInternal", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    String str = (String) param.args[1];
+                    log("Oxygen Customizer - EffectiveCompositionFactory fromJsonReaderSyncInternal | " + str);
+                    if (!TextUtils.isEmpty(str) && str.contains("qs_volume") && param.args.length == 3) {
+                        log("Oxygen Customizer - fromJsonReaderSyncInternal shouldHook | " + str);
+                        shouldHook = true;
+                    }
+                }
+            });
+
+
+
+
+        } catch (Throwable t) {
+            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+        }
+
+        try {
+            Class<?> EffectiveCompositionParser = findClass("com.oplus.anim.parser.EffectiveCompositionParser", lpparam.classLoader);
+            for (Method m : EffectiveCompositionParser.getDeclaredMethods()) {
+                hookAllMethods(EffectiveCompositionParser, m.getName(), new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        log("Oxygen Customizer - EffectiveCompositionParser " + m.getName() + " | " + param.args.length);
+                    }
+                });
+            }
+            hookAllMethods(EffectiveCompositionParser, "parse", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    Object str = param.args[0];
+                    log("Oxygen Customizer - EffectiveCompositionParser parse | " + str);
+                }
+            });
+
+            Class<?> Layer = findClass("com.oplus.anim.model.layer.Layer", lpparam.classLoader);
+            hookAllConstructors(Layer, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    String layerName = param.args[2].toString();
+                    log("Oxygen Customizer - Layer constructor | " + layerName);
+                    /*
+                    public Layer(
+                    0 List<ContentModel> list,
+                    1 EffectiveAnimationComposition effectiveAnimationComposition,
+                    String str,
+                    long j,
+                    LayerType layerType,
+                    long j2,
+                    @Nullable String str2,
+                    List<Mask> list2,
+                    AnimatableTransform animatableTransform,
+                    int i,
+                    int i2,
+                    int i3, float f, float f2, float f3, float f4, @Nullable AnimatableTextFrame animatableTextFrame, @Nullable AnimatableTextProperties animatableTextProperties, List<Keyframe<Float>> list3, MatteType matteType, @Nullable AnimatableFloatValue animatableFloatValue, boolean z, @Nullable BlurEffect blurEffect, @Nullable DropShadowEffect dropShadowEffect) {
+
+                     */
+                    /*if (shouldHook) {
+                        log("Oxygen Customizer - Layer constructor shouldHook | " + layerName);
+                        int color = (int) param.args[11];
+                        log("Oxygen Customizer - Layer constructor color | " + String.format("#%08X", color) + " | " + String.format("#%06X", (0xFFFFFF & color)));
+                        param.args[11] = Color.RED;
+                    }
+                }
+            });
+        } catch (Throwable t) {
+            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+        }*/
 
         try {
             Class<?> PagedTileLayout = findClass("com.android.systemui.qs.PagedTileLayout", lpparam.classLoader);
