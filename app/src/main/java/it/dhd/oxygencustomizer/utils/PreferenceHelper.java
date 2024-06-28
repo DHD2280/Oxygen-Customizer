@@ -81,6 +81,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
@@ -617,6 +619,8 @@ public class PreferenceHelper {
             case "BIconTransitColors" -> !instance.mPreferences.getBoolean("BIconColorful", false);
             case "lockscreen_fp_remove_icon" -> !instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             case "lockscreen_fp_custom_icon" -> !instance.mPreferences.getBoolean("lockscreen_fp_remove_icon", false);
+            case QS_TILE_HIDE_LABELS -> !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
+            case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED -> !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
             default -> true;
         };
     }
