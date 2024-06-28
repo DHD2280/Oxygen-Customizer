@@ -9,15 +9,15 @@
             android:viewportWidth="24"
             android:viewportHeight="24">
             <group
-                android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:translateX="3"
-                android:translateY="3">
+                android:scaleX="0.668"
+                android:scaleY="0.668"
+                android:translateX="4"
+                android:translateY="4">
                 <group android:name="vector_1">
-                    <group android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:translateX="3"
-                android:translateY="3">
+                    <group android:scaleX="0.668"
+                android:scaleY="0.668"
+                android:translateX="4"
+                android:translateY="4">
                         <path
                             android:name="path"
                             android:pathData="M 14.92 4.78 L 20.42 15.1 C 22.49 20.6 15.19 23.89 12 18.02 C 8.81 23.89 1.51 20.6 3.58 15.1 L 9.08 4.78 C 10.57 2.21 13.68 2.26 14.92 4.78 Z"

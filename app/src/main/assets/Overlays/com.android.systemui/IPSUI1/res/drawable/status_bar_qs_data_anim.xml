@@ -8,10 +8,10 @@
             android:height="24dp"
             android:viewportWidth="24"
             android:viewportHeight="24">
-            <group android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:translateX="3"
-                android:translateY="3">
+            <group android:scaleX="0.668"
+                android:scaleY="0.668"
+                android:translateX="4"
+                android:translateY="4">
                 <path
                     android:name="path_3"
                     android:pathData="M 6.9 5.76 L 3.67 8.88 Q 2.36 10 2.36 11.5 L 2.36 14.83 C 2.36 16.35 3.88 17.86 5.39 17.86 L 8.5 17.86 Q 9.86 17.86 11.06 16.72 L 16.72 11.06"
