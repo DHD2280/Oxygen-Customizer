@@ -209,6 +209,12 @@ public class StatusbarClock extends XposedMods {
         Class<?> ClockClass = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
         Class<?> CollapsedStatusBarFragmentClass = findClass("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
         Class<?> TaskStackListenerImpl = findClass("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
+        Class<?> StatClock = null;
+        try {
+            StatClock = findClass("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            log(TAG + "StatClock not found");
+        }
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -281,6 +287,22 @@ public class StatusbarClock extends XposedMods {
                     }
                 });
 
+        if (StatClock != null) {
+            try {
+                hookAllMethods(StatClock, "measureText", new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args.length >= 2 && param.args[1] instanceof Float) {
+                            param.args[1] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mClockSize, mContext.getResources().getDisplayMetrics());
+                            ;
+                        }
+                    }
+                });
+            } catch (Throwable ignored) {
+                log(TAG + "measureText in StatClock not found");
+            }
+        }
+
         findAndHookMethod(CollapsedStatusBarFragmentClass, "animateShow",
                 View.class, boolean.class,
                 new XC_MethodHook() {
@@ -318,6 +340,15 @@ public class StatusbarClock extends XposedMods {
                     autoHideHandler.postDelayed(() -> autoHideClock(param.thisObject), mShowDuration * 1000);
                 }
                 param.setResult(null);
+            }
+        });
+
+        hookAllMethods(ClockClass, "updateClock", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (param.thisObject != mClockView)
+                    return;
+                setClockSize();
             }
         });
 
