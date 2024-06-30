@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_SETTINGS_ICONS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SETTINGS_ICONS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -15,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -49,8 +47,9 @@ public class SettingsIcons extends BaseFragment {
 
     private IconsAdapter initSettingsIconsItems() {
         ArrayList<IconModel> settingsIcons = new ArrayList<>();
-        for (int i = 0; i< LIST_SETTINGS_ICONS.size(); i++) {
-            String pkgName = LIST_SETTINGS_ICONS.get(i).split("]")[1].replaceAll(" ", "");
+        List<String> pack = getOverlayForComponent("ICS");
+        for (int i = 0; i< pack.size(); i++) {
+            String pkgName = pack.get(i).split("]")[1].replaceAll(" ", "");
             settingsIcons.add(
                     new IconModel(
                             getStringFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "theme_name"),
@@ -59,7 +58,7 @@ public class SettingsIcons extends BaseFragment {
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_personalise_ic"),
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_power_manage_ic"),
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_system_breeno_ic"),
-                            LIST_SETTINGS_ICONS.get(i).contains("[x]")));
+                            pack.get(i).contains("[x]")));
         }
         settingsIcons.sort(Comparator.comparing(IconModel::getName));
         return new IconsAdapter(requireContext(), settingsIcons, loadingDialog, "ICS", false);

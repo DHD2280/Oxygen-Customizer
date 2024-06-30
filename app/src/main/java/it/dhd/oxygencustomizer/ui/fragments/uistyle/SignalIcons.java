@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
-import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_SIGNAL_ICONS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -48,8 +47,9 @@ public class SignalIcons extends BaseFragment {
 
     private IconsAdapter initSignalIconsItems() {
         ArrayList<IconModel> signalIcons = new ArrayList<>();
-        for (int i = 0; i< LIST_SIGNAL_ICONS.size(); i++) {
-            String pkgName = LIST_SIGNAL_ICONS.get(i).split("]")[1].replaceAll(" ", "");
+        List<String> pack = getOverlayForComponent("SGIC");
+        for (int i = 0; i< pack.size(); i++) {
+            String pkgName = pack.get(i).split("]")[1].replaceAll(" ", "");
             signalIcons.add(
                     new IconModel(
                             getStringFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "theme_name"),
@@ -58,7 +58,7 @@ public class SignalIcons extends BaseFragment {
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_signal_signal_lte_single_1"),
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_signal_signal_lte_single_2"),
                             getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_signal_signal_lte_single_3"),
-                            LIST_SIGNAL_ICONS.get(i).contains("[x]")));
+                            pack.get(i).contains("[x]")));
         }
         signalIcons.sort(Comparator.comparing(IconModel::getName));
         return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", "COMMONSGIC", true);

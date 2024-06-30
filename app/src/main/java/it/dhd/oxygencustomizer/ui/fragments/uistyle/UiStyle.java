@@ -23,8 +23,6 @@ import it.dhd.oxygencustomizer.ui.adapters.ThemeAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.ThemeModel;
-import it.dhd.oxygencustomizer.utils.PrefManager;
-import it.dhd.oxygencustomizer.utils.Prefs;
 
 public class UiStyle extends BaseFragment {
 

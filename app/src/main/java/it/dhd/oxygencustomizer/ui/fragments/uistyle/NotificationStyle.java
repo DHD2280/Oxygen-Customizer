@@ -1,30 +1,20 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NOTIFICATIONS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
-import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
-import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
-import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.NotificationAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.ui.models.NotificationModel;
 
 public class NotificationStyle extends BaseFragment {

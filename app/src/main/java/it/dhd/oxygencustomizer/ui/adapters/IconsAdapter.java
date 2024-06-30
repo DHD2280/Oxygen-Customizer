@@ -28,7 +28,6 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> {
@@ -174,7 +173,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                     mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition()+1);
                 } else {
                     for (int i = 1; i <= itemList.size(); i++) {
-                        itemList.get(i-1).setEnabled(false);
+                        itemList.get(i-1).setEnabled(i == holder.getBindingAdapterPosition()+1);
                         OverlayUtil.disableOverlay(itemList.get(i-1).getPackageName());
                     }
                     if (!TextUtils.isEmpty(mAdditionalComponent))

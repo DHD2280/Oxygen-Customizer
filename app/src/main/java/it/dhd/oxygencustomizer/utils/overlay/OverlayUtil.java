@@ -38,6 +38,10 @@ public class OverlayUtil {
         return Shell.cmd("cmd overlay list |  grep -E '. ..OxygenCustomizerComponent' | sed -E 's/^. ..//'").exec().getOut();
     }
 
+    public static List<String> getOverlayForComponent(String componentName) {
+        return Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponent" + componentName + "'").exec().getOut();
+    }
+
     public static boolean isOverlayEnabled(String pkgName) {
         return Shell.cmd("[[ $(cmd overlay list | grep -o '\\[x\\] " + pkgName + "') ]] && echo 1 || echo 0").exec().getOut().get(0).equals("1");
     }

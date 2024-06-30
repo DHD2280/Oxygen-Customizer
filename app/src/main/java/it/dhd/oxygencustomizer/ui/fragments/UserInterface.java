@@ -18,6 +18,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class UserInterface extends ControlledPreferenceFragmentCompat {
 
@@ -66,11 +67,11 @@ public class UserInterface extends ControlledPreferenceFragmentCompat {
         super.updateScreen(key);
 
         mRebootPreference.setVisible(!ModuleUtil.checkModuleVersion(getContext()) && !skippedInstallation);
-        mUiStyle.setVisible(TOTAL_ANDROID_THEMES > 0);
+        mUiStyle.setVisible(!OverlayUtil.getOverlayForComponent("TH").isEmpty());
         mNotifications.setVisible(TOTAL_NOTIFICATIONS > 0);
         mNavBar.setVisible(TOTAL_NAVBAR > 0);
-        mSignalIcons.setVisible(TOTAL_SIGNAL_ICONS > 0);
-        mWifiIcons.setVisible(TOTAL_WIFI_ICONS > 0);
+        mSignalIcons.setVisible(!OverlayUtil.getOverlayForComponent("SGIC").isEmpty());
+        mWifiIcons.setVisible(!OverlayUtil.getOverlayForComponent("WIFI").isEmpty());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ICON_PACKS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ICON_PACKS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.checkOverlayEnabledAndEnable;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;

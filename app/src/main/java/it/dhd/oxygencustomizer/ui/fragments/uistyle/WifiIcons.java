@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
-import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_WIFI_ICONS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_WIFI_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
-import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
@@ -50,7 +46,7 @@ public class WifiIcons extends BaseFragment {
 
     private IconsAdapter initWifiIconsItems() {
         ArrayList<IconModel> wifiIcons = new ArrayList<>();
-        List<String> packs = LIST_WIFI_ICONS;
+        List<String> packs = getOverlayForComponent("WIFI");
         for (int i = 0; i< packs.size(); i++) {
             String pkgName = packs.get(i).split("]")[1].replaceAll(" ", "");
             wifiIcons.add(
