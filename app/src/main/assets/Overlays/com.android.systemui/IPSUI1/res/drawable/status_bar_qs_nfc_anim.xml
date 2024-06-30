@@ -8,9 +8,11 @@
             android:height="24dp"
             android:viewportWidth="24"
             android:viewportHeight="24">
-            <group android:name="group_3">
-                <group android:name="vector_2">
-                    <group android:name="group_2">
+            <group
+                android:scaleX="0.668"
+                android:scaleY="0.668"
+                android:pivotX="12"
+                android:pivotY="12">
                         <path
                             android:name="path_3"
                             android:pathData="M 10.83 8.54 C 11.443 9.52 11.774 10.713 11.774 11.94 C 11.774 13.167 11.443 14.36 10.83 15.34 L 3.92 8.54 C 3.295 9.516 2.96 10.717 2.969 11.95 C 2.978 13.183 3.331 14.378 3.97 15.34"
@@ -35,8 +37,6 @@
                             android:strokeWidth="2.016"
                             android:strokeLineCap="round"
                             android:strokeLineJoin="round"/>
-                    </group>
-                </group>
             </group>
         </vector>
     </aapt:attr>
