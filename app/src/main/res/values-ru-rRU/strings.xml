@@ -358,7 +358,7 @@
     <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
     <!-- Media Tile -->
-    <string name="media_tile">Плитка Медиа</string>
+    <string name="media_tile">Плитка медиа</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">Анимация плиток</string>
     <string name="qs_tile_animation_style_title">Стиль анимации</string>
@@ -580,8 +580,8 @@
     <string name="torch_long_press_volbtn_torch_timeout_title">Тайм-аут</string>
     <string name="torch_long_press_volbtn_torch_use_proximity">Используйте датчик приближения</string>
     <string name="volume_buttons_category_title">Кнопки регулировки громкости</string>
-    <string name="volbtn_music_controls_title">Кнопка регулировки громкости для управления музыкой</string>
-    <string name="volbtn_music_controls_summary">Управляйте воспроизведением музыки с помощью кнопок регулировки громкости</string>
+    <string name="volbtn_music_controls_title">Управление музыкой</string>
+    <string name="volbtn_music_controls_summary">Управляйте воспроизведением музыки зажатием кнопок громкости на экране блокировки</string>
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Экран блокировки</string>
     <string name="lockscreen_hide_carrier">Скрыть оператора связи</string>
@@ -776,7 +776,7 @@
     <string name="volume_panel_position_left">Слева</string>
     <string name="volume_panel_custom_title">Настройки панели регулировки громкости</string>
     <string name="volume_panel_custom_summary">Настройка цветов панели регулировки громкости</string>
-    <string name="volume_disable_volume_warning">Отключить предупреждение о громкости</string>
+    <string name="volume_disable_volume_warning">Отключить предупреждение</string>
     <string name="volume_dialog_timeout_title">Тайм-аут панели регулировки громкости</string>
     <!-- Volume Panel Customizations -->
     <string name="volume_panel_custom_enabled_title">Настройка цвета хода выполнения слайдера</string>
@@ -994,7 +994,7 @@
     <string name="theme_customization_icon_pack_title">Пакет значков</string>
     <string name="theme_customization_icon_pack_summary">Смена пакета значков</string>
     <string name="theme_customization_settings_icons_title">Стиль настроек</string>
-    <string name="theme_customization_settings_icons_summary">Установите собственные значки в настройках</string>
+    <string name="theme_customization_settings_icons_summary">Смените значки в настройках</string>
     <string name="theme_customization_signal_icon_title">Стиль значка сети</string>
     <string name="theme_customization_signal_icon_summary">Смена значка сети</string>
     <string name="theme_customization_wifi_icon_title">Стиль значка Wi-Fi</string>
@@ -1002,14 +1002,14 @@
     <string name="theme_customization_navbar_title">Стиль панели навигации</string>
     <string name="theme_customization_navbar_summary">Смена стиля панели навигации</string>
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
-    <string name="theme_customization_toast_frame_summary">Изменить стиль всплывающих уведомлений</string>
+    <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
     <!-- Notification -->
     <string name="notification_styles">Стиль уведомлений</string>
     <string name="notification_styles_desc">Смена стиля уведомлений</string>
     <string name="notif_preview_desc">Предварительный просмотр уведомления.\nНажмите, чтобы применить этот стиль.</string>
     <!-- Notification Corner Radius -->
-    <string name="notification_corner_radius_title">Радиус ушла уведомления</string>
-    <string name="notification_corner_radius_summary">Установите собственный радиус угла для уведомлений.</string>
+    <string name="notification_corner_radius_title">Радиус скругления уведомлений</string>
+    <string name="notification_corner_radius_summary">Смена угла скруглений уведомлений.</string>
     <string name="notif_roundness_preview_desc">Предварительный просмотр уведомлений.</string>
     <!-- USB Dialog -->
     <string name="theme_customization_usb_dialog_title">Стиль диалогового окна USB</string>
