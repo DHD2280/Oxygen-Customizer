@@ -66,11 +66,11 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Для применения настроек требуется перезагрузка системы</string>
     <!-- General Strings -->
-    <string name="battery_charging">Зарядка аккумулятора</string>
+    <string name="battery_charging">Зарядка батареи</string>
     <string name="battery_discharging">Разрядка аккумулятора</string>
     <string name="battery_full">Батарея полностью заряжена</string>
     <string name="battery_level_percentage">Уровень заряда батареи</string>
-    <string name="seconds">Секунд</string>
+    <string name="seconds">Секунды</string>
     <string name="milliseconds">Миллисекунды</string>
     <string name="steps">Шаги</string>
     <string name="general_color_accent1">Акцент 1</string>
@@ -84,16 +84,14 @@
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
     <string name="searchpreference_history_entry">Запись в истории</string>
-    <string name="searchpreference_more">Больше</string>
+    <string name="searchpreference_more">Ещё</string>
     <string name="searchpreference_clear_history">Очистить историю </string>
-    <string name="searchpreference_no_results">Никаких результатов</string>
+    <string name="searchpreference_no_results">Нет результатов</string>
     <!-- Menu Strings -->
-    <string name="restart_scopes">Перезапуск областей видимости</string>
+    <string name="restart_scopes">Область перезапуска</string>
     <string name="restart_module">Перезапуск процессов, ограниченных областью действия</string>
-    <string name="restart_page_scope">Перезапустите только эту область страницы</string>
-    <string name="restart_scope_message">Вы уверены, что хотите перезапустить все процессы, кроме системной платформы?
-Используйте это, если модуль не работает!
-Убедитесь, что все соответствующие области проверены!</string>
+    <string name="restart_page_scope">Перезапустите только эту область</string>
+    <string name="restart_scope_message">Вы уверены, что хотите перезапустить все процессы с заданной областью, кроме системной платформы?\nИспользуйте это,\n если модуль не работает!\Убедитесь, что все соответствующие области проверены!</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">Пользовательский Интерфейс</string>
     <string name="navbar_mods">Модов</string>
@@ -111,14 +109,14 @@
     <!-- General Strings -->
     <string name="general_on">Вкл</string>
     <string name="general_off">Откл</string>
-    <string name="accent_color">Акцентный цвет</string>
+    <string name="accent_color">Цвет акцента</string>
     <string name="custom_color">Пользовательский цвет</string>
     <string name="battery_info_button_title">Информация о батарее…</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">Параметры строки состояния</string>
     <string name="statusbar_double_tap_sleep">Дважды нажмите, чтобы перейти в спящий режим</string>
     <string name="status_bar_toggle_brightness_title">Регулировка яркости</string>
-    <string name="status_bar_toggle_brightness_summary">Отрегулируйте яркость, перемещая ее по строке состояния</string>
+    <string name="status_bar_toggle_brightness_summary">Регулировка яркости свайпом по строке состояния</string>
     <string name="statusbar_batterybar_title">Настройки панели управления аккумулятором</string>
     <string name="statusbar_battery_icon_options">Значок батареи</string>
     <string name="statusbar_icons">Значки в строке состояния</string>
@@ -136,7 +134,7 @@
     <string name="remove_dev_mode_notification">Удалить уведомление о режиме разработки</string>
     <string name="remove_flashlight_notification">Удалить уведомление о фонарике</string>
     <string name="remove_low_battery_notification">Удалить уведомление о низком заряде батареи</string>
-    <string name="notif_default_expansion_title">Расширение уведомлений по умолчанию</string>
+    <string name="notif_default_expansion_title">Раскрытие уведомлений по умолчанию</string>
     <string name="notif_always_expand">Всегда разворачивать</string>
     <string name="notif_always_collapse">Всегда сворачивать</string>
     <string name="customize_clear_all_button">Настроить кнопку Очистить все</string>
@@ -174,7 +172,7 @@
     <string name="status_bar_date_style">Стиль даты</string>
     <string name="status_bar_date_style_normal">Нормальный</string>
     <string name="status_bar_date_style_lowercase">Lowercase</string>
-    <string name="status_bar_date_style_uppercase">Верхний регистр</string>
+    <string name="status_bar_date_style_uppercase">Заглавные</string>
     <string name="status_bar_date_format_custom">Custom java format</string>
     <string name="status_bar_date_string_edittext_title">Должно быть в формате даты, например. ММ/дд/гг</string>
     <string name="status_bar_date_string_edittext_summary">Введите строку</string>
@@ -186,14 +184,14 @@
     <string name="status_bar_clock_color_title">Пользовательский цвет часов</string>
     <string name="status_bar_custom_clock_color_title">Пользовательский цвет часов</string>
     <string name="status_bar_custom_clock_color_summary">Цвет часов</string>
-    <string name="status_bar_clock_background_chip_title">Фоновый чип</string>
-    <string name="status_bar_clock_background_chip_style_title">Фоновый стиль чипа</string>
+    <string name="status_bar_clock_background_chip_title">Фоновая подложка</string>
+    <string name="status_bar_clock_background_chip_style_title">Фоновый стиль подложки</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">Заполнение строки состояния</string>
-    <string name="statusbar_top_padding">Верхняя обивка</string>
+    <string name="statusbar_top_padding">Отступ сверху</string>
     <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
     <string name="sb_padding_summary">Установка значений min/max эквивалентна настройкам устройства по умолчанию</string>
-    <string name="statusbar_left_padding">Левая прокладка</string>
+    <string name="statusbar_left_padding">Отступ слева</string>
     <string name="statusbar_right_padding">Правильное заполнение</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Включить индикатор заряда батареи</string>
@@ -201,19 +199,19 @@
     <string name="BB_move_SB_bottom_title">В нижней части строки состояния</string>
     <string name="BB_colorful_title">Сделайте его красочным</string>
     <string name="BB_Opacity_title">Непрозрачность полосы</string>
-    <string name="BB_center_align_title">Выровненный по центру</string>
-    <string name="BB_Thickness_title">Толщина стержня</string>
-    <string name="BB_indicate_charging">Указывает на зарядку</string>
-    <string name="BB_indicate_power_save">Указывает на экономию электроэнергии</string>
-    <string name="BB_indicate_fast_charging">Указывает на быструю зарядку</string>
+    <string name="BB_center_align_title">Выравнивание по центру</string>
+    <string name="BB_Thickness_title">Толщина строки</string>
+    <string name="BB_indicate_charging">Индикатор зарядки</string>
+    <string name="BB_indicate_power_save">Индикатор энергосбережения</string>
+    <string name="BB_indicate_fast_charging">Индикатор быстрой зарядки</string>
     <string name="BB_warning_level">Диапазон уровней предупреждения</string>
     <string name="BB_warning_tip">Установите оба значения в 0, чтобы отключить цвета на основе уровней</string>
     <string name="BB_batteryCriticalColor">Цвет критического уровня</string>
     <string name="BB_batteryWarningColor">Цвет предупреждающего уровня</string>
     <string name="BB_batteryChargingColor">Цвет зарядки</string>
-    <string name="BB_batteryPowerSaveColor">Энергосберегающий цвет</string>
+    <string name="BB_batteryPowerSaveColor">Цвет энергосбережения</string>
     <string name="BB_batteryFastChargingColor">Цвет быстрой зарядки</string>
-    <string name="BB_transit_colors">Оттеняйте цвета в пределах этого диапазона</string>
+    <string name="BB_transit_colors">Цвета оттенков между этим диапазоном</string>
     <string name="colored_battery_percentage_title">Окрашенный процент заряда батареи во время зарядки</string>
     <!-- Battery Icon Strings -->
     <string name="battery_icon_customize_title">Настройка значка батареи</string>
@@ -224,7 +222,7 @@
     <string name="battery_width_title">Ширина батареи</string>
     <string name="battery_height_title">Высота батареи</string>
     <string name="battery_margin_title">Запас заряда батареи</string>
-    <string name="hide_battery_title">Спрятать батарею</string>
+    <string name="hide_battery_title">Скрыть батарею</string>
     <string name="hide_battery_desc">Сохраняйте только значок зарядки и процентное соотношение</string>
     <string name="custom_charging_icon_title">Пользовательский значок зарядки</string>
     <string name="custom_charging_icon_desc">Измените значок зарядки на пользовательский значок</string>
@@ -249,8 +247,8 @@
     <string name="charging_fill_color_desc">Изменение цвета заряжаемого аккумулятора</string>
     <string name="fast_charging_fill_color_title">Цвет заливки при быстрой зарядке</string>
     <string name="fast_charging_fill_color_desc">Изменение цвета аккумулятора для быстрой зарядки</string>
-    <string name="powersave_fill_color_title">Экономичный цвет заливки</string>
-    <string name="powersave_fill_color_desc">Измените цвет батареи powersave</string>
+    <string name="powersave_fill_color_title">Цвет заливки энергосбережения</string>
+    <string name="powersave_fill_color_desc">Изменить цвет батареи при энергосбережении</string>
     <string name="powersave_indicator_color_title">Цвет индикатора энергосбережения</string>
     <string name="powersave_indicator_color_desc">Измените цвет индикатора энергосбережения</string>
     <string name="battery_icon_margins">Поля значка батареи</string>
@@ -260,49 +258,49 @@
     <string name="rotate_layout_desc">Поверните расположение батареи на 180 градусов</string>
     <string name="hide_percentage_title">Скрыть процентное соотношение</string>
     <string name="hide_percentage_desc">Скрыть текст о проценте заряда батареи</string>
-    <string name="inside_percentage_title">Внутренний процент</string>
+    <string name="inside_percentage_title">Проценты внутри</string>
     <string name="inside_percentage_desc">Переместить процентное соотношение на внутренний значок батареи</string>
-    <string name="battery_icon_color">Цвета значков батарей</string>
+    <string name="battery_icon_color">Цвета значков батареи</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_stock_prefs">Настройки батареи по умолчанию</string>
-    <string name="battery_edit_percentage_size_title">Настройка процентного размера</string>
-    <string name="battery_percentage_size">Процентный размер</string>
+    <string name="battery_edit_percentage_size_title">Настройка размера процентов</string>
+    <string name="battery_percentage_size">Размер процентов</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">По умолчанию</string>
     <string name="battery_landscape_r_default">Пейзаж R По умолчанию</string>
     <string name="battery_landscape_l_default">Пейзаж L По умолчанию</string>
     <string name="battery_landscape_r_custom">Ландшафт R Пользовательский</string>
-    <string name="battery_landscape_l_custom">Ландшафт L Нестандартный</string>
-    <string name="battery_portrait_capsule">Portrait Capsule</string>
-    <string name="battery_portrait_lorn">Portrait Lorn</string>
-    <string name="battery_portrait_mx">Portrait Mx</string>
-    <string name="battery_portrait_airoo">Portrait Airoo</string>
-    <string name="battery_landscape_r_style_a">Пейзаж в стиле А</string>
+    <string name="battery_landscape_l_custom">Пейзаж L Пользовательский</string>
+    <string name="battery_portrait_capsule">Портретная Капсула</string>
+    <string name="battery_portrait_lorn">Портрет Лорна</string>
+    <string name="battery_portrait_mx">Портрет Mx</string>
+    <string name="battery_portrait_airoo">Портрет Airoo</string>
+    <string name="battery_landscape_r_style_a">Пейзаж R Стиль A</string>
     <string name="battery_landscape_l_style_a">Пейзаж в стиле А</string>
-    <string name="battery_landscape_r_style_b">Пейзаж в стиле R B</string>
-    <string name="battery_landscape_l_style_b">Пейзаж L В стиле B</string>
-    <string name="battery_landscape_ios_15">Ландшафтная версия iOS 15</string>
-    <string name="battery_landscape_ios_16">Ландшафтная версия iOS 16</string>
-    <string name="battery_portrait_origami">Portrait Origami</string>
-    <string name="battery_landscape_smiley">Пейзажный смайлик</string>
-    <string name="battery_landscape_miui_pill">Пейзажная таблетка MIUI</string>
+    <string name="battery_landscape_r_style_b">Пейзаж R Стиль B</string>
+    <string name="battery_landscape_l_style_b">Пейзаж L Стиль B</string>
+    <string name="battery_landscape_ios_15">Пейзаж iOS 15</string>
+    <string name="battery_landscape_ios_16">Пейзаж iOS 16</string>
+    <string name="battery_portrait_origami">Портрет Оригами</string>
+    <string name="battery_landscape_smiley">Пейзаж Смайлик</string>
+    <string name="battery_landscape_miui_pill">Пейзаж MIUI Pill</string>
     <string name="battery_landscape_l_coloros">Пейзаж L ColorOS</string>
-    <string name="battery_landscape_r_coloros">Пейзажные цвета</string>
-    <string name="battery_landscape_battery_a">Ландшафтная батарея A</string>
-    <string name="battery_landscape_battery_b">Ландшафтная батарея B</string>
-    <string name="battery_landscape_battery_c">Ландшафтная батарея C</string>
-    <string name="battery_landscape_battery_d">Ландшафтная батарея D</string>
-    <string name="battery_landscape_battery_e">Ландшафтная батарея E</string>
-    <string name="battery_landscape_battery_f">Ландшафтная батарея F</string>
-    <string name="battery_landscape_battery_g">Ландшафтная батарея G</string>
-    <string name="battery_landscape_battery_h">Ландшафтная батарея H</string>
-    <string name="battery_landscape_battery_i">Ландшафтная батарея I</string>
-    <string name="battery_landscape_battery_j">Ландшафтная батарея J</string>
-    <string name="battery_landscape_battery_k">Ландшафтная батарея K</string>
-    <string name="battery_landscape_battery_l">Ландшафтная батарея L</string>
-    <string name="battery_landscape_battery_m">Ландшафтная батарея, М</string>
-    <string name="battery_landscape_battery_n">Ландшафтная батарея N</string>
-    <string name="battery_landscape_battery_o">Ландшафтная батарея O</string>
+    <string name="battery_landscape_r_coloros">Пейзаж R ColorOS</string>
+    <string name="battery_landscape_battery_a">Пейзаж батарея А</string>
+    <string name="battery_landscape_battery_b">Пейзаж батарея B</string>
+    <string name="battery_landscape_battery_c">Пейзаж Батарея С</string>
+    <string name="battery_landscape_battery_d">Пейзаж батарея D</string>
+    <string name="battery_landscape_battery_e">Пейзаж батарея E</string>
+    <string name="battery_landscape_battery_f">Пейзаж батарея F</string>
+    <string name="battery_landscape_battery_g">Пейзаж Батарея G</string>
+    <string name="battery_landscape_battery_h">Пейзаж Батарея H</string>
+    <string name="battery_landscape_battery_i">Пейзаж батарея I</string>
+    <string name="battery_landscape_battery_j">Пейзаж батарея J</string>
+    <string name="battery_landscape_battery_k">Пейзаж батарея K</string>
+    <string name="battery_landscape_battery_l">Пейзаж батарея L</string>
+    <string name="battery_landscape_battery_m">Пейзаж батарея, М</string>
+    <string name="battery_landscape_battery_n">Пейзаж батарея N</string>
+    <string name="battery_landscape_battery_o">Пейзаж батарея O</string>
     <string name="battery_circle">Круговая батарея</string>
     <string name="battery_dotted_circle">Батарея в виде пунктирного круга</string>
     <!-- Statusbar Icons Strings -->
@@ -315,10 +313,10 @@
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown">Быстрое опускание</string>
     <string name="quick_pulldown_length">Длина быстрого вытягивания</string>
-    <string name="quick_settings_side">Быстро Опускающаяся сторона</string>
+    <string name="quick_settings_side">Сторона быстрого опускания</string>
     <string name="quick_pulldown_side_left">Слева</string>
     <string name="quick_pulldown_side_right">Справа</string>
-    <string name="quick_collapse">Быстрый коллапс</string>
+    <string name="quick_collapse">Быстрое сворачивание</string>
     <string name="my_device">Мои Устройства</string>
     <string name="my_device_title">Принудительно использовать мои устройства</string>
     <string name="my_device_summary">Принудительно отображать «Мои устройства» в Центре управления.\nПРИМЕЧАНИЕ. Для правильного использования этой функции необходим новый Центр управления и Мои устройства.</string>
@@ -347,7 +345,7 @@
     <string name="quick_settings_tiles_customize_inactive_color">QS Неактивный цвет</string>
     <string name="qs_tile_disabled_color_title">Настройка цвета отключенной плитки</string>
     <string name="quick_settings_tiles_customize_disabled_color">Цвет QS отключен</string>
-    <string name="quick_settings_tiles_customize_labels">Этикетки QS</string>
+    <string name="quick_settings_tiles_customize_labels">Ярлыки QS</string>
     <string name="quick_settings_tiles_customize_hide_labels">Скрыть метки QS</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Настройка цвета текста QS</string>
     <string name="quick_settings_tiles_customize_labels_color">Цвет текста QS</string>
@@ -414,15 +412,15 @@
     <string name="qs_header_static_provider_title">Статичное изображение</string>
     <string name="qs_header_daylight_provider_title">Коллекция изображений</string>
     <string name="qs_header_file_provider_title">Пользовательское изображение</string>
-    <string name="header_creator_label">Создатель:</string>
+    <string name="header_creator_label">Автор\u003a </string>
     <string name="download_wallpaper_list_failed_notice">Не удалось загрузить каталог обоев</string>
     <string name="download_header_notice">Заголовок для загрузки</string>
     <string name="download_header_failed_notice">Не удалось загрузить заголовок</string>
     <string name="custom_header_image_notice">Набор изображений заголовка</string>
     <string name="header_location_online">Онлайн</string>
-    <string name="header_location_local">Local</string>
+    <string name="header_location_local">Локально</string>
     <string name="no_network_message">Нет подключения к сети</string>
-    <string name="qs_header_image_landscape_enabled_title">Показывать на ландшафте</string>
+    <string name="qs_header_image_landscape_enabled_title">Показать в альбомной ориентации</string>
     <string name="qs_header_image_landscape_enabled_summary">Отображение изображения заголовка QS в альбомном режиме</string>
     <string name="qs_header_image_tint_title">Оттенок</string>
     <string name="qs_header_image_tint_none">Никакого оттенка</string>
@@ -435,8 +433,8 @@
     <string name="qs_header_image_height_portrait_title">Высота</string>
     <string name="qs_header_image_alpha_title">Непрозрачность</string>
     <string name="qs_header_image_bottom_fade_title">Нижнее затухание</string>
-    <string name="qs_header_image_padding_side_title">Боковая обивка</string>
-    <string name="qs_header_image_padding_top_title">Верхняя обивка</string>
+    <string name="qs_header_image_padding_side_title">Отступ сбоку</string>
+    <string name="qs_header_image_padding_top_title">Отступ сверху</string>
     <string name="file_header_select_title">Выберите локальное изображение</string>
     <string name="file_header_select_summary">Выберите изображение из хранилища</string>
     <string name="qs_header_image_zoomtofit_title">Увеличьте Масштаб по Размеру</string>
@@ -449,13 +447,13 @@
     <string name="qs_header_clock_enabled_summary">Добавьте пользовательские часы на панель QS</string>
     <string name="qs_header_clock_custom">Стиль часов</string>
     <string name="qs_header_clock_custom_summary">Выберите стиль по своему усмотрению.</string>
-    <string name="qs_header_clock_custom_user">Используйте пользовательское имя пользователя</string>
-    <string name="qs_header_clock_custom_user_title">User Name</string>
-    <string name="qs_header_clock_custom_user_image">Используйте пользовательский образ пользователя</string>
-    <string name="qs_header_clock_custom_user_image_title">User Image</string>
+    <string name="qs_header_clock_custom_user">Используйте собственное имя пользователя</string>
+    <string name="qs_header_clock_custom_user_title">Имя пользователя</string>
+    <string name="qs_header_clock_custom_user_image">Используйте собственное имя пользователя</string>
+    <string name="qs_header_clock_custom_user_image_title">Изображение пользователя</string>
     <string name="qs_header_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
     <string name="qs_header_stock_clock_prefs">Настройки стандартных часов</string>
-    <string name="qs_header_stock_clock_red_one_title">Поведение Красного Одина</string>
+    <string name="qs_header_stock_clock_red_one_title">Поведение Красного Индикатора</string>
     <string name="qs_header_stock_clock_red_one_disable">Отключите Красный Индикатор</string>
     <string name="qs_header_stock_clock_red_one_color">Цвет в течение 1 часа</string>
     <string name="qs_header_stock_clock_custom_color_title">Включите пользовательский цвет на определенное время</string>
@@ -463,13 +461,13 @@
     <string name="qs_header_stock_clock_date_hide">Скрыть дату</string>
     <string name="qs_header_stock_clock_date_custom_color_title">Включить пользовательский цвет для даты</string>
     <string name="qs_header_stock_clock_date_custom_color">Пользовательский цвет даты</string>
-    <string name="qs_header_stock_clock_hide_carrier_label">Скрыть этикетку-носитель</string>
-    <string name="qs_header_stock_clock_background_chip">Фоновый чип часов</string>
-    <string name="qs_header_stock_clock_background_chip_style">Стиль чипа на фоне часов</string>
-    <string name="qs_header_stock_clock_background_chip_color_mode">Цветовой режим фонового чипа</string>
-    <string name="qs_header_stock_clock_background_chip_color">Пользовательский цветной фоновый чип</string>
-    <string name="qs_header_stock_date_background_chip">Чип с указанием даты</string>
-    <string name="qs_header_stock_date_background_chip_style">Стиль чипа на фоне даты</string>
+    <string name="qs_header_stock_clock_hide_carrier_label">Скрыть метку оператора связи</string>
+    <string name="qs_header_stock_clock_background_chip">Фоновая подложка часов</string>
+    <string name="qs_header_stock_clock_background_chip_style">Стиль подложки на фоне часов</string>
+    <string name="qs_header_stock_clock_background_chip_color_mode">Цветовой режим фоновой подложки</string>
+    <string name="qs_header_stock_clock_background_chip_color">Фоновая подложка пользовательского цвета</string>
+    <string name="qs_header_stock_date_background_chip">Фоновая подложка даты</string>
+    <string name="qs_header_stock_date_background_chip_style">Стиль фоновой подложки даты</string>
     <string name="qs_header_clock_font_prefs_title">Шрифт</string>
     <string name="qs_header_clock_font_custom_enabled">Используйте пользовательский шрифт</string>
     <string name="qs_header_clock_font_custom_title">Выберите шрифт</string>
@@ -483,13 +481,13 @@
     <!-- Hour only color -->
     <string name="qs_header_clock_custom_color_hour_mode">Часовой цветовой режим</string>
     <string name="qs_header_clock_custom_color_hour_mode_default">По умолчанию</string>
-    <string name="qs_header_clock_custom_color_hour_mode_disabled">None</string>
+    <string name="qs_header_clock_custom_color_hour_mode_disabled">Нет</string>
     <string name="qs_header_clock_custom_color_hour_mode_like_time">Цвет в зависимости от времени на часах</string>
     <string name="qs_header_clock_custom_color_hour_mode_first_digit">Только первая цифра</string>
     <string name="qs_header_clock_custom_color_hour_mode_one">Только символ 1</string>
-    <string name="qs_header_clock_custom_color_hour_color">Пользовательский цветной час</string>
+    <string name="qs_header_clock_custom_color_hour_color">Пользовательские цветные часы</string>
     <!-- Time color -->
-    <string name="qs_header_clock_custom_color_time_mode">Временной цветовой режим</string>
+    <string name="qs_header_clock_custom_color_time_mode">Цветовой режим времени</string>
     <string name="qs_header_clock_custom_color_time_mode_default">По умолчанию</string>
     <string name="qs_header_clock_custom_color_time_mode_accent">Акцентный цвет</string>
     <string name="qs_header_clock_custom_color_time_mode_custom">Пользовательский цвет</string>
@@ -509,16 +507,16 @@
     <string name="qs_header_system_icons_chip_style">Системные значки</string>
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Заполненный</string>
-    <string name="chip_outlined">Упомянутый</string>
+    <string name="chip_outlined">Обводка</string>
     <string name="chip_color_props">Свойства цвета</string>
     <string name="chip_use_accent">Используйте акцентный цвет</string>
     <string name="chip_use_gradient">Используйте градиент</string>
     <string name="chip_color_accent">Используйте акцент</string>
-    <string name="chip_color_color">Цвет чипа</string>
+    <string name="chip_color_color">Цвет подложки</string>
     <string name="chip_stroke_color">Цвет обводки</string>
     <string name="chip_gradient_color_1">Первый цветовой градиент</string>
     <string name="chip_gradient_color_2">Второй цветовой градиент</string>
-    <string name="chip_standard_color">Цвет чипа</string>
+    <string name="chip_standard_color">Цвет подложки</string>
     <string name="chip_stroke">Штриховые подпорки</string>
     <string name="chip_stroke_width">Ширина штриха</string>
     <string name="chip_round_corners_props">Свойства углов</string>
@@ -537,22 +535,22 @@
     <string name="launcher_folder_layout">Расположение папок</string>
     <string name="launcher_folder_edit_layout">Редактировать макет</string>
     <string name="launcher_folder_columns">Столбцы</string>
-    <string name="launcher_folder_rows">Rows</string>
+    <string name="launcher_folder_rows">Строки</string>
     <string name="launcher_folder_update_preview">Предварительный просмотр обновлений</string>
     <string name="remove_folder_pagination_title">Удалить Нумерацию Папок</string>
-    <string name="drawer">Выдвижной ящик</string>
+    <string name="drawer">Меню приложений</string>
     <string name="launcher_drawer_edit_columns">Редактирование столбцов</string>
     <string name="drawer_columns">Столбцы</string>
-    <string name="launcher_recents">Недавние события</string>
+    <string name="launcher_recents">Недавние</string>
     <string name="launcher_app_details_title">Откройте сведения о приложении</string>
     <string name="launcher_app_details_summary">Нажмите на значок приложения, чтобы открыть сведения о приложении в разделе \"Настройки\".</string>
     <string name="remove_home_pagination">Удалить Домашнюю Нумерацию Страниц</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Панель навигации</string>
     <string name="gesture_navigation_title">Навигация с помощью жестов</string>
-    <string name="three_button_navigation_title">Навигация с помощью трех кнопок</string>
+    <string name="three_button_navigation_title">Навигация с помощью кнопок</string>
     <!-- Gesture Strings -->
-    <string name="gesture_back_title">Настройка обратного жеста</string>
+    <string name="gesture_back_title">Настройка жеста назад</string>
     <string name="gesture_left_title">Левая часть экрана</string>
     <string name="gesture_right_title">Правая часть экрана</string>
     <string name="gesture_height_title">Высота жеста</string>
@@ -564,9 +562,9 @@
     <string name="gesture_override_back_hold_left">Левая боковая команда</string>
     <string name="gesture_override_back_hold_right">Правая боковая команда</string>
     <string name="gesture_override_back_hold_common">Сдерживать команду</string>
-    <string name="gesture_override_back_hold_command_switch_app">Switch to previous app</string>
+    <string name="gesture_override_back_hold_command_switch_app">Переход к предыдущему приложению</string>
     <string name="gesture_override_back_hold_command_close_recents">Очистить все последние записи</string>
-    <string name="gesture_override_back_hold_command_kill_app">Уничтожить активное приложение</string>
+    <string name="gesture_override_back_hold_command_kill_app">Закрыть активное приложение</string>
     <string name="gesture_override_back_hold_command_screenshot">Сделайте скриншот</string>
     <string name="gesture_override_back_hold_command_quick_settings">Откройте быстрые настройки</string>
     <string name="gesture_override_back_hold_command_power_menu">Откройте меню питания</string>
@@ -574,10 +572,10 @@
     <string name="gesture_override_back_hold_command_screen_off">Экран выключен</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
-    <string name="power_button_category_title">Power Button</string>
+    <string name="power_button_category_title">Кнопка питания</string>
     <string name="buttons_power_button_customize">Настройка кнопки включения</string>
-    <string name="torch_long_press_volbtn_torch_title">Фонарик с кнопкой регулировки громкости</string>
-    <string name="torch_long_press_volbtn_torch_desc">Длительное нажатие кнопок регулировки громкости для переключения горелки</string>
+    <string name="torch_long_press_volbtn_torch_title">Фонарик кнопками громкости</string>
+    <string name="torch_long_press_volbtn_torch_desc">Длительное нажатие кнопок громкости для переключения фонарика</string>
     <string name="torch_long_press_volbtn_torch_enable_timeout_title">Включить тайм-аут</string>
     <string name="torch_long_press_volbtn_torch_timeout_title">Тайм-аут</string>
     <string name="torch_long_press_volbtn_torch_use_proximity">Используйте датчик приближения</string>
@@ -626,6 +624,12 @@
     <!-- Album art filter -->
     <string name="albumart_filter_title">Фильтр обложки альбома</string>
     <string name="albumart_filter_none">Нет</string>
+    <string name="albumart_filter_grayscale">Оттенки серого</string>
+    <string name="albumart_filter_tint">Цвет акцента</string>
+    <string name="albumart_filter_blur">Размытие</string>
+    <string name="albumart_filter_grayblur">Оттенки серого и размытие</string>
+    <string name="albumart_filter_custom_tint">Пользовательский цвет</string>
+    <string name="albumart_tint_intensity_title">Пользовательская интенсивность цвета</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Внимание</string>
     <string name="depth_effect_alert_body">Используйте подходящие обои для экрана блокировки, элементы переднего плана не загораживают часы на экране блокировки, обеспечивая как визуальную привлекательность, так и функциональную ясность на экране блокировки.\nПосле включения и установки обоев экрана блокировки модель AI автоматически попытается извлечь  Объект с обоев.\n\nПримечание: %s.</string>
@@ -644,25 +648,27 @@
     <string name="lockscreen_clock_custom_color_title">Пользовательские цветные часы</string>
     <string name="lockscreen_clock_custom_color_summary">Пользовательский цвет вместо основного</string>
     <string name="lockscreen_clock_text_scaling">Масштабирование текста</string>
-    <string name="lockscreen_clock_custom_user">Используйте пользовательское имя пользователя</string>
-    <string name="lockscreen_clock_custom_user_title">User Name</string>
-    <string name="lockscreen_clock_custom_user_image">Используйте пользовательский образ пользователя</string>
-    <string name="lockscreen_clock_custom_user_image_title">User Image</string>
+    <string name="lockscreen_clock_custom_user">Используйте свое имя пользователя</string>
+    <string name="lockscreen_clock_custom_user_title">Имя пользователя</string>
+    <string name="lockscreen_clock_custom_user_image">Используйте свое изображение пользователя</string>
+    <string name="lockscreen_clock_custom_user_image_title">Изображение пользователя</string>
     <string name="lockscreen_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
+    <string name="lockscreen_clock_custom_image_title">Использовать собственное изображение</string>
+    <string name="lockscreen_clock_custom_image_picker_title">Пользовательское изображение</string>
     <string name="lockscreen_font_line_height_title">Высота линии</string>
     <string name="lockscreen_clock_custom_margins">Временные рамки</string>
     <string name="lockscreen_clock_top_margin_title">Верхний предел</string>
     <string name="lockscreen_clock_bottom_margin_title">Нижнее поле</string>
     <string name="lockscreen_clock_stock_prefs">Стандартные настройки часов на экране блокировки</string>
-    <string name="lockscreen_stock_clock_red_one_title">Поведение Красного Одина</string>
+    <string name="lockscreen_stock_clock_red_one_title">Поведение Красного Индикатора</string>
     <string name="lockscreen_stock_clock_red_one_disable">Отключите Красный Индикатор</string>
     <string name="lockscreen_stock_clock_red_one_color">Цвет в течение 1 часа</string>
     <string name="welcome_back">С возвращением</string>
-    <string name="default_user_name">User</string>
+    <string name="default_user_name">Пользователь</string>
     <!-- Lockscreen 9 Strings -->
-    <string name="lockscreen_9_time_title">Time is</string>
+    <string name="lockscreen_9_time_title">Время</string>
     <string name="lockscreen_9_calendar">Календарь</string>
-    <string name="lockscreen_9_day_title">Today is</string>
+    <string name="lockscreen_9_day_title">Сегодня</string>
     <!-- Aod Strings -->
     <string name="aod_title">Always On Display</string>
     <!-- Aod Clock -->
@@ -676,6 +682,14 @@
     <string name="aod_clock_font_custom_summary">Выберите свой шрифт.\nНе выбирайте файл из списка «Недавние».</string>
     <string name="aod_clock_prefs">Настройки часов AOD</string>
     <string name="aod_clock_custom_color_title">Пользовательский цвет часов</string>
+    <string name="aod_clock_custom_color_summary">Пользовательский цвет вместо основного цвета</string>
+    <string name="aod_clock_text_scaling">Масштабирование текста</string>
+    <string name="aod_clock_custom_user">Использовать собственное имя пользователя</string>
+    <string name="aod_clock_custom_user_title">Имя пользователя</string>
+    <string name="aod_clock_custom_user_image">Использовать собственное изображение пользователя</string>
+    <string name="aod_clock_custom_user_image_title">Изображение пользователя</string>
+    <string name="aod_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
+    <string name="aod_font_line_height_title">Высота линии</string>
     <!-- Sound Mods -->
     <string name="misc_category">Разнообразные</string>
     <!-- Pulse music visualizer -->
@@ -693,8 +707,9 @@
     <string name="pulse_render_mode_title">Режим рендеринга</string>
     <string name="pulse_render_mode_fading_bars">Исчезающие блоки</string>
     <string name="pulse_render_mode_solid_lines">Сплошные линии</string>
+    <string name="pulse_render_mode_waveform">Форма волны</string>
     <string name="pulse_legacy_mode_advanced_category">Настройки режима блокировки затухания</string>
-    <string name="pulse_custom_fudge_factor">Уровень здравомыслия</string>
+    <string name="pulse_custom_fudge_factor">Уровень чувствительности</string>
     <string name="pulse_lavalamp_speed_title">Скорость работы лавовой лампы</string>
     <string name="pulse_solid_units_count">Количество сплошных линий</string>
     <string name="pulse_solid_units_opacity">Непрозрачность сплошных линий</string>
@@ -710,10 +725,25 @@
     <string name="pulse_smoothing_enabled_title">Включите сглаживание</string>
     <string name="pulse_smoothing_enabled_summary">Каждая полоска анимируется более плавно</string>
     <string name="pulse_custom_dimen">Ширина планки</string>
-    <string name="pulse_custom_div">Расстояние между стержнями</string>
+    <string name="pulse_custom_div">Расстояние между линиями</string>
     <string name="pulse_filled_block_size">Размер блока</string>
     <string name="pulse_empty_block_size">Расстояние между блоками</string>
+    <string name="pulse_lines_category">Настройки формы сигнала</string>
+    <string name="pulse_line_show_flash_title">Показать вспышку</string>
+    <string name="pulse_line_show_flash_summary">Показывать видимую волну, когда амплитуда больше</string>
+    <string name="pulse_line_wave_stroke">Форма волны</string>
+    <string name="pulse_line_wave_opacity">Непрозрачность волны</string>
+    <string name="pulse_line_wave_rotate_keyguard_title">Поворот на экране блокировки</string>
+    <string name="pulse_line_wave_rotate_keyguard_summary">Поворот формы волны на экране блокировки/дисплее</string>
     <!-- Pulse Gravity n Mirror Options -->
+    <string name="pulse_custom_gravity_title">Импульсная гравитация</string>
+    <string name="pulse_custom_gravity_bottom">Снизу</string>
+    <string name="pulse_custom_gravity_top">Сверху</string>
+    <string name="pulse_custom_gravity_center">По центру</string>
+    <string name="visualizer_center_mirrored_title">По центру зеркально</string>
+    <string name="visualizer_center_mirrored_summary">Установите визуализатор в центрально зеркальный режим</string>
+    <string name="pulse_vertical_mirror_title">Вертикальное зеркало</string>
+    <string name="pulse_vertical_mirror_summary">Создайте другой импульс и переверните его вертикально</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">Шаги регулировки громкости</string>
     <string name="volume_steps_summary">Контролируйте степень детализации каждого потока</string>
@@ -753,6 +783,7 @@
     <string name="volume_panel_seekbar_link_primary">Свяжите прогресс с основным цветом</string>
     <string name="volume_panel_icon_color">Настройка цвета значка</string>
     <string name="volume_panel_icon_accent">Привязать значок к основному цвету</string>
+    <string name="volume_panel_bg_color">Пользовательский цвет фона</string>
     <!-- Volume Styles -->
     <string name="volume_style_title">Стили объемной панели</string>
     <string name="volume_persen_switch_title">Показывать процент звука</string>
@@ -767,14 +798,28 @@
     <string name="use_auth_for_advanced_reboot_summary">Требуется проверка подлинности для использования расширенных параметров перезагрузки.</string>
     <string name="advanced_reboot_hide_lockscreen">Скрыть на экране блокировки</string>
     <string name="show_entry_settings_title">Показать запись в настройках</string>
+    <string name="remove_usb_dialog">Удалить диалоговое окно USB</string>
+    <string name="remove_usb_dialog_summary">Если этот параметр включен, диалоговое окно USB будет скрыто, и опция MTP будет выбрана автоматически.</string>
     <!-- Screenshot Strings -->
+    <string name="screenshot">Скриншот</string>
+    <string name="screenshots_prefs">Параметры скриншота</string>
+    <string name="disable_secure_screenshot">Отключить FLAG_SECURE</string>
+    <string name="disable_secure_screenshot_summary">Разрешить создание снимков экрана в безопасных приложениях.\nТребуется полная перезагрузка.</string>
+    <string name="disable_screenshot_observer">Отключить обнаружение скриншотов</string>
+    <string name="disable_screenshot_observer_summary">Это отключит обнаружение скриншотов, требуется A14+.\nТребуется полная перезагрузка.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Хуки</string>
     <string name="hooked_packages_title">Подключенные пакеты</string>
     <string name="package_hooked_successful">Адаптивный пакет</string>
     <string name="package_not_hook_enabled">Пакет не включен в LSposed</string>
     <string name="package_hook_no_response">Пакет не отвечает</string>
+    <string name="package_hook_bootlooped">Пакет отключен из-за сбоев при загрузке</string>
     <string name="package_not_found">Пакет не найден</string>
+    <string name="info_hooks">Хук Инфо</string>
+    <string name="info_hooks_desc">Пояснение\n\n
+         Адаптивность пакета означает, что все работает нормально,\n\n
+         Пакет отключен, поскольку загрузочный цикл означает наличие ошибок при перехвате, поэтому пакет не может перехватывать.  Свяжитесь с разработчиком, чтобы решить проблему.\n\n
+         Пакет не отвечает означает, что приложение, вероятно, не включено в LSPosed или закрыто. Попробуйте запустить приложение и проверить, отвечает ли пакет.</string>
     <string name="package_checking">Загрузка %s</string>
     <string name="package_activated">Пакет успешно активирован</string>
     <string name="package_activation_failed">Не удалось активировать пакет</string>
@@ -783,6 +828,7 @@
     <string name="menu_launch_app">Запустите приложение</string>
     <string name="menu_restart_app">Перезапустить приложение</string>
     <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">Помимо обычного текста, также доступны динамические переменные, такие как дата, использование данных и температура:\n\n$G\&lt;format\&gt; : дата по григорианскому календарю в формате*\n$P&lt;format&gt; : персидская дата в формате *\n$Nrx : общее количество загрузок за указанный период ** ***\n$Ntx: общее количество загрузок за указанный период ** ***\n$Nall : общий трафик за указанный период ** ***\n$Nssid: имя SSID Wi-Fi (если применимо)\n\n$T\&lt;format\&gt;[интервал]: температура; \nФормат может быть b (для батареи), c (для процессора), g (для графического процессора) и s (для скина). \nНаконец, существует НЕОБЯЗАТЕЛЬНОЕ количество интервалов обновления в секундах (по умолчанию: 60 секунд)\n\n* для документации по формату найдите «Формат даты Java».\n**Вы можете указать период статистики в Oxygen Customizer/меню «Разное»/Настройки сетевой статистики.\n***Если вы замените $N на $Nc, вы получите мобильные данные. статистика (например, $Ncrx вместо Nrx)</string>
     <string name="update_channel_name">Обновления</string>
     <string name="update_notification_title">Обновление загружено</string>
     <string name="update_notification_text">Нажмите здесь, чтобы установить</string>
@@ -826,6 +872,9 @@
     <string name="import_failed">Импорт не удался</string>
     <string name="settings_about_section_title">О приложении </string>
     <string name="github_repo_title">Репозиторий на GitHub</string>
+    <string name="support_group_title">Группа поддержки</string>
+    <string name="translate_title">Помощь с переводом</string>
+    <string name="translate_summary">Помогите нам перевести Oxygen Customizer на ваш язык</string>
     <string name="check_updates">Проверить обновления</string>
     <string name="check_updates_summary">Текущая версия: %s</string>
     <string name="check_auto_updates">Автоматическая проверка обновлений</string>
@@ -833,6 +882,7 @@
     <string name="notification_channel_update">Обновления</string>
     <string name="notification_channel_update_desc">На этом канале отображаются уведомления о последних обновлениях.</string>
     <string name="new_update_title">Доступно обновление</string>
+    <string name="new_update_desc">Доступна новая версия Oxygen Customizer</string>
     <string name="usage_title">Использование</string>
     <string name="usage_summary">Открыть вики-страницу</string>
     <string name="credits_title">Кредиты</string>
@@ -913,6 +963,7 @@
     <string name="weather_permission_dialog_title">Включить разрешения на определение местоположения</string>
     <string name="weather_permission_dialog_message">Для получения данных о погоде необходимы разрешения на определение местоположения. Нажмите «ОК», чтобы открыть «Настройки».</string>
     <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_title">Стиль фона погоды</string>
     <string name="lockscreen_weather_selection_default">По умолчанию</string>
     <string name="lockscreen_weather_selection_str_box">Полупрозрачная подложка</string>
     <string name="lockscreen_weather_selection_str_round">Полупрозрачная подложка (круглая)</string>
