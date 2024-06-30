@@ -10,8 +10,8 @@
             android:viewportHeight="24">
             <group android:scaleX="0.668"
                 android:scaleY="0.668"
-                android:translateX="4"
-                android:translateY="4">
+                android:pivotX="12"
+                android:pivotY="12">
                 <path
                     android:name="path_3"
                     android:pathData="M 9.5 12 L 9.5 6 Q 9.5 3 12.5 3 L 14.5 3 C 20.5 3 20.5 12 14.5 12 L 9.5 12 Z M 9.5 12 C 7.5 12 5.5 11 5 9"
