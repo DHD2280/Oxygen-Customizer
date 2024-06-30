@@ -1,13 +1,11 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ICON_PACKS;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.checkOverlayEnabledAndEnable;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +87,6 @@ public class IconPacks extends BaseFragment {
 
     private void enableIconPack (int position) {
         // Enable icon pack
-        Log.d("IconPacks", "enableIconPack: " + position);
         IconPackManager.enableOverlay(position);
     }
 
