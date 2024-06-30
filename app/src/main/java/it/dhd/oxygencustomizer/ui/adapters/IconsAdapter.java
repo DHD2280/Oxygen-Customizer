@@ -35,7 +35,6 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
     Context context;
     ArrayList<IconModel> itemList;
-    ArrayList<String> ICONPACK_KEY = new ArrayList<>();
     LinearLayoutManager linearLayoutManager;
     LoadingDialog loadingDialog;
     int selectedItem = -1;
@@ -55,9 +54,6 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
         this.mComponentName = compName;
         this.needSystemUIRestart = needSysUiRestart;
 
-        // Preference key
-        for (int i = 1; i <= itemList.size(); i++)
-            ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
 
     public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, String additionalCompName, boolean needSysUiRestart) {
@@ -68,9 +64,6 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
         this.mAdditionalComponent = additionalCompName;
         this.needSystemUIRestart = needSysUiRestart;
 
-        // Preference key
-        for (int i = 1; i <= itemList.size(); i++)
-            ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
 
     public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, onButtonClick onButtonClick) {
@@ -80,8 +73,6 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
         this.mComponentName = compName;
         this.mOnButtonClick = onButtonClick;
         this.needSystemUIRestart = false;
-        for (int i = 1; i <= itemList.size(); i++)
-            ICONPACK_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
 
     @NonNull
@@ -141,7 +132,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
 
-        itemSelected(holder.container, Prefs.getBoolean(ICONPACK_KEY.get(holder.getBindingAdapterPosition())));
+        itemSelected(holder.container, itemList.get(holder.getBindingAdapterPosition()).isEnabled());
         refreshButton(holder);
     }
 
@@ -159,7 +150,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             selectedItem = selectedItem == holder.getBindingAdapterPosition() ? -1 : holder.getBindingAdapterPosition();
             refreshLayout(holder);
 
-            if (!Prefs.getBoolean(ICONPACK_KEY.get(holder.getBindingAdapterPosition()))) {
+            if (!itemList.get(holder.getBindingAdapterPosition()).isEnabled()) {
                 holder.btn_disable.setVisibility(View.GONE);
                 if (holder.btn_enable.getVisibility() == View.VISIBLE)
                     holder.btn_enable.setVisibility(View.GONE);
@@ -182,13 +173,13 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                 if (mOnButtonClick != null) {
                     mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition()+1);
                 } else {
-                    for (int i = 1; i <= ICONPACK_KEY.size(); i++) {
-                        Prefs.putBoolean("OxygenCustomizerComponent" + mComponentName + i + ".overlay", i == holder.getBindingAdapterPosition());
-                        OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
+                    for (int i = 1; i <= itemList.size(); i++) {
+                        itemList.get(i-1).setEnabled(false);
+                        OverlayUtil.disableOverlay(itemList.get(i-1).getPackageName());
                     }
                     if (!TextUtils.isEmpty(mAdditionalComponent))
                         OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
-                    OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                    OverlayUtil.enableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPackageName());
                 }
 
 
@@ -221,7 +212,8 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                 } else {
                     if (!TextUtils.isEmpty(mAdditionalComponent))
                         OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
-                    OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                    itemList.get(holder.getBindingAdapterPosition()).setEnabled(false);
+                    OverlayUtil.disableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPackageName());
                 }
 
                 ((Activity) context).runOnUiThread(() -> {
@@ -275,7 +267,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
                 LinearLayout child = view.findViewById(R.id.icon_pack_child);
 
                 if (child != null) {
-                    itemSelected(child, i == holder.getAbsoluteAdapterPosition() && Prefs.getBoolean(ICONPACK_KEY.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition()))));
+                    itemSelected(child, i == holder.getAbsoluteAdapterPosition() && (itemList.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition())).isEnabled()));
                 }
             }
         }
@@ -286,7 +278,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             holder.btn_enable.setVisibility(View.GONE);
             holder.btn_disable.setVisibility(View.GONE);
         } else {
-            if (Prefs.getBoolean(ICONPACK_KEY.get(selectedItem))) {
+            if (itemList.get(holder.getBindingAdapterPosition()).isEnabled()) {
                 holder.btn_enable.setVisibility(View.GONE);
                 holder.btn_disable.setVisibility(View.VISIBLE);
             } else {

@@ -5,8 +5,10 @@ import android.graphics.drawable.Drawable;
 public class IconModel {
 
     private String name;
+    private String packageName;
     private int desc = 0, icon1 = 0, icon2 = 0, icon3 = 0, icon4 = 0;
     private Drawable drawableIcon1, drawableIcon2, drawableIcon3, drawableIcon4;
+    private boolean isEnabled;
 
     public IconModel(String name, int desc, int icon1, int icon2, int icon3, int icon4) {
         this.name = name;
@@ -17,12 +19,14 @@ public class IconModel {
         this.icon4 = icon4;
     }
 
-    public IconModel(String name, Drawable icon1, Drawable icon2, Drawable icon3, Drawable icon4) {
-        this.name = name;
+    public IconModel(String packName, String pkgName, Drawable icon1, Drawable icon2, Drawable icon3, Drawable icon4, boolean isEnabled) {
+        this.name = packName;
+        this.packageName = pkgName;
         this.drawableIcon1 = icon1;
         this.drawableIcon2 = icon2;
         this.drawableIcon3 = icon3;
         this.drawableIcon4= icon4;
+        this.isEnabled = isEnabled;
     }
 
     public String getName() {
@@ -31,6 +35,10 @@ public class IconModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 
     public int getDesc() {
@@ -103,5 +111,13 @@ public class IconModel {
 
     public void setDrawableIcon4(Drawable drawableIcon4) {
         this.drawableIcon4 = drawableIcon4;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

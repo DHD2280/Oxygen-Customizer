@@ -20,11 +20,15 @@ public class Dynamic {
     public static final int TOTAL_BRIGHTNESSBARS = (Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentBBN'").exec().getOut()).size();
     public static final int TOTAL_BRIGHTNESSBARSPIXEL = (Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentBBP'").exec().getOut()).size();
     public static final int TOTAL_ICON_PACKS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentIPSUI'").exec().getOut().size();
+    public static final List<String> LIST_ICON_PACKS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentIPSUI'").exec().getOut();
     public static final int TOTAL_NOTIFICATIONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentNFN'").exec().getOut().size();
     public static final int TOTAL_NAVBAR = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentNB'").exec().getOut().size();
     public static final int TOTAL_SIGNAL_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentSGIC'").exec().getOut().size();
+    public static final List<String> LIST_SIGNAL_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentSGIC'").exec().getOut();
     public static final int TOTAL_WIFI_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentWIFI'").exec().getOut().size();
+    public static final List<String> LIST_WIFI_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentWIFI'").exec().getOut();
     public static final int TOTAL_SETTINGS_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentICS'").exec().getOut().size();
+    public static final List<String> LIST_SETTINGS_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentICS'").exec().getOut();
 
     // Overlay compiler tools
     public static final String NATIVE_LIBRARY_DIR = OxygenCustomizer.getAppContext().getApplicationInfo().nativeLibraryDir;

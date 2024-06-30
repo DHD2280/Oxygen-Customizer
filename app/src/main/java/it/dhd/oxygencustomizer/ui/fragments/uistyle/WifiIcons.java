@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
+import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_WIFI_ICONS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_WIFI_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
@@ -15,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
@@ -46,18 +49,22 @@ public class WifiIcons extends BaseFragment {
     }
 
     private IconsAdapter initWifiIconsItems() {
-        ArrayList<IconModel> signalIcons = new ArrayList<>();
-        for (int i = 0; i<TOTAL_WIFI_ICONS; i++) {
-            signalIcons.add(
+        ArrayList<IconModel> wifiIcons = new ArrayList<>();
+        List<String> packs = LIST_WIFI_ICONS;
+        for (int i = 0; i< packs.size(); i++) {
+            String pkgName = packs.get(i).split("]")[1].replaceAll(" ", "");
+            wifiIcons.add(
                     new IconModel(
-                            getStringFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "theme_name"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "stat_signal_wifi_signal_1"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "stat_signal_wifi_signal_2"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "stat_signal_wifi_signal_3"),
-                            getDrawableFromOverlay(getContext(), "OxygenCustomizerComponentWIFI" + (i+1) + ".overlay", "stat_signal_wifi_signal_4")));
+                            getStringFromOverlay(getContext(), pkgName, "theme_name"),
+                            pkgName,
+                            getDrawableFromOverlay(getContext(), pkgName, "stat_signal_wifi_signal_1"),
+                            getDrawableFromOverlay(getContext(), pkgName, "stat_signal_wifi_signal_2"),
+                            getDrawableFromOverlay(getContext(), pkgName, "stat_signal_wifi_signal_3"),
+                            getDrawableFromOverlay(getContext(), pkgName, "stat_signal_wifi_signal_4"),
+                            packs.get(i).contains("[x]")));
         }
-
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "WIFI", "COMMONWIFI", true);
+        wifiIcons.sort(Comparator.comparing(IconModel::getName));
+        return new IconsAdapter(requireContext(), wifiIcons, loadingDialog, "WIFI", "COMMONWIFI", true);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
+import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_SETTINGS_ICONS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SETTINGS_ICONS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_SIGNAL_ICONS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -46,16 +49,19 @@ public class SettingsIcons extends BaseFragment {
 
     private IconsAdapter initSettingsIconsItems() {
         ArrayList<IconModel> settingsIcons = new ArrayList<>();
-        for (int i = 0; i<TOTAL_SETTINGS_ICONS; i++) {
+        for (int i = 0; i< LIST_SETTINGS_ICONS.size(); i++) {
+            String pkgName = LIST_SETTINGS_ICONS.get(i).split("]")[1].replaceAll(" ", "");
             settingsIcons.add(
                     new IconModel(
-                            getStringFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "theme_name"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "settings_wifi_ic"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "settings_personalise_ic"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "settings_power_manage_ic"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentICS" + (i+1) + ".overlay", "settings_system_breeno_ic")));
+                            getStringFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "theme_name"),
+                            pkgName,
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_wifi_ic"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_personalise_ic"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_power_manage_ic"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "settings_system_breeno_ic"),
+                            LIST_SETTINGS_ICONS.get(i).contains("[x]")));
         }
-
+        settingsIcons.sort(Comparator.comparing(IconModel::getName));
         return new IconsAdapter(requireContext(), settingsIcons, loadingDialog, "ICS", false);
     }
 

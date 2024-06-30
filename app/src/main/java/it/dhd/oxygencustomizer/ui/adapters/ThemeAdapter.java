@@ -23,28 +23,22 @@ import java.util.ArrayList;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.models.ThemeModel;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<String> itemList;
-    ArrayList<String> THEME_KEY = new ArrayList<>();
+    ArrayList<ThemeModel> itemList;
     LinearLayoutManager linearLayoutManager;
     LoadingDialog loadingDialog;
     int selectedItem = -1;
-    String mComponentName = "";
 
-    public ThemeAdapter(Context context, ArrayList<String> itemList, LoadingDialog loadingDialog, String compName) {
+    public ThemeAdapter(Context context, ArrayList<ThemeModel> itemList, LoadingDialog loadingDialog) {
         this.context = context;
         this.itemList = itemList;
         this.loadingDialog = loadingDialog;
-        this.mComponentName = compName;
-
-        // Preference key
-        for (int i = 1; i <= itemList.size(); i++)
-            THEME_KEY.add("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
     }
 
     @NonNull
@@ -57,7 +51,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.style_name.setText(itemList.get(position));
+        holder.style_name.setText(itemList.get(position).getThemeName());
         holder.desc.setVisibility(View.GONE);
         holder.icon_preview.setVisibility(View.GONE);
 
@@ -76,7 +70,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
 
-        itemSelected(holder.container, Prefs.getBoolean(THEME_KEY.get(holder.getBindingAdapterPosition())));
+        itemSelected(holder.container, itemList.get(holder.getBindingAdapterPosition()).isEnabled());
         refreshButton(holder);
     }
 
@@ -94,7 +88,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             selectedItem = selectedItem == holder.getBindingAdapterPosition() ? -1 : holder.getBindingAdapterPosition();
             refreshLayout(holder);
 
-            if (!Prefs.getBoolean(THEME_KEY.get(holder.getBindingAdapterPosition()))) {
+            if (!itemList.get(holder.getBindingAdapterPosition()).isEnabled()) {
                 holder.btn_disable.setVisibility(View.GONE);
                 if (holder.btn_enable.getVisibility() == View.VISIBLE)
                     holder.btn_enable.setVisibility(View.GONE);
@@ -113,28 +107,27 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
-                for (int i = 1; i <= THEME_KEY.size(); i++) {
-                    Prefs.putBoolean("OxygenCustomizerComponent" + mComponentName + i + ".overlay", i == holder.getBindingAdapterPosition());
-                    OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + i + ".overlay");
+                for (int i = 1; i <= itemList.size(); i++) {
+                    itemList.get(i - 1).setEnabled(i == holder.getBindingAdapterPosition());
+                    Prefs.putBoolean(itemList.get(holder.getBindingAdapterPosition()).getPkgName(), i == holder.getBindingAdapterPosition());
+                    OverlayUtil.disableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
                 }
-                OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                OverlayUtil.enableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
                 if (OverlayUtil.overlayExist("COMMONSUITH")) {
                     OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
                 }
 
-                ((Activity) context).runOnUiThread(() -> {
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        // Hide loading dialog
-                        loadingDialog.hide();
+                ((Activity) context).runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    // Hide loading dialog
+                    loadingDialog.hide();
 
-                        // Change button visibility
-                        holder.btn_enable.setVisibility(View.GONE);
-                        holder.btn_disable.setVisibility(View.VISIBLE);
-                        refreshBackground(holder);
+                    // Change button visibility
+                    holder.btn_enable.setVisibility(View.GONE);
+                    holder.btn_disable.setVisibility(View.VISIBLE);
+                    refreshBackground(holder);
 
-                        Toast.makeText(OxygenCustomizer.getAppContext(), context.getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
-                    }, 3000);
-                });
+                    Toast.makeText(OxygenCustomizer.getAppContext(), context.getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                }, 3000));
             };
             Thread thread = new Thread(runnable);
             thread.start();
@@ -146,7 +139,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             Runnable runnable = () -> {
-                OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mComponentName + (holder.getBindingAdapterPosition() + 1) + ".overlay");
+                OverlayUtil.disableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
                 if (OverlayUtil.overlayExist("COMMONSUITH")) {
                     OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
                 }
@@ -202,7 +195,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
                 LinearLayout child = view.findViewById(R.id.icon_pack_child);
 
                 if (child != null) {
-                    itemSelected(child, i == holder.getAbsoluteAdapterPosition() && Prefs.getBoolean(THEME_KEY.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition()))));
+                    itemSelected(child, i == holder.getAbsoluteAdapterPosition() && (itemList.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition())).isEnabled()));
                 }
             }
         }
@@ -213,7 +206,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             holder.btn_enable.setVisibility(View.GONE);
             holder.btn_disable.setVisibility(View.GONE);
         } else {
-            if (Prefs.getBoolean(THEME_KEY.get(selectedItem))) {
+            if (itemList.get(holder.getBindingAdapterPosition()).isEnabled()) {
                 holder.btn_enable.setVisibility(View.GONE);
                 holder.btn_disable.setVisibility(View.VISIBLE);
             } else {

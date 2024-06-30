@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
+import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ANDROID_THEMES;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
@@ -13,12 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.ThemeAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.models.ThemeModel;
 import it.dhd.oxygencustomizer.utils.PrefManager;
 import it.dhd.oxygencustomizer.utils.Prefs;
 
@@ -44,14 +48,23 @@ public class UiStyle extends BaseFragment {
     }
 
     private ThemeAdapter initThemesItems() {
-        ArrayList<String> mThemeNames = new ArrayList<>();
-        for (int i = 0; i<TOTAL_ANDROID_THEMES; i++) {
-            mThemeNames.add(getStringFromOverlay(requireContext(), "OxygenCustomizerComponentTH" + (i+1) + ".overlay", "android_theme_name"));
+        ArrayList<ThemeModel> mThemeNames = new ArrayList<>();
+        List<String> pack = LIST_ANDROID_THEMES;
+        for (int i = 0; i< pack.size(); i++) {
+            String themeName = pack.get(i).split("]")[1].replaceAll(" ", "");
+            mThemeNames.add(new ThemeModel(themeName,
+                    getStringFromOverlay(
+                            requireContext(),
+                            themeName,
+                            "android_theme_name"),
+                    pack.get(i).contains("[x]")
+                    ));
         }
         if (getModulePrefs() != null) {
             getModulePrefs().edit().putInt("UiStylesThemes", TOTAL_ANDROID_THEMES).apply();
         }
-        return new ThemeAdapter(requireContext(), mThemeNames, loadingDialog, "TH");
+        mThemeNames.sort(Comparator.comparing(ThemeModel::getThemeName));
+        return new ThemeAdapter(requireContext(), mThemeNames, loadingDialog);
     }
 
     @Override

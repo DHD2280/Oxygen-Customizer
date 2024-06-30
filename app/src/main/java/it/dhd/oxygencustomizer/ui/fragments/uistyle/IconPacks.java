@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
+import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ICON_PACKS;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ICON_PACKS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.checkOverlayEnabledAndEnable;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -58,15 +61,21 @@ public class IconPacks extends BaseFragment {
 
     private IconsAdapter initIconPackItems() {
         ArrayList<IconModel> iconPacks = new ArrayList<>();
-        for (int i = 0; i<TOTAL_ICON_PACKS; i++) {
+        List<String> packs = LIST_ICON_PACKS;
+        for (int i = 0; i< packs.size(); i++) {
+            String pkgName = packs.get(i).split("]")[1].replaceAll(" ", "");
             iconPacks.add(
                     new IconModel(
-                            getStringFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentIPSUI" + (i+1) + ".overlay", "theme_name"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentIPSUI" + (i+1) + ".overlay", "stat_signal_signal_lte_single_3"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentIPSUI" + (i+1) + ".overlay", "stat_signal_wifi_signal_3"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentIPSUI" + (i+1) + ".overlay", "stat_sys_data_bluetooth"),
-                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), "OxygenCustomizerComponentIPSUI" + (i+1) + ".overlay", "stat_sys_airplane_mode")));
+                            getStringFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "theme_name"),
+                            pkgName,
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_signal_signal_lte_single_3"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_signal_wifi_signal_3"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_sys_data_bluetooth"),
+                            getDrawableFromOverlay(OxygenCustomizer.getAppContext(), pkgName, "stat_sys_airplane_mode"),
+                            packs.get(i).contains("[x]")));
         }
+
+        iconPacks.sort(Comparator.comparing(IconModel::getName));
 
         return new IconsAdapter(requireContext(), iconPacks, loadingDialog, "IPSUI", new IconsAdapter.onButtonClick() {
             @Override
