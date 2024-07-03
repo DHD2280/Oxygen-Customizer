@@ -1,8 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ANDROID_THEMES;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -47,7 +47,7 @@ public class UiStyle extends BaseFragment {
 
     private ThemeAdapter initThemesItems() {
         ArrayList<ThemeModel> mThemeNames = new ArrayList<>();
-        List<String> pack = LIST_ANDROID_THEMES;
+        List<String> pack = getOverlayForComponent("TH");
         for (int i = 0; i< pack.size(); i++) {
             String themeName = pack.get(i).split("]")[1].replaceAll(" ", "");
             mThemeNames.add(new ThemeModel(themeName,
