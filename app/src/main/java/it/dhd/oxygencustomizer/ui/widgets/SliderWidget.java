@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -95,6 +96,7 @@ public class SliderWidget extends RelativeLayout {
     }
 
     public void setSelectedText() {
+        if (TextUtils.isEmpty(valueFormat)) valueFormat = "";
         summaryTextView.setText(
                 (valueFormat.isBlank() || valueFormat.isEmpty() ?
                         String.valueOf(

@@ -107,6 +107,17 @@ public class SwitchWidget extends RelativeLayout {
         iconImageView.setVisibility(VISIBLE);
     }
 
+    public void setImageDimensions(int width, int height) {
+        iconImageView.getLayoutParams().width = width;
+        iconImageView.getLayoutParams().height = height;
+    }
+
+    public void setImageMargin(int left) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) iconImageView.getLayoutParams();
+        layoutParams.setMarginStart(left);
+        iconImageView.setLayoutParams(layoutParams);
+    }
+
     public void setIconVisibility(int visibility) {
         iconImageView.setVisibility(visibility);
     }
