@@ -644,7 +644,12 @@ public class QsTileCustomization extends XposedMods {
     private void updateMediaQsBackground() {
         if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
         Bitmap oldArt = mArt;
-        mArt = getFilteredArt(getArt());
+        Bitmap tempArt = getArt();
+        if (tempArt == null) {
+            hideMediaQsBackground();
+            return;
+        }
+        mArt = getFilteredArt(tempArt);
         float radius = 0f;
         try {
             GradientDrawable defBg = (GradientDrawable) mOplusQsMediaDefaultBackground;
@@ -675,7 +680,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void hideMediaQsBackground() {
-        if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
+        if (mOplusQsMediaView == null) return;
         mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
     }
 
