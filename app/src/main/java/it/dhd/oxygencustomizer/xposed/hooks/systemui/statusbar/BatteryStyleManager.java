@@ -3,6 +3,8 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -81,8 +83,10 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.TypedValue;
@@ -184,11 +188,12 @@ public class BatteryStyleManager extends XposedMods {
     private static boolean mIsPowerSaving = false;
     private static boolean mIsCharging = false;
     private ImageView mStockChargingIcon = null, mBatteryIcon = null;
-    private Object BatteryControllerImpl = null;
     private boolean updating = false;
     private boolean customizePercSize = false;
     private int mBatteryPercSize = 12;
     private static boolean oos13 = false;
+    private Class<?> DarkIconDispatcher = null;
+    private Class<?> DualToneHandler = null;
 
     public BatteryStyleManager(Context context) {
         super(context);
@@ -289,6 +294,9 @@ public class BatteryStyleManager extends XposedMods {
 
         BatteryDataProvider.registerInfoCallback(this::refreshAllBatteryIcons);
 
+        DarkIconDispatcher = findClass("com.android.systemui.plugins.DarkIconDispatcher", lpparam.classLoader);
+        DualToneHandler = findClass("com.android.systemui.DualToneHandler", lpparam.classLoader);
+
         final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View v) {
@@ -302,6 +310,10 @@ public class BatteryStyleManager extends XposedMods {
                 batteryViews.remove(v);
             }
         };
+
+        boolean nightMode = (mContext.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        int batteryColor = nightMode ? Color.WHITE : Color.BLACK;
 
         Class<?> StatBatteryMeterView = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.view.StatBatteryMeterView", lpparam.classLoader);
         hookAllConstructors(StatBatteryMeterView, new XC_MethodHook() {
@@ -339,40 +351,53 @@ public class BatteryStyleManager extends XposedMods {
             }
         });
 
-
-        Class<?> BatteryIconColor = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.model.BatteryIconColor", lpparam.classLoader);
-
-        findAndHookConstructor(BatteryIconColor,
-                int.class,
-                int.class,
-                int.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        /*
-                        this.singleToneColor = i;
-                        this.foregroundColor = i2;
-                        this.backgroundColor = i3;
-                         */
-
-                        if (BuildConfig.DEBUG) log(TAG + "BatteryIconColor constructor called");
-
-                        if (!CustomBatteryEnabled) return;
-                        singleToneColor = (int) param.args[0];
-                        frameColor = (int) param.args[1];
-                        backgroundColor = (int) param.args[2];
-                        updateIconsColor();
-                        updateIconsColor();
-                    }
-                });
-
-        Class<?> BatteryControllerImplClass = findClass("com.android.systemui.statusbar.policy.BatteryControllerImpl", lpparam.classLoader);
-        hookAllConstructors(BatteryControllerImplClass, new XC_MethodHook() {
+        hookAllMethods(StatBatteryMeterView, "onDarkChanged", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                BatteryControllerImpl = param.thisObject;
+                //((View) param.thisObject).addOnAttachStateChangeListener(listener);
+
+                /*
+                public void onDarkChanged(@NotNull ArrayList<Rect> areas, float f, int i) {
+                    Intrinsics.checkNotNullParameter(areas, "areas");
+                    this.darkIntensity = f;
+                    this.tmpRectList.clear();
+                    this.tmpRectList.addAll(areas);
+                    if (!DarkIconDispatcher.isInAreas(areas, this)) {
+                        f = 0.0f;
+                    }
+                    BatteryViewBinder.Binding binding = this.binding;
+                    if (binding != null) {
+                        binding.darkIntensityChanged(f);
+                    }
+                }
+                 */
+                if (!CustomBatteryEnabled) return;
+                ArrayList<Rect> areas = (ArrayList<Rect>) param.args[0];
+                float darkIntensity = (float) param.args[1];
+                boolean isInAreas = (boolean) callStaticMethod(DarkIconDispatcher, "isInAreas", areas, param.thisObject);
+                if (!isInAreas) {
+                    darkIntensity = 0.0f;
+                }
+                View v = (View) param.thisObject;
+                Context c = v.getContext();
+                Object dualToneHandler = DualToneHandler.getConstructor(Context.class).newInstance(c);
+                // final DualToneHandler dualToneHandler = new DualToneHandler(context);
+                int singleToneColor = (int) callMethod(dualToneHandler, "getSingleColor", darkIntensity);
+                int foregroundColor = (int) callMethod(dualToneHandler, "getFillColor", darkIntensity);
+                int backgroundColor = (int) callMethod(dualToneHandler, "getBackgroundColor", darkIntensity);
+
+                int iosColor = Color.WHITE;
+                boolean isOS = (BatteryStyle == BATTERY_STYLE_LANDSCAPE_IOS_15 || BatteryStyle == BATTERY_STYLE_LANDSCAPE_IOS_16);
+                boolean nightMode = (c.getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+                if (BatteryStyle == BATTERY_STYLE_LANDSCAPE_IOS_16) {
+                    iosColor = nightMode ? Color.DKGRAY : Color.LTGRAY;
+                }
+
+               updateIconColor(v, singleToneColor, foregroundColor, isOS ? iosColor : backgroundColor);
             }
         });
+
 
         Class<?> BatteryViewBinder = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.binder.BatteryViewBinder", lpparam.classLoader);
 
@@ -411,7 +436,7 @@ public class BatteryStyleManager extends XposedMods {
         try {
             batteryOutPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_percentage_view", "id", mContext.getPackageName()));
         } catch (Throwable ignored) {}
-        if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE) {
+        if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE && !CustomBatteryEnabled) {
                 batteryOutPercentage.setTextSize(TypedValue.COMPLEX_UNIT_SP, customizePercSize ? mBatteryPercSize : 12);
         }
         if (!CustomBatteryEnabled) return;
@@ -433,6 +458,10 @@ public class BatteryStyleManager extends XposedMods {
                 View child = ((ViewGroup) view).getChildAt(i);
                 if (child instanceof FrameLayout) {
                     child.setVisibility(View.GONE);
+                } else if (child instanceof TextView tv) {
+                    if (tv.getText().toString().contains("%")) {
+                        batteryOutPercentage = tv;
+                    }
                 } else {
                     if (child != batteryIcon && child != batteryOutPercentage && child != batteryInPercentage) {
                         child.setVisibility(View.GONE);
@@ -448,19 +477,20 @@ public class BatteryStyleManager extends XposedMods {
             mIsPowerSaving = isPowerSaving();
             batteryIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
             if (batteryOutPercentage != null) {
+                TextView finalBatteryOutPercentage = batteryOutPercentage;
                 if (mHidePercentage) {
-                    batteryOutPercentage.setVisibility(View.GONE);
+                    batteryOutPercentage.post(() -> finalBatteryOutPercentage.setVisibility(View.GONE));
                 } else {
-                    batteryOutPercentage.setVisibility(View.VISIBLE);
+                    batteryOutPercentage.post(() -> finalBatteryOutPercentage.setVisibility(View.VISIBLE));
                 }
             }
             try {
                 BatteryDrawable drawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
-                drawable.setChargingEnabled(mIsCharging, isFastCharging());
+                drawable.setChargingEnabled(false, false);//mIsCharging, isFastCharging());
                 drawable.setPowerSavingEnabled(isPowerSaving());
                 drawable.setShowPercentEnabled(mShowPercentInside);
                 drawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
-                drawable.setColors(frameColor, backgroundColor, singleToneColor);
+                //drawable.setColors(frameColor, backgroundColor, singleToneColor);
                 drawable.customizeBatteryDrawable(
                         mBatteryLayoutReverse,
                         mScaledPerimeterAlpha,
@@ -512,18 +542,12 @@ public class BatteryStyleManager extends XposedMods {
         }
     }
 
-    private void updateAllIcons() {
+    private void updateIconColor(View view, int singleColor, int fillColor, int bgColor) {
+        if (BuildConfig.DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
-        for (View v : batteryViews) {
-            if (v instanceof ImageView) {
-                Drawable drawable = ((ImageView) v).getDrawable();
-                if (drawable instanceof BatteryDrawable) {
-                    ((BatteryDrawable) drawable).setPowerSavingEnabled(mIsPowerSaving);
-                    ((BatteryDrawable) drawable).setChargingEnabled(mIsCharging, isFastCharging());
-                    drawable.invalidateSelf();
-                }
-            }
-        }
+        BatteryDrawable mBatteryDrawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
+        mBatteryDrawable.setColors(fillColor, bgColor, singleColor);
+        mBatteryDrawable.invalidateSelf();
     }
 
     private void hookBattery13(XC_LoadPackage.LoadPackageParam lpparam) {
