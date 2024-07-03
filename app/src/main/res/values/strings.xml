@@ -1102,4 +1102,10 @@
     <string name="style_11">Style 11</string>
     <string name="style_12">Style 12</string>
 
+    <!-- Dark Mode -->
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_pref">Customize Dark Mode</string>
+    <string name="custom_dark_mode_title">Custom Dark Mode</string>
+    <string name="custom_dark_mode_summary">Allow customizing dark mode app list.</string>
+
 </resources>

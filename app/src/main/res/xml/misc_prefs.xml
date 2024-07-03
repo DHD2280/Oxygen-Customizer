@@ -71,4 +71,15 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/dark_mode">
+
+        <Preference
+            android:key="dark_mode_prefs"
+            android:title="@string/dark_mode_pref"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

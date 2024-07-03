@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
+        android:id="@+id/dark_mode_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+        android:id="@+id/dark_intensity_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:titleText="Dark Intensity"
+        app:sliderValueFrom="0"
+        app:sliderValueTo="4"
+        app:sliderValue="0"/>
+
+</LinearLayout>

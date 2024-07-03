@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import it.dhd.oxygencustomizer.R;
@@ -19,6 +20,7 @@ import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Prefs;
 
@@ -187,6 +189,18 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         public String[] getScopes() {
             return new String[]{Constants.Packages.SYSTEM_UI};
         }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferences(savedInstanceState, rootKey);
+
+            Preference mDarkMode = findPreference("dark_mode_prefs");
+            mDarkMode.setOnPreferenceClickListener(preference -> {
+                replaceFragment(new DarkMode());
+                return true;
+            });
+        }
+
     }
 
     public static class Screenshot extends ControlledPreferenceFragmentCompat {
