@@ -486,7 +486,7 @@ public class BatteryStyleManager extends XposedMods {
             }
             try {
                 BatteryDrawable drawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
-                drawable.setChargingEnabled(false, false);//mIsCharging, isFastCharging());
+                drawable.setChargingEnabled(mIsCharging, isFastCharging());
                 drawable.setPowerSavingEnabled(isPowerSaving());
                 drawable.setShowPercentEnabled(mShowPercentInside);
                 drawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
