@@ -112,7 +112,7 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
                 }
             }
         }
-        notifyDataSetChanged();
+        checkChange();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
