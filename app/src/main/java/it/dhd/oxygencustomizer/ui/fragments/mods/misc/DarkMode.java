@@ -62,6 +62,7 @@ public class DarkMode extends BaseFragment {
     private List<AppModel> mAppList;
     private Map<String, Integer> mEnabledApps;
     private SharedPreferences mPrefs;
+    private boolean showSystem = false;
 
     @Override
     public String getTitle() {
@@ -122,6 +123,7 @@ public class DarkMode extends BaseFragment {
             binding.recyclerView.setHasFixedSize(true);
             binding.searchViewLayout.setEnabled(true);
             binding.progress.setVisibility(View.GONE);
+            ((DarkModeAdapter) binding.recyclerView.getAdapter()).showSystem(showSystem);
             binding.searchView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -154,6 +156,10 @@ public class DarkMode extends BaseFragment {
                 menu.add(0, 2, 0, R.string.menu_launch_app)
                         .setIcon(R.drawable.ic_launch)
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.add(0, 3, 0, R.string.menu_show_system_apps)
+                        .setCheckable(true)
+                        .setChecked(showSystem)
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             }
 
             @Override
@@ -167,6 +173,11 @@ public class DarkMode extends BaseFragment {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     getAppContext().startActivity(intent);
+                    return true;
+                } else if (menuItem.getItemId() == 3) {
+                    showSystem = !menuItem.isChecked();
+                    menuItem.setChecked(showSystem);
+                    ((DarkModeAdapter) binding.recyclerView.getAdapter()).showSystem(showSystem);
                     return true;
                 }
 
@@ -197,7 +208,6 @@ public class DarkMode extends BaseFragment {
         Set<String> enabledApps = new HashSet<>();
         for (Map.Entry<String, Integer> entry : mEnabledApps.entrySet()) {
             enabledApps.add(entry.getKey() + "|" + entry.getValue());
-            Log.d("DarkMode", "savePrefs: " + entry.getKey() + "|" + entry.getValue());
         }
         mPrefs.edit().putStringSet("custom_dark_mode", enabledApps).apply();
 
@@ -230,7 +240,6 @@ public class DarkMode extends BaseFragment {
                             OnTaskCompleted tastCompleted) {
             this.mContext = context;
             this.mEnabledApps = enabledApps;
-            Log.d("LoadAppsTask", "LoadAppsTask: " + enabledApps.size());
             this.preExecutionListener = preExecutionListener;
             this.taskCompletedListener = tastCompleted;
         }
@@ -250,11 +259,14 @@ public class DarkMode extends BaseFragment {
                 for(ApplicationInfo app : apps) {
                     Integer value = mEnabledApps.getOrDefault(app.packageName, 0);
                     int enabledAppCount = (value != null) ? value : 0;
+                    boolean isSystem = (app.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
+                    Log.d("DarkMode", "execute: " + app.packageName + " " + isSystem);
                     appList.add(
                             new AppModel(
                                     app.loadLabel(packageManager).toString(),
                                     app.packageName,
                                     app.loadIcon(packageManager),
+                                    isSystem,
                                     mEnabledApps.containsKey(app.packageName),
                                     enabledAppCount));
                 }

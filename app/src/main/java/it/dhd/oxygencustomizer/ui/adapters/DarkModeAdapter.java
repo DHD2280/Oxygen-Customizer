@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.adapters;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -25,6 +26,8 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
     private final List<AppModel> filteredApps;
     private static OnSwitchChange switchChangeListener;
     private static OnSliderChange sliderChangeListener;
+    private String filterText = "";
+    private boolean showSystem = false;
 
     public interface OnSwitchChange {
         void onSwitchChange(AppModel model, boolean isChecked);
@@ -63,7 +66,6 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
         );
         holder.binding.darkModeSwitch.setIcon(model.getAppIcon());
         holder.binding.darkModeSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
-            Log.d("DarkModeAdapter", "setSwitchChangeListener: App " + model.getPackageName() + " " + isChecked);
             holder.binding.darkIntensitySlider.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             if (switchChangeListener != null && model.isEnabled() != isChecked) {
                 switchChangeListener.onSwitchChange(model, isChecked);
@@ -73,7 +75,6 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
         });
         holder.binding.darkModeSwitch.setSwitchChecked(model.isEnabled());
         holder.binding.darkIntensitySlider.setOnSliderChangeListener((slider, progress, fromUser) -> {
-            Log.d("DarkModeAdapter", "setOnSliderChangeListener: App " + model.getPackageName() + " Int: " + progress + " " + fromUser);
             if (!fromUser) return;
             model.setDarkModeValue((int) progress);
             if (sliderChangeListener != null) {
@@ -84,6 +85,12 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
         holder.binding.darkIntensitySlider.setVisibility(model.isEnabled() ? View.VISIBLE : View.GONE);
     }
 
+    public void showSystem(boolean show) {
+        showSystem = show;
+        filter(filterText);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private void checkChange() {
         filteredApps.sort((app1, app2) -> {
             if (app1.isEnabled() == app2.isEnabled()) {
@@ -101,15 +108,13 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
 
     public void filter(String text) {
         filteredApps.clear();
-        if (TextUtils.isEmpty(text)) {
-            filteredApps.addAll(itemList);
-        } else {
-            text = text.toLowerCase();
-            for (AppModel item : itemList) {
-                if (item.getAppName().toLowerCase().contains(text) ||
-                    item.getPackageName().contains(text)) {
-                    filteredApps.add(item);
-                }
+        filterText = text != null ? text : "";
+        for (AppModel app : itemList) {
+            boolean matchesText = TextUtils.isEmpty(filterText) || app.getAppName().toLowerCase().contains(filterText.toLowerCase()) || app.getPackageName().toLowerCase().contains(filterText.toLowerCase());
+            boolean matchesSystem = showSystem || !app.isSystemApp();
+
+            if ((matchesText && matchesSystem) || app.isEnabled()) {
+                filteredApps.add(app);
             }
         }
         checkChange();

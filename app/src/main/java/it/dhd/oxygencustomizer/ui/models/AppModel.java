@@ -9,13 +9,15 @@ public class AppModel {
     private Drawable appIcon;
     private boolean isEnabled;
     private int darkModeValue;
+    private boolean isSystem;
 
-    public AppModel(String appName, String packageName, Drawable appIcon, boolean enabled, int darkModeValue) {
+    public AppModel(String appName, String packageName, Drawable appIcon, boolean isSystemApp, boolean enabled, int darkModeValue) {
         this.appName = appName;
         this.packageName = packageName;
         this.appIcon = appIcon;
         this.isEnabled = enabled;
         this.darkModeValue = darkModeValue;
+        this.isSystem = isSystemApp;
     }
 
     public String getAppName() {
@@ -46,5 +48,8 @@ public class AppModel {
         darkModeValue = value;
     }
 
+    public boolean isSystemApp() {
+        return isSystem;
+    }
 
 }
