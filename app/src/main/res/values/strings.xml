@@ -1103,6 +1103,7 @@
     <string name="style_12">Style 12</string>
 
     <!-- Dark Mode -->
+    <string name="menu_show_system_apps">Show System</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="dark_mode_pref">Customize Dark Mode</string>
     <string name="custom_dark_mode_title">Custom Dark Mode</string>
