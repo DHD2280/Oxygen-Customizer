@@ -84,6 +84,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -102,6 +103,7 @@ import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 
 public class LockscreenClock extends XposedMods {
@@ -109,7 +111,6 @@ public class LockscreenClock extends XposedMods {
     private static final String TAG = "Oxygen Customizer - " + LockscreenClock.class.getSimpleName() + ": ";
     private final static String listenPackage = Constants.Packages.SYSTEM_UI;
     public static final String OC_LOCKSCREEN_CLOCK_TAG = "oxygencustomizer_lockscreen_clock";
-    public static final String OC_DEPTH_WALLPAPER_TAG = "oxygencustomizer_depth_wallpaper";
 
     private boolean customLockscreenClock = false;
     private ViewGroup mClockViewContainer = null;
@@ -240,7 +241,6 @@ public class LockscreenClock extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
@@ -500,19 +500,26 @@ public class LockscreenClock extends XposedMods {
 
                 ((TextView) clockView.findViewById(R.id.device_name)).setText(Build.MODEL);
             }
+            case 25 -> {
+                ImageView imageView = clockView.findViewById(R.id.custom_image);
+                if (useCustomImage) {
+                    imageView.setImageDrawable(getCustomImage());
+                }
+            }
             case 27 -> {
+                TextView hourView = clockView.findViewWithTag("textHour");
+                TextView minuteView = clockView.findViewWithTag("textMinute");
+                TextClock tickIndicator = clockView.findViewWithTag("tickIndicator");
+
+                TimeUtils.setCurrentTimeTextClock(mContext, tickIndicator, hourView, minuteView);
+            }
+            case 99 -> {
                 // TextViews
                 mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
 
                 mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
                 mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
                 mBatteryArcProgress = clockView.findViewById(R.id.battery_progress);
-            }
-            case 25 -> {
-                ImageView imageView = clockView.findViewById(R.id.custom_image);
-                if (useCustomImage) {
-                    imageView.setImageDrawable(getCustomImage());
-                }
             }
             default -> {
                 mBatteryStatusView = null;
