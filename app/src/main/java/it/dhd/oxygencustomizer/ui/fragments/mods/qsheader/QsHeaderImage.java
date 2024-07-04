@@ -19,6 +19,7 @@ import androidx.preference.Preference;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
@@ -52,14 +53,23 @@ public class QsHeaderImage extends ControlledPreferenceFragmentCompat {
         super.onCreatePreferences(savedInstanceState, rootKey);
         ListWithPopUpPreference mImage = findPreference("qs_header_image");
         List<String> mValues = new ArrayList<>();
-        for(int i=0;i<24;i++) {
-            mValues.add("qs_header_image_" + i);
+        int maxIndex = 1;
+        while (requireContext()
+                .getResources()
+                .getIdentifier(
+                        "qs_header_image_low_" + maxIndex,
+                        "drawable",
+                        BuildConfig.APPLICATION_ID
+                ) != 0) {
+            mValues.add("qs_header_image_low_" + maxIndex);
+            maxIndex++;
         }
         if (mImage != null) {
             mImage.createDefaultAdapter();
             mImage.setAdapterType(ListPreferenceAdapter.TYPE_QS_IMAGE);
             mImage.setEntries(mValues.toArray(new CharSequence[0]));
             mImage.setEntryValues(mValues.toArray(new CharSequence[0]));
+            mImage.setImages(mValues);
         }
         Preference mQsImageFile = findPreference("qs_header_image_file");
         if (mQsImageFile != null) {

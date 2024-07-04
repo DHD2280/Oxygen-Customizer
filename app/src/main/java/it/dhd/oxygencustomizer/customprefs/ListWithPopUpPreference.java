@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.List;
+
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 
@@ -66,6 +68,12 @@ public class ListWithPopUpPreference extends ListPreference {
     public void setAdapterType(int type) {
         if (mAdapter != null)
             mAdapter.setType(type);
+    }
+
+    public void setImages(List<String> images) {
+        if (mAdapter != null) {
+            mAdapter.setImages(images);
+        }
     }
 
     public void setDefaultAdapterListener() {
