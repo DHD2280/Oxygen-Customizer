@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,11 +108,13 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
-                for (int i = 1; i <= itemList.size(); i++) {
-                    itemList.get(i - 1).setEnabled(i == holder.getBindingAdapterPosition());
+                for (int i = 0; i <= itemList.size()-1; i++) {
+                    itemList.get(i).setEnabled(i == holder.getBindingAdapterPosition());
                     Prefs.putBoolean(itemList.get(holder.getBindingAdapterPosition()).getPkgName(), i == holder.getBindingAdapterPosition());
-                    OverlayUtil.disableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
+                    Log.d("ThemeAdapter", "onBindViewHolder: " + itemList.get(i).getPkgName() + " " + itemList.get(i).isEnabled());
+                    OverlayUtil.disableOverlay(itemList.get(i).getPkgName());
                 }
+                Log.d("ThemeAdapter", "onBindViewHolder: " + itemList.get(holder.getBindingAdapterPosition()).getPkgName() + " " + itemList.get(holder.getBindingAdapterPosition()).isEnabled());
                 OverlayUtil.enableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
                 if (OverlayUtil.overlayExist("COMMONSUITH")) {
                     OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
