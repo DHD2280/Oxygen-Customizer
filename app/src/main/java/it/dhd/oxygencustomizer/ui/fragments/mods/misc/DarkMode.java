@@ -111,12 +111,12 @@ public class DarkMode extends BaseFragment {
         });
         binding.darkModeSwitch.setSwitchChecked(mPrefs.getBoolean("custom_dark_mode_switch", false));
 
-        new LoadAppsTask(requireActivity(), mEnabledApps, () -> {
+        new LoadAppsTask(getAppContext(), mEnabledApps, () -> {
             binding.searchViewLayout.setEnabled(false);
             binding.progress.setVisibility(View.VISIBLE);
         }, appList -> {
             mAppList = appList;
-            binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(getAppContext()));
             binding.recyclerView.setAdapter(new DarkModeAdapter(appList,
                     this::onSwitchChange,
                     this::onSliderChange));
