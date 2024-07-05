@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -86,7 +85,7 @@ public class StatusbarMods extends XposedMods {
     private boolean mBrightnessControl;
     private boolean mJustPeeked;
     private Object OplusBrightnessControllerExt = null;
-    private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
+    private static final float BRIGHTNESS_CONTROL_PADDING = 0.10f;
     private static final int BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT = 750; // ms
     private static final int BRIGHTNESS_CONTROL_LINGER_THRESHOLD = 20;
     private DisplayMetrics mDisplayMetrics = null;
@@ -412,7 +411,6 @@ public class StatusbarMods extends XposedMods {
         hookAllConstructors(CentralSurfacesImpl, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Log.d("StatusbarMods", "afterHookedMethod CentralSurfacesImpl");
                 mDisplayMetrics = (DisplayMetrics) getObjectField(param.thisObject, "mDisplayMetrics");
                 mDisplayManager = (DisplayManager) mContext.getSystemService(Context.DISPLAY_SERVICE);
             }
@@ -667,9 +665,7 @@ public class StatusbarMods extends XposedMods {
         if (mStatusBar != null)
             mStatusBar.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
 
-        final float val = convertGammaToLinearFloat(
-                Math.round(value * getGammaMax()),
-                mMinimumBacklight, mMaximumBacklight);
+        final float val = mMinimumBacklight + value * (mMaximumBacklight - mMinimumBacklight);
         callMethod(mDisplayManager, "setTemporaryBrightness", 0, val);
         callMethod(mDisplayManager, "setTemporaryAutoBrightnessAdjustment", val);
         callMethod(OplusBrightnessControllerExt, "setBrightness", (int) val);
