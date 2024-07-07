@@ -329,37 +329,6 @@ public class UpdateFragment extends Fragment {
     public interface TaskDoneCallback extends Callback {
         void onFinished(HashMap<String, Object> result);
     }
-/*    private static class ChangelogReceiver extends Thread {
-        private final TaskDoneCallback mCallback;
-        private final String mURL;
-
-        private ChangelogReceiver(String URL, TaskDoneCallback callback) {
-            mURL = URL;
-            mCallback = callback;
-        }
-
-        @Override
-        public void run()
-        {
-            try {
-                URL changelogData = new URL(mURL);
-                InputStream s = changelogData.openStream();
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(s));
-
-                StringBuilder result = new StringBuilder();
-                String line;
-                while ((line = in.readLine()) != null) {
-                    result.append(line).append("\n");
-                }
-                HashMap<String, Object> returnVal = new HashMap<>();
-                returnVal.put("changelog", result.toString());
-
-                mCallback.onFinished(returnVal);
-            } catch (Exception ignored){}
-        }
-    }
-*/
 
     public static class updateChecker extends Thread {
         private final TaskDoneCallback mCallback;
