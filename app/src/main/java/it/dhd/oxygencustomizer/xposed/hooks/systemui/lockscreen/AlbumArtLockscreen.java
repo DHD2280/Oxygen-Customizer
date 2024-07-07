@@ -87,6 +87,7 @@ public class AlbumArtLockscreen extends XposedMods {
                 albumArtView = new ImageView(mContext);
                 albumArtView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
                 albumArtView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                albumArtView.setVisibility(View.GONE);
                 albumArtContainer.addView(albumArtView);
 
                 rootView.addView(albumArtContainer, 2);
@@ -114,7 +115,7 @@ public class AlbumArtLockscreen extends XposedMods {
     }
 
     private void updateAlbumArt() {
-        if (shouldShowArt) {
+        if (showAlbumArt && shouldShowArt && canShowArt) {
             // Keyguard so we can show album art
             albumArtView.post(() -> albumArtView.setVisibility(View.VISIBLE));
         } else {
@@ -131,7 +132,7 @@ public class AlbumArtLockscreen extends XposedMods {
         canShowArt = (getMediaMetadata() != null &&
                 (isMusicActive ||
                 state == PlaybackState.STATE_PLAYING ||
-                        state == PlaybackState.STATE_PAUSED));
+                        state == PlaybackState.STATE_PAUSED) && getArt() != null);
         if (showAlbumArt && canShowArt) {
             Bitmap oldArt = mArt;
             mArt = getArtFilter(getArt());
@@ -143,6 +144,7 @@ public class AlbumArtLockscreen extends XposedMods {
             transitionDrawable.startTransition(250);
         } else {
             albumArtView.setImageBitmap(null);
+            albumArtView.post(() -> albumArtView.setVisibility(View.GONE));
         }
         updateAlbumArt();
     }
