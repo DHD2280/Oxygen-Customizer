@@ -170,7 +170,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
 
                 if (mOnButtonClick != null) {
-                    mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition()+1);
+                    mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition());
                 } else {
                     for (int i = 1; i <= itemList.size(); i++) {
                         itemList.get(i-1).setEnabled(i == holder.getBindingAdapterPosition()+1);
@@ -207,7 +207,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
             Runnable runnable = () -> {
                 if (mOnButtonClick != null) {
-                    mOnButtonClick.onDisableClick(holder.getBindingAdapterPosition()+1);
+                    mOnButtonClick.onDisableClick(holder.getBindingAdapterPosition());
                 } else {
                     if (!TextUtils.isEmpty(mAdditionalComponent))
                         OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");

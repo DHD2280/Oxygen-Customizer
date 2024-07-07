@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ICON_PACKS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.checkOverlayEnabledAndEnable;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.disableOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
@@ -25,12 +26,15 @@ import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.overlay.manager.IconPackManager;
+import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class IconPacks extends BaseFragment {
 
     private FragmentRecyclerBinding binding;
     private LoadingDialog loadingDialog;
+    private List<String> packs;
+    private ArrayList<IconModel> iconPacks;
 
     @Override
     public String getTitle() {
@@ -51,6 +55,7 @@ public class IconPacks extends BaseFragment {
         loadingDialog = new LoadingDialog(requireContext());
 
         // RecyclerView
+        packs = LIST_ICON_PACKS;
         binding.recyclerViewFragment.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerViewFragment.setAdapter(initIconPackItems());
         binding.recyclerViewFragment.setHasFixedSize(true);
@@ -59,8 +64,7 @@ public class IconPacks extends BaseFragment {
     }
 
     private IconsAdapter initIconPackItems() {
-        ArrayList<IconModel> iconPacks = new ArrayList<>();
-        List<String> packs = LIST_ICON_PACKS;
+        iconPacks = new ArrayList<>();
         for (int i = 0; i< packs.size(); i++) {
             String pkgName = packs.get(i).split("]")[1].replaceAll(" ", "");
             iconPacks.add(
@@ -93,14 +97,23 @@ public class IconPacks extends BaseFragment {
         });
     }
 
-    private void enableIconPack (int position) {
+    private void enableIconPack(int position) {
         // Enable icon pack
-        IconPackManager.enableOverlay(position);
+        disableAllIcons(position);
+        OverlayUtil.enableOverlayExclusiveInCategory(iconPacks.get(position).getPackageName());
     }
 
-    private void disableIconPack (int position) {
+    private void disableIconPack(int position) {
         // Disable icon pack
-        IconPackManager.disableOverlay(position);
+        Prefs.putBoolean(iconPacks.get(position).getPackageName(), false);
+        OverlayUtil.disableOverlay(iconPacks.get(position).getPackageName());
+    }
+
+    private void disableAllIcons(int position) {
+        for (int i=0; i<iconPacks.size(); i++) {
+            Prefs.putBoolean(iconPacks.get(i).getPackageName(), i == position);
+            disableOverlay(iconPacks.get(i).getPackageName());
+        }
     }
 
 }
