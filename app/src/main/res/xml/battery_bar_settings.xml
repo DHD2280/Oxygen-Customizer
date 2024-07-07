@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBarEnabled"
         android:summaryOff="@string/general_off"
@@ -10,7 +10,7 @@
         android:title="@string/BB_enable_title"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBOnlyWhileCharging"
         android:summaryOff="@string/general_off"
@@ -18,7 +18,7 @@
         android:title="@string/BB_onlycharging_title"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBOnBottom"
         android:summaryOff="@string/general_off"
@@ -26,7 +26,7 @@
         android:title="@string/BB_move_SB_bottom_title"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBarColorful"
         android:summaryOff="@string/general_off"
@@ -48,7 +48,7 @@
         app:iconSpaceReserved="false"
         app:updatesContinuously="true" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBSetCentered"
         android:summaryOff="@string/general_off"
@@ -56,7 +56,7 @@
         android:title="@string/BB_center_align_title"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="indicateCharging"
         android:summaryOff="@string/general_off"
@@ -70,7 +70,7 @@
         android:title="@string/BB_batteryChargingColor"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="indicateFastCharging"
         android:summaryOff="@string/general_off"
@@ -84,7 +84,7 @@
         android:title="@string/BB_batteryFastChargingColor"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         app:iconSpaceReserved="false"
         android:title="@string/BB_indicate_power_save"
@@ -109,7 +109,7 @@
         app:tickInterval="1"
         app:valueCount="2" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="BBarTransitColors"
         android:summaryOff="@string/general_off"

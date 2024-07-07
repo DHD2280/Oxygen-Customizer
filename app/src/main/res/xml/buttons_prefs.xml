@@ -14,28 +14,28 @@
         app:iconSpaceReserved="false"
         android:title="@string/volume_buttons_category_title" >
 
-        <!-- <SwitchPreferenceCompat
+        <!-- <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volume_wake_screen"
             app:iconSpaceReserved="false"
             android:title="@string/button_wake_title"
             android:summary="@string/button_wake_summary"
             android:defaultValue="false" /> -->
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volbtn_music_controls"
             app:iconSpaceReserved="false"
             android:title="@string/volbtn_music_controls_title"
             android:summary="@string/volbtn_music_controls_summary"
             android:defaultValue="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volbtn_torch"
             android:title="@string/torch_long_press_volbtn_torch_title"
             android:summary="@string/torch_long_press_volbtn_torch_desc"
             android:defaultValue="false"
             app:iconSpaceReserved="false"/>
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volbtn_torch_enable_timeout"
             android:title="@string/torch_long_press_volbtn_torch_enable_timeout_title"
             android:summaryOff="@string/general_off"
@@ -50,7 +50,7 @@
             app:minVal="5"
             app:tickInterval="5"/>
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volbtn_torch_use_proximity"
             android:title="@string/torch_long_press_volbtn_torch_use_proximity"
             android:summaryOff="@string/general_off"

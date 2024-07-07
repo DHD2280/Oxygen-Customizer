@@ -22,12 +22,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.PrefManager;
@@ -36,11 +36,11 @@ import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 public class Settings extends PreferenceFragmentCompat {
 
     Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
-    SwitchPreferenceCompat appIconThemed;
+    MaterialSwitchPreference appIconThemed;
 
     // Updater Prefs
     Preference updatePref;
-    SwitchPreferenceCompat autoUpdatePref, checkOnWifiPref;
+    MaterialSwitchPreference autoUpdatePref, checkOnWifiPref;
     boolean export = true;
 
     @Override

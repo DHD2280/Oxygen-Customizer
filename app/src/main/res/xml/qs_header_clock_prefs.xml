@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="qs_header_clock_custom_enabled"
         android:summary="@string/qs_header_clock_enabled_summary"
@@ -37,7 +37,7 @@
             android:title="@string/qs_header_stock_clock_red_one_color"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_clock_custom_color_switch"
             android:title="@string/qs_header_stock_clock_custom_color_title"
@@ -49,13 +49,13 @@
             android:title="@string/qs_header_stock_clock_custom_color"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_clock_date_hide"
             android:title="@string/qs_header_stock_clock_date_hide"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_clock_date_custom_color_switch"
             android:title="@string/qs_header_stock_clock_date_custom_color_title"
@@ -67,7 +67,7 @@
             android:title="@string/qs_header_stock_clock_date_custom_color"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_clock_background_chip_switch"
             android:title="@string/qs_header_stock_clock_background_chip"
@@ -78,7 +78,7 @@
             android:title="@string/qs_header_stock_clock_background_chip_style"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_date_background_chip_switch"
             android:title="@string/qs_header_stock_date_background_chip"
@@ -90,7 +90,7 @@
             app:backgroundChipStyle="1"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_stock_clock_hide_carrier_label"
             android:title="@string/qs_header_stock_clock_hide_carrier_label"
@@ -104,7 +104,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_clock_custom_font"
             android:summaryOff="@string/general_off"
@@ -126,7 +126,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_clock_custom_color_switch"
             android:title="@string/qs_header_clock_custom_color_title"
@@ -173,7 +173,7 @@
             app:minVal="0.5"
             app:tickInterval=".1" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="qs_header_clock_custom_user_image"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"

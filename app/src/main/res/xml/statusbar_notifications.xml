@@ -10,7 +10,7 @@
     app:iconSpaceReserved="false"
     android:title="@string/statusbar_notifications_cat">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="statusbar_notification_app_icon"
         android:title="@string/statusbar_use_app_icon"
@@ -26,7 +26,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/statusbar_notifications_transparency">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_notification_transparency"
             android:title="@string/statusbar_notification_transparency"
@@ -47,28 +47,28 @@
         app:iconSpaceReserved="false"
         android:title="@string/statusbar_notifications_related">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="remove_charging_complete_notification"
             android:title="@string/remove_charging_complete_notification_title"
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="remove_dev_mode"
             android:title="@string/remove_dev_mode_notification"
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="remove_flashlight_notification"
             android:title="@string/remove_flashlight_notification"
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="remove_low_battery_notification"
             android:title="@string/remove_low_battery_notification"
@@ -84,14 +84,14 @@
             android:title="@string/notif_default_expansion_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="customizeClearButton"
             android:title="@string/customize_clear_all_button"
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="linkBackgroundAccent"
             android:title="@string/clear_all_link_bg_accent"
@@ -105,7 +105,7 @@
             android:defaultValue="0x555555"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="linkIconAccent"
             android:title="@string/clear_all_link_bg_icon_accent"

@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="battery_icon_customize"
         android:summaryOff="@string/general_off"
@@ -19,7 +19,7 @@
         app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="battery_icon_change_charging_icon"
         android:summaryOff="@string/general_off"
@@ -46,31 +46,31 @@
             app:maxVal="30"
             app:minVal="10" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_hide_percentage"
             android:summary="@string/hide_percentage_desc"
             android:title="@string/hide_percentage_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_inside_percentage"
             android:summary="@string/inside_percentage_desc"
             android:title="@string/inside_percentage_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_hide_battery"
             android:summary="@string/hide_battery_desc"
             android:title="@string/hide_battery_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_reverse_layout"
             android:summary="@string/reverse_layout_desc"
             android:title="@string/reverse_layout_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_rotate_layout"
             android:summary="@string/rotate_layout_desc"
             android:title="@string/rotate_layout_title"
@@ -83,25 +83,25 @@
         android:title="@string/battery_icon_color"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_perimeter_alpha"
             android:summary="@string/perimeter_alpha_desc"
             android:title="@string/perimeter_alpha_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_fill_alpha"
             android:summary="@string/fill_alpha_desc"
             android:title="@string/fill_alpha_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_rainbow_color"
             android:summary="@string/rainbow_color_desc"
             android:title="@string/rainbow_color_title"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_blend_color"
             android:summary="@string/blend_color_desc"
             android:title="@string/blend_color_title"
@@ -188,7 +188,7 @@
         android:key="category_battery_stock_prefs"
         android:title="@string/battery_stock_prefs">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="customize_stock_percentage_size"
             android:summaryOff="@string/general_off"

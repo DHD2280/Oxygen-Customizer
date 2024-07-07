@@ -20,7 +20,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/weather_config_title">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="lockscreen_weather_enabled"
         android:title="@string/enable_title"
@@ -72,7 +72,7 @@
         app:useSimpleSummaryProvider="true"
         android:dependency="lockscreen_weather_enabled" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_show_location"
         android:title="@string/weather_show_location"
@@ -81,7 +81,7 @@
         android:defaultValue="true"
         android:dependency="lockscreen_weather_enabled"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_show_condition"
         android:title="@string/weather_show_condition"
@@ -90,7 +90,7 @@
         android:defaultValue="true"
         android:dependency="lockscreen_weather_enabled"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_show_humidity"
         android:title="@string/weather_show_humidity"
@@ -99,7 +99,7 @@
         android:defaultValue="true"
         android:dependency="lockscreen_weather_enabled"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_show_wind"
         android:title="@string/weather_show_wind"
@@ -124,7 +124,7 @@
         app:defaultValue="18"
         android:dependency="lockscreen_weather_enabled"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_custom_color_switch"
         android:title="@string/weather_custom_color"
@@ -140,7 +140,7 @@
         app:iconSpaceReserved="false" />
 
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="weather_custom_location_switch"
         android:title="@string/custom_location_title"
@@ -159,7 +159,7 @@
         android:title="@string/weather_icon_pack_title"
         android:dependency="lockscreen_weather_enabled" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:key="weather_custom_margins"
         android:title="@string/weather_custom_margins"
         android:summaryOff="@string/general_off"

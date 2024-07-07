@@ -4,14 +4,14 @@
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/misc_illustration" />
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="misc_remove_rotate_floating"
         android:title="@string/misc_remove_rotate_floating_title"
         android:summaryOn="@string/general_on"
         android:summaryOff="@string/general_off"
         app:iconSpaceReserved="false" />
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="remove_usb_dialog"
         android:title="@string/remove_usb_dialog"
@@ -23,20 +23,20 @@
         app:iconSpaceReserved="false"
         android:title="@string/misc_power_menu">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="power_menu_hide_sos"
             android:title="@string/misc_power_menu_hide_sos"
             android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="show_advanced_reboot"
             android:title="@string/show_advanced_reboot_title"
             android:summary="@string/show_advanced_reboot_summary"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="advanced_reboot_auth"
             android:title="@string/use_auth_for_advanced_reboot_title"
@@ -61,7 +61,7 @@
         android:title="@string/app_name"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="true"
             android:key="show_entry_settings"
             android:title="@string/show_entry_settings_title"

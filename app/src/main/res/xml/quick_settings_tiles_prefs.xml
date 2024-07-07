@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_tiles_customize"
         android:title="@string/quick_settings_tiles_main"
@@ -63,7 +63,7 @@
 
     </PreferenceCategory>
 
-    <!-- <SwitchPreferenceCompat
+    <!-- <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_disable_lockscreen"
         android:title="@string/quick_settings_tiles_disable_qs_title"

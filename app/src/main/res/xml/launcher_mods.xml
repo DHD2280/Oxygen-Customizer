@@ -14,7 +14,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/launcher_layout">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="rearrange_home"
             app:iconSpaceReserved="false"
             android:title="@string/launcher_edit_layout"
@@ -48,7 +48,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/launcher_folder_layout">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="rearrange_folder"
             app:iconSpaceReserved="false"
             android:title="@string/launcher_folder_edit_layout"
@@ -74,7 +74,7 @@
             app:tickInterval="1"
             app:defaultValue="3"
             android:dependency="rearrange_folder"/>
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="rearrange_preview"
             app:iconSpaceReserved="false"
             android:title="@string/launcher_folder_update_preview"
@@ -82,7 +82,7 @@
             android:summaryOn="@string/general_on"
             android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="remove_folder_pagination"
             app:iconSpaceReserved="false"
             android:title="@string/remove_folder_pagination_title"
@@ -95,7 +95,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/drawer">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="rearrange_drawer"
             app:iconSpaceReserved="false"
             android:title="@string/launcher_drawer_edit_columns"
@@ -118,7 +118,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/launcher_recents">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:title="@string/launcher_app_details_title"
             android:summary="@string/launcher_app_details_summary"
@@ -130,7 +130,7 @@
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="remove_home_pagination"
             app:iconSpaceReserved="false"
             android:title="@string/remove_home_pagination"

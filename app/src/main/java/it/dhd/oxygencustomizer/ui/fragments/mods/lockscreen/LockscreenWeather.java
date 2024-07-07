@@ -35,7 +35,6 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -46,6 +45,7 @@ import java.util.Locale;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -62,9 +62,9 @@ public class LockscreenWeather
     private static final String DEFAULT_WEATHER_ICON_PACKAGE = "it.dhd.oxygencustomizer.google";
     private SharedPreferences mPrefs;
     private ListPreference mProvider;
-    private SwitchPreferenceCompat mCustomLocation;
+    private MaterialSwitchPreference mCustomLocation;
     private ListPreference mUnits;
-    private SwitchPreferenceCompat mEnable;
+    private MaterialSwitchPreference mEnable;
     private boolean mTriggerPermissionCheck;
     private ListPreference mUpdateInterval;
     private ListWithPopUpPreference mWeatherIconPack;

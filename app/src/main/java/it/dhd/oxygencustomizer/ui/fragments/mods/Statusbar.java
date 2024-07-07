@@ -11,13 +11,12 @@ import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
-import androidx.preference.SwitchPreferenceCompat;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -275,7 +274,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                 mChargingIcon.setAdapterType(ListPreferenceAdapter.TYPE_BATTERY_ICONS);
             }
 
-            SwitchPreferenceCompat mBatteryCustomize = findPreference("battery_icon_customize");
+            MaterialSwitchPreference mBatteryCustomize = findPreference("battery_icon_customize");
             if (mBatteryCustomize != null) {
                 mBatteryCustomize.setOnPreferenceChangeListener((preference, newValue) -> {
                     AppUtils.restartAllScope(new String[]{SYSTEM_UI});

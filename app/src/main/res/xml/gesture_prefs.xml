@@ -7,7 +7,7 @@
         android:title="@string/gesture_back_title"
         app:iconSpaceReserved="false"
         search:ignore="true">
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="gesture_left"
             android:title="@string/gesture_left_title"
             android:defaultValue="true"
@@ -21,7 +21,7 @@
             app:valueCount="2"
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="gesture_right"
             android:title="@string/gesture_right_title"
             android:defaultValue="true"
@@ -36,13 +36,13 @@
             app:tickInterval="1"
             android:iconSpaceReserved="false"/>
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="gesture_on_rotate"
             android:title="@string/gesture_back_on_rotate"
             android:defaultValue="true"
             app:iconSpaceReserved="false"/>
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="gesture_override_holdback"
             android:title="@string/gesture_override_back_hold"
             android:defaultValue="false"
