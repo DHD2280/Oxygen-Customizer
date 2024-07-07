@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
 package it.dhd.oxygencustomizer.xposed.batterystyles
 
 import android.annotation.SuppressLint
@@ -16,12 +30,10 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
-import it.dhd.oxygencustomizer.xposed.ResourceManager.modRes
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider
 import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
-open class PortraitBatteryAiroo(private val context: Context, frameColor: Int, private val xposed: Boolean) :
+open class PortraitBatteryAiroo(private val context: Context, frameColor: Int) :
     BatteryDrawable() {
 
     // Need to load:
@@ -147,9 +159,7 @@ open class PortraitBatteryAiroo(private val context: Context, frameColor: Int, p
     }
 
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
-        p.color =
-            if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(context, android.R.attr.colorError)
-            else getColorAttrDefaultColor(context, android.R.attr.colorError, Color.RED)
+        p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
         p.isDither = true
         p.strokeWidth = 0f
@@ -192,11 +202,9 @@ open class PortraitBatteryAiroo(private val context: Context, frameColor: Int, p
         for (i in 0 until n) {
             colorLevels[2 * i] = levels.getInt(i, 0)
             if (colors.getType(i) == TypedValue.TYPE_ATTRIBUTE) {
-                colorLevels[2 * i + 1] =
-                    if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(
-                            colors.getResourceId(i, 0), context
-                        )
-                    else getColorAttrDefaultColor(context, colors.getResourceId(i, 0), Color.WHITE)
+                colorLevels[2 * i + 1] = getColorAttrDefaultColor(
+                        colors.getResourceId(i, 0), context
+                    )
             } else {
                 colorLevels[2 * i + 1] = colors.getColor(i, 0)
             }
@@ -447,32 +455,27 @@ open class PortraitBatteryAiroo(private val context: Context, frameColor: Int, p
     @SuppressLint("RestrictedApi")
     private fun loadPaths() {
         val pathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryPerimeterAiroo)
-            else context.getString(R.string.config_portraitBatteryPerimeterAiroo)
+            getResources(context).getString(R.string.config_portraitBatteryPerimeterAiroo)
         perimeterPath.set(PathParser.createPathFromPathData(pathString))
         perimeterPath.computeBounds(RectF(), true)
 
         val errorPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryErrorAiroo)
-            else context.getString(R.string.config_portraitBatteryErrorAiroo)
+            getResources(context).getString(R.string.config_portraitBatteryErrorAiroo)
         errorPerimeterPath.set(PathParser.createPathFromPathData(errorPathString))
         errorPerimeterPath.computeBounds(RectF(), true)
 
         val fillMaskString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryFillMaskAiroo)
-            else context.getString(R.string.config_portraitBatteryFillMaskAiroo)
+            getResources(context).getString(R.string.config_portraitBatteryFillMaskAiroo)
         fillMask.set(PathParser.createPathFromPathData(fillMaskString))
         // Set the fill rect so we can calculate the fill properly
         fillMask.computeBounds(fillRect, true)
 
         val boltPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryBoltAiroo)
-            else context.getString(R.string.config_portraitBatteryBoltAiroo)
+            getResources(context).getString(R.string.config_portraitBatteryBoltAiroo)
         boltPath.set(PathParser.createPathFromPathData(boltPathString))
 
         val plusPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryPlusAiroo)
-            else context.getString(R.string.config_portraitBatteryPlusAiroo)
+            getResources(context).getString(R.string.config_portraitBatteryPlusAiroo)
         plusPath.set(PathParser.createPathFromPathData(plusPathString))
 
         dualTone = false

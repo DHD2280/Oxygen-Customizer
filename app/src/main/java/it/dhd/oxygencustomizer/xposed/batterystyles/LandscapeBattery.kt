@@ -17,12 +17,10 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
-import it.dhd.oxygencustomizer.xposed.ResourceManager.modRes
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider
 import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
-open class LandscapeBattery(private val context: Context, frameColor: Int, private val xposed: Boolean) :
+open class LandscapeBattery(private val context: Context, frameColor: Int) :
     BatteryDrawable() {
 
     // Need to load:
@@ -92,15 +90,8 @@ open class LandscapeBattery(private val context: Context, frameColor: Int, priva
             postInvalidate()
         }
 
-    var fastCharging = false
-        set(value) {
-            field = value
-            postInvalidate()
-        }
-
     override fun setChargingEnabled(charging: Boolean, isFast: Boolean) {
         this.charging = charging
-        this.fastCharging = isFast
         postInvalidate()
     }
 
@@ -155,9 +146,7 @@ open class LandscapeBattery(private val context: Context, frameColor: Int, priva
     }
 
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
-        p.color =
-            if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(context, android.R.attr.colorError)
-            else getColorAttrDefaultColor(context, android.R.attr.colorError, Color.RED)
+        p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
         p.isDither = true
         p.strokeWidth = 0f
@@ -200,11 +189,9 @@ open class LandscapeBattery(private val context: Context, frameColor: Int, priva
         for (i in 0 until n) {
             colorLevels[2 * i] = levels.getInt(i, 0)
             if (colors.getType(i) == TypedValue.TYPE_ATTRIBUTE) {
-                colorLevels[2 * i + 1] =
-                    if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(
+                colorLevels[2 * i + 1] = getColorAttrDefaultColor(
                                     colors.getResourceId(i, 0), context
                                 )
-                    else getColorAttrDefaultColor(context, colors.getResourceId(i, 0), 0)
             } else {
                 colorLevels[2 * i + 1] = colors.getColor(i, 0)
             }
@@ -451,32 +438,27 @@ open class LandscapeBattery(private val context: Context, frameColor: Int, priva
     @SuppressLint("RestrictedApi")
     private fun loadPaths() {
         val pathString =
-            if (xposed) modRes.getString(R.string.config_landscapeBatteryPerimeterCustomL)
-            else context.getString(R.string.config_landscapeBatteryPerimeterCustomL)
+            getResources(context).getString(R.string.config_landscapeBatteryPerimeterCustomL)
         perimeterPath.set(PathParser.createPathFromPathData(pathString))
         perimeterPath.computeBounds(RectF(), true)
 
         val errorPathString =
-            if (xposed) modRes.getString(R.string.config_landscapeBatteryErrorCustomL)
-            else context.getString(R.string.config_landscapeBatteryErrorCustomL)
+            getResources(context).getString(R.string.config_landscapeBatteryErrorCustomL)
         errorPerimeterPath.set(PathParser.createPathFromPathData(errorPathString))
         errorPerimeterPath.computeBounds(RectF(), true)
 
         val fillMaskString =
-            if (xposed) modRes.getString(R.string.config_landscapeBatteryFillMaskCustomL)
-            else context.getString(R.string.config_landscapeBatteryFillMaskCustomL)
+            getResources(context).getString(R.string.config_landscapeBatteryFillMaskCustomL)
         fillMask.set(PathParser.createPathFromPathData(fillMaskString))
         // Set the fill rect so we can calculate the fill properly
         fillMask.computeBounds(fillRect, true)
 
         val boltPathString =
-            if (xposed) modRes.getString(R.string.config_landscapeBatteryBoltCustomL)
-            else context.getString(R.string.config_landscapeBatteryBoltCustomL)
+            getResources(context).getString(R.string.config_landscapeBatteryBoltCustomL)
         boltPath.set(PathParser.createPathFromPathData(boltPathString))
 
         val plusPathString =
-            if (xposed) modRes.getString(R.string.config_landscapeBatteryPlusCustomL)
-            else context.getString(R.string.config_landscapeBatteryPlusCustomL)
+            getResources(context).getString(R.string.config_landscapeBatteryPlusCustomL)
         plusPath.set(PathParser.createPathFromPathData(plusPathString))
 
         dualTone = false

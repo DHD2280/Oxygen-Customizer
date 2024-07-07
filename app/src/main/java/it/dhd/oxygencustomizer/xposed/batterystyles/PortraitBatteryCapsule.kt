@@ -30,12 +30,10 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
-import it.dhd.oxygencustomizer.xposed.ResourceManager.modRes
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider
 import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
-open class PortraitBatteryCapsule(private val context: Context, frameColor: Int, private val xposed: Boolean) :
+open class PortraitBatteryCapsule(private val context: Context, frameColor: Int) :
     BatteryDrawable() {
 
     // Need to load:
@@ -161,9 +159,7 @@ open class PortraitBatteryCapsule(private val context: Context, frameColor: Int,
     }
 
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
-        p.color =
-            if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(context, android.R.attr.colorError)
-            else getColorAttrDefaultColor(context, android.R.attr.colorError, Color.RED)
+        p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
         p.isDither = true
         p.strokeWidth = 0f
@@ -206,11 +202,9 @@ open class PortraitBatteryCapsule(private val context: Context, frameColor: Int,
         for (i in 0 until n) {
             colorLevels[2 * i] = levels.getInt(i, 0)
             if (colors.getType(i) == TypedValue.TYPE_ATTRIBUTE) {
-                colorLevels[2 * i + 1] =
-                    if (xposed) SettingsLibUtilsProvider.getColorAttrDefaultColor(
+                colorLevels[2 * i + 1] = getColorAttrDefaultColor(
                                     colors.getResourceId(i, 0), context
                                 )
-                    else getColorAttrDefaultColor(context, colors.getResourceId(i, 0), Color.WHITE)
             } else {
                 colorLevels[2 * i + 1] = colors.getColor(i, 0)
             }
@@ -461,32 +455,27 @@ open class PortraitBatteryCapsule(private val context: Context, frameColor: Int,
     @SuppressLint("RestrictedApi")
     private fun loadPaths() {
         val pathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryPerimeterCapsule)
-            else context.getString(R.string.config_portraitBatteryPerimeterCapsule)
+            getResources(context).getString(R.string.config_portraitBatteryPerimeterCapsule)
         perimeterPath.set(PathParser.createPathFromPathData(pathString))
         perimeterPath.computeBounds(RectF(), true)
 
         val errorPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryErrorCapsule)
-            else context.getString(R.string.config_portraitBatteryErrorCapsule)
+            getResources(context).getString(R.string.config_portraitBatteryErrorCapsule)
         errorPerimeterPath.set(PathParser.createPathFromPathData(errorPathString))
         errorPerimeterPath.computeBounds(RectF(), true)
 
         val fillMaskString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryFillMaskCapsule)
-            else context.getString(R.string.config_portraitBatteryFillMaskCapsule)
+            getResources(context).getString(R.string.config_portraitBatteryFillMaskCapsule)
         fillMask.set(PathParser.createPathFromPathData(fillMaskString))
         // Set the fill rect so we can calculate the fill properly
         fillMask.computeBounds(fillRect, true)
 
         val boltPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryBoltCapsule)
-            else context.getString(R.string.config_portraitBatteryBoltCapsule)
+            getResources(context).getString(R.string.config_portraitBatteryBoltCapsule)
         boltPath.set(PathParser.createPathFromPathData(boltPathString))
 
         val plusPathString =
-            if (xposed) modRes.getString(R.string.config_portraitBatteryPlusCapsule)
-            else context.getString(R.string.config_portraitBatteryPlusCapsule)
+            getResources(context).getString(R.string.config_portraitBatteryPlusCapsule)
         plusPath.set(PathParser.createPathFromPathData(plusPathString))
 
         dualTone = false

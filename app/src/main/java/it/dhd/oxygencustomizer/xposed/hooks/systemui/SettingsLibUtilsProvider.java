@@ -42,6 +42,21 @@ public class SettingsLibUtilsProvider extends XposedMods {
         }
     }
 
+    public static int getColorAttrDefaultColor(int resID, Context context, int defValue) {
+        if (UtilsClass == null) {
+            return 0;
+        }
+        try {
+            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", resID, context);
+        } catch (Throwable throwable) {
+            try {
+                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID);
+            } catch (Throwable throwable1) {
+                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, defValue);
+            }
+        }
+    }
+
     public static int getColorAttrDefaultColor(int resID, Context context) {
         if (UtilsClass == null) return 0;
 

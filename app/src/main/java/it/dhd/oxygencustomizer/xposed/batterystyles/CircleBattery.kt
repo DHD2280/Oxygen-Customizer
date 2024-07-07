@@ -1,424 +1,350 @@
-package it.dhd.oxygencustomizer.xposed.batterystyles;
+package it.dhd.oxygencustomizer.xposed.batterystyles
 
-/* Modified from Iconify
- * https://github.com/Mahmud0808/Iconify/tree/00db9657a129663b1a26815857c5eba7eacb8657
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see [http://www.gnu.org/licenses/].
- */
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.DashPathEffect
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Paint.Align
+import android.graphics.Path
+import android.graphics.PathEffect
+import android.graphics.PixelFormat
+import android.graphics.RectF
+import android.graphics.SweepGradient
+import android.graphics.Typeface
+import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.PathParser
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE
+import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE
+import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR
+import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_STYLE
+import it.dhd.oxygencustomizer.utils.Prefs.getBoolean
+import it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs
+import it.dhd.oxygencustomizer.xposed.utils.AlphaRefreshedPaint
 
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static android.graphics.Paint.Align.CENTER;
-import static android.graphics.Paint.Style.STROKE;
-import static android.graphics.Typeface.BOLD;
-import static java.lang.Math.round;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_RLANDSCAPE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_STYLE;
-import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+@Suppress("UNUSED_PARAMETER")
+open class CircleBattery(private val mContext: Context, frameColor: Int) : BatteryDrawable() {
 
-import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
-import android.graphics.PixelFormat;
-import android.graphics.RectF;
-import android.graphics.SweepGradient;
-import android.graphics.Typeface;
+    private var mChargingColor = -0xcb38a7
+    private var mPowerSaveColor = -0x5b00
+    private var mShowPercentage = false
+    private var mDiameter = 0
+    private val mFrame = RectF()
+    private var mFGColor = Color.WHITE
+    private val mTextPaint: Paint = AlphaRefreshedPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mFramePaint: Paint = AlphaRefreshedPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mBatteryPaint: Paint = AlphaRefreshedPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mWarningTextPaint: Paint = AlphaRefreshedPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mBoltPaint: Paint = AlphaRefreshedPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mBoltAlphaAnimator: ValueAnimator
+    private var mShadeColors: IntArray? = null
+    private var mShadeLevels: FloatArray? = null
+    private var mBoltPath: Path? = null
+    private var mAlphaPct = 0f
+    private var powerSaveEnabled = false
+    private var charging = false
+    private var batteryLevel = 0
+    private var batteryColors: IntArray? = null
+    private var batteryLevels: List<Int>? = null
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.graphics.ColorUtils;
-import androidx.core.graphics.PathParser;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-
-import java.util.List;
-
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
-import it.dhd.oxygencustomizer.xposed.utils.AlphaRefreshedPaint;
-
-public class CircleBattery extends BatteryDrawable {
-
-    private static final String WARNING_STRING = "!";
-    private static final int CRITICAL_LEVEL = 5;
-    private static final int CIRCLE_DIAMETER = 45; //relative to dash effect size. Size doesn't matter as finally it gets scaled by parent
-    private static final PathEffect DASH_PATH_EFFECT = new DashPathEffect(new float[]{3f, 2f}, 0f);
-    private final Context mContext;
-    private final boolean xposed;
-    private int mChargingColor = 0xFF34C759;
-    private int mPowerSaveColor = 0xFFFFA500;
-    private int mFastChargingColor = mChargingColor;
-    private boolean mShowPercentage = false;
-    private int mDiameter;
-    private final RectF mFrame = new RectF();
-    private int mFGColor = Color.WHITE;
-    private final Paint mTextPaint = new AlphaRefreshedPaint(ANTI_ALIAS_FLAG);
-    private final Paint mFramePaint = new AlphaRefreshedPaint(ANTI_ALIAS_FLAG);
-    private final Paint mBatteryPaint = new AlphaRefreshedPaint(ANTI_ALIAS_FLAG);
-    private final Paint mWarningTextPaint = new AlphaRefreshedPaint(ANTI_ALIAS_FLAG);
-    private final Paint mBoltPaint = new AlphaRefreshedPaint(ANTI_ALIAS_FLAG);
-    private final ValueAnimator mBoltAlphaAnimator;
-    private int[] mShadeColors;
-    private float[] mShadeLevels;
-    private Path mBoltPath;
-    private float mAlphaPct;
-    private boolean powerSaveEnabled = false;
-    private boolean charging = false;
-    private boolean isFastCharging = false;
-    private int batteryLevel = 0;
-    private int[] batteryColors;
-    private List<Integer> batteryLevels;
-    private boolean customBlendColor = false;
-
-    public CircleBattery(Context context, int frameColor, boolean xposed) {
-        super();
-        mContext = context;
-        this.xposed = xposed;
-
-        mFramePaint.setDither(true);
-        mFramePaint.setStyle(STROKE);
-
-        mTextPaint.setTypeface(Typeface.create("sans-serif-condensed", BOLD));
-        mTextPaint.setTextAlign(CENTER);
-
-        mWarningTextPaint.setTypeface(Typeface.create("sans-serif", BOLD));
-        mWarningTextPaint.setTextAlign(CENTER);
-
-        mBatteryPaint.setDither(true);
-        mBatteryPaint.setStyle(STROKE);
-
-        setColors(frameColor, frameColor, frameColor);
-
-        setMeterStyle(xposed ? Integer.parseInt(Xprefs.getString(CUSTOM_BATTERY_STYLE, String.valueOf(BATTERY_STYLE_CUSTOM_RLANDSCAPE))) : 0);
-
-        mBoltAlphaAnimator = ValueAnimator.ofInt(255, 255, 255, 45);
-
-        mBoltAlphaAnimator.setDuration(2000);
-        mBoltAlphaAnimator.setInterpolator(new FastOutSlowInInterpolator());
-        mBoltAlphaAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        mBoltAlphaAnimator.setRepeatCount(ValueAnimator.INFINITE);
-
-        mBoltAlphaAnimator.addUpdateListener(valueAnimator -> invalidateSelf());
+    override fun setShowPercentEnabled(showPercent: Boolean) {
+        mShowPercentage = showPercent
+        postInvalidate()
     }
 
-    @Override
-    public void setShowPercentEnabled(boolean showPercent) {
-        mShowPercentage = showPercent;
-        postInvalidate();
+    override fun setChargingEnabled(charging: Boolean, isFast: Boolean) {
+        this.charging = charging
+        postInvalidate()
     }
 
-    @Override
-    public void setChargingEnabled(boolean charging, boolean isFast) {
-        this.charging = charging;
-        this.isFastCharging = isFast;
-        postInvalidate();
+    override fun setBatteryLevel(mLevel: Int) {
+        batteryLevel = mLevel
+        invalidateSelf()
     }
 
-    @Override
-    public void setBatteryLevel(int mLevel) {
-        batteryLevel = mLevel;
-        invalidateSelf();
+    fun setMeterStyle(batteryStyle: Int) {
+        mFramePaint.setPathEffect(if (batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE) DASH_PATH_EFFECT else null)
+        mBatteryPaint.setPathEffect(if (batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE) DASH_PATH_EFFECT else null)
     }
 
-    public void setMeterStyle(int batteryStyle) {
-        mFramePaint.setPathEffect(batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ? DASH_PATH_EFFECT : null);
-        mBatteryPaint.setPathEffect(batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ? DASH_PATH_EFFECT : null);
+    override fun setBounds(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setBounds(left, top, right, bottom)
+        updateSize()
     }
 
-    @Override
-    public void setBounds(int left, int top, int right, int bottom) {
-        super.setBounds(left, top, right, bottom);
-        updateSize();
+    override fun setPowerSavingEnabled(powerSaveEnabled: Boolean) {
+        this.powerSaveEnabled = powerSaveEnabled
+        postInvalidate()
     }
 
-    @Override
-    public void setPowerSavingEnabled(boolean powerSaveEnabled) {
-        this.powerSaveEnabled = powerSaveEnabled;
-        postInvalidate();
+    override fun setColors(fgColor: Int, bgColor: Int, singleToneColor: Int) {
+        mFGColor = fgColor
+        mBoltPaint.setColor(mFGColor)
+        mFramePaint.setColor(bgColor)
+        mTextPaint.setColor(mFGColor)
+        initColors()
+        invalidateSelf()
     }
 
-    @Override
-    public void setColors(int fgColor, int bgColor, int singleToneColor) {
-        mFGColor = fgColor;
-
-        mBoltPaint.setColor(mFGColor);
-        mFramePaint.setColor(bgColor);
-        mTextPaint.setColor(mFGColor);
-
-        initColors();
-
-        invalidateSelf();
-    }
-
-    private void initColors() {
-        if (xposed)
-            customBlendColor = Xprefs.getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false);
-        else
-            customBlendColor = false;
-
-        if (customBlendColor && getChargingColor() != Color.BLACK) {
-            mChargingColor = getChargingColor();
-        } else {
-            mChargingColor = 0xFF34C759;
+    private fun initColors() {
+        customBlendColor = try {
+            Xprefs?.getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false) ?: false
+        } catch (ignored: Throwable) {
+            getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false)
         }
 
-        if (customBlendColor && getFastChargingColor() != Color.BLACK) {
-            mFastChargingColor = getFastChargingColor();
+        mChargingColor = if (customBlendColor && chargingColor != Color.BLACK) {
+            chargingColor
         } else {
-            mFastChargingColor = mChargingColor;
+            -0xcb38a7
         }
 
-
-        if (customBlendColor && getPowerSaveFillColor() != Color.BLACK) {
-            mPowerSaveColor = getPowerSaveFillColor();
+        mPowerSaveColor = if (customBlendColor && powerSaveFillColor != Color.BLACK) {
+            powerSaveFillColor
         } else {
-            if (xposed)
-                mPowerSaveColor = SettingsLibUtilsProvider.getColorAttrDefaultColor(android.R.attr.colorError, mContext);
-            else
-                getColorAttrDefaultColor(mContext, android.R.attr.colorError, Color.RED);
+            getColorAttrDefaultColor(android.R.attr.colorError, mContext)
         }
 
-        @ColorInt int fillColor = getCustomFillColor();
-        @ColorInt int fillGradColor = getCustomFillGradColor();
+        @ColorInt val fillColor = customFillColor
+        @ColorInt val fillGradColor = customFillGradColor
 
-        if (customBlendColor) {
+        batteryColors = if (customBlendColor) {
             if (fillColor != Color.BLACK && fillGradColor != Color.BLACK) {
-                batteryColors = new int[]{fillGradColor, ColorUtils.blendARGB(fillColor, Color.WHITE, 0.4f)};
+                intArrayOf(fillGradColor, ColorUtils.blendARGB(fillColor, Color.WHITE, 0.4f))
             } else if (fillColor != Color.BLACK) {
-                batteryColors = new int[]{Color.RED, ColorUtils.blendARGB(fillColor, Color.WHITE, 0.4f)};
+                intArrayOf(Color.RED, ColorUtils.blendARGB(fillColor, Color.WHITE, 0.4f))
             } else if (fillGradColor != Color.BLACK) {
-                batteryColors = new int[]{fillGradColor, Color.YELLOW};
+                intArrayOf(fillGradColor, Color.YELLOW)
             } else {
-                batteryColors = new int[]{Color.RED, Color.YELLOW};
+                intArrayOf(Color.RED, Color.YELLOW)
             }
         } else {
-            batteryColors = new int[]{mFGColor, mFGColor};
+            intArrayOf(mFGColor, mFGColor)
         }
 
-        if (customBlendColor) {
-            batteryLevels = List.of(10, 30);
+        batteryLevels = if (customBlendColor) {
+            listOf(10, 30)
         } else {
-            batteryLevels = List.of(0, 0);
+            listOf(0, 0)
         }
     }
 
-    private void refreshShadeColors() {
-        if (batteryColors == null) return;
+    private fun refreshShadeColors() {
+        if (batteryColors == null || batteryLevels == null) return
 
-        initColors();
+        initColors()
 
-        mShadeColors = new int[batteryLevels.size() * 2 + 2];
-        mShadeLevels = new float[mShadeColors.length];
+        mShadeColors = IntArray(batteryLevels!!.size * 2 + 2)
+        mShadeLevels = FloatArray(mShadeColors!!.size)
 
-        float lastPCT = 0f;
-
-        for (int i = 0; i < batteryLevels.size(); i++) {
-            float rangeLength = batteryLevels.get(i) - lastPCT;
-
-            int pointer = 2 * i;
-            mShadeLevels[pointer] = (lastPCT + rangeLength * 0.3f) / 100;
-            mShadeColors[pointer] = batteryColors[i];
-
-            mShadeLevels[pointer + 1] = (batteryLevels.get(i) - rangeLength * 0.3f) / 100;
-            mShadeColors[pointer + 1] = batteryColors[i];
-            lastPCT = batteryLevels.get(i);
+        var lastPCT = 0f
+        for (i in batteryLevels!!.indices) {
+            val rangeLength = batteryLevels!![i] - lastPCT
+            val pointer = 2 * i
+            mShadeLevels!![pointer] = (lastPCT + rangeLength * 0.3f) / 100
+            mShadeColors!![pointer] = batteryColors!![i]
+            mShadeLevels!![pointer + 1] = (batteryLevels!![i] - rangeLength * 0.3f) / 100
+            mShadeColors!![pointer + 1] = batteryColors!![i]
+            lastPCT = batteryLevels!![i].toFloat()
         }
 
-        @ColorInt int fillColor = getCustomFillColor();
-
-        mShadeLevels[mShadeLevels.length - 2] = (batteryLevels.get(batteryLevels.size() - 1) + (100 - batteryLevels.get(batteryLevels.size() - 1) * 0.3f)) / 100;
-        mShadeColors[mShadeColors.length - 2] = customBlendColor ? fillColor != Color.BLACK ?
-                fillColor : Color.GREEN : mFGColor;
-
-        mShadeLevels[mShadeLevels.length - 1] = 1f;
-        mShadeColors[mShadeColors.length - 1] = customBlendColor ? fillColor != Color.BLACK ?
-                fillColor : Color.GREEN : mFGColor;
+        @ColorInt val fillColor = customFillColor
+        mShadeLevels!![mShadeLevels!!.size - 2] =
+            (batteryLevels!![batteryLevels!!.size - 1] + (100 - batteryLevels!![batteryLevels!!.size - 1] * 0.3f)) / 100
+        mShadeColors!![mShadeColors!!.size - 2] =
+            if (customBlendColor) if (fillColor != Color.BLACK) fillColor else Color.GREEN else mFGColor
+        mShadeLevels!![mShadeLevels!!.size - 1] = 1f
+        mShadeColors!![mShadeColors!!.size - 1] =
+            if (customBlendColor) if (fillColor != Color.BLACK) fillColor else Color.GREEN else mFGColor
     }
 
-    @Override
-    public void draw(@NonNull Canvas canvas) {
-        if (batteryLevel < 0 || mDiameter == 0) return;
+    override fun draw(canvas: Canvas) {
+        if (batteryLevel < 0 || mDiameter == 0) return
 
-        refreshShadeColors();
-
-        setLevelBasedColors(mBatteryPaint, mFrame.centerX(), mFrame.centerY());
+        refreshShadeColors()
+        setLevelBasedColors(mBatteryPaint, mFrame.centerX(), mFrame.centerY())
 
         if (charging && batteryLevel < 100) {
-            if (!mBoltAlphaAnimator.isStarted()) {
-                mBoltAlphaAnimator.start();
+            if (!mBoltAlphaAnimator.isStarted) {
+                mBoltAlphaAnimator.start()
             }
-
-            mBoltPaint.setAlpha(round((int) mBoltAlphaAnimator.getAnimatedValue() * mAlphaPct));
-
-            canvas.drawPath(mBoltPath, mBoltPaint);
-        } else if (mBoltAlphaAnimator.isStarted()) {
-            mBoltAlphaAnimator.end();
+            mBoltPaint.setAlpha(Math.round(mBoltAlphaAnimator.getAnimatedValue() as Int * mAlphaPct))
+            canvas.drawPath(mBoltPath!!, mBoltPaint)
+        } else if (mBoltAlphaAnimator.isStarted) {
+            mBoltAlphaAnimator.end()
         }
 
-        canvas.drawArc(mFrame, 270f, 360f, false, mFramePaint);
+        canvas.drawArc(mFrame, 270f, 360f, false, mFramePaint)
 
         if (batteryLevel > 0) {
-            canvas.drawArc(mFrame, 270f, 3.6f * batteryLevel, false, mBatteryPaint);
+            canvas.drawArc(mFrame, 270f, 3.6f * batteryLevel, false, mBatteryPaint)
         }
 
         if (!charging && batteryLevel < 100 && mShowPercentage) {
-            String pctText = batteryLevel > CRITICAL_LEVEL ? String.valueOf(batteryLevel) : WARNING_STRING;
-
-            float textHeight = -mTextPaint.getFontMetrics().ascent;
-            float pctX = mDiameter * .5f;
-            float pctY = (mDiameter + textHeight) * 0.47f;
-            canvas.drawText(pctText, pctX, pctY, mTextPaint);
+            val pctText =
+                if (batteryLevel > CRITICAL_LEVEL) batteryLevel.toString() else WARNING_STRING
+            val textHeight = -mTextPaint.getFontMetrics().ascent
+            val pctX = mDiameter * .5f
+            val pctY = (mDiameter + textHeight) * 0.47f
+            canvas.drawText(pctText, pctX, pctY, mTextPaint)
         }
     }
 
-    private void setLevelBasedColors(Paint paint, float centerX, float centerY) {
-        paint.setShader(null);
+    private fun setLevelBasedColors(paint: Paint, centerX: Float, centerY: Float) {
+        paint.setShader(null)
 
         if (powerSaveEnabled) {
-            paint.setColor(mPowerSaveColor);
-            return;
+            paint.setColor(mPowerSaveColor)
+            return
         } else if (charging) {
-            if (isFastCharging) {
-                paint.setColor(mFastChargingColor);
-            } else {
-                paint.setColor(mChargingColor);
-            }
-            return;
+            paint.setColor(mChargingColor)
+            return
         }
 
         if (mShadeColors == null) {
-            for (int i = 0; i < batteryLevels.size(); i++) {
-                if (batteryLevel <= batteryLevels.get(i)) {
+            for (i in batteryLevels!!.indices) {
+                if (batteryLevel <= batteryLevels!![i]) {
                     if (i > 0) {
-                        float range = batteryLevels.get(i) - batteryLevels.get(i - 1);
-                        float currentPos = batteryLevel - batteryLevels.get(i - 1);
-
-                        float ratio = currentPos / range;
-
-                        paint.setColor(ColorUtils.blendARGB(batteryColors[i - 1], batteryColors[i], ratio));
+                        val range = (batteryLevels!![i] - batteryLevels!![i - 1]).toFloat()
+                        val currentPos = (batteryLevel - batteryLevels!![i - 1]).toFloat()
+                        val ratio = currentPos / range
+                        paint.setColor(
+                            ColorUtils.blendARGB(
+                                batteryColors!![i - 1],
+                                batteryColors!![i],
+                                ratio
+                            )
+                        )
                     } else {
-                        paint.setColor(batteryColors[i]);
+                        paint.setColor(batteryColors!![i])
                     }
-                    return;
+                    return
                 }
             }
-            paint.setColor(mFGColor);
+            paint.setColor(mFGColor)
         } else {
-            SweepGradient shader = new SweepGradient(centerX, centerY, mShadeColors, mShadeLevels);
-            Matrix shaderMatrix = new Matrix();
-            shaderMatrix.preRotate(270f, centerX, centerY);
-            shader.setLocalMatrix(shaderMatrix);
-            paint.setShader(shader);
+            val shader = SweepGradient(centerX, centerY, mShadeColors!!, mShadeLevels)
+            val shaderMatrix = Matrix()
+            shaderMatrix.preRotate(270f, centerX, centerY)
+            shader.setLocalMatrix(shaderMatrix)
+            paint.setShader(shader)
         }
     }
 
-    @Override
-    public void setAlpha(int alpha) {
-        mAlphaPct = alpha / 255f;
-
-        mFramePaint.setAlpha(round(70 * alpha / 255f));
-
-        mTextPaint.setAlpha(alpha);
-        mBatteryPaint.setAlpha(alpha);
+    override fun setAlpha(alpha: Int) {
+        mAlphaPct = alpha / 255f
+        mFramePaint.setAlpha(Math.round(70 * alpha / 255f))
+        mTextPaint.setAlpha(alpha)
+        mBatteryPaint.setAlpha(alpha)
     }
 
-    @SuppressLint({"DiscouragedApi", "RestrictedApi"})
-    private void updateSize() {
-        Resources res = mContext.getResources();
-
-        mDiameter = getBounds().bottom - getBounds().top;
-
-        mWarningTextPaint.setTextSize(mDiameter * 0.75f);
-
-        float strokeWidth = mDiameter / 6.5f;
-        mFramePaint.setStrokeWidth(strokeWidth);
-        mBatteryPaint.setStrokeWidth(strokeWidth);
-
-        mTextPaint.setTextSize(mDiameter * 0.52f);
-
-        mFrame.set(strokeWidth / 2.0f,
-                strokeWidth / 2.0f,
-                mDiameter - strokeWidth / 2.0f,
-                mDiameter - strokeWidth / 2.0f);
-
-        @SuppressLint("DiscouragedApi")
-        Path unscaledBoltPath = new Path();
+    @SuppressLint("DiscouragedApi", "RestrictedApi")
+    private fun updateSize() {
+        val res = mContext.resources
+        mDiameter = getBounds().bottom - getBounds().top
+        mWarningTextPaint.textSize = mDiameter * 0.75f
+        val strokeWidth = mDiameter / 6.5f
+        mFramePaint.strokeWidth = strokeWidth
+        mBatteryPaint.strokeWidth = strokeWidth
+        mTextPaint.textSize = mDiameter * 0.52f
+        mFrame[strokeWidth / 2.0f, strokeWidth / 2.0f, mDiameter - strokeWidth / 2.0f] =
+            mDiameter - strokeWidth / 2.0f
+        @SuppressLint("DiscouragedApi") val unscaledBoltPath = Path()
         unscaledBoltPath.set(
-                PathParser.createPathFromPathData(
-                        res.getString(
-                                res.getIdentifier(
-                                        "android:string/config_batterymeterBoltPath",
-                                        "string",
-                                        "android"))));
+            PathParser.createPathFromPathData(
+                res.getString(
+                    res.getIdentifier(
+                        "android:string/config_batterymeterBoltPath",
+                        "string",
+                        "android"
+                    )
+                )
+            )
+        )
 
         //Bolt icon
-        Matrix scaleMatrix = new Matrix();
-        RectF pathBounds = new RectF();
-
-        unscaledBoltPath.computeBounds(pathBounds, true);
-
-        float scaleF = (getBounds().height() - strokeWidth * 2) * .8f / pathBounds.height(); //scale comparing to 80% of icon's inner space
-
-        scaleMatrix.setScale(scaleF, scaleF);
-
-        mBoltPath = new Path();
-
-        unscaledBoltPath.transform(scaleMatrix, mBoltPath);
-
-        mBoltPath.computeBounds(pathBounds, true);
+        val scaleMatrix = Matrix()
+        val pathBounds = RectF()
+        unscaledBoltPath.computeBounds(pathBounds, true)
+        val scaleF =
+            (getBounds().height() - strokeWidth * 2) * .8f / pathBounds.height() //scale comparing to 80% of icon's inner space
+        scaleMatrix.setScale(scaleF, scaleF)
+        mBoltPath = Path()
+        unscaledBoltPath.transform(scaleMatrix, mBoltPath)
+        mBoltPath!!.computeBounds(pathBounds, true)
 
         //moving it to center
-        mBoltPath.offset(getBounds().centerX() - pathBounds.centerX(),
-                getBounds().centerY() - pathBounds.centerY());
+        mBoltPath!!.offset(
+            getBounds().centerX() - pathBounds.centerX(),
+            getBounds().centerY() - pathBounds.centerY()
+        )
     }
 
-    @Override
-    public void setColorFilter(@Nullable ColorFilter colorFilter) {
-        mFramePaint.setColorFilter(colorFilter);
-        mBatteryPaint.setColorFilter(colorFilter);
-        mWarningTextPaint.setColorFilter(colorFilter);
-        mBoltPaint.setColorFilter(colorFilter);
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        mFramePaint.setColorFilter(colorFilter)
+        mBatteryPaint.setColorFilter(colorFilter)
+        mWarningTextPaint.setColorFilter(colorFilter)
+        mBoltPaint.setColorFilter(colorFilter)
     }
 
-    @Override
-    public int getOpacity() {
-        return PixelFormat.UNKNOWN;
+    @Deprecated(
+        "Deprecated in Java",
+        ReplaceWith("PixelFormat.UNKNOWN", "android.graphics.PixelFormat")
+    )
+    override fun getOpacity(): Int {
+        return PixelFormat.UNKNOWN
     }
 
-    @Override
-    public int getIntrinsicHeight() {
-        return CIRCLE_DIAMETER;
+    override fun getIntrinsicHeight(): Int {
+        return CIRCLE_DIAMETER
     }
 
-    @Override
-    public int getIntrinsicWidth() {
-        return CIRCLE_DIAMETER;
+    override fun getIntrinsicWidth(): Int {
+        return CIRCLE_DIAMETER
     }
 
-    private final Runnable invalidateRunnable = this::invalidateSelf;
+    private val invalidateRunnable = Runnable { invalidateSelf() }
 
-    private void postInvalidate() {
-        unscheduleSelf(invalidateRunnable);
-        scheduleSelf(invalidateRunnable, 0);
+    init {
+        mFramePaint.isDither = true
+        mFramePaint.style = Paint.Style.STROKE
+        mTextPaint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
+        mTextPaint.textAlign = Align.CENTER
+        mWarningTextPaint.setTypeface(Typeface.create("sans-serif", Typeface.BOLD))
+        mWarningTextPaint.textAlign = Align.CENTER
+        mBatteryPaint.isDither = true
+        mBatteryPaint.style = Paint.Style.STROKE
+
+        try {
+            Xprefs?.let { setMeterStyle(it.getInt(CUSTOM_BATTERY_STYLE, 0)) }
+        } catch (ignored: Throwable) {
+            setMeterStyle(BATTERY_STYLE_CIRCLE)
+        }
+
+        mBoltAlphaAnimator = ValueAnimator.ofInt(255, 255, 255, 45)
+        mBoltAlphaAnimator.setDuration(2000)
+        mBoltAlphaAnimator.interpolator = FastOutSlowInInterpolator()
+        mBoltAlphaAnimator.repeatMode = ValueAnimator.REVERSE
+        mBoltAlphaAnimator.repeatCount = ValueAnimator.INFINITE
+        mBoltAlphaAnimator.addUpdateListener { invalidateSelf() }
+    }
+
+    private fun postInvalidate() {
+        unscheduleSelf(invalidateRunnable)
+        scheduleSelf(invalidateRunnable, 0)
+    }
+
+    companion object {
+        private const val WARNING_STRING = "!"
+        private const val CRITICAL_LEVEL = 5
+        private const val CIRCLE_DIAMETER =
+            45 //relative to dash effect size. Size doesn't matter as finally it gets scaled by parent
+        private val DASH_PATH_EFFECT: PathEffect = DashPathEffect(floatArrayOf(3f, 2f), 0f)
     }
 }

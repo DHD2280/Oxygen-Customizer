@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
 import static android.content.Context.BATTERY_SERVICE;
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
 
@@ -182,44 +183,42 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
 
-            boolean nightMode = (requireContext().getResources().getConfiguration().uiMode
-                    & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-            int batteryColor = nightMode ? Color.WHITE : Color.BLACK;
+            int batteryColor = getAppContext().getColor(R.color.textColorPrimary);
             Drawable[] batteryDrawables = new Drawable[] {
-                    new RLandscapeBattery(requireContext(), batteryColor, false),
-                    new LandscapeBattery(requireContext(), batteryColor, false),
-                    new PortraitBatteryCapsule(requireContext(), batteryColor, false),
-                    new PortraitBatteryLorn(requireContext(), batteryColor, false),
-                    new PortraitBatteryMx(requireContext(), batteryColor, false),
-                    new PortraitBatteryAiroo(requireContext(), batteryColor, false),
-                    new RLandscapeBatteryStyleA(requireContext(), batteryColor, false),
-                    new LandscapeBatteryStyleA(requireContext(), batteryColor, false),
-                    new RLandscapeBatteryStyleB(requireContext(), batteryColor, false),
-                    new LandscapeBatteryStyleB(requireContext(), batteryColor, false),
-                    new LandscapeBatteryiOS15(requireContext(), batteryColor, false),
-                    new LandscapeBatteryiOS16(requireContext(), batteryColor, false),
-                    new PortraitBatteryOrigami(requireContext(), batteryColor, false),
-                    new LandscapeBatterySmiley(requireContext(), batteryColor, false),
-                    new LandscapeBatteryMIUIPill(requireContext(), batteryColor, false),
-                    new LandscapeBatteryColorOS(requireContext(), batteryColor, false),
-                    new RLandscapeBatteryColorOS(requireContext(), batteryColor, false),
-                    new LandscapeBatteryA(requireContext(), batteryColor, false),
-                    new LandscapeBatteryB(requireContext(), batteryColor, false),
-                    new LandscapeBatteryC(requireContext(), batteryColor, false),
-                    new LandscapeBatteryD(requireContext(), batteryColor, false),
-                    new LandscapeBatteryE(requireContext(), batteryColor, false),
-                    new LandscapeBatteryF(requireContext(), batteryColor, false),
-                    new LandscapeBatteryG(requireContext(), batteryColor, false),
-                    new LandscapeBatteryH(requireContext(), batteryColor, false),
-                    new LandscapeBatteryI(requireContext(), batteryColor, false),
-                    new LandscapeBatteryJ(requireContext(), batteryColor, false),
-                    new LandscapeBatteryK(requireContext(), batteryColor, false),
-                    new LandscapeBatteryL(requireContext(), batteryColor, false),
-                    new LandscapeBatteryM(requireContext(), batteryColor, false),
-                    new LandscapeBatteryN(requireContext(), batteryColor, false),
-                    new LandscapeBatteryO(requireContext(), batteryColor, false),
-                    new CircleBattery(requireContext(), batteryColor, false),
-                    new CircleBattery(requireContext(), batteryColor, false)
+                    new RLandscapeBattery(requireContext(), batteryColor),
+                    new LandscapeBattery(requireContext(), batteryColor),
+                    new PortraitBatteryCapsule(requireContext(), batteryColor),
+                    new PortraitBatteryLorn(requireContext(), batteryColor),
+                    new PortraitBatteryMx(requireContext(), batteryColor),
+                    new PortraitBatteryAiroo(requireContext(), batteryColor),
+                    new RLandscapeBatteryStyleA(requireContext(), batteryColor),
+                    new LandscapeBatteryStyleA(requireContext(), batteryColor),
+                    new RLandscapeBatteryStyleB(requireContext(), batteryColor),
+                    new LandscapeBatteryStyleB(requireContext(), batteryColor),
+                    new LandscapeBatteryiOS15(requireContext(), batteryColor),
+                    new LandscapeBatteryiOS16(requireContext(), batteryColor),
+                    new PortraitBatteryOrigami(requireContext(), batteryColor),
+                    new LandscapeBatterySmiley(requireContext(), batteryColor),
+                    new LandscapeBatteryMIUIPill(requireContext(), batteryColor),
+                    new LandscapeBatteryColorOS(requireContext(), batteryColor),
+                    new RLandscapeBatteryColorOS(requireContext(), batteryColor),
+                    new LandscapeBatteryA(requireContext(), batteryColor),
+                    new LandscapeBatteryB(requireContext(), batteryColor),
+                    new LandscapeBatteryC(requireContext(), batteryColor),
+                    new LandscapeBatteryD(requireContext(), batteryColor),
+                    new LandscapeBatteryE(requireContext(), batteryColor),
+                    new LandscapeBatteryF(requireContext(), batteryColor),
+                    new LandscapeBatteryG(requireContext(), batteryColor),
+                    new LandscapeBatteryH(requireContext(), batteryColor),
+                    new LandscapeBatteryI(requireContext(), batteryColor),
+                    new LandscapeBatteryJ(requireContext(), batteryColor),
+                    new LandscapeBatteryK(requireContext(), batteryColor),
+                    new LandscapeBatteryL(requireContext(), batteryColor),
+                    new LandscapeBatteryM(requireContext(), batteryColor),
+                    new LandscapeBatteryN(requireContext(), batteryColor),
+                    new LandscapeBatteryO(requireContext(), batteryColor),
+                    new CircleBattery(requireContext(), batteryColor),
+                    new CircleBattery(requireContext(), batteryColor)
             };
 
 
