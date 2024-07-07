@@ -351,36 +351,7 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> QuickSettingsController;
-        try {
-            QuickSettingsController = findClass("com.android.systemui.shade.QuickSettingsController", lpparam.classLoader);
-        } catch (Throwable e) {
-            oos13 = true;
-            QuickSettingsController = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
-        }
         Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
-
-        deoptimizeMethod(QuickSettingsController, "isOpenQsEvent");
-        hookAllMethods(QuickSettingsController, "isOpenQsEvent", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-
-                if (!oneFingerPulldownEnabled) return;
-
-                MotionEvent motionEvent = (MotionEvent) param.args[0];
-                boolean override = false;
-                if (oneFingerPulldownEnabled) {
-                    //mGestureDetector.onTouchEvent(event);
-                    Rect displayBounds = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getCurrentWindowMetrics().getBounds();
-                    override = isTouchInRegion(motionEvent, displayBounds.width());
-                }
-
-                if (override) {
-                    param.setResult(true);
-                }
-
-            }
-        });
 
         Class<?> OplusBrightnessControllerExImpl;
         try {
@@ -432,18 +403,22 @@ public class StatusbarMods extends XposedMods {
             }
         }
 
-
+        final GestureDetector mGestureDetector = new GestureDetector(mContext, getPullDownLPListener(QSExpandMethodName));
 
         hookAllMethods(PhoneStatusBarViewControllerClass, "onTouch", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 
-                if (!mBrightnessControl) return;
-
                 MotionEvent event =
                         param.args[0] instanceof MotionEvent
                                 ? (MotionEvent) param.args[0]
                                 : (MotionEvent) param.args[1];
+
+                if (oneFingerPulldownEnabled) {
+                    mGestureDetector.onTouchEvent(event);
+                }
+
+                if (!mBrightnessControl) return;
 
                 final int action = event.getAction();
                 final int x = (int) event.getRawX();
