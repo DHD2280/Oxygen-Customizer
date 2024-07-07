@@ -179,7 +179,12 @@ public class HeaderImage extends XposedMods {
 
         } catch (Throwable ignored) {}
 
-        Class <?> QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        Class <?> QSFragmentHelper;
+        try {
+            QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        } catch (Throwable t) {
+            QSFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader); // OOS 13
+        }
         hookAllMethods(QSFragmentHelper, "springBackAll", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
