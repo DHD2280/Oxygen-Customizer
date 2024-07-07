@@ -558,10 +558,8 @@ public class Constants {
     public static final String ACTION_XPOSED_CONFIRMED = BuildConfig.APPLICATION_ID + ".ACTION_XPOSED_CONFIRMED_OC";
     public static final String ACTION_XPOSED_NOT_FOUND = BuildConfig.APPLICATION_ID + ".ACTION_XPOSED_NOT_FOUND_OC";
     public static final String ACTION_CHECK_XPOSED_ENABLED = BuildConfig.APPLICATION_ID + ".ACTION_CHECK_XPOSED_ENABLED_OC";
-    public static final String ACTION_CLEAR_ALL_TASKS = BuildConfig.APPLICATION_ID + ".ACTION_CLEAR_ALL_TASKS_OC";
     public static final String ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT = BuildConfig.APPLICATION_ID + ".ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT_OC";
     public static final String ACTION_SETTINGS_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_SETTINGS_CHANGED_OC";
-    public static final String ACTION_MAX_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_MAX_CHANGED_OC";
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
     public static final String HEADER_CLOCK_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_user_image.png";
