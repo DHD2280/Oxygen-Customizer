@@ -4,8 +4,10 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,6 +24,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
@@ -31,10 +35,8 @@ import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 
 public class Settings extends PreferenceFragmentCompat {
 
-    private static final int REQUEST_IMPORT = 98;
-    private static final int REQUEST_EXPORT = 99;
-
     Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
+    SwitchPreferenceCompat appIconThemed;
 
     // Updater Prefs
     Preference updatePref;
@@ -45,6 +47,7 @@ public class Settings extends PreferenceFragmentCompat {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.own_settings, rootKey);
 
+        appIconThemed = findPreference("themed_icon");
         ghPref = findPreference("GitHubRepo");
         deleteAllPref = findPreference("deleteAllPrefs");
         exportPref = findPreference("export");
@@ -55,6 +58,19 @@ public class Settings extends PreferenceFragmentCompat {
         checkOnWifiPref = findPreference("checkOnWifi");
         supportGroupPref = findPreference("SupportGroup");
         translatePref = findPreference("translate");
+
+        if (appIconThemed != null) {
+            appIconThemed.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isThemed = (boolean) newValue;
+                new MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialComponents_MaterialAlertDialog)
+                        .setTitle(R.string.app_kill_alert_title)
+                        .setMessage(R.string.app_kill_alert_body)
+                        .setPositiveButton(R.string.app_kill_ok_btn, (dialog, which) -> changeIcon(isThemed))
+                        .setCancelable(false)
+                        .show();
+                return true;
+            });
+        }
 
         if (ghPref != null) {
             ghPref.setOnPreferenceClickListener(preference -> {
@@ -133,6 +149,25 @@ public class Settings extends PreferenceFragmentCompat {
             });
         }
 
+    }
+
+    private void changeIcon(boolean isThemed) {
+        PackageManager packageManager = getActivity().getPackageManager();
+
+        packageManager.setComponentEnabledSetting(
+                new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".SplashActivity"),
+                isThemed ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        // Enable themed app icon component
+        packageManager.setComponentEnabledSetting(
+                new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".SplashActivityThemed"),
+                isThemed ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        getActivity().finish();
     }
 
     private void importExportSettings(boolean export) {

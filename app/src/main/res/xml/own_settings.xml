@@ -3,6 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
+        android:title="@string/general_settings"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/app_icon"
+            android:key="themed_icon"
+            android:title="@string/app_icon_themed"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/misc"
         app:iconSpaceReserved="false">
 
