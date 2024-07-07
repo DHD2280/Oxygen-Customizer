@@ -50,6 +50,7 @@ import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.Config;
 import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
@@ -228,11 +229,11 @@ public class LockscreenWeather
 
     private void disableService() {
         // stop any pending
-        WeatherUpdateService.cancelAllUpdate(getContext());
+        WeatherScheduler.unscheduleUpdates(getContext());
     }
 
     private void enableService() {
-        WeatherUpdateService.scheduleUpdatePeriodic(getContext());
+        WeatherScheduler.scheduleUpdates(getContext());
     }
 
     @Override

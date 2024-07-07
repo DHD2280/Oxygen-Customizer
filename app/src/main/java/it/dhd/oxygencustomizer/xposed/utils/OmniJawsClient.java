@@ -132,10 +132,10 @@ public class OmniJawsClient {
         }
     }
 
-    public static interface OmniJawsObserver {
-        public void weatherUpdated();
-        public void weatherError(int errorReason);
-        default public void updateSettings() {};
+    public interface OmniJawsObserver {
+        void weatherUpdated();
+        void weatherError(int errorReason);
+        default void updateSettings() {};
     }
 
     private class WeatherUpdateReceiver extends BroadcastReceiver {
