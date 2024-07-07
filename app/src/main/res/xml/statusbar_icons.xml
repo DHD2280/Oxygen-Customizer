@@ -3,21 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:defaultValue="false"
         android:title="@string/statusbar_icons_bluetooth_hide"
         android:summary="@string/statusbar_icons_bluetooth_hide_summary"
         android:key="hide_bluetooth_when_disconnected"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:defaultValue="false"
         android:title="@string/statusbar_icons_inout_wifi_hide_title"
         android:summary="@string/statusbar_icons_inout_wifi_hide_summary"
         android:key="hide_inout_wifi"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:defaultValue="false"
         android:title="@string/statusbar_icons_inout_mobile_hide_title"

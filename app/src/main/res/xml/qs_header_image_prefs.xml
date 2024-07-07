@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:key="qs_header_image_enabled"
         android:title="@string/qs_header_image_enabled_title"
         android:summary="@string/qs_header_image_enabled_summary"
@@ -101,7 +101,7 @@
         app:defaultValue="325"
         android:dependency="qs_header_image_enabled" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:key="qs_header_image_landscape_enabled"
         android:title="@string/qs_header_image_landscape_enabled_title"
         android:summary="@string/qs_header_image_landscape_enabled_summary"
@@ -125,7 +125,7 @@
         app:defaultValue="0"
         android:dependency="qs_header_image_enabled" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:key="qs_header_image_zoom_to_fit"
         android:title="@string/qs_header_image_zoomtofit_title"
         app:iconSpaceReserved="false"

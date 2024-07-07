@@ -52,7 +52,7 @@
             android:summary="@string/volume_panel_custom_summary"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$VolumePanelCustomizations" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volume_disable_volume_warning"
             app:iconSpaceReserved="false"
             android:title="@string/volume_disable_volume_warning"

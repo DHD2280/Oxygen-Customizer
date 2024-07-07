@@ -33,7 +33,7 @@
         android:title="@string/qs_transparency"
         search:ignore="true">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="qs_transparency_switch"
             app:iconSpaceReserved="false"
             android:title="@string/qs_transparency_title"
@@ -50,7 +50,7 @@
             app:maxVal="100"
             app:tickInterval="1" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="qs_transparency_blur_switch"
             app:iconSpaceReserved="false"
             android:title="@string/qs_transparency_blur_title"
@@ -75,7 +75,7 @@
         android:title="@string/quick_pulldown"
         search:ignore="true">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="quick_pulldown"
             app:iconSpaceReserved="false"
             android:title="@string/quick_pulldown"
@@ -101,7 +101,7 @@
             app:entryValues="@array/quick_pulldown_side_values"
             app:defaultValue="1"
             android:dependency="quick_pulldown"/>
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="quick_collapse"
             app:iconSpaceReserved="false"
             android:title="@string/quick_collapse"
@@ -114,7 +114,7 @@
         android:title="@string/my_device"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="qs_show_my_device"
             app:iconSpaceReserved="false"
             android:title="@string/my_device_title"

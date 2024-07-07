@@ -34,7 +34,7 @@
         android:title="@string/qs_header_misc"
         search:ignore="true">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:title="@string/qs_header_system_icons_chip"
             android:key="qs_header_system_icons_chip_switch"

@@ -6,7 +6,7 @@
         android:title="@string/general_settings"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:icon="@drawable/app_icon"
             android:key="themed_icon"
             android:title="@string/app_icon_themed"
@@ -49,14 +49,14 @@
             android:key="updates"
             android:title="@string/check_updates" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:icon="@drawable/ic_check_updates"
             android:key="autoUpdate"
             android:summary="@string/auto_update_summary"
             android:title="@string/auto_update_title"
             android:defaultValue="true" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:icon="@drawable/ic_wifi_only"
             android:key="checkOnWifi"
             android:summary="@string/update_over_wifi_summary"

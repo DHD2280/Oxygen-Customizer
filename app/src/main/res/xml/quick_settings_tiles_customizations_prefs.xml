@@ -4,7 +4,7 @@
     <PreferenceCategory
         android:title="@string/quick_settings_tiles_customize_category_title"
         app:iconSpaceReserved="false">
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_active_color_enabled"
             android:summaryOff="@string/general_off"
@@ -17,7 +17,7 @@
             android:title="@string/quick_settings_tiles_customize_active_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_inactive_color_enabled"
             android:summaryOff="@string/general_off"
@@ -30,7 +30,7 @@
             android:title="@string/quick_settings_tiles_customize_inactive_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_disabled_color_enabled"
             android:summaryOff="@string/general_off"
@@ -49,7 +49,7 @@
         android:title="@string/media_tile"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_media_show_album_art"
             android:summary="@string/media_art_title_qs_summary"
@@ -126,7 +126,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/qs_transitions_title">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_transitions_title_switch"
             android:summaryOff="@string/general_off"
@@ -148,7 +148,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/quick_settings_tiles_customize_labels">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_hide_labels"
             android:summaryOff="@string/general_off"
@@ -156,7 +156,7 @@
             android:title="@string/quick_settings_tiles_customize_hide_labels"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_label_enabled"
             android:summaryOff="@string/general_off"
@@ -178,7 +178,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/brightness_slider">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="customize_brightness_slider"
             android:summaryOff="@string/general_off"
@@ -202,7 +202,7 @@
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="brightness_slider_background_color_enabled"
             android:summaryOff="@string/general_off"

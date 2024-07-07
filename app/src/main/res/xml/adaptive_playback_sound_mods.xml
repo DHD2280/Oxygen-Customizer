@@ -7,7 +7,7 @@
         android:key="adaptive_playback_header"
         app:lottie_rawRes="@raw/lottie_adaptive_playback"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="sound_adaptive_playback_main_switch"
         android:title="@string/adaptive_playback_enabled" />

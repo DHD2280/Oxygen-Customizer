@@ -28,8 +28,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.SwitchPreferenceCompat;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ import java.util.Objects;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.customprefs.RecyclerPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
@@ -123,7 +122,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
             });
         }
 
-        SwitchPreferenceCompat hideCarrier, hideCapsule, hideStatusbar;
+        MaterialSwitchPreference hideCarrier, hideCapsule, hideStatusbar;
         hideCarrier = findPreference(LOCKSCREEN_HIDE_CARRIER);
         hideCapsule = findPreference(LOCKSCREEN_HIDE_CAPSULE);
         hideStatusbar = findPreference(LOCKSCREEN_HIDE_STATUSBAR);

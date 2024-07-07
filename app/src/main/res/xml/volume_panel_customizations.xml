@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/volume_panel_custom_title">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volume_panel_seekbar_color_enabled"
             android:title="@string/volume_panel_custom_enabled_title"
             android:summaryOff="@string/general_off"
@@ -14,7 +14,7 @@
             app:iconSpaceReserved="false"
             android:defaultValue="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volume_panel_seekbar_link_primary"
             android:title="@string/volume_panel_seekbar_link_primary"
             android:summaryOff="@string/general_off"
@@ -28,7 +28,7 @@
             app:iconSpaceReserved="false"
             android:defaultValue="0xffffffff" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="volume_panel_seekbar_bg_color_enabled"
             android:title="@string/volume_panel_bg_color"
             android:summaryOff="@string/general_off"

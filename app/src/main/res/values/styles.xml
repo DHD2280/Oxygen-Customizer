@@ -3,12 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <style name="AppPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
-        <item name="switchPreferenceCompatStyle">@style/AppSwitchPreference</item>
         <item name="preferenceCategoryStyle">@style/AppPreferenceCategory</item>
-    </style>
-
-    <style name="AppSwitchPreference" parent="@style/Preference.SwitchPreferenceCompat.Material">
-        <item name="widgetLayout">@layout/preference_material_switch</item>
     </style>
 
     <style name="AppPreferenceCategory" parent="@style/Preference.Category.Material">

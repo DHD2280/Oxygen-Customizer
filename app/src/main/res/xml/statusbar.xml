@@ -38,7 +38,7 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Clock" />
 
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="status_bar_custom_clock_color"
             android:title="@string/status_bar_custom_clock_color_title"
@@ -67,7 +67,7 @@
             android:key="statusbar_notifications"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Notifications" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="double_tap_sleep_statusbar"
             app:iconSpaceReserved="false"
             android:title="@string/statusbar_double_tap_sleep"
@@ -75,7 +75,7 @@
             android:summaryOn="@string/general_on"
             android:defaultValue="false" />
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="brightness_control"
             app:iconSpaceReserved="false"
             android:title="@string/status_bar_toggle_brightness_title"
@@ -107,7 +107,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/statusbar_padding">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="statusbar_padding_enabled"
             app:iconSpaceReserved="false"
             android:title="@string/statusbar_padding"

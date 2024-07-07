@@ -3,19 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="navbar_pulse_enabled"
         android:title="@string/show_navbar_pulse_title"
         android:summary="@string/show_navbar_pulse_summary"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="lockscreen_pulse_enabled"
         android:title="@string/show_lockscreen_pulse_title"
         android:summary="@string/show_lockscreen_pulse_summary"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="ambient_pulse_enabled"
         android:title="@string/show_ambient_pulse_title"
@@ -39,21 +39,21 @@
         android:summary="%s"
         android:defaultValue="0"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="pulse_center_mirrored"
         android:title="@string/visualizer_center_mirrored_title"
         android:summary="@string/visualizer_center_mirrored_summary"
         android:defaultValue="false"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="pulse_vertical_mirror"
         android:title="@string/pulse_vertical_mirror_title"
         android:summary="@string/pulse_vertical_mirror_summary"
         android:defaultValue="false"/>
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"
         android:key="pulse_smoothing_enabled"
         android:title="@string/pulse_smoothing_enabled_title"
@@ -136,7 +136,7 @@
         android:key="pulse_2"
         android:title="@string/pulse_solid_dimen_category">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="pulse_solid_units_rounded"
             android:title="@string/pulse_solid_units_rounded_title"
@@ -175,7 +175,7 @@
         android:key="pulse_line"
         android:title="@string/pulse_lines_category">
 
-        <SwitchPreferenceCompat
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:key="pulse_line_show_flash"
             android:title="@string/pulse_line_show_flash_title"

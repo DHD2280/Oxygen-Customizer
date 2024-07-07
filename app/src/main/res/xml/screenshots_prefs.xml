@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="disable_secure_screenshot"
         android:title="@string/disable_secure_screenshot"
         android:summary="@string/disable_secure_screenshot_summary"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="disable_screenshot_observer"
         android:title="@string/disable_screenshot_observer"
