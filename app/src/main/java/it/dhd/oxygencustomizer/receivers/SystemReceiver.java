@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.weather.receivers;
+package it.dhd.oxygencustomizer.receivers;
 
 /*
  *  Copyright (C) 2015 The OmniROM Project
@@ -21,24 +21,18 @@ package it.dhd.oxygencustomizer.weather.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import it.dhd.oxygencustomizer.utils.UpdateScheduler;
-import it.dhd.oxygencustomizer.weather.Config;
-import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 
 public class SystemReceiver extends BroadcastReceiver {
-    private static final String TAG = "WeatherService:SystemReceiver";
-    private static final boolean DEBUG = false;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         final String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            if (Config.isEnabled(context)) {
-                WeatherUpdateService.scheduleUpdatePeriodic(context);
-                WeatherUpdateService.scheduleUpdateNow(context);
-            }
+            WeatherScheduler.scheduleUpdates(context);
+            WeatherScheduler.scheduleUpdateNow(context);
             UpdateScheduler.scheduleUpdates(context);
         }
     }

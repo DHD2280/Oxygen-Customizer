@@ -147,7 +147,7 @@
             android:exported="true" />
 
         <receiver
-            android:name=".weather.receivers.SystemReceiver"
+            android:name=".receivers.SystemReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
