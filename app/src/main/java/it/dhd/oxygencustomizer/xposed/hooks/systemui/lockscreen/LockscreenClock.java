@@ -46,6 +46,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
@@ -507,9 +508,9 @@ public class LockscreenClock extends XposedMods {
                 }
             }
             case 27 -> {
-                TextView hourView = clockView.findViewWithTag("textHour");
-                TextView minuteView = clockView.findViewWithTag("textMinute");
-                TextClock tickIndicator = clockView.findViewWithTag("tickIndicator");
+                TextView hourView = (TextView) findViewWithTag(clockView, "textHour");
+                TextView minuteView = (TextView) findViewWithTag(clockView, "textMinute");
+                TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
 
                 TimeUtils.setCurrentTimeTextClock(mContext, tickIndicator, hourView, minuteView);
             }

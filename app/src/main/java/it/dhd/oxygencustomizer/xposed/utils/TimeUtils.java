@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.utils;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.widget.TextClock;
@@ -115,14 +116,10 @@ public class TimeUtils {
     }
 
     public static void setCurrentTimeTextClock(Context context, TextClock tickIndicator, TextView hourView, TextView minuteView) {
+        if (tickIndicator == null || hourView == null || minuteView == null) return;
         setCurrentTimeHour(context, hourView);
         setCurrentTimeMinute(minuteView);
 
-        setupTextClockListener(context, tickIndicator, hourView, true);
-        setupTextClockListener(context, tickIndicator, minuteView, false);
-    }
-
-    private static void setupTextClockListener(Context context, TextClock tickIndicator, TextView textView, boolean isHour) {
         tickIndicator.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -132,15 +129,13 @@ public class TimeUtils {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s != null && !s.toString().isEmpty()) {
-                    if (isHour) {
-                        setCurrentTimeHour(context, textView);
-                    } else {
-                        setCurrentTimeMinute(textView);
-                    }
+                if (!TextUtils.isEmpty(s)) {
+                    setCurrentTimeHour(context, hourView);
+                    setCurrentTimeMinute(minuteView);
                 }
             }
         });
+
     }
 
     private static void setCurrentTimeHour(Context context, TextView hourView) {

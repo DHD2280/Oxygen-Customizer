@@ -439,4 +439,27 @@ public class ViewHelper {
         }
 
     }
+
+    public static View findViewWithTag(View view, String tag) {
+        if (view == null) {
+            return null;
+        }
+
+        if (view instanceof ViewGroup viewGroup) {
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+
+                View result = findViewWithTag(child, tag);
+                if (result != null) {
+                    return result;
+                }
+            }
+        } else {
+            if (view.getTag() != null && view.getTag().toString().contains(tag)) {
+                return view;
+            }
+        }
+        return null;
+    }
+
 }
