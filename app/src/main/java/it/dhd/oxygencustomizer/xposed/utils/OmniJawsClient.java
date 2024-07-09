@@ -187,11 +187,6 @@ public class OmniJawsClient {
     }
 
     public void queryWeather() {
-        if (!isOmniJawsEnabled()) {
-            Log.w(TAG, "queryWeather while disabled");
-            mCachedInfo = null;
-            return;
-        }
         try {
             mCachedInfo = null;
             Cursor c = mContext.getContentResolver().query(WEATHER_URI, WEATHER_PROJECTION,

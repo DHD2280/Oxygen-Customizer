@@ -32,8 +32,11 @@ public class WeatherScheduler {
 
         boolean weatherEnabled = Config.isEnabled(context);
 
+        Log.d("Weather Scheduler", "Weather enabled: " + weatherEnabled);
+
         if(weatherEnabled)
         {
+            Log.d("Weather Scheduler", "Scheduling updates");
             PeriodicWorkRequest.Builder builder = new PeriodicWorkRequest.Builder(WeatherWork.class, Config.getUpdateInterval(context), TimeUnit.HOURS)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1, TimeUnit.HOURS);
 

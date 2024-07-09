@@ -41,6 +41,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -193,7 +194,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         log(TAG + "enableUpdates");
         if (mWeatherClient != null) {
             mWeatherClient.addObserver(this);
-            WeatherUpdateService.scheduleUpdateNow(mContext);
+            //WeatherScheduler.scheduleUpdateNow(mContext);
+            //WeatherUpdateService.scheduleUpdateNow(mContext);
             queryAndUpdateWeather();
         }
     }

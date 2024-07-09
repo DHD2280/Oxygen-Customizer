@@ -427,7 +427,7 @@ public class LockscreenWeather
             );
 
     private void forceRefreshWeatherSettings() {
-        WeatherUpdateService.scheduleUpdateNow(getContext());
+        WeatherScheduler.scheduleUpdateNow(getContext());
     }
 
     @Override

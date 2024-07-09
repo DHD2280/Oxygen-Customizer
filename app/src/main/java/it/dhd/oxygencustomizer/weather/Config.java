@@ -32,7 +32,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
@@ -125,14 +124,8 @@ public class Config {
     }
 
     public static void setWeatherData(WeatherInfo data, Context context) {
-        try {
-            Xprefs.edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
-            Xprefs.edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
-        } catch (Throwable ignored) {
-            SharedPreferences prefs = getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
-            prefs.edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
-            prefs.edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
-        }
+        getPrefs(context).edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
+        getPrefs(context).edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
     }
 
     public static void clearLastUpdateTime(Context context) {
@@ -140,15 +133,11 @@ public class Config {
     }
 
     public static boolean isEnabled(Context context) {
-
         return getPrefs(context).getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
     }
 
-    public static boolean setEnabled(Context context, boolean value) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-
-        return prefs.edit().putBoolean(PREF_KEY_ENABLE, value).commit();
+    public static void setEnabled(Context context, boolean value) {
+        getPrefs(context).edit().putBoolean(LOCKSCREEN_WEATHER_SWITCH, value).apply();
     }
 
     public static int getUpdateInterval(Context context) {

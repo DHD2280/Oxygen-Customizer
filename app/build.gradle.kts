@@ -37,6 +37,8 @@ android {
             keyPassword = keystoreProperties.getProperty("keyPassword")
             storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
             storePassword = keystoreProperties.getProperty("storePassword")
+            enableV1Signing = true
+            enableV2Signing = true
         }
     } catch (ignored: Exception) {
     }
@@ -199,6 +201,9 @@ dependencies {
 
     // Palette
     implementation("androidx.palette:palette:1.0.0")
+
+    // Location
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
 
 tasks.register("printVersionName") {

@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 // we dont need an explicit wakelock JobScheduler takes care of that
 public class WeatherUpdateService extends JobService {
     private static final String TAG = "WeatherUpdateService";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String ACTION_BROADCAST = "it.dhd.oxygencustomizer.WEATHER_UPDATE";
     private static final String ACTION_ERROR = "it.dhd.oxygencustomizer.WEATHER_ERROR";
 
