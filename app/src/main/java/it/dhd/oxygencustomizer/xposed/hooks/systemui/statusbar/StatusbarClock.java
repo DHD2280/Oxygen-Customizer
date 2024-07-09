@@ -378,7 +378,6 @@ public class StatusbarClock extends XposedMods {
                             return;
                         // Avoid to use stock am pm style or we will have double am/pm
                         // setObjectField(param.thisObject, "mAmPmStyle", mAmPmStyle);
-                        setObjectField(param.thisObject, "mShowSeconds", mShowSeconds);
                     }
 
                     @Override
@@ -506,12 +505,9 @@ public class StatusbarClock extends XposedMods {
         try {
             mClockView.post(() -> { //the builtin update method doesn't care about the format. Just the text sadly
                 callMethod(getObjectField(mClockView, "mCalendar"), "setTimeInMillis", System.currentTimeMillis());
-                if (mShowSeconds) {
-                    try {
-                        setBooleanField(mClockView, "mShowSeconds", true);
-                        callMethod(mClockView, "updateShowSeconds");
-                    } catch (Throwable ignored) {
-                    }
+                try {
+                    callMethod(mClockView, "setShowSecondsAndUpdate", mShowSeconds);
+                } catch (Throwable ignored) {
                 }
                 callMethod(mClockView, "updateClock");
             });
@@ -589,6 +585,7 @@ public class StatusbarClock extends XposedMods {
             mClockChipDrawale.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
             mClockChipDrawale.setStroke(chipStrokeWidth, chipUseAccent ? mAccent : chipGradient1);
         }
+        mClockChipDrawale.setPadding(2, 0, 2, 0);
         mClockChipDrawale.invalidateSelf();
         setupChip();
     }
@@ -596,7 +593,7 @@ public class StatusbarClock extends XposedMods {
     @SuppressLint("RtlHardcoded")
     private void setupChip() {
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, 8), dp2px(mContext, 2), dp2px(mContext, 8), dp2px(mContext, 2));
+            mClockView.setPadding(dp2px(mContext, 4), dp2px(mContext, 2), dp2px(mContext, 4), dp2px(mContext, 2));
             mClockView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             mClockView.setBackground(mClockChipDrawale);
         } else {
