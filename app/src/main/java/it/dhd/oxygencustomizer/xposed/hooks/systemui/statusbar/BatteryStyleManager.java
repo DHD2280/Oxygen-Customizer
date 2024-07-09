@@ -149,6 +149,7 @@ public class BatteryStyleManager extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static final String TAG = "Oxygen Customizer - " + BatteryStyleManager.class.getSimpleName() + ": ";
+    private static final boolean DEBUG = false;
 
     private TextView batteryPercentInView, batteryPercentOutView;
     private static final ArrayList<View> batteryViews = new ArrayList<>();
@@ -317,27 +318,23 @@ public class BatteryStyleManager extends XposedMods {
         final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View v) {
-                if (v instanceof LinearLayout batteryMeter) {
-                    batteryViews.add(batteryMeter);
-                }
+                batteryViews.add(v);
+                if (DEBUG) log(TAG + "BatteryMeter attached to window");
             }
 
             @Override
             public void onViewDetachedFromWindow(@NonNull View v) {
+                if (DEBUG) log(TAG + "BatteryMeter detached from window");
                 batteryViews.remove(v);
             }
         };
-
-        boolean nightMode = (mContext.getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-        int batteryColor = nightMode ? Color.WHITE : Color.BLACK;
 
         Class<?> StatBatteryMeterView = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.view.StatBatteryMeterView", lpparam.classLoader);
         hookAllConstructors(StatBatteryMeterView, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
-                if (BuildConfig.DEBUG) log(TAG + "StatBatteryMeterView constructor called");
+                if (DEBUG) log(TAG + "StatBatteryMeterView constructor called");
 
                 ((View) param.thisObject).addOnAttachStateChangeListener(listener);
 
@@ -353,7 +350,7 @@ public class BatteryStyleManager extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 //((View) param.thisObject).addOnAttachStateChangeListener(listener);
 
-                if (BuildConfig.DEBUG) log(TAG + "StatBatteryMeterView onFinishInflate called");
+                if (DEBUG) log(TAG + "StatBatteryMeterView onFinishInflate called");
 
                 if (!CustomBatteryEnabled) return;
 
@@ -363,8 +360,10 @@ public class BatteryStyleManager extends XposedMods {
 
                 BatteryDrawable mBatteryDrawable = getNewBatteryDrawable(mContext);
                 setAdditionalInstanceField(param.thisObject, "mBatteryDrawable", mBatteryDrawable);
-
                 mBatteryIconView.setImageDrawable(mBatteryDrawable);
+                mBatteryIconView.requestLayout();
+                mBatteryIconView.invalidate();
+                refreshAllBatteryIcons();
             }
         });
 
@@ -423,7 +422,7 @@ public class BatteryStyleManager extends XposedMods {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
+                if (DEBUG) log(TAG + "BatteryViewBinder bind called");
                 refreshAllBatteryIcons();
             }
         });
@@ -444,7 +443,7 @@ public class BatteryStyleManager extends XposedMods {
                 7   TwoBatteryDashChargeView twoBatteryDashChargeView,
                 8   StatBatteryIcon statBatteryIcon) {
                  */
-
+                log(TAG + "BatteryViewBinder bind$initView called");
                 refreshAllBatteryIcons();
             }
         });
@@ -457,10 +456,12 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateBatteryViewValues(View view) {
+        if (DEBUG) log(TAG + "updateBatteryViewValues called");
         TextView batteryOutPercentage = null;
         try {
             batteryOutPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_percentage_view", "id", mContext.getPackageName()));
         } catch (Throwable ignored) {
+            if (DEBUG) log(TAG + "battery_percentage_view not found");
         }
         if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE && !CustomBatteryEnabled) {
             batteryOutPercentage.setTextSize(TypedValue.COMPLEX_UNIT_SP, customizePercSize ? mBatteryPercSize : 12);
@@ -473,15 +474,18 @@ public class BatteryStyleManager extends XposedMods {
             try {
                 batteryIcon = view.findViewById(mContext.getResources().getIdentifier("battery_icon_view", "id", mContext.getPackageName()));
             } catch (Throwable ignored) {
+                if (DEBUG) log(TAG + "battery_icon_view not found");
             }
             try {
                 chargingIcon = view.findViewById(mContext.getResources().getIdentifier("battery_dash_charge_view", "id", mContext.getPackageName()));
             } catch (Throwable ignored) {
+                if (DEBUG) log(TAG + "battery_dash_charge_view not found");
             }
             try {
                 batteryInPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_text", "id", mContext.getPackageName()));
                 batteryInPercentage.setVisibility(View.GONE);
             } catch (Throwable ignored) {
+                if (DEBUG) log(TAG + "battery_text not found");
             }
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View child = ((ViewGroup) view).getChildAt(i);
@@ -499,6 +503,7 @@ public class BatteryStyleManager extends XposedMods {
             }
         }
         if (CustomBatteryEnabled && batteryIcon != null) {
+            if (DEBUG) log(TAG + "CustomBatteryEnabled && batteryIcon != null");
             scaleBatteryMeterViews(batteryIcon);
             updateBatteryRotation(batteryIcon);
             updateFlipper(batteryIcon.getParent());
@@ -536,7 +541,9 @@ public class BatteryStyleManager extends XposedMods {
                 );
                 drawable.setBatteryLevel(getCurrentLevel());
                 drawable.invalidateSelf();
-            } catch (Throwable ignored) {
+                batteryIcon.setImageDrawable(drawable);
+            } catch (Throwable t) {
+                if (DEBUG) log(TAG + "BatteryDrawable not found " + t.getMessage());
             } //it's probably the default battery. no action needed
         }
 
@@ -554,7 +561,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconsColor() {
-        if (BuildConfig.DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
+        if (DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         for (View v : batteryViews) {
             if (v instanceof ImageView) {
@@ -573,7 +580,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconColor(View view, int singleColor, int fillColor, int bgColor) {
-        if (BuildConfig.DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
+        if (DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         BatteryDrawable mBatteryDrawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
         mBatteryDrawable.setColors(fillColor, bgColor, singleColor);
@@ -654,7 +661,7 @@ public class BatteryStyleManager extends XposedMods {
                 }
                  */
                         //batteryLevel = (int) param.args[0];
-                        if (BuildConfig.DEBUG) log(TAG + "onBatteryLevelChanged");
+                        if (DEBUG) log(TAG + "onBatteryLevelChanged");
                         mIsCharging = (boolean) param.args[2];
                         mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
                         batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
