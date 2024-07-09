@@ -443,7 +443,7 @@ public class BatteryStyleManager extends XposedMods {
                 7   TwoBatteryDashChargeView twoBatteryDashChargeView,
                 8   StatBatteryIcon statBatteryIcon) {
                  */
-                log(TAG + "BatteryViewBinder bind$initView called");
+                if (DEBUG) log(TAG + "BatteryViewBinder bind$initView called");
                 refreshAllBatteryIcons();
             }
         });
