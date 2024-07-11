@@ -38,7 +38,7 @@ import java.util.Locale;
 public class WeatherWork extends ListenableWorker {
     final Context mContext;
     private static final String TAG = "WeatherWork";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String ACTION_BROADCAST = "it.dhd.oxygencustomizer.WEATHER_UPDATE";
     private static final String ACTION_ERROR = "it.dhd.oxygencustomizer.WEATHER_ERROR";
 
@@ -51,10 +51,6 @@ public class WeatherWork extends ListenableWorker {
     private static final long OUTDATED_LOCATION_THRESHOLD_MILLIS = 10L * 60L * 1000L; // 10 minutes
     private static final int RETRY_DELAY_MS = 5000;
     private static final int RETRY_MAX_NUM = 5;
-
-    public static final int PERIODIC_UPDATE_JOB_ID = 0;
-    public static final int ONCE_UPDATE_JOB_ID = 1;
-    private FusedLocationProviderClient fusedLocationClient;
 
     private volatile HandlerThread mHandlerThread;
     private Handler mHandler;
@@ -92,7 +88,7 @@ public class WeatherWork extends ListenableWorker {
             updateWeatherFromAlarm();
 
         return CallbackToFutureAdapter.getFuture(completer -> {
-            completer.set(doCheckLocationEnabled() ? Result.success() : Result.retry());
+            completer.set(Config.isEnabled(mContext) && doCheckLocationEnabled() ? Result.success() : Result.retry());
             return completer;
         });
     }
@@ -165,7 +161,7 @@ public class WeatherWork extends ListenableWorker {
         if (needsUpdate) {
             CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder()
                     .setGranularity(Granularity.GRANULARITY_COARSE)
-                    .setMaxUpdateAgeMillis(3600000)  // Max age of 1 hour
+                    .setMaxUpdateAgeMillis(1000 * 60 * 15)  // Max age of 15 minutes
                     .build();
 
             fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
