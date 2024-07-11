@@ -3,20 +3,14 @@ package it.dhd.oxygencustomizer.ui.adapters;
 import static it.dhd.oxygencustomizer.utils.AssetsReader.getDrawableFromAssets;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NAVBAR;
 import static it.dhd.oxygencustomizer.utils.ViewBindingHelpers.setDrawable;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,20 +24,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.ui.models.NotificationModel;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
@@ -264,24 +250,9 @@ public class NavbarAdapter extends RecyclerView.Adapter<NavbarAdapter.ViewHolder
 
     private void setIcons(ViewHolder holder, int position) {
         Log.d("NavbarAdapter", "OxygenCustomizerComponentNB" + position + ".overlay");
-        holder.backButton.setImageDrawable(getDrawable(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_back"));
-        holder.homeButton.setImageDrawable(getDrawable(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_home"));
-        holder.recentsButton.setImageDrawable(getDrawable(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_recent"));
-    }
-
-    public Drawable getDrawable(Context context, String pkg, String drawableName) {
-        if (pkg.equals("com.android.systemui"))
-            pkg = "com.android.settings";
-        try {
-            PackageManager pm = context.getPackageManager();
-            Resources res = pm.getResourcesForApplication(pkg);
-            int resId = res.getIdentifier(drawableName, "drawable", pkg);
-            return res.getDrawable(resId);
-        }
-        catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        holder.backButton.setImageDrawable(getDrawableFromOverlay(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_back"));
+        holder.homeButton.setImageDrawable(getDrawableFromOverlay(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_home"));
+        holder.recentsButton.setImageDrawable(getDrawableFromOverlay(context, "OxygenCustomizerComponentNB" + position + ".overlay", "ic_sysbar_recent"));
     }
 
     private void refreshButton(ViewHolder holder) {
