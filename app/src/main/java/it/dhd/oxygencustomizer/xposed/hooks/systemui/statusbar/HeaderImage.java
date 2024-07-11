@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findField;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
@@ -136,7 +137,6 @@ public class HeaderImage extends XposedMods {
         Class<?> OplusQSContainerImpl;
         try {
             OplusQSContainerImpl = findClass("com.oplus.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);
-
         } catch (Throwable t) {
             OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); // OOS 13
         }
@@ -209,7 +209,7 @@ public class HeaderImage extends XposedMods {
                             float qsAlpha = (float) param.args[alphaIndex];
                             boolean nightMode = (mQsHeaderLayout.getContext().getResources().getConfiguration().uiMode
                                     & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-                            if (nightMode && qsAlpha < .19f // Dark Mode Alpha
+                            if (nightMode && qsAlpha < .18f // Dark Mode Alpha
                                     || !nightMode && qsAlpha < 0.09f // Light Mode Different Alpha
                                 ) {
                                 mQsHeaderLayout.setAlpha(0f);
@@ -219,6 +219,7 @@ public class HeaderImage extends XposedMods {
                         }
                     }
                 });
+
             } catch (Throwable t) {
                 log(TAG + "Error hooking new Control Center " + t.getMessage());
             }
