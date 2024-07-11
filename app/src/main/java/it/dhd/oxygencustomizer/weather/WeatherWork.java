@@ -56,7 +56,7 @@ public class WeatherWork extends ListenableWorker {
     public static final int ONCE_UPDATE_JOB_ID = 1;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private HandlerThread mHandlerThread;
+    private volatile HandlerThread mHandlerThread;
     private Handler mHandler;
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
 
@@ -78,9 +78,15 @@ public class WeatherWork extends ListenableWorker {
     @Override
     public ListenableFuture<Result> startWork() {
 
-        mHandlerThread = new HandlerThread("WeatherService Thread");
-        mHandlerThread.start();
-        mHandler = new Handler(mHandlerThread.getLooper());
+        if (mHandlerThread == null) {
+            synchronized (WeatherWork.class) {
+                if (mHandlerThread == null) {
+                    mHandlerThread = new HandlerThread("WeatherService Thread");
+                    mHandlerThread.start();
+                    mHandler = new Handler(mHandlerThread.getLooper());
+                }
+            }
+        }
 
         if(Config.isEnabled(mContext))
             updateWeatherFromAlarm();
