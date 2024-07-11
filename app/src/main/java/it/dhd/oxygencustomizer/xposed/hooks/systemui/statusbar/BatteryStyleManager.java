@@ -319,7 +319,7 @@ public class BatteryStyleManager extends XposedMods {
             @Override
             public void onViewAttachedToWindow(@NonNull View v) {
                 batteryViews.add(v);
-                if (DEBUG) log(TAG + "BatteryMeter attached to window");
+                updateBatteryViewValues(v);
             }
 
             @Override
@@ -412,6 +412,7 @@ public class BatteryStyleManager extends XposedMods {
                 } else {
                     updateIconColor(v, singleToneColor, foregroundColor, backgroundColor);
                 }
+                updateBatteryViewValues(v);
 
             }
         });
@@ -423,7 +424,7 @@ public class BatteryStyleManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (DEBUG) log(TAG + "BatteryViewBinder bind called");
-                refreshAllBatteryIcons();
+                if (param.args[0] instanceof View v) updateBatteryViewValues(v);
             }
         });
         hookAllMethods(BatteryViewBinder, "bind$initView", new XC_MethodHook() {
@@ -444,7 +445,12 @@ public class BatteryStyleManager extends XposedMods {
                 8   StatBatteryIcon statBatteryIcon) {
                  */
                 if (DEBUG) log(TAG + "BatteryViewBinder bind$initView called");
-                refreshAllBatteryIcons();
+                if (param.args[2] instanceof View v) {
+                    Object statBattery = param.args[2];
+                    if (statBattery.getClass().getCanonicalName().equals(StatBatteryMeterView.getCanonicalName())) {
+                        updateBatteryViewValues(v);
+                    }
+                }
             }
         });
     }
