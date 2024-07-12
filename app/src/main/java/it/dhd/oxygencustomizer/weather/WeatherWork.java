@@ -4,19 +4,13 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.job.JobParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -27,13 +21,13 @@ import androidx.work.WorkerParameters;
 import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Granularity;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WeatherWork extends ListenableWorker {
     final Context mContext;
@@ -54,6 +48,7 @@ public class WeatherWork extends ListenableWorker {
 
     private volatile HandlerThread mHandlerThread;
     private Handler mHandler;
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
 
 
@@ -62,27 +57,9 @@ public class WeatherWork extends ListenableWorker {
         mContext = appContext;
     }
 
-    private static final LocationRequest sLocationRequest;
-
-    static {
-        sLocationRequest = new LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 1000 * 60 * 120)
-                .setMinUpdateIntervalMillis(1000 * 60 * 60)
-                .build();
-    }
-
     @NonNull
     @Override
     public ListenableFuture<Result> startWork() {
-
-        if (mHandlerThread == null) {
-            synchronized (WeatherWork.class) {
-                if (mHandlerThread == null) {
-                    mHandlerThread = new HandlerThread("WeatherService Thread");
-                    mHandlerThread.start();
-                    mHandler = new Handler(mHandlerThread.getLooper());
-                }
-            }
-        }
 
         if(Config.isEnabled(mContext))
             updateWeatherFromAlarm();
@@ -183,7 +160,7 @@ public class WeatherWork extends ListenableWorker {
     }
 
     private void updateWeather() {
-        mHandler.post(() -> {
+        executor.execute(() -> {
             WeatherInfo w = null;
             try {
                 AbstractWeatherProvider provider = Config.getProvider(mContext);
