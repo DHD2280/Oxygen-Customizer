@@ -173,8 +173,6 @@
     <string name="status_bar_date_style_lowercase">Minúsculas</string>
     <string name="status_bar_date_style_uppercase">Mayúsculas</string>
     <string name="status_bar_date_format_custom">Formato personalizado de Java</string>
-    <string name="status_bar_date_string_edittext_title">Debe estar en formato de fecha. Por ejemplo, MM/dd/aa</string>
-    <string name="status_bar_date_string_edittext_summary">Introduce texto</string>
     <string name="clock_date_position">Posición de la fecha</string>
     <string name="clock_date_right">A la derecha de la hora</string>
     <string name="clock_date_left">A la izquierda de la hora</string>
@@ -821,7 +819,6 @@
     <string name="menu_launch_app">Iniciar aplicación</string>
     <string name="menu_restart_app">Reiniciar aplicación</string>
     <!-- Update Fragment -->
-    <string name="string_formatter_manual_body_v3">Además del texto normal, las variables dinámicas también están disponibles, como Fecha, Uso de datos y Temperatura:\n\n$G\&lt;format\&gt; : Fecha gregoriana, basada en el formato*\n$P&lt;format&gt; : Fecha persa, basada en el formato*\n$Nrx : Descargas totales en el periodo especificado ** ***\n$Ntx: Subidas totales en el periodo especificado ** ***\n$Nall : Tráfico total en el periodo especificado ** ***\n$Nssid : Nombre SSID de WiFi SSID (si corresponde)\n\n$T\&lt;format\&gt;[interval] : Temperatura; \nel formato puede ser b (para batería), c (para CPU), g (para GPU) and s (para piel) \nFinalmente, hay un número OPCIONAL de intervalo de actualizaciones en segundos (por defecto: 60 segundos)\n\n*para documentación del formato, busca \"Formato de fecha de Java\"\n**Puedes especificar el periodo de estadísticas en Oxygen Customizer/menú Misceláneo/Ajustes de estadísticas de red\n***Si reemplazas $N con $Nc, obtendrás con estadísticas de datos móviles (por ejemplo $Ncrx en vez de Nrx)</string>
     <string name="update_channel_name">Actualizaciones</string>
     <string name="update_notification_title">Actualización descargada</string>
     <string name="update_notification_text">Toca aquí para instalar</string>

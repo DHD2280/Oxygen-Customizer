@@ -174,8 +174,6 @@
     <string name="status_bar_date_style_lowercase">Строчные буквы</string>
     <string name="status_bar_date_style_uppercase">Заглавные</string>
     <string name="status_bar_date_format_custom">Пользовательский формат Java</string>
-    <string name="status_bar_date_string_edittext_title">Должно быть в формате даты, например. ММ/дд/гг</string>
-    <string name="status_bar_date_string_edittext_summary">Введите строку</string>
     <string name="clock_date_position">Положение даты</string>
     <string name="clock_date_right">Самое подходящее время</string>
     <string name="clock_date_left">Осталось совсем немного времени</string>
@@ -828,7 +826,6 @@
     <string name="menu_launch_app">Запустить приложение</string>
     <string name="menu_restart_app">Перезапустить приложение</string>
     <!-- Update Fragment -->
-    <string name="string_formatter_manual_body_v3">Помимо обычного текста, также доступны динамические переменные, такие как дата, использование данных и температура:\n\n$G\&lt;format\&gt; : дата по григорианскому календарю в формате*\n$P&lt;format&gt; : персидская дата в формате *\n$Nrx : общее количество загрузок за указанный период ** ***\n$Ntx: общее количество загрузок за указанный период ** ***\n$Nall : общий трафик за указанный период ** ***\n$Nssid: имя SSID Wi-Fi (если применимо)\n\n$T\&lt;format\&gt;[интервал]: температура; \nФормат может быть b (для батареи), c (для процессора), g (для графического процессора) и s (для скина). \nНаконец, существует НЕОБЯЗАТЕЛЬНОЕ количество интервалов обновления в секундах (по умолчанию: 60 секунд)\n\n* для документации по формату найдите «Формат даты Java».\n**Вы можете указать период статистики в Oxygen Customizer/меню «Разное»/Настройки сетевой статистики.\n***Если вы замените $N на $Nc, вы получите мобильные данные. статистика (например, $Ncrx вместо Nrx)</string>
     <string name="update_channel_name">Обновления</string>
     <string name="update_notification_title">Обновление загружено</string>
     <string name="update_notification_text">Нажмите здесь, чтобы установить</string>
