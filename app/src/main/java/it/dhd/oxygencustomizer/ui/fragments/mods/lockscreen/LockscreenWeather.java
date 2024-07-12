@@ -227,11 +227,6 @@ public class LockscreenWeather
         builder.show();
     }
 
-    private void disableService() {
-        // stop any pending
-        WeatherScheduler.unscheduleUpdates(getContext());
-    }
-
     private void enableService() {
         WeatherScheduler.scheduleUpdates(getContext());
     }
@@ -444,8 +439,6 @@ public class LockscreenWeather
                 } else {
                     forceRefreshWeatherSettings();
                 }
-            } else {
-                disableService();
             }
             return true;
         } else if (preference == mProvider) {
