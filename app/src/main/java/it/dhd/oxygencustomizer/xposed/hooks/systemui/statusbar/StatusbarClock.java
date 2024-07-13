@@ -277,6 +277,12 @@ public class StatusbarClock extends XposedMods {
                             mStatusBar.addView(mCenteredIconArea);
                         }
 
+                        if (mShowSeconds) {
+                            try {
+                                callMethod(mClockView, "setShowSecondsAndUpdate", mShowSeconds);
+                            } catch (Throwable ignored) {
+                            }
+                        }
 
                         placeClock();
                         setClockSize();
@@ -371,13 +377,6 @@ public class StatusbarClock extends XposedMods {
 
         findAndHookMethod(ClockClass,
                 "getSmallTime", new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.thisObject != mClockView)
-                            return;
-                        // Avoid to use stock am pm style or we will have double am/pm
-                        // setObjectField(param.thisObject, "mAmPmStyle", mAmPmStyle);
-                    }
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
