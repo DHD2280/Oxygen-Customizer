@@ -806,6 +806,9 @@ public class BatteryStyleManager extends XposedMods {
         };
 
         if (mBatteryDrawable != null) {
+            if (mBatteryStyle == BATTERY_STYLE_DOTTED_CIRCLE && mBatteryDrawable instanceof CircleBattery) {
+                ((CircleBattery)mBatteryDrawable).setMeterStyle(BATTERY_STYLE_DOTTED_CIRCLE);
+            }
             mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);
             mBatteryDrawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
             mBatteryDrawable.setColors(frameColor, backgroundColor, singleToneColor);
