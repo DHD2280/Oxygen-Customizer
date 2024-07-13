@@ -196,7 +196,6 @@ public class StatusbarClock extends XposedMods {
                 mScreenOn = true;
             }
             if (mScreenOn) {
-                handler.post(() -> callMethod(Clock, "updateClock"));
                 if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility(Clock));
             }
         }
