@@ -173,6 +173,8 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
+    <string name="status_bar_date_string_edittext_title">Ilyen kell legyen a formátum kb. HH/nn/éé</string>
+    <string name="status_bar_date_string_edittext_summary">Szövegbevitel</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
     <string name="clock_date_left">Az idő-kijelzéstől balra</string>
@@ -816,6 +818,7 @@
     <string name="menu_launch_app">Az alkalmazás elindítása</string>
     <string name="menu_restart_app">Az alkalmazás újraindítása</string>
     <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum, az adathasználat és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátum, a \n$P&lt;format&gt; alapján : Perzsa dátum a \n$Nrx alapján : Az összes letöltés a megadott időszakban ** ***\n$Ntx: Az összes feltöltés a megadott időszakban ** ***\n$Nall : Az összes forgalom a megadott időszakban ** ***\n$Nssid : WiFi SSID neve (ha van)\n\n$T\&lt;format\&gt;[intervallum] : Hőmérséklet-formátum; \n b (akkuhoz), c (processzorhoz), g (GPU-hoz) and s (Szkinhez) \nVégül, van OPCIONÁLIS számú frissítési intervallum másodpercben (alapértelmezett: 60 másodperc)\n\n*formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre\n**A statisztikai időszakot az Oxigén Módosítások/Hasznos cuccok menü/Hálózati statisztika beállítások menüpontban adhatja meg.\n***Ha lecseréli a $N-t a $Nc-re, akkor mobiladat-statisztikát kap (pl. $Ncrx a Nrx helyett)</string>
     <string name="update_channel_name">Frissítések</string>
     <string name="update_notification_title">A frissítés letöltve</string>
     <string name="update_notification_text">Telepítéshez érintse meg</string>
@@ -1013,4 +1016,5 @@
     <string name="style_10">10. Stílus</string>
     <string name="style_11">11. Stílus</string>
     <string name="style_12">12. Stílus</string>
+    <!-- Dark Mode -->
 </resources>

@@ -173,6 +173,8 @@
     <string name="status_bar_date_style_lowercase">小文字</string>
     <string name="status_bar_date_style_uppercase">大文字</string>
     <string name="status_bar_date_format_custom">カスタム Java フォーマット</string>
+    <string name="status_bar_date_string_edittext_title">DateFormat で入力をしてください (例: MM/dd/yy)</string>
+    <string name="status_bar_date_string_edittext_summary">文字列を入力</string>
     <string name="clock_date_position">日付の位置</string>
     <string name="clock_date_right">時間の右側</string>
     <string name="clock_date_left">時間の左側</string>
@@ -800,6 +802,7 @@
     <string name="menu_launch_app">アプリを起動</string>
     <string name="menu_restart_app">アプリを再起動</string>
     <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">通常のテキストに加えて日付、データの使用量、温度のような動的な変数も使用可能です:\n\n$G\&lt;format\&gt; : グレゴリオ暦の日付*\n$P&lt;format&gt; : ペルシア語の日付*\n$Nrx : 指定期間の総ダウンロード数** ***\n$Ntx : 指定期間の総アップロード数*** ***\n$Nall : 指定期間の総トラフィック** ***\n$Nssid : Wi-Fi SSID名 (該当する場合)\n\n$T\&lt;format\&gt;[interval] : Temperature; \nフォーマットには b でバッテリー、c で CPU、g で GPU、s で スキン \n最後に更新間隔を秒単位で指定します (デフォルトは 60 秒)\n\n*フォーマットのドキュメントは、「Java Date Format｣で検索してください。\n**統計期間はOxygen Customizer/その他/ネットワーク統計設定で指定できます。\n***$Nを$Ncに置き換えるとモバイルデータの統計が取得できます (例: Nrxの代わりに$Ncrx)</string>
     <string name="update_channel_name">アップデート</string>
     <string name="update_notification_title">アップデートのダウンロードが完了しました</string>
     <string name="update_notification_text">タップでインストール</string>
@@ -992,4 +995,5 @@
     <string name="style_10">スタイル 10</string>
     <string name="style_11">スタイル 11</string>
     <string name="style_12">スタイル 12</string>
+    <!-- Dark Mode -->
 </resources>

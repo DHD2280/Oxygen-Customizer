@@ -173,6 +173,8 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
+    <string name="status_bar_date_string_edittext_title">Deve essere in DateFormat eg. MM/dd/yy</string>
+    <string name="status_bar_date_string_edittext_summary">Inserisci stringa</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
     <string name="clock_date_left">A sinistra dell\'ora</string>
@@ -811,6 +813,7 @@
     <string name="menu_launch_app">Avvia app</string>
     <string name="menu_restart_app">Riavvia app</string>
     <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data, Utilizzo dati e Temperatura:\n\n$G\&lt;formato\&gt; : data gregoriana, basata sul formato*\n$P&lt;format&gt; : data persiana, in base al formato*\n$Nrx: download totali nel periodo specificato ** ***\n$Ntx: caricamenti totali nel periodo specificato ** ***\n$Nall: traffico totale nel periodo specificato ** ***\n$Nssid: nome SSID WiFi (se applicabile)\n\n$T\&lt;formato\&gt;[intervallo]: temperatura; \nil formato può essere b (per batteria), c (per CPU), g (per GPU) e s (per skin) \nInfine, c\'è un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n* per la documentazione sul formato, cerca \"Formato data Java\"\n**Puoi specificare il periodo delle statistiche in Personalizzazione Oxygen/menu Varie/Impostazioni statistiche di rete\n***Se sostituisci $N con $Nc otterrai dati mobili statistiche (ad esempio $Ncrx invece di Nrx)</string>
     <string name="update_channel_name">Aggiornamenti</string>
     <string name="update_notification_title">Aggiornamento scaricato</string>
     <string name="update_notification_text">Tocca qui per installare</string>
@@ -1008,4 +1011,5 @@
     <string name="style_10">Stile 10</string>
     <string name="style_11">Stile 11</string>
     <string name="style_12">Stile 12</string>
+    <!-- Dark Mode -->
 </resources>

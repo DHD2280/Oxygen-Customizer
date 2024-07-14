@@ -173,6 +173,8 @@
     <string name="status_bar_date_style_lowercase">Küçük harf</string>
     <string name="status_bar_date_style_uppercase">Büyük harf</string>
     <string name="status_bar_date_format_custom">Özel java formatı</string>
+    <string name="status_bar_date_string_edittext_title">DateFormat\'ta olmalıdır, örn. AA/gg/yy</string>
+    <string name="status_bar_date_string_edittext_summary">Dize girin</string>
     <string name="clock_date_position">Tarih pozisyonu</string>
     <string name="clock_date_right">Zaman hakkı</string>
     <string name="clock_date_left">Kalan süre</string>
@@ -819,6 +821,7 @@
     <string name="menu_launch_app">Uygulamayı başlat</string>
     <string name="menu_restart_app">Uygulamayı yeniden başlat</string>
     <!-- Update Fragment -->
+    <string name="string_formatter_manual_body_v3">Normal metne ek olarak, Tarih, Veri kullanımı ve Sıcaklık gibi dinamik değişkenler de mevcuttur:\n\n$G \&lt; format \&gt;: Biçime göre Miladi tarih *\n$P&lt;format &gt;: Biçime göre Farsça tarih *\n$ Nrx: Belirtilen dönemdeki Toplam İndirmeler ****\n$ Ntx: Belirtilen dönemdeki toplam yüklemeler ****\n$Nall : Belirtilen dönemdeki toplam trafik ****\n $ Nssid: WiFi SSID adı (varsa)\n\n$T \&lt; format \&gt;[interval]: Sıcaklık;\nformat b (pil için), c (CPU için), g (GPU için) ve s (skin için) olabilir\nSon zamanlarda, saniye cinsinden İSTEĞE BAĞLI güncelleme aralığı sayısı vardır (varsayılan: 60 saniye)\n\n * format belgeleri için arama yapın \" Java Tarih Formatı \"\n** Oxygen Customizer/Çeşitli menü/Ağ İstatistikleri Ayarları\n** N $Nc ile değiştirirseniz, mobil istatistiklerle (örneğin Ncrx yerine Ncrx) elde edersiniz</string>
     <string name="update_channel_name">Güncellemeler</string>
     <string name="update_notification_title">Güncelleme indirildi</string>
     <string name="update_notification_text">Yüklemek için buraya dokunun</string>
@@ -1019,4 +1022,5 @@
     <string name="style_10">Stil 10</string>
     <string name="style_11">Stil 11</string>
     <string name="style_12">Stil 12</string>
+    <!-- Dark Mode -->
 </resources>
