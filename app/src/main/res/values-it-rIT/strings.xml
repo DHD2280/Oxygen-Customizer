@@ -50,6 +50,7 @@
     <string name="btn_back">Indietro</string>
     <string name="btn_lets_go">Andiamo</string>
     <string name="btn_close">Chiudi</string>
+    <string name="btn_cancel">Annulla</string>
     <string name="btn_reboot_now">Riavvia ora</string>
     <string name="btn_reboot">Riavvia</string>
     <string name="btn_enable">Abilita</string>
@@ -61,6 +62,7 @@
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Avviso</string>
+    <string name="app_kill_alert_body">L\'app verrà chiusa. Puoi aprirla di nuovo cliccando sulla nuova icona</string>
     <string name="app_kill_ok_btn">Ok</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Per applicare le impostazioni è necessario un riavvio di sistema</string>
@@ -173,6 +175,8 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
+    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
+    <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
     <string name="clock_date_left">A sinistra dell\'ora</string>
@@ -314,6 +318,9 @@
     <string name="quick_pulldown_side_left">Sinistra</string>
     <string name="quick_pulldown_side_right">Destra</string>
     <string name="quick_collapse">Comprimi Veloce</string>
+    <string name="my_device">I miei dispositivi</string>
+    <string name="my_device_title">Forza i miei dispositivi</string>
+    <string name="my_device_summary">Forza la visualizzazione dei miei dispositivi nel centro di controllo.\nNOTA: È necessario il nuovo Centro di controllo e I\'app \"i miei dispositivi\" per utilizzare correttamente questa funzione.</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Riquadri Impostazioni rapide</string>
     <string name="quick_settings_tiles_number">Conteggio Tile Impostazioni rapide</string>
@@ -609,14 +616,17 @@
     <!-- Media art -->
     <string name="media_art_title">Copertina Album</string>
     <string name="media_art_summary">Mostra copertina album quando disponibile</string>
+    <string name="media_art_title_qs_summary">Mostra copertina multimediale come sfondo Tile quando disponibile</string>
     <string name="albumart_blur_title">Intensità Sfocature Copertina Album</string>
     <!-- Album art filter -->
+    <string name="albumart_filter_title">Filtro copertina multimediale</string>
     <string name="albumart_filter_none">Nessuno</string>
     <string name="albumart_filter_grayscale">Scala di grigi</string>
     <string name="albumart_filter_tint">Tinta Accento</string>
     <string name="albumart_filter_blur">Sfocatura</string>
     <string name="albumart_filter_grayblur">Scala di grigi e sfocatura</string>
     <string name="albumart_filter_custom_tint">Colore personalizzato</string>
+    <string name="albumart_tint_intensity_title">Intensità del colore personalizzata</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">Attenzione</string>
     <string name="depth_effect_alert_body">Usa uno sfondo adatto alla schermata di blocco in cui gli elementi di primo piano non ostacolano l\'intero orologio sulla schermata di blocco, garantendo sia il fascino visivo che la chiarezza funzionale sulla schermata di blocco.\nDopo l\'abilitazione, imposta uno sfondo della schermata di blocco, il modello AI proverà automaticamente ad estrarre l\'oggetto dallo sfondo.\n\nNota: %s.</string>
@@ -639,6 +649,8 @@
     <string name="lockscreen_clock_custom_user_image">Usa Immagine Utente Personalizzata</string>
     <string name="lockscreen_clock_custom_user_image_title">Immagine Utente</string>
     <string name="lockscreen_clock_custom_user_image_summary">Fai clic per selezionare un\'immagine.</string>
+    <string name="lockscreen_clock_custom_image_title">Usa Immagine Personalizzata</string>
+    <string name="lockscreen_clock_custom_image_picker_title">Immagine personalizzata</string>
     <string name="lockscreen_font_line_height_title">Altezza Linea</string>
     <string name="lockscreen_clock_custom_margins">Margini Orologio</string>
     <string name="lockscreen_clock_top_margin_title">Margine superiore</string>
@@ -842,6 +854,8 @@
     <string name="advanced_reboot_fast_reboot">Riavvio Veloce</string>
     <string name="advanced_reboot_systemui">Riavvia SystemUI</string>
     <!-- Own Settings -->
+    <string name="general_settings">Generale</string>
+    <string name="app_icon_themed">Usa icona app con tema</string>
     <string name="delete_all_title">Elimina Tutto</string>
     <string name="delete_all_summary">Elimina tutte le impostazioni</string>
     <string name="export_title">Esporta</string>
@@ -989,8 +1003,11 @@
     <string name="notif_preview_desc">Anteprima notifica.\nFai clic per applicare questo stile.</string>
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">Raggio Angolo Notifiche</string>
+    <string name="notification_corner_radius_summary">Imposta un raggio di angolo personalizzato per le notifiche.</string>
     <string name="notif_roundness_preview_desc">Anteprima notifica.</string>
     <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">Stili Di Dialogo Usb</string>
+    <string name="theme_customization_usb_dialog_summary">Imposta stile personalizzato per la finestra USB.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Stile Toast</string>
     <string name="toast_message">Messaggio Toast</string>
@@ -1008,4 +1025,10 @@
     <string name="style_10">Stile 10</string>
     <string name="style_11">Stile 11</string>
     <string name="style_12">Stile 12</string>
+    <!-- Dark Mode -->
+    <string name="menu_show_system_apps">Mostra Sistema</string>
+    <string name="dark_mode">Modalità scura</string>
+    <string name="dark_mode_pref">Personalizza Modalità Scura</string>
+    <string name="custom_dark_mode_title">Modalità scura personalizzata</string>
+    <string name="custom_dark_mode_summary">Consenti la personalizzazione delle app in modalità scura.</string>
 </resources>

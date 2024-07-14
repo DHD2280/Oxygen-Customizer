@@ -61,6 +61,7 @@
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Megjegyzés</string>
+    <string name="app_kill_alert_body">Az alkalmazás bezáródik. Az új ikonra kattintva újra megnyithatja</string>
     <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">A beállítások érvényesítéséhez újra kell indítani a rendszert</string>
@@ -314,6 +315,9 @@
     <string name="quick_pulldown_side_left">Bal</string>
     <string name="quick_pulldown_side_right">Jobb</string>
     <string name="quick_collapse">Gyors bezárás</string>
+    <string name="my_device">Saját készülékeim</string>
+    <string name="my_device_title">A \' Saját készülékeim \' kényszerítése</string>
+    <string name="my_device_summary">A \' Saját készülékeim \' megjelenítésének kényszerítése a Vezérlőközpontban.\nMEGJEGYZÉS: A funkció megfelelő használatához a Vezérlőközpont és a Saját készülékeim új verzióját kell telepítenie.</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Gyorskapcsoló-csempék</string>
     <string name="quick_settings_tiles_number">A gyorsbeállítási csempék száma</string>
@@ -847,6 +851,8 @@
     <string name="advanced_reboot_fast_reboot">Gyors újraindítás</string>
     <string name="advanced_reboot_systemui">A felhasználói felület újraindítása</string>
     <!-- Own Settings -->
+    <string name="general_settings">Általános</string>
+    <string name="app_icon_themed">A témázott alkalmazásikon használata</string>
     <string name="delete_all_title">Az összes törlése</string>
     <string name="delete_all_summary">Az összes beállítás törlése</string>
     <string name="export_title">Exportálás</string>
@@ -859,6 +865,9 @@
     <string name="import_failed">Sikertelen importálás</string>
     <string name="settings_about_section_title">Névjegy</string>
     <string name="github_repo_title">GitHub repó</string>
+    <string name="support_group_title">Támogatói csoport</string>
+    <string name="translate_title">Segítsen a fordításban</string>
+    <string name="translate_summary">Segítsen nekünk lefordítani az alkalmazásunkat az Ön nyelvére</string>
     <string name="check_updates">Frissítések keresése</string>
     <string name="check_updates_summary">Jelenlegi verzió: %s</string>
     <string name="check_auto_updates">Frissítések automatikus ellenőrzése</string>
@@ -1013,4 +1022,10 @@
     <string name="style_10">10. Stílus</string>
     <string name="style_11">11. Stílus</string>
     <string name="style_12">12. Stílus</string>
+    <!-- Dark Mode -->
+    <string name="menu_show_system_apps">Rendszeralkalmazások megjelenítése</string>
+    <string name="dark_mode">Sötét mód</string>
+    <string name="dark_mode_pref">A Sötét mód átalakítása</string>
+    <string name="custom_dark_mode_title">Egyéni Sötét mód</string>
+    <string name="custom_dark_mode_summary">Lehetővé teszi a Sötét mód alkalmazáslistájának testreszabását.</string>
 </resources>
