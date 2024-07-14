@@ -13,6 +13,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.screenshot.ScreenshotSecureFlag;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
+import it.dhd.oxygencustomizer.xposed.hooks.settings.FontVariation;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
@@ -42,6 +43,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarNotification;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.ThermalProvider;
 
 public class ModPacks {
 
@@ -62,6 +64,9 @@ public class ModPacks {
                 if (!XPLauncher.isChildProcess) {
                     // Theme Enabler
                     modPacks.add(ThemeEnabler.class);
+
+                    // Thermal Provider
+                    modPacks.add(ThermalProvider.class);
 
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);
@@ -117,6 +122,7 @@ public class ModPacks {
             case Constants.Packages.SETTINGS -> {
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
+                //modPacks.add(FontVariation.class);
             }
             case Constants.Packages.LAUNCHER -> modPacks.add(Launcher.class);
             case Constants.Packages.SCREENSHOT -> modPacks.add(ScreenshotSecureFlag.class);

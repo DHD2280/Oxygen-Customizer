@@ -4,12 +4,15 @@ import static android.content.Context.BATTERY_SERVICE;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
+import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
+
+import androidx.preference.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
@@ -138,6 +142,9 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
     public static class Clock extends ControlledPreferenceFragmentCompat {
 
+        private DateFormatDialog mDateFormatDialog;
+        private Preference mCustomFormat;
+
         @Override
         public String getTitle() {
             return getString(R.string.status_bar_clock_title);
@@ -162,6 +169,20 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
         public String[] getScopes() {
             return new String[]{SYSTEM_UI};
         }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferences(savedInstanceState, rootKey);
+            mDateFormatDialog = new DateFormatDialog(requireContext());
+            mCustomFormat = findPreference("status_bar_java_custom");
+            if (mCustomFormat != null) {
+                mCustomFormat.setOnPreferenceClickListener((preference) -> {
+                    mDateFormatDialog.show();
+                    return true;
+                });
+            }
+        }
+
     }
 
     public static class BatteryIcon extends ControlledPreferenceFragmentCompat {

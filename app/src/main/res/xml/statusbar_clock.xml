@@ -86,8 +86,14 @@
         app:useSimpleSummaryProvider="true"
         android:key="status_bar_clock_date_format"
         android:title="@string/status_bar_date_format_title"
-        android:entries="@array/status_bar_date_format_entries_values"
+        android:defaultValue="$GEEE"
+        android:entries="@array/status_bar_date_format_entries"
         android:entryValues="@array/status_bar_date_format_entries_values" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="status_bar_java_custom"
+        android:title="@string/status_bar_date_format_custom" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         app:iconSpaceReserved="false"

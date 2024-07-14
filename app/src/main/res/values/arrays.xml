@@ -199,7 +199,7 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="status_bar_date_format_entries_values" translatable="false">
+    <string-array name="status_bar_date_format_entries" translatable="false">
         <item>dd/MM/yy</item>
         <item>MM/dd/yy</item>
         <item>yyyy-MM-dd</item>
@@ -218,7 +218,28 @@
         <item>EEE MMMM dd</item>
         <item>EEEE dd/MM</item>
         <item>EEEE MM/dd</item>
-        <!-- <item>@string/status_bar_date_format_custom</item> -->
+        <item>@string/status_bar_date_format_custom</item>
+    </string-array>
+    <string-array name="status_bar_date_format_entries_values" translatable="false">
+        <item>$Gdd/$GMM/$Gyy</item>
+        <item>$GMM/$Gdd/$Gyy</item>
+        <item>$Gyyyy-$GMM-$Gdd</item>
+        <item>$Gyyyy-$Gdd-$GMM</item>
+        <item>$Gdd-$GMM-$Gyyyy</item>
+        <item>$GMM-$Gdd-$Gyyyy</item>
+        <item>$GMMM $Gdd</item>
+        <item>$GMMM $Gdd, $Gyyyy</item>
+        <item>$GMMMM $Gdd, $Gyyyy</item>
+        <item>$GEEE</item>
+        <item>$GEEE $Gdd</item>
+        <item>$GEEE $Gdd/$GMM</item>
+        <item>$GEEE $GMM/$Gdd</item>
+        <item>$GEEE $Gdd $GMMM</item>
+        <item>$GEEE $GMMM $Gdd</item>
+        <item>$GEEE $GMMMM $Gdd</item>
+        <item>$GEEEE $Gdd/$GMM</item>
+        <item>$GEEEE $GMM/$Gdd</item>
+        <item>custom</item>
     </string-array>
 
     <string-array name="notif_default_expansion_entries">

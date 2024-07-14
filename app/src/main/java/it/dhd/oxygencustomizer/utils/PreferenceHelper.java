@@ -208,6 +208,10 @@ public class PreferenceHelper {
             case "status_bar_clock_background_chip" -> {
                 return instance.mPreferences.getBoolean("status_bar_clock_background_chip_switch", false);
             }
+            case "status_bar_java_custom" -> {
+                return !instance.mPreferences.getString("status_bar_clock_date_display", "0").equals("0") &&
+                        instance.mPreferences.getString("status_bar_clock_date_format", "$GEEE").equals("custom");
+            }
 
             // Notification
             case "statusbar_notification_transparency_value" -> {
@@ -650,6 +654,9 @@ public class PreferenceHelper {
             // Padding
             case "statusbar_top_padding" -> instance.mPreferences.getSliderInt(key, 0) + "dp";
             case "statusbar_left_padding", "statusbar_right_padding" -> String.valueOf(instance.mPreferences.getSliderFloat(key, -0.5f));
+
+            // Statusbar Clock
+            case "status_bar_java_custom" -> instance.mPreferences.getString("status_bar_custom_clock_format", "$GEEE");
 
             // Battery Bar
             case "BBOpacity", "BBarHeight" -> instance.mPreferences.getSliderInt(key, 100) + "%";

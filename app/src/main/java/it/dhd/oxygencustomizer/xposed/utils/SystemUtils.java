@@ -41,7 +41,6 @@ import it.dhd.oxygencustomizer.xposed.XPLauncher;
 
 public class SystemUtils {
     private static final int THREAD_PRIORITY_BACKGROUND = 10;
-    public static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
 
     @SuppressLint("StaticFieldLeak")
     static SystemUtils instance;
@@ -101,6 +100,14 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
+    public static AlarmManager AlarmManager() {
+        return instance == null
+                ? null
+                : instance.getAlarmManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
     public static BatteryManager BatteryManager() {
         return instance == null
                 ? null
@@ -145,14 +152,6 @@ public class SystemUtils {
         mContext = context;
 
         instance = this;
-    }
-
-    public static boolean isGSAEnabled(Context context) {
-        try {
-            return context.getPackageManager().getApplicationInfo(GSA_PACKAGE, 0).enabled;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     private PowerManager getPowerManager() {
@@ -229,6 +228,21 @@ public class SystemUtils {
             }
         }
         return mAudioManager;
+    }
+
+    private AlarmManager getAlarmManager() {
+        if(mAlarmManager == null)
+        {
+            try {
+                mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("OxygenCustomizer Error getting alarm manager");
+                    log(t);
+                }
+            }
+        }
+        return mAlarmManager;
     }
 
     private BatteryManager getBatteryManager() {
