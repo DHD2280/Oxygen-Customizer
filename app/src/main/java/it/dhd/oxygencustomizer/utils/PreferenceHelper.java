@@ -543,6 +543,9 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("volume_panel_seekbar_color_enabled", false) &&
                         !instance.mPreferences.getBoolean("volume_panel_seekbar_link_primary", false);
             }
+            case "volume_panel_seekbar_bg_color" -> {
+                return instance.mPreferences.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
+            }
             case "volume_panel_icon_accent" -> {
                 return instance.mPreferences.getBoolean("volume_panel_icon_color_enabled", false);
             }
