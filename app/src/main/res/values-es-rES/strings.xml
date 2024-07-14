@@ -61,6 +61,7 @@
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Aviso</string>
+    <string name="app_kill_alert_body">La aplicación se cerrará ahora. Puedes abrirla de nuevo tocando en el nuevo icono</string>
     <string name="app_kill_ok_btn">Ok</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Se requiere un reinicio del sistema para aplicar los ajustes</string>
@@ -850,6 +851,8 @@
     <string name="advanced_reboot_fast_reboot">Reinicio rápido</string>
     <string name="advanced_reboot_systemui">Reiniciar Interfaz del Sistema</string>
     <!-- Own Settings -->
+    <string name="general_settings">General</string>
+    <string name="app_icon_themed">Usar icono de aplicación temática</string>
     <string name="delete_all_title">Eliminar todo</string>
     <string name="delete_all_summary">Eliminar todos los ajustes</string>
     <string name="export_title">Exportar</string>
@@ -1019,4 +1022,9 @@
     <string name="style_10">Estilo 10</string>
     <string name="style_11">Estilo 11</string>
     <string name="style_12">Estilo 12</string>
+    <!-- Dark Mode -->
+    <string name="menu_show_system_apps">Mostrar aplicaciones del sistema</string>
+    <string name="dark_mode">Modo nocturno</string>
+    <string name="dark_mode_pref">Personalizar Modo Nocturno</string>
+    <string name="custom_dark_mode_title">Modo Nocturno Personalizado</string>
 </resources>
