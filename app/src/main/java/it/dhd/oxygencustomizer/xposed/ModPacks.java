@@ -13,7 +13,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.screenshot.ScreenshotSecureFlag;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
-import it.dhd.oxygencustomizer.xposed.hooks.settings.FontVariation;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
