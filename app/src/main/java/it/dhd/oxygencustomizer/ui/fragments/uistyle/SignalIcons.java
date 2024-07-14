@@ -23,11 +23,14 @@ import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
+import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class SignalIcons extends BaseFragment {
 
     private FragmentRecyclerBinding binding;
     private LoadingDialog loadingDialog;
+    private ArrayList<IconModel> signalIcons;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class SignalIcons extends BaseFragment {
     }
 
     private IconsAdapter initSignalIconsItems() {
-        ArrayList<IconModel> signalIcons = new ArrayList<>();
+        signalIcons = new ArrayList<>();
         List<String> pack = getOverlayForComponent("SGIC");
         for (int i = 0; i< pack.size(); i++) {
             String pkgName = pack.get(i).split("]")[1].replaceAll(" ", "");
@@ -61,8 +64,29 @@ public class SignalIcons extends BaseFragment {
                             pack.get(i).contains("[x]")));
         }
         signalIcons.sort(Comparator.comparing(IconModel::getName));
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", "COMMONSGIC", true);
+        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", onButtonClick);
     }
+
+    private final IconsAdapter.OnButtonClick onButtonClick = new IconsAdapter.OnButtonClick() {
+        @Override
+        public void onEnableClick(int position, IconModel item) {
+            for (int i = 0; i <= signalIcons.size()-1; i++) {
+                signalIcons.get(i).setEnabled(i == position);
+                OverlayUtil.disableOverlay(signalIcons.get(i).getPackageName());
+            }
+            OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSGIC.overlay");
+            OverlayUtil.enableOverlay(item.getPackageName());
+            AppUtils.restartScope("systemui");
+        }
+
+        @Override
+        public void onDisableClick(int position, IconModel item) {
+            item.setEnabled(false);
+            OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONSGIC.overlay");
+            OverlayUtil.disableOverlay(item.getPackageName());
+            AppUtils.restartScope("systemui");
+        }
+    };
 
     @Override
     public void onDestroy() {

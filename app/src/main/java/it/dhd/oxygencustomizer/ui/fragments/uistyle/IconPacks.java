@@ -4,6 +4,7 @@ import static it.dhd.oxygencustomizer.utils.Dynamic.LIST_ICON_PACKS;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.checkOverlayEnabledAndEnable;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.disableOverlay;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
+import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
@@ -55,7 +56,7 @@ public class IconPacks extends BaseFragment {
         loadingDialog = new LoadingDialog(requireContext());
 
         // RecyclerView
-        packs = LIST_ICON_PACKS;
+        packs = getOverlayForComponent("IPSUI");
         binding.recyclerViewFragment.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerViewFragment.setAdapter(initIconPackItems());
         binding.recyclerViewFragment.setHasFixedSize(true);
@@ -80,38 +81,32 @@ public class IconPacks extends BaseFragment {
 
         iconPacks.sort(Comparator.comparing(IconModel::getName));
 
-        return new IconsAdapter(requireContext(), iconPacks, loadingDialog, "IPSUI", new IconsAdapter.onButtonClick() {
-            @Override
-            public void onEnableClick(int position) {
-                enableIconPack(position);
-                checkOverlayEnabledAndEnable("SGIC");
-                checkOverlayEnabledAndEnable("WIFI");
-                AppUtils.restartScope("systemui");
-            }
-
-            @Override
-            public void onDisableClick(int position) {
-                disableIconPack(position);
-                AppUtils.restartScope("systemui");
-            }
-        });
+        return new IconsAdapter(requireContext(), iconPacks, loadingDialog, "IPSUI", onButtonClick);
     }
 
-    private void enableIconPack(int position) {
-        // Enable icon pack
-        disableAllIcons(position);
-        OverlayUtil.enableOverlayExclusiveInCategory(iconPacks.get(position).getPackageName());
-    }
+    private final IconsAdapter.OnButtonClick onButtonClick = new IconsAdapter.OnButtonClick() {
+        @Override
+        public void onEnableClick(int position, IconModel item) {
+            disableAllIcons(position);
+            OverlayUtil.enableOverlayExclusiveInCategory(iconPacks.get(position).getPackageName());
+            checkOverlayEnabledAndEnable("SGIC");
+            checkOverlayEnabledAndEnable("WIFI");
+            AppUtils.restartScope("systemui");
+        }
 
-    private void disableIconPack(int position) {
-        // Disable icon pack
-        Prefs.putBoolean(iconPacks.get(position).getPackageName(), false);
-        OverlayUtil.disableOverlay(iconPacks.get(position).getPackageName());
-    }
+        @Override
+        public void onDisableClick(int position, IconModel item) {
+            Prefs.putBoolean(iconPacks.get(position).getPackageName(), false);
+            OverlayUtil.disableOverlay(iconPacks.get(position).getPackageName());
+            iconPacks.get(position).setEnabled(false);
+            AppUtils.restartScope("systemui");
+        }
+    };
 
     private void disableAllIcons(int position) {
         for (int i=0; i<iconPacks.size(); i++) {
             Prefs.putBoolean(iconPacks.get(i).getPackageName(), i == position);
+            iconPacks.get(i).setEnabled(i == position);
             disableOverlay(iconPacks.get(i).getPackageName());
         }
     }

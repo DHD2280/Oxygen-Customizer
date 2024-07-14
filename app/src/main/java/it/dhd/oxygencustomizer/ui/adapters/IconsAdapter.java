@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,12 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
     LoadingDialog loadingDialog;
     int selectedItem = -1;
     String mComponentName = "", mAdditionalComponent = "";
-    private onButtonClick mOnButtonClick = null;
+    private OnButtonClick mOnButtonClick = null;
     private boolean needSystemUIRestart = false;
 
-    public interface onButtonClick{
-        void onEnableClick(int position);
-        void onDisableClick(int position);
+    public interface OnButtonClick{
+        void onEnableClick(int position, IconModel item);
+        void onDisableClick(int position, IconModel item);
     }
 
     public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, boolean needSysUiRestart) {
@@ -55,17 +56,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
     }
 
-    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, String additionalCompName, boolean needSysUiRestart) {
-        this.context = context;
-        this.itemList = itemList;
-        this.loadingDialog = loadingDialog;
-        this.mComponentName = compName;
-        this.mAdditionalComponent = additionalCompName;
-        this.needSystemUIRestart = needSysUiRestart;
-
-    }
-
-    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, onButtonClick onButtonClick) {
+    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, OnButtonClick onButtonClick) {
         this.context = context;
         this.itemList = itemList;
         this.loadingDialog = loadingDialog;
@@ -169,12 +160,15 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
 
+                for (int i = 0; i <= itemList.size()-1; i++) {
+                    itemList.get(i).setEnabled(i == holder.getBindingAdapterPosition());
+                }
+
                 if (mOnButtonClick != null) {
-                    mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition());
+                    mOnButtonClick.onEnableClick(holder.getBindingAdapterPosition(), itemList.get(holder.getBindingAdapterPosition()));
                 } else {
-                    for (int i = 1; i <= itemList.size(); i++) {
-                        itemList.get(i-1).setEnabled(i == holder.getBindingAdapterPosition()+1);
-                        OverlayUtil.disableOverlay(itemList.get(i-1).getPackageName());
+                    for (int i = 0; i <= itemList.size()-1; i++) {
+                        OverlayUtil.disableOverlay(itemList.get(i).getPackageName());
                     }
                     if (!TextUtils.isEmpty(mAdditionalComponent))
                         OverlayUtil.enableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
@@ -205,9 +199,11 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
             // Show loading dialog
             loadingDialog.show(context.getResources().getString(R.string.loading_dialog_wait));
 
+            itemList.get(holder.getBindingAdapterPosition()).setEnabled(false);
+
             Runnable runnable = () -> {
                 if (mOnButtonClick != null) {
-                    mOnButtonClick.onDisableClick(holder.getBindingAdapterPosition());
+                    mOnButtonClick.onDisableClick(holder.getBindingAdapterPosition(), itemList.get(holder.getBindingAdapterPosition()));
                 } else {
                     if (!TextUtils.isEmpty(mAdditionalComponent))
                         OverlayUtil.disableOverlay("OxygenCustomizerComponent" + mAdditionalComponent + ".overlay");
@@ -267,6 +263,7 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
                 if (child != null) {
                     itemSelected(child, i == holder.getAbsoluteAdapterPosition() && (itemList.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition())).isEnabled()));
+                    Log.d("IconsAdapter", "refresh " + i + " " + holder.getAbsoluteAdapterPosition() + " " + holder.getBindingAdapterPosition() + " | " + (itemList.get(i - (holder.getAbsoluteAdapterPosition() - holder.getBindingAdapterPosition())).isEnabled()));
                 }
             }
         }

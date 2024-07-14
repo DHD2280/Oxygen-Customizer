@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForCom
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,14 @@ import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.IconModel;
+import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class WifiIcons extends BaseFragment {
 
     private FragmentRecyclerBinding binding;
     private LoadingDialog loadingDialog;
+    private ArrayList<IconModel> wifiIcons;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +49,7 @@ public class WifiIcons extends BaseFragment {
     }
 
     private IconsAdapter initWifiIconsItems() {
-        ArrayList<IconModel> wifiIcons = new ArrayList<>();
+        wifiIcons = new ArrayList<>();
         List<String> packs = getOverlayForComponent("WIFI");
         for (int i = 0; i< packs.size(); i++) {
             String pkgName = packs.get(i).split("]")[1].replaceAll(" ", "");
@@ -60,8 +64,29 @@ public class WifiIcons extends BaseFragment {
                             packs.get(i).contains("[x]")));
         }
         wifiIcons.sort(Comparator.comparing(IconModel::getName));
-        return new IconsAdapter(requireContext(), wifiIcons, loadingDialog, "WIFI", "COMMONWIFI", true);
+        return new IconsAdapter(requireContext(), wifiIcons, loadingDialog, "WIFI", onButtonClick);
     }
+
+    private final IconsAdapter.OnButtonClick onButtonClick = new IconsAdapter.OnButtonClick() {
+        @Override
+        public void onEnableClick(int position, IconModel item) {
+            for (int i = 0; i <= wifiIcons.size()-1; i++) {
+                wifiIcons.get(i).setEnabled(i == position);
+                OverlayUtil.disableOverlay(wifiIcons.get(i).getPackageName());
+            }
+            OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONWIFI.overlay");
+            OverlayUtil.enableOverlay(item.getPackageName());
+            AppUtils.restartScope("systemui");
+        }
+
+        @Override
+        public void onDisableClick(int position, IconModel item) {
+            item.setEnabled(false);
+            OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONWIFI.overlay");
+            OverlayUtil.disableOverlay(item.getPackageName());
+            AppUtils.restartScope("systemui");
+        }
+    };
 
     @Override
     public void onDestroy() {
