@@ -157,7 +157,7 @@ public class AodClock extends XposedMods {
                 if (!mAodClockEnabled) return;
                 FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
                 for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
-                    log(TAG + " mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
+                    if (BuildConfig.DEBUG) log(TAG + " mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
                     if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
                         for (int j = 0; j < v.getChildCount(); j++) {
                             mRootLayout = v;
@@ -170,7 +170,7 @@ public class AodClock extends XposedMods {
                         }
                     }
                 }
-                log(TAG + " initForAodApk");
+                if (BuildConfig.DEBUG) log(TAG + " initForAodApk");
                 updateClockView();
             }
         });
@@ -187,7 +187,7 @@ public class AodClock extends XposedMods {
 
         if (mRootLayout == null) return;
 
-        log(TAG + " updateClockView " + mRootLayout.getChildCount());
+        if (BuildConfig.DEBUG) log(TAG + " updateClockView " + mRootLayout.getChildCount());
 
 
         View clockView = getClockView();
@@ -230,7 +230,7 @@ public class AodClock extends XposedMods {
                 if (textView.getTag() != null) {
                     tag = textView.getTag().toString();
                 }
-                log(TAG + " TextView: " + textView.getText() + " - " + tag);
+                if (BuildConfig.DEBUG) log(TAG + " TextView: " + textView.getText() + " - " + tag);
             }
         }
     }
@@ -254,7 +254,7 @@ public class AodClock extends XposedMods {
 
         ViewHelper.setMargins(clockView, mContext, 0, 0, 0, 0);
 
-        log(TAG + " customColor: " + customColor);
+        if (BuildConfig.DEBUG) log(TAG + " customColor: " + customColor);
 
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : systemAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : systemAccent);
@@ -464,7 +464,7 @@ public class AodClock extends XposedMods {
             Bitmap bitmapUserIcon = (Bitmap) getUserIconMethod.invoke(mUserManager, userId);
             return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
         } catch (Throwable throwable) {
-            log(TAG + throwable);
+            if (BuildConfig.DEBUG) log(TAG + throwable);
             return appContext.getResources().getDrawable(R.drawable.default_avatar);
         }
     }
