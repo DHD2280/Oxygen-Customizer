@@ -37,10 +37,6 @@ public class AudioDataProvider extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> NotificationMediaManager = findClass("com.android.systemui.statusbar.NotificationMediaManager", lpparam.classLoader);
-        // onPlaybackStateChanged
-        // onMetadataChanged
-
         // Stole method from KeyguardSliceProvider
         Class<?> KeyguardSliceProvider = findClass("com.android.systemui.keyguard.KeyguardSliceProvider", lpparam.classLoader);
         hookAllMethods(KeyguardSliceProvider, "onPrimaryMetadataOrStateChanged", new XC_MethodHook() {
