@@ -45,7 +45,15 @@
 
     <style name="AppTheme.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:dialogCornerRadius">32dp</item>
+        <item name="android:background">@color/colorContainer</item>
         <item name="android:backgroundDimAmount">0.60</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="HorizontalDivider" parent="">
@@ -57,7 +65,7 @@
     </style>
 
     <style name="MaterialComponents.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">?attr/colorSurfaceContainer</item>
+        <item name="android:background">@color/colorContainer</item>
         <item name="android:dialogCornerRadius">@dimen/ui_container_radius</item>
         <item name="android:backgroundDimAmount">0.6</item>
     </style>
