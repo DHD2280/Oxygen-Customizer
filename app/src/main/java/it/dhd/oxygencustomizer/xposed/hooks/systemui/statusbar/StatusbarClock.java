@@ -130,7 +130,7 @@ public class StatusbarClock extends XposedMods {
         if (!listensTo(context.getPackageName())) return;
 
         rightClockPadding = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("status_bar_clock_starting_padding", "dimen", mContext.getPackageName()));
-        leftClockPadding = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("status_bar_left_clock_end_padding", "dimen", mContext.getPackageName()));
+        leftClockPadding = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("status_bar_left_clock_starting_padding", "dimen", mContext.getPackageName()));
     }
 
     @Override
@@ -171,14 +171,14 @@ public class StatusbarClock extends XposedMods {
                 case "status_bar_clock_auto_hide" -> updateClockVisibility();
                 case "status_bar_am_pm",
                         "status_bar_clock_date_display",
-                        "status_bar_clock_seconds",
                         "status_bar_clock_date_position",
                         "status_bar_clock_date_style",
                         "status_bar_clock_date_format",
                      "status_bar_custom_clock_format" -> updateClock();
                 case "status_bar_clock_size" -> setClockSize();
                 case "status_bar_custom_clock_color", "status_bar_clock_color" -> updateClockColor();
-                case "status_bar_clock" -> placeClock();
+                case "status_bar_clock",
+                     "status_bar_clock_seconds" -> placeClock();
                 case "status_bar_clock_background_chip" + "_STYLE",
                         "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR",
                         "status_bar_clock_background_chip" + "_USE_GRADIENT",
@@ -355,15 +355,6 @@ public class StatusbarClock extends XposedMods {
             }
         });
 
-        hookAllMethods(ClockClass, "updateClock", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (param.thisObject != mClockView)
-                    return;
-                setClockSize();
-            }
-        });
-
         hookAllMethods(ClockClass, "shouldBeVisible", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -395,88 +386,6 @@ public class StatusbarClock extends XposedMods {
                         if (param.thisObject != mClockView)
                             return; //We don't want custom format in QS header. do we?
 
-
-                        /*CharSequence dateString = null;
-                        CharSequence amPmString = null;
-                        String dateResult = "";
-                        String amPmResult = "";
-                        CharSequence timeResult = (CharSequence) param.getResult();
-                        String result = timeResult.toString();
-                        Date now = new Date();
-
-                        if (mAmPmStyle != AM_PM_STYLE_GONE) {
-                            amPmString = DateFormat.format("a", now).toString();
-                            amPmResult = amPmString.toString().toUpperCase();
-                            result = result + " " + amPmResult;
-                        }
-
-                        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
-                            if (mClockDateFormat == null || mClockDateFormat.isEmpty()) {
-                                // Set dateString to short uppercase Weekday if empty
-                                dateString = DateFormat.format("EEE", now);
-                            } else {
-                                if (!mClockDateFormat.equals("custom")) {
-                                    dateString = DateFormat.format(mClockDateFormat, now);
-                                } else {
-
-                                }
-                            }
-                            if (mClockDateStyle == CLOCK_DATE_STYLE_LOWERCASE) {
-                                // When Date style is small, convert date to uppercase
-                                dateResult = dateString.toString().toLowerCase();
-                            } else if (mClockDateStyle == CLOCK_DATE_STYLE_UPPERCASE) {
-                                dateResult = dateString.toString().toUpperCase();
-                            } else {
-                                dateResult = dateString.toString();
-                            }
-                            result = (mClockDatePosition == STYLE_DATE_LEFT) ? dateResult + " " + result
-                                    : result + " " + dateResult;
-                        }
-
-                        SpannableStringBuilder formatted = new SpannableStringBuilder(result);
-
-                        if (mAmPmStyle != AM_PM_STYLE_GONE) {
-                            if (amPmString != null) {
-                                int amPmStringLen = amPmString.length();
-                                int timeStringOffset = timeResult.length() + 1;
-                                if (mAmPmStyle == AM_PM_STYLE_SMALL) {
-                                    CharacterStyle style = new RelativeSizeSpan(0.7f);
-                                    formatted.setSpan(style, timeStringOffset,
-                                            timeStringOffset + amPmStringLen,
-                                            Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                                }
-                            }
-                        }
-
-                        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_NORMAL) {
-                            if (dateString != null) {
-                                int dateStringLen = dateString.length();
-                                int timeStringOffset = (mClockDatePosition == STYLE_DATE_RIGHT)
-                                        ? timeResult.length() + 1 : 0;
-                                if (mClockDateDisplay == CLOCK_DATE_DISPLAY_GONE) {
-                                    formatted.delete(0, dateStringLen);
-                                } else {
-                                    if (mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL) {
-                                        CharacterStyle style = new RelativeSizeSpan(0.7f);
-                                        formatted.setSpan(style, timeStringOffset,
-                                                timeStringOffset + dateStringLen,
-                                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                                    }
-                                }
-                            }
-                        }
-
-                        if(getAdditionalInstanceField(param.thisObject, "stringFormatCallBack") == null) {
-                            StringFormatter.FormattedStringCallback callback = () -> {
-                                if(!mShowSeconds) //don't update again if it's going to do it every second anyway
-                                    updateClock();
-                            };
-
-                            stringFormatter.registerCallback(callback);
-                            setAdditionalInstanceField(param.thisObject, "stringFormatCallBack", callback);
-                        }
-
-                        param.setResult(formatted);*/
 
                         SpannableStringBuilder result = new SpannableStringBuilder();
 
@@ -586,7 +495,7 @@ public class StatusbarClock extends XposedMods {
             case POSITION_LEFT -> {
                 targetArea = mStatusbarStartSide;
                 index = 1;
-                mClockView.setPadding(0, 0, leftClockPadding, 0);
+                mClockView.setPadding(0, 0, 0, 0);
             }
             case POSITION_CENTER -> {
                 targetArea = (ViewGroup) mCenteredIconArea;
@@ -605,6 +514,7 @@ public class StatusbarClock extends XposedMods {
                 targetArea.addView(mClockView);
             }
         }
+        updateClock();
 
     }
 
