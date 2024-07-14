@@ -52,6 +52,7 @@ public class Config {
     public static final String PREF_KEY_OWM_KEY = "owm_key";
     public static final String PREF_KEY_HISTORY = "history";
     public static final String PREF_KEY_HISTORY_SIZE = "history_size";
+    public static final String WEATHER_PREFS = BuildConfig.APPLICATION_ID + "_weatherprefs";
 
     private static SharedPreferences getPrefs(Context context)
     {
@@ -62,6 +63,11 @@ public class Config {
         } catch (Throwable t) {
             return getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
         }
+    }
+
+    private static SharedPreferences getWeatherPrefs(Context context) {
+        Context deviceProtectedContext = context.createDeviceProtectedStorageContext();
+        return deviceProtectedContext.getSharedPreferences(WEATHER_PREFS, Context.MODE_PRIVATE);
     }
 
     public static AbstractWeatherProvider getProvider(Context context) {
@@ -93,27 +99,27 @@ public class Config {
 
     public static String getLocationId(Context context) {
 
-        return getPrefs(context).getString(PREF_KEY_LOCATION_ID, null);
+        return getWeatherPrefs(context).getString(PREF_KEY_LOCATION_ID, null);
     }
 
     public static void setLocationId(Context context, String id) {
 
-        getPrefs(context).edit().putString(PREF_KEY_LOCATION_ID, id).apply();
+        getWeatherPrefs(context).edit().putString(PREF_KEY_LOCATION_ID, id).apply();
     }
 
     public static String getLocationName(Context context) {
 
-        return getPrefs(context).getString(PREF_KEY_LOCATION_NAME, null);
+        return getWeatherPrefs(context).getString(PREF_KEY_LOCATION_NAME, null);
     }
 
     public static void setLocationName(Context context, String name) {
-        getPrefs(context).edit().putString(PREF_KEY_LOCATION_NAME, name).apply();
+        getWeatherPrefs(context).edit().putString(PREF_KEY_LOCATION_NAME, name).apply();
     }
 
     public static WeatherInfo getWeatherData(Context context) {
         String str = null;
         try {
-            str = getPrefs(context).getString(PREF_KEY_WEATHER_DATA, null);
+            str = getWeatherPrefs(context).getString(PREF_KEY_WEATHER_DATA, null);
         } catch (Throwable ignored) {
         }
 
@@ -124,12 +130,12 @@ public class Config {
     }
 
     public static void setWeatherData(WeatherInfo data, Context context) {
-        getPrefs(context).edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
-        getPrefs(context).edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
+        getWeatherPrefs(context).edit().putString(PREF_KEY_WEATHER_DATA, data.toSerializedString()).apply();
+        getWeatherPrefs(context).edit().putLong(PREF_KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
     }
 
     public static void clearLastUpdateTime(Context context) {
-        getPrefs(context).edit().putLong(PREF_KEY_LAST_UPDATE, 0).apply();
+        getWeatherPrefs(context).edit().putLong(PREF_KEY_LAST_UPDATE, 0).apply();
     }
 
     public static boolean isEnabled(Context context) {
@@ -157,7 +163,7 @@ public class Config {
     }
 
     public static void setUpdateError(Context context, boolean value) {
-        getPrefs(context).edit().putBoolean(PREF_KEY_UPDATE_ERROR, value).apply();
+        getWeatherPrefs(context).edit().putBoolean(PREF_KEY_UPDATE_ERROR, value).apply();
     }
 
     public static boolean isSetupDone(Context context) {
@@ -166,7 +172,6 @@ public class Config {
     }
 
     public static String getOwmKey(Context context) {
-
         return getPrefs(context).getString(LOCKSCREEN_WEATHER_OWM_KEY, null);
     }
 }

@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -41,13 +39,11 @@ public class WeatherWork extends ListenableWorker {
     private static final int EXTRA_ERROR_LOCATION = 1;
     private static final int EXTRA_ERROR_DISABLED = 2;
 
-    private static final float LOCATION_ACCURACY_THRESHOLD_METERS = 50000;
+    private static final float LOCATION_ACCURACY_THRESHOLD_METERS = 10000;
     private static final long OUTDATED_LOCATION_THRESHOLD_MILLIS = 10L * 60L * 1000L; // 10 minutes
     private static final int RETRY_DELAY_MS = 5000;
     private static final int RETRY_MAX_NUM = 5;
 
-    private volatile HandlerThread mHandlerThread;
-    private Handler mHandler;
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
 
@@ -104,6 +100,8 @@ public class WeatherWork extends ListenableWorker {
             Log.d(TAG, "doCheckLocationEnabled: " + ex.getMessage());
         }
 
+        if (DEBUG) Log.d(TAG, "gpsEnabled: " + gpsEnabled + " networkEnabled: " + networkEnabled);
+
         return gpsEnabled || networkEnabled;
     }
 
@@ -129,6 +127,7 @@ public class WeatherWork extends ListenableWorker {
         if (location != null) {
             long delta = System.currentTimeMillis() - location.getTime();
             needsUpdate = delta > OUTDATED_LOCATION_THRESHOLD_MILLIS;
+            if (DEBUG) Log.d(TAG, "Location is " + delta + "ms old");
             if (needsUpdate) {
                 Log.w(TAG, "Ignoring too old location from " + dayFormat.format(location.getTime()));
                 location = null;
@@ -136,9 +135,10 @@ public class WeatherWork extends ListenableWorker {
         }
 
         if (needsUpdate) {
+            if (DEBUG) Log.d(TAG, "Requesting current location");
             CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder()
                     .setGranularity(Granularity.GRANULARITY_COARSE)
-                    .setMaxUpdateAgeMillis(1000 * 60 * 15)  // Max age of 15 minutes
+                    .setMaxUpdateAgeMillis(60L * 1000L)  // Max age of 1 minutes
                     .build();
 
             fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
@@ -193,7 +193,6 @@ public class WeatherWork extends ListenableWorker {
                         Config.setWeatherData(w, mContext);
                         WeatherContentProvider.updateCachedWeatherInfo(mContext);
                         Log.d(TAG, "Weather updated updateCachedWeatherInfo");
-                        //WeatherAppWidgetProvider.updateAllWidgets(WeatherUpdateService.this);
                         // we are outa here
                         break;
                     } else {
