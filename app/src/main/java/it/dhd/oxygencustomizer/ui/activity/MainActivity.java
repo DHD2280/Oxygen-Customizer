@@ -66,7 +66,9 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
+import it.dhd.oxygencustomizer.weather.Config;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
@@ -154,6 +156,11 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         if (!modDir.exists()) {
             Shell.cmd("mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR).exec();
         }
+
+        if (Config.isEnabled(this)) {
+            WeatherScheduler.scheduleUpdates(this);
+        }
+
     }
 
 
