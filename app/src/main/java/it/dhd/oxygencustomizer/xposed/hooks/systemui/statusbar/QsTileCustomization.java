@@ -47,16 +47,11 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.text.TextUtils;
-import android.util.JsonReader;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -69,20 +64,12 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.BlendModeColorFilterCompat;
-import androidx.core.graphics.BlendModeCompat;
-import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
-
-import com.airbnb.lottie.SimpleColorFilter;
-import com.airbnb.lottie.value.LottieFrameInfo;
-import com.airbnb.lottie.value.LottieValueCallback;
-
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -458,16 +445,18 @@ public class QsTileCustomization extends XposedMods {
                         if (!qsBrightnessSliderCustomize) return;
 
                         if (qsBrightnessSliderColorMode == 1) {
-                            callMethod(getObjectField(param.thisObject, "mSlider"), "setProgressColor", ColorStateList.valueOf(getPrimaryColor(mContext)));
+                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(getPrimaryColor(mContext)));
                         } else if (qsBrightnessSliderColorMode == 2) {
-                            callMethod(getObjectField(param.thisObject, "mSlider"), "setProgressColor", ColorStateList.valueOf(qsBrightnessSliderColor));
+                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessSliderColor));
                         }
 
                         if (qsBrightnessBackgroundCustomize) {
-                            callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                            setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                         } else {
                             int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                            callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
+                            if (color != 0x0) {
+                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                            }
                         }
                     }
                 });
@@ -482,16 +471,21 @@ public class QsTileCustomization extends XposedMods {
                     colorToApply = qsBrightnessSliderColor;
                 }
 
-                callMethod(getObjectField(param.thisObject, "mSlider"), "setProgressColor", ColorStateList.valueOf(colorToApply));
+                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(colorToApply));
                 if (getBooleanField(param.thisObject, "mIsMirror")) {
-                    callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
+                    try {
+                        callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
+                    } catch (Throwable ignored) {
+                        callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbTintList", ColorStateList.valueOf(colorToApply));
+                    }
                 }
-
                 if (qsBrightnessBackgroundCustomize) {
-                    callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                 }  else {
                     int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                    callMethod(getObjectField(param.thisObject, "mSlider"), "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
+                    if (color != 0x0) {
+                        setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                    }
                 }
             }
         });
@@ -528,87 +522,6 @@ public class QsTileCustomization extends XposedMods {
 
         } catch (Throwable ignored) {}
 
-        /*try {
-
-            Class<?> EffectiveCompositionFactory = findClass("com.oplus.anim.EffectiveCompositionFactory", lpparam.classLoader);
-            for (Method m : EffectiveCompositionFactory.getDeclaredMethods()) {
-                hookAllMethods(EffectiveCompositionFactory, m.getName(), new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        log("Oxygen Customizer - EffectiveCompositionFactory " + m.getName() + " | " + param.args.length);
-                    }
-                });
-            }
-            hookAllMethods(EffectiveCompositionFactory, "fromJsonReaderSyncInternal", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    String str = (String) param.args[1];
-                    log("Oxygen Customizer - EffectiveCompositionFactory fromJsonReaderSyncInternal | " + str);
-                    if (!TextUtils.isEmpty(str) && str.contains("qs_volume") && param.args.length == 3) {
-                        log("Oxygen Customizer - fromJsonReaderSyncInternal shouldHook | " + str);
-                        shouldHook = true;
-                    }
-                }
-            });
-
-
-
-
-        } catch (Throwable t) {
-            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
-        }
-
-        try {
-            Class<?> EffectiveCompositionParser = findClass("com.oplus.anim.parser.EffectiveCompositionParser", lpparam.classLoader);
-            for (Method m : EffectiveCompositionParser.getDeclaredMethods()) {
-                hookAllMethods(EffectiveCompositionParser, m.getName(), new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        log("Oxygen Customizer - EffectiveCompositionParser " + m.getName() + " | " + param.args.length);
-                    }
-                });
-            }
-            hookAllMethods(EffectiveCompositionParser, "parse", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    Object str = param.args[0];
-                    log("Oxygen Customizer - EffectiveCompositionParser parse | " + str);
-                }
-            });
-
-            Class<?> Layer = findClass("com.oplus.anim.model.layer.Layer", lpparam.classLoader);
-            hookAllConstructors(Layer, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    String layerName = param.args[2].toString();
-                    log("Oxygen Customizer - Layer constructor | " + layerName);
-                    /*
-                    public Layer(
-                    0 List<ContentModel> list,
-                    1 EffectiveAnimationComposition effectiveAnimationComposition,
-                    String str,
-                    long j,
-                    LayerType layerType,
-                    long j2,
-                    @Nullable String str2,
-                    List<Mask> list2,
-                    AnimatableTransform animatableTransform,
-                    int i,
-                    int i2,
-                    int i3, float f, float f2, float f3, float f4, @Nullable AnimatableTextFrame animatableTextFrame, @Nullable AnimatableTextProperties animatableTextProperties, List<Keyframe<Float>> list3, MatteType matteType, @Nullable AnimatableFloatValue animatableFloatValue, boolean z, @Nullable BlurEffect blurEffect, @Nullable DropShadowEffect dropShadowEffect) {
-
-                     */
-                    /*if (shouldHook) {
-                        log("Oxygen Customizer - Layer constructor shouldHook | " + layerName);
-                        int color = (int) param.args[11];
-                        log("Oxygen Customizer - Layer constructor color | " + String.format("#%08X", color) + " | " + String.format("#%06X", (0xFFFFFF & color)));
-                        param.args[11] = Color.RED;
-                    }
-                }
-            });
-        } catch (Throwable t) {
-            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
-        }*/
 
         try {
             Class<?> PagedTileLayout = findClass("com.android.systemui.qs.PagedTileLayout", lpparam.classLoader);
@@ -639,6 +552,22 @@ public class QsTileCustomization extends XposedMods {
             log(this.getClass().getSimpleName() + " error: " + t.getMessage());
         }
 
+    }
+
+    private void setSliderProgressColor(Object mSlider, ColorStateList colorStateList) {
+        try {
+            callMethod(mSlider, "setProgressColor", colorStateList);
+        } catch (Throwable ignored) {
+            callMethod(mSlider, "setProgressTintList", colorStateList);
+        }
+    }
+
+    private void setSliderBackgroundColor(Object mSlider, ColorStateList colorStateList) {
+        try {
+            callMethod(mSlider, "setSeekBarBackgroundColor", colorStateList);
+        } catch (Throwable ignored) {
+            callMethod(mSlider, "setProgressBackgroundTintList", colorStateList);
+        }
     }
 
     private void updateMediaQsBackground() {
