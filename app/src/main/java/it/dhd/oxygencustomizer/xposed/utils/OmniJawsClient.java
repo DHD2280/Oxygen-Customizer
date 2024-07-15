@@ -60,9 +60,10 @@ public class OmniJawsClient {
     private static final String ICON_PREFIX_DEFAULT = "google";
     private static final String ICON_PREFIX_OUTLINE = "outline";
     private static final String EXTRA_ERROR = "error";
-    public static final int EXTRA_ERROR_NETWORK = 0;
-    public static final int EXTRA_ERROR_LOCATION = 1;
-    public static final int EXTRA_ERROR_DISABLED = 2;
+    public static final int EXTRA_ERROR_NETWORK = 0; // No Network
+    public static final int EXTRA_ERROR_LOCATION = 1; // No Location Found
+    public static final int EXTRA_ERROR_DISABLED = 2; // Disabled
+    public static final int EXTRA_ERROR_NO_PERMISSIONS = 3; // No Permissions
 
     public static final String[] WEATHER_PROJECTION = new String[]{
             "city",

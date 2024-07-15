@@ -206,8 +206,20 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         }
     }
 
-    private void setErrorView() {
+    private void setErrorView(int errorReason) {
         setTextRecursively(instance, "");
+        String errorText = switch (errorReason) {
+            case OmniJawsClient.EXTRA_ERROR_DISABLED ->
+                    modRes.getString(R.string.omnijaws_service_disabled);
+            case OmniJawsClient.EXTRA_ERROR_NETWORK ->
+                    modRes.getString(R.string.omnijaws_service_error_network);
+            case OmniJawsClient.EXTRA_ERROR_LOCATION ->
+                    modRes.getString(R.string.omnijaws_service_error_location);
+            case OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS ->
+                    modRes.getString(R.string.omnijaws_service_error_permissions);
+            default -> modRes.getString(R.string.omnijaws_service_error_long);
+        };
+        mLeftText.setText(errorText);
         mCurrentImage.setImageDrawable(null);
         mHumImage.setImageDrawable(null);
         mWindImage.setImageDrawable(null);
@@ -223,8 +235,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         log(TAG + "weatherError " + errorReason);
         if (errorReason == OmniJawsClient.EXTRA_ERROR_DISABLED) {
             mWeatherInfo = null;
-            setErrorView();
         }
+        setErrorView(errorReason);
     }
 
     @Override
@@ -241,7 +253,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     private void queryAndUpdateWeather() {
         try {
             if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
-                setErrorView();
+                setErrorView(2);
                 return;
             }
             mWeatherClient.queryWeather();

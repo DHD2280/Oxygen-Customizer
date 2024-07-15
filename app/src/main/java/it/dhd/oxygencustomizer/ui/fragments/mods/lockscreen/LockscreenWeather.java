@@ -152,7 +152,6 @@ public class LockscreenWeather
             });
 
     private void checkLocationPermissions(boolean force) {
-        Log.d("LockscreenWeather", "checking location permissions");
         if (requireContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 || requireContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -343,7 +342,6 @@ public class LockscreenWeather
             } else {
                 values.add(r.activityInfo.name);
                 String[] name = r.activityInfo.name.split("\\.");
-                Log.d("LockscreenWeather", "icon: " + name[name.length-1].toLowerCase() + "_30");
                 drawables.add(ResourcesCompat.getDrawable(getResources(), getResources().getIdentifier(name[name.length-1].toLowerCase() + "_30", "drawable", BuildConfig.APPLICATION_ID), getContext().getTheme()));
             }
             String label = r.activityInfo.loadLabel(packageManager).toString();
@@ -383,6 +381,8 @@ public class LockscreenWeather
             errorString = getResources().getString(R.string.omnijaws_service_error_location);
         } else if (errorReason == OmniJawsClient.EXTRA_ERROR_NETWORK) {
             errorString = getResources().getString(R.string.omnijaws_service_error_network);
+        } else if (errorReason == OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS) {
+            errorString = getResources().getString(R.string.omnijaws_service_error_permissions);
         } else {
             errorString = getResources().getString(R.string.omnijaws_service_error_long);
         }
