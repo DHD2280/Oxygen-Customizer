@@ -33,6 +33,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -83,7 +84,7 @@ public class StatusbarClock extends XposedMods {
 
     private boolean mClockAutoHideLauncher = false;
     private boolean mScreenOn = true;
-    private Handler autoHideHandler = new Handler();
+    private Handler autoHideHandler = new Handler(Looper.getMainLooper());
 
     private boolean mClockAutoHide;
     private boolean mClockAutoHideLauncherSwitch;
@@ -336,9 +337,9 @@ public class StatusbarClock extends XposedMods {
                 if (mClockCustomColor)
                     mClockView.post(() -> mClockView.setTextColor(mClockColor));
 
-                if (!mClockAutoHide) return;
-
                 Clock = param.thisObject;
+
+                if (!mClockAutoHide) return;
 
                 boolean visible = (boolean) callMethod(param.thisObject, "shouldBeVisible");
                 int visibility = visible ? View.VISIBLE : View.GONE;
