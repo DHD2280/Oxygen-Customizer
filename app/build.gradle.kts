@@ -201,9 +201,6 @@ dependencies {
 
     // Palette
     implementation("androidx.palette:palette:1.0.0")
-
-    // Location
-    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
 
 tasks.register("printVersionName") {

@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,10 +18,6 @@ import androidx.concurrent.futures.CallbackToFutureAdapter;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
-import com.google.android.gms.location.CurrentLocationRequest;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.Granularity;
-import com.google.android.gms.location.LocationServices;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +45,13 @@ public class WeatherWork extends ListenableWorker {
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
 
+    private static final Criteria sLocationCriteria;
+    static {
+        sLocationCriteria = new Criteria();
+        sLocationCriteria.setPowerRequirement(Criteria.POWER_LOW);
+        sLocationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        sLocationCriteria.setCostAllowed(false);
+    }
 
     public WeatherWork(@NonNull Context appContext, @NonNull WorkerParameters workerParams) {
         super(appContext, workerParams);
@@ -56,6 +61,8 @@ public class WeatherWork extends ListenableWorker {
     @NonNull
     @Override
     public ListenableFuture<Result> startWork() {
+
+        if (DEBUG) Log.d(TAG, "startWork");
 
         if(Config.isEnabled(mContext))
             updateWeatherFromAlarm();
@@ -68,6 +75,8 @@ public class WeatherWork extends ListenableWorker {
 
     private void updateWeatherFromAlarm() {
         Config.setUpdateError(mContext, false);
+
+        if (DEBUG) Log.d(TAG, "updateWeatherFromAlarm");
 
         if (!Config.isEnabled(mContext)) {
             Log.w(TAG, "Service started, but not enabled ... stopping");
@@ -107,14 +116,13 @@ public class WeatherWork extends ListenableWorker {
 
     @SuppressLint("MissingPermission")
     private Location getCurrentLocation() {
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         if (!doCheckLocationEnabled()) {
             Log.w(TAG, "locations disabled");
             return null;
         }
 
-        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         if (DEBUG) Log.d(TAG, "Current location is " + location);
 
@@ -136,24 +144,24 @@ public class WeatherWork extends ListenableWorker {
 
         if (needsUpdate) {
             if (DEBUG) Log.d(TAG, "Requesting current location");
-            CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder()
-                    .setGranularity(Granularity.GRANULARITY_COARSE)
-                    .setMaxUpdateAgeMillis(60L * 1000L)  // Max age of 1 minutes
-                    .build();
-
-            fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
-                    .addOnSuccessListener(mContext.getMainExecutor(), locationResult -> {
-                        if (locationResult != null) {
-                            if (DEBUG) Log.d(TAG, "Got valid location now update");
-                            startWork();
-                        } else {
-                            Log.w(TAG, "Failed to retrieve location");
-                            Intent errorIntent = new Intent(ACTION_ERROR);
-                            errorIntent.putExtra(EXTRA_ERROR, EXTRA_ERROR_LOCATION);
-                            mContext.sendBroadcast(errorIntent);
-                            Config.setUpdateError(mContext, true);
-                        }
-                    });
+            String locationProvider = lm.getBestProvider(sLocationCriteria, true);
+            if (TextUtils.isEmpty(locationProvider)) {
+                Log.e(TAG, "No available location providers matching criteria.");
+            } else {
+                if (DEBUG) Log.d(TAG, "Getting current location with provider " + locationProvider);
+                lm.getCurrentLocation(locationProvider, null, mContext.getMainExecutor(), location1 -> {
+                    if (location1 != null) {
+                        if (DEBUG) Log.d(TAG, "Got valid location now update");
+                        startWork();
+                    } else {
+                        Log.w(TAG, "Failed to retrieve location");
+                        Intent errorIntent = new Intent(ACTION_ERROR);
+                        errorIntent.putExtra(EXTRA_ERROR, EXTRA_ERROR_LOCATION);
+                        mContext.sendBroadcast(errorIntent);
+                        Config.setUpdateError(mContext, true);
+                    }
+                });
+            }
         }
 
         return location;
