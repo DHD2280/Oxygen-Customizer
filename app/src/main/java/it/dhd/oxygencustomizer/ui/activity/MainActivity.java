@@ -157,10 +157,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             Shell.cmd("mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR).exec();
         }
 
-        if (Config.isEnabled(this)) {
-            WeatherScheduler.scheduleUpdates(this);
-        }
-
     }
 
 
