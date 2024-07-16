@@ -23,14 +23,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Get application version name
-        run: echo "VERSION_NAME=beta-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
+        run: echo "VERSION_NAME=nightly-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
 
       - name: Bump application version code
         uses: chkfung/android-version-actions@v1.2.3
         with:
           gradlePath: app/build.gradle.kts
-          versionCode: ${{github.run_number}}
-          versionName: "${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
+          versionName: "${{ env.VERSION_NAME }} (#${{github.run_number}})"
 
       - name: Write sign info
         if: github.repository == 'DHD2280/Oxygen-Customizer'
