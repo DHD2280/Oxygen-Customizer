@@ -2,6 +2,11 @@ package it.dhd.oxygencustomizer.weather;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
+import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_DISABLED;
+import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_LOCATION;
+import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NETWORK;
+import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -34,9 +39,6 @@ public class WeatherWork extends ListenableWorker {
 
     private static final String EXTRA_ERROR = "error";
 
-    private static final int EXTRA_ERROR_LOCATION = 1;
-    private static final int EXTRA_ERROR_DISABLED = 2;
-
     private static final float LOCATION_ACCURACY_THRESHOLD_METERS = 10000;
     private static final long OUTDATED_LOCATION_THRESHOLD_MILLIS = 10L * 60L * 1000L; // 10 minutes
     private static final int RETRY_DELAY_MS = 5000;
@@ -61,35 +63,47 @@ public class WeatherWork extends ListenableWorker {
     @NonNull
     @Override
     public ListenableFuture<Result> startWork() {
-
         if (DEBUG) Log.d(TAG, "startWork");
 
-        if(Config.isEnabled(mContext))
-            updateWeatherFromAlarm();
-
         return CallbackToFutureAdapter.getFuture(completer -> {
-            completer.set(Config.isEnabled(mContext) && doCheckLocationEnabled() ? Result.success() : Result.retry());
+            if (!Config.isEnabled(mContext)) {
+                handleError(completer, EXTRA_ERROR_DISABLED, "Service started, but not enabled ... stopping");
+                return completer;
+            }
+
+            if (!checkPermissions()) {
+                handleError(completer, EXTRA_ERROR_NO_PERMISSIONS, "Location permissions are not granted");
+                return completer;
+            }
+
+            if (!doCheckLocationEnabled()) {
+                handleError(completer, EXTRA_ERROR_NETWORK, "Location services are disabled");
+                return completer;
+            }
+
+            executor.execute(() -> {
+                Location location = getCurrentLocation(completer);
+                if (location != null) {
+                    Log.d(TAG, "Location retrieved");
+                    updateWeather(location, completer);
+                } else if (Config.isCustomLocation(mContext)) {
+                    Log.d(TAG, "Using custom location configuration");
+                    updateWeather(null, completer);
+                } else {
+                    handleError(completer, EXTRA_ERROR_LOCATION, "Failed to retrieve location");
+                }
+            });
+
             return completer;
         });
     }
 
-    private void updateWeatherFromAlarm() {
-        Config.setUpdateError(mContext, false);
-
-        if (DEBUG) Log.d(TAG, "updateWeatherFromAlarm");
-
-        if (!Config.isEnabled(mContext)) {
-            Log.w(TAG, "Service started, but not enabled ... stopping");
-            Intent errorIntent = new Intent(ACTION_ERROR);
-            errorIntent.putExtra(EXTRA_ERROR, EXTRA_ERROR_DISABLED);
-            mContext.sendBroadcast(errorIntent);
-            return;
-        }
-
-        Config.clearLastUpdateTime(mContext);
-
-        if (DEBUG) Log.d(TAG, "call updateWeather from updateWeatherFromAlarm");
-        updateWeather();
+    private void handleError(CallbackToFutureAdapter.Completer<Result> completer, int errorExtra, String logMessage) {
+        Log.w(TAG, logMessage);
+        Intent errorIntent = new Intent(ACTION_ERROR);
+        errorIntent.putExtra(EXTRA_ERROR, errorExtra);
+        mContext.sendBroadcast(errorIntent);
+        completer.set(Result.retry());
     }
 
     private boolean doCheckLocationEnabled() {
@@ -115,7 +129,7 @@ public class WeatherWork extends ListenableWorker {
     }
 
     @SuppressLint("MissingPermission")
-    private Location getCurrentLocation() {
+    private Location getCurrentLocation(CallbackToFutureAdapter.Completer<Result> completer) {
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         if (!doCheckLocationEnabled()) {
@@ -124,7 +138,7 @@ public class WeatherWork extends ListenableWorker {
         }
 
         Location location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        if (DEBUG) Log.d(TAG, "Current location is " + location);
+        Log.d(TAG, "Current location is " + location);
 
         if (location != null && location.getAccuracy() > LOCATION_ACCURACY_THRESHOLD_METERS) {
             Log.w(TAG, "Ignoring inaccurate location");
@@ -135,7 +149,7 @@ public class WeatherWork extends ListenableWorker {
         if (location != null) {
             long delta = System.currentTimeMillis() - location.getTime();
             needsUpdate = delta > OUTDATED_LOCATION_THRESHOLD_MILLIS;
-            if (DEBUG) Log.d(TAG, "Location is " + delta + "ms old");
+            Log.d(TAG, "Location is " + delta + "ms old");
             if (needsUpdate) {
                 Log.w(TAG, "Ignoring too old location from " + dayFormat.format(location.getTime()));
                 location = null;
@@ -143,91 +157,74 @@ public class WeatherWork extends ListenableWorker {
         }
 
         if (needsUpdate) {
-            if (DEBUG) Log.d(TAG, "Requesting current location");
+            Log.d(TAG, "Requesting current location");
             String locationProvider = lm.getBestProvider(sLocationCriteria, true);
             if (TextUtils.isEmpty(locationProvider)) {
                 Log.e(TAG, "No available location providers matching criteria.");
             } else {
-                if (DEBUG) Log.d(TAG, "Getting current location with provider " + locationProvider);
+                Log.d(TAG, "Getting current location with provider " + locationProvider);
                 lm.getCurrentLocation(locationProvider, null, mContext.getMainExecutor(), location1 -> {
                     if (location1 != null) {
-                        if (DEBUG) Log.d(TAG, "Got valid location now update");
-                        startWork();
+                        Log.d(TAG, "Got valid location now update");
+                        updateWeather(location1, completer);
                     } else {
                         Log.w(TAG, "Failed to retrieve location");
-                        Intent errorIntent = new Intent(ACTION_ERROR);
-                        errorIntent.putExtra(EXTRA_ERROR, EXTRA_ERROR_LOCATION);
-                        mContext.sendBroadcast(errorIntent);
+                        handleError(completer, EXTRA_ERROR_LOCATION, "Failed to retrieve location");
                         Config.setUpdateError(mContext, true);
                     }
                 });
             }
+        } else {
+            updateWeather(location, completer);
         }
 
         return location;
     }
 
-    private void updateWeather() {
-        executor.execute(() -> {
-            WeatherInfo w = null;
-            try {
-                AbstractWeatherProvider provider = Config.getProvider(mContext);
-                int i = 0;
-                // retry max 3 times
-                while (i < RETRY_MAX_NUM) {
-                    if (!Config.isCustomLocation(mContext)) {
-                        if (checkPermissions()) {
-                            Location location = getCurrentLocation();
-                            if (location != null) {
-                                w = provider.getLocationWeather(location, Config.isMetric(mContext));
-                            } else {
-                                Log.w(TAG, "no location yet");
-                                // we are outa here
-                                break;
-                            }
-                        } else {
-                            Log.w(TAG, "no location permissions");
-                            // we are outa here
-                            break;
-                        }
-                    } else if (Config.getLocationId(mContext) != null) {
-                        w = provider.getCustomWeather(Config.getLocationId(mContext), Config.isMetric(mContext));
-                    } else {
-                        Log.w(TAG, "no valid custom location");
-                        // we are outa here
-                        break;
-                    }
-                    if (w != null) {
-                        Config.setWeatherData(w, mContext);
-                        WeatherContentProvider.updateCachedWeatherInfo(mContext);
-                        Log.d(TAG, "Weather updated updateCachedWeatherInfo");
-                        // we are outa here
+    private void updateWeather(Location location, CallbackToFutureAdapter.Completer<Result> completer) {
+        WeatherInfo w = null;
+        try {
+            AbstractWeatherProvider provider = Config.getProvider(mContext);
+            boolean isMetric = Config.isMetric(mContext);
+            int i = 0;
+            while (i < RETRY_MAX_NUM) {
+                if (location != null && !Config.isCustomLocation(mContext)) {
+                    w = provider.getLocationWeather(location, isMetric);
+                } else if (Config.getLocationId(mContext) != null) {
+                    w = provider.getCustomWeather(Config.getLocationId(mContext), isMetric);
+                } else {
+                    Log.w(TAG, "No valid custom location and location is null");
+                    break;
+                }
+
+                if (w != null) {
+                    Config.setWeatherData(w, mContext);
+                    WeatherContentProvider.updateCachedWeatherInfo(mContext);
+                    Log.d(TAG, "Weather updated updateCachedWeatherInfo");
+                    completer.set(Result.success());
+                    return;
+                } else {
+                    if (!provider.shouldRetry()) {
                         break;
                     } else {
-                        if (!provider.shouldRetry()) {
-                            // some other error
-                            break;
-                        } else {
-                            Log.w(TAG, "retry count =" + i);
-                            try {
-                                Thread.sleep(RETRY_DELAY_MS);
-                            } catch (InterruptedException ignored) {
-                            }
+                        Log.w(TAG, "retry count = " + i);
+                        try {
+                            Thread.sleep(RETRY_DELAY_MS);
+                        } catch (InterruptedException ignored) {
                         }
                     }
-                    i++;
                 }
-            } finally {
-                if (w == null) {
-                    // error
-                    if (DEBUG) Log.d(TAG, "error updating weather");
-                    Config.setUpdateError(mContext, true);
-                }
-                // send broadcast that something has changed
-                Intent updateIntent = new Intent(ACTION_BROADCAST);
-                mContext.sendBroadcast(updateIntent);
+                i++;
             }
-        });
+        } finally {
+            if (w == null) {
+                Log.d(TAG, "error updating weather");
+                Config.setUpdateError(mContext, true);
+                completer.set(Result.retry());
+            }
+            Intent updateIntent = new Intent(ACTION_BROADCAST);
+            mContext.sendBroadcast(updateIntent);
+        }
     }
 
     private boolean checkPermissions() {
