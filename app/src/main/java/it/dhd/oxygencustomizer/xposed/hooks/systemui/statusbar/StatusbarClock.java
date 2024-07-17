@@ -503,7 +503,7 @@ public class StatusbarClock extends XposedMods {
                 mClockView.setPadding(rightClockPadding, 0, rightClockPadding, 0);
             }
             case POSITION_RIGHT -> {
-                mClockView.setPadding(rightClockPadding, 0, 0, 0);
+                mClockView.setPadding(0, 0, 0, 0);
                 targetArea = ((ViewGroup) mSystemIconArea.getParent());
             }
         }
@@ -600,7 +600,7 @@ public class StatusbarClock extends XposedMods {
     private void setupChip() {
         if (clockChip) {
             mClockView.setPadding(dp2px(mContext, 4), dp2px(mContext, 2), dp2px(mContext, 4), dp2px(mContext, 2));
-            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            mClockView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mClockView.setBackground(mClockChipDrawale);
         } else {
             mClockView.setPadding(0, 0, 0, 0);
@@ -619,7 +619,6 @@ public class StatusbarClock extends XposedMods {
     }
 
     private void updateShowClock() {
-
 
         ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
