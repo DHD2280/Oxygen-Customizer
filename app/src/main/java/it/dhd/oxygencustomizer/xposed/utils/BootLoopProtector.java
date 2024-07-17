@@ -14,7 +14,7 @@ import java.util.Calendar;
 public class BootLoopProtector {
     public static final String LOAD_TIME_KEY_KEY = "packageLastLoad_";
     public static final String PACKAGE_STRIKE_KEY_KEY = "packageStrike_";
-    private static final int COUNTER_RESET_PERIOD = 20; //seconds
+    private static final int COUNTER_RESET_PERIOD = 60; //seconds
 
     @SuppressLint("ApplySharedPref")
     public static boolean isBootLooped(String packageName) {
