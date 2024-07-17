@@ -55,10 +55,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.base.BaseActivity;
 import it.dhd.oxygencustomizer.ui.drawables.TintedDrawableSpan;
 import it.dhd.oxygencustomizer.utils.NetworkUtils;
 
-public class LocationBrowseActivity extends AppCompatActivity {
+public class LocationBrowseActivity extends BaseActivity {
     private static final String TAG = "LocationBrowseActivity";
 
     public static final String DATA_LOCATION_NAME = "location_name";

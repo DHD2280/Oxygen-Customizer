@@ -146,6 +146,7 @@ public class LockscreenWeather
                         String locationId = String.format(Locale.US, PART_COORDINATES, lat, lon);
                         Config.setLocationId(getContext(), locationId);
                         Config.setLocationName(getContext(), locationName);
+                        doLoadPreferences();
                         forceRefreshWeatherSettings();
                     }
                 }
