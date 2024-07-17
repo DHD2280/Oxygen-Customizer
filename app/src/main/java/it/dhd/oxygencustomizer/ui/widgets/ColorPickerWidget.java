@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -58,7 +59,12 @@ public class ColorPickerWidget extends RelativeLayout {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorPickerWidget);
         setTitle(typedArray.getString(R.styleable.ColorPickerWidget_titleText));
-        setSummary(typedArray.getString(R.styleable.ColorPickerWidget_summaryText));
+        String summary = typedArray.getString(R.styleable.ColorPickerWidget_summaryText);
+        if (!TextUtils.isEmpty(summary)) {
+            setSummary(summary);
+        } else {
+            summaryTextView.setVisibility(GONE);
+        }
         int colorResId = typedArray.getResourceId(R.styleable.ColorPickerWidget_previewColor, -1);
         selectedColor = typedArray.getColor(R.styleable.ColorPickerWidget_previewColor, Color.WHITE);
         typedArray.recycle();
