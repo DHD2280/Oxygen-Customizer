@@ -113,12 +113,26 @@ public class LockscreenClock extends XposedMods {
     private final static String listenPackage = Constants.Packages.SYSTEM_UI;
     public static final String OC_LOCKSCREEN_CLOCK_TAG = "oxygencustomizer_lockscreen_clock";
 
-    private boolean customLockscreenClock = false;
+    private final String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_clock_font.ttf";
+
     private ViewGroup mClockViewContainer = null;
     private ViewGroup mStatusViewContainer = null;
     private RelativeLayout mClockView = null;
     private View mMediaHostContainer = null;
+
+    // Lockscreen Clock Prefs
+    private boolean customLockscreenClock = false;
     private int lockscreenClockStyle = 1;
+    private int topMargin, bottomMargin;
+    private float clockScale;
+    private int lineHeight;
+    private boolean customFontEnabled;
+    private boolean useCustomName;
+    private String customName;
+    private boolean useCustomUserImage;
+    private boolean useCustomImage;
+
+    // Stock Clock
     private int mStockClockRed, mStockClockRedColor;
     private static Object mStockClock;
     private UserManager mUserManager;
@@ -205,6 +219,15 @@ public class LockscreenClock extends XposedMods {
                 Color.BLACK
         );
         customColor = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH, false);
+        topMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 100);
+        bottomMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 40);
+        clockScale = Xprefs.getSliderFloat(LOCKSCREEN_CLOCK_TEXT_SCALING, 1.0f);
+        lineHeight = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 0);
+        customFontEnabled = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_FONT, false);
+        useCustomName = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER, false);
+        customName = Xprefs.getString(LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE, getUserName());
+        useCustomUserImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false);
+        useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_IMAGE, false);
 
         // Weather
         weatherEnabled = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
@@ -440,16 +463,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     private void modifyClockView(View clockView) {
-        int topMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 100);
-        int bottomMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 40);
-        float clockScale = Xprefs.getSliderFloat(LOCKSCREEN_CLOCK_TEXT_SCALING, 1.0f);
-        String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_clock_font.ttf";
-        int lineHeight = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 0);
-        boolean customFontEnabled = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_FONT, false);
-        boolean useCustomName = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER, false);
-        String customName = Xprefs.getString(LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE, getUserName());
-        boolean useCustomUserImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false);
-        boolean useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_IMAGE, false);
+
         int systemAccent = getPrimaryColor(mContext);
 
         Typeface typeface = null;
