@@ -84,12 +84,36 @@
                     android:text="@string/chip_outlined"
                     android:textSize="14sp" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/mixedChip"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1.0"
+                    android:ellipsize="marquee"
+                    android:paddingHorizontal="0dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="11dp"
+                    android:singleLine="true"
+                    android:text="@string/chip_mixed"
+                    android:textSize="14sp" />
+
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <it.dhd.oxygencustomizer.ui.widgets.CategoryWidget
+                android:id="@+id/gradientPrefs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:titleText="@string/chip_color_props" />
+                app:titleText="@string/chip_gradient_props" />
+
+            <it.dhd.oxygencustomizer.ui.widgets.ListWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gradientOrientation"
+                app:titleText="@string/chip_gradient_orientation"
+                app:entries="@array/gradient_orientation_entries"
+                app:entryValues="@array/gradient_orientation_values" />
 
             <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
                 android:id="@+id/accentSwitch"
@@ -132,6 +156,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:titleText="@string/chip_stroke" />
+
+            <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
+                android:id="@+id/accentStrokeSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:isChecked="false"
+                app:titleText="@string/chip_use_accent" />
+
+            <it.dhd.oxygencustomizer.ui.widgets.ColorPickerWidget
+                android:id="@+id/strokeColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/chip_stroke_color" />
 
             <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
                 android:id="@+id/strokeWidth"

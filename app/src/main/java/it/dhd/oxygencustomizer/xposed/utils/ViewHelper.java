@@ -462,4 +462,26 @@ public class ViewHelper {
         return null;
     }
 
+    public static GradientDrawable getChip(int gradientOrientation, int[] colors, int strokeWidth, int strokeColor, float[] cornerRadii) {
+        GradientDrawable gradient = new GradientDrawable();
+        gradient.setShape(GradientDrawable.RECTANGLE);
+        gradient.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+        GradientDrawable.Orientation orientation = switch (gradientOrientation) {
+            case 1 -> GradientDrawable.Orientation.TOP_BOTTOM;
+            case 2 -> GradientDrawable.Orientation.TL_BR;
+            case 3 -> GradientDrawable.Orientation.TR_BL;
+            default -> GradientDrawable.Orientation.LEFT_RIGHT;
+        };
+        gradient.setOrientation(orientation);
+        gradient.setColors(colors);
+        gradient.setStroke(strokeWidth, strokeColor);
+        if (cornerRadii != null) {
+            gradient.setCornerRadii(cornerRadii);
+        } else {
+            gradient.setCornerRadius(0);
+        }
+
+        return gradient;
+    }
+
 }

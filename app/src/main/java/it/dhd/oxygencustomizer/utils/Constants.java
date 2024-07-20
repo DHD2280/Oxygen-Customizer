@@ -317,6 +317,8 @@ public class Constants {
                     getGradientNum(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP, 1),
                     getGradientNum(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP, 2),
                     getGradientOrientation(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
+                    getStrokeColor(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
+                    getUseAccentColorStroke(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
                     getStrokeWidth(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
                     getRoundedCorners(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
                     getTopSxR(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP),
@@ -333,6 +335,8 @@ public class Constants {
                     getGradientNum(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP, 2),
                     getGradientOrientation(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
                     getStrokeWidth(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
+                    getStrokeColor(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
+                    getUseAccentColorStroke(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
                     getRoundedCorners(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
                     getTopSxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
                     getTopDxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
@@ -585,6 +589,9 @@ public class Constants {
 
     public static String getUseAccentColor(String key) {
         return key + "_USE_ACCENT_COLOR";
+    }
+    public static String getUseAccentColorStroke(String key) {
+        return key + "_USE_ACCENT_COLOR_STROKE";
     }
     public static String getUseGradient(String key) {
         return key + "_USE_GRADIENT";

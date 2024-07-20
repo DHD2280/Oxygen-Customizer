@@ -11,6 +11,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
 import static it.dhd.oxygencustomizer.utils.Constants.getTopDxR;
 import static it.dhd.oxygencustomizer.utils.Constants.getTopSxR;
 import static it.dhd.oxygencustomizer.utils.Constants.getUseAccentColor;
+import static it.dhd.oxygencustomizer.utils.Constants.getUseAccentColorStroke;
 import static it.dhd.oxygencustomizer.utils.Constants.getUseGradient;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -42,6 +43,7 @@ public class BackgroundChipPreference extends DialogPreference {
     private int mAccentColor;
     boolean useGradient;
     boolean useAccentColor;
+    boolean useAccentStroke;
     boolean roundCorners;
     int gradientColor1;
     int gradientColor2;
@@ -51,7 +53,7 @@ public class BackgroundChipPreference extends DialogPreference {
     int strokeWidth;
     int strokeColor;
     int topSxR, topDxR, bottomSxR, bottomDxR;
-    int backgroundChipStyle = 0;
+    int backgroundChipStyle = 0; // 0 = filled, 1 = outlined, 2 mixed
     GradientDrawable gradientDrawable = new GradientDrawable();
     private QsChipLayoutBinding binding;
 
@@ -90,28 +92,8 @@ public class BackgroundChipPreference extends DialogPreference {
         mAccentColor = ThemeUtils.getPrimaryColor(getContext());
         SharedPreferences prefs = PreferenceHelper.getModulePrefs();
 
-
         // def props
-        backgroundChipStyle = prefs.getInt(getStyle(getKey()), 0);
-        useAccentColor = prefs.getBoolean(getUseAccentColor(getKey()), true);
-        useGradient = prefs.getBoolean(getUseGradient(getKey()), false);
-        gradientColor1 = prefs.getInt(getGradientNum(getKey(), 1), mAccentColor);
-        gradientColor2 = prefs.getInt(getGradientNum(getKey(), 2), mAccentColor);
-        gradientOrientation = prefs.getInt(getGradientOrientation(getKey()), 0);
-        orientation = switch (gradientOrientation) {
-            case 1 -> GradientDrawable.Orientation.RIGHT_LEFT;
-            case 2 -> GradientDrawable.Orientation.TOP_BOTTOM;
-            case 3 -> GradientDrawable.Orientation.BOTTOM_TOP;
-            default -> GradientDrawable.Orientation.LEFT_RIGHT;
-        };
-        gradientType = GradientDrawable.LINEAR_GRADIENT;
-        strokeWidth = prefs.getInt(getStrokeWidth(getKey()), 10);
-        strokeColor = prefs.getInt(getStrokeColor(getKey()), mAccentColor);
-        roundCorners = prefs.getBoolean(getRoundedCorners(getKey()), false);
-        topSxR = prefs.getInt(getTopSxR(getKey()), 28);
-        topDxR = prefs.getInt(getTopDxR(getKey()), 28);
-        bottomSxR = prefs.getInt(getBottomSxR(getKey()), 28);
-        bottomDxR = prefs.getInt(getBottomDxR(getKey()), 28);
+        loadPrefs(prefs);
 
         binding = QsChipLayoutBinding.inflate(LayoutInflater.from(getContext()));
 
@@ -155,8 +137,22 @@ public class BackgroundChipPreference extends DialogPreference {
             setupWidgets();
             setupGradient();
         });
+        binding.mixedChip.setOnClickListener(v -> {
+            prefs.edit().putInt(getKey() + "_STYLE", 2).apply();
+            backgroundChipStyle = 2;
 
-        // Color Category
+            setupWidgets();
+            setupGradient();
+        });
+
+        // Gradient Props
+        binding.gradientOrientation.setOnSelectedListener((entry, entryValue) -> {
+            prefs.edit().putInt(getGradientOrientation(getKey()), Integer.parseInt(entryValue.toString())).apply();
+            gradientOrientation = Integer.parseInt(entryValue.toString());
+
+            setupWidgets();
+            setupGradient();
+        });
         binding.accentSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(getUseAccentColor(getKey()), isChecked).apply();
             useAccentColor = isChecked;
@@ -204,7 +200,28 @@ public class BackgroundChipPreference extends DialogPreference {
             setupGradient();
         });
 
-        // Stroke Category
+        // Stroke Props
+        binding.accentStrokeSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean(getUseAccentColorStroke(getKey()), isChecked).apply();
+            useAccentStroke = isChecked;
+
+            setupWidgets();
+            setupGradient();
+        });
+        binding.strokeColor.setColorPickerListener(
+                (FragmentActivity) getContext(),
+                prefs.getInt(getStrokeColor(getKey()), mAccentColor),
+                true,
+                true,
+                true
+        );
+        binding.strokeColor.setOnColorSelectedListener(color -> {
+            prefs.edit().putInt(getStrokeColor(getKey()), color).apply();
+            strokeColor = color;
+
+            setupWidgets();
+            setupGradient();
+        });
         binding.strokeWidth.setOnSliderChangeListener((slider, value, fromUser) -> {
             prefs.edit().putInt(getStrokeWidth(getKey()), (int) value).apply();
             strokeWidth = (int) value;
@@ -248,6 +265,30 @@ public class BackgroundChipPreference extends DialogPreference {
 
     }
 
+    private void loadPrefs(SharedPreferences prefs) {
+        backgroundChipStyle = prefs.getInt(getStyle(getKey()), 0);
+        useAccentColor = prefs.getBoolean(getUseAccentColor(getKey()), true);
+        useGradient = prefs.getBoolean(getUseGradient(getKey()), false);
+        gradientColor1 = prefs.getInt(getGradientNum(getKey(), 1), mAccentColor);
+        gradientColor2 = prefs.getInt(getGradientNum(getKey(), 2), mAccentColor);
+        gradientOrientation = prefs.getInt(getGradientOrientation(getKey()), 0);
+        orientation = switch (gradientOrientation) {
+            case 1 -> GradientDrawable.Orientation.TOP_BOTTOM;
+            case 2 -> GradientDrawable.Orientation.TL_BR;
+            case 3 -> GradientDrawable.Orientation.TR_BL;
+            default -> GradientDrawable.Orientation.LEFT_RIGHT;
+        };
+        gradientType = GradientDrawable.LINEAR_GRADIENT;
+        strokeWidth = prefs.getInt(getStrokeWidth(getKey()), 10);
+        useAccentStroke = prefs.getBoolean(getUseAccentColorStroke(getKey()), true);
+        strokeColor = prefs.getInt(getStrokeColor(getKey()), mAccentColor);
+        roundCorners = prefs.getBoolean(getRoundedCorners(getKey()), false);
+        topSxR = prefs.getInt(getTopSxR(getKey()), 28);
+        topDxR = prefs.getInt(getTopDxR(getKey()), 28);
+        bottomSxR = prefs.getInt(getBottomSxR(getKey()), 28);
+        bottomDxR = prefs.getInt(getBottomDxR(getKey()), 28);
+    }
+
     public float getAdapterTextSizeSp() {
         float f = 12.0f;
         int fontScaleToArrayIndex = fontScaleToArrayIndex(new float[]{0.9f, 1.0f, 1.15f, 1.35f, 1.60f});
@@ -280,20 +321,34 @@ public class BackgroundChipPreference extends DialogPreference {
         // setup gradient
         gradientDrawable.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        gradientDrawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-        if (backgroundChipStyle == 0) {
-            if (useAccentColor)
-                gradientDrawable.setColors(new int[]{mAccentColor, mAccentColor});
-            else if (useGradient)
-                gradientDrawable.setColors(new int[]{gradientColor1, gradientColor2});
-            else
-                gradientDrawable.setColors(new int[]{gradientColor1, gradientColor1});
+        GradientDrawable.Orientation orientation = switch (gradientOrientation) {
+            case 1 -> GradientDrawable.Orientation.TOP_BOTTOM;
+            case 2 -> GradientDrawable.Orientation.TL_BR;
+            case 3 -> GradientDrawable.Orientation.TR_BL;
+            default -> GradientDrawable.Orientation.LEFT_RIGHT;
+        };
+        gradientDrawable.setOrientation(orientation);
+        int[] colors;
+        int strokeC = Color.TRANSPARENT;
+        int strokeW = strokeWidth;
 
-            gradientDrawable.setStroke(0, Color.TRANSPARENT);
+        if (useAccentColor) {
+            colors = new int[]{mAccentColor, mAccentColor};
+        } else if (useGradient) {
+            colors = new int[]{gradientColor1, gradientColor2};
         } else {
-            gradientDrawable.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
-            gradientDrawable.setStroke(strokeWidth, useAccentColor ? mAccentColor : gradientColor1);
+            colors = new int[]{gradientColor1, gradientColor1};
         }
+        switch (backgroundChipStyle) {
+            case 0 -> strokeW = 0;
+            case 1 -> {
+                colors = new int[]{Color.TRANSPARENT, Color.TRANSPARENT};
+                strokeC = useAccentColor ? mAccentColor : strokeColor;
+            }
+            case 2 -> strokeC = useAccentStroke ? mAccentColor : strokeColor;
+        };
+        gradientDrawable.setColors(colors);
+        gradientDrawable.setStroke(strokeW, strokeC);
         if (roundCorners) {
             gradientDrawable.setCornerRadii(new float[]{
                     dp2px(getContext(), topSxR), dp2px(getContext(), topSxR),
@@ -311,24 +366,39 @@ public class BackgroundChipPreference extends DialogPreference {
 
     private void setupWidgets() {
         if (binding == null) return;
-        binding.filledChip.setChecked(backgroundChipStyle == 0);
-        binding.outlinedChip.setChecked(!binding.filledChip.isChecked());
-        binding.strokePrefs.setVisibility(binding.outlinedChip.isChecked() ? View.VISIBLE : View.GONE);
-        binding.strokeWidth.setVisibility(binding.outlinedChip.isChecked() ? View.VISIBLE : View.GONE);
-        binding.accentSwitch.setSwitchChecked(useAccentColor);
-        binding.gradientSwitch.setVisibility(useAccentColor || backgroundChipStyle == 1 ? View.GONE : View.VISIBLE);
+        boolean filled = backgroundChipStyle == 0;
+        boolean outlined = backgroundChipStyle == 1;
+        boolean mixed = backgroundChipStyle == 2;
+
+        binding.filledChip.setChecked(filled);
+        binding.outlinedChip.setChecked(outlined);
+        binding.mixedChip.setChecked(mixed);
+        // Gradient Prefs
+        binding.gradientPrefs.setVisibility(filled || mixed ? View.VISIBLE : View.GONE);
+        binding.gradientOrientation.setVisibility((filled || mixed) && useGradient ? View.VISIBLE : View.GONE);
+        binding.gradientOrientation.setSelectedValue(String.valueOf(gradientOrientation));
+        binding.accentSwitch.setVisibility((filled || mixed) ? View.VISIBLE : View.GONE);
+        binding.gradientSwitch.setVisibility((filled || mixed) && !useAccentColor ? View.VISIBLE : View.GONE);
         binding.gradientSwitch.setSwitchChecked(useGradient);
-        binding.colorPickerGradient1.setVisibility(useAccentColor ? View.GONE : View.VISIBLE);
         binding.colorPickerGradient1.setTitle(useGradient ? getContext().getString(R.string.chip_gradient_color_1) : getContext().getString(R.string.chip_color_color));
+        binding.colorPickerGradient1.setVisibility((filled || mixed) && !useAccentColor ? View.VISIBLE : View.GONE);
         binding.colorPickerGradient1.setPreviewColor(gradientColor1);
-        if (!useAccentColor && useGradient && backgroundChipStyle == 0) {
+        if (!useAccentColor && useGradient && (filled || mixed)) {
             binding.colorPickerGradient2.setVisibility(View.VISIBLE);
         } else {
             binding.colorPickerGradient2.setVisibility(View.GONE);
         }
-
         binding.colorPickerGradient2.setPreviewColor(gradientColor2);
+
+        // Stroke Prefs
+        binding.strokePrefs.setVisibility(outlined || mixed ? View.VISIBLE : View.GONE);
+        binding.accentStrokeSwitch.setVisibility(outlined || mixed ? View.VISIBLE : View.GONE);
+        binding.strokeColor.setVisibility((outlined || mixed) && !useAccentStroke ? View.VISIBLE : View.GONE);
+        binding.strokeWidth.setVisibility(outlined || mixed || binding.mixedChip.isChecked() ? View.VISIBLE : View.GONE);
+        binding.strokeColor.setPreviewColor(strokeColor);
         binding.strokeWidth.setSliderValue(strokeWidth);
+
+        // Round Corner Prefs
         binding.roundCornersSwitch.setSwitchChecked(roundCorners);
         binding.topSxCorner.setVisibility(roundCorners ? View.VISIBLE : View.GONE);
         binding.topSxCorner.setSliderValue(topSxR);

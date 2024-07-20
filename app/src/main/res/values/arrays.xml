@@ -242,6 +242,20 @@
         <item>custom</item>
     </string-array>
 
+    <string-array name="gradient_orientation_entries">
+        <item>@string/gradient_left_right</item>
+        <item>@string/gradient_top_bottom</item>
+        <item>@string/gradient_tl_br</item>
+        <item>@string/gradient_tr_bl</item>
+    </string-array>
+
+    <string-array name="gradient_orientation_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="notif_default_expansion_entries">
         <item>@string/default_value</item>
         <item>@string/notif_always_expand</item>

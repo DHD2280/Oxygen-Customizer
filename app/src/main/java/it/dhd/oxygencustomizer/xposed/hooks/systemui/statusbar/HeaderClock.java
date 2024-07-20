@@ -10,7 +10,6 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.DATE_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CHIP_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT2;
@@ -41,6 +40,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 
 import android.content.Context;
 import android.content.Intent;
@@ -123,14 +123,17 @@ public class HeaderClock extends XposedMods {
     private boolean stockClockHideCarrier;
 
     // Clock Chip Style
-    private int stockClockTimeBackgroundChipStyle;
-    private boolean stockClockUseAccent, stockClockDateUseAccent;
-    private int stockClockStrokeWidth, stockDateStrokeWidth;
+    private int clockChipStyle, dateChipStyle;
+    private boolean clockGradientAccent, dateGradientAccent;
+    private int clockStrokeWitdh, dateStrokeWidth;
     private boolean clockRoundCorners, dateRoundCorners;
+    private int clockGradientOrientation, dateGradientOrientation;
+    private int clockStrokeColor, dateStrokeColor;
+    private boolean clockStrokeAccent, dateStrokeAccent;
     private int clockTopSxRound, clockTopDxRound, clockBottomSxRound,clockBottomDxRound;
     private int dateTopSxRound, dateTopDxRound, dateBottomSxRound, dateBottomDxRound;
-    private int stockClockTimeChipGradient1, stockClockTimeChipGradient2, stockClockDateChipGradient1, stockClockDateChipGradient2;
-    private boolean stockClockTimeChipGradient, stockClockDateChipGradient;
+    private int clockGradient1, clockGradient2, dateGradient1, dateGradient2;
+    private boolean clockUseGradient, dateUseGradient;
     private boolean customFontEnabled;
     private int systemIconBackgroundChipStyle;
     private boolean systemIconsChipEnabled = false;
@@ -139,13 +142,11 @@ public class HeaderClock extends XposedMods {
     private int systemIconChipGradient1, systemIconChipGradient2;
     private boolean systemIconChipGradient = false;
     private int systemIconStrokeWidth;
-    private int stockClockTimeChipOrientation;
 
-    private int stockClockDateBackgroundChipStyle;
     private int mAccent;
-    private static final GradientDrawable mClockChipDrawale = new GradientDrawable();
-    private static final GradientDrawable mDateChipDrawale = new GradientDrawable();
-    private static final GradientDrawable mSystemIconsChipDrawale = new GradientDrawable();
+    private static GradientDrawable mClockChipDrawable = new GradientDrawable();
+    private static GradientDrawable mDateChipDrawable = new GradientDrawable();
+    private static final GradientDrawable mSystemIconsChipDrawable = new GradientDrawable();
     private Typeface mStockClockTypeface, mStockDateTypeface;
     private Object OQC = null;
     private Object mActivityStarter = null;
@@ -183,9 +184,9 @@ public class HeaderClock extends XposedMods {
         stockClockDateColorSwitch = Xprefs.getBoolean(QsHeaderClock.QS_HEADER_CLOCK_STOCK_DATE_COLOR_SWITCH, false);
         stockClockDateColor = Xprefs.getInt(QsHeaderClock.QS_HEADER_CLOCK_STOCK_DATE_COLOR, 0);
         stockClockTimeBackgroundChip = Xprefs.getBoolean(QsHeaderClock.QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP_SWITCH, false);
-        stockClockTimeBackgroundChipStyle = Xprefs.getInt(getStyle(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), 0);
+        clockChipStyle = Xprefs.getInt(getStyle(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), 0);
         stockClockDateBackgroundChip = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP_SWITCH, false);
-        stockClockDateBackgroundChipStyle = Xprefs.getInt(getStyle(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 0);
+        dateChipStyle = Xprefs.getInt(getStyle(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 0);
         stockClockHideCarrier = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_CARRIER, false);
         systemIconsChipEnabled = Xprefs.getBoolean(QS_SYSTEM_ICON_CHIP_SWITCH, false);
         systemIconBackgroundChipStyle = Xprefs.getInt(getStyle(QS_SYSTEM_ICON_CHIP), 0);
@@ -194,22 +195,28 @@ public class HeaderClock extends XposedMods {
         customFontEnabled = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_FONT, false);
 
         // gradients prefs
-        stockClockUseAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_ACCENT_COLOR", true);
-        stockClockTimeChipGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_GRADIENT", false);
-        stockClockTimeChipGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
-        stockClockTimeChipGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
-        stockClockStrokeWidth = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), 10);
+        clockGradientAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_ACCENT_COLOR", true);
+        clockGradientOrientation = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_ORIENTATION", 0);
+        clockUseGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_GRADIENT", false);
+        clockGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
+        clockGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
+        clockStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_ACCENT_STROKE", false);
+        clockStrokeColor = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_STROKE_COLOR", mAccent);
+        clockStrokeWitdh = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), 10);
         clockRoundCorners = Xprefs.getBoolean(getRoundedCorners(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), true);
         clockTopSxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_TOP_LEFT_RADIUS", 28);
         clockTopDxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_TOP_RIGHT_RADIUS", 28);
         clockBottomSxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_BOTTOM_LEFT_RADIUS", 28);
         clockBottomDxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_BOTTOM_RIGHT_RADIUS", 28);
 
-        stockClockDateUseAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_ACCENT_COLOR", true);
-        stockClockDateChipGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_GRADIENT", false);
-        stockClockDateChipGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
-        stockClockDateChipGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
-        stockDateStrokeWidth = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 10);
+        dateGradientAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_ACCENT_COLOR", true);
+        dateGradientOrientation = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_ORIENTATION", 0);
+        dateUseGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_GRADIENT", false);
+        dateGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
+        dateGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
+        dateStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_ACCENT_STROKE", false);
+        dateStrokeColor = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_STROKE_COLOR", mAccent);
+        dateStrokeWidth = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 10);
         dateRoundCorners = Xprefs.getBoolean(getRoundedCorners(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), true);
         dateTopSxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_TOP_LEFT_RADIUS", 28);
         dateTopDxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_TOP_RIGHT_RADIUS", 28);
@@ -485,104 +492,128 @@ public class HeaderClock extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
-    private void setupChips() {
+    private void setupClockChip() {
+        int[] colors;
+        int strokeColor = Color.TRANSPARENT;
+        int strokeWidth = clockStrokeWitdh;
 
-        mAccent = getPrimaryColor(mContext);
-        mClockChipDrawale.setShape(GradientDrawable.RECTANGLE);
-        mClockChipDrawale.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        mClockChipDrawale.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+        if (clockGradientAccent) {
+            colors = new int[]{getPrimaryColor(mContext), getPrimaryColor(mContext)};
+        } else if (clockUseGradient) {
+            colors = new int[]{clockGradient1, clockGradient2};
+        } else {
+            colors = new int[]{clockGradient1, clockGradient1};
+        }
+        switch (clockChipStyle) {
+            case 0:
+                strokeWidth = 0;
+                break;
+            case 1:
+                colors = new int[]{Color.TRANSPARENT, Color.TRANSPARENT};
+                strokeWidth = clockStrokeWitdh;
+                strokeColor = clockStrokeAccent ? getPrimaryColor(mContext) : clockStrokeColor;
+                break;
+            case 2:
+                strokeWidth = clockStrokeWitdh;
+                strokeColor = clockStrokeAccent ? getPrimaryColor(mContext) : clockStrokeColor;
+                break;
+        }
+        float[] radii;
         if (clockRoundCorners) {
-            mClockChipDrawale.setCornerRadii(new float[]{
+            radii = new float[]{
                     dp2px(mContext, clockTopSxRound), dp2px(mContext, clockTopSxRound),
                     dp2px(mContext, clockTopDxRound), dp2px(mContext, clockTopDxRound),
                     dp2px(mContext, clockBottomDxRound), dp2px(mContext, clockBottomDxRound),
                     dp2px(mContext, clockBottomSxRound), dp2px(mContext, clockBottomSxRound)
-            });
+            };
         } else {
-            mClockChipDrawale.setCornerRadius(0);
+            radii = null;
         }
-        mClockChipDrawale.setPadding(20, 0, 20, 0);
-        if (stockClockTimeBackgroundChipStyle == 0) {
-            if (stockClockUseAccent)
-                mClockChipDrawale.setColors(new int[]{mAccent, mAccent});
-            else if (stockClockTimeChipGradient)
-                mClockChipDrawale.setColors(new int[]{stockClockTimeChipGradient1, stockClockTimeChipGradient2});
-            else
-                mClockChipDrawale.setColors(new int[]{stockClockTimeChipGradient1, stockClockTimeChipGradient1});
-            mClockChipDrawale.setStroke(0, Color.TRANSPARENT);
-        } else {
-            mClockChipDrawale.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
-            mClockChipDrawale.setStroke(stockClockStrokeWidth, stockClockUseAccent ? mAccent : stockClockTimeChipGradient1);
-        }
-        GradientDrawable.Orientation orientation = switch (stockClockTimeChipOrientation) {
-            case 1 -> GradientDrawable.Orientation.RIGHT_LEFT;
-            case 2 -> GradientDrawable.Orientation.TOP_BOTTOM;
-            case 3 -> GradientDrawable.Orientation.BOTTOM_TOP;
-            default -> GradientDrawable.Orientation.LEFT_RIGHT;
-        };
-        mClockChipDrawale.invalidateSelf();
+        mClockChipDrawable = getChip(clockGradientOrientation, colors, strokeWidth, strokeColor, radii);
+        mClockChipDrawable.invalidateSelf();
+    }
 
-        mDateChipDrawale.setShape(GradientDrawable.RECTANGLE);
-        mDateChipDrawale.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        mDateChipDrawale.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+    private void setupDateChip() {
+        int[] colors;
+        int strokeColor = Color.TRANSPARENT;
+        int strokeWidth = dateStrokeWidth;
+
+        if (dateGradientAccent) {
+            colors = new int[]{getPrimaryColor(mContext), getPrimaryColor(mContext)};
+        } else if (dateUseGradient) {
+            colors = new int[]{dateGradient1, dateGradient2};
+        } else {
+            colors = new int[]{dateGradient1, dateGradient1};
+        }
+        switch (dateChipStyle) {
+            case 0:
+                strokeWidth = 0;
+                break;
+            case 1:
+                colors = new int[]{Color.TRANSPARENT, Color.TRANSPARENT};
+                strokeWidth = dateStrokeWidth;
+                strokeColor = dateStrokeAccent ? getPrimaryColor(mContext) : dateStrokeColor;
+                break;
+            case 2:
+                strokeWidth = dateStrokeWidth;
+                strokeColor = dateStrokeAccent ? getPrimaryColor(mContext) : dateStrokeColor;
+                break;
+        }
+        float[] radii;
         if (dateRoundCorners) {
-            mDateChipDrawale.setCornerRadii(new float[]{
+            radii = new float[]{
                     dp2px(mContext, dateTopSxRound), dp2px(mContext, dateTopSxRound),
                     dp2px(mContext, dateTopDxRound), dp2px(mContext, dateTopDxRound),
                     dp2px(mContext, dateBottomDxRound), dp2px(mContext, dateBottomDxRound),
                     dp2px(mContext, dateBottomSxRound), dp2px(mContext, dateBottomSxRound)
-            });
+            };
         } else {
-            mDateChipDrawale.setCornerRadius(0);
+            radii = null;
         }
+        mDateChipDrawable = getChip(clockGradientOrientation, colors, strokeWidth, strokeColor, radii);
+        mDateChipDrawable.invalidateSelf();
+    }
 
-        mDateChipDrawale.setPadding(20, 0, 20, 0);
-        if (stockClockDateBackgroundChipStyle == 0) {
-            if (stockClockDateUseAccent)
-                mDateChipDrawale.setColors(new int[]{mAccent, mAccent});
-            else if (stockClockDateChipGradient)
-                mDateChipDrawale.setColors(new int[]{stockClockDateChipGradient1, stockClockDateChipGradient2});
-            else
-                mDateChipDrawale.setColors(new int[]{stockClockDateChipGradient1, stockClockDateChipGradient1});
-            mDateChipDrawale.setStroke(0, Color.TRANSPARENT);
-        } else {
-            mDateChipDrawale.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
-            mDateChipDrawale.setStroke(stockDateStrokeWidth, stockClockDateUseAccent ? mAccent : stockClockDateChipGradient1);
-        }
-        mDateChipDrawale.invalidateSelf();
+    private void setupChips() {
+
+        mAccent = getPrimaryColor(mContext);
+
+        setupClockChip();
+        setupDateChip();
+
         updateChips();
 
     }
 
     private void setupStatusChips() {
         log(TAG + "setupStatusChips");
-        mSystemIconsChipDrawale.setShape(GradientDrawable.RECTANGLE);
-        mSystemIconsChipDrawale.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        mSystemIconsChipDrawale.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+        mSystemIconsChipDrawable.setShape(GradientDrawable.RECTANGLE);
+        mSystemIconsChipDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+        mSystemIconsChipDrawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
         if (systemIconRoundCorners) {
-            mSystemIconsChipDrawale.setCornerRadii(new float[]{
+            mSystemIconsChipDrawable.setCornerRadii(new float[]{
                     dp2px(mContext, systemIconTopSxRound), dp2px(mContext, systemIconTopSxRound),
                     dp2px(mContext, systemIconTopDxRound), dp2px(mContext, systemIconTopDxRound),
                     dp2px(mContext, systemIconBottomDxRound), dp2px(mContext, systemIconBottomDxRound),
                     dp2px(mContext, systemIconBottomSxRound), dp2px(mContext, systemIconBottomSxRound)
             });
         } else {
-            mSystemIconsChipDrawale.setCornerRadius(0);
+            mSystemIconsChipDrawable.setCornerRadius(0);
         }
-        mSystemIconsChipDrawale.setPadding(20, 0, 20, 0);
+        mSystemIconsChipDrawable.setPadding(20, 0, 20, 0);
         if (systemIconBackgroundChipStyle == 0) {
             if (systemIconUseAccent)
-                mSystemIconsChipDrawale.setColors(new int[]{mAccent, mAccent});
+                mSystemIconsChipDrawable.setColors(new int[]{mAccent, mAccent});
             else if (systemIconChipGradient)
-                mSystemIconsChipDrawale.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient2});
+                mSystemIconsChipDrawable.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient2});
             else
-                mSystemIconsChipDrawale.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient1});
-            mSystemIconsChipDrawale.setStroke(0, Color.TRANSPARENT);
+                mSystemIconsChipDrawable.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient1});
+            mSystemIconsChipDrawable.setStroke(0, Color.TRANSPARENT);
         } else {
-            mSystemIconsChipDrawale.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
-            mSystemIconsChipDrawale.setStroke(stockClockStrokeWidth, stockClockUseAccent ? mAccent : systemIconChipGradient1);
+            mSystemIconsChipDrawable.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
+            mSystemIconsChipDrawable.setStroke(clockStrokeWitdh, clockGradientAccent ? mAccent : systemIconChipGradient1);
         }
-        mSystemIconsChipDrawale.invalidateSelf();
+        mSystemIconsChipDrawable.invalidateSelf();
         updateStatusChips();
     }
 
@@ -696,7 +727,7 @@ public class HeaderClock extends XposedMods {
     private void applyChip(TextView textView) {
         if (textView == null || textView.getVisibility() != View.VISIBLE) return;
         try {
-            textView.setBackground(textView == mOplusClock ? mClockChipDrawale : mDateChipDrawale);
+            textView.setBackground(textView == mOplusClock ? mClockChipDrawable : mDateChipDrawable);
         } catch (Throwable t) {
             log(TAG + "applyChip: " + t.getMessage());
         }
@@ -917,7 +948,7 @@ public class HeaderClock extends XposedMods {
         int paddingStartEnd = 0;
         int paddingTopBottom = 0;
         if (systemIconsChipEnabled) {
-            mStatusIconsView.setBackground(mSystemIconsChipDrawale);
+            mStatusIconsView.setBackground(mSystemIconsChipDrawable);
             paddingStartEnd = dp2px(mContext, 12);
             paddingTopBottom = dp2px(mContext, 4);
             mStatusIconsView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
