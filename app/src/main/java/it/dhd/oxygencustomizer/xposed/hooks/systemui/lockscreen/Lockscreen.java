@@ -32,6 +32,7 @@ import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +50,7 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
@@ -68,7 +70,9 @@ public class Lockscreen extends XposedMods {
     private View mStartButton = null, mEndButton = null;
     private ImageView mLockIcon = null;
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
+    private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
+    final StringFormatter carrierStringFormatter = new StringFormatter();
 
     public Lockscreen(Context context) {
         super(context);
@@ -108,14 +112,6 @@ public class Lockscreen extends XposedMods {
             }
         }
 
-    }
-
-    private boolean isMethodSecure() {
-        log(TAG + "isMethodSecure" + " != null" + (KeyguardHelper != null));
-        if (KeyguardHelper != null) {
-            return (boolean) callStaticMethod(KeyguardHelper, "hasSecurityKeyguard");
-        }
-        return false;
     }
 
     @Override
@@ -324,19 +320,26 @@ public class Lockscreen extends XposedMods {
 
     private void hookCarrier(XC_LoadPackage.LoadPackageParam lpparam) {
 
+        carrierStringFormatter.registerCallback(this::setCarrierText);
+
         Class<?> OplusStatCarrierTextController = findClass("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController", lpparam.classLoader);
         hookAllMethods(OplusStatCarrierTextController, "updateCarrierInfo", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 TextView mView = (TextView) getObjectField(param.thisObject, "mView");
-                if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage) &&
-                        !lockscreenCarrierReplacement.isEmpty()
-                ) {
-                    mView.post(() -> mView.setText(lockscreenCarrierReplacement));
-                    param.setResult(null);
+                if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
+                    mCarrierText = mView;
+                    setCarrierText();
+                    if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
                 }
             }
         });
+    }
+
+    private void setCarrierText() {
+        if (mCarrierText != null && !TextUtils.isEmpty(lockscreenCarrierReplacement)) {
+            mCarrierText.post(() -> mCarrierText.setText(carrierStringFormatter.formatString(lockscreenCarrierReplacement)));
+        }
     }
 
     private void hideLockscreenStuff() {

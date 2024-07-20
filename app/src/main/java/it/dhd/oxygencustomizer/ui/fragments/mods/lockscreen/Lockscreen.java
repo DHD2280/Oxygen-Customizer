@@ -7,6 +7,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CAPSULE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CARRIER;
@@ -17,6 +18,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
+import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -42,11 +44,15 @@ import it.dhd.oxygencustomizer.customprefs.RecyclerPreference;
 import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
+
+    private DateFormatDialog mDateFormatDialog;
+
     @Override
     public String getTitle() {
         return getString(R.string.lockscreen_title);
@@ -75,6 +81,9 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+
+        mDateFormatDialog = new DateFormatDialog(requireContext());
+
         ListWithPopUpPreference mLockscreenFpIcons = findPreference(LOCKSCREEN_FINGERPRINT_STYLE);
         int maxIndex = 0;
         List<String> fpIconsEntries = new ArrayList<>(), fpIconsValues = new ArrayList<>();
@@ -138,6 +147,17 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         }
         if (hideStatusbar != null) {
             hideStatusbar.setOnPreferenceChangeListener(listener);
+        }
+
+        Preference mLsCarrierText = findPreference("ls_carrier_replacement");
+        if (mLsCarrierText != null) {
+            mLsCarrierText.setOnPreferenceClickListener(preference -> {
+                mDateFormatDialog.show(
+                        getString(R.string.lockscreen_carrier_replacement),
+                        mPreferences.getString(LOCKSCREEN_CARRIER_REPLACEMENT, ""),
+                        (text) -> mPreferences.edit().putString(LOCKSCREEN_CARRIER_REPLACEMENT, text.toString()).apply());
+                return true;
+            });
         }
 
         new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->

@@ -164,9 +164,8 @@
             android:title="@string/lockscreen_hide_carrier"
             android:summary="@string/lockscreen_hide_carrier_summary"
             app:iconSpaceReserved="false" />
-        <EditTextPreference
-            android:defaultValue=""
-            android:key="lockscreen_carrier_replacement"
+        <Preference
+            android:key="ls_carrier_replacement"
             android:title="@string/lockscreen_carrier_replacement"
             android:summary="@string/lockscreen_carrier_replacement_summary"
             app:iconSpaceReserved="false" />
