@@ -180,7 +180,7 @@ public class StatusbarClock extends XposedMods {
                         "status_bar_clock_background_chip" + "_USE_GRADIENT",
                         "status_bar_clock_background_chip" + "_GRADIENT_1",
                         "status_bar_clock_background_chip" + "_GRADIENT_2",
-                        "status_bar_clock_background_chip" + "_USE_ACCENT_STROKE",
+                        "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR_STROKE",
                         "status_bar_clock_background_chip" + "_STROKE_COLOR",
                         "status_bar_clock_background_chip" + "_STROKE_WIDTH",
                         "status_bar_clock_background_chip" + "_ROUNDED_CORNERS",
@@ -611,7 +611,6 @@ public class StatusbarClock extends XposedMods {
     private void setupChip() {
         log(TAG + "Setting up Chip " + clockChip + " | " + chipStyle + " | " + (mClockChipDrawable != null));
         if (clockChip) {
-
             mClockView.setPadding(dp2px(mContext, 4), dp2px(mContext, 2), dp2px(mContext, 4), dp2px(mContext, 2));
             mClockView.getLayoutParams().height = WRAP_CONTENT;
             mClockView.post(() -> mClockView.setBackground(mClockChipDrawable));
@@ -622,7 +621,7 @@ public class StatusbarClock extends XposedMods {
         }
         switch (mClockPosition) {
             case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER_VERTICAL);
+            case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER);
             case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         }
         mClockView.setIncludeFontPadding(false);
