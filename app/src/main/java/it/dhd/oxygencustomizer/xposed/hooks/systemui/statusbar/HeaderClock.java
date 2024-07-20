@@ -200,7 +200,7 @@ public class HeaderClock extends XposedMods {
         clockUseGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_GRADIENT", false);
         clockGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
         clockGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
-        clockStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_ACCENT_STROKE", false);
+        clockStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_USE_ACCENT_COLOR_STROKE", false);
         clockStrokeColor = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP + "_STROKE_COLOR", mAccent);
         clockStrokeWitdh = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), 10);
         clockRoundCorners = Xprefs.getBoolean(getRoundedCorners(QS_HEADER_CLOCK_STOCK_CLOCK_BACKGROUND_CHIP), true);
@@ -214,7 +214,7 @@ public class HeaderClock extends XposedMods {
         dateUseGradient = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_GRADIENT", false);
         dateGradient1 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_1", mAccent);
         dateGradient2 = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_GRADIENT_2", mAccent);
-        dateStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_ACCENT_STROKE", false);
+        dateStrokeAccent = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_USE_ACCENT_COLOR_STROKE", false);
         dateStrokeColor = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_STROKE_COLOR", mAccent);
         dateStrokeWidth = Xprefs.getInt(getStrokeWidth(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 10);
         dateRoundCorners = Xprefs.getBoolean(getRoundedCorners(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), true);
