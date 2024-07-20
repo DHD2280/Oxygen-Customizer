@@ -38,7 +38,7 @@ public class DateFormatDialog extends AppCompatActivity {
         this.context = context;
     }
 
-    public void show(String text, OnApplyListener onApplyListener) {
+    public void show(String title, String text, OnApplyListener onApplyListener) {
         if (dialog != null) dialog.dismiss();
 
         dialog = new Dialog(context);
@@ -46,6 +46,8 @@ public class DateFormatDialog extends AppCompatActivity {
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
+
+        ((TextView) dialog.findViewById(R.id.title)).setText(title);
 
         MaterialButton mApply, mCancel;
         mApply = dialog.findViewById(R.id.apply);

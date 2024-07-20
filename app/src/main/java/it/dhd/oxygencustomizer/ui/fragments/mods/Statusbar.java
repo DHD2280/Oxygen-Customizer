@@ -175,7 +175,9 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
             mCustomFormat = findPreference("status_bar_java_custom");
             if (mCustomFormat != null) {
                 mCustomFormat.setOnPreferenceClickListener((preference) -> {
-                    mDateFormatDialog.show(getModulePrefs().getString("status_bar_custom_clock_format", "$GEEE"), (text) -> {
+                    mDateFormatDialog.show(
+                            getString(R.string.status_bar_date_format_custom),
+                            getModulePrefs().getString("status_bar_custom_clock_format", "$GEEE"), (text) -> {
                         getModulePrefs().edit().putString("status_bar_custom_clock_format", text.toString()).apply();
                     });
                     return true;
