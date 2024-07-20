@@ -38,7 +38,7 @@ public class DateFormatDialog extends AppCompatActivity {
         this.context = context;
     }
 
-    public void show() {
+    public void show(String text, OnApplyListener onApplyListener) {
         if (dialog != null) dialog.dismiss();
 
         dialog = new Dialog(context);
@@ -72,11 +72,11 @@ public class DateFormatDialog extends AppCompatActivity {
             }
         });
 
-        formatText.setText(getModulePrefs().getString("status_bar_custom_clock_format", "$GEEE"));
+        formatText.setText(text);
 
         mCancel.setOnClickListener(v -> dialog.dismiss());
         mApply.setOnClickListener(v -> {
-            savePref();
+            onApplyListener.onApplyText(formatText.getText());
             dialog.dismiss();
         });
 
@@ -85,11 +85,6 @@ public class DateFormatDialog extends AppCompatActivity {
 
         Window window = dialog.getWindow();
         window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-    }
-
-    private void savePref() {
-        if (getModulePrefs() == null) return;
-        getModulePrefs().edit().putString("status_bar_custom_clock_format", ((TextInputEditText) dialog.findViewById(R.id.edit_text)).getText().toString()).apply();
     }
 
     public void hide() {
@@ -109,4 +104,9 @@ public class DateFormatDialog extends AppCompatActivity {
         dismiss();
         super.onDestroy();
     }
+
+    public interface OnApplyListener {
+        void onApplyText(CharSequence value);
+    }
+
 }

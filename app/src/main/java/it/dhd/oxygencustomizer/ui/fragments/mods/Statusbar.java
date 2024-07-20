@@ -6,8 +6,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -177,7 +175,9 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
             mCustomFormat = findPreference("status_bar_java_custom");
             if (mCustomFormat != null) {
                 mCustomFormat.setOnPreferenceClickListener((preference) -> {
-                    mDateFormatDialog.show();
+                    mDateFormatDialog.show(getModulePrefs().getString("status_bar_custom_clock_format", "$GEEE"), (text) -> {
+                        getModulePrefs().edit().putString("status_bar_custom_clock_format", text.toString()).apply();
+                    });
                     return true;
                 });
             }
@@ -187,7 +187,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
     public static class BatteryIcon extends ControlledPreferenceFragmentCompat {
 
-        ListWithPopUpPreference mBatteryStyle, mChargingIconStock, mChargingIcon;
+        ListWithPopUpPreference mBatteryStyle, mChargingIcon;
 
         @Override
         public String getTitle() {
