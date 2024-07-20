@@ -66,8 +66,10 @@ public class StringFormatter {
 
         } catch (Throwable t) {
             if (BuildConfig.DEBUG) {
-                log("Error setting formatted string update schedule");
-                log(t);
+                try {
+                    log("Error setting formatted string update schedule");
+                    log(t);
+                } catch (Throwable ignored) {}
             }
         }
     }
