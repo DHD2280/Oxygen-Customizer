@@ -32,7 +32,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,8 +40,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.WeatherScheduler;
-import it.dhd.oxygencustomizer.weather.WeatherUpdateService;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
@@ -74,34 +71,34 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         mContext = context;
         mWeatherClient = new OmniJawsClient(context, true);
 
-        setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setOrientation(VERTICAL);
 
         mWeatherLayout = new LinearLayout(context);
-        mWeatherLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mWeatherLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mWeatherLayout.setOrientation(HORIZONTAL);
 
         mLeftText = new TextView(context);
-        mLeftText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mLeftText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mLeftText.setTextColor(Color.WHITE); // Aggiungi il colore desiderato
         mLeftText.setSingleLine(true);
         mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         mLeftText.setEllipsize(TextUtils.TruncateAt.END);
         mLeftText.setTag("text");
 
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp2px(mContext, 18), dp2px(mContext, 18));
+        LayoutParams imageParams = new LayoutParams(dp2px(mContext, 18), dp2px(mContext, 18));
         mCurrentImage = new ImageView(context);
         mCurrentImage.setLayoutParams(imageParams);
 
         mRightText = new TextView(context);
-        mRightText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mRightText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mRightText.setTextColor(Color.WHITE);
         mRightText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         mRightText.setSingleLine(true);
         mRightText.setTag("text");
 
         mWeatherText = new TextView(context);
-        mWeatherText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mWeatherText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mWeatherText.setTextColor(Color.WHITE);
         mWeatherText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         mWeatherText.setSingleLine(true);
@@ -114,7 +111,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
         mHumLayout = new LinearLayout(context);
         mHumLayout.setOrientation(HORIZONTAL);
-        mHumLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mHumLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         setMargins(mHumLayout, context, 0, dp2px(context, 1), 0, 0);
 
         mHumImage = new ImageView(context);
@@ -127,7 +124,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         );
 
         mHumText = new TextView(context);
-        mHumText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mHumText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mHumText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mHumText.setTextColor(Color.WHITE);
         mHumText.setTag("text");
@@ -150,7 +147,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         );
 
         mWindText = new TextView(context);
-        mWindText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mWindText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mWindText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mWindText.setTextColor(Color.WHITE);
         mWindText.setTag("text");
@@ -173,7 +170,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     }
 
     public static void updateIconsSize(int size) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp2px(instance.mContext, size), dp2px(instance.mContext, size));
+        LayoutParams params = new LayoutParams(dp2px(instance.mContext, size), dp2px(instance.mContext, size));
         params.gravity = CENTER_VERTICAL;
         instance.mCurrentImage.setLayoutParams(params);
         setMargins(instance.mCurrentImage, instance.mContext,
@@ -213,13 +210,13 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                     modRes.getString(R.string.omnijaws_service_disabled);
             case OmniJawsClient.EXTRA_ERROR_NETWORK ->
                     modRes.getString(R.string.omnijaws_service_error_network);
-            case OmniJawsClient.EXTRA_ERROR_LOCATION ->
-                    modRes.getString(R.string.omnijaws_service_error_location);
             case OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS ->
                     modRes.getString(R.string.omnijaws_service_error_permissions);
-            default -> modRes.getString(R.string.omnijaws_service_error_long);
+            default -> "";
         };
-        mLeftText.setText(errorText);
+        if (!TextUtils.isEmpty(errorText)) {
+            mLeftText.setText(errorText);
+        }
         mCurrentImage.setImageDrawable(null);
         mHumImage.setImageDrawable(null);
         mWindImage.setImageDrawable(null);
