@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.NetworkUtils;
@@ -48,13 +49,35 @@ public abstract class AbstractWeatherProvider {
             "https://secure.geonames.org/extendedFindNearbyJSON?lat=%f&lng=%f&lang=%s&username=omnijaws";
     public static final String PART_COORDINATES =
             "lat=%f&lon=%f";
+    private static String response = "";
 
     public AbstractWeatherProvider(Context context) {
         mContext = context;
     }
 
     protected String retrieve(String url) {
-        return NetworkUtils.downloadUrlMemoryAsString(url);
+         response = "";
+        CountDownLatch latch = new CountDownLatch(1);
+
+        NetworkUtils.downloadUrlMemoryAsString(url, result -> {
+            if (result != null) {
+                Log.d(TAG, "Download success " + result);
+                response = result;
+            } else {
+                response = "";
+                Log.d(TAG, "Download failed");
+            }
+            latch.countDown();
+        });
+
+        try {
+            latch.await(); // Wait until the response is set
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupt status
+            Log.e(TAG, "retrieve interrupted", e);
+        }
+
+        return response;
     }
 
     public abstract WeatherInfo getCustomWeather(String id, boolean metric);

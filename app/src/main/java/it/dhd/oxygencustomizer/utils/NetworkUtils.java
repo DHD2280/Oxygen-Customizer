@@ -26,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -35,6 +37,17 @@ public class NetworkUtils {
 
     private static final int HTTP_READ_TIMEOUT = 60000;
     private static final int HTTP_CONNECTION_TIMEOUT = 60000;
+
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    public static void downloadUrlMemoryAsString(String url, DownloadCallback callback) {
+        executor.submit(() -> {
+            String result = downloadUrlMemoryAsString(url);
+            if (callback != null) {
+                callback.onDownloadComplete(result);
+            }
+        });
+    }
 
     public static HttpsURLConnection setupHttpsRequest(String urlStr) {
         URL url;
@@ -102,6 +115,7 @@ public class NetworkUtils {
         }
     }
 
+
     public static String downloadUrlMemoryAsString(String url) {
         if (DEBUG) Log.d(TAG, "download: " + url);
 
@@ -138,4 +152,9 @@ public class NetworkUtils {
             }
         }
     }
+
+    public interface DownloadCallback {
+        void onDownloadComplete(String result);
+    }
+
 }
