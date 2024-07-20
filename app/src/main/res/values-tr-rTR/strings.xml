@@ -503,7 +503,6 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Dolduruldu</string>
     <string name="chip_outlined">Ana hatlarıyla</string>
-    <string name="chip_color_props">Renk Özellikleri</string>
     <string name="chip_use_accent">Vurgu Rengini Kullan</string>
     <string name="chip_use_gradient">Gradyan kullan</string>
     <string name="chip_color_accent">Vurgu Kullan</string>

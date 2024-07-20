@@ -504,7 +504,6 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Kitöltött</string>
     <string name="chip_outlined">Körvonalas</string>
-    <string name="chip_color_props">Színtulajdonságook</string>
     <string name="chip_use_accent">Kiemelőszín használata</string>
     <string name="chip_use_gradient">Átmenetes szín használata</string>
     <string name="chip_color_accent">Kiemelő használata</string>

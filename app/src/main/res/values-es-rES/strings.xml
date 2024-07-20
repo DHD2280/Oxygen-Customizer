@@ -504,7 +504,6 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Rellenado</string>
     <string name="chip_outlined">Contorneado</string>
-    <string name="chip_color_props">Propiedades de color</string>
     <string name="chip_use_accent">Usar color de acento</string>
     <string name="chip_use_gradient">Usar degradado</string>
     <string name="chip_color_accent">Usar acento</string>

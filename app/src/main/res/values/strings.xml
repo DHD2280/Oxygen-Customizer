@@ -90,6 +90,10 @@
     <string name="general_color_text2">Text 2</string>
     <string name="sysui_restart_needed">Requires a SystemUI restart to apply</string>
     <string name="one_time_reboot_needed">Reboot your device!</string>
+    <string name="gradient_left_right">Left to Right</string>
+    <string name="gradient_top_bottom">Top to Bottom</string>
+    <string name="gradient_tl_br">Top Left to Bottom Right</string>
+    <string name="gradient_tr_bl">Top Right to Bottom Left</string>
 
     <!-- Search Preference -->
     <string name="searchpreference_search">Search…</string>
@@ -541,7 +545,9 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Filled</string>
     <string name="chip_outlined">Outlined</string>
-    <string name="chip_color_props">Color Properties</string>
+    <string name="chip_mixed">Mixed</string>
+    <string name="chip_gradient_props">Gradient Properties</string>
+    <string name="chip_gradient_orientation">Gradient Orientation</string>
     <string name="chip_use_accent">Use Accent Color</string>
     <string name="chip_use_gradient">Use gradient</string>
     <string name="chip_color_accent">Use Accent</string>

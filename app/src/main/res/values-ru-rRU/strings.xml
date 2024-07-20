@@ -506,7 +506,6 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Заполненный</string>
     <string name="chip_outlined">Обводка</string>
-    <string name="chip_color_props">Свойства цвета</string>
     <string name="chip_use_accent">Используйте акцентный цвет</string>
     <string name="chip_use_gradient">Используйте градиент</string>
     <string name="chip_color_accent">Используйте акцент</string>

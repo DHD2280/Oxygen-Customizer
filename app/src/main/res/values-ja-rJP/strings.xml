@@ -499,7 +499,6 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Filled</string>
     <string name="chip_outlined">Outlined</string>
-    <string name="chip_color_props">色のプロパティ</string>
     <string name="chip_use_accent">アクセントカラーを使用する</string>
     <string name="chip_use_gradient">グラデーションを使用</string>
     <string name="chip_color_accent">アクセントを使用</string>

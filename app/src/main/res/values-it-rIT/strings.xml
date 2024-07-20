@@ -507,17 +507,16 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Pieno</string>
     <string name="chip_outlined">Con bordo</string>
-    <string name="chip_color_props">Proprietà Colore</string>
     <string name="chip_use_accent">Usa Colore Accento</string>
     <string name="chip_use_gradient">Utilizza gradiente</string>
     <string name="chip_color_accent">Usa Accento</string>
-    <string name="chip_color_color">Colore Bordo</string>
-    <string name="chip_stroke_color">Colore Tratto</string>
+    <string name="chip_color_color">Colore Chip</string>
+    <string name="chip_stroke_color">Colore Bordo</string>
     <string name="chip_gradient_color_1">Primo colore gradiente</string>
     <string name="chip_gradient_color_2">Secondo colore gradiente</string>
     <string name="chip_standard_color">Colore bordo</string>
-    <string name="chip_stroke">Strumenti Bordo</string>
-    <string name="chip_stroke_width">Larghezza tratto</string>
+    <string name="chip_stroke">Proprietà Bordo</string>
+    <string name="chip_stroke_width">Spessore Bordo</string>
     <string name="chip_round_corners_props">Proprietà Angoli</string>
     <string name="chip_round_corners">Angoli Arrotondati</string>
     <string name="chip_round_corners_top_sx_radius">Raggio superiore sinistro</string>
