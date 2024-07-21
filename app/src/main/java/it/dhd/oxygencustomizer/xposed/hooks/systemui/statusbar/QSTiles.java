@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_COLUMNS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_COLUMNS_LANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_CUSTOMIZE_TILES;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_QUICK_TILES;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_ROWS;
@@ -34,9 +35,7 @@ public class QSTiles extends XposedMods {
     private static int QSColQty = QS_COL_NOT_SET;
     private static int QQSTileQty = QQS_NOT_SET;
 
-    private static int QSRowQtyL = NOT_SET;
     private static int QSColQtyL = QS_COL_NOT_SET;
-    private static int QQSTileQtyL = QQS_NOT_SET;
 
     private boolean mCustomizeQSTiles = false;
 
@@ -52,6 +51,7 @@ public class QSTiles extends XposedMods {
         QQSTileQty = Xprefs.getSliderInt(QS_QUICK_TILES, QQS_NOT_SET);
         QSRowQty = Xprefs.getSliderInt(QS_ROWS, QS_ROW_NOT_SET);
         QSColQty = Xprefs.getSliderInt(QS_COLUMNS, QS_COL_NOT_SET);
+        QSColQtyL = Xprefs.getSliderInt(QS_COLUMNS_LANDSCAPE, QS_COL_NOT_SET);
 
         if (Key.length > 0) {
             for (String qsTilePref : QS_TILES_PREFS) {
