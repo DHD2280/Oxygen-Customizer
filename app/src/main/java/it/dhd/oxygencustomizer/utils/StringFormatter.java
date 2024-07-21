@@ -9,9 +9,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.github.mfathi91.time.PersianDate;
+
+import java.awt.font.NumericShaper;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -153,6 +158,23 @@ public class StringFormatter {
         }
     }
 
+    private CharSequence persianDateOf(String format) {
+        try {
+            String result = PersianDate.now().format(
+                    DateTimeFormatter.ofPattern(
+                            format,
+                            Locale.forLanguageTag("fa")
+                    )
+            );
+            hasDate = true;
+            char[] bytes = result.toCharArray();
+            NumericShaper.getShaper(NumericShaper.EASTERN_ARABIC).shape(bytes, 0, bytes.length); //Numbers to be shown in correct font
+            return String.copyValueOf(bytes);
+        } catch (Exception ignored) {
+            return "$P" + format;
+        }
+    }
+
     public CharSequence formatString(String input) {
         Log.d("StringFormatter", "Formatting string: " + input);
         SpannableStringBuilder result = new SpannableStringBuilder(input);
@@ -179,6 +201,8 @@ public class StringFormatter {
         {
             case "G":
                 return georgianDateOf(match.substring(1));
+            case "P":
+                return persianDateOf(match.substring(1));
             case "T":
                 return temperatureOf(match.substring(1));
             default:

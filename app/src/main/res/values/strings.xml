@@ -169,6 +169,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Clock &amp; date</string>
     <string name="status_bar_clock_summary">Customize clock &amp; date</string>
+    <string name="status_bar_clock_format_category">Format Settings</string>
     <string name="status_bar_clock_seconds_title">Clock seconds</string>
     <string name="status_bar_clock_seconds_summary">Display seconds next to clock in status bar</string>
     <string name="status_bar_clock_position_title">Clock style</string>
@@ -176,6 +177,7 @@
     <string name="status_bar_clock_position_left">Left</string>
     <string name="status_bar_clock_position_center">Center</string>
     <string name="status_bar_clock_position_hidden">Hidden</string>
+    <string name="status_bar_clock_hide_category">Hide Clock</string>
     <string name="status_bar_clock_auto_hide_title">Auto hide</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">Hide clock if launcher is visible</string>
     <string name="status_bar_clock_auto_hide_summary">Hide clock at regular interval</string>
@@ -197,7 +199,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Custom java format</string>
-    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
+    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P\&lt;format\&gt; : Persian date, based on format*\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
     <string name="preview">Preview</string>
     <string name="clock_date_position">Date position</string>
     <string name="clock_date_right">Right of time</string>
@@ -207,8 +209,13 @@
     <string name="status_bar_clock_color_title">Clock custom color</string>
     <string name="status_bar_custom_clock_color_title">Custom clock color</string>
     <string name="status_bar_custom_clock_color_summary">Clock color</string>
+    <string name="status_bar_clock_chip_category">Clock Chip</string>
     <string name="status_bar_clock_background_chip_title">Background Chip</string>
     <string name="status_bar_clock_background_chip_style_title">Background Chip Style</string>
+    <string name="status_bar_clock_advanced_formatting">Advanced (will supersede above setting!)</string>
+    <string name="status_bar_clock_before_clock">Custom text before clock</string>
+    <string name="status_bar_clock_after_clock">Custom text after clock</string>
+    <string name="status_bar_clock_smaller">Smaller (70%)</string>
 
     <!-- Status bar padding -->
     <string name="statusbar_padding">Status bar padding</string>

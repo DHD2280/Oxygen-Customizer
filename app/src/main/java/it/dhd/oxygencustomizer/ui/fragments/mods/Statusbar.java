@@ -57,6 +57,7 @@ import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryColorOS;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleB;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class Statusbar extends ControlledPreferenceFragmentCompat {
     @Override
@@ -83,7 +84,6 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
     public String[] getScopes() {
         return new String[]{SYSTEM_UI};
     }
-
 
     public static class BatteryBar extends ControlledPreferenceFragmentCompat {
         @Override
@@ -142,7 +142,6 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
     public static class Clock extends ControlledPreferenceFragmentCompat {
 
         private DateFormatDialog mDateFormatDialog;
-        private Preference mCustomFormat;
 
         @Override
         public String getTitle() {
@@ -173,6 +172,9 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
             mDateFormatDialog = new DateFormatDialog(requireContext());
+
+            Preference mCustomFormat, mBeforeClock, mAfterClock;
+
             mCustomFormat = findPreference("status_bar_java_custom");
             if (mCustomFormat != null) {
                 mCustomFormat.setOnPreferenceClickListener((preference) -> {
@@ -180,6 +182,28 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                             getString(R.string.status_bar_date_format_custom),
                             mPreferences.getString("status_bar_custom_clock_format", "$GEEE"),
                             (text) -> mPreferences.edit().putString("status_bar_custom_clock_format", text.toString()).apply());
+                    return true;
+                });
+            }
+
+            mBeforeClock = findPreference("sbc_before_clock");
+            if (mBeforeClock != null) {
+                mBeforeClock.setOnPreferenceClickListener((preference) -> {
+                    mDateFormatDialog.show(
+                            getString(R.string.status_bar_date_format_custom),
+                            mPreferences.getString("sbc_before_clock_format", ""),
+                            (text) -> mPreferences.edit().putString("sbc_before_clock_format", text.toString()).apply());
+                    return true;
+                });
+            }
+
+            mAfterClock = findPreference("sbc_after_clock");
+            if (mAfterClock != null) {
+                mAfterClock.setOnPreferenceClickListener((preference) -> {
+                    mDateFormatDialog.show(
+                            getString(R.string.status_bar_clock_after_clock),
+                            mPreferences.getString("sbc_after_clock_format", ""),
+                            (text) -> mPreferences.edit().putString("sbc_after_clock_format", text.toString()).apply());
                     return true;
                 });
             }

@@ -201,6 +201,9 @@ dependencies {
 
     // Palette
     implementation("androidx.palette:palette:1.0.0")
+
+    // Persian Date
+    implementation("com.github.mfathi91:persian-date-time:4.2.1")
 }
 
 tasks.register("printVersionName") {

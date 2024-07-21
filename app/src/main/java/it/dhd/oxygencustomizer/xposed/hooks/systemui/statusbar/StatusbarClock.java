@@ -38,6 +38,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -47,13 +48,15 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import kotlin.Suppress;
 
 public class StatusbarClock extends XposedMods {
 
@@ -87,6 +90,8 @@ public class StatusbarClock extends XposedMods {
     private int mClockDatePosition = STYLE_DATE_LEFT;
     private String mClockDateFormat = null;
     private String mCustomClockDateFormat = "$GEEE";
+    private String mCustomBeforeClock = "", mCustomAfterClock = "";
+    private boolean mCustomBeforeSmall = false, mCustomAfterSmall = false;
     private Object Clock = null;
     private TextView mClockView;
     private Object mCollapsedStatusBarFragment = null;
@@ -138,6 +143,10 @@ public class StatusbarClock extends XposedMods {
         mClockDateStyle = Integer.parseInt(Xprefs.getString("status_bar_clock_date_style", String.valueOf(CLOCK_DATE_STYLE_REGULAR)));
         mClockDateFormat = Xprefs.getString("status_bar_clock_date_format", null);
         mCustomClockDateFormat = Xprefs.getString("status_bar_custom_clock_format", "$GEEE");
+        mCustomBeforeClock = Xprefs.getString("sbc_before_clock_format", "");
+        mCustomAfterClock = Xprefs.getString("sbc_after_clock_format", "");
+        mCustomBeforeSmall = Xprefs.getBoolean("sbc_before_small", false);
+        mCustomAfterSmall = Xprefs.getBoolean("sbc_after_small", false);
         mClockPosition = Integer.parseInt(Xprefs.getString("status_bar_clock", String.valueOf(POSITION_LEFT)));
         mClockCustomColor = Xprefs.getBoolean("status_bar_custom_clock_color", false);
         mClockColor = Xprefs.getInt("status_bar_clock_color", Color.WHITE);
@@ -160,20 +169,49 @@ public class StatusbarClock extends XposedMods {
         chipBottomSxRound = Xprefs.getInt("status_bar_clock_background_chip" + "_BOTTOM_LEFT_RADIUS", 28);
         chipBottomDxRound = Xprefs.getInt("status_bar_clock_background_chip" + "_BOTTOM_RIGHT_RADIUS", 28);
 
+        String dateFormat;
+        if (mClockDateFormat.equals("custom")) {
+            dateFormat = mCustomClockDateFormat;
+        } else {
+            dateFormat = mClockDateFormat;
+        }
+        if ((mCustomBeforeClock + mCustomAfterClock).trim().isEmpty()) {
+            if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
+                if (mClockDatePosition == STYLE_DATE_LEFT) {
+                    mCustomBeforeClock = dateFormat + " ";
+                    mCustomBeforeSmall = mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL;
+                    mCustomAfterClock = "";
+                    mCustomAfterSmall = false;
+                } else {
+                    mCustomAfterClock = " " + dateFormat;
+                    mCustomAfterSmall = mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL;
+                    mCustomBeforeClock = "";
+                    mCustomBeforeSmall = false;
+                }
+            }
+        } else {
+            if (!TextUtils.isEmpty(mCustomBeforeClock)) {
+                mCustomBeforeClock = mCustomBeforeClock + " ";
+            }
+            if (!TextUtils.isEmpty(mCustomAfterClock)) {
+                mCustomAfterClock = " " + mCustomAfterClock;
+            }
+            mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
+        }
 
         if (Key.length > 0) {
             switch (Key[0]) {
                 case "status_bar_clock_auto_hide" -> updateClockVisibility();
                 case "status_bar_am_pm",
-                        "status_bar_clock_date_display",
-                        "status_bar_clock_date_position",
-                        "status_bar_clock_date_style",
-                        "status_bar_clock_date_format",
-                     "status_bar_custom_clock_format" -> updateClock();
+                     "status_bar_clock_date_display",
+                     "status_bar_clock_date_position",
+                     "status_bar_clock_date_style",
+                     "status_bar_clock_date_format",
+                     "status_bar_custom_clock_format",
+                     "sbc_before_clock_format", "sbc_before_small", "sbc_after_clock_format", "sbc_after_small" -> updateClock();
                 case "status_bar_clock_size" -> setClockSize();
-                case "status_bar_custom_clock_color", "status_bar_clock_color" -> updateClockColor();
                 case "status_bar_clock",
-                     "status_bar_clock_seconds" -> placeClock();
+                     "status_bar_clock_seconds", "status_bar_custom_clock_color", "status_bar_clock_color" -> placeClock();
                 case "status_bar_clock_background_chip" + "_STYLE",
                         "status_bar_clock_background_chip" + "_GRADIENT_ORIENTATION",
                         "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR",
@@ -293,7 +331,7 @@ public class StatusbarClock extends XposedMods {
 
                         placeClock();
                         setClockSize();
-                        updateClockColor();
+                        updateClock();
                         updateChip();
                         setupChip();
                     }
@@ -321,7 +359,7 @@ public class StatusbarClock extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (param.args[0] == mClockView) {
-                    updateClockColor();
+                    updateClock();
                 }
             }
         });
@@ -390,26 +428,20 @@ public class StatusbarClock extends XposedMods {
                         SpannableStringBuilder result = new SpannableStringBuilder();
 
                         SpannableStringBuilder clockText = SpannableStringBuilder.valueOf((CharSequence) param.getResult()); //THE clock
+
+                        result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
+
                         if (mClockCustomColor) {
-                            clockText.setSpan(mClockColor, 0, (clockText).length(),
+                            clockText.setSpan(new ForegroundColorSpan(mClockColor), 0, (clockText).length(),
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
-                        String dateFormat = "";
-                        if (!TextUtils.isEmpty(mClockDateFormat) && !mClockDateFormat.equals("custom")) {
-                            dateFormat = mClockDateFormat;
-                        } else if (!TextUtils.isEmpty(mCustomClockDateFormat)) {
-                            dateFormat = mCustomClockDateFormat;
-                        }
-                        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE && mClockDatePosition == STYLE_DATE_LEFT) {
-                            result.append(getFormattedString(dateFormat + " ", mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL, mClockDateStyle)); //before clock
-                        }
                         result.append(clockText);
+
                         if (mAmPmStyle != AM_PM_STYLE_GONE) {
-                            result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0));
+                            result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
                         }
-                        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE && mClockDatePosition == STYLE_DATE_RIGHT) {
-                            result.append(getFormattedString(" " + dateFormat, mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL, mClockDateStyle)); //before clock
-                        }
+
+                        result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
 
                         if(getAdditionalInstanceField(param.thisObject, "stringFormatCallBack") == null) {
                             StringFormatter.FormattedStringCallback callback = () -> {
@@ -481,11 +513,6 @@ public class StatusbarClock extends XposedMods {
         catch (Throwable ignored){}
     }
 
-    private void updateClockColor() {
-        if (mClockCustomColor)
-            mClockView.post(() -> mClockView.setTextColor(mClockColor));
-    }
-
     private void placeClock() {
         ViewGroup parent = (ViewGroup) mClockView.getParent();
         ViewGroup targetArea = null;
@@ -517,12 +544,11 @@ public class StatusbarClock extends XposedMods {
         }
         updateClock();
         setupChip();
-
     }
 
     private final StringFormatter stringFormatter = new StringFormatter();
 
-    private CharSequence getFormattedString(String dateFormat, boolean small, int caseStyle) {
+    private CharSequence getFormattedString(String dateFormat, boolean small, int caseStyle, @Nullable @ColorInt Integer textColor) {
         if (dateFormat.isEmpty()) return "";
 
         //There's some format to work on
@@ -539,6 +565,12 @@ public class StatusbarClock extends XposedMods {
             //small size requested
             CharacterStyle style = new RelativeSizeSpan(0.7f);
             formatted.setSpan(style, 0, formatted.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if (textColor != null) {
+            //color requested
+            CharacterStyle textColorSpan = new ForegroundColorSpan(textColor);
+            formatted.setSpan(textColorSpan, 0, (formatted).length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         return formatted;
