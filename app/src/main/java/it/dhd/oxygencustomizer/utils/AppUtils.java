@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -150,6 +151,22 @@ public class AppUtils {
         } catch (PackageManager.NameNotFoundException ignored) {
         }
         return new String[0];
+    }
+
+    public static boolean doesClassExist(Context context, String packageName, String className) {
+        try {
+            Context otherAppContext = context.createPackageContext(packageName, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+            ClassLoader classLoader = otherAppContext.getClassLoader();
+            Class<?> loadedClass = Class.forName(className, false, classLoader);
+            return loadedClass != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("ClassChecker", "Package not found: " + packageName, e);
+        } catch (ClassNotFoundException e) {
+            Log.e("ClassChecker", "Class not found: " + className, e);
+        } catch (Exception e) {
+            Log.e("ClassChecker", "Exception occurred", e);
+        }
+        return false;
     }
 
 }

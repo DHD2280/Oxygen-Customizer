@@ -18,6 +18,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
@@ -114,6 +115,9 @@ public class ModPacks {
                     modPacks.add(GestureNavbarManager.class);
                     modPacks.add(BatteryBar.class);
                     modPacks.add(AdaptivePlayback.class);
+
+                    // Fluid Music Settings
+                    modPacks.add(FluidMusic.class);
 
                     modPacks.add(MiscMods.class);
                 }

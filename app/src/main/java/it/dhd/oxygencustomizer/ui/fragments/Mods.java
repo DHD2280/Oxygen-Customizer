@@ -4,7 +4,9 @@ package it.dhd.oxygencustomizer.ui.fragments;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.backButtonDisabled;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
+import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.content.Intent;
@@ -21,6 +23,7 @@ import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
+import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Prefs;
 
@@ -124,6 +127,27 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         @Override
         public String[] getScopes() {
             return new String[]{Constants.Packages.SYSTEM_UI};
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferences(savedInstanceState, rootKey);
+
+            Preference mFluid = findPreference("fluid_settings");
+            if (mFluid == null) return;
+            if (!doesClassExist(
+                    getContext(),
+                    SYSTEM_UI,
+                    "com.oplus.systemui.media.seedling.rus.OplusMediaRusUpdateManager"
+            )) {
+                mFluid.setVisible(false);
+            } else {
+                mFluid.setOnPreferenceClickListener(preference -> {
+                    replaceFragment(new FluidSettings());
+                    return true;
+                });
+
+            }
         }
     }
 

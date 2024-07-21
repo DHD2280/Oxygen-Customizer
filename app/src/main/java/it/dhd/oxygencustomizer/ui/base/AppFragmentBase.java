@@ -102,7 +102,7 @@ public abstract class AppFragmentBase extends BaseFragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 // Add menu items here
-                if (hasRestartScopes()) {
+                if (hasRestartScopes() && getScopes() != null) {
                     menu.add(0, 1, 0, R.string.restart_scopes)
                             .setIcon(R.drawable.ic_restart)
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
