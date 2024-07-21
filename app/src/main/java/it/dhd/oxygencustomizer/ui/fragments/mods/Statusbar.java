@@ -24,6 +24,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
+import it.dhd.oxygencustomizer.xposed.batterystyles.CircleFilledBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryB;
@@ -239,7 +240,8 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                     new LandscapeBatteryN(requireContext(), batteryColor),
                     new LandscapeBatteryO(requireContext(), batteryColor),
                     new CircleBattery(requireContext(), batteryColor),
-                    new CircleBattery(requireContext(), batteryColor)
+                    new CircleBattery(requireContext(), batteryColor),
+                    new CircleFilledBattery(requireContext(), batteryColor)
             };
 
 
@@ -272,7 +274,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
 
             for (Drawable batteryIcon : batteryDrawables) {
                 ((BatteryDrawable)batteryIcon).setBatteryLevel(batLevel);
-                if (batteryIcon instanceof CircleBattery && batteryIcon == batteryDrawables[batteryDrawables.length-1]) {
+                if (batteryIcon instanceof CircleBattery && batteryIcon == batteryDrawables[batteryDrawables.length-2]) {
                     ((CircleBattery)batteryIcon).setMeterStyle(BATTERY_STYLE_DOTTED_CIRCLE);
                 }
                 ((BatteryDrawable)batteryIcon).setColors(batteryColor, batteryColor, batteryColor);

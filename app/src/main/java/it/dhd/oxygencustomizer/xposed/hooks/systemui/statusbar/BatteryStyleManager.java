@@ -16,6 +16,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT_LANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT_RLANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_FILLED_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYB;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYC;
@@ -111,6 +112,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
+import it.dhd.oxygencustomizer.xposed.batterystyles.CircleFilledBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryB;
@@ -802,6 +804,7 @@ public class BatteryStyleManager extends XposedMods {
                     new LandscapeBatteryO(context, frameColor);
             case BATTERY_STYLE_CIRCLE, BATTERY_STYLE_DOTTED_CIRCLE ->
                     new CircleBattery(context, frameColor);
+            case BATTERY_STYLE_FILLED_CIRCLE -> new CircleFilledBattery(context, frameColor);
             default -> null;
         };
 
@@ -820,8 +823,8 @@ public class BatteryStyleManager extends XposedMods {
                     mRainbowFillColor,
                     mCustomFillColor,
                     mCustomFillGradColor,
-                    mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
-                    mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                    mCustomChargingColor,
+                    mCustomFastChargingColor,
                     mCustomPowerSaveColor,
                     mCustomPowerSaveFillColor,
                     mChargingIconSwitch

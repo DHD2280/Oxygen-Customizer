@@ -331,6 +331,7 @@
     <string name="battery_landscape_battery_o">Landscape Battery O</string>
     <string name="battery_circle">Circle Battery</string>
     <string name="battery_dotted_circle">Dotted Circle Battery</string>
+    <string name="battery_filled_circle">Filled Circle</string>
 
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Hide Bluetooth icon</string>
