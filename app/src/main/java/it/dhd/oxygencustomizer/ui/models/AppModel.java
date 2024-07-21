@@ -20,6 +20,14 @@ public class AppModel {
         this.isSystem = isSystemApp;
     }
 
+    public AppModel(String appName, String packageName, Drawable appIcon, boolean isSystemApp, boolean enabled) {
+        this.appName = appName;
+        this.packageName = packageName;
+        this.appIcon = appIcon;
+        this.isEnabled = enabled;
+        this.isSystem = isSystemApp;
+    }
+
     public String getAppName() {
         return appName;
     }

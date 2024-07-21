@@ -4,7 +4,6 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import it.dhd.oxygencustomizer.databinding.DarkModeItemBinding;
+import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.databinding.AppItemBinding;
 import it.dhd.oxygencustomizer.ui.models.AppModel;
 
-public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHolder> {
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private final List<AppModel> itemList;
     private final List<AppModel> filteredApps;
@@ -28,6 +28,7 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
     private static OnSliderChange sliderChangeListener;
     private String filterText = "";
     private boolean showSystem = false;
+    private boolean hasSlider = false;
 
     public interface OnSwitchChange {
         void onSwitchChange(AppModel model, boolean isChecked);
@@ -37,52 +38,68 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
         void onSliderChange(AppModel model, int progress);
     }
 
-    public DarkModeAdapter(List<AppModel> items, OnSwitchChange changeListener, OnSliderChange sliderListener) {
+    public AppAdapter(List<AppModel> items, OnSwitchChange changeListener, OnSliderChange sliderListener) {
         items.sort(Comparator.comparing(AppModel::getAppName));
         this.itemList = items;
         this.filteredApps = new ArrayList<>(items);
         checkChange();
         switchChangeListener = changeListener;
         sliderChangeListener = sliderListener;
+        hasSlider = true;
+    }
+
+    public AppAdapter(List<AppModel> items, OnSwitchChange changeListener) {
+        items.sort(Comparator.comparing(AppModel::getAppName));
+        this.itemList = items;
+        this.filteredApps = new ArrayList<>(items);
+        checkChange();
+        switchChangeListener = changeListener;
+        sliderChangeListener = null;
+        hasSlider = false;
     }
 
     @NonNull
     @Override
-    public DarkModeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        DarkModeItemBinding binding = DarkModeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    public AppAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        AppItemBinding binding = AppItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DarkModeAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AppAdapter.ViewHolder holder, int position) {
         AppModel model = filteredApps.get(holder.getBindingAdapterPosition());
-        holder.binding.darkModeSwitch.setTitle(model.getAppName());
-        holder.binding.darkModeSwitch.setSummary(model.getPackageName());
-        holder.binding.darkModeSwitch.setImageDimensions(
+        holder.binding.appSwitch.setTitle(model.getAppName());
+        holder.binding.appSwitch.setSummary(model.getPackageName());
+        holder.binding.appSwitch.setImageDimensions(
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getAppContext().getResources().getDisplayMetrics()),
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getAppContext().getResources().getDisplayMetrics()));
-        holder.binding.darkModeSwitch.setImageMargin(
+        holder.binding.appSwitch.setImageMargin(
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 9, getAppContext().getResources().getDisplayMetrics())
         );
-        holder.binding.darkModeSwitch.setIcon(model.getAppIcon());
-        holder.binding.darkModeSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
-            holder.binding.darkIntensitySlider.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        holder.binding.appSwitch.setIcon(model.getAppIcon());
+
+        holder.binding.appSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
+            if (hasSlider) {
+                holder.binding.appSlider.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            }
             if (switchChangeListener != null && model.isEnabled() != isChecked) {
                 switchChangeListener.onSwitchChange(model, isChecked);
                 checkChange();
             }
             model.setEnabled(isChecked);
         });
-        holder.binding.darkModeSwitch.setSwitchChecked(model.isEnabled());
-        holder.binding.darkIntensitySlider.setOnSliderChangeListener((slider, progress, fromUser) -> {
+        holder.binding.appSwitch.setSwitchChecked(model.isEnabled());
+        holder.binding.appSlider.setOnSliderChangeListener((slider, progress, fromUser) -> {
             if (!fromUser) return;
             model.setDarkModeValue((int) progress);
             if (sliderChangeListener != null) {
                 sliderChangeListener.onSliderChange(model, (int) progress);
             }
         });
-        holder.binding.darkIntensitySlider.setSliderValue(model.getDarkModeValue());
-        holder.binding.darkIntensitySlider.setVisibility(model.isEnabled() ? View.VISIBLE : View.GONE);
+
+        holder.binding.appSlider.setTitle(getAppContext().getString(R.string.dark_mode_intensity));
+        holder.binding.appSlider.setSliderValue(model.getDarkModeValue());
+        holder.binding.appSlider.setVisibility(hasSlider && model.isEnabled() ? View.VISIBLE : View.GONE);
     }
 
     public void showSystem(boolean show) {
@@ -122,9 +139,9 @@ public class DarkModeAdapter extends RecyclerView.Adapter<DarkModeAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private DarkModeItemBinding binding;
+        private AppItemBinding binding;
 
-        public ViewHolder(@NonNull DarkModeItemBinding binding) {
+        public ViewHolder(@NonNull AppItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

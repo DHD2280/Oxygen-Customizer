@@ -34,11 +34,9 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
-                    android:id="@+id/dark_mode_switch"
+                    android:id="@+id/app_function_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:titleText="@string/custom_dark_mode_title"
-                    app:summaryText="@string/custom_dark_mode_summary"
                     app:iconSpaceReserved="false" />
 
                 <com.google.android.material.textfield.TextInputLayout

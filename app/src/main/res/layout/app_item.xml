@@ -7,16 +7,15 @@
     android:orientation="vertical">
 
     <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
-        android:id="@+id/dark_mode_switch"
+        android:id="@+id/app_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
-        android:id="@+id/dark_intensity_slider"
+        android:id="@+id/app_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:titleText="Dark Intensity"
         app:sliderValueFrom="0"
         app:sliderValueTo="4"
         app:sliderValue="0"/>

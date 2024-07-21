@@ -796,6 +796,12 @@
     <string name="pulse_vertical_mirror_title">Vertical Mirror</string>
     <string name="pulse_vertical_mirror_summary">Create other pulse and flip vertically</string>
 
+    <!-- Fluid Music -->
+    <string name="fluid_music">Fluid Music</string>
+    <string name="fluid_music_summary">Customize Fluid Music</string>
+    <string name="fluid_music_custom_list">Custom Fluid Music</string>
+    <string name="fluid_music_custom_list_summary">Customize Fluid Music apps.\nThis list will replace System\'s Fluid Music App List.</string>
+
     <!-- Volume Steps -->
     <string name="volume_steps_title">Volume Steps</string>
     <string name="volume_steps_summary">Control the granularity of each stream</string>
@@ -1118,5 +1124,6 @@
     <string name="dark_mode_pref">Customize Dark Mode</string>
     <string name="custom_dark_mode_title">Custom Dark Mode</string>
     <string name="custom_dark_mode_summary">Allow customizing dark mode app list.</string>
+    <string name="dark_mode_intensity">Dark Mode Intensity</string>
 
 </resources>
