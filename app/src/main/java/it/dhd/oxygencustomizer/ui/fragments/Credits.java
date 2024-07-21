@@ -11,28 +11,26 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.databinding.CreditsFragmentViewBinding;
-import it.dhd.oxygencustomizer.ui.activity.MainActivity;
+import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.models.CreditsModel;
 
 public class Credits extends BaseFragment {
 
-    private CreditsFragmentViewBinding binding;
+    private FragmentRecyclerBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = CreditsFragmentViewBinding.inflate(inflater, container, false);
+        binding = FragmentRecyclerBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -46,7 +44,7 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siavash", """
                 For helping with Xposed
                 And his amazing work with PixelXpert
-                github/Siavash""", "https://github.com/siavash79", R.drawable.ic_default_person));
+                github/Siavash79""", "https://github.com/siavash79", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "DrDisagree", """
                 For his amazing work with Iconify
                 github/Mahmud0808""", "https://github.com/Mahmud0808", ResourcesCompat.getDrawable(getResources(), R.drawable.drdisagree, requireContext().getTheme())));
@@ -84,8 +82,8 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "serge.croise", "French", "https://crowdin.com/profile/serge.croise", R.drawable.flag_fr));
 
         CreditsAdapter adapter = new CreditsAdapter(credits);
-        binding.creditsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.creditsRecyclerView.setAdapter(adapter);
+        binding.recyclerViewFragment.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewFragment.setAdapter(adapter);
 
     }
 
