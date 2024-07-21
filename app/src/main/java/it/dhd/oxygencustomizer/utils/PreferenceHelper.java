@@ -35,6 +35,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT_LANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT_RLANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_FILLED_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYJ;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYL;
@@ -593,7 +594,8 @@ public class PreferenceHelper {
         boolean showInsidePercentage = showPercentage && !instance.mPreferences.getBoolean(CUSTOM_BATTERY_HIDE_PERCENTAGE, false);
         boolean showChargingIconCustomization = instance.mPreferences.getBoolean(CUSTOM_BATTERY_CHARGING_ICON_SWITCH, false);
         boolean circleBattery = batteryStyle == BATTERY_STYLE_CIRCLE ||
-                batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE;
+                batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ||
+                batteryStyle == BATTERY_STYLE_FILLED_CIRCLE;
 
         return switch(key) {
             case "category_battery_icon_settings",
@@ -604,7 +606,7 @@ public class PreferenceHelper {
                     "battery_rotate_layout" -> showAdvancedCustomizations;
             case "battery_reverse_layout", "battery_inside_percentage" -> showInsidePercentage;
             case "battery_rainbow_color" -> (showAdvancedCustomizations || circleBattery) && showRainbowBattery;
-            case "battery_blend_color" -> showAdvancedCustomizations || circleBattery;
+            case "battery_blend_color" -> (showAdvancedCustomizations || circleBattery);
             case "battery_fill_color",
                     "battery_fill_gradient_color",
                     "battery_charging_fill_color",
@@ -612,7 +614,7 @@ public class PreferenceHelper {
                     "battery_powersave_fill_color",
                     "battery_powersave_icon_color" -> (showAdvancedCustomizations || circleBattery) && showColorPickers;
             case "battery_hide_percentage" -> showPercentage;
-            case "category_battery_colors" -> showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers);
+            case "category_battery_colors" -> showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
             default -> false;
         };
 
