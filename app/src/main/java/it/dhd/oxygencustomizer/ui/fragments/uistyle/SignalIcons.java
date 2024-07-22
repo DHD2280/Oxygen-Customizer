@@ -64,7 +64,7 @@ public class SignalIcons extends BaseFragment {
                             pack.get(i).contains("[x]")));
         }
         signalIcons.sort(Comparator.comparing(IconModel::getName));
-        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", onButtonClick);
+        return new IconsAdapter(requireContext(), signalIcons, loadingDialog, "SGIC", onButtonClick, true);
     }
 
     private final IconsAdapter.OnButtonClick onButtonClick = new IconsAdapter.OnButtonClick() {
@@ -76,7 +76,6 @@ public class SignalIcons extends BaseFragment {
             }
             OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSGIC.overlay");
             OverlayUtil.enableOverlay(item.getPackageName());
-            AppUtils.restartScope("systemui");
         }
 
         @Override
@@ -84,7 +83,6 @@ public class SignalIcons extends BaseFragment {
             item.setEnabled(false);
             OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONSGIC.overlay");
             OverlayUtil.disableOverlay(item.getPackageName());
-            AppUtils.restartScope("systemui");
         }
     };
 

@@ -64,7 +64,7 @@ public class WifiIcons extends BaseFragment {
                             packs.get(i).contains("[x]")));
         }
         wifiIcons.sort(Comparator.comparing(IconModel::getName));
-        return new IconsAdapter(requireContext(), wifiIcons, loadingDialog, "WIFI", onButtonClick);
+        return new IconsAdapter(requireContext(), wifiIcons, loadingDialog, "WIFI", onButtonClick, true);
     }
 
     private final IconsAdapter.OnButtonClick onButtonClick = new IconsAdapter.OnButtonClick() {
@@ -76,7 +76,6 @@ public class WifiIcons extends BaseFragment {
             }
             OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONWIFI.overlay");
             OverlayUtil.enableOverlay(item.getPackageName());
-            AppUtils.restartScope("systemui");
         }
 
         @Override
@@ -84,7 +83,6 @@ public class WifiIcons extends BaseFragment {
             item.setEnabled(false);
             OverlayUtil.disableOverlay("OxygenCustomizerComponentCOMMONWIFI.overlay");
             OverlayUtil.disableOverlay(item.getPackageName());
-            AppUtils.restartScope("systemui");
         }
     };
 

@@ -56,13 +56,13 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
     }
 
-    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, OnButtonClick onButtonClick) {
+    public IconsAdapter(Context context, ArrayList<IconModel> itemList, LoadingDialog loadingDialog, String compName, OnButtonClick onButtonClick, boolean needSysUiRestart) {
         this.context = context;
         this.itemList = itemList;
         this.loadingDialog = loadingDialog;
         this.mComponentName = compName;
         this.mOnButtonClick = onButtonClick;
-        this.needSystemUIRestart = false;
+        this.needSystemUIRestart = needSysUiRestart;
     }
 
     @NonNull
