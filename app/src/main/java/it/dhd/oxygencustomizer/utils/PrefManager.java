@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 /**
  * Credits
@@ -57,6 +58,9 @@ public class PrefManager {
             Log.d(TAG, "Importing " + e.getKey() + " with value " + e.getValue());
             if (e.getValue() instanceof Boolean) {
                 editor.putBoolean(e.getKey(), (Boolean) e.getValue());
+                if (e.getKey().contains("overlay") && (Boolean) e.getValue()) {
+                    OverlayUtil.enableOverlay(e.getKey());
+                }
             } else if (e.getValue() instanceof String) {
                 editor.putString(e.getKey(), (String) e.getValue());
             } else if (e.getValue() instanceof Integer) {
