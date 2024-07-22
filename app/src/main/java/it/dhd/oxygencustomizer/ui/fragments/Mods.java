@@ -134,19 +134,11 @@ public class Mods extends ControlledPreferenceFragmentCompat {
             super.onCreatePreferences(savedInstanceState, rootKey);
 
             Preference mFluid = findPreference("fluid_settings");
-            if (mFluid == null) return;
-            if (!doesClassExist(
-                    getContext(),
-                    SYSTEM_UI,
-                    "com.oplus.systemui.media.seedling.rus.OplusMediaRusUpdateManager"
-            )) {
-                mFluid.setVisible(false);
-            } else {
+            if (mFluid != null) {
                 mFluid.setOnPreferenceClickListener(preference -> {
                     replaceFragment(new FluidSettings());
                     return true;
                 });
-
             }
         }
     }

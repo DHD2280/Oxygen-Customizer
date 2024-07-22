@@ -25,9 +25,7 @@
             android:key="fluid_settings"
             app:iconSpaceReserved="false"
             android:title="@string/fluid_music"
-            android:summary="@string/fluid_music_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidMusicSettings" />
-
+            android:summary="@string/fluid_music_summary" />
 
     </PreferenceCategory>
 

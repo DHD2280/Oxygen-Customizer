@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
@@ -20,6 +21,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCRE
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UPDATE_INTERVAL;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_WIND;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT2;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT3;
@@ -563,6 +565,12 @@ public class PreferenceHelper {
             // Pulse
             case "pulse_lavalamp_speed" -> {
                 return Integer.parseInt(instance.mPreferences.getString("pulse_color_mode", "2")) == 2;
+            }
+
+            // Fluid Music
+            case "fluid_settings" -> {
+                return doesClassExist(SYSTEM_UI,
+                        "com.oplus.systemui.media.seedling.rus.OplusMediaRusUpdateManager");
             }
 
 
