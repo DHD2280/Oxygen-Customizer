@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.utils;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -143,9 +145,9 @@ public class AppUtils {
 
     public static String[] getSplitLocations(String packageName) {
         try {
-            String[] splitLocations = OxygenCustomizer.getAppContext().getPackageManager().getApplicationInfo(packageName, 0).splitSourceDirs;
+            String[] splitLocations = getAppContext().getPackageManager().getApplicationInfo(packageName, 0).splitSourceDirs;
             if (splitLocations == null) {
-                splitLocations = new String[]{OxygenCustomizer.getAppContext().getPackageManager().getApplicationInfo(packageName, 0).sourceDir};
+                splitLocations = new String[]{getAppContext().getPackageManager().getApplicationInfo(packageName, 0).sourceDir};
             }
             return splitLocations;
         } catch (PackageManager.NameNotFoundException ignored) {
@@ -153,9 +155,10 @@ public class AppUtils {
         return new String[0];
     }
 
-    public static boolean doesClassExist(Context context, String packageName, String className) {
+    public static boolean doesClassExist(String packageName, String className) {
         try {
-            Context otherAppContext = context.createPackageContext(packageName, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+            Context c = getAppContext();
+            Context otherAppContext = c.createPackageContext(packageName, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
             ClassLoader classLoader = otherAppContext.getClassLoader();
             Class<?> loadedClass = Class.forName(className, false, classLoader);
             return loadedClass != null;
