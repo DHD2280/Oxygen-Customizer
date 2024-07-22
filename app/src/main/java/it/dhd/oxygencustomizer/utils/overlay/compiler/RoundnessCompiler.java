@@ -96,7 +96,7 @@ public class RoundnessCompiler {
             // Disable the overlay in case it is already enabled
             String[] overlayNames = new String[mOverlayName.length];
             for (int i = 1; i <= mOverlayName.length; i++) {
-                overlayNames[i - 1] = "OxygenCustomizerComponentCR" + i + ".overlay";
+                overlayNames[i - 1] = "OxygenCustomizerComponentCRN" + i + ".overlay";
             }
             OverlayUtil.disableOverlays(overlayNames);
         }
@@ -130,7 +130,7 @@ public class RoundnessCompiler {
                 // Enable the overlays
                 String[] overlayNames = new String[mOverlayName.length];
                 for (int i = 1; i <= mOverlayName.length; i++) {
-                    overlayNames[i - 1] = "OxygenCustomizerComponentCR" + i + ".overlay";
+                    overlayNames[i - 1] = "OxygenCustomizerComponentCRN" + i + ".overlay";
                 }
                 OverlayUtil.enableOverlays(overlayNames);
             } else {
@@ -141,8 +141,8 @@ public class RoundnessCompiler {
         }
 
         // Clean temp directory
-        Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR).exec();
-        Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/Overlays").exec();
+        //Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR).exec();
+        //Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/Overlays").exec();
     }
 
     private static boolean writeResources(String source, String resources) {
