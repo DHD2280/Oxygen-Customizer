@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     LinearLayoutManager linearLayoutManager;
     LoadingDialog loadingDialog;
     int selectedItem = -1;
+    int enabledItem = -1;
 
     public ThemeAdapter(Context context, ArrayList<ThemeModel> itemList, LoadingDialog loadingDialog) {
         this.context = context;
@@ -109,12 +109,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
 
             @SuppressLint("SetTextI18n") Runnable runnable = () -> {
                 for (int i = 0; i <= itemList.size()-1; i++) {
+                    if (itemList.get(i).isEnabled()) enabledItem = i;
                     itemList.get(i).setEnabled(i == holder.getBindingAdapterPosition());
                     Prefs.putBoolean(itemList.get(holder.getBindingAdapterPosition()).getPkgName(), i == holder.getBindingAdapterPosition());
-                    Log.d("ThemeAdapter", "onBindViewHolder: " + itemList.get(i).getPkgName() + " " + itemList.get(i).isEnabled());
                     OverlayUtil.disableOverlay(itemList.get(i).getPkgName());
                 }
-                Log.d("ThemeAdapter", "onBindViewHolder: " + itemList.get(holder.getBindingAdapterPosition()).getPkgName() + " " + itemList.get(holder.getBindingAdapterPosition()).isEnabled());
                 OverlayUtil.enableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
                 if (OverlayUtil.overlayExist("COMMONSUITH")) {
                     OverlayUtil.enableOverlay("OxygenCustomizerComponentCOMMONSUITH.overlay");
@@ -128,6 +127,8 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
                     holder.btn_enable.setVisibility(View.GONE);
                     holder.btn_disable.setVisibility(View.VISIBLE);
                     refreshBackground(holder);
+                    notifyItemChanged(enabledItem);
+                    enabledItem = -1;
 
                     Toast.makeText(OxygenCustomizer.getAppContext(), context.getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                 }, 3000));
