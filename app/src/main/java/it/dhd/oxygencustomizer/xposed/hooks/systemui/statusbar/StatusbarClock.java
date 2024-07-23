@@ -88,7 +88,7 @@ public class StatusbarClock extends XposedMods {
     private int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     private int mClockDatePosition = STYLE_DATE_LEFT;
-    private String mClockDateFormat = null;
+    private String mClockDateFormat = "$GEEE";
     private String mCustomClockDateFormat = "$GEEE";
     private String mCustomBeforeClock = "", mCustomAfterClock = "";
     private boolean mCustomBeforeSmall = false, mCustomAfterSmall = false;
@@ -141,7 +141,7 @@ public class StatusbarClock extends XposedMods {
         mClockDateDisplay = Integer.parseInt(Xprefs.getString("status_bar_clock_date_display", String.valueOf(CLOCK_DATE_DISPLAY_GONE)));
         mClockDatePosition = Integer.parseInt(Xprefs.getString("status_bar_clock_date_position", String.valueOf(STYLE_DATE_LEFT)));
         mClockDateStyle = Integer.parseInt(Xprefs.getString("status_bar_clock_date_style", String.valueOf(CLOCK_DATE_STYLE_REGULAR)));
-        mClockDateFormat = Xprefs.getString("status_bar_clock_date_format", null);
+        mClockDateFormat = Xprefs.getString("status_bar_clock_date_format", "$GEEE");
         mCustomClockDateFormat = Xprefs.getString("status_bar_custom_clock_format", "$GEEE");
         mCustomBeforeClock = Xprefs.getString("sbc_before_clock_format", "");
         mCustomAfterClock = Xprefs.getString("sbc_after_clock_format", "");
