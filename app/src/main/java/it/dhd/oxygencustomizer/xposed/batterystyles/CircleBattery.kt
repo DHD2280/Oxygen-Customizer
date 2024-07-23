@@ -252,7 +252,7 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
         val strokeWidth = mDiameter / 6.5f
         mFramePaint.strokeWidth = strokeWidth
         mBatteryPaint.strokeWidth = strokeWidth
-        mTextPaint.textSize = mDiameter * 0.52f
+        mTextPaint.textSize = mDiameter * 0.48f
         mFrame[strokeWidth / 2.0f, strokeWidth / 2.0f, mDiameter - strokeWidth / 2.0f] =
             mDiameter - strokeWidth / 2.0f
         @SuppressLint("DiscouragedApi") val unscaledBoltPath = Path()
