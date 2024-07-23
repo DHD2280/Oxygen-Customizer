@@ -8,13 +8,57 @@
     <string name="settings_label">Ustawienia</string>
     <string name="toast_rename_file">Zmień nazwę pliku na coś prostszego</string>
     <string name="toast_applied">Zastosowano</string>
+    <string name="toast_disabled">Wył.</string>
+    <string name="toast_error">Coś poszło nie tak</string>
     <string name="opt_selected1">Wybrano: %s</string>
     <string name="opt_selected2">Wybrano: %s%s</string>
     <string name="requires_sysui_restart">Ta sekcja wymaga ponownego uruchomienia SystemUI\nDotknij menu, aby uruchomić ponownie.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Rozpoczynanie instalacji</string>
+    <string name="step">Etap</string>
+    <string name="module_installation_step1">Tworzenie powłoki modułu</string>
+    <string name="module_installation_step2">Wypakowywanie wymaganych plików</string>
+    <string name="module_installation_step3">Tworzenie dodatkowych APK</string>
+    <string name="module_installation_step4">Wyrównywanie nakładek APK</string>
+    <string name="module_installation_step5">Podpisywanie nakładek APK</string>
+    <string name="module_installation_step6">Czyszczenie katalogów</string>
+    <string name="onboarding_title_1">Znudził cię standardowy wygląd systemu?</string>
+    <string name="onboarding_subtitle_1">Spersonalizujmy wszystko według naszych preferencji.</string>
+    <string name="onboarding_desc_1">Zapomnij o monotonii standardowego interfejsu – spersonalizuj każdy szczegół zgodnie ze swoim stylem i preferencjami.</string>
+    <string name="onboarding_title_2">Czy moje urządzenie jest wspierane?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer obsługuje urządzenia pracujące w oparciu o OxygenOS.</string>
+    <string name="onboarding_desc_2">Kompatybilny z każdym systemem opartym o OxygenOS, dzięki czemu zapewnia wsparcie dla szerokiej grupy urządzeń z Androidem.</string>
+    <string name="onboarding_title_3">Możemy zaczynać?</string>
+    <string name="onboarding_subtitle_3">Nadszedł czas, aby Oxygen Customizer wykonał pewne wewnętrzne zadania.</string>
+    <string name="onboarding_desc_3">Rozpoczęcie zadań wewnętrznych oznacza start wymaganych prac w systemie. Zaczynamy?</string>
+    <string name="need_storage_perm_title">Brak uprawnień dostępu do pamięci</string>
+    <string name="need_storage_perm_desc">Uprawnienia dostępu do pamięci są niezbędne do stworzenia wymaganych plików.</string>
+    <string name="compatible_root_not_found_title">Nie można znaleźć kompatybilnego roota</string>
+    <string name="compatible_root_not_found_desc">Użyj dowolnej nieprzestarzałe metody rootowania, aby kontynuować.</string>
+    <string name="root_not_found_title">Root jest niedostępny</string>
+    <string name="root_not_found_desc">Wygląda na to, że Twoje urządzenie nie jest zrootowane!</string>
+    <string name="need_reboot_title">Wymagany restart urządzenia</string>
+    <string name="need_reboot_desc">Zrestartuj urządzenie, aby zainstalować wszystkie pliki.</string>
+    <string name="installation_failed_title">Ups, stało się coś dziwnego</string>
+    <string name="installation_failed_desc">Logi zostały zapisane w folderze /documents.</string>
+    <string name="logs">Logi</string>
+    <string name="toast_skipped_installation">Instalacja pominięta. Niektóre funkcje mogą nie działać prawidłowo.</string>
     <!-- Buttons -->
     <string name="btn_select">Wybierz</string>
+    <string name="btn_skip">Pomiń</string>
+    <string name="btn_next">Nast.</string>
+    <string name="btn_back">Wstecz</string>
+    <string name="btn_lets_go">Do dzieła</string>
+    <string name="btn_close">Zamknij</string>
+    <string name="btn_cancel">Anuluj</string>
+    <string name="btn_reboot_now">Uruchom ponownie teraz</string>
+    <string name="btn_reboot">Uruchom ponownie</string>
+    <string name="btn_enable">Włącz</string>
+    <string name="btn_disable">Wyłącz</string>
+    <string name="btn_apply">Zastosuj</string>
     <!-- Dialogs -->
+    <string name="installing">Instalowanie</string>
+    <string name="loading_dialog_wait">Proszę czekać</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Uwaga</string>
@@ -96,6 +140,7 @@
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <!-- Adaptive Playback -->
     <!-- Volume panel -->

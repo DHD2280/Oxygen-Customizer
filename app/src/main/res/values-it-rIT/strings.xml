@@ -81,6 +81,10 @@
     <string name="general_color_text2">Testo 2</string>
     <string name="sysui_restart_needed">Richiede il riavvio di SystemUI</string>
     <string name="one_time_reboot_needed">Riavvia il dispositivo!</string>
+    <string name="gradient_left_right">Da sinistra a destra</string>
+    <string name="gradient_top_bottom">Dall\'alto in basso</string>
+    <string name="gradient_tl_br">Da in alto a sinistra a in basso a destra</string>
+    <string name="gradient_tr_bl">In alto a destra in basso a sinistra</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -147,6 +151,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Ora &amp; data</string>
     <string name="status_bar_clock_summary">Personalizza Ora &amp; data</string>
+    <string name="status_bar_clock_format_category">Impostazioni Formato</string>
     <string name="status_bar_clock_seconds_title">Mostra Secondi</string>
     <string name="status_bar_clock_seconds_summary">Mostra secondi nell\'orologio nella barra di stato</string>
     <string name="status_bar_clock_position_title">Posizione Orologio</string>
@@ -154,6 +159,7 @@
     <string name="status_bar_clock_position_left">Sinistra</string>
     <string name="status_bar_clock_position_center">Centro</string>
     <string name="status_bar_clock_position_hidden">Nascosto</string>
+    <string name="status_bar_clock_hide_category">Nascondi Orologio</string>
     <string name="status_bar_clock_auto_hide_title">Nascondi automaticamente</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">Nascondi l\'orologio quando è visibile il launcher</string>
     <string name="status_bar_clock_auto_hide_summary">Nascondi l\'orologio ad intervalli</string>
@@ -175,7 +181,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
-    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
+    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -185,8 +191,13 @@
     <string name="status_bar_clock_color_title">Colore personalizzato Orologio</string>
     <string name="status_bar_custom_clock_color_title">Colore personalizzato Orologio</string>
     <string name="status_bar_custom_clock_color_summary">Colore orologio</string>
+    <string name="status_bar_clock_chip_category">Chip Orologio</string>
     <string name="status_bar_clock_background_chip_title">Chip di sfondo</string>
     <string name="status_bar_clock_background_chip_style_title">Stile Chip di sfondo</string>
+    <string name="status_bar_clock_advanced_formatting">Avanzate (sovrascrive le impostazioni precedenti!)</string>
+    <string name="status_bar_clock_before_clock">Testo personalizzato prima dell\'orologio</string>
+    <string name="status_bar_clock_after_clock">Testo personalizzato dopo l\'orologio</string>
+    <string name="status_bar_clock_smaller">Più piccolo (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">Padding barra di stato</string>
     <string name="statusbar_top_padding">Padding superiore</string>
@@ -304,6 +315,7 @@
     <string name="battery_landscape_battery_o">Orizzontale Batteria O</string>
     <string name="battery_circle">Rotonda</string>
     <string name="battery_dotted_circle">Rotonda a trattini</string>
+    <string name="battery_filled_circle">Cerchio pieno</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Nascondi icona Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Nascondi l\'icona Bluetooth quando non è connesso.</string>
@@ -507,6 +519,9 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Pieno</string>
     <string name="chip_outlined">Con bordo</string>
+    <string name="chip_mixed">Misto</string>
+    <string name="chip_gradient_props">Proprietà Gradiente</string>
+    <string name="chip_gradient_orientation">Orientamento Gradiente</string>
     <string name="chip_use_accent">Usa Colore Accento</string>
     <string name="chip_use_gradient">Utilizza gradiente</string>
     <string name="chip_color_accent">Usa Accento</string>
@@ -738,6 +753,11 @@
     <string name="visualizer_center_mirrored_summary">Imposta il visualizzatore in modalità specchiata centrale</string>
     <string name="pulse_vertical_mirror_title">Specchio Verticale</string>
     <string name="pulse_vertical_mirror_summary">Crea ulteriori Pulse e capovolgi verticalmente</string>
+    <!-- Fluid Music -->
+    <string name="fluid_music">Musica Fluida</string>
+    <string name="fluid_music_summary">Personalizza Fluid Music</string>
+    <string name="fluid_music_custom_list">Fluid Music Personalizzata</string>
+    <string name="fluid_music_custom_list_summary">Personalizza le app Fluid Music.\nQuesto elenco sostituirà l\'elenco delle app Fluid Music del sistema.</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">Livelli Volume</string>
     <string name="volume_steps_summary">Controlla la granularità di ciascun flusso</string>
@@ -942,6 +962,7 @@
     <string name="omnijaws_service_last_update">Ultimo aggiornamento:</string>
     <string name="omnijaws_service_error_location">Nessuna posizione disponibile</string>
     <string name="omnijaws_service_error_network">Nessuna rete trovata</string>
+    <string name="omnijaws_service_error_permissions">Permessi di localizzazione non concessi</string>
     <string name="weather_widget_desc">"Tempo effettivo e previsioni di 4 giorni"</string>
     <string name="theme_system">Segui Il Sistema</string>
     <string name="theme_dark">Scuro</string>
@@ -1030,4 +1051,5 @@
     <string name="dark_mode_pref">Personalizza Modalità Scura</string>
     <string name="custom_dark_mode_title">Modalità scura personalizzata</string>
     <string name="custom_dark_mode_summary">Consenti la personalizzazione delle app in modalità scura.</string>
+    <string name="dark_mode_intensity">Intensità Modalità Scura</string>
 </resources>

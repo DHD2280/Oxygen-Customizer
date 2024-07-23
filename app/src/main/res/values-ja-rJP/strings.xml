@@ -715,6 +715,7 @@
     <string name="visualizer_center_mirrored_summary">ビジュアライザーをセンターミラーモードにします</string>
     <string name="pulse_vertical_mirror_title">垂直ミラー</string>
     <string name="pulse_vertical_mirror_summary">他の Pluse を作成して垂直に反転させます</string>
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <string name="volume_steps_title">音量ステップ</string>
     <string name="volume_steps_summary">各ストリームの粒度を制御します</string>

@@ -734,6 +734,7 @@
     <string name="visualizer_center_mirrored_summary">Görselleştiriciyi merkezden yansıtılmış modda ayarlayın</string>
     <string name="pulse_vertical_mirror_title">Dikey Ayna</string>
     <string name="pulse_vertical_mirror_summary">Başka bir darbe oluşturun ve dikey olarak çevirin</string>
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <string name="volume_steps_title">Ses Seviyesi Adımları</string>
     <string name="volume_steps_summary">Her akışın tanecikliliğini kontrol edin</string>

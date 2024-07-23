@@ -741,6 +741,7 @@
     <string name="visualizer_center_mirrored_summary">Установите визуализатор в центрально зеркальный режим</string>
     <string name="pulse_vertical_mirror_title">Вертикальное отзеркаливание</string>
     <string name="pulse_vertical_mirror_summary">Создайте другой импульс и переверните его вертикально</string>
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <string name="volume_steps_title">Шаги регулировки громкости</string>
     <string name="volume_steps_summary">Контролируйте степень детализации каждого потока</string>
