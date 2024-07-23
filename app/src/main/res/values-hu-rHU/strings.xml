@@ -735,6 +735,7 @@
     <string name="visualizer_center_mirrored_summary">Vizualizáció beállítása középre tükrözött módba</string>
     <string name="pulse_vertical_mirror_title">Föggőleges tükrözés</string>
     <string name="pulse_vertical_mirror_summary">Más pulzálás létrehozása, és függőlegesre fordítása</string>
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <string name="volume_steps_title">Hangerőléptetések</string>
     <string name="volume_steps_summary">Az összes adatfolyam részletességének szabályozása</string>

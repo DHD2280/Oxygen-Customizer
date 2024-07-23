@@ -735,6 +735,7 @@
     <string name="visualizer_center_mirrored_summary">Establecer el visualizador en modo centrado espejeado</string>
     <string name="pulse_vertical_mirror_title">Espejo vertical</string>
     <string name="pulse_vertical_mirror_summary">Crear otro pulso y voltear verticalmente</string>
+    <!-- Fluid Music -->
     <!-- Volume Steps -->
     <string name="volume_steps_title">Intervalos de volumen</string>
     <string name="volume_steps_summary">Controla la granularidad de cada flujo</string>
