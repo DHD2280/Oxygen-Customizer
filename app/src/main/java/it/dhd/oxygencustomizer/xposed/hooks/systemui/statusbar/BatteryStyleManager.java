@@ -540,8 +540,8 @@ public class BatteryStyleManager extends XposedMods {
                         mRainbowFillColor,
                         mCustomFillColor,
                         mCustomFillGradColor,
-                        mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
-                        mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                        mCustomChargingColor,
+                        mCustomFastChargingColor,
                         mCustomPowerSaveColor,
                         mCustomPowerSaveFillColor,
                         mChargingIconSwitch
@@ -698,8 +698,8 @@ public class BatteryStyleManager extends XposedMods {
                                         mRainbowFillColor,
                                         mCustomFillColor,
                                         mCustomFillGradColor,
-                                        mCustomBlendColor ? mCustomChargingColor : getChargingColor(mCustomChargingColor),
-                                        mCustomBlendColor ? mCustomFastChargingColor : getChargingColor(mCustomFastChargingColor),
+                                        mCustomChargingColor,
+                                        mCustomFastChargingColor,
                                         mCustomPowerSaveColor,
                                         mCustomPowerSaveFillColor,
                                         mChargingIconSwitch

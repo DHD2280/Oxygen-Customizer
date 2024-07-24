@@ -16,6 +16,7 @@ abstract class BatteryDrawable : Drawable() {
     protected var customBlendColor = false
     protected var customFillRainbow = false
     protected var customChargingIcon = false
+    protected var colorForLevels: IntArray = intArrayOf(20, Color.RED, 100, Color.WHITE)
 
     protected var chargingColor: Int = Color.TRANSPARENT
     protected var fastChargingColor: Int = Color.TRANSPARENT

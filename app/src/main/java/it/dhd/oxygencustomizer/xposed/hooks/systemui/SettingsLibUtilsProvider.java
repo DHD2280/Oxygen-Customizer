@@ -32,6 +32,12 @@ public class SettingsLibUtilsProvider extends XposedMods {
         return (int) callStaticMethod(UtilsClass, "getColorStateListDefaultColor", context, resID);
     }
 
+    public static int getColorErrorDefaultColor(Context context) {
+        if (CoUIColors == null) return 0;
+
+        return (int) callStaticMethod(CoUIColors, "getColorErrorDefaultColor", context);
+    }
+
     public static int getColorAttrDefaultColor(Context context, int resID) {
         if (UtilsClass == null) return 0;
 
@@ -44,15 +50,15 @@ public class SettingsLibUtilsProvider extends XposedMods {
 
     public static int getColorAttrDefaultColor(int resID, Context context, int defValue) {
         if (UtilsClass == null) {
-            return 0;
+            return defValue;
         }
         try {
-            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", resID, context);
+            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, defValue);
         } catch (Throwable throwable) {
             try {
                 return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID);
             } catch (Throwable throwable1) {
-                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, defValue);
+                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", resID, context);
             }
         }
     }
@@ -69,24 +75,6 @@ public class SettingsLibUtilsProvider extends XposedMods {
                 return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, 0);
             }
         }
-    }
-
-    public static int getSecureIntValue(Context context, String str, int i) {
-        if (AbsSettingsValueProxy == null) return i;
-
-        return (int) callStaticMethod(AbsSettingsValueProxy, "getSecureIntValue", context, str, i);
-    }
-
-    public static float convertGammaToLinearFloat(int i, float f, float f2) {
-        if (BrightnessUtils == null) return 0f;
-
-        return (float) callStaticMethod(BrightnessUtils, "convertGammaToLinearFloat", i, f, f2);
-    }
-
-    public static int getGammaMax() {
-        if (BrightnessUtils == null) return 0;
-
-        return getStaticIntField(BrightnessUtils, "GAMMA_SPACE_MAX");
     }
 
     public static int getThemeAttr(Context context, int attr) {

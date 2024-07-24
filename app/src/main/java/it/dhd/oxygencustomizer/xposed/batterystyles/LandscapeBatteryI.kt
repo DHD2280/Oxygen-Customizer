@@ -109,9 +109,6 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
     // To implement hysteresis, keep track of the need to invert the interior icon of the battery
     private var invertFillIcon = false
 
-    // Colors can be configured based on battery level (see res/values/arrays.xml)
-    private var colorLevels: IntArray
-
     private var fillColor: Int = Color.WHITE
     private var backgroundColor: Int = Color.WHITE
 
@@ -354,32 +351,6 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         val density = context.resources.displayMetrics.density
         intrinsicHeight = (HEIGHT * density).toInt()
         intrinsicWidth = (WIDTH * density).toInt()
-
-        val res = context.resources
-        val levels = res.obtainTypedArray(
-            res.getIdentifier(
-                "batterymeter_color_levels", "array", context.packageName
-            )
-        )
-        val colors = res.obtainTypedArray(
-            res.getIdentifier(
-                "batterymeter_color_values", "array", context.packageName
-            )
-        )
-        val n = levels.length()
-        colorLevels = IntArray(2 * n)
-        for (i in 0 until n) {
-            colorLevels[2 * i] = levels.getInt(i, 0)
-            if (colors.getType(i) == TypedValue.TYPE_ATTRIBUTE) {
-                colorLevels[2 * i + 1] = getColorAttrDefaultColor(
-                                    colors.getResourceId(i, 0), context
-                                )
-            } else {
-                colorLevels[2 * i + 1] = colors.getColor(i, 0)
-            }
-        }
-        levels.recycle()
-        colors.recycle()
 
         loadPaths()
     }
@@ -800,13 +771,13 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         var thresh: Int
         var color = 0
         var i = 0
-        while (i < colorLevels.size) {
-            thresh = colorLevels[i]
-            color = colorLevels[i + 1]
+        while (i < colorForLevels.size) {
+            thresh = colorForLevels[i]
+            color = colorForLevels[i + 1]
             if (level <= thresh) {
 
                 // Respect tinting for "normal" level
-                return if (i == colorLevels.size - 2) {
+                return if (i == colorForLevels.size - 2) {
                     fillColor
                 } else {
                     color
