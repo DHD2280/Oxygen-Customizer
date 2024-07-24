@@ -43,7 +43,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarNotification;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.ThermalProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 
 public class ModPacks {
 

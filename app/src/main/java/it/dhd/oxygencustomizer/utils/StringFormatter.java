@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.ThermalProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class StringFormatter {
