@@ -11,9 +11,6 @@ import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider.convertGammaToLinearFloat;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider.getGammaMax;
-import static it.dhd.oxygencustomizer.xposed.utils.Deoptimizer.deoptimizeMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
