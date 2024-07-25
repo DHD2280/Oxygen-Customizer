@@ -343,7 +343,7 @@ public class BackgroundChipPreference extends DialogPreference {
             case 0 -> strokeW = 0;
             case 1 -> {
                 colors = new int[]{Color.TRANSPARENT, Color.TRANSPARENT};
-                strokeC = useAccentColor ? mAccentColor : strokeColor;
+                strokeC = useAccentStroke ? mAccentColor : strokeColor;
             }
             case 2 -> strokeC = useAccentStroke ? mAccentColor : strokeColor;
         };
