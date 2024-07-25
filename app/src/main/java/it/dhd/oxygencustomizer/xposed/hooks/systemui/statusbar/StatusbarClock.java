@@ -685,7 +685,7 @@ public class StatusbarClock extends XposedMods {
         if (mClockAutoHideLauncher != clockAutoHide) {
             mClockAutoHideLauncher = clockAutoHide;
             log(TAG + "Updating Clock");
-            callMethod(Clock, "updateClock");
+            updateClock();
             autoHideHandler.post(() -> updateClockVisibility(Clock));
         }
     }
