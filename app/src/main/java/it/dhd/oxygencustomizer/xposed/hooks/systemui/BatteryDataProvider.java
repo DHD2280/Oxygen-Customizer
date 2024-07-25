@@ -75,10 +75,16 @@ public class BatteryDataProvider extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mIsFastCharging = callMethod(param.thisObject, "getChargingSpeed", mContext).equals(CHARGING_FAST);
-                if(param.args.length > 0 && param.args.length != 6) {
+                if (param.args[0] instanceof Intent) {
                     try {
                         onBatteryStatusChanged((int) getObjectField(param.thisObject, "status"), (Intent) param.args[0]);
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
+                } else if (param.args[0] instanceof Integer) {
+                    try {
+                        onBatteryStatusChanged((int) param.args[0], null);
+                    } catch (Throwable ignored) {
+                    }
                 }
             }
         });
