@@ -670,6 +670,8 @@ public class PreferenceHelper {
 
             // Statusbar Clock
             case "status_bar_java_custom" -> instance.mPreferences.getString("status_bar_custom_clock_format", "$GEEE");
+            case "sbc_before_clock" -> instance.mPreferences.getString("sbc_before_clock_format", "");
+            case "sbc_after_clock" -> instance.mPreferences.getString("sbc_after_clock_format", "");
 
             // Battery Bar
             case "BBOpacity", "BBarHeight" -> instance.mPreferences.getSliderInt(key, 100) + "%";
