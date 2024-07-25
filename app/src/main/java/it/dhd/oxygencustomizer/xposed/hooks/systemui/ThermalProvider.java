@@ -79,7 +79,7 @@ public class ThermalProvider extends XposedMods {
                 .stream(temperatures)
                 .filter(temperature -> {
                     String mName = (String) getObjectField(temperature, "mName");
-                    return mName.contains(container);
+                    return mName.toLowerCase().contains(container.toLowerCase());
                 })
                 .forEach(temperature -> maxValue[0] = Math.max(maxValue[0], getFloatField(temperature, "mValue")));
 
