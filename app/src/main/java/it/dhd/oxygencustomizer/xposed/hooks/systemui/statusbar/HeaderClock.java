@@ -108,8 +108,12 @@ public class HeaderClock extends XposedMods {
     // Custom Clock Prefs
     private boolean showHeaderClock = false;
     private int clockStyle = 0;
-
+    private int accent1, accent2, accent3, text1, text2;
+    private float mClockTextScale = 1.0f;
+    private int mTopMargin, mLeftMargin;
     private boolean centeredClockView = false;
+    private boolean mClockCustomColor = false;
+    private boolean mClockCustomUserImage = false;
 
     // Stock Clock Prefs
     private int stockClockRedStyle;
@@ -174,6 +178,33 @@ public class HeaderClock extends XposedMods {
         showHeaderClock = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_ENABLED, false);
         clockStyle = Xprefs.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);
         centeredClockView = Xprefs.getBoolean("center_clock", false);
+        boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
+        int textColor = nightMode ? Color.WHITE : Color.BLACK;
+        accent1 = Xprefs.getInt(
+                QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
+                getPrimaryColor(mContext)
+        );
+        accent2 = Xprefs.getInt(
+                QS_HEADER_CLOCK_COLOR_CODE_ACCENT2,
+                ContextCompat.getColor(mContext, android.R.color.system_accent2_600)
+        );
+        accent3 = Xprefs.getInt(
+                QS_HEADER_CLOCK_COLOR_CODE_ACCENT3,
+                ContextCompat.getColor(mContext, android.R.color.system_accent3_600)
+        );
+        text1 = Xprefs.getInt(
+                QS_HEADER_CLOCK_COLOR_CODE_TEXT1,
+                textColor
+        );
+        text2 = Xprefs.getInt(
+                QS_HEADER_CLOCK_COLOR_CODE_TEXT2,
+                textColor
+        );
+        mTopMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_TOP_MARGIN, 0);
+        mLeftMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_LEFT_MARGIN, 8);
+        mClockTextScale = Xprefs.getSliderFloat(QS_HEADER_CLOCK_TEXT_SCALING, 1.0f);
+        mClockCustomColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
+        mClockCustomUserImage = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_USER_IMAGE, false);
 
         // Stock Header Prefs
         stockClockRedStyle = Integer.parseInt(Xprefs.getString(QS_HEADER_CLOCK_STOCK_RED_MODE, "0"));
@@ -586,7 +617,6 @@ public class HeaderClock extends XposedMods {
     }
 
     private void setupStatusChips() {
-        log(TAG + "setupStatusChips");
         mSystemIconsChipDrawable.setShape(GradientDrawable.RECTANGLE);
         mSystemIconsChipDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
         mSystemIconsChipDrawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
@@ -800,66 +830,39 @@ public class HeaderClock extends XposedMods {
     }
 
     private void modifyClockView(View clockView) {
-        float clockScale = Xprefs.getSliderFloat(QS_HEADER_CLOCK_TEXT_SCALING, 1.0f);
-        int sideMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_LEFT_MARGIN, 0);
-        int topMargin = Xprefs.getSliderInt(QS_HEADER_CLOCK_TOP_MARGIN, 8);
         String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/header_clock_font.ttf";
-        int mAccent = getPrimaryColor(mContext);
-        boolean customColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
         int textColor = nightMode ? Color.WHITE : Color.BLACK;
-        boolean useCustomImage = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_USER_IMAGE, false);
-
-        int accent1 = Xprefs.getInt(
-                QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
-                mAccent
-        );
-        int accent2 = Xprefs.getInt(
-                QS_HEADER_CLOCK_COLOR_CODE_ACCENT2,
-                ContextCompat.getColor(mContext, android.R.color.system_accent2_600)
-        );
-        int accent3 = Xprefs.getInt(
-                QS_HEADER_CLOCK_COLOR_CODE_ACCENT3,
-                ContextCompat.getColor(mContext, android.R.color.system_accent3_600)
-        );
-        int textPrimary = Xprefs.getInt(
-                QS_HEADER_CLOCK_COLOR_CODE_TEXT1,
-                textColor
-        );
-        int text2 = Xprefs.getInt(
-                QS_HEADER_CLOCK_COLOR_CODE_TEXT2,
-                textColor
-        );
 
         Typeface typeface = null;
         if (customFontEnabled && (new File(customFont).exists()))
             typeface = Typeface.createFromFile(new File(customFont));
 
         if (TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
-            ViewHelper.setMargins(clockView, mContext, 0, topMargin, sideMargin, 0);
+            ViewHelper.setMargins(clockView, mContext, 0, mTopMargin, mLeftMargin, 0);
         } else {
-            ViewHelper.setMargins(clockView, mContext, sideMargin, topMargin, 0, 0);
+            ViewHelper.setMargins(clockView, mContext, mLeftMargin, mTopMargin, 0, 0);
         }
 
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : mAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : mAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", customColor ? accent3 : mAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", customColor ? textPrimary : textColor);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", customColor ? text2 : textColor);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "backgroundAccent", customColor ? accent1 : mAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", mClockCustomColor ? accent1 : mAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", mClockCustomColor ? accent2 : mAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", mClockCustomColor ? accent3 : mAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", mClockCustomColor ? text1 : textColor);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", mClockCustomColor ? text2 : textColor);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "backgroundAccent", mClockCustomColor ? accent1 : mAccent);
 
         if (typeface != null) {
             ViewHelper.applyFontRecursively((ViewGroup) clockView, typeface);
         }
 
-        if (clockScale != 1.0f) {
-            ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, clockScale);
+        if (mClockTextScale != 1.0f) {
+            ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, mClockTextScale);
         }
 
         switch (clockStyle) {
             case 6 -> {
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                imageView.setImageDrawable(useCustomImage ? getCustomUserImage() : getUserImage());
+                imageView.setImageDrawable(mClockCustomUserImage ? getCustomUserImage() : getUserImage());
             }
         }
     }
@@ -943,7 +946,6 @@ public class HeaderClock extends XposedMods {
     }
 
     private void updateStatusChips() {
-        log(TAG + "updateStatusChips " + systemIconsChipEnabled + " != null " + (mStatusIconsView != null));
         if (mStatusIconsView == null) return;
         int paddingStartEnd = 0;
         int paddingTopBottom = 0;
