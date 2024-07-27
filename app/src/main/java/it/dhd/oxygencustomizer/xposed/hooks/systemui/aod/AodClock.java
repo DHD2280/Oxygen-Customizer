@@ -80,8 +80,12 @@ public class AodClock extends XposedMods {
     private Context appContext;
     Class<?> LottieAn = null;
     public static final String OC_AOD_CLOCK_TAG = "oxygencustomizer_aod_clock";
-    private boolean mAodClockEnabled = false, customColor = false;
+    private boolean mAodClockEnabled = false;
     private int accent1, accent2, accent3, text1, text2;
+    private boolean mCustomColor, mCustomFont, mCustomImage, mCustomUser, mCustomUserImage;
+    private String mCustomUserName;
+    private float mClockScale;
+    private int mLineHeight;
     private int mAodClockStyle = 0;
     private int mBatteryStatus = 1;
     private int mBatteryPercentage = 1;
@@ -131,6 +135,14 @@ public class AodClock extends XposedMods {
         accent3 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_ACCENT3, getPrimaryColor(mContext));
         text1 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT1, Color.WHITE);
         text2 = Xprefs.getInt(AOD_CLOCK_COLOR_CODE_TEXT2, Color.WHITE);
+        mCustomFont = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_FONT, false);
+        mCustomColor = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_COLOR_SWITCH, false);
+        mCustomImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_IMAGE, false);
+        mCustomUser = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER, false);
+        mCustomUserName = Xprefs.getString(AOD_CLOCK_CUSTOM_USER_VALUE, "");
+        mCustomUserImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER_IMAGE, false);
+        mClockScale = Xprefs.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f);
+        mLineHeight = Xprefs.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 0);
 
     }
 
@@ -236,30 +248,22 @@ public class AodClock extends XposedMods {
     }
 
     private void modifyClockView(View clockView) {
-        boolean customColor = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_COLOR_SWITCH, false);
-        float clockScale = Xprefs.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f);
         String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/aod_clock_font.ttf";
-        int lineHeight = Xprefs.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 0);
-        boolean customFontEnabled = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_FONT, false);
-        boolean useCustomName = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER, false);
-        String customName = Xprefs.getString(AOD_CLOCK_CUSTOM_USER_VALUE, "TEST");
-        boolean useCustomUserImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER_IMAGE, false);
-        boolean useCustomImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_IMAGE, false);
         int systemAccent = getPrimaryColor(mContext);
 
         Typeface typeface = null;
-        if (customFontEnabled && (new File(customFont).exists())) {
+        if (mCustomFont && (new File(customFont).exists())) {
             typeface = Typeface.createFromFile(new File(customFont));
         }
 
         ViewHelper.setMargins(clockView, mContext, 0, 0, 0, 0);
 
-        if (BuildConfig.DEBUG) log(TAG + " customColor: " + customColor);
+        if (BuildConfig.DEBUG) log(TAG + " customColor: " + mCustomColor);
 
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", customColor ? accent1 : systemAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", customColor ? accent2 : systemAccent);
-        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", customColor ? accent3 : systemAccent);
-        if (customColor) {
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", mCustomColor ? accent1 : systemAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", mCustomColor ? accent2 : systemAccent);
+        ViewHelper.findViewWithTagAndChangeColor(clockView, "accent3", mCustomColor ? accent3 : systemAccent);
+        if (mCustomColor) {
             ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", text1);
             ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", text2);
         }
@@ -268,10 +272,10 @@ public class AodClock extends XposedMods {
             ViewHelper.applyFontRecursively((ViewGroup) clockView, typeface);
         }
 
-        ViewHelper.applyTextMarginRecursively((ViewGroup) clockView, lineHeight);
+        ViewHelper.applyTextMarginRecursively((ViewGroup) clockView, mLineHeight);
 
-        if (clockScale != 1.0f) {
-            ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, clockScale);
+        if (mClockScale != 1.0f) {
+            ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, mClockScale);
         }
         clockView.setVisibility(View.VISIBLE);
 
@@ -285,9 +289,9 @@ public class AodClock extends XposedMods {
             }
             case 7 -> {
                 TextView usernameView = clockView.findViewById(R.id.summary);
-                usernameView.setText(useCustomName ? customName : getUserName());
+                usernameView.setText(mCustomUser ? mCustomUserName : getUserName());
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                imageView.setImageDrawable(useCustomUserImage ? getCustomUserImage() : getUserImage());
+                imageView.setImageDrawable(mCustomUserImage ? getCustomUserImage() : getUserImage());
             }
             case 19 -> {
                 mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
@@ -295,13 +299,13 @@ public class AodClock extends XposedMods {
                 mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
                 mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
 
-                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
+                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(mCustomColor ? accent1 : getPrimaryColor(mContext)));
 
                 ((TextView) clockView.findViewById(R.id.device_name)).setText(Build.MODEL);
             }
             case 25 -> {
                 ImageView imageView = clockView.findViewById(R.id.custom_image);
-                if (useCustomImage) {
+                if (mCustomImage) {
                     imageView.setImageDrawable(getCustomImage());
                 }
             }
@@ -369,7 +373,7 @@ public class AodClock extends XposedMods {
         if (mBatteryProgress != null) {
             mBatteryProgress.setProgress(mBatteryPercentage);
             if (mAodClockStyle == 19) {
-                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
+                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(mCustomColor ? accent1 : getPrimaryColor(mContext)));
             }
         }
         if (mBatteryArcProgress != null) {
@@ -380,7 +384,7 @@ public class AodClock extends XposedMods {
                     32,
                     "BATTERY",
                     20,
-                    customColor ? accent1 : getPrimaryColor(mContext)
+                    mCustomColor ? accent1 : getPrimaryColor(mContext)
             );
             mBatteryArcProgress.setImageBitmap(widgetBitmap);
         }
@@ -411,7 +415,7 @@ public class AodClock extends XposedMods {
                     32,
                     ContextCompat.getDrawable(appContext, R.drawable.ic_volume_up),
                     36,
-                    customColor ? accent1 : getPrimaryColor(mContext)
+                    mCustomColor ? accent1 : getPrimaryColor(mContext)
             );
             mVolumeLevelArcProgress.setImageBitmap(widgetBitmap);
         }
@@ -434,7 +438,7 @@ public class AodClock extends XposedMods {
                     32,
                     "RAM",
                     20,
-                    customColor ? accent1 : getPrimaryColor(mContext)
+                    mCustomColor ? accent1 : getPrimaryColor(mContext)
             );
             mRamUsageArcProgress.setImageBitmap(widgetBitmap);
         }
