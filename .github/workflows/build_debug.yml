@@ -62,5 +62,6 @@ jobs:
         run: |
           curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup" \
             -F chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
+            -F message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
             -F media='[{"type":"document", "media":"attach://Xposed", "caption":"Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"}]' \
             -F Xposed="@OxygenCustomizer.zip"
