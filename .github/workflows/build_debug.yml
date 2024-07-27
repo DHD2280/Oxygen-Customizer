@@ -53,3 +53,11 @@ jobs:
           name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
+
+      - name: Telegram File Attachment
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        run: |
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup" \
+            -F chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
+            -F media='[{"type":"document", "media":"attach://Xposed", "caption":"Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"}]' \
+            -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.apk"
