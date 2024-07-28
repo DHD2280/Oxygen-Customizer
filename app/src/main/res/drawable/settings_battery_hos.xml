@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="36.0dip" android:width="36.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <clip-path android:pathData="M6.4614,6.4615h11.0769v11.0769h-11.0769z" />
+        <path android:fillColor="@color/settings_accent" android:pathData="M13.3844,7.8H10.6152V6.9692H13.3844V7.8ZM9.6921,9.1846C9.6666,9.1846 9.646,9.2053 9.646,9.2308V16.1538C9.646,16.1793 9.6666,16.2 9.6921,16.2H14.3075C14.333,16.2 14.3536,16.1793 14.3536,16.1538V9.2308C14.3536,9.2053 14.333,9.1846 14.3075,9.1846H9.6921ZM8.8152,9.2308C8.8152,8.7465 9.2078,8.3538 9.6921,8.3538H14.3075C14.7918,8.3538 15.1844,8.7465 15.1844,9.2308V16.1538C15.1844,16.6382 14.7918,17.0308 14.3075,17.0308H9.6921C9.2078,17.0308 8.8152,16.6382 8.8152,16.1538V9.2308ZM10.1536,11.4923H13.846V15.6461H10.1536V11.4923Z" android:fillType="evenOdd" />
+    </group>
+    <path android:fillColor="#00000000" android:pathData="M12.00,1.99C17.70,1.99,22.31,6.47,22.31,12.00C22.31,17.53,17.70,22.01,12.00,22.01C6.30,22.01,1.69,17.53,1.69,12.00C1.69,6.47,6.30,1.99,12.00,1.99z" android:strokeColor="@color/settings_accent" android:strokeWidth="1.1244442" android:strokeLineCap="square" android:strokeLineJoin="miter" android:fillType="nonZero" />
+</vector>
