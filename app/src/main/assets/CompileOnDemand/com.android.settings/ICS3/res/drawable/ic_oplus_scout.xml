@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="36.0" android:viewportHeight="36.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M26.8639,25.8027L22.9113,21.8501C24.1157,20.3736 24.7067,18.4908 24.5623,16.5909C24.4178,14.691 23.549,12.9192 22.1352,11.6417C20.7215,10.3643 18.871,9.6788 16.9662,9.727C15.0614,9.7752 13.248,10.5533 11.9007,11.9007C10.5533,13.248 9.7752,15.0614 9.727,16.9662C9.6788,18.871 10.3643,20.7215 11.6417,22.1352C12.9192,23.549 14.691,24.4178 16.5909,24.5623C18.4908,24.7067 20.3736,24.1157 21.8501,22.9113L25.8027,26.8639L26.8639,25.8027ZM17.1666,23.083C15.9964,23.083 14.8525,22.7361 13.8795,22.086C12.9065,21.4358 12.1481,20.5118 11.7003,19.4307C11.2525,18.3496 11.1353,17.1599 11.3636,16.0122C11.5918,14.8645 12.1553,13.8103 12.9828,12.9828C13.8103,12.1553 14.8645,11.5918 16.0122,11.3636C17.1599,11.1353 18.3496,11.2525 19.4307,11.7003C20.5118,12.1481 21.4358,12.9065 22.086,13.8795C22.7361,14.8525 23.083,15.9964 23.083,17.1666C23.0812,18.7352 22.4573,20.239 21.3482,21.3482C20.239,22.4573 18.7352,23.0812 17.1666,23.083Z" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

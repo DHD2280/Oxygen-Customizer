@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M7.8,12C7.8,9.6804 9.6804,7.8 12,7.8C14.3196,7.8 16.2,9.6804 16.2,12C16.2,13.0463 15.8174,14.0032 15.1846,14.7385V14.548C15.1951,14.2997 15.1436,14.0526 15.0346,13.8291C14.924,13.6022 14.7577,13.4071 14.5513,13.2618C14.5466,13.2585 14.5417,13.2553 14.5369,13.2521L14.4723,13.2106L14.4633,13.205C14.1406,13.009 13.7975,12.8527 13.4414,12.7382C13.8057,12.3711 14.0307,11.8657 14.0307,11.3077C14.0307,10.1861 13.1215,9.2769 11.9999,9.2769C10.8784,9.2769 9.9692,10.1861 9.9692,11.3077C9.9692,11.8657 10.1942,12.3711 10.5585,12.7382C10.2023,12.8527 9.8592,13.009 9.5366,13.205L9.5276,13.2106L9.463,13.2521C9.4581,13.2553 9.4533,13.2585 9.4486,13.2618C9.2422,13.4071 9.0759,13.6022 8.9652,13.8291C8.8562,14.0526 8.8047,14.2997 8.8153,14.548V14.7383C8.1825,14.003 7.8,13.0462 7.8,12ZM9.6461,15.4789C10.3175,15.9341 11.1277,16.2 12,16.2C12.8722,16.2 13.6824,15.9341 14.3538,15.479V14.5385C14.3538,14.5315 14.354,14.5246 14.3543,14.5177C14.3599,14.4057 14.3371,14.2941 14.2879,14.1933C14.2399,14.0948 14.1682,14.0097 14.0794,13.9457L14.0276,13.9123C13.4158,13.5419 12.7152,13.3436 11.9999,13.3385C11.2847,13.3436 10.5841,13.5419 9.9723,13.9123L9.9205,13.9457C9.8316,14.0097 9.76,14.0948 9.7119,14.1933C9.6628,14.2941 9.6399,14.4057 9.6456,14.5177C9.6459,14.5246 9.6461,14.5315 9.6461,14.5385V15.4789ZM12,6.9692C9.2216,6.9692 6.9692,9.2216 6.9692,12C6.9692,14.7784 9.2216,17.0308 12,17.0308C14.7784,17.0308 17.0308,14.7784 17.0308,12C17.0308,9.2216 14.7784,6.9692 12,6.9692ZM11.9999,10.1077C11.3372,10.1077 10.7999,10.6449 10.7999,11.3077C10.7999,11.9704 11.3372,12.5077 11.9999,12.5077L12.0026,12.5077C12.6641,12.5062 13.1999,11.9695 13.1999,11.3077C13.1999,10.6449 12.6627,10.1077 11.9999,10.1077Z" android:fillType="evenOdd" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

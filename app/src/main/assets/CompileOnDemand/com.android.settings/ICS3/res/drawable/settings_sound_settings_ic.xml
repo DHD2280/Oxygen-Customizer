@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M9.4271,13.3718L9.6674,13.6121L11.987,15.9317V8.0683L9.6674,10.3879L9.4271,10.6282H9.0873H7.8588V13.3718H9.0873H9.4271ZM7.846,13.3718C7.846,13.3718 7.846,13.3718 7.846,13.3718L7.846,13.3718ZM9.0873,9.8077H7.846C7.4,9.8077 7.0383,10.1691 7.0383,10.6154V13.3846C7.0383,13.8309 7.4,14.1923 7.846,14.1923H9.0873L11.6199,16.7249C11.7715,16.8766 11.9767,16.9616 12.1909,16.9616H12.4614C12.6526,16.9616 12.8076,16.8066 12.8076,16.6154V7.3846C12.8076,7.1935 12.6526,7.0385 12.4614,7.0385H12.1909C11.9767,7.0385 11.7715,7.1235 11.6199,7.2751L9.0873,9.8077Z" android:fillType="evenOdd" />
+                <path android:fillColor="#00000000" android:pathData="M15.3847,8.9231C16.0875,9.733 16.5129,10.7902 16.5129,11.9467C16.5129,13.1288 16.0685,14.207 15.3376,15.0236" android:strokeColor="@color/icon_color" android:strokeWidth="0.820513" />
+                <path android:fillColor="#00000000" android:pathData="M13.8626,10.5641C14.108,10.9181 14.2564,11.3802 14.2564,11.8858C14.2564,12.4025 14.1013,12.8738 13.8462,13.2308" android:strokeColor="@color/icon_color" android:strokeWidth="0.820513" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

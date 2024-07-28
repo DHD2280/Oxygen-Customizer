@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M11.5846,6.9231V8.3077H12.4154V6.9231H11.5846ZM12,10.1077V13.8923C13.0451,13.8923 13.8923,13.0451 13.8923,12C13.8923,10.9549 13.0451,10.1077 12,10.1077ZM12,9.2769C10.4961,9.2769 9.2769,10.4961 9.2769,12C9.2769,13.5039 10.4961,14.7231 12,14.7231C13.5039,14.7231 14.7231,13.5039 14.7231,12C14.7231,10.4961 13.5039,9.2769 12,9.2769ZM14.3172,9.0953L15.2961,8.1164L15.8836,8.7039L14.9047,9.6828L14.3172,9.0953ZM17.0769,11.5846H15.6923V12.4154H17.0769V11.5846ZM14.9047,14.3172L15.8836,15.2961L15.2961,15.8836L14.3172,14.9046L14.9047,14.3172ZM12.4154,17.0769V15.6923H11.5846V17.0769H12.4154ZM9.6828,14.9046L8.7039,15.8836L8.1164,15.2961L9.0953,14.3172L9.6828,14.9046ZM6.9231,12.4154H8.3077V11.5846H6.9231V12.4154ZM9.0953,9.6828L8.1164,8.7039L8.7039,8.1164L9.6828,9.0953L9.0953,9.6828Z" android:fillType="evenOdd" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

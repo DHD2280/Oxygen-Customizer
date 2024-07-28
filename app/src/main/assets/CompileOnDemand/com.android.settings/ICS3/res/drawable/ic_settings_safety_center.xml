@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:tint="@*android:color/accent_material_dark" android:height="24.0dip" android:width="24.0dip" android:top="7.299988dip" android:start="7.299988dip">
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+				<path android:pathData="M 0 0 H 24 V 24 H 0 V 0 Z" />
+				<path android:fillColor="@color/icon_color" android:pathData="M12,4.14l6,2.25v4.71c0,2.12-0.62,4-1.88,5.74c-1.13,1.55-2.48,2.56-4.12,3.09c-1.64-0.52-2.99-1.54-4.12-3.09 C6.62,15.1,6,13.22,6,11.1V6.39L12,4.14 M12,2L4,5v6.1c0,2.53,0.75,4.84,2.26,6.91C7.77,20.09,9.68,21.42,12,22 c2.32-0.58,4.23-1.91,5.74-3.99C19.25,15.94,20,13.63,20,11.1V5L12,2L12,2z" />
+				<path android:fillColor="@color/icon_color" android:pathData="M 10.95 15.55 L 7.42 12.02 L 8.85 10.6 L 10.95 12.7 L 15.17 8.47 L 16.6 9.9 Z" />
+</vector>
+    </item>
+</layer-list>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="24.0dip" android:width="24.0dip" android:top="0.0dip" android:start="0.0dip">
+		<vector android:tint="@*android:color/accent_material_dark" android:height="54.0dip" android:width="54.0dip" android:viewportWidth="54.0" android:viewportHeight="54.0">
+			<group>
+				<clip-path android:pathData="M0,0h54v54h-54z" />
+				<path android:fillColor="@color/icon_color" android:pathData="M51.5251,19.1494C51.5251,16.8994 49.5001,14.8744 47.2501,14.8744H39.8251L38.4751,9.0244C38.0251,6.9994 36.2251,5.6494 34.2001,5.8744H19.8001C17.7751,5.8744 15.9751,7.2244 15.5251,9.0244L14.1751,14.8744H6.7501C4.5001,14.8744 2.4751,16.8994 2.4751,19.1494V32.4244H4.7251V48.1744H45.0001C47.2501,48.1744 49.2751,46.1494 49.2751,43.8994V32.4244H51.5251V19.1494ZM19.5751,10.1494L19.8001,9.9244H34.2001C34.2001,9.9244 34.4251,9.9244 34.4251,10.1494L35.5501,14.8744H18.2251L19.5751,10.1494ZM6.5251,19.1494C6.5251,18.9244 6.5251,18.9244 6.7501,18.9244H38.2501H47.2501C47.4751,18.9244 47.4751,18.9244 47.4751,19.1494V28.3744H6.5251V19.1494ZM45.2251,43.8994C45.2251,44.1244 45.2251,44.1244 45.2251,43.8994L8.7751,44.1244V32.4244H24.9751V37.1494H29.0251V32.4244H45.2251V43.8994Z" />
+			</group>
+		</vector>
+    </item>
+</layer-list>

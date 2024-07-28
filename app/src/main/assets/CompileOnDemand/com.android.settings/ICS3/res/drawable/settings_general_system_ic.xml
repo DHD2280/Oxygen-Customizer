@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M12,12.9231C12.5098,12.9231 12.9231,12.5098 12.9231,12C12.9231,11.4902 12.5098,11.0769 12,11.0769C11.4902,11.0769 11.0769,11.4902 11.0769,12C11.0769,12.5098 11.4902,12.9231 12,12.9231Z" />
+                <path android:fillColor="@color/icon_color" android:pathData="M12,9.6923C12.5098,9.6923 12.9231,9.279 12.9231,8.7692C12.9231,8.2594 12.5098,7.8461 12,7.8461C11.4902,7.8461 11.0769,8.2594 11.0769,8.7692C11.0769,9.279 11.4902,9.6923 12,9.6923Z" />
+                <path android:fillColor="@color/icon_color" android:pathData="M12,16.1538C12.5098,16.1538 12.9231,15.7406 12.9231,15.2308C12.9231,14.721 12.5098,14.3077 12,14.3077C11.4902,14.3077 11.0769,14.721 11.0769,15.2308C11.0769,15.7406 11.4902,16.1538 12,16.1538Z" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

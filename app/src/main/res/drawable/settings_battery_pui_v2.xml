@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#00000000" android:pathData="M7,9C7,9 7.5,9.9 7.5,12C7.5,14.1 7,15 7,15" android:strokeColor="@color/settings_pui_monet_v2" android:strokeWidth="2.4" android:strokeLineCap="round" />
+    <path android:fillColor="#00000000" android:pathData="M10.5,9C10.5,9 11,9.9 11,12C11,14.1 10.5,15 10.5,15" android:strokeColor="@color/settings_pui_monet_v2" android:strokeWidth="2.4" android:strokeLineCap="round" />
+    <path android:fillColor="#00000000" android:pathData="M14,9C14,9 14.5,9.9 14.5,12C14.5,14.1 14,15 14,15" android:strokeColor="@color/settings_pui_monet_v2" android:strokeWidth="2.4" android:strokeLineCap="round" />
+    <path android:fillColor="#00000000" android:pathData="M20,10C20.943,10 21.414,10 21.707,10.293C22,10.586 22,11.057 22,12C22,12.943 22,13.414 21.707,13.707C21.414,14 20.943,14 20,14V10Z" android:strokeColor="@color/settings_pui_monet_v2" android:strokeWidth="2.4" />
+    <path android:fillColor="#00000000" android:pathData="M2,12C2,8.229 2,6.343 3.172,5.172C4.343,4 6.229,4 10,4H11.5C15.271,4 17.157,4 18.328,5.172C19.5,6.343 19.5,8.229 19.5,12C19.5,15.771 19.5,17.657 18.328,18.828C17.157,20 15.271,20 11.5,20H10C6.229,20 4.343,20 3.172,18.828C2.518,18.175 2.229,17.3 2.101,16" android:strokeColor="@color/settings_pui_monet_v2" android:strokeWidth="2.4" android:strokeLineCap="round" />
+</vector>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="24.0dip" android:width="24.0dip" android:top="0.0dip" android:start="0.0dip">
+		<vector android:tint="@*android:color/accent_material_dark" android:height="54.0dip" android:width="54.0dip" android:viewportWidth="54.0" android:viewportHeight="54.0">
+			<path android:fillColor="@color/icon_color" android:pathData="M14.4579,33.6875L15.6294,34.8591L26.9375,46.1671V7.8329L15.6294,19.1409L14.4579,20.3125H12.801H6.8125V33.6875H12.801H14.4579ZM12.801,16.3125H6.75C4.5755,16.3125 2.8125,18.0743 2.8125,20.25V33.75C2.8125,35.9257 4.5755,37.6875 6.75,37.6875H12.801L25.1475,50.034C25.8866,50.7731 26.8872,51.1875 27.9315,51.1875H29.25C30.182,51.1875 30.9375,50.432 30.9375,49.5V4.5C30.9375,3.568 30.182,2.8125 29.25,2.8125H27.9315C26.8872,2.8125 25.8866,3.2269 25.1475,3.966L12.801,16.3125Z" android:fillType="evenOdd" />
+			<path android:fillColor="#00000000" android:pathData="M43.4997,12C46.926,15.9482 48.9997,21.1019 48.9997,26.7399C48.9997,32.5026 46.8333,37.7593 43.2705,41.7399" android:strokeColor="@color/icon_color" android:strokeWidth="4.0" />
+			<path android:fillColor="#00000000" android:pathData="M36.08,20C37.2761,21.7259 38,23.9787 38,26.4432C38,28.9621 37.2437,31.26 36,33" android:strokeColor="@color/icon_color" android:strokeWidth="4.0" />
+		</vector>
+    </item>
+</layer-list>

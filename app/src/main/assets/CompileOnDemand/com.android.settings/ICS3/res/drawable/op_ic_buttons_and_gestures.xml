@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="24.0dip" android:width="24.0dip" android:top="0.0dip" android:start="0.0dip">
+		<vector android:tint="@*android:color/accent_material_dark" android:height="54.0dip" android:width="54.0dip" android:viewportWidth="54.0" android:viewportHeight="54.0">
+			<path android:fillColor="@color/icon_color" android:pathData="M14.1066,22.3875C13.4316,20.3625 12.9816,18.3375 12.9816,16.3125C12.9816,8.2125 19.7316,1.4625 27.8316,1.4625C35.9316,1.4625 42.6816,8.2125 42.6816,16.3125C42.6816,18.3375 42.2316,20.3625 41.3316,22.3875L37.7316,20.8125C38.4066,19.4625 38.6316,17.8875 38.6316,16.5375C38.6316,10.4625 33.6816,5.7375 27.8316,5.7375C21.7566,5.7375 17.0316,10.6875 17.0316,16.5375C17.0316,18.1125 17.2566,19.4625 17.9316,20.8125L14.1066,22.3875ZM44.9316,41.0625L46.0566,36.3375C46.7316,33.4125 44.9316,30.4875 42.0066,29.8125L34.3566,28.2375V21.0375C34.1316,17.6625 31.2066,14.7375 27.8316,14.9625C24.4566,14.7375 21.5316,17.6625 21.3066,21.2625V33.6375L19.9566,32.7375C18.8316,31.8375 17.4816,31.3875 16.1316,31.3875C14.3316,31.3875 12.7566,32.0625 11.4066,33.1875L7.8066,36.5625L17.9316,47.3625C20.8566,50.7375 25.1316,52.5375 29.4066,52.5375C29.6316,52.5375 29.6316,52.5375 29.8566,52.5375C36.8316,52.5375 42.9066,47.8125 44.9316,41.0625ZM29.6316,48.4875C26.2566,48.4875 23.1066,47.1375 21.0816,44.6625L13.6566,36.7875L14.3316,36.1125C14.7816,35.6625 15.4566,35.4375 16.1316,35.4375C16.5816,35.4375 17.2566,35.6625 17.7066,35.8875L25.3566,41.5125V21.2625C25.3566,19.9125 26.4816,19.0125 27.8316,19.0125C29.1816,19.0125 30.0816,19.9125 30.3066,21.2625V31.3875L41.1066,33.8625C41.7816,34.0875 42.2316,34.7625 42.2316,35.4375L41.1066,39.9375C39.5316,45.1125 35.0316,48.4875 29.6316,48.4875Z" />
+		</vector>
+    </item>
+</layer-list>

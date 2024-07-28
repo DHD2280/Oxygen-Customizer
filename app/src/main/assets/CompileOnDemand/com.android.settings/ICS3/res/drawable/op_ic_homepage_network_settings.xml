@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="24.0dip" android:width="24.0dip" android:top="0.0dip" android:start="0.0dip">
+		<vector android:tint="@*android:color/accent_material_dark" android:height="54.0dip" android:width="54.0dip" android:viewportWidth="54.0" android:viewportHeight="54.0">
+			<path android:fillColor="@color/icon_color" android:pathData="M26.9998,8.8873C17.3988,8.8873 8.191,12.7011 1.4019,19.4897L5.3792,23.4673C11.1135,17.7335 18.8906,14.5123 26.9998,14.5123C35.1089,14.5123 42.886,17.7335 48.6204,23.4673L52.5977,19.4897C45.8085,12.7011 36.6007,8.8873 26.9998,8.8873ZM17.9669,23.2789C20.8306,22.0926 23.9,21.4821 26.9997,21.4821C30.0994,21.4821 33.1688,22.0926 36.0326,23.2789C38.8963,24.4652 41.4983,26.204 43.6901,28.3959L39.7124,32.3732C38.043,30.7036 36.0611,29.3793 33.8798,28.4757C31.6986,27.5721 29.3607,27.1071 26.9997,27.1071C24.6387,27.1071 22.3009,27.5721 20.1196,28.4757C17.9384,29.3793 15.9564,30.7036 14.2871,32.3732L10.3094,28.3959C12.5011,26.204 15.1031,24.4652 17.9669,23.2789ZM34.9132,37.1742C32.8144,35.0756 29.9679,33.8966 26.9999,33.8966C24.0319,33.8966 21.1855,35.0756 19.0867,37.1742L26.9999,45.0874L34.9132,37.1742Z" android:fillType="evenOdd" />
+		</vector>
+    </item>
+</layer-list>

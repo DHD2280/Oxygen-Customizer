@@ -491,7 +491,7 @@
     </string-array>
 
     <!-- Lockscreen album art filter -->
-    <string-array name="lockscreen_albumart_filter_entries">
+    <string-array name="lockscreen_albumart_filter_entries" translatable="false">
         <item>@string/albumart_filter_none</item>
         <item>@string/albumart_filter_grayscale</item>
         <item>@string/albumart_filter_tint</item>
@@ -508,7 +508,7 @@
     </string-array>
 
     <!-- QS Album Art Filter -->
-    <string-array name="qs_media_art_filter_entries">
+    <string-array name="qs_media_art_filter_entries" translatable="false">
         <item>@string/albumart_filter_none</item>
         <item>@string/albumart_filter_grayscale</item>
         <item>@string/albumart_filter_tint</item>
@@ -524,6 +524,45 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+    </string-array>
+
+    <!-- Settings Icons -->
+    <string-array name="settings_bg_color_entries">
+        <item>@string/accent_color</item>
+        <item>@string/white_color</item>
+        <item>@string/black_color</item>
+    </string-array>
+
+    <string-array name="settings_bg_color_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_bg_solid_entries" translatable="false">
+        <item>@string/general_off</item>
+        <item>@string/general_on</item>
+    </string-array>
+
+    <string-array name="settings_bg_solid_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="settings_bg_shape_entries" translatable="false">
+        <item>@string/circle</item>
+        <item>@string/squircle</item>
+        <item>@string/rounded_square</item>
+        <item>@string/teardrop</item>
+        <item>@string/rhombus</item>
+    </string-array>
+
+    <string-array name="settings_bg_shape_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 
 </resources>

@@ -562,11 +562,15 @@ public class Constants {
         };
     }
 
+    // Actions
     public static final String ACTION_XPOSED_CONFIRMED = BuildConfig.APPLICATION_ID + ".ACTION_XPOSED_CONFIRMED_OC";
     public static final String ACTION_XPOSED_NOT_FOUND = BuildConfig.APPLICATION_ID + ".ACTION_XPOSED_NOT_FOUND_OC";
     public static final String ACTION_CHECK_XPOSED_ENABLED = BuildConfig.APPLICATION_ID + ".ACTION_CHECK_XPOSED_ENABLED_OC";
     public static final String ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT = BuildConfig.APPLICATION_ID + ".ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT_OC";
     public static final String ACTION_SETTINGS_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_SETTINGS_CHANGED_OC";
+    public static final String ACTIONS_QS_CLOCK_FONT_CHANGEG = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_FONT_CHANGEG_OC";
+    public static final String ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED_OC";
+
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
     public static final String HEADER_CLOCK_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_user_image.png";
@@ -586,10 +590,10 @@ public class Constants {
     public static final String CLOCK_TAG = "clock";
     public static final String DATE_TAG = "date";
 
+    // Chip Style
     public static String getStyle(String key) {
         return key + "_STYLE";
     }
-
     public static String getUseAccentColor(String key) {
         return key + "_USE_ACCENT_COLOR";
     }
@@ -634,5 +638,12 @@ public class Constants {
     public static String getLockScreenBitmapCachePath() {
         return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lsw.jpg";
     }
+
+    // Settings Icons Prefs
+    public static String SELECTED_SETTINGS_ICONS_SET = "selectedSettingsIconsSet";
+    public static String SELECTED_SETTINGS_ICONS_COLOR = "selectedSettignsIconsColor";
+    public static String SELECTED_SETTINGS_ICONS_BG_COLOR = "selectedSettignsIconsBgColor";
+    public static String SELECTED_SETTINGS_ICONS_BG_SHAPE = "selectedSettignsIconsBgShape";
+    public static String SELECTED_SETTINGS_ICONS_BG_SOLID = "selectedSettignsIconsBgSolid";
 
 }

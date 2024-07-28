@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M13.686,13.927C13.2555,13.4966 12.6716,13.2547 12.0628,13.2547C11.454,13.2547 10.8701,13.4966 10.4396,13.927L12.0628,15.5503L13.686,13.927Z" />
+                <path android:fillColor="@color/icon_color" android:pathData="M10.21,11.0767C10.7974,10.8334 11.427,10.7081 12.0629,10.7081C12.6987,10.7081 13.3283,10.8334 13.9157,11.0767C14.5032,11.3201 15.0369,11.6767 15.4865,12.1264L14.6706,12.9422C14.3281,12.5997 13.9216,12.3281 13.4742,12.1427C13.0267,11.9574 12.5472,11.862 12.0629,11.862C11.5785,11.862 11.099,11.9574 10.6515,12.1427C10.2041,12.3281 9.7976,12.5997 9.4551,12.9422L8.6392,12.1264C9.0888,11.6767 9.6225,11.3201 10.21,11.0767Z" android:fillType="evenOdd" />
+                <path android:fillColor="@color/icon_color" android:pathData="M6.812,10.2994C8.2047,8.9069 10.0934,8.1246 12.0629,8.1246C14.0323,8.1246 15.9211,8.9069 17.3137,10.2994L16.4979,11.1154C15.3216,9.9392 13.7263,9.2785 12.0629,9.2785C10.3994,9.2785 8.8041,9.9392 7.6279,11.1154L6.812,10.2994Z" android:fillType="evenOdd" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

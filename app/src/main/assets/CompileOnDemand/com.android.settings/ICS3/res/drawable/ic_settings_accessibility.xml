@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:height="38.0dip" android:width="38.0dip">
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+				<path android:fillColor="@color/icon_color" android:pathData="M14,2C14,3.1 13.1,4 12,4C10.9,4 10,3.1 10,2C10,0.9 10.9,0 12,0C13.1,0 14,0.9 14,2ZM12,5C14.83,5 17.89,4.7 20.5,4L21,6C19.14,6.5 17,6.83 15,7V20H13V14H11V20H9V7C7,6.83 4.86,6.5 3,6L3.5,4C6.11,4.7 9.17,5 12,5Z" android:fillType="evenOdd" />
+				<path android:fillColor="@color/icon_color" android:pathData="M7,24H9V22H7V24ZM11,24H13V22H11V24ZM17,24H15V22H17V24Z" android:fillType="evenOdd" />
+	</vector>
+    </item>
+</layer-list>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M8.7461,9.2077C8.7338,9.2077 8.7221,9.2126 8.7134,9.2212C8.7048,9.2299 8.6999,9.2416 8.6999,9.2539V15.7616H15.2076C15.2198,15.7616 15.2316,15.7567 15.2402,15.748C15.2489,15.7394 15.2538,15.7276 15.2538,15.7154V11.1H16.0845V15.7154C16.0845,15.948 15.9921,16.171 15.8277,16.3355C15.6632,16.4999 15.4402,16.5923 15.2076,16.5923H7.8691V9.2539C7.8691,9.0213 7.9615,8.7983 8.126,8.6338C8.2904,8.4693 8.5135,8.377 8.7461,8.377H13.3614V9.2077H8.7461Z" android:fillType="evenOdd" />
+                <path android:fillColor="@color/icon_color" android:pathData="M15.6691,10.1769C16.4338,10.1769 17.0538,9.557 17.0538,8.7923C17.0538,8.0276 16.4338,7.4077 15.6691,7.4077C14.9044,7.4077 14.2845,8.0276 14.2845,8.7923C14.2845,9.557 14.9044,10.1769 15.6691,10.1769Z" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

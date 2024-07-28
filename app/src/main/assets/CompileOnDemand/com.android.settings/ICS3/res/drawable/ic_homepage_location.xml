@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+     <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="24.0dip" android:width="24.0dip" android:top="0.0dip" android:start="0.0dip">
+		<vector android:tint="@*android:color/accent_material_dark" android:height="54.0dip" android:width="54.0dip" android:viewportWidth="54.0" android:viewportHeight="54.0">
+			<group>
+				<clip-path android:pathData="M0,0h54v54h-54z" />
+				<path android:fillColor="@color/icon_color" android:pathData="M15.0678,10.3425C18.2324,7.1779 22.5247,5.4 27.0002,5.4C31.4757,5.4 35.7679,7.1779 38.9326,10.3425C42.0973,13.5072 43.8752,17.7994 43.8752,22.275C43.8752,28.5535 39.6238,35.0337 34.9511,40.1792C32.662,42.7 30.3664,44.7981 28.6408,46.2669C28.0046,46.8085 27.4479,47.2627 27.0002,47.6193C26.5525,47.2627 25.9958,46.8085 25.3596,46.2669C23.634,44.7981 21.3384,42.7 19.0493,40.1792C14.3766,35.0337 10.1252,28.5535 10.1252,22.275C10.1252,17.7994 11.9031,13.5072 15.0678,10.3425ZM25.8093,51.8128C25.8098,51.8132 25.8103,51.8135 27.0002,50.175L25.8103,51.8135L27.0002,52.6776L28.1901,51.8135L27.0002,50.175C28.1901,51.8135 28.1905,51.8132 28.1911,51.8128L28.1925,51.8117L28.1967,51.8087L28.2101,51.7989L28.2572,51.7643C28.2973,51.7346 28.3549,51.6919 28.4287,51.6365C28.5763,51.5256 28.789,51.3638 29.0575,51.1544C29.5943,50.7358 30.3553,50.126 31.2659,49.351C33.084,47.8034 35.5134,45.5844 37.9493,42.902C42.7266,37.6413 47.9252,30.1714 47.9252,22.275C47.9252,16.7253 45.7206,11.403 41.7964,7.4788C37.8722,3.5546 32.5498,1.35 27.0002,1.35C21.4505,1.35 16.1282,3.5546 12.204,7.4788C8.2798,11.403 6.0752,16.7253 6.0752,22.275C6.0752,30.1714 11.2738,37.6413 16.0511,42.902C18.487,45.5844 20.9164,47.8034 22.7345,49.351C23.6451,50.126 24.406,50.7358 24.9429,51.1544C25.2114,51.3638 25.4241,51.5256 25.5717,51.6365C25.6455,51.6919 25.7031,51.7346 25.7432,51.7643L25.7902,51.7989L25.8037,51.8087L25.8079,51.8117L25.8093,51.8128ZM21.15,22.5C21.15,19.2691 23.7691,16.65 27,16.65C30.2308,16.65 32.85,19.2691 32.85,22.5C32.85,25.7308 30.2308,28.35 27,28.35C23.7691,28.35 21.15,25.7308 21.15,22.5ZM27,12.6C21.5324,12.6 17.1,17.0324 17.1,22.5C17.1,27.9676 21.5324,32.4 27,32.4C32.4676,32.4 36.9,27.9676 36.9,22.5C36.9,17.0324 32.4676,12.6 27,12.6Z" android:fillType="evenOdd" />
+			</group>
+		</vector>
+    </item>
+</layer-list>

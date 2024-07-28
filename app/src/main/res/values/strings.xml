@@ -129,6 +129,8 @@
     <string name="general_on">On</string>
     <string name="general_off">Off</string>
     <string name="accent_color">Accent Color</string>
+    <string name="white_color">White</string>
+    <string name="black_color">Black</string>
     <string name="custom_color">Custom Color</string>
     <string name="battery_info_button_title">Battery info…</string>
 
@@ -1092,6 +1094,21 @@
     <string name="theme_customization_navbar_summary">Set custom navigation bar style</string>
     <string name="theme_customization_toast_frame_title">Toast Frame</string>
     <string name="theme_customization_toast_frame_summary">Change toast notification style</string>
+
+    <!-- Settings Icons -->
+    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_customized">Stock Customized</string>
+    <string name="settings_icons_pui">PUI</string>
+    <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_bg_color">Background Color</string>
+    <string name="settings_bg_use_solid">Solid Background</string>
+    <string name="settings_bg_shape">Background Shape</string>
+    <string name="circle">Circle</string>
+    <string name="squircle">Squircle</string>
+    <string name="rounded_square">Rounded Square</string>
+    <string name="teardrop">Teardrop</string>
+    <string name="rhombus">Rhombus</string>
+    <string name="settings_icon_color">Icon Color</string>
 
     <!-- Notification -->
     <string name="notification_styles">Notification Styles</string>

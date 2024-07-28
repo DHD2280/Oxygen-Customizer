@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector android:height="36.0dip" android:width="36.0dip" android:viewportWidth="32.0" android:viewportHeight="32.0"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/monet_color" android:pathData="M23.0223,21.0056L8.9778,21.0056L10.3229,19.077L10.4667,18.8708L10.4667,18.6194L10.4667,10.9943L21.5334,10.9943L21.5334,18.6194L21.5334,18.8708L21.6772,19.077L23.0223,21.0056ZM23.5973,22.6056C24.648,22.6056 25.2646,21.4237 24.6636,20.5619L23.1334,18.368L23.1334,10.8829C23.1334,10.4545 22.9403,10.0666 22.6359,9.797C22.3346,9.5303 21.9447,9.3943 21.5556,9.3943L10.4445,9.3943C10.0554,9.3943 9.6655,9.5303 9.3642,9.797C9.0598,10.0666 8.8667,10.4545 8.8667,10.8829L8.8667,18.368L7.3366,20.5619C6.7355,21.4237 7.3521,22.6056 8.4028,22.6056L23.5973,22.6056Z" android:fillType="evenOdd" />
-    <path android:fillColor="@color/monet_color" android:pathData="M20.3818,12.1493H11.6179V16.5938H20.3818V12.1493Z" />
-    <path android:fillColor="#00000000" android:pathData="M16.00,1.50C24.01,1.50,30.50,7.99,30.50,16.00C30.50,24.01,24.01,30.50,16.00,30.50C7.99,30.50,1.50,24.01,1.50,16.00C1.50,7.99,7.99,1.50,16.00,1.50z" android:strokeColor="@color/monet_color" android:strokeWidth="1.28" android:strokeLineCap="square" android:strokeLineJoin="miter" android:fillType="nonZero" />
-</vector>

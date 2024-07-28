@@ -118,4 +118,8 @@
 
     <color name="rippleAccent">@color/color_accent_alpha_light</color>
 
+    <color name="settings_pui_monet_v1">@android:color/system_accent1_600</color>
+    <color name="settings_pui_monet_v2">@android:color/system_accent1_700</color>
+    <color name="settings_accent">@android:color/system_accent1_500</color>
+
 </resources>

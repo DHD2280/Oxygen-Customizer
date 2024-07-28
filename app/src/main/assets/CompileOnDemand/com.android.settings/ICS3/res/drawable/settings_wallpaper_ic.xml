@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M11.0511,9.7393C11.1907,9.7306 11.3253,9.7928 11.4092,9.9047L12.5065,11.3677L13.0909,10.7833C13.1813,10.6928 13.3084,10.6491 13.4354,10.6647C13.5623,10.6803 13.675,10.7536 13.7408,10.8633L15.1254,13.171C15.2024,13.2993 15.2044,13.4591 15.1307,13.5893C15.057,13.7196 14.9189,13.8001 14.7692,13.8001H9.2308C9.0827,13.8001 8.9458,13.7212 8.8715,13.5932C8.7972,13.4651 8.7967,13.3071 8.8701,13.1786L10.7163,9.9478C10.7857,9.8264 10.9115,9.748 11.0511,9.7393ZM11.1239,10.9089L9.9466,12.9693H14.0356L13.3022,11.7469L12.7553,12.2938C12.6701,12.3789 12.5522,12.4229 12.4321,12.4144C12.312,12.4059 12.2015,12.3456 12.1292,12.2493L11.1239,10.9089Z" android:fillType="evenOdd" />
+                <path android:fillColor="@color/icon_color" android:pathData="M7.8462,8.7231C7.8339,8.7231 7.8222,8.728 7.8135,8.7367C7.8049,8.7453 7.8,8.757 7.8,8.7693V15.277H16.1539C16.1661,15.277 16.1778,15.2721 16.1865,15.2635C16.1951,15.2548 16.2,15.2431 16.2,15.2308V8.7693C16.2,8.757 16.1951,8.7453 16.1865,8.7367C16.1778,8.728 16.1661,8.7231 16.1539,8.7231H7.8462ZM7.2261,8.1492C7.3905,7.9847 7.6136,7.8924 7.8462,7.8924H16.1539C16.3864,7.8924 16.6095,7.9847 16.7739,8.1492C16.9384,8.3137 17.0308,8.5367 17.0308,8.7693V15.2308C17.0308,15.4634 16.9384,15.6864 16.7739,15.8509C16.6095,16.0154 16.3864,16.1077 16.1539,16.1077H6.9692V8.7693C6.9692,8.5367 7.0616,8.3137 7.2261,8.1492Z" android:fillType="evenOdd" />
+            </group>
+        </vector>
+    </item>
+</layer-list>

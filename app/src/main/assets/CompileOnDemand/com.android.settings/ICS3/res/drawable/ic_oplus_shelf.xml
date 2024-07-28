@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+     <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="36.0" android:viewportHeight="36.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M15.5 22.7V24.3H20.5V22.7H15.5Z" />
+                <path android:fillColor="@color/icon_color" android:pathData="M12.5 8.5C11.9477 8.5 11.5 8.94771 11.5 9.5V27.5H23.5C24.0523 27.5 24.5 27.0523 24.5 26.5V9.5C24.5 8.94772 24.0523 8.5 23.5 8.5H12.5ZM13.1 10.1V25.9H22.9V10.1H13.1Z" android:fillType="evenOdd" />
+            </group>
+        </vector>
+    </item>
+</layer-list>
