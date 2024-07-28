@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Xposed Description -->
+    <string name="xposeddescription">تخصيص Oxygen OS</string>
     <!-- Preferences Strings -->
+    <string name="default_value">افتراضي</string>
     <!-- Onboarding -->
     <!-- Buttons -->
     <!-- Dialogs -->

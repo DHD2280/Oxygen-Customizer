@@ -1,57 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Xposed Description -->
-    <string name="xposeddescription">Customizar Oxygen OS</string>
+    <string name="xposeddescription">Customize a OxygenOS</string>
     <!-- Preferences Strings -->
     <string name="default_value">Predefinido</string>
     <string name="settingslib_learn_more_text">Mais informações</string>
     <string name="settings_label">Configurações</string>
     <string name="toast_rename_file">Renomear arquivo para algo mais simples</string>
     <string name="toast_applied">Aplicado</string>
+    <string name="toast_disabled">Desativado</string>
+    <string name="toast_error">Algo deu errado</string>
     <string name="opt_selected1">Selecionado: %s</string>
     <string name="opt_selected2">Selecionado: %s%s</string>
+    <string name="requires_sysui_restart">Esta seção requer a reinicialização do SystemUI.\nToque no menu para reiniciar.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Inicializando a configuração</string>
+    <string name="step">Passo</string>
+    <string name="module_installation_step1">Criando módulo shell</string>
+    <string name="module_installation_step2">Extraindo arquivos necessários</string>
+    <string name="module_installation_step3">Criando APKs de sobreposição</string>
+    <string name="module_installation_step4">Alinhando APKs de sobreposição</string>
+    <string name="module_installation_step5">Assinando APKs de sobreposição</string>
+    <string name="module_installation_step6">Limpando diretórios</string>
+    <string name="onboarding_title_1">Ficou entediado com a interface padrão?</string>
+    <string name="onboarding_subtitle_1">Vamos personalizar tudo ao nosso gosto.</string>
+    <string name="onboarding_desc_1">Abandone a monotonia da interface padrão – personalize cada detalhe tecnológico para combinar com seu estilo e preferências.</string>
+    <string name="onboarding_title_2">Meu dispositivo é compatível?</string>
+    <string name="onboarding_subtitle_2">O Oxygen Customizer oferece suporte a ROMs baseadas em OOS.</string>
+    <string name="onboarding_desc_2">Compatível com todas as ROMs baseadas em OOS, garantindo um amplo suporte para os dispositivos Android.</string>
+    <string name="onboarding_title_3">Vamos começar agora?</string>
+    <string name="onboarding_subtitle_3">É hora do Oxygen Customizer fazer algum trabalho interno.</string>
+    <string name="onboarding_desc_3">Iniciando tarefas internas, marcando o início de trabalhos essenciais. Pronto para começar?</string>
+    <string name="need_storage_perm_title">Conceda permissão de armazenamento</string>
+    <string name="need_storage_perm_desc">A permissão de armazenamento é necessária para criar os arquivos necessários.</string>
+    <string name="compatible_root_not_found_title">Não foi possível encontrar método root compatível</string>
+    <string name="compatible_root_not_found_desc">Use qualquer solução root popular para continuar.</string>
+    <string name="root_not_found_title">Root não está acessível</string>
+    <string name="root_not_found_desc">Parece que seu dispositivo não está rooteado!</string>
+    <string name="need_reboot_title">Necessário reiniciar o dispositivo</string>
+    <string name="need_reboot_desc">Reinicie seu dispositivo para colocar todos os arquivos no lugar.</string>
+    <string name="installation_failed_title">Ops, não esperava por isso</string>
+    <string name="installation_failed_desc">Os registros foram salvos na pasta documents.</string>
+    <string name="logs">Registros</string>
+    <string name="toast_skipped_installation">Instalação ignorada. Alguns recursos podem não funcionar corretamente.</string>
     <!-- Buttons -->
     <string name="btn_select">Selecionar</string>
+    <string name="btn_skip">Pular</string>
+    <string name="btn_next">Próximo</string>
+    <string name="btn_back">Voltar</string>
+    <string name="btn_lets_go">Vamos</string>
+    <string name="btn_close">Fechar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_reboot_now">Reiniciar agora</string>
+    <string name="btn_reboot">Reiniciar</string>
+    <string name="btn_enable">Ativar</string>
+    <string name="btn_disable">Desativar</string>
+    <string name="btn_apply">Aplicar</string>
     <!-- Dialogs -->
+    <string name="installing">Instalando</string>
+    <string name="loading_dialog_wait">Por favor, aguarde.</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Observação</string>
+    <string name="app_kill_alert_body">O app será fechado agora. Você pode abri-lo novamente tocando no novo ícone.</string>
     <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">É necessária uma reinicialização do sistema para as configurações serem aplicadas</string>
     <!-- General Strings -->
+    <string name="battery_charging">Bateria carregando</string>
+    <string name="battery_discharging">Bateria descarregando</string>
+    <string name="battery_full">Bateria cheia</string>
+    <string name="battery_level_percentage">Nível da bateria</string>
+    <string name="seconds">Segundos</string>
+    <string name="milliseconds">Milissegundos</string>
+    <string name="steps">Passos</string>
+    <string name="general_color_accent1">Destaque 1</string>
+    <string name="general_color_accent2">Destaque 2</string>
+    <string name="general_color_accent3">Destaque 3</string>
+    <string name="general_color_text1">Texto 1</string>
+    <string name="general_color_text2">Texto 2</string>
+    <string name="sysui_restart_needed">Requer uma reinicialização do SystemUI para aplicar</string>
+    <string name="one_time_reboot_needed">Reinicie seu dispositivo!</string>
+    <string name="gradient_left_right">Esquerda para direita</string>
+    <string name="gradient_top_bottom">Cima para baixo</string>
+    <string name="gradient_tl_br">Superior esquerdo para inferior direito</string>
+    <string name="gradient_tr_bl">Superior direito para inferior esquerdo</string>
     <!-- Search Preference -->
+    <string name="searchpreference_search">Pesquisar…</string>
+    <string name="searchpreference_clear">Limpar</string>
     <string name="searchpreference_more">Mais</string>
+    <string name="searchpreference_clear_history">Limpar histórico</string>
+    <string name="searchpreference_no_results">Sem resultados</string>
     <!-- Menu Strings -->
+    <string name="restart_scopes">Reiniciar escopos</string>
+    <string name="restart_module">Reiniciar processos do escopo</string>
+    <string name="restart_page_scope">Reinicar apenas o escopo desta página</string>
+    <string name="restart_scope_message">Tem certeza que deseja reiniciar todos os processos do escopo, exceto a estrutura do sistema?\nUse isto se o módulo não estiver funcionando!\nCertifique-se de que todos os escopos relevantes estejam verificados!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">UI</string>
     <string name="navbar_mods">Mods</string>
+    <string name="navbar_hooks">Hooks</string>
+    <string name="navbar_settings">Configurações</string>
     <!-- Mods Strings -->
     <string name="mods_title">Mods</string>
+    <string name="statusbar_title">Barra de status</string>
+    <string name="launcher_title">Launcher</string>
+    <string name="quick_settings_title">Configurações rápidas</string>
+    <string name="qs_header_title">Cabeçalho das configurações rápidas</string>
+    <string name="sound">Som</string>
+    <string name="misc">Diversos</string>
+    <string name="package_manager">Gerenciador de pacotes</string>
     <!-- General Strings -->
     <string name="general_on">Ativo</string>
     <string name="general_off">Desativado</string>
+    <string name="accent_color">Cor de destaque</string>
+    <string name="custom_color">Cor customizada</string>
+    <string name="battery_info_button_title">Informações da bateria…</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">Opções da barra de status</string>
+    <string name="statusbar_double_tap_sleep">Toque duas vezes para desligar a tela</string>
+    <string name="status_bar_toggle_brightness_title">Controle de brilho</string>
+    <string name="status_bar_toggle_brightness_summary">Ajuste o brilho deslizando pela barra de status</string>
+    <string name="statusbar_batterybar_title">Configurações da barra de bateria</string>
+    <string name="statusbar_battery_icon_options">Ícone da bateria</string>
+    <string name="statusbar_icons">Ícones da barra de status</string>
     <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">Notificações</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">Notificações da barra de status</string>
+    <string name="statusbar_use_app_icon">Usar ícone do app para notificações</string>
+    <string name="statusbar_notifications_transparency">Transparência de notificações</string>
+    <string name="statusbar_notification_transparency">Transparência da notificação</string>
+    <string name="statusbar_notification_transparency_value">Valor de transparência</string>
+    <string name="statusbar_notification_count">Mostrar contagem de notificações</string>
+    <string name="statusbar_notifications_related">Preferências de notificações</string>
+    <string name="remove_charging_complete_notification_title">Remover notificação de conclusão de carregamento</string>
+    <string name="remove_dev_mode_notification">Remover notificação das opções do desenvolvedor</string>
+    <string name="remove_flashlight_notification">Remover notificação da lanterna</string>
+    <string name="remove_low_battery_notification">Remover notificação de bateria fraca</string>
+    <string name="notif_default_expansion_title">Expansão padrão de notificação</string>
+    <string name="notif_always_expand">Sempre expandir</string>
+    <string name="notif_always_collapse">Sempre recolher</string>
+    <string name="customize_clear_all_button">Personalizar botão Limpar tudo</string>
+    <string name="clear_all_link_bg_accent">Vincular plano de fundo ao destaque</string>
+    <string name="clear_all_bg_color">Cor de fundo personalizada</string>
+    <string name="clear_all_link_bg_icon_accent">Vincular ícone ao destaque</string>
+    <string name="clear_all_icon_color">Cor do ícone personalizado</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_title">Relógio e data</string>
+    <string name="status_bar_clock_summary">Personalize o relógio e a data</string>
+    <string name="status_bar_clock_seconds_title">Segundos do relógio</string>
+    <string name="status_bar_clock_position_title">Estilo do relógio</string>
     <string name="status_bar_clock_position_left">Esquerda</string>
+    <string name="status_bar_am_pm_title">Estilo AM/PM</string>
+    <string name="status_bar_am_pm_normal">Normal</string>
     <string name="status_bar_date_title">Data</string>
+    <string name="status_bar_date_style">Estilo da data</string>
+    <string name="status_bar_date_style_normal">Normal</string>
+    <string name="status_bar_date_style_lowercase">Minúscula</string>
+    <string name="status_bar_date_style_uppercase">Maiúscula</string>
+    <string name="string_formatter_manual_body">Além do texto normal, variáveis ​​dinâmicas também estão disponíveis, como Data e Temperatura:\n\n$G\&lt;format\&gt; : Data gregoriana, com base no formato*\n$P\&lt;format\&gt; : Data persa, baseada no formato*\n$T\&lt;format\&gt;[interval] : Temperatura; \no formato pode ser b (para bateria), c (para CPU), g (para GPU) e s (para skin). \nPor último, há um número OPCIONAL de intervalo de atualização em segundos (padrão: 60 segundos)\n\n* para documentação de formato, procure por \"Java Date Format\".</string>
+    <string name="preview">Visualizar</string>
+    <string name="status_bar_clock_font_style_title">Estilo da fonte do relógio</string>
     <!-- Status bar padding -->
     <!-- Battery Bar Strings -->
     <!-- Battery Icon Strings -->
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
+    <string name="battery_default">Padrão</string>
+    <string name="battery_landscape_r_default">Paisagem R padrão</string>
+    <string name="battery_landscape_l_default">Paisagem L padrão</string>
+    <string name="battery_landscape_r_custom">Paisagem R personalizado</string>
+    <string name="battery_landscape_l_custom">Paisagem L personalizado</string>
+    <string name="battery_portrait_capsule">Cápsula retrato</string>
+    <string name="battery_portrait_lorn">Retrato lorn</string>
+    <string name="battery_portrait_mx">Retrato Mx</string>
+    <string name="battery_portrait_airoo">Retrato Airoo</string>
+    <string name="battery_landscape_r_style_a">Paisagem R estilo A</string>
+    <string name="battery_landscape_l_style_a">Paisagem L estilo A</string>
+    <string name="battery_landscape_r_style_b">Paisagem R estilo B</string>
+    <string name="battery_landscape_l_style_b">Paisagem L estilo B</string>
+    <string name="battery_landscape_ios_15">Paisagem iOS 15</string>
+    <string name="battery_landscape_ios_16">Paisagem iOS 16</string>
+    <string name="battery_portrait_origami">Retrato origami</string>
+    <string name="battery_landscape_smiley">Paisagem Smiley</string>
+    <string name="battery_landscape_miui_pill">Indicador MIUI de paisagem</string>
+    <string name="battery_landscape_l_coloros">Paisagem L ColorOS</string>
+    <string name="battery_landscape_r_coloros">Paisagem R ColorOS</string>
+    <string name="battery_landscape_battery_a">Bateria de paisagem A</string>
+    <string name="battery_landscape_battery_b">Bateria de paisagem B</string>
+    <string name="battery_landscape_battery_c">Bateria de paisagem C</string>
+    <string name="battery_landscape_battery_d">Bateria de paisagem D</string>
+    <string name="battery_landscape_battery_e">Bateria de paisagem E</string>
+    <string name="battery_landscape_battery_f">Bateria de paisagem F</string>
+    <string name="battery_landscape_battery_g">Bateria de paisagem G</string>
+    <string name="battery_landscape_battery_h">Bateria de paisagem H</string>
+    <string name="battery_landscape_battery_i">Bateria de paisagem I</string>
+    <string name="battery_landscape_battery_j">Bateria de paisagem J</string>
+    <string name="battery_landscape_battery_k">Bateria de paisagem K</string>
+    <string name="battery_landscape_battery_l">Bateria de paisagem L</string>
+    <string name="battery_landscape_battery_m">Bateria de paisagem M</string>
+    <string name="battery_landscape_battery_n">Bateria de paisagem N</string>
+    <string name="battery_landscape_battery_o">Bateria de paisagem O</string>
     <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown_side_left">Esquerda</string>
+    <string name="my_device_summary">Force a exibição de Meus dispositivos no centro de controle.\nOBSERVAÇÃO: Você precisa que o novo centro de controle e Meus dispositivos estejam instalados para usar esse recurso corretamente.</string>
     <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_title">Blocos de configurações rápidas</string>
+    <string name="qs_transparency">Transparência do QS e blur</string>
+    <string name="qs_transparency_blur_title">Blur no nível da janela</string>
+    <string name="qs_blur_intentisy">Intensidade do blur</string>
     <!-- Quick Settings Tiles Customizations -->
     <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_style_flip">Inverter</string>
     <string name="qs_tile_animation_duration_low">Baixa</string>
+    <string name="qs_tile_animation_duration_default">Padrão</string>
     <string name="qs_tile_animation_duration_fast">Rápido</string>
     <!-- QS Page Transitions -->
     <!-- QS Header Image Strings -->
@@ -59,21 +225,28 @@
     <!-- QS Header Clock Strings -->
     <!-- Qs Header Per Clock Prefs -->
     <!-- Hour only color -->
+    <string name="qs_header_clock_custom_color_hour_mode_default">Padrão</string>
     <string name="qs_header_clock_custom_color_hour_mode_disabled">Nenhuma</string>
     <!-- Time color -->
+    <string name="qs_header_clock_custom_color_time_mode_default">Padrão</string>
     <!-- Separator Color, Only for first clock -->
     <!-- QS Header Clock Margins -->
     <!-- QS Header Misc -->
     <!-- Chip Styles Strings -->
     <!-- Launcher Mods -->
+    <string name="launcher_folder_update_preview">Atualizar visualização</string>
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
     <!-- Media art -->
+    <string name="albumart_blur_title">Nível do blur da arte da mídia</string>
     <!-- Album art filter -->
+    <string name="albumart_filter_blur">Blur</string>
+    <string name="albumart_filter_grayblur">Tons de cinza e desfocados</string>
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
+    <string name="default_user_name">Usuário</string>
     <!-- Lockscreen 9 Strings -->
     <!-- Aod Strings -->
     <!-- Aod Clock -->
@@ -82,9 +255,31 @@
     <!-- Pulse Gravity n Mirror Options -->
     <!-- Fluid Music -->
     <!-- Volume Steps -->
+    <string name="max_alarm_volume_title">Alarmes</string>
+    <string name="steps_unit">%1s passos</string>
     <!-- Adaptive Playback -->
+    <string name="adaptive_playback_screen_title">Pausa inteligente</string>
+    <string name="adaptive_playback_enabled">Usar pausa inteligente</string>
     <string name="adaptive_playback_disabled_summary">Desativado</string>
+    <string name="adaptive_playback_intro_text">Pausa automaticamente a mídia quando o volume for silenciado e retorna automaticamente quando o volume for restaurado no tempo definido.</string>
+    <string name="adaptive_playback_timeout_title">Tempo limite de</string>
+    <string name="adaptive_playback_timeout_none">Sem tempo limite</string>
+    <string name="adaptive_playback_timeout_none_summary">Ativado (sem limite de tempo)</string>
+    <string name="adaptive_playback_timeout_30_secs">30 segundos</string>
+    <string name="adaptive_playback_timeout_30_secs_summary">Ativado (30 segundos)</string>
+    <string name="adaptive_playback_timeout_1_min">1 minuto</string>
+    <string name="adaptive_playback_timeout_1_min_summary">Ativado (1 minuto)</string>
+    <string name="adaptive_playback_timeout_2_min">2 minutos</string>
+    <string name="adaptive_playback_timeout_2_min_summary">Ativado (2 minutos)</string>
+    <string name="adaptive_playback_timeout_5_min">5 minutos</string>
+    <string name="adaptive_playback_timeout_5_min_summary">Ativado (5 minutos)</string>
+    <string name="adaptive_playback_timeout_10_min">10 minutos</string>
+    <string name="adaptive_playback_timeout_10_min_summary">Ativado (10 minutos)</string>
     <!-- Volume panel -->
+    <string name="volume_panel_category">Painel de volume</string>
+    <string name="volume_panel_position_title">Posição do painel de volume</string>
+    <string name="volume_panel_position_right">Direito</string>
+    <string name="volume_panel_position_left">Esquerdo</string>
     <!-- Volume Panel Customizations -->
     <!-- Volume Styles -->
     <!-- Package Manager -->
@@ -95,17 +290,48 @@
     <string name="update_channel_name">Atualizações</string>
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
+    <string name="settings_about_section_title">Sobre</string>
     <!-- Omni Jaws Strings -->
+    <string name="settings_title">Configurações</string>
     <string name="omnijaws_current_text">Agora</string>
+    <string name="omnijaws_label_default">Clima</string>
     <!-- Lockscreen Weather styles -->
+    <string name="lockscreen_weather_selection_default">Padrão</string>
     <!-- Weather -->
     <!-- UI Strings -->
+    <string name="style_category">Temas e estilos</string>
     <!-- UI styles -->
+    <string name="oxygen_customizer_updated_title">O Oxygen Customizer acabou de ser atualizado!</string>
+    <string name="theme_customization_ui_style_title">Estilo da UI</string>
+    <string name="theme_customization_ui_style_summary">Defina um estilo personalizado para sua interface.</string>
     <!-- Icon pack -->
+    <string name="theme_customization_wifi_icon_summary">Defina um estilo personalizado do ícone Wi-Fi</string>
+    <string name="theme_customization_navbar_title">Estilo da barra de navegação</string>
+    <string name="theme_customization_navbar_summary">Defina um estilo personalizado da barra de navegação.</string>
     <!-- Notification -->
+    <string name="notification_styles">Estilos de notificação</string>
+    <string name="notification_styles_desc">Defina um estilo personalizado para notificações.</string>
+    <string name="notif_preview_desc">Visualização da notificação.\nClique para aplicar este estilo.</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Raio do canto de notificação</string>
+    <string name="notification_corner_radius_summary">Defina o raio do canto personalizado para notificações.</string>
+    <string name="notif_roundness_preview_desc">Visualização da notificação</string>
     <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_summary">Defina um estilo personalizado para a caixa de diálogo USB.</string>
     <!-- Toast Styles -->
     <!-- Style List -->
+    <string name="style_0">Nenhum</string>
+    <string name="style_1">Estilo 1</string>
+    <string name="style_2">Estilo 2</string>
+    <string name="style_3">Estilo 3</string>
+    <string name="style_4">Estilo 4</string>
+    <string name="style_5">Estilo 5</string>
+    <string name="style_6">Estilo 6</string>
+    <string name="style_7">Estilo 7</string>
+    <string name="style_8">Estilo 8</string>
+    <string name="style_9">Estilo 9</string>
+    <string name="style_10">Estilo 10</string>
+    <string name="style_11">Estilo 11</string>
+    <string name="style_12">Estilo 12</string>
     <!-- Dark Mode -->
 </resources>
