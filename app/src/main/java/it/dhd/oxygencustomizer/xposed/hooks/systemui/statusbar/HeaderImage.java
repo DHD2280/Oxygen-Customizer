@@ -3,8 +3,10 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findField;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
@@ -23,6 +25,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -83,12 +88,16 @@ public class HeaderImage extends XposedMods {
     private int qshiMinHeight = 50;
     private int qshiDefaultHeight = 200;
     private int qshiTintIntensity = 50;
+    ValueAnimator alphaAnimator;
 
     private int mColorAccent;
     private int mColorTextPrimary;
     private int mColorTextPrimaryInverse;
     private int bottomFadeAmount = 0;
     private boolean newControlCenter = false;
+    private boolean isFirstExpansionIgnored = true;
+    private boolean isResetNeeded = false;
+    private boolean ignore = true;
 
     public HeaderImage(Context context) {
         super(context);
@@ -197,7 +206,278 @@ public class HeaderImage extends XposedMods {
 
         if (newControlCenter) {
             try {
-                final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", lpparam.classLoader);
+
+                hookAllMethods(OplusQSContainerImpl, "calcExpansionHeight", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        log(TAG + "calcExpansionHeight " + param.getResult());
+                    }
+                });
+
+                /*Class<?> NotificationsQuickSettingsContainer = findClass("com.android.systemui.shade.NotificationsQuickSettingsContainer", lpparam.classLoader);
+                hookAllMethods(NotificationsQuickSettingsContainer,
+                        "applyBackScaling",
+                        new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args[0] instanceof Float) {
+                            float f = (float) param.args[0];
+                            log(TAG + "applyBackScaling: " + f);
+                        }
+                    }
+                });
+
+                Class<?> NotificationStackScrollLayout = findClass("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout", lpparam.classLoader);
+                hookAllMethods(NotificationStackScrollLayout,
+                        "setFractionToShade",
+                        new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args[0] instanceof Float) {
+                            float height = (float) param.args[0];
+                            log(TAG + "setFractionToShade: " + height);
+                        }
+                    }
+                });*/
+
+                Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+
+                hookAllMethods(CentralSurfacesImpl, "onPanelExpansionChanged", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (true) return;
+                        if (!qshiEnabled) return;
+
+                        Object shade = param.args[0];
+                        float f = (float) callMethod(shade, "getFraction");
+                        log(TAG + "onPanelExpansionChanged: " + f);
+
+                        if (mQsHeaderLayout != null && f < .2f) {
+                            mQsHeaderLayout.setAlpha(0f);
+                            mQsHeaderLayout.setVisibility(View.GONE);
+                        }
+
+                        if (isFirstExpansionIgnored) {
+                            log(TAG + "Ignoring first expansion");
+                            if (f >= 0.9f) {
+                                log(TAG + "First expansion ignored f>=0.9");
+                                // Abbiamo superato 0.9, quindi non ignoriamo più le espansioni
+                                isFirstExpansionIgnored = false;
+                                isResetNeeded = true; // Prepara il reset quando l'espansione torna a 0.0
+                            }
+                            if (mQsHeaderLayout != null && f >= .20f) {
+                                mQsHeaderLayout.setAlpha(1f);
+                                mQsHeaderLayout.setVisibility(View.VISIBLE);
+                            }
+                            return;
+                        }
+
+                        if (f <= .49f) {
+                            log(TAG + "Resetting");
+                            // Reset dello stato per ignorare di nuovo la prossima espansione da 0.0 a 0.9
+                            isFirstExpansionIgnored = true;
+                            isResetNeeded = false;
+                        }
+
+                        if (mQsHeaderLayout != null) {
+                            if (f <= .900f) {
+                                mQsHeaderLayout.animate()
+                                        .alpha(0f)
+                                        .setDuration(750)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                mQsHeaderLayout.setVisibility(View.GONE);
+                                            }
+                                        });
+                            } else {
+                                mQsHeaderLayout.animate()
+                                        .alpha(1f)
+                                        .setDuration(150)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                mQsHeaderLayout.setVisibility(View.VISIBLE);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+                /*Class<?> ClearAllController = findClass("com.oplus.systemui.statusbar.notification.ClearAllController", lpparam.classLoader);
+                hookAllMethods(ClearAllController, "updateVisibility", new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        log(TAG + "ClearAllController updateVisibility: " + param.args[0]);
+                        boolean visible = (boolean) param.args[0];
+                        if (mQsHeaderLayout != null) {
+                            if (visible) {
+                                mQsHeaderLayout.animate()
+                                        .alpha(1f)
+                                        .setDuration(200)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                mQsHeaderLayout.setVisibility(View.VISIBLE);
+                                            }
+                                        });
+                            } else {
+                                mQsHeaderLayout.animate()
+                                        .alpha(0f)
+                                        .setDuration(650)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                mQsHeaderLayout.setVisibility(View.GONE);
+                                            }
+                                        });
+                            }
+                        }
+
+                    }
+                });*/
+
+                Class<?> NotificationStack = findClass("com.oplus.systemui.shade.NotificationPanelViewControllerExImp", lpparam.classLoader);
+
+                hookAllMethods(NotificationStack, "canScaleFadePanelAtExpandFraction",
+                        new XC_MethodHook() {
+                            @Override
+                            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                                if (!qshiEnabled || mQsHeaderLayout == null) return;
+                                if (param.args[0] instanceof Float) {
+                                    float expansion = (float) param.args[0];
+                                    //log(TAG + "canScaleFadePanelAtExpandFraction: " + expansion);
+
+                                    if (isFirstExpansionIgnored) {
+                                        log(TAG + "Ignoring first expansion");
+                                        if (expansion >= 0.9f) {
+                                            log(TAG + "First expansion ignored f>=0.9");
+                                            // Abbiamo superato 0.9, quindi non ignoriamo più le espansioni
+                                            isFirstExpansionIgnored = false;
+                                            isResetNeeded = true; // Prepara il reset quando l'espansione torna a 0.0
+                                        }
+                                        if (expansion >= .20f) {
+                                            mQsHeaderLayout.setAlpha(1f);
+                                            mQsHeaderLayout.setVisibility(View.VISIBLE);
+                                        }
+                                        return;
+                                    }
+
+                                    if (expansion <= .2f) {
+                                        log(TAG + "Resetting");
+                                        // Reset dello stato per ignorare di nuovo la prossima espansione da 0.0 a 0.9
+                                        isFirstExpansionIgnored = true;
+                                        isResetNeeded = false;
+                                    }
+
+                                    if (mQsHeaderLayout != null) {
+                                        if (expansion <= .900f) {
+                                            mQsHeaderLayout.animate()
+                                                    .alpha(0f)
+                                                    .setDuration(750)
+                                                    .setListener(new AnimatorListenerAdapter() {
+                                                        @Override
+                                                        public void onAnimationEnd(Animator animation) {
+                                                            mQsHeaderLayout.setVisibility(View.GONE);
+                                                        }
+                                                    });
+                                        } else {
+                                            mQsHeaderLayout.animate()
+                                                    .alpha(1f)
+                                                    .setDuration(150)
+                                                    .setListener(new AnimatorListenerAdapter() {
+                                                        @Override
+                                                        public void onAnimationEnd(Animator animation) {
+                                                            mQsHeaderLayout.setVisibility(View.VISIBLE);
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                /*Class<?> OplusNotificationCloseButtonImp = findClass("com.oplus.systemui.notification.extend.OplusNotificationCloseButtonImp", lpparam.classLoader);
+                hookAllMethods(OplusNotificationCloseButtonImp, "setNotificationCloseButtonAlpha", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!qshiEnabled) return;
+                        if (param.args[0] instanceof Float) {
+                            float targetAlpha = (float) param.args[0];
+                            log(TAG + "setNotificationCloseButtonAlpha: " + targetAlpha);
+
+                            if (mQsHeaderLayout != null) {
+                                // Crea e avvia l'animazione solo se il valore target è diverso dall'alpha corrente
+                                if (mQsHeaderLayout.getAlpha() != targetAlpha) {
+                                    // Annulla eventuali animazioni in corso
+                                    if (alphaAnimator != null && alphaAnimator.isRunning()) {
+                                        alphaAnimator.cancel();
+                                    }
+
+                                    float currentAlpha = mQsHeaderLayout.getAlpha();
+                                    if (currentAlpha != 0f) {
+                                        // Prima anima l'alpha fino a 0f
+                                        alphaAnimator = ValueAnimator.ofFloat(currentAlpha, 0f);
+                                        alphaAnimator.setDuration(300); // Imposta la durata dell'animazione
+                                        alphaAnimator.addUpdateListener(animation -> {
+                                            float alpha = (float) animation.getAnimatedValue();
+                                            mQsHeaderLayout.setAlpha(alpha);
+                                        });
+                                        alphaAnimator.addListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                // Dopo aver raggiunto 0f, anima fino al valore target
+                                                alphaAnimator = ValueAnimator.ofFloat(0f, targetAlpha);
+                                                alphaAnimator.setDuration(300); // Imposta la durata dell'animazione
+                                                alphaAnimator.addUpdateListener(anim -> {
+                                                    float alpha = (float) anim.getAnimatedValue();
+                                                    mQsHeaderLayout.setAlpha(alpha);
+                                                });
+                                                alphaAnimator.start();
+                                            }
+                                        });
+                                        alphaAnimator.start();
+                                    } else {
+                                        // Se già a 0f, anima direttamente fino al valore target
+                                        alphaAnimator = ValueAnimator.ofFloat(currentAlpha, targetAlpha);
+                                        alphaAnimator.setDuration(300); // Imposta la durata dell'animazione
+                                        alphaAnimator.addUpdateListener(animation -> {
+                                            float alpha = (float) animation.getAnimatedValue();
+                                            mQsHeaderLayout.setAlpha(alpha);
+                                        });
+                                        alphaAnimator.start();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });*/
+
+                /* onHeightUpdatedExt com.oplus.systemui.shade.NotificationStack
+                hookAllMethods(NotificationStack, "onHeightUpdatedExt", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args[0] instanceof Float) {
+                            float height = (float) param.args[0];
+                            log(TAG + "onHeightUpdatedExt: " + height);
+
+                        }
+                    }
+                });
+
+                // updateQsExpansion
+                hookAllMethods(NotificationStack, "updateQsExpansion", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (param.args.length >= 1 && param.args[1] instanceof Float) {
+                            float expansion = (float) param.args[1];
+                            log(TAG + "updateQsExpansion: " + expansion);
+                        }
+                    }
+                });*/
+
+                /*final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", lpparam.classLoader);
 
                 hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -218,7 +498,7 @@ public class HeaderImage extends XposedMods {
                             }
                         }
                     }
-                });
+                });*/
 
             } catch (Throwable t) {
                 log(TAG + "Error hooking new Control Center " + t.getMessage());
