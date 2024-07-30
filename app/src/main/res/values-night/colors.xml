@@ -5,6 +5,8 @@
     <color name="colorContainerOverlay">@color/color_container_overlay_dark</color>
 
     <color name="textColorPrimary">@android:color/system_neutral1_100</color>
+    <color name="textColorSecondary">@android:color/system_neutral1_300</color>
+
     <color name="changelog_bg">@android:color/system_neutral1_900</color>
 
     <color name="colorBackground">@android:color/system_neutral2_900</color>

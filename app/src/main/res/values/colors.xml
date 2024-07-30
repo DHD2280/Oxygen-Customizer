@@ -77,7 +77,9 @@
     <color name="holo_blue_light">@color/holo_blue_light_dark</color>
     <color name="holo_blue_dark">@color/holo_blue_dark_dark</color>
 
+    <!-- Text -->
     <color name="textColorPrimary">@android:color/system_neutral1_900</color>
+    <color name="textColorSecondary">@android:color/system_neutral1_700</color>
 
     <drawable name="notification_number_text_color">#ff000000</drawable>
 
