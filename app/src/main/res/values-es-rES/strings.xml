@@ -1010,18 +1010,6 @@
     <string name="toast_message">Mensaje de mensajes emergentes</string>
     <!-- Style List -->
     <string name="style_0">Ninguno</string>
-    <string name="style_1">Estilo 1</string>
-    <string name="style_2">Estilo 2</string>
-    <string name="style_3">Estilo 3</string>
-    <string name="style_4">Estilo 4</string>
-    <string name="style_5">Estilo 5</string>
-    <string name="style_6">Estilo 6</string>
-    <string name="style_7">Estilo 7</string>
-    <string name="style_8">Estilo 8</string>
-    <string name="style_9">Estilo 9</string>
-    <string name="style_10">Estilo 10</string>
-    <string name="style_11">Estilo 11</string>
-    <string name="style_12">Estilo 12</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Mostrar aplicaciones del sistema</string>
     <string name="dark_mode">Modo nocturno</string>

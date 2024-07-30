@@ -5,16 +5,16 @@ import androidx.annotation.StringRes;
 
 public class ToastModel {
 
-    private @DrawableRes int mStyle;
-    private @StringRes int mTitle;
+    private int mStyle;
+    private String mTitle;
     private boolean mSelected = false;
 
-    public ToastModel(@DrawableRes int style, @StringRes int title) {
+    public ToastModel( int style, String title) {
         mStyle = style;
         mTitle = title;
     }
 
-    public ToastModel(@DrawableRes int style, @StringRes int title, boolean selected) {
+    public ToastModel(int style, String title, boolean selected) {
         mStyle = style;
         mTitle = title;
         mSelected = selected;
@@ -25,7 +25,7 @@ public class ToastModel {
         return mStyle;
     }
 
-    public @StringRes int getTitle() {
+    public String getTitle() {
         return mTitle;
     }
 

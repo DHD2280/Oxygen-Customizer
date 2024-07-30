@@ -58,20 +58,12 @@ public class ToastFrame extends BaseFragment {
         gridLayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                int totalItemCount = binding.recyclerViewFragment.getAdapter() != null ? binding.recyclerViewFragment.getAdapter().getItemCount() : 1;
-                int spanCount = gridLayout.getSpanCount();
+                int lastIndex = binding.recyclerViewFragment.getAdapter().getItemCount() - 1;
 
-                // Calculate the number of items in the last row
-                int itemsInLastRow = totalItemCount % spanCount;
-                if (position >= totalItemCount - itemsInLastRow) {
-                    // Adjust span size for the last row
-                    if (itemsInLastRow == 1) {
-                        return 1;
-                    } else {
-                        return 2;
-                    }
+                if (position == lastIndex && lastIndex % gridLayout.getSpanCount() == 0) {
+                    return 2;
                 } else {
-                    return 1; // Default span size (1 column each)
+                    return 1;
                 }
             }
         });
@@ -83,19 +75,21 @@ public class ToastFrame extends BaseFragment {
     }
 
     private ToastAdapter initToastStyles() {
+        
         ArrayList<ToastModel> toastFrameStyle = new ArrayList<>() {{
-            add(new ToastModel(R.drawable.toast_frame_style_1, R.string.style_0));
-            add(new ToastModel(R.drawable.toast_frame_style_1, R.string.style_1));
-            add(new ToastModel(R.drawable.toast_frame_style_2, R.string.style_2));
-            add(new ToastModel(R.drawable.toast_frame_style_3, R.string.style_3));
-            add(new ToastModel(R.drawable.toast_frame_style_4, R.string.style_4));
-            add(new ToastModel(R.drawable.toast_frame_style_5, R.string.style_5));
-            add(new ToastModel(R.drawable.toast_frame_style_6, R.string.style_6));
-            add(new ToastModel(R.drawable.toast_frame_style_7, R.string.style_7));
-            add(new ToastModel(R.drawable.toast_frame_style_8, R.string.style_8));
-            add(new ToastModel(R.drawable.toast_frame_style_9, R.string.style_9));
-            add(new ToastModel(R.drawable.toast_frame_style_10, R.string.style_10));
-            add(new ToastModel(R.drawable.toast_frame_style_11, R.string.style_11));
+            add(new ToastModel(R.drawable.toast_frame_style_1, String.format(getString(R.string.style), 0)));
+            add(new ToastModel(R.drawable.toast_frame_style_1, String.format(getString(R.string.style), 1)));
+            add(new ToastModel(R.drawable.toast_frame_style_2, String.format(getString(R.string.style), 2)));
+            add(new ToastModel(R.drawable.toast_frame_style_3, String.format(getString(R.string.style), 3)));
+            add(new ToastModel(R.drawable.toast_frame_style_4, String.format(getString(R.string.style), 4)));
+            add(new ToastModel(R.drawable.toast_frame_style_5, String.format(getString(R.string.style), 5)));
+            add(new ToastModel(R.drawable.toast_frame_style_6, String.format(getString(R.string.style), 6)));
+            add(new ToastModel(R.drawable.toast_frame_style_7, String.format(getString(R.string.style), 7)));
+            add(new ToastModel(R.drawable.toast_frame_style_8, String.format(getString(R.string.style), 8)));
+            add(new ToastModel(R.drawable.toast_frame_style_9, String.format(getString(R.string.style), 9)));
+            add(new ToastModel(R.drawable.toast_frame_style_10, String.format(getString(R.string.style), 10)));
+            add(new ToastModel(R.drawable.toast_frame_style_11, String.format(getString(R.string.style), 11)));
+            add(new ToastModel(R.drawable.toast_frame_style_12, String.format(getString(R.string.style), 12)));
         }};
 
         return new ToastAdapter(

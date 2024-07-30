@@ -1007,17 +1007,5 @@
     <string name="toast_message">Toast Mesajları</string>
     <!-- Style List -->
     <string name="style_0">Yok</string>
-    <string name="style_1">Stil 1</string>
-    <string name="style_2">Stil 2</string>
-    <string name="style_3">Stil 3</string>
-    <string name="style_4">Stil 4</string>
-    <string name="style_5">Stil 5</string>
-    <string name="style_6">Stil 6</string>
-    <string name="style_7">Stil 7</string>
-    <string name="style_8">Stil 8</string>
-    <string name="style_9">Stil 9</string>
-    <string name="style_10">Stil 10</string>
-    <string name="style_11">Stil 11</string>
-    <string name="style_12">Stil 12</string>
     <!-- Dark Mode -->
 </resources>

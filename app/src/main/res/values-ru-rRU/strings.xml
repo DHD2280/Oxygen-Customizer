@@ -1016,17 +1016,5 @@
     <string name="toast_message">Всплывающее сообщение</string>
     <!-- Style List -->
     <string name="style_0">Нет</string>
-    <string name="style_1">Стиль 1</string>
-    <string name="style_2">Стиль 2</string>
-    <string name="style_3">Стиль 3</string>
-    <string name="style_4">Стиль 4</string>
-    <string name="style_5">Стиль 5</string>
-    <string name="style_6">Стиль 6</string>
-    <string name="style_7">Стиль 7</string>
-    <string name="style_8">Стиль 8</string>
-    <string name="style_9">Стиль 9</string>
-    <string name="style_10">Стиль 10</string>
-    <string name="style_11">Стиль 11</string>
-    <string name="style_12">Стиль 12</string>
     <!-- Dark Mode -->
 </resources>

@@ -1010,18 +1010,6 @@
     <string name="toast_message">Üzenetbuborék</string>
     <!-- Style List -->
     <string name="style_0">Nincs</string>
-    <string name="style_1">1. Stílus</string>
-    <string name="style_2">2. Stílus</string>
-    <string name="style_3">3. Stílus</string>
-    <string name="style_4">4. Stílus</string>
-    <string name="style_5">5. Stílus</string>
-    <string name="style_6">6. Stílus</string>
-    <string name="style_7">7. Stílus</string>
-    <string name="style_8">8. Stílus</string>
-    <string name="style_9">9. Stílus</string>
-    <string name="style_10">10. Stílus</string>
-    <string name="style_11">11. Stílus</string>
-    <string name="style_12">12. Stílus</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Rendszeralkalmazások megjelenítése</string>
     <string name="dark_mode">Sötét mód</string>

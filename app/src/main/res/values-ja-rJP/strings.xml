@@ -980,17 +980,5 @@
     <string name="toast_message">トーストメッセージ</string>
     <!-- Style List -->
     <string name="style_0">なし</string>
-    <string name="style_1">スタイル 1</string>
-    <string name="style_2">スタイル 2</string>
-    <string name="style_3">スタイル 3</string>
-    <string name="style_4">スタイル 4</string>
-    <string name="style_5">スタイル 5</string>
-    <string name="style_6">スタイル 6</string>
-    <string name="style_7">スタイル 7</string>
-    <string name="style_8">スタイル 8</string>
-    <string name="style_9">スタイル 9</string>
-    <string name="style_10">スタイル 10</string>
-    <string name="style_11">スタイル 11</string>
-    <string name="style_12">スタイル 12</string>
     <!-- Dark Mode -->
 </resources>

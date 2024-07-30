@@ -1033,18 +1033,6 @@
     <string name="toast_message">Messaggio Toast</string>
     <!-- Style List -->
     <string name="style_0">Nessuno</string>
-    <string name="style_1">Stile 1</string>
-    <string name="style_2">Stile 2</string>
-    <string name="style_3">Stile 3</string>
-    <string name="style_4">Stile 4</string>
-    <string name="style_5">Stile 5</string>
-    <string name="style_6">Stile 6</string>
-    <string name="style_7">Stile 7</string>
-    <string name="style_8">Stile 8</string>
-    <string name="style_9">Stile 9</string>
-    <string name="style_10">Stile 10</string>
-    <string name="style_11">Stile 11</string>
-    <string name="style_12">Stile 12</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Mostra Sistema</string>
     <string name="dark_mode">Modalità scura</string>

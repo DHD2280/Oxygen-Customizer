@@ -34,7 +34,7 @@ class ToastAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = itemList[holder.bindingAdapterPosition]
-        holder.binding.styleName.text = mContext.resources.getString(model.title)
+        holder.binding.styleName.text = model.title
         holder.binding.toastContainer.background = ContextCompat.getDrawable(mContext, model.style)
         if (model.isSelected) {
             holder.binding.styleName.setTextColor(
