@@ -5,7 +5,7 @@
             <gradient
                 android:angle="315.0"
                 android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:startColor="@*android:color/system_accent3_600" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
         </shape>
     </item>
