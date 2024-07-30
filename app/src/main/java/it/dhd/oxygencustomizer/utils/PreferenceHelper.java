@@ -687,6 +687,10 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_horizontal_columns", 4));
             case "quick_settings_tiles_vertical_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
+
+            case QS_TILE_ANIMATION_DURATION ->
+                    instance.mPreferences.getSliderInt(QS_TILE_ANIMATION_DURATION, 1) + "s";
+
             case QS_TRANSPARENCY_VAL ->
                     instance.mPreferences.getSliderInt(QS_TRANSPARENCY_VAL, 40) + "%";
             case BLUR_RADIUS_VALUE ->
