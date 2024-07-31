@@ -712,6 +712,16 @@ public class PreferenceHelper {
             case "quick_settings_tiles_vertical_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
 
+            // Tile Radius
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_TOP_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_TOP_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0) + "dp";
+            case QS_TILE_RADIUS_BOTTOM_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_BOTTOM_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0) + "dp";
+
             case QS_TILE_ANIMATION_DURATION ->
                     instance.mPreferences.getSliderInt(QS_TILE_ANIMATION_DURATION, 1) + "s";
 
