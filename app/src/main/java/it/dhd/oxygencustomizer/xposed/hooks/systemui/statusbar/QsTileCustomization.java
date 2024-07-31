@@ -8,10 +8,8 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
+import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
-import static de.robv.android.xposed.XposedHelpers.setStaticIntField;
-import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR;
@@ -32,15 +30,25 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_UPDATE_PREFS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.recursivelyChangeViewColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -52,6 +60,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -64,7 +74,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -96,34 +105,55 @@ import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutTransformer;
 
 public class QsTileCustomization extends XposedMods {
 
+    private static final String TAG = "Oxygen Customizer - QsTileCustomization: ";
+
+    private final int STATE_ACTIVE = 2;
+    private final int STATE_INACTIVE = 1;
+
     private static final String listenerPackage = Constants.Packages.SYSTEM_UI;
+
     private Object mPersonalityManager = null;
+
+    // Qs Tile Colors
     private int qsInactiveColor, qsActiveColor, qsDisabledColor;
-    private boolean qsInactiveColorEnabled, qsActiveColorEnabled, qsDisabledColorEnabled;
+    private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false, qsDisabledColorEnabled = false;
+
+    // Qs Tile Radius
+    private boolean customHighlightTileRadius = false, customTileRadius = false;
+    private int highlightTSRadius, highlightTDRadius, highlightBSRadius, highlightBDRadius;
+    private int tileTSRadius, tileTDRadius, tileBSRadius, tileBDRadius;
+
+    // Qs Tile Label Utils
     private boolean qsLabelsHide, qsLabelsColorEnabled;
     private int qsLabelsColor;
+
+    // Brightness Slider
     private boolean qsBrightnessSliderCustomize, qsBrightnessBackgroundCustomize;
     private int qsBrightnessSliderColorMode, qsBrightnessSliderColor, qsBrightnessBackgroundColor;
+
+    // QS Media Tile
     private View mOplusQsMediaView = null;
     private Drawable mOplusQsMediaDefaultBackground = null;
     private Drawable mOplusQsMediaDrawable = null;
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
     private ImageView mExpandIndicator = null;
-    private boolean advancedCustom = true;
+
+    // Qs Tile Animation
     private int mAnimStyle = 0;
     private int mInterpolatorType = 0;
     private int mAnimDuration = 0;
     private boolean mTrasformationsEnabled = false;
     private int mTrasformations = 1;
+
+    // Qs Media Tile Album Art
     private boolean showMediaArtMediaQs = false;
     private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
     private float mMediaQsArtBlurAmount = 7.5f;
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
+
     private Class<?> QsColorUtil = null;
-    private Object mOplusQsVolumeIconView = null;
-    private boolean shouldHook = false;
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -140,6 +170,18 @@ public class QsTileCustomization extends XposedMods {
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
         qsDisabledColorEnabled = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
         qsDisabledColor = Xprefs.getInt(QS_TILE_DISABLED_COLOR, Color.DKGRAY);
+
+        // Qs Radius
+        customHighlightTileRadius = Xprefs.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
+        highlightTSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0);
+        highlightTDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0);
+        highlightBSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0);
+        highlightBDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0);
+        customTileRadius = Xprefs.getBoolean(QS_TILE_RADIUS, false);
+        tileTSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0);
+        tileTDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0);
+        tileBSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0);
+        tileBDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0);
 
         // Media QS
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
@@ -225,115 +267,31 @@ public class QsTileCustomization extends XposedMods {
             }
         });*/
 
-        /*
-        TESTING CUSTOMIZATIONS
-        hookAllMethods(OplusQSTileBaseView, "updateBgResource", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                ImageView mBg = (ImageView) getObjectField(param.thisObject, "mBg");
-                int state = getIntField(param.thisObject, "mTileIconState");
-                if (state == 2) {
-                    GradientDrawable gb = new GradientDrawable();
-                    gb.setShape(GradientDrawable.RECTANGLE);
-                    gb.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-                    gb.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-                    gb.setCornerRadii(new float[]{
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28)
-                    });
-                    gb.setStroke(28, getPrimaryColor(mContext));
-                    mBg.setImageDrawable(gb);
-                }
-            }
-        });
-
-        hookAllMethods(OplusQSTileBaseView, "obtainDrawable", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                int state = (int) param.args[0];
-                if (state == 2) {
-                    GradientDrawable gb = new GradientDrawable();
-                    gb.setShape(GradientDrawable.RECTANGLE);
-                    gb.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-                    gb.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-                    gb.setCornerRadii(new float[]{
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28)
-                    });
-                    gb.setStroke(28, getPrimaryColor(mContext));
-                    param.setResult(gb);
-                }
-            }
-        });
-
-        hookAllMethods(OplusQSTileBaseView, "setDrawableForDefault", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                ImageView mBg = (ImageView) getObjectField(param.thisObject, "mBg");
-                Object St = param.args[0];
-                int state = (int) getIntField(St, "state");
-                if (state == 2) {
-                    GradientDrawable gb = new GradientDrawable();
-                    gb.setShape(GradientDrawable.RECTANGLE);
-                    gb.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-                    gb.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-                    gb.setCornerRadii(new float[]{
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28)
-                    });
-                    gb.setStroke(28, getPrimaryColor(mContext));
-                    mBg.setImageDrawable(gb);
-                }
-            }
-        });
-
-        hookAllMethods(OplusQSTileBaseView, "handleStateChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                ImageView mBg = (ImageView) getObjectField(param.thisObject, "mBg");
-                Object St = param.args[0];
-                int state = (int) getIntField(St, "state");
-                if (state == 2) {
-                    GradientDrawable gb = new GradientDrawable();
-                    gb.setShape(GradientDrawable.RECTANGLE);
-                    gb.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-                    gb.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-                    gb.setCornerRadii(new float[]{
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28),
-                            dp2px(mContext, 28), dp2px(mContext, 28)
-                    });
-                    gb.setStroke(28, getPrimaryColor(mContext));
-                    mBg.setImageDrawable(gb);
-                }
-            }
-        });*/
-
-
         final XC_MethodHook colorHook = new XC_MethodHook() {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 int state = (int) param.args[0];
                 ShapeDrawable mPersonalityDrawable = (ShapeDrawable) param.getResult();
-                if (state == 1 && qsInactiveColorEnabled) // Inactive State
+
+                Shape mPersonalityDrawable2 = new RoundRectShape(
+                        new float[]{
+                                dp2px(mContext, 10), dp2px(mContext, 10),
+                                dp2px(mContext, 28), dp2px(mContext, 28),
+                                dp2px(mContext, 10), dp2px(mContext, 10),
+                                dp2px(mContext, 28), dp2px(mContext, 28)}, null, null);
+                mPersonalityDrawable.setShape(mPersonalityDrawable2);
+                if (state == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsInactiveColor);
-                } else if (state == 2 && qsActiveColorEnabled) // Active State
+                } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsActiveColor);
                 } else if (qsDisabledColorEnabled && state!=1 && state!=2) // Disabled State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
                 }
-                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || advancedCustom) mPersonalityDrawable.invalidateSelf();
+                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled) mPersonalityDrawable.invalidateSelf();
             }
         };
 
@@ -345,7 +303,7 @@ public class QsTileCustomization extends XposedMods {
             }
         };
 
-        hookAllMethods(OplusQSTileBaseView, "generateDrawable", colorHook);
+        hookAllMethods(OplusQSTileBaseView, "generateDrawable", getColorHook(false));
 
         hookAllMethods(OplusQSTileBaseView, "performClick", animationHook);
 
@@ -355,7 +313,7 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable ignored) {
             OplusQSHighlightTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
         }
-        hookAllMethods(OplusQSHighlightTileView, "generateDrawable", colorHook);
+        hookAllMethods(OplusQSHighlightTileView, "generateDrawable", getColorHook(true));
         hookAllMethods(OplusQSHighlightTileView, "performClick", animationHook);
 
 
@@ -442,6 +400,7 @@ public class QsTileCustomization extends XposedMods {
                 new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
                         if (!qsBrightnessSliderCustomize) return;
 
                         if (qsBrightnessSliderColorMode == 1) {
@@ -531,12 +490,12 @@ public class QsTileCustomization extends XposedMods {
 
                     Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
                     Object vPager = param.thisObject;
+                    final int childCount = (int) callMethod(vPager, "getChildCount");
                     hookAllMethods(VPagerListener.getClass(),
                             "onPageScrolled", new XC_MethodHook() {
                                 @Override
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                                     if (!mTrasformationsEnabled) return;
-                                    final int childCount = (int) callMethod(vPager, "getChildCount");
                                     for (int i = 0; i < childCount; i++) {
                                         final View child = (View) callMethod(vPager, "getChildAt", i);
                                         final Object lp = callMethod(child, "getLayoutParams");
@@ -771,6 +730,50 @@ public class QsTileCustomization extends XposedMods {
             mExpandIndicator.setImageTintList(ColorStateList.valueOf(qsLabelsColor));
         }
 
+    }
+
+    private XC_MethodHook getColorHook(boolean isHighlight) {
+        return new XC_MethodHook() {
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                int state = (int) param.args[0];
+                Shape mCustomShape = null;
+                if (customHighlightTileRadius && isHighlight) {
+                    mCustomShape = getTileShape(true);
+                } else if (customTileRadius && !isHighlight) {
+                    mCustomShape = getTileShape(false);
+                }
+                ShapeDrawable mPersonalityDrawable = (ShapeDrawable) param.getResult();
+                if (mCustomShape != null)
+                    mPersonalityDrawable.setShape(mCustomShape);
+                if (state == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
+                {
+                    mPersonalityDrawable.getPaint().setColor(qsInactiveColor);
+                } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
+                {
+                    mPersonalityDrawable.getPaint().setColor(qsActiveColor);
+                } else if (qsDisabledColorEnabled && state!=STATE_INACTIVE && state!=STATE_ACTIVE) // Disabled State
+                {
+                    mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
+                }
+                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius) mPersonalityDrawable.invalidateSelf();
+            }
+        };
+    }
+
+    private Shape getTileShape(boolean isHighlight) {
+        return new RoundRectShape(
+                new float[]{
+                        dp2px(mContext, isHighlight ? highlightTSRadius : tileTSRadius),
+                        dp2px(mContext, isHighlight ? highlightTSRadius : tileTSRadius),
+                        dp2px(mContext, isHighlight ? highlightTDRadius : tileTDRadius),
+                        dp2px(mContext, isHighlight ? highlightTDRadius : tileTDRadius),
+                        dp2px(mContext, isHighlight ? highlightBDRadius : tileBDRadius),
+                        dp2px(mContext, isHighlight ? highlightBDRadius : tileBDRadius),
+                        dp2px(mContext, isHighlight ? highlightBSRadius : tileBSRadius),
+                        dp2px(mContext, isHighlight ? highlightBSRadius : tileBSRadius)},
+                null, null);
     }
 
 }

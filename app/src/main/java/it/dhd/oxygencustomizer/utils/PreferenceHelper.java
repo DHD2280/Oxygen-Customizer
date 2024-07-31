@@ -85,7 +85,17 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
@@ -325,6 +335,20 @@ public class PreferenceHelper {
                     QS_MEDIA_ART_TINT_AMOUNT -> {
                 return instance.mPreferences.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false) &&
                         (instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("5"));
+            }
+
+            // Tile Radius
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> {
+                return instance.mPreferences.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
+            }
+            case QS_TILE_RADIUS_TOP_LEFT,
+                    QS_TILE_RADIUS_TOP_RIGHT,
+                    QS_TILE_RADIUS_BOTTOM_LEFT,
+                    QS_TILE_RADIUS_BOTTOM_RIGHT -> {
+                return instance.mPreferences.getBoolean(QS_TILE_RADIUS, false);
             }
 
             // Gesture Prefs

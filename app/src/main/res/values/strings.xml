@@ -399,6 +399,11 @@
     <string name="brightness_slider_progress_color_title">Brightness Slider Color Mode</string>
     <string name="brightness_slider_background_color_title">Customize background color</string>
 
+    <!-- QS Tile Radius -->
+    <string name="qs_tiles_custom_radius">Custom QS Tile Radius</string>
+    <string name="qs_tile_custom_highlight">Custom QS Highlight Tiles Radius</string>
+    <string name="qs_tile_custom_radius">Custom QS Tiles Radius</string>
+
     <!-- Media Tile -->
     <string name="media_tile">Media Tile</string>
     <!-- QS Tiles animation -->

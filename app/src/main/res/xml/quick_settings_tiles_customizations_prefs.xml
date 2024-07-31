@@ -46,6 +46,88 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/qs_tiles_custom_radius">
+
+        <!-- Highlight Tile Radius -->
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            app:iconSpaceReserved="false"
+            android:defaultValue="off"
+            android:key="qs_tile_highlight_custom_radius_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_custom_highlight" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_highlight_custom_radius_top_left"
+            android:title="@string/chip_round_corners_top_sx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_highlight_custom_radius_top_right"
+            android:title="@string/chip_round_corners_top_dx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_highlight_custom_radius_bottom_left"
+            android:title="@string/chip_round_corners_bottom_sx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_highlight_custom_radius_bottom_right"
+            android:title="@string/chip_round_corners_bottom_dx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+
+        <!-- Tile Radius -->
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            app:iconSpaceReserved="false"
+            android:defaultValue="off"
+            android:key="qs_tile_custom_radius_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_custom_radius" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_custom_radius_top_left"
+            android:title="@string/chip_round_corners_top_sx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_custom_radius_top_right"
+            android:title="@string/chip_round_corners_top_dx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_custom_radius_bottom_left"
+            android:title="@string/chip_round_corners_bottom_sx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:key="qs_tile_custom_radius_bottom_right"
+            android:title="@string/chip_round_corners_bottom_dx_radius"
+            app:minVal="0"
+            app:maxVal="30"
+            app:tickInterval="1"
+            app:defaultValue="0" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/media_tile"
         app:iconSpaceReserved="false">
 

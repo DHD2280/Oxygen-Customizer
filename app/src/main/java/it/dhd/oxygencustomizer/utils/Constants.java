@@ -211,6 +211,18 @@ public class Constants {
             public static final String QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH = "qs_transitions_title_switch";
             public static final String QS_TILE_ANIMATION_TRANSFORMATIONS = "qs_tile_transformations";
 
+            // Qs Radius
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS = "qs_tile_highlight_custom_radius_enabled";
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT = "qs_tile_highlight_custom_radius_top_left";
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT = "qs_tile_highlight_custom_radius_top_right";
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT = "qs_tile_highlight_custom_radius_bottom_left";
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT = "qs_tile_highlight_custom_radius_bottom_right";
+            public static final String QS_TILE_RADIUS = "qs_tile_custom_radius_enabled";
+            public static final String QS_TILE_RADIUS_TOP_LEFT = "qs_tile_custom_radius_top_left";
+            public static final String QS_TILE_RADIUS_TOP_RIGHT = "qs_tile_custom_radius_top_right";
+            public static final String QS_TILE_RADIUS_BOTTOM_LEFT = "qs_tile_custom_radius_bottom_left";
+            public static final String QS_TILE_RADIUS_BOTTOM_RIGHT = "qs_tile_custom_radius_bottom_right";
+
             public static final String[] QS_UPDATE_PREFS = {
                     QS_TILE_ACTIVE_COLOR_ENABLED,
                     QS_TILE_ACTIVE_COLOR,
@@ -225,7 +237,17 @@ public class Constants {
                     QS_BRIGHTNESS_SLIDER_COLOR_MODE,
                     QS_BRIGHTNESS_SLIDER_COLOR,
                     QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED,
-                    QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR
+                    QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR,
+                    QS_TILE_HIGHTLIGHT_RADIUS,
+                    QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
+                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT,
+                    QS_TILE_RADIUS,
+                    QS_TILE_RADIUS_TOP_LEFT,
+                    QS_TILE_RADIUS_TOP_RIGHT,
+                    QS_TILE_RADIUS_BOTTOM_LEFT,
+                    QS_TILE_RADIUS_BOTTOM_RIGHT
             };
 
         }
