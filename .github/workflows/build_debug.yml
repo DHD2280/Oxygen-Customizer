@@ -61,7 +61,7 @@ jobs:
           echo "COMMIT_MESSAGE_HEADER=${COMMIT_MESSAGE_HEADER}" >> $GITHUB_ENV
 
       - name: Zip artifact for deployment
-        run: zip OxygenCustomizer.zip ./app/build/outputs/apk/release/*.apk -r
+        run: cd ./app/build/outputs/apk/release/ && zip OxygenCustomizer.zip *.apk -r
 
       - name: Telegram File Attachment
         if: github.repository == 'DHD2280/Oxygen-Customizer'
@@ -71,5 +71,5 @@ jobs:
               -F chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
               -F message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
               -F media='[{"type":"document", "media":"attach://Xposed", "caption":"Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}}) ${{ env.COMMIT_MESSAGE_HEADER }}"}]' \
-              -F Xposed="@OxygenCustomizer.zip"
+              -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
           fi
