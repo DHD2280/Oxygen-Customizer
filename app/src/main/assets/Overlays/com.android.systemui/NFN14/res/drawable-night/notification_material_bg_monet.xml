@@ -6,11 +6,7 @@
             <solid android:color="#00000000" />
         </shape>
     </item>
-    <item
-        android:bottom="2dp"
-        android:end="44dp"
-        android:start="44dp"
-        android:top="2dp">
+    <item>
         <shape android:shape="rectangle">
             <gradient
                 android:angle="315.0"
@@ -20,10 +16,9 @@
         </shape>
     </item>
     <item
-        android:bottom="4dp"
-        android:end="44dp"
-        android:start="44dp"
-        android:top="4dp">
+        android:bottom="3dp"
+        android:end="120dp"
+        android:top="6dp">
         <shape android:shape="rectangle">
             <solid android:color="@*android:color/system_neutral2_800" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
@@ -31,9 +26,8 @@
     </item>
     <item
         android:bottom="6dp"
-        android:end="6dp"
-        android:start="6dp"
-        android:top="6dp">
+        android:start="120dp"
+        android:top="3dp">
         <shape android:shape="rectangle">
             <solid android:color="@*android:color/system_neutral2_800" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />

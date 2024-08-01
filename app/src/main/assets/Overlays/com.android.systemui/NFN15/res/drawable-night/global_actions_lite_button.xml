@@ -3,10 +3,7 @@
     android:color="?android:colorControlHighlight">
     <item>
         <shape android:shape="oval">
-            <gradient
-                android:angle="270.0"
-                android:endColor="#00000000"
-                android:startColor="@*android:color/system_neutral2_800" />
+            <solid android:color="@*android:color/system_neutral2_800" />
         </shape>
     </item>
 </ripple>

@@ -3,7 +3,7 @@
     android:color="?android:colorControlHighlight">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@drawable/color_background_alpha" />
+            <solid android:color="@*android:color/system_neutral2_800" />
         </shape>
     </item>
 </ripple>

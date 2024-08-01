@@ -51,6 +51,7 @@ public class NotificationStyle extends BaseFragment {
         notif_list.add(new NotificationModel("Outline", R.drawable.notif_outline));
         notif_list.add(new NotificationModel("Leafy Outline", R.drawable.notif_leafy_outline));
         notif_list.add(new NotificationModel("Lighty", R.drawable.notif_lighty));
+        notif_list.add(new NotificationModel("Lighty v2", R.drawable.notif_lighty_v2));
         notif_list.add(new NotificationModel("Neumorph Outline", R.drawable.notif_neumorph_outline));
         notif_list.add(new NotificationModel("Cyberponk", R.drawable.notif_cyberponk));
         notif_list.add(new NotificationModel("Cyberponk v2", R.drawable.notif_cyberponk_v2));
