@@ -4,8 +4,8 @@
         <shape>
             <gradient
                 android:angle="0.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_light" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
         </shape>
     </item>
@@ -20,7 +20,7 @@
                 android:left="12.0dip"
                 android:right="12.0dip"
                 android:top="6.0dip" />
-            <solid android:color="@color/toast_color_bg" />
+            <solid android:color="@*android:color/background_dark" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>

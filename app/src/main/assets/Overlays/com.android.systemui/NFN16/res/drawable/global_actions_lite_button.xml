@@ -4,9 +4,18 @@
     <item>
         <shape android:shape="oval">
             <gradient
-                android:angle="270.0"
-                android:endColor="#00000000"
-                android:startColor="@*android:color/system_neutral2_10" />
+                android:angle="0.0"
+                android:endColor="@*android:color/system_accent1_600"
+                android:startColor="@*android:color/system_accent1_600" />
+        </shape>
+    </item>
+    <item
+        android:bottom="2dp"
+        android:end="2dp"
+        android:start="2dp"
+        android:top="2dp">
+        <shape android:shape="oval">
+            <solid android:color="@*android:color/system_neutral2_10" />
         </shape>
     </item>
 </ripple>

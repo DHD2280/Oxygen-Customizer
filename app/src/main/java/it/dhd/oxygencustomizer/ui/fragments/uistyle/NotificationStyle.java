@@ -41,8 +41,8 @@ public class NotificationStyle extends BaseFragment {
     private NotificationAdapter initNotifItems() {
         ArrayList<NotificationModel> notif_list = new ArrayList<>();
 
-        notif_list.add(new NotificationModel("Monet", R.drawable.notif_default));
-        notif_list.add(new NotificationModel("Layers", R.drawable.notif_layers));
+        notif_list.add(new NotificationModel("Fully Transparent", R.drawable.notif_fully_transparent));
+        notif_list.add(new NotificationModel("Transparent Thin Outline", R.drawable.notif_transparent_thin_outline));
         notif_list.add(new NotificationModel("Thin Outline", R.drawable.notif_thin_outline));
         notif_list.add(new NotificationModel("Bottom Outline", R.drawable.notif_bottom_outline));
         notif_list.add(new NotificationModel("Neumorph", R.drawable.notif_neumorph));
@@ -62,7 +62,9 @@ public class NotificationStyle extends BaseFragment {
         notif_list.add(new NotificationModel("Pitch Black", R.drawable.notif_pitch_black));
         notif_list.add(new NotificationModel("Duoline", R.drawable.notif_duoline));
         notif_list.add(new NotificationModel("iOS", R.drawable.notif_ios));
-
+        notif_list.add(new NotificationModel("Monet", R.drawable.notif_default));
+        notif_list.add(new NotificationModel("Layers", R.drawable.notif_layers));
+		
         return new NotificationAdapter(requireContext(), notif_list, loadingDialog);
     }
 

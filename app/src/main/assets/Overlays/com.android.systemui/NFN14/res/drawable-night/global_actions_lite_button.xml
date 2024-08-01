@@ -2,7 +2,9 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?android:colorControlHighlight">
     <item>
-        <shape android:shape="oval">
+        <shape
+            android:shape="oval"
+            android:tintMode="src_atop">
             <gradient
                 android:angle="0.0"
                 android:endColor="@*android:color/system_accent1_600"
@@ -10,12 +12,31 @@
         </shape>
     </item>
     <item
-        android:bottom="2dp"
-        android:end="2dp"
-        android:start="2dp"
-        android:top="2dp">
-        <shape android:shape="oval">
-            <solid android:color="@*android:color/system_neutral2_800" />
+        android:bottom="2.0dp"
+        android:end="2.0dp"
+        android:start="2.0dp"
+        android:top="2.0dp">
+        <shape
+            android:shape="oval"
+            android:tintMode="src_atop">
+            <gradient
+                android:angle="270.0"
+                android:endColor="#FF0F0F0F"
+                android:startColor="#FF363636" />
+        </shape>
+    </item>
+    <item
+        android:bottom="4.0dp"
+        android:left="4.0dp"
+        android:right="4.0dp"
+        android:top="4.0dp">
+        <shape
+            android:shape="oval"
+            android:tintMode="src_atop">
+            <gradient
+                android:angle="90.0"
+                android:endColor="#FF0F0F0F"
+                android:startColor="#FF363636" />
         </shape>
     </item>
 </ripple>

@@ -3,16 +3,6 @@
     <item
         android:bottom="2dp"
         android:top="2dp">
-        <shape
-            android:shape="rectangle"
-            android:tint="@*android:color/system_neutral2_10">
-            <solid android:color="#B3FFFFFF" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
-        </shape>
-    </item>
-    <item
-        android:bottom="6dp"
-        android:top="2dp">
         <shape android:shape="rectangle">
             <solid android:color="@*android:color/system_neutral2_10" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
