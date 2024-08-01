@@ -481,6 +481,8 @@ public class Constants {
     }
 
     public static class LockscreenWeather {
+        public static final String LOCKSCREEN_WEATHER = "LockscreenWeather";
+
         public static final String LOCKSCREEN_WEATHER_SWITCH = "lockscreen_weather_enabled";
         public static final String LOCKSCREEN_WEATHER_UPDATE_INTERVAL = "weather_update_interval";
         public static final String LOCKSCREEN_WEATHER_PROVIDER = "weather_provider";

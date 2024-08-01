@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
@@ -258,7 +259,7 @@ public class LockscreenClock extends XposedMods {
                 if (Key[0].equals(LCWeatherPref)) updateWeatherView();
             }
             for(String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
-                if (Key[0].equals(LCWeatherMargins)) updateMargins(CurrentWeatherView.getInstance());
+                if (Key[0].equals(LCWeatherMargins)) updateMargins(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
             }
         }
     }
@@ -722,7 +723,7 @@ public class LockscreenClock extends XposedMods {
 
     private void placeWeatherView() {
         try {
-            CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(mContext);
+            CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(mContext, LOCKSCREEN_WEATHER);
             try {
                 ((ViewGroup) currentWeatherView.getParent()).removeView(currentWeatherView);
             } catch (Throwable ignored) {
@@ -747,16 +748,16 @@ public class LockscreenClock extends XposedMods {
 
     private void refreshWeatherView(CurrentWeatherView currentWeatherView) {
         if (currentWeatherView == null) return;
-        currentWeatherView.updateSizes(weatherTextSize, weatherImageSize);
-        currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE);
-        currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind);
+        currentWeatherView.updateSizes(weatherTextSize, weatherImageSize, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.setVisibility(weatherEnabled ? View.VISIBLE : View.GONE);
-        currentWeatherView.updateWeatherBg(mWeatherBackground);
+        currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         updateMargins(currentWeatherView);
     }
 
     private void updateWeatherView() {
-        refreshWeatherView(CurrentWeatherView.getInstance());
+        refreshWeatherView(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
     }
 
     @Override
