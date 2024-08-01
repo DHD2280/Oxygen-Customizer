@@ -66,7 +66,7 @@ jobs:
       - name: Telegram File Attachment
         if: github.repository == 'DHD2280/Oxygen-Customizer'
         run: |
-          if [[ "$COMMIT_MESSAGE_HEADER" == *. ]]; then
+          if [[ "$COMMIT_MESSAGE_HEADER" == *. || "$COMMIT_MESSAGE_HEADER" == "CHANGELOG:"* ]]; then
             curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup" \
               -F chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
               -F message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
