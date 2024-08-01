@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.weather;
 
-import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
-
 import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_DISABLED;
 import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_LOCATION;
 import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NETWORK;
@@ -29,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class WeatherWork extends ListenableWorker {
     final Context mContext;
@@ -82,7 +81,7 @@ public class WeatherWork extends ListenableWorker {
             }
 
             executor.execute(() -> {
-                Location location = getCurrentLocation(completer);
+                Location location = getCurrentLocation();
                 if (location != null) {
                     Log.d(TAG, "Location retrieved");
                     updateWeather(location, completer);
@@ -129,7 +128,7 @@ public class WeatherWork extends ListenableWorker {
     }
 
     @SuppressLint("MissingPermission")
-    private Location getCurrentLocation(CallbackToFutureAdapter.Completer<Result> completer) {
+    private Location getCurrentLocation() {
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         if (!doCheckLocationEnabled()) {
@@ -137,22 +136,22 @@ public class WeatherWork extends ListenableWorker {
             return null;
         }
 
-        Location location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        AtomicReference<Location> location = new AtomicReference<>(lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER));
         Log.d(TAG, "Current location is " + location);
 
-        if (location != null && location.getAccuracy() > LOCATION_ACCURACY_THRESHOLD_METERS) {
+        if (location.get() != null && location.get().getAccuracy() > LOCATION_ACCURACY_THRESHOLD_METERS) {
             Log.w(TAG, "Ignoring inaccurate location");
-            location = null;
+            location.set(null);
         }
 
-        boolean needsUpdate = location == null;
-        if (location != null) {
-            long delta = System.currentTimeMillis() - location.getTime();
+        boolean needsUpdate = location.get() == null;
+        if (location.get() != null) {
+            long delta = System.currentTimeMillis() - location.get().getTime();
             needsUpdate = delta > OUTDATED_LOCATION_THRESHOLD_MILLIS;
             Log.d(TAG, "Location is " + delta + "ms old");
             if (needsUpdate) {
-                Log.w(TAG, "Ignoring too old location from " + dayFormat.format(location.getTime()));
-                location = null;
+                Log.w(TAG, "Ignoring too old location from " + dayFormat.format(location.get().getTime()));
+                location.set(null);
             }
         }
 
@@ -166,19 +165,15 @@ public class WeatherWork extends ListenableWorker {
                 lm.getCurrentLocation(locationProvider, null, mContext.getMainExecutor(), location1 -> {
                     if (location1 != null) {
                         Log.d(TAG, "Got valid location now update");
-                        updateWeather(location1, completer);
+                        location.set(location1);
                     } else {
                         Log.w(TAG, "Failed to retrieve location");
-                        handleError(completer, EXTRA_ERROR_LOCATION, "Failed to retrieve location");
-                        Config.setUpdateError(mContext, true);
                     }
                 });
             }
-        } else {
-            updateWeather(location, completer);
         }
 
-        return location;
+        return location.get();
     }
 
     private void updateWeather(Location location, CallbackToFutureAdapter.Completer<Result> completer) {
