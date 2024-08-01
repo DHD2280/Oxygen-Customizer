@@ -490,12 +490,12 @@ public class QsTileCustomization extends XposedMods {
 
                     Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
                     Object vPager = param.thisObject;
-                    final int childCount = (int) callMethod(vPager, "getChildCount");
                     hookAllMethods(VPagerListener.getClass(),
                             "onPageScrolled", new XC_MethodHook() {
                                 @Override
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                                     if (!mTrasformationsEnabled) return;
+                                    final int childCount = (int) callMethod(vPager, "getChildCount");
                                     for (int i = 0; i < childCount; i++) {
                                         final View child = (View) callMethod(vPager, "getChildAt", i);
                                         final Object lp = callMethod(child, "getLayoutParams");
