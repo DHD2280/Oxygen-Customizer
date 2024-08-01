@@ -36,7 +36,7 @@
             style="?android:attr/textAppearanceListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/text_color_primary" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@android:id/summary"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
             android:alpha="0.7"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/text_color_secondary" />
 
     </RelativeLayout>
 
