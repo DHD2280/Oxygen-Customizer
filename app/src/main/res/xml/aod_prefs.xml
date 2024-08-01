@@ -13,4 +13,10 @@
         android:title="@string/aod_clock"
         android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock"/>
 
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather"
+        android:title="@string/aod_weather"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather"/>
+
 </PreferenceScreen>

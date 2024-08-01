@@ -1,5 +1,12 @@
 package it.dhd.oxygencustomizer.utils;
 
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
+
 import android.os.Environment;
 
 import java.util.Arrays;
@@ -436,6 +443,8 @@ public class Constants {
                     LOCKSCREEN_CLOCK_CUSTOM_IMAGE
             };
         }
+
+        // AOD
         public static class AodClock {
             public static final String AOD_CLOCK_SWITCH = "aod_custom_clock_switch";
             public static final String AOD_CLOCK_STYLE = "aod_custom_clock_style";
@@ -452,6 +461,24 @@ public class Constants {
             public static final String AOD_CLOCK_CUSTOM_USER_VALUE = "aod_clock_custom_user";
             public static final String AOD_CLOCK_CUSTOM_USER_IMAGE = "aod_clock_custom_user_image";
             public static final String AOD_CLOCK_CUSTOM_IMAGE = "aod_clock_custom_image_switch";
+
+        }
+
+        public static class AodWeather {
+            public static final String AOD_WEATHER = "AodWeather";
+
+            public static final String AOD_WEATHER_SWITCH = "aod_weather_enabled";
+            public static final String AOD_WEATHER_TEXT_SIZE = "aod_weather_text_size";
+            public static final String AOD_WEATHER_IMAGE_SIZE = "aod_weather_image_size";
+            public static final String AOD_WEATHER_SHOW_LOCATION = "aod_weather_show_location";
+            public static final String AOD_WEATHER_SHOW_CONDITION = "aod_weather_show_condition";
+            public static final String AOD_WEATHER_HUMIDITY = "aod_weather_show_humidity";
+            public static final String AOD_WEATHER_WIND = "aod_weather_show_wind";
+            public static final String AOD_WEATHER_CUSTOM_COLOR_SWITCH = "aod_weather_custom_color_switch";
+            public static final String AOD_WEATHER_CUSTOM_COLOR = "aod_weather_custom_color";
+            public static final String AOD_WEATHER_CUSTOM_MARGINS = "aod_weather_custom_margins";
+            public static final String AOD_WEATHER_CUSTOM_MARGIN_LEFT = "aod_weather_margin_left";
+            public static final String AOD_WEATHER_CUSTOM_MARGIN_TOP = "aod_weather_margin_top";
 
         }
 
@@ -480,16 +507,19 @@ public class Constants {
 
     }
 
+    public static class Weather {
+        public static final String WEATHER_ICON_PACK = "weather_icon_pack";
+        public static final String WEATHER_UPDATE_INTERVAL = "weather_update_interval";
+        public static final String WEATHER_PROVIDER = "weather_provider";
+        public static final String WEATHER_OWM_KEY = "owm_key";
+        public static final String WEATHER_UNITS = "weather_units";
+        public static final String WEATHER_CUSTOM_LOCATION = "weather_custom_location_switch";
+    }
+
     public static class LockscreenWeather {
         public static final String LOCKSCREEN_WEATHER = "LockscreenWeather";
 
         public static final String LOCKSCREEN_WEATHER_SWITCH = "lockscreen_weather_enabled";
-        public static final String LOCKSCREEN_WEATHER_UPDATE_INTERVAL = "weather_update_interval";
-        public static final String LOCKSCREEN_WEATHER_PROVIDER = "weather_provider";
-        public static final String LOCKSCREEN_WEATHER_OWM_KEY = "owm_key";
-        public static final String LOCKSCREEN_WEATHER_UNITS = "weather_units";
-        public static final String LOCKSCREEN_WEATHER_CUSTOM_LOCATION = "weather_custom_location_switch";
-        public static final String LOCKSCREEN_WEATHER_ICON_PACK = "weather_icon_pack";
         public static final String LOCKSCREEN_WEATHER_TEXT_SIZE = "weather_text_size";
         public static final String LOCKSCREEN_WEATHER_IMAGE_SIZE = "weather_image_size";
         public static final String LOCKSCREEN_WEATHER_SHOW_LOCATION = "weather_show_location";
@@ -505,12 +535,12 @@ public class Constants {
 
         public static final String[] LOCKSCREEN_WEATHER_PREFS = {
                 LOCKSCREEN_WEATHER_SWITCH,
-                LOCKSCREEN_WEATHER_UPDATE_INTERVAL,
-                LOCKSCREEN_WEATHER_PROVIDER,
-                LOCKSCREEN_WEATHER_OWM_KEY,
-                LOCKSCREEN_WEATHER_UNITS,
-                LOCKSCREEN_WEATHER_CUSTOM_LOCATION,
-                LOCKSCREEN_WEATHER_ICON_PACK,
+                WEATHER_UPDATE_INTERVAL,
+                WEATHER_PROVIDER,
+                WEATHER_OWM_KEY,
+                WEATHER_UNITS,
+                WEATHER_CUSTOM_LOCATION,
+                WEATHER_ICON_PACK,
                 LOCKSCREEN_WEATHER_TEXT_SIZE,
                 LOCKSCREEN_WEATHER_IMAGE_SIZE,
                 LOCKSCREEN_WEATHER_HUMIDITY,

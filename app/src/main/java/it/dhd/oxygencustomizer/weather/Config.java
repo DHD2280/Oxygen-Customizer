@@ -19,13 +19,14 @@ package it.dhd.oxygencustomizer.weather;
  */
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_LOCATION;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_ICON_PACK;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_OWM_KEY;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_PROVIDER;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UNITS;
-import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UPDATE_INTERVAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.Manifest;
@@ -71,7 +72,7 @@ public class Config {
     }
 
     public static AbstractWeatherProvider getProvider(Context context) {
-        String provider = getPrefs(context).getString(LOCKSCREEN_WEATHER_PROVIDER, "0");
+        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "0");
 
         return switch (provider) {
             case "1" -> new METNorwayProvider(context);
@@ -80,7 +81,7 @@ public class Config {
     }
 
     public static String getProviderId(Context context) {
-        String provider = getPrefs(context).getString(LOCKSCREEN_WEATHER_PROVIDER, "0");
+        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "0");
 
         return switch (provider) {
             case "1" -> "MET Norway";
@@ -90,11 +91,11 @@ public class Config {
 
     public static boolean isMetric(Context context) {
 
-        return getPrefs(context).getString(LOCKSCREEN_WEATHER_UNITS, "0").equals("0");
+        return getPrefs(context).getString(WEATHER_UNITS, "0").equals("0");
     }
 
     public static boolean isCustomLocation(Context context) {
-        return getPrefs(context).getBoolean(LOCKSCREEN_WEATHER_CUSTOM_LOCATION, false);
+        return getPrefs(context).getBoolean(WEATHER_CUSTOM_LOCATION, false);
     }
 
     public static String getLocationId(Context context) {
@@ -139,18 +140,20 @@ public class Config {
     }
 
     public static boolean isEnabled(Context context) {
-        return getPrefs(context).getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
+        boolean lsWeather = getPrefs(context).getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
+        boolean aodWeather = getPrefs(context).getBoolean(AOD_WEATHER_SWITCH, false);
+        return lsWeather || aodWeather;
     }
 
-    public static void setEnabled(Context context, boolean value) {
-        getPrefs(context).edit().putBoolean(LOCKSCREEN_WEATHER_SWITCH, value).apply();
+    public static void setEnabled(Context context, boolean value, String key) {
+        getPrefs(context).edit().putBoolean(key, value).apply();
     }
 
     public static int getUpdateInterval(Context context) {
 
         int updateValue = 2;
         try {
-            updateValue = Integer.parseInt(getPrefs(context).getString(LOCKSCREEN_WEATHER_UPDATE_INTERVAL, "2"));
+            updateValue = Integer.parseInt(getPrefs(context).getString(WEATHER_UPDATE_INTERVAL, "2"));
         } catch (Throwable ignored) {
         }
 
@@ -158,8 +161,7 @@ public class Config {
     }
 
     public static String getIconPack(Context context) {
-
-        return getPrefs(context).getString(LOCKSCREEN_WEATHER_ICON_PACK, null);
+        return getPrefs(context).getString(WEATHER_ICON_PACK, null);
     }
 
     public static void setUpdateError(Context context, boolean value) {
@@ -172,6 +174,6 @@ public class Config {
     }
 
     public static String getOwmKey(Context context) {
-        return getPrefs(context).getString(LOCKSCREEN_WEATHER_OWM_KEY, null);
+        return getPrefs(context).getString(WEATHER_OWM_KEY, null);
     }
 }

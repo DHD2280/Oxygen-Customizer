@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/weather_config_title">
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_enabled"
+        android:title="@string/enable_title"
+        android:defaultValue="false" />
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_update_interval"
+        android:title="@string/update_interval_title"
+        android:entries="@array/update_interval_entries"
+        android:entryValues="@array/update_interval_values"
+        android:defaultValue="2"
+        app:useSimpleSummaryProvider="true"
+        android:dependency="aod_weather_enabled" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="update_status"
+        android:title="@string/last_update_time"
+        android:dependency="aod_weather_enabled"/>
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_provider"
+        android:title="@string/provider_title"
+        android:entries="@array/provider_entries"
+        android:entryValues="@array/provider_values"
+        app:useSimpleSummaryProvider="true"
+        android:defaultValue="0"
+        android:dependency="aod_weather_enabled" />
+
+    <EditTextPreference
+        android:key="owm_key"
+        android:title="@string/owm_key"
+        android:dialogTitle="@string/owm_key"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions"
+        app:useSimpleSummaryProvider="true"
+        app:iconSpaceReserved="false"
+        android:dependency="aod_weather_enabled" />
+
+    <ListPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_units"
+        android:title="@string/units_title"
+        android:entries="@array/units_entries"
+        android:entryValues="@array/units_values"
+        android:defaultValue="0"
+        app:useSimpleSummaryProvider="true"
+        android:dependency="aod_weather_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_show_location"
+        android:title="@string/weather_show_location"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="true"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_show_condition"
+        android:title="@string/weather_show_condition"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="true"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_show_humidity"
+        android:title="@string/weather_show_humidity"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="false"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_show_wind"
+        android:title="@string/weather_show_wind"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="false"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="aod_weather_text_size"
+        android:title="@string/weather_text_size"
+        app:minVal="13"
+        app:maxVal="24"
+        app:defaultValue="16"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="aod_weather_image_size"
+        android:title="@string/weather_image_size"
+        app:minVal="13"
+        app:maxVal="24"
+        app:defaultValue="18"
+        android:dependency="aod_weather_enabled"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="aod_weather_custom_color_switch"
+        android:title="@string/weather_custom_color"
+        android:summaryOn="@string/general_on"
+        android:summaryOff="@string/general_off"
+        android:defaultValue="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="aod_weather_custom_color"
+        android:title="@string/custom_color"
+        android:defaultValue="@color/white"
+        android:dependency="aod_weather_custom_color_switch"
+        app:iconSpaceReserved="false" />
+
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_custom_location_switch"
+        android:title="@string/custom_location_title"
+        android:defaultValue="false"
+        android:dependency="aod_weather_enabled" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="weather_custom_location_picker"
+        android:title="@string/weather_custom_location_title"
+        android:dependency="weather_custom_location_switch"/>
+
+    <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+        app:iconSpaceReserved="false"
+        android:key="weather_icon_pack"
+        android:title="@string/weather_icon_pack_title"
+        android:dependency="aod_weather_enabled" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:key="aod_weather_custom_margins"
+        android:title="@string/weather_custom_margins"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="aod_weather_margin_top"
+        android:title="@string/weather_margin_top"
+        app:minVal="0"
+        app:maxVal="100"
+        app:defaultValue="0"
+        android:dependency="aod_weather_custom_margins"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="aod_weather_margin_left"
+        android:title="@string/weather_margin_left"
+        app:minVal="0"
+        app:maxVal="100"
+        app:defaultValue="0"
+        android:dependency="aod_weather_custom_margins"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

@@ -26,6 +26,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodClock;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodWeather;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.DepthWallpaper;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
@@ -85,6 +86,7 @@ public class ModPacks {
 
                     // AOD
                     modPacks.add(AodClock.class);
+                    modPacks.add(AodWeather.class);
 
                     // Statusbar
                     modPacks.add(StatusbarMods.class);

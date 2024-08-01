@@ -755,6 +755,9 @@
     <string name="aod_clock_custom_user_image_summary">Click to pick an image.</string>
     <string name="aod_font_line_height_title">Line Height</string>
 
+    <!-- Aod Weather -->
+    <string name="aod_weather">AOD Weather</string>
+
     <!-- Sound Mods -->
     <string name="misc_category">Miscellaneous</string>
 
