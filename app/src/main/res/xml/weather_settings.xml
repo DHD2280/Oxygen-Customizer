@@ -149,7 +149,7 @@
 
     <Preference
         app:iconSpaceReserved="false"
-        android:key="weather_custom_location"
+        android:key="weather_custom_location_picker"
         android:title="@string/weather_custom_location_title"
         android:dependency="weather_custom_location_switch"/>
 
