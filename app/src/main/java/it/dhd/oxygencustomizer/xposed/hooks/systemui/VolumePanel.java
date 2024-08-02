@@ -4,6 +4,7 @@ import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -22,6 +23,8 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class VolumePanel extends XposedMods {
+
+    private static final String TAG = "Oxygen Customizer - VolumePanel:";
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private int mTimeOut;
@@ -105,11 +108,57 @@ public class VolumePanel extends XposedMods {
         hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                log("showSafetyWarningH: " + mDisableVolumeWarning);
                 if (mDisableVolumeWarning) {
                     param.setResult(null);
                 }
             }
         });
+
+        try {
+            hookAllMethods(OplusVolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    log("showSafetyWarningH: " + mDisableVolumeWarning);
+                    if (mDisableVolumeWarning) {
+                        param.setResult(null);
+                    }
+                }
+            });
+
+            findAndHookMethod(OplusVolumeDialogImpl, "onShowSafetyWarning", int.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    log("onShowSafetyWarning: " + mDisableVolumeWarning);
+                    if (mDisableVolumeWarning) {
+                        param.setResult(null);
+                    }
+                }
+            });
+
+        } catch (Throwable t) {
+            log(TAG + "Error: " + t.getMessage());
+        }
+
+        try {
+            Class<?> OplusQsVolumeController = findClass("com.oplus.systemui.qs.slider.OplusQsVolumeController", lpparam.classLoader);
+            hookAllConstructors(OplusQsVolumeController, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
+                    hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            if (mDisableVolumeWarning) {
+                                param.setResult(null);
+                            }
+                        }
+                    });
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "Error OplusQsVolumeController: " + t.getMessage());
+        }
 
         hookAllConstructors(OplusVolumeDialogImpl, new XC_MethodHook() {
             @Override
