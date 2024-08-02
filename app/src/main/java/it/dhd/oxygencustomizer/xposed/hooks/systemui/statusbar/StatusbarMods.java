@@ -8,11 +8,15 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
+import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -500,20 +504,27 @@ public class StatusbarMods extends XposedMods {
                         Drawable icon = null;
                         Object statusBarIcon = param.args[2];
 
+                        float mIconScale = getFloatField(param.thisObject, "mIconScale");
+                        log("mIconScale: " + mIconScale);
+
                         String pkgName = (String) getObjectField(statusBarIcon, "pkg");
                         if (pkgName.contains("com.android") || pkgName.contains("systemui")) return;
                         try {
                             if (!pkgName.contains("systemui")) {
-                                icon = mContext.getPackageManager().getApplicationIcon(pkgName);
+                                icon = context.getPackageManager().getApplicationIcon(pkgName);
                             }
                         } catch (Throwable e) {
                             return;
                         }
                         int dimen = 0;
                         try {
-                            dimen = (int) callMethod(FwkResIdLoader, "dimen", "notification_small_icon_size");
-                        } catch (Throwable e) {
-                        }
+                            boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
+                            dimen = mContext.getResources().getDimensionPixelSize(
+                                    mContext.getResources().getIdentifier(
+                                            isLowRam ?
+                                                    "notification_small_icon_size" :
+                                                    "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
+                        } catch (Throwable ignored) {}
                         TypedValue typedValue = new TypedValue();
                         sysuiContext.getResources().getValue(
                                 sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
@@ -522,21 +533,14 @@ public class StatusbarMods extends XposedMods {
 
                         if (icon != null) {
                             if (DrawableSize != null) {
-                                Resources res = sysuiContext.getResources();
-                                int maxIconSize = dimen;
-                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", mContext.getResources(), icon, maxIconSize, maxIconSize);
-                            } else {
+                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", sysuiContext.getResources(), icon, dimen, dimen);
+                            }
+                            if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);
+                            } else { // Scale Factor != 1f so return a scaled icon
+                                param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
                             }
                         }
-
-                        // No need to scale the icon, so return it as is.
-                        if (scaleFactor == 1.f && icon != null) {
-                            param.setResult(icon);
-                        }
-
-                        // Scale the icon to the desired size.
-                        param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
                     }
                 });
 
