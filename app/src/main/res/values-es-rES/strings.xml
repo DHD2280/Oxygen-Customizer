@@ -355,6 +355,7 @@
     <string name="customize_brightness_slider_title">Personalizar deslizador de brillo</string>
     <string name="brightness_slider_progress_color_title">Modo de color del deslizador de brillo</string>
     <string name="brightness_slider_background_color_title">Personalizar color del fondo</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <string name="media_tile">Mosaico multimedia</string>
     <!-- QS Tiles animation -->
@@ -682,6 +683,7 @@
     <string name="aod_clock_custom_user_image_title">Imagen de usuario</string>
     <string name="aod_clock_custom_user_image_summary">Haz clic para elegir una imagen.</string>
     <string name="aod_font_line_height_title">Altura de línea</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">Misceláneo</string>
     <!-- Pulse music visualizer -->
@@ -994,6 +996,7 @@
     <string name="theme_customization_navbar_summary">Establecer estilo personalizado de barra de navegación</string>
     <string name="theme_customization_toast_frame_title">Marco de mensajes emergentes</string>
     <string name="theme_customization_toast_frame_summary">Cambiar estilo de notificación de mensajes emergentes</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Estilos de notificaciones</string>
     <string name="notification_styles_desc">Establecer estilo personalizado para notificaciones</string>

@@ -351,6 +351,7 @@
     <string name="customize_brightness_slider_title">明るさのスライダーをカスタマイズ</string>
     <string name="brightness_slider_progress_color_title">明るさのスライダーのカラーモード</string>
     <string name="brightness_slider_background_color_title">背景色のカスタマイズ</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">タイルのアニメーション</string>
@@ -662,6 +663,7 @@
     <string name="aod_clock_custom_user_image_title">ユーザー画像</string>
     <string name="aod_clock_custom_user_image_summary">タップで画像を選択します。</string>
     <string name="aod_font_line_height_title">行の高さ</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">その他</string>
     <!-- Pulse music visualizer -->
@@ -967,6 +969,7 @@
     <string name="theme_customization_navbar_summary">カスタムナビゲーションバーを設定します</string>
     <string name="theme_customization_toast_frame_title">トーストのフレーム</string>
     <string name="theme_customization_toast_frame_summary">トースト通知のスタイルを変更します</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">通知のスタイル</string>
     <string name="notification_styles_desc">通知のカスタムスタイルを設定します</string>

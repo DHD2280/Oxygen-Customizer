@@ -50,6 +50,7 @@
     <string name="btn_back">Vissza</string>
     <string name="btn_lets_go">Gyerünk!</string>
     <string name="btn_close">Bezárás</string>
+    <string name="btn_cancel">Mégse</string>
     <string name="btn_reboot_now">Újraindítás most</string>
     <string name="btn_reboot">Újraindítás</string>
     <string name="btn_enable">Engedélyezés</string>
@@ -80,6 +81,10 @@
     <string name="general_color_text2">Szöveg 2</string>
     <string name="sysui_restart_needed">A beállítások érvényesítéséhez újra kell indítani a rendszerfelületet</string>
     <string name="one_time_reboot_needed">Indítsa újra a készüléket!</string>
+    <string name="gradient_left_right">Balról jobbra</string>
+    <string name="gradient_top_bottom">Fentről lefelé</string>
+    <string name="gradient_tl_br">Bal fentről jobbra lefelé</string>
+    <string name="gradient_tr_bl">Jobb fentről balra lefelé</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -146,6 +151,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Óra és Dátum</string>
     <string name="status_bar_clock_summary">Az \'Óra és dátum\' testreszabása</string>
+    <string name="status_bar_clock_format_category">Formázási beállítások</string>
     <string name="status_bar_clock_seconds_title">Másodpercmutató</string>
     <string name="status_bar_clock_seconds_summary">Másodpercek kijelzése az óra mellett az állapotsoron</string>
     <string name="status_bar_clock_position_title">Az Óra stílusa</string>
@@ -153,6 +159,7 @@
     <string name="status_bar_clock_position_left">Balra</string>
     <string name="status_bar_clock_position_center">Középre</string>
     <string name="status_bar_clock_position_hidden">Rejtett</string>
+    <string name="status_bar_clock_hide_category">Az Óra elrejtése</string>
     <string name="status_bar_clock_auto_hide_title">Automatikus elrejtés</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">Óraelrejtés, ha a Launcher látszik</string>
     <string name="status_bar_clock_auto_hide_summary">Óraelrejtés rendszeres időközönként</string>
@@ -174,6 +181,7 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
+    <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
     <string name="clock_date_left">Az idő-kijelzéstől balra</string>
@@ -182,8 +190,13 @@
     <string name="status_bar_clock_color_title">Egyéni óraszín</string>
     <string name="status_bar_custom_clock_color_title">Egyéni óraszín</string>
     <string name="status_bar_custom_clock_color_summary">Óraszín</string>
+    <string name="status_bar_clock_chip_category">Óraháttér</string>
     <string name="status_bar_clock_background_chip_title">Hátteres óralap</string>
     <string name="status_bar_clock_background_chip_style_title">A Hátteres óralap stílusa</string>
+    <string name="status_bar_clock_advanced_formatting">Speciális (felülírja a korábbi beállítást!)</string>
+    <string name="status_bar_clock_before_clock">Egyéni szöveg az Óra előtt</string>
+    <string name="status_bar_clock_after_clock">Egyéni szöveg az Óra mögött</string>
+    <string name="status_bar_clock_smaller">Apróbb (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">Állapotsáv-kitöltés</string>
     <string name="statusbar_top_padding">Felső kitöltés</string>
@@ -301,6 +314,7 @@
     <string name="battery_landscape_battery_o">Fekvő Akkumulátor O</string>
     <string name="battery_circle">Kör alakú akku</string>
     <string name="battery_dotted_circle">Pontozott kör akku</string>
+    <string name="battery_filled_circle">Telített kör</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Bluetooth-ikon elrejtés</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Amikor nincs kapcsolat, elrejti a BT kijelzőjét.</string>
@@ -355,6 +369,7 @@
     <string name="customize_brightness_slider_title">Beállítható, milyen legyen a fényerőszabályozó-csúszka</string>
     <string name="brightness_slider_progress_color_title">A működő fényerő-csúszka színe</string>
     <string name="brightness_slider_background_color_title">Módosítható a háttérszín</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <string name="media_tile">Média-csempe</string>
     <!-- QS Tiles animation -->
@@ -504,6 +519,9 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Kitöltött</string>
     <string name="chip_outlined">Körvonalas</string>
+    <string name="chip_mixed">Vegyes</string>
+    <string name="chip_gradient_props">Az Átmenet tulajdonságai</string>
+    <string name="chip_gradient_orientation">Az Átmenet tájolása</string>
     <string name="chip_use_accent">Kiemelőszín használata</string>
     <string name="chip_use_gradient">Átmenetes szín használata</string>
     <string name="chip_color_accent">Kiemelő használata</string>
@@ -682,6 +700,7 @@
     <string name="aod_clock_custom_user_image_title">Felhasználókép</string>
     <string name="aod_clock_custom_user_image_summary">Klikkeljen egy képre</string>
     <string name="aod_font_line_height_title">Sormagasság</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">Hasznos cuccok</string>
     <!-- Pulse music visualizer -->
@@ -736,6 +755,10 @@
     <string name="pulse_vertical_mirror_title">Föggőleges tükrözés</string>
     <string name="pulse_vertical_mirror_summary">Más pulzálás létrehozása, és függőlegesre fordítása</string>
     <!-- Fluid Music -->
+    <string name="fluid_music">Fluid Music</string>
+    <string name="fluid_music_summary">A Fluid Music testreszabása</string>
+    <string name="fluid_music_custom_list">Egyéni Fluid Music</string>
+    <string name="fluid_music_custom_list_summary">A Fluid Music alkalmazás testreszabása.\nEz felváltja a rendszer Fluid Music-hoz tartozó listáját.</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">Hangerőléptetések</string>
     <string name="volume_steps_summary">Az összes adatfolyam részletességének szabályozása</string>
@@ -940,6 +963,7 @@
     <string name="omnijaws_service_last_update">Legutóbbi frissítés:</string>
     <string name="omnijaws_service_error_location">Nincs helymeghatározás</string>
     <string name="omnijaws_service_error_network">Nincs hálózat</string>
+    <string name="omnijaws_service_error_permissions">Nincs engedélyezve a helymeghatározás</string>
     <string name="weather_widget_desc">"Jelenlegi időjárás és 4 napos előrejelzés"</string>
     <string name="theme_system">Rendszertéma követése</string>
     <string name="theme_dark">Sötét</string>
@@ -994,6 +1018,7 @@
     <string name="theme_customization_navbar_summary">Egyéni navigációssáv-stílus állítható be</string>
     <string name="theme_customization_toast_frame_title">Buborékkeret</string>
     <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Értesítésstílusok</string>
     <string name="notification_styles_desc">Egyéni értesítsstílus állítható be</string>
@@ -1016,4 +1041,5 @@
     <string name="dark_mode_pref">A Sötét mód átalakítása</string>
     <string name="custom_dark_mode_title">Egyéni Sötét mód</string>
     <string name="custom_dark_mode_summary">Lehetővé teszi a Sötét mód alkalmazáslistájának testreszabását.</string>
+    <string name="dark_mode_intensity">A Sötét mód intenzitása</string>
 </resources>

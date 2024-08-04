@@ -354,6 +354,7 @@
     <string name="customize_brightness_slider_title">Parlaklık Kaydırıcısını Özelleştir</string>
     <string name="brightness_slider_progress_color_title">Parlaklık Kaydırıcı Renk Modu</string>
     <string name="brightness_slider_background_color_title">Arka plan rengini özelleştir</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <string name="media_tile">Medya Kutucuğu</string>
     <!-- QS Tiles animation -->
@@ -681,6 +682,7 @@
     <string name="aod_clock_custom_user_image_title">Kullanıcı Resmi</string>
     <string name="aod_clock_custom_user_image_summary">Bir resim seçmek için tıklayın.</string>
     <string name="aod_font_line_height_title">Çizgi Yüksekliği</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">Çeşitli Hükümler</string>
     <!-- Pulse music visualizer -->
@@ -991,6 +993,7 @@
     <string name="theme_customization_navbar_summary">Özel gezinme çubuğu stili ayarlayın</string>
     <string name="theme_customization_toast_frame_title">Tost Çerçevesi</string>
     <string name="theme_customization_toast_frame_summary">Tost bildirim stilini değiştir</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Bildirim Stilleri</string>
     <string name="notification_styles_desc">Bildirimler için özel stil ayarla</string>
