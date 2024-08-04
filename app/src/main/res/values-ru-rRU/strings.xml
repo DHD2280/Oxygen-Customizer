@@ -355,6 +355,7 @@
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
     <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <string name="media_tile">Плитка медиа</string>
     <!-- QS Tiles animation -->
@@ -687,6 +688,7 @@
     <string name="aod_clock_custom_user_image_title">Изображение пользователя</string>
     <string name="aod_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
     <string name="aod_font_line_height_title">Высота линии</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">Другое</string>
     <!-- Pulse music visualizer -->
@@ -1000,6 +1002,7 @@
     <string name="theme_customization_navbar_summary">Смена стиля панели навигации</string>
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
     <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Стиль уведомлений</string>
     <string name="notification_styles_desc">Смена стиля уведомлений</string>

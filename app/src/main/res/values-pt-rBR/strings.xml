@@ -213,6 +213,7 @@
     <string name="qs_transparency_blur_title">Blur no nível da janela</string>
     <string name="qs_blur_intentisy">Intensidade do blur</string>
     <!-- Quick Settings Tiles Customizations -->
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_style_flip">Inverter</string>
@@ -250,6 +251,7 @@
     <!-- Lockscreen 9 Strings -->
     <!-- Aod Strings -->
     <!-- Aod Clock -->
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -308,6 +310,7 @@
     <string name="theme_customization_wifi_icon_summary">Defina um estilo personalizado do ícone Wi-Fi</string>
     <string name="theme_customization_navbar_title">Estilo da barra de navegação</string>
     <string name="theme_customization_navbar_summary">Defina um estilo personalizado da barra de navegação.</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Estilos de notificação</string>
     <string name="notification_styles_desc">Defina um estilo personalizado para notificações.</string>

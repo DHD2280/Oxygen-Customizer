@@ -370,6 +370,7 @@
     <string name="customize_brightness_slider_title">Personalizza Cursore Luminosità</string>
     <string name="brightness_slider_progress_color_title">Modalità Colore Cursore Luminosità</string>
     <string name="brightness_slider_background_color_title">Personalizza colore sfondo</string>
+    <!-- QS Tile Radius -->
     <!-- Media Tile -->
     <string name="media_tile">Tile Media</string>
     <!-- QS Tiles animation -->
@@ -700,6 +701,7 @@
     <string name="aod_clock_custom_user_image_title">Immagine Utente</string>
     <string name="aod_clock_custom_user_image_summary">Fai clic per selezionare un\'immagine.</string>
     <string name="aod_font_line_height_title">Altezza Linea</string>
+    <!-- Aod Weather -->
     <!-- Sound Mods -->
     <string name="misc_category">Varie</string>
     <!-- Pulse music visualizer -->
@@ -1017,6 +1019,7 @@
     <string name="theme_customization_navbar_summary">Imposta lo stile personalizzato della barra di navigazione</string>
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
+    <!-- Settings Icons -->
     <!-- Notification -->
     <string name="notification_styles">Stili di notifica</string>
     <string name="notification_styles_desc">Imposta uno stile personalizzato per le notifiche</string>
