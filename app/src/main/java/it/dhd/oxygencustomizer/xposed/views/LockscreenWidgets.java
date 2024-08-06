@@ -37,8 +37,6 @@ import android.media.session.PlaybackState;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.os.VibrationAttributes;
-import android.os.VibrationEffect;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -100,6 +98,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String TORCH_LABEL_INACTIVE = "notification_flashlight_hasclose";
     public static final String WIFI_LABEL_INACTIVE = "quick_settings_wifi_label";
     public static final String HOME_CONTROLS_LABEL = "quick_controls_title";
+    public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -107,7 +106,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private Context mContext;
 
     // Two Linear Layouts, one for main widgets and one for secondary widgets
-    private LinearLayout mDeviceWidgetContainer, mMainWidgetsContainer, mSecondaryWidgetsContainer;
+    private final LinearLayout mDeviceWidgetContainer;
+    private final LinearLayout mMainWidgetsContainer;
+    private final LinearLayout mSecondaryWidgetsContainer;
     private DeviceWidgetView mDeviceWidgetView;
 
     private ImageView mediaButton, torchButton, weatherButton;
@@ -256,18 +257,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             updateMobileDataState(!getBooleanField(IconState, "visible") && isMobileDataEnabled());
         }
     };
-
-    private void onMobileDataChanged(boolean airplane, boolean simDetected, boolean mobileDataEnabled) {
-        log("LockscreenWidgets onMobileDataChanged " + airplane + " | " + simDetected + " | " + mobileDataEnabled);
-        if (instance == null) return;
-        updateMobileDataState(!airplane && mobileDataEnabled);
-    }
-
-    protected static final class WifiCallbackInfo {
-        boolean enabled;
-        @Nullable
-        String ssid;
-    }
 
     private void onWifiChanged(Object mWifiTracker) {
         log("LockscreenWidgets onWifiChanged");
@@ -766,10 +755,16 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 setUpWidgetResources(iv, efab, v -> toggleFlashlight(), TORCH_RES_INACTIVE, TORCH_LABEL_INACTIVE);
                 break;
             case "timer":
-                setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchTimer(), "ic_alarm", R.string.clock_timer);
+                setUpWidgetResources(iv, efab, v -> {
+                    mActivityLauncherUtils.launchTimer();
+                    vibrate(1);
+                }, getDrawable("ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
             case "calculator":
-                setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchCalculator(), modRes.getDrawable(R.drawable.ic_calculator, mContext.getTheme()), modRes.getString(R.string.calculator));
+                setUpWidgetResources(iv, efab, v -> {
+                    mActivityLauncherUtils.launchCalculator();
+                    vibrate(1);
+                }, ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme()), modRes.getString(R.string.calculator));
                 break;
             case "homecontrols":
                 setUpWidgetResources(iv, efab, this::launchHomeControls, HOME_CONTROLS, HOME_CONTROLS_LABEL);
@@ -782,7 +777,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 if (efab != null) {
                     mediaButtonFab = efab;
                 }
-                setUpWidgetResources(iv, efab, v -> toggleMediaPlaybackState(), "ic_alarm", BT_LABEL_INACTIVE);
+                setUpWidgetResources(iv, efab, v -> toggleMediaPlaybackState(),
+                        ResourcesCompat.getDrawable(modRes, R.drawable.ic_play, mContext.getTheme()),
+                        getString(MEDIA_PLAY_LABEL, SYSTEM_UI));
                 break;
             case "weather":
                 if (iv != null) {
@@ -799,39 +796,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         }
     }
 
-    private void setUpWidget(ImageView iv, ExtendedFAB efab,
-                             OnClickListener cl, Drawable icon, String text) {
-        if (efab != null) {
-            efab.setOnClickListener(cl);
-            efab.setIcon(icon);
-            efab.setText(text);
-            if (mediaButtonFab == efab) {
-                attachSwipeGesture(efab);
-            }
-        }
-        if (iv != null) {
-            iv.setOnClickListener(cl);
-            iv.setImageDrawable(icon);
-        }
-    }
-
-    private void setupRingerWidget(ImageView iv, ExtendedFAB efab, OnClickListener cl) {
-        Drawable icon = getRingerDrawable();
-        String text = getRingerText();
-        if (iv != null) {
-            iv.setOnClickListener(cl);
-            iv.setImageDrawable(icon);
-        }
-        if (efab != null) {
-            efab.setOnClickListener(cl);
-            efab.setIcon(icon);
-            efab.setText(text);
-        }
-    }
 
     private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
                                       OnClickListener cl, String drawableRes, String stringRes){
-        Drawable d = mContext.getDrawable(mContext.getResources().getIdentifier(drawableRes, "drawable", SYSTEM_UI));
+        Drawable d = getDrawable(drawableRes, SYSTEM_UI);
         if (efab != null) {
             efab.setOnClickListener(cl);
             efab.setIcon(d);
@@ -860,24 +828,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         if (iv != null) {
             iv.setOnClickListener(cl);
             iv.setImageDrawable(icon);
-        }
-    }
-
-    private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
-                                      OnClickListener cl, String drawableRes, int stringRes){
-        Drawable d = mContext.getDrawable(mContext.getResources().getIdentifier(drawableRes, "drawable", SYSTEM_UI));
-        if (efab != null) {
-            efab.setOnClickListener(cl);
-            efab.setIcon(d);
-            String text = modRes.getString(stringRes);
-            efab.setText(text);
-            if (mediaButtonFab == efab) {
-                attachSwipeGesture(efab);
-            }
-        }
-        if (iv != null) {
-            iv.setOnClickListener(cl);
-            iv.setImageDrawable(d);
         }
     }
 
@@ -975,20 +925,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         }
         if (mediaQsHelper[0] == null || mediaQsHelper[1] == null) return;
         callMethod(mediaQsHelper[1], "showPrompt", mContext, finalView, mediaQsHelper[0]);
-        /*post(() ->
-                mMediaOutputDialogFactory.create(getActiveVolumeApp(), true, view));
-        VibrationUtils.triggerVibration(mContext, 2);*/
-    }
-
-    private String getActiveVolumeApp() {
-        String mAppVolumeActivePackageName = "";
-        /*for (AppVolume av : mAudioManager.listAppVolumes()) {
-            if (av.isActive()) {
-                mAppVolumeActivePackageName = av.getPackageName();
-                break;
-            }
-        }*/
-        return mAppVolumeActivePackageName;
+        vibrate(0);
     }
 
     private void dispatchMediaKeyWithWakeLockToMediaSession(final int keycode) {
@@ -996,15 +933,15 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         KeyEvent keyEvent = new KeyEvent(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), KeyEvent.ACTION_DOWN, keycode, 0);
         keyIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         KeyEvent mediaEvent = new KeyEvent(KeyEvent.ACTION_DOWN, keycode);
-        SystemUtils.AudioManager().dispatchMediaKeyEvent(mediaEvent);
+        mAudioManager.dispatchMediaKeyEvent(mediaEvent);
 
         mediaEvent = KeyEvent.changeAction(mediaEvent, KeyEvent.ACTION_UP);
         keyIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
-        SystemUtils.AudioManager().dispatchMediaKeyEvent(mediaEvent);
+        mAudioManager.dispatchMediaKeyEvent(mediaEvent);
 
     }
 
-    private void updateMediaPlaybackState() {;
+    private void updateMediaPlaybackState() {
         boolean isPlaying = isMediaPlaying();
         Drawable icon = ResourcesCompat.getDrawable(
                 modRes,
@@ -1038,6 +975,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             mCameraManager.setTorchMode(mCameraId, !isFlashOn);
             isFlashOn = !isFlashOn;
             updateTorchButtonState();
+            vibrate(1);
         } catch (Exception e) {
             log("LockscreenWidgets toggleFlashlight error: " + e.getMessage());
         }
@@ -1102,6 +1040,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         callMethod(getDataController(), "setMobileDataEnabled", !isMobileDataEnabled());
         updateMobileDataState(!isMobileDataEnabled());
         mHandler.postDelayed(() -> updateMobileDataState(isMobileDataEnabled()), 250L);
+        vibrate(1);
     }
 
 
@@ -1196,16 +1135,13 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public void updateTorchButtonState() {
         if (!isWidgetEnabled("torch")) return;
         log("LockscreenWidgets updateTorchButtonState " + isFlashOn);
-        String activeString = mContext.getResources().getString(
-                mContext.getResources().getIdentifier(TORCH_LABEL_ACTIVE, "string", SYSTEM_UI)
-        );
-        String inactiveString = mContext.getResources().getString(
-                mContext.getResources().getIdentifier(TORCH_LABEL_INACTIVE, "string", SYSTEM_UI));
+        String activeString = getString(TORCH_LABEL_ACTIVE, SYSTEM_UI);
+        String inactiveString = getString(TORCH_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(torchButton, torchButtonFab, isFlashOn,
                 TORCH_RES_ACTIVE, TORCH_RES_INACTIVE, activeString, inactiveString);
     }
 
-    private BroadcastReceiver mRingerModeReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mRingerModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateRingerButtonState();
@@ -1259,6 +1195,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         callMethod(bluetoothController, "setBluetoothEnabled", !isBluetoothEnabled());
         updateBtState();
         mHandler.postDelayed(this::updateBtState, 350L);
+        vibrate(1);
     }
 
     private void showBluetoothDialog(View view) {
@@ -1269,7 +1206,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             finalView = view;
         }
         post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", finalView));
-        SystemUtils.vibrate(VibrationEffect.EFFECT_CLICK, VibrationAttributes.USAGE_ACCESSIBILITY);
+        vibrate(0);
     }
 
     private void updateBtState() {
@@ -1279,9 +1216,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
         boolean isConnected = !TextUtils.isEmpty(deviceName);
-        String inactiveString = mContext.getResources().getString(
-                mContext.getResources().getIdentifier(BT_LABEL_INACTIVE, "string", SYSTEM_UI)
-        );
+        String inactiveString = getString(BT_INACTIVE, SYSTEM_UI);
         updateTileButtonState(btButton, btButtonFab, isBluetoothOn,
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
@@ -1400,10 +1335,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
      */
     private void vibrate(int type) {
         if (type == 0) {
-            this.performHapticFeedback(HapticFeedbackConstants.TOGGLE_ON);
-            SystemUtils.vibrate(VibrationEffect.EFFECT_CLICK, VibrationAttributes.USAGE_ACCESSIBILITY);
+            this.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
         } else if (type == 1) {
-            this.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
+            this.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
         }
     }
 
