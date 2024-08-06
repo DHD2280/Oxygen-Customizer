@@ -49,6 +49,8 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
     private boolean mHasAPIKey;
     private int mRequestNumber;
 
+    private boolean shouldRetry = false;
+
     public OpenWeatherMapProvider(Context context) {
         super(context);
         loadKeys();
@@ -109,6 +111,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         } catch (JSONException e) {
             Log.w(TAG, "Received malformed weather data (selection = " + selection
                     + ", lang = " + locale + ")", e);
+            setShouldRetry(true);
         }
 
         return null;
@@ -321,6 +324,13 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             }
         } catch (Resources.NotFoundException ignored) {
         }
+        try {
+            String key = mContext.getResources().getString(R.string.owm_api_key);
+            if (!TextUtils.isEmpty(key)) {
+                mKeys.add(key);
+            }
+        } catch (Resources.NotFoundException ignored) {
+        }
         log(TAG, "use API keys = " + mKeys);
     }
 
@@ -342,6 +352,10 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
     }
 
     public boolean shouldRetry() {
-        return false;
+        return shouldRetry;
+    }
+
+    private void setShouldRetry(boolean retry) {
+        shouldRetry = retry;
     }
 }
