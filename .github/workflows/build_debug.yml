@@ -67,6 +67,9 @@ jobs:
         if: github.repository == 'DHD2280/Oxygen-Customizer'
         run: |
           if [[ "$COMMIT_MESSAGE_HEADER" == *. || "$COMMIT_MESSAGE_HEADER" == "CHANGELOG:"* ]]; then
+            if [[ "$COMMIT_MESSAGE_HEADER" == "CHANGELOG:"* ]]; then
+              echo "COMMIT_MESSAGE_HEADER=$(echo ${COMMIT_MESSAGE_HEADER} | tr -s ':' | cut -d " " -f 2)" >> $GITHUB_ENV
+            fi
             curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup" \
               -F chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
               -F message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
