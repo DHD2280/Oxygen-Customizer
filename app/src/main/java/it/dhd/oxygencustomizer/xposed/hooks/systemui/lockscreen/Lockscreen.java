@@ -119,6 +119,20 @@ public class Lockscreen extends XposedMods {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
         try {
+            ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+            executor.scheduleWithFixedDelay(() -> {
+                File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
+
+                if (Android.isDirectory()) {
+                    updateDrawable();
+                    executor.shutdown();
+                    executor.shutdownNow();
+                }
+            }, 0, 5, TimeUnit.SECONDS);
+        } catch (Throwable ignored) {
+        }
+
+        try {
             hideLockscreenStuff();
         } catch (Throwable t) {
             log(TAG + "hideLockscreenStuff failed " + t.getMessage());
@@ -227,7 +241,7 @@ public class Lockscreen extends XposedMods {
             } else {
                 try {
                     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-                    executor.scheduleAtFixedRate(() -> {
+                    executor.scheduleWithFixedDelay(() -> {
                         File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
 
                         if (Android.isDirectory()) {
@@ -238,7 +252,9 @@ public class Lockscreen extends XposedMods {
                                     ((AnimatedImageDrawable) mFpDrawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
                                     ((AnimatedImageDrawable) mFpDrawable).start();
                                 }
-                            } catch (Throwable ignored) {}
+                            } catch (Throwable t) {
+                                log(TAG + "Failed to load custom fingerprint icon: " + t.getMessage());
+                            }
                         }
                     }, 0, 5, TimeUnit.SECONDS);
                 } catch (Throwable ignored) {
