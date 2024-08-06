@@ -166,11 +166,11 @@ public class AdvancedReboot extends XposedMods {
         listView.setScrollContainer(false);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             switch (position) {
-                case 0 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));//ShellUtils.execCommand("reboot recovery", true);
-                case 1 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));//ShellUtils.execCommand("reboot bootloader", true);
-                case 2 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));//ShellUtils.execCommand("reboot safemode", true);
-                case 3 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));//ShellUtils.execCommand("killall zygote", true);
-                case 4 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));//restartAllScope(new String[]{SYSTEM_UI});
+                case 0 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));
+                case 1 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));
+                case 2 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));
+                case 3 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));
+                case 4 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));
             }
         });
 
