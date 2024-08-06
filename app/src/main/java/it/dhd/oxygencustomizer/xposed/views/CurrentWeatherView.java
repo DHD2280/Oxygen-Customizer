@@ -83,7 +83,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
         mLeftText = new TextView(context);
         mLeftText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mLeftText.setTextColor(Color.WHITE); // Aggiungi il colore desiderato
+        mLeftText.setTextColor(Color.WHITE);
         mLeftText.setSingleLine(true);
         mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         mLeftText.setEllipsize(TextUtils.TruncateAt.END);
@@ -310,7 +310,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
             }
         } catch(Exception e) {
-            log(TAG + "Weather query failed");
+            log(TAG + "Weather query failed" + e.getMessage());
             Log.e(TAG, "Weather query failed", e);
         }
     }
