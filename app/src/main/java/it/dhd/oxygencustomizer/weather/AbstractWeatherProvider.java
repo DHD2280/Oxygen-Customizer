@@ -40,7 +40,7 @@ import it.dhd.oxygencustomizer.utils.NetworkUtils;
 
 public abstract class AbstractWeatherProvider {
     private static final String TAG = "AbstractWeatherProvider";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     protected Context mContext;
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     private static final String URL_PLACES =
