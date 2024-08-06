@@ -258,7 +258,6 @@ public class Constants {
             };
 
         }
-
         public static class QsHeaderSystemIcons {
 
             public static final String QS_SYSTEM_ICON_CHIP_SWITCH = "qs_header_system_icons_chip_switch";
@@ -279,7 +278,6 @@ public class Constants {
                     getBottomDxR(QS_SYSTEM_ICON_CHIP)
             };
         }
-
         public static class QsHeaderClock {
             // Custom Switch
             public static final String QS_HEADER_CLOCK_CUSTOM_ENABLED = "qs_header_clock_custom_enabled";
@@ -392,8 +390,6 @@ public class Constants {
             public static final String LOCKSCREEN_REMOVE_LOCK = "lockscreen_hide_lock_icon";
             public static final String LOCKSCREEN_REMOVE_LEFT_AFFORDANCE = "lockscreen_affordance_remove_left";
             public static final String LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE = "lockscreen_affordance_remove_right";
-            public static final String LOCKSCREEN_CUSTOM_LEFT_AFFORDANCE = "lockscreen_affordance_custom_left";
-            public static final String LOCKSCREEN_CUSTOM_RIGHT_AFFORDANCE = "lockscreen_affordance_custom_left";
             public static final String LOCKSCREEN_HIDE_CARRIER = "lockscreen_hide_carrier";
             public static final String LOCKSCREEN_HIDE_STATUSBAR = "lockscreen_hide_statusbar";
             public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
@@ -442,6 +438,12 @@ public class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2,
                     LOCKSCREEN_CLOCK_CUSTOM_IMAGE
             };
+        }
+        public static class LockscreenWidgets {
+            public static final String LOCKSCREEN_WIDGETS_ENABLED = "lockscreen_widgets_enabled";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET = "lockscreen_device_widget";
+            public static final String LOCKSCREEN_WIDGETS = "lockscreen_widgets";
+            public static final String LOCKSCREEN_WIDGETS_EXTRAS = "lockscreen_widgets_extras";
         }
 
         // AOD

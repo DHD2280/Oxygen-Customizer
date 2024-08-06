@@ -211,7 +211,11 @@ public class StatusbarClock extends XposedMods {
                      "sbc_before_clock_format", "sbc_before_small", "sbc_after_clock_format", "sbc_after_small" -> updateClock();
                 case "status_bar_clock_size" -> setClockSize();
                 case "status_bar_clock",
-                     "status_bar_clock_seconds", "status_bar_custom_clock_color", "status_bar_clock_color" -> placeClock();
+                     "status_bar_clock_seconds", "status_bar_custom_clock_color", "status_bar_clock_color" -> {
+                    placeClock();
+                    updateClock();
+                    setupChip();
+                }
                 case "status_bar_clock_background_chip" + "_STYLE",
                         "status_bar_clock_background_chip" + "_GRADIENT_ORIENTATION",
                         "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR",
@@ -526,7 +530,7 @@ public class StatusbarClock extends XposedMods {
             }
             case POSITION_CENTER -> {
                 targetArea = (ViewGroup) mCenteredIconArea;
-                mClockView.setPadding(rightClockPadding, dp2px(mContext, 4), rightClockPadding, dp2px(mContext, 4));
+                mClockView.setPadding(rightClockPadding, 0, rightClockPadding, 0);
                 setMargins(mClockView, mContext, 0, 4, 0, 4);
             }
             case POSITION_RIGHT -> {
@@ -542,8 +546,6 @@ public class StatusbarClock extends XposedMods {
                 targetArea.addView(mClockView);
             }
         }
-        updateClock();
-        setupChip();
     }
 
     private final StringFormatter stringFormatter = new StringFormatter();
@@ -643,28 +645,27 @@ public class StatusbarClock extends XposedMods {
     private void setupChip() {
         log(TAG + "Setting up Chip " + clockChip + " | " + chipStyle + " | " + (mClockChipDrawable != null));
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, 4), dp2px(mContext, 2), dp2px(mContext, 4), dp2px(mContext, 2));
+            mClockView.setPadding(dp2px(mContext, 2), dp2px(mContext, 2), dp2px(mContext, 2), dp2px(mContext, 2));
             mClockView.getLayoutParams().height = WRAP_CONTENT;
-            mClockView.post(() -> mClockView.setBackground(mClockChipDrawable));
+            mClockView.setBackground(mClockChipDrawable);
         } else {
             mClockView.setPadding(0, 0, 0, 0);
             mClockView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mClockView.post(() -> mClockView.setBackground(null));
+            return;
         }
         switch (mClockPosition) {
-            case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER);
-            case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+            case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER);
+            case POSITION_CENTER -> {
+                mCenteredIconArea.getLayoutParams().height = WRAP_CONTENT;
+                mClockView.setGravity(Gravity.CENTER);
+            }
+            case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER);
         }
         mClockView.setIncludeFontPadding(false);
         mClockView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        mClockView.requestLayout();
-        if (clockChip) {
-            mClockView.post(() -> mClockView.setBackground(mClockChipDrawable));
-        } else {
-            mClockView.post(() -> mClockView.setBackground(null));
-        }
         if (mCenteredIconArea != null) mCenteredIconArea.requestLayout();
+        mClockView.requestLayout();
     }
 
     private void updateShowClock() {

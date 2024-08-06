@@ -24,6 +24,12 @@
             android:title="@string/lockscreen_weather"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWidgets"
+            android:key="lockscreen_widgets"
+            android:title="@string/lockscreen_widgets_title"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -17,6 +17,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
@@ -69,6 +70,9 @@ public class ModPacks {
                     // Thermal Provider
                     modPacks.add(ThermalProvider.class);
 
+                    // Controllers Provider
+                    modPacks.add(ControllersProvider.class);
+
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);
 
@@ -90,7 +94,6 @@ public class ModPacks {
 
                     // Statusbar
                     modPacks.add(StatusbarMods.class);
-                    modPacks.add(HeaderClock.class);
                     modPacks.add(StatusbarNotification.class);
                     modPacks.add(StatusbarClock.class);
                     modPacks.add(StatusbarIcons.class);
@@ -99,6 +102,7 @@ public class ModPacks {
                     // QS
                     modPacks.add(HeaderImage.class); // Load first QS Header Image since we have to check ScrimView Alpha before set by QS Transparency
                     modPacks.add(DepthWallpaper.class); // Load first Depth Wallpaper since we have to check ScrimView Alpha before set by QS Transparency
+                    modPacks.add(HeaderClock.class);
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
@@ -127,7 +131,6 @@ public class ModPacks {
             case Constants.Packages.SETTINGS -> {
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
-                //modPacks.add(FontVariation.class);
             }
             case Constants.Packages.LAUNCHER -> modPacks.add(Launcher.class);
             case Constants.Packages.SCREENSHOT -> modPacks.add(ScreenshotSecureFlag.class);
