@@ -119,13 +119,6 @@
             tools:ignore="ExportedContentProvider" />
 
         <service
-            android:name=".weather.WeatherUpdateService"
-            android:exported="true"
-            android:enabled="true"
-            android:foregroundServiceType="location"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <service
             android:name=".services.RootProviderProxy"
             android:exported="true"
             tools:ignore="ExportedService" />
