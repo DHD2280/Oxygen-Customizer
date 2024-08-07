@@ -36,6 +36,7 @@ import android.content.pm.PackageManager;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
+import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 
 public class Config {
@@ -76,6 +77,7 @@ public class Config {
 
         return switch (provider) {
             case "1" -> new METNorwayProvider(context);
+            case "2" -> new OpenMeteoProvider(context);
             default -> new OpenWeatherMapProvider(context);
         };
     }
@@ -85,6 +87,7 @@ public class Config {
 
         return switch (provider) {
             case "1" -> "MET Norway";
+            case "2" -> "OpenMeteo";
             default -> "OpenWeatherMap";
         };
     }

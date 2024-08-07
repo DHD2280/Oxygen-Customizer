@@ -991,6 +991,7 @@
     <string name="weather_custom_color">Weather Text Custom Color</string>
     <string name="provider_openweathermap" translatable="false">OpenWeatherMap</string>
     <string name="provider_metnorway" translatable="false">MET Norway</string>
+    <string name="provider_openmeteo" translatable="false">OpenMeteo</string>
     <string name="weather_progress_title">Verifying location</string>
     <string name="weather_select_location">Select location</string>
     <string name="custom_location_title">Custom location</string>

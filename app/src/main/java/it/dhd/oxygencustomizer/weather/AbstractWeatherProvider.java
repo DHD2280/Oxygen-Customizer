@@ -91,12 +91,13 @@ public abstract class AbstractWeatherProvider {
     }
 
     private String getCoordinatesLocalityWithGoogle(String coordinate) {
-        double latitude = Double.valueOf(coordinate.substring(4, coordinate.indexOf("&")));
-        double longitude = Double.valueOf(coordinate.substring(coordinate.indexOf("lon=") + 4));
+        double latitude = Double.valueOf(coordinate.substring(coordinate.indexOf("=") + 1, coordinate.indexOf("&")));
+        double longitude = Double.valueOf(coordinate.substring(coordinate.lastIndexOf("=") + 1));
+
         Geocoder geocoder = new Geocoder(mContext.getApplicationContext(), Locale.getDefault());
         try {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if(listAddresses != null && listAddresses.size() > 0){
+            if(listAddresses != null && !listAddresses.isEmpty()){
                 Address a = listAddresses.get(0);
                 return TextUtils.isEmpty(a.getLocality()) ? a.getAdminArea() : a.getLocality();
             }
@@ -111,9 +112,8 @@ public abstract class AbstractWeatherProvider {
         if (!TextUtils.isEmpty(cityGoogle)) {
             return cityGoogle;
         }
-        double latitude = Double.valueOf(coordinate.substring(4, coordinate.indexOf("&")));
-        double longitude = Double.valueOf(coordinate.substring(coordinate.indexOf("lon=") + 4));
-        Log.d(TAG, "getCoordinatesLocality " + latitude + " " + longitude);
+        double latitude = Double.valueOf(coordinate.substring(coordinate.indexOf("=") + 1, coordinate.indexOf("&")));
+        double longitude = Double.valueOf(coordinate.substring(coordinate.lastIndexOf("=") + 1));
 
         String lang = Locale.getDefault().getLanguage().replaceFirst("_", "-");
         String url = String.format(URL_LOCALITY, latitude, longitude, lang);

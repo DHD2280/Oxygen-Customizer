@@ -27,6 +27,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
+
 public class WeatherContentProvider extends ContentProvider {
     private static final String TAG = "WeatherService:WeatherContentProvider";
     private static final boolean DEBUG = true;
@@ -198,7 +200,7 @@ public class WeatherContentProvider extends ContentProvider {
         if (projectionType == URI_TYPE_CONTROL) {
             if (values.containsKey(COLUMN_FORCE_REFRESH) && values.getAsBoolean(COLUMN_FORCE_REFRESH)) {
                 if (DEBUG) Log.i(TAG, "update: " + uri.toString() + " " + values);
-                WeatherUpdateService.scheduleUpdateNow(mContext);
+                WeatherScheduler.scheduleUpdateNow(mContext);
             }
         }
         return 0;
