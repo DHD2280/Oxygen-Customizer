@@ -256,16 +256,6 @@
         </activity>
 
         <activity
-            android:name=".weather_gnw"
-            android:label="Google Now"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="org.omnirom.WeatherIconPack" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".weather_miui"
             android:label="MIUI"
             android:exported="false">
@@ -298,6 +288,16 @@
         <activity
             android:name=".weather_magical"
             android:label="Magical"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".weather_vclouds"
+            android:label="VClouds"
             android:exported="false">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
