@@ -325,13 +325,16 @@ public class LockscreenClock extends XposedMods {
             // LaunchableLinearLayout
             // This is the container of our custom views
             LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "LaunchableLinearLayout not found: " + t.getMessage());
+        }
 
+        try {
             // LaunchableImageView
             // This is an ImageView that can launch dialogs with a GhostView
             LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
-
         } catch (Throwable t) {
-            log(TAG + "Class/es not found: " + t.getMessage());
+            log(TAG + "LaunchableImageView not found: " + t.getMessage());
         }
 
         initResources(mContext);

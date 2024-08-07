@@ -34,6 +34,7 @@ import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -298,30 +299,33 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private LinearLayout createMainWidgetsContainer(Context context) {
+        LinearLayout mainWidgetsContainer;
         try {
-            LinearLayout mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-            mainWidgetsContainer.setOrientation(HORIZONTAL);
-            mainWidgetsContainer.setGravity(Gravity.CENTER);
-            mainWidgetsContainer.setLayoutParams(new LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-            // Add FABs to the main widgets container
-            mMainWidgetViews = new ExtendedFAB[]{
-                    createFAB(context),
-                    createFAB(context)
-            };
-
-            for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
-                mainWidgetsContainer.addView(mMainWidgetView);
-            }
-
-            return mainWidgetsContainer;
         } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
                  InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer error: " + e.getMessage());
-            return null;
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            mainWidgetsContainer = new LinearLayout(context);
         }
+
+        mainWidgetsContainer.setOrientation(HORIZONTAL);
+        mainWidgetsContainer.setGravity(Gravity.CENTER);
+        mainWidgetsContainer.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // Add FABs to the main widgets container
+        mMainWidgetViews = new ExtendedFAB[]{
+                createFAB(context),
+                createFAB(context)
+        };
+
+        for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
+            mainWidgetsContainer.addView(mMainWidgetView);
+        }
+
+        return mainWidgetsContainer;
     }
 
     private ExtendedFAB createFAB(Context context) {
@@ -346,64 +350,71 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
+        LinearLayout secondaryWidgetsContainer;
         try {
-            LinearLayout secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-            secondaryWidgetsContainer.setOrientation(HORIZONTAL);
-            secondaryWidgetsContainer.setGravity(Gravity.CENTER_HORIZONTAL);
-            secondaryWidgetsContainer.setLayoutParams(new LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).topMargin =
-                    modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
-            ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).bottomMargin =
-                    modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_bottom);
+            secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-            // Add ImageViews to the secondary widgets container
-            mSecondaryWidgetViews = new ImageView[]{
-                    createImageView(context),
-                    createImageView(context),
-                    createImageView(context),
-                    createImageView(context)
-            };
-
-            for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
-                secondaryWidgetsContainer.addView(mSecondaryWidgetView);
-            }
-
-            return secondaryWidgetsContainer;
         } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
                  InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer error: " + e.getMessage());
-            return null;
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            secondaryWidgetsContainer = new LinearLayout(context);
         }
+
+        secondaryWidgetsContainer.setOrientation(HORIZONTAL);
+        secondaryWidgetsContainer.setGravity(Gravity.CENTER_HORIZONTAL);
+        secondaryWidgetsContainer.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).topMargin =
+                modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
+        ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).bottomMargin =
+                modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_bottom);
+
+        // Add ImageViews to the secondary widgets container
+        mSecondaryWidgetViews = new ImageView[]{
+                createImageView(context),
+                createImageView(context),
+                createImageView(context),
+                createImageView(context)
+        };
+
+        for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
+            secondaryWidgetsContainer.addView(mSecondaryWidgetView);
+        }
+
+        return secondaryWidgetsContainer;
     }
 
     private ImageView createImageView(Context context) {
+        ImageView imageView;
         try {
-            ImageView imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
-            imageView.setId(View.generateViewId());
-            LayoutParams params = new LayoutParams(
-                    modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size),
-                    modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size));
-            params.setMargins(
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
-                    0,
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
-                    0);
-            imageView.setLayoutParams(params);
-            imageView.setPadding(
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                    modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
-            imageView.setFocusable(true);
-            imageView.setClickable(true);
-            return imageView;
+            imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
+
         } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
                  InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createImageView error: " + e.getMessage());
-            return null;
+            log("LockscreenWidgets createImageView LaunchableImageView not found: " + e.getMessage());
+            imageView = new ImageView(context);
         }
+
+        imageView.setId(View.generateViewId());
+        LayoutParams params = new LayoutParams(
+                modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size),
+                modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size));
+        params.setMargins(
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
+                0,
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
+                0);
+        imageView.setLayoutParams(params);
+        imageView.setPadding(
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
+                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
+        imageView.setFocusable(true);
+        imageView.setClickable(true);
+
+        return imageView;
     }
 
     public void enableWeatherUpdates() {
@@ -915,6 +926,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void showMediaDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
         updateMediaController();
         Object[] mediaQsHelper = getQsMediaDialog();
         View finalView;
@@ -1045,6 +1057,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
 
     private void showWifiDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
         View finalView;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
@@ -1056,6 +1069,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void showInternetDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
         if (getCellularTile() == null) return;
         View finalView;
         if (view instanceof ExtendedFAB) {

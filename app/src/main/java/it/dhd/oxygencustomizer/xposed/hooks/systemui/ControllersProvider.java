@@ -31,7 +31,6 @@ public class ControllersProvider extends XposedMods {
     private Object mDataController = null;
     private Object mNetworkController = null;
     private Object mSignalCallback = null;
-    private Object mControlsComponent = null;
 
     private Object mOplusBluetoothTile = null;
     private Object mOplusWifiTile = null;
@@ -95,15 +94,24 @@ public class ControllersProvider extends XposedMods {
 
         // CellularTile, OplusCellularTile extends CellularTile
         // Get some controllers from CellularTile
-        Class<?> CellularTile = findClass("com.oplus.systemui.qs.tiles.CellularTile", lpparam.classLoader);
-        hookAllConstructors(CellularTile, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCellularTile = param.thisObject;
-                mNetworkController = getObjectField(param.thisObject, "mController");
-                mDataController = getObjectField(param.thisObject, "mDataController");
-            }
-        });
+        Class<?> CellularTile;
+        try {
+            CellularTile = findClass("com.oplus.systemui.qs.tiles.CellularTile", lpparam.classLoader);
+        } catch (Throwable t) {
+            CellularTile = findClass("com.android.systemui.qs.tiles.CellularTile", lpparam.classLoader); // OOS 13
+        }
+        if (CellularTile != null) {
+            hookAllConstructors(CellularTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mCellularTile = param.thisObject;
+                    mNetworkController = getObjectField(param.thisObject, "mController");
+                    mDataController = getObjectField(param.thisObject, "mDataController");
+                }
+            });
+        } else {
+            log(TAG + "CellularTile not found");
+        }
 
         // Bluetooth Controller
         Class<?> BluetoothControllerImpl = findClass("com.android.systemui.statusbar.policy.BluetoothControllerImpl", lpparam.classLoader);
@@ -115,29 +123,42 @@ public class ControllersProvider extends XposedMods {
         });
 
         // Bluetooth Tile - for Bluetooth Dialog
-        Class<?> OplusBluetoothTile = findClass("com.oplus.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader);
-        hookAllConstructors(OplusBluetoothTile, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mOplusBluetoothTile = param.thisObject;
-            }
-        });
+        try {
+            Class<?> OplusBluetoothTile = findClass("com.oplus.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader);
+            hookAllConstructors(OplusBluetoothTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mOplusBluetoothTile = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "OplusBluetoothTile not found");
+        }
 
         // Stole a Bluetooth Callback from OplusPhoneStatusBarPolicyExImpl
-        Class<?> OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
-        findAndHookMethod(
-                OplusPhoneStatusBarPolicyExImpl,
-                "updateBluetooth",
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
-                        boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
-                        boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
-                        onBluetoothChanged(enabled);
+        Class<?> OplusPhoneStatusBarPolicyExImpl;
+        try {
+            OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusPhoneStatusBarPolicyExImpl = findClass("com.oplusos.systemui.statusbar.phone.PhoneStatusBarPolicyEx", lpparam.classLoader); // OOS 13
+        }
+        if (OplusPhoneStatusBarPolicyExImpl != null) {
+            findAndHookMethod(
+                    OplusPhoneStatusBarPolicyExImpl,
+                    "updateBluetooth",
+                    new XC_MethodHook() {
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                            boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
+                            boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                            onBluetoothChanged(enabled);
+                        }
                     }
-                }
-        );
+            );
+        } else {
+            log(TAG + "OplusPhoneStatusBarPolicyExImpl not found");
+        }
 
         // WiFi Tile - for WiFi Dialog
         Class<?> OplusWifiTile = findClass("com.oplus.systemui.qs.tiles.OplusWifiTile", lpparam.classLoader);
@@ -191,7 +212,12 @@ public class ControllersProvider extends XposedMods {
         });
 
         // Home Controls Tile - for ControlsActivity
-        Class<?> OplusDeviceControlsTile = findClass("com.oplus.systemui.qs.tiles.OplusDeviceControlsTile", lpparam.classLoader);
+        Class<?> OplusDeviceControlsTile;
+        try {
+            OplusDeviceControlsTile = findClass("com.oplus.systemui.qs.tiles.OplusDeviceControlsTile", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusDeviceControlsTile = findClass("com.android.systemui.qs.tiles.DeviceControlsTile/", lpparam.classLoader); // OOS 13
+        }
         hookAllConstructors(OplusDeviceControlsTile, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
