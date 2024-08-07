@@ -82,9 +82,11 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             JSONObject conditions = new JSONObject(conditionResponse);
             JSONObject conditionData = conditions.getJSONObject("main");
             JSONObject weather = conditions.getJSONArray("weather").getJSONObject(0);
-            /*ArrayList<DayForecast> forecasts =
-                    parseForecasts(conditions.getJSONArray("daily"), metric);*/
             ArrayList<DayForecast> forecasts = new ArrayList<>();
+            if (conditions.has("daily")) {
+                forecasts =
+                        parseForecasts(conditions.getJSONArray("daily"), metric);
+            }
             JSONObject wind = conditions.getJSONObject("wind");
             float windSpeed = (float) wind.getDouble("speed");
             if (metric) {
