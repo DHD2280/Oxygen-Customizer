@@ -444,6 +444,14 @@ public class Constants {
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET = "lockscreen_device_widget";
             public static final String LOCKSCREEN_WIDGETS = "lockscreen_widgets";
             public static final String LOCKSCREEN_WIDGETS_EXTRAS = "lockscreen_widgets_extras";
+
+            // Customizations
+            // Device Widget
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH = "lockscreen_device_widget_custom_color";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR = "lockscreen_device_widget_linear_progress_color";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR = "lockscreen_device_widget_circular_progress_color";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR = "lockscreen_device_widget_text_color";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE = "lockscreen_device_widget_device_name";
         }
 
         // AOD

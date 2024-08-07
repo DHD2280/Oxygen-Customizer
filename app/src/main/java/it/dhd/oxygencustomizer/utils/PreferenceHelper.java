@@ -65,6 +65,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_HIDE_DATE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
@@ -526,6 +530,13 @@ public class PreferenceHelper {
                     LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
+            }
+
+            // Lockscreen Widgets
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE, false);
             }
 
             // Aod Clocks

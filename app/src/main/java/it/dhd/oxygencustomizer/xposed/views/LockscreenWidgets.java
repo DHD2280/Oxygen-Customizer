@@ -1276,6 +1276,13 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         instance.updateWidgetViews();
     }
 
+    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int progressColor, int textColor, String devName) {
+        if (instance.mDeviceWidgetView == null) return;
+        instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, progressColor);
+        instance.mDeviceWidgetView.setTextCustomColor(textColor);
+        instance.mDeviceWidgetView.setDeviceName(devName);
+    }
+
     public void setActivityStarter(Object activityStarter) {
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, activityStarter);
     }
