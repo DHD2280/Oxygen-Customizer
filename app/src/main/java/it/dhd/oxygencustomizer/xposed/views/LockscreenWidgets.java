@@ -1216,7 +1216,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
         boolean isConnected = !TextUtils.isEmpty(deviceName);
-        String inactiveString = getString(BT_INACTIVE, SYSTEM_UI);
+        String inactiveString = getString(BT_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(btButton, btButtonFab, isBluetoothOn,
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
@@ -1265,7 +1265,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
      */
     public void setOptions(boolean lsWidgets, boolean deviceWidget,
                            String mainWidgets, String secondaryWidgets) {
-        log("LockscreenWidgets setOptions " + lsWidgets);
+        log("LockscreenWidgets setOptions " + lsWidgets +
+                " | " + deviceWidget + " | " + mainWidgets + " | " + secondaryWidgets);
         instance.lockscreenWidgetsEnabled = lsWidgets;
         instance.deviceWidgetsEnabled = deviceWidget;
         instance.mMainLockscreenWidgetsList = mainWidgets;
@@ -1285,7 +1286,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     mContext,
                     mContext.getResources().getIdentifier(drawableRes, "drawable", pkg));
         } catch (Throwable t) {
-            log("LockscreenWidgets getDrawable error " + t);
+            log("LockscreenWidgets getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
         }
     }
@@ -1295,7 +1296,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             return mContext.getResources().getString(
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
-            log("LockscreenWidgets getString error " + t);
+            log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }
     }
