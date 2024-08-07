@@ -43,7 +43,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
 
     private static final int FORECAST_DAYS = 5;
     private static final String URL_WEATHER =
-            "https://api.openweathermap.org/data/2.5/onecall?%s&mode=json&units=%s&lang=%s&cnt=" + FORECAST_DAYS + "&appid=%s";
+            "https://api.openweathermap.org/data/2.5/weather?%s&mode=json&units=%s&lang=%s&cnt=" + FORECAST_DAYS + "&appid=%s";
 
     private List<String> mKeys = new ArrayList<>();
     private boolean mHasAPIKey;
@@ -80,11 +80,13 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
 
         try {
             JSONObject conditions = new JSONObject(conditionResponse);
-            JSONObject conditionData = conditions.getJSONObject("current");
-            JSONObject weather = conditionData.getJSONArray("weather").getJSONObject(0);
-            ArrayList<DayForecast> forecasts =
-                    parseForecasts(conditions.getJSONArray("daily"), metric);
-            float windSpeed = (float) conditionData.getDouble("wind_speed");
+            JSONObject conditionData = conditions.getJSONObject("main");
+            JSONObject weather = conditions.getJSONArray("weather").getJSONObject(0);
+            /*ArrayList<DayForecast> forecasts =
+                    parseForecasts(conditions.getJSONArray("daily"), metric);*/
+            ArrayList<DayForecast> forecasts = new ArrayList<>();
+            JSONObject wind = conditions.getJSONObject("wind");
+            float windSpeed = (float) wind.getDouble("speed");
             if (metric) {
                 // speeds are in m/s so convert to our common metric unit km/h
                 windSpeed *= 3.6f;
@@ -99,7 +101,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
                     /* temperature */ sanitizeTemperature(conditionData.getDouble("temp"), metric),
                     /* humidity */ (float) conditionData.getDouble("humidity"),
                     /* wind */ windSpeed,
-                    /* windDir */ conditionData.has("wind_deg") ? conditionData.getInt("wind_deg") : 0,
+                    /* windDir */ wind.has("deg") ? wind.getInt("deg") : 0,
                     metric,
                     forecasts,
                     System.currentTimeMillis());
