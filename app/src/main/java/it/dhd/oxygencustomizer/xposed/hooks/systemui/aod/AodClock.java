@@ -74,8 +74,10 @@ import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class AodClock extends XposedMods {
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+
     private static final String TAG = "Oxygen Customizer: AOD ";
+
+    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private ViewGroup mRootLayout = null;
     private Context appContext;
     Class<?> LottieAn = null;
@@ -214,36 +216,15 @@ public class AodClock extends XposedMods {
         if (clockView != null) {
             clockView.setTag(OC_AOD_CLOCK_TAG);
 
-            int idx = 0;
-            LinearLayout dummyLayout = null;
-
-
             if (clockView.getParent() != null) {
                 ((ViewGroup) clockView.getParent()).removeView(clockView);
             }
-
-//            TextUtil.convertTextViewsToTitleCase((ViewGroup) clockView);
 
             mRootLayout.addView(clockView, 0);
             modifyClockView(clockView);
             initSoundManager();
             initBatteryStatus();
 
-        }
-    }
-
-    private void findClockView(ViewGroup viewGroup) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                findClockView((ViewGroup) child);
-            } else if (child instanceof TextView textView) {
-                String tag = "TAG";
-                if (textView.getTag() != null) {
-                    tag = textView.getTag().toString();
-                }
-                if (BuildConfig.DEBUG) log(TAG + " TextView: " + textView.getText() + " - " + tag);
-            }
         }
     }
 
@@ -332,6 +313,7 @@ public class AodClock extends XposedMods {
 
     @SuppressLint("DiscouragedApi")
     private View getClockView() {
+        if (appContext == null) return null;
         LayoutInflater inflater = LayoutInflater.from(appContext);
 
         View v = inflater.inflate(

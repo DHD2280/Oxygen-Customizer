@@ -10,7 +10,6 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -18,14 +17,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.topjohnwu.superuser.Shell;
@@ -63,18 +58,13 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTile
 import it.dhd.oxygencustomizer.ui.fragments.UserInterface;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
-import it.dhd.oxygencustomizer.utils.Prefs;
-import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
-import it.dhd.oxygencustomizer.weather.Config;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
 
     private Integer selectedFragment = null;
-    private NavHostFragment navHostFragment;
     private ActivityMainBinding binding;
     private static FragmentManager fragmentManager;
     private static final String TITLE_TAG = "mainActivityTitle";
@@ -86,8 +76,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d("MainActivity", "onCreate: ");
 
         fragmentManager = getSupportFragmentManager();
         binding = ActivityMainBinding.inflate(getLayoutInflater());

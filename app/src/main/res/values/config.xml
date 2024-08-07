@@ -2,7 +2,7 @@
 <resources>
 
     <string name="owm_api_key" translatable="false" >2eaba923f653cc4b4b1b1b5849349db6</string>
-    <string name="owm_api_key_1" translatable="false" >c071025e890429c585e4df3aeeae0640</string>
+    <string name="owm_api_key_1" translatable="false" >c150c80a27b1f82a31a3e1aa0186e2b3</string>
     <string name="owm_api_key_2" translatable="false" >bf2e711833265643fa9749dfbc9c2d54</string>
 
 </resources>

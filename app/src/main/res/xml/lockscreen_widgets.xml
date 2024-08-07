@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:key="lockscreen_widgets_enabled"
+        app:iconSpaceReserved="false"
+        android:title="@string/lockscreen_widgets_enabled_title"
+        android:summary="@string/lockscreen_widgets_enabled_summary"
+        android:defaultValue="false"/>
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:key="lockscreen_device_widget"
+        app:iconSpaceReserved="false"
+        android:title="@string/lockscreen_display_widgets_title"
+        android:summary="@string/lockscreen_display_widgets_summary"
+        android:defaultValue="false" />
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/main_custom_widgets1"
+        android:key="main_custom_widgets1"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/main_custom_widgets2"
+        android:key="main_custom_widgets2"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/custom_widgets1"
+        android:key="custom_widgets1"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/custom_widgets2"
+        android:key="custom_widgets2"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/custom_widgets3"
+        android:key="custom_widgets3"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:entries="@array/widget_entries"
+        app:iconSpaceReserved="false"
+        android:title="@string/custom_widgets4"
+        android:key="custom_widgets4"
+        android:entryValues="@array/widget_values"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

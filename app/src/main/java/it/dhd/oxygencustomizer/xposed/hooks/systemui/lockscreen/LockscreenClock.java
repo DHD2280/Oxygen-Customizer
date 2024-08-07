@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
+import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
@@ -44,6 +45,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_STOCK_CLOCK_RED_ONE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_STOCK_CLOCK_RED_ONE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -107,6 +112,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
+import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgets;
 
 public class LockscreenClock extends XposedMods {
 
@@ -159,10 +165,21 @@ public class LockscreenClock extends XposedMods {
     private boolean weatherShowHumidity = true, weatherShowWind = true;
     private boolean weatherCustomColor = false;
     private int weatherColor = Color.WHITE;
-    private int weatherStartPadding = 0, weatherTextSize = 16, weatherImageSize = 18;
+    private int weatherStartPadding, weatherTextSize = 16, weatherImageSize = 18;
     private boolean mCustomMargins = false;
     private int mLeftMargin = 0, mTopMargin = 0;
     private int mWeatherBackground = 0;
+
+    // Lockscreen Widgets Class Helpers
+    public static Class<?> LaunchableLinearLayout = null;
+    public static Class<?> LaunchableImageView = null;
+
+    // Lockscreen Widgets
+    private boolean mWidgetsEnabled = false;
+    private boolean mDeviceWidgetEnabled = false;
+    private String mMainWidgets;
+    private String mExtraWidgets;
+    private Object mActivityStarter = null;
 
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
@@ -185,7 +202,7 @@ public class LockscreenClock extends XposedMods {
 
     public LockscreenClock(Context context) {
         super(context);
-        int resourceId = mContext.getResources().getIdentifier("red_horizontal_single_clock_margin_start", "dimen", listenPackage);
+        @SuppressLint("DiscouragedApi") int resourceId = mContext.getResources().getIdentifier("red_horizontal_single_clock_margin_start", "dimen", listenPackage);
         if (resourceId > 0) {
             weatherStartPadding = mContext.getResources().getDimensionPixelSize(resourceId);
         } else { weatherStartPadding = dp2px(mContext, 32); }
@@ -245,6 +262,12 @@ public class LockscreenClock extends XposedMods {
         mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
         mWeatherBackground = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WEATHER_BACKGROUND, "0"));
 
+        mWidgetsEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
+        mDeviceWidgetEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+        mMainWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS, "");
+        mExtraWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
+
+
         if (Key.length > 0) {
             for(String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
                 if (Key[0].equals(LCPrefs)) {
@@ -261,6 +284,12 @@ public class LockscreenClock extends XposedMods {
             for(String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
                 if (Key[0].equals(LCWeatherMargins)) updateMargins(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
             }
+            if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_EXTRAS)) {
+                updateLockscreenWidgets();
+            }
         }
     }
 
@@ -269,11 +298,37 @@ public class LockscreenClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
+        try {
+            // LaunchableLinearLayout
+            // This is the container of our custom views
+            LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
+
+            // LaunchableImageView
+            // This is an ImageView that can launch dialogs with a GhostView
+            LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
+
+        } catch (Throwable t) {
+            log(TAG + "Class/es not found: " + t.getMessage());
+        }
+
         initResources(mContext);
+
+        try {
+            Class<?> KeyguardQuickAffordanceInteractor = findClass("com.android.systemui.keyguard.domain.interactor.KeyguardQuickAffordanceInteractor", lpparam.classLoader);
+            hookAllConstructors(KeyguardQuickAffordanceInteractor, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mActivityStarter = getObjectField(param.thisObject, "activityStarter");
+                    setActivityStarter();
+                }
+            });
+        } catch (Throwable ignored) {
+        }
 
         Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
 
         hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
+            @SuppressLint("DiscouragedApi")
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
 
@@ -291,6 +346,8 @@ public class LockscreenClock extends XposedMods {
                 registerClockUpdater();
 
                 placeWeatherView();
+
+                placeLockscreenWidgets();
             }
         });
 
@@ -758,6 +815,32 @@ public class LockscreenClock extends XposedMods {
 
     private void updateWeatherView() {
         refreshWeatherView(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
+    }
+
+    private void placeLockscreenWidgets() {
+        try {
+            LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance(mContext, mActivityStarter);
+            try {
+                ((ViewGroup) lsWidgets.getParent()).removeView(lsWidgets);
+            } catch (Throwable ignored) {
+            }
+            mClockViewContainer.addView(lsWidgets);
+            updateLockscreenWidgets();
+        } catch (Throwable ignored) {
+        }
+    }
+
+    private void updateLockscreenWidgets() {
+        log(TAG + "Updating Lockscreen Widgets");
+        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        if (lsWidgets == null) return;
+        lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
+    }
+
+    private void setActivityStarter() {
+        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        if (lsWidgets == null) return;
+        lsWidgets.setActivityStarter(mActivityStarter);
     }
 
     @Override

@@ -134,7 +134,7 @@ public class HeaderClock extends XposedMods {
     private int clockGradientOrientation, dateGradientOrientation;
     private int clockStrokeColor, dateStrokeColor;
     private boolean clockStrokeAccent, dateStrokeAccent;
-    private int clockTopSxRound, clockTopDxRound, clockBottomSxRound,clockBottomDxRound;
+    private int clockTopSxRound, clockTopDxRound, clockBottomSxRound, clockBottomDxRound;
     private int dateTopSxRound, dateTopDxRound, dateBottomSxRound, dateBottomDxRound;
     private int clockGradient1, clockGradient2, dateGradient1, dateGradient2;
     private boolean clockUseGradient, dateUseGradient;
@@ -267,13 +267,13 @@ public class HeaderClock extends XposedMods {
         systemIconBottomDxRound = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_BOTTOM_RIGHT_RADIUS", 28);
 
 
-        if (Key.length > 0){
+        if (Key.length > 0) {
             if (Key[0].equals(QS_HEADER_CLOCK_STOCK_RED_MODE)
                     || Key[0].equals(QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR)
                     || Key[0].equals(QS_HEADER_CLOCK_CUSTOM_ENABLED)) {
                 callMethod(OQC, "updateClock");
             }
-            for(String k : QS_HEADER_PREFS) {
+            for (String k : QS_HEADER_PREFS) {
                 if (Key[0].equals(k)) {
                     updateStockPrefs();
                     updateClockView();
@@ -296,7 +296,8 @@ public class HeaderClock extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         Class<?> QuickStatusBarHeader;
-        try { QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        try {
+            QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
         } catch (Throwable t) {
             QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
         }
@@ -309,13 +310,17 @@ public class HeaderClock extends XposedMods {
             }
         });
 
-        hookAllMethods(QuickStatusBarHeader, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                mStatusIconsView = (View) getObjectField(param.thisObject, "mStatusIconsView");
-                if (systemIconsChipEnabled) updateStatusChips();
-            }
-        });
+        try {
+            hookAllMethods(QuickStatusBarHeader, "onFinishInflate", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
+                    mStatusIconsView = (View) getObjectField(param.thisObject, "mStatusIconsView");
+                    if (systemIconsChipEnabled) updateStatusChips();
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "QuickStatusBarHeader onFinishInflate error: " + t.getMessage());
+        }
 
         //OplusQSFooterImpl
         Class<?> OplusQSFooterImpl;
@@ -350,7 +355,8 @@ public class HeaderClock extends XposedMods {
                 } catch (Throwable t) {
                     try {
                         mOplusDate = (TextView) mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("oplus_date", "id", listenPackage));
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                 }
 
                 try {
@@ -359,7 +365,8 @@ public class HeaderClock extends XposedMods {
                 } catch (Throwable t) {
                     try {
                         mOplusClock = (TextView) mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_clock", "id", listenPackage));
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                 }
 
                 try {
@@ -367,13 +374,23 @@ public class HeaderClock extends XposedMods {
                 } catch (Throwable t) {
                     try {
                         mOplusCarrier = (TextView) mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_carrier_text", "id", listenPackage));
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                 }
 
                 updateStockPrefs();
                 setupChips();
                 updateChips();
                 updateClockView();
+            }
+        });
+
+        hookAllMethods(OplusQSFooterImpl, "updateResources", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                updateStockPrefs();
+                updateClockView();
+                updateChips();
             }
         });
 
@@ -402,17 +419,18 @@ public class HeaderClock extends XposedMods {
             }
         });
 
-        Class<?> OplusClockExImpl ;
+        Class<?> OplusClockExImpl;
         try {
             OplusClockExImpl = findClass("com.oplus.systemui.common.clock.OplusClockExImpl", lpparam.classLoader);
         } catch (Throwable t) {
             OplusClockExImpl = findClass("com.oplusos.systemui.ext.BaseClockExt", lpparam.classLoader); // OOS 13
         }
+
         hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 TextView textView = (TextView) param.args[0];
-                if (showHeaderClock || stockClockRedStyle == 1 ) {
+                if (showHeaderClock || stockClockRedStyle == 1) {
                     param.setResult(null);
                     if (showHeaderClock) {
                         textView.setText("");
@@ -447,13 +465,6 @@ public class HeaderClock extends XposedMods {
             }
         });
 
-        hookAllMethods(QuickStatusBarHeader, "updateResources", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                updateClockView();
-                updateChips();
-            }
-        });
 
         try {
             Class<?> ShadeHeaderControllerClass = findClassIfExists("com.android.systemui.shade.LargeScreenShadeHeaderController", lpparam.classLoader);
@@ -484,7 +495,8 @@ public class HeaderClock extends XposedMods {
                     }
                 }
             });
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            log(TAG + "ShadeHeaderController error: " + t.getMessage());
         }
 
 
@@ -508,6 +520,7 @@ public class HeaderClock extends XposedMods {
                 File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
 
                 if (Android.isDirectory()) {
+                    updateStockPrefs();
                     updateClockView();
                     executor.shutdown();
                     executor.shutdownNow();
@@ -902,7 +915,8 @@ public class HeaderClock extends XposedMods {
     }
 
     class ClickListener implements View.OnClickListener {
-        public ClickListener() {}
+        public ClickListener() {
+        }
 
         @Override
         public void onClick(View v) {

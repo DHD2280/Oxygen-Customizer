@@ -100,6 +100,14 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
+    public static CameraManager CameraManager() {
+        return instance == null
+                ? null
+                : instance.getCameraManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
     public static AlarmManager AlarmManager() {
         return instance == null
                 ? null
@@ -116,10 +124,27 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
+    public static WifiManager WifiManager()
+    {
+        return instance == null
+                ? null
+                : instance.getWifiManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
     public static UserManager UserManager() {
         return instance == null
                 ? null
                 : instance.getUserManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static ConnectivityManager ConnectivityManager() {
+        return instance == null
+                ? null
+                : instance.getConnectivityManager();
     }
 
     private CameraManager getCameraManager() {
@@ -256,6 +281,38 @@ public class SystemUtils {
             }
         }
         return mBatteryManager;
+    }
+
+    private WifiManager getWifiManager() {
+        if(mWifiManager == null)
+        {
+            try
+            {
+                mWifiManager = mContext.getSystemService(WifiManager.class);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("Oxygen Customizer Error getting wifi manager");
+                    log(t);
+                }
+            }
+        }
+        return mWifiManager;
+    }
+
+    private ConnectivityManager getConnectivityManager() {
+        if(mConnectivityManager == null)
+        {
+            try
+            {
+                mConnectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("Oxygen Customizer Error getting connection manager");
+                    log(t);
+                }
+            }
+        }
+        return mConnectivityManager;
     }
 
     private UserManager getUserManager() {

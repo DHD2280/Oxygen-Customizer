@@ -321,6 +321,13 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             }
         } catch (Resources.NotFoundException ignored) {
         }
+        try {
+            String key = mContext.getResources().getString(R.string.owm_api_key);
+            if (!TextUtils.isEmpty(key)) {
+                mKeys.add(key);
+            }
+        } catch (Resources.NotFoundException ignored) {
+        }
         log(TAG, "use API keys = " + mKeys);
     }
 

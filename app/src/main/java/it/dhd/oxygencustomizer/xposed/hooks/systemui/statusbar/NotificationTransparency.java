@@ -87,7 +87,7 @@ public class NotificationTransparency extends XposedMods {
             });
 
         } catch (Throwable t) {
-            log(TAG + "ERROR IN OpNotificationBackgroundView");
+            log(TAG + "ERROR IN OpNotificationBackgroundView " + t.getMessage());
         }
 
         fixNotificationColorA14(lpparam);
