@@ -239,7 +239,7 @@ public class WeatherInfo {
         builder.append(getFormattedWindSpeed());
         builder.append(" at ");
         builder.append(getWindDirection());
-        if (forecasts.size() > 0) {
+        if (!forecasts.isEmpty()) {
             builder.append(", forecasts:");
         }
         for (int i = 0; i < forecasts.size(); i++) {
@@ -269,13 +269,19 @@ public class WeatherInfo {
         builder.append(windDirection).append('|');
         builder.append(metric).append('|');
         builder.append(timestamp).append('|');
-        builder.append(pinWheel).append('|');
-        serializeForecasts(builder);
+        builder.append(pinWheel);
+        if (!forecasts.isEmpty()) {
+            serializeForecasts(builder);
+        }
         return builder.toString();
     }
 
     private void serializeForecasts(StringBuilder builder) {
+        builder.append('|');
         builder.append(forecasts.size());
+        if (forecasts.isEmpty()) {
+            return;
+        }
         for (DayForecast d : forecasts) {
             builder.append(';');
             builder.append(d.high).append(';');
@@ -292,7 +298,7 @@ public class WeatherInfo {
         }
 
         String[] parts = input.split("\\|");
-        if (parts == null || parts.length != 12) {
+        if (parts == null || parts.length != 11) {
             return null;
         }
 
@@ -301,7 +307,7 @@ public class WeatherInfo {
         float temperature, humidity, wind;
         boolean metric;
         String pinWheel;
-        String[] forecastParts = parts[11].split(";");
+        String[] forecastParts = parts[10].split(";");
         int forecastItems;
         ArrayList<DayForecast> forecasts = new ArrayList<DayForecast>();
 
@@ -315,36 +321,37 @@ public class WeatherInfo {
             metric = Boolean.parseBoolean(parts[8]);
             timestamp = Long.parseLong(parts[9]);
             pinWheel = parts[10];
-            forecastItems = forecastParts == null ? 0 : Integer.parseInt(forecastParts[0]);
+//            forecastItems = forecastParts == null ? 0 : Integer.parseInt(forecastParts[0]);
         } catch (NumberFormatException e) {
+            android.util.Log.e("Weather", "Error parsing weather data", e);
             return null;
         }
 
-        if (forecastItems == 0 || forecastParts.length != 5 * forecastItems + 1) {
-            return null;
-        }
+//        if (forecastItems == 0 || forecastParts.length != 5 * forecastItems + 1) {
+//            return null;
+//        }
 
         // Parse the forecast data
-        try {
-            for (int item = 0; item < forecastItems; item ++) {
-                int offset = item * 5 + 1;
-                DayForecast day = new DayForecast(
-                        /* low */ Float.parseFloat(forecastParts[offset + 1]),
-                        /* high */ Float.parseFloat(forecastParts[offset]),
-                        /* condition */ forecastParts[offset + 2],
-                        /* conditionCode */ Integer.parseInt(forecastParts[offset + 3]),
-                        forecastParts[offset + 4],
-                        metric);
-                if (!Float.isNaN(day.low) && !Float.isNaN(day.high) /*&& day.conditionCode >= 0*/) {
-                    forecasts.add(day);
-                }
-            }
-        } catch (NumberFormatException ignored) {
-        }
-
-        if (forecasts.isEmpty()) {
-            return null;
-        }
+//        try {
+//            for (int item = 0; item < forecastItems; item ++) {
+//                int offset = item * 5 + 1;
+//                DayForecast day = new DayForecast(
+//                        /* low */ Float.parseFloat(forecastParts[offset + 1]),
+//                        /* high */ Float.parseFloat(forecastParts[offset]),
+//                        /* condition */ forecastParts[offset + 2],
+//                        /* conditionCode */ Integer.parseInt(forecastParts[offset + 3]),
+//                        forecastParts[offset + 4],
+//                        metric);
+//                if (!Float.isNaN(day.low) && !Float.isNaN(day.high) /*&& day.conditionCode >= 0*/) {
+//                    forecasts.add(day);
+//                }
+//            }
+//        } catch (NumberFormatException ignored) {
+//        }
+//
+//        if (forecasts.isEmpty()) {
+//            return null;
+//        }
 
         return new WeatherInfo(context,
                 /* id */ parts[0], /* city */ parts[1], /* condition */ parts[2],
