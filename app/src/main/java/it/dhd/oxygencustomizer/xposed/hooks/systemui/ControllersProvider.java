@@ -7,7 +7,6 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
@@ -39,6 +38,7 @@ public class ControllersProvider extends XposedMods {
     private Object mCellularTile = null;
     private Object mDeviceControlsTile = null;
     private Object mCalculatorTile = null;
+    private Object mWalletTile = null;
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
@@ -285,6 +285,19 @@ public class ControllersProvider extends XposedMods {
             log(TAG + "CameraGestureHelper not found " + t.getMessage());
         }
 
+        // Wallet Tile - for opening wallet
+        try {
+            Class<?> QuickAccessWalletTile = findClass("com.android.systemui.qs.tiles.QuickAccessWalletTile", lpparam.classLoader);
+            hookAllConstructors(QuickAccessWalletTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mWalletTile = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "QuickAccessWalletTile not found");
+        }
+
     }
 
     @Override
@@ -468,8 +481,12 @@ public class ControllersProvider extends XposedMods {
         return instance.mCalculatorTile;
     }
 
-    public static Object getCamerGestureHelper() {
+    public static Object getCameraGestureHelper() {
         return instance.mCameraGestureHelper;
+    }
+
+    public static Object getWalletTile() {
+        return instance.mWalletTile;
     }
 
 }

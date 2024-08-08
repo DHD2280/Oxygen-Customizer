@@ -581,6 +581,7 @@
         <item>@string/bt</item>
         <item>@string/home_controls</item>
         <item>@string/camera</item>
+        <item>@string/wallet</item>
     </string-array>
 
     <string-array name="widget_values" translatable="false">
@@ -596,6 +597,7 @@
         <item>bt</item>
         <item>homecontrols</item>
         <item>camera</item>
+        <item>wallet</item>
     </string-array>
 
 </resources>

@@ -1168,6 +1168,8 @@
     <string name="custom_widgets2">Mini widget 2</string>
     <string name="custom_widgets3">Mini widget 3</string>
     <string name="custom_widgets4">Mini widget 4</string>
+
+    <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>
     <string name="clock_timer">Clock/Timer</string>
     <string name="calculator">Calculator</string>
@@ -1181,5 +1183,6 @@
     <string name="ringer">Ringer</string>
     <string name="bt">Bluetooth</string>
     <string name="home_controls">Home Controls</string>
+    <string name="wallet">Wallet</string>
 
 </resources>

@@ -2,7 +2,9 @@ package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCamerGestureHelper;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCameraGestureHelper;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 
 import android.content.Context;
 import android.content.ComponentName;
@@ -55,7 +57,7 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCamera() {
-        Object mCameraGestureHelper = getCamerGestureHelper();
+        Object mCameraGestureHelper = getCameraGestureHelper();
 
         if (mCameraGestureHelper != null) {
             callMethod(mCameraGestureHelper, "launchCamera", 3);
@@ -73,6 +75,15 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCalculator() {
+        // If the calculator tile is available
+        // we can use it to open the calculator
+        Object calculatorTile = getCalculatorTile();
+        if (calculatorTile != null) {
+            callMethod(calculatorTile, "openCalculator");
+            return;
+        }
+
+        // Otherwise we try to launch the calculator app
         Intent launchIntent = null;
         for (String packageName : mCalculatorApps) {
             Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -90,6 +101,12 @@ public class ActivityLauncherUtils {
 
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
         launchAppIfAvailable(launchIntent, R.string.calculator);
+    }
+
+    public void launchWallet() {
+        Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.google.android.apps.walletnfcrel");
+        if (launchIntent != null) launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, R.string.wallet);
     }
 
     public void launchSettingsComponent(String className) {

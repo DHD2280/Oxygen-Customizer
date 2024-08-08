@@ -17,6 +17,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusBluetoothTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusWifiTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableLinearLayout;
 
@@ -88,6 +89,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String HOME_CONTROLS = "controls_icon";
     public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
     public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
+    public static final String WALLET_ICON = "status_bar_qs_wallet_active";
 
     public static final String GENERAL_INACTIVE = "switch_bar_off";
     public static final String GENERAL_ACTIVE = "switch_bar_on";
@@ -104,6 +106,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
     public static final String CALCULATOR_LABEL = "state_button_calculator";
     public static final String CAMERA_LABEL = "affordance_settings_camera";
+    public static final String WALLET_LABEL = "wallet_title";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -802,6 +805,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             case "homecontrols":
                 setUpWidgetResources(iv, efab, this::launchHomeControls, HOME_CONTROLS, HOME_CONTROLS_LABEL);
                 break;
+            case "wallet":
+                setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(WALLET_ICON, SYSTEM_UI), getString(WALLET_LABEL, SYSTEM_UI));
+                break;
             case "media":
                 if (iv != null) {
                     mediaButton = iv;
@@ -905,6 +911,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
         int bgTint;
         int tintColor;
+        //int bgCustom
         if (active) {
             bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
             tintColor = isNightMode() ? mDarkColor : mLightColor;
@@ -1029,10 +1036,24 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         vibrate(1);
     }
 
+    private void launchWallet(View view) {
+        Object WalletTile = getWalletTile();
+        if (WalletTile != null) {
+            View finalView;
+            if (view instanceof ExtendedFAB) {
+                finalView = (View) view.getParent();
+            } else {
+                finalView = view;
+            }
+            post(() -> callMethod(WalletTile, "handleClick", finalView));
+        } else {
+            mActivityLauncherUtils.launchWallet();
+        }
+        vibrate(1);
+    }
+
     private void openCalculator() {
-        Object calculatorTile = getCalculatorTile();
-        if (calculatorTile == null) mActivityLauncherUtils.launchCalculator();
-        else post(() -> callMethod(calculatorTile, "openCalculator"));
+        mActivityLauncherUtils.launchCalculator();
         vibrate(1);
     }
 
@@ -1353,6 +1374,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 return modRes.getString(R.string.calculator);
             else if (stringRes.equals(CAMERA_LABEL)) // Also for Camera
                 return modRes.getString(R.string.camera);
+            else if (stringRes.equals(WALLET_LABEL)) // Wallet
+                return modRes.getString(R.string.wallet);
 
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
