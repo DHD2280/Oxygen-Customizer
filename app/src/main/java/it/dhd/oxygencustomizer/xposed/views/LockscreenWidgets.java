@@ -303,14 +303,18 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
-        try {
-            mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        if (LaunchableLinearLayout != null) {
+            try {
+                mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            } catch (Exception e) {
+                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+                mainWidgetsContainer = new LinearLayout(context);
+            }
+        } else {
             mainWidgetsContainer = new LinearLayout(context);
         }
+
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         mainWidgetsContainer.setGravity(Gravity.CENTER);
@@ -1312,6 +1316,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     mContext,
                     mContext.getResources().getIdentifier(drawableRes, "drawable", pkg));
         } catch (Throwable t) {
+            // We have a calculator icon, so if SystemUI doesn't just return ours
+            if (drawableRes.equals(CALCULATOR_ICON))
+                return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
+
             log("LockscreenWidgets getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
         }
@@ -1322,6 +1330,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             return mContext.getResources().getString(
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
+            // We have a calculator string, so if SystemUI doesn't just return ours
+            if (stringRes.equals(CALCULATOR_LABEL)) {
+                return modRes.getString(R.string.calculator);
+            }
+
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }
