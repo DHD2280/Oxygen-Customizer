@@ -87,6 +87,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String WIFI_INACTIVE = "status_bar_qs_wifi_inactive";
     public static final String HOME_CONTROLS = "controls_icon";
     public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
+    public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
 
     public static final String GENERAL_INACTIVE = "switch_bar_off";
     public static final String GENERAL_ACTIVE = "switch_bar_on";
@@ -102,6 +103,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String HOME_CONTROLS_LABEL = "quick_controls_title";
     public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
     public static final String CALCULATOR_LABEL = "state_button_calculator";
+    public static final String CAMERA_LABEL = "affordance_settings_camera";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -788,6 +790,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     vibrate(1);
                 }, getDrawable("ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
+            case "camera":
+                setUpWidgetResources(iv, efab, v -> {
+                    mActivityLauncherUtils.launchCamera();
+                    vibrate(1);
+                }, getDrawable(CAMERA_ICON, SYSTEM_UI), getString(CAMERA_LABEL, SYSTEM_UI));
+                break;
             case "calculator":
                 setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
                 break;
@@ -1341,9 +1349,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
             // We have a calculator string, so if SystemUI doesn't just return ours
-            if (stringRes.equals(CALCULATOR_LABEL)) {
+            if (stringRes.equals(CALCULATOR_LABEL))
                 return modRes.getString(R.string.calculator);
-            }
+            else if (stringRes.equals(CAMERA_LABEL)) // Also for Camera
+                return modRes.getString(R.string.camera);
 
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";

@@ -580,6 +580,7 @@
         <item>@string/ringer</item>
         <item>@string/bt</item>
         <item>@string/home_controls</item>
+        <item>@string/camera</item>
     </string-array>
 
     <string-array name="widget_values" translatable="false">
@@ -594,6 +595,7 @@
         <item>ringer</item>
         <item>bt</item>
         <item>homecontrols</item>
+        <item>camera</item>
     </string-array>
 
 </resources>

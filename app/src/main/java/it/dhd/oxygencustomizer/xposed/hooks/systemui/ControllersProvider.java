@@ -7,6 +7,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
@@ -41,6 +42,8 @@ public class ControllersProvider extends XposedMods {
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
+
+    private Object mCameraGestureHelper = null;
 
     private final ArrayList<OnMobileDataChanged> mMobileDataChangedListeners = new ArrayList<>();
     private final ArrayList<OnWifiChanged> mWifiChangedListeners = new ArrayList<>();
@@ -269,6 +272,19 @@ public class ControllersProvider extends XposedMods {
             log(TAG + "CalculatorTile not found");
         }
 
+        // Camera Launcher, so we can launch camera directly
+        try {
+            Class<?> CameraGestureHelper = findClass("com.android.systemui.camera.CameraGestureHelper", lpparam.classLoader);
+            hookAllConstructors(CameraGestureHelper, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mCameraGestureHelper = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "CameraGestureHelper not found " + t.getMessage());
+        }
+
     }
 
     @Override
@@ -420,10 +436,6 @@ public class ControllersProvider extends XposedMods {
         return instance.mDataController;
     }
 
-//    public Object getMediaOutputDialogFactory() {
-//        return instance.mMediaOutputDialogFactory;
-//    }
-
     public static Object getNetworkController() {
         return instance.mNetworkController;
     }
@@ -454,6 +466,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getCalculatorTile() {
         return instance.mCalculatorTile;
+    }
+
+    public static Object getCamerGestureHelper() {
+        return instance.mCameraGestureHelper;
     }
 
 }

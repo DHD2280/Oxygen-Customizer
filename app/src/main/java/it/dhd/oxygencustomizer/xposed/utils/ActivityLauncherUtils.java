@@ -1,29 +1,23 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCamerGestureHelper;
 
 import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.media.AudioManager;
-import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 
 import java.util.List;
-import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 
 public class ActivityLauncherUtils {
 
@@ -61,8 +55,14 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCamera() {
-        final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        launchAppIfAvailable(launchIntent, R.string.camera);
+        Object mCameraGestureHelper = getCamerGestureHelper();
+
+        if (mCameraGestureHelper != null) {
+            callMethod(mCameraGestureHelper, "launchCamera", 3);
+        } else {
+            final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
+            launchAppIfAvailable(launchIntent, R.string.camera);
+        }
     }
 
     public void launchTimer() {
