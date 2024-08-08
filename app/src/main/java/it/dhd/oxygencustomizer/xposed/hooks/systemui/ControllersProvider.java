@@ -11,6 +11,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class ControllersProvider extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        boolean oos13 = false;
+        boolean oos13 = Build.VERSION.SDK_INT == 33;
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
@@ -116,13 +117,17 @@ public class ControllersProvider extends XposedMods {
         }
 
         // Bluetooth Controller
-        Class<?> BluetoothControllerImpl = findClass("com.android.systemui.statusbar.policy.BluetoothControllerImpl", lpparam.classLoader);
-        hookAllConstructors(BluetoothControllerImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mBluetoothController = param.thisObject;
-            }
-        });
+        try {
+            Class<?> BluetoothControllerImpl = findClass("com.android.systemui.statusbar.policy.BluetoothControllerImpl", lpparam.classLoader);
+            hookAllConstructors(BluetoothControllerImpl, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mBluetoothController = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "BluetoothControllerImpl not found " + t.getMessage());
+        }
 
         // Bluetooth Tile - for Bluetooth Dialog
         try {
@@ -134,7 +139,7 @@ public class ControllersProvider extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "OplusBluetoothTile not found");
+            log(TAG + "OplusBluetoothTile not found " + t.getMessage());
         }
 
         // Stole a Bluetooth Callback from OplusPhoneStatusBarPolicyExImpl
@@ -195,46 +200,54 @@ public class ControllersProvider extends XposedMods {
 
 
         // Stole FlashLight Callback
-        Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", lpparam.classLoader);
-        hookAllConstructors(FlashlightControllerImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object mTorchCallback = getObjectField(param.thisObject, "mTorchCallback");
-                findAndHookMethod(
-                        mTorchCallback.getClass(),
-                        "onTorchModeChanged",
-                        String.class,
-                        boolean.class,
-                        new XC_MethodHook() {
-                            @Override
-                            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                onTorchModeChanged((boolean) param.args[1]);
-                            }
-                        });
-            }
-        });
+        try {
+            Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", lpparam.classLoader);
+            hookAllConstructors(FlashlightControllerImpl, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    Object mTorchCallback = getObjectField(param.thisObject, "mTorchCallback");
+                    findAndHookMethod(
+                            mTorchCallback.getClass(),
+                            "onTorchModeChanged",
+                            String.class,
+                            boolean.class,
+                            new XC_MethodHook() {
+                                @Override
+                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                                    onTorchModeChanged((boolean) param.args[1]);
+                                }
+                            });
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "FlashlightControllerImpl not found " + t.getMessage());
+        }
 
         // QS Media Tile Controller, for Dialog
-        Class<?> OplusQsMediaPanelViewController = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelViewController", lpparam.classLoader);
-        hookAllMethods(OplusQsMediaPanelViewController, "bindMediaCarouselController", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (param.args.length >= 1) mQsDialogLaunchAnimator = param.args[1];
-            }
-        });
-        hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mQsMediaDialogController = param.args[0];
-            }
-        });
+        try {
+            Class<?> OplusQsMediaPanelViewController = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelViewController", lpparam.classLoader);
+            hookAllMethods(OplusQsMediaPanelViewController, "bindMediaCarouselController", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (param.args.length >= 1) mQsDialogLaunchAnimator = param.args[1];
+                }
+            });
+            hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mQsMediaDialogController = param.args[0];
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "OplusQsMediaPanelViewController not found: " + t.getMessage());
+        }
 
         // Home Controls Tile - for ControlsActivity
         Class<?> OplusDeviceControlsTile;
         try {
             OplusDeviceControlsTile = findClass("com.oplus.systemui.qs.tiles.OplusDeviceControlsTile", lpparam.classLoader);
         } catch (Throwable t) {
-            OplusDeviceControlsTile = findClass("com.android.systemui.qs.tiles.DeviceControlsTile/", lpparam.classLoader); // OOS 13
+            OplusDeviceControlsTile = findClass("com.android.systemui.qs.tiles.DeviceControlsTile", lpparam.classLoader); // OOS 13
         }
         hookAllConstructors(OplusDeviceControlsTile, new XC_MethodHook() {
             @Override
