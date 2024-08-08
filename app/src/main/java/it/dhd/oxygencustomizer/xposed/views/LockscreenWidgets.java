@@ -297,6 +297,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
         deviceWidget.addView(mDeviceWidgetView);
 
+        log("LockscreenWidgets createDeviceWidgetContainer done");
+
         return deviceWidget;
     }
 
@@ -426,6 +428,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
         imageView.setFocusable(true);
         imageView.setClickable(true);
+
+        log("LockscreenWidgets createImageView done, imageView " + (imageView != null));
 
         return imageView;
     }
