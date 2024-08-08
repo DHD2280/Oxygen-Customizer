@@ -33,6 +33,10 @@ public class ActivityLauncherUtils {
     private final Object mActivityStarter;
     private final PackageManager mPackageManager;
 
+    private final String[] mCalculatorApps = new String[]{
+            "com.oneplus.calculator", "com.coloros.calculator"
+    };
+
     public ActivityLauncherUtils(Context context, Object activityStarter) {
         this.mContext = context;
         this.mActivityStarter = activityStarter;
@@ -69,13 +73,21 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCalculator() {
-        Intent launchIntent = new Intent();
-        if (AppUtils.isAppInstalled(mContext, "com.oneplus.calculator")) {
-            launchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.oneplus.calculator");
-        } else {
+        Intent launchIntent = null;
+        for (String packageName : mCalculatorApps) {
+            Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+            if (intent != null) {
+                launchIntent = intent;
+                break;
+            }
+        }
+
+        if (launchIntent == null) {
+            launchIntent = new Intent();
             launchIntent.setAction(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_APP_CALCULATOR);
         }
+
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
         launchAppIfAvailable(launchIntent, R.string.calculator);
     }
