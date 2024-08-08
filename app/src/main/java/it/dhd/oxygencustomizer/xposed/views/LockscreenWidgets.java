@@ -9,7 +9,6 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCellularTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getDataController;
@@ -62,6 +61,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.overlay.manager.NotificationManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
@@ -127,6 +127,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private final int mDarkColorActive;
     private final int mLightColor;
     private final int mLightColorActive;
+
+    // Custom Widgets Colors
+    private boolean mCustomColors = false;
+    private int mBigInactiveColor, mBigActiveColor, mSmallInactiveColor, mSmallActiveColor;
+    private int mBigIconInactiveColor, mBigIconActiveColor, mSmallIconInactiveColor, mSmallIconActiveColor;
 
     private String mMainLockscreenWidgetsList;
     private String mSecondaryLockscreenWidgetsList;
@@ -911,31 +916,53 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
         int bgTint;
         int tintColor;
-        //int bgCustom
-        if (active) {
-            bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
-            tintColor = isNightMode() ? mDarkColor : mLightColor;
+
+        if (!mCustomColors) {
+            if (active) {
+                bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
+                tintColor = isNightMode() ? mDarkColor : mLightColor;
+            } else {
+                bgTint = isNightMode() ? mDarkColor : mLightColor;
+                tintColor = isNightMode() ? mLightColor : mDarkColor;
+            }
+            if (iv != null) {
+                iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
+                if (iv != weatherButton) {
+                    iv.setImageTintList(ColorStateList.valueOf(tintColor));
+                } else {
+                    iv.setImageTintList(null);
+                }
+            }
+            if (efab != null) {
+                efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
+                if (efab != weatherButtonFab) {
+                    efab.setIconTint(ColorStateList.valueOf(tintColor));
+                } else {
+                    efab.setIconTint(null);
+                }
+                efab.setTextColor(tintColor);
+            }
         } else {
-            bgTint = isNightMode() ? mDarkColor : mLightColor;
-            tintColor = isNightMode() ? mLightColor : mDarkColor;
-        }
-        if (iv != null) {
-            iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
-            if (iv != weatherButton) {
-                iv.setImageTintList(ColorStateList.valueOf(tintColor));
-            } else {
-                iv.setImageTintList(null);
+            if (iv != null) {
+                iv.setBackgroundTintList(ColorStateList.valueOf(active ? mSmallActiveColor : mSmallInactiveColor));
+                if (iv != weatherButton) {
+                    iv.setImageTintList(ColorStateList.valueOf(active ? mSmallIconActiveColor : mSmallIconInactiveColor));
+                } else {
+                    iv.setImageTintList(null);
+                }
+            }
+            if (efab != null) {
+                efab.setBackgroundTintList(ColorStateList.valueOf(active ? mBigActiveColor : mBigInactiveColor));
+                if (efab != weatherButtonFab) {
+                    efab.setIconTint(ColorStateList.valueOf(active ? mBigIconActiveColor : mBigIconInactiveColor));
+                } else {
+                    efab.setIconTint(null);
+                }
+                efab.setTextColor(active ? mBigIconActiveColor : mBigIconInactiveColor);
             }
         }
-        if (efab != null) {
-            efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
-            if (efab != weatherButtonFab) {
-                efab.setIconTint(ColorStateList.valueOf(tintColor));
-            } else {
-                efab.setIconTint(null);
-            }
-            efab.setTextColor(tintColor);
-        }
+
+
     }
 
     public void updateMediaState() {
@@ -1142,6 +1169,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
                     mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
+                    //notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
                     mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -1338,11 +1367,36 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         instance.updateWidgetViews();
     }
 
-    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int progressColor, int textColor, String devName) {
+    /**
+     * Set the options for the Device Widget
+     * @param customColor true if custom color is enabled
+     * @param linearColor color for linear battery progressbar
+     * @param circularColor color for circular progressbar
+     * @param textColor color for text
+     * @param devName device name, keep blank for default Build.MODEL
+     */
+    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
         if (instance.mDeviceWidgetView == null) return;
-        instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, progressColor);
+        instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);
+    }
+
+    public void setCustomColors(
+            boolean customColorsEnabled,
+            int bigInactive, int bigActive, int smallInactive, int smallActive,
+            int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
+        log("LockscreenWidgets setCustomColors " + customColorsEnabled);
+        instance.mCustomColors = customColorsEnabled;
+        instance.mBigInactiveColor = bigInactive;
+        instance.mBigActiveColor = bigActive;
+        instance.mSmallInactiveColor = smallInactive;
+        instance.mSmallActiveColor = smallActive;
+        instance.mBigIconInactiveColor = bigIconInactive;
+        instance.mBigIconActiveColor = bigIconActive;
+        instance.mSmallIconInactiveColor = smallIconInactive;
+        instance.mSmallIconActiveColor = smallIconActive;
+        instance.updateWidgetViews();
     }
 
     public void setActivityStarter(Object activityStarter) {
@@ -1369,14 +1423,19 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             return mContext.getResources().getString(
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
-            // We have a calculator string, so if SystemUI doesn't just return ours
-            if (stringRes.equals(CALCULATOR_LABEL))
-                return modRes.getString(R.string.calculator);
-            else if (stringRes.equals(CAMERA_LABEL)) // Also for Camera
-                return modRes.getString(R.string.camera);
-            else if (stringRes.equals(WALLET_LABEL)) // Wallet
-                return modRes.getString(R.string.wallet);
-
+            switch (stringRes) {
+                // We have out own strings too, so if getString from SystemUI fails
+                // return our own strings,
+                case CALCULATOR_LABEL -> {
+                    return modRes.getString(R.string.calculator);
+                }
+                case CAMERA_LABEL -> {
+                    return modRes.getString(R.string.camera);
+                }
+                case WALLET_LABEL -> {
+                    return modRes.getString(R.string.wallet);
+                }
+            }
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }

@@ -107,4 +107,73 @@
         android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true" />
 
+    <PreferenceCategory
+        android:title="@string/widgets_custom_color"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:key="lockscreen_widgets_custom_color"
+            app:iconSpaceReserved="false"
+            android:title="@string/widgets_custom_color_title"
+            android:defaultValue="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_big_active"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-1"
+            android:title="@string/big_active"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_big_inactive"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-16777216"
+            android:title="@string/big_inactive"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_big_icon_active"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-16777216"
+            android:title="@string/big_icon_active"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_big_icon_inactive"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-1"
+            android:title="@string/big_icon_inactive"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_small_active"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-1"
+            android:title="@string/mini_active"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_small_inactive"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-16777216"
+            android:title="@string/mini_inactive"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_small_icon_active"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-16777216"
+            android:title="@string/mini_icon_active"/>
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:key="lockscreen_widgets_small_icon_inactive"
+            app:iconSpaceReserved="false"
+            app:cpv_showAlphaSlider="true"
+            android:defaultValue="-1"
+            android:title="@string/mini_icon_inactive"/>
+
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

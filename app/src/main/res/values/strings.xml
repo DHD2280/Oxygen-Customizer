@@ -1168,6 +1168,16 @@
     <string name="custom_widgets2">Mini widget 2</string>
     <string name="custom_widgets3">Mini widget 3</string>
     <string name="custom_widgets4">Mini widget 4</string>
+    <string name="widgets_custom_color">Color Settings</string>
+    <string name="widgets_custom_color_title">Customize widget colors</string>
+    <string name="big_active">Big Widget Active Color</string>
+    <string name="big_inactive">Big Widget Inactive Color</string>
+    <string name="big_icon_active">Big Widget Icon Active Color</string>
+    <string name="big_icon_inactive">Big Widget Icon Inactive Color</string>
+    <string name="mini_active">Mini Widget Active Color</string>
+    <string name="mini_inactive">Mini Widget Inactive Color</string>
+    <string name="mini_icon_active">Mini Widget Icon Active Color</string>
+    <string name="mini_icon_inactive">Mini Widget Icon Inactive Color</string>
 
     <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>
