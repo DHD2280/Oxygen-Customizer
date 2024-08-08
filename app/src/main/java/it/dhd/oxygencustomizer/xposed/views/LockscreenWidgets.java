@@ -303,6 +303,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
+        log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
         if (LaunchableLinearLayout != null) {
             try {
                 mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
@@ -358,12 +359,16 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
-        try {
-            secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        log("LockscreenWidgets createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
+        if (LaunchableLinearLayout != null) {
+            try {
+                secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            } catch (Exception e) {
+                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+                secondaryWidgetsContainer = new LinearLayout(context);
+            }
+        } else {
             secondaryWidgetsContainer = new LinearLayout(context);
         }
 
