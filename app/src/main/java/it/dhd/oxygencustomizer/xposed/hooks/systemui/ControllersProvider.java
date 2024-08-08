@@ -36,6 +36,7 @@ public class ControllersProvider extends XposedMods {
     private Object mOplusWifiTile = null;
     private Object mCellularTile = null;
     private Object mDeviceControlsTile = null;
+    private Object mCalculatorTile = null;
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
@@ -242,6 +243,19 @@ public class ControllersProvider extends XposedMods {
             }
         });
 
+        // Calculator Tile - for opening calculator
+        try {
+            Class<?> CalculatorTile = findClass("com.oplus.systemui.qs.tiles.CalculatorTile", lpparam.classLoader);
+            hookAllConstructors(CalculatorTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mCalculatorTile = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "CalculatorTile not found");
+        }
+
     }
 
     @Override
@@ -423,6 +437,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getControlsTile() {
         return instance.mDeviceControlsTile;
+    }
+
+    public static Object getCalculatorTile() {
+        return instance.mCalculatorTile;
     }
 
 }
