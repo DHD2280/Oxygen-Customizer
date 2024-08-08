@@ -9,6 +9,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCellularTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getDataController;
@@ -86,6 +87,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String WIFI_ACTIVE = "status_bar_qs_wifi_active";
     public static final String WIFI_INACTIVE = "status_bar_qs_wifi_inactive";
     public static final String HOME_CONTROLS = "controls_icon";
+    public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
 
     public static final String GENERAL_INACTIVE = "switch_bar_off";
     public static final String GENERAL_ACTIVE = "switch_bar_on";
@@ -100,6 +102,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String WIFI_LABEL_INACTIVE = "quick_settings_wifi_label";
     public static final String HOME_CONTROLS_LABEL = "quick_controls_title";
     public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
+    public static final String CALCULATOR_LABEL = "state_button_calculator";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -300,14 +303,19 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
-        try {
-            mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
+        if (LaunchableLinearLayout != null) {
+            try {
+                mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            } catch (Exception e) {
+                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+                mainWidgetsContainer = new LinearLayout(context);
+            }
+        } else {
             mainWidgetsContainer = new LinearLayout(context);
         }
+
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         mainWidgetsContainer.setGravity(Gravity.CENTER);
@@ -351,12 +359,16 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
-        try {
-            secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        log("LockscreenWidgets createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
+        if (LaunchableLinearLayout != null) {
+            try {
+                secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
 
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            } catch (Exception e) {
+                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+                secondaryWidgetsContainer = new LinearLayout(context);
+            }
+        } else {
             secondaryWidgetsContainer = new LinearLayout(context);
         }
 
@@ -772,10 +784,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 }, getDrawable("ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
             case "calculator":
-                setUpWidgetResources(iv, efab, v -> {
-                    mActivityLauncherUtils.launchCalculator();
-                    vibrate(1);
-                }, ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme()), modRes.getString(R.string.calculator));
+                setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "homecontrols":
                 setUpWidgetResources(iv, efab, this::launchHomeControls, HOME_CONTROLS, HOME_CONTROLS_LABEL);
@@ -1007,7 +1016,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         vibrate(1);
     }
 
-
+    private void openCalculator() {
+        Object calculatorTile = getCalculatorTile();
+        if (calculatorTile == null) mActivityLauncherUtils.launchCalculator();
+        else post(() -> callMethod(calculatorTile, "openCalculator"));
+        vibrate(1);
+    }
 
     private void toggleWiFi() {
         Object networkController = getNetworkController();
@@ -1307,6 +1321,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     mContext,
                     mContext.getResources().getIdentifier(drawableRes, "drawable", pkg));
         } catch (Throwable t) {
+            // We have a calculator icon, so if SystemUI doesn't just return ours
+            if (drawableRes.equals(CALCULATOR_ICON))
+                return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
+
             log("LockscreenWidgets getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
         }
@@ -1317,6 +1335,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             return mContext.getResources().getString(
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
+            // We have a calculator string, so if SystemUI doesn't just return ours
+            if (stringRes.equals(CALCULATOR_LABEL)) {
+                return modRes.getString(R.string.calculator);
+            }
+
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }

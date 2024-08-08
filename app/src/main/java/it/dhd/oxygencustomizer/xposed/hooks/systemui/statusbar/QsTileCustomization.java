@@ -235,13 +235,17 @@ public class QsTileCustomization extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenerPackage)) return;
 
-        Class<?> PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
-        hookAllConstructors(PersonalityManager, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mPersonalityManager = param.thisObject;
-            }
-        });
+        try {
+            Class<?> PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
+            hookAllConstructors(PersonalityManager, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mPersonalityManager = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "PersonalityManager not found: " + t.getMessage());
+        }
 
         try {
             QsColorUtil = findClassIfExists("com.oplus.systemui.qs.util.QsColorUtil", lpparam.classLoader);
