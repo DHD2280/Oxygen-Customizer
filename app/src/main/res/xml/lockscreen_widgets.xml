@@ -15,6 +15,7 @@
         app:iconSpaceReserved="false"
         android:title="@string/lockscreen_display_widgets_title"
         android:summary="@string/lockscreen_display_widgets_summary"
+        android:dependency="lockscreen_widgets_enabled"
         android:defaultValue="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
@@ -58,6 +59,7 @@
         android:title="@string/main_custom_widgets1"
         android:key="main_custom_widgets1"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
@@ -66,6 +68,7 @@
         android:title="@string/main_custom_widgets2"
         android:key="main_custom_widgets2"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
@@ -74,6 +77,7 @@
         android:title="@string/custom_widgets1"
         android:key="custom_widgets1"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true"/>
 
     <ListPreference
@@ -82,6 +86,7 @@
         android:title="@string/custom_widgets2"
         android:key="custom_widgets2"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true"/>
 
     <ListPreference
@@ -90,6 +95,7 @@
         android:title="@string/custom_widgets3"
         android:key="custom_widgets3"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
@@ -98,6 +104,7 @@
         android:title="@string/custom_widgets4"
         android:key="custom_widgets4"
         android:entryValues="@array/widget_values"
+        android:dependency="lockscreen_widgets_enabled"
         app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

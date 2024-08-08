@@ -65,7 +65,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
@@ -116,7 +119,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
-import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -533,10 +535,16 @@ public class PreferenceHelper {
             }
 
             // Lockscreen Widgets
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+            }
+
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR,
-                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR,
-                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE, false);
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false) &&
+                        instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
             }
 
             // Aod Clocks
@@ -692,6 +700,13 @@ public class PreferenceHelper {
             case "lockscreen_fp_custom_icon" -> !instance.mPreferences.getBoolean("lockscreen_fp_remove_icon", false);
             case QS_TILE_HIDE_LABELS -> !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
             case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED -> !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
+
+            // Lockscreen Widgets
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE ->
+                    instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS, false);
+
             default -> true;
         };
     }
