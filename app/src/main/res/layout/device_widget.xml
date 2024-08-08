@@ -60,8 +60,7 @@
             android:indeterminateOnly="false"
             android:progress="40"
             android:progressDrawable="@drawable/ios_widget_line_progress_track"
-            android:progressTint="@android:color/system_accent1_300"
-            android:tag="text1" />
+            android:progressTint="@android:color/system_accent1_300" />
 
     </LinearLayout>
 

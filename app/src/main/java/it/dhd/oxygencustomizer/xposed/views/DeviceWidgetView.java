@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.text.TextUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
+import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class DeviceWidgetView extends FrameLayout {
 
@@ -37,6 +39,11 @@ public class DeviceWidgetView extends FrameLayout {
 
     private AudioManager mAudioManager;
     private ActivityManager mActivityManager;
+
+    private boolean mCustomColor = false;
+    private int mProgressColor = 0;
+    private int mLinearProgressColor = 0;
+    private int mTextColor = 0;
 
     public DeviceWidgetView(Context context) {
         super(context);
@@ -93,7 +100,13 @@ public class DeviceWidgetView extends FrameLayout {
         mVolumeLevelArcProgress = findViewById(R.id.volume_progress);
         mRamUsageArcProgress = findViewById(R.id.ram_usage_info);
 
-        mBatteryProgress.setProgressTintList(ColorStateList.valueOf(getPrimaryColor(mContext)));
+        mBatteryProgress.setProgressTintList(ColorStateList.valueOf(
+                mCustomColor ?
+                        mLinearProgressColor == 0 ?
+                                getPrimaryColor(mContext) :
+                                mLinearProgressColor :
+                        getPrimaryColor(mContext)
+        ));
 
         ((TextView) findViewById(R.id.device_name)).setText(Build.MODEL);
     }
@@ -103,7 +116,13 @@ public class DeviceWidgetView extends FrameLayout {
         if (mBatteryProgress != null) {
             post(() -> {
                 mBatteryProgress.setProgress(mBatteryPercentage);
-                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(getPrimaryColor(mContext)));
+                mBatteryProgress.setProgressTintList(ColorStateList.valueOf(
+                        mCustomColor ?
+                                mLinearProgressColor == 0 ?
+                                        getPrimaryColor(mContext) :
+                                        mLinearProgressColor :
+                                getPrimaryColor(mContext)
+                ));
             });
         }
         if (mBatteryLevelView != null) {
@@ -127,7 +146,11 @@ public class DeviceWidgetView extends FrameLayout {
                     32,
                     ContextCompat.getDrawable(appContext, R.drawable.ic_volume_up),
                     36,
-                    getPrimaryColor(mContext)
+                    mCustomColor ?
+                            mProgressColor == 0 ?
+                                    getPrimaryColor(mContext) :
+                                    mProgressColor :
+                            getPrimaryColor(mContext)
             );
             post(() -> mVolumeLevelArcProgress.setImageBitmap(widgetBitmap));
         }
@@ -151,10 +174,38 @@ public class DeviceWidgetView extends FrameLayout {
                     32,
                     "RAM",
                     20,
-                    getPrimaryColor(mContext)
+                    mCustomColor ?
+                            mProgressColor == 0 ?
+                                    getPrimaryColor(mContext) :
+                                    mProgressColor :
+                            getPrimaryColor(mContext)
             );
             post(() -> mRamUsageArcProgress.setImageBitmap(widgetBitmap));
         }
+    }
+
+    public void setCustomColor(boolean customColor, int linearColor, int circularColor) {
+        mCustomColor = customColor;
+        mProgressColor = linearColor;
+        mLinearProgressColor = circularColor;
+        post(this::initSoundManager);
+    }
+
+    public void setTextCustomColor(int color) {
+        mTextColor = color;
+        post(() -> ViewHelper.findViewWithTagAndChangeColor(this, "text1", mTextColor));
+    }
+
+    public void setDeviceName(String devName) {
+        String deviceName;
+        if (!TextUtils.isEmpty(devName)) {
+            deviceName = devName;
+        } else {
+            deviceName = Build.MODEL;
+        }
+
+        post(() -> ((TextView) findViewById(R.id.device_name)).setText(deviceName));
+
     }
 
 }

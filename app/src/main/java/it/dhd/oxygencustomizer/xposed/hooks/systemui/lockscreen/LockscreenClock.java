@@ -47,6 +47,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_STOCK_CLOCK_RED_ONE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -177,6 +182,11 @@ public class LockscreenClock extends XposedMods {
     // Lockscreen Widgets
     private boolean mWidgetsEnabled = false;
     private boolean mDeviceWidgetEnabled = false;
+    private boolean mDeviceCustomColor = false;
+    private int mDeviceLinearColor = Color.WHITE;
+    private int mDeviceCircularColor = Color.WHITE;
+    private int mDeviceTextColor = Color.WHITE;
+    private String mDeviceName = "";
     private String mMainWidgets;
     private String mExtraWidgets;
     private Object mActivityStarter = null;
@@ -262,10 +272,16 @@ public class LockscreenClock extends XposedMods {
         mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
         mWeatherBackground = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WEATHER_BACKGROUND, "0"));
 
+        // Widgets
         mWidgetsEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
         mDeviceWidgetEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
         mMainWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS, "");
         mExtraWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
+        mDeviceCustomColor = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
+        mDeviceLinearColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR, Color.WHITE);
+        mDeviceCircularColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR, Color.WHITE);
+        mDeviceTextColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR, Color.WHITE);
+        mDeviceName = Xprefs.getString(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE, "");
 
 
         if (Key.length > 0) {
@@ -290,6 +306,13 @@ public class LockscreenClock extends XposedMods {
                     Key[0].equals(LOCKSCREEN_WIDGETS_EXTRAS)) {
                 updateLockscreenWidgets();
             }
+            if (Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR) ||
+                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE)) {
+                updateLsDeviceWidget();
+            }
         }
     }
 
@@ -302,13 +325,16 @@ public class LockscreenClock extends XposedMods {
             // LaunchableLinearLayout
             // This is the container of our custom views
             LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "LaunchableLinearLayout not found: " + t.getMessage());
+        }
 
+        try {
             // LaunchableImageView
             // This is an ImageView that can launch dialogs with a GhostView
             LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
-
         } catch (Throwable t) {
-            log(TAG + "Class/es not found: " + t.getMessage());
+            log(TAG + "LaunchableImageView not found: " + t.getMessage());
         }
 
         initResources(mContext);
@@ -835,6 +861,13 @@ public class LockscreenClock extends XposedMods {
         LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
+    }
+
+    private void updateLsDeviceWidget() {
+        log(TAG + "Updating Lockscreen Device Widget");
+        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        if (lsWidgets == null) return;
+        lsWidgets.setDeviceWidgetOptions(mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
     }
 
     private void setActivityStarter() {

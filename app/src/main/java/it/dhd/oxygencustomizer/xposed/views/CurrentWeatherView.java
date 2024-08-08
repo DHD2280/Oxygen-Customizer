@@ -211,7 +211,6 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         if (mWeatherClient != null) {
             mWeatherClient.addObserver(this);
             //WeatherScheduler.scheduleUpdateNow(mContext);
-            //WeatherUpdateService.scheduleUpdateNow(mContext);
             queryAndUpdateWeather();
         }
     }

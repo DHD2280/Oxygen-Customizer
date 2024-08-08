@@ -1,0 +1,313 @@
+package it.dhd.oxygencustomizer.weather.providers;
+
+import android.content.Context;
+import android.location.Location;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;
+import it.dhd.oxygencustomizer.weather.WeatherInfo;
+
+public class OpenMeteoProvider extends AbstractWeatherProvider {
+    private static final String TAG = "OpenWeatherMapProvider";
+
+    private static final int FORECAST_DAYS = 5;
+    private static final String URL_WEATHER =
+            "https://api.open-meteo.com/v1/forecast?";
+    private static final String PART_COORDINATES =
+            "latitude=%f&longitude=%f";
+    private static final String PART_PARAMETERS =
+            "%s&hourly=relativehumidity_2m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
+
+
+    public OpenMeteoProvider(Context context) {
+        super(context);
+    }
+
+    public WeatherInfo getCustomWeather(String id, boolean metric) {
+        return handleWeatherRequest(id, metric);
+    }
+
+    public WeatherInfo getLocationWeather(Location location, boolean metric) {
+        String coordinates = String.format(Locale.US, PART_COORDINATES, location.getLatitude(), location.getLongitude());
+        return handleWeatherRequest(coordinates, metric);
+    }
+
+    private WeatherInfo handleWeatherRequest(String selection, boolean metric) {
+        String tempUnit = metric ? "celsius" : "fahrenheit";
+        String speedUnit = metric ? "kmh" : "mph";
+        String timeZone = java.util.TimeZone.getDefault().getID();
+        String conditionUrl = String.format(Locale.US,URL_WEATHER + PART_PARAMETERS, selection, tempUnit, speedUnit, timeZone);
+        Log.d(TAG, "Condition URL = " + conditionUrl);
+        String conditionResponse = retrieve(conditionUrl);
+        if (conditionResponse == null) {
+            return null;
+        }
+        log(TAG, "Condition URL = " + conditionUrl + " returning a response of " + conditionResponse);
+
+        try {
+            JSONObject weather = new JSONObject(conditionResponse).getJSONObject("current_weather");
+
+            String city = getWeatherDataLocality(selection);
+
+            int weathercode = weather.getInt("weathercode");
+            boolean isDay = weather.getInt("is_day") == 1;
+
+            WeatherInfo w = new WeatherInfo(mContext,
+                    /* id */ selection,
+                    /* cityId */ city,
+                    /* condition */ getWeatherDescription(weathercode),
+                    /* conditionCode */ mapConditionIconToCode(weathercode, isDay),
+                    /* temperature */ (float) weather.getDouble("temperature"),
+                    // Api: Possibly future inclusion humidity in current weather; may eliminate need for hourly forecast request.
+                    /* humidity */ getCurrentHumidity(new JSONObject(conditionResponse).getJSONObject("hourly")),
+                    /* wind */ (float) weather.getDouble("windspeed"),
+                    /* windDir */ weather.getInt("winddirection"),
+                    metric,
+                    parseForecasts(new JSONObject(conditionResponse).getJSONObject("daily"), metric),
+                    System.currentTimeMillis());
+
+            log(TAG, "Weather updated: " + w);
+            return w;
+        } catch (JSONException e) {
+            Log.w(TAG, "Received malformed weather data (coordinates = " + selection + ")", e);
+        }
+
+
+        return null;
+    }
+
+    private static String getWeatherDescription(int code) {
+        return switch (code) {
+            case 0 -> "Clear sky";
+            case 1 -> "Mainly clear";
+            case 2 -> "Partly cloudy";
+            case 3 -> "Overcast";
+            case 45 -> "Fog";
+            case 48 -> "Depositing rime fog";
+            case 51 -> "Light intensity drizzle";
+            case 53 -> "Moderate intensity drizzle";
+            case 55 -> "Dense intensity drizzle";
+            case 56 -> "Light intensity freezing drizzle";
+            case 57 -> "Dense intensity freezing drizzle";
+            case 61 -> "Slight intensity rain";
+            case 63 -> "Moderate intensity rain";
+            case 65 -> "Heavy intensity rain";
+            case 66 -> "Light intensity freezing rain";
+            case 67 -> "Heavy intensity freezing rain";
+            case 71 -> "Slight intensity snowfall";
+            case 73 -> "Moderate intensity snowfall";
+            case 75 -> "Heavy intensity snowfall";
+            case 77 -> "Snow grains";
+            case 80 -> "Slight intensity rain showers";
+            case 81 -> "Moderate intensity rain showers";
+            case 82 -> "Violent intensity rain showers";
+            case 85 -> "Slight intensity snow showers";
+            case 86 -> "Heavy intensity snow showers";
+            case 95 -> "Slight or moderate thunderstorm";
+            case 96 -> "Thunderstorm with slight hail";
+            case 99 -> "Thunderstorm with heavy hail";
+            default -> "Unknown";
+        };
+    }
+
+    private ArrayList<WeatherInfo.DayForecast> parseForecasts(JSONObject dailyForecasts, boolean metric) throws JSONException {
+        ArrayList<WeatherInfo.DayForecast> result = new ArrayList<>(5);
+
+        JSONArray timeJson = dailyForecasts.getJSONArray("time");
+        JSONArray temperatureMinJson = dailyForecasts.getJSONArray("temperature_2m_min_best_match");
+        JSONArray temperatureMaxJson = dailyForecasts.getJSONArray("temperature_2m_max_best_match");
+        JSONArray weatherCodeJson = dailyForecasts.getJSONArray("weathercode_best_match");
+        JSONArray altWeatherCodeJson = dailyForecasts.getJSONArray("weathercode_gfs_seamless");
+        String currentDay = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime());
+
+        int startIndex = 1;
+        if (currentDay.equals(timeJson.getString(0)))
+            startIndex = 0;
+        else if (currentDay.equals(timeJson.getString(2)))
+            startIndex = 2;
+
+        for (int i = startIndex; i < timeJson.length() && result.size() < 5; i++) {
+            WeatherInfo.DayForecast item;
+            int weatherCode = weatherCodeJson.getInt(i);
+            if(weatherCode == 45 || weatherCode == 48)
+                weatherCode = altWeatherCodeJson.getInt(i);
+
+            try {
+                item = new WeatherInfo.DayForecast(
+                        /* low */ (float) temperatureMinJson.getDouble(i),
+                        /* high */ (float) temperatureMaxJson.getDouble(i),
+                        /* condition */ getWeatherDescription(weatherCode),
+                        /* conditionCode */ mapConditionIconToCode(weatherCode, true),
+                        timeJson.getString(i),
+                        metric);
+            } catch (JSONException e) {
+                Log.w(TAG, "Invalid forecast for day " + i + " creating dummy", e);
+                item = new WeatherInfo.DayForecast(
+                        /* low */ 0,
+                        /* high */ 0,
+                        /* condition */ "",
+                        /* conditionCode */ -1,
+                        "NaN",
+                        metric);
+            }
+            result.add(item);
+        }
+        // clients assume there are 5  entries - so fill with dummy if needed
+        if (result.size() < 5) {
+            for (int i = result.size(); i < 5; i++) {
+                Log.w(TAG, "Missing forecast for day " + i + " creating dummy");
+                WeatherInfo.DayForecast item = new WeatherInfo.DayForecast(
+                        /* low */ 0,
+                        /* high */ 0,
+                        /* condition */ "",
+                        /* conditionCode */ -1,
+                        "NaN",
+                        metric);
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private static float getCurrentHumidity(JSONObject hourlyJson) throws JSONException {
+        String currentHour = new SimpleDateFormat("yyyy-MM-dd'T'HH", Locale.US).format(Calendar.getInstance().getTime());
+        JSONArray hourlyTimes = hourlyJson.getJSONArray("time");
+        JSONArray hourlyHumidity = hourlyJson.getJSONArray("relativehumidity_2m_best_match");
+
+        int currentIndex = 36;
+        for (int i = 0; i < hourlyTimes.length(); i++)
+            if (hourlyTimes.getString(i).startsWith(currentHour)) {
+                currentIndex = i;
+                break;
+            }
+
+        return (float) hourlyHumidity.getDouble(currentIndex);
+    }
+
+    // OpenWeatherMap sometimes returns temperatures in Kelvin even if we ask it
+    // for deg C or deg F. Detect this and convert accordingly.
+    private static float sanitizeTemperature(double value, boolean metric) {
+        // threshold chosen to work for both C and F. 170 deg F is hotter
+        // than the hottest place on earth.
+        if (value > 170) {
+            // K -> deg C
+            value -= 273.15;
+            if (!metric) {
+                // deg C -> deg F
+                value = (value * 1.8) + 32;
+            }
+        }
+        return (float) value;
+    }
+
+    private static final HashMap<String, String> LANGUAGE_CODE_MAPPING = new HashMap<String, String>();
+
+    static {
+        LANGUAGE_CODE_MAPPING.put("bg-", "bg");
+        LANGUAGE_CODE_MAPPING.put("de-", "de");
+        LANGUAGE_CODE_MAPPING.put("es-", "sp");
+        LANGUAGE_CODE_MAPPING.put("fi-", "fi");
+        LANGUAGE_CODE_MAPPING.put("fr-", "fr");
+        LANGUAGE_CODE_MAPPING.put("it-", "it");
+        LANGUAGE_CODE_MAPPING.put("nl-", "nl");
+        LANGUAGE_CODE_MAPPING.put("pl-", "pl");
+        LANGUAGE_CODE_MAPPING.put("pt-", "pt");
+        LANGUAGE_CODE_MAPPING.put("ro-", "ro");
+        LANGUAGE_CODE_MAPPING.put("ru-", "ru");
+        LANGUAGE_CODE_MAPPING.put("se-", "se");
+        LANGUAGE_CODE_MAPPING.put("tr-", "tr");
+        LANGUAGE_CODE_MAPPING.put("uk-", "ua");
+        LANGUAGE_CODE_MAPPING.put("zh-CN", "zh_cn");
+        LANGUAGE_CODE_MAPPING.put("zh-TW", "zh_tw");
+    }
+
+    private String getLanguageCode() {
+        Locale locale = mContext.getResources().getConfiguration().locale;
+        String selector = locale.getLanguage() + "-" + locale.getCountry();
+
+        for (Map.Entry<String, String> entry : LANGUAGE_CODE_MAPPING.entrySet()) {
+            if (selector.startsWith(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        return "en";
+    }
+
+    private int mapConditionIconToCode(int code, boolean isDay) {
+
+        return switch (code) {
+            case 0 -> // Clear sky
+                    isDay ? 32 : 31;
+            case 1 -> // Mainly clear
+                    isDay ? 34 : 33;
+            case 2 -> // Partly cloudy
+                    isDay ? 30 : 29;
+            case 3 -> // Overcast
+                    26; // Fog
+            case 45, 48 -> // Depositing rime fog
+                    20;
+            case 51 -> // Light intensity drizzle
+                    9;
+            case 53 -> // Moderate intensity drizzle
+                    9;
+            case 55 -> // Dense intensity drizzle
+                    12;
+            case 56 -> // Light intensity freezing drizzle
+                    8;
+            case 57 -> // Dense intensity freezing drizzle
+                    8;
+            case 61 -> // Slight intensity rain
+                    9;
+            case 63 -> // Moderate intensity rain
+                    11;
+            case 65 -> // Heavy intensity rain
+                    12;
+            case 66 -> // Light intensity freezing rain
+                    10;
+            case 67 -> // Heavy intensity freezing rain
+                    10;
+            case 71 -> // Slight intensity snowfall
+                    14;
+            case 73 -> // Moderate intensity snowfall
+                    16;
+            case 75 -> // Heavy intensity snowfall
+                    43;
+            case 77 -> // Snow grains
+                    16;
+            case 80 -> // Slight intensity rain showers
+                    11;
+            case 81 -> // Moderate intensity rain showers
+                    40;
+            case 82 -> // Violent intensity rain showers
+                    40;
+            case 85 -> // Slight intensity snow showers
+                    14;
+            case 86 -> // Heavy intensity snow showers
+                    43;
+            case 95 -> // Slight or moderate thunderstorm
+                    4; // Thunderstorm with slight hail
+            case 96, 99 -> // Thunderstorm with heavy hail
+                    38;
+            default -> // Unknown
+                    -1;
+        };
+
+    }
+
+    public boolean shouldRetry() {
+        return false;
+    }
+}

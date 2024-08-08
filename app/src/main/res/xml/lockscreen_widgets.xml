@@ -17,6 +17,41 @@
         android:summary="@string/lockscreen_display_widgets_summary"
         android:defaultValue="false" />
 
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:key="lockscreen_device_widget_custom_color"
+        app:iconSpaceReserved="false"
+        android:title="@string/custom_color"
+        android:summaryOn="@string/general_on"
+        android:summaryOff="@string/general_off"
+        android:defaultValue="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="lockscreen_device_widget_linear_progress_color"
+        app:iconSpaceReserved="false"
+        android:title="@string/linear_progress_color"
+        app:cpv_showAlphaSlider="true"
+        android:defaultValue="0xFFFFFFFF" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="lockscreen_device_widget_circular_progress_color"
+        app:iconSpaceReserved="false"
+        android:title="@string/circular_progress_color"
+        app:cpv_showAlphaSlider="true"
+        android:defaultValue="0xFFFFFFFF" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        android:key="lockscreen_device_widget_text_color"
+        app:iconSpaceReserved="false"
+        android:title="@string/text_color"
+        app:cpv_showAlphaSlider="true"
+        android:defaultValue="0xFFFFFFFF" />
+
+    <EditTextPreference
+        android:key="lockscreen_device_widget_device_name"
+        android:title="@string/custom_device_name"
+        app:iconSpaceReserved="false"
+        android:summary="@string/custom_device_name_summary" />
+
     <ListPreference
         android:entries="@array/widget_entries"
         app:iconSpaceReserved="false"

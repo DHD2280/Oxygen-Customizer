@@ -991,6 +991,7 @@
     <string name="weather_custom_color">Weather Text Custom Color</string>
     <string name="provider_openweathermap" translatable="false">OpenWeatherMap</string>
     <string name="provider_metnorway" translatable="false">MET Norway</string>
+    <string name="provider_openmeteo" translatable="false">OpenMeteo</string>
     <string name="weather_progress_title">Verifying location</string>
     <string name="weather_select_location">Select location</string>
     <string name="custom_location_title">Custom location</string>
@@ -1154,6 +1155,11 @@
     <string name="lockscreen_widgets_enabled_summary">Add widgets to lockscreen</string>
     <string name="lockscreen_display_widgets_title">Device info Widget</string>
     <string name="lockscreen_display_widgets_summary">Show device info widget on lockscreen</string>
+    <string name="linear_progress_color">Linear Progress Color</string>
+    <string name="circular_progress_color">Circular Progress Color</string>
+    <string name="text_color">Text Color</string>
+    <string name="custom_device_name">Custom Device Name</string>
+    <string name="custom_device_name_summary">Set custom device name.\nKeep blank to disable.</string>
     <string name="large_widgets_category_title">Big widgets</string>
     <string name="main_custom_widgets1">Big widget 1</string>
     <string name="main_custom_widgets2">Big widget 2</string>

@@ -689,6 +689,9 @@ public class HeaderClock extends XposedMods {
     }
 
     private void showView(TextView textView) {
+        if (textView == null) {
+            log(TAG + "showView: textView is null");
+        }
         try {
             if (textView.getVisibility() == View.VISIBLE) return;
             textView.setVisibility(View.VISIBLE);
@@ -745,15 +748,20 @@ public class HeaderClock extends XposedMods {
     private void setupStockColors() {
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
         int textColor = nightMode ? Color.WHITE : Color.BLACK;
-        if (stockClockTimeColorSwitch) {
-            mOplusClock.setTextColor(stockClockTimeColor);
-        } else {
-            mOplusClock.setTextColor(textColor);
+        if (mOplusClock != null) {
+            if (stockClockTimeColorSwitch) {
+                mOplusClock.setTextColor(stockClockTimeColor);
+            } else {
+                mOplusClock.setTextColor(textColor);
+            }
         }
-        if (!stockClockHideDate && stockClockDateColorSwitch) {
-            mOplusDate.setTextColor(stockClockDateColor);
-        } else if (!stockClockHideDate) {
-            mOplusDate.setTextColor(textColor);
+
+        if (mOplusCarrier != null) {
+            if (!stockClockHideDate && stockClockDateColorSwitch) {
+                mOplusDate.setTextColor(stockClockDateColor);
+            } else if (!stockClockHideDate) {
+                mOplusDate.setTextColor(textColor);
+            }
         }
 
     }
