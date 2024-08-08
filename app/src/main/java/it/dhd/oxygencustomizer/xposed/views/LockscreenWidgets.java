@@ -51,7 +51,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -393,6 +392,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
             secondaryWidgetsContainer.addView(mSecondaryWidgetView);
         }
+
+        log("LockscreenWidgets createSecondaryWidgetsContainer done, secondaryWidgetsContainer " + (secondaryWidgetsContainer != null));
 
         return secondaryWidgetsContainer;
     }
