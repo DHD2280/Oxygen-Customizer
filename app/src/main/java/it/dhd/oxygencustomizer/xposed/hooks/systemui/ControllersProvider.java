@@ -57,6 +57,7 @@ public class ControllersProvider extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        boolean oos13 = false;
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
@@ -149,7 +150,12 @@ public class ControllersProvider extends XposedMods {
                     new XC_MethodHook() {
                         @Override
                         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                            Object bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                            Object bluetoothController;
+                            try {
+                                bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                            } catch (Throwable t) {
+                                bluetoothController = getObjectField(param.thisObject, "mBluetooth");
+                            }
                             boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
                             boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
                             onBluetoothChanged(enabled);
@@ -161,20 +167,31 @@ public class ControllersProvider extends XposedMods {
         }
 
         // WiFi Tile - for WiFi Dialog
-        Class<?> OplusWifiTile = findClass("com.oplus.systemui.qs.tiles.OplusWifiTile", lpparam.classLoader);
-        hookAllConstructors(OplusWifiTile, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mOplusWifiTile = param.thisObject;
-            }
-        });
+        if (!oos13) {
+            Class<?> OplusWifiTile = findClass("com.oplus.systemui.qs.tiles.OplusWifiTile", lpparam.classLoader);
+            hookAllConstructors(OplusWifiTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mOplusWifiTile = param.thisObject;
+                }
+            });
 
-        hookAllMethods(OplusWifiTile, "createSignalCallback", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mSignalCallback = param.getResult();
-            }
-        });
+            hookAllMethods(OplusWifiTile, "createSignalCallback", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mSignalCallback = param.getResult();
+                }
+            });
+        } else {
+            Class<?> WifiTile = findClass("com.android.systemui.qs.tiles.WifiTile", lpparam.classLoader);
+            hookAllConstructors(WifiTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mSignalCallback = getObjectField(param.thisObject, "mSignalCallback");
+                }
+            });
+        }
+
 
         // Stole FlashLight Callback
         Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", lpparam.classLoader);
@@ -201,7 +218,7 @@ public class ControllersProvider extends XposedMods {
         hookAllMethods(OplusQsMediaPanelViewController, "bindMediaCarouselController", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mQsDialogLaunchAnimator = param.args[1];
+                if (param.args.length >= 1) mQsDialogLaunchAnimator = param.args[1];
             }
         });
         hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
