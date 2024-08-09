@@ -315,18 +315,18 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
         log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
-        if (LaunchableLinearLayout != null) {
-            try {
-                mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-
-            } catch (Exception e) {
-                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
-                mainWidgetsContainer = new LinearLayout(context);
-            }
-        } else {
+        try {
+            mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        } catch (Exception e) {
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             mainWidgetsContainer = new LinearLayout(context);
         }
 
+        if (mainWidgetsContainer == null) {
+            mainWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
+        }
+
+        log("LockscreenWidgets createMainWidgetsContainer mainWidgetsContainer " + (mainWidgetsContainer != null));
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         mainWidgetsContainer.setGravity(Gravity.CENTER);
@@ -343,6 +343,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
             mainWidgetsContainer.addView(mMainWidgetView);
         }
+
+        log("LockscreenWidgets createMainWidgetsContainer done " + (mainWidgetsContainer != null));
 
         return mainWidgetsContainer;
     }
@@ -371,16 +373,15 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
         log("LockscreenWidgets createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
-        if (LaunchableLinearLayout != null) {
-            try {
-                secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-
-            } catch (Exception e) {
-                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
-                secondaryWidgetsContainer = new LinearLayout(context);
-            }
-        } else {
+        try {
+            secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        } catch (Exception e) {
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             secondaryWidgetsContainer = new LinearLayout(context);
+        }
+
+        if (secondaryWidgetsContainer == null) {
+            secondaryWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
         }
 
         secondaryWidgetsContainer.setOrientation(HORIZONTAL);
@@ -414,9 +415,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         ImageView imageView;
         try {
             imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
-
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
+        } catch (Exception e) {
             log("LockscreenWidgets createImageView LaunchableImageView not found: " + e.getMessage());
             imageView = new ImageView(context);
         }
@@ -1165,15 +1164,18 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             int mode = mAudioManager.getRingerMode();
             switch (mode) {
                 case AudioManager.RINGER_MODE_NORMAL:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_VIBRATE);
+//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                    NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_SILENT);
+//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+//                    NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
                     //notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_NORMAL);
+//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     break;
             }
             updateRingerButtonState();

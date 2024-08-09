@@ -232,7 +232,7 @@ public class ControllersProvider extends XposedMods {
             hookAllMethods(OplusQsMediaPanelViewController, "bindMediaCarouselController", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (param.args.length >= 1) mQsDialogLaunchAnimator = param.args[1];
+                    if (param.args.length > 1) mQsDialogLaunchAnimator = param.args[1];
                 }
             });
             hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
@@ -261,7 +261,12 @@ public class ControllersProvider extends XposedMods {
 
         // Calculator Tile - for opening calculator
         try {
-            Class<?> CalculatorTile = findClass("com.oplus.systemui.qs.tiles.CalculatorTile", lpparam.classLoader);
+            Class<?> CalculatorTile;
+            try {
+                CalculatorTile = findClass("com.oplus.systemui.qs.tiles.CalculatorTile", lpparam.classLoader);
+            } catch (Throwable t) {
+                CalculatorTile = findClass("com.oplusos.systemui.qs.tiles.CalculatorTile", lpparam.classLoader); // OOS 13
+            }
             hookAllConstructors(CalculatorTile, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
