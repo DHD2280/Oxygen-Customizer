@@ -1165,17 +1165,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             switch (mode) {
                 case AudioManager.RINGER_MODE_NORMAL:
                     callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_VIBRATE);
-//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
                     callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_SILENT);
-//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-//                    NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
-                    //notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
                     callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_NORMAL);
-//                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     break;
             }
             updateRingerButtonState();
