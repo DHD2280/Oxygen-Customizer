@@ -18,10 +18,14 @@ package it.dhd.oxygencustomizer.receivers;
  *
  */
 
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 
@@ -34,6 +38,11 @@ public class SystemReceiver extends BroadcastReceiver {
             WeatherScheduler.scheduleUpdates(context);
             WeatherScheduler.scheduleUpdateNow(context);
             UpdateScheduler.scheduleUpdates(context);
+
+            // Update QS Clock on BOOT_COMPLETED
+            Intent broadcast = new Intent(Constants.ACTIONS_QS_CLOCK_UPDATE);
+            broadcast.putExtra("packageName", SYSTEM_UI);
+            context.sendBroadcast(broadcast);
         }
     }
 }

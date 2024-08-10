@@ -211,26 +211,29 @@ public class StatusbarClock extends XposedMods {
                      "sbc_before_clock_format", "sbc_before_small", "sbc_after_clock_format", "sbc_after_small" -> updateClock();
                 case "status_bar_clock_size" -> setClockSize();
                 case "status_bar_clock",
-                     "status_bar_clock_seconds", "status_bar_custom_clock_color", "status_bar_clock_color" -> {
+                     "status_bar_clock_seconds",
+                     "status_bar_custom_clock_color",
+                     "status_bar_clock_color",
+                     "status_bar_clock_background_chip_switch",
+                     "status_bar_clock_background_chip" + "_STYLE",
+                     "status_bar_clock_background_chip" + "_GRADIENT_ORIENTATION",
+                     "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR",
+                     "status_bar_clock_background_chip" + "_USE_GRADIENT",
+                     "status_bar_clock_background_chip" + "_GRADIENT_1",
+                     "status_bar_clock_background_chip" + "_GRADIENT_2",
+                     "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR_STROKE",
+                     "status_bar_clock_background_chip" + "_STROKE_COLOR",
+                     "status_bar_clock_background_chip" + "_STROKE_WIDTH",
+                     "status_bar_clock_background_chip" + "_ROUNDED_CORNERS",
+                     "status_bar_clock_background_chip" + "_TOP_LEFT_RADIUS",
+                     "status_bar_clock_background_chip" + "_TOP_RIGHT_RADIUS",
+                     "status_bar_clock_background_chip" + "_BOTTOM_LEFT_RADIUS",
+                     "status_bar_clock_background_chip" + "_BOTTOM_RIGHT_RADIUS"-> {
                     placeClock();
                     updateClock();
                     setupChip();
+                    updateChip();
                 }
-                case "status_bar_clock_background_chip" + "_STYLE",
-                        "status_bar_clock_background_chip" + "_GRADIENT_ORIENTATION",
-                        "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR",
-                        "status_bar_clock_background_chip" + "_USE_GRADIENT",
-                        "status_bar_clock_background_chip" + "_GRADIENT_1",
-                        "status_bar_clock_background_chip" + "_GRADIENT_2",
-                        "status_bar_clock_background_chip" + "_USE_ACCENT_COLOR_STROKE",
-                        "status_bar_clock_background_chip" + "_STROKE_COLOR",
-                        "status_bar_clock_background_chip" + "_STROKE_WIDTH",
-                        "status_bar_clock_background_chip" + "_ROUNDED_CORNERS",
-                        "status_bar_clock_background_chip" + "_TOP_LEFT_RADIUS",
-                        "status_bar_clock_background_chip" + "_TOP_RIGHT_RADIUS",
-                        "status_bar_clock_background_chip" + "_BOTTOM_LEFT_RADIUS",
-                        "status_bar_clock_background_chip" + "_BOTTOM_RIGHT_RADIUS" -> updateChip();
-                case "status_bar_clock_background_chip_switch" -> setupChip();
             }
         }
 

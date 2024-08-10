@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -7,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_CLOCK_UPDATE;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.DATE_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
@@ -42,8 +44,10 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -98,7 +102,9 @@ public class HeaderClock extends XposedMods {
     private final String TAG = "HeaderClock: ";
 
     private Context appContext;
-    private UserManager mUserManager;
+    private final UserManager mUserManager;
+
+    private boolean mBroadcastRegistered = false;
 
     LinearLayout mQsClockContainer = new LinearLayout(mContext);
     private static TextView mOplusClock = null;
@@ -157,6 +163,16 @@ public class HeaderClock extends XposedMods {
     final ClickListener clickListener = new ClickListener();
     private View mStatusIconsView = null;
 
+    final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                if (intent.getAction().equals(ACTIONS_QS_CLOCK_UPDATE)) {
+                    updateClockView();
+                }
+            }
+        }
+    };
 
     public HeaderClock(Context context) {
         super(context);
@@ -295,6 +311,15 @@ public class HeaderClock extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+        if (!mBroadcastRegistered) {
+            mBroadcastRegistered = true;
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTIONS_QS_CLOCK_UPDATE);
+            mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
+        }
+
         Class<?> QuickStatusBarHeader;
         try {
             QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
@@ -689,9 +714,7 @@ public class HeaderClock extends XposedMods {
     }
 
     private void showView(TextView textView) {
-        if (textView == null) {
-            log(TAG + "showView: textView is null");
-        }
+        if (textView == null) return;
         try {
             if (textView.getVisibility() == View.VISIBLE) return;
             textView.setVisibility(View.VISIBLE);
