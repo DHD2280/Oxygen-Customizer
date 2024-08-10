@@ -8,7 +8,9 @@
         android:name="group"
         android:pivotX="12"
         android:pivotY="12"
-        android:rotation="90">
+        android:rotation="90"
+        android:scaleX="1.2"
+        android:scaleY="1.2">
         <path
             android:name="path"
             android:fillColor="@color/white"

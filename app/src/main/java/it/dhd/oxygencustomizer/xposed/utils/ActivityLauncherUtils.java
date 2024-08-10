@@ -1,29 +1,25 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCameraGestureHelper;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 
 import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.media.AudioManager;
-import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 
 import java.util.List;
-import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 
 public class ActivityLauncherUtils {
 
@@ -32,6 +28,10 @@ public class ActivityLauncherUtils {
     private final Context mContext;
     private final Object mActivityStarter;
     private final PackageManager mPackageManager;
+
+    private final String[] mCalculatorApps = new String[]{
+            "com.oneplus.calculator", "com.coloros.calculator"
+    };
 
     public ActivityLauncherUtils(Context context, Object activityStarter) {
         this.mContext = context;
@@ -57,8 +57,14 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCamera() {
-        final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        launchAppIfAvailable(launchIntent, R.string.camera);
+        Object mCameraGestureHelper = getCameraGestureHelper();
+
+        if (mCameraGestureHelper != null) {
+            callMethod(mCameraGestureHelper, "launchCamera", 3);
+        } else {
+            final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
+            launchAppIfAvailable(launchIntent, R.string.camera);
+        }
     }
 
     public void launchTimer() {
@@ -69,15 +75,38 @@ public class ActivityLauncherUtils {
     }
 
     public void launchCalculator() {
-        Intent launchIntent = new Intent();
-        if (AppUtils.isAppInstalled(mContext, "com.oneplus.calculator")) {
-            launchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.oneplus.calculator");
-        } else {
+        // If the calculator tile is available
+        // we can use it to open the calculator
+        Object calculatorTile = getCalculatorTile();
+        if (calculatorTile != null) {
+            callMethod(calculatorTile, "openCalculator");
+            return;
+        }
+
+        // Otherwise we try to launch the calculator app
+        Intent launchIntent = null;
+        for (String packageName : mCalculatorApps) {
+            Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+            if (intent != null) {
+                launchIntent = intent;
+                break;
+            }
+        }
+
+        if (launchIntent == null) {
+            launchIntent = new Intent();
             launchIntent.setAction(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_APP_CALCULATOR);
         }
+
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
         launchAppIfAvailable(launchIntent, R.string.calculator);
+    }
+
+    public void launchWallet() {
+        Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.google.android.apps.walletnfcrel");
+        if (launchIntent != null) launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, R.string.wallet);
     }
 
     public void launchSettingsComponent(String className) {

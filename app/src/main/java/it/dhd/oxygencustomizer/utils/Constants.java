@@ -452,6 +452,18 @@ public class Constants {
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR = "lockscreen_device_widget_circular_progress_color";
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR = "lockscreen_device_widget_text_color";
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE = "lockscreen_device_widget_device_name";
+
+            // Custom Widgets Colors
+            public static final String LOCKSCREEN_WIDGETS_CUSTOM_COLOR = "lockscreen_widgets_custom_color";
+            public static final String LOCKSCREEN_WIDGETS_BIG_ACTIVE = "lockscreen_widgets_big_active";
+            public static final String LOCKSCREEN_WIDGETS_BIG_INACTIVE = "lockscreen_widgets_big_inactive";
+            public static final String LOCKSCREEN_WIDGETS_SMALL_ACTIVE = "lockscreen_widgets_small_active";
+            public static final String LOCKSCREEN_WIDGETS_SMALL_INACTIVE = "lockscreen_widgets_small_inactive";
+            public static final String LOCKSCREEN_WIDGETS_BIG_ICON_ACTIVE = "lockscreen_widgets_big_icon_active";
+            public static final String LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE = "lockscreen_widgets_big_icon_inactive";
+            public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE = "lockscreen_widgets_small_icon_active";
+            public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE = "lockscreen_widgets_small_icon_inactive";
+
         }
 
         // AOD

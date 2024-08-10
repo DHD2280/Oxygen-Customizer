@@ -9,7 +9,6 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCellularTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getDataController;
@@ -17,6 +16,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusBluetoothTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusWifiTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableLinearLayout;
 
@@ -51,7 +51,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -62,6 +61,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.overlay.manager.NotificationManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
@@ -88,6 +88,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String WIFI_INACTIVE = "status_bar_qs_wifi_inactive";
     public static final String HOME_CONTROLS = "controls_icon";
     public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
+    public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
+    public static final String WALLET_ICON = "status_bar_qs_wallet_active";
 
     public static final String GENERAL_INACTIVE = "switch_bar_off";
     public static final String GENERAL_ACTIVE = "switch_bar_on";
@@ -103,6 +105,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String HOME_CONTROLS_LABEL = "quick_controls_title";
     public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
     public static final String CALCULATOR_LABEL = "state_button_calculator";
+    public static final String CAMERA_LABEL = "affordance_settings_camera";
+    public static final String WALLET_LABEL = "wallet_title";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -123,6 +127,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private final int mDarkColorActive;
     private final int mLightColor;
     private final int mLightColorActive;
+
+    // Custom Widgets Colors
+    private boolean mCustomColors = false;
+    private int mBigInactiveColor, mBigActiveColor, mSmallInactiveColor, mSmallActiveColor;
+    private int mBigIconInactiveColor, mBigIconActiveColor, mSmallIconInactiveColor, mSmallIconActiveColor;
 
     private String mMainLockscreenWidgetsList;
     private String mSecondaryLockscreenWidgetsList;
@@ -298,24 +307,26 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
         deviceWidget.addView(mDeviceWidgetView);
 
+        log("LockscreenWidgets createDeviceWidgetContainer done");
+
         return deviceWidget;
     }
 
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
         log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
-        if (LaunchableLinearLayout != null) {
-            try {
-                mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-
-            } catch (Exception e) {
-                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
-                mainWidgetsContainer = new LinearLayout(context);
-            }
-        } else {
+        try {
+            mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        } catch (Exception e) {
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             mainWidgetsContainer = new LinearLayout(context);
         }
 
+        if (mainWidgetsContainer == null) {
+            mainWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
+        }
+
+        log("LockscreenWidgets createMainWidgetsContainer mainWidgetsContainer " + (mainWidgetsContainer != null));
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         mainWidgetsContainer.setGravity(Gravity.CENTER);
@@ -332,6 +343,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
             mainWidgetsContainer.addView(mMainWidgetView);
         }
+
+        log("LockscreenWidgets createMainWidgetsContainer done " + (mainWidgetsContainer != null));
 
         return mainWidgetsContainer;
     }
@@ -360,16 +373,15 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
         log("LockscreenWidgets createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
-        if (LaunchableLinearLayout != null) {
-            try {
-                secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
-
-            } catch (Exception e) {
-                log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
-                secondaryWidgetsContainer = new LinearLayout(context);
-            }
-        } else {
+        try {
+            secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
+        } catch (Exception e) {
+            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             secondaryWidgetsContainer = new LinearLayout(context);
+        }
+
+        if (secondaryWidgetsContainer == null) {
+            secondaryWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
         }
 
         secondaryWidgetsContainer.setOrientation(HORIZONTAL);
@@ -394,6 +406,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             secondaryWidgetsContainer.addView(mSecondaryWidgetView);
         }
 
+        log("LockscreenWidgets createSecondaryWidgetsContainer done, secondaryWidgetsContainer " + (secondaryWidgetsContainer != null));
+
         return secondaryWidgetsContainer;
     }
 
@@ -401,9 +415,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         ImageView imageView;
         try {
             imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
-
-        } catch (NoSuchMethodException | IllegalAccessException | IllegalStateException |
-                 InvocationTargetException | InstantiationException e) {
+        } catch (Exception e) {
             log("LockscreenWidgets createImageView LaunchableImageView not found: " + e.getMessage());
             imageView = new ImageView(context);
         }
@@ -425,6 +437,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
         imageView.setFocusable(true);
         imageView.setClickable(true);
+
+        log("LockscreenWidgets createImageView done, imageView " + (imageView != null));
 
         return imageView;
     }
@@ -783,11 +797,20 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     vibrate(1);
                 }, getDrawable("ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
+            case "camera":
+                setUpWidgetResources(iv, efab, v -> {
+                    mActivityLauncherUtils.launchCamera();
+                    vibrate(1);
+                }, getDrawable(CAMERA_ICON, SYSTEM_UI), getString(CAMERA_LABEL, SYSTEM_UI));
+                break;
             case "calculator":
                 setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "homecontrols":
                 setUpWidgetResources(iv, efab, this::launchHomeControls, HOME_CONTROLS, HOME_CONTROLS_LABEL);
+                break;
+            case "wallet":
+                setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(WALLET_ICON, SYSTEM_UI), getString(WALLET_LABEL, SYSTEM_UI));
                 break;
             case "media":
                 if (iv != null) {
@@ -892,30 +915,53 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
         int bgTint;
         int tintColor;
-        if (active) {
-            bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
-            tintColor = isNightMode() ? mDarkColor : mLightColor;
+
+        if (!mCustomColors) {
+            if (active) {
+                bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
+                tintColor = isNightMode() ? mDarkColor : mLightColor;
+            } else {
+                bgTint = isNightMode() ? mDarkColor : mLightColor;
+                tintColor = isNightMode() ? mLightColor : mDarkColor;
+            }
+            if (iv != null) {
+                iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
+                if (iv != weatherButton) {
+                    iv.setImageTintList(ColorStateList.valueOf(tintColor));
+                } else {
+                    iv.setImageTintList(null);
+                }
+            }
+            if (efab != null) {
+                efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
+                if (efab != weatherButtonFab) {
+                    efab.setIconTint(ColorStateList.valueOf(tintColor));
+                } else {
+                    efab.setIconTint(null);
+                }
+                efab.setTextColor(tintColor);
+            }
         } else {
-            bgTint = isNightMode() ? mDarkColor : mLightColor;
-            tintColor = isNightMode() ? mLightColor : mDarkColor;
-        }
-        if (iv != null) {
-            iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
-            if (iv != weatherButton) {
-                iv.setImageTintList(ColorStateList.valueOf(tintColor));
-            } else {
-                iv.setImageTintList(null);
+            if (iv != null) {
+                iv.setBackgroundTintList(ColorStateList.valueOf(active ? mSmallActiveColor : mSmallInactiveColor));
+                if (iv != weatherButton) {
+                    iv.setImageTintList(ColorStateList.valueOf(active ? mSmallIconActiveColor : mSmallIconInactiveColor));
+                } else {
+                    iv.setImageTintList(null);
+                }
+            }
+            if (efab != null) {
+                efab.setBackgroundTintList(ColorStateList.valueOf(active ? mBigActiveColor : mBigInactiveColor));
+                if (efab != weatherButtonFab) {
+                    efab.setIconTint(ColorStateList.valueOf(active ? mBigIconActiveColor : mBigIconInactiveColor));
+                } else {
+                    efab.setIconTint(null);
+                }
+                efab.setTextColor(active ? mBigIconActiveColor : mBigIconInactiveColor);
             }
         }
-        if (efab != null) {
-            efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
-            if (efab != weatherButtonFab) {
-                efab.setIconTint(ColorStateList.valueOf(tintColor));
-            } else {
-                efab.setIconTint(null);
-            }
-            efab.setTextColor(tintColor);
-        }
+
+
     }
 
     public void updateMediaState() {
@@ -1016,10 +1062,24 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         vibrate(1);
     }
 
+    private void launchWallet(View view) {
+        Object WalletTile = getWalletTile();
+        if (WalletTile != null) {
+            View finalView;
+            if (view instanceof ExtendedFAB) {
+                finalView = (View) view.getParent();
+            } else {
+                finalView = view;
+            }
+            post(() -> callMethod(WalletTile, "handleClick", finalView));
+        } else {
+            mActivityLauncherUtils.launchWallet();
+        }
+        vibrate(1);
+    }
+
     private void openCalculator() {
-        Object calculatorTile = getCalculatorTile();
-        if (calculatorTile == null) mActivityLauncherUtils.launchCalculator();
-        else post(() -> callMethod(calculatorTile, "openCalculator"));
+        mActivityLauncherUtils.launchCalculator();
         vibrate(1);
     }
 
@@ -1104,13 +1164,13 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             int mode = mAudioManager.getRingerMode();
             switch (mode) {
                 case AudioManager.RINGER_MODE_NORMAL:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_VIBRATE);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_SILENT);
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_NORMAL);
                     break;
             }
             updateRingerButtonState();
@@ -1304,11 +1364,36 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         instance.updateWidgetViews();
     }
 
-    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int progressColor, int textColor, String devName) {
+    /**
+     * Set the options for the Device Widget
+     * @param customColor true if custom color is enabled
+     * @param linearColor color for linear battery progressbar
+     * @param circularColor color for circular progressbar
+     * @param textColor color for text
+     * @param devName device name, keep blank for default Build.MODEL
+     */
+    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
         if (instance.mDeviceWidgetView == null) return;
-        instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, progressColor);
+        instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);
+    }
+
+    public void setCustomColors(
+            boolean customColorsEnabled,
+            int bigInactive, int bigActive, int smallInactive, int smallActive,
+            int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
+        log("LockscreenWidgets setCustomColors " + customColorsEnabled);
+        instance.mCustomColors = customColorsEnabled;
+        instance.mBigInactiveColor = bigInactive;
+        instance.mBigActiveColor = bigActive;
+        instance.mSmallInactiveColor = smallInactive;
+        instance.mSmallActiveColor = smallActive;
+        instance.mBigIconInactiveColor = bigIconInactive;
+        instance.mBigIconActiveColor = bigIconActive;
+        instance.mSmallIconInactiveColor = smallIconInactive;
+        instance.mSmallIconActiveColor = smallIconActive;
+        instance.updateWidgetViews();
     }
 
     public void setActivityStarter(Object activityStarter) {
@@ -1335,11 +1420,19 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             return mContext.getResources().getString(
                     mContext.getResources().getIdentifier(stringRes, "string", pkg));
         } catch (Throwable t) {
-            // We have a calculator string, so if SystemUI doesn't just return ours
-            if (stringRes.equals(CALCULATOR_LABEL)) {
-                return modRes.getString(R.string.calculator);
+            switch (stringRes) {
+                // We have out own strings too, so if getString from SystemUI fails
+                // return our own strings,
+                case CALCULATOR_LABEL -> {
+                    return modRes.getString(R.string.calculator);
+                }
+                case CAMERA_LABEL -> {
+                    return modRes.getString(R.string.camera);
+                }
+                case WALLET_LABEL -> {
+                    return modRes.getString(R.string.wallet);
+                }
             }
-
             log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }
