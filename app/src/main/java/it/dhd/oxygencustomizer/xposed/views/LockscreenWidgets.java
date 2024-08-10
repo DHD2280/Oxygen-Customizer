@@ -766,7 +766,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     dataButtonFab = efab;
                     dataButtonFab.setOnLongClickListener(v -> { showInternetDialog(v); return true; });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleMobileData(), DATA_INACTIVE, DATA_LABEL_INACTIVE);
+                setUpWidgetResources(iv, efab, v -> toggleMobileData(), getDrawable(DATA_INACTIVE, SYSTEM_UI), getString(DATA_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "ringer":
                 if (iv != null) {
@@ -777,7 +777,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     ringerButtonFab = efab;
                     ringerButtonFab.setOnLongClickListener(v -> { mActivityLauncherUtils.launchAudioSettings(); return true; });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleRingerMode(), RINGER_INACTIVE, RINGER_LABEL_INACTIVE);
+                setUpWidgetResources(iv, efab, v -> toggleRingerMode(), getDrawable(RINGER_INACTIVE, SYSTEM_UI), getString(RINGER_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "bt":
                 if (iv != null) {
@@ -788,7 +788,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     btButtonFab = efab;
                     btButtonFab.setOnLongClickListener(v -> { showBluetoothDialog(v); return true; });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleBluetoothState(), BT_INACTIVE, BT_LABEL_INACTIVE);
+                setUpWidgetResources(iv, efab, v -> toggleBluetoothState(), getDrawable(BT_INACTIVE, SYSTEM_UI), getString(BT_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "torch":
                 if (iv != null) {
@@ -797,7 +797,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 if (efab != null) {
                     torchButtonFab = efab;
                 }
-                setUpWidgetResources(iv, efab, v -> toggleFlashlight(), TORCH_RES_INACTIVE, TORCH_LABEL_INACTIVE);
+                setUpWidgetResources(iv, efab, v -> toggleFlashlight(), getDrawable(TORCH_RES_INACTIVE, SYSTEM_UI), getString(TORCH_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "timer":
                 setUpWidgetResources(iv, efab, v -> {
@@ -844,25 +844,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 break;
             default:
                 break;
-        }
-    }
-
-
-    private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
-                                      OnClickListener cl, String drawableRes, String stringRes){
-        Drawable d = getDrawable(drawableRes, SYSTEM_UI);
-        if (efab != null) {
-            efab.setOnClickListener(cl);
-            efab.setIcon(d);
-            String text = mContext.getResources().getString(mContext.getResources().getIdentifier(stringRes, "string", SYSTEM_UI));
-            efab.setText(text);
-            if (mediaButtonFab == efab) {
-                attachSwipeGesture(efab);
-            }
-        }
-        if (iv != null) {
-            iv.setOnClickListener(cl);
-            iv.setImageDrawable(d);
         }
     }
 
