@@ -19,6 +19,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.session.PlaybackState;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -59,6 +60,7 @@ public class AlbumArtLockscreen extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        if (Build.VERSION.SDK_INT <= 33) return;
 
         // Get mediadata change
         AudioDataProvider.registerInfoCallback(this::onPrimaryMetadataOrStateChanged);
