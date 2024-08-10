@@ -860,11 +860,14 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         if (iv != null) {
             iv.setOnClickListener(cl);
             iv.setImageDrawable(icon);
+            if (mediaButton == iv) {
+                attachSwipeGesture(iv);
+            }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void attachSwipeGesture(ExtendedFAB efab) {
+    private void attachSwipeGesture(View view) {
         final GestureDetector gestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             private static final int SWIPE_THRESHOLD = 100;
             private static final int SWIPE_VELOCITY_THRESHOLD = 100;
@@ -889,11 +892,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             public void onLongPress(@NonNull MotionEvent e) {
                 super.onLongPress(e);
                 mIsLongPress = true;
-                showMediaDialog(efab);
+                showMediaDialog(view);
                 mHandler.postDelayed(() -> mIsLongPress = false, 2500);
             }
         });
-        efab.setOnTouchListener((v, event) -> {
+        view.setOnTouchListener((v, event) -> {
             boolean isClick = gestureDetector.onTouchEvent(event);
             if (event.getAction() == MotionEvent.ACTION_UP && !isClick && !mIsLongPress) {
                 v.performClick();
