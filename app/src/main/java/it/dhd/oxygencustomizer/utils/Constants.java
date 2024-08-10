@@ -646,6 +646,7 @@ public class Constants {
     public static final String ACTION_SETTINGS_CHANGED = BuildConfig.APPLICATION_ID + ".ACTION_SETTINGS_CHANGED_OC";
     public static final String ACTIONS_QS_CLOCK_FONT_CHANGEG = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_FONT_CHANGEG_OC";
     public static final String ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED_OC";
+    public static final String ACTIONS_QS_CLOCK_UPDATE = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_UPDATE_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
