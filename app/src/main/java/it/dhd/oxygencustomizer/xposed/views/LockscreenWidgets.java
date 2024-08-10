@@ -16,6 +16,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusBluetoothTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusWifiTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableLinearLayout;
@@ -54,14 +55,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.overlay.manager.NotificationManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
@@ -86,7 +85,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String TORCH_RES_INACTIVE = "status_bar_qs_flashlight_inactive";
     public static final String WIFI_ACTIVE = "status_bar_qs_wifi_active";
     public static final String WIFI_INACTIVE = "status_bar_qs_wifi_inactive";
-    public static final String HOME_CONTROLS = "controls_icon";
+    public static final String HOME_CONTROLS = "status_bar_qs_device_control_active";
     public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
     public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
     public static final String WALLET_ICON = "status_bar_qs_wallet_active";
@@ -152,6 +151,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private boolean mIsInflated = false;
     private boolean mIsLongPress = false;
+    private int mInitialTouchX;
+    private int mInitialTouchY;
+    private int mLinger;
+    private boolean mIsSwipe = false;
 
     private CameraManager mCameraManager;
     private String mCameraId;
@@ -416,7 +419,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         try {
             imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
         } catch (Exception e) {
-            log("LockscreenWidgets createImageView LaunchableImageView not found: " + e.getMessage());
+            // LaunchableImageView not found or other error, ensure the creation of our ImageView
             imageView = new ImageView(context);
         }
 
@@ -437,8 +440,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
         imageView.setFocusable(true);
         imageView.setClickable(true);
-
-        log("LockscreenWidgets createImageView done, imageView " + (imageView != null));
 
         return imageView;
     }
@@ -633,6 +634,13 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        log("LockscreenWidgets onConfigurationChanged");
+        updateWidgetViews();
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         log("LockscreenWidgets onFinishInflate");
@@ -747,7 +755,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     wifiButtonFab = efab;
                     wifiButtonFab.setOnLongClickListener(v -> { showWifiDialog(v); return true; });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleWiFi(), WIFI_INACTIVE, "wifi_Connected");
+                setUpWidgetResources(iv, efab, v -> toggleWiFi(), getDrawable(WIFI_INACTIVE, SYSTEM_UI), getString(WIFI_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "data":
                 if (iv != null) {
@@ -807,7 +815,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "homecontrols":
-                setUpWidgetResources(iv, efab, this::launchHomeControls, HOME_CONTROLS, HOME_CONTROLS_LABEL);
+                setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(HOME_CONTROLS,  SYSTEM_UI), getString(HOME_CONTROLS_LABEL, SYSTEM_UI));
                 break;
             case "wallet":
                 setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(WALLET_ICON, SYSTEM_UI), getString(WALLET_LABEL, SYSTEM_UI));
@@ -879,6 +887,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         final GestureDetector gestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             private static final int SWIPE_THRESHOLD = 100;
             private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 float diffX = e2.getX() - e1.getX();
@@ -1084,6 +1093,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void toggleWiFi() {
+        log("LockscreenWidgets toggleWiFi");
         Object networkController = getNetworkController();
         if (networkController == null) {
             log("LockscreenWidgets toggleWiFi networkController is null");
@@ -1091,7 +1101,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         }
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
         callMethod(networkController, "setWifiEnabled", !enabled);
-        //SystemUtils.WifiManager().setWifiEnabled(!SystemUtils.WifiManager().isWifiEnabled());
         updateWiFiButtonState(!enabled);
         mHandler.postDelayed(() -> updateWiFiButtonState(isWifiEnabled()), 350L);
         vibrate(1);
@@ -1160,22 +1169,23 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
      * Normal -> Vibrate -> Silent -> Normal
      */
     private void toggleRingerMode() {
-        if (mAudioManager != null) {
+        Object mRingerTile = getRingerTile();
+
+        if (mRingerTile != null) {
+            callMethod(mRingerTile, "setRingMode");
+        } else if (mAudioManager != null) {
             int mode = mAudioManager.getRingerMode();
-            switch (mode) {
-                case AudioManager.RINGER_MODE_NORMAL:
-                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_VIBRATE);
-                    break;
-                case AudioManager.RINGER_MODE_VIBRATE:
-                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_SILENT);
-                    break;
-                case AudioManager.RINGER_MODE_SILENT:
-                    callMethod(mAudioManager, "setRingerModeInternal", AudioManager.RINGER_MODE_NORMAL);
-                    break;
-            }
-            updateRingerButtonState();
-            vibrate(1);
+            int newMode = switch (mode) {
+                case AudioManager.RINGER_MODE_NORMAL -> AudioManager.RINGER_MODE_VIBRATE;
+                case AudioManager.RINGER_MODE_VIBRATE -> AudioManager.RINGER_MODE_SILENT;
+                default -> AudioManager.RINGER_MODE_NORMAL;
+            };
+
+            mAudioManager.setRingerMode(newMode);
         }
+
+        updateRingerButtonState();
+        vibrate(1);
     }
 
     private void updateTileButtonState(
@@ -1409,6 +1419,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             // We have a calculator icon, so if SystemUI doesn't just return ours
             if (drawableRes.equals(CALCULATOR_ICON))
                 return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
+            else if (drawableRes.equals(HOME_CONTROLS))
+                return getDrawable("controls_icon", SYSTEM_UI);
 
             log("LockscreenWidgets getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
