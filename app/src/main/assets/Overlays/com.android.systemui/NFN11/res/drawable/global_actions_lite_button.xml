@@ -15,7 +15,7 @@
         android:start="4dp"
         android:top="4dp">
         <shape android:shape="oval">
-            <solid android:color="?android:attr/colorBackgroundFloating" />
+            <solid android:color="?android:attr/colorBackground" />
         </shape>
     </item>
 </ripple>
