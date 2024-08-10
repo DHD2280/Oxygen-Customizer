@@ -6,7 +6,7 @@
             <gradient
                 android:angle="270.0"
                 android:endColor="#00000000"
-                android:startColor="@*android:color/system_neutral2_800" />
+                android:startColor="@*android:color/system_neutral2_900" />
         </shape>
     </item>
 </ripple>

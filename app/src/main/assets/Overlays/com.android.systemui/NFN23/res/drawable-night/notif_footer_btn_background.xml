@@ -5,7 +5,7 @@
         android:top="2dp">
         <shape
             android:shape="rectangle"
-            android:tint="@*android:color/system_neutral2_800">
+            android:tint="@*android:color/system_neutral2_900">
             <solid android:color="#B3FFFFFF" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
         </shape>
@@ -14,7 +14,7 @@
         android:bottom="6dp"
         android:top="2dp">
         <shape android:shape="rectangle">
-            <solid android:color="@*android:color/system_neutral2_800" />
+            <solid android:color="@*android:color/system_neutral2_900" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
             <padding
                 android:left="20dp"
