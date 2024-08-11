@@ -335,7 +335,12 @@ public class ControllersProvider extends XposedMods {
         }
 
         try {
-            Class<?> OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
+            Class<?> OplusHotspotTile;
+            try {
+                OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
+            } catch (Throwable t) {
+                OplusHotspotTile = findClass("com.oplusos.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader); // OOS 13
+            }
             hookAllConstructors(OplusHotspotTile, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
