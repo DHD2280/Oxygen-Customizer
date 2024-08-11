@@ -115,6 +115,8 @@
     <string name="general_on">Be</string>
     <string name="general_off">Ki</string>
     <string name="accent_color">Kiemelőszín</string>
+    <string name="white_color">Fehér</string>
+    <string name="black_color">Fekete</string>
     <string name="custom_color">Egyéni szín</string>
     <string name="battery_info_button_title">Akkumulátor infó…</string>
     <!-- Statusbar Strings -->
@@ -181,6 +183,7 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
+    <string name="string_formatter_manual_body">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátumformátum alapján*\n$P\&lt;format\&gt; : Perzsa-dátumformátum alapján*\n$T\&lt;format\&gt;[intervallum] : Hőmérsékletformátumnál - b (akku), c (CPU), g (GPU) és s (bőr) \nVégül, van OPCIONÁLIS számú frissítési időköz másodpercben (alapértelmezetten: 60 másodperc)\n\n*a formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre</string>
     <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
@@ -370,6 +373,9 @@
     <string name="brightness_slider_progress_color_title">A működő fényerő-csúszka színe</string>
     <string name="brightness_slider_background_color_title">Módosítható a háttérszín</string>
     <!-- QS Tile Radius -->
+    <string name="qs_tiles_custom_radius">Egyéni lekerekítés</string>
+    <string name="qs_tile_custom_highlight">Egyedi lekerekítés</string>
+    <string name="qs_tile_custom_radius">Egyéni lekerekítés a csempékhez</string>
     <!-- Media Tile -->
     <string name="media_tile">Média-csempe</string>
     <!-- QS Tiles animation -->
@@ -701,6 +707,7 @@
     <string name="aod_clock_custom_user_image_summary">Klikkeljen egy képre</string>
     <string name="aod_font_line_height_title">Sormagasság</string>
     <!-- Aod Weather -->
+    <string name="aod_weather">Időjárás mindig bekapcsolva</string>
     <!-- Sound Mods -->
     <string name="misc_category">Hasznos cuccok</string>
     <!-- Pulse music visualizer -->
@@ -1019,6 +1026,19 @@
     <string name="theme_customization_toast_frame_title">Buborékkeret</string>
     <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
     <!-- Settings Icons -->
+    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_customized">Megvariált gyári</string>
+    <string name="settings_icons_pui">PUI</string>
+    <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_bg_color">Háttérszín</string>
+    <string name="settings_bg_use_solid">Telt háttér</string>
+    <string name="settings_bg_shape">A háttér alakja</string>
+    <string name="circle">Kör</string>
+    <string name="squircle">Négyzetes kör</string>
+    <string name="rounded_square">Lekerekített négyzet</string>
+    <string name="teardrop">Könnycsepp</string>
+    <string name="rhombus">Rombusz</string>
+    <string name="settings_icon_color">Ikonszín</string>
     <!-- Notification -->
     <string name="notification_styles">Értesítésstílusok</string>
     <string name="notification_styles_desc">Egyéni értesítsstílus állítható be</string>
@@ -1035,6 +1055,7 @@
     <string name="toast_message">Üzenetbuborék</string>
     <!-- Style List -->
     <string name="style_0">Nincs</string>
+    <string name="style">%d stílus</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Rendszeralkalmazások megjelenítése</string>
     <string name="dark_mode">Sötét mód</string>
@@ -1042,4 +1063,32 @@
     <string name="custom_dark_mode_title">Egyéni Sötét mód</string>
     <string name="custom_dark_mode_summary">Lehetővé teszi a Sötét mód alkalmazáslistájának testreszabását.</string>
     <string name="dark_mode_intensity">A Sötét mód intenzitása</string>
+    <!-- Lockscreen Widgets -->
+    <string name="lockscreen_widgets_title">A záróképernyő indítóelemei</string>
+    <string name="lockscreen_widgets_enabled_title">Engedélyezi a kisalkalmazásokat a záróképernyőn</string>
+    <string name="lockscreen_widgets_enabled_summary">Új kisalkalmazás hozzáadása</string>
+    <string name="lockscreen_display_widgets_title">Készülékinformáció</string>
+    <string name="lockscreen_display_widgets_summary">Megjeleníti a készülékinfót a záróképernyőn</string>
+    <string name="large_widgets_category_title">Nagy indítóelemek</string>
+    <string name="main_custom_widgets1">Nagyméretű 1</string>
+    <string name="main_custom_widgets2">Nagyméretű 2</string>
+    <string name="mini_widgets_category_title">Mini indítóelemek</string>
+    <string name="custom_widgets1">Kisméretű 1</string>
+    <string name="custom_widgets2">Kisméretű 2</string>
+    <string name="custom_widgets3">Kisméretű 3</string>
+    <string name="custom_widgets4">Kisméretű 4</string>
+    <!-- LS Widgets Actions -->
+    <string name="camera">Fényképezőgép</string>
+    <string name="clock_timer">Óra/Időzítő</string>
+    <string name="calculator">Számológép</string>
+    <string name="gallery">Galéria</string>
+    <string name="media">Médialejátszó</string>
+    <string name="torch">Zseblámpa</string>
+    <string name="controls_media_button_play">Lejátszás</string>
+    <string name="weather">Időjárás</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="data">Adat</string>
+    <string name="ringer">Csengés</string>
+    <string name="bt">Bluetooth</string>
+    <string name="home_controls">Főképernyő-vezérlők</string>
 </resources>
