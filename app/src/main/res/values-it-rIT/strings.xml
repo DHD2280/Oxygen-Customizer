@@ -115,6 +115,8 @@
     <string name="general_on">On</string>
     <string name="general_off">Off</string>
     <string name="accent_color">Colore Accento</string>
+    <string name="white_color">Bianco</string>
+    <string name="black_color">Nero</string>
     <string name="custom_color">Colore Personalizzato</string>
     <string name="battery_info_button_title">Info batteria…</string>
     <!-- Statusbar Strings -->
@@ -336,7 +338,6 @@
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Riquadri Impostazioni rapide</string>
     <string name="quick_settings_tiles_number">Conteggio Tile Impostazioni rapide</string>
-    <string name="quick_settings_tiles_main">Personalizza Piastrelle Impostazioni Rapide</string>
     <string name="qs_transparency">Trasparenza QS &amp; Sfocatura</string>
     <string name="qs_transparency_title">Personalizza Trasparenza QS</string>
     <string name="qs_transparency_value">Trasparenza QS</string>
@@ -371,6 +372,9 @@
     <string name="brightness_slider_progress_color_title">Modalità Colore Cursore Luminosità</string>
     <string name="brightness_slider_background_color_title">Personalizza colore sfondo</string>
     <!-- QS Tile Radius -->
+    <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
+    <string name="qs_tile_custom_highlight">Raggio personalizzato dei Tile QS in evidenza</string>
+    <string name="qs_tile_custom_radius">Raggio Tile QS Personalizzato</string>
     <!-- Media Tile -->
     <string name="media_tile">Tile Media</string>
     <!-- QS Tiles animation -->
@@ -702,6 +706,7 @@
     <string name="aod_clock_custom_user_image_summary">Fai clic per selezionare un\'immagine.</string>
     <string name="aod_font_line_height_title">Altezza Linea</string>
     <!-- Aod Weather -->
+    <string name="aod_weather">Meteo AOD</string>
     <!-- Sound Mods -->
     <string name="misc_category">Varie</string>
     <!-- Pulse music visualizer -->
@@ -1020,6 +1025,17 @@
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Settings Icons -->
+    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_pui">PUI v1</string>
+    <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_bg_color">Colore sfondo</string>
+    <string name="settings_bg_shape">Forma Sfondo</string>
+    <string name="circle">Cerchio</string>
+    <string name="squircle">Supercerchio</string>
+    <string name="rounded_square">Quadrato Arrotondato</string>
+    <string name="teardrop">Goccia</string>
+    <string name="rhombus">Rombo</string>
+    <string name="settings_icon_color">Colore Icona</string>
     <!-- Notification -->
     <string name="notification_styles">Stili di notifica</string>
     <string name="notification_styles_desc">Imposta uno stile personalizzato per le notifiche</string>
@@ -1036,6 +1052,7 @@
     <string name="toast_message">Messaggio Toast</string>
     <!-- Style List -->
     <string name="style_0">Nessuno</string>
+    <string name="style">Stile %d</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Mostra Sistema</string>
     <string name="dark_mode">Modalità scura</string>
@@ -1043,4 +1060,6 @@
     <string name="custom_dark_mode_title">Modalità scura personalizzata</string>
     <string name="custom_dark_mode_summary">Consenti la personalizzazione delle app in modalità scura.</string>
     <string name="dark_mode_intensity">Intensità Modalità Scura</string>
+    <!-- Lockscreen Widgets -->
+    <!-- LS Widgets Actions -->
 </resources>

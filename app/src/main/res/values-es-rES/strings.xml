@@ -1018,4 +1018,6 @@
     <string name="dark_mode">Modo nocturno</string>
     <string name="dark_mode_pref">Personalizar Modo Nocturno</string>
     <string name="custom_dark_mode_title">Modo Nocturno Personalizado</string>
+    <!-- Lockscreen Widgets -->
+    <!-- LS Widgets Actions -->
 </resources>
