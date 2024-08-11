@@ -126,7 +126,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
-import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgets;
+import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgetsView;
 
 public class LockscreenClock extends XposedMods {
 
@@ -881,12 +881,22 @@ public class LockscreenClock extends XposedMods {
 
     private void placeLockscreenWidgets() {
         try {
-            LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance(mContext, mActivityStarter);
+            LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance(mContext, mActivityStarter);
             try {
                 ((ViewGroup) lsWidgets.getParent()).removeView(lsWidgets);
             } catch (Throwable ignored) {
             }
-            mClockViewContainer.addView(lsWidgets);
+            if (Build.VERSION.SDK_INT == 33) {
+                mClockViewContainer.addView(lsWidgets, mClockViewContainer.getChildCount());
+                lsWidgets.bringToFront();
+                mClockViewContainer.post(() -> {
+                    mClockViewContainer.bringToFront();
+                    mClockViewContainer.invalidate();
+                    mClockViewContainer.requestLayout();
+                });
+            } else {
+                mClockViewContainer.addView(lsWidgets);
+            }
             updateLockscreenWidgets();
             updateLsDeviceWidget();
             updateLockscreenWidgetsColors();
@@ -896,21 +906,21 @@ public class LockscreenClock extends XposedMods {
 
     private void updateLockscreenWidgets() {
         log(TAG + "Updating Lockscreen Widgets");
-        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
     }
 
     private void updateLsDeviceWidget() {
         log(TAG + "Updating Lockscreen Device Widget");
-        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setDeviceWidgetOptions(mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
     }
 
     private void updateLockscreenWidgetsColors() {
         log(TAG + "Updating Lockscreen Widgets Colors");
-        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setCustomColors(
                 mWidgetsCustomColor,
@@ -921,7 +931,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     private void setActivityStarter() {
-        LockscreenWidgets lsWidgets = LockscreenWidgets.getInstance();
+        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setActivityStarter(mActivityStarter);
     }

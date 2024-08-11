@@ -582,6 +582,7 @@
         <item>@string/home_controls</item>
         <item>@string/camera</item>
         <item>@string/wallet</item>
+        <item>@string/hotspot</item>
     </string-array>
 
     <string-array name="widget_values" translatable="false">
@@ -598,6 +599,7 @@
         <item>homecontrols</item>
         <item>camera</item>
         <item>wallet</item>
+        <item>hotspot</item>
     </string-array>
 
 </resources>

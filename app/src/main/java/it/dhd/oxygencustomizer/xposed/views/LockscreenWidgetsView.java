@@ -4,14 +4,19 @@ package it.dhd.oxygencustomizer.xposed.views;
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PluralMessageFormater;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCellularTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getDataController;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getHotspotController;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getHotspotTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getNetworkController;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusBluetoothTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusWifiTile;
@@ -36,7 +41,7 @@ import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
-import android.os.Build;
+import android.net.wifi.WifiConfiguration;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -68,15 +73,16 @@ import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 @SuppressLint("ViewConstructor")
-public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
+public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
 
-    public static LockscreenWidgets instance = null;
+    public static LockscreenWidgetsView instance = null;
+
+    private final int HOTSPOT_ENABLED = 13;
 
     public static final String BT_ACTIVE = "status_bar_qs_bluetooth_active";
     public static final String BT_INACTIVE = "status_bar_qs_bluetooth_inactive";
     public static final String DATA_ACTIVE = "status_bar_qs_data_active";
     public static final String DATA_INACTIVE = "status_bar_qs_data_inactive";
-    public static final String RINGER_ACTIVE = "status_bar_qs_mute_inactive";
     public static final String RINGER_NORMAL = "status_bar_qs_mute_inactive";
     public static final String RINGER_VIBRATE = "status_bar_qs_icon_volume_ringer_vibrate";
     public static final String RINGER_SILENT = "status_bar_qs_mute_active";
@@ -89,6 +95,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
     public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
     public static final String WALLET_ICON = "status_bar_qs_wallet_active";
+    public static final String HOTSPOT_ACTIVE = "status_bar_qs_hotspot_active";
+    public static final String HOTSPOT_INACTIVE = "status_bar_qs_hotspot_inactive";
 
     public static final String GENERAL_INACTIVE = "switch_bar_off";
     public static final String GENERAL_ACTIVE = "switch_bar_on";
@@ -96,7 +104,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String BT_LABEL_INACTIVE = "quick_settings_bluetooth_label";
     public static final String DATA_LABEL_INACTIVE = "mobile_data_settings_title";
     public static final String DATA_LABEL_ACTIVE = "mobile_data_connection_active";
-    public static final String RINGER_LABEL_ACTIVE = "";
     public static final String RINGER_LABEL_INACTIVE = "state_button_silence";
     public static final String TORCH_LABEL_ACTIVE = "notification_flashlight_hasopen";
     public static final String TORCH_LABEL_INACTIVE = "notification_flashlight_hasclose";
@@ -106,11 +113,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     public static final String CALCULATOR_LABEL = "state_button_calculator";
     public static final String CAMERA_LABEL = "affordance_settings_camera";
     public static final String WALLET_LABEL = "wallet_title";
+    public static final String HOTSPOT_LABEL = "quick_settings_hotspot_label";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
 
-    private Context mContext;
+    private final Context mContext;
 
     // Two Linear Layouts, one for main widgets and one for secondary widgets
     private final LinearLayout mDeviceWidgetContainer;
@@ -118,8 +126,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     private final LinearLayout mSecondaryWidgetsContainer;
     private DeviceWidgetView mDeviceWidgetView;
 
-    private ImageView mediaButton, torchButton, weatherButton;
-    private ExtendedFAB mediaButtonFab, torchButtonFab, weatherButtonFab;
+    private ImageView mediaButton, torchButton, weatherButton, hotspotButton;
+    private ExtendedFAB mediaButtonFab, torchButtonFab, weatherButtonFab, hotspotButtonFab;
     private ExtendedFAB wifiButtonFab, dataButtonFab, ringerButtonFab, btButtonFab;
     private ImageView wifiButton, dataButton, ringerButton, btButton;
     private final int mDarkColor;
@@ -151,16 +159,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private boolean mIsInflated = false;
     private boolean mIsLongPress = false;
-    private int mInitialTouchX;
-    private int mInitialTouchY;
-    private int mLinger;
-    private boolean mIsSwipe = false;
 
-    private CameraManager mCameraManager;
+    private final CameraManager mCameraManager;
     private String mCameraId;
     private boolean isFlashOn = false;
 
-    private int mAudioMode;
     private final Runnable mMediaUpdater;
     private final Handler mHandler;
 
@@ -171,6 +174,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         public void onPlaybackStateChanged(PlaybackState state) {
             updateMediaController();
         }
+
         @Override
         public void onMetadataChanged(MediaMetadata metadata) {
             super.onMetadataChanged(metadata);
@@ -179,7 +183,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         }
     };
 
-    public LockscreenWidgets(Context context, Object activityStarter) {
+    public LockscreenWidgetsView(Context context, Object activityStarter) {
         super(context);
 
         instance = this;
@@ -202,7 +206,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         try {
             mCameraId = mCameraManager.getCameraIdList()[0];
         } catch (Throwable e) {
-            log("LockscreenWidgets error: " + e.getMessage());
+            log("LockscreenWidgetsView error: " + e.getMessage());
         }
 
         LinearLayout container = new LinearLayout(context);
@@ -240,6 +244,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         ControllersProvider.registerWifiCallback(this::onWifiChanged);
         ControllersProvider.registerBluetoothCallback(this::onBluetoothChanged);
         ControllersProvider.registerTorchModeCallback(this::onTorchChanged);
+        ControllersProvider.registerHotspotCallback(this::onHotspotChanged);
 
         addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
             @Override
@@ -248,54 +253,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             }
 
             @Override
-            public void onViewDetachedFromWindow(@NonNull View v) {}
-        });
-    }
-
-    private final ControllersProvider.OnMobileDataChanged mMobileDataCallback = new ControllersProvider.OnMobileDataChanged() {
-        @Override
-        public void setMobileDataIndicators(Object MobileDataIndicators) {
-            Object qsIcon = getObjectField(MobileDataIndicators, "qsIcon");
-            if (qsIcon == null) {
-                updateMobileDataState(false);
-                return;
+            public void onViewDetachedFromWindow(@NonNull View v) {
             }
-            updateMobileDataState(isMobileDataEnabled());
-        }
-
-        @Override
-        public void setNoSims(boolean show, boolean simDetected) {
-            updateMobileDataState(simDetected && isMobileDataEnabled());
-        }
-
-        @Override
-        public void setIsAirplaneMode(Object IconState) {
-            updateMobileDataState(!getBooleanField(IconState, "visible") && isMobileDataEnabled());
-        }
-    };
-
-    private void onWifiChanged(Object mWifiTracker) {
-        log("LockscreenWidgets onWifiChanged");
-        Object qsIcon = getObjectField(mWifiTracker, "qsIcon");
-        log("LockscreenWidgets onWifiChanged qsIcon " + (qsIcon != null));
-        if (qsIcon == null) {
-            updateWiFiButtonState(false);
-            return;
-        }
-        boolean enabled = getBooleanField(mWifiTracker, "enabled");
-        updateWiFiButtonState(isWifiEnabled());
-    }
-
-    private void onBluetoothChanged(boolean enabled) {
-        log("LockscreenWidgets onBluetoothChanged " + enabled);
-        isBluetoothOn = enabled;
-        updateBtState();
-    }
-
-    private void onTorchChanged(boolean enabled) {
-        log("LockscreenWidgets onTorchChanged " + enabled);
-        isFlashOn = enabled;
-        updateTorchButtonState();
+        });
     }
 
     private LinearLayout createDeviceWidgetContainer(Context context) {
@@ -310,26 +270,16 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
         deviceWidget.addView(mDeviceWidgetView);
 
-        log("LockscreenWidgets createDeviceWidgetContainer done");
-
         return deviceWidget;
     }
 
     private LinearLayout createMainWidgetsContainer(Context context) {
         LinearLayout mainWidgetsContainer;
-        log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
         try {
             mainWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
         } catch (Exception e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             mainWidgetsContainer = new LinearLayout(context);
         }
-
-        if (mainWidgetsContainer == null) {
-            mainWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
-        }
-
-        log("LockscreenWidgets createMainWidgetsContainer mainWidgetsContainer " + (mainWidgetsContainer != null));
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         mainWidgetsContainer.setGravity(Gravity.CENTER);
@@ -346,8 +296,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
             mainWidgetsContainer.addView(mMainWidgetView);
         }
-
-        log("LockscreenWidgets createMainWidgetsContainer done " + (mainWidgetsContainer != null));
 
         return mainWidgetsContainer;
     }
@@ -375,11 +323,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
-        log("LockscreenWidgets createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
+        log("LockscreenWidgetsView createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
         try {
             secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
         } catch (Exception e) {
-            log("LockscreenWidgets createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
+            log("LockscreenWidgetsView createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             secondaryWidgetsContainer = new LinearLayout(context);
         }
 
@@ -409,7 +357,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             secondaryWidgetsContainer.addView(mSecondaryWidgetView);
         }
 
-        log("LockscreenWidgets createSecondaryWidgetsContainer done, secondaryWidgetsContainer " + (secondaryWidgetsContainer != null));
+        log("LockscreenWidgetsView createSecondaryWidgetsContainer done, secondaryWidgetsContainer " + (secondaryWidgetsContainer != null));
 
         return secondaryWidgetsContainer;
     }
@@ -444,6 +392,51 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         return imageView;
     }
 
+    private final ControllersProvider.OnMobileDataChanged mMobileDataCallback = new ControllersProvider.OnMobileDataChanged() {
+        @Override
+        public void setMobileDataIndicators(Object MobileDataIndicators) {
+            Object qsIcon = getObjectField(MobileDataIndicators, "qsIcon");
+            if (qsIcon == null) {
+                updateMobileDataState(false);
+                return;
+            }
+            updateMobileDataState(isMobileDataEnabled());
+        }
+
+        @Override
+        public void setNoSims(boolean show, boolean simDetected) {
+            updateMobileDataState(simDetected && isMobileDataEnabled());
+        }
+
+        @Override
+        public void setIsAirplaneMode(Object IconState) {
+            updateMobileDataState(!getBooleanField(IconState, "visible") && isMobileDataEnabled());
+        }
+    };
+
+    private void onWifiChanged(Object mWifiTracker) {
+        Object qsIcon = getObjectField(mWifiTracker, "qsIcon");
+        if (qsIcon == null) {
+            updateWiFiButtonState(false);
+            return;
+        }
+        updateWiFiButtonState(isWifiEnabled());
+    }
+
+    private void onBluetoothChanged(boolean enabled) {
+        isBluetoothOn = enabled;
+        updateBtState();
+    }
+
+    private void onTorchChanged(boolean enabled) {
+        isFlashOn = enabled;
+        updateTorchButtonState();
+    }
+
+    private void onHotspotChanged(boolean enabled, int numDevices) {
+        updateHotspotButtonState(numDevices);
+    }
+
     public void enableWeatherUpdates() {
         if (mWeatherClient != null) {
             mWeatherClient.addObserver(this);
@@ -474,6 +467,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         queryAndUpdateWeather();
     }
 
+    @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
         try {
             if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
@@ -514,7 +508,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 if (weatherButtonFab != null) {
                     weatherButtonFab.setIcon(d);
-                    weatherButtonFab.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits + " \u2022 " + formattedCondition);
+                    weatherButtonFab.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits + " • " + formattedCondition);
                     weatherButtonFab.setIconTint(null);
                 }
                 if (weatherButton != null) {
@@ -522,7 +516,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     weatherButton.setImageTintList(null);
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Do nothing
         }
     }
@@ -610,24 +604,26 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void onVisible() {
-        log("LockscreenWidgets onVisible");
+        log("LockscreenWidgetsView onVisible");
+        // Update the widgets when the view is visible
         updateTorchButtonState();
         updateRingerButtonState();
         updateWiFiButtonState(isWifiEnabled());
         updateMobileDataState(isMobileDataEnabled());
+        updateHotspotButtonState(0);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        log("LockscreenWidgets onAttachedToWindow");
+        log("LockscreenWidgetsView onAttachedToWindow");
         onVisible();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        log("LockscreenWidgets onDetachedFromWindow");
+        log("LockscreenWidgetsView onDetachedFromWindow");
         if (isWidgetEnabled("weather")) {
             disableWeatherUpdates();
         }
@@ -636,14 +632,14 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        log("LockscreenWidgets onConfigurationChanged");
+        log("LockscreenWidgetsView onConfigurationChanged");
         updateWidgetViews();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        log("LockscreenWidgets onFinishInflate");
+        log("LockscreenWidgetsView onFinishInflate");
         mIsInflated = true;
         updateWidgetViews();
     }
@@ -669,7 +665,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     public void updateWidgetViews() {
-        log("LockscreenWidgets updateWidgetViews lockscreenWidgetsEnabled " + lockscreenWidgetsEnabled);
+        log("LockscreenWidgetsView updateWidgetViews lockscreenWidgetsEnabled " + lockscreenWidgetsEnabled);
 
         if (mMainWidgetViews != null && mMainWidgetsList != null) {
             for (int i = 0; i < mMainWidgetViews.length; i++) {
@@ -680,7 +676,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             for (int i = 0; i < Math.min(mMainWidgetsList.size(), mMainWidgetViews.length); i++) {
                 String widgetType = mMainWidgetsList.get(i);
                 if (widgetType != null && i < mMainWidgetViews.length && mMainWidgetViews[i] != null) {
-                    log("LockscreenWidgets updateWidgetViews mMainWidgetsList " + widgetType);
+                    log("LockscreenWidgetsView updateWidgetViews mMainWidgetsList " + widgetType);
                     setUpWidgetWiews(null, mMainWidgetViews[i], widgetType);
                     updateMainWidgetResources(mMainWidgetViews[i], false);
                 }
@@ -695,7 +691,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             for (int i = 0; i < Math.min(mSecondaryWidgetsList.size(), mSecondaryWidgetViews.length); i++) {
                 String widgetType = mSecondaryWidgetsList.get(i);
                 if (widgetType != null && i < mSecondaryWidgetViews.length && mSecondaryWidgetViews[i] != null) {
-                    log("LockscreenWidgets updateWidgetViews mSecondaryWidgetsList " + widgetType);
+                    log("LockscreenWidgetsView updateWidgetViews mSecondaryWidgetsList " + widgetType);
                     setUpWidgetWiews(mSecondaryWidgetViews[i], null, widgetType);
                     updateWidgetsResources(mSecondaryWidgetViews[i]);
                 }
@@ -710,8 +706,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         efab.setElevation(0);
         setButtonActiveState(null, efab, false);
         ViewGroup.LayoutParams params = efab.getLayoutParams();
-        if (params instanceof LayoutParams) {
-            LayoutParams layoutParams = (LayoutParams) params;
+        if (params instanceof LayoutParams layoutParams) {
             if (efab.getVisibility() == View.VISIBLE && mMainWidgetsList.size() == 1) {
                 layoutParams.width = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_width);
                 layoutParams.height = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_height);
@@ -749,44 +744,68 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             case "wifi":
                 if (iv != null) {
                     wifiButton = iv;
-                    wifiButton.setOnLongClickListener(v -> { showWifiDialog(v); return true; });
+                    wifiButton.setOnLongClickListener(v -> {
+                        showWifiDialog(v);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     wifiButtonFab = efab;
-                    wifiButtonFab.setOnLongClickListener(v -> { showWifiDialog(v); return true; });
+                    wifiButtonFab.setOnLongClickListener(v -> {
+                        showWifiDialog(v);
+                        return true;
+                    });
                 }
                 setUpWidgetResources(iv, efab, v -> toggleWiFi(), getDrawable(WIFI_INACTIVE, SYSTEM_UI), getString(WIFI_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "data":
                 if (iv != null) {
                     dataButton = iv;
-                    dataButton.setOnLongClickListener(v -> { showInternetDialog(v); return true; });
+                    dataButton.setOnLongClickListener(v -> {
+                        showInternetDialog(v);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     dataButtonFab = efab;
-                    dataButtonFab.setOnLongClickListener(v -> { showInternetDialog(v); return true; });
+                    dataButtonFab.setOnLongClickListener(v -> {
+                        showInternetDialog(v);
+                        return true;
+                    });
                 }
                 setUpWidgetResources(iv, efab, v -> toggleMobileData(), getDrawable(DATA_INACTIVE, SYSTEM_UI), getString(DATA_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "ringer":
                 if (iv != null) {
                     ringerButton = iv;
-                    ringerButton.setOnLongClickListener(v -> { mActivityLauncherUtils.launchAudioSettings(); return true; });
+                    ringerButton.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchAudioSettings();
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     ringerButtonFab = efab;
-                    ringerButtonFab.setOnLongClickListener(v -> { mActivityLauncherUtils.launchAudioSettings(); return true; });
+                    ringerButtonFab.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchAudioSettings();
+                        return true;
+                    });
                 }
                 setUpWidgetResources(iv, efab, v -> toggleRingerMode(), getDrawable(RINGER_INACTIVE, SYSTEM_UI), getString(RINGER_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "bt":
                 if (iv != null) {
                     btButton = iv;
-                    btButton.setOnLongClickListener(v -> { showBluetoothDialog(v); return true; });
+                    btButton.setOnLongClickListener(v -> {
+                        showBluetoothDialog(v);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     btButtonFab = efab;
-                    btButtonFab.setOnLongClickListener(v -> { showBluetoothDialog(v); return true; });
+                    btButtonFab.setOnLongClickListener(v -> {
+                        showBluetoothDialog(v);
+                        return true;
+                    });
                 }
                 setUpWidgetResources(iv, efab, v -> toggleBluetoothState(), getDrawable(BT_INACTIVE, SYSTEM_UI), getString(BT_LABEL_INACTIVE, SYSTEM_UI));
                 break;
@@ -815,7 +834,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "homecontrols":
-                setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(HOME_CONTROLS,  SYSTEM_UI), getString(HOME_CONTROLS_LABEL, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(HOME_CONTROLS, SYSTEM_UI), getString(HOME_CONTROLS_LABEL, SYSTEM_UI));
                 break;
             case "wallet":
                 setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(WALLET_ICON, SYSTEM_UI), getString(WALLET_LABEL, SYSTEM_UI));
@@ -823,7 +842,10 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             case "media":
                 if (iv != null) {
                     mediaButton = iv;
-                    mediaButton.setOnLongClickListener(v -> { showMediaDialog(v); return true; });
+                    mediaButton.setOnLongClickListener(v -> {
+                        showMediaDialog(v);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     mediaButtonFab = efab;
@@ -842,13 +864,31 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 //setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchWeatherApp(), "ic_alarm", R.string.weather_data_unavailable);
                 enableWeatherUpdates();
                 break;
+            case "hotspot":
+                if (iv != null) {
+                    hotspotButton = iv;
+                    hotspotButton.setOnLongClickListener(v -> {
+                        showHotspotDialog(v);
+                        return true;
+                    });
+                }
+                if (efab != null) {
+                    hotspotButtonFab = efab;
+                    hotspotButtonFab.setOnLongClickListener(v -> {
+                        showHotspotDialog(v);
+                        return true;
+                    });
+                }
+                setUpWidgetResources(iv, efab, v -> toggleHotspot(),
+                        getDrawable(HOTSPOT_INACTIVE, SYSTEM_UI),
+                        getString(HOTSPOT_LABEL, SYSTEM_UI));
             default:
                 break;
         }
     }
 
     private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
-                                      OnClickListener cl, Drawable icon, String text){
+                                      OnClickListener cl, Drawable icon, String text) {
         if (efab != null) {
             efab.setOnClickListener(cl);
             efab.setIcon(icon);
@@ -873,7 +913,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
             @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            public boolean onFling(MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0) {
@@ -971,10 +1011,11 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             mMediaUpdater.run();
             dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY);
         }
+        vibrate(1);
     }
 
     private void showMediaDialog(View view) {
-        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
+
         updateMediaController();
         Object[] mediaQsHelper = getQsMediaDialog();
         View finalView;
@@ -1037,12 +1078,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             updateTorchButtonState();
             vibrate(1);
         } catch (Exception e) {
-            log("LockscreenWidgets toggleFlashlight error: " + e.getMessage());
+            log("LockscreenWidgetsView toggleFlashlight error: " + e.getMessage());
         }
     }
 
     private void launchHomeControls(View view) {
-        log("LockscreenWidgets launchHomeControls");
+        log("LockscreenWidgetsView launchHomeControls");
         Object controlsTile = getControlsTile();
         if (controlsTile == null) return;
         View finalView;
@@ -1077,41 +1118,19 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void toggleWiFi() {
-        log("LockscreenWidgets toggleWiFi");
+        log("LockscreenWidgetsView toggleWiFi");
         Object networkController = getNetworkController();
-        if (networkController == null) {
-            log("LockscreenWidgets toggleWiFi networkController is null");
-            return;
-        }
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
-        callMethod(networkController, "setWifiEnabled", !enabled);
+        if (networkController != null) {
+            log("LockscreenWidgetsView toggleWiFi networkController is null");
+            callMethod(networkController, "setWifiEnabled", !enabled);
+        } else {
+            SystemUtils.WifiManager().setWifiEnabled(!enabled);
+        }
+
         updateWiFiButtonState(!enabled);
         mHandler.postDelayed(() -> updateWiFiButtonState(isWifiEnabled()), 350L);
         vibrate(1);
-    }
-
-    private boolean isMobileDataEnabled() {
-        Object dataController = getDataController();
-        log("LockscreenWidgets isMobileDataEnabled (dataController == null) " + (dataController == null));
-        if (dataController != null) {
-            return (boolean) callMethod(dataController, "isMobileDataEnabled");
-        } else {
-            try {
-                Class cmClass = Class.forName(SystemUtils.ConnectivityManager().getClass().getName());
-                Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
-                method.setAccessible(true); // Make the method callable
-                // get the setting for "mobile data"
-                return (Boolean)method.invoke(SystemUtils.ConnectivityManager());
-            } catch (Exception e) {
-                return false;
-            }
-        }
-    }
-
-    private boolean isWifiEnabled() {
-        boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
-        log("LockscreenWidgets isWifiEnabled " + enabled);
-        return enabled;
     }
 
     private void toggleMobileData() {
@@ -1122,30 +1141,14 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         vibrate(1);
     }
 
-
-    private void showWifiDialog(View view) {
-        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
-        View finalView;
-        if (view instanceof ExtendedFAB) {
-            finalView = (View) view.getParent();
-        } else {
-            finalView = view;
+    private void toggleHotspot() {
+        Object mHostpotController = getHotspotController();
+        if (mHostpotController != null) {
+            callMethod(mHostpotController, "setHotspotEnabled", !isHotspotEnabled());
         }
-        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", finalView));
-        vibrate(0);
-    }
-
-    private void showInternetDialog(View view) {
-        if (Build.VERSION.SDK_INT == 33) return; // OOS 13
-        if (getCellularTile() == null) return;
-        View finalView;
-        if (view instanceof ExtendedFAB) {
-            finalView = (View) view.getParent();
-        } else {
-            finalView = view;
-        }
-        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", finalView));
-        vibrate(0);
+        updateHotspotButtonState(0);
+        postDelayed(() -> updateHotspotButtonState(0), 350L);
+        vibrate(1);
     }
 
     /**
@@ -1170,6 +1173,61 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
         updateRingerButtonState();
         vibrate(1);
+    }
+
+    private void toggleBluetoothState() {
+        Object bluetoothController = getBluetoothController();
+        if (bluetoothController == null) return;
+        callMethod(bluetoothController, "setBluetoothEnabled", !isBluetoothEnabled());
+        updateBtState();
+        mHandler.postDelayed(this::updateBtState, 350L);
+        vibrate(1);
+    }
+
+    private void showWifiDialog(View view) {
+        View finalView;
+        if (view instanceof ExtendedFAB) {
+            finalView = (View) view.getParent();
+        } else {
+            finalView = view;
+        }
+        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", finalView));
+        vibrate(0);
+    }
+
+    private void showInternetDialog(View view) {
+        if (getCellularTile() == null) return;
+        View finalView;
+        if (view instanceof ExtendedFAB) {
+            finalView = (View) view.getParent();
+        } else {
+            finalView = view;
+        }
+        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", finalView));
+        vibrate(0);
+    }
+
+    private void showBluetoothDialog(View view) {
+        View finalView;
+        if (view instanceof ExtendedFAB) {
+            finalView = (View) view.getParent();
+        } else {
+            finalView = view;
+        }
+        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", finalView));
+        vibrate(0);
+    }
+
+    private void showHotspotDialog(View view) {
+        if (getHotspotTile() == null) return;
+        View finalView;
+        if (view instanceof ExtendedFAB) {
+            finalView = (View) view.getParent();
+        } else {
+            finalView = view;
+        }
+        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", finalView));
+        vibrate(0);
     }
 
     private void updateTileButtonState(
@@ -1201,6 +1259,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             String activeString,
             String inactiveString) {
         post(() -> {
+
             @SuppressLint("UseCompatLoadingForDrawables") Drawable d = mContext.getDrawable(mContext.getResources().getIdentifier(active ? activeResource : inactiveResource, "drawable", SYSTEM_UI));
             if (iv != null) {
                 iv.setImageDrawable(d);
@@ -1216,7 +1275,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     public void updateTorchButtonState() {
         if (!isWidgetEnabled("torch")) return;
-        log("LockscreenWidgets updateTorchButtonState " + isFlashOn);
+        log("LockscreenWidgetsView updateTorchButtonState " + isFlashOn);
         String activeString = getString(TORCH_LABEL_ACTIVE, SYSTEM_UI);
         String inactiveString = getString(TORCH_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(torchButton, torchButtonFab, isFlashOn,
@@ -1231,7 +1290,6 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     };
 
     private void updateWiFiButtonState(boolean enabled) {
-        log("LockscreenWidgets updateWiFiButtonState " + enabled + " | " + isWidgetEnabled("wifi"));
         if (!isWidgetEnabled("wifi")) return;
         if (wifiButton == null && wifiButtonFab == null) return;
         String theSsid = SystemUtils.WifiManager().getConnectionInfo().getSSID();
@@ -1247,7 +1305,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
     }
 
     private void updateRingerButtonState() {
-        log("LockscreenWidgets updateRingerButtonState " + (isWidgetEnabled("ringer")) + " | " + (ringerButton == null) + " | " + (ringerButtonFab == null));
+        log("LockscreenWidgetsView updateRingerButtonState " + (isWidgetEnabled("ringer")) + " | " + (ringerButton == null) + " | " + (ringerButtonFab == null));
         if (!isWidgetEnabled("ringer")) return;
         if (ringerButton == null && ringerButtonFab == null) return;
         if (mAudioManager != null) {
@@ -1271,29 +1329,9 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 DATA_ACTIVE, DATA_INACTIVE, hasNetwork && enabled ? networkName : inactive, inactive);
     }
 
-    private void toggleBluetoothState() {
-        Object bluetoothController = getBluetoothController();
-        if (bluetoothController == null) return;
-        callMethod(bluetoothController, "setBluetoothEnabled", !isBluetoothEnabled());
-        updateBtState();
-        mHandler.postDelayed(this::updateBtState, 350L);
-        vibrate(1);
-    }
-
-    private void showBluetoothDialog(View view) {
-        View finalView;
-        if (view instanceof ExtendedFAB) {
-            finalView = (View) view.getParent();
-        } else {
-            finalView = view;
-        }
-        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", finalView));
-        vibrate(0);
-    }
-
     private void updateBtState() {
         if (!isWidgetEnabled("bt")) return;
-        log("LockscreenWidgets updateBtState " + isBluetoothOn);
+        log("LockscreenWidgetsView updateBtState " + isBluetoothOn);
         if (btButton == null && btButtonFab == null) return;
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
@@ -1303,9 +1341,82 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
 
+    private void updateHotspotButtonState(int numDevices) {
+        if (!isWidgetEnabled("hotspot")) return;
+        log("LockscreenWidgetsView updateHotspotButtonState " + isHotspotEnabled());
+        if (hotspotButton == null && hotspotButtonFab == null) return;
+        String inactiveString = getString(HOTSPOT_LABEL, SYSTEM_UI);
+        String activeString = getString(HOTSPOT_LABEL, SYSTEM_UI);
+        if (isHotspotEnabled()) {
+            String hotspotSSID = getHotspotSSID();
+            String devices = "(" + numDevices + ")";
+            if (!TextUtils.isEmpty(hotspotSSID)) {
+                if (numDevices > 0) activeString = hotspotSSID + " " + devices;
+                else activeString = hotspotSSID;
+            }
+        }
+        log("LockscreenWidgetsView updateHotspotButtonState " + isHotspotEnabled() + " | " + activeString + " | " + inactiveString);
+        updateTileButtonState(hotspotButton, hotspotButtonFab, isHotspotEnabled(),
+                HOTSPOT_ACTIVE, HOTSPOT_INACTIVE, activeString, inactiveString);
+    }
+
     private boolean isBluetoothEnabled() {
         final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return mBluetoothAdapter != null && mBluetoothAdapter.isEnabled();
+    }
+
+    private boolean isMobileDataEnabled() {
+        Object dataController = getDataController();
+        if (dataController != null) {
+            return (boolean) callMethod(dataController, "isMobileDataEnabled");
+        } else {
+            try {
+                Class<?> cmClass = Class.forName(SystemUtils.ConnectivityManager().getClass().getName());
+                Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+                method.setAccessible(true); // Make the method callable
+                // get the setting for "mobile data"
+                return (Boolean) method.invoke(SystemUtils.ConnectivityManager());
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    }
+
+    private boolean isWifiEnabled() {
+        boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
+        return enabled;
+    }
+
+    private boolean isHotspotEnabled() {
+        Object hotspotController = getHotspotController();
+        if (hotspotController != null) {
+            return (boolean) callMethod(hotspotController, "isHotspotEnabled");
+        } else {
+            try {
+                Method method = SystemUtils.WifiManager().getClass().getDeclaredMethod("getWifiApState");
+                method.setAccessible(true);
+                int actualState = (Integer) method.invoke(SystemUtils.WifiManager(), (Object[]) null);
+                return actualState == HOTSPOT_ENABLED;
+            } catch (Throwable t) {
+                log("LockscreenWidgetsView isHotspotEnabled error: " + t.getMessage());
+            }
+        }
+        return false;
+    }
+
+    private String getHotspotSSID() {
+        try {
+            Method[] methods = SystemUtils.WifiManager().getClass().getDeclaredMethods();
+            for (Method m : methods) {
+                if (m.getName().equals("getWifiApConfiguration")) {
+                    WifiConfiguration config = (WifiConfiguration) m.invoke(SystemUtils.WifiManager());
+                    return config.SSID;
+                }
+            }
+        } catch (Throwable t) {
+            log("LockscreenWidgetsView getHotspotSSID error: " + t.getMessage());
+        }
+        return "";
     }
 
     private boolean sameSessions(MediaController a, MediaController b) {
@@ -1328,26 +1439,27 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
         return PlaybackState.STATE_NONE;
     }
 
-    public static LockscreenWidgets getInstance(Context context, Object activityStarter) {
+    public static LockscreenWidgetsView getInstance(Context context, Object activityStarter) {
         if (instance != null) return instance;
-        return new LockscreenWidgets(context, activityStarter);
+        return new LockscreenWidgetsView(context, activityStarter);
     }
 
-    public static LockscreenWidgets getInstance() {
+    public static LockscreenWidgetsView getInstance() {
         if (instance != null) return instance;
         return null;
     }
 
     /**
      * Set the options for the lockscreen widgets
-     * @param lsWidgets true if lockscreen widgets are enabled
-     * @param deviceWidget true if device widget is enabled
-     * @param mainWidgets comma separated list of main widgets
+     *
+     * @param lsWidgets        true if lockscreen widgets are enabled
+     * @param deviceWidget     true if device widget is enabled
+     * @param mainWidgets      comma separated list of main widgets
      * @param secondaryWidgets comma separated list of secondary widgets
      */
     public void setOptions(boolean lsWidgets, boolean deviceWidget,
                            String mainWidgets, String secondaryWidgets) {
-        log("LockscreenWidgets setOptions " + lsWidgets +
+        log("LockscreenWidgetsView setOptions " + lsWidgets +
                 " | " + deviceWidget + " | " + mainWidgets + " | " + secondaryWidgets);
         instance.lockscreenWidgetsEnabled = lsWidgets;
         instance.deviceWidgetsEnabled = deviceWidget;
@@ -1360,11 +1472,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     /**
      * Set the options for the Device Widget
-     * @param customColor true if custom color is enabled
-     * @param linearColor color for linear battery progressbar
+     *
+     * @param customColor   true if custom color is enabled
+     * @param linearColor   color for linear battery progressbar
      * @param circularColor color for circular progressbar
-     * @param textColor color for text
-     * @param devName device name, keep blank for default Build.MODEL
+     * @param textColor     color for text
+     * @param devName       device name, keep blank for default Build.MODEL
      */
     public void setDeviceWidgetOptions(boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
         if (instance.mDeviceWidgetView == null) return;
@@ -1377,7 +1490,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             boolean customColorsEnabled,
             int bigInactive, int bigActive, int smallInactive, int smallActive,
             int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
-        log("LockscreenWidgets setCustomColors " + customColorsEnabled);
+        log("LockscreenWidgetsView setCustomColors " + customColorsEnabled);
         instance.mCustomColors = customColorsEnabled;
         instance.mBigInactiveColor = bigInactive;
         instance.mBigActiveColor = bigActive;
@@ -1406,11 +1519,12 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
             else if (drawableRes.equals(HOME_CONTROLS))
                 return getDrawable("controls_icon", SYSTEM_UI);
 
-            log("LockscreenWidgets getDrawable " + drawableRes + " from " + pkg + " error " + t);
+            log("LockscreenWidgetsView getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     private String getString(String stringRes, String pkg) {
         try {
             return mContext.getResources().getString(
@@ -1429,7 +1543,7 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
                     return modRes.getString(R.string.wallet);
                 }
             }
-            log("LockscreenWidgets getString " + stringRes + " from " + pkg + " error " + t);
+            log("LockscreenWidgetsView getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }
     }
@@ -1465,7 +1579,8 @@ public class LockscreenWidgets extends LinearLayout implements OmniJawsClient.Om
 
     /**
      * Vibrate the device
-     * @param type 0 = click, 1 = tick
+     *
+     * @param type 0 = Long Press, 1 = Click
      */
     private void vibrate(int type) {
         if (type == 0) {

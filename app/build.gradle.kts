@@ -135,7 +135,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     // Work
-    implementation("androidx.work:work-runtime:2.9.0")
+    implementation("androidx.work:work-runtime:2.9.1")
     implementation("androidx.concurrent:concurrent-futures:1.2.0")
 
     // Biometric Auth
@@ -157,7 +157,7 @@ dependencies {
     implementation("com.jaredrummler:colorpicker:1.1.0") //Color Picker Component for UI
 
     // Lottie
-    implementation("com.airbnb.android:lottie:6.4.0")
+    implementation("com.airbnb.android:lottie:6.4.1")
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -188,7 +188,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-base:18.5.0")
 
     // APK Signer
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.77")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
 
     // Zip Util
     implementation("net.lingala.zip4j:zip4j:2.11.5")

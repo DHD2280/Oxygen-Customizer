@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
@@ -28,10 +29,13 @@ public class ControllersProvider extends XposedMods {
     @SuppressLint("StaticFieldLeak")
     private static ControllersProvider instance = null;
 
+    public static Class<?> PluralMessageFormater = null;
+
     private Object mBluetoothController = null;
     private Object mDataController = null;
     private Object mNetworkController = null;
     private Object mSignalCallback = null;
+    private Object mHotspotController = null;
 
     private Object mOplusBluetoothTile = null;
     private Object mOplusWifiTile = null;
@@ -40,6 +44,7 @@ public class ControllersProvider extends XposedMods {
     private Object mCalculatorTile = null;
     private Object mWalletTile = null;
     private Object mThreeStateRingerTile = null;
+    private Object mHotspotTile = null;
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
@@ -50,6 +55,7 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnWifiChanged> mWifiChangedListeners = new ArrayList<>();
     private final ArrayList<OnBluetoothChanged> mBluetoothChangedListeners = new ArrayList<>();
     private final ArrayList<OnTorchModeChanged> mTorchModeChangedListeners = new ArrayList<>();
+    private final ArrayList<OnHotspotChanged> mHotspotChangedListeners = new ArrayList<>();
 
     public ControllersProvider(Context context) {
         super(context);
@@ -64,6 +70,13 @@ public class ControllersProvider extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         boolean oos13 = Build.VERSION.SDK_INT == 33;
+
+        // PluralMessageFormater
+        try {
+            PluralMessageFormater = findClass("com.android.systemui.util.PluralMessageFormater", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "PluralMessageFormater not found " + t.getMessage());
+        }
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
@@ -317,6 +330,47 @@ public class ControllersProvider extends XposedMods {
             log(TAG + "ThreeStateRingerTile error: " + t.getMessage());
         }
 
+        // Hostpost Tile - for settings Hotspot
+        try {
+            Class<?> HotspotTile = findClass("com.android.systemui.qs.tiles.HotspotTile", lpparam.classLoader);
+            hookAllConstructors(HotspotTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mHotspotController = getObjectField(param.thisObject, "mHotspotController");
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "OplusHotspotTile error: " + t.getMessage());
+        }
+
+        try {
+            Class<?> OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
+            hookAllConstructors(OplusHotspotTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mHotspotTile = param.thisObject;
+                }
+            });
+
+        } catch (Throwable t) {
+            log(TAG + "OplusHotspotTile error: " + t.getMessage());
+        }
+
+        // Get an Hotspot Callback
+        try {
+            Class<?> HotspotControllerImpl = findClass("com.android.systemui.statusbar.policy.HotspotControllerImpl", lpparam.classLoader);
+            hookAllMethods(HotspotControllerImpl, "fireHotspotChangedCallback", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    boolean enabled = (boolean) callMethod(param.thisObject, "isHotspotEnabled");
+                    int devices = getIntField(param.thisObject, "mNumConnectedDevices");
+                    onHotspotChanged(enabled, devices);
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "HotspotCallback error: " + t.getMessage());
+        }
+
     }
 
     @Override
@@ -352,6 +406,13 @@ public class ControllersProvider extends XposedMods {
      */
     public interface OnTorchModeChanged {
         void onTorchModeChanged(boolean enabled);
+    }
+
+    /**
+     * Callback for Hotspot
+     */
+    public interface OnHotspotChanged {
+        void onHotspotChanged(boolean enabled, int connectedDevices);
     }
 
     public static void registerMobileDataCallback(ControllersProvider.OnMobileDataChanged callback)
@@ -396,6 +457,17 @@ public class ControllersProvider extends XposedMods {
     public static void unRegisterTorchModeCallback(ControllersProvider.OnTorchModeChanged callback)
     {
         instance.mTorchModeChangedListeners.remove(callback);
+    }
+
+    public static void registerHotspotCallback(ControllersProvider.OnHotspotChanged callback)
+    {
+        instance.mHotspotChangedListeners.add(callback);
+    }
+
+    /** @noinspection unused*/
+    public static void unRegisterHotspotCallback(ControllersProvider.OnHotspotChanged callback)
+    {
+        instance.mHotspotChangedListeners.remove(callback);
     }
 
     private void onSetMobileDataIndicators(Object MobileDataIndicators) {
@@ -460,6 +532,15 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
+    private void onHotspotChanged(boolean enabled, int connectedDevices) {
+        for (ControllersProvider.OnHotspotChanged callback : mHotspotChangedListeners) {
+            try {
+                callback.onHotspotChanged(enabled, connectedDevices);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     public static Object getBluetoothController() {
         return instance.mBluetoothController;
     }
@@ -510,6 +591,14 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getRingerTile() {
         return instance.mThreeStateRingerTile;
+    }
+
+    public static Object getHotspotTile() {
+        return instance.mHotspotTile;
+    }
+
+    public static Object getHotspotController() {
+        return instance.mHotspotController;
     }
 
 }
