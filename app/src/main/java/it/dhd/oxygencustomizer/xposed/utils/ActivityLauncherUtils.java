@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -124,6 +125,28 @@ public class ActivityLauncherUtils {
     public void startSettingsActivity() {
         if (mActivityStarter == null) return;
         callMethod(mActivityStarter, "startActivity", new Intent(android.provider.Settings.ACTION_SETTINGS), true);
+    }
+
+    public void launchWifiSettings() {
+        final Intent launchIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, 0);
+    }
+
+    public void launchInternetSettings() {
+        final Intent launchIntent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, 0);
+    }
+
+    public void launchBluetoothSettings() {
+        final Intent launchIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, 0);
+    }
+
+    public void launchHotspotSettings() {
+        launchSettingsComponent("com.android.settings.TetherSettings");
     }
 
     private void showNoDefaultAppFoundToast(@StringRes int appTypeResId) {

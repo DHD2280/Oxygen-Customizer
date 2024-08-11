@@ -395,9 +395,9 @@ public class LockscreenClock extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
 
-                mStatusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
-
-                mClockViewContainer = mStatusViewContainer;
+                ViewGroup statusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
+                mStatusViewContainer = (ViewGroup) param.thisObject;
+                mClockViewContainer = statusViewContainer;
 
                 // Hide stock clock
                 GridLayout KeyguardStatusView = (GridLayout) param.thisObject;
@@ -887,12 +887,12 @@ public class LockscreenClock extends XposedMods {
             } catch (Throwable ignored) {
             }
             if (Build.VERSION.SDK_INT == 33) {
-                mClockViewContainer.addView(lsWidgets, mClockViewContainer.getChildCount());
+                mStatusViewContainer.addView(lsWidgets, mStatusViewContainer.getChildCount());
                 lsWidgets.bringToFront();
-                mClockViewContainer.post(() -> {
-                    mClockViewContainer.bringToFront();
-                    mClockViewContainer.invalidate();
-                    mClockViewContainer.requestLayout();
+                mStatusViewContainer.post(() -> {
+                    mStatusViewContainer.bringToFront();
+                    mStatusViewContainer.invalidate();
+                    mStatusViewContainer.requestLayout();
                 });
             } else {
                 mClockViewContainer.addView(lsWidgets);
