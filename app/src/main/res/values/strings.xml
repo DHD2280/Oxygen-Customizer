@@ -1194,5 +1194,6 @@
     <string name="bt">Bluetooth</string>
     <string name="home_controls">Home Controls</string>
     <string name="wallet">Wallet</string>
+    <string name="hotspot">Hotspot</string>
 
 </resources>
