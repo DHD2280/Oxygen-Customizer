@@ -39,6 +39,7 @@ public class ControllersProvider extends XposedMods {
     private Object mDeviceControlsTile = null;
     private Object mCalculatorTile = null;
     private Object mWalletTile = null;
+    private Object mThreeStateRingerTile = null;
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
@@ -303,6 +304,19 @@ public class ControllersProvider extends XposedMods {
             log(TAG + "QuickAccessWalletTile not found");
         }
 
+        // Three State Ringer Mode Tile - for settings Ringer Mode & DND
+        try {
+            Class<?> ThreeStageRingerModeTile = findClass("com.oplus.systemui.qs.tiles.ThreeStageRingerModeTile", lpparam.classLoader);
+            hookAllConstructors(ThreeStageRingerModeTile, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    mThreeStateRingerTile = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "ThreeStateRingerTile error: " + t.getMessage());
+        }
+
     }
 
     @Override
@@ -492,6 +506,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getWalletTile() {
         return instance.mWalletTile;
+    }
+
+    public static Object getRingerTile() {
+        return instance.mThreeStateRingerTile;
     }
 
 }
