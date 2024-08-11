@@ -132,6 +132,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -467,8 +468,11 @@ public class PreferenceHelper {
                     LOCKSCREEN_FINGERPRINT_SCALING -> {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
+            case "DWCategory", "DWallpaperEnabled" -> {
+                return Build.VERSION.SDK_INT >= 34;
+            }
             case "DWOpacity" -> {
-                return instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false);
             }
             case "lockscreen_album_art_filter" -> {
                 return instance.mPreferences.getBoolean("lockscreen_album_art", false);

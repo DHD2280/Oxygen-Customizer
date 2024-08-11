@@ -99,7 +99,8 @@
 
     <PreferenceCategory
         android:title="@string/depth_wallpaper_category"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:key="DWCategory">
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
