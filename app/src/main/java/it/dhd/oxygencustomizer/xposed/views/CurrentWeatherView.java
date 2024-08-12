@@ -43,6 +43,7 @@ import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
@@ -86,6 +87,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         inflateView();
 
         enableUpdates();
+
+        ThemeEnabler.registerThemeChangedListener(this::reloadWeatherBg);
     }
 
     private void inflateView() {
@@ -276,7 +279,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 });
     }
 
-    public static void reloadWeatherBg() {
+    public void reloadWeatherBg() {
         if (instances.isEmpty()) return;
         instances.forEach(obj -> {
             CurrentWeatherView instance = (CurrentWeatherView) obj[0];
