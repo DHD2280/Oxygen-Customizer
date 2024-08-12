@@ -132,6 +132,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -467,14 +468,20 @@ public class PreferenceHelper {
                     LOCKSCREEN_FINGERPRINT_SCALING -> {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
+            case "DWCategory", "DWallpaperEnabled" -> {
+                return Build.VERSION.SDK_INT >= 34;
+            }
             case "DWOpacity" -> {
-                return instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+            }
+            case "lockscreen_album_art_category" -> {
+                return Build.VERSION.SDK_INT >= 34;
             }
             case "lockscreen_album_art_filter" -> {
-                return instance.mPreferences.getBoolean("lockscreen_album_art", false);
+                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("lockscreen_album_art", false);
             }
             case "lockscreen_media_blur" -> {
-                return instance.mPreferences.getBoolean("lockscreen_album_art", false) &&
+                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("lockscreen_album_art", false) &&
                         (instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("3") ||
                                 instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("4"));
             }

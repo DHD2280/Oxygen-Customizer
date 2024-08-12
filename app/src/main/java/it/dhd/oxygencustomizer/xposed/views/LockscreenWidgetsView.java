@@ -4,13 +4,10 @@ package it.dhd.oxygencustomizer.xposed.views;
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PluralMessageFormater;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCellularTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
@@ -42,6 +39,7 @@ import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.net.wifi.WifiConfiguration;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -1015,7 +1013,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void showMediaDialog(View view) {
-
+        if (Build.VERSION.SDK_INT == 33) return;
         updateMediaController();
         Object[] mediaQsHelper = getQsMediaDialog();
         View finalView;
@@ -1185,6 +1183,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void showWifiDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) {
+            mActivityLauncherUtils.launchWifiSettings();
+            vibrate(0);
+            return;
+        }
         View finalView;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
@@ -1196,6 +1199,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void showInternetDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) {
+            mActivityLauncherUtils.launchInternetSettings();
+            vibrate(0);
+            return;
+        }
         if (getCellularTile() == null) return;
         View finalView;
         if (view instanceof ExtendedFAB) {
@@ -1208,6 +1216,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void showBluetoothDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) {
+            mActivityLauncherUtils.launchBluetoothSettings();
+            vibrate(0);
+            return;
+        }
         View finalView;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
@@ -1219,6 +1232,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void showHotspotDialog(View view) {
+        if (Build.VERSION.SDK_INT == 33) {
+            mActivityLauncherUtils.launchHotspotSettings();
+            vibrate(0);
+            return;
+        }
         if (getHotspotTile() == null) return;
         View finalView;
         if (view instanceof ExtendedFAB) {

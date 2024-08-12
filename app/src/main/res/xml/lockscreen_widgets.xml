@@ -1,177 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:defaultValue="false"
         android:key="lockscreen_widgets_enabled"
-        app:iconSpaceReserved="false"
-        android:title="@string/lockscreen_widgets_enabled_title"
         android:summary="@string/lockscreen_widgets_enabled_summary"
-        android:defaultValue="false"/>
+        android:title="@string/lockscreen_widgets_enabled_title"
+        app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        android:key="lockscreen_device_widget"
-        app:iconSpaceReserved="false"
+    <PreferenceCategory
         android:title="@string/lockscreen_display_widgets_title"
-        android:summary="@string/lockscreen_display_widgets_summary"
-        android:dependency="lockscreen_widgets_enabled"
-        android:defaultValue="false" />
+        app:iconSpaceReserved="false">
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        android:key="lockscreen_device_widget_custom_color"
-        app:iconSpaceReserved="false"
-        android:title="@string/custom_color"
-        android:summaryOn="@string/general_on"
-        android:summaryOff="@string/general_off"
-        android:defaultValue="false" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_widgets_enabled"
+            android:key="lockscreen_device_widget"
+            android:summary="@string/lockscreen_display_widgets_summary"
+            android:title="@string/lockscreen_display_widgets_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-        android:key="lockscreen_device_widget_linear_progress_color"
-        app:iconSpaceReserved="false"
-        android:title="@string/linear_progress_color"
-        app:cpv_showAlphaSlider="true"
-        android:defaultValue="0xFFFFFFFF" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_device_widget_custom_color"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/custom_color"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-        android:key="lockscreen_device_widget_circular_progress_color"
-        app:iconSpaceReserved="false"
-        android:title="@string/circular_progress_color"
-        app:cpv_showAlphaSlider="true"
-        android:defaultValue="0xFFFFFFFF" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            android:key="lockscreen_device_widget_linear_progress_color"
+            android:title="@string/linear_progress_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-        android:key="lockscreen_device_widget_text_color"
-        app:iconSpaceReserved="false"
-        android:title="@string/text_color"
-        app:cpv_showAlphaSlider="true"
-        android:defaultValue="0xFFFFFFFF" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            android:key="lockscreen_device_widget_circular_progress_color"
+            android:title="@string/circular_progress_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
 
-    <EditTextPreference
-        android:key="lockscreen_device_widget_device_name"
-        android:title="@string/custom_device_name"
-        app:iconSpaceReserved="false"
-        android:summary="@string/custom_device_name_summary" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            android:key="lockscreen_device_widget_text_color"
+            android:title="@string/text_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/main_custom_widgets1"
-        android:key="main_custom_widgets1"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:key="lockscreen_device_widget_device_name"
+            android:summary="@string/custom_device_name_summary"
+            android:title="@string/custom_device_name"
+            app:iconSpaceReserved="false" />
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/main_custom_widgets2"
-        android:key="main_custom_widgets2"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/custom_widgets1"
-        android:key="custom_widgets1"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true"/>
+    <PreferenceCategory
+        android:title="@string/large_widgets_category_title"
+        app:iconSpaceReserved="false">
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/custom_widgets2"
-        android:key="custom_widgets2"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true"/>
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="main_custom_widgets1"
+            android:title="@string/main_custom_widgets1"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/custom_widgets3"
-        android:key="custom_widgets3"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="main_custom_widgets2"
+            android:title="@string/main_custom_widgets2"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        android:entries="@array/widget_entries"
-        app:iconSpaceReserved="false"
-        android:title="@string/custom_widgets4"
-        android:key="custom_widgets4"
-        android:entryValues="@array/widget_values"
-        android:dependency="lockscreen_widgets_enabled"
-        app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/mini_widgets_category_title"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="custom_widgets1"
+            android:title="@string/custom_widgets1"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="custom_widgets2"
+            android:title="@string/custom_widgets2"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="custom_widgets3"
+            android:title="@string/custom_widgets3"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:dependency="lockscreen_widgets_enabled"
+            android:entries="@array/widget_entries"
+            android:entryValues="@array/widget_values"
+            android:key="custom_widgets4"
+            android:title="@string/custom_widgets4"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/widgets_custom_color"
         app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="lockscreen_widgets_custom_color"
-            app:iconSpaceReserved="false"
             android:title="@string/widgets_custom_color_title"
-            android:defaultValue="false" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-1"
             android:key="lockscreen_widgets_big_active"
-            app:iconSpaceReserved="false"
+            android:title="@string/big_active"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-1"
-            android:title="@string/big_active"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-16777216"
             android:key="lockscreen_widgets_big_inactive"
-            app:iconSpaceReserved="false"
+            android:title="@string/big_inactive"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-16777216"
-            android:title="@string/big_inactive"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-16777216"
             android:key="lockscreen_widgets_big_icon_active"
-            app:iconSpaceReserved="false"
+            android:title="@string/big_icon_active"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-16777216"
-            android:title="@string/big_icon_active"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-1"
             android:key="lockscreen_widgets_big_icon_inactive"
-            app:iconSpaceReserved="false"
+            android:title="@string/big_icon_inactive"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-1"
-            android:title="@string/big_icon_inactive"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-1"
             android:key="lockscreen_widgets_small_active"
-            app:iconSpaceReserved="false"
+            android:title="@string/mini_active"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-1"
-            android:title="@string/mini_active"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-16777216"
             android:key="lockscreen_widgets_small_inactive"
-            app:iconSpaceReserved="false"
+            android:title="@string/mini_inactive"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-16777216"
-            android:title="@string/mini_inactive"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-16777216"
             android:key="lockscreen_widgets_small_icon_active"
-            app:iconSpaceReserved="false"
+            android:title="@string/mini_icon_active"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="-16777216"
-            android:title="@string/mini_icon_active"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            android:key="lockscreen_widgets_small_icon_inactive"
-            app:iconSpaceReserved="false"
-            app:cpv_showAlphaSlider="true"
             android:defaultValue="-1"
-            android:title="@string/mini_icon_inactive"/>
+            android:key="lockscreen_widgets_small_icon_inactive"
+            android:title="@string/mini_icon_inactive"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
 
 
     </PreferenceCategory>

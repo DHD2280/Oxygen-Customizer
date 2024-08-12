@@ -24,6 +24,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -59,7 +60,6 @@ public class DepthWallpaper extends XposedMods {
     private FrameLayout mWallpaperBitmapContainer;
     private FrameLayout mWallpaperDimmingOverlay;
     private boolean mLayersCreated = false;
-    private boolean oos13 = false;
     private boolean superPowerSave = false;
 
     public DepthWallpaper(Context context) {
@@ -74,12 +74,9 @@ public class DepthWallpaper extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+        if (Build.VERSION.SDK_INT < 34) return;
+
         Class<?> QSImplClass = findClass("com.android.systemui.qs.QSFragment", lpParam.classLoader);
-        try {
-            findClass("com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine", lpParam.classLoader);
-        } catch (Throwable t) {
-            oos13 = true;
-        }
 
         Class<?> SuperPowerSaveSettingsObserver;
         try {
@@ -98,15 +95,9 @@ public class DepthWallpaper extends XposedMods {
         });
 
         Class<?> CentralSurfacesImplClass = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpParam.classLoader);
-        Class<?> ScrimControllerClassEx =
-                !oos13 ?
-                        findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpParam.classLoader) :
-                        findClass("com.android.systemui.statusbar.phone.ScrimController", lpParam.classLoader);
+        Class<?> ScrimControllerClassEx = findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpParam.classLoader);
 
-        Class<?> ScrimViewClass =
-                !oos13 ?
-                        findClass("com.oplus.systemui.scrim.ScrimViewExImp", lpParam.classLoader) :
-                        findClass("com.android.systemui.scrim.ScrimView", lpParam.classLoader);
+        Class<?> ScrimViewClass = findClass("com.oplus.systemui.scrim.ScrimViewExImp", lpParam.classLoader);
 
         hookAllMethods(ScrimViewClass, "setViewAlpha", new XC_MethodHook() {
             @Override
@@ -118,10 +109,7 @@ public class DepthWallpaper extends XposedMods {
 
                 if (DEBUG) log(TAG + "ScrimViewExImp setViewAlpha " + notificationScrim + " " + getObjectField(param.thisObject, "name"));
 
-                String scrimName =
-                        !oos13 ?
-                                (String) getObjectField(param.thisObject, "name") :
-                                (String) callMethod(param.thisObject, "getName");
+                String scrimName = (String) getObjectField(param.thisObject, "name");
 
                 if (DEBUG) log(TAG + "ScrimViewExImp setViewAlpha " + scrimName + " " + param.args[0]);
 
@@ -245,7 +233,7 @@ public class DepthWallpaper extends XposedMods {
         });
 
         Class<?> ScrimControllerClass = findClass("com.android.systemui.statusbar.phone.ScrimController", lpParam.classLoader);
-        hookAllMethods(!oos13 ? ScrimControllerClass : ScrimControllerClassEx, "applyAndDispatchState", new XC_MethodHook() {
+        hookAllMethods(ScrimControllerClass, "applyAndDispatchState", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (DEBUG) log(TAG + "ScrimController applyAndDispatchState");
@@ -437,8 +425,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private Object getScrimController() {
-        if (oos13) return mScrimController;
-        else return callMethod(mScrimController, "getScrimController");
+        return callMethod(mScrimController, "getScrimController");
     }
 
     @Override

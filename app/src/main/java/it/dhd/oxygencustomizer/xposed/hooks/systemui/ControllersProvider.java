@@ -29,8 +29,6 @@ public class ControllersProvider extends XposedMods {
     @SuppressLint("StaticFieldLeak")
     private static ControllersProvider instance = null;
 
-    public static Class<?> PluralMessageFormater = null;
-
     private Object mBluetoothController = null;
     private Object mDataController = null;
     private Object mNetworkController = null;
@@ -70,13 +68,6 @@ public class ControllersProvider extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         boolean oos13 = Build.VERSION.SDK_INT == 33;
-
-        // PluralMessageFormater
-        try {
-            PluralMessageFormater = findClass("com.android.systemui.util.PluralMessageFormater", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "PluralMessageFormater not found " + t.getMessage());
-        }
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
@@ -344,7 +335,12 @@ public class ControllersProvider extends XposedMods {
         }
 
         try {
-            Class<?> OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
+            Class<?> OplusHotspotTile;
+            try {
+                OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
+            } catch (Throwable t) {
+                OplusHotspotTile = findClass("com.oplusos.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader); // OOS 13
+            }
             hookAllConstructors(OplusHotspotTile, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
