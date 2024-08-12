@@ -4,9 +4,11 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView.reloadWeatherBg;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+
+import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -18,8 +20,14 @@ public class ThemeEnabler extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     private int themeNum;
 
+    @SuppressLint("StaticFieldLeak")
+    private static ThemeEnabler instance = null;
+
+    private final ArrayList<OnThemeChangedListener> mThemeChangedListeners = new ArrayList<>();
+
     public ThemeEnabler(Context context) {
         super(context);
+        instance = this;
     }
 
     @Override
@@ -40,20 +48,54 @@ public class ThemeEnabler extends XposedMods {
         enableTheme();
 
         // Get monet change so we can apply theme
-        Class<?> ScrimController = findClass("com.android.systemui.statusbar.phone.ScrimController", lpparam.classLoader);
-        hookAllMethods(ScrimController, "updateThemeColors", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                enableTheme();
-                reloadWeatherBg();
-            }
-        });
+        try {
+            Class<?> ScrimController = findClass("com.android.systemui.statusbar.phone.ScrimController", lpparam.classLoader);
+            hookAllMethods(ScrimController, "updateThemeColors", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    enableTheme();
+                    notifyThemeChanged();
+                }
+            });
+        } catch (Throwable ignored) {}
+
+        try {
+            Class<?> NotificationPanelViewController = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+            hookAllMethods(NotificationPanelViewController, "onThemeChanged", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    enableTheme();
+                    notifyThemeChanged();
+                }
+            });
+        } catch (Throwable ignored) {}
 
     }
 
     private void enableTheme() {
         if (themeNum == -1) return;
         XPLauncher.enqueueProxyCommand(proxy -> proxy.applyTheme("OxygenCustomizerComponentTH" + themeNum + ".overlay"));
+    }
+
+    public interface OnThemeChangedListener {
+        void onThemeChanged();
+    }
+
+    public static void registerThemeChangedListener(ThemeEnabler.OnThemeChangedListener listener) {
+        instance.mThemeChangedListeners.add(listener);
+    }
+
+    /** @noinspection unused*/
+    public static void unRegisterThemeChangedListener(OnThemeChangedListener listener) {
+        instance.mThemeChangedListeners.remove(listener);
+    }
+
+    private void notifyThemeChanged() {
+        for (ThemeEnabler.OnThemeChangedListener listener : mThemeChangedListeners) {
+            try {
+            listener.onThemeChanged();
+            } catch (Throwable ignored) {}
+        }
     }
 
     @Override
