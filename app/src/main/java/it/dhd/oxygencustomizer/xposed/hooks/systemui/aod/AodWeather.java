@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -21,6 +23,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_WIND;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setPaddings;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -46,11 +50,12 @@ public class AodWeather extends XposedMods {
     private boolean weatherEnabled = true, weatherShowLocation = true, weatherShowCondition = true;
     private boolean weatherShowHumidity = true, weatherShowWind = true;
     private boolean weatherCustomColor = false;
-    private int weatherPosition = WEATHER_BOTTOM;
     private int weatherColor = Color.WHITE;
-    private int weatherStartPadding = 0, weatherTextSize = 16, weatherImageSize = 18;
+    private final int weatherStartPadding = 20;
+    private int weatherTextSize = 16, weatherImageSize = 18;
     private boolean mCustomMargins = false;
     private int mLeftMargin = 0, mTopMargin = 0;
+    private LinearLayout mWeatherContainer = null;
 
     private ViewGroup mAodRootLayout = null;
 
@@ -78,6 +83,10 @@ public class AodWeather extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         Class<?> AodClockLayout;
+
+        mWeatherContainer = new LinearLayout(mContext);
+        mWeatherContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+
         try {
             AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
         } catch (Throwable t) {
@@ -100,28 +109,39 @@ public class AodWeather extends XposedMods {
         });
     }
 
-    private void updateMargins(CurrentWeatherView weatherView) {
-        if (weatherView == null) return;
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) weatherView.getLayoutParams();
+    private void updateMargins() {
+        if (mWeatherContainer == null) return;
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mWeatherContainer.getLayoutParams();
+        params.width = WRAP_CONTENT;
         if (mCustomMargins) {
             params.setMargins(dp2px(mContext, mLeftMargin), dp2px(mContext, mTopMargin), dp2px(mContext, mLeftMargin), 0);
         } else {
-            params.setMargins(weatherStartPadding, 0, weatherStartPadding, 0);
+            params.setMargins(dp2px(mContext, weatherStartPadding), 0, dp2px(mContext, weatherStartPadding), 0);
         }
-        weatherView.setLayoutParams(params);
+        mWeatherContainer.setLayoutParams(params);
     }
 
     private void placeWeatherView() {
         try {
+            if (mWeatherContainer == null) {
+                mWeatherContainer = new LinearLayout(mContext);
+                mWeatherContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            }
             CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(mContext, AOD_WEATHER);
             try {
                 ((ViewGroup) currentWeatherView.getParent()).removeView(currentWeatherView);
             } catch (Throwable ignored) {
             }
-            mAodRootLayout.addView(currentWeatherView, mAodRootLayout.getChildCount());
+            try {
+                ((ViewGroup) mWeatherContainer.getParent()).removeView(mWeatherContainer);
+            } catch (Throwable ignored) {
+            }
+            mWeatherContainer.addView(currentWeatherView);
+            mAodRootLayout.addView(mWeatherContainer, mAodRootLayout.getChildCount());
             refreshWeatherView(currentWeatherView);
-            updateMargins(currentWeatherView);
-        } catch (Throwable ignored) {
+            updateMargins();
+        } catch (Throwable tt) {
+            log("AOD WEATHER ERROR " + tt.getMessage());
         }
     }
 
@@ -131,7 +151,7 @@ public class AodWeather extends XposedMods {
         currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE, AOD_WEATHER);
         currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind, AOD_WEATHER);
         currentWeatherView.setVisibility(weatherEnabled ? View.VISIBLE : View.GONE);
-        updateMargins(currentWeatherView);
+        updateMargins();
     }
 
     private void updateWeatherView() {

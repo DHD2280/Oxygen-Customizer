@@ -26,7 +26,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setTextRecursively
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,12 +36,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
@@ -52,7 +54,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     static final String TAG = "CurrentWeatherView: ";
 
     private ImageView mCurrentImage, mHumImage, mWindImage;
-    private OmniJawsClient mWeatherClient;
+    private final OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
     private TextView mLeftText, mRightText, mWeatherText; // Weather Layout
     private TextView mHumText, mWindText;
@@ -67,103 +69,54 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     public static ArrayList<Object[]> instances = new ArrayList<>();
     private int mWeatherHorPadding = 0, mWeatherVerPadding = 0;
     private final Context mContext;
+    private Context appContext;
 
     public CurrentWeatherView(Context context, String name) {
         super(context);
         instances.add(new Object[]{this, name});
         mContext = context;
+        try {
+            appContext = context.createPackageContext(
+                    BuildConfig.APPLICATION_ID,
+                    Context.CONTEXT_IGNORE_SECURITY
+            );
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
         mWeatherClient = new OmniJawsClient(context, true);
 
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        setOrientation(VERTICAL);
-
-        mWeatherLayout = new LinearLayout(context);
-        mWeatherLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mWeatherLayout.setOrientation(HORIZONTAL);
-
-        mLeftText = new TextView(context);
-        mLeftText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mLeftText.setTextColor(Color.WHITE);
-        mLeftText.setSingleLine(true);
-        mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        mLeftText.setEllipsize(TextUtils.TruncateAt.END);
-        mLeftText.setTag("text");
-
-        LayoutParams imageParams = new LayoutParams(dp2px(mContext, 18), dp2px(mContext, 18));
-        mCurrentImage = new ImageView(context);
-        mCurrentImage.setLayoutParams(imageParams);
-
-        mRightText = new TextView(context);
-        mRightText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mRightText.setTextColor(Color.WHITE);
-        mRightText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        mRightText.setSingleLine(true);
-        mRightText.setTag("text");
-
-        mWeatherText = new TextView(context);
-        mWeatherText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mWeatherText.setTextColor(Color.WHITE);
-        mWeatherText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        mWeatherText.setSingleLine(true);
-        mWeatherText.setTag("text");
-
-        mWeatherLayout.addView(mLeftText);
-        mWeatherLayout.addView(mCurrentImage);
-        mWeatherLayout.addView(mRightText);
-        mWeatherLayout.addView(mWeatherText);
-
-        mHumLayout = new LinearLayout(context);
-        mHumLayout.setOrientation(HORIZONTAL);
-        mHumLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        setMargins(mHumLayout, context, 0, dp2px(context, 1), 0, 0);
-
-        mHumImage = new ImageView(context);
-        mHumImage.setLayoutParams(imageParams);
-        mHumImage.setScaleType(ImageView.ScaleType.FIT_XY);
-        mHumDrawable = ResourcesCompat.getDrawable(
-                modRes,
-                modRes.getIdentifier("ic_humidity_symbol", "drawable", BuildConfig.APPLICATION_ID),
-                context.getTheme()
-        );
-
-        mHumText = new TextView(context);
-        mHumText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mHumText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        mHumText.setTextColor(Color.WHITE);
-        mHumText.setTag("text");
-        setMargins(mHumText, context, dp2px(context, 1), 0, 0, 0);
-
-        mHumLayout.addView(mHumImage);
-        mHumLayout.addView(mHumText);
-
-        mWindLayout = new LinearLayout(context);
-        mWindLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        setMargins(mWindLayout, context, 0, dp2px(context, 1), 0, 0);
-
-        mWindImage = new ImageView(context);
-        mWindImage.setLayoutParams(imageParams);
-        mWindImage.setScaleType(ImageView.ScaleType.FIT_XY);
-        mWindDrawable = ResourcesCompat.getDrawable(
-                modRes,
-                modRes.getIdentifier("ic_wind_symbol", "drawable", BuildConfig.APPLICATION_ID),
-                context.getTheme()
-        );
-
-        mWindText = new TextView(context);
-        mWindText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mWindText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        mWindText.setTextColor(Color.WHITE);
-        mWindText.setTag("text");
-        setMargins(mWindText, context, dp2px(context, 1), 0, 0, 0);
-
-        mWindLayout.addView(mWindImage);
-        mWindLayout.addView(mWindText);
-
-        addView(mWeatherLayout);
-        addView(mHumLayout);
-        addView(mWindLayout);
+        inflateView();
 
         enableUpdates();
+
+        ThemeEnabler.registerThemeChangedListener(this::reloadWeatherBg);
+    }
+
+    private void inflateView() {
+        inflate(appContext, R.layout.view_current_weather, this);
+        setupViews();
+    }
+    
+    private void setupViews() {
+        mLeftText = findViewById(R.id.leftText);
+        mCurrentImage = findViewById(R.id.currentImage);
+        mRightText = findViewById(R.id.rightText);
+        mWeatherText = findViewById(R.id.weatherText);
+        mHumLayout = findViewById(R.id.humLayout);
+        mHumImage = findViewById(R.id.humImage);
+        mHumText = findViewById(R.id.humText);
+        mWindLayout = findViewById(R.id.windLayout);
+        mWindImage = findViewById(R.id.windImage);
+        mWindText = findViewById(R.id.windText);
+
+        mWindDrawable = ContextCompat.getDrawable(
+                appContext,
+                R.drawable.ic_wind_symbol
+        );
+
+        mHumDrawable = ContextCompat.getDrawable(
+                appContext,
+                R.drawable.ic_humidity_symbol
+        );
     }
 
     public void updateSizes(int weatherTextSize, int weatherImageSize, String name) {
@@ -172,7 +125,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         instances
                 .stream()
                 .filter(obj -> obj[1].equals(name))
-                .forEach(obj -> applyTextSizeRecursively((CurrentWeatherView)obj[0], weatherTextSize));
+                .forEach(obj -> applyTextSizeRecursively((CurrentWeatherView) obj[0], weatherTextSize));
     }
 
     public static void updateIconsSize(int size, String name) {
@@ -296,7 +249,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 mRightText.setText(mWeatherInfo.temp + " " + mWeatherInfo.tempUnits);
                 mLeftText.setText(mWeatherInfo.city);
                 mLeftText.setVisibility(mShowWeatherLocation ? View.VISIBLE : View.GONE);
-                mWeatherText.setText(" · "  + formattedCondition);
+                mWeatherText.setText(" · " + formattedCondition);
                 mWeatherText.setVisibility(mShowWeatherText ? View.VISIBLE : View.GONE);
 
                 mHumImage.setImageDrawable(mHumDrawable);
@@ -308,7 +261,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 mWindLayout.setVisibility(mShowWeatherWind ? View.VISIBLE : View.GONE);
 
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             log(TAG + "Weather query failed" + e.getMessage());
             Log.e(TAG, "Weather query failed", e);
         }
@@ -326,7 +279,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 });
     }
 
-    public static void reloadWeatherBg() {
+    public void reloadWeatherBg() {
         if (instances.isEmpty()) return;
         instances.forEach(obj -> {
             CurrentWeatherView instance = (CurrentWeatherView) obj[0];
@@ -336,53 +289,60 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
     private void updateWeatherBg() {
         Drawable bg = null;
-            switch (mWeatherBgSelection) {
-                case 0: // default
-                    bg = null;
-                    mWeatherHorPadding = 0;
-                    mWeatherVerPadding = 0;
-                    break;
-                case 1: // semi-transparent box
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_box_str_border, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 2: // semi-transparent box (round)
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_str_border, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 3: // Q-Now Playing background
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.ambient_indication_pill_background, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 4, 5: // accent box
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_str_accent, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 6: // gradient box
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_str_gradient, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 7: // Dark Accent border
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_str_borderacc, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
-                    break;
-                case 8: // Dark Gradient border
-                    bg = ResourcesCompat.getDrawable(modRes, R.drawable.date_str_bordergrad, getContext().getTheme());
-                    mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                    mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+        try {
+            appContext = mContext.createPackageContext(
+                    BuildConfig.APPLICATION_ID,
+                    Context.CONTEXT_IGNORE_SECURITY
+            );
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+        switch (mWeatherBgSelection) {
+            case 0: // default
+                bg = null;
+                mWeatherHorPadding = 0;
+                mWeatherVerPadding = 0;
+                break;
+            case 1: // semi-transparent box
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_box_str_border, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 2: // semi-transparent box (round)
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_border, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 3: // Q-Now Playing background
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.ambient_indication_pill_background, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 4, 5: // accent box
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_accent, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 6: // gradient box
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_gradient, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 7: // Dark Accent border
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_borderacc, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
+            case 8: // Dark Gradient border
+                bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_bordergrad, appContext.getTheme());
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
 
-                    break;
-                default:
-                    break;
-            }
-        setViewBackground(bg, (bg  != null && mWeatherBgSelection == 5) ? 160 : 255);
-            setPadding(mWeatherHorPadding, mWeatherVerPadding, mWeatherHorPadding, mWeatherVerPadding);
+                break;
+            default:
+                break;
+        }
+        setViewBackground(bg, (bg != null && mWeatherBgSelection == 5) ? 160 : 255);
+        setPadding(mWeatherHorPadding, mWeatherVerPadding, mWeatherHorPadding, mWeatherVerPadding);
 
     }
 
@@ -393,7 +353,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     }
 
     public void updateWeatherSettings(boolean showLocation, boolean showText,
-                                             boolean showHumidity, boolean showWind, String name) {
+                                      boolean showHumidity, boolean showWind, String name) {
         if (BuildConfig.DEBUG) log(TAG + "updateWeatherSettings " + (instances.isEmpty()));
         instances.stream()
                 .filter(obj -> obj[1].equals(name))

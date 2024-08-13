@@ -63,8 +63,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
@@ -117,6 +119,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private OmniJawsClient.WeatherInfo mWeatherInfo;
 
     private final Context mContext;
+    private Context appContext;
 
     // Two Linear Layouts, one for main widgets and one for secondary widgets
     private final LinearLayout mDeviceWidgetContainer;
@@ -128,10 +131,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private ExtendedFAB mediaButtonFab, torchButtonFab, weatherButtonFab, hotspotButtonFab;
     private ExtendedFAB wifiButtonFab, dataButtonFab, ringerButtonFab, btButtonFab;
     private ImageView wifiButton, dataButton, ringerButton, btButton;
-    private final int mDarkColor;
-    private final int mDarkColorActive;
-    private final int mLightColor;
-    private final int mLightColorActive;
+    private int mDarkColor;
+    private int mDarkColorActive;
+    private int mLightColor;
+    private int mLightColorActive;
 
     // Custom Widgets Colors
     private boolean mCustomColors = false;
@@ -189,10 +192,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         mContext = context;
         mAudioManager = SystemUtils.AudioManager();
         mCameraManager = SystemUtils.CameraManager();
-        mDarkColor = ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_background_color_dark, mContext.getTheme());
-        mLightColor = ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_background_color_light, mContext.getTheme());
-        mDarkColorActive = ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_active_color_dark, mContext.getTheme());
-        mLightColorActive = ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_active_color_light, mContext.getTheme());
+
+        loadColors();
 
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, activityStarter);
 
@@ -243,6 +244,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         ControllersProvider.registerBluetoothCallback(this::onBluetoothChanged);
         ControllersProvider.registerTorchModeCallback(this::onTorchChanged);
         ControllersProvider.registerHotspotCallback(this::onHotspotChanged);
+        ThemeEnabler.registerThemeChangedListener(() -> {
+            loadColors();
+            updateWidgetViews();
+        });
 
         addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
             @Override
@@ -388,6 +393,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         imageView.setClickable(true);
 
         return imageView;
+    }
+
+    private void loadColors() {
+        try {
+            appContext = mContext.createPackageContext(
+                    BuildConfig.APPLICATION_ID,
+                    Context.CONTEXT_IGNORE_SECURITY
+            );
+        } catch (Exception ignored) {}
+        mDarkColor = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_background_color_dark, appContext.getTheme());
+        mLightColor = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_background_color_light, appContext.getTheme());
+        mDarkColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_dark, appContext.getTheme());
+        mLightColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_light, appContext.getTheme());
     }
 
     private final ControllersProvider.OnMobileDataChanged mMobileDataCallback = new ControllersProvider.OnMobileDataChanged() {
