@@ -49,7 +49,7 @@
         android:entries="@array/provider_entries"
         android:entryValues="@array/provider_values"
         app:useSimpleSummaryProvider="true"
-        android:defaultValue="0"
+        android:defaultValue="2"
         android:dependency="lockscreen_weather_enabled" />
 
     <EditTextPreference
