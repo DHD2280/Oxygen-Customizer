@@ -58,7 +58,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     private OmniJawsClient.WeatherInfo mWeatherInfo;
     private TextView mLeftText, mRightText, mWeatherText; // Weather Layout
     private TextView mHumText, mWindText;
-    private LinearLayout mWeatherLayout, mHumLayout, mWindLayout;
+    private LinearLayout mHumLayout, mWindLayout;
     private Drawable mHumDrawable, mWindDrawable;
     private int mWeatherBgSelection = 0;
 
