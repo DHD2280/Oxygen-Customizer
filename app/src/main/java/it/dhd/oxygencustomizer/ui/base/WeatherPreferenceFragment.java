@@ -141,9 +141,9 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                         String locationName = intent.getStringExtra(DATA_LOCATION_NAME);
                         double lat = intent.getDoubleExtra(DATA_LOCATION_LAT, 0f);
                         double lon = intent.getDoubleExtra(DATA_LOCATION_LON, 0f);
-                        String locationId = String.format(Locale.US, PART_COORDINATES, lat, lon);
-                        Config.setLocationId(getContext(), locationId);
+                        Config.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
                         Config.setLocationName(getContext(), locationName);
+                        mCustomLocationActivity.setSummary(locationName);
                         if (mPreferences.getBoolean(getMainSwitchKey(), false)
                                 && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
                             checkLocationEnabled();

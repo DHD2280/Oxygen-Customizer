@@ -80,7 +80,7 @@ public abstract class AbstractWeatherProvider {
         return response;
     }
 
-    public abstract WeatherInfo getCustomWeather(String id, boolean metric);
+    public abstract WeatherInfo getCustomWeather(String lat, String lon, boolean metric);
 
     public abstract WeatherInfo getLocationWeather(Location location, boolean metric);
 

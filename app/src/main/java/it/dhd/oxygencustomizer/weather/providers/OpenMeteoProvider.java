@@ -34,7 +34,8 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         super(context);
     }
 
-    public WeatherInfo getCustomWeather(String id, boolean metric) {
+    public WeatherInfo getCustomWeather(String lat, String lon, boolean metric) {
+        String id = String.format(Locale.US, PART_COORDINATES, Float.valueOf(lat), Float.valueOf(lon));
         return handleWeatherRequest(id, metric);
     }
 
