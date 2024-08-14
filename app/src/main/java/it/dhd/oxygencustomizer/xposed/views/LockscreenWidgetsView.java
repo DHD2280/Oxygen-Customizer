@@ -184,6 +184,15 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
     };
 
+    final BroadcastReceiver mScreenOnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+                onVisible();
+            }
+        }
+    };
+
     public LockscreenWidgetsView(Context context, Object activityStarter) {
         super(context);
 
@@ -248,6 +257,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             loadColors();
             updateWidgetViews();
         });
+
 
         addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
             @Override
@@ -326,11 +336,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private LinearLayout createSecondaryWidgetsContainer(Context context) {
         LinearLayout secondaryWidgetsContainer;
-        log("LockscreenWidgetsView createSecondaryWidgetsContainer LaunchableLinearLayout " + (LaunchableLinearLayout != null));
         try {
             secondaryWidgetsContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
         } catch (Exception e) {
-            log("LockscreenWidgetsView createMainWidgetsContainer LaunchableLinearLayout not found: " + e.getMessage());
             secondaryWidgetsContainer = new LinearLayout(context);
         }
 
@@ -359,8 +367,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
             secondaryWidgetsContainer.addView(mSecondaryWidgetView);
         }
-
-        log("LockscreenWidgetsView createSecondaryWidgetsContainer done, secondaryWidgetsContainer " + (secondaryWidgetsContainer != null));
 
         return secondaryWidgetsContainer;
     }
@@ -620,26 +626,24 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void onVisible() {
-        log("LockscreenWidgetsView onVisible");
         // Update the widgets when the view is visible
         updateTorchButtonState();
         updateRingerButtonState();
         updateWiFiButtonState(isWifiEnabled());
         updateMobileDataState(isMobileDataEnabled());
         updateHotspotButtonState(0);
+        updateMediaController();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        log("LockscreenWidgetsView onAttachedToWindow");
         onVisible();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        log("LockscreenWidgetsView onDetachedFromWindow");
         if (isWidgetEnabled("weather")) {
             disableWeatherUpdates();
         }
@@ -648,14 +652,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        log("LockscreenWidgetsView onConfigurationChanged");
         updateWidgetViews();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        log("LockscreenWidgetsView onFinishInflate");
         mIsInflated = true;
         updateWidgetViews();
     }
@@ -681,7 +683,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     public void updateWidgetViews() {
-        log("LockscreenWidgetsView updateWidgetViews lockscreenWidgetsEnabled " + lockscreenWidgetsEnabled);
 
         if (mMainWidgetViews != null && mMainWidgetsList != null) {
             for (int i = 0; i < mMainWidgetViews.length; i++) {
@@ -692,7 +693,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             for (int i = 0; i < Math.min(mMainWidgetsList.size(), mMainWidgetViews.length); i++) {
                 String widgetType = mMainWidgetsList.get(i);
                 if (widgetType != null && i < mMainWidgetViews.length && mMainWidgetViews[i] != null) {
-                    log("LockscreenWidgetsView updateWidgetViews mMainWidgetsList " + widgetType);
                     setUpWidgetWiews(null, mMainWidgetViews[i], widgetType);
                     updateMainWidgetResources(mMainWidgetViews[i], false);
                 }
@@ -707,7 +707,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             for (int i = 0; i < Math.min(mSecondaryWidgetsList.size(), mSecondaryWidgetViews.length); i++) {
                 String widgetType = mSecondaryWidgetsList.get(i);
                 if (widgetType != null && i < mSecondaryWidgetViews.length && mSecondaryWidgetViews[i] != null) {
-                    log("LockscreenWidgetsView updateWidgetViews mSecondaryWidgetsList " + widgetType);
                     setUpWidgetWiews(mSecondaryWidgetViews[i], null, widgetType);
                     updateWidgetsResources(mSecondaryWidgetViews[i]);
                 }
@@ -1099,7 +1098,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void launchHomeControls(View view) {
-        log("LockscreenWidgetsView launchHomeControls");
         Object controlsTile = getControlsTile();
         if (controlsTile == null) return;
         View finalView;
@@ -1134,7 +1132,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void toggleWiFi() {
-        log("LockscreenWidgetsView toggleWiFi");
         Object networkController = getNetworkController();
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
         if (networkController != null) {
@@ -1311,7 +1308,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     public void updateTorchButtonState() {
         if (!isWidgetEnabled("torch")) return;
-        log("LockscreenWidgetsView updateTorchButtonState " + isFlashOn);
         String activeString = getString(TORCH_LABEL_ACTIVE, SYSTEM_UI);
         String inactiveString = getString(TORCH_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(torchButton, torchButtonFab, isFlashOn,
@@ -1341,7 +1337,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void updateRingerButtonState() {
-        log("LockscreenWidgetsView updateRingerButtonState " + (isWidgetEnabled("ringer")) + " | " + (ringerButton == null) + " | " + (ringerButtonFab == null));
         if (!isWidgetEnabled("ringer")) return;
         if (ringerButton == null && ringerButtonFab == null) return;
         if (mAudioManager != null) {
@@ -1367,7 +1362,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private void updateBtState() {
         if (!isWidgetEnabled("bt")) return;
-        log("LockscreenWidgetsView updateBtState " + isBluetoothOn);
         if (btButton == null && btButtonFab == null) return;
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
@@ -1379,7 +1373,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private void updateHotspotButtonState(int numDevices) {
         if (!isWidgetEnabled("hotspot")) return;
-        log("LockscreenWidgetsView updateHotspotButtonState " + isHotspotEnabled());
         if (hotspotButton == null && hotspotButtonFab == null) return;
         String inactiveString = getString(HOTSPOT_LABEL, SYSTEM_UI);
         String activeString = getString(HOTSPOT_LABEL, SYSTEM_UI);
@@ -1391,7 +1384,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 else activeString = hotspotSSID;
             }
         }
-        log("LockscreenWidgetsView updateHotspotButtonState " + isHotspotEnabled() + " | " + activeString + " | " + inactiveString);
         updateTileButtonState(hotspotButton, hotspotButtonFab, isHotspotEnabled(),
                 HOTSPOT_ACTIVE, HOTSPOT_INACTIVE, activeString, inactiveString);
     }
@@ -1495,8 +1487,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
      */
     public void setOptions(boolean lsWidgets, boolean deviceWidget,
                            String mainWidgets, String secondaryWidgets) {
-        log("LockscreenWidgetsView setOptions " + lsWidgets +
-                " | " + deviceWidget + " | " + mainWidgets + " | " + secondaryWidgets);
         instance.lockscreenWidgetsEnabled = lsWidgets;
         instance.deviceWidgetsEnabled = deviceWidget;
         instance.mMainLockscreenWidgetsList = mainWidgets;
@@ -1526,7 +1516,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             boolean customColorsEnabled,
             int bigInactive, int bigActive, int smallInactive, int smallActive,
             int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
-        log("LockscreenWidgetsView setCustomColors " + customColorsEnabled);
         instance.mCustomColors = customColorsEnabled;
         instance.mBigInactiveColor = bigInactive;
         instance.mBigActiveColor = bigActive;
