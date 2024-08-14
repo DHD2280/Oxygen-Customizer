@@ -39,8 +39,9 @@ public class METNorwayProvider extends AbstractWeatherProvider {
         return getAllWeather(coordinates, metric);
     }
 
-    public WeatherInfo getCustomWeather(String id, boolean metric) {
-        return getAllWeather(id, metric);
+    public WeatherInfo getCustomWeather(String lat, String lon, boolean metric) {
+        String coordinates = String.format(Locale.US, PART_COORDINATES, Float.valueOf(lat), Float.valueOf(lon));
+        return getAllWeather(coordinates, metric);
     }
 
     private WeatherInfo getAllWeather(String coordinates, boolean metric) {

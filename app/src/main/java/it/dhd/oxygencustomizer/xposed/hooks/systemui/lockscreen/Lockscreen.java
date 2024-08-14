@@ -27,6 +27,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawab
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
@@ -184,17 +185,33 @@ public class Lockscreen extends XposedMods {
             log(TAG + "loadAnimDrawables not found");
         }
 
-        try {
-            hookAllMethods(OnScreenFingerprint, "updateFpIconColor", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!customFingerprint || hideFingerprint) return;
-                    Drawable d = (Drawable) getObjectField(param.thisObject, "mImMobileDrawable");
-                    if (d != null) d.clearColorFilter();
-                }
-            });
-        } catch (Throwable t) {
-            log(TAG + "updateFpIconColor not found");
+        if (Build.VERSION.SDK_INT == 33) {
+            try {
+                hookAllMethods(OnScreenFingerprint, "updateFpIconColor", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!customFingerprint || hideFingerprint) return;
+                        Drawable d = (Drawable) getObjectField(param.thisObject, "mImMobileDrawable");
+                        if (d != null) d.clearColorFilter();
+                    }
+                });
+            } catch (Throwable t) {
+                log(TAG + "updateFpIconColor not found");
+            }
+        }
+
+        if (Build.VERSION.SDK_INT == 34) {
+            try {
+                findAndHookMethod(OnScreenFingerprint, "updateFpColor", int.class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!customFingerprint || hideFingerprint) return;
+                        param.args[0] = Color.TRANSPARENT;
+                    }
+                });
+            } catch (Throwable t) {
+                log(TAG + "updateFpIconColor not found");
+            }
         }
 
         // Affordance Section
@@ -411,7 +428,8 @@ public class Lockscreen extends XposedMods {
                     }
                 }
             });
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            log(TAG + "hideLockscreenCarrier Error: " + t.getMessage());
         }
     }
 

@@ -84,11 +84,11 @@ public class LocationBrowseActivity extends BaseActivity {
 
 
     private static class LocationBrowseItem {
-        private String mCityExt;
-        private String mCountryId;
-        private String mCity;
-        private double mLat;
-        private double mLon;
+        private final String mCityExt;
+        private final String mCountryId;
+        private final String mCity;
+        private final double mLat;
+        private final double mLon;
 
         public LocationBrowseItem(String cityExt, String countryId, String city, double lat, double lon) {
             mCityExt = cityExt;

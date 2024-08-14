@@ -55,8 +55,9 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         mHasAPIKey = getAPIKey() != null;
     }
 
-    public WeatherInfo getCustomWeather(String id, boolean metric) {
-        return handleWeatherRequest(id, metric);
+    public WeatherInfo getCustomWeather(String lat, String lon, boolean metric) {
+        String coordinates = String.format(Locale.US, PART_COORDINATES, Float.valueOf(lat), Float.valueOf(lon));
+        return handleWeatherRequest(coordinates, metric);
     }
 
     public WeatherInfo getLocationWeather(Location location, boolean metric) {

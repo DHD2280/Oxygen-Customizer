@@ -185,8 +185,8 @@ public class WeatherWork extends ListenableWorker {
             while (i < RETRY_MAX_NUM) {
                 if (location != null && !Config.isCustomLocation(mContext)) {
                     w = provider.getLocationWeather(location, isMetric);
-                } else if (Config.getLocationId(mContext) != null) {
-                    w = provider.getCustomWeather(Config.getLocationId(mContext), isMetric);
+                } else if (!TextUtils.isEmpty(Config.getLocationLat(mContext)) && !TextUtils.isEmpty(Config.getLocationLon(mContext)) ) {
+                    w = provider.getCustomWeather(Config.getLocationLat(mContext), Config.getLocationLon(mContext), isMetric);
                 } else {
                     Log.w(TAG, "No valid custom location and location is null");
                     break;

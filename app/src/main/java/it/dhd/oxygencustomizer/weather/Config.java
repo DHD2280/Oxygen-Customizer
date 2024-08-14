@@ -40,20 +40,12 @@ import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 
 public class Config {
-    public static final String SharedXPref = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String PREF_KEY_PROVIDER = "provider";
-    public static final String PREF_KEY_UNITS = "units";
-    public static final String PREF_KEY_LOCATION_ID = "location_id";
+    public static final String PREF_KEY_LOCATION_LAT = "location_lat";
+    public static final String PREF_KEY_LOCATION_LON = "location_lon";
     public static final String PREF_KEY_LOCATION_NAME = "location_name";
     public static final String PREF_KEY_WEATHER_DATA = "weather_data";
     public static final String PREF_KEY_LAST_UPDATE = "last_update";
-    public static final String PREF_KEY_ENABLE = "enable";
-    public static final String PREF_KEY_UPDATE_INTERVAL = "update_interval";
-    public static final String PREF_KEY_ICON_PACK = "icon_pack";
     public static final String PREF_KEY_UPDATE_ERROR = "update_error";
-    public static final String PREF_KEY_OWM_KEY = "owm_key";
-    public static final String PREF_KEY_HISTORY = "history";
-    public static final String PREF_KEY_HISTORY_SIZE = "history_size";
     public static final String WEATHER_PREFS = BuildConfig.APPLICATION_ID + "_weatherprefs";
 
     private static SharedPreferences getPrefs(Context context)
@@ -101,14 +93,17 @@ public class Config {
         return getPrefs(context).getBoolean(WEATHER_CUSTOM_LOCATION, false);
     }
 
-    public static String getLocationId(Context context) {
-
-        return getWeatherPrefs(context).getString(PREF_KEY_LOCATION_ID, null);
+    public static String getLocationLat(Context context) {
+            return getWeatherPrefs(context).getString(PREF_KEY_LOCATION_LAT, null);
     }
 
-    public static void setLocationId(Context context, String id) {
+    public static String getLocationLon(Context context) {
+            return getWeatherPrefs(context).getString(PREF_KEY_LOCATION_LON, null);
+    }
 
-        getWeatherPrefs(context).edit().putString(PREF_KEY_LOCATION_ID, id).apply();
+    public static void setLocationId(Context context, String lat, String lon) {
+        getWeatherPrefs(context).edit().putString(PREF_KEY_LOCATION_LAT, lat).apply();
+        getWeatherPrefs(context).edit().putString(PREF_KEY_LOCATION_LON, lon).apply();
     }
 
     public static String getLocationName(Context context) {
