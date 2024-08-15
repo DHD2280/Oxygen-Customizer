@@ -209,7 +209,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         mHandler = new Handler(Looper.getMainLooper());
 
         if (mWeatherClient == null) {
-            mWeatherClient = new OmniJawsClient(context, true);
+            mWeatherClient = new OmniJawsClient(context);
         }
         try {
             mCameraId = mCameraManager.getCameraIdList()[0];

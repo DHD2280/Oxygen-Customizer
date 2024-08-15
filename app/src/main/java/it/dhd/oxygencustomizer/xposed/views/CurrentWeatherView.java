@@ -82,7 +82,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             );
         } catch (PackageManager.NameNotFoundException ignored) {
         }
-        mWeatherClient = new OmniJawsClient(context, true);
+        mWeatherClient = new OmniJawsClient(context);
 
         inflateView();
 

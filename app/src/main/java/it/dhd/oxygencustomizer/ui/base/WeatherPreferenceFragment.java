@@ -59,7 +59,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
-        mWeatherClient = new OmniJawsClient(getContext(), false);
+        mWeatherClient = new OmniJawsClient(getContext());
 
         mWeatherIconPack = findPreference(WEATHER_ICON_PACK);
 
