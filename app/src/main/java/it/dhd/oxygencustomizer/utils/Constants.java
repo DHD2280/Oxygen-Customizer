@@ -464,6 +464,9 @@ public class Constants {
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE = "lockscreen_widgets_small_icon_active";
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE = "lockscreen_widgets_small_icon_inactive";
 
+            // Weather Settings
+            public static final String LOCKSCREEN_WIDGETS_WEATHER_SETTINGS = "weather_settings";
+
         }
 
         // AOD

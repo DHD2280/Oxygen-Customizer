@@ -78,10 +78,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_WEATHER_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_HIDE_DATE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
@@ -176,10 +178,10 @@ public class PreferenceHelper {
             // Status Bar Prefs
             // Battery Bar
             case "batteryFastChargingColor",
-                    "batteryChargingColor",
-                    "batteryWarningColor",
-                    "batteryCriticalColor",
-                    "batteryPowerSaveColor" -> {
+                 "batteryChargingColor",
+                 "batteryWarningColor",
+                 "batteryCriticalColor",
+                 "batteryPowerSaveColor" -> {
 
                 boolean critZero = false, warnZero = false;
                 List<Float> BBarLevels = instance.mPreferences.getSliderValues("batteryWarningRange", 0);
@@ -204,16 +206,16 @@ public class PreferenceHelper {
                 };
             }
             case "BBarTransitColors",
-                    "BBarColorful",
-                    "BBOnlyWhileCharging",
-                    "BBOnBottom",
-                    "BBOpacity",
-                    "BBarHeight",
-                    "BBSetCentered",
-                    "indicateCharging",
-                    "indicateFastCharging",
-                    "indicatePowerSave",
-                    "batteryWarningRange" -> {
+                 "BBarColorful",
+                 "BBOnlyWhileCharging",
+                 "BBOnBottom",
+                 "BBOpacity",
+                 "BBarHeight",
+                 "BBSetCentered",
+                 "indicateCharging",
+                 "indicateFastCharging",
+                 "indicatePowerSave",
+                 "batteryWarningRange" -> {
                 return instance.mPreferences.getBoolean("BBarEnabled", false);
             }
             // Launcher Prefs
@@ -239,7 +241,8 @@ public class PreferenceHelper {
             case "status_bar_clock_auto_hide_hduration", "status_bar_clock_auto_hide_sduration" -> {
                 return instance.mPreferences.getBoolean("status_bar_clock_auto_hide", false);
             }
-            case "status_bar_clock_date_position", "status_bar_clock_date_style", "status_bar_clock_date_format" -> {
+            case "status_bar_clock_date_position", "status_bar_clock_date_style",
+                 "status_bar_clock_date_format" -> {
                 return !instance.mPreferences.getString("status_bar_clock_date_display", "0").equals("0");
             }
             case "status_bar_clock_background_chip" -> {
@@ -255,7 +258,7 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("statusbar_notification_transparency", false);
             }
             case CLEAR_BUTTON_BG_LINK_ACCENT,
-                    CLEAR_BUTTON_ICON_LINK_ACCENT -> {
+                 CLEAR_BUTTON_ICON_LINK_ACCENT -> {
                 return instance.mPreferences.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
             }
             case CLEAR_BUTTON_BG_COLOR -> {
@@ -270,25 +273,25 @@ public class PreferenceHelper {
 
             // Battery Icon
             case "battery_icon_style",
-                    "category_battery_icon_settings",
-                    "battery_hide_percentage",
-                    "battery_inside_percentage",
-                    "battery_hide_battery",
-                    "battery_reverse_layout",
-                    "battery_rotate_layout",
-                    "category_battery_colors",
-                    "battery_perimeter_alpha",
-                    "battery_fill_alpha",
-                    "battery_rainbow_color",
-                    "battery_blend_color",
-                    "battery_fill_color",
-                    "battery_fill_gradient_color",
-                    "battery_charging_fill_color",
-                    "battery_fast_charging_fill_color",
-                    "battery_powersave_fill_color",
-                    "battery_powersave_icon_color",
-                    "category_battery_margins",
-                    "category_battery_charging_icon" -> {
+                 "category_battery_icon_settings",
+                 "battery_hide_percentage",
+                 "battery_inside_percentage",
+                 "battery_hide_battery",
+                 "battery_reverse_layout",
+                 "battery_rotate_layout",
+                 "category_battery_colors",
+                 "battery_perimeter_alpha",
+                 "battery_fill_alpha",
+                 "battery_rainbow_color",
+                 "battery_blend_color",
+                 "battery_fill_color",
+                 "battery_fill_gradient_color",
+                 "battery_charging_fill_color",
+                 "battery_fast_charging_fill_color",
+                 "battery_powersave_fill_color",
+                 "battery_powersave_icon_color",
+                 "category_battery_margins",
+                 "category_battery_charging_icon" -> {
                 return isVisibleBattery(key);
             }
             case "category_battery_stock_prefs" -> {
@@ -296,7 +299,7 @@ public class PreferenceHelper {
             }
             case "stock_percentage_size" -> {
                 return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false) &&
-                    instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
+                        instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
             }
 
             // QuickSettings Prefs
@@ -312,8 +315,8 @@ public class PreferenceHelper {
 
             // Qs Tiles
             case "quick_settings_quick_tiles",
-                    "qs_tile_potrait",
-                    "qs_tile_landscape" -> {
+                 "qs_tile_potrait",
+                 "qs_tile_landscape" -> {
                 return instance.mPreferences.getBoolean("quick_settings_tiles_customize", false);
             }
 
@@ -338,7 +341,7 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("brightness_slider_background_color_enabled", false);
             }
             case QS_TILE_ANIMATION_INTERPOLATOR,
-                    QS_TILE_ANIMATION_DURATION -> {
+                 QS_TILE_ANIMATION_DURATION -> {
                 return !instance.mPreferences.getString(QS_TILE_ANIMATION_STYLE, "0").equals("0");
             }
             case QS_TILE_ANIMATION_TRANSFORMATIONS -> {
@@ -356,22 +359,22 @@ public class PreferenceHelper {
                                 instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("4"));
             }
             case QS_MEDIA_ART_TINT_COLOR,
-                    QS_MEDIA_ART_TINT_AMOUNT -> {
+                 QS_MEDIA_ART_TINT_AMOUNT -> {
                 return instance.mPreferences.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false) &&
                         (instance.mPreferences.getString(QS_MEDIA_ART_FILTER, "0").equals("5"));
             }
 
             // Tile Radius
             case QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT,
-                    QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
-                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
-                    QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> {
+                 QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
+                 QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
+                 QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> {
                 return instance.mPreferences.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
             }
             case QS_TILE_RADIUS_TOP_LEFT,
-                    QS_TILE_RADIUS_TOP_RIGHT,
-                    QS_TILE_RADIUS_BOTTOM_LEFT,
-                    QS_TILE_RADIUS_BOTTOM_RIGHT -> {
+                 QS_TILE_RADIUS_TOP_RIGHT,
+                 QS_TILE_RADIUS_BOTTOM_LEFT,
+                 QS_TILE_RADIUS_BOTTOM_RIGHT -> {
                 return instance.mPreferences.getBoolean(QS_TILE_RADIUS, false);
             }
 
@@ -393,14 +396,14 @@ public class PreferenceHelper {
             // Header Image
             // Header Image
             case QS_HEADER_IMAGE_TINT,
-                    QS_HEADER_IMAGE_ALPHA,
-                    QS_HEADER_IMAGE_BOTTOM_FADE,
-                    QS_HEADER_IMAGE_HEIGHT_PORTRAIT,
-                    QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
-                    QS_HEADER_IMAGE_PADDING_SIDE,
-                    QS_HEADER_IMAGE_PADDING_TOP,
-                    QS_HEADER_IMAGE_URI,
-                    QS_HEADER_IMAGE_ZOOM_TO_FIT -> {
+                 QS_HEADER_IMAGE_ALPHA,
+                 QS_HEADER_IMAGE_BOTTOM_FADE,
+                 QS_HEADER_IMAGE_HEIGHT_PORTRAIT,
+                 QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
+                 QS_HEADER_IMAGE_PADDING_SIDE,
+                 QS_HEADER_IMAGE_PADDING_TOP,
+                 QS_HEADER_IMAGE_URI,
+                 QS_HEADER_IMAGE_ZOOM_TO_FIT -> {
                 return instance.mPreferences.getBoolean(QS_HEADER_IMAGE_ENABLED, false);
             }
             case "qs_header_image_tint_custom" -> {
@@ -418,7 +421,7 @@ public class PreferenceHelper {
                 return !instance.mPreferences.getBoolean("qs_header_stock_clock_date_hide", false);
             }
             case "qs_header_clock_custom",
-                    "qs_header_clock_prefs", "qs_header_clock_custom_margins" -> {
+                 "qs_header_clock_prefs", "qs_header_clock_custom_margins" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR -> {
@@ -435,10 +438,10 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_font", false);
             }
             case "qs_header_clock_color_code_accent1",
-                    "qs_header_clock_color_code_accent2",
-                    "qs_header_clock_color_code_accent3",
-                    "qs_header_clock_color_code_text1",
-                    "qs_header_clock_color_code_text2" -> {
+                 "qs_header_clock_color_code_accent2",
+                 "qs_header_clock_color_code_accent3",
+                 "qs_header_clock_color_code_text1",
+                 "qs_header_clock_color_code_text2" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_color_switch", false);
             }
             case "qs_header_clock_custom_user_image" -> {
@@ -465,8 +468,8 @@ public class PreferenceHelper {
 
             // Lockscreen Prefs
             case "lockscreen_fp_icon_custom",
-                    "lockscreen_fp_icon_picker",
-                    LOCKSCREEN_FINGERPRINT_SCALING -> {
+                 "lockscreen_fp_icon_picker",
+                 LOCKSCREEN_FINGERPRINT_SCALING -> {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
             case "DWCategory", "DWallpaperEnabled" -> {
@@ -488,18 +491,19 @@ public class PreferenceHelper {
             }
 
             // Lockscreen Clock
-            case "lockscreen_clock_custom", "lockscreen_clock_prefs", "lockscreen_clock_custom_margins", "lockscreen_clock_font_prefs" -> {
+            case "lockscreen_clock_custom", "lockscreen_clock_prefs",
+                 "lockscreen_clock_custom_margins", "lockscreen_clock_font_prefs" -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
             }
             case "lockscreen_clock_color_code_accent1",
-                    "lockscreen_clock_color_code_accent2",
-                    "lockscreen_clock_color_code_accent3",
-                    "lockscreen_clock_color_code_text1",
-                    "lockscreen_clock_color_code_text2" -> {
+                 "lockscreen_clock_color_code_accent2",
+                 "lockscreen_clock_color_code_accent3",
+                 "lockscreen_clock_color_code_text1",
+                 "lockscreen_clock_color_code_text2" -> {
                 return instance.mPreferences.getBoolean("lockscreen_custom_color_switch", false);
             }
             case "lockscreen_clock_custom_user_switch",
-                    "lockscreen_clock_custom_user_image" -> {
+                 "lockscreen_clock_custom_user_image" -> {
                 return instance.mPreferences.getInt("lockscreen_custom_clock_style", 0) == 7;
             }
             case "lockscreen_clock_custom_user" -> {
@@ -530,15 +534,15 @@ public class PreferenceHelper {
 
             // Lockscreen Weather
             case "update_status",
-                    LOCKSCREEN_WEATHER_HUMIDITY,
-                    LOCKSCREEN_WEATHER_WIND,
-                    LOCKSCREEN_WEATHER_TEXT_SIZE,
-                    LOCKSCREEN_WEATHER_IMAGE_SIZE,
-                    LOCKSCREEN_WEATHER_SHOW_LOCATION,
-                    LOCKSCREEN_WEATHER_SHOW_CONDITION,
-                    LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
-                    LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
-                    LOCKSCREEN_WEATHER_BACKGROUND -> {
+                 LOCKSCREEN_WEATHER_HUMIDITY,
+                 LOCKSCREEN_WEATHER_WIND,
+                 LOCKSCREEN_WEATHER_TEXT_SIZE,
+                 LOCKSCREEN_WEATHER_IMAGE_SIZE,
+                 LOCKSCREEN_WEATHER_SHOW_LOCATION,
+                 LOCKSCREEN_WEATHER_SHOW_CONDITION,
+                 LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
+                 LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
+                 LOCKSCREEN_WEATHER_BACKGROUND -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
             }
             case LOCKSCREEN_WEATHER_CUSTOM_COLOR -> {
@@ -546,7 +550,7 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
             }
             case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP,
-                    LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> {
+                 LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
             }
@@ -572,24 +576,24 @@ public class PreferenceHelper {
                  LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE,
                  LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE,
                  LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE -> {
-                    return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_CUSTOM_COLOR, false);
-                }
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_CUSTOM_COLOR, false);
+            }
 
             // Aod Clocks
             case "aod_clock_custom",
-                    "aod_clock_font_prefs",
-                    "aod_clock_prefs" -> {
+                 "aod_clock_font_prefs",
+                 "aod_clock_prefs" -> {
                 return instance.mPreferences.getBoolean(AOD_CLOCK_SWITCH, false);
             }
             case AOD_CLOCK_COLOR_CODE_ACCENT1,
-                    AOD_CLOCK_COLOR_CODE_ACCENT2,
-                    AOD_CLOCK_COLOR_CODE_ACCENT3,
-                    AOD_CLOCK_COLOR_CODE_TEXT1,
-                    AOD_CLOCK_COLOR_CODE_TEXT2 -> {
+                 AOD_CLOCK_COLOR_CODE_ACCENT2,
+                 AOD_CLOCK_COLOR_CODE_ACCENT3,
+                 AOD_CLOCK_COLOR_CODE_TEXT1,
+                 AOD_CLOCK_COLOR_CODE_TEXT2 -> {
                 return instance.mPreferences.getBoolean(AOD_CLOCK_CUSTOM_COLOR_SWITCH, false);
             }
             case AOD_CLOCK_CUSTOM_USER,
-                    "aod_clock_custom_user_image" -> {
+                 "aod_clock_custom_user_image" -> {
                 return instance.mPreferences.getInt("aod_custom_clock_style", 0) == 7;
             }
             case "aod_clock_custom_user" -> {
@@ -695,24 +699,27 @@ public class PreferenceHelper {
                 batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ||
                 batteryStyle == BATTERY_STYLE_FILLED_CIRCLE;
 
-        return switch(key) {
+        return switch (key) {
             case "category_battery_icon_settings",
-                    "battery_icon_style" -> showCommonCustomizations;
+                 "battery_icon_style" -> showCommonCustomizations;
             case "category_battery_charging_icon" -> showChargingIconCustomization;
             case "battery_perimeter_alpha",
-                    "battery_fill_alpha",
-                    "battery_rotate_layout" -> showAdvancedCustomizations;
+                 "battery_fill_alpha",
+                 "battery_rotate_layout" -> showAdvancedCustomizations;
             case "battery_reverse_layout", "battery_inside_percentage" -> showInsidePercentage;
-            case "battery_rainbow_color" -> (showAdvancedCustomizations || circleBattery) && showRainbowBattery;
+            case "battery_rainbow_color" ->
+                    (showAdvancedCustomizations || circleBattery) && showRainbowBattery;
             case "battery_blend_color" -> (showAdvancedCustomizations || circleBattery);
             case "battery_fill_color",
-                    "battery_fill_gradient_color",
-                    "battery_charging_fill_color",
-                    "battery_fast_charging_fill_color",
-                    "battery_powersave_fill_color",
-                    "battery_powersave_icon_color" -> (showAdvancedCustomizations || circleBattery) && showColorPickers;
+                 "battery_fill_gradient_color",
+                 "battery_charging_fill_color",
+                 "battery_fast_charging_fill_color",
+                 "battery_powersave_fill_color",
+                 "battery_powersave_icon_color" ->
+                    (showAdvancedCustomizations || circleBattery) && showColorPickers;
             case "battery_hide_percentage" -> showPercentage;
-            case "category_battery_colors" -> showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
+            case "category_battery_colors" ->
+                    showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
             default -> false;
         };
 
@@ -724,10 +731,14 @@ public class PreferenceHelper {
             case "BBarColorful" -> !instance.mPreferences.getBoolean("BBarTransitColors", false);
             case "BIconColorful" -> !instance.mPreferences.getBoolean("BIconTransitColors", false);
             case "BIconTransitColors" -> !instance.mPreferences.getBoolean("BIconColorful", false);
-            case "lockscreen_fp_remove_icon" -> !instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
-            case "lockscreen_fp_custom_icon" -> !instance.mPreferences.getBoolean("lockscreen_fp_remove_icon", false);
-            case QS_TILE_HIDE_LABELS -> !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
-            case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED -> !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
+            case "lockscreen_fp_remove_icon" ->
+                    !instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
+            case "lockscreen_fp_custom_icon" ->
+                    !instance.mPreferences.getBoolean("lockscreen_fp_remove_icon", false);
+            case QS_TILE_HIDE_LABELS ->
+                    !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
+            case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED ->
+                    !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
 
             // Lockscreen Widgets
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
@@ -744,11 +755,17 @@ public class PreferenceHelper {
                  LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE ->
                     instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
 
+            case LOCKSCREEN_WIDGETS_WEATHER_SETTINGS ->
+                    instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) &&
+                            (instance.mPreferences.getString(LOCKSCREEN_WIDGETS, "").contains("weather") ||
+                                    instance.mPreferences.getString(LOCKSCREEN_WIDGETS_EXTRAS, "").contains("weather"));
+
             default -> true;
         };
     }
 
     /**
+     *
      */
     @SuppressLint("DefaultLocale")
     @Nullable
@@ -772,18 +789,22 @@ public class PreferenceHelper {
         return switch (key) {
             // Padding
             case "statusbar_top_padding" -> instance.mPreferences.getSliderInt(key, 0) + "dp";
-            case "statusbar_left_padding", "statusbar_right_padding" -> String.valueOf(instance.mPreferences.getSliderFloat(key, -0.5f));
+            case "statusbar_left_padding", "statusbar_right_padding" ->
+                    String.valueOf(instance.mPreferences.getSliderFloat(key, -0.5f));
 
             // Statusbar Clock
-            case "status_bar_java_custom" -> instance.mPreferences.getString("status_bar_custom_clock_format", "$GEEE");
-            case "sbc_before_clock" -> instance.mPreferences.getString("sbc_before_clock_format", "");
+            case "status_bar_java_custom" ->
+                    instance.mPreferences.getString("status_bar_custom_clock_format", "$GEEE");
+            case "sbc_before_clock" ->
+                    instance.mPreferences.getString("sbc_before_clock_format", "");
             case "sbc_after_clock" -> instance.mPreferences.getString("sbc_after_clock_format", "");
 
             // Battery Bar
             case "BBOpacity", "BBarHeight" -> instance.mPreferences.getSliderInt(key, 100) + "%";
 
             // Quick Settings Prefs
-            case "quick_pulldown_length" -> instance.mPreferences.getSliderInt("quick_pulldown_length", 25) + "%";
+            case "quick_pulldown_length" ->
+                    instance.mPreferences.getSliderInt("quick_pulldown_length", 25) + "%";
             // Tiles
             case "quick_settings_quick_tiles" ->
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_quick_tiles", 5));
@@ -795,14 +816,22 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
 
             // Tile Radius
-            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0) + "dp";
-            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0) + "dp";
-            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0) + "dp";
-            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0) + "dp";
-            case QS_TILE_RADIUS_TOP_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0) + "dp";
-            case QS_TILE_RADIUS_TOP_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0) + "dp";
-            case QS_TILE_RADIUS_BOTTOM_LEFT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0) + "dp";
-            case QS_TILE_RADIUS_BOTTOM_RIGHT -> instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_TOP_LEFT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_TOP_RIGHT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0) + "dp";
+            case QS_TILE_RADIUS_BOTTOM_LEFT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0) + "dp";
+            case QS_TILE_RADIUS_BOTTOM_RIGHT ->
+                    instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0) + "dp";
 
             case QS_TILE_ANIMATION_DURATION ->
                     instance.mPreferences.getSliderInt(QS_TILE_ANIMATION_DURATION, 1) + "s";
@@ -811,10 +840,13 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_TRANSPARENCY_VAL, 40) + "%";
             case BLUR_RADIUS_VALUE ->
                     instance.mPreferences.getSliderInt(BLUR_RADIUS_VALUE, 60) + "%";
-            case QS_MEDIA_ART_BLUR_AMOUNT -> instance.mPreferences.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 35) + "%";
-            case QS_MEDIA_ART_TINT_AMOUNT -> instance.mPreferences.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 30) + "%";
+            case QS_MEDIA_ART_BLUR_AMOUNT ->
+                    instance.mPreferences.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 35) + "%";
+            case QS_MEDIA_ART_TINT_AMOUNT ->
+                    instance.mPreferences.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 30) + "%";
             // Statusbar
-            case "status_bar_clock_size" -> instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
+            case "status_bar_clock_size" ->
+                    instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_hdur_summary) + "\n" +
                             instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_hduration", 60) + " " +
@@ -827,65 +859,102 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
 
             // Header Clock
-            case "qs_header_clock_text_scaling" -> instance.mPreferences.getSliderFloat("qs_header_clock_text_scaling", 1.0f) + "%";
-            case "qs_header_clock_top_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_top_margin", 0) + "dp";
-            case "qs_header_clock_left_margin" -> instance.mPreferences.getSliderInt("qs_header_clock_left_margin", 0) + "dp";
+            case "qs_header_clock_text_scaling" ->
+                    instance.mPreferences.getSliderFloat("qs_header_clock_text_scaling", 1.0f) + "%";
+            case "qs_header_clock_top_margin" ->
+                    instance.mPreferences.getSliderInt("qs_header_clock_top_margin", 0) + "dp";
+            case "qs_header_clock_left_margin" ->
+                    instance.mPreferences.getSliderInt("qs_header_clock_left_margin", 0) + "dp";
 
             // Battery
-            case CUSTOM_BATTERY_WIDTH -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_WIDTH, 20) + "dp";
-            case CUSTOM_BATTERY_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20) + "dp";
-            case CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14) + "dp";
-            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
-            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT -> instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
+            case CUSTOM_BATTERY_WIDTH ->
+                    instance.mPreferences.getSliderInt(CUSTOM_BATTERY_WIDTH, 20) + "dp";
+            case CUSTOM_BATTERY_HEIGHT ->
+                    instance.mPreferences.getSliderInt(CUSTOM_BATTERY_HEIGHT, 20) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT ->
+                    instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT ->
+                    instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
+            case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT ->
+                    instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
 
             // Gesture Prefs
             case "gesture_left_height_double" -> getGestureHeight(key);
             case "gesture_right_height_double" -> getGestureHeight(key);
             // Launcher Prefs
-            case "folder_columns" -> String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));
-            case "folder_rows" -> String.valueOf(instance.mPreferences.getSliderInt("folder_rows", 3));
-            case "drawer_columns" -> String.valueOf(instance.mPreferences.getSliderInt("drawer_columns", 4));
-            case "launcher_max_columns" -> String.valueOf(instance.mPreferences.getSliderInt("launcher_max_columns", 5));
-            case "launcher_max_rows" -> String.valueOf(instance.mPreferences.getSliderInt("launcher_max_rows", 6));
+            case "folder_columns" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));
+            case "folder_rows" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("folder_rows", 3));
+            case "drawer_columns" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("drawer_columns", 4));
+            case "launcher_max_columns" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("launcher_max_columns", 5));
+            case "launcher_max_rows" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("launcher_max_rows", 6));
 
             // Header Image
-            case "qs_header_image_alpha" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_alpha", 255));
-            case "qs_header_image_height_portrait" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_height_portrait", 325));
-            case "qs_header_image_height_landscape" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_height_landscape", 200));
-            case "qs_header_image_padding_side" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_padding_side", -50));
-            case "qs_header_image_padding_top" -> String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_padding_top", 0));
-            case "qs_header_image_tint_intensity" -> instance.mPreferences.getSliderInt("qs_header_image_tint_intensity", 50) + "%";
-            case QS_HEADER_IMAGE_BOTTOM_FADE -> instance.mPreferences.getSliderInt(QS_HEADER_IMAGE_BOTTOM_FADE, 40) + "dp";
+            case "qs_header_image_alpha" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_alpha", 255));
+            case "qs_header_image_height_portrait" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_height_portrait", 325));
+            case "qs_header_image_height_landscape" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_height_landscape", 200));
+            case "qs_header_image_padding_side" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_padding_side", -50));
+            case "qs_header_image_padding_top" ->
+                    String.valueOf(instance.mPreferences.getSliderInt("qs_header_image_padding_top", 0));
+            case "qs_header_image_tint_intensity" ->
+                    instance.mPreferences.getSliderInt("qs_header_image_tint_intensity", 50) + "%";
+            case QS_HEADER_IMAGE_BOTTOM_FADE ->
+                    instance.mPreferences.getSliderInt(QS_HEADER_IMAGE_BOTTOM_FADE, 40) + "dp";
 
             // Lockscreen
-            case LOCKSCREEN_FINGERPRINT_SCALING -> instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
+            case LOCKSCREEN_FINGERPRINT_SCALING ->
+                    instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
             case "DWOpacity" -> instance.mPreferences.getSliderInt("DWOpacity", 192) + "dp";
-            case "lockscreen_media_blur" -> instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
+            case "lockscreen_media_blur" ->
+                    instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
 
             // Lockscreen Clock
-            case LOCKSCREEN_CLOCK_LINE_HEIGHT -> instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 100) + "dp";
-            case LOCKSCREEN_CLOCK_TEXT_SCALING -> instance.mPreferences.getSliderFloat(LOCKSCREEN_CLOCK_TEXT_SCALING, 1.0f) + "%";
-            case LOCKSCREEN_CLOCK_TOP_MARGIN -> instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 0) + "dp";
-            case LOCKSCREEN_CLOCK_BOTTOM_MARGIN -> instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 0) + "dp";
+            case LOCKSCREEN_CLOCK_LINE_HEIGHT ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 100) + "dp";
+            case LOCKSCREEN_CLOCK_TEXT_SCALING ->
+                    instance.mPreferences.getSliderFloat(LOCKSCREEN_CLOCK_TEXT_SCALING, 1.0f) + "%";
+            case LOCKSCREEN_CLOCK_TOP_MARGIN ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 0) + "dp";
+            case LOCKSCREEN_CLOCK_BOTTOM_MARGIN ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 0) + "dp";
 
             // Lockscreen Weather
-            case LOCKSCREEN_WEATHER_IMAGE_SIZE -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18) + "dp";
-            case LOCKSCREEN_WEATHER_TEXT_SIZE -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16) + "sp";
-            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
-            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
+            case LOCKSCREEN_WEATHER_IMAGE_SIZE ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18) + "dp";
+            case LOCKSCREEN_WEATHER_TEXT_SIZE ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16) + "sp";
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
 
             // Aod Clock
-            case AOD_CLOCK_LINE_HEIGHT -> instance.mPreferences.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 100) + "dp";
-            case AOD_CLOCK_TEXT_SCALING -> instance.mPreferences.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f) + "%";
+            case AOD_CLOCK_LINE_HEIGHT ->
+                    instance.mPreferences.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 100) + "dp";
+            case AOD_CLOCK_TEXT_SCALING ->
+                    instance.mPreferences.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f) + "%";
 
             // Aod Weather
-            case AOD_WEATHER_IMAGE_SIZE -> instance.mPreferences.getSliderInt(AOD_WEATHER_IMAGE_SIZE, 18) + "dp";
-            case AOD_WEATHER_TEXT_SIZE -> instance.mPreferences.getSliderInt(AOD_WEATHER_TEXT_SIZE, 16) + "sp";
-            case AOD_WEATHER_CUSTOM_MARGIN_TOP -> instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
-            case AOD_WEATHER_CUSTOM_MARGIN_LEFT -> instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
+            case AOD_WEATHER_IMAGE_SIZE ->
+                    instance.mPreferences.getSliderInt(AOD_WEATHER_IMAGE_SIZE, 18) + "dp";
+            case AOD_WEATHER_TEXT_SIZE ->
+                    instance.mPreferences.getSliderInt(AOD_WEATHER_TEXT_SIZE, 16) + "sp";
+            case AOD_WEATHER_CUSTOM_MARGIN_TOP ->
+                    instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
+            case AOD_WEATHER_CUSTOM_MARGIN_LEFT ->
+                    instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
 
             // Sound Prefs
-            case "volume_dialog_timeout" -> instance.mPreferences.getSliderInt("volume_dialog_timeout", 3) + " s";
+            case "volume_dialog_timeout" ->
+                    instance.mPreferences.getSliderInt("volume_dialog_timeout", 3) + " s";
 
             // Pulse Prefs
             case "pulse_lavalamp_speed" ->
@@ -912,7 +981,8 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("pulse_line_wave_opacity", 200));
 
             // Buttons
-            case "volbtn_torch_enable_timeout" -> instance.mPreferences.getSliderInt("volbtn_torch_enable_timeout", 5) + " s";
+            case "volbtn_torch_enable_timeout" ->
+                    instance.mPreferences.getSliderInt("volbtn_torch_enable_timeout", 5) + " s";
 
             default -> null;
         };
@@ -945,7 +1015,8 @@ public class PreferenceHelper {
 
             if (preference instanceof SliderPreference) {
                 ((SliderPreference) preference).slider.setLabelFormatter(value -> {
-                    if (value == ((SliderPreference) preference).defaultValue.get(0)) return getAppContext().getString(R.string.default_value);
+                    if (value == ((SliderPreference) preference).defaultValue.get(0))
+                        return getAppContext().getString(R.string.default_value);
                     else return String.valueOf(Math.round(value));
                 });
             }
@@ -955,7 +1026,8 @@ public class PreferenceHelper {
                 // Quick Settings
                 case "QSLabelScaleFactor", "QSSecondaryLabelScaleFactor" ->
                         ((SliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
-                case QS_HEADER_CLOCK_TEXT_SCALING, LOCKSCREEN_CLOCK_TEXT_SCALING, LOCKSCREEN_FINGERPRINT_SCALING ->
+                case QS_HEADER_CLOCK_TEXT_SCALING, LOCKSCREEN_CLOCK_TEXT_SCALING,
+                     LOCKSCREEN_FINGERPRINT_SCALING ->
                         ((SliderPreference) preference).slider.setLabelFormatter(value -> value + "%");
             }
         } catch (Throwable ignored) {

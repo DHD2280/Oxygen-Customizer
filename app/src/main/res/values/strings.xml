@@ -599,6 +599,7 @@
     <string name="launcher_app_details_title">Open App Details</string>
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
+    <string name="force_themed_launcher_icons">Force Themed App Icons</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
@@ -1178,6 +1179,7 @@
     <string name="mini_inactive">Mini Widget Inactive Color</string>
     <string name="mini_icon_active">Mini Widget Icon Active Color</string>
     <string name="mini_icon_inactive">Mini Widget Icon Inactive Color</string>
+    <string name="weather_settings">Weather Settings</string>
 
     <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>

@@ -138,6 +138,7 @@
             android:defaultValue="-1"
             android:key="lockscreen_widgets_big_active"
             android:title="@string/big_active"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -145,6 +146,7 @@
             android:defaultValue="-16777216"
             android:key="lockscreen_widgets_big_inactive"
             android:title="@string/big_inactive"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -152,6 +154,7 @@
             android:defaultValue="-16777216"
             android:key="lockscreen_widgets_big_icon_active"
             android:title="@string/big_icon_active"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -159,6 +162,7 @@
             android:defaultValue="-1"
             android:key="lockscreen_widgets_big_icon_inactive"
             android:title="@string/big_icon_inactive"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -166,6 +170,7 @@
             android:defaultValue="-1"
             android:key="lockscreen_widgets_small_active"
             android:title="@string/mini_active"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -173,6 +178,7 @@
             android:defaultValue="-16777216"
             android:key="lockscreen_widgets_small_inactive"
             android:title="@string/mini_inactive"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -180,6 +186,7 @@
             android:defaultValue="-16777216"
             android:key="lockscreen_widgets_small_icon_active"
             android:title="@string/mini_icon_active"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
@@ -187,9 +194,21 @@
             android:defaultValue="-1"
             android:key="lockscreen_widgets_small_icon_inactive"
             android:title="@string/mini_icon_inactive"
+            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/misc_category">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:key="weather_settings"
+            android:title="@string/weather_settings"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings" />
 
     </PreferenceCategory>
 
