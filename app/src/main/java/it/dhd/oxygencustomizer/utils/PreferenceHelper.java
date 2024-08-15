@@ -77,6 +77,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
@@ -731,8 +732,17 @@ public class PreferenceHelper {
             // Lockscreen Widgets
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
-                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE ->
-                    instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS, false);
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE,
+                 LOCKSCREEN_WIDGETS_CUSTOM_COLOR,
+                 LOCKSCREEN_WIDGETS_BIG_ACTIVE,
+                 LOCKSCREEN_WIDGETS_BIG_INACTIVE,
+                 LOCKSCREEN_WIDGETS_BIG_ICON_ACTIVE,
+                 LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE,
+                 LOCKSCREEN_WIDGETS_SMALL_ACTIVE,
+                 LOCKSCREEN_WIDGETS_SMALL_INACTIVE,
+                 LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE,
+                 LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE ->
+                    instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
 
             default -> true;
         };
