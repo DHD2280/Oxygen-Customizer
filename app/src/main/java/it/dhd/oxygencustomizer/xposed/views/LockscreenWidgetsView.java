@@ -258,17 +258,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             updateWidgetViews();
         });
 
+        // Add a Screen On Receiver so we can update the widgets state when the screen is turned on
+        mContext.registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON), Context.RECEIVER_EXPORTED);
 
-        addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(@NonNull View v) {
-                onVisible();
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(@NonNull View v) {
-            }
-        });
     }
 
     private LinearLayout createDeviceWidgetContainer(Context context) {
@@ -876,7 +868,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 if (efab != null) {
                     weatherButtonFab = efab;
                 }
-                //setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchWeatherApp(), "ic_alarm", R.string.weather_data_unavailable);
+                // Set a null on click listener to weather button to avoid running previous button action
+                setUpWidgetResources(iv, efab, v -> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
                 enableWeatherUpdates();
                 break;
             case "hotspot":
