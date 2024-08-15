@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -295,6 +296,10 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             String packageName = r.activityInfo.packageName;
             values.add(packageName + ".weather");
             String label = r.activityInfo.loadLabel(packageManager).toString();
+            try {
+                Resources mRes = packageManager.getResourcesForApplication(packageName);
+                drawables.add(ResourcesCompat.getDrawable(mRes, mRes.getIdentifier("weather_30", "drawable", packageName), getContext().getTheme()));
+            } catch (PackageManager.NameNotFoundException ignored) {}
             if (label == null) {
                 label = r.activityInfo.packageName;
             }
