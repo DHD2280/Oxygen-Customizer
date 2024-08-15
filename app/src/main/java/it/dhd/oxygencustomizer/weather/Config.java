@@ -65,7 +65,7 @@ public class Config {
     }
 
     public static AbstractWeatherProvider getProvider(Context context) {
-        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "0");
+        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "2");
 
         return switch (provider) {
             case "1" -> new METNorwayProvider(context);
@@ -75,7 +75,7 @@ public class Config {
     }
 
     public static String getProviderId(Context context) {
-        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "0");
+        String provider = getPrefs(context).getString(WEATHER_PROVIDER, "2");
 
         return switch (provider) {
             case "1" -> "MET Norway";
