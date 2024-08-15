@@ -108,7 +108,6 @@ public class VolumePanel extends XposedMods {
         hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log("showSafetyWarningH: " + mDisableVolumeWarning);
                 if (mDisableVolumeWarning) {
                     param.setResult(null);
                 }
@@ -145,15 +144,19 @@ public class VolumePanel extends XposedMods {
             hookAllConstructors(OplusQsVolumeController, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
-                    hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            if (mDisableVolumeWarning) {
-                                param.setResult(null);
+                    try {
+                        Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
+                        hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
+                            @Override
+                            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                if (mDisableVolumeWarning) {
+                                    param.setResult(null);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Throwable t) {
+                        log(TAG + "OplusQsVolumeController, no volumeCallback " + t.getMessage());
+                    }
                 }
             });
         } catch (Throwable t) {
