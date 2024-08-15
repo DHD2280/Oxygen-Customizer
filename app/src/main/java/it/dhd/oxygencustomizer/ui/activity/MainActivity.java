@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.ui.activity;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.fragments.UpdateFragment.UPDATES_CHANNEL_ID;
-import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -47,6 +45,7 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.Buttons;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Launcher;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar;
 import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock;
+import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture;
@@ -121,8 +120,9 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             prefsList.add(new Object[]{R.xml.launcher_mods, R.string.launcher_title, new Launcher()});
         prefsList.add(new Object[]{R.xml.lockscreen_prefs, R.string.lockscreen_title, new Lockscreen()});
         prefsList.add(new Object[]{R.xml.lockscreen_clock, R.string.lockscreen_clock, new Lockscreen.LockscreenClock()});
-        prefsList.add(new Object[]{R.xml.weather_settings, R.string.lockscreen_weather, new LockscreenWeather()});
+        prefsList.add(new Object[]{R.xml.lockscreen_weather_prefs, R.string.lockscreen_weather, new LockscreenWeather()});
         prefsList.add(new Object[]{R.xml.aod_clock_prefs, R.string.aod_clock, new AodClock()});
+        prefsList.add(new Object[]{R.xml.aod_weather_prefs, R.string.aod_weather, new AodWeather()});
         prefsList.add(new Object[]{R.xml.sound_mods, R.string.sound, new Mods.Sound()});
         prefsList.add(new Object[]{R.xml.package_manager_prefs, R.string.package_manager, new Mods.PackageManager()});
         prefsList.add(new Object[]{R.xml.misc_prefs, R.string.misc, new Mods.Misc()});
