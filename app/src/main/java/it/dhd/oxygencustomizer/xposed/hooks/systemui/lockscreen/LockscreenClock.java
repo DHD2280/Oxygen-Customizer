@@ -1,5 +1,8 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -175,6 +178,8 @@ public class LockscreenClock extends XposedMods {
     private int accent1, accent2, accent3, text1, text2;
     private boolean customColor;
     Class<?> LottieAn = null;
+
+    // Weather
     private boolean weatherEnabled = false, weatherShowLocation = true, weatherShowCondition = true;
     private boolean weatherShowHumidity = true, weatherShowWind = true;
     private boolean weatherCustomColor = false;
@@ -189,6 +194,7 @@ public class LockscreenClock extends XposedMods {
     public static Class<?> LaunchableImageView = null;
 
     // Lockscreen Widgets
+    private LinearLayout mWidgetsContainer = null;
     private boolean mWidgetsEnabled = false;
     private boolean mDeviceWidgetEnabled = false;
     private boolean mDeviceCustomColor = false;
@@ -358,6 +364,10 @@ public class LockscreenClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
+        mWidgetsContainer = new LinearLayout(mContext);
+        mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+        mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
+
         try {
             // LaunchableLinearLayout
             // This is the container of our custom views
@@ -385,7 +395,19 @@ public class LockscreenClock extends XposedMods {
                     setActivityStarter();
                 }
             });
-        } catch (Throwable ignored) {
+        } catch (Throwable ignored) {}
+
+        if (Build.VERSION.SDK_INT == 33) {
+            try {
+                Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
+                hookAllMethods(KeyguardBottomAreaView, "onFinishInflate", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
+                        setActivityStarter();
+                    }
+                });
+            } catch (Throwable ignored) {}
         }
 
         Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
@@ -887,8 +909,18 @@ public class LockscreenClock extends XposedMods {
             } catch (Throwable ignored) {
             }
             if (Build.VERSION.SDK_INT == 33) {
-                mStatusViewContainer.addView(lsWidgets, mStatusViewContainer.getChildCount());
-                lsWidgets.bringToFront();
+                if (mWidgetsContainer == null) {
+                    mWidgetsContainer = new LinearLayout(mContext);
+                    mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                    mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
+                }
+                try {
+                    ((ViewGroup) mWidgetsContainer.getParent()).removeView(mWidgetsContainer);
+                } catch (Throwable ignored) {
+                }
+                mWidgetsContainer.addView(lsWidgets);
+                mStatusViewContainer.addView(mWidgetsContainer, mStatusViewContainer.getChildCount());
+                mWidgetsContainer.bringToFront();
                 mStatusViewContainer.post(() -> {
                     mStatusViewContainer.bringToFront();
                     mStatusViewContainer.invalidate();
