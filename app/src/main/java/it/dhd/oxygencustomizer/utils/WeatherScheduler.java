@@ -19,12 +19,10 @@ import it.dhd.oxygencustomizer.weather.WeatherWork;
 public class WeatherScheduler {
     private static final String UPDATE_WORK_NAME = BuildConfig.APPLICATION_ID + ".WeatherSchedule";
 
-    public static void scheduleUpdates(Context context)
-    {
-            Log.d("Weather Scheduler", "Updating update schedule...");
+    public static void scheduleUpdates(Context context) {
+        Log.d("WeatherScheduler", "Updating update schedule...");
 
-        if(!WorkManager.isInitialized())
-        {
+        if (!WorkManager.isInitialized()) {
             WorkManager.initialize(context, new Configuration.Builder().build());
         }
 
@@ -32,11 +30,10 @@ public class WeatherScheduler {
 
         boolean weatherEnabled = Config.isEnabled(context);
 
-        Log.d("Weather Scheduler", "Weather enabled: " + weatherEnabled);
+        Log.d("WeatherScheduler", "Weather enabled: " + weatherEnabled);
 
-        if(weatherEnabled)
-        {
-            Log.d("Weather Scheduler", "Scheduling updates");
+        if (weatherEnabled) {
+            Log.d("WeatherScheduler", "Scheduling updates");
             PeriodicWorkRequest.Builder builder = new PeriodicWorkRequest.Builder(WeatherWork.class, Config.getUpdateInterval(context), TimeUnit.HOURS)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1, TimeUnit.HOURS);
 
@@ -44,17 +41,14 @@ public class WeatherScheduler {
                     UPDATE_WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE,
                     builder.build());
-        }
-        else
-        {
+        } else {
             workManager.cancelUniqueWork(UPDATE_WORK_NAME);
         }
     }
 
     public static void unscheduleUpdates(Context context) {
 
-        if(!WorkManager.isInitialized())
-        {
+        if (!WorkManager.isInitialized()) {
             WorkManager.initialize(context, new Configuration.Builder().build());
         }
 
@@ -63,12 +57,10 @@ public class WeatherScheduler {
         workManager.cancelUniqueWork(UPDATE_WORK_NAME);
     }
 
-    public static void scheduleUpdateNow(Context context)
-    {
-            Log.d("Weather Scheduler", "Check update now");
+    public static void scheduleUpdateNow(Context context) {
+        Log.d("WeatherScheduler", "Check update now");
 
-        if(!WorkManager.isInitialized())
-        {
+        if (!WorkManager.isInitialized()) {
             WorkManager.initialize(context, new Configuration.Builder().build());
         }
 
