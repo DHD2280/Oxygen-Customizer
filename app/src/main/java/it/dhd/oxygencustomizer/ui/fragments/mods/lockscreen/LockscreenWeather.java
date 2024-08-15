@@ -21,7 +21,7 @@ public class LockscreenWeather
 
     @Override
     public int getLayoutResource() {
-        return R.xml.weather_settings;
+        return R.xml.lockscreen_weather_prefs;
     }
 
     @Override
