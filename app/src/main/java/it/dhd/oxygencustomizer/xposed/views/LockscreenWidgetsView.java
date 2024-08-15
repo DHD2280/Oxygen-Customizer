@@ -334,10 +334,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             secondaryWidgetsContainer = new LinearLayout(context);
         }
 
-        if (secondaryWidgetsContainer == null) {
-            secondaryWidgetsContainer = new LinearLayout(context); // Ensure the creation on our linear layout
-        }
-
         secondaryWidgetsContainer.setOrientation(HORIZONTAL);
         secondaryWidgetsContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         secondaryWidgetsContainer.setLayoutParams(new LayoutParams(
