@@ -109,7 +109,7 @@ public class WeatherContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mContext = getContext();
-        sCachedWeatherInfo = Config.getWeatherData(mContext);
+        sCachedWeatherInfo = WeatherConfig.getWeatherData(mContext);
         return true;
     }
 
@@ -127,13 +127,13 @@ public class WeatherContentProvider extends ContentProvider {
 
         if (projectionType == URI_TYPE_SETTINGS) {
             result.newRow()
-                    .add(COLUMN_ENABLED, Config.isEnabled(mContext) ? 1 : 0)
-                    .add(COLUMN_PROVIDER, Config.getProviderId(mContext))
-                    .add(COLUMN_INTERVAL, Config.getUpdateInterval(mContext))
-                    .add(COLUMN_UNITS, Config.isMetric(mContext) ? 0 : 1)
-                    .add(COLUMN_LOCATION, Config.isCustomLocation(mContext) ? Config.getLocationName(mContext) : "")
-                    .add(COLUMN_SETUP, !Config.isSetupDone(mContext) && sCachedWeatherInfo == null ? 0 : 1)
-                    .add(COLUMN_ICON_PACK, Config.getIconPack(mContext) != null ? Config.getIconPack(mContext) : "");
+                    .add(COLUMN_ENABLED, WeatherConfig.isEnabled(mContext) ? 1 : 0)
+                    .add(COLUMN_PROVIDER, WeatherConfig.getProviderId(mContext))
+                    .add(COLUMN_INTERVAL, WeatherConfig.getUpdateInterval(mContext))
+                    .add(COLUMN_UNITS, WeatherConfig.isMetric(mContext) ? 0 : 1)
+                    .add(COLUMN_LOCATION, WeatherConfig.isCustomLocation(mContext) ? WeatherConfig.getLocationName(mContext) : "")
+                    .add(COLUMN_SETUP, !WeatherConfig.isSetupDone(mContext) && sCachedWeatherInfo == null ? 0 : 1)
+                    .add(COLUMN_ICON_PACK, WeatherConfig.getIconPack(mContext) != null ? WeatherConfig.getIconPack(mContext) : "");
 
 
             return result;
@@ -208,7 +208,7 @@ public class WeatherContentProvider extends ContentProvider {
 
     public static void updateCachedWeatherInfo(Context context) {
         if (DEBUG) Log.d(TAG, "updateCachedWeatherInfo()");
-        sCachedWeatherInfo = Config.getWeatherData(context);
+        sCachedWeatherInfo = WeatherConfig.getWeatherData(context);
         context.getContentResolver().notifyChange(
                 Uri.parse("content://" + WeatherContentProvider.AUTHORITY + "/weather"), null);
     }

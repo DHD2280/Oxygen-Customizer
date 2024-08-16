@@ -34,7 +34,7 @@ import java.util.Map;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;
-import it.dhd.oxygencustomizer.weather.Config;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.weather.WeatherInfo;
 import it.dhd.oxygencustomizer.weather.WeatherInfo.DayForecast;
 
@@ -337,7 +337,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
     }
 
     private String getAPIKey() {
-        String customKey = Config.getOwmKey(mContext);
+        String customKey = WeatherConfig.getOwmKey(mContext);
         if (!TextUtils.isEmpty(customKey)) {
             return customKey;
         }

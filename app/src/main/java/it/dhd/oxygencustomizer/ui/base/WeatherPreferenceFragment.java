@@ -36,7 +36,7 @@ import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
-import it.dhd.oxygencustomizer.weather.Config;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 
 public abstract class WeatherPreferenceFragment extends ControlledPreferenceFragmentCompat
@@ -61,7 +61,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
 
         mWeatherIconPack = findPreference(WEATHER_ICON_PACK);
 
-        String settingHeaderPackage = Config.getIconPack(getContext());
+        String settingHeaderPackage = WeatherConfig.getIconPack(getContext());
         List<String> entries = new ArrayList<>();
         List<String> values = new ArrayList<>();
         List<Drawable> drawables = new ArrayList<>();
@@ -74,7 +74,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         if (valueIndex == -1) {
             // no longer found
             settingHeaderPackage = DEFAULT_WEATHER_ICON_PACKAGE;
-            //Config.setIconPack(getContext(), settingHeaderPackage);
+            //WeatherConfig.setIconPack(getContext(), settingHeaderPackage);
             valueIndex = mWeatherIconPack.findIndexOfValue(settingHeaderPackage);
         }
         mWeatherIconPack.setValueIndex(valueIndex >= 0 ? valueIndex : 0);
@@ -102,7 +102,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                 mCustomLocationLauncher.launch(new Intent(getContext(), LocationBrowseActivity.class));
                 return true;
             });
-            mCustomLocationActivity.setSummary(Config.getLocationName(getContext()));
+            mCustomLocationActivity.setSummary(WeatherConfig.getLocationName(getContext()));
         }
     }
 
@@ -142,8 +142,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                         String locationName = intent.getStringExtra(DATA_LOCATION_NAME);
                         double lat = intent.getDoubleExtra(DATA_LOCATION_LAT, 0f);
                         double lon = intent.getDoubleExtra(DATA_LOCATION_LON, 0f);
-                        Config.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
-                        Config.setLocationName(getContext(), locationName);
+                        WeatherConfig.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
+                        WeatherConfig.setLocationName(getContext(), locationName);
                         mCustomLocationActivity.setSummary(locationName);
                         if (mPreferences.getBoolean(getMainSwitchKey(), false)
                                 && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
@@ -248,7 +248,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         String mainKey = getMainSwitchKey();
 
         if (key.equals(mainKey)) {
-            Config.setEnabled(getContext(), mPreferences.getBoolean(mainKey, false), mainKey);
+            WeatherConfig.setEnabled(getContext(), mPreferences.getBoolean(mainKey, false), mainKey);
             if (mPreferences.getBoolean(mainKey, false)) {
                 handlePermissions();
                 enableService();

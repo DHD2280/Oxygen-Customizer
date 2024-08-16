@@ -333,7 +333,7 @@ public class OmniJawsClient {
     }
 
     public boolean isOmniJawsEnabled() {
-        return Config.isEnabled(mContext);
+        return WeatherConfig.isEnabled(mContext);
     }
 
     private String getTemperatureUnit() {
