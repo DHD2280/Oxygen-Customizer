@@ -69,7 +69,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
-import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 @SuppressLint("ViewConstructor")

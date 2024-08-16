@@ -1,9 +1,9 @@
 package it.dhd.oxygencustomizer.weather;
 
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_DISABLED;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_LOCATION;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NETWORK;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_DISABLED;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_LOCATION;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_NETWORK;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

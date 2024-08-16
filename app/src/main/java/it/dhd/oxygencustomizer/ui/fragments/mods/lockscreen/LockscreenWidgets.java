@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
-import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 
 public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
 

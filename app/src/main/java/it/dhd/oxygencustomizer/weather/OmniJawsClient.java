@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.utils;
+package it.dhd.oxygencustomizer.weather;
 
 /*
  * Copyright (C) 2021 The OmniROM Project
@@ -43,7 +43,6 @@ import java.util.Date;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.weather.Config;
 
 public class OmniJawsClient {
     private static final String TAG = "OmniJawsClient";
