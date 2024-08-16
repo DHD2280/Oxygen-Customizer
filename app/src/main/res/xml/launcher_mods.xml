@@ -138,6 +138,13 @@
             android:summaryOn="@string/general_on"
             android:defaultValue="false"/>
 
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:key="force_themed_launcher_icons"
+            app:iconSpaceReserved="false"
+            android:title="@string/force_themed_launcher_icons"
+            android:summary="@string/force_themed_launcher_icons_summary"
+            android:defaultValue="false"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

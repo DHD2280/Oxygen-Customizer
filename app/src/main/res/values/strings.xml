@@ -600,6 +600,7 @@
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>
+    <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>

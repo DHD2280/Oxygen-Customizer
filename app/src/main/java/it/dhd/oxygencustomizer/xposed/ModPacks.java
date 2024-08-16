@@ -10,6 +10,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
+import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.screenshot.ScreenshotSecureFlag;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
@@ -132,7 +133,10 @@ public class ModPacks {
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
             }
-            case Constants.Packages.LAUNCHER -> modPacks.add(Launcher.class);
+            case Constants.Packages.LAUNCHER -> {
+                modPacks.add(Launcher.class);
+                modPacks.add(ThemedIcons.class);
+            }
             case Constants.Packages.SCREENSHOT -> modPacks.add(ScreenshotSecureFlag.class);
         }
 
