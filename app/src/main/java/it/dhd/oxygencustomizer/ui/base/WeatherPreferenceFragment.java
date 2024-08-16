@@ -36,11 +36,11 @@ import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
-import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 
 public abstract class WeatherPreferenceFragment extends ControlledPreferenceFragmentCompat
-    implements OmniJawsClient.OmniJawsObserver {
+        implements OmniJawsClient.OmniJawsObserver {
 
     private static final String DEFAULT_WEATHER_ICON_PACKAGE = "it.dhd.oxygencustomizer.google";
     private MaterialSwitchPreference mCustomLocation;
@@ -181,7 +181,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
 
     private void checkLocationPermission(boolean force) {
         if (!hasPermissions() && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
-                requestLocationPermission(requestPermissionLauncher);
+            requestLocationPermission(requestPermissionLauncher);
         } else {
             if (force) {
                 forceRefreshWeatherSettings();
@@ -248,8 +248,6 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                 enableService();
                 forceRefreshWeatherSettings();
             }
-        } else {
-            forceRefreshWeatherSettings();
         }
 
     }
@@ -266,7 +264,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             } else {
                 values.add(r.activityInfo.name);
                 String[] name = r.activityInfo.name.split("\\.");
-                drawables.add(ResourcesCompat.getDrawable(getResources(), getResources().getIdentifier(name[name.length-1].toLowerCase() + "_30", "drawable", BuildConfig.APPLICATION_ID), getContext().getTheme()));
+                drawables.add(ResourcesCompat.getDrawable(getResources(), getResources().getIdentifier(name[name.length - 1].toLowerCase() + "_30", "drawable", BuildConfig.APPLICATION_ID), getContext().getTheme()));
             }
             String label = r.activityInfo.loadLabel(packageManager).toString();
             if (label == null) {
@@ -287,7 +285,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             try {
                 Resources mRes = packageManager.getResourcesForApplication(packageName);
                 drawables.add(ResourcesCompat.getDrawable(mRes, mRes.getIdentifier("weather_30", "drawable", packageName), getContext().getTheme()));
-            } catch (PackageManager.NameNotFoundException ignored) {}
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
             if (label == null) {
                 label = r.activityInfo.packageName;
             }
