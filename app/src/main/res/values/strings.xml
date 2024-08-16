@@ -1055,7 +1055,8 @@
     <string name="location_query_hint">Search for a location</string>
     <string name="weather_custom_margins">Custom Margins</string>
     <string name="weather_margin_top">Top margin</string>
-    <string name="weather_centered">Center Layout</string>
+    <string name="weather_centered">Center Weather View</string>
+    <string name="weather_centered_summary">Move weather view to center horizontally</string>
     <string name="weather_margin_left">Left Margin</string>
     <string name="weather_permission_dialog_title">Enable Location Permissions</string>
     <string name="weather_permission_dialog_message">Location permissions are required to fetch weather data. Click OK to open Settings.</string>

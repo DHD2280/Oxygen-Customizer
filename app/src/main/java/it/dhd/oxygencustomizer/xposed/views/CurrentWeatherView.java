@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,6 +75,9 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     public CurrentWeatherView(Context context, String name) {
         super(context);
         instances.add(new Object[]{this, name});
+
+        this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
         mContext = context;
         try {
             appContext = context.createPackageContext(

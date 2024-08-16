@@ -980,7 +980,6 @@
     <string name="location_query_hint">Helyszín keresése</string>
     <string name="weather_custom_margins">Egyéni margók</string>
     <string name="weather_margin_top">Felső margó</string>
-    <string name="weather_centered">Középre rendezett</string>
     <string name="weather_margin_left">Baloldali margó</string>
     <string name="weather_permission_dialog_title">Helymeghatározási jogosultságok megadása</string>
     <string name="weather_permission_dialog_message">Az időjárási adatok lekéréséhez tartózkodási helymeghatározásra van szükség. Kattintson az OK gombra a Beállítások megnyitásához.</string>

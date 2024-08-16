@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.START;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
@@ -9,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGINS;
@@ -28,6 +31,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setPaddings;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -43,9 +47,6 @@ public class AodWeather extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
 
-    // Aod Weather
-    private final int WEATHER_TOP = 0;
-    private final int WEATHER_BOTTOM = 1;
 
     private boolean weatherEnabled = true, weatherShowLocation = true, weatherShowCondition = true;
     private boolean weatherShowHumidity = true, weatherShowWind = true;
@@ -56,6 +57,7 @@ public class AodWeather extends XposedMods {
     private boolean mCustomMargins = false;
     private int mLeftMargin = 0, mTopMargin = 0;
     private LinearLayout mWeatherContainer = null;
+    private boolean mWeatherCentered = false;
 
     private ViewGroup mAodRootLayout = null;
 
@@ -78,6 +80,7 @@ public class AodWeather extends XposedMods {
         mCustomMargins = Xprefs.getBoolean(AOD_WEATHER_CUSTOM_MARGINS, false);
         mLeftMargin = Xprefs.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_LEFT, 0);
         mTopMargin = Xprefs.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_TOP, 0);
+        mWeatherCentered = Xprefs.getBoolean(AOD_WEATHER_CENTERED, false);
     }
 
     @Override
@@ -138,6 +141,7 @@ public class AodWeather extends XposedMods {
             }
             mWeatherContainer.addView(currentWeatherView);
             mAodRootLayout.addView(mWeatherContainer, mAodRootLayout.getChildCount());
+            setWeatherCentered();
             refreshWeatherView(currentWeatherView);
             updateMargins();
         } catch (Throwable tt) {
@@ -156,6 +160,21 @@ public class AodWeather extends XposedMods {
 
     private void updateWeatherView() {
         refreshWeatherView(CurrentWeatherView.getInstance(AOD_WEATHER));
+    }
+
+    private void setWeatherCentered() {
+        if (mWeatherCentered) {
+            mWeatherContainer.setGravity(CENTER_HORIZONTAL);
+        } else {
+            mWeatherContainer.setGravity(START);
+        }
+        ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
+        for (int i = 0; i < weatherContainer.getChildCount(); i++) {
+            View child = weatherContainer.getChildAt(i);
+            if (child instanceof LinearLayout linearLayoutChild) {
+                linearLayoutChild.setGravity(mWeatherCentered ? Gravity.CENTER_HORIZONTAL : (Gravity.START | Gravity.CENTER_VERTICAL));
+            }
+        }
     }
 
     @Override

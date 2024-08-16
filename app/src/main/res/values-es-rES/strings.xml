@@ -951,7 +951,6 @@
     <string name="location_query_hint">Buscar ubicación</string>
     <string name="weather_custom_margins">Márgenes personalizados</string>
     <string name="weather_margin_top">Margen superior</string>
-    <string name="weather_centered">Diseño del centro</string>
     <string name="weather_margin_left">Margen izquierdo</string>
     <string name="weather_permission_dialog_title">Habilitar permisos de ubicación</string>
     <string name="weather_permission_dialog_message">Se requieren permisos de ubicación para obtener datos del clima. Haz clic en Ok para abrir Ajustes.</string>

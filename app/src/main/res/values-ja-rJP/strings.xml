@@ -926,7 +926,6 @@
     <string name="location_query_hint">場所を検索</string>
     <string name="weather_custom_margins">余白のカスタマイズ</string>
     <string name="weather_margin_top">上部の余白</string>
-    <string name="weather_centered">中央のレイアウト</string>
     <string name="weather_margin_left">左の余白</string>
     <string name="weather_permission_dialog_title">位置情報の許可を有効化</string>
     <string name="weather_permission_dialog_message">気象情報の取得には位置情報の許可が必要です。OK をタップで設定を開きます。</string>

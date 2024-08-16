@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2013 The OmniROM Project
 
   This program is free software: you can redistribute it and/or modify
@@ -15,184 +14,189 @@
   You should have received a copy of the GNU General Public License
   along with this program.	If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/weather_config_title">
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="false"
         android:key="lockscreen_weather_enabled"
         android:title="@string/enable_title"
-        android:defaultValue="false" />
+        app:iconSpaceReserved="false" />
 
     <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_update_interval"
-        android:title="@string/update_interval_title"
+        android:defaultValue="2"
+        android:dependency="lockscreen_weather_enabled"
         android:entries="@array/update_interval_entries"
         android:entryValues="@array/update_interval_values"
-        android:defaultValue="2"
-        app:useSimpleSummaryProvider="true"
-        android:dependency="lockscreen_weather_enabled" />
+        android:key="weather_update_interval"
+        android:title="@string/update_interval_title"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:dependency="lockscreen_weather_enabled"
         android:key="update_status"
         android:title="@string/last_update_time"
-        android:dependency="lockscreen_weather_enabled"/>
+        app:iconSpaceReserved="false" />
 
     <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_provider"
-        android:title="@string/provider_title"
+        android:defaultValue="2"
+        android:dependency="lockscreen_weather_enabled"
         android:entries="@array/provider_entries"
         android:entryValues="@array/provider_values"
-        app:useSimpleSummaryProvider="true"
-        android:defaultValue="2"
-        android:dependency="lockscreen_weather_enabled" />
+        android:key="weather_provider"
+        android:title="@string/provider_title"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
-        android:key="owm_key"
-        android:title="@string/owm_key"
+        android:dependency="lockscreen_weather_enabled"
         android:dialogTitle="@string/owm_key"
-        android:singleLine="true"
         android:inputType="textNoSuggestions"
-        app:useSimpleSummaryProvider="true"
+        android:key="owm_key"
+        android:singleLine="true"
+        android:title="@string/owm_key"
         app:iconSpaceReserved="false"
-        android:dependency="lockscreen_weather_enabled" />
+        app:useSimpleSummaryProvider="true" />
 
     <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_units"
-        android:title="@string/units_title"
+        android:defaultValue="0"
+        android:dependency="lockscreen_weather_enabled"
         android:entries="@array/units_entries"
         android:entryValues="@array/units_values"
-        android:defaultValue="0"
-        app:useSimpleSummaryProvider="true"
-        android:dependency="lockscreen_weather_enabled" />
+        android:key="weather_units"
+        android:title="@string/units_title"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="true"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_show_location"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
         android:title="@string/weather_show_location"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:defaultValue="true"
-        android:dependency="lockscreen_weather_enabled"/>
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="true"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_show_condition"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
         android:title="@string/weather_show_condition"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:defaultValue="true"
-        android:dependency="lockscreen_weather_enabled"/>
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="true"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_show_humidity"
-        android:title="@string/weather_show_humidity"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
-        android:defaultValue="true"
-        android:dependency="lockscreen_weather_enabled"/>
+        android:title="@string/weather_show_humidity"
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="true"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_show_wind"
-        android:title="@string/weather_show_wind"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
-        android:defaultValue="true"
-        android:dependency="lockscreen_weather_enabled"/>
+        android:title="@string/weather_show_wind"
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_text_size"
         android:title="@string/weather_text_size"
-        app:minVal="13"
-        app:maxVal="24"
         app:defaultValue="16"
-        android:dependency="lockscreen_weather_enabled"/>
+        app:maxVal="24"
+        app:minVal="13" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_image_size"
         android:title="@string/weather_image_size"
-        app:minVal="13"
-        app:maxVal="24"
         app:defaultValue="18"
-        android:dependency="lockscreen_weather_enabled"/>
+        app:maxVal="24"
+        app:minVal="13" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="false"
         android:key="weather_custom_color_switch"
-        android:title="@string/weather_custom_color"
-        android:summaryOn="@string/general_on"
         android:summaryOff="@string/general_off"
-        android:defaultValue="false" />
+        android:summaryOn="@string/general_on"
+        android:title="@string/weather_custom_color"
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-        android:key="weather_custom_color"
-        android:title="@string/custom_color"
         android:defaultValue="@color/white"
         android:dependency="weather_custom_color_switch"
+        android:key="weather_custom_color"
+        android:title="@string/custom_color"
         app:iconSpaceReserved="false" />
 
-
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="false"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_custom_location_switch"
         android:title="@string/custom_location_title"
-        android:defaultValue="false"
-        android:dependency="lockscreen_weather_enabled" />
+        app:iconSpaceReserved="false" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:dependency="weather_custom_location_switch"
         android:key="weather_custom_location_picker"
         android:title="@string/weather_custom_location_title"
-        android:dependency="weather_custom_location_switch"/>
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
-        app:iconSpaceReserved="false"
+        android:dependency="lockscreen_weather_enabled"
         android:key="weather_icon_pack"
         android:title="@string/weather_icon_pack_title"
-        android:dependency="lockscreen_weather_enabled" />
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:defaultValue="false"
+        android:key="weather_centered"
+        android:title="@string/weather_centered"
+        android:summary="@string/weather_centered_summary"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        android:defaultValue="false"
         android:key="weather_custom_margins"
-        android:title="@string/weather_custom_margins"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
-        android:defaultValue="false"
+        android:title="@string/weather_custom_margins"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:dependency="weather_custom_margins"
         android:key="weather_margin_top"
         android:title="@string/weather_margin_top"
-        app:minVal="0"
-        app:maxVal="100"
         app:defaultValue="0"
-        android:dependency="weather_custom_margins"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false"
+        app:maxVal="100"
+        app:minVal="0" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:dependency="weather_custom_margins"
         android:key="weather_margin_left"
         android:title="@string/weather_margin_left"
-        app:minVal="0"
-        app:maxVal="100"
         app:defaultValue="0"
-        android:dependency="weather_custom_margins"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false"
+        app:maxVal="100"
+        app:minVal="0" />
 
     <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_background"
-        android:title="@string/lockscreen_weather_selection_title"
+        android:defaultValue="0"
+        android:dependency="lockscreen_weather_enabled"
         android:entries="@array/lockscreen_weather_bg_entries"
         android:entryValues="@array/lockscreen_weather_bg_values"
-        android:defaultValue="0"
-        app:useSimpleSummaryProvider="true"
-        android:dependency="lockscreen_weather_enabled" />
+        android:key="weather_background"
+        android:title="@string/lockscreen_weather_selection_title"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

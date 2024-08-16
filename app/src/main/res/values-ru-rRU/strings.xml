@@ -957,7 +957,6 @@
     <string name="location_query_hint">Поиск нужного местоположения</string>
     <string name="weather_custom_margins">Настраиваемые поля</string>
     <string name="weather_margin_top">Верхнее поле</string>
-    <string name="weather_centered">По центру</string>
     <string name="weather_margin_left">Левое поле</string>
     <string name="weather_permission_dialog_title">Включить разрешения на определение местоположения</string>
     <string name="weather_permission_dialog_message">Для получения данных о погоде необходимы разрешения на определение местоположения. Нажмите «ОК», чтобы открыть «Настройки».</string>

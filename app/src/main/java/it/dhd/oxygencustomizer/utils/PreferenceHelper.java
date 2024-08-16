@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.utils;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGINS;
@@ -26,6 +27,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_LINE_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGINS;
@@ -542,6 +544,7 @@ public class PreferenceHelper {
                  LOCKSCREEN_WEATHER_SHOW_CONDITION,
                  LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
+                 LOCKSCREEN_WEATHER_CENTERED,
                  LOCKSCREEN_WEATHER_BACKGROUND -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
             }
@@ -619,7 +622,8 @@ public class PreferenceHelper {
                  AOD_WEATHER_SHOW_LOCATION,
                  AOD_WEATHER_SHOW_CONDITION,
                  AOD_WEATHER_CUSTOM_COLOR_SWITCH,
-                 AOD_WEATHER_CUSTOM_MARGINS -> {
+                 AOD_WEATHER_CUSTOM_MARGINS,
+                 AOD_WEATHER_CENTERED -> {
                 return instance.mPreferences.getBoolean(AOD_WEATHER_SWITCH, false);
             }
             case AOD_WEATHER_CUSTOM_COLOR -> {

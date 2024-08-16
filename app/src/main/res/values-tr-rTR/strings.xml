@@ -948,7 +948,6 @@
     <string name="location_query_hint">Konum ara</string>
     <string name="weather_custom_margins">Özel Kenar Boşlukları</string>
     <string name="weather_margin_top">Üst kenar boşluğu</string>
-    <string name="weather_centered">Orta Düzen</string>
     <string name="weather_margin_left">Sol Kenar Boşluğu</string>
     <string name="weather_permission_dialog_title">Konum İzinlerini Etkinleştir</string>
     <string name="weather_permission_dialog_message">Hava durumu verilerini almak için konum izinleri gereklidir. Ayarları açmak için Tamam\'a tıklayın.</string>
