@@ -70,14 +70,18 @@ public class WeatherWork extends ListenableWorker {
                 return completer;
             }
 
-            if (!checkPermissions()) {
-                handleError(completer, EXTRA_ERROR_NO_PERMISSIONS, "Location permissions are not granted");
-                return completer;
-            }
+            if (!WeatherConfig.isCustomLocation(mContext)) {
+                // Check permissions and location enabled
+                // only if not using custom location
+                if (!checkPermissions()) {
+                    handleError(completer, EXTRA_ERROR_NO_PERMISSIONS, "Location permissions are not granted");
+                    return completer;
+                }
 
-            if (!doCheckLocationEnabled()) {
-                handleError(completer, EXTRA_ERROR_NETWORK, "Location services are disabled");
-                return completer;
+                if (!doCheckLocationEnabled()) {
+                    handleError(completer, EXTRA_ERROR_NETWORK, "Location services are disabled");
+                    return completer;
+                }
             }
 
             executor.execute(() -> {
@@ -130,6 +134,8 @@ public class WeatherWork extends ListenableWorker {
     @SuppressLint("MissingPermission")
     private Location getCurrentLocation() {
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+
 
         if (!doCheckLocationEnabled()) {
             Log.w(TAG, "locations disabled");
