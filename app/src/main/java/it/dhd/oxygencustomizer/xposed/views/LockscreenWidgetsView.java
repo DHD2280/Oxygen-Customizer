@@ -456,6 +456,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     public void disableWeatherUpdates() {
         if (mWeatherClient != null) {
+            weatherButton = null;
+            weatherButtonFab = null;
             mWeatherClient.removeObserver(this);
         }
     }

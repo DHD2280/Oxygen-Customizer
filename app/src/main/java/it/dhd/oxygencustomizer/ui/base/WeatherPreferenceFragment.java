@@ -115,13 +115,11 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     }
 
     private void handlePermissions() {
-        if (mPreferences.getBoolean(getMainSwitchKey(), false)) {
-            if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
-                checkLocationEnabled(mInitialCheck);
-                mInitialCheck = false;
-            } else {
-                forceRefreshWeatherSettings();
-            }
+        if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+            checkLocationEnabled(mInitialCheck);
+            mInitialCheck = false;
+        } else {
+            forceRefreshWeatherSettings();
         }
     }
 
@@ -145,8 +143,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                         WeatherConfig.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
                         WeatherConfig.setLocationName(getContext(), locationName);
                         mCustomLocationActivity.setSummary(locationName);
-                        if (mPreferences.getBoolean(getMainSwitchKey(), false)
-                                && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+                        if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
                             checkLocationEnabled(mInitialCheck);
                         }
                         forceRefreshWeatherSettings();
@@ -183,11 +180,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     }
 
     private void checkLocationPermission(boolean force) {
-        if (!hasPermissions()) {
-            if (mPreferences.getBoolean(getMainSwitchKey(), false) &&
-                    !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+        if (!hasPermissions() && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
                 requestLocationPermission(requestPermissionLauncher);
-            }
         } else {
             if (force) {
                 forceRefreshWeatherSettings();
