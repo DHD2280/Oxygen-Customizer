@@ -533,8 +533,7 @@ public class PreferenceHelper {
             }
 
             // Lockscreen Weather
-            case "update_status",
-                 LOCKSCREEN_WEATHER_HUMIDITY,
+            case LOCKSCREEN_WEATHER_HUMIDITY,
                  LOCKSCREEN_WEATHER_WIND,
                  LOCKSCREEN_WEATHER_TEXT_SIZE,
                  LOCKSCREEN_WEATHER_IMAGE_SIZE,
