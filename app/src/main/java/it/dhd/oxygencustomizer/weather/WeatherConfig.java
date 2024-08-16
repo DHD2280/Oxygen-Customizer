@@ -37,12 +37,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 
-public class Config {
+public class WeatherConfig {
     public static final String PREF_KEY_LOCATION_LAT = "location_lat";
     public static final String PREF_KEY_LOCATION_LON = "location_lon";
     public static final String PREF_KEY_LOCATION_NAME = "location_name";

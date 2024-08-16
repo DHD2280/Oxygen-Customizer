@@ -13,7 +13,7 @@ import androidx.work.WorkManager;
 import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.weather.Config;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.weather.WeatherWork;
 
 public class WeatherScheduler {
@@ -28,13 +28,13 @@ public class WeatherScheduler {
 
         WorkManager workManager = WorkManager.getInstance(context);
 
-        boolean weatherEnabled = Config.isEnabled(context);
+        boolean weatherEnabled = WeatherConfig.isEnabled(context);
 
         Log.d("WeatherScheduler", "Weather enabled: " + weatherEnabled);
 
         if (weatherEnabled) {
             Log.d("WeatherScheduler", "Scheduling updates");
-            PeriodicWorkRequest.Builder builder = new PeriodicWorkRequest.Builder(WeatherWork.class, Config.getUpdateInterval(context), TimeUnit.HOURS)
+            PeriodicWorkRequest.Builder builder = new PeriodicWorkRequest.Builder(WeatherWork.class, WeatherConfig.getUpdateInterval(context), TimeUnit.HOURS)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1, TimeUnit.HOURS);
 
             workManager.enqueueUniquePeriodicWork(

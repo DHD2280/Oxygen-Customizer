@@ -165,8 +165,8 @@ public abstract class AbstractWeatherProvider {
 
     protected String getWeatherDataLocality(String coordinates) {
         String city;
-        if (Config.isCustomLocation(mContext)) {
-            city = Config.getLocationName(mContext);
+        if (WeatherConfig.isCustomLocation(mContext)) {
+            city = WeatherConfig.getLocationName(mContext);
             if (TextUtils.isEmpty(city)) {
                 city = getCoordinatesLocality(coordinates);
             }
