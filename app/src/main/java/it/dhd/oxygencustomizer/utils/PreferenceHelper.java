@@ -131,6 +131,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -673,6 +674,12 @@ public class PreferenceHelper {
             case "volbtn_torch_timeout" -> {
                 return instance.mPreferences.getBoolean("volbtn_torch", false) && instance.mPreferences.getBoolean("volbtn_torch_enable_timeout", false);
             }
+
+            // Weather
+            case "owm_key" -> {
+                return instance.mPreferences.getString(WEATHER_PROVIDER, "2").equals("0");
+            }
+
         }
         return true;
     }
