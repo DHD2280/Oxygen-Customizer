@@ -602,6 +602,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         if (visibility == View.VISIBLE && isAttachedToWindow()) {
+            onVisible();
             updateMediaController();
         }
     }
@@ -617,6 +618,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private void onVisible() {
         // Update the widgets when the view is visible
+        if (isWidgetEnabled("weather")) {
+            enableWeatherUpdates();
+        }
         updateTorchButtonState();
         updateRingerButtonState();
         updateWiFiButtonState(isWifiEnabled());
@@ -628,6 +632,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isWidgetEnabled("weather")) {
+            enableWeatherUpdates();
+        }
         onVisible();
     }
 
@@ -673,7 +680,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     public void updateWidgetViews() {
-
         if (mMainWidgetViews != null && mMainWidgetsList != null) {
             for (int i = 0; i < mMainWidgetViews.length; i++) {
                 if (mMainWidgetViews[i] != null) {
