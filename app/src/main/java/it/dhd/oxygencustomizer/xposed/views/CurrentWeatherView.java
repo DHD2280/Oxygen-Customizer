@@ -229,7 +229,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             mWeatherInfo = mWeatherClient.getWeatherInfo();
             if (mWeatherInfo != null) {
                 String formattedCondition = mWeatherInfo.condition;
-                if (formattedCondition.toLowerCase().contains("clouds")) {
+                if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_rain);
