@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity.DATA_LO
 import static it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity.DATA_LOCATION_NAME;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 
 import android.Manifest;
 import android.app.Activity;
@@ -248,6 +249,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                 enableService();
                 forceRefreshWeatherSettings();
             }
+        } else if (key.equals(WEATHER_PROVIDER)) {
+            forceRefreshWeatherSettings();
         }
 
     }
