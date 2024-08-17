@@ -979,7 +979,6 @@
     <string name="location_query_hint">Cerca una posizione</string>
     <string name="weather_custom_margins">Margini Personalizzati</string>
     <string name="weather_margin_top">Margine superiore</string>
-    <string name="weather_centered">Disposizione centrale</string>
     <string name="weather_margin_left">Margine Sinistro</string>
     <string name="weather_permission_dialog_title">Abilita Permessi Posizione</string>
     <string name="weather_permission_dialog_message">I permessi di localizzazione sono necessari per recuperare i dati meteo. Fare clic su OK per aprire le impostazioni.</string>

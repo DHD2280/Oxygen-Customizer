@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.START;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
@@ -14,6 +15,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGINS;
@@ -100,6 +102,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,8 +129,8 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
-import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
+import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgetsView;
 
@@ -180,14 +183,16 @@ public class LockscreenClock extends XposedMods {
     Class<?> LottieAn = null;
 
     // Weather
-    private boolean weatherEnabled = false, weatherShowLocation = true, weatherShowCondition = true;
-    private boolean weatherShowHumidity = true, weatherShowWind = true;
-    private boolean weatherCustomColor = false;
-    private int weatherColor = Color.WHITE;
-    private int weatherStartPadding, weatherTextSize = 16, weatherImageSize = 18;
-    private boolean mCustomMargins = false;
-    private int mLeftMargin = 0, mTopMargin = 0;
+    private LinearLayout mWeatherContainer = null;
+    private boolean mWeatherEnabled = false, mWeatherShowLocation = true, mWeatherShowCondition = true;
+    private boolean mWeatherShowHumidity = true, mWeatherShowWind = true;
+    private boolean mWeatherCustomColor = false;
+    private int mWeatherColor = Color.WHITE;
+    private int mWeatherStartPadding, mWeatherTextSize = 16, mWeatherImageSize = 18;
+    private boolean mWeatherCustomMargins = false;
+    private int mWeatherLeftMargin = 0, mWeatherTopMargin = 0;
     private int mWeatherBackground = 0;
+    private boolean mWeatherCentered = false;
 
     // Lockscreen Widgets Class Helpers
     public static Class<?> LaunchableLinearLayout = null;
@@ -238,8 +243,10 @@ public class LockscreenClock extends XposedMods {
         super(context);
         @SuppressLint("DiscouragedApi") int resourceId = mContext.getResources().getIdentifier("red_horizontal_single_clock_margin_start", "dimen", listenPackage);
         if (resourceId > 0) {
-            weatherStartPadding = mContext.getResources().getDimensionPixelSize(resourceId);
-        } else { weatherStartPadding = dp2px(mContext, 32); }
+            mWeatherStartPadding = mContext.getResources().getDimensionPixelSize(resourceId);
+        } else {
+            mWeatherStartPadding = dp2px(mContext, 32);
+        }
     }
 
     @Override
@@ -282,18 +289,19 @@ public class LockscreenClock extends XposedMods {
         useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_IMAGE, false);
 
         // Weather
-        weatherEnabled = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
-        weatherTextSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16);
-        weatherImageSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18);
-        weatherShowLocation = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_LOCATION, true);
-        weatherShowCondition = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_CONDITION, true);
-        weatherShowHumidity = Xprefs.getBoolean(LOCKSCREEN_WEATHER_HUMIDITY, true);
-        weatherShowWind = Xprefs.getBoolean(LOCKSCREEN_WEATHER_WIND, true);
-        weatherCustomColor = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
-        weatherColor = Xprefs.getInt(LOCKSCREEN_WEATHER_CUSTOM_COLOR, Color.WHITE);
-        mCustomMargins = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
-        mLeftMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0);
-        mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
+        mWeatherEnabled = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
+        mWeatherTextSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16);
+        mWeatherImageSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18);
+        mWeatherShowLocation = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_LOCATION, true);
+        mWeatherShowCondition = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_CONDITION, true);
+        mWeatherShowHumidity = Xprefs.getBoolean(LOCKSCREEN_WEATHER_HUMIDITY, true);
+        mWeatherShowWind = Xprefs.getBoolean(LOCKSCREEN_WEATHER_WIND, true);
+        mWeatherCustomColor = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
+        mWeatherColor = Xprefs.getInt(LOCKSCREEN_WEATHER_CUSTOM_COLOR, Color.WHITE);
+        mWeatherCentered = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CENTERED, false);
+        mWeatherCustomMargins = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
+        mWeatherLeftMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0);
+        mWeatherTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
         mWeatherBackground = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WEATHER_BACKGROUND, "0"));
 
         // Widgets
@@ -317,7 +325,7 @@ public class LockscreenClock extends XposedMods {
         mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
 
         if (Key.length > 0) {
-            for(String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
+            for (String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
                 if (Key[0].equals(LCPrefs)) {
                     new Handler(Looper.getMainLooper()).post(this::updateClockView);
                 }
@@ -326,11 +334,15 @@ public class LockscreenClock extends XposedMods {
                     updateStockClock();
                 }
             }
-            for(String LCWeatherPref : LOCKSCREEN_WEATHER_PREFS) {
+            for (String LCWeatherPref : LOCKSCREEN_WEATHER_PREFS) {
                 if (Key[0].equals(LCWeatherPref)) updateWeatherView();
             }
-            for(String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
-                if (Key[0].equals(LCWeatherMargins)) updateMargins(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
+            if (Key[0].equals(LOCKSCREEN_WEATHER_CENTERED)) {
+                setWeatherCentered();
+            }
+            for (String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
+                if (Key[0].equals(LCWeatherMargins))
+                    updateMargins();
             }
             if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
                     Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET) ||
@@ -364,6 +376,9 @@ public class LockscreenClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
+        mWeatherContainer = new LinearLayout(mContext);
+        mWeatherContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT));
+
         mWidgetsContainer = new LinearLayout(mContext);
         mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
@@ -395,7 +410,8 @@ public class LockscreenClock extends XposedMods {
                     setActivityStarter();
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
@@ -407,7 +423,8 @@ public class LockscreenClock extends XposedMods {
                         setActivityStarter();
                     }
                 });
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
 
         Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
@@ -453,7 +470,8 @@ public class LockscreenClock extends XposedMods {
                     TextView mTimeHour = (TextView) getObjectField(param.thisObject, "mTimeHour");
                     String mHour = (String) getObjectField(param.thisObject, "mHour");
                     setClockRed(mTimeHour, mHour);
-                } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {
+                }
             }
         });
 
@@ -477,7 +495,8 @@ public class LockscreenClock extends XposedMods {
                     String mHour = DateFormat.format(format, mTime).toString();
                     TextView mTimeHour = (TextView) param.thisObject;
                     setClockRed(mTimeHour, mHour);
-                } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {
+                }
             }
         });
 
@@ -534,11 +553,15 @@ public class LockscreenClock extends XposedMods {
         if (mClockViewContainer == null) return;
 
         if (customLockscreenClock) {
-            if (mClockView != null && mClockView.getVisibility() != View.INVISIBLE) mClockView.setVisibility(View.INVISIBLE);
-            if (mMediaHostContainer != null && mMediaHostContainer.getVisibility() != View.INVISIBLE) mMediaHostContainer.setVisibility(View.INVISIBLE);
+            if (mClockView != null && mClockView.getVisibility() != View.INVISIBLE)
+                mClockView.setVisibility(View.INVISIBLE);
+            if (mMediaHostContainer != null && mMediaHostContainer.getVisibility() != View.INVISIBLE)
+                mMediaHostContainer.setVisibility(View.INVISIBLE);
         } else {
-            if (mClockView != null && mClockView.getVisibility() != View.VISIBLE) mClockView.setVisibility(View.VISIBLE);
-            if (mMediaHostContainer != null && mMediaHostContainer.getVisibility() != View.VISIBLE) mMediaHostContainer.setVisibility(View.VISIBLE);
+            if (mClockView != null && mClockView.getVisibility() != View.VISIBLE)
+                mClockView.setVisibility(View.VISIBLE);
+            if (mMediaHostContainer != null && mMediaHostContainer.getVisibility() != View.VISIBLE)
+                mMediaHostContainer.setVisibility(View.VISIBLE);
         }
 
 
@@ -546,7 +569,8 @@ public class LockscreenClock extends XposedMods {
         boolean isClockAdded = mClockViewContainer.findViewWithTag(OC_LOCKSCREEN_CLOCK_TAG) != null;
 
         if (!customLockscreenClock) {
-            if (isClockAdded) mClockViewContainer.removeView(mClockViewContainer.findViewWithTag(OC_LOCKSCREEN_CLOCK_TAG));
+            if (isClockAdded)
+                mClockViewContainer.removeView(mClockViewContainer.findViewWithTag(OC_LOCKSCREEN_CLOCK_TAG));
             return;
         }
 
@@ -869,32 +893,57 @@ public class LockscreenClock extends XposedMods {
                 ((ViewGroup) currentWeatherView.getParent()).removeView(currentWeatherView);
             } catch (Throwable ignored) {
             }
-            mClockViewContainer.addView(currentWeatherView);
+            try {
+                ((ViewGroup) mWeatherContainer.getParent()).removeView(mWeatherContainer);
+            } catch (Throwable ignored) {
+            }
+            mWeatherContainer.addView(currentWeatherView);
+            mClockViewContainer.addView(mWeatherContainer);
+            setWeatherCentered();
             refreshWeatherView(currentWeatherView);
-            updateMargins(currentWeatherView);
+            updateMargins();
         } catch (Throwable ignored) {
         }
     }
 
-    private void updateMargins(CurrentWeatherView weatherView) {
-        if (weatherView == null) return;
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) weatherView.getLayoutParams();
-        if (mCustomMargins) {
-            params.setMargins(dp2px(mContext, mLeftMargin), dp2px(mContext, mTopMargin), dp2px(mContext, mLeftMargin), 0);
+    private void updateMargins() {
+        if (mWeatherContainer == null) return;
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mWeatherContainer.getLayoutParams();
+        if (mWeatherCustomMargins) {
+            params.setMargins(dp2px(mContext, mWeatherLeftMargin), dp2px(mContext, mWeatherTopMargin), dp2px(mContext, mWeatherLeftMargin), 0);
         } else {
-            params.setMargins(weatherStartPadding, 0, weatherStartPadding, 0);
+            params.setMargins(mWeatherStartPadding, 0, mWeatherStartPadding, 0);
         }
-        weatherView.setLayoutParams(params);
+        mWeatherContainer.setLayoutParams(params);
+    }
+
+    private void setWeatherCentered() {
+        CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
+        if (mWeatherCentered) {
+            mWeatherContainer.setGravity(CENTER_HORIZONTAL);
+            if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = WRAP_CONTENT;
+        } else {
+            mWeatherContainer.setGravity(START);
+            if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = MATCH_PARENT;
+        }
+        currentWeatherView.requestLayout();
+        ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
+        for (int i = 0; i < weatherContainer.getChildCount(); i++) {
+            View child = weatherContainer.getChildAt(i);
+            if (child instanceof LinearLayout linearLayoutChild) {
+                linearLayoutChild.setGravity(mWeatherCentered ? Gravity.CENTER_HORIZONTAL : (Gravity.START | Gravity.CENTER_VERTICAL));
+            }
+        }
     }
 
     private void refreshWeatherView(CurrentWeatherView currentWeatherView) {
         if (currentWeatherView == null) return;
-        currentWeatherView.updateSizes(weatherTextSize, weatherImageSize, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.setVisibility(weatherEnabled ? View.VISIBLE : View.GONE);
+        currentWeatherView.updateSizes(mWeatherTextSize, mWeatherImageSize, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.updateColors(mWeatherCustomColor ? mWeatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.updateWeatherSettings(mWeatherShowLocation, mWeatherShowCondition, mWeatherShowHumidity, mWeatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
         currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        updateMargins(currentWeatherView);
+        updateMargins();
     }
 
     private void updateWeatherView() {

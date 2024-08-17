@@ -111,7 +111,6 @@ android {
 
         jniLibs.useLegacyPackaging = true
     }
-    useLibrary ("org.apache.http.legacy")
 }
 
 dependencies {
@@ -204,6 +203,9 @@ dependencies {
 
     // Persian Date
     implementation("com.github.mfathi91:persian-date-time:4.2.1")
+
+    // OkHTTP
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 }
 
 tasks.register("printVersionName") {

@@ -41,10 +41,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OxygenCustomizer" >
 
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
         <meta-data
             android:name="xposedmodule"
             android:value="true" />

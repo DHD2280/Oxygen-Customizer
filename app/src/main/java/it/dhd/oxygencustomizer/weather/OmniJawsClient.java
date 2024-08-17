@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.utils;
+package it.dhd.oxygencustomizer.weather;
 
 /*
  * Copyright (C) 2021 The OmniROM Project
@@ -43,7 +43,6 @@ import java.util.Date;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.weather.Config;
 
 public class OmniJawsClient {
     private static final String TAG = "OmniJawsClient";
@@ -164,11 +163,9 @@ public class OmniJawsClient {
     private boolean mMetric;
     private List<OmniJawsObserver> mObserver;
     private WeatherUpdateReceiver mReceiver;
-    private boolean mXposed = false;
 
-    public OmniJawsClient(Context context, boolean xposed) {
+    public OmniJawsClient(Context context) {
         mContext = context;
-        mXposed = xposed;
         mObserver = new ArrayList<>();
     }
 
@@ -260,12 +257,8 @@ public class OmniJawsClient {
         mSettingIconPackage = mPackageName + "." + mIconPrefix;
         if (DEBUG) Log.d(TAG, "Load default icon pack " + mSettingIconPackage + " " + mPackageName + " " + mIconPrefix);
         try {
-            if (!mXposed) {
-                PackageManager packageManager = mContext.getPackageManager();
-                mRes = packageManager.getResourcesForApplication(mPackageName);
-            } else {
-                mRes = modRes;
-            }
+            PackageManager packageManager = mContext.getPackageManager();
+            mRes = packageManager.getResourcesForApplication(mPackageName);
         } catch (Exception e) {
             mRes = null;
         }
@@ -308,13 +301,8 @@ public class OmniJawsClient {
         mIconPrefix = mSettingIconPackage.substring(idx + 1);
         if (DEBUG) Log.d(TAG, "Load custom icon pack " + mPackageName + " " + mIconPrefix);
         try {
-            if (!mXposed) {
-                PackageManager packageManager = mContext.getPackageManager();
-                mRes = packageManager.getResourcesForApplication(mPackageName);
-            } else {
-                mRes = modRes;
-            }
-
+            PackageManager packageManager = mContext.getPackageManager();
+            mRes = packageManager.getResourcesForApplication(mPackageName);
         } catch (Exception e) {
             mRes = null;
         }
@@ -345,7 +333,7 @@ public class OmniJawsClient {
     }
 
     public boolean isOmniJawsEnabled() {
-        return Config.isEnabled(mContext);
+        return WeatherConfig.isEnabled(mContext);
     }
 
     private String getTemperatureUnit() {

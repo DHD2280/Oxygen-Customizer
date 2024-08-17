@@ -464,6 +464,9 @@ public class Constants {
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE = "lockscreen_widgets_small_icon_active";
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE = "lockscreen_widgets_small_icon_inactive";
 
+            // Weather Settings
+            public static final String LOCKSCREEN_WIDGETS_WEATHER_SETTINGS = "weather_settings";
+
         }
 
         // AOD
@@ -498,6 +501,7 @@ public class Constants {
             public static final String AOD_WEATHER_WIND = "aod_weather_show_wind";
             public static final String AOD_WEATHER_CUSTOM_COLOR_SWITCH = "aod_weather_custom_color_switch";
             public static final String AOD_WEATHER_CUSTOM_COLOR = "aod_weather_custom_color";
+            public static final String AOD_WEATHER_CENTERED = "aod_weather_centered";
             public static final String AOD_WEATHER_CUSTOM_MARGINS = "aod_weather_custom_margins";
             public static final String AOD_WEATHER_CUSTOM_MARGIN_LEFT = "aod_weather_margin_left";
             public static final String AOD_WEATHER_CUSTOM_MARGIN_TOP = "aod_weather_margin_top";
@@ -550,6 +554,7 @@ public class Constants {
         public static final String LOCKSCREEN_WEATHER_WIND = "weather_show_wind";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH = "weather_custom_color_switch";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR = "weather_custom_color";
+        public static final String LOCKSCREEN_WEATHER_CENTERED = "weather_centered";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGINS = "weather_custom_margins";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT = "weather_margin_left";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP = "weather_margin_top";

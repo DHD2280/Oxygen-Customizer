@@ -39,7 +39,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +50,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -71,6 +71,7 @@ public class LocationBrowseActivity extends BaseActivity {
     private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     private Handler mHandler = new Handler();
     private String mQueryString;
+    private String response;
 
     private Runnable mQueryRunnable = new Runnable() {
         @Override
@@ -166,8 +167,6 @@ public class LocationBrowseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
         setContentView(R.layout.location_browse_activity);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -225,7 +224,7 @@ public class LocationBrowseActivity extends BaseActivity {
         try {
             String lang = Locale.getDefault().getLanguage().replaceFirst("_", "-");
             String url = String.format(URL_PLACES, Uri.encode(input.trim()), lang);
-            String response = NetworkUtils.downloadUrlMemoryAsString(url);
+            getResponse(url);
             if (response != null) {
                 JSONArray jsonResults = new JSONObject(response).getJSONArray("geonames");
                 int count = jsonResults.length();
@@ -264,6 +263,30 @@ public class LocationBrowseActivity extends BaseActivity {
                 mAdapter.notifyDataSetChanged();
             });
         }
+    }
+
+    private void getResponse(String url) {
+        response = "";
+        CountDownLatch latch = new CountDownLatch(1);
+
+        NetworkUtils.asynchronousGetRequest(url, result -> {
+            if (!TextUtils.isEmpty(result)) {
+                Log.d(TAG, "Download success " + result);
+                response = result;
+            } else {
+                response = "";
+                Log.d(TAG, "Download failed");
+            }
+            latch.countDown();
+        });
+
+        try {
+            latch.await(); // Wait until the response is set
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupt status
+            Log.e(TAG, "retrieve interrupted", e);
+        }
+
     }
 
     private void showProgress() {

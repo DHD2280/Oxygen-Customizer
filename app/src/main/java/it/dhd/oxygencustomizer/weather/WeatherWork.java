@@ -1,9 +1,9 @@
 package it.dhd.oxygencustomizer.weather;
 
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_DISABLED;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_LOCATION;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NETWORK;
-import static it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_DISABLED;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_LOCATION;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_NETWORK;
+import static it.dhd.oxygencustomizer.weather.OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -65,19 +65,23 @@ public class WeatherWork extends ListenableWorker {
         if (DEBUG) Log.d(TAG, "startWork");
 
         return CallbackToFutureAdapter.getFuture(completer -> {
-            if (!Config.isEnabled(mContext)) {
+            if (!WeatherConfig.isEnabled(mContext)) {
                 handleError(completer, EXTRA_ERROR_DISABLED, "Service started, but not enabled ... stopping");
                 return completer;
             }
 
-            if (!checkPermissions()) {
-                handleError(completer, EXTRA_ERROR_NO_PERMISSIONS, "Location permissions are not granted");
-                return completer;
-            }
+            if (!WeatherConfig.isCustomLocation(mContext)) {
+                // Check permissions and location enabled
+                // only if not using custom location
+                if (!checkPermissions()) {
+                    handleError(completer, EXTRA_ERROR_NO_PERMISSIONS, "Location permissions are not granted");
+                    return completer;
+                }
 
-            if (!doCheckLocationEnabled()) {
-                handleError(completer, EXTRA_ERROR_NETWORK, "Location services are disabled");
-                return completer;
+                if (!doCheckLocationEnabled()) {
+                    handleError(completer, EXTRA_ERROR_NETWORK, "Location services are disabled");
+                    return completer;
+                }
             }
 
             executor.execute(() -> {
@@ -85,7 +89,7 @@ public class WeatherWork extends ListenableWorker {
                 if (location != null) {
                     Log.d(TAG, "Location retrieved");
                     updateWeather(location, completer);
-                } else if (Config.isCustomLocation(mContext)) {
+                } else if (WeatherConfig.isCustomLocation(mContext)) {
                     Log.d(TAG, "Using custom location configuration");
                     updateWeather(null, completer);
                 } else {
@@ -130,6 +134,8 @@ public class WeatherWork extends ListenableWorker {
     @SuppressLint("MissingPermission")
     private Location getCurrentLocation() {
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+
 
         if (!doCheckLocationEnabled()) {
             Log.w(TAG, "locations disabled");
@@ -179,21 +185,21 @@ public class WeatherWork extends ListenableWorker {
     private void updateWeather(Location location, CallbackToFutureAdapter.Completer<Result> completer) {
         WeatherInfo w = null;
         try {
-            AbstractWeatherProvider provider = Config.getProvider(mContext);
-            boolean isMetric = Config.isMetric(mContext);
+            AbstractWeatherProvider provider = WeatherConfig.getProvider(mContext);
+            boolean isMetric = WeatherConfig.isMetric(mContext);
             int i = 0;
             while (i < RETRY_MAX_NUM) {
-                if (location != null && !Config.isCustomLocation(mContext)) {
+                if (location != null && !WeatherConfig.isCustomLocation(mContext)) {
                     w = provider.getLocationWeather(location, isMetric);
-                } else if (!TextUtils.isEmpty(Config.getLocationLat(mContext)) && !TextUtils.isEmpty(Config.getLocationLon(mContext)) ) {
-                    w = provider.getCustomWeather(Config.getLocationLat(mContext), Config.getLocationLon(mContext), isMetric);
+                } else if (!TextUtils.isEmpty(WeatherConfig.getLocationLat(mContext)) && !TextUtils.isEmpty(WeatherConfig.getLocationLon(mContext)) ) {
+                    w = provider.getCustomWeather(WeatherConfig.getLocationLat(mContext), WeatherConfig.getLocationLon(mContext), isMetric);
                 } else {
                     Log.w(TAG, "No valid custom location and location is null");
                     break;
                 }
 
                 if (w != null) {
-                    Config.setWeatherData(w, mContext);
+                    WeatherConfig.setWeatherData(w, mContext);
                     WeatherContentProvider.updateCachedWeatherInfo(mContext);
                     Log.d(TAG, "Weather updated updateCachedWeatherInfo");
                     completer.set(Result.success());
@@ -214,7 +220,7 @@ public class WeatherWork extends ListenableWorker {
         } finally {
             if (w == null) {
                 Log.d(TAG, "error updating weather");
-                Config.setUpdateError(mContext, true);
+                WeatherConfig.setUpdateError(mContext, true);
                 completer.set(Result.retry());
             }
             Intent updateIntent = new Intent(ACTION_BROADCAST);

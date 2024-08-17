@@ -5,7 +5,7 @@ import static it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity.DATA_LO
 import static it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity.DATA_LOCATION_NAME;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
-import static it.dhd.oxygencustomizer.weather.AbstractWeatherProvider.PART_COORDINATES;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -24,13 +25,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceScreen;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -38,15 +37,15 @@ import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
-import it.dhd.oxygencustomizer.weather.Config;
-import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 
 public abstract class WeatherPreferenceFragment extends ControlledPreferenceFragmentCompat
-    implements OmniJawsClient.OmniJawsObserver {
+        implements OmniJawsClient.OmniJawsObserver {
 
     private static final String DEFAULT_WEATHER_ICON_PACKAGE = "it.dhd.oxygencustomizer.google";
     private MaterialSwitchPreference mCustomLocation;
-    private boolean mTriggerPermissionCheck;
+    private boolean mInitialCheck = true;
     private ListWithPopUpPreference mWeatherIconPack;
     private Preference mUpdateStatus;
     private OmniJawsClient mWeatherClient;
@@ -59,11 +58,11 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
-        mWeatherClient = new OmniJawsClient(getContext(), false);
+        mWeatherClient = new OmniJawsClient(getContext());
 
         mWeatherIconPack = findPreference(WEATHER_ICON_PACK);
 
-        String settingHeaderPackage = Config.getIconPack(getContext());
+        String settingHeaderPackage = WeatherConfig.getIconPack(getContext());
         List<String> entries = new ArrayList<>();
         List<String> values = new ArrayList<>();
         List<Drawable> drawables = new ArrayList<>();
@@ -76,7 +75,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         if (valueIndex == -1) {
             // no longer found
             settingHeaderPackage = DEFAULT_WEATHER_ICON_PACKAGE;
-            //Config.setIconPack(getContext(), settingHeaderPackage);
+            //WeatherConfig.setIconPack(getContext(), settingHeaderPackage);
             valueIndex = mWeatherIconPack.findIndexOfValue(settingHeaderPackage);
         }
         mWeatherIconPack.setValueIndex(valueIndex >= 0 ? valueIndex : 0);
@@ -104,7 +103,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                 mCustomLocationLauncher.launch(new Intent(getContext(), LocationBrowseActivity.class));
                 return true;
             });
-            mCustomLocationActivity.setSummary(Config.getLocationName(getContext()));
+            mCustomLocationActivity.setSummary(WeatherConfig.getLocationName(getContext()));
         }
     }
 
@@ -112,16 +111,17 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     public void onResume() {
         super.onResume();
         mWeatherClient.addObserver(this);
-        if (mPreferences.getBoolean(getMainSwitchKey(), false)
-                && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
-            checkLocationEnabled();
+
+        handlePermissions();
+    }
+
+    private void handlePermissions() {
+        if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+            checkLocationEnabled(mInitialCheck);
+            mInitialCheck = false;
+        } else {
+            forceRefreshWeatherSettings();
         }
-        // values can be changed from outside
-        if (mTriggerPermissionCheck) {
-            checkLocationPermissions(true);
-            mTriggerPermissionCheck = false;
-        }
-        queryAndUpdateWeather();
     }
 
     private boolean hasPermissions() {
@@ -141,30 +141,48 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                         String locationName = intent.getStringExtra(DATA_LOCATION_NAME);
                         double lat = intent.getDoubleExtra(DATA_LOCATION_LAT, 0f);
                         double lon = intent.getDoubleExtra(DATA_LOCATION_LON, 0f);
-                        Config.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
-                        Config.setLocationName(getContext(), locationName);
+                        WeatherConfig.setLocationId(getContext(), String.valueOf(lat), String.valueOf(lon));
+                        WeatherConfig.setLocationName(getContext(), locationName);
                         mCustomLocationActivity.setSummary(locationName);
-                        if (mPreferences.getBoolean(getMainSwitchKey(), false)
-                                && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
-                            checkLocationEnabled();
+                        if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+                            checkLocationEnabled(mInitialCheck);
                         }
                         forceRefreshWeatherSettings();
                     }
                 }
             });
 
-    private void checkLocationPermissions(boolean force) {
-        if (requireContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                || requireContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED ||
-                requireContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(new String[]{
+
+    private boolean isLocationEnabled() {
+        LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
+        return lm.isLocationEnabled();
+    }
+
+    private void requestLocationPermission(ActivityResultLauncher<String[]> locationPermissionRequest) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) ||
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+            showApplicationPermissionDialog();
+        } else {
+            locationPermissionRequest.launch(new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_BACKGROUND_LOCATION
             });
+        }
+    }
+
+    private void checkLocationEnabled(boolean force) {
+        if (!isLocationEnabled()) {
+            showLocationPermissionDialog();
+        } else {
+            checkLocationPermission(force);
+        }
+    }
+
+    private void checkLocationPermission(boolean force) {
+        if (!hasPermissions() && !mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
+            requestLocationPermission(requestPermissionLauncher);
         } else {
             if (force) {
                 forceRefreshWeatherSettings();
@@ -173,29 +191,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         }
     }
 
-    private boolean doCheckLocationEnabled() {
-        LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
-        return lm.isLocationEnabled();
-    }
-
-    private void checkLocationEnabled() {
-        if (!doCheckLocationEnabled()) {
-            showDialog();
-        } else {
-            checkLocationPermissions(false);
-        }
-    }
-
-    private void checkLocationEnabledInitial() {
-        if (!doCheckLocationEnabled()) {
-            showDialog();
-        } else {
-            checkLocationPermissions(true);
-        }
-    }
-
-    private void showDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+    private void showLocationPermissionDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.MaterialAlertDialog_Material3);
         final Dialog dialog;
 
         // Build and show the dialog
@@ -204,7 +201,6 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.weather_retrieve_location_dialog_enable_button,
                 (dialog1, whichButton) -> {
-                    mTriggerPermissionCheck = true;
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -214,8 +210,8 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         dialog.show();
     }
 
-    private void showPermissionDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+    private void showApplicationPermissionDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.MaterialAlertDialog_Material3);
         builder.setTitle(R.string.weather_permission_dialog_title);
         builder.setMessage(R.string.weather_permission_dialog_message);
         builder.setCancelable(false);
@@ -247,19 +243,13 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         String mainKey = getMainSwitchKey();
 
         if (key.equals(mainKey)) {
-            Config.setEnabled(getContext(), mPreferences.getBoolean(mainKey, false), mainKey);
+            WeatherConfig.setEnabled(getContext(), mPreferences.getBoolean(mainKey, false), mainKey);
             if (mPreferences.getBoolean(mainKey, false)) {
-                if (!hasPermissions()) {
-                    showPermissionDialog();
-                }
+                handlePermissions();
                 enableService();
-                if (!mPreferences.getBoolean(WEATHER_CUSTOM_LOCATION, false)) {
-                    checkLocationEnabledInitial();
-                } else {
-                    forceRefreshWeatherSettings();
-                }
+                forceRefreshWeatherSettings();
             }
-        } else {
+        } else if (key.equals(WEATHER_PROVIDER)) {
             forceRefreshWeatherSettings();
         }
 
@@ -277,7 +267,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             } else {
                 values.add(r.activityInfo.name);
                 String[] name = r.activityInfo.name.split("\\.");
-                drawables.add(ResourcesCompat.getDrawable(getResources(), getResources().getIdentifier(name[name.length-1].toLowerCase() + "_30", "drawable", BuildConfig.APPLICATION_ID), getContext().getTheme()));
+                drawables.add(ResourcesCompat.getDrawable(getResources(), getResources().getIdentifier(name[name.length - 1].toLowerCase() + "_30", "drawable", BuildConfig.APPLICATION_ID), getContext().getTheme()));
             }
             String label = r.activityInfo.loadLabel(packageManager).toString();
             if (label == null) {
@@ -295,6 +285,11 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             String packageName = r.activityInfo.packageName;
             values.add(packageName + ".weather");
             String label = r.activityInfo.loadLabel(packageManager).toString();
+            try {
+                Resources mRes = packageManager.getResourcesForApplication(packageName);
+                drawables.add(ResourcesCompat.getDrawable(mRes, mRes.getIdentifier("weather_30", "drawable", packageName), getContext().getTheme()));
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
             if (label == null) {
                 label = r.activityInfo.packageName;
             }

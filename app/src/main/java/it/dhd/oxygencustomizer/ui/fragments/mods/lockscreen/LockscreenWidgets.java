@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 
 public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
+
+    private OmniJawsClient mWeatherClient;
 
     private static final String MAIN_WIDGET_1_KEY = "main_custom_widgets1";
     private static final String MAIN_WIDGET_2_KEY = "main_custom_widgets2";
@@ -68,6 +72,9 @@ public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+
+        mWeatherClient = new OmniJawsClient(getContext());
+        mWeatherClient.queryWeather();
 
         mMainWidget1 = findPreference(MAIN_WIDGET_1_KEY);
         mMainWidget2 = findPreference(MAIN_WIDGET_2_KEY);
@@ -126,6 +133,16 @@ public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
 
         mPreferences.putString(LOCKSCREEN_WIDGETS, mainWidgets);
         mPreferences.putString(LOCKSCREEN_WIDGETS_EXTRAS, extraWidgets);
+
+        if (mWeatherClient.getWeatherInfo() != null) {
+            // Weather enabled but updater more than 1h ago
+            if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
+                WeatherScheduler.scheduleUpdateNow(getContext());
+            }
+        } else {
+            // Weather not enabled (LS/AOD Weather) so we will update now
+            WeatherScheduler.scheduleUpdateNow(getContext());
+        }
 
     }
 

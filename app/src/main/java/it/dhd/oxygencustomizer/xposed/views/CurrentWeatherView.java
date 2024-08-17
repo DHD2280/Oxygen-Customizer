@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
-import it.dhd.oxygencustomizer.xposed.utils.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 
@@ -74,6 +75,9 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     public CurrentWeatherView(Context context, String name) {
         super(context);
         instances.add(new Object[]{this, name});
+
+        this.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
         mContext = context;
         try {
             appContext = context.createPackageContext(
@@ -82,7 +86,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             );
         } catch (PackageManager.NameNotFoundException ignored) {
         }
-        mWeatherClient = new OmniJawsClient(context, true);
+        mWeatherClient = new OmniJawsClient(context);
 
         inflateView();
 
@@ -229,7 +233,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             mWeatherInfo = mWeatherClient.getWeatherInfo();
             if (mWeatherInfo != null) {
                 String formattedCondition = mWeatherInfo.condition;
-                if (formattedCondition.toLowerCase().contains("clouds")) {
+                if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_rain);

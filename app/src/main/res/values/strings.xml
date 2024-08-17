@@ -599,6 +599,8 @@
     <string name="launcher_app_details_title">Open App Details</string>
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
+    <string name="force_themed_launcher_icons">Force Themed App Icons</string>
+    <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
@@ -1053,7 +1055,8 @@
     <string name="location_query_hint">Search for a location</string>
     <string name="weather_custom_margins">Custom Margins</string>
     <string name="weather_margin_top">Top margin</string>
-    <string name="weather_centered">Center Layout</string>
+    <string name="weather_centered">Center Weather View</string>
+    <string name="weather_centered_summary">Move weather view to center horizontally</string>
     <string name="weather_margin_left">Left Margin</string>
     <string name="weather_permission_dialog_title">Enable Location Permissions</string>
     <string name="weather_permission_dialog_message">Location permissions are required to fetch weather data. Click OK to open Settings.</string>
@@ -1178,6 +1181,7 @@
     <string name="mini_inactive">Mini Widget Inactive Color</string>
     <string name="mini_icon_active">Mini Widget Icon Active Color</string>
     <string name="mini_icon_inactive">Mini Widget Icon Inactive Color</string>
+    <string name="weather_settings">Weather Settings</string>
 
     <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>

@@ -21,6 +21,8 @@ package it.dhd.oxygencustomizer.weather;
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
@@ -39,7 +41,7 @@ import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 
-public class Config {
+public class WeatherConfig {
     public static final String PREF_KEY_LOCATION_LAT = "location_lat";
     public static final String PREF_KEY_LOCATION_LON = "location_lon";
     public static final String PREF_KEY_LOCATION_NAME = "location_name";
@@ -140,7 +142,12 @@ public class Config {
     public static boolean isEnabled(Context context) {
         boolean lsWeather = getPrefs(context).getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
         boolean aodWeather = getPrefs(context).getBoolean(AOD_WEATHER_SWITCH, false);
-        return lsWeather || aodWeather;
+        String bigWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS, "");
+        String miniWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
+
+        boolean weatherWidget = bigWidgets.contains("weather") || miniWidgets.contains("weather");
+
+        return lsWeather || aodWeather || weatherWidget;
     }
 
     public static void setEnabled(Context context, boolean value, String key) {

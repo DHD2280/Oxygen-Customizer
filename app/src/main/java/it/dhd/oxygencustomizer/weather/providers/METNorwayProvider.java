@@ -24,7 +24,7 @@ public class METNorwayProvider extends AbstractWeatherProvider {
     private static final String TAG = "METNorwayProvider";
 
     private static final String URL_WEATHER =
-            "https://api.met.no/weatherapi/locationforecast/2.0/?";
+            "https://api.met.no/weatherapi/locationforecast/2.0/compact?";
 
     private static final SimpleDateFormat gmt0Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
     private static final SimpleDateFormat userTimeZoneFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);

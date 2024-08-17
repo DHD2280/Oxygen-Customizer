@@ -56,11 +56,11 @@ public abstract class AbstractWeatherProvider {
     }
 
     protected String retrieve(String url) {
-         response = "";
+        response = "";
         CountDownLatch latch = new CountDownLatch(1);
 
-        NetworkUtils.downloadUrlMemoryAsString(url, result -> {
-            if (result != null) {
+        NetworkUtils.asynchronousGetRequest(url, result -> {
+            if (!TextUtils.isEmpty(result)) {
                 Log.d(TAG, "Download success " + result);
                 response = result;
             } else {
@@ -97,7 +97,7 @@ public abstract class AbstractWeatherProvider {
         Geocoder geocoder = new Geocoder(mContext.getApplicationContext(), Locale.getDefault());
         try {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if(listAddresses != null && !listAddresses.isEmpty()){
+            if (listAddresses != null && !listAddresses.isEmpty()) {
                 Address a = listAddresses.get(0);
                 return TextUtils.isEmpty(a.getLocality()) ? a.getAdminArea() : a.getLocality();
             }
@@ -165,8 +165,8 @@ public abstract class AbstractWeatherProvider {
 
     protected String getWeatherDataLocality(String coordinates) {
         String city;
-        if (Config.isCustomLocation(mContext)) {
-            city = Config.getLocationName(mContext);
+        if (WeatherConfig.isCustomLocation(mContext)) {
+            city = WeatherConfig.getLocationName(mContext);
             if (TextUtils.isEmpty(city)) {
                 city = getCoordinatesLocality(coordinates);
             }

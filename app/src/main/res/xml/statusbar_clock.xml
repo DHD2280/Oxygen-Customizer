@@ -121,7 +121,7 @@
 
         <Preference
             android:key="sbc_after_clock"
-            android:title="@string/status_bar_clock_before_clock"
+            android:title="@string/status_bar_clock_after_clock"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
