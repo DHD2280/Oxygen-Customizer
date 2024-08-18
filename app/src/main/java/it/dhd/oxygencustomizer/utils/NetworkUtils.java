@@ -32,14 +32,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class NetworkUtils {
+
     private static final boolean DEBUG = false;
     private static final String TAG = "NetworkUtils";
 
-
     public static void asynchronousGetRequest(String url, DownloadCallback callback) {
-        if (DEBUG) Log.d(TAG, "download: " + url);
-        OkHttpClient client = new OkHttpClient();
 
+        if (DEBUG) Log.d(TAG, "download: " + url);
+
+        OkHttpClient client = new OkHttpClient();
 
         Request apiRequest = new Request.Builder()
                 .url(url)
