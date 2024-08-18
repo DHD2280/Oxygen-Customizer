@@ -9,12 +9,38 @@
     <string name="toast_rename_file">重命名文件未一些简单的</string>
     <string name="toast_applied">应用</string>
     <string name="toast_disabled">已禁用</string>
+    <string name="toast_error">出现错误</string>
     <string name="opt_selected1">已选择: %s</string>
     <string name="opt_selected2">已选择: %s%s</string>
     <string name="requires_sysui_restart">这个选择需要系统界面重启\n点击菜单来重启</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">正在初始化设置</string>
+    <string name="step">步骤</string>
+    <string name="module_installation_step1">正在创建模块 Shell</string>
+    <string name="module_installation_step2">正在提取必要的文件</string>
+    <string name="module_installation_step3">创建overlay叠加层</string>
+    <string name="module_installation_step4"></string>
+    <string name="module_installation_step5">签名叠加层</string>
+    <string name="module_installation_step6">清理目录</string>
+    <string name="onboarding_subtitle_1">让我们根据我们的喜好定制一切。</string>
+    <string name="onboarding_title_2">是否支持我的设备？</string>
+    <string name="compatible_root_not_found_title">无法找到兼容的 Root 方法</string>
+    <string name="compatible_root_not_found_desc">使用任何流行的 root 解决方案进行操作。</string>
+    <string name="root_not_found_title">Root 不可访问</string>
+    <string name="root_not_found_desc">看起来您的设备没有Root!</string>
+    <string name="need_reboot_title">需要重启设备</string>
+    <string name="need_reboot_desc">重新启动您的设备以设置所有文件。</string>
+    <string name="logs">日志</string>
     <!-- Buttons -->
     <string name="btn_select">选择</string>
+    <string name="btn_next">下一个</string>
+    <string name="btn_back">后退</string>
+    <string name="btn_lets_go">开始吧！</string>
+    <string name="btn_close">关闭</string>
+    <string name="btn_reboot_now">现在重启</string>
+    <string name="btn_reboot">重启</string>
+    <string name="btn_enable">启用</string>
+    <string name="btn_disable">已禁用</string>
     <string name="btn_apply">应用</string>
     <!-- Dialogs -->
     <string name="installing">正在安装...</string>
@@ -38,7 +64,10 @@
     <string name="general_color_accent3">强调色 3</string>
     <string name="general_color_text1">文本 1</string>
     <string name="general_color_text2">文本 2</string>
+    <string name="sysui_restart_needed">需要重启系统界面才能应用</string>
+    <string name="one_time_reboot_needed">重启您的设备！</string>
     <string name="gradient_left_right">从左到右</string>
+    <string name="gradient_top_bottom">从上到下</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">搜索...</string>
     <string name="searchpreference_clear">清空</string>
@@ -68,8 +97,13 @@
     <string name="general_on">开启</string>
     <string name="general_off">关闭</string>
     <string name="accent_color">强调色</string>
+    <string name="white_color">白色</string>
+    <string name="black_color">黑色</string>
+    <string name="custom_color">自定义颜色</string>
     <string name="battery_info_button_title">电池信息…</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">状态栏选项</string>
+    <string name="statusbar_double_tap_sleep">双击以休眠</string>
     <string name="statusbar_battery_icon_options">电池图标</string>
     <string name="statusbar_icons">状态栏图标</string>
     <!-- Statusbar notification strings -->
