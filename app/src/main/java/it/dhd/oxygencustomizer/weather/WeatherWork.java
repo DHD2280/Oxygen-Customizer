@@ -133,9 +133,12 @@ public class WeatherWork extends ListenableWorker {
 
     @SuppressLint("MissingPermission")
     private Location getCurrentLocation() {
+
+        if (WeatherConfig.isCustomLocation(mContext)) {
+            return null;
+        }
+
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
-
 
         if (!doCheckLocationEnabled()) {
             Log.w(TAG, "locations disabled");
