@@ -338,6 +338,7 @@
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">Riquadri Impostazioni rapide</string>
     <string name="quick_settings_tiles_number">Conteggio Tile Impostazioni rapide</string>
+    <string name="quick_settings_tiles_main">Personalizza Tile Impostazioni Rapide</string>
     <string name="qs_transparency">Trasparenza QS &amp; Sfocatura</string>
     <string name="qs_transparency_title">Personalizza Trasparenza QS</string>
     <string name="qs_transparency_value">Trasparenza QS</string>
@@ -761,7 +762,7 @@
     <string name="pulse_vertical_mirror_title">Specchio Verticale</string>
     <string name="pulse_vertical_mirror_summary">Crea ulteriori Pulse e capovolgi verticalmente</string>
     <!-- Fluid Music -->
-    <string name="fluid_music">Musica Fluida</string>
+    <string name="fluid_music">Fluid Music</string>
     <string name="fluid_music_summary">Personalizza Fluid Music</string>
     <string name="fluid_music_custom_list">Fluid Music Personalizzata</string>
     <string name="fluid_music_custom_list_summary">Personalizza le app Fluid Music.\nQuesto elenco sostituirà l\'elenco delle app Fluid Music del sistema.</string>
@@ -1025,9 +1026,11 @@
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_customized">Stock Personalizzato</string>
     <string name="settings_icons_pui">PUI v1</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
     <string name="settings_bg_color">Colore sfondo</string>
+    <string name="settings_bg_use_solid">Fondo Solido</string>
     <string name="settings_bg_shape">Forma Sfondo</string>
     <string name="circle">Cerchio</string>
     <string name="squircle">Supercerchio</string>
@@ -1060,5 +1063,48 @@
     <string name="custom_dark_mode_summary">Consenti la personalizzazione delle app in modalità scura.</string>
     <string name="dark_mode_intensity">Intensità Modalità Scura</string>
     <!-- Lockscreen Widgets -->
+    <string name="lockscreen_widgets_title">Widget Schermata di Blocco</string>
+    <string name="lockscreen_widgets_enabled_title">Abilita Widget Schermata di Blocco</string>
+    <string name="lockscreen_widgets_enabled_summary">Aggiungi Widget alla schermata di blocco</string>
+    <string name="lockscreen_display_widgets_title">Widget informazioni dispositivo</string>
+    <string name="lockscreen_display_widgets_summary">Mostra il widget delle informazioni sul dispositivo nella schermata di blocco</string>
+    <string name="linear_progress_color">Colore barra avanzamento lineare</string>
+    <string name="circular_progress_color">Colore barra avanzamento circolare</string>
+    <string name="text_color">Colore testo</string>
+    <string name="custom_device_name">Personalizza nome dispositivo</string>
+    <string name="custom_device_name_summary">Imposta un nome dispositivo personalizzato.\nLasciare vuoto per disabilitare.</string>
+    <string name="large_widgets_category_title">Widget grande</string>
+    <string name="main_custom_widgets1">Widget grande 1</string>
+    <string name="main_custom_widgets2">Widget grande 2</string>
+    <string name="mini_widgets_category_title">Widget Mini</string>
+    <string name="custom_widgets1">Widget Mini 1</string>
+    <string name="custom_widgets2">Widget Mini 2</string>
+    <string name="custom_widgets3">Widget Mini 3</string>
+    <string name="custom_widgets4">Widget Mini 4</string>
+    <string name="widgets_custom_color">Impostazioni colore</string>
+    <string name="widgets_custom_color_title">Personalizza colori widget</string>
+    <string name="big_active">Colore attivo Widget grande</string>
+    <string name="big_inactive">Colore inattivo Widget grande</string>
+    <string name="big_icon_active">Colore attivo icona Widget grande</string>
+    <string name="big_icon_inactive">Colorein attivo icona Widget grande</string>
+    <string name="mini_active">Colore attivo Mini Widget</string>
+    <string name="mini_inactive">Colore inattivo Mini Widget</string>
+    <string name="mini_icon_active">Colore attivo icona Mini Widget</string>
+    <string name="mini_icon_inactive">Colore inattivo icona Mini Widget</string>
     <!-- LS Widgets Actions -->
+    <string name="camera">Fotocamera</string>
+    <string name="clock_timer">Orologio/Timer</string>
+    <string name="calculator">Calcolatrice</string>
+    <string name="gallery">Galleria</string>
+    <string name="media">Lettore multimediale</string>
+    <string name="torch">Torcia</string>
+    <string name="controls_media_button_play">Riproduci</string>
+    <string name="weather">Meteo</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="data">Dati</string>
+    <string name="ringer">Suoneria</string>
+    <string name="bt">Bluetooth</string>
+    <string name="home_controls">Controlli domotici</string>
+    <string name="wallet">Portafoglio</string>
+    <string name="hotspot">Hotspot</string>
 </resources>

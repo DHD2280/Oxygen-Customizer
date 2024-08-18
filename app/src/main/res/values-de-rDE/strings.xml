@@ -8,10 +8,18 @@
     <string name="settings_label">Einstellungen</string>
     <string name="toast_rename_file">Datei in etwas Einfacheres umbenennen</string>
     <string name="toast_applied">Angewandt</string>
+    <string name="toast_disabled">Deaktiviert</string>
+    <string name="toast_error">Etwas ist schief gelaufen</string>
     <string name="opt_selected1">Ausgewählt: %s</string>
     <string name="opt_selected2">Ausgewählt: %s%s</string>
     <string name="requires_sysui_restart">Dieser Abschnitt erfordert ein Neustart von SystemUI neustarten\nTippen Sie auf das Menü um neu zu starten.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Setup wird initialisiert</string>
+    <string name="step">Schritt</string>
+    <string name="module_installation_step1">Modul-Shell wird erstellt</string>
+    <string name="module_installation_step2">Entpacken notwendiger Dateien</string>
+    <string name="module_installation_step3">Erstellen von Overlay-APKs</string>
+    <string name="module_installation_step4">Ausrichten der Overlay-APKs</string>
     <!-- Buttons -->
     <string name="btn_select">Auswählen</string>
     <!-- Dialogs -->
