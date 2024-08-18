@@ -6,8 +6,10 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.toggleNotifications;
@@ -18,6 +20,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -27,6 +30,8 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -65,6 +70,20 @@ public class GestureNavbarManager extends XposedMods {
     private String QSExpandMethodName = "";
     private Object NotificationPanelViewController;
 
+    //region pill size
+    private static float widthFactor = 1f;
+
+    private Object mNavigationBarInflaterView = null;
+    //endregion
+
+    //region pill color
+    private boolean colorReplaced = false;
+    private static boolean navPillColorAccent = false;
+    private static boolean navPillCustomColor = false;
+    private static int navPillColor = Color.GRAY;
+    private static final int mLightColor = 0xEBFFFFFF, mDarkColor = 0x99000000; //original navbar colors
+    //endregion
+
 
     public GestureNavbarManager(Context context) {
         super(context);
@@ -85,6 +104,26 @@ public class GestureNavbarManager extends XposedMods {
         overrideLeft = Integer.parseInt(Xprefs.getString("gesture_override_holdback_left", "0"));
         overrideRight = Integer.parseInt(Xprefs.getString("gesture_override_holdback_right", "0"));
         //endregion
+
+        //region pill size
+        widthFactor = Xprefs.getSliderInt( "GesPillWidthModPos", 50) * .02f;
+        //endregion
+
+        //region pill color
+        navPillColorAccent = Xprefs.getBoolean("navPillColorAccent", true);
+        navPillCustomColor = Xprefs.getBoolean("navPillCustomColor", false);
+        navPillColor = Xprefs.getInt("navPillColor", Color.GRAY);
+        //endregion
+
+        if (Key.length > 0) {
+            if (Key[0].equals("GesPillWidthModPos") ||
+                    Key[0].equals("GesPillHeightFactor") ||
+                    Key[0].equals("navPillColorAccent") ||
+                    Key[0].equals("navPillCustomColor") ||
+                    Key[0].equals("navPillColor")) {
+                refreshNavbar();
+            }
+        }
     }
 
     @Override
@@ -227,6 +266,68 @@ public class GestureNavbarManager extends XposedMods {
                 NotificationPanelViewController = param.thisObject;
             }
         });
+
+        Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
+        Class<?> OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader);
+        //region pill color
+        hookAllMethods(OplusNavigationHandle, "setDarkIntensity", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (navPillColorAccent || colorReplaced) {
+                    setObjectField(param.thisObject, "mLightColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_200, mContext.getTheme()) : mLightColor);
+                    setObjectField(param.thisObject, "mDarkColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_600, mContext.getTheme()) : mDarkColor);
+                    colorReplaced = true;
+                }
+            }
+        });
+        //endregion
+
+        //region pill size
+        hookAllMethods(OplusNavigationHandle,
+                "setVertical", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (widthFactor != 1f) {
+                            View result = (View) param.thisObject;
+                            ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
+                            int originalWidth;
+                            try {
+                                originalWidth = (int) getAdditionalInstanceField(param.thisObject, "originalWidth");
+                            } catch (Throwable ignored) {
+                                originalWidth = resultLayoutParams.width;
+                                setAdditionalInstanceField(param.thisObject, "originalWidth", originalWidth);
+                            }
+
+                            resultLayoutParams.width = Math.round(originalWidth * widthFactor);
+                        }
+                    }
+                });
+
+
+        hookAllConstructors(OplusNavigationBarInflaterView, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                mNavigationBarInflaterView = param.thisObject;
+                refreshNavbar();
+            }
+        });
+
+        hookAllMethods(OplusNavigationBarInflaterView,
+                "createView", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (widthFactor != 1f) {
+                            String button = (String) callMethod(param.thisObject, "extractButton", param.args[0]);
+                            if (!button.equals("home_handle")) return;
+
+                            View result = (View) param.getResult();
+                            ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
+                            resultLayoutParams.width = Math.round(resultLayoutParams.width * widthFactor);
+                            result.setLayoutParams(resultLayoutParams);
+                        }
+                    }
+                });
+        //endregion
 
     }
 
@@ -381,6 +482,14 @@ public class GestureNavbarManager extends XposedMods {
             return packageName; // Fallback to package name if the app label is not found
         }
     }
+
+    //region pill size
+    private void refreshNavbar() {
+        try {
+            callMethod(mNavigationBarInflaterView, "updateLayout");
+        } catch (Throwable ignored) {}
+    }
+    //endregion
 
     @Override
     public boolean listensTo(String packageName) {

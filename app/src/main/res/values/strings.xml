@@ -629,6 +629,11 @@
     <string name="gesture_override_back_hold_command_notification_panel">Open notification panel</string>
     <string name="gesture_override_back_hold_command_screen_off">Screen Off</string>
 
+    <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">Navigation bar pill</string>
+    <string name="gesture_nav_pill_width_title">Width compared to standard size</string>
+    <string name="colorpill">Accent colored gesture pill</string>
+
     <!-- Buttons Title -->
     <string name="buttons_title">Buttons</string>
     <string name="power_button_category_title">Power Button</string>
