@@ -919,14 +919,9 @@ public class LockscreenClock extends XposedMods {
 
     private void setWeatherCentered() {
         CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
-        if (mWeatherCentered) {
-            mWeatherContainer.setGravity(CENTER_HORIZONTAL);
-            if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = WRAP_CONTENT;
-        } else {
-            mWeatherContainer.setGravity(START);
-            if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = MATCH_PARENT;
-        }
-        currentWeatherView.requestLayout();
+        mWeatherContainer.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
+        if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
+        if (currentWeatherView != null) currentWeatherView.requestLayout();
         ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
         for (int i = 0; i < weatherContainer.getChildCount(); i++) {
             View child = weatherContainer.getChildAt(i);
