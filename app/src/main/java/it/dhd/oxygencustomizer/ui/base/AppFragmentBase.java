@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +50,8 @@ public abstract class AppFragmentBase extends BaseFragment {
 
     public abstract boolean backButtonEnabled();
 
+    public boolean hasMainSwitch() { return true; }
+
     public abstract String getFunctionTitle();
 
     public abstract String getFunctionSummary();
@@ -80,8 +83,13 @@ public abstract class AppFragmentBase extends BaseFragment {
 
         mPreferences = getModulePrefs();
 
-        binding.appFunctionSwitch.setTitle(getFunctionTitle());
-        binding.appFunctionSwitch.setSummary(getFunctionSummary());
+        if (hasMainSwitch()) {
+            binding.appFunctionSwitch.setVisibility(View.VISIBLE);
+            binding.appFunctionSwitch.setTitle(getFunctionTitle());
+            binding.appFunctionSwitch.setSummary(getFunctionSummary());
+        } else {
+            binding.appFunctionSwitch.setVisibility(View.GONE);
+        }
 
         return binding.getRoot();
     }
@@ -242,7 +250,7 @@ public abstract class AppFragmentBase extends BaseFragment {
                         }
                     });
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(this.getClass().getName(), "Executor error", e);
                 }
             });
         }
