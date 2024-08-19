@@ -205,7 +205,7 @@ dependencies {
     implementation("com.github.mfathi91:persian-date-time:4.2.1")
 
     // OkHTTP
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 tasks.register("printVersionName") {

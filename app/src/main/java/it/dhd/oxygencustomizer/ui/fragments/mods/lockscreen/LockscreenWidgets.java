@@ -19,6 +19,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 
 public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
 
@@ -131,16 +132,22 @@ public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
         String mainWidgets = TextUtils.join(",", mainWidgetsList);
         String extraWidgets = TextUtils.join(",", extraWidgetsList);
 
+        boolean wasWeatherEnabled = WeatherConfig.isEnabled(getContext());
+
         mPreferences.putString(LOCKSCREEN_WIDGETS, mainWidgets);
         mPreferences.putString(LOCKSCREEN_WIDGETS_EXTRAS, extraWidgets);
 
-        if (mWeatherClient.getWeatherInfo() != null) {
+        boolean weatherEnabled =
+                mainWidgets.contains("weather") || extraWidgets.contains("weather");
+
+        if (weatherEnabled && wasWeatherEnabled) {
             // Weather enabled but updater more than 1h ago
             if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
                 WeatherScheduler.scheduleUpdateNow(getContext());
             }
-        } else {
+        } else if (weatherEnabled) {
             // Weather not enabled (LS/AOD Weather) so we will update now
+            WeatherScheduler.scheduleUpdates(getContext());
             WeatherScheduler.scheduleUpdateNow(getContext());
         }
 

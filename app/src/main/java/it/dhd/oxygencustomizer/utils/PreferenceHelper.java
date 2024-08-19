@@ -891,6 +891,8 @@ public class PreferenceHelper {
             // Gesture Prefs
             case "gesture_left_height_double" -> getGestureHeight(key);
             case "gesture_right_height_double" -> getGestureHeight(key);
+            case "GesPillWidthModPos" -> instance.mPreferences.getSliderInt("GesPillWidthModPos", 0) + "%";
+
             // Launcher Prefs
             case "folder_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));

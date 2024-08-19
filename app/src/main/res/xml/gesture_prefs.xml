@@ -76,4 +76,29 @@
             android:defaultValue="0"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="nav_pill_cat"
+        android:title="@string/gesture_nav_pill_cat"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            android:key="navPillColorAccent"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/colorpill"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            app:defaultValue="50"
+            android:key="GesPillWidthModPos"
+            android:title="@string/gesture_nav_pill_width_title"
+            app:iconSpaceReserved="false"
+            app:maxVal="100"
+            app:minVal="10" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

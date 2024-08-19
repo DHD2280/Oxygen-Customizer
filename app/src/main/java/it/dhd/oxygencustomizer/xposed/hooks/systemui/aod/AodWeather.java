@@ -4,7 +4,6 @@ import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.Gravity.START;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -39,7 +38,6 @@ import android.widget.LinearLayout;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 
@@ -115,7 +113,6 @@ public class AodWeather extends XposedMods {
     private void updateMargins() {
         if (mWeatherContainer == null) return;
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mWeatherContainer.getLayoutParams();
-        params.width = WRAP_CONTENT;
         if (mCustomMargins) {
             params.setMargins(dp2px(mContext, mLeftMargin), dp2px(mContext, mTopMargin), dp2px(mContext, mLeftMargin), 0);
         } else {
@@ -163,11 +160,10 @@ public class AodWeather extends XposedMods {
     }
 
     private void setWeatherCentered() {
-        if (mWeatherCentered) {
-            mWeatherContainer.setGravity(CENTER_HORIZONTAL);
-        } else {
-            mWeatherContainer.setGravity(START);
-        }
+        CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(AOD_WEATHER);
+        mWeatherContainer.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
+        if (currentWeatherView != null) currentWeatherView.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
+        if (currentWeatherView != null) currentWeatherView.requestLayout();
         ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
         for (int i = 0; i < weatherContainer.getChildCount(); i++) {
             View child = weatherContainer.getChildAt(i);
