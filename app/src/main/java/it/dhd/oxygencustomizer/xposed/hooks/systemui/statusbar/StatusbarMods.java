@@ -8,8 +8,6 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
@@ -19,7 +17,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
@@ -93,7 +90,6 @@ public class StatusbarMods extends XposedMods {
     private DisplayManager mDisplayManager = null;
     private Object mCollapsedStatusBarFragment = null;
     private ViewGroup mStatusBar;
-    private Class<?> FwkResIdLoader = null;
     private boolean doubleTapToSleepStatusbarEnabled;
     GestureDetector mLockscreenDoubleTapToSleep; //event callback for double tap to sleep detection of statusbar only
 
@@ -481,9 +477,6 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
-            FwkResIdLoader = findClass("com.android.systemui.util.FwkResIdLoader", lpparam.classLoader);
-        } catch (Throwable ignored) {}
-        try {
             DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
         } catch (Throwable ignored) {}
         try {
@@ -503,9 +496,6 @@ public class StatusbarMods extends XposedMods {
                         Context context = (Context) param.args[1];
                         Drawable icon = null;
                         Object statusBarIcon = param.args[2];
-
-                        float mIconScale = getFloatField(param.thisObject, "mIconScale");
-                        log("mIconScale: " + mIconScale);
 
                         String pkgName = (String) getObjectField(statusBarIcon, "pkg");
                         if (pkgName.contains("com.android") || pkgName.contains("systemui")) return;
