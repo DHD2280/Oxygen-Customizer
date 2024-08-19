@@ -9,6 +9,7 @@
         <item>com.oplus.screenshot</item>
     </string-array>
     <string-array name="root_requirement">
+        <item>android</item> <!-- framework -->
         <item>com.android.systemui</item> <!-- systemUI -->
     </string-array>
 

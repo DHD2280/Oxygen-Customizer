@@ -8,6 +8,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
@@ -62,6 +63,7 @@ public class ModPacks {
                 modPacks.add(PhoneWindowManager.class);
                 modPacks.add(Buttons.class);
                 modPacks.add(DarkMode.class);
+                modPacks.add(OplusStartingWindowManager.class);
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
