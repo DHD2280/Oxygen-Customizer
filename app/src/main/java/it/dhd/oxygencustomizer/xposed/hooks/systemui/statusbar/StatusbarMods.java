@@ -8,8 +8,6 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
@@ -19,7 +17,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
@@ -93,7 +90,6 @@ public class StatusbarMods extends XposedMods {
     private DisplayManager mDisplayManager = null;
     private Object mCollapsedStatusBarFragment = null;
     private ViewGroup mStatusBar;
-    private Class<?> FwkResIdLoader = null;
     private boolean doubleTapToSleepStatusbarEnabled;
     GestureDetector mLockscreenDoubleTapToSleep; //event callback for double tap to sleep detection of statusbar only
 
@@ -161,7 +157,7 @@ public class StatusbarMods extends XposedMods {
         if (Key.length > 0) {
             switch (Key[0]) {
                 case "statusbarPaddings",
-                        "statusbar_top_padding" -> updateStatusbarHeight();
+                     "statusbar_top_padding" -> updateStatusbarHeight();
                 case "statusbar_padding_enabled" -> updateResources();
                 case "statusbar_notification_app_icon" -> updateNotificationIcons();
             }
@@ -201,7 +197,8 @@ public class StatusbarMods extends XposedMods {
             QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
         }
         Class<?> QuickStatusBarHeaderClass;
-        try { QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        try {
+            QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
         } catch (Throwable t) {
             oos13 = true;
             QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
@@ -481,14 +478,13 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
-            FwkResIdLoader = findClass("com.android.systemui.util.FwkResIdLoader", lpparam.classLoader);
-        } catch (Throwable ignored) {}
-        try {
             DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         try {
             ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         findAndHookMethod(StatusBarIconView,
                 "getIcon",
@@ -503,9 +499,6 @@ public class StatusbarMods extends XposedMods {
                         Context context = (Context) param.args[1];
                         Drawable icon = null;
                         Object statusBarIcon = param.args[2];
-
-                        float mIconScale = getFloatField(param.thisObject, "mIconScale");
-                        log("mIconScale: " + mIconScale);
 
                         String pkgName = (String) getObjectField(statusBarIcon, "pkg");
                         if (pkgName.contains("com.android") || pkgName.contains("systemui")) return;
@@ -524,7 +517,8 @@ public class StatusbarMods extends XposedMods {
                                             isLowRam ?
                                                     "notification_small_icon_size" :
                                                     "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable ignored) {
+                        }
                         TypedValue typedValue = new TypedValue();
                         sysuiContext.getResources().getValue(
                                 sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
@@ -740,13 +734,11 @@ public class StatusbarMods extends XposedMods {
     private void updateNotificationIcons() {
         try {
             callMethod(mNotificationIconAreaController, "updateStatusBarIcons");
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (Throwable ignored) {
         }
         try {
             callMethod(mNotificationIconContainer, "updateState");
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 
