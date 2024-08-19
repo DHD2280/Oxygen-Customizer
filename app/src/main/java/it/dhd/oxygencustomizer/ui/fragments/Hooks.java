@@ -70,22 +70,11 @@ public class Hooks extends Fragment {
     private int dotCount = 0;
     private ServiceConnection mCoreRootServiceConnection;
     private IRootProviderService mRootServiceIPC = null;
-    private boolean rebootPending = false;
     private final String reboot_key = "reboot_pending";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHooksBinding.inflate(inflater, container, false);
-
-        if (savedInstanceState != null) {
-            rebootPending = savedInstanceState.getBoolean(reboot_key);
-        }
-
-        //binding.rebootButton.setOnClickListener(view -> AppUtils.Restart("system"));
-
-        if (!rebootPending) {
-            binding.rebootButton.hide();
-        }
 
         startRootService();
 
@@ -335,20 +324,6 @@ public class Hooks extends Fragment {
 
     private int dp2px(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean(reboot_key, rebootPending);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            rebootPending = savedInstanceState.getBoolean(reboot_key);
-        }
     }
 
     @Override
