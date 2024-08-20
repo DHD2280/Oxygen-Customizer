@@ -86,6 +86,9 @@ public class OplusStartingWindowManager extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (Build.VERSION.SDK_INT < 34) return;
 
+        XPLauncher.enqueueProxyCommand((proxy) ->
+            proxy.runCommand("echo " + getFormattedDate() + " - OplusStartingWindowManager: hook started >> " + LOG_FILE));
+        
         if (!broadcastRegistered) {
             broadcastRegistered = true;
 
