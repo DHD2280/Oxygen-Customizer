@@ -74,7 +74,7 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Pasqui1978", "", "", R.drawable.ic_default_person));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "https://github.com/Pronegate", R.drawable.ic_default_person));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ZioProne", "", "https://github.com/Pronegate", ResourcesCompat.getDrawable(getResources(), R.drawable.zioprone, requireContext().getTheme())));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ℤ\uD835\uDD56\uD835\uDD5F\uD835\uDD60 \uD835\uDD4F", "OOS 13 Tester", "", R.drawable.ic_default_person));
 
         credits.add(new CreditsModel("Translators"));
