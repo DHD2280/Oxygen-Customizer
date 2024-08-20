@@ -98,4 +98,8 @@ public class ExtendedSharedPreferences implements SharedPreferences {
     public void putString(String setting, String value) {
         edit().putString(setting, value).apply();
     }
+
+    public void putBoolean(String key, boolean enabled) {
+        edit().putBoolean(key, enabled).apply();
+    }
 }

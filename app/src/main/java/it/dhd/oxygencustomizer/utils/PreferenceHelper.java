@@ -684,6 +684,14 @@ public class PreferenceHelper {
                 return instance.mPreferences.getString(WEATHER_PROVIDER, "2").equals("0");
             }
 
+            // Lag Fix
+            case "lag_fix_cat",
+                 "fix_lag_switch",
+                 "fix_lag_force_all_apps",
+                 "fix_lag_app_chooser" -> {
+                return Build.VERSION.SDK_INT >= 34;
+            }
+
         }
         return true;
     }
@@ -769,6 +777,12 @@ public class PreferenceHelper {
                     instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) &&
                             (instance.mPreferences.getString(LOCKSCREEN_WIDGETS, "").contains("weather") ||
                                     instance.mPreferences.getString(LOCKSCREEN_WIDGETS_EXTRAS, "").contains("weather"));
+
+            case "fix_lag_force_all_apps" ->
+                    instance.mPreferences.getBoolean("fix_lag_switch", false);
+            case "fix_lag_app_chooser" ->
+                    instance.mPreferences.getBoolean("fix_lag_switch", false) &&
+                            !instance.mPreferences.getBoolean("fix_lag_force_all_apps", false);
 
             default -> true;
         };
@@ -891,7 +905,8 @@ public class PreferenceHelper {
             // Gesture Prefs
             case "gesture_left_height_double" -> getGestureHeight(key);
             case "gesture_right_height_double" -> getGestureHeight(key);
-            case "GesPillWidthModPos" -> instance.mPreferences.getSliderInt("GesPillWidthModPos", 0) + "%";
+            case "GesPillWidthModPos" ->
+                    instance.mPreferences.getSliderInt("GesPillWidthModPos", 0) + "%";
 
             // Launcher Prefs
             case "folder_columns" ->

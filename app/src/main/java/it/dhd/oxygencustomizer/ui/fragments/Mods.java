@@ -10,22 +10,30 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.topjohnwu.superuser.Shell;
+
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
+import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
 import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
 
@@ -100,9 +108,7 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     public static class Sound extends ControlledPreferenceFragmentCompat {
 
-        public Sound() {
-
-        }
+        public Sound() {}
 
         @Override
         public String getTitle() {
@@ -145,9 +151,7 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     public static class VolumePanelCustomizations extends ControlledPreferenceFragmentCompat {
 
-        public VolumePanelCustomizations() {
-
-        }
+        public VolumePanelCustomizations() {}
 
         @Override
         public String getTitle() {
@@ -177,9 +181,7 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     public static class Misc extends ControlledPreferenceFragmentCompat {
 
-        public Misc() {
-
-        }
+        public Misc() {}
 
         @Override
         public String getTitle() {
@@ -215,6 +217,70 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                 replaceFragment(new DarkMode());
                 return true;
             });
+
+            Preference mLagFix = findPreference("fix_lag_app_chooser");
+            mLagFix.setOnPreferenceClickListener(preference -> {
+                replaceFragment(new LagFixAppChooser());
+                return true;
+            });
+
+        }
+
+        private void checkOplusVersion() {
+            String osVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);
+            if (!TextUtils.isEmpty(osVersion)) {
+                String[] split = osVersion.split("\\.");
+                String version = split[split.length - 1].substring(0, split[split.length - 1].indexOf("("));
+                Log.d("Misc OC", "Oplus version: " + version);
+                if (Integer.parseInt(version) >= 610) {
+                    Log.d("Misc OC", "Oplus version is greater than 610");
+                    showConfirmDialog();
+                } else {
+                    Log.d("Misc OC", "Oplus version is less than 610");
+                    sendIntent();
+                }
+            }
+        }
+
+        private void showConfirmDialog() {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+            builder.setTitle(R.string.warning)
+                    .setMessage(R.string.fix_lag_dialog_message)
+                    .setNegativeButton(R.string.btn_cancel, (dialog, which) -> {
+                        mPreferences.putBoolean("fix_lag_switch", false);
+                        ((MaterialSwitchPreference)findPreference("fix_lag_switch")).setChecked(false);
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton(R.string.fix_lag_apply_anyway, (dialog, which) -> {
+                        mPreferences.putBoolean("fix_lag_switch", true);
+                        sendIntent();
+                    })
+                    .show();
+        }
+
+        @Override
+        public void updateScreen(String key) {
+            super.updateScreen(key);
+
+            if (key == null) return;
+
+            switch (key) {
+                case "fix_lag_switch":
+                    if (mPreferences.getBoolean("fix_lag_switch", false)) checkOplusVersion();
+                    break;
+                case "fix_lag_force_all_apps":
+                    sendIntent();
+                    break;
+            }
+        }
+
+        private void sendIntent() {
+            Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
+            broadcast.putExtra("packageName", FRAMEWORK);
+            broadcast.putExtra("class", OplusStartingWindowManager.class.getSimpleName());
+            broadcast.setPackage(FRAMEWORK);
+            if (getContext() != null)
+                getContext().sendBroadcast(broadcast);
         }
 
     }

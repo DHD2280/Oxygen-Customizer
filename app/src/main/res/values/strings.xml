@@ -94,6 +94,7 @@
     <string name="gradient_top_bottom">Top to Bottom</string>
     <string name="gradient_tl_br">Top Left to Bottom Right</string>
     <string name="gradient_tr_bl">Top Right to Bottom Left</string>
+    <string name="warning">Warning</string>
 
     <!-- Search Preference -->
     <string name="searchpreference_search">Search…</string>
@@ -1204,5 +1205,15 @@
     <string name="home_controls">Home Controls</string>
     <string name="wallet">Wallet</string>
     <string name="hotspot">Hotspot</string>
+
+    <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">App Lag Fix</string>
+    <string name="fix_lag_summary">Fix lag when opening app from recents</string>
+    <string name="fix_lag_force_all_apps_title">Force all apps</string>
+    <string name="fix_lag_force_all_apps_summary">Force all apps to use the fix.\nWarning: this could cause weird issues, use at your own risk!</string>
+    <string name="fix_lag_apps_summary">Select to which app apply the fix</string>
+    <string name="fix_lag_apps_title">Select APPs</string>
+    <string name="fix_lag_dialog_message">Your OOS Version could not be compatible with this fix.\nIf you want, you can still force the fix.</string>
+    <string name="fix_lag_apply_anyway">Enable anyway</string>
 
 </resources>
