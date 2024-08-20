@@ -66,7 +66,10 @@ public class Credits extends BaseFragment {
 
         credits.add(new CreditsModel("Contributors"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "tugaia56", "OOS Themer", "https://t.me/OnePlus_Mods_Theme", R.drawable.tugaia));
-
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "thecubed", """
+        Recognized Developer
+        For finding a fix to lag issue from recents""", "https://github.com/thecubed", R.drawable.ic_default_person));
+                                     
         credits.add(new CreditsModel("Testers"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
