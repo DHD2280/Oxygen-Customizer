@@ -266,7 +266,11 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
             switch (key) {
                 case "fix_lag_switch":
-                    if (mPreferences.getBoolean("fix_lag_switch", false)) checkOplusVersion();
+                    if (mPreferences.getBoolean("fix_lag_switch", false)) {
+                        checkOplusVersion();
+                    } else {
+                        sendIntent();
+                    }
                     break;
                 case "fix_lag_force_all_apps":
                     sendIntent();
