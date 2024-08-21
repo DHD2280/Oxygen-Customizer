@@ -21,6 +21,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class VolumePanel extends XposedMods {
 
@@ -89,15 +90,12 @@ public class VolumePanel extends XposedMods {
                 if (mDesiredTimeout == 3) return;
 
                 if (getBooleanField(param.thisObject, "mHovering")) {
-                    log("mTimeOut: 16000");
                     param.setResult((int) callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 16000, 4));
                 }
                 synchronized (getObjectField(param.thisObject, "mSafetyWarningLock")) {
                     if (getBooleanField(param.thisObject, "mExpanded")) {
-                        log("mTimeOut: mExpanded 5000");
                         param.setResult((int) callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 5000, 4));
                     } else {
-                        log("mTimeOut: " + mTimeOut);
                         param.setResult(mTimeOut);
                     }
                 }
@@ -109,6 +107,9 @@ public class VolumePanel extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (mDisableVolumeWarning) {
+                    try {
+                        callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
+                    } catch (Throwable ignored) {}
                     param.setResult(null);
                 }
             }
@@ -118,18 +119,10 @@ public class VolumePanel extends XposedMods {
             hookAllMethods(OplusVolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    log("showSafetyWarningH: " + mDisableVolumeWarning);
                     if (mDisableVolumeWarning) {
-                        param.setResult(null);
-                    }
-                }
-            });
-
-            findAndHookMethod(OplusVolumeDialogImpl, "onShowSafetyWarning", int.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    log("onShowSafetyWarning: " + mDisableVolumeWarning);
-                    if (mDisableVolumeWarning) {
+                        try {
+                            callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
+                        } catch (Throwable ignored) {}
                         param.setResult(null);
                     }
                 }
