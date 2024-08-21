@@ -9,10 +9,10 @@
                         android:endColor="@color/holo_blue_dark_alpha"
                         android:startColor="@color/holo_blue_light_alpha" />
                     <corners
-                        android:bottomLeftRadius="14dp"
+                        android:bottomLeftRadius="2dp"
                         android:bottomRightRadius="24dp"
                         android:topLeftRadius="24dp"
-                        android:topRightRadius="14dp" />
+                        android:topRightRadius="2dp" />
                 </shape>
             </item>
             <item
@@ -21,12 +21,12 @@
                 android:start="4.0dp"
                 android:top="4.0dp">
                 <shape>
-                    <solid android:color="@android:color/system_neutral1_800" />
+                    <solid android:color="@android:color/system_neutral1_900" />
                     <corners
-                        android:bottomLeftRadius="14dp"
+                        android:bottomLeftRadius="2dp"
                         android:bottomRightRadius="24dp"
                         android:topLeftRadius="24dp"
-                        android:topRightRadius="14dp" />
+                        android:topRightRadius="2dp" />
                 </shape>
             </item>
         </layer-list>
