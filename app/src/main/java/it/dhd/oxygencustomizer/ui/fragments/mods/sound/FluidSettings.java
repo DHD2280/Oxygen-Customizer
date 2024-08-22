@@ -70,7 +70,7 @@ public class FluidSettings extends AppFragmentBase {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mEnabledApps = mPreferences.getStringSet("custom_dark_mode", new ArraySet<>());
+        mEnabledApps = mPreferences.getStringSet("fluid_music_apps", new ArraySet<>());
 
         binding.appFunctionSwitch.setSwitchChangeListener((buttonView, isChecked) -> mPreferences.edit().putBoolean("fluid_music_custom_switch", isChecked).apply());
         binding.appFunctionSwitch.setSwitchChecked(mPreferences.getBoolean("fluid_music_custom_switch", false));
