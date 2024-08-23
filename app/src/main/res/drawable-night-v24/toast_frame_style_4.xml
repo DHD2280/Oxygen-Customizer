@@ -11,7 +11,7 @@
     </item>
     <item android:bottom="4.0dip">
         <shape>
-            <solid android:color="@android:color/system_neutral1_900" />
+            <solid android:color="@android:color/system_neutral1_800" />
             <corners android:radius="22dp" />
         </shape>
     </item>
