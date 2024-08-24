@@ -560,6 +560,7 @@
     <string name="gesture_override_back_hold_command_power_menu">電源メニューを開く</string>
     <string name="gesture_override_back_hold_command_notification_panel">通知パネルを開く</string>
     <string name="gesture_override_back_hold_command_screen_off">画面 OFF</string>
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <string name="buttons_title">ボタン</string>
     <string name="power_button_category_title">電源ボタン</string>
@@ -985,4 +986,5 @@
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
+    <!-- Lag Fix Strings -->
 </resources>

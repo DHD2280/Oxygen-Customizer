@@ -565,6 +565,7 @@
     <string name="gesture_override_back_hold_command_power_menu">Abrir menú de apagado</string>
     <string name="gesture_override_back_hold_command_notification_panel">Abrir panel de notificaciones</string>
     <string name="gesture_override_back_hold_command_screen_off">Pantalla apagada</string>
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <string name="buttons_title">Botones</string>
     <string name="power_button_category_title">Botón de encendido</string>
@@ -1019,4 +1020,5 @@
     <string name="custom_dark_mode_title">Modo Nocturno Personalizado</string>
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
+    <!-- Lag Fix Strings -->
 </resources>

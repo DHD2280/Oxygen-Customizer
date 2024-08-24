@@ -238,6 +238,7 @@
     <string name="launcher_folder_update_preview">Atualizar visualização</string>
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
     <!-- Media art -->
@@ -327,4 +328,5 @@
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
+    <!-- Lag Fix Strings -->
 </resources>

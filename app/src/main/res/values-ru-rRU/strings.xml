@@ -568,6 +568,7 @@
     <string name="gesture_override_back_hold_command_power_menu">Откройте меню питания</string>
     <string name="gesture_override_back_hold_command_notification_panel">Откройте панель уведомлений</string>
     <string name="gesture_override_back_hold_command_screen_off">Экран выключен</string>
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
     <string name="power_button_category_title">Кнопка питания</string>
@@ -1021,4 +1022,5 @@
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
+    <!-- Lag Fix Strings -->
 </resources>
