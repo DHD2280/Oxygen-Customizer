@@ -604,6 +604,7 @@
     <string name="gesture_override_back_hold_command_power_menu">Güç menüsünü açın</string>
     <string name="gesture_override_back_hold_command_notification_panel">Bildirim panelini aç</string>
     <string name="gesture_override_back_hold_command_screen_off">Ekran Kapalı</string>
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <string name="buttons_title">Düğmeler</string>
     <string name="power_button_category_title">Güç Düğmesi</string>
@@ -1138,4 +1139,5 @@
     <string name="home_controls">Ev Kontrolleri</string>
     <string name="wallet">Cüzdan</string>
     <string name="hotspot">Yayın noktası</string>
+    <!-- Lag Fix Strings -->
 </resources>

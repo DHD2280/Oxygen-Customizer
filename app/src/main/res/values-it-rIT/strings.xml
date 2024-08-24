@@ -85,6 +85,7 @@
     <string name="gradient_top_bottom">Dall\'alto in basso</string>
     <string name="gradient_tl_br">Da in alto a sinistra a in basso a destra</string>
     <string name="gradient_tr_bl">In alto a destra in basso a sinistra</string>
+    <string name="warning">Attenzione</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -563,6 +564,8 @@
     <string name="launcher_app_details_title">Apri dettagli app</string>
     <string name="launcher_app_details_summary">Tocca l\'icona dell\'app per aprire i dettagli in Impostazioni.</string>
     <string name="remove_home_pagination">Rimuovi impaginazione Home</string>
+    <string name="force_themed_launcher_icons">Forza icone delle app a tema</string>
+    <string name="force_themed_launcher_icons_summary">FUNZIONE BETA: forza le icone a tema per tutte le app.\nRiattiva le icone a tema nel launcher per applicarle.</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -588,6 +591,10 @@
     <string name="gesture_override_back_hold_command_power_menu">Apri menù alimentazione</string>
     <string name="gesture_override_back_hold_command_notification_panel">Apri pannello notifiche</string>
     <string name="gesture_override_back_hold_command_screen_off">Schermo Spento</string>
+    <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">Pillola barra di navigazione</string>
+    <string name="gesture_nav_pill_width_title">Larghezza rispetto alla misura standard</string>
+    <string name="colorpill">Pillola colore accento</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Pulsanti</string>
     <string name="power_button_category_title">Pulsante Alimentazione</string>
@@ -980,6 +987,8 @@
     <string name="location_query_hint">Cerca una posizione</string>
     <string name="weather_custom_margins">Margini Personalizzati</string>
     <string name="weather_margin_top">Margine superiore</string>
+    <string name="weather_centered">Centra vista Meteo</string>
+    <string name="weather_centered_summary">Centra il meteo orizzontalmente</string>
     <string name="weather_margin_left">Margine Sinistro</string>
     <string name="weather_permission_dialog_title">Abilita Permessi Posizione</string>
     <string name="weather_permission_dialog_message">I permessi di localizzazione sono necessari per recuperare i dati meteo. Fare clic su OK per aprire le impostazioni.</string>
@@ -1091,6 +1100,7 @@
     <string name="mini_inactive">Colore inattivo Mini Widget</string>
     <string name="mini_icon_active">Colore attivo icona Mini Widget</string>
     <string name="mini_icon_inactive">Colore inattivo icona Mini Widget</string>
+    <string name="weather_settings">Impostazioni Meteo</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fotocamera</string>
     <string name="clock_timer">Orologio/Timer</string>
@@ -1107,4 +1117,13 @@
     <string name="home_controls">Controlli domotici</string>
     <string name="wallet">Portafoglio</string>
     <string name="hotspot">Hotspot</string>
+    <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">Correzione ritardo app</string>
+    <string name="fix_lag_summary">Correggi il ritardo durante l\'apertura dell\'app dai recenti</string>
+    <string name="fix_lag_force_all_apps_title">Forza tutte le app</string>
+    <string name="fix_lag_force_all_apps_summary">Forza tutte le app a utilizzare la correzione.\nAttenzione: questo potrebbe causare strani problemi, usalo a tuo rischio e pericolo!</string>
+    <string name="fix_lag_apps_summary">Seleziona a quale app applicare la correzione</string>
+    <string name="fix_lag_apps_title">Seleziona App</string>
+    <string name="fix_lag_dialog_message">La tua versione OOS potrebbe non essere compatibile con questa correzione.\nSe vuoi, puoi comunque forzare la correzione.</string>
+    <string name="fix_lag_apply_anyway">Abilita comunque</string>
 </resources>
