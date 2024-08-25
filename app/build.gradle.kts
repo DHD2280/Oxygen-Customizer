@@ -116,7 +116,7 @@ android {
 dependencies {
 
     // Magisk libsu version
-    val libsuVersion = "5.2.2"
+    val libsuVersion = "6.0.0"
 
     // Xposed
     compileOnly(files("libs/api-82.jar"))

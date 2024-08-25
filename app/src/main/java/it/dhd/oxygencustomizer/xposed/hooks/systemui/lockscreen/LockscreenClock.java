@@ -64,6 +64,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SCALE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
@@ -218,6 +219,7 @@ public class LockscreenClock extends XposedMods {
     private String mDeviceName = "";
     private String mMainWidgets;
     private String mExtraWidgets;
+    private float mWidgetsScale = 1f;
     private Object mActivityStarter = null;
 
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
@@ -323,6 +325,7 @@ public class LockscreenClock extends XposedMods {
         mBigIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE, Color.WHITE);
         mSmallIconActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE, Color.BLACK);
         mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
+        mWidgetsScale = Xprefs.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f);
 
         if (Key.length > 0) {
             for (String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
@@ -367,6 +370,9 @@ public class LockscreenClock extends XposedMods {
                     Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE) ||
                     Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE)) {
                 updateLockscreenWidgetsColors();
+            }
+            if (Key[0].equals(LOCKSCREEN_WIDGETS_SCALE)) {
+                updateLockscreenWidgetsScale();
             }
         }
     }
@@ -976,26 +982,24 @@ public class LockscreenClock extends XposedMods {
             updateLockscreenWidgets();
             updateLsDeviceWidget();
             updateLockscreenWidgetsColors();
+            updateLockscreenWidgetsScale();
         } catch (Throwable ignored) {
         }
     }
 
     private void updateLockscreenWidgets() {
-        log(TAG + "Updating Lockscreen Widgets");
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
     }
 
     private void updateLsDeviceWidget() {
-        log(TAG + "Updating Lockscreen Device Widget");
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setDeviceWidgetOptions(mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
     }
 
     private void updateLockscreenWidgetsColors() {
-        log(TAG + "Updating Lockscreen Widgets Colors");
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setCustomColors(
@@ -1004,6 +1008,12 @@ public class LockscreenClock extends XposedMods {
                 mSmallInactiveColor, mSmallActiveColor,
                 mBigIconInactiveColor, mBigIconActiveColor,
                 mSmallIconInactiveColor, mSmallIconActiveColor);
+    }
+
+    private void updateLockscreenWidgetsScale() {
+        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
+        if (lsWidgets == null) return;
+        lsWidgets.setScale(mWidgetsScale);
     }
 
     private void setActivityStarter() {
