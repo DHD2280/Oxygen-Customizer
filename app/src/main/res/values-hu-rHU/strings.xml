@@ -85,6 +85,7 @@
     <string name="gradient_top_bottom">Fentről lefelé</string>
     <string name="gradient_tl_br">Bal fentről jobbra lefelé</string>
     <string name="gradient_tr_bl">Jobb fentről balra lefelé</string>
+    <string name="warning">Figyelmeztetés</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -563,6 +564,8 @@
     <string name="launcher_app_details_title">Az alkalmazás-részletek megnyitása</string>
     <string name="launcher_app_details_summary">Érintse meg az alkalmazás ikonját az alkalmazás részleteinek megnyitásához a Beállításokban.</string>
     <string name="remove_home_pagination">Képernyőlapozás eltávolítása</string>
+    <string name="force_themed_launcher_icons">Témázott alkalmazásikon kényszerítve</string>
+    <string name="force_themed_launcher_icons_summary">BETA FUNKCIÓ: Kényszerítés minden alkalmazáshoz.\nAz alkalmazáshoz engedélyezze újra a témázott ikonokat a launcherben.</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigációs sáv</string>
     <string name="gesture_navigation_title">Navigáció kézmozdulatokkal</string>
@@ -588,6 +591,10 @@
     <string name="gesture_override_back_hold_command_power_menu">A Kikapcsolómenü megnyitása</string>
     <string name="gesture_override_back_hold_command_notification_panel">Az Értesítési panel megnyitása</string>
     <string name="gesture_override_back_hold_command_screen_off">Kijelző kikapcsolása</string>
+    <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">Kapszula navigációs-sáv</string>
+    <string name="gesture_nav_pill_width_title">Szélesség a szabványos mérethez</string>
+    <string name="colorpill">Kiemelőszínnel színezett kapszula</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Gombok</string>
     <string name="power_button_category_title">Bekapcsológomb</string>
@@ -980,6 +987,8 @@
     <string name="location_query_hint">Helyszín keresése</string>
     <string name="weather_custom_margins">Egyéni margók</string>
     <string name="weather_margin_top">Felső margó</string>
+    <string name="weather_centered">Az időjárás középen</string>
+    <string name="weather_centered_summary">A nézet mozgatása vízszintesen középre</string>
     <string name="weather_margin_left">Baloldali margó</string>
     <string name="weather_permission_dialog_title">Helymeghatározási jogosultságok megadása</string>
     <string name="weather_permission_dialog_message">Az időjárási adatok lekéréséhez tartózkodási helymeghatározásra van szükség. Kattintson az OK gombra a Beállítások megnyitásához.</string>
@@ -1068,6 +1077,11 @@
     <string name="lockscreen_widgets_enabled_summary">Új kisalkalmazás hozzáadása</string>
     <string name="lockscreen_display_widgets_title">Készülékinformáció</string>
     <string name="lockscreen_display_widgets_summary">Megjeleníti a készülékinfót a záróképernyőn</string>
+    <string name="linear_progress_color">A lineáris haladás színe</string>
+    <string name="circular_progress_color">A körkörös haladás színe</string>
+    <string name="text_color">Szövegszín</string>
+    <string name="custom_device_name">Egyéni Készüléknév</string>
+    <string name="custom_device_name_summary">Beállíthat egyedi nevet.\nHagyja üresen a kikapcsoláshoz.</string>
     <string name="large_widgets_category_title">Nagy indítóelemek</string>
     <string name="main_custom_widgets1">Nagyméretű 1</string>
     <string name="main_custom_widgets2">Nagyméretű 2</string>
@@ -1076,6 +1090,17 @@
     <string name="custom_widgets2">Kisméretű 2</string>
     <string name="custom_widgets3">Kisméretű 3</string>
     <string name="custom_widgets4">Kisméretű 4</string>
+    <string name="widgets_custom_color">Színbeállítások</string>
+    <string name="widgets_custom_color_title">A kisalkalmazás színeinek testreszabása</string>
+    <string name="big_active">A nagy színe, mikor aktív</string>
+    <string name="big_inactive">A nagy színe, mikor inaktív</string>
+    <string name="big_icon_active">A nagy ikon színe, mikor aktív</string>
+    <string name="big_icon_inactive">A nagy ikon színe, mikor inaktív</string>
+    <string name="mini_active">A mini színe, mikor aktív</string>
+    <string name="mini_inactive">A mini színe, mikor inaktív</string>
+    <string name="mini_icon_active">A mini ikon színe, mikor aktív</string>
+    <string name="mini_icon_inactive">A mini ikon színe, mikor inaktív</string>
+    <string name="weather_settings">Időjárás-beállítások</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fényképezőgép</string>
     <string name="clock_timer">Óra/Időzítő</string>
@@ -1090,4 +1115,15 @@
     <string name="ringer">Csengés</string>
     <string name="bt">Bluetooth</string>
     <string name="home_controls">Főképernyő-vezérlők</string>
+    <string name="wallet">Pénztárca</string>
+    <string name="hotspot">Hotspot</string>
+    <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">Alkalmazások laggolás-javítása</string>
+    <string name="fix_lag_summary">Laggolás javítása, mikor az Előzményekből nyílik meg</string>
+    <string name="fix_lag_force_all_apps_title">Kényszerítve minden alkalmazásra</string>
+    <string name="fix_lag_force_all_apps_summary">Minden alkalmazáson futtassa a javítást.\nFigyelmeztetés: ez nem várt problémákat okozhat, használja saját felelősségére!</string>
+    <string name="fix_lag_apps_summary">Válassza ki, melyik alkalmazásokra legyen érvényes a javítás</string>
+    <string name="fix_lag_apps_title">Alkalmazás-választás</string>
+    <string name="fix_lag_dialog_message">Az Ön OxygenOS-verziója nem kompatibilis ezzel a javítással.\nHa akarja, továbbra is kényszerítheti a javítást.</string>
+    <string name="fix_lag_apply_anyway">Mindenképp fusson le</string>
 </resources>

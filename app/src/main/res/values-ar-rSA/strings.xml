@@ -47,6 +47,7 @@
     <!-- Launcher Mods -->
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
+    <!-- Gesture Pill Strings -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
     <!-- Media art -->
@@ -88,4 +89,5 @@
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
+    <!-- Lag Fix Strings -->
 </resources>
