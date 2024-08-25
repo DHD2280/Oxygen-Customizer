@@ -87,6 +87,7 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "W I N Z O R T", "Turkish", "https://crowdin.com/profile/mikropsoft", R.drawable.flag_tr));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "\uD835\uDDE6\uD835\uDDF5\uD835\uDDDF\uD835\uDDF2\uD835\uDDFF\uD835\uDDE3", "Turkish", "https://crowdin.com/profile/mikropsoft", R.drawable.flag_tr));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "凌天", "Chinese Simplified", "https://crowdin.com/profile/lingtian", R.drawable.flag_cn));
+        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "芜蚌湖埠", "Chinese Simplified", "https://crowdin.com/profile/11451420", R.drawable.flag_cn));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Re*Index.", "Japanese", "https://crowdin.com/profile/ot_inc", R.drawable.flag_jp));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Serge Croise ", "French", "https://crowdin.com/profile/serge.croise", R.drawable.flag_fr));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Serge Croise ", "Spanish", "https://crowdin.com/profile/serge.croise", R.drawable.flag_es));
