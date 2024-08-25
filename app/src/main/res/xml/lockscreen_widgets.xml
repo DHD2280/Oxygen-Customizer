@@ -212,4 +212,14 @@
 
     </PreferenceCategory>
 
+    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        android:key="widget_scale"
+        app:defaultValue="1.0"
+        app:iconSpaceReserved="false"
+        app:maxVal="1"
+        app:minVal="0.50"
+        app:tickInterval="0.05"
+        android:dependency="lockscreen_widgets_enabled"
+        android:title="@string/widgets_scale" />
+
 </PreferenceScreen>

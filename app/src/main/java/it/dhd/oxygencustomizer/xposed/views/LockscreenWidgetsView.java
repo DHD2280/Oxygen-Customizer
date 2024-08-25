@@ -122,9 +122,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private Context appContext;
 
     // Two Linear Layouts, one for main widgets and one for secondary widgets
-    private final LinearLayout mDeviceWidgetContainer;
-    private final LinearLayout mMainWidgetsContainer;
-    private final LinearLayout mSecondaryWidgetsContainer;
+    private LinearLayout mDeviceWidgetContainer;
+    private LinearLayout mMainWidgetsContainer;
+    private LinearLayout mSecondaryWidgetsContainer;
     private DeviceWidgetView mDeviceWidgetView;
 
     private ImageView mediaButton, torchButton, weatherButton, hotspotButton;
@@ -140,6 +140,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private boolean mCustomColors = false;
     private int mBigInactiveColor, mBigActiveColor, mSmallInactiveColor, mSmallActiveColor;
     private int mBigIconInactiveColor, mBigIconActiveColor, mSmallIconInactiveColor, mSmallIconActiveColor;
+
+    // Widgets Dimens
+    private int mFabWidth, mFabHeight, mFabMarginStart, mFabMarginEnd, mFabPadding;
+    private int mWidgetCircleSize, mWidgetMarginHorizontal, mWidgetMarginVertical, mWidgetIconPadding;
+    private float mWidgetsScale = 1f;
 
     private String mMainLockscreenWidgetsList;
     private String mSecondaryLockscreenWidgetsList;
@@ -217,25 +222,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             log("LockscreenWidgetsView error: " + e.getMessage());
         }
 
-        LinearLayout container = new LinearLayout(context);
-        container.setOrientation(VERTICAL);
-        container.setLayoutParams(new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        // Device Widget Container
-        mDeviceWidgetContainer = createDeviceWidgetContainer(context);
-        container.addView(mDeviceWidgetContainer);
-
-        // Add main widgets container
-        mMainWidgetsContainer = createMainWidgetsContainer(context);
-        container.addView(mMainWidgetsContainer);
-
-        // Add secondary widgets container
-        mSecondaryWidgetsContainer = createSecondaryWidgetsContainer(context);
-        container.addView(mSecondaryWidgetsContainer);
-
-        addView(container);
+        setupDimens();
+        drawUI();
 
         IntentFilter ringerFilter = new IntentFilter("android.media.INTERNAL_RINGER_MODE_CHANGED_ACTION");
         mContext.registerReceiver(mRingerModeReceiver, ringerFilter);
@@ -261,6 +249,44 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         // Add a Screen On Receiver so we can update the widgets state when the screen is turned on
         mContext.registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON), Context.RECEIVER_EXPORTED);
 
+    }
+
+    private void setupDimens() {
+
+        // Fab Dimens
+        mFabWidth = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_width);
+        mFabHeight = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_height);
+        mFabMarginStart = modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_start);
+        mFabMarginEnd = modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_end);
+        mFabPadding = modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding);
+
+        // Circle Dimens
+        mWidgetCircleSize = modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size);
+        mWidgetMarginHorizontal = modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
+        mWidgetMarginVertical = modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
+        mWidgetIconPadding = modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
+    }
+
+    private void drawUI() {
+        LinearLayout container = new LinearLayout(mContext);
+        container.setOrientation(VERTICAL);
+        container.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // Device Widget Container
+        mDeviceWidgetContainer = createDeviceWidgetContainer(mContext);
+        container.addView(mDeviceWidgetContainer);
+
+        // Add main widgets container
+        mMainWidgetsContainer = createMainWidgetsContainer(mContext);
+        container.addView(mMainWidgetsContainer);
+
+        // Add secondary widgets container
+        mSecondaryWidgetsContainer = createSecondaryWidgetsContainer(mContext);
+        container.addView(mSecondaryWidgetsContainer);
+
+        addView(container);
     }
 
     private LinearLayout createDeviceWidgetContainer(Context context) {
@@ -309,19 +335,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         ExtendedFAB fab = new ExtendedFAB(context);
         fab.setId(View.generateViewId());
         LayoutParams params = new LayoutParams(
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_main_width),
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_main_height));
+                (int)(mFabWidth*mWidgetsScale),
+                (int)(mFabHeight*mWidgetsScale));
         params.setMargins(
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_start),
+                (int)(mFabMarginStart*mWidgetsScale),
                 0,
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_end),
+                (int)(mFabMarginEnd*mWidgetsScale),
                 0);
         fab.setLayoutParams(params);
         fab.setPadding(
-                modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding));
+                (int)(mFabPadding*mWidgetsScale),
+                (int)(mFabPadding*mWidgetsScale),
+                (int)(mFabPadding*mWidgetsScale),
+                (int)(mFabPadding*mWidgetsScale));
         fab.setGravity(Gravity.CENTER);
         return fab;
     }
@@ -370,19 +396,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         imageView.setId(View.generateViewId());
         LayoutParams params = new LayoutParams(
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size),
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size));
+                (int)(mWidgetCircleSize*mWidgetsScale),
+                (int)(mWidgetCircleSize*mWidgetsScale));
         params.setMargins(
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
+                (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0,
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal),
+                (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0);
         imageView.setLayoutParams(params);
         imageView.setPadding(
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding),
-                modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding));
+                (int)(mWidgetIconPadding*mWidgetsScale),
+                (int)(mWidgetIconPadding*mWidgetsScale),
+                (int)(mWidgetIconPadding*mWidgetsScale),
+                (int)(mWidgetIconPadding*mWidgetsScale));
         imageView.setFocusable(true);
         imageView.setClickable(true);
 
@@ -1523,6 +1549,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         instance.mSmallIconInactiveColor = smallIconInactive;
         instance.mSmallIconActiveColor = smallIconActive;
         instance.updateWidgetViews();
+    }
+
+    public void setScale(float scale) {
+        instance.mWidgetsScale = scale;
+        instance.removeAllViews();
+        instance.drawUI();
     }
 
     public void setActivityStarter(Object activityStarter) {

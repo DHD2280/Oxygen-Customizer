@@ -81,6 +81,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SCALE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
@@ -963,6 +964,10 @@ public class PreferenceHelper {
             case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
 
+            // Lockscreen Widgets
+            case LOCKSCREEN_WIDGETS_SCALE ->
+                    instance.mPreferences.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f) + "%";
+
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->
                     instance.mPreferences.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 100) + "dp";
@@ -1054,7 +1059,7 @@ public class PreferenceHelper {
                 case "QSLabelScaleFactor", "QSSecondaryLabelScaleFactor" ->
                         ((SliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
                 case QS_HEADER_CLOCK_TEXT_SCALING, LOCKSCREEN_CLOCK_TEXT_SCALING,
-                     LOCKSCREEN_FINGERPRINT_SCALING ->
+                     LOCKSCREEN_FINGERPRINT_SCALING, LOCKSCREEN_WIDGETS_SCALE ->
                         ((SliderPreference) preference).slider.setLabelFormatter(value -> value + "%");
             }
         } catch (Throwable ignored) {
