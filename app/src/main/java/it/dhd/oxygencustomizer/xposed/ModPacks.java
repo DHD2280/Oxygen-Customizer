@@ -34,6 +34,8 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscre
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.DepthWallpaper;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWeather;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.navbar.GestureNavbarManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryBar;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryStyleManager;
@@ -116,6 +118,8 @@ public class ModPacks {
                     // Lockscreen
                     modPacks.add(Lockscreen.class);
                     modPacks.add(LockscreenClock.class);
+                    modPacks.add(LockscreenWidgets.class);
+                    modPacks.add(LockscreenWeather.class);
                     modPacks.add(AlbumArtLockscreen.class);
 
                     // Volume Panel
