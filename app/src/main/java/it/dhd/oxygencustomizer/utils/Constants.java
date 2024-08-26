@@ -714,6 +714,30 @@ public class Constants {
     public static String getBottomDxR(String key) {
         return key + "_BOTTOM_RIGHT_RADIUS";
     }
+    public static String getMarginSx(String key) {
+        return key + "_MARGIN_LEFT";
+    }
+    public static String getMarginDx(String key) {
+        return key + "_MARGIN_RIGHT";
+    }
+    public static String getMarginTop(String key) {
+        return key + "_MARGIN_TOP";
+    }
+    public static String getMarginBottom(String key) {
+        return key + "_MARGIN_BOTTOM";
+    }
+    public static String getPaddingSx(String key) {
+        return key + "_PADDING_LEFT";
+    }
+    public static String getPaddingDx(String key) {
+        return key + "_PADDING_RIGHT";
+    }
+    public static String getPaddingTop(String key) {
+        return key + "_PADDING_TOP";
+    }
+    public static String getPaddingBottom(String key) {
+        return key + "_PADDING_BOTTOM";
+    }
 
     public static String getLockScreenSubjectCachePath() {
         return Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lswt.png";
