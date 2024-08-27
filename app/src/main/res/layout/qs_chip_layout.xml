@@ -242,6 +242,112 @@
                 app:titleText="@string/chip_round_corners_bottom_dx_radius"
                 app:valueFormat="dp" />
 
+            <it.dhd.oxygencustomizer.ui.widgets.CategoryWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/custom_margins" />
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/top"
+                android:id="@+id/chipMarginTop"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/left"
+                android:id="@+id/chipMarginLeft"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/right"
+                android:id="@+id/chipMarginRight"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/bottom"
+                android:id="@+id/chipMarginBottom"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.CategoryWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/custom_padding" />
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/top"
+                android:id="@+id/chipPaddingTop"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/left"
+                android:id="@+id/chipPaddingLeft"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/right"
+                android:id="@+id/chipPaddingRight"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
+            <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="@string/bottom"
+                android:id="@+id/chipPaddingBottom"
+                app:sliderDefaultValue="0"
+                app:sliderStepSize="1"
+                app:sliderValue="0"
+                app:sliderValueFrom="0"
+                app:sliderValueTo="8"
+                app:valueFormat="dp"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

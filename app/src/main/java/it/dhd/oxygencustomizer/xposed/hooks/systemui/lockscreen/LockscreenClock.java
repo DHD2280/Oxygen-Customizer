@@ -183,45 +183,6 @@ public class LockscreenClock extends XposedMods {
     private boolean customColor;
     Class<?> LottieAn = null;
 
-    // Weather
-    private LinearLayout mWeatherContainer = null;
-    private boolean mWeatherEnabled = false, mWeatherShowLocation = true, mWeatherShowCondition = true;
-    private boolean mWeatherShowHumidity = true, mWeatherShowWind = true;
-    private boolean mWeatherCustomColor = false;
-    private int mWeatherColor = Color.WHITE;
-    private int mWeatherStartPadding, mWeatherTextSize = 16, mWeatherImageSize = 18;
-    private boolean mWeatherCustomMargins = false;
-    private int mWeatherLeftMargin = 0, mWeatherTopMargin = 0;
-    private int mWeatherBackground = 0;
-    private boolean mWeatherCentered = false;
-
-    // Lockscreen Widgets Class Helpers
-    public static Class<?> LaunchableLinearLayout = null;
-    public static Class<?> LaunchableImageView = null;
-
-    // Lockscreen Widgets
-    private LinearLayout mWidgetsContainer = null;
-    private boolean mWidgetsEnabled = false;
-    private boolean mDeviceWidgetEnabled = false;
-    private boolean mDeviceCustomColor = false;
-    private int mDeviceLinearColor = Color.WHITE;
-    private int mDeviceCircularColor = Color.WHITE;
-    private int mDeviceTextColor = Color.WHITE;
-    private boolean mWidgetsCustomColor = false;
-    private int mBigInactiveColor = Color.BLACK;
-    private int mBigActiveColor = Color.WHITE;
-    private int mSmallInactiveColor = Color.BLACK;
-    private int mSmallActiveColor = Color.WHITE;
-    private int mBigIconActiveColor = Color.WHITE;
-    private int mBigIconInactiveColor = Color.BLACK;
-    private int mSmallIconActiveColor = Color.WHITE;
-    private int mSmallIconInactiveColor = Color.BLACK;
-    private String mDeviceName = "";
-    private String mMainWidgets;
-    private String mExtraWidgets;
-    private float mWidgetsScale = 1f;
-    private Object mActivityStarter = null;
-
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -243,12 +204,6 @@ public class LockscreenClock extends XposedMods {
 
     public LockscreenClock(Context context) {
         super(context);
-        @SuppressLint("DiscouragedApi") int resourceId = mContext.getResources().getIdentifier("red_horizontal_single_clock_margin_start", "dimen", listenPackage);
-        if (resourceId > 0) {
-            mWeatherStartPadding = mContext.getResources().getDimensionPixelSize(resourceId);
-        } else {
-            mWeatherStartPadding = dp2px(mContext, 32);
-        }
     }
 
     @Override
@@ -290,43 +245,6 @@ public class LockscreenClock extends XposedMods {
         useCustomUserImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false);
         useCustomImage = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_IMAGE, false);
 
-        // Weather
-        mWeatherEnabled = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
-        mWeatherTextSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_TEXT_SIZE, 16);
-        mWeatherImageSize = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_IMAGE_SIZE, 18);
-        mWeatherShowLocation = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_LOCATION, true);
-        mWeatherShowCondition = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SHOW_CONDITION, true);
-        mWeatherShowHumidity = Xprefs.getBoolean(LOCKSCREEN_WEATHER_HUMIDITY, true);
-        mWeatherShowWind = Xprefs.getBoolean(LOCKSCREEN_WEATHER_WIND, true);
-        mWeatherCustomColor = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
-        mWeatherColor = Xprefs.getInt(LOCKSCREEN_WEATHER_CUSTOM_COLOR, Color.WHITE);
-        mWeatherCentered = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CENTERED, false);
-        mWeatherCustomMargins = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
-        mWeatherLeftMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0);
-        mWeatherTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
-        mWeatherBackground = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WEATHER_BACKGROUND, "0"));
-
-        // Widgets
-        mWidgetsEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
-        mDeviceWidgetEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
-        mMainWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS, "");
-        mExtraWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
-        mDeviceCustomColor = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
-        mDeviceLinearColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR, Color.WHITE);
-        mDeviceCircularColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR, Color.WHITE);
-        mDeviceTextColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR, Color.WHITE);
-        mDeviceName = Xprefs.getString(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE, "");
-        mWidgetsCustomColor = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_CUSTOM_COLOR, false);
-        mBigInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_BIG_INACTIVE, Color.BLACK);
-        mBigActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_BIG_ACTIVE, Color.WHITE);
-        mSmallInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_INACTIVE, Color.BLACK);
-        mSmallActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ACTIVE, Color.WHITE);
-        mBigIconActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_BIG_ICON_ACTIVE, Color.BLACK);
-        mBigIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE, Color.WHITE);
-        mSmallIconActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE, Color.BLACK);
-        mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
-        mWidgetsScale = Xprefs.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f);
-
         if (Key.length > 0) {
             for (String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
                 if (Key[0].equals(LCPrefs)) {
@@ -337,43 +255,6 @@ public class LockscreenClock extends XposedMods {
                     updateStockClock();
                 }
             }
-            for (String LCWeatherPref : LOCKSCREEN_WEATHER_PREFS) {
-                if (Key[0].equals(LCWeatherPref)) updateWeatherView();
-            }
-            if (Key[0].equals(LOCKSCREEN_WEATHER_CENTERED)) {
-                setWeatherCentered();
-            }
-            for (String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
-                if (Key[0].equals(LCWeatherMargins))
-                    updateMargins();
-            }
-            if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_EXTRAS)) {
-                updateLockscreenWidgets();
-            }
-            if (Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE)) {
-                updateLsDeviceWidget();
-            }
-            if (Key[0].equals(LOCKSCREEN_WIDGETS_CUSTOM_COLOR) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_BIG_ACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_BIG_INACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_INACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_BIG_ICON_ACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE) ||
-                    Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE)) {
-                updateLockscreenWidgetsColors();
-            }
-            if (Key[0].equals(LOCKSCREEN_WIDGETS_SCALE)) {
-                updateLockscreenWidgetsScale();
-            }
         }
     }
 
@@ -382,56 +263,7 @@ public class LockscreenClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
-        mWeatherContainer = new LinearLayout(mContext);
-        mWeatherContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT));
-
-        mWidgetsContainer = new LinearLayout(mContext);
-        mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
-
-        try {
-            // LaunchableLinearLayout
-            // This is the container of our custom views
-            LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "LaunchableLinearLayout not found: " + t.getMessage());
-        }
-
-        try {
-            // LaunchableImageView
-            // This is an ImageView that can launch dialogs with a GhostView
-            LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "LaunchableImageView not found: " + t.getMessage());
-        }
-
         initResources(mContext);
-
-        try {
-            Class<?> KeyguardQuickAffordanceInteractor = findClass("com.android.systemui.keyguard.domain.interactor.KeyguardQuickAffordanceInteractor", lpparam.classLoader);
-            hookAllConstructors(KeyguardQuickAffordanceInteractor, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mActivityStarter = getObjectField(param.thisObject, "activityStarter");
-                    setActivityStarter();
-                }
-            });
-        } catch (Throwable ignored) {
-        }
-
-        if (Build.VERSION.SDK_INT == 33) {
-            try {
-                Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
-                hookAllMethods(KeyguardBottomAreaView, "onFinishInflate", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
-                        setActivityStarter();
-                    }
-                });
-            } catch (Throwable ignored) {
-            }
-        }
 
         Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
 
@@ -452,10 +284,6 @@ public class LockscreenClock extends XposedMods {
                 mMediaHostContainer = (View) getObjectField(param.thisObject, "mMediaHostContainer");
 
                 registerClockUpdater();
-
-                placeWeatherView();
-
-                placeLockscreenWidgets();
             }
         });
 
@@ -890,136 +718,6 @@ public class LockscreenClock extends XposedMods {
             }
         }
         tv.setText(spannableString, TextView.BufferType.SPANNABLE);
-    }
-
-    private void placeWeatherView() {
-        try {
-            CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(mContext, LOCKSCREEN_WEATHER);
-            try {
-                ((ViewGroup) currentWeatherView.getParent()).removeView(currentWeatherView);
-            } catch (Throwable ignored) {
-            }
-            try {
-                ((ViewGroup) mWeatherContainer.getParent()).removeView(mWeatherContainer);
-            } catch (Throwable ignored) {
-            }
-            mWeatherContainer.addView(currentWeatherView);
-            mClockViewContainer.addView(mWeatherContainer);
-            setWeatherCentered();
-            refreshWeatherView(currentWeatherView);
-            updateMargins();
-        } catch (Throwable ignored) {
-        }
-    }
-
-    private void updateMargins() {
-        if (mWeatherContainer == null) return;
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mWeatherContainer.getLayoutParams();
-        if (mWeatherCustomMargins) {
-            params.setMargins(dp2px(mContext, mWeatherLeftMargin), dp2px(mContext, mWeatherTopMargin), dp2px(mContext, mWeatherLeftMargin), 0);
-        } else {
-            params.setMargins(mWeatherStartPadding, 0, mWeatherStartPadding, 0);
-        }
-        mWeatherContainer.setLayoutParams(params);
-    }
-
-    private void setWeatherCentered() {
-        CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
-        mWeatherContainer.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
-        if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
-        if (currentWeatherView != null) currentWeatherView.requestLayout();
-        ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
-        for (int i = 0; i < weatherContainer.getChildCount(); i++) {
-            View child = weatherContainer.getChildAt(i);
-            if (child instanceof LinearLayout linearLayoutChild) {
-                linearLayoutChild.setGravity(mWeatherCentered ? Gravity.CENTER_HORIZONTAL : (Gravity.START | Gravity.CENTER_VERTICAL));
-            }
-        }
-    }
-
-    private void refreshWeatherView(CurrentWeatherView currentWeatherView) {
-        if (currentWeatherView == null) return;
-        currentWeatherView.updateSizes(mWeatherTextSize, mWeatherImageSize, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.updateColors(mWeatherCustomColor ? mWeatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.updateWeatherSettings(mWeatherShowLocation, mWeatherShowCondition, mWeatherShowHumidity, mWeatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
-        currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        updateMargins();
-    }
-
-    private void updateWeatherView() {
-        refreshWeatherView(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
-    }
-
-    private void placeLockscreenWidgets() {
-        try {
-            LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance(mContext, mActivityStarter);
-            try {
-                ((ViewGroup) lsWidgets.getParent()).removeView(lsWidgets);
-            } catch (Throwable ignored) {
-            }
-            if (Build.VERSION.SDK_INT == 33) {
-                if (mWidgetsContainer == null) {
-                    mWidgetsContainer = new LinearLayout(mContext);
-                    mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-                    mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
-                }
-                try {
-                    ((ViewGroup) mWidgetsContainer.getParent()).removeView(mWidgetsContainer);
-                } catch (Throwable ignored) {
-                }
-                mWidgetsContainer.addView(lsWidgets);
-                mStatusViewContainer.addView(mWidgetsContainer, mStatusViewContainer.getChildCount());
-                mWidgetsContainer.bringToFront();
-                mStatusViewContainer.post(() -> {
-                    mStatusViewContainer.bringToFront();
-                    mStatusViewContainer.invalidate();
-                    mStatusViewContainer.requestLayout();
-                });
-            } else {
-                mClockViewContainer.addView(lsWidgets);
-            }
-            updateLockscreenWidgets();
-            updateLsDeviceWidget();
-            updateLockscreenWidgetsColors();
-            updateLockscreenWidgetsScale();
-        } catch (Throwable ignored) {
-        }
-    }
-
-    private void updateLockscreenWidgets() {
-        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
-    }
-
-    private void updateLsDeviceWidget() {
-        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setDeviceWidgetOptions(mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
-    }
-
-    private void updateLockscreenWidgetsColors() {
-        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setCustomColors(
-                mWidgetsCustomColor,
-                mBigInactiveColor, mBigActiveColor,
-                mSmallInactiveColor, mSmallActiveColor,
-                mBigIconInactiveColor, mBigIconActiveColor,
-                mSmallIconInactiveColor, mSmallIconActiveColor);
-    }
-
-    private void updateLockscreenWidgetsScale() {
-        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setScale(mWidgetsScale);
-    }
-
-    private void setActivityStarter() {
-        LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setActivityStarter(mActivityStarter);
     }
 
     @Override

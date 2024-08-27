@@ -20,8 +20,8 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableImageView;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.LaunchableLinearLayout;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableImageView;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableLinearLayout;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -297,7 +297,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        mDeviceWidgetView = new DeviceWidgetView(context);
+        if (mDeviceWidgetView == null)
+            mDeviceWidgetView = new DeviceWidgetView(context);
+
+        try {
+            ((ViewGroup)(mDeviceWidgetView.getParent())).removeView(mDeviceWidgetView);
+        } catch (Throwable ignored) {}
 
         deviceWidget.addView(mDeviceWidgetView);
 
@@ -714,7 +719,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             }
             for (int i = 0; i < Math.min(mMainWidgetsList.size(), mMainWidgetViews.length); i++) {
                 String widgetType = mMainWidgetsList.get(i);
-                if (widgetType != null && i < mMainWidgetViews.length && mMainWidgetViews[i] != null) {
+                if (widgetType != null && mMainWidgetViews[i] != null) {
                     setUpWidgetWiews(null, mMainWidgetViews[i], widgetType);
                     updateMainWidgetResources(mMainWidgetViews[i], false);
                 }
@@ -728,7 +733,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             }
             for (int i = 0; i < Math.min(mSecondaryWidgetsList.size(), mSecondaryWidgetViews.length); i++) {
                 String widgetType = mSecondaryWidgetsList.get(i);
-                if (widgetType != null && i < mSecondaryWidgetViews.length && mSecondaryWidgetViews[i] != null) {
+                if (widgetType != null && mSecondaryWidgetViews[i] != null) {
                     setUpWidgetWiews(mSecondaryWidgetViews[i], null, widgetType);
                     updateWidgetsResources(mSecondaryWidgetViews[i]);
                 }
@@ -955,9 +960,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0) {
-                        dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-                    } else {
                         dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
+                    } else {
+                        dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
                     }
                     vibrate(1);
                     updateMediaController();
@@ -1555,6 +1560,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         instance.mWidgetsScale = scale;
         instance.removeAllViews();
         instance.drawUI();
+        instance.updateWidgetViews();
     }
 
     public void setActivityStarter(Object activityStarter) {

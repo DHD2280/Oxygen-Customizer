@@ -4,6 +4,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.getBottomDxR;
 import static it.dhd.oxygencustomizer.utils.Constants.getBottomSxR;
 import static it.dhd.oxygencustomizer.utils.Constants.getGradientNum;
 import static it.dhd.oxygencustomizer.utils.Constants.getGradientOrientation;
+import static it.dhd.oxygencustomizer.utils.Constants.getMarginBottom;
+import static it.dhd.oxygencustomizer.utils.Constants.getMarginDx;
+import static it.dhd.oxygencustomizer.utils.Constants.getMarginSx;
+import static it.dhd.oxygencustomizer.utils.Constants.getMarginTop;
 import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeColor;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
@@ -53,6 +57,8 @@ public class BackgroundChipPreference extends DialogPreference {
     int strokeWidth;
     int strokeColor;
     int topSxR, topDxR, bottomSxR, bottomDxR;
+    int marginSx, marginDx, marginTop, marginBottom;
+    int paddingSx, paddingDx, paddingTop, paddingBottom;
     int backgroundChipStyle = 0; // 0 = filled, 1 = outlined, 2 mixed
     GradientDrawable gradientDrawable = new GradientDrawable();
     private QsChipLayoutBinding binding;
@@ -260,6 +266,42 @@ public class BackgroundChipPreference extends DialogPreference {
             setupGradient();
         });
 
+        // Margin
+        binding.chipMarginLeft.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginSx(getKey()), (int) value).apply();
+            marginSx = (int) value;
+        });
+        binding.chipMarginRight.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginDx(getKey()), (int) value).apply();
+            marginDx = (int) value;
+        });
+        binding.chipMarginTop.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginTop(getKey()), (int) value).apply();
+            marginTop = (int) value;
+        });
+        binding.chipMarginBottom.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginBottom(getKey()), (int) value).apply();
+            marginBottom = (int) value;
+        });
+
+        // Padding
+        binding.chipPaddingLeft.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginSx(getKey()), (int) value).apply();
+            paddingSx = (int) value;
+        });
+        binding.chipPaddingRight.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginDx(getKey()), (int) value).apply();
+            paddingDx = (int) value;
+        });
+        binding.chipPaddingTop.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginTop(getKey()), (int) value).apply();
+            paddingTop = (int) value;
+        });
+        binding.chipPaddingBottom.setOnSliderChangeListener((slider, value, fromUser) -> {
+            prefs.edit().putInt(getMarginBottom(getKey()), (int) value).apply();
+            paddingBottom = (int) value;
+        });
+
         // Set Widgets
         setupWidgets();
 
@@ -287,6 +329,14 @@ public class BackgroundChipPreference extends DialogPreference {
         topDxR = prefs.getInt(getTopDxR(getKey()), 28);
         bottomSxR = prefs.getInt(getBottomSxR(getKey()), 28);
         bottomDxR = prefs.getInt(getBottomDxR(getKey()), 28);
+        marginSx = prefs.getInt(getMarginSx(getKey()), 0);
+        marginDx = prefs.getInt(getMarginDx(getKey()), 0);
+        marginTop = prefs.getInt(getMarginTop(getKey()), 0);
+        marginBottom = prefs.getInt(getMarginBottom(getKey()), 0);
+        paddingSx = prefs.getInt(getMarginSx(getKey()), 0);
+        paddingDx = prefs.getInt(getMarginDx(getKey()), 0);
+        paddingTop = prefs.getInt(getMarginTop(getKey()), 0);
+        paddingBottom = prefs.getInt(getMarginBottom(getKey()), 0);
     }
 
     public float getAdapterTextSizeSp() {
@@ -408,6 +458,14 @@ public class BackgroundChipPreference extends DialogPreference {
         binding.bottomSxCorner.setSliderValue(bottomSxR);
         binding.bottomDxCorner.setVisibility(roundCorners ? View.VISIBLE : View.GONE);
         binding.bottomDxCorner.setSliderValue(bottomDxR);
+        binding.chipMarginLeft.setSliderValue(marginSx);
+        binding.chipMarginRight.setSliderValue(marginDx);
+        binding.chipMarginTop.setSliderValue(marginTop);
+        binding.chipMarginBottom.setSliderValue(marginBottom);
+        binding.chipPaddingLeft.setSliderValue(paddingSx);
+        binding.chipPaddingRight.setSliderValue(paddingDx);
+        binding.chipPaddingTop.setSliderValue(paddingTop);
+        binding.chipPaddingBottom.setSliderValue(paddingBottom);
         bottomSheetDialog.setContentView(binding.getRoot());
         bottomSheetDialog.show();
     }

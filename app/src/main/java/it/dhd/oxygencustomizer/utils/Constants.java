@@ -653,6 +653,7 @@ public class Constants {
     public static final String ACTIONS_QS_CLOCK_FONT_CHANGEG = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_FONT_CHANGEG_OC";
     public static final String ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED_OC";
     public static final String ACTIONS_QS_CLOCK_UPDATE = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_UPDATE_OC";
+    public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
@@ -712,6 +713,30 @@ public class Constants {
     }
     public static String getBottomDxR(String key) {
         return key + "_BOTTOM_RIGHT_RADIUS";
+    }
+    public static String getMarginSx(String key) {
+        return key + "_MARGIN_LEFT";
+    }
+    public static String getMarginDx(String key) {
+        return key + "_MARGIN_RIGHT";
+    }
+    public static String getMarginTop(String key) {
+        return key + "_MARGIN_TOP";
+    }
+    public static String getMarginBottom(String key) {
+        return key + "_MARGIN_BOTTOM";
+    }
+    public static String getPaddingSx(String key) {
+        return key + "_PADDING_LEFT";
+    }
+    public static String getPaddingDx(String key) {
+        return key + "_PADDING_RIGHT";
+    }
+    public static String getPaddingTop(String key) {
+        return key + "_PADDING_TOP";
+    }
+    public static String getPaddingBottom(String key) {
+        return key + "_PADDING_BOTTOM";
     }
 
     public static String getLockScreenSubjectCachePath() {
