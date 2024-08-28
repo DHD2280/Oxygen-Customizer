@@ -289,58 +289,9 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     }
 
-    public static class Screenshot extends ControlledPreferenceFragmentCompat {
-
-        public Screenshot() {
-
-        }
-
-        @Override
-        public String getTitle() {
-            return getString(R.string.screenshot);
-        }
-
-        @Override
-        public boolean backButtonEnabled() {
-            return true;
-        }
-
-        @Override
-        public int getLayoutResource() {
-            return R.xml.screenshots_prefs;
-        }
-
-        @Override
-        public boolean hasMenu() {
-            return true;
-        }
-
-        @Override
-        public String[] getScopes() {
-            return new String[]{Constants.Packages.SCREENSHOT};
-        }
-
-        @Override
-        public void updateScreen(String key) {
-            super.updateScreen(key);
-            Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-            broadcast.putExtra("packageName", FRAMEWORK);
-            broadcast.putExtra("class", it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager.class.getSimpleName());
-
-            broadcast.setPackage(FRAMEWORK);
-
-            if (getContext() != null)
-                getContext().sendBroadcast(broadcast);
-
-        }
-    }
-
     public static class PackageManager extends ControlledPreferenceFragmentCompat {
 
-        public PackageManager() {
-
-        }
+        public PackageManager() {}
 
         @Override
         public String getTitle() {

@@ -801,13 +801,6 @@
     <string name="show_entry_settings_title">Показать запись в настройках</string>
     <string name="remove_usb_dialog">Убрать диалоговое окно USB</string>
     <string name="remove_usb_dialog_summary">Диалоговое окно USB будет скрыто. MTP будет выбран автоматически.</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Скриншот</string>
-    <string name="screenshots_prefs">Параметры скриншота</string>
-    <string name="disable_secure_screenshot">Отключить FLAG_SECURE</string>
-    <string name="disable_secure_screenshot_summary">Разрешить создание снимков экрана в безопасных приложениях.\nТребуется полная перезагрузка.</string>
-    <string name="disable_screenshot_observer">Отключить обнаружение скриншотов</string>
-    <string name="disable_screenshot_observer_summary">Это отключит обнаружение скриншотов, требуется A14+.\nТребуется полная перезагрузка.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Хуки</string>
     <string name="hooked_packages_title">Подключенные пакеты</string>

@@ -829,13 +829,6 @@
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
     <string name="remove_usb_dialog">Rimuovi Finestra Dialogo Usb</string>
     <string name="remove_usb_dialog_summary">Se abilitata, la finestra di dialogo USB sarà nascosta e l\'opzione MTP verrà scelta automaticamente.</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Screenshot</string>
-    <string name="screenshots_prefs">Opzioni screenshot</string>
-    <string name="disable_secure_screenshot">Disabilita FLAG_SECURE</string>
-    <string name="disable_secure_screenshot_summary">Consenti screenshot in app sicure.\nRichiede il riavvio completo.</string>
-    <string name="disable_screenshot_observer">Disabilita rilevamento screenshot</string>
-    <string name="disable_screenshot_observer_summary">Questo disabiliterà il rilevamento degli screenshot, richiede A14+.\nRichiede il riavvio completo.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Pacchetti</string>
     <string name="hooked_packages_title">Pacchetti connessi</string>
