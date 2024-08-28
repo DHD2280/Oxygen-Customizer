@@ -44,7 +44,7 @@
     <color name="system_neutral2_900">#101014</color>
     <color name="system_neutral2_1000">#101014</color>
 
-    <!-- Changes for background theme, the system_neutral method 
+    <!-- Changes for background theme, the system_neutral method
         doesn't work for transparency -->
     <color name="background_device_default_light">#b1f7f7fe</color>
     <color name="background_device_default_dark">#ae101014</color>

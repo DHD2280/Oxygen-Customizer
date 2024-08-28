@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<resources>
+    <color name="accent_material_dark">#908dff</color>
+    <color name="ripple_material_dark">#80908dff</color>
+    <color name="ripple_material_light">#66908dff</color>
+    <color name="material_grey_800">#1b2029</color>
+    <color name="black">#1b2029</color>
+    <color name="system_neutral1_0">#FFFFFF</color>
+    <color name="system_neutral1_10">#FFFFFF</color>
+    <color name="system_neutral1_50">@android:color/white</color>
+    <color name="system_neutral1_100">@android:color/white</color>
+    <color name="system_neutral1_200">@android:color/system_accent1_600</color>
+    <color name="system_neutral1_300">@android:color/system_accent1_600</color>
+    <color name="system_neutral1_400">@android:color/system_accent1_600</color>
+    <color name="system_neutral1_500">#30353f</color>
+    <color name="system_neutral1_600">#242832</color>
+    <color name="system_neutral1_700">#1b2029</color>
+    <color name="system_neutral1_800">#1b2029</color>
+    <color name="system_neutral1_900">#1b2029</color>
+    <color name="system_neutral1_1000">#1b2029</color>
+
+    <color name="system_neutral2_0">#FFFFFF</color>
+    <color name="system_neutral2_10">#FFFFFF</color>
+    <color name="system_neutral2_50">@android:color/white</color>
+    <color name="system_neutral2_100">@android:color/white</color>
+    <color name="system_neutral2_200">@android:color/system_accent1_600</color>
+    <color name="system_neutral2_300">@android:color/system_accent1_600</color>
+    <color name="system_neutral2_400">@android:color/system_accent1_600</color>
+    <color name="system_neutral2_500">#30353f</color>
+    <color name="system_neutral2_600">#242832</color>
+    <color name="system_neutral2_700">#1b2029</color>
+    <color name="system_neutral2_800">#1b2029</color>
+    <color name="system_neutral2_900">#1b2029</color>
+    <color name="system_neutral2_1000">#1b2029</color>
+
+    <!-- Changes for background theme, the system_neutral method
+        doesn't work for transparency -->
+		    <color name="surface_header_dark">@*android:color/black</color>
+    <color name="background_device_default_light">#b1f7f7fe</color>
+    <color name="background_device_default_dark">#ae1b2029</color>
+    <color name="primary_device_default_light">@*android:color/background_device_default_light</color>
+    <color name="primary_device_default_dark">@*android:color/black</color>
+    <color name="primary_device_default_settings">@*android:color/black</color>
+    <color name="surface_dark_sysui">@*android:color/black</color>
+    <color name="surface_dark">@*android:color/background_device_default_dark</color>
+    <color name="surface_light">@*android:color/background_device_default_light</color>
+    <color name="background_dark">@*android:color/black</color>
+
+    <!-- This is a lazy change, dwai -->
+    <color name="bootleg_accent_gradient_end_color">@*android:color/system_accent1_400</color>
+</resources>
