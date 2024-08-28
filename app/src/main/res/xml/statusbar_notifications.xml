@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/notification_illustration" />
 
-<PreferenceCategory
-    app:iconSpaceReserved="false"
-    android:title="@string/statusbar_notifications_cat">
+    <PreferenceCategory
+        android:title="@string/statusbar_notifications_cat"
+        app:iconSpaceReserved="false">
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="statusbar_notification_app_icon"
-        android:title="@string/statusbar_use_app_icon"
-        android:summaryOn="@string/general_on"
-        android:summaryOff="@string/general_off"
-        app:iconSpaceReserved="false"/>
-    <it.dhd.oxygencustomizer.customprefs.FooterPreference
-        android:title="@string/requires_sysui_restart"
-        android:selectable="false"/>
-</PreferenceCategory>
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
+            android:key="statusbar_notification_app_icon"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/statusbar_use_app_icon"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.customprefs.FooterPreference
+            android:selectable="false"
+            android:title="@string/requires_sysui_restart" />
+    </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/statusbar_notifications_transparency">
+        android:title="@string/statusbar_notifications_transparency"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_notification_transparency"
-            android:title="@string/statusbar_notification_transparency"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            app:iconSpaceReserved="false"/>
+            android:summaryOn="@string/general_on"
+            android:title="@string/statusbar_notification_transparency"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="statusbar_notification_transparency_value"
             android:title="@string/statusbar_notification_transparency_value"
             app:defaultValue="25"
             app:maxVal="255"
-            app:minVal="0"/>
+            app:minVal="0"
+            app:valueFormat="dp" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/statusbar_notifications_related">
+        android:title="@string/statusbar_notifications_related"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
             android:key="remove_charging_complete_notification"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
             android:title="@string/remove_charging_complete_notification_title"
-            android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
             android:key="remove_dev_mode"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
             android:title="@string/remove_dev_mode_notification"
-            android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
             android:key="remove_flashlight_notification"
-            android:title="@string/remove_flashlight_notification"
+            android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            android:title="@string/remove_flashlight_notification"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
             android:key="remove_low_battery_notification"
-            android:title="@string/remove_low_battery_notification"
+            android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            android:title="@string/remove_low_battery_notification"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
@@ -85,38 +85,38 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
             android:key="customizeClearButton"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
             android:title="@string/customize_clear_all_button"
-            android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
-
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
-            android:key="linkBackgroundAccent"
-            android:title="@string/clear_all_link_bg_accent"
-            android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
-
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            android:key="clearButtonBgColor"
-            android:title="@string/clear_all_bg_color"
-            app:cpv_showAlphaSlider="true"
-            android:defaultValue="0x555555"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
-            android:key="linkIconAccent"
-            android:title="@string/clear_all_link_bg_icon_accent"
+            android:key="linkBackgroundAccent"
+            android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            android:title="@string/clear_all_link_bg_accent"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0x555555"
+            android:key="clearButtonBgColor"
+            android:title="@string/clear_all_bg_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:key="linkIconAccent"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/clear_all_link_bg_icon_accent"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffff"
             android:key="clearButtonIconColor"
             android:title="@string/clear_all_icon_color"
             app:cpv_showAlphaSlider="true"
-            android:defaultValue="0xffffff"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

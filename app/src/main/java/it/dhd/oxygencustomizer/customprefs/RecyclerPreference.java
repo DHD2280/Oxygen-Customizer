@@ -20,20 +20,28 @@ import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 public class RecyclerPreference extends Preference {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private String mKey;
-    private int mDefaultValue;
+    private RecyclerView.Adapter<?> mAdapter;
+    private String mKey = null;
+    private int mDefaultValue = 0;
 
     public RecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setSelectable(false);
-        setLayoutResource(R.layout.custom_preference_recyclerview);
-
+        init();
     }
 
     public RecyclerPreference(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        init();
+    }
+
+    public RecyclerPreference(Context context) {
+        this(context, null, 0);
+        init();
+    }
+
+    private void init() {
         setSelectable(false);
+        setLayoutResource(R.layout.custom_preference_recyclerview);
     }
 
     public void setPreference(String key, int defaultValue) {
@@ -59,7 +67,7 @@ public class RecyclerPreference extends Preference {
         }
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter) {
+    public void setAdapter(RecyclerView.Adapter<?> adapter) {
         mAdapter = adapter;
     }
 

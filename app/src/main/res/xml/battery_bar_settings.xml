@@ -35,18 +35,20 @@
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
-        app:defaultValue="100"
         android:key="BBOpacity"
         android:title="@string/BB_Opacity_title"
+        app:defaultValue="100"
         app:iconSpaceReserved="false"
-        app:updatesContinuously="true" />
+        app:updatesContinuously="true"
+        app:valueFormat="%" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
-        app:defaultValue="50"
         android:key="BBarHeight"
         android:title="@string/BB_Thickness_title"
+        app:defaultValue="50"
         app:iconSpaceReserved="false"
-        app:updatesContinuously="true" />
+        app:updatesContinuously="true"
+        app:valueFormat="dp" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
@@ -86,11 +88,11 @@
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
-        app:iconSpaceReserved="false"
-        android:title="@string/BB_indicate_power_save"
+        android:key="indicatePowerSave"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
-        android:key="indicatePowerSave" />
+        android:title="@string/BB_indicate_power_save"
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
         android:defaultValue="-16711936"
@@ -107,7 +109,8 @@
         app:maxVal="100"
         app:minVal="0"
         app:tickInterval="1"
-        app:valueCount="2" />
+        app:valueCount="2"
+        app:valueFormat="%" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"

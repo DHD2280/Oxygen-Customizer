@@ -1058,9 +1058,6 @@ public class PreferenceHelper {
                 // Quick Settings
                 case "QSLabelScaleFactor", "QSSecondaryLabelScaleFactor" ->
                         ((SliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
-                case QS_HEADER_CLOCK_TEXT_SCALING, LOCKSCREEN_CLOCK_TEXT_SCALING,
-                     LOCKSCREEN_FINGERPRINT_SCALING, LOCKSCREEN_WIDGETS_SCALE ->
-                        ((SliderPreference) preference).slider.setLabelFormatter(value -> value + "%");
             }
         } catch (Throwable ignored) {
         }

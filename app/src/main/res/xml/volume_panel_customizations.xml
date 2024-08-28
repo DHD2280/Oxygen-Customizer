@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/volume_panel_custom_title">
+        android:title="@string/volume_panel_custom_title"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="volume_panel_seekbar_color_enabled"
-            android:title="@string/volume_panel_custom_enabled_title"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            app:iconSpaceReserved="false"
-            android:defaultValue="false" />
+            android:title="@string/volume_panel_custom_enabled_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="volume_panel_seekbar_link_primary"
-            android:title="@string/volume_panel_seekbar_link_primary"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            app:iconSpaceReserved="false"
-            android:defaultValue="false" />
+            android:title="@string/volume_panel_seekbar_link_primary"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xffffffff"
             android:key="volume_panel_seekbar_color"
             android:title="@string/custom_color"
-            app:iconSpaceReserved="false"
-            android:defaultValue="0xffffffff" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="volume_panel_seekbar_bg_color_enabled"
-            android:title="@string/volume_panel_bg_color"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            app:iconSpaceReserved="false"
-            android:defaultValue="false" />
+            android:title="@string/volume_panel_bg_color"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="-7829368"
             android:key="volume_panel_seekbar_bg_color"
             android:title="@string/custom_color"
-            app:iconSpaceReserved="false"
-            android:defaultValue="-7829368" />
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 

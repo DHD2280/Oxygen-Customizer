@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="disable_secure_screenshot"
-        android:title="@string/disable_secure_screenshot"
         android:summary="@string/disable_secure_screenshot_summary"
+        android:title="@string/disable_secure_screenshot"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="disable_screenshot_observer"
-        android:title="@string/disable_screenshot_observer"
         android:summary="@string/disable_screenshot_observer_summary"
+        android:title="@string/disable_screenshot_observer"
         app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

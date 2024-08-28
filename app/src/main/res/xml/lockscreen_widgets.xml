@@ -136,89 +136,92 @@
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-1"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_big_active"
             android:title="@string/big_active"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-16777216"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_big_inactive"
             android:title="@string/big_inactive"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-16777216"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_big_icon_active"
             android:title="@string/big_icon_active"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-1"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_big_icon_inactive"
             android:title="@string/big_icon_inactive"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-1"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_small_active"
             android:title="@string/mini_active"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-16777216"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_small_inactive"
             android:title="@string/mini_inactive"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-16777216"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_small_icon_active"
             android:title="@string/mini_icon_active"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
             android:defaultValue="-1"
+            android:dependency="lockscreen_widgets_custom_color"
             android:key="lockscreen_widgets_small_icon_inactive"
             android:title="@string/mini_icon_inactive"
-            android:dependency="lockscreen_widgets_custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/misc_category">
+        android:title="@string/misc_category"
+        app:iconSpaceReserved="false">
 
         <Preference
-            app:iconSpaceReserved="false"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings"
             android:key="weather_settings"
             android:title="@string/weather_settings"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:dependency="lockscreen_widgets_enabled"
             android:key="widget_scale"
+            android:title="@string/widgets_scale"
+            app:decimalFormat="#.##"
             app:defaultValue="1.0"
             app:iconSpaceReserved="false"
+            app:isDecimalFormat="true"
             app:maxVal="1"
             app:minVal="0.50"
             app:tickInterval="0.05"
-            android:dependency="lockscreen_widgets_enabled"
-            android:title="@string/widgets_scale" />
+            app:valueFormat="%" />
 
     </PreferenceCategory>
 

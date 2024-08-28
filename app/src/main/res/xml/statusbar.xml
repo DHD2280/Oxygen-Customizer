@@ -1,86 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
 
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sb_illustration"
-        app:lottie_rawRes="@raw/sb_illustration"
-        app:lottie_cacheComposition="false" />
+        app:lottie_cacheComposition="false"
+        app:lottie_rawRes="@raw/sb_illustration" />
 
     <PreferenceCategory
         android:title="@string/status_bar_clock_title"
         app:iconSpaceReserved="false">
 
         <ListPreference
-            app:iconSpaceReserved="false"
-            android:key="status_bar_clock"
-            android:title="@string/status_bar_clock_position_title"
-            app:useSimpleSummaryProvider="true"
+            android:defaultValue="2"
             android:dialogTitle="@string/status_bar_clock_position_title"
             android:entries="@array/status_bar_clock_position_entries"
             android:entryValues="@array/status_bar_clock_position_values"
-            android:defaultValue="2" />
+            android:key="status_bar_clock"
+            android:title="@string/status_bar_clock_position_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="status_bar_clock_size"
             android:title="@string/clock_font_size_title"
             app:defaultValue="12"
             app:maxVal="28"
-            app:minVal="4" />
+            app:minVal="4"
+            app:valueFormat="sp" />
 
         <Preference
-            app:iconSpaceReserved="false"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Clock"
             android:key="clock"
-            android:title="@string/status_bar_clock_title"
             android:summary="@string/status_bar_clock_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Clock" />
+            android:title="@string/status_bar_clock_title"
+            app:iconSpaceReserved="false" />
 
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:iconSpaceReserved="false"
+            android:defaultValue="false"
             android:key="status_bar_custom_clock_color"
-            android:title="@string/status_bar_custom_clock_color_title"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/status_bar_custom_clock_color_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            app:iconSpaceReserved="false"
-            android:key="status_bar_clock_color"
+            android:defaultValue="0xffffffff"
             android:dependency="status_bar_custom_clock_color"
+            android:key="status_bar_clock_color"
             android:title="@string/status_bar_clock_color_title"
-            android:defaultValue="0xffffffff" />
+            app:iconSpaceReserved="false" />
 
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
         android:title="@string/statusbar_options"
+        app:iconSpaceReserved="false"
         search:ignore="true">
 
         <Preference
-            app:iconSpaceReserved="false"
-            android:title="@string/statusbar_notifications"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Notifications"
             android:key="statusbar_notifications"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Notifications" />
+            android:title="@string/statusbar_notifications"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="double_tap_sleep_statusbar"
-            app:iconSpaceReserved="false"
-            android:title="@string/statusbar_double_tap_sleep"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:defaultValue="false" />
+            android:title="@string/statusbar_double_tap_sleep"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="brightness_control"
-            app:iconSpaceReserved="false"
-            android:title="@string/status_bar_toggle_brightness_title"
             android:summary="@string/status_bar_toggle_brightness_summary"
-            android:defaultValue="false" />
+            android:title="@string/status_bar_toggle_brightness_title"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="battery_bar"
@@ -89,40 +89,41 @@
             app:iconSpaceReserved="false" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            android:title="@string/statusbar_battery_icon_options"
             android:key="battery_icon"
-            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon" />
+            android:title="@string/statusbar_battery_icon_options"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
+            app:iconSpaceReserved="false" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            android:title="@string/statusbar_icons"
             android:key="statusbar_icons"
-            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons" />
+            android:title="@string/statusbar_icons"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="statusbar_padding"
-        app:iconSpaceReserved="false"
-        android:title="@string/statusbar_padding">
+        android:title="@string/statusbar_padding"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="statusbar_padding_enabled"
-            app:iconSpaceReserved="false"
-            android:title="@string/statusbar_padding"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:defaultValue="false" />
+            android:title="@string/statusbar_padding"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="statusbar_top_padding"
+            android:title="@string/statusbar_top_padding"
+            app:defaultValue="0"
             app:iconSpaceReserved="false"
             app:maxVal="20"
             app:minVal="-20"
-            app:defaultValue="0"
-            android:title="@string/statusbar_top_padding"
-            app:updatesContinuously="true" />
+            app:updatesContinuously="true"
+            app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="statusbarPaddings"
@@ -133,7 +134,8 @@
             app:maxVal="100.5"
             app:minVal="-.5"
             app:tickInterval=".5"
-            app:valueCount="2" />
+            app:valueCount="2"
+            app:valueFormat="dp" />
 
     </PreferenceCategory>
 

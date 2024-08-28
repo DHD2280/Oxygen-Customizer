@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sound_illustration"
@@ -10,31 +8,31 @@
 
     <PreferenceCategory
         android:title="@string/misc_category"
-        app:iconSpaceReserved="false" >
+        app:iconSpaceReserved="false">
 
         <!-- Pulse music visualizer -->
         <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.PulseSettings"
             android:key="pulse_settings"
-            app:iconSpaceReserved="false"
-            android:title="@string/pulse_settings"
             android:summary="@string/pulse_settings_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.PulseSettings"/>
+            android:title="@string/pulse_settings"
+            app:iconSpaceReserved="false" />
 
         <!-- Fluid Music -->
         <Preference
             android:key="fluid_settings"
-            app:iconSpaceReserved="false"
+            android:summary="@string/fluid_music_summary"
             android:title="@string/fluid_music"
-            android:summary="@string/fluid_music_summary" />
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <!-- Adaptive Playback -->
     <Preference
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings"
         android:key="sound_adaptive_playback_summary"
-        app:iconSpaceReserved="false"
         android:title="@string/adaptive_playback_screen_title"
-        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings" />
+        app:iconSpaceReserved="false" />
 
     <!-- Volume panel -->
     <PreferenceCategory
@@ -43,32 +41,34 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:key="volume_panel_position"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true"
-            android:title="@string/volume_panel_position_title"
+            android:defaultValue="0"
             android:entries="@array/volume_panel_position_entries"
             android:entryValues="@array/volume_panel_position_values"
-            android:defaultValue="0" />
+            android:key="volume_panel_position"
+            android:title="@string/volume_panel_position_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$VolumePanelCustomizations"
             android:key="volume_panel_custom"
-            app:iconSpaceReserved="false"
-            android:title="@string/volume_panel_custom_title"
             android:summary="@string/volume_panel_custom_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$VolumePanelCustomizations" />
+            android:title="@string/volume_panel_custom_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="volume_disable_volume_warning"
-            app:iconSpaceReserved="false"
             android:title="@string/volume_disable_volume_warning"
-            android:defaultValue="false" />
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="volume_dialog_timeout"
             android:title="@string/volume_dialog_timeout_title"
             app:defaultValue="3"
             app:maxVal="10"
-            app:minVal="1" />
+            app:minVal="1"
+            app:valueFormat="s" />
+
     </PreferenceCategory>
 </PreferenceScreen>

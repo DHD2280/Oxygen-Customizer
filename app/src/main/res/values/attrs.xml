@@ -10,6 +10,10 @@
         <attr name="showResetButton" format="float"/>
         <attr name="showValueLabel" format="boolean"/>
         <attr name="units" format="string"/>
+        <attr name="isDecimalFormat" format="boolean" />
+        <attr name="decimalFormat" format="string" />
+        <attr name="valueFormat" format="string" />
+        <attr name="outputScale" format="float" />
     </declare-styleable>
 
     <declare-styleable name="footerPreferenceStyle">
@@ -23,11 +27,11 @@
         <attr name="sliderValue" format="integer" />
         <attr name="sliderValueFrom" format="integer" />
         <attr name="sliderValueTo" format="integer" />
-        <attr name="valueFormat" format="string" />
+        <attr name="valueFormat" />
         <attr name="sliderDefaultValue" format="integer" />
-        <attr name="isDecimalFormat" format="boolean" />
-        <attr name="decimalFormat" format="string" />
-        <attr name="outputScale" format="float" />
+        <attr name="isDecimalFormat" />
+        <attr name="decimalFormat" />
+        <attr name="outputScale" />
         <attr name="hasResetButton" format="boolean" />
     </declare-styleable>
 

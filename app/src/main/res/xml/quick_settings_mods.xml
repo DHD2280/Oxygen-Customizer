@@ -1,112 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
 
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
         android:key="sb_illustration"
-        app:lottie_rawRes="@raw/lottie_row_quick_setting_style"
-        app:lottie_cacheComposition="false" />
+        app:lottie_cacheComposition="false"
+        app:lottie_rawRes="@raw/lottie_row_quick_setting_style" />
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
         android:title="@string/quick_settings_tiles_title"
+        app:iconSpaceReserved="false"
         search:ignore="true">
 
         <Preference
-            android:title="@string/quick_settings_tiles_number"
-            app:iconSpaceReserved="false"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles"
             android:key="quick_settings_tiles_number"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles" />
+            android:title="@string/quick_settings_tiles_number"
+            app:iconSpaceReserved="false" />
 
         <Preference
-            android:title="@string/quick_settings_tiles_main"
-            app:iconSpaceReserved="false"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization"
             android:key="quick_settings_tiles_appearance"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization" />
+            android:title="@string/quick_settings_tiles_main"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
         android:title="@string/qs_transparency"
+        app:iconSpaceReserved="false"
         search:ignore="true">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="qs_transparency_switch"
-            app:iconSpaceReserved="false"
-            android:title="@string/qs_transparency_title"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_transparency_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="qs_transparency_value"
             android:title="@string/qs_transparency_value"
-            app:iconSpaceReserved="false"
             app:defaultValue="40"
-            app:minVal="0"
+            app:iconSpaceReserved="false"
             app:maxVal="100"
-            app:tickInterval="1" />
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="%" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="qs_transparency_blur_switch"
-            app:iconSpaceReserved="false"
-            android:title="@string/qs_transparency_blur_title"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_transparency_blur_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="qs_transparency_blur_radius"
             android:title="@string/qs_blur_intentisy"
-            app:iconSpaceReserved="false"
             app:defaultValue="40"
-            app:minVal="0"
+            app:iconSpaceReserved="false"
             app:maxVal="100"
-            app:tickInterval="1" />
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="%" />
 
     </PreferenceCategory>
 
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
         android:title="@string/quick_pulldown"
+        app:iconSpaceReserved="false"
         search:ignore="true">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="quick_pulldown"
-            app:iconSpaceReserved="false"
-            android:title="@string/quick_pulldown"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/quick_pulldown"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:dependency="quick_pulldown"
             android:key="quick_pulldown_length"
-            app:iconSpaceReserved="false"
             android:title="@string/quick_pulldown_length"
-            app:minVal="0"
-            app:maxVal="100"
-            app:tickInterval="1"
             app:defaultValue="25"
-            android:dependency="quick_pulldown"/>
-        <ListPreference
-            android:key="quick_pulldown_side"
             app:iconSpaceReserved="false"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="%" />
+        <ListPreference
+            android:dependency="quick_pulldown"
+            android:key="quick_pulldown_side"
             android:title="@string/quick_settings_side"
-            app:useSimpleSummaryProvider="true"
+            app:defaultValue="1"
             app:entries="@array/quick_pulldown_side_entries"
             app:entryValues="@array/quick_pulldown_side_values"
-            app:defaultValue="1"
-            android:dependency="quick_pulldown"/>
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            android:key="quick_collapse"
             app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:dependency="quick_pulldown"
+            android:key="quick_collapse"
             android:title="@string/quick_collapse"
             app:defaultValue="false"
-            android:dependency="quick_pulldown"/>
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -115,11 +117,11 @@
         app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="qs_show_my_device"
-            app:iconSpaceReserved="false"
-            android:title="@string/my_device_title"
             android:summary="@string/my_device_summary"
-            android:defaultValue="false" />
+            android:title="@string/my_device_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 

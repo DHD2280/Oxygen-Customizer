@@ -37,14 +37,16 @@
             android:title="@string/battery_width_title"
             app:defaultValue="20"
             app:maxVal="30"
-            app:minVal="10" />
+            app:minVal="10"
+            app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="battery_height"
             android:title="@string/battery_height_title"
             app:defaultValue="20"
             app:maxVal="30"
-            app:minVal="10" />
+            app:minVal="10"
+            app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="battery_hide_percentage"
@@ -165,28 +167,31 @@
             android:title="@string/charging_icon_margin_left_title"
             app:defaultValue="1"
             app:maxVal="6"
-            app:minVal="0" />
+            app:minVal="0"
+            app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="battery_charging_icon_margin_right"
             android:title="@string/charging_icon_margin_right_title"
             app:defaultValue="1"
             app:maxVal="6"
-            app:minVal="0" />
+            app:minVal="0"
+            app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="battery_charging_icon_size"
             android:title="@string/charging_icon_size_title"
             app:defaultValue="14"
             app:maxVal="20"
-            app:minVal="8" />
+            app:minVal="8"
+            app:valueFormat="dp" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
         android:key="category_battery_stock_prefs"
-        android:title="@string/battery_stock_prefs">
+        android:title="@string/battery_stock_prefs"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
@@ -201,7 +206,8 @@
             android:title="@string/battery_percentage_size"
             app:defaultValue="12"
             app:maxVal="24"
-            app:minVal="8" />
+            app:minVal="8"
+            app:valueFormat="sp" />
 
     </PreferenceCategory>
 
