@@ -6,7 +6,6 @@
         <item>com.android.systemui</item>
         <item>com.android.settings</item>
         <item>com.android.launcher</item>
-        <item>com.oplus.screenshot</item>
     </string-array>
     <string-array name="root_requirement">
         <item>android</item> <!-- framework -->

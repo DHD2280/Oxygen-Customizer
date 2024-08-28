@@ -9,10 +9,8 @@ import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
-import it.dhd.oxygencustomizer.xposed.hooks.framework.PhoneWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
-import it.dhd.oxygencustomizer.xposed.hooks.screenshot.ScreenshotSecureFlag;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
@@ -62,7 +60,6 @@ public class ModPacks {
 
         switch (packageName) {
             case Constants.Packages.FRAMEWORK -> {
-                modPacks.add(PhoneWindowManager.class);
                 modPacks.add(Buttons.class);
                 modPacks.add(DarkMode.class);
                 modPacks.add(OplusStartingWindowManager.class);
@@ -143,7 +140,6 @@ public class ModPacks {
                 modPacks.add(Launcher.class);
                 modPacks.add(ThemedIcons.class);
             }
-            case Constants.Packages.SCREENSHOT -> modPacks.add(ScreenshotSecureFlag.class);
         }
 
         return modPacks;

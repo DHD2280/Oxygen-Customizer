@@ -898,14 +898,6 @@
     <string name="remove_usb_dialog">Remove USB Dialog</string>
     <string name="remove_usb_dialog_summary">If enabled, the USB dialog will be hidden and MTP option will be chosen automatically.</string>
 
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Screenshot</string>
-    <string name="screenshots_prefs">Screenshot Options</string>
-    <string name="disable_secure_screenshot">Disable FLAG_SECURE</string>
-    <string name="disable_secure_screenshot_summary">Allow screenshots in secure apps.\nRequires full reboot.</string>
-    <string name="disable_screenshot_observer">Disable screenshot detection</string>
-    <string name="disable_screenshot_observer_summary">This will disable the detection of the screenshots, requires A14+.\nRequires full reboot.</string>
-
     <!-- Hooks Fragment -->
     <string name="hooks_title">Hooks</string>
     <string name="hooked_packages_title">Connected packages</string>

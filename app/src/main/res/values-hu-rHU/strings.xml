@@ -829,13 +829,6 @@
     <string name="show_entry_settings_title">Jelenjen meg a bejárat a Beállításokban</string>
     <string name="remove_usb_dialog">Az USB-párbeszédpanel kikapcsolása</string>
     <string name="remove_usb_dialog_summary">Ha engedélyezve van, az USB párbeszédpanel rejtett lesz, és az MTP opció kerül automatikusan kiválasztásra.</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Képernyőmentés</string>
-    <string name="screenshots_prefs">Képernyőmentési beállítások</string>
-    <string name="disable_secure_screenshot">A FLAG_SECURE kikapcsolása</string>
-    <string name="disable_secure_screenshot_summary">A védett alkalmazásoknál is engedi a képernyőmentést.\nÚjraindítás szükséges.</string>
-    <string name="disable_screenshot_observer">A Képernyőmentés észlelésének kikapcsolása</string>
-    <string name="disable_screenshot_observer_summary">Ez letiltja a képernyőképek észlelését, Android 14-től.\nÚjraindítás szükséges.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Csapdák</string>
     <string name="hooked_packages_title">Csatlakoztatott csomagok</string>
