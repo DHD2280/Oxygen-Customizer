@@ -608,7 +608,6 @@
     <string name="volbtn_music_controls_title">Controlli musicali con pulsanti volume</string>
     <string name="volbtn_music_controls_summary">Controlla la riproduzione musicale con i pulsanti del volume</string>
     <!-- Lockscreen Strings -->
-    <string name="lockscreen_title">Blocco Schermo</string>
     <string name="lockscreen_hide_carrier">Nascondi Operatore</string>
     <string name="lockscreen_hide_carrier_summary">Nascondi nome operatore nella schermata di blocco</string>
     <string name="lockscreen_carrier_replacement">Sostituzione nome operatore LS</string>
