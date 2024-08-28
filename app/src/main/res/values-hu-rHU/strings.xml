@@ -86,6 +86,12 @@
     <string name="gradient_tl_br">Bal fentről jobbra lefelé</string>
     <string name="gradient_tr_bl">Jobb fentről balra lefelé</string>
     <string name="warning">Figyelmeztetés</string>
+    <string name="custom_margins">Egyedi margók</string>
+    <string name="custom_padding">Egyedi kitöltés</string>
+    <string name="left">Bal</string>
+    <string name="right">Jobb</string>
+    <string name="top">Felső</string>
+    <string name="bottom">Alsó</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -1094,6 +1100,7 @@
     <string name="mini_icon_active">A mini ikon színe, mikor aktív</string>
     <string name="mini_icon_inactive">A mini ikon színe, mikor inaktív</string>
     <string name="weather_settings">Időjárás-beállítások</string>
+    <string name="widgets_scale">Kisalkalmazások méretskálázása</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fényképezőgép</string>
     <string name="clock_timer">Óra/Időzítő</string>
