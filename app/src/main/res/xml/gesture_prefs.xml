@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
     <PreferenceCategory
@@ -8,72 +7,74 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="true"
             android:key="gesture_left"
             android:title="@string/gesture_left_title"
-            android:defaultValue="true"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:iconSpaceReserved="false"
             android:key="gesture_left_height_double"
             android:title="@string/gesture_height_title"
-            app:minVal="0"
-            app:maxVal="100"
             app:defaultValue="0,100"
-            app:valueCount="2"
+            app:maxVal="100"
+            app:minVal="0"
             app:tickInterval="1"
-            android:iconSpaceReserved="false"/>
+            app:valueCount="2"
+            app:valueFormat="%" />
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="true"
             android:key="gesture_right"
             android:title="@string/gesture_right_title"
-            android:defaultValue="true"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
+            android:iconSpaceReserved="false"
             android:key="gesture_right_height_double"
             android:title="@string/gesture_height_title"
-            app:minVal="0"
-            app:maxVal="100"
             app:defaultValue="0,100"
-            app:valueCount="2"
+            app:maxVal="100"
+            app:minVal="0"
             app:tickInterval="1"
-            android:iconSpaceReserved="false"/>
+            app:valueCount="2"
+            app:valueFormat="%" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="true"
             android:key="gesture_on_rotate"
             android:title="@string/gesture_back_on_rotate"
-            android:defaultValue="true"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+            android:defaultValue="false"
             android:key="gesture_override_holdback"
             android:title="@string/gesture_override_back_hold"
-            android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+            android:defaultValue="0"
             android:key="gesture_override_holdback_mode"
             android:title="@string/gesture_override_back_hold_mode"
-            app:iconSpaceReserved="false"
             app:entries="@array/gesture_holdback_mode_entries"
             app:entryValues="@array/gesture_holdback_mode_values"
-            app:useSimpleSummaryProvider="true"
-            android:defaultValue="0"/>
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+            android:defaultValue="0"
             android:key="gesture_override_holdback_left"
             android:title="@string/gesture_override_back_hold_common"
-            app:iconSpaceReserved="false"
             app:entries="@array/gesture_holdback_commands_entries"
             app:entryValues="@array/gesture_holdback_commands_values"
-            app:useSimpleSummaryProvider="true"
-            android:defaultValue="0"/>
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+            android:defaultValue="0"
             android:key="gesture_override_holdback_right"
             android:title="@string/gesture_override_back_hold_right"
-            app:iconSpaceReserved="false"
             app:entries="@array/gesture_holdback_commands_entries"
             app:entryValues="@array/gesture_holdback_commands_values"
-            app:useSimpleSummaryProvider="true"
-            android:defaultValue="0"/>
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -92,12 +93,13 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
-            app:defaultValue="50"
             android:key="GesPillWidthModPos"
             android:title="@string/gesture_nav_pill_width_title"
+            app:defaultValue="50"
             app:iconSpaceReserved="false"
             app:maxVal="100"
-            app:minVal="10" />
+            app:minVal="10"
+            app:valueFormat="%" />
 
     </PreferenceCategory>
 

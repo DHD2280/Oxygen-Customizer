@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_tiles_customize"
-        android:title="@string/quick_settings_tiles_main"
-        android:summaryOn="@string/general_on"
         android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:title="@string/quick_settings_tiles_main"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.SliderPreference
@@ -22,10 +21,10 @@
         app:tickInterval="1" />
 
     <PreferenceCategory
-        android:title="@string/quick_settings_tiles_portrait"
         android:key="qs_tile_potrait"
-        search:ignore="true"
-        app:iconSpaceReserved="false">
+        android:title="@string/quick_settings_tiles_portrait"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="quick_settings_tiles_rows"
@@ -47,10 +46,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/quick_settings_tiles_landscape"
         android:key="qs_tile_landscape"
-        search:ignore="true"
-        app:iconSpaceReserved="false">
+        android:title="@string/quick_settings_tiles_landscape"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="quick_settings_tiles_vertical_columns"

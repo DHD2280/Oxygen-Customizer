@@ -68,9 +68,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/reset_button"
-                style="@style/MaterialButtonIcon"
-                android:layout_width="38dp"
+                style="?attr/materialIconButtonFilledTonalStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 app:icon="@drawable/ic_reset"
                 app:iconTint="@drawable/reset_button" />
 

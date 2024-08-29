@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
@@ -8,15 +7,15 @@
         app:lottie_rawRes="@raw/aod_illustration" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock"
         android:key="aod_clock"
         android:title="@string/aod_clock"
-        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock"/>
+        app:iconSpaceReserved="false" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather"
         android:key="aod_weather"
         android:title="@string/aod_weather"
-        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather"/>
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

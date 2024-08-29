@@ -1,64 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_update_interval"
-        android:title="@string/update_interval_title"
+        android:defaultValue="2"
         android:entries="@array/update_interval_entries"
         android:entryValues="@array/update_interval_values"
-        android:defaultValue="2"
+        android:key="weather_update_interval"
+        android:title="@string/update_interval_title"
+        app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
     <Preference
-        app:iconSpaceReserved="false"
         android:key="update_status"
-        android:title="@string/last_update_time"/>
-
-    <ListPreference
-        app:iconSpaceReserved="false"
-        android:key="weather_provider"
-        android:title="@string/provider_title"
-        android:entries="@array/provider_entries"
-        android:entryValues="@array/provider_values"
-        app:useSimpleSummaryProvider="true"
-        android:defaultValue="2" />
-
-    <EditTextPreference
-        android:key="owm_key"
-        android:title="@string/owm_key"
-        android:dialogTitle="@string/owm_key"
-        android:singleLine="true"
-        android:inputType="textNoSuggestions"
-        app:useSimpleSummaryProvider="true"
+        android:title="@string/last_update_time"
         app:iconSpaceReserved="false" />
 
     <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/provider_entries"
+        android:entryValues="@array/provider_values"
+        android:key="weather_provider"
+        android:title="@string/provider_title"
         app:iconSpaceReserved="false"
-        android:key="weather_units"
-        android:title="@string/units_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:dialogTitle="@string/owm_key"
+        android:inputType="textNoSuggestions"
+        android:key="owm_key"
+        android:singleLine="true"
+        android:title="@string/owm_key"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:defaultValue="0"
         android:entries="@array/units_entries"
         android:entryValues="@array/units_values"
-        android:defaultValue="0"
+        android:key="weather_units"
+        android:title="@string/units_title"
+        app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
     <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-        app:iconSpaceReserved="false"
+        android:defaultValue="false"
         android:key="weather_custom_location_switch"
         android:title="@string/custom_location_title"
-        android:defaultValue="false" />
+        app:iconSpaceReserved="false" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:dependency="weather_custom_location_switch"
         android:key="weather_custom_location_picker"
         android:title="@string/weather_custom_location_title"
-        android:dependency="weather_custom_location_switch"/>
+        app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
-        app:iconSpaceReserved="false"
         android:key="weather_icon_pack"
-        android:title="@string/weather_icon_pack_title" />
+        android:title="@string/weather_icon_pack_title"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

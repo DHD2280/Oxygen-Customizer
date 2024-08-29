@@ -7,9 +7,9 @@
         app:lottie_rawRes="@raw/ui_illustration" />
 
     <Preference
-        app:iconSpaceReserved="false"
+        android:key="reboot_pref"
         android:layout="@layout/view_reboot"
-        android:key="reboot_pref" />
+        app:iconSpaceReserved="false" />
 
     <PreferenceCategory
         android:title="@string/style_category"
@@ -70,19 +70,19 @@
 
         <!-- Icon pack -->
         <Preference
-            android:key="android.theme.customization.icon_pack"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.IconPacks"
             android:icon="@drawable/ic_drawing"
-            android:title="@string/theme_customization_icon_pack_title"
+            android:key="android.theme.customization.icon_pack"
             android:summary="@string/theme_customization_icon_pack_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.IconPacks"/>
+            android:title="@string/theme_customization_icon_pack_title" />
 
         <!-- Settings Icons -->
         <Preference
-            android:key="android.theme.customization.settings_icons"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.SettingsIcons"
             android:icon="@drawable/ic_settings_accent"
-            android:title="@string/theme_customization_settings_icons_title"
+            android:key="android.theme.customization.settings_icons"
             android:summary="@string/theme_customization_settings_icons_summary"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.SettingsIcons"/>
+            android:title="@string/theme_customization_settings_icons_title" />
 
         <!-- Signal icon style -->
         <Preference

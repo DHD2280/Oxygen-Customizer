@@ -129,49 +129,52 @@
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_clock_custom_color_switch"
-            android:title="@string/qs_header_clock_custom_color_title"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
+            android:title="@string/qs_header_clock_custom_color_title"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xff006781"
             android:key="qs_header_clock_color_code_accent1"
-            app:iconSpaceReserved="false"
-            android:defaultValue="0xff006781"
-            android:title="@string/general_color_accent1" />
+            android:title="@string/general_color_accent1"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xff006781"
             android:key="qs_header_clock_color_code_accent2"
-            app:iconSpaceReserved="false"
-            android:defaultValue="0xff006781"
-            android:title="@string/general_color_accent2" />
+            android:title="@string/general_color_accent2"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+            android:defaultValue="0xff006781"
             android:key="qs_header_clock_color_code_accent3"
-            app:iconSpaceReserved="false"
-            android:defaultValue="0xff006781"
-            android:title="@string/general_color_accent3" />
+            android:title="@string/general_color_accent3"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            android:key="qs_header_clock_color_code_text1"
-            app:iconSpaceReserved="false"
             android:defaultValue="0xffffffff"
-            android:title="@string/general_color_text1" />
+            android:key="qs_header_clock_color_code_text1"
+            android:title="@string/general_color_text1"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
-            android:key="qs_header_clock_color_code_text2"
-            app:iconSpaceReserved="false"
             android:defaultValue="0xff000000"
-            android:title="@string/general_color_text2" />
+            android:key="qs_header_clock_color_code_text2"
+            android:title="@string/general_color_text2"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.customprefs.SliderPreference
             android:key="qs_header_clock_text_scaling"
             android:title="@string/qs_header_clock_text_scaling"
+            app:decimalFormat="#.#"
             app:defaultValue="1.0"
             app:iconSpaceReserved="false"
+            app:isDecimalFormat="true"
             app:maxVal="1.5"
             app:minVal="0.5"
-            app:tickInterval=".1" />
+            app:tickInterval=".1"
+            app:valueFormat="%" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
             android:key="qs_header_clock_custom_user_image"

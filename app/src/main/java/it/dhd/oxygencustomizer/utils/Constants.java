@@ -23,7 +23,6 @@ public class Constants {
         public static final String TELECOM_SERVER_PACKAGE = "com.android.server.telecom";
         public static final String LAUNCHER = "com.android.launcher";
         public static final String SETTINGS = "com.android.settings";
-        public static final String SCREENSHOT = "com.oplus.screenshot";
     }
 
     public static class Preferences {

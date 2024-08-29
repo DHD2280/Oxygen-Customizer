@@ -86,6 +86,12 @@
     <string name="gradient_tl_br">从左上到右下</string>
     <string name="gradient_tr_bl">从右上到左下</string>
     <string name="warning">警告</string>
+    <string name="custom_margins">自定义边距</string>
+    <string name="custom_padding">自定义填充</string>
+    <string name="left">左侧</string>
+    <string name="right">右侧</string>
+    <string name="top">顶部</string>
+    <string name="bottom">底部</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">搜索...</string>
     <string name="searchpreference_clear">清空</string>
@@ -829,13 +835,6 @@
     <string name="show_entry_settings_title">在系统设置中显示模块入口</string>
     <string name="remove_usb_dialog">移除 USB 对话框</string>
     <string name="remove_usb_dialog_summary">如果启用，将隐藏USB对话框，并自动选择MTP选项</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">截图</string>
-    <string name="screenshots_prefs">截图选项</string>
-    <string name="disable_secure_screenshot">禁用FLAG_SECURE</string>
-    <string name="disable_secure_screenshot_summary">允许在安全应用中截图\n需要完全重启</string>
-    <string name="disable_screenshot_observer">禁用截图检测</string>
-    <string name="disable_screenshot_observer_summary">这将禁用截图检测，需要 A14以上\n需要完全重启</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">钩子（Hooks）</string>
     <string name="hooked_packages_title">已连接的软件包</string>
@@ -1101,6 +1100,7 @@
     <string name="mini_icon_active">小部件图标活动颜色</string>
     <string name="mini_icon_inactive">迷你小部件图标非活动颜色</string>
     <string name="weather_settings">天气设置</string>
+    <string name="widgets_scale">部件比例</string>
     <!-- LS Widgets Actions -->
     <string name="camera">相机</string>
     <string name="clock_timer">时钟/计时器</string>

@@ -608,7 +608,6 @@
     <string name="volbtn_music_controls_title">Controlli musicali con pulsanti volume</string>
     <string name="volbtn_music_controls_summary">Controlla la riproduzione musicale con i pulsanti del volume</string>
     <!-- Lockscreen Strings -->
-    <string name="lockscreen_title">Blocco Schermo</string>
     <string name="lockscreen_hide_carrier">Nascondi Operatore</string>
     <string name="lockscreen_hide_carrier_summary">Nascondi nome operatore nella schermata di blocco</string>
     <string name="lockscreen_carrier_replacement">Sostituzione nome operatore LS</string>
@@ -829,13 +828,6 @@
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
     <string name="remove_usb_dialog">Rimuovi Finestra Dialogo Usb</string>
     <string name="remove_usb_dialog_summary">Se abilitata, la finestra di dialogo USB sarà nascosta e l\'opzione MTP verrà scelta automaticamente.</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Screenshot</string>
-    <string name="screenshots_prefs">Opzioni screenshot</string>
-    <string name="disable_secure_screenshot">Disabilita FLAG_SECURE</string>
-    <string name="disable_secure_screenshot_summary">Consenti screenshot in app sicure.\nRichiede il riavvio completo.</string>
-    <string name="disable_screenshot_observer">Disabilita rilevamento screenshot</string>
-    <string name="disable_screenshot_observer_summary">Questo disabiliterà il rilevamento degli screenshot, richiede A14+.\nRichiede il riavvio completo.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Pacchetti</string>
     <string name="hooked_packages_title">Pacchetti connessi</string>

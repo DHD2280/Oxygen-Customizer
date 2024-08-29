@@ -775,13 +775,6 @@
     <string name="show_entry_settings_title">設定に項目を表示</string>
     <string name="remove_usb_dialog">USB ダイアログを削除</string>
     <string name="remove_usb_dialog_summary">有効化すると USB ダイアログが非表示になり、MTP オプションが自動的に選択されます</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">スクリーンショット</string>
-    <string name="screenshots_prefs">スクリーンショットのオプション</string>
-    <string name="disable_secure_screenshot">FLAG_SECURE を無効化</string>
-    <string name="disable_secure_screenshot_summary">セキュアアプリでスクリーンショットを許可します。\n完全な再起動が必要です。</string>
-    <string name="disable_screenshot_observer">スクリーンショットの検出を無効化</string>
-    <string name="disable_screenshot_observer_summary">スクリーンショットの検出が無効化されます。Android14 以降の環境が必要です。\n完全な再起動が必要です。</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">フック</string>
     <string name="hooked_packages_title">接続済みのパッケージ</string>

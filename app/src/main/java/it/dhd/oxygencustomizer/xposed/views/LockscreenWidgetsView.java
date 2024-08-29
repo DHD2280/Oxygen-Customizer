@@ -62,6 +62,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -98,12 +99,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     public static final String HOTSPOT_ACTIVE = "status_bar_qs_hotspot_active";
     public static final String HOTSPOT_INACTIVE = "status_bar_qs_hotspot_inactive";
 
-    public static final String GENERAL_INACTIVE = "switch_bar_off";
-    public static final String GENERAL_ACTIVE = "switch_bar_on";
-
     public static final String BT_LABEL_INACTIVE = "quick_settings_bluetooth_label";
     public static final String DATA_LABEL_INACTIVE = "mobile_data_settings_title";
-    public static final String DATA_LABEL_ACTIVE = "mobile_data_connection_active";
     public static final String RINGER_LABEL_INACTIVE = "state_button_silence";
     public static final String TORCH_LABEL_ACTIVE = "notification_flashlight_hasopen";
     public static final String TORCH_LABEL_INACTIVE = "notification_flashlight_hasclose";
@@ -163,7 +160,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private boolean isBluetoothOn = false;
 
-    private boolean mIsInflated = false;
     private boolean mIsLongPress = false;
 
     private final CameraManager mCameraManager;
@@ -686,8 +682,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mIsInflated = true;
         updateWidgetViews();
+        onVisible();
     }
 
     private void updateContainerVisibility() {
@@ -1098,7 +1094,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
         if (mediaButtonFab != null) {
             String trackTitle = mMediaMetadata != null ? mMediaMetadata.getString(MediaMetadata.METADATA_KEY_TITLE) : "";
-            if (!TextUtils.isEmpty(trackTitle) && mLastTrackTitle != trackTitle) {
+            if (!TextUtils.isEmpty(trackTitle) && !Objects.equals(mLastTrackTitle, trackTitle)) {
                 mLastTrackTitle = trackTitle;
             }
             final boolean canShowTrackTitle = isPlaying || !TextUtils.isEmpty(mLastTrackTitle);

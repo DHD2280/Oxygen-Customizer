@@ -847,13 +847,6 @@
     <string name="show_entry_settings_title">Ayarlar\'da girişi göster</string>
     <string name="remove_usb_dialog">USB Diyalogunu Kaldır</string>
     <string name="remove_usb_dialog_summary">Etkinleştirilirse, USB iletişim kutusu gizlenecek ve MTP seçeneği otomatik olarak seçilecektir.</string>
-    <!-- Screenshot Strings -->
-    <string name="screenshot">Ekran görüntüsü</string>
-    <string name="screenshots_prefs">Ekran Görüntüsü Seçenekleri</string>
-    <string name="disable_secure_screenshot">FLAG_SECURE\'ı devre dışı bırakın</string>
-    <string name="disable_secure_screenshot_summary">Güvenli uygulamalarda ekran görüntüsüne izin ver.\nTam yeniden başlatma gerektirir.</string>
-    <string name="disable_screenshot_observer">Ekran görüntüsü algılama özelliğini devre dışı bırak</string>
-    <string name="disable_screenshot_observer_summary">Bu, ekran görüntülerinin algılanmasını devre dışı bırakacak, A14+ gerektirir.\nTam yeniden başlatma gerektirir.</string>
     <!-- Hooks Fragment -->
     <string name="hooks_title">Kanca</string>
     <string name="hooked_packages_title">Bağlantılı paketler</string>

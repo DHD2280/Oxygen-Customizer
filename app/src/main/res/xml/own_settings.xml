@@ -7,12 +7,12 @@
         app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:icon="@drawable/app_icon"
+            android:defaultValue="false"
             android:key="themed_icon"
-            android:title="@string/app_icon_themed"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:defaultValue="false" />
+            android:title="@string/app_icon_themed"
+            app:icon="@drawable/app_icon" />
 
     </PreferenceCategory>
 
@@ -21,46 +21,46 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            app:icon="@drawable/ic_delete"
             android:key="deleteAllPrefs"
             android:summary="@string/delete_all_summary"
-            android:title="@string/delete_all_title" />
+            android:title="@string/delete_all_title"
+            app:icon="@drawable/ic_delete" />
 
         <Preference
-            app:icon="@drawable/ic_export"
             android:key="export"
             android:summary="@string/export_summary"
-            android:title="@string/export_title" />
+            android:title="@string/export_title"
+            app:icon="@drawable/ic_export" />
 
         <Preference
-            app:icon="@drawable/ic_import"
             android:key="import"
             android:summary="@string/import_summary"
-            android:title="@string/import_title" />
+            android:title="@string/import_title"
+            app:icon="@drawable/ic_import" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/update">
+        android:title="@string/update"
+        app:iconSpaceReserved="false">
 
         <Preference
-            app:icon="@drawable/ic_update"
             android:key="updates"
-            android:title="@string/check_updates" />
+            android:title="@string/check_updates"
+            app:icon="@drawable/ic_update" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:icon="@drawable/ic_check_updates"
+            android:defaultValue="true"
             android:key="autoUpdate"
             android:summary="@string/auto_update_summary"
             android:title="@string/auto_update_title"
-            android:defaultValue="true" />
+            app:icon="@drawable/ic_check_updates" />
 
         <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
-            app:icon="@drawable/ic_wifi_only"
             android:key="checkOnWifi"
             android:summary="@string/update_over_wifi_summary"
-            android:title="@string/update_over_wifi_title" />
+            android:title="@string/update_over_wifi_title"
+            app:icon="@drawable/ic_wifi_only" />
 
     </PreferenceCategory>
 
@@ -77,21 +77,21 @@
 
         <Preference
             android:key="SupportGroup"
-            android:title="@string/support_group_title"
             android:summary="@string/support_group_summary"
+            android:title="@string/support_group_title"
             app:icon="@drawable/ic_group" />
 
         <Preference
             android:key="translate"
-            android:title="@string/translate_title"
             android:summary="@string/translate_summary"
+            android:title="@string/translate_title"
             app:icon="@drawable/ic_translate" />
 
         <Preference
-            app:icon="@drawable/ic_credits"
             android:key="credits"
             android:summary="@string/credits_summary"
-            android:title="@string/credits_title" />
+            android:title="@string/credits_title"
+            app:icon="@drawable/ic_credits" />
 
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
