@@ -5,8 +5,8 @@
         <shape android:shape="oval">
             <gradient
                 android:angle="315.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
         </shape>
     </item>
     <item>

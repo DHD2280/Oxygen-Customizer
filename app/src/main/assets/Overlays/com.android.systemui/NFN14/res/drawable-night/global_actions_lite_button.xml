@@ -7,8 +7,8 @@
             android:tintMode="src_atop">
             <gradient
                 android:angle="0.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
         </shape>
     </item>
     <item
