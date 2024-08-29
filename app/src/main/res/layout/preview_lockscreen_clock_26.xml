@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:tag="accent2"
             android:text="·"
-            android:textColor="@android:color/system_accent1_600"
+            android:textColor="@*android:color/accent_material_dark"
             android:textSize="40sp" />
 
         <TextView

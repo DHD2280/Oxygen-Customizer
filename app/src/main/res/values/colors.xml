@@ -106,7 +106,7 @@
 
     <!-- Previews -->
     <color name="holo_blue_light_light">@android:color/system_accent1_300</color>
-    <color name="holo_blue_light_dark">@android:color/system_accent1_600</color>
+    <color name="holo_blue_light_dark">@*android:color/accent_material_dark</color>
     <color name="holo_blue_dark_light">@android:color/system_accent3_300</color>
     <color name="holo_blue_dark_dark">@android:color/system_accent3_600</color>
     <color name="offStateColor">@android:color/system_neutral2_10</color>
@@ -120,14 +120,14 @@
 
     <color name="rippleAccent">@color/color_accent_alpha_light</color>
 
-    <color name="settings_pui_monet_v1">@android:color/system_accent1_600</color>
+    <color name="settings_pui_monet_v1">@*android:color/accent_material_dark</color>
     <color name="settings_pui_monet_v2">@android:color/system_accent1_700</color>
     <color name="settings_accent">@android:color/system_accent1_500</color>
 
     <color name="lockscreen_widget_background_color_dark">@android:color/system_neutral1_900</color>
     <color name="lockscreen_widget_background_color_light">@android:color/system_neutral1_0</color>
     <color name="lockscreen_widget_active_color_dark">@android:color/system_accent1_100</color>
-    <color name="lockscreen_widget_active_color_light">@android:color/system_accent1_600</color>
+    <color name="lockscreen_widget_active_color_light">@*android:color/accent_material_dark</color>
     <color name="card_surface_color">@android:color/system_neutral1_100</color>
 
 </resources>

@@ -13,6 +13,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License
+  ~ limitations under the License
   -->
 
 <resources>
@@ -20,14 +21,35 @@
     <color name="ripple_material_dark">#80908dff</color>
     <color name="ripple_material_light">#66908dff</color>
     <color name="material_grey_800">#1b2029</color>
+    <color name="datepicker_default_header_selector_background_material_dark">@android:color/black</color>
+    <color name="datepicker_default_view_animator_color_material_dark">@android:color/black</color>
+    <color name="material_grey_850">@android:color/black</color>
     <color name="black">#1b2029</color>
+    <color name="background_dark">#1b2029</color>
+    <color name="background_floating_material_dark">#22262f</color>
+    <color name="button_material_dark">#242832</color>
+    <color name="holo_primary">#282c36</color>
+    <color name="holo_light_primary_dark">#2c313a</color>
+    <color name="button_material_light">#30353f</color>
+    <color name="holo_primary_dark">#353944</color>
+    <color name="background_holo_dark">#393e48</color>
+    <color name="background_leanback_dark">#3e424d</color>
+    <color name="darker_gray">#aeafb1</color>
+    <color name="keyguard_avatar_frame_pressed_color">#40908dff</color>
+    <color name="holo_red_light">#cc908dff</color>
+    <color name="highlighted_text_dark">#99908dff</color>
+    <color name="highlighted_text_light">#99908dff</color>
+    <color name="accessibility_focus_highlight_color">#bf908dff</color>
+    <color name="holo_button_normal">#21908dff</color>
+    <color name="holo_blue_light">#595bc5</color>
+
     <color name="system_neutral1_0">#FFFFFF</color>
     <color name="system_neutral1_10">#FFFFFF</color>
-    <color name="system_neutral1_50">@android:color/white</color>
-    <color name="system_neutral1_100">@android:color/white</color>
-    <color name="system_neutral1_200">@android:color/system_accent1_600</color>
-    <color name="system_neutral1_300">@android:color/system_accent1_600</color>
-    <color name="system_neutral1_400">@android:color/system_accent1_600</color>
+    <color name="system_neutral1_50">@*android:color/white</color>
+    <color name="system_neutral1_100">@*android:color/white</color>
+    <color name="system_neutral1_200">@*android:color/accent_material_dark</color>
+    <color name="system_neutral1_300">@*android:color/accent_material_dark</color>
+    <color name="system_neutral1_400">@*android:color/accent_material_dark</color>
     <color name="system_neutral1_500">#30353f</color>
     <color name="system_neutral1_600">#242832</color>
     <color name="system_neutral1_700">#1b2029</color>
@@ -37,11 +59,11 @@
 
     <color name="system_neutral2_0">#FFFFFF</color>
     <color name="system_neutral2_10">#FFFFFF</color>
-    <color name="system_neutral2_50">@android:color/white</color>
-    <color name="system_neutral2_100">@android:color/white</color>
-    <color name="system_neutral2_200">@android:color/system_accent1_600</color>
-    <color name="system_neutral2_300">@android:color/system_accent1_600</color>
-    <color name="system_neutral2_400">@android:color/system_accent1_600</color>
+    <color name="system_neutral2_50">@*android:color/white</color>
+    <color name="system_neutral2_100">@*android:color/white</color>
+    <color name="system_neutral2_200">@*android:color/accent_material_dark</color>
+    <color name="system_neutral2_300">@*android:color/accent_material_dark</color>
+    <color name="system_neutral2_400">@*android:color/accent_material_dark</color>
     <color name="system_neutral2_500">#30353f</color>
     <color name="system_neutral2_600">#242832</color>
     <color name="system_neutral2_700">#1b2029</color>
@@ -51,7 +73,7 @@
 
     <!-- Changes for background theme, the system_neutral method
         doesn't work for transparency -->
-		    <color name="surface_header_dark">@*android:color/black</color>
+	<color name="surface_header_dark">@*android:color/black</color>
     <color name="background_device_default_light">#b1f7f7fe</color>
     <color name="background_device_default_dark">#ae1b2029</color>
     <color name="primary_device_default_light">@*android:color/background_device_default_light</color>
@@ -60,7 +82,6 @@
     <color name="surface_dark_sysui">@*android:color/black</color>
     <color name="surface_dark">@*android:color/background_device_default_dark</color>
     <color name="surface_light">@*android:color/background_device_default_light</color>
-    <color name="background_dark">@*android:color/black</color>
 
     <!-- This is a lazy change, dwai -->
     <color name="bootleg_accent_gradient_end_color">@*android:color/system_accent1_400</color>

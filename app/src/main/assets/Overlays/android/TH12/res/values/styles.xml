@@ -67,5 +67,25 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
-
+    <!-- Ora e Data -->
+    <style name="Widget.Material.DatePicker" parent="@*android:style/Widget.Material">
+        <item name="*android:headerBackground">@*android:color/transparent</item>
+        <item name="*android:calendarViewShown">true</item>
+        <item name="*android:datePickerMode">@*android:integer/date_picker_mode_material</item>
+        <item name="*android:headerTextColor">@*android:color/primary_text_secondary_when_activated_material</item>
+        <item name="*android:internalLayout">@*android:layout/date_picker_material</item>
+        <item name="*android:legacyLayout">@*android:layout/date_picker_legacy_holo</item>
+    </style>
+    <style name="Widget.Material.TimePicker" parent="@*android:style/Widget.Material">
+        <item name="*android:headerBackground">@*android:color/transparent</item>
+        <item name="*android:numbersTextColor">@*android:color/white</item>
+        <item name="*android:numbersBackgroundColor">@*android:color/holo_primary</item>
+        <item name="*android:numbersSelectorColor">@*android:color/accent_material_dark</item>
+        <item name="*android:amPmTextColor">@*android:color/white</item>
+        <item name="*android:timePickerMode">@*android:integer/time_picker_mode_material</item>
+        <item name="*android:numbersInnerTextColor">@*android:color/white</item>
+        <item name="*android:headerTextColor">@*android:color/primary_text_secondary_when_activated_material</item>
+        <item name="*android:internalLayout">@*android:layout/time_picker_material</item>
+        <item name="*android:legacyLayout">@*android:layout/time_picker_legacy_material</item>
+    </style>
 </resources>
