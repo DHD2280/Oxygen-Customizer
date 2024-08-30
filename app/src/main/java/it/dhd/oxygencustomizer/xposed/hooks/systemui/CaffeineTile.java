@@ -128,16 +128,17 @@ public class CaffeineTile extends XposedMods {
         hookAllMethods(QSTileImpl, "handleLongClick", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
-                View v = (View) param.args[0];
-                if (v != null) {
-                    if (getAdditionalInstanceField(v, "mTileTag") != null &&
-                            getAdditionalInstanceField(v, "mTileTag").equals("caffeine")) {
-                        handleLongClick();
-                        param.setResult(null);
+                try {
+                    View v = (View) param.args[0];
+                    if (v != null) {
+                        if (getAdditionalInstanceField(v, "mTileTag") != null &&
+                                getAdditionalInstanceField(v, "mTileTag").equals("caffeine")) {
+                            handleLongClick();
+                            param.setResult(null);
+                        }
                     }
-                    if (mTileView != null && v == mTileView) {
-                        param.setResult(null);
-                    }
+                } catch (Throwable t) {
+                    log(TAG + "Error handling long click: " + t.getMessage());
                 }
             }
         });
@@ -186,7 +187,6 @@ public class CaffeineTile extends XposedMods {
 
         @Override
         public void onClick(View v) {
-            log(TAG + "Tile clicked");
             if (mWakeLock.isHeld() && (mLastClickTime != -1) &&
                     (SystemClock.elapsedRealtime() - mLastClickTime < 5000)) {
                 // cycle duration
