@@ -15,7 +15,7 @@
     <item android:id="@android:id/background"
           android:gravity="center_vertical|fill_horizontal">
         <shape android:shape="rectangle"
-               android:tint="@*android:color/text_color_secondary">
+               android:tint="@*android:color/accent_device_default">
             <corners android:radius="@*android:dimen/config_progressBarCornerRadius" />
             <size android:height="@*android:dimen/progress_bar_height_material" />
             <solid android:color="@*android:color/white_disabled_material" />
