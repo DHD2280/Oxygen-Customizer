@@ -17,6 +17,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.CaffeineTile;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
@@ -66,6 +67,9 @@ public class ModPacks {
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
+                    // Caffeine Tile
+                    modPacks.add(CaffeineTile.class);
+
                     // Theme Enabler
                     modPacks.add(ThemeEnabler.class);
 
