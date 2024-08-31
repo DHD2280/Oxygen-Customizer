@@ -1216,4 +1216,7 @@
     <string name="fix_lag_dialog_message">Your OOS Version could not be compatible with this fix.\nIf you want, you can still force the fix.</string>
     <string name="fix_lag_apply_anyway">Enable anyway</string>
 
+    <!-- Caffeine -->
+    <string name="caffeine">Caffeine</string>
+
 </resources>
