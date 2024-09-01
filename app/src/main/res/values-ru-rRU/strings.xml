@@ -51,6 +51,7 @@
     <string name="btn_back">Назад</string>
     <string name="btn_lets_go">Вперёд</string>
     <string name="btn_close">Закрыть</string>
+    <string name="btn_cancel">Отмена</string>
     <string name="btn_reboot_now">Перезагрузить сейчас</string>
     <string name="btn_reboot">Перезагрузить</string>
     <string name="btn_enable">Вкл</string>
@@ -62,6 +63,7 @@
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Уведомление</string>
+    <string name="app_kill_alert_body">Приложение будет закрыто. Вы можете открыть его снова, нажав на новый значок</string>
     <string name="app_kill_ok_btn">ОК</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Для применения настроек требуется перезагрузка системы</string>
@@ -80,6 +82,17 @@
     <string name="general_color_text2">Текст 2</string>
     <string name="sysui_restart_needed">Для применения требуется перезапуск SystemUI</string>
     <string name="one_time_reboot_needed">Перезагрузите устройство!</string>
+    <string name="gradient_left_right">Слева направо</string>
+    <string name="gradient_top_bottom">Сверху вниз</string>
+    <string name="gradient_tl_br">Сверху слева к низу справа</string>
+    <string name="gradient_tr_bl">Справа сверху вниз слева</string>
+    <string name="warning">Предупреждение</string>
+    <string name="custom_margins">Настраиваемые поля</string>
+    <string name="custom_padding">Настраиваемое заполнение</string>
+    <string name="left">Слева</string>
+    <string name="right">Справа</string>
+    <string name="top">Сверху</string>
+    <string name="bottom">Снизу</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
@@ -110,6 +123,8 @@
     <string name="general_on">Вкл</string>
     <string name="general_off">Откл</string>
     <string name="accent_color">Цвет акцента</string>
+    <string name="white_color">Белый</string>
+    <string name="black_color">Чёрный</string>
     <string name="custom_color">Пользовательский цвет</string>
     <string name="battery_info_button_title">Информация о батарее…</string>
     <!-- Statusbar Strings -->
@@ -146,6 +161,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Часы и дата</string>
     <string name="status_bar_clock_summary">Настройка часов и даты</string>
+    <string name="status_bar_clock_format_category">Параметры форматирования</string>
     <string name="status_bar_clock_seconds_title">Секунды на часах</string>
     <string name="status_bar_clock_seconds_summary">Отображение секунд рядом с часами в строке состояния</string>
     <string name="status_bar_clock_position_title">Стиль часов</string>
@@ -153,6 +169,7 @@
     <string name="status_bar_clock_position_left">Слева</string>
     <string name="status_bar_clock_position_center">Центр</string>
     <string name="status_bar_clock_position_hidden">Скрытый</string>
+    <string name="status_bar_clock_hide_category">Скрыть часы</string>
     <string name="status_bar_clock_auto_hide_title">Автоматическое скрытие</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">Скрыть часы, если лаунчер виден</string>
     <string name="status_bar_clock_auto_hide_summary">Скрывать часы через регулярные промежутки времени</string>
@@ -174,6 +191,8 @@
     <string name="status_bar_date_style_lowercase">Строчные буквы</string>
     <string name="status_bar_date_style_uppercase">Заглавные</string>
     <string name="status_bar_date_format_custom">Пользовательский формат Java</string>
+    <string name="string_formatter_manual_body">Помимо обычного текста, также доступны динамические переменные, такие как Дата и Температура:\n\n$G\&lt;format\&gt; : дата по григорианскому календарю, основанная на формате*\n$P\&lt;format\&gt; : персидская дата, на основе формата*\n$T\&lt;format\&gt;[interval] : Температура; \nформат может быть b (для батареи), c (для процессора), g (для графического процессора) и s (для скина) \nНаконец, существует НЕОБЯЗАТЕЛЬНОЕ количество интервалов обновления в секундах (по умолчанию: 60 секунд)\n\n*для документации по формату найдите «Формат даты Java»</string>
+    <string name="preview">Предпросмотр</string>
     <string name="clock_date_position">Положение даты</string>
     <string name="clock_date_right">Самое подходящее время</string>
     <string name="clock_date_left">Осталось совсем немного времени</string>
@@ -182,8 +201,13 @@
     <string name="status_bar_clock_color_title">Пользовательский цвет часов</string>
     <string name="status_bar_custom_clock_color_title">Пользовательский цвет часов</string>
     <string name="status_bar_custom_clock_color_summary">Цвет часов</string>
+    <string name="status_bar_clock_chip_category">Фишки часов</string>
     <string name="status_bar_clock_background_chip_title">Фоновый чип часов</string>
     <string name="status_bar_clock_background_chip_style_title">Фоновый стиль подложки</string>
+    <string name="status_bar_clock_advanced_formatting">Дополнительные (заменяет вышеуказанные настройки!)</string>
+    <string name="status_bar_clock_before_clock">Пользовательский текст перед часами</string>
+    <string name="status_bar_clock_after_clock">Пользовательский текст после часов</string>
+    <string name="status_bar_clock_smaller">Меньше (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">Заполнение строки состояния</string>
     <string name="statusbar_top_padding">Отступ сверху</string>
@@ -301,6 +325,7 @@
     <string name="battery_landscape_battery_o">Пейзаж батарея O</string>
     <string name="battery_circle">Круговая батарея</string>
     <string name="battery_dotted_circle">Батарея в виде пунктирного круга</string>
+    <string name="battery_filled_circle">Заполненный круг</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Скрыть значок Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Скрывайте значок Bluetooth, когда он не подключен.</string>
@@ -356,6 +381,9 @@
     <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
     <!-- QS Tile Radius -->
+    <string name="qs_tiles_custom_radius">Пользовательский радиус быстрых настроек</string>
+    <string name="qs_tile_custom_highlight">Пользовательский радиус выделенных плиток</string>
+    <string name="qs_tile_custom_radius">Пользовательский радиус плиток</string>
     <!-- Media Tile -->
     <string name="media_tile">Плитка медиа</string>
     <!-- QS Tiles animation -->
@@ -507,6 +535,9 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Заполненный</string>
     <string name="chip_outlined">Обводка</string>
+    <string name="chip_mixed">Смешанное</string>
+    <string name="chip_gradient_props">Параметры градиента</string>
+    <string name="chip_gradient_orientation">Ориентация градиента</string>
     <string name="chip_use_accent">Используйте акцентный цвет</string>
     <string name="chip_use_gradient">Используйте градиент</string>
     <string name="chip_color_accent">Используйте акцент</string>
@@ -543,6 +574,8 @@
     <string name="launcher_app_details_title">Откройте сведения о приложении</string>
     <string name="launcher_app_details_summary">Нажмите на значок приложения, чтобы открыть сведения о приложении в разделе \"Настройки\".</string>
     <string name="remove_home_pagination">Убрать нумерацию страниц</string>
+    <string name="force_themed_launcher_icons">Принудительные тематические значки приложений</string>
+    <string name="force_themed_launcher_icons_summary">БЕТА-ФУНКЦИЯ: принудительно использовать тематические значки для всех приложений.\nВновь включите тематические значки в панели запуска, чтобы они применялись.</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Панель навигации</string>
     <string name="gesture_navigation_title">Навигация с помощью жестов</string>
@@ -569,6 +602,9 @@
     <string name="gesture_override_back_hold_command_notification_panel">Откройте панель уведомлений</string>
     <string name="gesture_override_back_hold_command_screen_off">Экран выключен</string>
     <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">Таблетка навигационной панели</string>
+    <string name="gesture_nav_pill_width_title">Ширина по сравнению со стандартным размером</string>
+    <string name="colorpill">Панель жестов с акцентом темы</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
     <string name="power_button_category_title">Кнопка питания</string>
@@ -690,6 +726,7 @@
     <string name="aod_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
     <string name="aod_font_line_height_title">Высота линии</string>
     <!-- Aod Weather -->
+    <string name="aod_weather">Погода на AOD</string>
     <!-- Sound Mods -->
     <string name="misc_category">Другое</string>
     <!-- Pulse music visualizer -->
@@ -745,6 +782,10 @@
     <string name="pulse_vertical_mirror_title">Вертикальное отзеркаливание</string>
     <string name="pulse_vertical_mirror_summary">Создайте другой импульс и переверните его вертикально</string>
     <!-- Fluid Music -->
+    <string name="fluid_music">Fluid музыка</string>
+    <string name="fluid_music_summary">Настройка Fluid Music</string>
+    <string name="fluid_music_custom_list">Пользовательская Fluid Music</string>
+    <string name="fluid_music_custom_list_summary">Настройте приложения Fluid Music.\nЭтот список заменит системный список приложений Fluid Music.</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">Шаги регулировки громкости</string>
     <string name="volume_steps_summary">Контролируйте степень детализации каждого потока</string>
@@ -853,6 +894,8 @@
     <string name="advanced_reboot_fast_reboot">Быстрая перезагрузка</string>
     <string name="advanced_reboot_systemui">Перезапустите SystemUI</string>
     <!-- Own Settings -->
+    <string name="general_settings">Основное</string>
+    <string name="app_icon_themed">Принудительные тематические значки приложений</string>
     <string name="delete_all_title">Удалить все настройки</string>
     <string name="delete_all_summary">Сбрасывает все настройки приложения</string>
     <string name="export_title">Экспорт</string>
@@ -942,6 +985,7 @@
     <string name="omnijaws_service_last_update">Последнее обновление:</string>
     <string name="omnijaws_service_error_location">Нет доступного местоположения</string>
     <string name="omnijaws_service_error_network">Сеть не найдена</string>
+    <string name="omnijaws_service_error_permissions">Доступ к геолокации не предоставлен</string>
     <string name="weather_widget_desc">"Фактическая погода и прогноз на 4 дня"</string>
     <string name="theme_system">Следуйте системе</string>
     <string name="theme_dark">Темный</string>
@@ -951,6 +995,8 @@
     <string name="location_query_hint">Поиск нужного местоположения</string>
     <string name="weather_custom_margins">Настраиваемые поля</string>
     <string name="weather_margin_top">Верхнее поле</string>
+    <string name="weather_centered">Погода по центру</string>
+    <string name="weather_centered_summary">Переместить погоду в центр по горизонтали</string>
     <string name="weather_margin_left">Левое поле</string>
     <string name="weather_permission_dialog_title">Включить разрешения на определение местоположения</string>
     <string name="weather_permission_dialog_message">Для получения данных о погоде необходимы разрешения на определение местоположения. Нажмите «ОК», чтобы открыть «Настройки».</string>
@@ -996,6 +1042,16 @@
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
     <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
     <!-- Settings Icons -->
+    <string name="settings_icons_customized">Stock индивидуальный</string>
+    <string name="settings_bg_color">Цвет фона</string>
+    <string name="settings_bg_use_solid">Сплошной фон</string>
+    <string name="settings_bg_shape">Форма фона</string>
+    <string name="circle">Круг</string>
+    <string name="squircle">Круглый квадрат</string>
+    <string name="rounded_square">Скругленный квадрат</string>
+    <string name="teardrop">Капля</string>
+    <string name="rhombus">Ромб</string>
+    <string name="settings_icon_color">Цвет значка</string>
     <!-- Notification -->
     <string name="notification_styles">Стиль уведомлений</string>
     <string name="notification_styles_desc">Смена стиля уведомлений</string>
@@ -1012,8 +1068,68 @@
     <string name="toast_message">Всплывающее сообщение</string>
     <!-- Style List -->
     <string name="style_0">Нет</string>
+    <string name="style">Стиль %d</string>
     <!-- Dark Mode -->
+    <string name="menu_show_system_apps">Показать системные процессы</string>
+    <string name="dark_mode">Темный режим</string>
+    <string name="dark_mode_pref">Настроить темный режим</string>
+    <string name="custom_dark_mode_title">Пользовательский темный режим</string>
+    <string name="custom_dark_mode_summary">Разрешить настройку списка приложений в темном режиме.</string>
+    <string name="dark_mode_intensity">Интенсивность темного режима</string>
     <!-- Lockscreen Widgets -->
+    <string name="lockscreen_widgets_title">Виджеты на экране блокировки</string>
+    <string name="lockscreen_widgets_enabled_title">Включить виджеты экрана блокировки</string>
+    <string name="lockscreen_widgets_enabled_summary">Добавить виджеты на экран блокировки</string>
+    <string name="lockscreen_display_widgets_title">Виджет информации об устройстве</string>
+    <string name="lockscreen_display_widgets_summary">Показывать виджет информации об устройстве на экране блокировки</string>
+    <string name="linear_progress_color">Линейный цвет прогресса</string>
+    <string name="circular_progress_color">Круглый цвет прогресса</string>
+    <string name="text_color">Цвет текста</string>
+    <string name="custom_device_name">Пользовательское имя устройства</string>
+    <string name="custom_device_name_summary">Задайте собственное имя устройства.\nОставьте пустым, чтобы отключить.</string>
+    <string name="large_widgets_category_title">Большие виджеты</string>
+    <string name="main_custom_widgets1">Большой виджет 1</string>
+    <string name="main_custom_widgets2">Большой виджет 2</string>
+    <string name="mini_widgets_category_title">Мини виджеты</string>
+    <string name="custom_widgets1">Большой виджет 1</string>
+    <string name="custom_widgets2">Мини виджет 2</string>
+    <string name="custom_widgets3">Мини виджет 3</string>
+    <string name="custom_widgets4">Мини виджет 4</string>
+    <string name="widgets_custom_color">Настройки цвета</string>
+    <string name="widgets_custom_color_title">Настроить цвета виджета</string>
+    <string name="big_active">Активный цвет большого</string>
+    <string name="big_inactive">Неактивный цвет большого</string>
+    <string name="big_icon_active">Активный значок большого</string>
+    <string name="big_icon_inactive">Неактивный значок большого</string>
+    <string name="mini_active">Активный цвет мини</string>
+    <string name="mini_inactive">Неактивный цвет мини</string>
+    <string name="mini_icon_active">Активный значок мини</string>
+    <string name="mini_icon_inactive">Неактивный значок мини</string>
+    <string name="weather_settings">Настройки погоды</string>
+    <string name="widgets_scale">Масштаб виджетов</string>
     <!-- LS Widgets Actions -->
+    <string name="camera">Камера</string>
+    <string name="clock_timer">Часы/Таймер</string>
+    <string name="calculator">Калькулятор</string>
+    <string name="gallery">Галерея</string>
+    <string name="media">Медиа плеер</string>
+    <string name="torch">Фонарик</string>
+    <string name="controls_media_button_play">Играть</string>
+    <string name="weather">Погода</string>
+    <string name="data">Данные</string>
+    <string name="ringer">Звонок</string>
+    <string name="home_controls">Домашнее управление</string>
+    <string name="wallet">Кошелек</string>
+    <string name="hotspot">Точка доступа</string>
     <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">Исправление задержки приложения</string>
+    <string name="fix_lag_summary">Исправить ​​задержку при открытии приложения из последних</string>
+    <string name="fix_lag_force_all_apps_title">Принудительно все приложения</string>
+    <string name="fix_lag_force_all_apps_summary">Заставить все приложения использовать исправление.\nВнимание: это может вызвать странные проблемы, используйте на свой страх и риск!</string>
+    <string name="fix_lag_apps_summary">Выбрать, к какому приложению применить исправление</string>
+    <string name="fix_lag_apps_title">Выбрать приложения</string>
+    <string name="fix_lag_dialog_message">Ваша версия OOS несовместима с этим исправлением.\nПри желании вы все равно можете принудительно внести исправление.</string>
+    <string name="fix_lag_apply_anyway">Включить в любом случае</string>
+    <!-- Caffeine -->
+    <string name="caffeine">Запрет сна</string>
 </resources>

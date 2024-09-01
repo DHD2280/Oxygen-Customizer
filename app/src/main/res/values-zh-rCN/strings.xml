@@ -1126,4 +1126,5 @@
     <string name="fix_lag_apps_title">选择 APP</string>
     <string name="fix_lag_dialog_message">您的 OOS 版本无法与这个修复兼容。\n如果您想，您仍然可以强制修复。</string>
     <string name="fix_lag_apply_anyway">仍然启用</string>
+    <!-- Caffeine -->
 </resources>
