@@ -54,7 +54,7 @@
             android:paddingBottom="8dp"
             android:textColor="?android:attr/textColorSecondary" />
 
-        <it.dhd.oxygencustomizer.customprefs.LinkTextView
+        <it.dhd.oxygencustomizer.ui.preferences.LinkTextView
             android:id="@+id/settingslib_learn_more"
             style="@style/TextAppearance.Footer.Title.SettingsLib"
             android:layout_width="wrap_content"

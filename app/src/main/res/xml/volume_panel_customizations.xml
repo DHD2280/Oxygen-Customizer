@@ -5,7 +5,7 @@
         android:title="@string/volume_panel_custom_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_color_enabled"
             android:summaryOff="@string/general_off"
@@ -13,7 +13,7 @@
             android:title="@string/volume_panel_custom_enabled_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_link_primary"
             android:summaryOff="@string/general_off"
@@ -21,13 +21,13 @@
             android:title="@string/volume_panel_seekbar_link_primary"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="volume_panel_seekbar_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_bg_color_enabled"
             android:summaryOff="@string/general_off"
@@ -35,7 +35,7 @@
             android:title="@string/volume_panel_bg_color"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="-7829368"
             android:key="volume_panel_seekbar_bg_color"
             android:title="@string/custom_color"

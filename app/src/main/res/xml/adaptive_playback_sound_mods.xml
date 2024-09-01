@@ -2,16 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="adaptive_playback_header"
         app:lottie_rawRes="@raw/lottie_adaptive_playback" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:key="sound_adaptive_playback_main_switch"
         android:title="@string/adaptive_playback_enabled"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.TopIntroPreference
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
         android:key="gesture_adaptive_playback_intro_text"
         android:title="@string/adaptive_playback_intro_text" />
 

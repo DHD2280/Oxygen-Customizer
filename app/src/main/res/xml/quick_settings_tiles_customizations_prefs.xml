@@ -4,40 +4,40 @@
     <PreferenceCategory
         android:title="@string/quick_settings_tiles_customize_category_title"
         app:iconSpaceReserved="false">
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_active_color_enabled"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/qs_tile_active_color_title"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="qs_tile_active_color"
             android:title="@string/quick_settings_tiles_customize_active_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_inactive_color_enabled"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/qs_tile_inactive_color_title"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="qs_tile_inactive_color"
             android:title="@string/quick_settings_tiles_customize_inactive_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_disabled_color_enabled"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/qs_tile_disabled_color_title"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="qs_tile_disabled_color"
             android:title="@string/quick_settings_tiles_customize_disabled_color"
@@ -50,7 +50,7 @@
         app:iconSpaceReserved="false">
 
         <!-- Highlight Tile Radius -->
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="off"
             android:key="qs_tile_highlight_custom_radius_enabled"
             android:summaryOff="@string/general_off"
@@ -58,7 +58,7 @@
             android:title="@string/qs_tile_custom_highlight"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_highlight_custom_radius_top_left"
             android:title="@string/chip_round_corners_top_sx_radius"
             app:defaultValue="0"
@@ -67,7 +67,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_highlight_custom_radius_top_right"
             android:title="@string/chip_round_corners_top_dx_radius"
             app:defaultValue="0"
@@ -76,7 +76,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_highlight_custom_radius_bottom_left"
             android:title="@string/chip_round_corners_bottom_sx_radius"
             app:defaultValue="0"
@@ -85,7 +85,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_highlight_custom_radius_bottom_right"
             android:title="@string/chip_round_corners_bottom_dx_radius"
             app:defaultValue="0"
@@ -95,7 +95,7 @@
             app:valueFormat="dp" />
 
         <!-- Tile Radius -->
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="off"
             android:key="qs_tile_custom_radius_enabled"
             android:summaryOff="@string/general_off"
@@ -103,7 +103,7 @@
             android:title="@string/qs_tile_custom_radius"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_custom_radius_top_left"
             android:title="@string/chip_round_corners_top_sx_radius"
             app:defaultValue="0"
@@ -112,7 +112,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_custom_radius_top_right"
             android:title="@string/chip_round_corners_top_dx_radius"
             app:defaultValue="0"
@@ -121,7 +121,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_custom_radius_bottom_left"
             android:title="@string/chip_round_corners_bottom_sx_radius"
             app:defaultValue="0"
@@ -130,7 +130,7 @@
             app:tickInterval="1"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_custom_radius_bottom_right"
             android:title="@string/chip_round_corners_bottom_dx_radius"
             app:defaultValue="0"
@@ -146,7 +146,7 @@
         android:title="@string/media_tile"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_media_show_album_art"
             android:summary="@string/media_art_title_qs_summary"
@@ -162,7 +162,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_media_blur_amount"
             android:title="@string/albumart_blur_title"
             app:defaultValue="30"
@@ -171,13 +171,13 @@
             app:tickInterval="5"
             app:valueFormat="%" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="qs_media_art_tint_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_media_art_tint_amount"
             android:title="@string/albumart_tint_intensity_title"
             app:defaultValue="30"
@@ -201,7 +201,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_tile_animation_duration"
             android:max="5"
             android:min="1"
@@ -226,7 +226,7 @@
         android:title="@string/qs_transitions_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_transitions_title_switch"
             android:summaryOff="@string/general_off"
@@ -248,7 +248,7 @@
         android:title="@string/quick_settings_tiles_customize_labels"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_hide_labels"
             android:summaryOff="@string/general_off"
@@ -256,7 +256,7 @@
             android:title="@string/quick_settings_tiles_customize_hide_labels"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_tile_label_enabled"
             android:summaryOff="@string/general_off"
@@ -264,7 +264,7 @@
             android:title="@string/quick_settings_tiles_customize_labels_color_switch"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="qs_tile_label"
             android:title="@string/quick_settings_tiles_customize_labels_color"
@@ -278,7 +278,7 @@
         android:title="@string/brightness_slider"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="customize_brightness_slider"
             android:summaryOff="@string/general_off"
@@ -295,14 +295,14 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="brightness_slider_color"
             android:title="@string/custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="brightness_slider_background_color_enabled"
             android:summaryOff="@string/general_off"
@@ -310,7 +310,7 @@
             android:title="@string/brightness_slider_background_color_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="brightness_slider_background_color"
             android:title="@string/custom_color"

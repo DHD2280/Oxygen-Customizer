@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
-import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResultListener;
+import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
+import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.databinding.ActivityMainBinding;
 import it.dhd.oxygencustomizer.ui.base.BaseActivity;
 import it.dhd.oxygencustomizer.ui.events.ColorDismissedEvent;

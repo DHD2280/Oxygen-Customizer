@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="qs_header_image_enabled"
         android:summary="@string/qs_header_image_enabled_summary"
@@ -35,7 +35,7 @@
             android:targetClass="it.dhd.oxygencustomizer.ui.activity.BrowseHeaderActivity" />
     </Preference> -->
 
-    <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+    <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
         android:defaultValue="-1"
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image"
@@ -61,7 +61,7 @@
         app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_tint_intensity"
         android:title="@string/qs_header_image_tint_intensity_title"
@@ -71,14 +71,14 @@
         app:tickInterval="5"
         app:valueFormat="%" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
         android:defaultValue="0xffffffff"
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_tint_custom"
         android:title="@string/qs_header_image_tint_custom_title"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_alpha"
         android:title="@string/qs_header_image_alpha_title"
@@ -87,7 +87,7 @@
         app:minVal="0"
         app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_bottom_fade"
         android:title="@string/qs_header_image_bottom_fade_title"
@@ -96,7 +96,7 @@
         app:minVal="0"
         app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_height_portrait"
         android:title="@string/qs_header_image_height_portrait_title"
@@ -105,7 +105,7 @@
         app:minVal="50"
         app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_landscape_enabled"
@@ -113,7 +113,7 @@
         android:title="@string/qs_header_image_landscape_enabled_title"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_padding_side"
         android:title="@string/qs_header_image_padding_side_title"
@@ -122,7 +122,7 @@
         app:minVal="-100"
         app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:dependency="qs_header_image_enabled"
         android:key="qs_header_image_padding_top"
         android:title="@string/qs_header_image_padding_top_title"
@@ -131,7 +131,7 @@
         app:minVal="-100"
         app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="qs_header_image_zoom_to_fit"
         android:summary="@string/qs_header_image_zoomtofit_summary"

@@ -38,10 +38,10 @@ import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
-import it.dhd.oxygencustomizer.customprefs.RecyclerPreference;
-import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
+import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.RecyclerPreference;
+import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="lockscreen_custom_clock_switch"
         android:summaryOff="@string/general_off"
@@ -10,7 +10,7 @@
         android:title="@string/lockscreen_clock_switch"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.RecyclerPreference
+    <it.dhd.oxygencustomizer.ui.preferences.RecyclerPreference
         android:key="lockscreen_clock_custom"
         android:summary="@string/lockscreen_clock_custom_summary"
         android:title="@string/lockscreen_clock_custom"
@@ -22,7 +22,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_custom_font"
             android:summaryOff="@string/general_off"
@@ -43,44 +43,44 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="lockscreen_custom_color_switch"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/lockscreen_clock_custom_color_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xff006781"
             android:key="lockscreen_clock_color_code_accent1"
             android:title="@string/general_color_accent1"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xff006781"
             android:key="lockscreen_clock_color_code_accent2"
             android:title="@string/general_color_accent2"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xff006781"
             android:key="lockscreen_clock_color_code_accent3"
             android:title="@string/general_color_accent3"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="lockscreen_clock_color_code_text1"
             android:title="@string/general_color_text1"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xff000000"
             android:key="lockscreen_clock_color_code_text2"
             android:title="@string/general_color_text2"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_clock_line_height"
             android:title="@string/lockscreen_font_line_height_title"
             app:defaultValue="0"
@@ -88,7 +88,7 @@
             app:minVal="-120"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_text_scaling"
             android:title="@string/lockscreen_clock_text_scaling"
             app:decimalFormat="#.#"
@@ -100,7 +100,7 @@
             app:tickInterval=".1"
             app:valueFormat="%" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="lockscreen_clock_custom_user_switch"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -114,7 +114,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="lockscreen_clock_custom_user_image"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -127,7 +127,7 @@
             android:title="@string/lockscreen_clock_custom_user_image_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="lockscreen_clock_custom_image_switch"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -148,7 +148,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_top_margin"
             android:title="@string/lockscreen_clock_top_margin_title"
             app:defaultValue="0"
@@ -156,7 +156,7 @@
             app:minVal="0"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_bottom_margin"
             android:title="@string/lockscreen_clock_bottom_margin_title"
             app:defaultValue="40"
@@ -179,7 +179,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:key="lockscreen_stock_clock_red_one_color"
             android:title="@string/lockscreen_stock_clock_red_one_color"

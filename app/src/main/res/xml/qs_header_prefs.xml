@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
     <PreferenceCategory
         android:title="@string/qs_header_image_title"
         app:iconSpaceReserved="false"
@@ -33,7 +33,7 @@
         android:title="@string/qs_header_misc"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             app:iconSpaceReserved="false"
             android:title="@string/qs_header_system_icons_chip"
             android:key="qs_header_system_icons_chip_switch"
@@ -41,7 +41,7 @@
             android:summaryOff="@string/general_off"
             android:defaultValue="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.BackgroundChipPreference
+        <it.dhd.oxygencustomizer.ui.preferences.BackgroundChipPreference
             app:iconSpaceReserved="false"
             android:title="@string/qs_header_system_icons_chip_style"
             android:key="qs_header_system_icons_chip" />

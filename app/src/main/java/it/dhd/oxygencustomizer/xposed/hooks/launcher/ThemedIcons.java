@@ -13,6 +13,9 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Drawable;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -48,14 +51,16 @@ public class ThemedIcons extends XposedMods {
                 }
             });
 
-            /*Class<?> UxCustomAdaptiveIconDrawable = findClass("com.oplus.uxicon.ui.ui.UxCustomAdaptiveIconDrawable", lpparam.classLoader);
+            Class<?> UxCustomAdaptiveIconDrawable = findClass("com.oplus.uxicon.ui.ui.UxCustomAdaptiveIconDrawable", lpparam.classLoader);
             hookAllConstructors(UxCustomAdaptiveIconDrawable, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    Object icon = param.args[2];
+                    for (int i = 0;i< param.args.length; i++) {
+                        log("UxCustomAdaptiveIconDrawable: " + i + " " + (param.args[i] != null));
+                    }
                     //log("UxCustomAdaptiveIconDrawable: " + callMethod(icon, "toString"));
                 }
-            });*/
+            });
 
             hookAllMethods(AdaptiveIconDrawable.class, "getMonochrome", new XC_MethodHook() {
                 @Override
@@ -68,7 +73,6 @@ public class ThemedIcons extends XposedMods {
                             {
                                 return;
                             }
-
 
                             GoogleMonochromeIconFactory mono = (GoogleMonochromeIconFactory) getAdditionalInstanceField(param.thisObject, "mMonoFactoryOC");
                             if(mono == null)

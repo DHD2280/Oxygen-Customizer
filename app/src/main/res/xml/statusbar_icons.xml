@@ -2,21 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="hide_bluetooth_when_disconnected"
         android:summary="@string/statusbar_icons_bluetooth_hide_summary"
         android:title="@string/statusbar_icons_bluetooth_hide"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="hide_inout_wifi"
         android:summary="@string/statusbar_icons_inout_wifi_hide_summary"
         android:title="@string/statusbar_icons_inout_wifi_hide_title"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="hide_inout_mobile"
         android:summary="@string/statusbar_icons_inout_mobile_hide_summary"

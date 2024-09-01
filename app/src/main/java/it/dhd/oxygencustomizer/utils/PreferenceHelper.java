@@ -150,7 +150,7 @@ import java.util.Collections;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class PreferenceHelper {

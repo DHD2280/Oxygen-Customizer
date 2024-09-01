@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/misc_illustration" />
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="misc_remove_rotate_floating"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
         android:title="@string/misc_remove_rotate_floating_title"
         app:iconSpaceReserved="false" />
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="remove_usb_dialog"
         android:summary="@string/remove_usb_dialog_summary"
@@ -23,20 +23,20 @@
         android:title="@string/misc_power_menu"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="power_menu_hide_sos"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/misc_power_menu_hide_sos"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="show_advanced_reboot"
             android:summary="@string/show_advanced_reboot_summary"
             android:title="@string/show_advanced_reboot_title"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="advanced_reboot_auth"
             android:summary="@string/use_auth_for_advanced_reboot_summary"
@@ -49,7 +49,7 @@
         android:title="@string/app_name"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="true"
             android:key="show_entry_settings"
             android:summaryOff="@string/general_off"
@@ -75,14 +75,14 @@
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="fix_lag_switch"
             android:summary="@string/fix_lag_summary"
             android:title="@string/fix_lag_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="fix_lag_force_all_apps"
             android:summary="@string/fix_lag_force_all_apps_summary"

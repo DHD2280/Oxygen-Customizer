@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sound_illustration"
         app:lottie_rawRes="@raw/sound_illustration" />
 
@@ -56,13 +56,13 @@
             android:title="@string/volume_panel_custom_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volume_disable_volume_warning"
             android:title="@string/volume_disable_volume_warning"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="volume_dialog_timeout"
             android:title="@string/volume_dialog_timeout_title"
             app:defaultValue="3"

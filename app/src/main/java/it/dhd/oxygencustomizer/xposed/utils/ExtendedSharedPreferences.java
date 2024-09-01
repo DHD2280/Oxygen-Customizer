@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import it.dhd.oxygencustomizer.customprefs.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
 
 public class ExtendedSharedPreferences implements SharedPreferences {
     private final SharedPreferences prefs;

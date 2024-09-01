@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/lockscreen_illustration" />
 
@@ -36,7 +36,7 @@
         android:title="@string/lockscreen_fingerprint"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_fp_remove_icon"
             android:summaryOff="@string/general_off"
@@ -44,7 +44,7 @@
             android:title="@string/lockscreen_fp_remove_icon"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_fp_custom_icon"
             android:summaryOff="@string/general_off"
@@ -52,7 +52,7 @@
             android:title="@string/lockscreen_fp_custom_icon"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+        <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
             android:defaultValue="0"
             android:key="lockscreen_fp_icon_custom"
             android:title="@string/lockscreen_fp_icon_title"
@@ -64,7 +64,7 @@
             android:title="@string/lockscreen_fp_icon_picker_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_fp_icon_scaling"
             android:title="@string/lockscreen_fp_icon_scale"
             app:decimalFormat="#.#"
@@ -82,7 +82,7 @@
         android:title="@string/lockscreen_affordance"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_affordance_remove_left"
             android:summaryOff="@string/general_off"
@@ -90,7 +90,7 @@
             android:title="@string/lockscreen_affordance_remove_left"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_affordance_remove_right"
             android:summaryOff="@string/general_off"
@@ -105,7 +105,7 @@
         android:title="@string/depth_wallpaper_category"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="DWallpaperEnabled"
             android:summary="@string/depth_wallpaper_summary"
@@ -113,7 +113,7 @@
             app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="DWOpacity"
             android:title="@string/depth_wallpaper_opacity_title"
             app:defaultValue="192"
@@ -131,7 +131,7 @@
         android:title="@string/media_art_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_album_art"
             android:summary="@string/media_art_summary"
@@ -147,7 +147,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="lockscreen_media_blur"
             android:title="@string/albumart_blur_title"
             app:defaultValue="30"
@@ -163,7 +163,7 @@
         android:title="@string/misc"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_hide_lock_icon"
             android:summaryOff="@string/general_off"
@@ -171,7 +171,7 @@
             android:title="@string/lockscreen_hide_lock_icon"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_hide_carrier"
             android:summary="@string/lockscreen_hide_carrier_summary"
@@ -182,26 +182,26 @@
             android:summary="@string/lockscreen_carrier_replacement_summary"
             android:title="@string/lockscreen_carrier_replacement"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_hide_capsule"
             android:summary="@string/lockscreen_hide_capsule_summary"
             android:title="@string/lockscreen_hide_capsule"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_hide_statusbar"
             android:summary="@string/lockscreen_hide_statusbar_summary"
             android:title="@string/lockscreen_hide_statusbar"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="disable_power_on_lockscreen"
             android:summary="@string/lockscreen_hide_power_menu_summary"
             android:title="@string/lockscreen_hide_power_menu"
             app:iconSpaceReserved="false" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="hide_sos_lockscreen"
             android:summary="@string/lockscreen_remove_sos_summary"

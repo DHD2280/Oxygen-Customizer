@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs;
+package it.dhd.oxygencustomizer.ui.preferences;
 
 import android.content.Context;
 import android.util.AttributeSet;

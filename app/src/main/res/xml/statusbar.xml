@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_cacheComposition="false"
         app:lottie_rawRes="@raw/sb_illustration" />
@@ -22,7 +22,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="status_bar_clock_size"
             android:title="@string/clock_font_size_title"
             app:defaultValue="12"
@@ -38,7 +38,7 @@
             app:iconSpaceReserved="false" />
 
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="status_bar_custom_clock_color"
             android:summaryOff="@string/general_off"
@@ -46,7 +46,7 @@
             android:title="@string/status_bar_custom_clock_color_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
             android:defaultValue="0xffffffff"
             android:dependency="status_bar_custom_clock_color"
             android:key="status_bar_clock_color"
@@ -67,7 +67,7 @@
             android:title="@string/statusbar_notifications"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="double_tap_sleep_statusbar"
             android:summaryOff="@string/general_off"
@@ -75,7 +75,7 @@
             android:title="@string/statusbar_double_tap_sleep"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="brightness_control"
             android:summary="@string/status_bar_toggle_brightness_summary"
@@ -107,7 +107,7 @@
         android:title="@string/statusbar_padding"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_padding_enabled"
             android:summaryOff="@string/general_off"
@@ -115,7 +115,7 @@
             android:title="@string/statusbar_padding"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="statusbar_top_padding"
             android:title="@string/statusbar_top_padding"
             app:defaultValue="0"
@@ -125,7 +125,7 @@
             app:updatesContinuously="true"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="statusbarPaddings"
             android:summary="@string/sb_padding_summary"
             android:title="@string/sb_padding_title"

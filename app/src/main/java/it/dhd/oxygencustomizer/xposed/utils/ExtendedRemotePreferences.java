@@ -6,7 +6,7 @@ import com.crossbowffs.remotepreferences.RemotePreferences;
 
 import java.util.List;
 
-import it.dhd.oxygencustomizer.customprefs.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
 
 public class ExtendedRemotePreferences extends RemotePreferences {
     public ExtendedRemotePreferences(Context context, String authority, String prefFileName) {

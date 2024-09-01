@@ -33,8 +33,8 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
@@ -75,7 +75,6 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         if (valueIndex == -1) {
             // no longer found
             settingHeaderPackage = DEFAULT_WEATHER_ICON_PACKAGE;
-            //WeatherConfig.setIconPack(getContext(), settingHeaderPackage);
             valueIndex = mWeatherIconPack.findIndexOfValue(settingHeaderPackage);
         }
         mWeatherIconPack.setValueIndex(valueIndex >= 0 ? valueIndex : 0);

@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs.preferencesearch;
+package it.dhd.oxygencustomizer.ui.preferences.preferencesearch;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
