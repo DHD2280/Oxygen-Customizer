@@ -1118,4 +1118,5 @@
     <string name="fix_lag_apps_title">Seleziona App</string>
     <string name="fix_lag_dialog_message">La tua versione OOS potrebbe non essere compatibile con questa correzione.\nSe vuoi, puoi comunque forzare la correzione.</string>
     <string name="fix_lag_apply_anyway">Abilita comunque</string>
+    <!-- Caffeine -->
 </resources>

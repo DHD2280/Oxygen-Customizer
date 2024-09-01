@@ -1126,4 +1126,5 @@
     <string name="fix_lag_apps_title">Alkalmazás-választás</string>
     <string name="fix_lag_dialog_message">Az Ön OxygenOS-verziója nem kompatibilis ezzel a javítással.\nHa akarja, továbbra is kényszerítheti a javítást.</string>
     <string name="fix_lag_apply_anyway">Mindenképp fusson le</string>
+    <!-- Caffeine -->
 </resources>
