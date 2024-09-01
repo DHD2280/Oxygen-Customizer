@@ -33,7 +33,7 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 
 > [!CAUTION]
 > 
-> This app requires Magisk or KernelSU for root access and Xposed framework. Any alternative methods won't work.
+> This app requires Magisk, KernelSU & APatch for root access and XPosed/LSPosed framework. Any alternative methods won't work.
 
 # 🛠 Requirements
 
