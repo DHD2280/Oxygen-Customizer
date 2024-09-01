@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs.preferencesearch;
+package it.dhd.oxygencustomizer.ui.preferences.preferencesearch;
 
 class HistoryItem extends ListItem {
     static final int TYPE = 1;

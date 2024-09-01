@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs;
+package it.dhd.oxygencustomizer.ui.preferences;
 
 import static it.dhd.oxygencustomizer.utils.Constants.getBottomDxR;
 import static it.dhd.oxygencustomizer.utils.Constants.getBottomSxR;

@@ -43,7 +43,7 @@
         app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="weather_custom_location_switch"
         android:title="@string/custom_location_title"
@@ -55,7 +55,7 @@
         android:title="@string/weather_custom_location_title"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.ListWithPopUpPreference
+    <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
         android:key="weather_icon_pack"
         android:title="@string/weather_icon_pack_title"
         app:iconSpaceReserved="false" />

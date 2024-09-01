@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_tiles_customize"
         android:summaryOff="@string/general_off"
@@ -11,7 +11,7 @@
         android:title="@string/quick_settings_tiles_main"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.customprefs.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
         android:key="quick_settings_quick_tiles"
         android:title="@string/quick_settings_tiles_qqs"
         app:defaultValue="5"
@@ -26,7 +26,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="quick_settings_tiles_rows"
             android:title="@string/quick_settings_tiles_horizontal_rows"
             app:defaultValue="3"
@@ -34,7 +34,7 @@
             app:maxVal="6"
             app:minVal="1" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="quick_settings_tiles_horizontal_columns"
             android:title="@string/quick_settings_tiles_horizontal_columns"
             app:defaultValue="4"
@@ -51,7 +51,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="quick_settings_tiles_vertical_columns"
             android:title="@string/quick_settings_tiles_vertical_columns"
             app:defaultValue="4"
@@ -62,7 +62,7 @@
 
     </PreferenceCategory>
 
-    <!-- <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+    <!-- <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_disable_lockscreen"
         android:title="@string/quick_settings_tiles_disable_qs_title"

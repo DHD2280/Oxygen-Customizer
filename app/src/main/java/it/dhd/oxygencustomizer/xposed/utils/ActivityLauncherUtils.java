@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
+import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -48,13 +50,25 @@ public class ActivityLauncherUtils {
         return musicApp != null ? musicApp.activityInfo.packageName : "";
     }
 
-    private void launchAppIfAvailable(Intent launchIntent, @StringRes int appTypeResId) {
+    public void launchAppIfAvailable(Intent launchIntent, @StringRes int appTypeResId, boolean fromQs) {
         final List<ResolveInfo> apps = mPackageManager.queryIntentActivities(launchIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (mActivityStarter == null) {
+            log("ActivityStarter is null");
+            return;
+        }
         if (!apps.isEmpty()) {
             callMethod(mActivityStarter, "startActivity", launchIntent, false);
         } else {
             if (appTypeResId != 0) showNoDefaultAppFoundToast(appTypeResId);
         }
+    }
+
+    public void launchApp(Intent launchIntent) {
+        if (mActivityStarter == null) {
+            log("ActivityStarter is null");
+            return;
+        }
+        callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", launchIntent, 0 /* dismissShade */);
     }
 
     public void launchCamera() {
@@ -64,7 +78,7 @@ public class ActivityLauncherUtils {
             callMethod(mCameraGestureHelper, "launchCamera", 3);
         } else {
             final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
-            launchAppIfAvailable(launchIntent, R.string.camera);
+            launchAppIfAvailable(launchIntent, R.string.camera, false);
         }
     }
 
@@ -72,7 +86,7 @@ public class ActivityLauncherUtils {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.SHOW_ALARMS");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(intent, R.string.clock_timer);
+        launchAppIfAvailable(intent, R.string.clock_timer, false);
     }
 
     public void launchCalculator() {
@@ -101,13 +115,13 @@ public class ActivityLauncherUtils {
         }
 
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(launchIntent, R.string.calculator);
+        launchAppIfAvailable(launchIntent, R.string.calculator, false);
     }
 
     public void launchWallet() {
         Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.google.android.apps.walletnfcrel");
         if (launchIntent != null) launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(launchIntent, R.string.wallet);
+        launchAppIfAvailable(launchIntent, R.string.wallet, false);
     }
 
     public void launchSettingsComponent(String className) {
@@ -119,7 +133,7 @@ public class ActivityLauncherUtils {
 
     public void launchAudioSettings() {
         final Intent launchIntent = new Intent(android.provider.Settings.ACTION_SOUND_SETTINGS);
-        launchAppIfAvailable(launchIntent, 0);
+        launchAppIfAvailable(launchIntent, 0, false);
     }
 
     public void startSettingsActivity() {
@@ -130,19 +144,19 @@ public class ActivityLauncherUtils {
     public void launchWifiSettings() {
         final Intent launchIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(launchIntent, 0);
+        launchAppIfAvailable(launchIntent, 0, false);
     }
 
     public void launchInternetSettings() {
         final Intent launchIntent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(launchIntent, 0);
+        launchAppIfAvailable(launchIntent, 0, false);
     }
 
     public void launchBluetoothSettings() {
         final Intent launchIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(launchIntent, 0);
+        launchAppIfAvailable(launchIntent, 0, false);
     }
 
     public void launchHotspotSettings() {

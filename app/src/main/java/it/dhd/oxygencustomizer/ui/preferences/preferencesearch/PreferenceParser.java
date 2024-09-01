@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs.preferencesearch;
+package it.dhd.oxygencustomizer.ui.preferences.preferencesearch;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -20,7 +20,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 class PreferenceParser {
     private static final int MAX_RESULTS = 10;
     private static final String NS_ANDROID = "http://schemas.android.com/apk/res/android";
-    private static final String NS_SEARCH = "http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch";
+    private static final String NS_SEARCH = "http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch";
     private static final List<String> BLACKLIST = Arrays.asList(SearchPreference.class.getName(), "PreferenceCategory");
     private static final List<String> CONTAINERS = Arrays.asList("PreferenceCategory", "PreferenceScreen");
     private final Context mContext;

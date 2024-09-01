@@ -86,6 +86,12 @@
     <string name="gradient_tl_br">Da in alto a sinistra a in basso a destra</string>
     <string name="gradient_tr_bl">In alto a destra in basso a sinistra</string>
     <string name="warning">Attenzione</string>
+    <string name="custom_margins">Margine Personalizzato</string>
+    <string name="custom_padding">Padding Personalizzato</string>
+    <string name="left">Sinistra</string>
+    <string name="right">Destra</string>
+    <string name="top">In alto</string>
+    <string name="bottom">In basso</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -608,6 +614,7 @@
     <string name="volbtn_music_controls_title">Controlli musicali con pulsanti volume</string>
     <string name="volbtn_music_controls_summary">Controlla la riproduzione musicale con i pulsanti del volume</string>
     <!-- Lockscreen Strings -->
+    <string name="lockscreen_title">Schermata di Blocco</string>
     <string name="lockscreen_hide_carrier">Nascondi Operatore</string>
     <string name="lockscreen_hide_carrier_summary">Nascondi nome operatore nella schermata di blocco</string>
     <string name="lockscreen_carrier_replacement">Sostituzione nome operatore LS</string>
@@ -1093,6 +1100,7 @@
     <string name="mini_icon_active">Colore attivo icona Mini Widget</string>
     <string name="mini_icon_inactive">Colore inattivo icona Mini Widget</string>
     <string name="weather_settings">Impostazioni Meteo</string>
+    <string name="widgets_scale">Scala Widget</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fotocamera</string>
     <string name="clock_timer">Orologio/Timer</string>
@@ -1118,4 +1126,6 @@
     <string name="fix_lag_apps_title">Seleziona App</string>
     <string name="fix_lag_dialog_message">La tua versione OOS potrebbe non essere compatibile con questa correzione.\nSe vuoi, puoi comunque forzare la correzione.</string>
     <string name="fix_lag_apply_anyway">Abilita comunque</string>
+    <!-- Caffeine -->
+    <string name="caffeine">Caffeine</string>
 </resources>

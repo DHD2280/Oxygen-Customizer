@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs;
+package it.dhd.oxygencustomizer.ui.preferences;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.dialogadapter.ListPreferenceAdapter;
+import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 
 public class ListWithPopUpPreference extends ListPreference {
 

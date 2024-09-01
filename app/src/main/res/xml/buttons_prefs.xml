@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_cacheComposition="false"
         app:lottie_rawRes="@raw/buttons_illustration" />
@@ -13,35 +13,35 @@
         android:title="@string/volume_buttons_category_title"
         app:iconSpaceReserved="false">
 
-        <!-- <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <!-- <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="volume_wake_screen"
             app:iconSpaceReserved="false"
             android:title="@string/button_wake_title"
             android:summary="@string/button_wake_summary"
             android:defaultValue="false" /> -->
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_music_controls"
             android:summary="@string/volbtn_music_controls_summary"
             android:title="@string/volbtn_music_controls_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_torch"
             android:summary="@string/torch_long_press_volbtn_torch_desc"
             android:title="@string/torch_long_press_volbtn_torch_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="volbtn_torch_enable_timeout"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/torch_long_press_volbtn_torch_enable_timeout_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="volbtn_torch_timeout"
             android:title="@string/torch_long_press_volbtn_torch_timeout_title"
             app:defaultValue="5"
@@ -50,7 +50,7 @@
             app:tickInterval="5"
             app:valueFormat="s" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_torch_use_proximity"
             android:summaryOff="@string/general_off"

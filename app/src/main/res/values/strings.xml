@@ -373,6 +373,7 @@
     <string name="quick_settings_tiles_title">Quick Settings Tiles</string>
     <string name="quick_settings_tiles_number">Quick settings tile count settings</string>
     <string name="quick_settings_tiles_main">Customize Quick Settings Tiles</string>
+    <string name="quick_settings_widgets">Quick Settings Widgets</string>
     <string name="qs_transparency">QS Transparency &amp; Blur</string>
     <string name="qs_transparency_title">Customize QS Transparency</string>
     <string name="qs_transparency_value">QS Transparency</string>

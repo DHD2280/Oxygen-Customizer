@@ -133,7 +133,7 @@ public class QsTileCustomization extends XposedMods {
 
     // QS Media Tile
     private View mOplusQsMediaView = null;
-    private Drawable mOplusQsMediaDefaultBackground = null;
+    public static Drawable mOplusQsMediaDefaultBackground = null;
     private Drawable mOplusQsMediaDrawable = null;
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
@@ -227,7 +227,6 @@ public class QsTileCustomization extends XposedMods {
                 else updateMediaQs();
             }
         }
-
 
     }
 
@@ -497,7 +496,7 @@ public class QsTileCustomization extends XposedMods {
                     hookAllMethods(VPagerListener.getClass(),
                             "onPageScrolled", new XC_MethodHook() {
                                 @Override
-                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                                     if (!mTrasformationsEnabled) return;
                                     final int childCount = (int) callMethod(vPager, "getChildCount");
                                     for (int i = 0; i < childCount; i++) {
@@ -587,7 +586,7 @@ public class QsTileCustomization extends XposedMods {
             case 4 -> finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
             case 5 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
                     mMediaQsTintColor, mMediaQsTintAmount);
-        };
+        }
         return finalArt;
     }
 

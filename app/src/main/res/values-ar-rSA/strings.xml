@@ -1126,4 +1126,5 @@
     <string name="fix_lag_apps_title">حدد التطبيقات</string>
     <string name="fix_lag_dialog_message">قد لا يكون إصدار OOS الخاص بك متوافقًا مع هذا الإصلاح.\nإذا كنت ترغب، يمكنك فرض الإصلاح على أي حال.</string>
     <string name="fix_lag_apply_anyway">تفعيل على أي حال</string>
+    <!-- Caffeine -->
 </resources>

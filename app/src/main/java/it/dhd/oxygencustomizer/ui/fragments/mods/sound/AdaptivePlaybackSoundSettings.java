@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.preference.PreferenceCategory;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.SelectorWithWidgetPreference;
+import it.dhd.oxygencustomizer.ui.preferences.SelectorWithWidgetPreference;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 
 public class AdaptivePlaybackSoundSettings extends ControlledPreferenceFragmentCompat implements SelectorWithWidgetPreference.OnClickListener {

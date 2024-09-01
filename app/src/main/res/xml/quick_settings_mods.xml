@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.customprefs.preferencesearch">
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.customprefs.IllustrationPreference
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_cacheComposition="false"
         app:lottie_rawRes="@raw/lottie_row_quick_setting_style" />
@@ -32,7 +32,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_transparency_switch"
             android:summaryOff="@string/general_off"
@@ -40,7 +40,7 @@
             android:title="@string/qs_transparency_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_transparency_value"
             android:title="@string/qs_transparency_value"
             app:defaultValue="40"
@@ -50,7 +50,7 @@
             app:tickInterval="1"
             app:valueFormat="%" />
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_transparency_blur_switch"
             android:summaryOff="@string/general_off"
@@ -58,7 +58,7 @@
             android:title="@string/qs_transparency_blur_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="qs_transparency_blur_radius"
             android:title="@string/qs_blur_intentisy"
             app:defaultValue="40"
@@ -76,7 +76,7 @@
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="quick_pulldown"
             android:summaryOff="@string/general_off"
@@ -84,7 +84,7 @@
             android:title="@string/quick_pulldown"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.customprefs.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:dependency="quick_pulldown"
             android:key="quick_pulldown_length"
             android:title="@string/quick_pulldown_length"
@@ -103,7 +103,7 @@
             app:entryValues="@array/quick_pulldown_side_values"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:dependency="quick_pulldown"
             android:key="quick_collapse"
             android:title="@string/quick_collapse"
@@ -116,7 +116,7 @@
         android:title="@string/my_device"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:defaultValue="false"
             android:key="qs_show_my_device"
             android:summary="@string/my_device_summary"

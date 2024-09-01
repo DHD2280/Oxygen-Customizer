@@ -23,10 +23,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.customprefs.MaterialSwitchPreference;
-import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchConfiguration;
-import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreference;
-import it.dhd.oxygencustomizer.customprefs.preferencesearch.SearchPreferenceResult;
+import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
+import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;

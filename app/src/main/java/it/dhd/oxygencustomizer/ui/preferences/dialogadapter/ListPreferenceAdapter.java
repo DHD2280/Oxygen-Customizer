@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.customprefs.dialogadapter;
+package it.dhd.oxygencustomizer.ui.preferences.dialogadapter;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
