@@ -1207,11 +1207,11 @@
     <color name="kgd_show_password_button_background_normal_color_dark">#33000000</color>
     <color name="kgd_show_password_button_background_pressed_color">#1affffff</color>
     <color name="kgd_show_password_button_background_pressed_color_dark">#1a000000</color>
-    <color name="kgd_show_password_button_text_bg_color">#4dffffff</color>
+    <color name="kgd_show_password_button_text_bg_color">@*android:color/accent_material_dark</color>
     <color name="kgd_show_password_button_text_normal_color">#ffffffff</color>
     <color name="kgd_show_password_button_text_normal_color_dark">@*android:color/background_dark</color>
-    <color name="kgd_show_password_button_text_pressed_color">#b3ffffff</color>
-    <color name="kgd_show_password_button_text_pressed_color_dark">#b3000000</color>
+    <color name="kgd_show_password_button_text_pressed_color">@*android:color/ripple_material_dark</color>
+    <color name="kgd_show_password_button_text_pressed_color_dark">@*android:color/ripple_material_dark</color>
     <color name="ksh_application_group_color">#fff44336</color>
     <color name="landscape_gesture_hint_background">@*android:color/background_dark</color>
     <color name="landscape_gesture_hint_text">#ffffffff</color>
