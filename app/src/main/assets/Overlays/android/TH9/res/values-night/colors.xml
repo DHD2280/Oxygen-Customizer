@@ -16,6 +16,24 @@
   -->
 
 <resources>
+    <color name="accent_device_default">@*android:color/accent_material_dark</color>
+    <color name="call_notification_answer_color">@*android:color/accent_material_dark</color>
+    <color name="language_picker_item_selected_bg">@*android:color/accent_material_dark</color>
+    <color name="language_picker_item_selected_indicator">@*android:color/background_dark</color>
+    <color name="language_picker_item_selected_stroke">@*android:color/accent_material_dark</color>
+    <color name="language_picker_item_text_color_secondary_selected">@*android:color/background_dark</color>
+    <color name="overview_background">@*android:color/background_holo_dark</color>
+    <color name="personal_apps_suspension_notification_color">@*android:color/accent_material_dark</color>
+    <color name="side_fps_button_color">@*android:color/accent_material_dark</color>
+    <color name="side_fps_toast_background">@*android:color/background_dark</color>
+    <color name="user_icon_6">@*android:color/accent_material_dark</color>
+    <color name="user_icon_7">@*android:color/accent_material_dark</color>
+    <color name="user_icon_8">@*android:color/accent_material_dark</color>
+
+    <!-- Changes for background theme, the system_neutral method 
+        doesn't work for transparency -->
+    <color name="primary_device_default_settings">@*android:color/background_device_default_dark</color>
+
     <!-- This is a lazy change, dwai -->
-    <color name="bootleg_accent_gradient_end_color">@*android:color/system_accent1_200</color>
+    <color name="bootleg_accent_gradient_end_color">@*android:color/system_accent1_300</color>
 </resources>

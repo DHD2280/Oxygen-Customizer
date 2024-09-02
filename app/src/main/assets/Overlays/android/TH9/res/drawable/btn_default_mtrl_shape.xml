@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:insetLeft="4.0dip" android:insetRight="4.0dip" android:insetTop="6.0dip" android:insetBottom="6.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <layer-list>
+        <item>
+            <shape android:shape="rectangle">
+                <gradient android:startColor="@*android:color/holo_blue_light" android:endColor="@*android:color/accent_material_dark" android:angle="225.0" />
+                <corners android:radius="24.0dip" />
+            </shape>
+        </item>
+        <item android:left="1.5dip" android:top="1.5dip" android:right="1.5dip" android:bottom="1.5dip">
+            <shape android:shape="rectangle">
+                <corners android:radius="24.0dip" />
+                <solid android:color="?android:colorBackground" />
+            </shape>
+        </item>
+    </layer-list>
+</inset>

@@ -17,6 +17,6 @@
 
 <resources>
     <!-- Notification icon/text dynamic tint -->
-    <color name="notification_text_default_color">@*android:color/accent_tertiary_device_default</color>
-    <color name="notification_icon_default_color">@*android:color/accent_tertiary_device_default</color>
+    <color name="notification_text_default_color">@*android:color/accent_device_default</color>
+    <color name="notification_icon_default_color">@*android:color/accent_device_default</color>
 </resources>

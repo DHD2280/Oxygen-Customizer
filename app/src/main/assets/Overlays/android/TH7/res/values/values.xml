@@ -18,6 +18,7 @@
 <resources>
     <!-- Overlays for notification app name -->
     <style name="TextAppearance.DeviceDefault.Notification.Info" parent="@*android:style/TextAppearance.Material.Notification.Info">
+        <item name="*android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
         <item name="*android:letterSpacing">0.02</item>
     </style>
 </resources>

@@ -17,16 +17,23 @@
   -->
 
 <resources>
-    <color name="black">#1b2029</color>
-    <color name="background_dark">#1b2029</color>
-    <color name="background_floating_material_dark">#22262f</color>
-    <color name="button_material_dark">#242832</color>
-    <color name="holo_primary">#282c36</color>
-    <color name="holo_light_primary_dark">#2c313a</color>
-    <color name="button_material_light">#30353f</color>
-    <color name="holo_primary_dark">#353944</color>
-    <color name="background_holo_dark">#393e48</color>
-    <color name="background_leanback_dark">#3e424d</color>
+    <color name="background_dark">#1c3b3a</color>
+    <color name="background_floating_material_dark">#23413f</color>
+    <color name="background_holo_dark">#3c5a59</color>
+    <color name="background_leanback_dark">#405f5e</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>
+    <color name="black">@*android:color/background_dark</color>
+    <color name="button_material_dark">#254342</color>
+    <color name="button_material_light">#325150</color>
+    <color name="holo_light_primary_dark">#2e4c4b</color>
+    <color name="holo_primary">#294846</color>
+    <color name="holo_primary_dark">#375654</color>
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>
+    <color name="legacy_primary">@*android:color/background_dark</color>
+    <color name="legacy_primary_dark">@*android:color/background_dark</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="transparent">#00000000</color>
     <color name="accent_material_dark">#908dff</color>
     <color name="ripple_material_dark">#80908dff</color>
     <color name="ripple_material_light">#66908dff</color>
