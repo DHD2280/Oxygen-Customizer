@@ -17,9 +17,6 @@
   -->
 
 <resources>
-    <color name="accent_material_dark">#908dff</color>
-    <color name="ripple_material_dark">#80908dff</color>
-    <color name="ripple_material_light">#66908dff</color>
     <color name="black">#1b2029</color>
     <color name="background_dark">#1b2029</color>
     <color name="background_floating_material_dark">#22262f</color>
@@ -30,6 +27,9 @@
     <color name="holo_primary_dark">#353944</color>
     <color name="background_holo_dark">#393e48</color>
     <color name="background_leanback_dark">#3e424d</color>
+    <color name="accent_material_dark">#908dff</color>
+    <color name="ripple_material_dark">#80908dff</color>
+    <color name="ripple_material_light">#66908dff</color>
     <color name="darker_gray">#aeafb1</color>
     <color name="keyguard_avatar_frame_pressed_color">#40908dff</color>
     <color name="holo_red_light">#cc908dff</color>
@@ -38,7 +38,7 @@
     <color name="accessibility_focus_highlight_color">#bf908dff</color>
     <color name="holo_button_normal">#21908dff</color>
     <color name="holo_blue_light">#595bc5</color>
-    <color name="accent_material_light">@*android:color/accent_material_dark</color>
+    <color name="accent_material_light">@*android:color/holo_blue_light</color>
     <color name="holo_blue_dark">@*android:color/accent_material_dark</color>
     <color name="holo_green_light">@*android:color/accent_material_dark</color>
     <color name="holo_green_dark">@*android:color/accent_material_dark</color>
@@ -210,6 +210,8 @@
     <color name="keyguard_text_color_decline">@*android:color/accent_material_dark</color>
     <color name="keyguard_text_color_soundon">@*android:color/accent_material_dark</color>
     <color name="kg_multi_user_text_inactive">@*android:color/background_dark</color>
+    <color name="kgd_color_numeric_keyboard_setting_background_color">@*android:color/ripple_material_dark</color>
+    <color name="kgd_color_numeric_keyboard_side_setting_background_color">@*android:color/ripple_material_dark</color>
     <color name="language_picker_item_selected_indicator">@*android:color/accent_material_dark</color>
     <color name="language_picker_item_selected_stroke">@*android:color/accent_material_dark</color>
     <color name="language_picker_item_text_color">@*android:color/background_dark</color>
