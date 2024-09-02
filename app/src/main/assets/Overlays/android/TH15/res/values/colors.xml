@@ -33,7 +33,7 @@
     <color name="legacy_primary_dark">@*android:color/background_dark</color>
     <color name="primary_dark_material_dark">@*android:color/background_dark</color>
     <color name="primary_material_dark">@*android:color/background_dark</color>
-    <color name="transparent">#00000000</color
+    <color name="transparent">#00000000</color>
     <color name="accent_material_dark">#908dff</color>
     <color name="ripple_material_dark">#80908dff</color>
     <color name="ripple_material_light">#66908dff</color>

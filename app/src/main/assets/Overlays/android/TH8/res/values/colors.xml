@@ -17,7 +17,6 @@
   -->
 
 <resources>
-    <color name="black">#1b2029</color>
     <color name="background_dark">#1D0021</color>
     <color name="background_floating_material_dark">#210a26</color>
     <color name="background_holo_dark">#39213e</color>
