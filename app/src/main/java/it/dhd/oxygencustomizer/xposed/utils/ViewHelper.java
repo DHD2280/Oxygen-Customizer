@@ -446,6 +446,9 @@ public class ViewHelper {
         }
 
         if (view instanceof ViewGroup viewGroup) {
+            if (viewGroup.getTag() != null && viewGroup.getTag().toString().contains(tag)) {
+                return viewGroup;
+            }
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
 

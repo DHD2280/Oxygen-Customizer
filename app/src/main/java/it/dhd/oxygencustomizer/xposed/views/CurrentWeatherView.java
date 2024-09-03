@@ -18,6 +18,7 @@ package it.dhd.oxygencustomizer.xposed.views;
 
 import static android.view.Gravity.CENTER_VERTICAL;
 import static de.robv.android.xposed.XposedBridge.log;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.applyTextSizeRecursively;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -31,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -96,21 +98,27 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     }
 
     private void inflateView() {
-        inflate(appContext, R.layout.view_current_weather, this);
-        setupViews();
-    }
-    
-    private void setupViews() {
-        mLeftText = findViewById(R.id.leftText);
-        mCurrentImage = findViewById(R.id.currentImage);
-        mRightText = findViewById(R.id.rightText);
-        mWeatherText = findViewById(R.id.weatherText);
-        mHumLayout = findViewById(R.id.humLayout);
-        mHumImage = findViewById(R.id.humImage);
-        mHumText = findViewById(R.id.humText);
-        mWindLayout = findViewById(R.id.windLayout);
-        mWindImage = findViewById(R.id.windImage);
-        mWindText = findViewById(R.id.windText);
+        LayoutInflater inflater = LayoutInflater.from(appContext);
+        View v = inflater.inflate(
+                appContext
+                        .getResources()
+                        .getIdentifier(
+                                "view_current_weather",
+                                "layout",
+                                BuildConfig.APPLICATION_ID
+                        ),
+                null
+        );
+        mLeftText = (TextView) ViewHelper.findViewWithTag(v, "leftText");
+        mCurrentImage = (ImageView) ViewHelper.findViewWithTag(v, "currentImage");
+        mRightText = (TextView) ViewHelper.findViewWithTag(v, "rightText");
+        mWeatherText = (TextView) ViewHelper.findViewWithTag(v, "weatherText");
+        mHumLayout = (LinearLayout) ViewHelper.findViewWithTag(v, "humLayout");
+        mHumImage = (ImageView) ViewHelper.findViewWithTag(v, "humImage");
+        mHumText = (TextView) ViewHelper.findViewWithTag(v, "humText");
+        mWindLayout = (LinearLayout) ViewHelper.findViewWithTag(v, "windLayout");
+        mWindImage = (ImageView) ViewHelper.findViewWithTag(v, "windImage");
+        mWindText = (TextView) ViewHelper.findViewWithTag(v, "windText");
 
         mWindDrawable = ContextCompat.getDrawable(
                 appContext,
@@ -121,6 +129,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 appContext,
                 R.drawable.ic_humidity_symbol
         );
+
+        addView(v);
     }
 
     public void updateSizes(int weatherTextSize, int weatherImageSize, String name) {

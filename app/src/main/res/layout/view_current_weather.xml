@@ -2,98 +2,93 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <!-- Weather Layout -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/leftText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
+            android:tag="leftText|text"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:tag="text" />
+            android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/currentImage"
-            android:layout_marginHorizontal="2dp"
             android:layout_width="18dp"
-            android:layout_height="18dp" />
+            android:layout_height="18dp"
+            android:layout_marginHorizontal="2dp"
+            android:tag="currentImage" />
 
         <TextView
-            android:id="@+id/rightText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:tag="rightText|text"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:tag="text" />
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/weatherText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:tag="weatherText|text"
             android:textColor="@android:color/white"
-            android:textSize="16dp"
-            android:tag="text" />
+            android:textSize="16dp" />
     </LinearLayout>
 
     <!-- Humidity Layout -->
     <LinearLayout
-        android:id="@+id/humLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal"
-        android:layout_marginTop="2dp">
+        android:tag="humLayout">
 
         <ImageView
-            android:id="@+id/humImage"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_humidity_symbol" />
+            android:src="@drawable/ic_humidity_symbol"
+            android:tag="humImage" />
 
         <TextView
-            android:id="@+id/humText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
+            android:tag="humText|text"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:tag="text" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <!-- Wind Layout -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/windLayout"
-        android:layout_marginTop="2dp">
+        android:layout_marginTop="2dp"
+        android:tag="windLayout">
 
         <ImageView
-            android:id="@+id/windImage"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_wind_symbol" />
+            android:src="@drawable/ic_wind_symbol"
+            android:tag="windImage" />
 
         <TextView
-            android:id="@+id/windText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
+            android:tag="windText|text"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:tag="text" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

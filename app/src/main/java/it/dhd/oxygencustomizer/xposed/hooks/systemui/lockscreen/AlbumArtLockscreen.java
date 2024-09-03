@@ -80,8 +80,11 @@ public class AlbumArtLockscreen extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
-
                 View scrimBehind = (View) getObjectField(callMethod(mScrimController, "getScrimController"), "mScrimBehind");
+                if (scrimBehind == null) {
+                    log("ScrimBehind is null");
+                    return;
+                }
                 ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
 
                 albumArtContainer = new FrameLayout(mContext);
