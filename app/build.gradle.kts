@@ -206,6 +206,9 @@ dependencies {
 
     // OkHTTP
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Image Cropper
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
 }
 
 tasks.register("printVersionName") {
