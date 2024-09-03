@@ -95,10 +95,10 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void setupViews() {
-        mBatteryLevelView = findViewById(R.id.battery_percentage);
-        mBatteryProgress = findViewById(R.id.battery_progressbar);
-        mVolumeLevelArcProgress = findViewById(R.id.volume_progress);
-        mRamUsageArcProgress = findViewById(R.id.ram_usage_info);
+        mBatteryLevelView = (TextView) ViewHelper.findViewWithTag(this, "battery_percentage");
+        mBatteryProgress = (ProgressBar) ViewHelper.findViewWithTag(this, "battery_progressbar");
+        mVolumeLevelArcProgress = (ImageView) ViewHelper.findViewWithTag(this, "volume_progress");
+        mRamUsageArcProgress = (ImageView) ViewHelper.findViewWithTag(this, "ram_usage_info");
 
         mBatteryProgress.setProgressTintList(ColorStateList.valueOf(
                 mCustomColor ?
@@ -108,7 +108,7 @@ public class DeviceWidgetView extends FrameLayout {
                         getPrimaryColor(mContext)
         ));
 
-        ((TextView) findViewById(R.id.device_name)).setText(Build.MODEL);
+        ((TextView) ViewHelper.findViewWithTag(this, "device_name")).setText(Build.MODEL);
     }
 
     private void initBatteryStatus() {
@@ -204,7 +204,7 @@ public class DeviceWidgetView extends FrameLayout {
             deviceName = Build.MODEL;
         }
 
-        post(() -> ((TextView) findViewById(R.id.device_name)).setText(deviceName));
+        post(() -> ((TextView) ViewHelper.findViewWithTag(this, "device_name")).setText(deviceName));
 
     }
 
