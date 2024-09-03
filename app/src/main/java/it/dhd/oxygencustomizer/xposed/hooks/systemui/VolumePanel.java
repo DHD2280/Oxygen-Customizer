@@ -114,6 +114,17 @@ public class VolumePanel extends XposedMods {
                 }
             }
         });
+        hookAllMethods(VolumeDialogImpl, "onShowSafetyWarning", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (mDisableVolumeWarning) {
+                    try {
+                        callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
+                    } catch (Throwable ignored) {}
+                    param.setResult(null);
+                }
+            }
+        });
 
         try {
             hookAllMethods(OplusVolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
