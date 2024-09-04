@@ -151,7 +151,7 @@
             </LinearLayout>
 
             <ImageView
-                android:tag="@+id/user_profile_image"
+                android:tag="user_profile_image"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"
