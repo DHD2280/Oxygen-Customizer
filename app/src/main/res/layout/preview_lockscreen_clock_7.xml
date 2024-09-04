@@ -141,18 +141,17 @@
                         android:textSize="10sp" />
 
                     <TextView
-                        android:id="@+id/summary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/dot57"
-                        android:tag="accent1"
+                        android:tag="summary|accent1"
                         android:text="@string/default_user_name"
                         android:textColor="@android:color/system_accent1_100"
                         android:textSize="16sp" />
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/user_profile_image"
+                android:tag="@+id/user_profile_image"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"

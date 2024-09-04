@@ -25,6 +25,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 
 import android.annotation.SuppressLint;
@@ -55,6 +56,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -71,6 +73,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
+import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class AodClock extends XposedMods {
@@ -262,27 +265,27 @@ public class AodClock extends XposedMods {
 
         switch (mAodClockStyle) {
             case 5 -> {
-                mBatteryStatusView = clockView.findViewById(R.id.battery_status);
-                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
-                mVolumeLevelView = clockView.findViewById(R.id.volume_level);
-                mBatteryProgress = clockView.findViewById(R.id.battery_progressbar);
-                mVolumeProgress = clockView.findViewById(R.id.volume_progressbar);
+                mBatteryStatusView = (TextView) findViewWithTag(clockView, "battery_status");
+                mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
+                mVolumeLevelView = (TextView) findViewWithTag(clockView, "volume_level");
+                mBatteryProgress = (ProgressBar) findViewWithTag(clockView, "battery_progressbar");
+                mVolumeProgress = (ProgressBar) findViewWithTag(clockView, "volume_progressbar");
             }
             case 7 -> {
-                TextView usernameView = clockView.findViewById(R.id.summary);
+                TextView usernameView = (TextView) findViewWithTag(clockView, "summary");
                 usernameView.setText(mCustomUser ? mCustomUserName : getUserName());
-                ImageView imageView = clockView.findViewById(R.id.user_profile_image);
+                ImageView imageView = (ImageView) findViewWithTag(clockView, "user_profile_image");
                 imageView.setImageDrawable(mCustomUserImage ? getCustomUserImage() : getUserImage());
             }
             case 19 -> {
-                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
-                mBatteryProgress = clockView.findViewById(R.id.battery_progressbar);
-                mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
-                mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
+                mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
+                mBatteryProgress = (ProgressBar) findViewWithTag(clockView, "battery_progressbar");
+                mVolumeLevelArcProgress = (ImageView) findViewWithTag(clockView, "volume_progress");
+                mRamUsageArcProgress = (ImageView) findViewWithTag(clockView, "ram_usage_info");
 
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(mCustomColor ? accent1 : getPrimaryColor(mContext)));
 
-                ((TextView) clockView.findViewById(R.id.device_name)).setText(Build.MODEL);
+                ((TextView) findViewWithTag(clockView, "device_name")).setText(Build.MODEL);
             }
             case 25 -> {
                 ImageView imageView = clockView.findViewById(R.id.custom_image);
@@ -291,13 +294,11 @@ public class AodClock extends XposedMods {
                 }
             }
             case 27 -> {
-                // TextViews
-                mBatteryLevelView = clockView.findViewById(R.id.battery_percentage);
+                TextView hourView = (TextView) findViewWithTag(clockView, "textHour");
+                TextView minuteView = (TextView) findViewWithTag(clockView, "textMinute");
+                TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
 
-                // Image Views
-                mVolumeLevelArcProgress = clockView.findViewById(R.id.volume_progress);
-                mRamUsageArcProgress = clockView.findViewById(R.id.ram_usage_info);
-                mBatteryArcProgress = clockView.findViewById(R.id.battery_progress);
+                TimeUtils.setCurrentTimeTextClock(mContext, tickIndicator, hourView, minuteView);
             }
             default -> {
                 mBatteryStatusView = null;
