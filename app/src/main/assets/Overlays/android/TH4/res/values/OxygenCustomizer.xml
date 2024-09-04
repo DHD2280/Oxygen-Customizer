@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  ~ limitations under the License
+  -->
+
+<resources>
+    <color name="background_dark">#0a1236</color>
+    <color name="background_floating_material_dark">#13193e</color>
+    <color name="background_holo_dark">#2c3058</color>
+    <color name="background_leanback_dark">#31345c</color>
+    <color name="button_material_dark">#151b40</color>
+    <color name="button_material_light">#23274e</color>
+    <color name="holo_light_primary_dark">#1f2349</color>
+    <color name="holo_primary">#1a1f45</color>
+    <color name="holo_primary_dark">#282b53</color>
+</resources>

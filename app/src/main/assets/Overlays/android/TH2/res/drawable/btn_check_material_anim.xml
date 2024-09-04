@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animated-selector
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:id="@*android:id/checked" android:drawable="@*android:drawable/btn_checkbox_unchecked_to_checked_mtrl_animation" />
-    <item android:id="@*android:id/unchecked" android:drawable="@*android:drawable/btn_checkbox_checked_to_unchecked_mtrl_animation" />
-</animated-selector>
