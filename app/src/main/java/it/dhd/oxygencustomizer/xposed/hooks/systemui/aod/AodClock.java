@@ -288,7 +288,7 @@ public class AodClock extends XposedMods {
                 ((TextView) findViewWithTag(clockView, "device_name")).setText(Build.MODEL);
             }
             case 25 -> {
-                ImageView imageView = clockView.findViewById(R.id.custom_image);
+                ImageView imageView = (ImageView) findViewWithTag(clockView, "custom_image");
                 if (mCustomImage) {
                     imageView.setImageDrawable(getCustomImage());
                 }
