@@ -17,18 +17,19 @@
   -->
 
 <resources>
-    <color name="keyguard_avatar_frame_shadow_color">#000000</color>
     <color name="background_dark">#000000</color>
-    <color name="black">#000000</color>
-    <color name="holo_primary_dark">#1f1f1f</color>
-    <color name="holo_primary">#131313</color>
+    <color name="background_floating_material_dark">#0b0b0b</color>
     <color name="background_holo_dark">#242424</color>
+    <color name="background_leanback_dark">#282828</color>
     <color name="button_material_dark">#0e0e0e</color>
     <color name="button_material_light">#1b1b1b</color>
-    <color name="primary_dark_material_dark">#000000</color>
-    <color name="primary_material_dark">#000000</color>
-    <color name="background_floating_material_dark">#0b0b0b</color>
-    <color name="background_material_dark">#000000</color>
-    <color name="legacy_primary_dark">#000000</color>
-    <color name="holo_light_primary_dark">#000000</color>
+    <color name="holo_light_primary_dark">#181818</color>
+    <color name="holo_primary">#131313</color>
+    <color name="holo_primary_dark">#1f1f1f</color>
+    <color name="black">#000000</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>	
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>
+	
 </resources>

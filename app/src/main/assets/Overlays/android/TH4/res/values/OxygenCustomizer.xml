@@ -26,4 +26,9 @@
     <color name="holo_light_primary_dark">#1f2349</color>
     <color name="holo_primary">#1a1f45</color>
     <color name="holo_primary_dark">#282b53</color>
+    <color name="black">#0a1236</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>	
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>	
 </resources>

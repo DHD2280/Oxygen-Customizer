@@ -21,7 +21,6 @@
     <color name="background">#80000000</color>
     <color name="background_dark">#80000000</color>
     <color name="black">#ff000000</color>
-    <color name="transparent">#00000000</color>
     <color name="holo_primary_dark">#26000000</color>
     <color name="holo_primary">#26000000</color>
     <color name="background_holo_dark">#26000000</color>

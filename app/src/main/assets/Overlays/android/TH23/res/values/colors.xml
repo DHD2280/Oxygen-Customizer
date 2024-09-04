@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<resources>
+    <color name="system_neutral1_0">#FFFFFF</color>
+    <color name="system_neutral1_10">#f4f2f0</color>
+    <color name="system_neutral1_50">@android:color/system_accent2_50</color>
+    <color name="system_neutral1_100">@android:color/system_accent2_100</color>
+    <color name="system_neutral1_200">@android:color/system_accent2_200</color>
+    <color name="system_neutral1_300">@android:color/system_accent2_300</color>
+    <color name="system_neutral1_400">@android:color/system_accent2_400</color>
+    <color name="system_neutral1_500">#91826e</color>
+    <color name="system_neutral1_600">#746858</color>
+    <color name="system_neutral1_700">#574e42</color>
+    <color name="system_neutral1_800">#3a342c</color>
+    <color name="system_neutral1_900">#1f1c18</color>
+    <color name="system_neutral1_1000">#000000</color>
+
+    <color name="system_neutral2_0">#FFFFFF</color>
+    <color name="system_neutral2_10">#fdfcfc</color>
+    <color name="system_neutral2_50">#f5f2ef</color>
+    <color name="system_neutral2_100">#ece6df</color>
+    <color name="system_neutral2_200">#d9ccbf</color>
+    <color name="system_neutral2_300">#c6b39f</color>
+    <color name="system_neutral2_400">#b39a80</color>
+    <color name="system_neutral2_500">#9f8160</color>
+    <color name="system_neutral2_600">#80674d</color>
+    <color name="system_neutral2_700">#604d39</color>
+    <color name="system_neutral2_800">#403326</color>
+    <color name="system_neutral2_900">#231c15</color>
+    <color name="system_neutral2_1000">#000000</color>
+</resources>

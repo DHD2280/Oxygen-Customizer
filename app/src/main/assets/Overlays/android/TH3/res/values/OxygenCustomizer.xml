@@ -17,6 +17,7 @@
   -->
 
 <resources>
+    <!-- Background -->
     <color name="background_dark">#1b2029</color>
     <color name="background_floating_material_dark">#22262f</color>
     <color name="background_holo_dark">#393e48</color>
@@ -26,4 +27,20 @@
     <color name="holo_light_primary_dark">#2c313a</color>
     <color name="holo_primary">#282c36</color>
     <color name="holo_primary_dark">#353944</color>
+    <color name="black">#1b2029</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>	
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>	
+    <!-- Accent -->
+    <color name="accent_material_dark">#908dff</color>
+    <color name="keyguard_avatar_frame_pressed_color">#40908dff</color>
+    <color name="holo_red_light">#cc908dff</color>
+    <color name="highlighted_text_dark">#99908dff</color>
+    <color name="highlighted_text_light">#99908dff</color>
+    <color name="accessibility_focus_highlight_color">#bf908dff</color>
+    <color name="holo_button_normal">#21908dff</color>
+    <color name="ripple_material_dark">#80908dff</color>
+    <color name="ripple_material_light">#66908dff</color>
+    <color name="holo_blue_light">#595bc5</color>
 </resources>

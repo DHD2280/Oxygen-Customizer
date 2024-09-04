@@ -24,7 +24,6 @@
     <color name="car_blue_grey_800">#33000000</color>						<!-- 80% -->
     <color name="car_blue_grey_900">#1a000000</color>						<!-- 90% -->
     <color name="transparent">#00000000</color>
-    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>
     <color name="legacy_primary">@*android:color/background_dark</color>
     <color name="accent_material_light">@*android:color/holo_blue_light</color>
     <color name="holo_blue_dark">@*android:color/accent_material_dark</color>
