@@ -125,8 +125,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private boolean lockscreenWidgetsEnabled = false;
     private boolean deviceWidgetsEnabled = false;
 
-    private boolean isBluetoothOn = false;
-
     private boolean mIsLongPress = false;
 
     private final CameraManager mCameraManager;
@@ -427,7 +425,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private void onBluetoothChanged(boolean enabled) {
-        isBluetoothOn = enabled;
         updateBtState();
     }
 
@@ -1357,7 +1354,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
         boolean isConnected = !TextUtils.isEmpty(deviceName);
         String inactiveString = getString(mContext,BT_LABEL_INACTIVE, SYSTEM_UI);
-        updateTileButtonState(btButton, btButtonFab, isBluetoothOn,
+        updateTileButtonState(btButton, btButtonFab, isBluetoothEnabled(),
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
 
