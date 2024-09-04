@@ -22,6 +22,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableLinearLayout;
+import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.*;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -55,7 +56,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.lang.reflect.Method;
@@ -76,41 +76,8 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 @SuppressLint("ViewConstructor")
 public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
 
+    @SuppressLint("StaticFieldLeak")
     public static LockscreenWidgetsView instance = null;
-
-    private final int HOTSPOT_ENABLED = 13;
-
-    public static final String BT_ACTIVE = "status_bar_qs_bluetooth_active";
-    public static final String BT_INACTIVE = "status_bar_qs_bluetooth_inactive";
-    public static final String DATA_ACTIVE = "status_bar_qs_data_active";
-    public static final String DATA_INACTIVE = "status_bar_qs_data_inactive";
-    public static final String RINGER_NORMAL = "status_bar_qs_mute_inactive";
-    public static final String RINGER_VIBRATE = "status_bar_qs_icon_volume_ringer_vibrate";
-    public static final String RINGER_SILENT = "status_bar_qs_mute_active";
-    public static final String RINGER_INACTIVE = "status_bar_qs_mute_active";
-    public static final String TORCH_RES_ACTIVE = "status_bar_qs_flashlight_active";
-    public static final String TORCH_RES_INACTIVE = "status_bar_qs_flashlight_inactive";
-    public static final String WIFI_ACTIVE = "status_bar_qs_wifi_active";
-    public static final String WIFI_INACTIVE = "status_bar_qs_wifi_inactive";
-    public static final String HOME_CONTROLS = "status_bar_qs_device_control_active";
-    public static final String CALCULATOR_ICON = "status_bar_qs_calculator_inactive";
-    public static final String CAMERA_ICON = "status_bar_qs_camera_allowed"; // Use qs camera access icon for camera
-    public static final String WALLET_ICON = "status_bar_qs_wallet_active";
-    public static final String HOTSPOT_ACTIVE = "status_bar_qs_hotspot_active";
-    public static final String HOTSPOT_INACTIVE = "status_bar_qs_hotspot_inactive";
-
-    public static final String BT_LABEL_INACTIVE = "quick_settings_bluetooth_label";
-    public static final String DATA_LABEL_INACTIVE = "mobile_data_settings_title";
-    public static final String RINGER_LABEL_INACTIVE = "state_button_silence";
-    public static final String TORCH_LABEL_ACTIVE = "notification_flashlight_hasopen";
-    public static final String TORCH_LABEL_INACTIVE = "notification_flashlight_hasclose";
-    public static final String WIFI_LABEL_INACTIVE = "quick_settings_wifi_label";
-    public static final String HOME_CONTROLS_LABEL = "quick_controls_title";
-    public static final String MEDIA_PLAY_LABEL = "controls_media_button_play";
-    public static final String CALCULATOR_LABEL = "state_button_calculator";
-    public static final String CAMERA_LABEL = "affordance_settings_camera";
-    public static final String WALLET_LABEL = "wallet_title";
-    public static final String HOTSPOT_LABEL = "quick_settings_hotspot_label";
 
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
@@ -140,7 +107,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     // Widgets Dimens
     private int mFabWidth, mFabHeight, mFabMarginStart, mFabMarginEnd, mFabPadding;
-    private int mWidgetCircleSize, mWidgetMarginHorizontal, mWidgetMarginVertical, mWidgetIconPadding;
+    private int mWidgetCircleSize, mWidgetMarginHorizontal, mWidgetIconPadding;
     private float mWidgetsScale = 1f;
 
     private String mMainLockscreenWidgetsList;
@@ -259,7 +226,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         // Circle Dimens
         mWidgetCircleSize = modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size);
         mWidgetMarginHorizontal = modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
-        mWidgetMarginVertical = modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
         mWidgetIconPadding = modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
     }
 
@@ -794,7 +760,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                         return true;
                     });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleWiFi(), getDrawable(WIFI_INACTIVE, SYSTEM_UI), getString(WIFI_LABEL_INACTIVE, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> toggleWiFi(), getDrawable(mContext, WIFI_INACTIVE, SYSTEM_UI), getString(mContext,WIFI_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "data":
                 if (iv != null) {
@@ -811,7 +777,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                         return true;
                     });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleMobileData(), getDrawable(DATA_INACTIVE, SYSTEM_UI), getString(DATA_LABEL_INACTIVE, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> toggleMobileData(), getDrawable(mContext, DATA_INACTIVE, SYSTEM_UI), getString(mContext,DATA_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "ringer":
                 if (iv != null) {
@@ -828,7 +794,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                         return true;
                     });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleRingerMode(), getDrawable(RINGER_INACTIVE, SYSTEM_UI), getString(RINGER_LABEL_INACTIVE, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> toggleRingerMode(), getDrawable(mContext, RINGER_INACTIVE, SYSTEM_UI), getString(mContext,RINGER_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "bt":
                 if (iv != null) {
@@ -845,7 +811,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                         return true;
                     });
                 }
-                setUpWidgetResources(iv, efab, v -> toggleBluetoothState(), getDrawable(BT_INACTIVE, SYSTEM_UI), getString(BT_LABEL_INACTIVE, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> toggleBluetoothState(), getDrawable(mContext, BT_INACTIVE, SYSTEM_UI), getString(mContext,BT_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "torch":
                 if (iv != null) {
@@ -854,28 +820,28 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 if (efab != null) {
                     torchButtonFab = efab;
                 }
-                setUpWidgetResources(iv, efab, v -> toggleFlashlight(), getDrawable(TORCH_RES_INACTIVE, SYSTEM_UI), getString(TORCH_LABEL_INACTIVE, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> toggleFlashlight(), getDrawable(mContext, TORCH_RES_INACTIVE, SYSTEM_UI), getString(mContext,TORCH_LABEL_INACTIVE, SYSTEM_UI));
                 break;
             case "timer":
                 setUpWidgetResources(iv, efab, v -> {
                     mActivityLauncherUtils.launchTimer();
                     vibrate(1);
-                }, getDrawable("ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
+                }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
             case "camera":
                 setUpWidgetResources(iv, efab, v -> {
                     mActivityLauncherUtils.launchCamera();
                     vibrate(1);
-                }, getDrawable(CAMERA_ICON, SYSTEM_UI), getString(CAMERA_LABEL, SYSTEM_UI));
+                }, getDrawable(mContext, CAMERA_ICON, SYSTEM_UI), getString(mContext,CAMERA_LABEL, SYSTEM_UI));
                 break;
             case "calculator":
-                setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(CALCULATOR_ICON, SYSTEM_UI), getString(CALCULATOR_LABEL, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> openCalculator(), getDrawable(mContext, CALCULATOR_ICON, SYSTEM_UI), getString(mContext,CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "homecontrols":
-                setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(HOME_CONTROLS, SYSTEM_UI), getString(HOME_CONTROLS_LABEL, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(mContext, HOME_CONTROLS, SYSTEM_UI), getString(mContext,HOME_CONTROLS_LABEL, SYSTEM_UI));
                 break;
             case "wallet":
-                setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(WALLET_ICON, SYSTEM_UI), getString(WALLET_LABEL, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, this::launchWallet, getDrawable(mContext, WALLET_ICON, SYSTEM_UI), getString(mContext,WALLET_LABEL, SYSTEM_UI));
                 break;
             case "media":
                 if (iv != null) {
@@ -890,7 +856,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 }
                 setUpWidgetResources(iv, efab, v -> toggleMediaPlaybackState(),
                         ResourcesCompat.getDrawable(modRes, R.drawable.ic_play, mContext.getTheme()),
-                        getString(MEDIA_PLAY_LABEL, SYSTEM_UI));
+                        getString(mContext,MEDIA_PLAY_LABEL, SYSTEM_UI));
                 break;
             case "weather":
                 if (iv != null) {
@@ -919,8 +885,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     });
                 }
                 setUpWidgetResources(iv, efab, v -> toggleHotspot(),
-                        getDrawable(HOTSPOT_INACTIVE, SYSTEM_UI),
-                        getString(HOTSPOT_LABEL, SYSTEM_UI));
+                        getDrawable(mContext, HOTSPOT_INACTIVE, SYSTEM_UI),
+                        getString(mContext,HOTSPOT_LABEL, SYSTEM_UI));
             default:
                 break;
         }
@@ -1032,7 +998,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 efab.setTextColor(active ? mBigIconActiveColor : mBigIconInactiveColor);
             }
         }
-
 
     }
 
@@ -1332,8 +1297,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     public void updateTorchButtonState() {
         if (!isWidgetEnabled("torch")) return;
-        String activeString = getString(TORCH_LABEL_ACTIVE, SYSTEM_UI);
-        String inactiveString = getString(TORCH_LABEL_INACTIVE, SYSTEM_UI);
+        String activeString = getString(mContext,TORCH_LABEL_ACTIVE, SYSTEM_UI);
+        String inactiveString = getString(mContext,TORCH_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(torchButton, torchButtonFab, isFlashOn,
                 TORCH_RES_ACTIVE, TORCH_RES_INACTIVE, activeString, inactiveString);
     }
@@ -1345,19 +1310,20 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
     };
 
+    @SuppressWarnings("deprecation")
     private void updateWiFiButtonState(boolean enabled) {
         if (!isWidgetEnabled("wifi")) return;
         if (wifiButton == null && wifiButtonFab == null) return;
         String theSsid = SystemUtils.WifiManager().getConnectionInfo().getSSID();
         if (theSsid.equals(UNKNOWN_SSID)) {
-            theSsid = getString(WIFI_LABEL_INACTIVE, SYSTEM_UI);
+            theSsid = getString(mContext,WIFI_LABEL_INACTIVE, SYSTEM_UI);
         } else {
             if (theSsid.startsWith("\"") && theSsid.endsWith("\"")) {
                 theSsid = theSsid.substring(1, theSsid.length() - 1);
             }
         }
         updateTileButtonState(wifiButton, wifiButtonFab, isWifiEnabled(),
-                WIFI_ACTIVE, WIFI_INACTIVE, theSsid, getString(WIFI_LABEL_INACTIVE, SYSTEM_UI));
+                WIFI_ACTIVE, WIFI_INACTIVE, theSsid, getString(mContext,WIFI_LABEL_INACTIVE, SYSTEM_UI));
     }
 
     private void updateRingerButtonState() {
@@ -1379,7 +1345,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         String networkName =
                 networkController == null ? "" : (String) callMethod(networkController, "getMobileDataNetworkName");
         boolean hasNetwork = networkController != null && !TextUtils.isEmpty(networkName);
-        String inactive = getString(DATA_LABEL_INACTIVE, SYSTEM_UI);
+        String inactive = getString(mContext,DATA_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(dataButton, dataButtonFab, enabled,
                 DATA_ACTIVE, DATA_INACTIVE, hasNetwork && enabled ? networkName : inactive, inactive);
     }
@@ -1390,7 +1356,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
         boolean isConnected = !TextUtils.isEmpty(deviceName);
-        String inactiveString = getString(BT_LABEL_INACTIVE, SYSTEM_UI);
+        String inactiveString = getString(mContext,BT_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(btButton, btButtonFab, isBluetoothOn,
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
@@ -1398,8 +1364,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private void updateHotspotButtonState(int numDevices) {
         if (!isWidgetEnabled("hotspot")) return;
         if (hotspotButton == null && hotspotButtonFab == null) return;
-        String inactiveString = getString(HOTSPOT_LABEL, SYSTEM_UI);
-        String activeString = getString(HOTSPOT_LABEL, SYSTEM_UI);
+        String inactiveString = getString(mContext,HOTSPOT_LABEL, SYSTEM_UI);
+        String activeString = getString(mContext,HOTSPOT_LABEL, SYSTEM_UI);
         if (isHotspotEnabled()) {
             String hotspotSSID = getHotspotSSID();
             String devices = "(" + numDevices + ")";
@@ -1563,47 +1529,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, activityStarter);
     }
 
-    private Drawable getDrawable(String drawableRes, String pkg) {
-        try {
-            return ContextCompat.getDrawable(
-                    mContext,
-                    mContext.getResources().getIdentifier(drawableRes, "drawable", pkg));
-        } catch (Throwable t) {
-            // We have a calculator icon, so if SystemUI doesn't just return ours
-            if (drawableRes.equals(CALCULATOR_ICON))
-                return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
-            else if (drawableRes.equals(HOME_CONTROLS))
-                return getDrawable("controls_icon", SYSTEM_UI);
-
-            log("LockscreenWidgetsView getDrawable " + drawableRes + " from " + pkg + " error " + t);
-            return null;
-        }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private String getString(String stringRes, String pkg) {
-        try {
-            return mContext.getResources().getString(
-                    mContext.getResources().getIdentifier(stringRes, "string", pkg));
-        } catch (Throwable t) {
-            switch (stringRes) {
-                // We have out own strings too, so if getString from SystemUI fails
-                // return our own strings,
-                case CALCULATOR_LABEL -> {
-                    return modRes.getString(R.string.calculator);
-                }
-                case CAMERA_LABEL -> {
-                    return modRes.getString(R.string.camera);
-                }
-                case WALLET_LABEL -> {
-                    return modRes.getString(R.string.wallet);
-                }
-            }
-            log("LockscreenWidgetsView getString " + stringRes + " from " + pkg + " error " + t);
-            return "";
-        }
-    }
-
     private Drawable getRingerDrawable() {
         String resName = switch (mAudioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_NORMAL -> RINGER_NORMAL;
@@ -1613,7 +1538,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     throw new IllegalStateException("Unexpected value: " + mAudioManager.getRingerMode());
         };
 
-        return getDrawable(resName, SYSTEM_UI);
+        return getDrawable(mContext, resName, SYSTEM_UI);
     }
 
     private String getRingerText() {
@@ -1629,7 +1554,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     throw new IllegalStateException("Unexpected value: " + mAudioManager.getRingerMode());
         };
 
-        return getString(resName, SYSTEM_UI);
+        return getString(mContext,resName, SYSTEM_UI);
 
     }
 

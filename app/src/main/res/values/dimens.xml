@@ -66,4 +66,10 @@
     <dimen name="preview_margin">3dp</dimen>
     <dimen name="preview_icon_size">18dp</dimen>
 
+    <!-- Image Crop Dimens -->
+    <dimen name="keyline">4dp</dimen>
+    <dimen name="keyline_x2">8dp</dimen>
+    <dimen name="keyline_x4">16dp</dimen>
+    <dimen name="elevation_card_resting">1dp</dimen>
+
 </resources>

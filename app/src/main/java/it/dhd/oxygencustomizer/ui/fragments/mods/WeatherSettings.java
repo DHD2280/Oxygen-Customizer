@@ -21,7 +21,7 @@ public class WeatherSettings extends WeatherPreferenceFragment {
 
     @Override
     public boolean backButtonEnabled() {
-        return false;
+        return true;
     }
 
     @Override

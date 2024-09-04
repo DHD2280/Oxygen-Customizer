@@ -101,7 +101,10 @@
     <string name="right">Right</string>
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
+    <string name="reset">Reset</string>
 
+    <!-- Image Crop Strings -->
+    <string name="pick_image">Pick Image</string>
 
     <!-- Search Preference -->
     <string name="searchpreference_search">Search…</string>
@@ -386,6 +389,17 @@
     <string name="quick_settings_tiles_landscape">In landscape orientation</string>
     <string name="quick_settings_tiles_vertical_rows">Quick Settings Rows (Landscape)</string>
     <string name="quick_settings_tiles_vertical_columns">Quick Settings Columns (Landscape)</string>
+
+    <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">Show Quick Settings Widgets</string>
+    <string name="add_widget">Add Widget</string>
+    <string name="qs_widget_photo">Photo Showcase</string>
+    <string name="qs_widget_weather">Weather</string>
+    <string name="qs_widget_media_player">Media Player</string>
+    <string name="qs_media_alert">Can\'t remove media player!</string>
+    <string name="qs_widget_set_radius">Set Image Radius</string>
+    <string name="qs_widget_set_custom_photo">Set Custom Image</string>
+
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Customization</string>
     <string name="quick_settings_tiles_customize_category_title">Quick Settings Tiles Background</string>
