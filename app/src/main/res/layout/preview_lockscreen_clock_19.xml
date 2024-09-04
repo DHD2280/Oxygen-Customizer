@@ -104,7 +104,7 @@
             </LinearLayout>
 
             <ImageView
-                android:tag="@+id/volume_progress"
+                android:tag="volume_progress"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="24dp"
@@ -113,7 +113,7 @@
                 android:src="@drawable/arc_progress"/>
 
             <ImageView
-                android:tag="@+id/ram_usage_info"
+                android:tag="ram_usage_info"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"
