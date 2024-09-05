@@ -159,7 +159,6 @@ public class AodClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
-
         Class<?> AodClockLayout;
         try {
             AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
@@ -205,7 +204,6 @@ public class AodClock extends XposedMods {
         if (mRootLayout == null) return;
 
         if (BuildConfig.DEBUG) log(TAG + " updateClockView " + mRootLayout.getChildCount());
-
 
         View clockView = getClockView();
 
@@ -264,6 +262,11 @@ public class AodClock extends XposedMods {
         clockView.setVisibility(View.VISIBLE);
 
         switch (mAodClockStyle) {
+            case 2 -> {
+                TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
+                TextView hourView = (TextView) findViewWithTag(clockView, "hours");
+                TimeUtils.setCurrentTimeTextClockRed(mContext, tickIndicator, hourView, mCustomColor ? accent1 : getPrimaryColor(mContext));
+            }
             case 5 -> {
                 mBatteryStatusView = (TextView) findViewWithTag(clockView, "battery_status");
                 mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
