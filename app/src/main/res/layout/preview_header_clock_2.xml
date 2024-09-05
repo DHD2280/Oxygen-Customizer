@@ -37,7 +37,7 @@
             android:paddingEnd="5dp"
             android:paddingBottom="4dp"
             android:singleLine="true"
-            android:tag="text2|date"
+            android:tag="text2|date|textClockDate"
             android:textColor="@android:color/white"
             android:textSize="14dp"
             android:textStyle="bold" />

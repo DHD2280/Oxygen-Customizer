@@ -73,7 +73,7 @@
             android:format12Hour="dd - yyy"
             android:format24Hour="dd - yyy"
             android:singleLine="true"
-            android:tag="text1"
+            android:tag="text1|textClockDate"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@android:color/white"

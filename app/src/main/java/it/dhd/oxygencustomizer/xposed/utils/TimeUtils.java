@@ -2,9 +2,12 @@ package it.dhd.oxygencustomizer.xposed.utils;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -138,10 +141,44 @@ public class TimeUtils {
 
     }
 
+    public static void setCurrentTimeTextClockRed(Context context, TextClock tickIndicator, TextView hourView, int color) {
+        if (tickIndicator == null || hourView == null) return;
+
+        setCurrentTimeHourRed(context, hourView, color);
+
+        tickIndicator.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    setCurrentTimeHourRed(context, hourView, color);
+                }
+            }
+        });
+    }
+
     private static void setCurrentTimeHour(Context context, TextView hourView) {
         String hourFormat = DateFormat.is24HourFormat(context) ? "HH" : "hh";
         String hour = new SimpleDateFormat(hourFormat, Locale.getDefault()).format(Calendar.getInstance().getTime());
         hourView.setText(convertNumberToText(hour));
+    }
+
+    private static void setCurrentTimeHourRed(Context context, TextView hourView, int color) {
+        String hourFormat = DateFormat.is24HourFormat(context) ? "HH" : "hh";
+        String hour = new SimpleDateFormat(hourFormat, Locale.getDefault()).format(Calendar.getInstance().getTime());
+        StringBuilder sb = new StringBuilder(hour);
+        SpannableString spannableString = new SpannableString(sb);
+        for (int i = 0; i < 2 && i < sb.length(); i++) {
+            if (sb.charAt(i) == '1') {
+                spannableString.setSpan(new ForegroundColorSpan(color), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        hourView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 
     private static void setCurrentTimeMinute(TextView minuteView) {

@@ -395,6 +395,7 @@
     <string name="add_widget">Add Widget</string>
     <string name="qs_widget_photo">Photo Showcase</string>
     <string name="qs_widget_weather">Weather</string>
+    <string name="qs_widget_custom_app">Custom App</string>
     <string name="qs_widget_media_player">Media Player</string>
     <string name="qs_media_alert">Can\'t remove media player!</string>
     <string name="qs_widget_set_radius">Set Image Radius</string>
@@ -738,6 +739,9 @@
     <string name="lockscreen_clock_custom_color_title">Custom Color Clock</string>
     <string name="lockscreen_clock_custom_color_summary">Custom color instead of primary color</string>
     <string name="lockscreen_clock_text_scaling">Text Scaling</string>
+    <string name="lockscreen_clock_custom_format_title">Custom date format</string>
+    <string name="lockscreen_clock_custom_format_summary">Customize the date format.\nKeep blank to disable</string>
+    <string name="lockscreen_clock_custom_format_dmessage">For format documentation, search for "Java Date Format"</string>
     <string name="lockscreen_clock_custom_user">Use Custom User Name</string>
     <string name="lockscreen_clock_custom_user_title">User Name</string>
     <string name="lockscreen_clock_custom_user_image">Use Custom User Image</string>

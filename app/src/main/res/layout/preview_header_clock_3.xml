@@ -47,7 +47,7 @@
         android:format24Hour="EEE d MMM"
         android:letterSpacing="0.1"
         android:singleLine="true"
-        android:tag="text1|date"
+        android:tag="text1|date|textClockDate"
         android:textAlignment="viewStart"
         android:textAllCaps="true"
         android:textColor="?android:textColorPrimary"

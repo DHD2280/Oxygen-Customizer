@@ -54,7 +54,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:src="@drawable/relax"
-            android:id="@+id/custom_image"/>
+            android:tag="custom_image"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:format12Hour="dd MMM"
                 android:format24Hour="dd MMM"
-                android:tag="text2"
+                android:tag="text2|textClockDate"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp" />
 

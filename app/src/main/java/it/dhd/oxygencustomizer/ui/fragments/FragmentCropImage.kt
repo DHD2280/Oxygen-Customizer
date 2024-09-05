@@ -35,7 +35,6 @@ class FragmentCropImage :
     CropImageView.OnCropImageCompleteListener {
     private var _binding: FragmentCropImageViewBinding? = null
     private val binding get() = _binding!!
-    private val aspectRatio: Pair<Int, Int>? = null
 
     private var options: CropImageOptions? = null
     private val openPicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->

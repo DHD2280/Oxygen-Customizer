@@ -46,20 +46,18 @@
                 android:format12Hour="hh:mm"
                 android:format24Hour="HH:mm"
                 android:singleLine="true"
-                android:tag="text1"
+                android:tag="text1|tickIndicator"
                 android:textColor="@android:color/white"
                 android:textSize="40dp" />
 
-            <TextClock
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:format12Hour="hh:mm"
-                android:format24Hour="HH:mm"
-                android:maxLength="1"
-                android:singleLine="true"
-                android:tag="accent1"
-                android:textColor="@android:color/system_accent1_300"
-                android:textSize="40dp" />
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="40sp"
+                android:tag="hours" />
+
         </FrameLayout>
 
         <TextClock
@@ -68,7 +66,7 @@
             android:format12Hour="MMMM dd "
             android:format24Hour="dd MMMM "
             android:singleLine="true"
-            android:tag="text1"
+            android:tag="text1|textClockDate"
             android:textAlignment="viewStart"
             android:textColor="@android:color/white"
             android:textSize="20dp" />

@@ -20,7 +20,7 @@
             android:format24Hour="EEEE, dd MMMM"
             android:gravity="center"
             android:singleLine="true"
-            android:tag="text1|nolineheight"
+            android:tag="text1|nolineheight|textClockDate"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="22dp"
@@ -55,7 +55,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/battery_percentage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center"
@@ -66,7 +65,7 @@
                     android:ellipsize="end"
                     android:gravity="start"
                     android:singleLine="true"
-                    android:tag="text1"
+                    android:tag="battery_percentage|text1"
                     android:padding="2dp"
                     android:layout_marginTop="4dp"
                     android:text="40%"
@@ -75,7 +74,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/device_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center"
@@ -84,7 +82,7 @@
                     android:ellipsize="end"
                     android:gravity="start"
                     android:singleLine="true"
-                    android:tag="text1"
+                    android:tag="device_name|text1"
                     android:padding="2dp"
                     android:text="Device Name"
                     android:textColor="@android:color/white"
@@ -92,7 +90,6 @@
                     android:textStyle="bold" />
 
                 <ProgressBar
-                    android:id="@+id/battery_progressbar"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:layout_marginTop="4dp"
@@ -102,12 +99,12 @@
                     android:progress="40"
                     android:progressDrawable="@drawable/ios_widget_line_progress_track"
                     android:progressTint="@android:color/system_accent1_300"
-                    android:tag="text1" />
+                    android:tag="battery_progressbar|text1" />
 
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/volume_progress"
+                android:tag="volume_progress"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="24dp"
@@ -116,7 +113,7 @@
                 android:src="@drawable/arc_progress"/>
 
             <ImageView
-                android:id="@+id/ram_usage_info"
+                android:tag="ram_usage_info"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"

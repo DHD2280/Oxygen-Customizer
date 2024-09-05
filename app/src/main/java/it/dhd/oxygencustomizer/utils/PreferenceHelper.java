@@ -62,6 +62,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_DATE_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_IMAGES;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_LINE_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
@@ -87,11 +88,17 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_WEATHER_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT3;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_TEXT1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_TEXT2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_HIDE_DATE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
@@ -146,6 +153,8 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -159,6 +168,14 @@ public class PreferenceHelper {
     public final ExtendedSharedPreferences mPreferences;
 
     public static PreferenceHelper instance;
+
+    private final List<Integer> LsClockDateFormat = new ArrayList<>() {{
+        addAll(Arrays.asList(1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 28));
+    }};
+
+    private final List<Integer> QsClockDateFormat = new ArrayList<>() {{
+        addAll(Arrays.asList(1, 2, 3, 4, 7));
+    }};
 
     public static void init(ExtendedSharedPreferences prefs) {
         new PreferenceHelper(prefs);
@@ -441,12 +458,15 @@ public class PreferenceHelper {
             case "qs_header_clock_font_custom" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_font", false);
             }
-            case "qs_header_clock_color_code_accent1",
-                 "qs_header_clock_color_code_accent2",
-                 "qs_header_clock_color_code_accent3",
-                 "qs_header_clock_color_code_text1",
-                 "qs_header_clock_color_code_text2" -> {
-                return instance.mPreferences.getBoolean("qs_header_clock_custom_color_switch", false);
+            case QS_HEADER_CLOCK_COLOR_CODE_ACCENT1,
+                 QS_HEADER_CLOCK_COLOR_CODE_ACCENT2,
+                 QS_HEADER_CLOCK_COLOR_CODE_ACCENT3,
+                 QS_HEADER_CLOCK_COLOR_CODE_TEXT1,
+                 QS_HEADER_CLOCK_COLOR_CODE_TEXT2 -> {
+                return instance.mPreferences.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
+            }
+            case QS_HEADER_CLOCK_CUSTOM_FORMAT -> {
+                return instance.QsClockDateFormat.contains(instance.mPreferences.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0));
             }
             case "qs_header_clock_custom_user_image" -> {
                 return instance.mPreferences.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0) == 6;
@@ -534,6 +554,9 @@ public class PreferenceHelper {
             }
             case "lockscreen_clock_font_custom" -> {
                 return instance.mPreferences.getBoolean("lockscreen_custom_font", false);
+            }
+            case LOCKSCREEN_CLOCK_DATE_FORMAT -> {
+                return instance.LsClockDateFormat.contains(instance.mPreferences.getInt("lockscreen_custom_clock_style", 0));
             }
 
             // Lockscreen Weather
@@ -662,6 +685,7 @@ public class PreferenceHelper {
             }
 
             // Pulse
+
             case "pulse_lavalamp_speed" -> {
                 return Integer.parseInt(instance.mPreferences.getString("pulse_color_mode", "2")) == 2;
             }

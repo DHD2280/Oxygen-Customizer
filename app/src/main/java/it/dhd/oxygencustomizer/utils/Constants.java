@@ -257,6 +257,11 @@ public class Constants {
             };
 
         }
+        public static class QsWidgetsPrefs {
+            public static final String QS_WIDGETS_SWITCH = "qs_widgets_switch";
+            public static final String QS_WIDGETS_LIST = "qs_widgets_widgets";
+            public static final String QS_PHOTO_RADIUS = "qs_widgets_photo_radius";
+        }
         public static class QsHeaderSystemIcons {
 
             public static final String QS_SYSTEM_ICON_CHIP_SWITCH = "qs_header_system_icons_chip_switch";
@@ -313,6 +318,7 @@ public class Constants {
             public static final String QS_HEADER_CLOCK_COLOR_CODE_ACCENT3 = "qs_header_clock_color_code_accent3";
             public static final String QS_HEADER_CLOCK_COLOR_CODE_TEXT1 = "qs_header_clock_color_code_text1";
             public static final String QS_HEADER_CLOCK_COLOR_CODE_TEXT2 = "qs_header_clock_color_code_text2";
+            public static final String QS_HEADER_CLOCK_CUSTOM_FORMAT = "qs_clock_custom_format";
 
             public static final String[] QS_HEADER_PREFS = {
                     QS_HEADER_CLOCK_STOCK_RED_MODE,
@@ -394,7 +400,8 @@ public class Constants {
             public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
-        public static class LockscreenClock {
+        public static class LockscreenClock
+        {
 
             public static final List<Integer> LOCKSCREEN_CLOCK_IMAGES = List.of(25);
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
@@ -417,6 +424,7 @@ public class Constants {
             public static final String LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE = "lockscreen_clock_custom_user";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE = "lockscreen_clock_custom_user_image";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_IMAGE = "lockscreen_clock_custom_image_switch";
+            public static final String LOCKSCREEN_CLOCK_DATE_FORMAT = "lockscreen_clock_custom_format";
 
             public static final String[] LOCKSCREEN_CLOCK_PREFS = {
                     LOCKSCREEN_CLOCK_SWITCH,
@@ -435,7 +443,8 @@ public class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT3,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT1,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2,
-                    LOCKSCREEN_CLOCK_CUSTOM_IMAGE
+                    LOCKSCREEN_CLOCK_CUSTOM_IMAGE,
+                    LOCKSCREEN_CLOCK_DATE_FORMAT
             };
         }
         public static class LockscreenWidgets {
@@ -486,6 +495,7 @@ public class Constants {
             public static final String AOD_CLOCK_CUSTOM_USER_VALUE = "aod_clock_custom_user";
             public static final String AOD_CLOCK_CUSTOM_USER_IMAGE = "aod_clock_custom_user_image";
             public static final String AOD_CLOCK_CUSTOM_IMAGE = "aod_clock_custom_image_switch";
+            public static final String AOD_CLOCK_DATE_FORMAT = "aod_clock_custom_format";
 
         }
 
@@ -654,6 +664,7 @@ public class Constants {
     public static final String ACTIONS_QS_CLOCK_UPDATE = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_UPDATE_OC";
     public static final String ACTION_TILE_REMOVED = BuildConfig.APPLICATION_ID + ".ACTION_TILE_REMOVED_OC";
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
+    public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
@@ -666,6 +677,7 @@ public class Constants {
     public static final String AOD_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_custom_image.png";
     public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
+    public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
 
     // Resource names
     public static final String LOCKSCREEN_CLOCK_LAYOUT = "preview_lockscreen_clock_";
