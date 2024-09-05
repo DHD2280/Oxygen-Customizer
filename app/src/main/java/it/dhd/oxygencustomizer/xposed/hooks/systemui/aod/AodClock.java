@@ -18,6 +18,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_CUSTOM_USER_VALUE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_DATE_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_LINE_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
@@ -49,6 +50,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +92,7 @@ public class AodClock extends XposedMods {
     private boolean mCustomColor, mCustomFont, mCustomImage, mCustomUser, mCustomUserImage;
     private String mCustomUserName;
     private float mClockScale;
+    private String mCustomDateFormat;
     private int mLineHeight;
     private int mAodClockStyle = 0;
     private int mBatteryStatus = 1;
@@ -148,6 +151,7 @@ public class AodClock extends XposedMods {
         mCustomUserImage = Xprefs.getBoolean(AOD_CLOCK_CUSTOM_USER_IMAGE, false);
         mClockScale = Xprefs.getSliderFloat(AOD_CLOCK_TEXT_SCALING, 1.0f);
         mLineHeight = Xprefs.getSliderInt(AOD_CLOCK_LINE_HEIGHT, 0);
+        mCustomDateFormat = Xprefs.getString(AOD_CLOCK_DATE_FORMAT, "");
 
     }
 
@@ -260,6 +264,16 @@ public class AodClock extends XposedMods {
             ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, mClockScale);
         }
         clockView.setVisibility(View.VISIBLE);
+
+        TextClock textClock = (TextClock) findViewWithTag(clockView, "textClockDate");
+        if (!TextUtils.isEmpty(mCustomDateFormat) && textClock != null) {
+            try {
+                textClock.setFormat12Hour(mCustomDateFormat);
+                textClock.setFormat24Hour(mCustomDateFormat);
+            } catch (Throwable t) {
+                log(TAG + "Error setting date format: " + t.getMessage());
+            }
+        }
 
         switch (mAodClockStyle) {
             case 2 -> {

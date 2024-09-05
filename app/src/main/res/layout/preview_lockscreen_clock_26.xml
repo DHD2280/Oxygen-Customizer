@@ -55,7 +55,7 @@
             android:format12Hour="dd MMM"
             android:format24Hour="dd MMM"
             android:inputType="text|textCapCharacters"
-            android:tag="accent1"
+            android:tag="accent1|textClockDate"
             android:textColor="@android:color/system_accent1_300"
             android:textSize="28sp" />
 

@@ -21,6 +21,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_LEFT_MARGIN;
@@ -42,6 +43,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 
 import android.content.BroadcastReceiver;
@@ -62,6 +64,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -71,6 +74,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -116,6 +120,7 @@ public class HeaderClock extends XposedMods {
     private int clockStyle = 0;
     private int accent1, accent2, accent3, text1, text2;
     private float mClockTextScale = 1.0f;
+    private String mCustomDateFormat = "";
     private int mTopMargin, mLeftMargin;
     private boolean centeredClockView = false;
     private boolean mClockCustomColor = false;
@@ -221,6 +226,7 @@ public class HeaderClock extends XposedMods {
         mClockTextScale = Xprefs.getSliderFloat(QS_HEADER_CLOCK_TEXT_SCALING, 1.0f);
         mClockCustomColor = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_COLOR_SWITCH, false);
         mClockCustomUserImage = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_USER_IMAGE, false);
+        mCustomDateFormat = Xprefs.getString(QS_HEADER_CLOCK_CUSTOM_FORMAT, "");
 
         // Stock Header Prefs
         stockClockRedStyle = Integer.parseInt(Xprefs.getString(QS_HEADER_CLOCK_STOCK_RED_MODE, "0"));
@@ -903,6 +909,15 @@ public class HeaderClock extends XposedMods {
             ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, mClockTextScale);
         }
 
+        TextClock textClock = (TextClock) findViewWithTag(clockView, "textClockDate");
+        if (!TextUtils.isEmpty(mCustomDateFormat) && textClock != null) {
+            try {
+                textClock.setFormat12Hour(mCustomDateFormat);
+                textClock.setFormat24Hour(mCustomDateFormat);
+            } catch (Throwable t) {
+                log(TAG + "Error setting date format: " + t.getMessage());
+            }
+        }
         switch (clockStyle) {
             case 6 -> {
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);

@@ -99,7 +99,7 @@
                         android:format12Hour="MMMM-yyy"
                         android:format24Hour="MMMM-yyy"
                         android:singleLine="true"
-                        android:tag="text2"
+                        android:tag="text2|textClockDate"
                         android:textColor="@android:color/system_neutral1_1000"
                         android:textSize="18sp" />
                 </RelativeLayout>

@@ -38,7 +38,7 @@
         android:fontFamily="@font/bebasneue_bold"
         android:format12Hour="dd, yyyy"
         android:format24Hour="dd, yyyy"
-        android:tag="accent2"
+        android:tag="accent2|textClockDate"
         android:textColor="@android:color/system_accent2_300"
         android:textSize="35sp" />
 

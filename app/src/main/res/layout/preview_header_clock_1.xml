@@ -70,7 +70,7 @@
             android:format12Hour="dd MMMM"
             android:format24Hour="dd MMMM"
             android:singleLine="true"
-            android:tag="text1"
+            android:tag="text1|textClockDate"
             android:textAlignment="viewStart"
             android:textColor="?android:textColorPrimary"
             android:textSize="14dp"

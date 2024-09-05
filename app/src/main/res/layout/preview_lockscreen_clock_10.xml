@@ -231,7 +231,7 @@
                     android:format24Hour="yyyy.MM.dd"
                     android:letterSpacing="0.03"
                     android:singleLine="true"
-                    android:tag="accent3"
+                    android:tag="accent3|textClockDate"
                     android:textColor="@android:color/system_accent3_400"
                     android:textSize="16sp" />
 

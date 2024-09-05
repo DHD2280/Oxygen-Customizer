@@ -36,7 +36,7 @@
         android:layout_marginTop="40dp"
         android:format12Hour="dd MMMM"
         android:format24Hour="dd MMMM"
-        android:tag="text2"
+        android:tag="text2|textClockDate"
         android:textColor="#FFFFFF"
         android:textSize="28sp" />
 

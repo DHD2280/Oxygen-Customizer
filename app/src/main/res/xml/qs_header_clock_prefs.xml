@@ -176,6 +176,13 @@
             app:tickInterval=".1"
             app:valueFormat="%" />
 
+        <EditTextPreference
+            android:key="qs_clock_custom_format"
+            android:title="@string/lockscreen_clock_custom_format_title"
+            android:summary="@string/lockscreen_clock_custom_format_summary"
+            app:iconSpaceReserved="false"
+            android:dialogMessage="@string/lockscreen_clock_custom_format_dmessage" />
+
         <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
             android:key="qs_header_clock_custom_user_image"
             android:summaryOff="@string/general_off"

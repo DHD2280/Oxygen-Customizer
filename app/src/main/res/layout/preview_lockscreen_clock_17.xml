@@ -30,7 +30,7 @@
             android:fontFamily="@font/futurist_fixed_width_bold"
             android:format12Hour="dd, yyyy"
             android:format24Hour="dd, yyyy"
-            android:tag="text1"
+            android:tag="text1|textClockDate"
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
 

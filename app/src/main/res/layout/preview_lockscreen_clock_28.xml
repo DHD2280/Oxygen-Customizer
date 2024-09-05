@@ -335,6 +335,7 @@
                     android:singleLine="true"
                     android:textColor="#54B5DB"
                     android:textSize="14sp"
+                    android:tag="textClockDate"
                     android:theme="@style/ConsolasFontTextAppearance" />
 
                 <TextView

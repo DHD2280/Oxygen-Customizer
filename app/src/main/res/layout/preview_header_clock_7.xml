@@ -54,7 +54,7 @@
         android:format24Hour="dd MMMM"
         android:gravity="center|start"
         android:singleLine="true"
-        android:tag="text1|date"
+        android:tag="text1|date|textClockDate"
         android:textColor="?android:textColorPrimary"
         android:textSize="14dp"
         android:textStyle="bold" />

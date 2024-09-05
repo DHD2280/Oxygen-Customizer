@@ -97,7 +97,7 @@
                 android:format12Hour="MMM.dd"
                 android:format24Hour="dd.MMM"
                 android:includeFontPadding="false"
-                android:tag="text1"
+                android:tag="text1|textClockDate"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
         </LinearLayout>
