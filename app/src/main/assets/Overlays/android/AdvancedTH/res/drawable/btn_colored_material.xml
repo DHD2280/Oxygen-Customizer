@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:insetLeft="@*android:dimen/button_padding_horizontal_material" android:insetRight="@*android:dimen/button_padding_horizontal_material" android:insetTop="@*android:dimen/button_padding_vertical_material" android:insetBottom="@*android:dimen/button_padding_vertical_material"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ripple android:color="#ff000000">
+        <item>
+            <shape android:shape="rectangle">
+                <corners android:radius="30.0dip" />
+                <padding android:left="10.0dip" android:top="@*android:dimen/car_action2_size" android:right="10.0dip" android:bottom="@*android:dimen/car_action2_size" />
+            </shape>
+        </item>
+    </ripple>
+</inset>

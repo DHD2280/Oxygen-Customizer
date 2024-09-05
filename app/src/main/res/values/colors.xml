@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- UI -->
-    <color name="colorAccent">@android:color/system_accent1_300</color>
-    <color name="colorAccentVariant">@android:color/system_accent3_600</color>
+    <color name="colorAccent">@*android:color/accent_material_dark</color>
+    <color name="colorAccentVariant">@*android:color/accent_material_dark</color>
     <color name="seed">#00897B</color>
     <color name="md_theme_light_primary">#006B5F</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
@@ -74,8 +74,8 @@
     <color name="option_border_default">#5f6368</color>
     <color name="rippleDark">#66000000</color>
     <color name="dialer_divider_line_color">#5C5C5C</color>
-    <color name="holo_blue_light">@color/holo_blue_light_dark</color>
-    <color name="holo_blue_dark">@color/holo_blue_dark_dark</color>
+    <color name="holo_blue_light">@*android:color/accent_material_dark</color>
+    <color name="holo_blue_dark">@*android:color/accent_material_dark</color>
 
     <!-- Text -->
     <color name="textColorPrimary">@android:color/system_neutral1_900</color>
@@ -105,10 +105,10 @@
     <color name="colorNavbarOverlay">@color/color_navbar_overlay_light</color>
 
     <!-- Previews -->
-    <color name="holo_blue_light_light">@android:color/system_accent1_300</color>
-    <color name="holo_blue_light_dark">@android:color/system_accent1_600</color>
-    <color name="holo_blue_dark_light">@android:color/system_accent3_300</color>
-    <color name="holo_blue_dark_dark">@android:color/system_accent3_600</color>
+    <color name="holo_blue_light_light">@*android:color/accent_material_light</color>
+    <color name="holo_blue_light_dark">@*android:color/accent_material_dark</color>
+    <color name="holo_blue_dark_light">@*android:color/accent_material_light</color>
+    <color name="holo_blue_dark_dark">@*android:color/accent_material_dark</color>
     <color name="offStateColor">@android:color/system_neutral2_10</color>
     <color name="offStateColor2">#1A000000</color>
     <color name="offStateColor3">#40000000</color>
@@ -118,16 +118,16 @@
     <color name="neumorph_outline_end">#FFF0F0F0</color>
     <color name="color_background_alpha">@color/color_background_alpha_light</color>
 
-    <color name="rippleAccent">@color/color_accent_alpha_light</color>
+    <color name="rippleAccent">@*android:color/ripple_material_dark</color>
 
-    <color name="settings_pui_monet_v1">@android:color/system_accent1_600</color>
-    <color name="settings_pui_monet_v2">@android:color/system_accent1_700</color>
-    <color name="settings_accent">@android:color/system_accent1_500</color>
+    <color name="settings_pui_monet_v1">@*android:color/accent_material_dark</color>
+    <color name="settings_pui_monet_v2">@*android:color/accent_material_dark</color>
+    <color name="settings_accent">@*android:color/accent_material_dark</color>
 
     <color name="lockscreen_widget_background_color_dark">@android:color/system_neutral1_900</color>
     <color name="lockscreen_widget_background_color_light">@android:color/system_neutral1_0</color>
     <color name="lockscreen_widget_active_color_dark">@android:color/system_accent1_100</color>
-    <color name="lockscreen_widget_active_color_light">@android:color/system_accent1_600</color>
+    <color name="lockscreen_widget_active_color_light">@*android:color/accent_material_dark</color>
     <color name="card_surface_color">@android:color/system_neutral1_100</color>
 
 </resources>

@@ -7,43 +7,22 @@
         </shape>
     </item>
     <item>
-        <shape android:tintMode="src_atop">
-            <solid android:color="@*android:color/system_neutral2_800" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
-        </shape>
-    </item>
-    <item>
-        <shape android:tintMode="src_atop">
+        <shape android:shape="rectangle">
             <gradient
-                android:angle="90.0"
-                android:centerColor="#00000000"
-                android:endColor="#00000000"
-                android:startColor="#40000000" />
+                android:angle="0.0"
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>
     <item
-        android:bottom="4.0dp"
-        android:end="4.0dp"
-        android:start="4.0dp"
-        android:top="4.0dp">
-        <shape android:tintMode="src_atop">
-            <solid android:color="@*android:color/system_neutral2_800" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
-        </shape>
-    </item>
-    <item
-        android:bottom="4.0dp"
-        android:end="4.0dp"
-        android:start="4.0dp"
-        android:top="4.0dp">
-        <shape android:tintMode="src_atop">
-            <gradient
-                android:angle="270.0"
-                android:centerColor="#00000000"
-                android:endColor="#00000000"
-                android:startColor="#40000000" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
+        android:bottom="2dp"
+        android:end="2dp"
+        android:start="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@*android:color/system_neutral1_900" />
+            <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>
 </ripple>

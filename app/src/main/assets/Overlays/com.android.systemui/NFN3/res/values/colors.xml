@@ -2,5 +2,8 @@
 <resources>
 
     <color name="notification_material_background_media_default_color">#00000000</color>
+    <color name="notification_guts_bg_color_compass">@*android:color/background_dark</color>
+    <color name="notification_material_background_click">#00000000</color>
+    <color name="lockscreen_notification_compass_bg">#00000000</color>
 
 </resources>

@@ -3,17 +3,19 @@
     android:color="?android:colorControlHighlight">
     <item>
         <shape android:shape="oval">
-            <gradient
-                android:angle="0.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+            <solid android:color="@*android:color/system_neutral2_10" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#1A000000" />
         </shape>
     </item>
     <item
-        android:bottom="2dp"
-        android:end="2dp"
-        android:start="2dp"
-        android:top="2dp">
+        android:bottom="4dp"
+        android:end="4dp"
+        android:start="4dp"
+        android:top="4dp">
         <shape android:shape="oval">
             <solid android:color="@*android:color/system_neutral2_10" />
         </shape>

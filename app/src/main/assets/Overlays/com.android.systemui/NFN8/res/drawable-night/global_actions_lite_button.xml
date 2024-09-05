@@ -5,17 +5,17 @@
         <shape android:shape="oval">
             <gradient
                 android:angle="0.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
         </shape>
     </item>
     <item
-        android:bottom="4dp"
-        android:end="4dp"
-        android:start="4dp"
-        android:top="4dp">
+        android:bottom="1dp"
+        android:end="1dp"
+        android:start="1dp"
+        android:top="1dp">
         <shape android:shape="oval">
-            <solid android:color="?android:attr/colorBackgroundFloating" />
+            <solid android:color="@*android:color/system_neutral2_900" />
         </shape>
     </item>
 </ripple>

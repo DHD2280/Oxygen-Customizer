@@ -90,7 +90,7 @@ public class ToastFrame extends BaseFragment {
             add(new ToastModel(R.drawable.toast_frame_style_10, String.format(getString(R.string.style), 10)));
             add(new ToastModel(R.drawable.toast_frame_style_11, String.format(getString(R.string.style), 11)));
             add(new ToastModel(R.drawable.toast_frame_style_12, String.format(getString(R.string.style), 12)));
-        }};
+           }};
 
         return new ToastAdapter(
                 getAppContext(),

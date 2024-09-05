@@ -10,8 +10,8 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="315.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>
@@ -20,7 +20,7 @@
         android:end="120dp"
         android:top="6dp">
         <shape android:shape="rectangle">
-            <solid android:color="@*android:color/system_neutral2_800" />
+            <solid android:color="@*android:color/system_neutral2_900" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>
@@ -29,7 +29,7 @@
         android:start="120dp"
         android:top="3dp">
         <shape android:shape="rectangle">
-            <solid android:color="@*android:color/system_neutral2_800" />
+            <solid android:color="@*android:color/system_neutral2_900" />
             <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
         </shape>
     </item>

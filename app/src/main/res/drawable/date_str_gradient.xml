@@ -4,7 +4,7 @@
 
     <gradient
         android:type="linear"
-        android:startColor="@android:color/system_accent1_600"
+        android:startColor="@*android:color/accent_material_dark"
         android:endColor="@color/trasp"
         android:angle="45"/>
 
