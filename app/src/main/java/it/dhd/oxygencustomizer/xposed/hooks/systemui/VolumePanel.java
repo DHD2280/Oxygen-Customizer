@@ -47,7 +47,7 @@ public class VolumePanel extends XposedMods {
 
         mDesiredTimeout = Xprefs.getSliderInt("volume_dialog_timeout", 3);
         mTimeOut = mDesiredTimeout * 1000;
-        mDisableVolumeWarning = Xprefs.getBoolean("disable_volume_warning", false);
+        mDisableVolumeWarning = Xprefs.getBoolean("volume_disable_volume_warning", false);
         customizeVolumeProgress = Xprefs.getBoolean("volume_panel_seekbar_color_enabled", false);
         customizeVolumeBg = Xprefs.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
         volumeProgressPrimary = Xprefs.getBoolean("volume_panel_seekbar_link_primary", false);
