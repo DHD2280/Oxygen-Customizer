@@ -521,7 +521,7 @@
     <string name="qs_header_clock_enabled">Custom Header Clock</string>
     <string name="qs_header_clock_enabled_summary">Add a custom clock on QS panel</string>
     <string name="qs_header_clock_custom">Clock Style</string>
-    <string name="qs_header_clock_custom_summary">Pick a style of your choice.</string>
+    <string name="qs_header_clock_custom_summary">Swipe to pick a style of your choice.</string>
     <string name="qs_header_clock_custom_user">Use Custom User Name</string>
     <string name="qs_header_clock_custom_user_title">User Name</string>
     <string name="qs_header_clock_custom_user_image">Use Custom User Image</string>
@@ -730,7 +730,7 @@
     <string name="lockscreen_clock">Lockscreen Clock</string>
     <string name="lockscreen_clock_switch">Custom Lockscreen Clock</string>
     <string name="lockscreen_clock_custom">Clock Style</string>
-    <string name="lockscreen_clock_custom_summary">Pick a style of your choice.</string>
+    <string name="lockscreen_clock_custom_summary">Swipe to pick a style of your choice.</string>
     <string name="lockscreen_clock_font_prefs_title">Font</string>
     <string name="lockscreen_clock_font_custom_enabled">Use Custom font</string>
     <string name="lockscreen_clock_font_custom_title">Pick Font</string>
@@ -773,7 +773,7 @@
     <string name="aod_clock">AOD Clock</string>
     <string name="aod_clock_switch">Custom AOD Clock</string>
     <string name="aod_clock_custom">Clock Style</string>
-    <string name="aod_clock_custom_summary">Pick a style of your choice.</string>
+    <string name="aod_clock_custom_summary">Swipe to pick a style of your choice.</string>
     <string name="aod_clock_font_prefs_title">Font</string>
     <string name="aod_clock_font_custom_enabled">Use Custom font</string>
     <string name="aod_clock_font_custom_title">Pick Font</string>
