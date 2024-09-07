@@ -17,7 +17,7 @@
     <color name="color_background_alpha">@color/color_background_alpha_dark</color>
 
     <!-- Previews -->
-    <color name="offStateColor">@android:color/system_neutral2_800</color>
+    <color name="offStateColor">@android:color/system_neutral2_900</color>
     <color name="offStateColor2">#1AFFFFFF</color>
     <color name="offStateColor4">#99000000</color>
     <color name="shadow">#40000000</color>
@@ -28,10 +28,10 @@
     <color name="ic_launcher_foreground_themed">@android:color/system_accent1_100</color>
     <color name="ic_launcher_background_themed">@android:color/system_neutral1_800</color>
 
-    <color name="rippleAccent">@color/color_accent_alpha_dark</color>
+    <color name="rippleAccent">@*android:color/ripple_material_dark</color>
 
-    <color name="settings_pui_monet_v1">@android:color/system_accent1_600</color>
-    <color name="settings_pui_monet_v2">@android:color/system_accent1_100</color>
+    <color name="settings_pui_monet_v1">@*android:color/accent_material_dark</color>
+    <color name="settings_pui_monet_v2">@*android:color/accent_material_dark</color>
 
     <color name="card_surface_color">@android:color/system_neutral1_900</color>
 

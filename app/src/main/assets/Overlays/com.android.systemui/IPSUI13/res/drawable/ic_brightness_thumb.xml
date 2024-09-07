@@ -19,7 +19,7 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
-        android:fillColor="?android:attr/colorBackgroundFloating"
+        android:fillColor="?android:attr/colorBackground"
         android:pathData="M18.5,9.31V5.5h-3.81L12,2.81L9.31,5.5H5.5v3.81L2.81,12l2.69,2.69v3.81h3.81L12,21.19l2.69-2.69h3.81 v-3.81L21.19,12L18.5,9.31z M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S14.76,17,12,17z" />
     <path
         android:fillColor="?android:attr/colorControlActivated"

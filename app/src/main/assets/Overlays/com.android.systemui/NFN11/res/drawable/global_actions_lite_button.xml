@@ -4,16 +4,18 @@
     <item>
         <shape android:shape="oval">
             <gradient
-                android:angle="315.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
+                android:angle="0.0"
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
         </shape>
     </item>
-    <item>
+    <item
+        android:bottom="4dp"
+        android:end="4dp"
+        android:start="4dp"
+        android:top="4dp">
         <shape android:shape="oval">
-            <gradient
-                android:endColor="#B3FFFFFF"
-                android:startColor="#99FFFFFF" />
+            <solid android:color="?android:attr/colorBackground" />
         </shape>
     </item>
 </ripple>

@@ -1,25 +1,50 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:colorControlHighlight">
     <item
-        android:bottom="2dp"
-        android:top="4dp">
-        <shape android:shape="rectangle">
+        android:bottom="2.0dp"
+        android:top="2.0dp">
+        <shape
+            android:shape="rectangle"
+            android:tintMode="src_atop">
+            <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
             <gradient
                 android:angle="0.0"
-                android:endColor="@*android:color/system_accent1_600"
-                android:startColor="@*android:color/system_accent1_600" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
+                android:endColor="@*android:color/accent_material_dark"
+                android:startColor="@*android:color/accent_material_dark" />
         </shape>
     </item>
     <item
-        android:bottom="4dp"
-        android:top="2dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@*android:color/system_neutral2_10" />
-            <corners android:radius="@*android:dimen/harmful_app_name_padding_top" />
+        android:bottom="4.0dp"
+        android:end="2.0dp"
+        android:start="2.0dp"
+        android:top="4.0dp">
+        <shape
+            android:shape="rectangle"
+            android:tintMode="src_atop">
+            <gradient
+                android:angle="270.0"
+                android:endColor="#FFF0F0F0"
+                android:startColor="#FFBDBDBD" />
+            <corners android:radius="@*android:dimen/harmful_app_name_padding_right" />
+        </shape>
+    </item>
+    <item
+        android:bottom="6.0dp"
+        android:left="4.0dp"
+        android:right="4.0dp"
+        android:top="6.0dp">
+        <shape
+            android:shape="rectangle"
+            android:tintMode="src_atop">
+            <gradient
+                android:angle="90.0"
+                android:endColor="#FFF0F0F0"
+                android:startColor="#FFBDBDBD" />
+            <corners android:radius="@*android:dimen/harmful_app_name_padding_left" />
             <padding
                 android:left="20dp"
                 android:right="20dp" />
         </shape>
     </item>
-</layer-list>
+</ripple>

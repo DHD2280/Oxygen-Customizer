@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  ~ limitations under the License
+  -->
+
+<resources>
+    <color name="background_dark">#000000</color>
+    <color name="background_floating_material_dark">#0b0b0b</color>
+    <color name="background_holo_dark">#242424</color>
+    <color name="background_leanback_dark">#282828</color>
+    <color name="button_material_dark">#0e0e0e</color>
+    <color name="button_material_light">#1b1b1b</color>
+    <color name="holo_light_primary_dark">#181818</color>
+    <color name="holo_primary">#131313</color>
+    <color name="holo_primary_dark">#1f1f1f</color>
+    <color name="black">#000000</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>	
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>
+	
+</resources>
