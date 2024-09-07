@@ -18,13 +18,25 @@
 <resources>
     <color name="accent_device_default">@*android:color/accent_material_dark</color>
     <color name="call_notification_answer_color">@*android:color/accent_material_dark</color>
+    <color name="call_notification_decline_color">#ffdd0000</color>
+    <color name="chooser_gradient_background">#ff44484c</color>
+    <color name="chooser_gradient_highlight">#ff4d5155</color>
+    <color name="chooser_row_divider">#0fffffff</color>
     <color name="language_picker_item_selected_bg">@*android:color/accent_material_dark</color>
     <color name="language_picker_item_selected_indicator">@*android:color/background_dark</color>
     <color name="language_picker_item_selected_stroke">@*android:color/accent_material_dark</color>
+    <color name="language_picker_item_text_color">#fff1f3f4</color>
+    <color name="language_picker_item_text_color_secondary">#ffbdc1c6</color>
     <color name="language_picker_item_text_color_secondary_selected">@*android:color/background_dark</color>
+    <color name="notification_action_button_text_color">#deffffff</color>
+    <color name="notification_default_color_current">#deffffff</color>
+    <color name="notification_expand_button_pill_color">#0affffff</color>
+    <color name="notification_primary_text_color_current">#ffffffff</color>
+    <color name="notification_secondary_text_color_current">#ffffffff</color>
     <color name="overview_background">@*android:color/background_holo_dark</color>
     <color name="personal_apps_suspension_notification_color">@*android:color/accent_material_dark</color>
     <color name="side_fps_button_color">@*android:color/accent_material_dark</color>
+    <color name="side_fps_text_color">#ffffffff</color>
     <color name="side_fps_toast_background">@*android:color/background_dark</color>
     <color name="user_icon_6">@*android:color/accent_material_dark</color>
     <color name="user_icon_7">@*android:color/accent_material_dark</color>
