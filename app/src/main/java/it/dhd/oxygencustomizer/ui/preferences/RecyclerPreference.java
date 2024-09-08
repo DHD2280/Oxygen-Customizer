@@ -24,18 +24,23 @@ public class RecyclerPreference extends Preference {
     private String mKey = null;
     private int mDefaultValue = 0;
 
+    public RecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
     public RecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     public RecyclerPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
         init();
     }
 
     public RecyclerPreference(Context context) {
-        this(context, null, 0);
+        super(context);
         init();
     }
 
@@ -53,9 +58,12 @@ public class RecyclerPreference extends Preference {
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mRecyclerView = (RecyclerView) holder.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) holder.findViewById(R.id.pref_recycler_view);
+
         // Create a new LayoutManager instance for each RecyclerView
-        mRecyclerView.setLayoutManager(new CarouselLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        layoutManager.setMinifyDistance(0.8f);
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         //mRecyclerView.setHasFixedSize(true);
         mRecyclerView.scrollToPosition(PreferenceHelper.instance.mPreferences.getInt(mKey, mDefaultValue));
