@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -88,13 +89,13 @@ public class AppUtils {
         List<String> commands = new ArrayList<>();
         for (String scope : scopes) {
             if ("android".equals(scope)) continue;
+            BootLoopProtector.resetCounter(scope);
             if (scope.contains("systemui")) {
                 commands.add("kill -9 `pgrep systemui`");
                 continue;
             }
             commands.add("killall " + scope);
             commands.add("am force-stop " + scope);
-            BootLoopProtector.resetCounter(scope);
         }
         ShellUtils.execCommand(commands, true);
     }
@@ -170,6 +171,24 @@ public class AppUtils {
             Log.e("ClassChecker", "Exception occurred", e);
         }
         return false;
+    }
+
+    public static String getAppName(Context context, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            return pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            return packageName;
+        }
+    }
+
+    public static Drawable getAppIcon(Context context, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            return pm.getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
     }
 
 }

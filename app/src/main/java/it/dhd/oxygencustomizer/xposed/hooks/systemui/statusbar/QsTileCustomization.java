@@ -45,6 +45,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_UPDATE_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
@@ -133,7 +134,7 @@ public class QsTileCustomization extends XposedMods {
 
     // QS Media Tile
     private View mOplusQsMediaView = null;
-    public static Drawable mOplusQsMediaDefaultBackground = null;
+    private Drawable mOplusQsMediaDefaultBackground = null;
     private Drawable mOplusQsMediaDrawable = null;
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
@@ -147,6 +148,7 @@ public class QsTileCustomization extends XposedMods {
     private int mTrasformations = 1;
 
     // Qs Media Tile Album Art
+    private boolean mQsWidgetsEnabled = false;
     private boolean showMediaArtMediaQs = false;
     private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
     private float mMediaQsArtBlurAmount = 7.5f;
@@ -184,6 +186,7 @@ public class QsTileCustomization extends XposedMods {
         tileBDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0);
 
         // Media QS
+        mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
         mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
         mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
@@ -326,7 +329,7 @@ public class QsTileCustomization extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mOplusQsMediaView = (View) param.thisObject;
                 mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground;
+                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable();
                 if (qsInactiveColorEnabled) {
                     mOplusQsMediaDrawable.setTint(qsInactiveColor);
                     mOplusQsMediaDrawable.invalidateSelf();
@@ -534,6 +537,7 @@ public class QsTileCustomization extends XposedMods {
 
     private void updateMediaQsBackground() {
         if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
+        if (mQsWidgetsEnabled) return;
         Bitmap oldArt = mArt;
         Bitmap tempArt = getArt();
         if (tempArt == null) {
@@ -572,6 +576,7 @@ public class QsTileCustomization extends XposedMods {
 
     private void hideMediaQsBackground() {
         if (mOplusQsMediaView == null) return;
+        if (mQsWidgetsEnabled) return;
         mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
     }
 
@@ -703,7 +708,8 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void updateMediaQs() {
-        if (showMediaArtMediaQs) return;
+        if (!mQsWidgetsEnabled && showMediaArtMediaQs) return;
+        if (mQsWidgetsEnabled) return;
         if (qsInactiveColorEnabled) {
             if (mOplusQsMediaView != null && mOplusQsMediaDrawable != null) {
                 mOplusQsMediaDrawable.setTint(qsInactiveColor);

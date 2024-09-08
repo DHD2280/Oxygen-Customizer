@@ -21,6 +21,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.CaffeineTile;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
@@ -44,6 +45,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.NotificationTrans
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTiles;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomization;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
@@ -84,6 +86,7 @@ public class ModPacks {
 
                     // Audio Data Provider
                     modPacks.add(AudioDataProvider.class);
+                    modPacks.add(MediaPlayerObserver.class);
 
                     // System Classes We need
                     modPacks.add(OpUtils.class);
@@ -112,6 +115,7 @@ public class ModPacks {
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
+                    modPacks.add(QsWidgets.class);
 
                     // Pulse View
                     modPacks.add(PulseViewHook.class);

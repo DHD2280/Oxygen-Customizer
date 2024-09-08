@@ -20,7 +20,7 @@ public class OpUtils extends XposedMods {
 
     private static Class<?> OpUtils = null;
     private static Class<?> UtilsClass = null;
-    private static Class<?> QsColorUtil = null;
+    public static Class<?> QsColorUtil = null;
     private static Class<?> OplusChargingStrategy = null;
 
     public OpUtils(Context context) {

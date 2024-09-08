@@ -25,6 +25,12 @@
             android:title="@string/quick_settings_tiles_main"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsWidgets"
+            android:key="quick_settings_widgets"
+            android:title="@string/quick_settings_widgets"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

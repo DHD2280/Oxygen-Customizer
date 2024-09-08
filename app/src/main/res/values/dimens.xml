@@ -72,4 +72,7 @@
     <dimen name="keyline_x4">16dp</dimen>
     <dimen name="elevation_card_resting">1dp</dimen>
 
+    <!-- Qs Widgets -->
+    <dimen name="qs_controls_container_radius">22dp</dimen>
+
 </resources>

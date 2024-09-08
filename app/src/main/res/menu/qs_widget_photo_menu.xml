@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/set_photo_radius"
+        android:title="@string/qs_widget_set_radius" />
+    <item
+        android:id="@+id/set_photo"
+        android:title="@string/qs_widget_set_custom_photo" />
+
+</menu>

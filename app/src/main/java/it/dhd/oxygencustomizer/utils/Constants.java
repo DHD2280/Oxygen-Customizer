@@ -665,6 +665,7 @@ public class Constants {
     public static final String ACTION_TILE_REMOVED = BuildConfig.APPLICATION_ID + ".ACTION_TILE_REMOVED_OC";
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
     public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";
+    public static final String ACTION_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";

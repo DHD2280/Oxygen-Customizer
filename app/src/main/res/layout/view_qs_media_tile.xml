@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:tag="app_icon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:visibility="invisible" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:tag="media_output_switch_btn_parent"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"/>
+    </LinearLayout>
+
+    <TextView
+        android:tag="media_panel_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="marquee"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="start"
+        android:lineSpacingMultiplier="1.1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <TextView
+        android:tag="media_panel_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.55"
+        android:ellipsize="marquee"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="start"
+        android:lineSpacingMultiplier="1.1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:tag="media_panel_action_pre"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerInside" />
+
+        <ImageView
+            android:tag="media_panel_action_play_or_pause"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerInside" />
+
+        <ImageView
+            android:tag="media_panel_action_next"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+</LinearLayout>

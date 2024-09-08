@@ -23,6 +23,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCRE
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
@@ -144,10 +145,12 @@ public class WeatherConfig {
         boolean aodWeather = getPrefs(context).getBoolean(AOD_WEATHER_SWITCH, false);
         String bigWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS, "");
         String miniWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
+        String qsWidgets = getPrefs(context).getString(QS_WIDGETS_LIST, "media");
 
         boolean weatherWidget = bigWidgets.contains("weather") || miniWidgets.contains("weather");
+        boolean qsWeather = qsWidgets.contains("weather");
 
-        return lsWeather || aodWeather || weatherWidget;
+        return lsWeather || aodWeather || weatherWidget || qsWeather;
     }
 
     public static void setEnabled(Context context, boolean value, String key) {
