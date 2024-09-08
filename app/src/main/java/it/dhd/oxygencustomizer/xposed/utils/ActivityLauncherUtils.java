@@ -57,12 +57,18 @@ public class ActivityLauncherUtils {
             return;
         }
         if (!apps.isEmpty()) {
-            callMethod(mActivityStarter, "startActivity", launchIntent, false);
+            callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
         } else {
             if (appTypeResId != 0) showNoDefaultAppFoundToast(appTypeResId);
         }
     }
 
+    /**
+     * Launches an app using the ActivityStarter
+     * dismissing the shade.
+     * Used for launching apps from Quick Settings.
+     * @param launchIntent The intent to launch the app
+     */
     public void launchApp(Intent launchIntent) {
         if (mActivityStarter == null) {
             log("ActivityStarter is null");
@@ -71,22 +77,22 @@ public class ActivityLauncherUtils {
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", launchIntent, 0 /* dismissShade */);
     }
 
-    public void launchCamera() {
+    public void launchCamera(boolean fromQs) {
         Object mCameraGestureHelper = getCameraGestureHelper();
 
         if (mCameraGestureHelper != null) {
             callMethod(mCameraGestureHelper, "launchCamera", 3);
         } else {
             final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
-            launchAppIfAvailable(launchIntent, R.string.camera, false);
+            launchAppIfAvailable(launchIntent, R.string.camera, fromQs);
         }
     }
 
-    public void launchTimer() {
+    public void launchTimer(boolean fromQs) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.SHOW_ALARMS");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        launchAppIfAvailable(intent, R.string.clock_timer, false);
+        launchAppIfAvailable(intent, R.string.clock_timer, fromQs);
     }
 
     public void launchCalculator() {
@@ -131,9 +137,9 @@ public class ActivityLauncherUtils {
         callMethod(mActivityStarter, "startActivity", intent, true);
     }
 
-    public void launchAudioSettings() {
+    public void launchAudioSettings(boolean fromQs) {
         final Intent launchIntent = new Intent(android.provider.Settings.ACTION_SOUND_SETTINGS);
-        launchAppIfAvailable(launchIntent, 0, false);
+        launchAppIfAvailable(launchIntent, 0, fromQs);
     }
 
     public void startSettingsActivity() {
