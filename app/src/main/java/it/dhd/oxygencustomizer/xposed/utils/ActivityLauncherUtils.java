@@ -5,7 +5,6 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCameraGestureHelper;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 
 import android.content.Context;
 import android.content.ComponentName;
@@ -14,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -40,14 +38,6 @@ public class ActivityLauncherUtils {
         this.mContext = context;
         this.mActivityStarter = activityStarter;
         mPackageManager = mContext.getPackageManager();
-    }
-
-    public String getInstalledMusicApp() {
-        final Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_APP_MUSIC);
-        final  List<ResolveInfo> musicApps = mPackageManager.queryIntentActivities(intent, 0);
-        ResolveInfo musicApp = musicApps.isEmpty() ? null : musicApps.get(0);
-        return musicApp != null ? musicApp.activityInfo.packageName : "";
     }
 
     public void launchAppIfAvailable(Intent launchIntent, @StringRes int appTypeResId, boolean fromQs) {
