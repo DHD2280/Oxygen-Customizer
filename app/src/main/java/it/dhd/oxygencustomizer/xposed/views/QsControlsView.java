@@ -213,12 +213,9 @@ public class QsControlsView extends LinearLayout {
         ControllersProvider.registerBluetoothCallback(this::onBluetoothChanged);
         ControllersProvider.registerTorchModeCallback(this::onTorchChanged);
         ControllersProvider.registerHotspotCallback(this::onHotspotChanged);
-        ThemeEnabler.registerThemeChangedListener(new ThemeEnabler.OnThemeChangedListener() {
-            @Override
-            public void onThemeChanged() {
-                loadColors();
-                updateWidgetsState();
-            }
+        ThemeEnabler.registerThemeChangedListener(() -> {
+            loadColors();
+            updateWidgetsState();
         });
     }
 
@@ -709,12 +706,6 @@ public class QsControlsView extends LinearLayout {
 
     }
 
-    private boolean isNightMode() {
-        final Configuration config = mContext.getResources().getConfiguration();
-        return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES;
-    }
-
     private List<List<String>> splitString(String input) {
         String[] elements = input.split(",");
 
@@ -764,7 +755,6 @@ public class QsControlsView extends LinearLayout {
 
     private void updateWidgetsResources(ImageView iv) {
         if (iv == null) return;
-        Drawable d = ResourcesCompat.getDrawable(modRes, R.drawable.qs_widget_background_circle, mContext.getTheme());
         ShapeDrawable shapeDrawable = new ShapeDrawable();
         shapeDrawable.setShape(getLastShape(mContext));
         iv.setBackground(shapeDrawable);
@@ -1152,6 +1142,7 @@ public class QsControlsView extends LinearLayout {
 
     private void launchApp(String packageName) {
         Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (launchIntent == null) return;
         launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         mActivityLauncherUtils.launchApp(launchIntent);
     }
