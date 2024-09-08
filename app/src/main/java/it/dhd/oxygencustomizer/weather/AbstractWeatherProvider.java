@@ -174,7 +174,7 @@ public abstract class AbstractWeatherProvider {
             city = getCoordinatesLocality(coordinates);
         }
         if (TextUtils.isEmpty(city)) {
-            city = mContext.getResources().getString(R.string.omnijaws_city_unkown);
+            city = mContext.getResources().getString(R.string.omnijaws_city_unknown);
         }
         log(TAG, "getWeatherDataLocality = " + city);
         return city;
