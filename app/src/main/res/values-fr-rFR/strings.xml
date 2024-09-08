@@ -21,6 +21,7 @@
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Un redémarrage du système est nécessaire pour appliquer les paramètres</string>
     <!-- General Strings -->
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <!-- Menu Strings -->
     <!-- NavBar Strings -->
@@ -39,6 +40,7 @@
     <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <!-- QS Tile Radius -->
     <!-- Media Tile -->

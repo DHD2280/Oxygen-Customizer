@@ -92,6 +92,7 @@
     <string name="right">右邊</string>
     <string name="top">頂部</string>
     <string name="bottom">底部</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">搜尋…</string>
     <string name="searchpreference_clear">清除</string>
@@ -358,6 +359,7 @@
     <string name="quick_settings_tiles_landscape">橫屏時</string>
     <string name="quick_settings_tiles_vertical_rows">橫屏時(行數)</string>
     <string name="quick_settings_tiles_vertical_columns">橫屏時(列數)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">自定義</string>
     <string name="quick_settings_tiles_customize_category_title">磁貼背景</string>
@@ -471,7 +473,6 @@
     <string name="qs_header_clock_enabled">自定義標題時鐘</string>
     <string name="qs_header_clock_enabled_summary">在控制中心增加自定義時鐘</string>
     <string name="qs_header_clock_custom">時鐘風格</string>
-    <string name="qs_header_clock_custom_summary">選擇您喜歡的風格</string>
     <string name="qs_header_clock_custom_user">使用自定義用戶名</string>
     <string name="qs_header_clock_custom_user_title">用戶名</string>
     <string name="qs_header_clock_custom_user_image">使用自定義用戶圖片</string>
@@ -668,7 +669,6 @@
     <string name="lockscreen_clock">鎖定介面時鐘</string>
     <string name="lockscreen_clock_switch">自定義鎖定介面時鐘</string>
     <string name="lockscreen_clock_custom">時鐘風格</string>
-    <string name="lockscreen_clock_custom_summary">選擇您喜歡的風格</string>
     <string name="lockscreen_clock_font_prefs_title">字體</string>
     <string name="lockscreen_clock_font_custom_enabled">自定義字體</string>
     <string name="lockscreen_clock_font_custom_title">選擇字體</string>
@@ -704,7 +704,6 @@
     <string name="aod_clock">AOD時鐘</string>
     <string name="aod_clock_switch">自定義AOD時鐘</string>
     <string name="aod_clock_custom">時鐘風格</string>
-    <string name="aod_clock_custom_summary">選擇您喜歡的風格</string>
     <string name="aod_clock_font_prefs_title">字體</string>
     <string name="aod_clock_font_custom_enabled">自定義字體</string>
     <string name="aod_clock_font_custom_title">選擇字體</string>

@@ -85,6 +85,7 @@
     <string name="gradient_top_bottom">Cima para baixo</string>
     <string name="gradient_tl_br">Superior esquerdo para inferior direito</string>
     <string name="gradient_tr_bl">Superior direito para inferior esquerdo</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Pesquisar…</string>
     <string name="searchpreference_clear">Limpar</string>
@@ -212,6 +213,7 @@
     <string name="qs_transparency">Transparência do QS e blur</string>
     <string name="qs_transparency_blur_title">Blur no nível da janela</string>
     <string name="qs_blur_intentisy">Intensidade do blur</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <!-- QS Tile Radius -->
     <!-- Media Tile -->

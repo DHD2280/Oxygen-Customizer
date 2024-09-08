@@ -80,6 +80,7 @@
     <string name="general_color_text2">Texto 2</string>
     <string name="sysui_restart_needed">Requiere un reinicio de la Interfaz del Sistema para aplicar</string>
     <string name="one_time_reboot_needed">¡Reinicia tu dispositivo!</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Buscar…</string>
     <string name="searchpreference_clear">Limpiar</string>
@@ -334,6 +335,7 @@
     <string name="quick_settings_tiles_landscape">En modo horizontal</string>
     <string name="quick_settings_tiles_vertical_rows">Filas de Ajustes rápidos (horizontal)</string>
     <string name="quick_settings_tiles_vertical_columns">Columnas de Ajustes rápidos (horizontal)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalización de AR</string>
     <string name="quick_settings_tiles_customize_category_title">Fondo de los mosaicos de ajustes rápidos</string>
@@ -444,7 +446,6 @@
     <string name="qs_header_clock_enabled">Reloj de encabezado personalizado</string>
     <string name="qs_header_clock_enabled_summary">Añadir un reloj personalizado en el panel de AR</string>
     <string name="qs_header_clock_custom">Estilo de reloj</string>
-    <string name="qs_header_clock_custom_summary">Elige un estilo de tu elección.</string>
     <string name="qs_header_clock_custom_user">Usar nombre de usuario personalizado</string>
     <string name="qs_header_clock_custom_user_title">Nombre de usuario</string>
     <string name="qs_header_clock_custom_user_image">Usar imagen de usuario personalizada</string>
@@ -633,7 +634,6 @@
     <string name="lockscreen_clock">Reloj de pantalla de bloqueo</string>
     <string name="lockscreen_clock_switch">Reloj de la pantalla de bloqueo personalizado</string>
     <string name="lockscreen_clock_custom">Estilo de reloj</string>
-    <string name="lockscreen_clock_custom_summary">Elige un estilo de tu elección.</string>
     <string name="lockscreen_clock_font_prefs_title">Fuente</string>
     <string name="lockscreen_clock_font_custom_enabled">Usar fuente personalizada</string>
     <string name="lockscreen_clock_font_custom_title">Elegir fuente</string>
@@ -669,7 +669,6 @@
     <string name="aod_clock">Reloj AOD</string>
     <string name="aod_clock_switch">Reloj AOD personalizado</string>
     <string name="aod_clock_custom">Estilo de reloj</string>
-    <string name="aod_clock_custom_summary">Elige un estilo de tu elección.</string>
     <string name="aod_clock_font_prefs_title">Fuente</string>
     <string name="aod_clock_font_custom_enabled">Usar fuente personalizada</string>
     <string name="aod_clock_font_custom_title">Elegir fuente</string>

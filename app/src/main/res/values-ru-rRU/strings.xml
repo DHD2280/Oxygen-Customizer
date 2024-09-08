@@ -93,6 +93,7 @@
     <string name="right">Справа</string>
     <string name="top">Сверху</string>
     <string name="bottom">Снизу</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
@@ -359,6 +360,7 @@
     <string name="quick_settings_tiles_landscape">В альбомной ориентации</string>
     <string name="quick_settings_tiles_vertical_rows">Строки быстрой настройки (альбомная ориентация)</string>
     <string name="quick_settings_tiles_vertical_columns">Столбцов в QS (альбомная ориентация)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Настройка QS</string>
     <string name="quick_settings_tiles_customize_category_title">Быстрые настройки фона плиток</string>
@@ -473,7 +475,6 @@
     <string name="qs_header_clock_enabled">Настройка часов в QS</string>
     <string name="qs_header_clock_enabled_summary">Смена часов в QS</string>
     <string name="qs_header_clock_custom">Стиль часов</string>
-    <string name="qs_header_clock_custom_summary">Выберите стиль по своему усмотрению.</string>
     <string name="qs_header_clock_custom_user">Используйте собственное имя пользователя</string>
     <string name="qs_header_clock_custom_user_title">Имя пользователя</string>
     <string name="qs_header_clock_custom_user_image">Используйте собственное имя пользователя</string>
@@ -673,7 +674,6 @@
     <string name="lockscreen_clock">Часы на экране блокировки</string>
     <string name="lockscreen_clock_switch">Кастомные часы на экране блокировки</string>
     <string name="lockscreen_clock_custom">Стиль часов</string>
-    <string name="lockscreen_clock_custom_summary">Выберите стиль по своему усмотрению.</string>
     <string name="lockscreen_clock_font_prefs_title">Шрифт</string>
     <string name="lockscreen_clock_font_custom_enabled">Используйте пользовательский шрифт</string>
     <string name="lockscreen_clock_font_custom_title">Выберите шрифт</string>
@@ -710,7 +710,6 @@
     <string name="aod_clock">Часы на AOD</string>
     <string name="aod_clock_switch">Пользовательские часы AOD</string>
     <string name="aod_clock_custom">Стиль часов</string>
-    <string name="aod_clock_custom_summary">Выберите стиль по своему усмотрению.</string>
     <string name="aod_clock_font_prefs_title">Шрифт</string>
     <string name="aod_clock_font_custom_enabled">Использовать собственный шрифт</string>
     <string name="aod_clock_font_custom_title">Выберите шрифт</string>

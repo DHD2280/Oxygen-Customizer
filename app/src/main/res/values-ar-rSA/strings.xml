@@ -92,6 +92,7 @@
     <string name="right">يمين</string>
     <string name="top">أعلى</string>
     <string name="bottom">أسفل</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">بحث…</string>
     <string name="searchpreference_clear">مسح</string>
@@ -346,6 +347,7 @@
     <string name="quick_settings_tiles_title">مربعات الإعدادات السريعة</string>
     <string name="quick_settings_tiles_number">إعدادات عدد مربعات الإعدادات السريعة</string>
     <string name="quick_settings_tiles_main">تخصيص مربعات الإعدادات السريعة</string>
+    <string name="quick_settings_widgets">التطبيقات المصغرة للإعدادات السريعة</string>
     <string name="qs_transparency">شفافية QS &amp; ضبابية</string>
     <string name="qs_transparency_title">تخصيص شفافية QS</string>
     <string name="qs_transparency_value">شفافية QS</string>
@@ -358,6 +360,7 @@
     <string name="quick_settings_tiles_landscape">في الوضع الأفقي</string>
     <string name="quick_settings_tiles_vertical_rows">صفوف الإعدادات السريعة (الوضع الأفقي)</string>
     <string name="quick_settings_tiles_vertical_columns">أعمدة الإعدادات السريعة (الوضع الأفقي)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">تخصيص QS</string>
     <string name="quick_settings_tiles_customize_category_title">خلفية مربعات الإعدادات السريعة</string>
@@ -471,7 +474,6 @@
     <string name="qs_header_clock_enabled">ساعة رأس مخصصة</string>
     <string name="qs_header_clock_enabled_summary">إضافة ساعة مخصصة على لوحة QS</string>
     <string name="qs_header_clock_custom">نمط الساعة</string>
-    <string name="qs_header_clock_custom_summary">اختر نمط من اختيارك.</string>
     <string name="qs_header_clock_custom_user">استخدم اسم مستخدم مخصص</string>
     <string name="qs_header_clock_custom_user_title">اسم المستخدم</string>
     <string name="qs_header_clock_custom_user_image">استخدم صورة مستخدم مخصصة</string>
@@ -668,7 +670,6 @@
     <string name="lockscreen_clock">ساعة شاشة القفل</string>
     <string name="lockscreen_clock_switch">ساعة شاشة قفل مخصصة</string>
     <string name="lockscreen_clock_custom">نمط الساعة</string>
-    <string name="lockscreen_clock_custom_summary">اختر نمطًا من اختيارك.</string>
     <string name="lockscreen_clock_font_prefs_title">الخط</string>
     <string name="lockscreen_clock_font_custom_enabled">استخدام خط مخصص</string>
     <string name="lockscreen_clock_font_custom_title">اختر خط</string>
@@ -704,7 +705,6 @@
     <string name="aod_clock">ساعة AOD</string>
     <string name="aod_clock_switch">ساعة AOD مخصصة</string>
     <string name="aod_clock_custom">نمط الساعة</string>
-    <string name="aod_clock_custom_summary">اختر نمطًا من اختيارك.</string>
     <string name="aod_clock_font_prefs_title">الخط</string>
     <string name="aod_clock_font_custom_enabled">استخدام خط مخصص</string>
     <string name="aod_clock_font_custom_title">اختر خط</string>
@@ -1127,4 +1127,5 @@
     <string name="fix_lag_dialog_message">قد لا يكون إصدار OOS الخاص بك متوافقًا مع هذا الإصلاح.\nإذا كنت ترغب، يمكنك فرض الإصلاح على أي حال.</string>
     <string name="fix_lag_apply_anyway">تفعيل على أي حال</string>
     <!-- Caffeine -->
+    <string name="caffeine">كافيين</string>
 </resources>

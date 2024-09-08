@@ -92,6 +92,7 @@
     <string name="right">Jobb</string>
     <string name="top">Felső</string>
     <string name="bottom">Alsó</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -358,6 +359,7 @@
     <string name="quick_settings_tiles_landscape">Fekvő képernyő-tájolásban</string>
     <string name="quick_settings_tiles_vertical_rows">QS Sorok (Tájkép-mód)</string>
     <string name="quick_settings_tiles_vertical_columns">QS Oszlopok (Tájkép-mód)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Testreszabások</string>
     <string name="quick_settings_tiles_customize_category_title">A csempék háttere</string>
@@ -471,7 +473,6 @@
     <string name="qs_header_clock_enabled">Egyéni fejléc-óra</string>
     <string name="qs_header_clock_enabled_summary">Adjon hozzá egyéni órát a QS panelhez</string>
     <string name="qs_header_clock_custom">Az óra stílusa</string>
-    <string name="qs_header_clock_custom_summary">Válassza ki a kívánt stílust.</string>
     <string name="qs_header_clock_custom_user">Használhat egyéni felhasználónevet</string>
     <string name="qs_header_clock_custom_user_title">Felhasználónév</string>
     <string name="qs_header_clock_custom_user_image">Használhat egyéni felhasználóképet</string>
@@ -668,7 +669,6 @@
     <string name="lockscreen_clock">A képernyőzár órája</string>
     <string name="lockscreen_clock_switch">Egyéni óra a záróképernyőn</string>
     <string name="lockscreen_clock_custom">Az óra stílusa</string>
-    <string name="lockscreen_clock_custom_summary">Válassza ki a kívánt stílust.</string>
     <string name="lockscreen_clock_font_prefs_title">Betűtípus</string>
     <string name="lockscreen_clock_font_custom_enabled">Egyéni karakterkészlet használata</string>
     <string name="lockscreen_clock_font_custom_title">Betűtípus-választó</string>
@@ -704,7 +704,6 @@
     <string name="aod_clock">Óra az AOD-hoz</string>
     <string name="aod_clock_switch">Egyéni AOD-Óra</string>
     <string name="aod_clock_custom">Az óra stílusa</string>
-    <string name="aod_clock_custom_summary">Válassza ki a kívánt stílust.</string>
     <string name="aod_clock_font_prefs_title">Betűtípus</string>
     <string name="aod_clock_font_custom_enabled">Egyéni karakterkészlet használata</string>
     <string name="aod_clock_font_custom_title">Betűtípus-választó</string>

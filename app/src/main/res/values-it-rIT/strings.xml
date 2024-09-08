@@ -92,6 +92,7 @@
     <string name="right">Destra</string>
     <string name="top">In alto</string>
     <string name="bottom">In basso</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -358,6 +359,7 @@
     <string name="quick_settings_tiles_landscape">In orientamento orizzontale</string>
     <string name="quick_settings_tiles_vertical_rows">Righe Impostazioni rapide (orizzontale)</string>
     <string name="quick_settings_tiles_vertical_columns">Colonne Impostazioni rapide (orizzontale)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalizzazione QS</string>
     <string name="quick_settings_tiles_customize_category_title">Impostazioni rapide Sfondo dei Tile</string>
@@ -471,7 +473,6 @@
     <string name="qs_header_clock_enabled">Orologio Intestazione Personalizzato</string>
     <string name="qs_header_clock_enabled_summary">Aggiungi un orologio personalizzato al pannello impostazioni rapide</string>
     <string name="qs_header_clock_custom">Stile Orologio</string>
-    <string name="qs_header_clock_custom_summary">Scegli uno stile a tua scelta.</string>
     <string name="qs_header_clock_custom_user">Usa Nome Utente Personalizzato</string>
     <string name="qs_header_clock_custom_user_title">Nome Utente</string>
     <string name="qs_header_clock_custom_user_image">Usa Immagine Utente Personalizzata</string>
@@ -668,7 +669,6 @@
     <string name="lockscreen_clock">Orologio schermata di blocco</string>
     <string name="lockscreen_clock_switch">Personalizza Orologio schermata di blocco</string>
     <string name="lockscreen_clock_custom">Stile Orologio</string>
-    <string name="lockscreen_clock_custom_summary">Scegli uno stile a tua scelta.</string>
     <string name="lockscreen_clock_font_prefs_title">Carattere</string>
     <string name="lockscreen_clock_font_custom_enabled">Usa carattere personalizzato</string>
     <string name="lockscreen_clock_font_custom_title">Seleziona Carattere</string>
@@ -704,7 +704,6 @@
     <string name="aod_clock">Orologio AOD</string>
     <string name="aod_clock_switch">Orologio AOD personalizzato</string>
     <string name="aod_clock_custom">Stile Orologio</string>
-    <string name="aod_clock_custom_summary">Scegli uno stile a tua scelta.</string>
     <string name="aod_clock_font_prefs_title">Carattere</string>
     <string name="aod_clock_font_custom_enabled">Usa carattere personalizzato</string>
     <string name="aod_clock_font_custom_title">Seleziona Carattere</string>
