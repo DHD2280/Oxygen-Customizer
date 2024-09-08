@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginTop="4dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,6 +17,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Location"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:textSize="18sp" />
         <ImageView
             android:tag="weather_icon"
@@ -30,7 +35,6 @@
         android:tag="weather_current_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:text="Temp"
         android:textSize="32sp" />
 

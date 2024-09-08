@@ -1,14 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.views;
 
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -20,7 +17,6 @@ import android.widget.TextView;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 @SuppressWarnings("viewConstructor")
@@ -67,6 +63,7 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 null
         );
         mCity = (TextView) ViewHelper.findViewWithTag(v, "weather_location");
+        mCity.setSelected(true);
         mTemp = (TextView) ViewHelper.findViewWithTag(v, "weather_current_temp");
         mCondition = (TextView) ViewHelper.findViewWithTag(v, "weather_condition");
         mWeatherIcon = (ImageView) ViewHelper.findViewWithTag(v, "weather_icon");
@@ -75,10 +72,10 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 LinearLayout.LayoutParams.MATCH_PARENT
         );
         layoutParams.setMargins(
-                dp2px(mContext, 12),
-                dp2px(mContext, 12),
-                dp2px(mContext, 12),
-                dp2px(mContext, 12)
+                dp2px(mContext, 8),
+                dp2px(mContext, 8),
+                dp2px(mContext, 8),
+                dp2px(mContext, 8)
         );
         v.setLayoutParams(layoutParams);
         addView(v);
