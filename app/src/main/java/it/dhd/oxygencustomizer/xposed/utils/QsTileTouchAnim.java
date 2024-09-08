@@ -35,10 +35,10 @@ public class QsTileTouchAnim {
     }
 
 
-    public void doAction(int i, View view) {
-        if (i == 0) {
+    public void doAction(int motionAction, View view) {
+        if (motionAction == MotionEvent.ACTION_DOWN) {
             doActionDown(view);
-        } else if (i == 1 || i == 3) {
+        } else if (motionAction == MotionEvent.ACTION_UP || motionAction == MotionEvent.ACTION_CANCEL) {
             doActionUpOrCancel(view);
         }
     }

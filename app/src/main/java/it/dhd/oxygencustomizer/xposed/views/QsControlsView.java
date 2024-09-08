@@ -613,8 +613,8 @@ public class QsControlsView extends LinearLayout {
             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
                     0, h2, 1);
             layoutParams2.gravity = Gravity.CENTER;
+            fab.requestFocus();
             fab.setLayoutParams(layoutParams2);
-            fab.setSelected(true);
         });
         QsTileTouchAnim anim = new QsTileTouchAnim();
         anim.initTouchAnim(fab, true);
