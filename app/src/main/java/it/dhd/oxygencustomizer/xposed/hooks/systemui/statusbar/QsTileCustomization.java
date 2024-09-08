@@ -329,7 +329,7 @@ public class QsTileCustomization extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mOplusQsMediaView = (View) param.thisObject;
                 mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable();
+                if (mOplusQsMediaDefaultBackground != null) mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable();
                 if (qsInactiveColorEnabled) {
                     mOplusQsMediaDrawable.setTint(qsInactiveColor);
                     mOplusQsMediaDrawable.invalidateSelf();
