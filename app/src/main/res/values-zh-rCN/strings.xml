@@ -968,7 +968,7 @@
     <string name="weather_config_title">服务设置</string>
     <string name="with_forecast_title">包含 4 天预报和详细信息</string>
     <string name="owm_key">自定义OWM密钥</string>
-    <string name="omnijaws_city_unkown">未知</string>
+    <string name="omnijaws_city_unknown">未知</string>
     <string name="activity_title">天气</string>
     <string name="omnijaws_service_error_long">加载天气数据时出错</string>
     <string name="omnijaws_detail_header">天气</string>

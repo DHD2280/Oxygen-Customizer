@@ -977,7 +977,7 @@
     <string name="weather_config_title">Настройки сервиса</string>
     <string name="with_forecast_title">С прогнозом на 4 дня и подробной информацией</string>
     <string name="owm_key">Пользовательский ключ OWM</string>
-    <string name="omnijaws_city_unkown">Неизвестный</string>
+    <string name="omnijaws_city_unknown">Неизвестный</string>
     <string name="activity_title">Погода</string>
     <string name="omnijaws_service_error_long">Ошибка при загрузке погодных данных</string>
     <string name="omnijaws_detail_header">Погода</string>

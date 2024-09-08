@@ -968,7 +968,7 @@
     <string name="weather_config_title">إعدادات الخدمة</string>
     <string name="with_forecast_title">مع توقعات لمدة 4 أيام وتفاصيل</string>
     <string name="owm_key">مفتاح OWM مخصص</string>
-    <string name="omnijaws_city_unkown">غير معروف</string>
+    <string name="omnijaws_city_unknown">غير معروف</string>
     <string name="activity_title">الطقس</string>
     <string name="omnijaws_service_error_long">خطأ في تحميل بيانات الطقس</string>
     <string name="omnijaws_detail_header">الطقس</string>

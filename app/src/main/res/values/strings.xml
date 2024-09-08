@@ -1061,7 +1061,7 @@
     <string name="omnijaws_service_error_marker" translatable="false">*</string>
     <string name="with_forecast_title">With 4-day forecast and details</string>
     <string name="owm_key">Custom OWM key</string>
-    <string name="omnijaws_city_unkown">Unknown</string>
+    <string name="omnijaws_city_unknown">Unknown</string>
     <string name="activity_title">Weather</string>
     <string name="omnijaws_service_error_long">Error loading weather data</string>
     <string name="omnijaws_detail_header">Weather</string>

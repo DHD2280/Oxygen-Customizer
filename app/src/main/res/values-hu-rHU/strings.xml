@@ -968,7 +968,7 @@
     <string name="weather_config_title">Időjárás-szolgáltatási beállítások</string>
     <string name="with_forecast_title">4 napos előrejelzéssel és részletekkel</string>
     <string name="owm_key">Egyéni OWM-kulcs</string>
-    <string name="omnijaws_city_unkown">Ismeretlen</string>
+    <string name="omnijaws_city_unknown">Ismeretlen</string>
     <string name="activity_title">Időjárás</string>
     <string name="omnijaws_service_error_long">Hiba az időjárási adatok betöltésekor</string>
     <string name="omnijaws_detail_header">Időjárás</string>

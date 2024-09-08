@@ -928,7 +928,7 @@
     <string name="weather_config_title">Ajustes del servicio</string>
     <string name="with_forecast_title">Con pronóstico de 4 días y detalles</string>
     <string name="owm_key">Clave OWM personalizada</string>
-    <string name="omnijaws_city_unkown">Desconocido</string>
+    <string name="omnijaws_city_unknown">Desconocido</string>
     <string name="activity_title">Clima</string>
     <string name="omnijaws_service_error_long">Error cargando datos del clima</string>
     <string name="omnijaws_detail_header">Clima</string>

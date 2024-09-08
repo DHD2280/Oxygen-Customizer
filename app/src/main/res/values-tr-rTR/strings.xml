@@ -982,7 +982,7 @@
     <string name="weather_config_title">Hizmet ayarları</string>
     <string name="with_forecast_title">4 günlük tahmin ve detaylarla</string>
     <string name="owm_key">Özel OWM anahtarı</string>
-    <string name="omnijaws_city_unkown">Bilinmeyen</string>
+    <string name="omnijaws_city_unknown">Bilinmeyen</string>
     <string name="activity_title">Hava durumu</string>
     <string name="omnijaws_service_error_long">Hava durumu verisi yüklenirken hata oluştu</string>
     <string name="omnijaws_detail_header">Hava durumu</string>

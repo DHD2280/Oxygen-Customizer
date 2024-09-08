@@ -903,7 +903,7 @@
     <string name="weather_config_title">サービスの設定</string>
     <string name="with_forecast_title">4 日間の天気予報と詳細</string>
     <string name="owm_key">カスタム OWM キー</string>
-    <string name="omnijaws_city_unkown">不明</string>
+    <string name="omnijaws_city_unknown">不明</string>
     <string name="activity_title">天気</string>
     <string name="omnijaws_service_error_long">気象データの読み込みに失敗しました</string>
     <string name="omnijaws_detail_header">天気</string>
