@@ -24,6 +24,11 @@ public class ControllersProvider extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
 
+    public static Class<?> LaunchableLinearLayout = null;
+    public static Class<?> LaunchableImageView = null;
+    public static Class<?> LaunchableFrameLayout = null;
+    public static Object PersonalityManagerEx = null;
+
     private static final String TAG = "Oxygen Customizer - ControllersProvider: ";
 
     @SuppressLint("StaticFieldLeak")
@@ -46,6 +51,7 @@ public class ControllersProvider extends XposedMods {
 
     private Object mQsDialogLaunchAnimator = null;
     private Object mQsMediaDialogController = null;
+    private Object mMediaOutputDialogFactory = null;
 
     private Object mCameraGestureHelper = null;
 
@@ -68,6 +74,42 @@ public class ControllersProvider extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         boolean oos13 = Build.VERSION.SDK_INT == 33;
+
+        try {
+            // LaunchableLinearLayout
+            // This is the container of our custom views
+            LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "LaunchableLinearLayout not found: " + t.getMessage());
+        }
+
+        try {
+            // LaunchableImageView
+            // This is an ImageView that can launch dialogs with a GhostView
+            LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "LaunchableImageView not found: " + t.getMessage());
+        }
+
+        try {
+            // LaunchableFrameLayout
+            // This is a FrameLayout that can launch dialogs with a GhostView
+            LaunchableFrameLayout = findClass("com.android.systemui.animation.view.LaunchableFrameLayout", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "LaunchableFrameLayout not found: " + t.getMessage());
+        }
+
+        try {
+            Class<?> PersonalityManagerExImpl = findClass("com.android.systemui.qs.personality.PersonalityManagerEx", lpparam.classLoader);
+            hookAllConstructors(PersonalityManagerExImpl, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    PersonalityManagerEx = param.thisObject;
+                }
+            });
+        } catch (Throwable t) {
+            log(TAG + "PersonalityManagerExImpl not found: " + t.getMessage());
+        }
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
@@ -238,6 +280,12 @@ public class ControllersProvider extends XposedMods {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     if (param.args.length > 1) mQsDialogLaunchAnimator = param.args[1];
+                    if (param.args[0].getClass().getSimpleName().contains("OplusQsMediaCarouselController")) {
+                        Object oplusQsMediaCarouselController = param.args[0];
+                        if (oplusQsMediaCarouselController != null) {
+                            mMediaOutputDialogFactory = callMethod(oplusQsMediaCarouselController, "getMediaOutputDialogFactory");
+                        }
+                    }
                 }
             });
             hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
@@ -567,6 +615,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object[] getQsMediaDialog() {
         return new Object[]{instance.mQsDialogLaunchAnimator, instance.mQsMediaDialogController};
+    }
+
+    public static Object getMediaOutputDialogFactory() {
+        return instance.mMediaOutputDialogFactory;
     }
 
     public static Object getControlsTile() {

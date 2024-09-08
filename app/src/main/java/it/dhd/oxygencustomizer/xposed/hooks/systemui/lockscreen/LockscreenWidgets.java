@@ -53,10 +53,6 @@ public class LockscreenWidgets extends XposedMods {
 
     private ViewGroup mStatusViewContainer = null;
 
-    // Lockscreen Widgets Class Helpers
-    public static Class<?> LaunchableLinearLayout = null;
-    public static Class<?> LaunchableImageView = null;
-
     // Lockscreen Widgets
     private LinearLayout mWidgetsContainer = null;
     private boolean mWeatherEnabled = false;
@@ -168,22 +164,6 @@ public class LockscreenWidgets extends XposedMods {
         mWidgetsContainer = new LinearLayout(mContext);
         mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
-
-        try {
-            // LaunchableLinearLayout
-            // This is the container of our custom views
-            LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "LaunchableLinearLayout not found: " + t.getMessage());
-        }
-
-        try {
-            // LaunchableImageView
-            // This is an ImageView that can launch dialogs with a GhostView
-            LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "LaunchableImageView not found: " + t.getMessage());
-        }
 
         try {
             Class<?> KeyguardQuickAffordanceInteractor = findClass("com.android.systemui.keyguard.domain.interactor.KeyguardQuickAffordanceInteractor", lpparam.classLoader);

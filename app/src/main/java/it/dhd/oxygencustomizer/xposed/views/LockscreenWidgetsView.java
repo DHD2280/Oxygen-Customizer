@@ -20,8 +20,8 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableImageView;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets.LaunchableLinearLayout;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.*;
 
 import android.annotation.SuppressLint;
@@ -780,14 +780,14 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 if (iv != null) {
                     ringerButton = iv;
                     ringerButton.setOnLongClickListener(v -> {
-                        mActivityLauncherUtils.launchAudioSettings();
+                        mActivityLauncherUtils.launchAudioSettings(false);
                         return true;
                     });
                 }
                 if (efab != null) {
                     ringerButtonFab = efab;
                     ringerButtonFab.setOnLongClickListener(v -> {
-                        mActivityLauncherUtils.launchAudioSettings();
+                        mActivityLauncherUtils.launchAudioSettings(false);
                         return true;
                     });
                 }
@@ -821,13 +821,13 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 break;
             case "timer":
                 setUpWidgetResources(iv, efab, v -> {
-                    mActivityLauncherUtils.launchTimer();
+                    mActivityLauncherUtils.launchTimer(false);
                     vibrate(1);
                 }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
                 break;
             case "camera":
                 setUpWidgetResources(iv, efab, v -> {
-                    mActivityLauncherUtils.launchCamera();
+                    mActivityLauncherUtils.launchCamera(false);
                     vibrate(1);
                 }, getDrawable(mContext, CAMERA_ICON, SYSTEM_UI), getString(mContext,CAMERA_LABEL, SYSTEM_UI));
                 break;
