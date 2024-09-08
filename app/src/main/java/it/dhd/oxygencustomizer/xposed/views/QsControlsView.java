@@ -406,7 +406,11 @@ public class QsControlsView extends LinearLayout {
                 }
             } else {
                 log(TAG + "setupWidgets: add group " + group);
-                views.add(createGroupView(mContext, group));
+                try {
+                    views.add(createGroupView(mContext, group));
+                } catch (Throwable t) {
+                    log(TAG + "setupWidgets: error creating group view: " + t.getMessage());
+                }
             }
         }
 
@@ -1047,12 +1051,7 @@ public class QsControlsView extends LinearLayout {
                                       OnClickListener cl, Drawable icon, String text) {
         log(TAG + "setUpWidgetResources: " + text);
         if (efab != null) {
-            efab.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    cl.onClick(v);
-                }
-                return false;
-            });
+            efab.setOnClickListener(cl);
             if (icon != null) efab.setIcon(icon);
             efab.setText(text);
         }
