@@ -328,14 +328,13 @@ public class QsTileCustomization extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mOplusQsMediaView = (View) param.thisObject;
+                if (mQsWidgetsEnabled) return;
                 mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                if (mOplusQsMediaDefaultBackground != null) mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable();
                 if (qsInactiveColorEnabled) {
                     mOplusQsMediaDrawable.setTint(qsInactiveColor);
                     mOplusQsMediaDrawable.invalidateSelf();
                     mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
-                } else
-                    mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+                } else mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
 
                 // Listen for default tip change
                 View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
