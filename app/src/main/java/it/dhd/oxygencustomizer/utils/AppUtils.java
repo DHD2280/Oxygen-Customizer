@@ -48,7 +48,7 @@ public class AppUtils {
                 context.getString(R.string.restart_page_scope)
         };
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setItems(list, (dialog, which) -> {
             switch (which) {
                 case 0 -> restartAllScope(context);
@@ -75,7 +75,6 @@ public class AppUtils {
         builder.setPositiveButton(context.getString(android.R.string.ok), (dialog, which) -> {
             new Thread(() -> {
                 try {
-
                     ShellUtils.execCommand(commands, true);
                 } catch (Exception ignored) {
                 }

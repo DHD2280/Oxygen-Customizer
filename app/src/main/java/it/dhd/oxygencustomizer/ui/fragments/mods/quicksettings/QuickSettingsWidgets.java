@@ -205,7 +205,7 @@ public class QuickSettingsWidgets extends BaseFragment {
                 .map(this::getWidgetType)
                 .collect(Collectors.toList());
         String[] filteredArray = widgetValues.toArray(new String[0]);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(R.string.add_widget);
         builder.setItems(filteredArray, (dialog, which) -> {
             if (mSelectableWidgets.get(which).contains("ca")) {
