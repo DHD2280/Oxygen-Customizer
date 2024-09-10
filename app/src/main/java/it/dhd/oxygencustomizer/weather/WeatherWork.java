@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -85,16 +86,17 @@ public class WeatherWork extends ListenableWorker {
             }
 
             executor.execute(() -> {
-                Location location = getCurrentLocation();
-                if (location != null) {
-                    Log.d(TAG, "Location retrieved");
-                    updateWeather(location, completer);
-                } else if (WeatherConfig.isCustomLocation(mContext)) {
-                    Log.d(TAG, "Using custom location configuration");
-                    updateWeather(null, completer);
-                } else {
-                    handleError(completer, EXTRA_ERROR_LOCATION, "Failed to retrieve location");
-                }
+                getCurrentLocation().thenAccept(location -> {
+                    if (location != null) {
+                        Log.d(TAG, "Location retrieved");
+                        updateWeather(location, completer);
+                    } else if (WeatherConfig.isCustomLocation(mContext)) {
+                        Log.d(TAG, "Using custom location configuration");
+                        updateWeather(null, completer);
+                    } else {
+                        handleError(completer, EXTRA_ERROR_LOCATION, "Failed to retrieve location");
+                    }
+                });
             });
 
             return completer;
@@ -102,7 +104,7 @@ public class WeatherWork extends ListenableWorker {
     }
 
     private void handleError(CallbackToFutureAdapter.Completer<Result> completer, int errorExtra, String logMessage) {
-        Log.w(TAG, logMessage);
+        Log.e(TAG, logMessage);
         Intent errorIntent = new Intent(ACTION_ERROR);
         errorIntent.putExtra(EXTRA_ERROR, errorExtra);
         mContext.sendBroadcast(errorIntent);
@@ -132,17 +134,20 @@ public class WeatherWork extends ListenableWorker {
     }
 
     @SuppressLint("MissingPermission")
-    private Location getCurrentLocation() {
+    private CompletableFuture<Location> getCurrentLocation() {
+        CompletableFuture<Location> locationFuture = new CompletableFuture<>();
 
         if (WeatherConfig.isCustomLocation(mContext)) {
-            return null;
+            locationFuture.complete(null);
+            return locationFuture;
         }
 
         LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         if (!doCheckLocationEnabled()) {
             Log.w(TAG, "locations disabled");
-            return null;
+            locationFuture.complete(null);
+            return locationFuture;
         }
 
         AtomicReference<Location> location = new AtomicReference<>(lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER));
@@ -169,20 +174,25 @@ public class WeatherWork extends ListenableWorker {
             String locationProvider = lm.getBestProvider(sLocationCriteria, true);
             if (TextUtils.isEmpty(locationProvider)) {
                 Log.e(TAG, "No available location providers matching criteria.");
+                locationFuture.complete(null);
             } else {
                 Log.d(TAG, "Getting current location with provider " + locationProvider);
                 lm.getCurrentLocation(locationProvider, null, mContext.getMainExecutor(), location1 -> {
                     if (location1 != null) {
                         Log.d(TAG, "Got valid location now update");
                         location.set(location1);
+                        locationFuture.complete(location1);
                     } else {
-                        Log.w(TAG, "Failed to retrieve location");
+                        Log.e(TAG, "Failed to retrieve location");
+                        locationFuture.complete(null);
                     }
                 });
             }
+        } else {
+            locationFuture.complete(location.get());
         }
 
-        return location.get();
+        return locationFuture;
     }
 
     private void updateWeather(Location location, CallbackToFutureAdapter.Completer<Result> completer) {
