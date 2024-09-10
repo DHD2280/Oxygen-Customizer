@@ -548,6 +548,7 @@ public class Constants {
         public static final String WEATHER_UPDATE_INTERVAL = "weather_update_interval";
         public static final String WEATHER_PROVIDER = "weather_provider";
         public static final String WEATHER_OWM_KEY = "owm_key";
+        public static final String WEATHER_YANDEX_KEY = "yandex_key";
         public static final String WEATHER_UNITS = "weather_units";
         public static final String WEATHER_CUSTOM_LOCATION = "weather_custom_location_switch";
     }

@@ -60,6 +60,16 @@
         app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
+    <EditTextPreference
+        android:dependency="lockscreen_weather_enabled"
+        android:dialogTitle="@string/yandex_key"
+        android:inputType="textNoSuggestions"
+        android:key="yandex_key"
+        android:singleLine="true"
+        android:title="@string/yandex_key"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
     <ListPreference
         android:defaultValue="0"
         android:dependency="lockscreen_weather_enabled"

@@ -79,6 +79,38 @@ public class NetworkUtils {
         });
     }
 
+    public static void asynchronousGetRequest(String url, String[] header, DownloadCallback callback) {
+
+        if (DEBUG) Log.d(TAG, "download: " + url);
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request apiRequest = new Request.Builder()
+                .url(url)
+                .header(header[0], header[1])
+                .build();
+
+        client.newCall(apiRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // Handle failure
+                if (callback != null) {
+                    callback.onDownloadComplete("");
+                }
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                // Handle success
+                String result = response.body() != null ? response.body().string() : "";
+                // Process the response data
+                if (callback != null) {
+                    callback.onDownloadComplete(result);
+                }
+            }
+        });
+    }
+
     public interface DownloadCallback {
         void onDownloadComplete(String result);
     }
