@@ -96,8 +96,8 @@ public class GestureNavbarManager extends XposedMods {
         //region Back gesture
         leftEnabled = Xprefs.getBoolean("gesture_left", true);
         rightEnabled = Xprefs.getBoolean("gesture_right", true);
-        backGestureHeightFractionLeft = Xprefs.getSliderValues( "gesture_left_height_double", 100f);
-        backGestureHeightFractionRight = Xprefs.getSliderValues( "gesture_right_height_double", 100f) ;
+        backGestureHeightFractionLeft = Xprefs.getSliderValues("gesture_left_height_double", 100f);
+        backGestureHeightFractionRight = Xprefs.getSliderValues("gesture_right_height_double", 100f);
         onRotationToo = Xprefs.getBoolean("gesture_on_rotate", true);
         overrideBack = Xprefs.getBoolean("gesture_override_holdback", false);
         overrideMode = Integer.parseInt(Xprefs.getString("gesture_override_holdback_mode", "0"));
@@ -106,7 +106,7 @@ public class GestureNavbarManager extends XposedMods {
         //endregion
 
         //region pill size
-        widthFactor = Xprefs.getSliderInt( "GesPillWidthModPos", 50) * .02f;
+        widthFactor = Xprefs.getSliderInt("GesPillWidthModPos", 50) * .02f;
         //endregion
 
         //region pill color
@@ -138,59 +138,60 @@ public class GestureNavbarManager extends XposedMods {
         }
         Class<?> SideGestureNavView;
         try {
-          SideGestureNavView = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader);
+            SideGestureNavView = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader);
         } catch (Throwable t) {
             SideGestureNavView = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader); // OOS 13
         }
 
-            if (Build.VERSION.SDK_INT >= 34) {
-                hookAllConstructors(SideGestureDetector, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
-                    }
-                });
+        if (Build.VERSION.SDK_INT >= 34) {
+            hookAllConstructors(SideGestureDetector, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
+                }
+            });
 
-                hookAllMethods(SideGestureDetector, "onMotionEventImpl", new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        MotionEvent ev = (MotionEvent) param.args[0];
+            hookAllMethods(SideGestureDetector, "onMotionEventImpl", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    MotionEvent ev = (MotionEvent) param.args[0];
 
-                        if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
+                    if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
 
-                        Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
-                        boolean isLeftSide = ev.getX() < (mDisplaySize.x / 3f);
-                        mDirection = isLeftSide ? 0 : 1;
-                        if (ev.getActionMasked() == ACTION_DOWN) //down action is enough. once gesture is refused it won't accept further actions
-                        {
-                            int mBottomGestureHeight = (int) callMethod(SideGestureConfigurationEx, "getBottomGestureAreaHeight");
-                            int rotation = (int) getFloatField(param.thisObject, "mRotation");
-                            if (notWithinInsets(ev.getX(),
-                                    ev.getY(),
-                                    mDisplaySize,
-                                    mBottomGestureHeight, rotation)) {
-                                setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
-                                param.setResult(null); //and stop the current method too
-                            }
+                    Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
+                    boolean isLeftSide = ev.getX() < (mDisplaySize.x / 3f);
+                    mDirection = isLeftSide ? 0 : 1;
+                    if (ev.getActionMasked() == ACTION_DOWN) //down action is enough. once gesture is refused it won't accept further actions
+                    {
+                        int mBottomGestureHeight = (int) callMethod(SideGestureConfigurationEx, "getBottomGestureAreaHeight");
+                        int rotation = (int) getFloatField(param.thisObject, "mRotation");
+                        if (notWithinInsets(ev.getX(),
+                                ev.getY(),
+                                mDisplaySize,
+                                mBottomGestureHeight, rotation)) {
+                            setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
+                            param.setResult(null); //and stop the current method too
                         }
                     }
-                });
-            } else {
-                findAndHookMethod(SideGestureDetector, "isWithinInsets",
-                        int.class,
-                        int.class,
-                        new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        int x = (int) param.args[0];
-                        int y = (int) param.args[1];
+                }
+            });
+        } else {
+            findAndHookMethod(SideGestureDetector, "isWithinInsets",
+                    int.class,
+                    int.class,
+                    new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            int x = (int) param.args[0];
+                            int y = (int) param.args[1];
 
 
-                        if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
+                            if (getForegroundApp()[0].equals(getDefaultLauncherPackageName()))
+                                return;
 
-                        Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
-                        boolean isLeftSide = x < (mDisplaySize.x / 3f);
-                        mDirection = isLeftSide ? 0 : 1;
+                            Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
+                            boolean isLeftSide = x < (mDisplaySize.x / 3f);
+                            mDirection = isLeftSide ? 0 : 1;
                             int mBottomGestureHeight = (int) mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("bottom_gesture_area_height", "dimen", listenPackage));
                             int rotation = (int) getFloatField(param.thisObject, "mRotation");
                             if (notWithinInsets(x,
@@ -200,9 +201,9 @@ public class GestureNavbarManager extends XposedMods {
                                 setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
                                 param.setResult(false); //and stop the current method too
                             }
-                    }
-                });
-            }
+                        }
+                    });
+        }
 
         hookAllMethods(SideGestureNavView, "setAppIcon", new XC_MethodHook() {
             @Override
@@ -268,7 +269,13 @@ public class GestureNavbarManager extends XposedMods {
         });
 
         Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
-        Class<?> OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader);
+
+        Class<?> OplusNavigationHandle;
+        try {
+            OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusNavigationHandle = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader); // OOS 13
+        }
         //region pill color
         hookAllMethods(OplusNavigationHandle, "setDarkIntensity", new XC_MethodHook() {
             @Override
@@ -355,7 +362,8 @@ public class GestureNavbarManager extends XposedMods {
             case 4 -> showQs();
             case 5 -> showPowerMenu();
             case 6 -> toggleNotifications();
-            case 7 -> callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+            case 7 ->
+                    callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
         }
     }
 
@@ -451,7 +459,8 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     private void showQs() {
-        if (TextUtils.isEmpty(QSExpandMethodName) || NotificationPanelViewController == null) return;
+        if (TextUtils.isEmpty(QSExpandMethodName) || NotificationPanelViewController == null)
+            return;
 
         try {
             new Handler(Looper.getMainLooper()).post(() -> callMethod(NotificationPanelViewController, QSExpandMethodName));
@@ -487,7 +496,8 @@ public class GestureNavbarManager extends XposedMods {
     private void refreshNavbar() {
         try {
             callMethod(mNavigationBarInflaterView, "updateLayout");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
     //endregion
 
