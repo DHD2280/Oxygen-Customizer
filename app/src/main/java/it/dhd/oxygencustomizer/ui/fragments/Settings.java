@@ -35,12 +35,16 @@ import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 
 public class Settings extends PreferenceFragmentCompat {
 
-    Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
-    MaterialSwitchPreference appIconThemed;
+    // Language Pref
+    private Preference languagePref;
+
+    private Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
+    private MaterialSwitchPreference appIconThemed;
 
     // Updater Prefs
-    Preference updatePref;
-    MaterialSwitchPreference autoUpdatePref, checkOnWifiPref;
+    private Preference updatePref;
+    private MaterialSwitchPreference autoUpdatePref;
+
     boolean export = true;
 
     @Override
@@ -48,6 +52,7 @@ public class Settings extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.own_settings, rootKey);
 
         appIconThemed = findPreference("themed_icon");
+        languagePref = findPreference("appLanguage");
         ghPref = findPreference("GitHubRepo");
         deleteAllPref = findPreference("deleteAllPrefs");
         exportPref = findPreference("export");
@@ -55,7 +60,6 @@ public class Settings extends PreferenceFragmentCompat {
         creditsPref = findPreference("credits");
         updatePref = findPreference("updates");
         autoUpdatePref = findPreference("autoUpdate");
-        checkOnWifiPref = findPreference("checkOnWifi");
         supportGroupPref = findPreference("SupportGroup");
         translatePref = findPreference("translate");
 
@@ -68,6 +72,15 @@ public class Settings extends PreferenceFragmentCompat {
                         .setPositiveButton(R.string.app_kill_ok_btn, (dialog, which) -> changeIcon(isThemed))
                         .setCancelable(false)
                         .show();
+                return true;
+            });
+        }
+
+        if (languagePref != null) {
+            languagePref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (getActivity() != null) {
+                    getActivity().recreate();
+                }
                 return true;
             });
         }

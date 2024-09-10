@@ -18,6 +18,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.shape.MaterialShapeDrawable;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.LocaleHelper;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -68,4 +69,11 @@ public class BaseActivity extends AppCompatActivity {
         ((AppCompatActivity) context).setSupportActionBar(toolbar);
         toolbar.setTitle(title);
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+
+        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    }
+
 }

@@ -28,6 +28,7 @@ public class Constants {
     public static class Preferences {
         public static class General {
             public static final List<String> PREF_UPDATE_EXCLUSIONS = Arrays.asList(BootLoopProtector.LOAD_TIME_KEY_KEY, BootLoopProtector.PACKAGE_STRIKE_KEY_KEY);
+            public static final String APP_LANGUAGE = "appLanguage";
         }
         public static class BatteryPrefs {
             public static final String CUSTOMIZE_BATTERY_ICON = "battery_icon_customize";

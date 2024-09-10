@@ -102,6 +102,7 @@
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
     <string name="reset">Reset</string>
+    <string name="lang_follow_system">Follow System</string>
 
     <!-- Image Crop Strings -->
     <string name="pick_image">Pick Image</string>
@@ -975,6 +976,7 @@
     <!-- Own Settings -->
     <string name="general_settings">General</string>
     <string name="app_icon_themed">Use themed App Icon</string>
+    <string name="language_title">Language</string>
     <string name="delete_all_title">Delete All</string>
     <string name="delete_all_summary">Delete all settings</string>
     <string name="export_title">Export</string>

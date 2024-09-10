@@ -14,6 +14,15 @@
             android:title="@string/app_icon_themed"
             app:icon="@drawable/app_icon" />
 
+        <ListPreference
+            android:entries="@array/locale_name"
+            android:entryValues="@array/locale_code"
+            android:icon="@drawable/ic_language"
+            android:key="appLanguage"
+            android:defaultValue="system"
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/language_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
