@@ -7,6 +7,8 @@ import com.google.android.material.color.DynamicColors;
 
 import java.lang.ref.WeakReference;
 
+import it.dhd.oxygencustomizer.utils.LocaleHelper;
+
 public class OxygenCustomizer extends Application {
 
     private static OxygenCustomizer instance;
@@ -24,6 +26,10 @@ public class OxygenCustomizer extends Application {
             contextReference = new WeakReference<>(OxygenCustomizer.getInstance().getApplicationContext());
         }
         return contextReference.get();
+    }
+
+    public static Context getAppContextLocale() {
+        return LocaleHelper.setLocale(getAppContext());
     }
 
     private static OxygenCustomizer getInstance() {
