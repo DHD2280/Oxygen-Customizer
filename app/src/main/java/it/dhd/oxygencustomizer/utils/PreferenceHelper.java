@@ -141,7 +141,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_YANDEX_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -705,8 +707,11 @@ public class PreferenceHelper {
             }
 
             // Weather
-            case "owm_key" -> {
+            case WEATHER_OWM_KEY -> {
                 return instance.mPreferences.getString(WEATHER_PROVIDER, "2").equals("0");
+            }
+            case WEATHER_YANDEX_KEY -> {
+                return instance.mPreferences.getString(WEATHER_PROVIDER, "2").equals("3");
             }
 
             // Lag Fix

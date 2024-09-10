@@ -348,11 +348,13 @@
         <item>@string/provider_openweathermap</item>
         <item>@string/provider_metnorway</item>
         <item>@string/provider_openmeteo</item>
+        <item>@string/provider_yandex</item>
     </string-array>
     <string-array name="provider_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
     <string-array name="units_entries" translatable="false">
         <item>@string/unit_metric</item>

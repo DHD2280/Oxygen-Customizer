@@ -30,6 +30,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_YANDEX_KEY;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.Manifest;
@@ -41,6 +42,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
+import it.dhd.oxygencustomizer.weather.providers.YandexProvider;
 
 public class WeatherConfig {
     public static final String PREF_KEY_LOCATION_LAT = "location_lat";
@@ -73,6 +75,7 @@ public class WeatherConfig {
         return switch (provider) {
             case "1" -> new METNorwayProvider(context);
             case "2" -> new OpenMeteoProvider(context);
+            case "3" -> new YandexProvider(context);
             default -> new OpenWeatherMapProvider(context);
         };
     }
@@ -83,6 +86,8 @@ public class WeatherConfig {
         return switch (provider) {
             case "1" -> "MET Norway";
             case "2" -> "OpenMeteo";
+            case "3" -> "Yandex";
+            case "4" -> "Meteo AM";
             default -> "OpenWeatherMap";
         };
     }
@@ -184,4 +189,9 @@ public class WeatherConfig {
     public static String getOwmKey(Context context) {
         return getPrefs(context).getString(WEATHER_OWM_KEY, null);
     }
+
+    public static String getYandexKey(Context context) {
+        return getPrefs(context).getString(WEATHER_YANDEX_KEY, null);
+    }
+
 }

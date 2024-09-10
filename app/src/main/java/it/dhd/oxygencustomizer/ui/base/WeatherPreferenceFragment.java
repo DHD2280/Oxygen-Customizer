@@ -6,6 +6,7 @@ import static it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity.DATA_LO
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
+import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_YANDEX_KEY;
 
 import android.Manifest;
 import android.app.Activity;
@@ -191,7 +192,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     }
 
     private void showLocationPermissionDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.MaterialAlertDialog_Material3);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         final Dialog dialog;
 
         // Build and show the dialog
@@ -210,7 +211,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
     }
 
     private void showApplicationPermissionDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.MaterialAlertDialog_Material3);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(R.string.weather_permission_dialog_title);
         builder.setMessage(R.string.weather_permission_dialog_message);
         builder.setCancelable(false);
@@ -219,6 +220,17 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
             Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
             intent.setData(uri);
             startActivity(intent);
+        });
+        builder.show();
+    }
+
+    private void showYandexKeyDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(R.string.warning);
+        builder.setMessage(R.string.weather_yandex_key_required);
+        builder.setCancelable(false);
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            dialog.dismiss();
         });
         builder.show();
     }
@@ -249,7 +261,11 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
                 forceRefreshWeatherSettings();
             }
         } else if (key.equals(WEATHER_PROVIDER)) {
-            forceRefreshWeatherSettings();
+            if (mPreferences.getString(WEATHER_PROVIDER, "2").equals("3") && mPreferences.getString(WEATHER_YANDEX_KEY, "").isEmpty()) {
+                showYandexKeyDialog();
+            } else {
+                forceRefreshWeatherSettings();
+            }
         }
 
     }

@@ -80,6 +80,31 @@ public abstract class AbstractWeatherProvider {
         return response;
     }
 
+    protected String retrieve(String url, String[] header) {
+        response = "";
+        CountDownLatch latch = new CountDownLatch(1);
+
+        NetworkUtils.asynchronousGetRequest(url, header, result -> {
+            if (!TextUtils.isEmpty(result)) {
+                Log.d(TAG, "Download success " + result);
+                response = result;
+            } else {
+                response = "";
+                Log.d(TAG, "Download failed");
+            }
+            latch.countDown();
+        });
+
+        try {
+            latch.await(); // Wait until the response is set
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupt status
+            Log.e(TAG, "retrieve interrupted", e);
+        }
+
+        return response;
+    }
+
     public abstract WeatherInfo getCustomWeather(String lat, String lon, boolean metric);
 
     public abstract WeatherInfo getLocationWeather(Location location, boolean metric);
@@ -102,7 +127,7 @@ public abstract class AbstractWeatherProvider {
                 return TextUtils.isEmpty(a.getLocality()) ? a.getAdminArea() : a.getLocality();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log(TAG, e.getMessage());
         }
         return null;
     }
