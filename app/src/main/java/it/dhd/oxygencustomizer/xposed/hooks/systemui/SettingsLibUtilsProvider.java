@@ -16,8 +16,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class SettingsLibUtilsProvider extends XposedMods {
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static Class<?> UtilsClass = null;
-    private static Class<?> AbsSettingsValueProxy = null;
-    private static Class<?> BrightnessUtils = null;
     private static Class<?> CoUIColors = null;
 
     public static ColorStateList getColorAttr(int resID, Context context) {
@@ -105,8 +103,6 @@ public class SettingsLibUtilsProvider extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         UtilsClass = findClass("com.android.settingslib.Utils", lpparam.classLoader);
-        AbsSettingsValueProxy = findClass("com.oplusos.systemui.common.settingsvalue.AbsSettingsValueProxy", lpparam.classLoader);
-        BrightnessUtils = findClass("com.android.settingslib.display.BrightnessUtils", lpparam.classLoader);
         CoUIColors = findClass("com.coui.appcompat.contextutil.COUIContextUtil", lpparam.classLoader);
     }
 }
