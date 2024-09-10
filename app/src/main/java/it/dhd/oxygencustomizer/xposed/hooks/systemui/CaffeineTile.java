@@ -109,7 +109,12 @@ public class CaffeineTile extends XposedMods {
             }
         });
 
-        Class<?> QSTileViewImplClass = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        Class<?> QSTileViewImplClass;
+        try {
+            QSTileViewImplClass = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        } catch (Throwable t) {
+            QSTileViewImplClass = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader); // OOS 13
+        }
         hookAllMethods(QSTileViewImplClass, "handleStateChanged", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
