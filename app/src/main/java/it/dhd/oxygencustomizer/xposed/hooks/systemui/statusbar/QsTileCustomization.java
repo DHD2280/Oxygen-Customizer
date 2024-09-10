@@ -238,7 +238,12 @@ public class QsTileCustomization extends XposedMods {
         if (!lpparam.packageName.equals(listenerPackage)) return;
 
         try {
-            Class<?> PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
+            Class<?> PersonalityManager;
+            try {
+                PersonalityManager = findClass("com.oplus.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
+            } catch (Throwable ignored) {
+                PersonalityManager = findClass("com.oplusos.systemui.qs.personality.PersonalityManager", lpparam.classLoader);
+            }
             hookAllConstructors(PersonalityManager, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -246,7 +251,7 @@ public class QsTileCustomization extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "PersonalityManager not found: " + t.getMessage());
+            log(TAG + "PersonalityManager error: " + t.getMessage());
         }
 
         try {
