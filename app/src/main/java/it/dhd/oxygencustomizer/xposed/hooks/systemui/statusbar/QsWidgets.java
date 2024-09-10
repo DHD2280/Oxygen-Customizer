@@ -111,7 +111,12 @@ public class QsWidgets extends XposedMods {
 
         log(TAG + "Hooking OplusQSTileMediaContainer");
 
-        Class<?> OplusQSTileMediaContainer = findClass("com.oplus.systemui.qs.OplusQSTileMediaContainer", lpparam.classLoader);
+        Class<?> OplusQSTileMediaContainer;
+        try {
+            OplusQSTileMediaContainer = findClass("com.oplus.systemui.qs.OplusQSTileMediaContainer", lpparam.classLoader);
+        } catch (Throwable t) {
+            OplusQSTileMediaContainer = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);
+        }
         hookAllConstructors(OplusQSTileMediaContainer, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
