@@ -1121,7 +1121,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object networkController = getNetworkController();
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
         if (networkController != null) {
-            log("LockscreenWidgetsView toggleWiFi networkController is null");
             callMethod(networkController, "setWifiEnabled", !enabled);
         } else {
             SystemUtils.WifiManager().setWifiEnabled(!enabled);
