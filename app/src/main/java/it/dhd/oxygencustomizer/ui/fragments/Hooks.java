@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
@@ -53,6 +52,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.IRootProviderService;
+import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentHooksBinding;
 import it.dhd.oxygencustomizer.services.RootProvider;
@@ -212,8 +212,6 @@ public class Hooks extends Fragment {
 
             int finalI = i;
 
-
-
             list.setOnClickListener(view -> {
                 // show ripple effect and do nothing
             });
@@ -234,7 +232,7 @@ public class Hooks extends Fragment {
                     } else {
                         Toast.makeText(
                                 getContext(),
-                                getContext().getString(R.string.package_not_launchable),
+                                OxygenCustomizer.getAppContextLocale().getString(R.string.package_not_launchable),
                                 Toast.LENGTH_SHORT
                         ).show();
                     }
