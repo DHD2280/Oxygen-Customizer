@@ -19,7 +19,7 @@ public class OpUtils extends XposedMods {
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
 
     private static Class<?> OpUtils = null;
-    private static Class<?> UtilsClass = null;
+    private static Class<?> QSFragmentHelper = null;
     public static Class<?> QsColorUtil = null;
     private static Class<?> OplusChargingStrategy = null;
 
@@ -70,6 +70,16 @@ public class OpUtils extends XposedMods {
         }
     }
 
+    public static int getTileActiveColor(Context context) {
+        if (QSFragmentHelper == null) return getPrimaryColor(context);
+        try {
+            Object QSFragmentHelperObj = callStaticMethod(QSFragmentHelper, "getInstance");
+            return (int) callMethod(QSFragmentHelperObj, "getActiveColorWithDarkMode", context);
+        } catch (Throwable t) {
+            return getPrimaryColor(context);
+        }
+    }
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
@@ -92,6 +102,11 @@ public class OpUtils extends XposedMods {
             QsColorUtil = null;
         }
 
+        try {
+            QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        } catch (Throwable ignored) {
+            QSFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        }
 
     }
 
