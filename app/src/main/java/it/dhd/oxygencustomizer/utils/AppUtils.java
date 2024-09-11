@@ -117,9 +117,9 @@ public class AppUtils {
     }
 
     public static void restartScope(String what) {
-        switch (what.toLowerCase())
-        {
+        switch (what.toLowerCase()) {
             case "systemui":
+                BootLoopProtector.resetCounter("com.android.systemui");
                 Shell.cmd("killall com.android.systemui").exec();
                 break;
             case "system":
