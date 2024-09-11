@@ -83,7 +83,7 @@ public class StatusbarMods extends XposedMods {
     private boolean mBrightnessControl;
     private boolean mJustPeeked;
     private Object OplusBrightnessControllerExt = null;
-    private static final float BRIGHTNESS_CONTROL_PADDING = 0.10f;
+    private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
     private static final int BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT = 750; // ms
     private static final int BRIGHTNESS_CONTROL_LINGER_THRESHOLD = 20;
     private DisplayMetrics mDisplayMetrics = null;
