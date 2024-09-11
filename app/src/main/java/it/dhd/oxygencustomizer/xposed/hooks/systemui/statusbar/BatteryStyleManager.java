@@ -601,7 +601,6 @@ public class BatteryStyleManager extends XposedMods {
             } //it's probably the default battery. no action needed
         }
 
-        log(TAG + "mChargingIconSwitch " + mChargingIconSwitch + " chargingIcon " + (chargingIcon != null));
         if (mChargingIconSwitch && chargingIcon != null) {
             if (mIsCharging) {
                 chargingIcon.setImageDrawable(getNewChargingIcon());
