@@ -24,7 +24,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.QsColorUtil;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getTileActiveColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getLastShape;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getShapeForHighlightTile;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -83,7 +83,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -119,6 +118,11 @@ public class QsControlsView extends LinearLayout {
     public static QsControlsView instance = null;
 
     private static final String TAG = "QsControlsView: ";
+
+    private static final int QS_BG_INACTIVE = Color.parseColor("#CCFFFFFF");
+    private static final int QS_BG_INACTIVE_DARK = Color.parseColor("#33FFFFFF");
+    private static final int ICON_LIGHT_COLOR = Color.parseColor("#99000000");
+    private static final int ICON_DARK_COLOR = Color.parseColor("#B3FFFFFF");
 
     private final Context mContext;
     private Context appContext;
@@ -352,16 +356,25 @@ public class QsControlsView extends LinearLayout {
             );
         } catch (Exception ignored) {}
 //        mTileDrawable = WidgetUtils.getDrawable(mContext, "status_bar_qs_tile_bg_inactive", SYSTEM_UI);
-        mActiveColor = getPrimaryColor(mContext);
-        mInactiveColor = (int) callStaticMethod(QsColorUtil, "obtainColorForQsPanelBackground", mContext);
-        if ((boolean)callStaticMethod(QsColorUtil, "isIconNeedUseLightColor", mContext)) {
-            mIconInactiveColor = getStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
-        } else {
-            mIconInactiveColor = ResourcesCompat.getColor(
-                    mContext.getResources(),
-                    mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_inactive", "color", SYSTEM_UI),
-                    appContext.getTheme()
-            );
+        mActiveColor = getTileActiveColor(mContext);
+        try {
+            mInactiveColor = (int) callStaticMethod(QsColorUtil, "obtainColorForQsPanelBackground", mContext);
+        } catch (Throwable t) {
+            mInactiveColor = isNightMode() ? QS_BG_INACTIVE_DARK : QS_BG_INACTIVE;
+        }
+
+        try {
+            if ((boolean)callStaticMethod(QsColorUtil, "isIconNeedUseLightColor", mContext)) {
+                mIconInactiveColor = getStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
+            } else {
+                mIconInactiveColor = ResourcesCompat.getColor(
+                        mContext.getResources(),
+                        mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_inactive", "color", SYSTEM_UI),
+                        appContext.getTheme()
+                );
+            }
+        } catch (Throwable t) {
+            mIconInactiveColor = isNightMode() ? ICON_LIGHT_COLOR : ICON_DARK_COLOR;
         }
         mIconActiveColor = ResourcesCompat.getColor(
                 mContext.getResources(),
@@ -374,6 +387,12 @@ public class QsControlsView extends LinearLayout {
 //        mLightColor = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_background_color_light, appContext.getTheme());
 //        mDarkColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_dark, appContext.getTheme());
 //        mLightColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_light, appContext.getTheme());
+    }
+
+    private boolean isNightMode() {
+        final Configuration config = mContext.getResources().getConfiguration();
+        return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
     }
 
     private void showMediaDialog(View view) {
@@ -584,8 +603,11 @@ public class QsControlsView extends LinearLayout {
 
     private ExtendedFAB createFAB() {
         ExtendedFAB fab = new ExtendedFAB(mContext);
-        int h = mContext.getResources().getDimensionPixelSize(
-                mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI));
+        int resIdH = mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI);
+        if (resIdH == 0) {
+            resIdH = mContext.getResources().getIdentifier("qs_footer_hl_tile_collapse_height", "dimen", SYSTEM_UI);
+        }
+        int h = mContext.getResources().getDimensionPixelSize(resIdH);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 0,
                 h,
@@ -607,14 +629,20 @@ public class QsControlsView extends LinearLayout {
         fab.setClickable(true);
         fab.setTypeface(null, Typeface.BOLD);
         fab.setGravity(Gravity.CENTER_VERTICAL);
+        fab.setIconSize(dp2px(mContext, 24));
         fab.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            int resIdH2 = mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI);
+            if (resIdH2 == 0) {
+                resIdH2 = mContext.getResources().getIdentifier("qs_footer_hl_tile_collapse_height", "dimen", SYSTEM_UI);
+            }
             int h2 = mContext.getResources().getDimensionPixelSize(
-                    mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI));
+                    resIdH2);
             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
                     0, h2, 1);
             layoutParams2.gravity = Gravity.CENTER;
             fab.requestFocus();
             fab.setLayoutParams(layoutParams2);
+            fab.requestLayout();
         });
         QsTileTouchAnim anim = new QsTileTouchAnim();
         anim.initTouchAnim(fab, true);
@@ -811,7 +839,7 @@ public class QsControlsView extends LinearLayout {
     private void setUpWidgetWiews(ImageView iv, ExtendedFAB efab, String widgetType) {
         if (widgetType.contains(":")) {
             String[] parts = widgetType.split(":");
-            if (parts[0].contains("ca")) {
+            if (parts[0].startsWith("ca")) {
                 Drawable appIcon = AppUtils.getAppIcon(mContext, parts[1]);
                 if (iv != null) {
                     iv.setTag("app");

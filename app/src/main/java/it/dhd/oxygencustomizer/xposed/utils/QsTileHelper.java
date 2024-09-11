@@ -1,7 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerClass;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerEx;
 
 import android.content.Context;
@@ -75,12 +77,29 @@ public class QsTileHelper {
     }
 
     public static Shape getShapeForHighlightTile(Context c) {
+        // When PersonalityManagerEx is not available, fallback to PersonalityManagerClass, mainly for OOS 13
+        if (PersonalityManagerEx == null) {
+            if (PersonalityManagerClass != null) {
+                Object PersonalityManager = callStaticMethod(PersonalityManagerClass, "getInstance");
+                if (PersonalityManager != null) {
+                    return (Shape) callMethod(PersonalityManager, "getShapeForHighlightTile", c);
+                }
+            }
+        }
+        // Method should be available
         return (Shape) callMethod(PersonalityManagerEx, "getShapeForHighlightTile", c);
     }
 
     public static PathShape getLastShape(Context c) {
+        if (PersonalityManagerEx == null) {
+            if (PersonalityManagerClass != null) {
+                Object PersonalityManager = callStaticMethod(PersonalityManagerClass, "getInstance");
+                if (PersonalityManager != null) {
+                    return (PathShape) callMethod(PersonalityManager, "getLastShape", c);
+                }
+            }
+        }
         return (PathShape) callMethod(PersonalityManagerEx, "getLastShape", c);
     }
-
 
 }
