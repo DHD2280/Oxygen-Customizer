@@ -10,6 +10,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_LANDSCAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_RLANDSCAPE;
@@ -103,6 +104,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -148,7 +150,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 
 public class BatteryStyleManager extends XposedMods {
 
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+    private static final String listenPackage = SYSTEM_UI;
     private static final String TAG = "Oxygen Customizer - " + BatteryStyleManager.class.getSimpleName() + ": ";
     private static final boolean DEBUG = false;
 
@@ -196,6 +198,10 @@ public class BatteryStyleManager extends XposedMods {
     private Class<?> DarkIconDispatcher = null;
     private Class<?> DualToneHandler = null;
     private View mQsBattery = null;
+    private List<String> batteryCharging = new ArrayList<>() {{
+        add("battery_dash_charge_view");
+        add("battery_charge_icon");
+    }};
 
     public BatteryStyleManager(Context context) {
         super(context);
@@ -454,6 +460,45 @@ public class BatteryStyleManager extends XposedMods {
                 }
             }
         });
+        hookAllMethods(BatteryViewBinder, "bind$updateChargingView", new XC_MethodHook() {
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                /*
+                stock method
+                public static final void bind$updateChargingView(
+                0 android.widget.ImageView r4,
+                1 com.oplus.systemui.statusbar.pipeline.battery.p088ui.view.StatBatteryMeterView r5,
+                2 com.oplus.systemui.statusbar.pipeline.battery.p088ui.model.ChargeIcon r6) {
+                 */
+                if (param.args[0] instanceof ImageView chargingIcon) {
+                    if (mChargingIconSwitch && mIsCharging) {
+                        chargingIcon.setVisibility(View.VISIBLE);
+                        chargingIcon.setImageDrawable(getNewChargingIcon());
+                        int size = dp2px(mContext, mChargingIconWH);
+                        chargingIcon.setLayoutParams(new LinearLayout.LayoutParams(size, size));
+                        setMargins(chargingIcon, mContext, mChargingIconML, 0, mChargingIconMR, 0);
+                        chargingIcon.requestLayout();
+                        chargingIcon.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                            @Override
+                            public void onViewAttachedToWindow(@NonNull View v) {
+                                chargingIcon.setVisibility(mChargingIconSwitch && mIsCharging ? View.VISIBLE : View.GONE);
+                                chargingIcon.setImageDrawable(getNewChargingIcon());
+                                int size = dp2px(mContext, mChargingIconWH);
+                                chargingIcon.setLayoutParams(new LinearLayout.LayoutParams(size, size));
+                                setMargins(chargingIcon, mContext, mChargingIconML, 0, mChargingIconMR, 0);
+                                chargingIcon.requestLayout();
+                            }
+
+                            @Override
+                            public void onViewDetachedFromWindow(@NonNull View v) {
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void refreshAllBatteryIcons() {
@@ -481,12 +526,14 @@ public class BatteryStyleManager extends XposedMods {
             try {
                 batteryIcon = view.findViewById(mContext.getResources().getIdentifier("battery_icon_view", "id", mContext.getPackageName()));
             } catch (Throwable ignored) {
-                if (DEBUG) log(TAG + "battery_icon_view not found");
+                log(TAG + "battery_icon_view not found");
             }
-            try {
-                chargingIcon = view.findViewById(mContext.getResources().getIdentifier("battery_dash_charge_view", "id", mContext.getPackageName()));
-            } catch (Throwable ignored) {
-                if (DEBUG) log(TAG + "battery_dash_charge_view not found");
+            for (String s : batteryCharging) {
+                try {
+                    chargingIcon = view.findViewById(mContext.getResources().getIdentifier(s, "id", SYSTEM_UI));
+                } catch (Throwable ignored) {
+                    log(TAG + s + " not found");
+                }
             }
             try {
                 batteryInPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_text", "id", mContext.getPackageName()));
@@ -554,7 +601,7 @@ public class BatteryStyleManager extends XposedMods {
             } //it's probably the default battery. no action needed
         }
 
-
+        log(TAG + "mChargingIconSwitch " + mChargingIconSwitch + " chargingIcon " + (chargingIcon != null));
         if (mChargingIconSwitch && chargingIcon != null) {
             if (mIsCharging) {
                 chargingIcon.setImageDrawable(getNewChargingIcon());
@@ -563,7 +610,6 @@ public class BatteryStyleManager extends XposedMods {
                 chargingIcon.setLayoutParams(new LinearLayout.LayoutParams(size, size));
                 setMargins(chargingIcon, mContext, mChargingIconML, 0, mChargingIconMR, 0);
             }
-            chargingIcon.setVisibility(mIsCharging ? View.VISIBLE : View.GONE);
         }
     }
 
