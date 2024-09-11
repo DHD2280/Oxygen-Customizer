@@ -153,6 +153,8 @@ public class QuickSettingsWidgets extends BaseFragment {
         binding.qsWidgetsSwitch.setSwitchChecked(mWidgetsEnabled);
         binding.qsWidgetsSwitch.setSwitchChangeListener(((buttonView, isChecked) -> {
             mWidgetsEnabled = isChecked;
+            mWidgetListView.setEnabled(isChecked);
+            binding.addWidgets.setEnabled(isChecked);
             PreferenceHelper.getModulePrefs().edit().putBoolean(QS_WIDGETS_SWITCH, isChecked).apply();
             AppUtils.restartScope("systemui");
         }));
