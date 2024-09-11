@@ -79,4 +79,14 @@
 -keep class **.I*$Stub { *; }
 -keep class **.I*$Stub$Proxy { *; }
 
+# Markdown View
+-dontwarn java.awt.**
+-dontwarn javax.swing.**
+-dontwarn javax.imageio.**
+-keep class br.tiagohm.markdownview.** { *; }
+-keep class com.vladsch.flexmark.** { *; }
+-keep class com.vladsch.flexmark.ext.** { *; }
+-keep class com.vladsch.flexmark.util.** { *; }
+
 -printusage release/usage.txt
+-printmapping release/mapping.txt
