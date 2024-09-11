@@ -210,7 +210,8 @@ public class QuickSettingsWidgets extends BaseFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(R.string.add_widget);
         builder.setItems(filteredArray, (dialog, which) -> {
-            if (mSelectableWidgets.get(which).contains("ca")) {
+            if (mSelectableWidgets.get(which).startsWith("ca")) {
+                // Custom App Widget
                 pickApp(mSelectableWidgets.get(which));
                 return;
             }
