@@ -76,6 +76,7 @@ public class QuickSettingsWidgets extends BaseFragment {
     private final List<String> mAvailableWidgets = new ArrayList<>() {{
         add("photo");
         add("weather");
+        add("w:weather");
         add("w:wifi");
         add("w:data");
         add("w:calculator");
@@ -386,16 +387,16 @@ public class QuickSettingsWidgets extends BaseFragment {
     }
 
     private String getWidgetType(String widget) {
-        if (widget.contains("photo")) {
+        if (widget.equals("photo")) {
             return getString(R.string.qs_widget_photo);
-        } else if (widget.contains("weather")) {
+        } else if (widget.equals("weather")) {
             return getString(R.string.qs_widget_weather);
-        } else if (widget.contains("media")) {
+        } else if (widget.equals("media")) {
             return getString(R.string.qs_widget_media_player);
         } else if (widget.contains(":")) {
             String[] split = widget.split(":");
             String wCat = split[0];
-            if (wCat.contains("ca")) {
+            if (wCat.startsWith("ca")) {
                 String title = getString(R.string.qs_widget_custom_app);
                 if (split.length > 1) {
                     String packageName = split[1];
@@ -406,6 +407,8 @@ public class QuickSettingsWidgets extends BaseFragment {
             }
             String wType = split[1];
             switch (wType) {
+                case "weather":
+                    return getString(R.string.qs_widget_mini_weather);
                 case "wifi":
                     return getString(R.string.wifi);
                 case "data":

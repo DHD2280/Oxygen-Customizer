@@ -396,6 +396,7 @@
     <string name="add_widget">Add Widget</string>
     <string name="qs_widget_photo">Photo Showcase</string>
     <string name="qs_widget_weather">Weather</string>
+    <string name="qs_widget_mini_weather">Mini Weather</string>
     <string name="qs_widget_custom_app">Custom App</string>
     <string name="qs_widget_media_player">Media Player</string>
     <string name="qs_media_alert">Can\'t remove media player!</string>

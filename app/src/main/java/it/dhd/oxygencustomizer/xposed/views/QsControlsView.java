@@ -101,6 +101,7 @@ import java.util.List;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
@@ -112,7 +113,7 @@ import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 @SuppressLint("ViewConstructor")
-public class QsControlsView extends LinearLayout {
+public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
 
     @SuppressLint("StaticFieldLeak")
     public static QsControlsView instance = null;
@@ -143,11 +144,14 @@ public class QsControlsView extends LinearLayout {
     private String mCameraId;
     private boolean isFlashOn = false;
 
+    private OmniJawsClient mWeatherClient;
+    private OmniJawsClient.WeatherInfo mWeatherInfo;
+
     // Widgets View
     private ImageView torchButton, hotspotButton;
     private ExtendedFAB torchButtonFab, hotspotButtonFab;
-    private ExtendedFAB wifiButtonFab, dataButtonFab, ringerButtonFab, btButtonFab;
-    private ImageView wifiButton, dataButton, ringerButton, btButton;
+    private ExtendedFAB wifiButtonFab, dataButtonFab, ringerButtonFab, btButtonFab, weatherButtonFab;
+    private ImageView wifiButton, dataButton, ringerButton, btButton, weatherButton;
 
     private Drawable mDefaultBackground = null;
     private boolean mCustomColor = false;
@@ -171,9 +175,13 @@ public class QsControlsView extends LinearLayout {
         mHandler = new Handler(Looper.getMainLooper());
         mCameraManager = SystemUtils.CameraManager();
         try {
+            //noinspection NullPointerException
             mCameraId = mCameraManager.getCameraIdList()[0];
         } catch (Throwable e) {
             log(TAG + "error: " + e.getMessage());
+        }
+        if (mWeatherClient == null) {
+            mWeatherClient = new OmniJawsClient(context);
         }
 
         setId(generateViewId());
@@ -265,6 +273,87 @@ public class QsControlsView extends LinearLayout {
 
     private void onHotspotChanged(boolean enabled, int numDevices) {
         updateHotspotButtonState(numDevices);
+    }
+
+    public void enableWeatherUpdates() {
+        if (mWeatherClient != null) {
+            mWeatherClient.addObserver(this);
+            queryAndUpdateWeather();
+        }
+    }
+
+    public void disableWeatherUpdates() {
+        if (mWeatherClient != null) {
+            weatherButton = null;
+            weatherButtonFab = null;
+            mWeatherClient.removeObserver(this);
+        }
+    }
+
+    @Override
+    public void weatherError(int errorReason) {
+        if (errorReason == OmniJawsClient.EXTRA_ERROR_DISABLED) {
+            mWeatherInfo = null;
+        }
+    }
+
+    @Override
+    public void weatherUpdated() {
+        queryAndUpdateWeather();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void queryAndUpdateWeather() {
+        try {
+            if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
+                return;
+            }
+            mWeatherClient.queryWeather();
+            mWeatherInfo = mWeatherClient.getWeatherInfo();
+            if (mWeatherInfo != null) {
+                // OpenWeatherMap
+                String formattedCondition = mWeatherInfo.condition;
+                if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                } else if (formattedCondition.toLowerCase().contains("rain")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                } else if (formattedCondition.toLowerCase().contains("clear")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                } else if (formattedCondition.toLowerCase().contains("storm")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                } else if (formattedCondition.toLowerCase().contains("snow")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                } else if (formattedCondition.toLowerCase().contains("wind")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                } else if (formattedCondition.toLowerCase().contains("mist")) {
+                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                }
+
+                // MET Norway
+                if (formattedCondition.toLowerCase().contains("_")) {
+                    final String[] words = formattedCondition.split("_");
+                    final StringBuilder formattedConditionBuilder = new StringBuilder();
+                    for (String word : words) {
+                        final String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1);
+                        formattedConditionBuilder.append(capitalizedWord).append(" ");
+                    }
+                    formattedCondition = formattedConditionBuilder.toString().trim();
+                }
+
+                final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
+                if (weatherButtonFab != null) {
+                    weatherButtonFab.setIcon(d);
+                    weatherButtonFab.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits + " • " + formattedCondition);
+                    weatherButtonFab.setIconTint(null);
+                }
+                if (weatherButton != null) {
+                    weatherButton.setImageDrawable(d);
+                    weatherButton.setImageTintList(null);
+                }
+            }
+        } catch (Exception e) {
+            log(TAG + "queryAndUpdateWeather error: " + e.getMessage());
+        }
     }
 
     private void collectViews(List<View> viewList, View... views) {
@@ -403,6 +492,23 @@ public class QsControlsView extends LinearLayout {
         vibrate(0);
     }
 
+    private void resetButtons() {
+        wifiButton = null;
+        dataButton = null;
+        ringerButton = null;
+        btButton = null;
+        weatherButton = null;
+        wifiButtonFab = null;
+        dataButtonFab = null;
+        ringerButtonFab = null;
+        btButtonFab = null;
+        weatherButtonFab = null;
+        torchButton = null;
+        hotspotButton = null;
+        torchButtonFab = null;
+        hotspotButtonFab = null;
+    }
+
     private void setupWidgets() {
 
         mPages.clear();
@@ -413,6 +519,7 @@ public class QsControlsView extends LinearLayout {
         for (List<String> group : orderedGroups) {
             log(TAG + "setupWidgets: " + group);
         }
+        resetButtons();
         for (List<String> group : orderedGroups) {
             log(TAG + "setupWidgets current group:" + group);
             if (group.size() == 1 && !group.get(0).contains(":")) {
@@ -431,6 +538,9 @@ public class QsControlsView extends LinearLayout {
                     log(TAG + "setupWidgets: error creating group view: " + t.getMessage());
                 }
             }
+        }
+        if (mWidgets.contains("w:weather")) {
+            enableWeatherUpdates();
         }
 
         collectViews(mPages, views.toArray(new View[0]));
@@ -629,7 +739,7 @@ public class QsControlsView extends LinearLayout {
         fab.setClickable(true);
         fab.setTypeface(null, Typeface.BOLD);
         fab.setGravity(Gravity.CENTER_VERTICAL);
-        fab.setIconSize(dp2px(mContext, 24));
+        fab.setIconSize(dp2px(mContext, 35));
         fab.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int resIdH2 = mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI);
             if (resIdH2 == 0) {
@@ -714,7 +824,11 @@ public class QsControlsView extends LinearLayout {
             if (iv.getTag() != null && iv.getTag().equals("app")) {
                 iv.setImageTintList(null);
             } else {
-                iv.setImageTintList(ColorStateList.valueOf(tintColor));
+                if (iv != weatherButton) {
+                    iv.setImageTintList(ColorStateList.valueOf(tintColor));
+                } else {
+                    iv.setImageTintList(null);
+                }
             }
         }
         if (efab != null) {
@@ -731,7 +845,11 @@ public class QsControlsView extends LinearLayout {
             if (efab.getTag() != null && efab.getTag().equals("app")) {
                 efab.setIconTint(null);
             } else {
-                efab.setIconTint(ColorStateList.valueOf(tintColor));
+                if (efab != weatherButtonFab) {
+                    efab.setIconTint(ColorStateList.valueOf(tintColor));
+                } else {
+                    efab.setIconTint(null);
+                }
             }
             efab.setTextColor(tintColor);
         }
@@ -857,6 +975,17 @@ public class QsControlsView extends LinearLayout {
             }
         }
         switch (widgetType) {
+            case "w:weather":
+                if (iv != null) {
+                    weatherButton = iv;
+                }
+                if (efab != null) {
+                    weatherButtonFab = efab;
+                }
+                // Set a null on click listener to weather button to avoid running previous button action
+                setUpWidgetResources(iv, efab, v-> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
+                enableWeatherUpdates();
+                break;
             case "w:wifi":
                 if (iv != null) {
                     wifiButton = iv;
@@ -1076,7 +1205,7 @@ public class QsControlsView extends LinearLayout {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
-                                      OnClickListener cl, Drawable icon, String text) {
+                                      final OnClickListener cl, Drawable icon, String text) {
         log(TAG + "setUpWidgetResources: " + text);
         if (efab != null) {
             efab.setOnClickListener(cl);
@@ -1135,10 +1264,11 @@ public class QsControlsView extends LinearLayout {
     }
 
     private void toggleWiFi() {
+        log(TAG + "toggleWiFi");
         Object networkController = getNetworkController();
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
         if (networkController != null) {
-            log("LockscreenWidgetsView toggleWiFi networkController is null");
+            log(TAG + "toggleWiFi networkController is null");
             callMethod(networkController, "setWifiEnabled", !enabled);
         } else {
             SystemUtils.WifiManager().setWifiEnabled(!enabled);
