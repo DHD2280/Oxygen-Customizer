@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
+import static it.dhd.oxygencustomizer.utils.AppUtils.restartApplication;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -36,7 +38,7 @@ import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 public class Settings extends PreferenceFragmentCompat {
 
     // Language Pref
-    private Preference languagePref;
+    private ListPreference languagePref;
 
     private Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
     private MaterialSwitchPreference appIconThemed;
@@ -78,9 +80,7 @@ public class Settings extends PreferenceFragmentCompat {
 
         if (languagePref != null) {
             languagePref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (getActivity() != null) {
-                    getActivity().recreate();
-                }
+                restartApplication(requireActivity());
                 return true;
             });
         }

@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -188,6 +190,15 @@ public class AppUtils {
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
+    }
+
+    public static void restartApplication(Activity activity) {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent intent = activity.getIntent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.finish();
+            activity.startActivity(intent);
+        }, 600);
     }
 
 }
