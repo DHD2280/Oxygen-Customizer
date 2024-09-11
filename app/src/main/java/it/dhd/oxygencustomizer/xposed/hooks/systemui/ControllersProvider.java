@@ -28,6 +28,7 @@ public class ControllersProvider extends XposedMods {
     public static Class<?> LaunchableImageView = null;
     public static Class<?> LaunchableFrameLayout = null;
     public static Object PersonalityManagerEx = null;
+    public static Class<?> PersonalityManagerClass = null;
 
     private static final String TAG = "Oxygen Customizer - ControllersProvider: ";
 
@@ -111,6 +112,12 @@ public class ControllersProvider extends XposedMods {
             log(TAG + "PersonalityManagerExImpl not found: " + t.getMessage());
         }
 
+        try {
+            PersonalityManagerClass = findClass("com.oplusos.systemui.qs.personality.PersonalityManager$Companion", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "PersonalityManager not found: " + t.getMessage());
+        }
+
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
 
@@ -181,7 +188,12 @@ public class ControllersProvider extends XposedMods {
 
         // Bluetooth Tile - for Bluetooth Dialog
         try {
-            Class<?> OplusBluetoothTile = findClass("com.oplus.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader);
+            Class<?> OplusBluetoothTile;
+            try {
+                OplusBluetoothTile = findClass("com.oplus.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader);
+            } catch (Throwable t) {
+                OplusBluetoothTile = findClass("com.oplusos.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader); // OOS 13
+            }
             hookAllConstructors(OplusBluetoothTile, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
