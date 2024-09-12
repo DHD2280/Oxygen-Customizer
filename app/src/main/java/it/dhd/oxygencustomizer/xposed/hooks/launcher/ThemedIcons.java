@@ -51,16 +51,16 @@ public class ThemedIcons extends XposedMods {
                 }
             });
 
-            Class<?> UxCustomAdaptiveIconDrawable = findClass("com.oplus.uxicon.ui.ui.UxCustomAdaptiveIconDrawable", lpparam.classLoader);
-            hookAllConstructors(UxCustomAdaptiveIconDrawable, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    for (int i = 0;i< param.args.length; i++) {
-                        log("UxCustomAdaptiveIconDrawable: " + i + " " + (param.args[i] != null));
-                    }
-                    //log("UxCustomAdaptiveIconDrawable: " + callMethod(icon, "toString"));
-                }
-            });
+//            Class<?> UxCustomAdaptiveIconDrawable = findClass("com.oplus.uxicon.ui.ui.UxCustomAdaptiveIconDrawable", lpparam.classLoader);
+//            hookAllConstructors(UxCustomAdaptiveIconDrawable, new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    for (int i = 0;i< param.args.length; i++) {
+//                        log("UxCustomAdaptiveIconDrawable: " + i + " " + (param.args[i] != null));
+//                    }
+//                    //log("UxCustomAdaptiveIconDrawable: " + callMethod(icon, "toString"));
+//                }
+//            });
 
             hookAllMethods(AdaptiveIconDrawable.class, "getMonochrome", new XC_MethodHook() {
                 @Override
