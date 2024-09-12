@@ -1386,8 +1386,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private boolean isBluetoothEnabled() {
-        final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        return mBluetoothAdapter != null && mBluetoothAdapter.isEnabled();
+        if (SystemUtils.BluetoothManager().getAdapter() == null) return false;
+        return SystemUtils.BluetoothManager().getAdapter().isEnabled();
     }
 
     private boolean isMobileDataEnabled() {
