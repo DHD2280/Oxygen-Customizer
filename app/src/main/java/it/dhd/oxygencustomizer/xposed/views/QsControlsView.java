@@ -62,7 +62,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getString;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -154,10 +153,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private ImageView wifiButton, dataButton, ringerButton, btButton, weatherButton;
 
     private Drawable mDefaultBackground = null;
-    private boolean mCustomColor = false;
-    private int mBackgroundColor = Color.WHITE;
 
     // Colors
+    private boolean mCustomInactive = false;
+    private boolean mCustomActive = false;
     private int mInactiveColor;
     private int mIconInactiveColor;
     private int mActiveColor;
@@ -444,7 +443,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     Context.CONTEXT_IGNORE_SECURITY
             );
         } catch (Exception ignored) {}
-//        mTileDrawable = WidgetUtils.getDrawable(mContext, "status_bar_qs_tile_bg_inactive", SYSTEM_UI);
         mActiveColor = getTileActiveColor(mContext);
         try {
             mInactiveColor = (int) callStaticMethod(QsColorUtil, "obtainColorForQsPanelBackground", mContext);
@@ -470,12 +468,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active", "color", SYSTEM_UI),
                 appContext.getTheme()
         );
-
-//        mHighlightDrawable = WidgetUtils.getDrawable(mContext, "status_bar_qs_highlighttile_bg_inactive", SYSTEM_UI);
-//        mDarkColor = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_background_color_dark, appContext.getTheme());
-//        mLightColor = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_background_color_light, appContext.getTheme());
-//        mDarkColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_dark, appContext.getTheme());
-//        mLightColorActive = ResourcesCompat.getColor(appContext.getResources(), R.color.lockscreen_widget_active_color_light, appContext.getTheme());
     }
 
     private boolean isNightMode() {
@@ -806,6 +798,29 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         updateBtState();
         updateRingerButtonState();
         updateHotspotButtonState(0);
+    }
+
+    private void updateWidgetsColors() {
+        for (View v : mPages) {
+            if (v instanceof LinearLayout ll) {
+                if (ll.getTag() != null && ll.getTag().equals("widgetsContainer")) {
+                    for (int i = 0; i < ll.getChildCount(); i++) {
+                        View child = ll.getChildAt(i);
+                        if (child instanceof LinearLayout) {
+                            for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
+                                View widget = ((LinearLayout) child).getChildAt(j);
+                                if (widget instanceof ImageView) {
+                                    updateWidgetsResources((ImageView) widget);
+                                } else if (widget instanceof ExtendedFAB) {
+                                    updateMainWidgetResources((ExtendedFAB) widget, false);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        updateWidgetsState();
     }
 
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
@@ -1518,12 +1533,31 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     public void updateControlsBg(Drawable defBg, boolean customColor, int color) {
         if (instance == null) return;
         instance.mDefaultBackground = defBg;
-        instance.mCustomColor = customColor;
-        instance.mBackgroundColor = color;
+        instance.mCustomInactive = customColor;
+        instance.mInactiveColor = color;
         if (instance.mMediaPlayer != null) {
             instance.mMediaPlayer.updateColors(defBg, customColor, color);
         }
         instance.reloadBackground();
+    }
+
+    /**
+     * Set custom tile colors
+     * this will match qs tile customizations
+     *
+     * @param customInactive Use custom color for inactive state
+     * @param inactiveColor Inactive color state
+     * @param customActive Use custom color for active state
+     * @param activeColor Active color state
+     */
+    public void updateQsTileColors(boolean customInactive, int inactiveColor, boolean customActive, int activeColor, boolean force) {
+        if (instance == null) return;
+        instance.loadColors();
+        instance.mCustomInactive = customInactive;
+        if (customInactive) instance.mInactiveColor = inactiveColor;
+        instance.mCustomActive = customActive;
+        if (customActive) instance.mActiveColor = activeColor;
+        if (force) instance.updateWidgetsColors();
     }
 
     /**
@@ -1539,20 +1573,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             } else {
                 Drawable back = mDefaultBackground.getConstantState().newDrawable().mutate();
                 if (back instanceof GradientDrawable) {
-                    if (mCustomColor) {
-                        ((GradientDrawable)back).setColor(mBackgroundColor);
-                    } else if (v instanceof QsWeatherWidget) {
+                    if (v instanceof QsWeatherWidget) {
                         ((GradientDrawable)back).setColor(Color.parseColor("#0D47A1"));
                     } else {
-                        back.setColorFilter(null);
+                        ((GradientDrawable)back).setColor(mInactiveColor);
                     }
                 } else if (back instanceof ShapeDrawable) {
-                    if (mCustomColor) {
-                        ((ShapeDrawable) back).getPaint().setColor(mBackgroundColor);
-                    } else if (v instanceof QsWeatherWidget) {
+                    if (v instanceof QsWeatherWidget) {
                         ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
                     } else {
-                        back.setColorFilter(null);
+                        ((ShapeDrawable) back).getPaint().setColor(mInactiveColor);
                     }
                 }
                 back.invalidateSelf();

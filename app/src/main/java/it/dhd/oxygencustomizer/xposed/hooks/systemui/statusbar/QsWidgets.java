@@ -12,12 +12,15 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -46,8 +49,8 @@ public class QsWidgets extends XposedMods {
 
     // Qs Media Tile colors
     private Drawable mDefaultMediaBg = null;
-    private boolean qsInactiveColorEnabled = false;
-    private int qsInactiveColor = Color.WHITE;
+    private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false;
+    private int qsInactiveColor = Color.WHITE, qsActiveColor = getPrimaryColor(mContext);
 
     // Qs Media Tile Album Art
     private boolean showMediaArtMediaQs = false;
@@ -70,13 +73,16 @@ public class QsWidgets extends XposedMods {
         mQsWidgetsList = Xprefs.getString(QS_WIDGETS_LIST, "media");
         mQsPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         // Media QS
-        qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
-        qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.WHITE);
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
         mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
         mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
         mMediaQsTintColor = Xprefs.getInt(QS_MEDIA_ART_TINT_COLOR, Color.WHITE);
         mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
+        // Tile Colors
+        qsActiveColorEnabled = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
+        qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, Color.RED);
+        qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
+        qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
 
         if (Key.length > 0) {
             if (Key[0].equals(QS_WIDGETS_LIST)) {
@@ -93,8 +99,11 @@ public class QsWidgets extends XposedMods {
                 updateMediaPlayerPrefs();
             }
             if (Key[0].equals(QS_TILE_INACTIVE_COLOR) ||
-                    Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED)) {
+                    Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) ||
+                    Key[0].equals(QS_TILE_ACTIVE_COLOR) ||
+                    Key[0].equals(QS_TILE_ACTIVE_COLOR_ENABLED)) {
                 updateControlsBg();
+                updateTileColors(true);
             }
         }
     }
@@ -175,6 +184,7 @@ public class QsWidgets extends XposedMods {
             mOplusQsMediaView.addView(qsControlsView, 0);
             qsControlsView.bringToFront();
             qsControlsView.requestLayout();
+            updateTileColors(false);
             updateWidgets();
             updateMediaPlayerPrefs();
             updateControlsBg();
@@ -202,6 +212,13 @@ public class QsWidgets extends XposedMods {
         QsControlsView qsControlsView = QsControlsView.getInstance();
         if (qsControlsView != null) {
             qsControlsView.updateControlsBg(mDefaultMediaBg, qsInactiveColorEnabled, qsInactiveColor);
+        }
+    }
+
+    private void updateTileColors(boolean force) {
+        QsControlsView qsControlsView = QsControlsView.getInstance();
+        if (qsControlsView != null) {
+            qsControlsView.updateQsTileColors(qsInactiveColorEnabled, qsInactiveColor, qsActiveColorEnabled, qsActiveColor, force);
         }
     }
 
