@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
 import android.app.usage.NetworkStatsManager;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
@@ -63,6 +64,7 @@ public class SystemUtils {
     //ArrayList<ChangeListener> mFlashlightLevelListeners = new ArrayList<>();
     //ArrayList<ChangeListener> mVolumeChangeListeners = new ArrayList<>();
     private WifiManager mWifiManager;
+    private BluetoothManager mBluetoothManager;
     private WindowManager mWindowManager;
     private UserManager mUserManager;
 
@@ -129,6 +131,15 @@ public class SystemUtils {
         return instance == null
                 ? null
                 : instance.getWifiManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static BluetoothManager BluetoothManager()
+    {
+        return instance == null
+                ? null
+                : instance.getBluetoothManager();
     }
 
     @Nullable
@@ -297,6 +308,22 @@ public class SystemUtils {
             }
         }
         return mWifiManager;
+    }
+
+    private BluetoothManager getBluetoothManager() {
+        if(mBluetoothManager == null)
+        {
+            try
+            {
+                mBluetoothManager = mContext.getSystemService(BluetoothManager.class);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log("Oxygen Customizer Error getting bluetooth manager");
+                    log(t);
+                }
+            }
+        }
+        return mBluetoothManager;
     }
 
     private ConnectivityManager getConnectivityManager() {

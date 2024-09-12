@@ -1375,8 +1375,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private boolean isBluetoothEnabled() {
-        final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        return mBluetoothAdapter != null && mBluetoothAdapter.isEnabled();
+        if (SystemUtils.BluetoothManager().getAdapter() == null) return false;
+        return SystemUtils.BluetoothManager().getAdapter().isEnabled();
     }
 
     private boolean isMobileDataEnabled() {
@@ -1397,8 +1397,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private boolean isWifiEnabled() {
-        boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
-        return enabled;
+        return SystemUtils.WifiManager().isWifiEnabled();
     }
 
     private boolean isHotspotEnabled() {
