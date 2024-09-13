@@ -501,8 +501,12 @@ public class PreferenceHelper {
             case "DWCategory", "DWallpaperEnabled" -> {
                 return Build.VERSION.SDK_INT >= 34;
             }
-            case "DWOpacity" -> {
+            case "DWOpacity", "DWMode" -> {
                 return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+            }
+            case "DWBackground", "DWSubject" -> {
+                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false) &&
+                        instance.mPreferences.getString("DWMode", "0").equals("1");
             }
             case "lockscreen_album_art_category" -> {
                 return Build.VERSION.SDK_INT >= 34;

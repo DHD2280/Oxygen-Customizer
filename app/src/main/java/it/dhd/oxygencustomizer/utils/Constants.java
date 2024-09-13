@@ -668,6 +668,8 @@ public class Constants {
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
     public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";
     public static final String ACTION_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
+    public static final String ACTION_DEPTH_BACKGROUND_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_BACKGROUND_CHANGED_OC";
+    public static final String ACTION_DEPTH_SUBJECT_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_SUBJECT_CHANGED_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";

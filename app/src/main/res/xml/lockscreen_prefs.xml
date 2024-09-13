@@ -113,6 +113,15 @@
             app:allowDividerAbove="true"
             app:iconSpaceReserved="false" />
 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/depth_wallpaper_mode_entries"
+            android:entryValues="@array/depth_wallpaper_mode_values"
+            android:key="DWMode"
+            android:title="@string/depth_wallpaper_mode_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
         <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
             android:key="DWOpacity"
             android:title="@string/depth_wallpaper_opacity_title"
@@ -123,6 +132,18 @@
             app:tickInterval="1"
             app:valueCount="1"
             app:valueFormat="dp" />
+
+        <Preference
+            android:key="DWBackground"
+            android:summary="@string/depth_wallpaper_pick_background_summary"
+            android:title="@string/depth_wallpaper_pick_background_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="DWSubject"
+            android:summary="@string/depth_wallpaper_pick_subject_summary"
+            android:title="@string/depth_wallpaper_pick_subject_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 

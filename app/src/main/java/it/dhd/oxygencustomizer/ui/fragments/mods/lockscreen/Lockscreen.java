@@ -1,6 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static android.app.Activity.RESULT_OK;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
@@ -15,6 +17,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
@@ -52,6 +56,11 @@ import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
     private DateFormatDialog mDateFormatDialog;
+
+    private final int PICK_FP_ICON = 0;
+    private final int PICK_DEPTH_BACKGROUND = 1;
+    private final int PICK_DEPTH_SUBJECT = 2;
+    private int mPick = -1;
 
     @Override
     public String getTitle() {
@@ -122,10 +131,37 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         Preference mFingerprintPicker = findPreference("lockscreen_fp_icon_picker");
         if (mFingerprintPicker != null) {
             mFingerprintPicker.setOnPreferenceClickListener(preference -> {
+                mPick = PICK_FP_ICON;
                 if (!AppUtils.hasStoragePermission()) {
                     AppUtils.requestStoragePermission(requireContext());
                 } else {
-                    launchFilePicker(startActivityIntent, "image/*");
+                    launchFilePicker(pickImageIntent, "image/*");
+                }
+                return true;
+            });
+        }
+
+        Preference mDepthBackground = findPreference("DWBackground");
+        if (mDepthBackground != null) {
+            mDepthBackground.setOnPreferenceClickListener(preference -> {
+                mPick = PICK_DEPTH_BACKGROUND;
+                if (!AppUtils.hasStoragePermission()) {
+                    AppUtils.requestStoragePermission(requireContext());
+                } else {
+                    launchFilePicker(pickImageIntent, "image/*");
+                }
+                return true;
+            });
+        }
+
+        Preference mDepthSubject = findPreference("DWSubject");
+        if (mDepthSubject != null) {
+            mDepthSubject.setOnPreferenceClickListener(preference -> {
+                mPick = PICK_DEPTH_SUBJECT;
+                if (!AppUtils.hasStoragePermission()) {
+                    AppUtils.requestStoragePermission(requireContext());
+                } else {
+                    launchFilePicker(pickImageIntent, "image/*");
                 }
                 return true;
             });
@@ -169,21 +205,44 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
     }
 
-    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+    ActivityResultLauncher<Intent> pickImageIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
                     Intent data = result.getData();
                     String path = getRealPath(data);
 
-                    if (path != null && moveToOCHiddenDir(path, LOCKSCREEN_FINGERPRINT_FILE)) {
-                        mPreferences.edit().putString(LOCKSCREEN_FINGERPRINT_STYLE, "-1").apply();
+                    String dest = switch (mPick) {
+                        case PICK_FP_ICON -> LOCKSCREEN_FINGERPRINT_FILE;
+                        case PICK_DEPTH_BACKGROUND -> getLockScreenBitmapCachePath();
+                        case PICK_DEPTH_SUBJECT -> getLockScreenSubjectCachePath();
+                        default -> "";
+                    };
+
+                    if (path != null && moveToOCHiddenDir(path, dest)) {
+                        switch (mPick) {
+                            case PICK_FP_ICON:
+                                mPreferences.edit().putString(LOCKSCREEN_FINGERPRINT_STYLE, "-1").apply();
+                                break;
+                            case PICK_DEPTH_BACKGROUND:
+                                sendIntent(ACTION_DEPTH_BACKGROUND_CHANGED);
+                                break;
+                            case PICK_DEPTH_SUBJECT:
+                                sendIntent(ACTION_DEPTH_SUBJECT_CHANGED);
+                                break;
+                        }
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+
+    private void sendIntent(String action) {
+        Intent intent = new Intent(action);
+        intent.putExtra("packageName", SYSTEM_UI);
+        requireContext().sendBroadcast(intent);
+    }
 
     @Override
     public void updateScreen(String key) {

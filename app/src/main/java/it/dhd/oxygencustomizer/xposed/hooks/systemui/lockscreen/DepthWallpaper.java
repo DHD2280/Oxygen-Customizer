@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
@@ -11,30 +12,49 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_CLOCK_UPDATE;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.canShowArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.showAlbumArt;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ImageDecoder;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import androidx.core.graphics.ColorUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -53,6 +73,7 @@ public class DepthWallpaper extends XposedMods {
     private Object mScrimController;
     private static boolean DWallpaperEnabled = false;
     private static int DWOpacity = 192;
+    private static int DWMode = 0;
     private final boolean DEBUG = BuildConfig.DEBUG;
     private FrameLayout mLockScreenSubject;
     private Drawable mSubjectDimmingOverlay;
@@ -61,20 +82,48 @@ public class DepthWallpaper extends XposedMods {
     private FrameLayout mWallpaperDimmingOverlay;
     private boolean mLayersCreated = false;
     private boolean superPowerSave = false;
+    private boolean mBroadcastRegistered = false;
 
     public DepthWallpaper(Context context) {
         super(context);
     }
 
+    final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case ACTION_DEPTH_BACKGROUND_CHANGED -> setDepthBackground();
+                    case ACTION_DEPTH_SUBJECT_CHANGED -> lockScreenSubjectCacheValid = false;
+                }
+            }
+        }
+    };
+
     @Override
     public void updatePrefs(String... Key) {
         DWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
         DWOpacity = Xprefs.getSliderInt("DWOpacity", 192);
+        DWMode = Integer.parseInt(Xprefs.getString("DWMode", "0"));
+
+        if (Key.length > 0) {
+            if (Key[0].equals("DWMode")) {
+                cleanFiles();
+            }
+        }
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
         if (Build.VERSION.SDK_INT < 34) return;
+
+        if (!mBroadcastRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_DEPTH_BACKGROUND_CHANGED);
+            filter.addAction(ACTION_DEPTH_SUBJECT_CHANGED);
+            mContext.registerReceiver(mReceiver, filter, RECEIVER_EXPORTED);
+            mBroadcastRegistered = true;
+        }
 
         Class<?> QSImplClass = findClass("com.android.systemui.qs.QSFragment", lpParam.classLoader);
 
@@ -142,9 +191,14 @@ public class DepthWallpaper extends XposedMods {
                     createLayers();
                 }
 
-                rootView.addView(mWallpaperBackground, 0);
+                rootView.addView(mWallpaperBackground, 2);
 
                 targetView.addView(mLockScreenSubject,1);
+
+                if (DWMode == 1) {
+                    setDepthBackground();
+                }
+
                 if (DEBUG) log(TAG + "CentralSurfacesImpl finished");
             }
         });
@@ -165,8 +219,7 @@ public class DepthWallpaper extends XposedMods {
                 hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if(DWallpaperEnabled)
-                        {
+                        if(DWallpaperEnabled && DWMode == 0) {
                             if (superPowerSave) return;
                             if (DEBUG) log(TAG + "Wallpaper Changed");
 
@@ -319,7 +372,7 @@ public class DepthWallpaper extends XposedMods {
         mWallpaperBitmapContainer = new FrameLayout(mContext);
         FrameLayout.LayoutParams lpw = new FrameLayout.LayoutParams(-1, -1);
 
-        mWallpaperDimmingOverlay.setBackgroundColor(Color.BLACK);
+        mWallpaperDimmingOverlay.setBackgroundColor(Color.TRANSPARENT);
         mWallpaperDimmingOverlay.setLayoutParams(lpw);
         mWallpaperBitmapContainer.setLayoutParams(lpw);
 
@@ -419,13 +472,55 @@ public class DepthWallpaper extends XposedMods {
         }
         try {
             //noinspection ResultOfMethodCallIgnored
-            new File(Constants.getLockScreenSubjectCachePath()).delete();
+            new File(getLockScreenSubjectCachePath()).delete();
         }
         catch (Throwable ignored){}
     }
 
+    private void cleanFiles() {
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            new File(getLockScreenBitmapCachePath()).delete();
+        }
+        catch (Throwable ignored){}
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            new File(getLockScreenSubjectCachePath()).delete();
+        }
+        catch (Throwable ignored){}
+        lockScreenSubjectCacheValid = false;
+        mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(null));
+    }
+
     private Object getScrimController() {
         return callMethod(mScrimController, "getScrimController");
+    }
+
+    private void setDepthBackground() {
+        if (!DWallpaperEnabled || !mLayersCreated) return;
+        if (mWallpaperBackground != null) {
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+            executor.scheduleWithFixedDelay(() -> {
+                File Android = new File(Environment.getExternalStorageDirectory() + "/Android");
+
+                if (Android.isDirectory()) {
+                    try {
+                        ImageDecoder.Source source = ImageDecoder.createSource(new File(getLockScreenBitmapCachePath()));
+
+                        Drawable drawable = ImageDecoder.decodeDrawable(source);
+                        mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(drawable));
+
+                        if (drawable instanceof AnimatedImageDrawable) {
+                            ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                            ((AnimatedImageDrawable) drawable).start();
+                        }
+                    } catch (Throwable ignored) {}
+
+                    executor.shutdown();
+                    executor.shutdownNow();
+                }
+            }, 0, 5, TimeUnit.SECONDS);
+        }
     }
 
     @Override
