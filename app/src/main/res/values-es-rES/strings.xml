@@ -50,6 +50,7 @@
     <string name="btn_back">Volver</string>
     <string name="btn_lets_go">Vamos</string>
     <string name="btn_close">Cerrar</string>
+    <string name="btn_cancel">Cancelar</string>
     <string name="btn_reboot_now">Reiniciar ahora</string>
     <string name="btn_reboot">Reiniciar</string>
     <string name="btn_enable">Habilitar</string>
@@ -80,6 +81,17 @@
     <string name="general_color_text2">Texto 2</string>
     <string name="sysui_restart_needed">Requiere un reinicio de la Interfaz del Sistema para aplicar</string>
     <string name="one_time_reboot_needed">¡Reinicia tu dispositivo!</string>
+    <string name="gradient_left_right">Izquierda a Derecha</string>
+    <string name="gradient_top_bottom">De Arriba hacia Abajo</string>
+    <string name="warning">Aviso</string>
+    <string name="custom_margins">Margen Personalizado</string>
+    <string name="left">Izquierda</string>
+    <string name="right">Derecha</string>
+    <string name="top">Parte de Arriba</string>
+    <string name="bottom">Parte de Abajo</string>
+    <string name="reset">Restablecer</string>
+    <!-- Image Crop Strings -->
+    <string name="pick_image">Elegir Imagen</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Buscar…</string>
     <string name="searchpreference_clear">Limpiar</string>
@@ -110,6 +122,8 @@
     <string name="general_on">Encendido</string>
     <string name="general_off">Apagado</string>
     <string name="accent_color">Color de acento</string>
+    <string name="white_color">Blanco</string>
+    <string name="black_color">Negro</string>
     <string name="custom_color">Color personalizado</string>
     <string name="battery_info_button_title">Información de la batería…</string>
     <!-- Statusbar Strings -->
@@ -146,6 +160,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Reloj &amp; fecha</string>
     <string name="status_bar_clock_summary">Personalizar reloj &amp; fecha</string>
+    <string name="status_bar_clock_format_category">Ajustes de Formato</string>
     <string name="status_bar_clock_seconds_title">Segundos del reloj</string>
     <string name="status_bar_clock_seconds_summary">Mostrar segundos junto al reloj en la barra de estado</string>
     <string name="status_bar_clock_position_title">Estilo de reloj</string>
@@ -153,6 +168,7 @@
     <string name="status_bar_clock_position_left">Izquierda</string>
     <string name="status_bar_clock_position_center">Centro</string>
     <string name="status_bar_clock_position_hidden">Oculto</string>
+    <string name="status_bar_clock_hide_category">Ocultar Reloj</string>
     <string name="status_bar_clock_auto_hide_title">Auto ocultar</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">Ocultar reloj si el lanzador es visible</string>
     <string name="status_bar_clock_auto_hide_summary">Ocultar reloj en intervalos regulares</string>
@@ -174,6 +190,7 @@
     <string name="status_bar_date_style_lowercase">Minúsculas</string>
     <string name="status_bar_date_style_uppercase">Mayúsculas</string>
     <string name="status_bar_date_format_custom">Formato personalizado de Java</string>
+    <string name="preview">Vista Previa</string>
     <string name="clock_date_position">Posición de la fecha</string>
     <string name="clock_date_right">A la derecha de la hora</string>
     <string name="clock_date_left">A la izquierda de la hora</string>
@@ -182,8 +199,11 @@
     <string name="status_bar_clock_color_title">Color personalizado del reloj</string>
     <string name="status_bar_custom_clock_color_title">Color del reloj personalizado</string>
     <string name="status_bar_custom_clock_color_summary">Color del reloj</string>
+    <string name="status_bar_clock_chip_category">Ficha de Reloj</string>
     <string name="status_bar_clock_background_chip_title">Chip de fondo</string>
     <string name="status_bar_clock_background_chip_style_title">Estilo de chip de fondo</string>
+    <string name="status_bar_clock_advanced_formatting">Avanzado (¡reemplazará la configuración anterior!)</string>
+    <string name="status_bar_clock_smaller">Más pequeño (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">Margen de la barra de estado</string>
     <string name="statusbar_top_padding">Margen superior</string>
@@ -301,6 +321,7 @@
     <string name="battery_landscape_battery_o">Batería horizontal O</string>
     <string name="battery_circle">Batería circular</string>
     <string name="battery_dotted_circle">Batería circular punteada</string>
+    <string name="battery_filled_circle">Círculo Relleno</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Ocultar icono Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Ocultar ícono de Bluetooth cuando no esté conectado.</string>
@@ -334,6 +355,12 @@
     <string name="quick_settings_tiles_landscape">En modo horizontal</string>
     <string name="quick_settings_tiles_vertical_rows">Filas de Ajustes rápidos (horizontal)</string>
     <string name="quick_settings_tiles_vertical_columns">Columnas de Ajustes rápidos (horizontal)</string>
+    <!-- Quick Settings Widgets -->
+    <string name="add_widget">Añadir Widget</string>
+    <string name="qs_widget_weather">Tiempo</string>
+    <string name="qs_widget_custom_app">Aplicación Personalizada</string>
+    <string name="qs_widget_media_player">Reproductor Multimedia</string>
+    <string name="qs_media_alert">¡No se puede remover el Reproductor Multimedia!</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalización de AR</string>
     <string name="quick_settings_tiles_customize_category_title">Fondo de los mosaicos de ajustes rápidos</string>
@@ -444,7 +471,7 @@
     <string name="qs_header_clock_enabled">Reloj de encabezado personalizado</string>
     <string name="qs_header_clock_enabled_summary">Añadir un reloj personalizado en el panel de AR</string>
     <string name="qs_header_clock_custom">Estilo de reloj</string>
-    <string name="qs_header_clock_custom_summary">Elige un estilo de tu elección.</string>
+    <string name="qs_header_clock_custom_summary">Deslice para elegir un estilo de su elección.</string>
     <string name="qs_header_clock_custom_user">Usar nombre de usuario personalizado</string>
     <string name="qs_header_clock_custom_user_title">Nombre de usuario</string>
     <string name="qs_header_clock_custom_user_image">Usar imagen de usuario personalizada</string>
@@ -505,6 +532,7 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Rellenado</string>
     <string name="chip_outlined">Contorneado</string>
+    <string name="chip_mixed">Mezclado</string>
     <string name="chip_use_accent">Usar color de acento</string>
     <string name="chip_use_gradient">Usar degradado</string>
     <string name="chip_color_accent">Usar acento</string>
@@ -633,7 +661,7 @@
     <string name="lockscreen_clock">Reloj de pantalla de bloqueo</string>
     <string name="lockscreen_clock_switch">Reloj de la pantalla de bloqueo personalizado</string>
     <string name="lockscreen_clock_custom">Estilo de reloj</string>
-    <string name="lockscreen_clock_custom_summary">Elige un estilo de tu elección.</string>
+    <string name="lockscreen_clock_custom_summary">Deslice para elegir un estilo de su elección.</string>
     <string name="lockscreen_clock_font_prefs_title">Fuente</string>
     <string name="lockscreen_clock_font_custom_enabled">Usar fuente personalizada</string>
     <string name="lockscreen_clock_font_custom_title">Elegir fuente</string>
@@ -669,7 +697,7 @@
     <string name="aod_clock">Reloj AOD</string>
     <string name="aod_clock_switch">Reloj AOD personalizado</string>
     <string name="aod_clock_custom">Estilo de reloj</string>
-    <string name="aod_clock_custom_summary">Elige un estilo de tu elección.</string>
+    <string name="aod_clock_custom_summary">Deslice para elegir un estilo de su elección.</string>
     <string name="aod_clock_font_prefs_title">Fuente</string>
     <string name="aod_clock_font_custom_enabled">Usar fuente personalizada</string>
     <string name="aod_clock_font_custom_title">Elegir fuente</string>
@@ -928,7 +956,6 @@
     <string name="weather_config_title">Ajustes del servicio</string>
     <string name="with_forecast_title">Con pronóstico de 4 días y detalles</string>
     <string name="owm_key">Clave OWM personalizada</string>
-    <string name="omnijaws_city_unknown">Desconocido</string>
     <string name="activity_title">Clima</string>
     <string name="omnijaws_service_error_long">Error cargando datos del clima</string>
     <string name="omnijaws_detail_header">Clima</string>
@@ -990,6 +1017,7 @@
     <string name="theme_customization_toast_frame_title">Marco de mensajes emergentes</string>
     <string name="theme_customization_toast_frame_summary">Cambiar estilo de notificación de mensajes emergentes</string>
     <!-- Settings Icons -->
+    <string name="settings_icon_color">Color Iconos</string>
     <!-- Notification -->
     <string name="notification_styles">Estilos de notificaciones</string>
     <string name="notification_styles_desc">Establecer estilo personalizado para notificaciones</string>
@@ -1011,6 +1039,7 @@
     <string name="dark_mode">Modo nocturno</string>
     <string name="dark_mode_pref">Personalizar Modo Nocturno</string>
     <string name="custom_dark_mode_title">Modo Nocturno Personalizado</string>
+    <string name="dark_mode_intensity">Intensidad del Modo Oscuro</string>
     <!-- Lockscreen Widgets -->
     <!-- LS Widgets Actions -->
     <!-- Lag Fix Strings -->

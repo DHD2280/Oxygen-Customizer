@@ -79,6 +79,7 @@
     <string name="general_color_text2">テキスト 2</string>
     <string name="sysui_restart_needed">適用するにはシステム UI の再起動が必要です。</string>
     <string name="one_time_reboot_needed">デバイスを再起動します!</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">検索…</string>
     <string name="searchpreference_clear">消去</string>
@@ -330,6 +331,7 @@
     <string name="quick_settings_tiles_landscape">横画面の場合</string>
     <string name="quick_settings_tiles_vertical_rows">クイック設定の行 (横画面)</string>
     <string name="quick_settings_tiles_vertical_columns">クイック設定カラム (横画面)</string>
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">クイック設定のカスタマイズ</string>
     <string name="quick_settings_tiles_customize_category_title">クイック設定タイルの背景</string>
@@ -439,7 +441,6 @@
     <string name="qs_header_clock_enabled">カスタムヘッダー時計</string>
     <string name="qs_header_clock_enabled_summary">クイック設定パネルにカスタム時計を追加します</string>
     <string name="qs_header_clock_custom">時計のスタイル</string>
-    <string name="qs_header_clock_custom_summary">好みのスタイルを選択してください。</string>
     <string name="qs_header_clock_custom_user">カスタムユーザー名を使用</string>
     <string name="qs_header_clock_custom_user_title">ユーザー名</string>
     <string name="qs_header_clock_custom_user_image">カスタムユーザー画像を使用</string>
@@ -615,7 +616,6 @@
     <string name="lockscreen_clock">ロック画面の時計</string>
     <string name="lockscreen_clock_switch">ロック画面の時計をカスタマイズ</string>
     <string name="lockscreen_clock_custom">時計のスタイル</string>
-    <string name="lockscreen_clock_custom_summary">好みのスタイルを選択してください。</string>
     <string name="lockscreen_clock_font_prefs_title">フォント</string>
     <string name="lockscreen_clock_font_custom_enabled">カスタムフォントを使用</string>
     <string name="lockscreen_clock_font_custom_title">フォントを選択</string>
@@ -649,7 +649,6 @@
     <string name="aod_clock">AOD 時計</string>
     <string name="aod_clock_switch">AOD 時計のカスタマイズ</string>
     <string name="aod_clock_custom">時計のスタイル</string>
-    <string name="aod_clock_custom_summary">好みのスタイルを選択してください。</string>
     <string name="aod_clock_font_prefs_title">フォント</string>
     <string name="aod_clock_font_custom_enabled">カスタムフォントを使用</string>
     <string name="aod_clock_font_custom_title">フォントを選択</string>
@@ -903,7 +902,6 @@
     <string name="weather_config_title">サービスの設定</string>
     <string name="with_forecast_title">4 日間の天気予報と詳細</string>
     <string name="owm_key">カスタム OWM キー</string>
-    <string name="omnijaws_city_unknown">不明</string>
     <string name="activity_title">天気</string>
     <string name="omnijaws_service_error_long">気象データの読み込みに失敗しました</string>
     <string name="omnijaws_detail_header">天気</string>

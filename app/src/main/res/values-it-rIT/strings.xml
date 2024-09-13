@@ -92,6 +92,10 @@
     <string name="right">Destra</string>
     <string name="top">In alto</string>
     <string name="bottom">In basso</string>
+    <string name="reset">Ripristina</string>
+    <string name="lang_follow_system">Segui Il Sistema</string>
+    <!-- Image Crop Strings -->
+    <string name="pick_image">Scegli Immagine</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -346,6 +350,7 @@
     <string name="quick_settings_tiles_title">Riquadri Impostazioni rapide</string>
     <string name="quick_settings_tiles_number">Conteggio Tile Impostazioni rapide</string>
     <string name="quick_settings_tiles_main">Personalizza Tile Impostazioni Rapide</string>
+    <string name="quick_settings_widgets">Widget Impostazioni Rapide</string>
     <string name="qs_transparency">Trasparenza QS &amp; Sfocatura</string>
     <string name="qs_transparency_title">Personalizza Trasparenza QS</string>
     <string name="qs_transparency_value">Trasparenza QS</string>
@@ -358,6 +363,17 @@
     <string name="quick_settings_tiles_landscape">In orientamento orizzontale</string>
     <string name="quick_settings_tiles_vertical_rows">Righe Impostazioni rapide (orizzontale)</string>
     <string name="quick_settings_tiles_vertical_columns">Colonne Impostazioni rapide (orizzontale)</string>
+    <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">Mostra Widget delle Impostazioni Rapide</string>
+    <string name="add_widget">Aggiungi Widget</string>
+    <string name="qs_widget_photo">Visualizzatore Foto</string>
+    <string name="qs_widget_weather">Meteo</string>
+    <string name="qs_widget_mini_weather">Mini Meteo</string>
+    <string name="qs_widget_custom_app">App Personalizzata</string>
+    <string name="qs_widget_media_player">Lettore multimediale</string>
+    <string name="qs_media_alert">Impossibile rimuovere il lettore multimediale!</string>
+    <string name="qs_widget_set_radius">Imposta Raggio Immagine</string>
+    <string name="qs_widget_set_custom_photo">Imposta Immagine personalizzata</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalizzazione QS</string>
     <string name="quick_settings_tiles_customize_category_title">Impostazioni rapide Sfondo dei Tile</string>
@@ -471,7 +487,7 @@
     <string name="qs_header_clock_enabled">Orologio Intestazione Personalizzato</string>
     <string name="qs_header_clock_enabled_summary">Aggiungi un orologio personalizzato al pannello impostazioni rapide</string>
     <string name="qs_header_clock_custom">Stile Orologio</string>
-    <string name="qs_header_clock_custom_summary">Scegli uno stile a tua scelta.</string>
+    <string name="qs_header_clock_custom_summary">Scorri per scegliere lo stile che preferisci.</string>
     <string name="qs_header_clock_custom_user">Usa Nome Utente Personalizzato</string>
     <string name="qs_header_clock_custom_user_title">Nome Utente</string>
     <string name="qs_header_clock_custom_user_image">Usa Immagine Utente Personalizzata</string>
@@ -668,7 +684,7 @@
     <string name="lockscreen_clock">Orologio schermata di blocco</string>
     <string name="lockscreen_clock_switch">Personalizza Orologio schermata di blocco</string>
     <string name="lockscreen_clock_custom">Stile Orologio</string>
-    <string name="lockscreen_clock_custom_summary">Scegli uno stile a tua scelta.</string>
+    <string name="lockscreen_clock_custom_summary">Scorri per scegliere lo stile che preferisci.</string>
     <string name="lockscreen_clock_font_prefs_title">Carattere</string>
     <string name="lockscreen_clock_font_custom_enabled">Usa carattere personalizzato</string>
     <string name="lockscreen_clock_font_custom_title">Seleziona Carattere</string>
@@ -677,6 +693,9 @@
     <string name="lockscreen_clock_custom_color_title">Personalizza colore orologio</string>
     <string name="lockscreen_clock_custom_color_summary">Colore personalizzato invece del colore primario</string>
     <string name="lockscreen_clock_text_scaling">Ridimensionamento testo</string>
+    <string name="lockscreen_clock_custom_format_title">Formato data personalizzato</string>
+    <string name="lockscreen_clock_custom_format_summary">Personalizza il formato della data.\nLascia vuoto per disabilitare</string>
+    <string name="lockscreen_clock_custom_format_dmessage">Per la documentazione sul formato, cerca \"Formato data Java\"</string>
     <string name="lockscreen_clock_custom_user">Usa Nome Utente Personalizzato</string>
     <string name="lockscreen_clock_custom_user_title">Nome Utente</string>
     <string name="lockscreen_clock_custom_user_image">Usa Immagine Utente Personalizzata</string>
@@ -704,7 +723,7 @@
     <string name="aod_clock">Orologio AOD</string>
     <string name="aod_clock_switch">Orologio AOD personalizzato</string>
     <string name="aod_clock_custom">Stile Orologio</string>
-    <string name="aod_clock_custom_summary">Scegli uno stile a tua scelta.</string>
+    <string name="aod_clock_custom_summary">Scorri per scegliere lo stile che preferisci.</string>
     <string name="aod_clock_font_prefs_title">Carattere</string>
     <string name="aod_clock_font_custom_enabled">Usa carattere personalizzato</string>
     <string name="aod_clock_font_custom_title">Seleziona Carattere</string>
@@ -889,6 +908,7 @@
     <!-- Own Settings -->
     <string name="general_settings">Generale</string>
     <string name="app_icon_themed">Usa icona app con tema</string>
+    <string name="language_title">Lingua</string>
     <string name="delete_all_title">Elimina Tutto</string>
     <string name="delete_all_summary">Elimina tutte le impostazioni</string>
     <string name="export_title">Esporta</string>
@@ -968,6 +988,7 @@
     <string name="weather_config_title">Impostazioni servizio</string>
     <string name="with_forecast_title">Con previsioni e dettagli per 4 giorni</string>
     <string name="owm_key">Chiave OWM personalizzata</string>
+    <string name="yandex_key">Chiave API Yandex</string>
     <string name="omnijaws_city_unknown">Sconosciuto</string>
     <string name="activity_title">Meteo</string>
     <string name="omnijaws_service_error_long">Errore nel caricamento dei dati meteo</string>
@@ -991,6 +1012,7 @@
     <string name="weather_margin_left">Margine Sinistro</string>
     <string name="weather_permission_dialog_title">Abilita Permessi Posizione</string>
     <string name="weather_permission_dialog_message">I permessi di localizzazione sono necessari per recuperare i dati meteo. Fare clic su OK per aprire le impostazioni.</string>
+    <string name="weather_yandex_key_required">Per il Provider meteo Yandex è richiesta una chiave API!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">Stile Sfondo Meteo</string>
     <string name="lockscreen_weather_selection_default">Predefinito</string>

@@ -42,6 +42,7 @@
     <string name="general_color_accent3">Akzent 3</string>
     <string name="general_color_text1">Text 1</string>
     <string name="general_color_text2">Text 2</string>
+    <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <string name="searchpreference_search">Suche…</string>
     <!-- Menu Strings -->
@@ -61,6 +62,7 @@
     <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
+    <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <!-- QS Tile Radius -->
     <!-- Media Tile -->

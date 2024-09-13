@@ -92,6 +92,9 @@
     <string name="right">右侧</string>
     <string name="top">顶部</string>
     <string name="bottom">底部</string>
+    <string name="reset">重置</string>
+    <!-- Image Crop Strings -->
+    <string name="pick_image">选择图像</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">搜索...</string>
     <string name="searchpreference_clear">清空</string>
@@ -346,6 +349,7 @@
     <string name="quick_settings_tiles_title">控制中心磁贴</string>
     <string name="quick_settings_tiles_number">控制中心磁贴数量设置</string>
     <string name="quick_settings_tiles_main">自定义控制中心磁贴样式</string>
+    <string name="quick_settings_widgets">小组件</string>
     <string name="qs_transparency">控制中心的透明度和模糊度</string>
     <string name="qs_transparency_title">自定义控制中心透明度</string>
     <string name="qs_transparency_value">透明度</string>
@@ -358,6 +362,16 @@
     <string name="quick_settings_tiles_landscape">横屏时</string>
     <string name="quick_settings_tiles_vertical_rows">磁贴行数(横屏时)</string>
     <string name="quick_settings_tiles_vertical_columns">磁贴列数(横屏时)</string>
+    <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">显示小组件</string>
+    <string name="add_widget">添加小组件</string>
+    <string name="qs_widget_photo">照片展示</string>
+    <string name="qs_widget_weather">天气</string>
+    <string name="qs_widget_custom_app">自定义 App</string>
+    <string name="qs_widget_media_player">媒体播放器</string>
+    <string name="qs_media_alert">无法移除媒体播放器！</string>
+    <string name="qs_widget_set_radius">设置图像半径</string>
+    <string name="qs_widget_set_custom_photo">设置自定义图像</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">自定义</string>
     <string name="quick_settings_tiles_customize_category_title">磁贴背景</string>
@@ -471,7 +485,7 @@
     <string name="qs_header_clock_enabled">自定义顶部时钟</string>
     <string name="qs_header_clock_enabled_summary">在控制中心上添加自定义时钟</string>
     <string name="qs_header_clock_custom">时钟样式</string>
-    <string name="qs_header_clock_custom_summary">自选一种风格</string>
+    <string name="qs_header_clock_custom_summary">滑动选择一个风格</string>
     <string name="qs_header_clock_custom_user">使用自定义用户名</string>
     <string name="qs_header_clock_custom_user_title">用户名称</string>
     <string name="qs_header_clock_custom_user_image">使用自定义用户图像</string>
@@ -668,7 +682,7 @@
     <string name="lockscreen_clock">锁屏时钟</string>
     <string name="lockscreen_clock_switch">自定义锁屏时钟</string>
     <string name="lockscreen_clock_custom">时钟样式</string>
-    <string name="lockscreen_clock_custom_summary">自选一种风格</string>
+    <string name="lockscreen_clock_custom_summary">滑动选择一个风格</string>
     <string name="lockscreen_clock_font_prefs_title">字体</string>
     <string name="lockscreen_clock_font_custom_enabled">使用自定义字体</string>
     <string name="lockscreen_clock_font_custom_title">选择字体</string>
@@ -677,6 +691,9 @@
     <string name="lockscreen_clock_custom_color_title">自定义时钟颜色</string>
     <string name="lockscreen_clock_custom_color_summary">自定义颜色代替主颜色</string>
     <string name="lockscreen_clock_text_scaling">文本缩放</string>
+    <string name="lockscreen_clock_custom_format_title">自定义日期格式</string>
+    <string name="lockscreen_clock_custom_format_summary">自定义日期格式。\n保持空白以禁用</string>
+    <string name="lockscreen_clock_custom_format_dmessage">有关格式文档，请搜索“Java Date format”</string>
     <string name="lockscreen_clock_custom_user">使用自定义用户名</string>
     <string name="lockscreen_clock_custom_user_title">用户名称</string>
     <string name="lockscreen_clock_custom_user_image">使用自定义用户图像</string>
@@ -704,7 +721,7 @@
     <string name="aod_clock">AOD 时钟</string>
     <string name="aod_clock_switch">自定义AOD 时钟</string>
     <string name="aod_clock_custom">时钟样式</string>
-    <string name="aod_clock_custom_summary">自选一种风格</string>
+    <string name="aod_clock_custom_summary">滑动选择一个风格</string>
     <string name="aod_clock_font_prefs_title">字体</string>
     <string name="aod_clock_font_custom_enabled">使用自定义字体</string>
     <string name="aod_clock_font_custom_title">选择字体</string>
@@ -968,7 +985,6 @@
     <string name="weather_config_title">服务设置</string>
     <string name="with_forecast_title">包含 4 天预报和详细信息</string>
     <string name="owm_key">自定义OWM密钥</string>
-    <string name="omnijaws_city_unknown">未知</string>
     <string name="activity_title">天气</string>
     <string name="omnijaws_service_error_long">加载天气数据时出错</string>
     <string name="omnijaws_detail_header">天气</string>
@@ -1127,4 +1143,5 @@
     <string name="fix_lag_dialog_message">您的 OOS 版本无法与这个修复兼容。\n如果您想，您仍然可以强制修复。</string>
     <string name="fix_lag_apply_anyway">仍然启用</string>
     <!-- Caffeine -->
+    <string name="caffeine">咖啡因</string>
 </resources>

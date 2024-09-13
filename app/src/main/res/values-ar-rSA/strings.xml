@@ -92,6 +92,10 @@
     <string name="right">يمين</string>
     <string name="top">أعلى</string>
     <string name="bottom">أسفل</string>
+    <string name="reset">إعادة تعيين</string>
+    <string name="lang_follow_system">اتبع النظام</string>
+    <!-- Image Crop Strings -->
+    <string name="pick_image">اختر صورة</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">بحث…</string>
     <string name="searchpreference_clear">مسح</string>
@@ -346,6 +350,7 @@
     <string name="quick_settings_tiles_title">مربعات الإعدادات السريعة</string>
     <string name="quick_settings_tiles_number">إعدادات عدد مربعات الإعدادات السريعة</string>
     <string name="quick_settings_tiles_main">تخصيص مربعات الإعدادات السريعة</string>
+    <string name="quick_settings_widgets">التطبيقات المصغرة للإعدادات السريعة</string>
     <string name="qs_transparency">شفافية QS &amp; ضبابية</string>
     <string name="qs_transparency_title">تخصيص شفافية QS</string>
     <string name="qs_transparency_value">شفافية QS</string>
@@ -358,6 +363,17 @@
     <string name="quick_settings_tiles_landscape">في الوضع الأفقي</string>
     <string name="quick_settings_tiles_vertical_rows">صفوف الإعدادات السريعة (الوضع الأفقي)</string>
     <string name="quick_settings_tiles_vertical_columns">أعمدة الإعدادات السريعة (الوضع الأفقي)</string>
+    <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">عرض التطبيقات المصغرة للإعدادات السريعة</string>
+    <string name="add_widget">إضافة تطبيق مصغر</string>
+    <string name="qs_widget_photo">عرض الصور</string>
+    <string name="qs_widget_weather">الطقس</string>
+    <string name="qs_widget_mini_weather">الطقس المصغر</string>
+    <string name="qs_widget_custom_app">تطبيق مخصص</string>
+    <string name="qs_widget_media_player">مشغل الوسائط</string>
+    <string name="qs_media_alert">لا يمكن إزالة مشغل الوسائط!</string>
+    <string name="qs_widget_set_radius">تعيين نطاق الصورة</string>
+    <string name="qs_widget_set_custom_photo">تعيين صورة مخصصة</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">تخصيص QS</string>
     <string name="quick_settings_tiles_customize_category_title">خلفية مربعات الإعدادات السريعة</string>
@@ -471,7 +487,7 @@
     <string name="qs_header_clock_enabled">ساعة رأس مخصصة</string>
     <string name="qs_header_clock_enabled_summary">إضافة ساعة مخصصة على لوحة QS</string>
     <string name="qs_header_clock_custom">نمط الساعة</string>
-    <string name="qs_header_clock_custom_summary">اختر نمط من اختيارك.</string>
+    <string name="qs_header_clock_custom_summary">اسحب لإختيار نمط من اختيارك.</string>
     <string name="qs_header_clock_custom_user">استخدم اسم مستخدم مخصص</string>
     <string name="qs_header_clock_custom_user_title">اسم المستخدم</string>
     <string name="qs_header_clock_custom_user_image">استخدم صورة مستخدم مخصصة</string>
@@ -668,7 +684,7 @@
     <string name="lockscreen_clock">ساعة شاشة القفل</string>
     <string name="lockscreen_clock_switch">ساعة شاشة قفل مخصصة</string>
     <string name="lockscreen_clock_custom">نمط الساعة</string>
-    <string name="lockscreen_clock_custom_summary">اختر نمطًا من اختيارك.</string>
+    <string name="lockscreen_clock_custom_summary">اسحب لإختيار نمط من اختيارك.</string>
     <string name="lockscreen_clock_font_prefs_title">الخط</string>
     <string name="lockscreen_clock_font_custom_enabled">استخدام خط مخصص</string>
     <string name="lockscreen_clock_font_custom_title">اختر خط</string>
@@ -677,6 +693,9 @@
     <string name="lockscreen_clock_custom_color_title">ساعة بلون مخصص</string>
     <string name="lockscreen_clock_custom_color_summary">لون مخصص بدلاً من اللون الأساسي</string>
     <string name="lockscreen_clock_text_scaling">تغيير حجم النص</string>
+    <string name="lockscreen_clock_custom_format_title">تنسيق تاريخ مخصص</string>
+    <string name="lockscreen_clock_custom_format_summary">تخصيص تنسيق التاريخ.\nابق فارغاً للتعطيل</string>
+    <string name="lockscreen_clock_custom_format_dmessage">لنسق الوثائق، ابحث عن \"تنسيق تاريخ الجافا\"</string>
     <string name="lockscreen_clock_custom_user">استخدام اسم مستخدم مخصص</string>
     <string name="lockscreen_clock_custom_user_title">اسم المستخدم</string>
     <string name="lockscreen_clock_custom_user_image">استخدام صورة مستخدم مخصصة</string>
@@ -704,7 +723,7 @@
     <string name="aod_clock">ساعة AOD</string>
     <string name="aod_clock_switch">ساعة AOD مخصصة</string>
     <string name="aod_clock_custom">نمط الساعة</string>
-    <string name="aod_clock_custom_summary">اختر نمطًا من اختيارك.</string>
+    <string name="aod_clock_custom_summary">اسحب لإختيار نمط من اختيارك.</string>
     <string name="aod_clock_font_prefs_title">الخط</string>
     <string name="aod_clock_font_custom_enabled">استخدام خط مخصص</string>
     <string name="aod_clock_font_custom_title">اختر خط</string>
@@ -889,6 +908,7 @@
     <!-- Own Settings -->
     <string name="general_settings">عام</string>
     <string name="app_icon_themed">استخدام أيقونة التطبيق ذات الطابع الخاص</string>
+    <string name="language_title">اللغة</string>
     <string name="delete_all_title">حذف الكل</string>
     <string name="delete_all_summary">حذف جميع الإعدادات</string>
     <string name="export_title">تصدير</string>
@@ -968,6 +988,7 @@
     <string name="weather_config_title">إعدادات الخدمة</string>
     <string name="with_forecast_title">مع توقعات لمدة 4 أيام وتفاصيل</string>
     <string name="owm_key">مفتاح OWM مخصص</string>
+    <string name="yandex_key">مفتاح Yandex API</string>
     <string name="omnijaws_city_unknown">غير معروف</string>
     <string name="activity_title">الطقس</string>
     <string name="omnijaws_service_error_long">خطأ في تحميل بيانات الطقس</string>
@@ -991,6 +1012,7 @@
     <string name="weather_margin_left">الهامش الأيسر</string>
     <string name="weather_permission_dialog_title">تفعيل أذونات الموقع</string>
     <string name="weather_permission_dialog_message">تتطلب أذونات الموقع لجلب بيانات الطقس. انقر على \"موافق\" لفتح الإعدادات.</string>
+    <string name="weather_yandex_key_required">بالنسبة لمزود الطقس Yandex المفتاح مطلوب!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">نمط خلفية الطقس</string>
     <string name="lockscreen_weather_selection_default">افتراضي</string>
@@ -1127,4 +1149,5 @@
     <string name="fix_lag_dialog_message">قد لا يكون إصدار OOS الخاص بك متوافقًا مع هذا الإصلاح.\nإذا كنت ترغب، يمكنك فرض الإصلاح على أي حال.</string>
     <string name="fix_lag_apply_anyway">تفعيل على أي حال</string>
     <!-- Caffeine -->
+    <string name="caffeine">كافيين</string>
 </resources>

@@ -92,6 +92,10 @@
     <string name="right">Jobb</string>
     <string name="top">Felső</string>
     <string name="bottom">Alsó</string>
+    <string name="reset">Visszaállítás</string>
+    <string name="lang_follow_system">Kövesse a rendszert</string>
+    <!-- Image Crop Strings -->
+    <string name="pick_image">Képválasztás</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -346,6 +350,7 @@
     <string name="quick_settings_tiles_title">Gyorskapcsoló-csempék</string>
     <string name="quick_settings_tiles_number">A gyorsbeállítási csempék száma</string>
     <string name="quick_settings_tiles_main">A csempék testreszabása</string>
+    <string name="quick_settings_widgets">A Gyorsbeállítások kisalkalmazásai</string>
     <string name="qs_transparency">QS Átlátszóság és Homályosság</string>
     <string name="qs_transparency_title">Az átlátszóság változtatása</string>
     <string name="qs_transparency_value">QS Átlátszóság</string>
@@ -358,6 +363,17 @@
     <string name="quick_settings_tiles_landscape">Fekvő képernyő-tájolásban</string>
     <string name="quick_settings_tiles_vertical_rows">QS Sorok (Tájkép-mód)</string>
     <string name="quick_settings_tiles_vertical_columns">QS Oszlopok (Tájkép-mód)</string>
+    <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">Kisalkalmazások megjelenítése</string>
+    <string name="add_widget">Kisalkalmazás hozzáadása</string>
+    <string name="qs_widget_photo">Fotóalbum</string>
+    <string name="qs_widget_weather">Időjárás</string>
+    <string name="qs_widget_mini_weather">Miniatűr Időjárás</string>
+    <string name="qs_widget_custom_app">Egyedi alkalmazás</string>
+    <string name="qs_widget_media_player">Médialejátszó</string>
+    <string name="qs_media_alert">A Médialejátszó nem távolítható el!</string>
+    <string name="qs_widget_set_radius">A képlekerekítés beállítása</string>
+    <string name="qs_widget_set_custom_photo">Egyéni kép beállítása</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Testreszabások</string>
     <string name="quick_settings_tiles_customize_category_title">A csempék háttere</string>
@@ -471,7 +487,7 @@
     <string name="qs_header_clock_enabled">Egyéni fejléc-óra</string>
     <string name="qs_header_clock_enabled_summary">Adjon hozzá egyéni órát a QS panelhez</string>
     <string name="qs_header_clock_custom">Az óra stílusa</string>
-    <string name="qs_header_clock_custom_summary">Válassza ki a kívánt stílust.</string>
+    <string name="qs_header_clock_custom_summary">Csúsztassa az ujját arra a stílusra amit szeretne.</string>
     <string name="qs_header_clock_custom_user">Használhat egyéni felhasználónevet</string>
     <string name="qs_header_clock_custom_user_title">Felhasználónév</string>
     <string name="qs_header_clock_custom_user_image">Használhat egyéni felhasználóképet</string>
@@ -668,7 +684,7 @@
     <string name="lockscreen_clock">A képernyőzár órája</string>
     <string name="lockscreen_clock_switch">Egyéni óra a záróképernyőn</string>
     <string name="lockscreen_clock_custom">Az óra stílusa</string>
-    <string name="lockscreen_clock_custom_summary">Válassza ki a kívánt stílust.</string>
+    <string name="lockscreen_clock_custom_summary">Csúsztassa az ujját arra a stílusra amit szeretne.</string>
     <string name="lockscreen_clock_font_prefs_title">Betűtípus</string>
     <string name="lockscreen_clock_font_custom_enabled">Egyéni karakterkészlet használata</string>
     <string name="lockscreen_clock_font_custom_title">Betűtípus-választó</string>
@@ -677,6 +693,9 @@
     <string name="lockscreen_clock_custom_color_title">Egyéni óraszín</string>
     <string name="lockscreen_clock_custom_color_summary">Lecserélheti az elsődleges színt egyénire</string>
     <string name="lockscreen_clock_text_scaling">Szövegméretezés</string>
+    <string name="lockscreen_clock_custom_format_title">Egyedi dátumformátum</string>
+    <string name="lockscreen_clock_custom_format_summary">Testreszabhatja a dátum formátumát.\nHagyja üresen, ha nem akarja változtatni</string>
+    <string name="lockscreen_clock_custom_format_dmessage">A formátum leírásához keressen rá a „Java Date Format” kifejezésre</string>
     <string name="lockscreen_clock_custom_user">Egyéni felhasználónév</string>
     <string name="lockscreen_clock_custom_user_title">Felhasználónév</string>
     <string name="lockscreen_clock_custom_user_image">Egyéni felhasználókép</string>
@@ -704,7 +723,7 @@
     <string name="aod_clock">Óra az AOD-hoz</string>
     <string name="aod_clock_switch">Egyéni AOD-Óra</string>
     <string name="aod_clock_custom">Az óra stílusa</string>
-    <string name="aod_clock_custom_summary">Válassza ki a kívánt stílust.</string>
+    <string name="aod_clock_custom_summary">Csúsztassa az ujját arra a stílusra amit szeretne.</string>
     <string name="aod_clock_font_prefs_title">Betűtípus</string>
     <string name="aod_clock_font_custom_enabled">Egyéni karakterkészlet használata</string>
     <string name="aod_clock_font_custom_title">Betűtípus-választó</string>
@@ -889,6 +908,7 @@
     <!-- Own Settings -->
     <string name="general_settings">Általános</string>
     <string name="app_icon_themed">A témázott alkalmazásikon használata</string>
+    <string name="language_title">Nyelv</string>
     <string name="delete_all_title">Az összes törlése</string>
     <string name="delete_all_summary">Az összes beállítás törlése</string>
     <string name="export_title">Exportálás</string>
@@ -968,6 +988,7 @@
     <string name="weather_config_title">Időjárás-szolgáltatási beállítások</string>
     <string name="with_forecast_title">4 napos előrejelzéssel és részletekkel</string>
     <string name="owm_key">Egyéni OWM-kulcs</string>
+    <string name="yandex_key">Yandex API-kulcs</string>
     <string name="omnijaws_city_unknown">Ismeretlen</string>
     <string name="activity_title">Időjárás</string>
     <string name="omnijaws_service_error_long">Hiba az időjárási adatok betöltésekor</string>
@@ -991,6 +1012,7 @@
     <string name="weather_margin_left">Baloldali margó</string>
     <string name="weather_permission_dialog_title">Helymeghatározási jogosultságok megadása</string>
     <string name="weather_permission_dialog_message">Az időjárási adatok lekéréséhez tartózkodási helymeghatározásra van szükség. Kattintson az OK gombra a Beállítások megnyitásához.</string>
+    <string name="weather_yandex_key_required">A Yandex Időjárás-szolgáltatáshoz kell egy kulcs!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">Az Időjárás háttérstílusa</string>
     <string name="lockscreen_weather_selection_default">Alapértelmezett</string>
