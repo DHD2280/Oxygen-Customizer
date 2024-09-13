@@ -22,7 +22,7 @@ import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
-    public static final boolean SKIP_INSTALLATION = true;
+    public static final boolean SKIP_INSTALLATION = false;
 
     static {
         Shell.enableVerboseLogging = BuildConfig.DEBUG;
