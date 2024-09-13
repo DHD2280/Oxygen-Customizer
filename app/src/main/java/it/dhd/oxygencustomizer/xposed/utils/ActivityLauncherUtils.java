@@ -20,6 +20,7 @@ import androidx.annotation.StringRes;
 
 import java.util.List;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 
 public class ActivityLauncherUtils {
@@ -65,6 +66,21 @@ public class ActivityLauncherUtils {
             return;
         }
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", launchIntent, 0 /* dismissShade */);
+    }
+
+    /**
+     * Launches the weather settings page {@link it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings}
+     * @param fromQs Whether the intent is launched from Quick Settings
+     */
+    public void launchWeatherSettings(boolean fromQs) {
+        final Intent launchIntent = new Intent();
+        launchIntent.setComponent(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".ui.activity.MainActivity"));
+        launchIntent.putExtra("openWeatherSettings", true);
+        if (mActivityStarter == null) {
+            log("ActivityStarter is null");
+            return;
+        }
+        callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
     }
 
     public void launchCamera(boolean fromQs) {

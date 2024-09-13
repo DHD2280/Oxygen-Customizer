@@ -857,9 +857,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             case "weather":
                 if (iv != null) {
                     weatherButton = iv;
+                    weatherButton.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchWeatherSettings(false);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     weatherButtonFab = efab;
+                    weatherButtonFab.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchWeatherSettings(false);
+                        return true;
+                    });
                 }
                 // Set a null on click listener to weather button to avoid running previous button action
                 setUpWidgetResources(iv, efab, v -> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));

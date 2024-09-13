@@ -983,9 +983,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             case "w:weather":
                 if (iv != null) {
                     weatherButton = iv;
+                    weatherButton.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchWeatherSettings(true);
+                        return true;
+                    });
                 }
                 if (efab != null) {
                     weatherButtonFab = efab;
+                    weatherButtonFab.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchWeatherSettings(true);
+                        return true;
+                    });
                 }
                 // Set a null on click listener to weather button to avoid running previous button action
                 setUpWidgetResources(iv, efab, v-> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
