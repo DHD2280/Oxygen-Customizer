@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.databinding.ActivityMainBinding;
@@ -89,16 +90,21 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             setHeader(this, savedInstanceState.getCharSequence(TITLE_TAG));
         }
 
-        if (getIntent() != null && getIntent().getBooleanExtra("updateTapped", false)) {
-            Intent intent = getIntent();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
-            bundle.putString("filePath", intent.getStringExtra("filePath"));
-            UpdateFragment updateFragment = new UpdateFragment();
-            updateFragment.setArguments(bundle);
-            replaceFragment(updateFragment);
-        } else if (getIntent() != null && getIntent().getBooleanExtra("newUpdate", false)) {
-            replaceFragment(new UpdateFragment());
+        if (getIntent() != null) {
+            if (getIntent().getBooleanExtra("updateTapped", false)) {
+                Intent intent = getIntent();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
+                bundle.putString("filePath", intent.getStringExtra("filePath"));
+                UpdateFragment updateFragment = new UpdateFragment();
+                updateFragment.setArguments(bundle);
+                replaceFragment(updateFragment);
+            } else if (getIntent().getBooleanExtra("newUpdate", false)) {
+                replaceFragment(new UpdateFragment());
+            } else if (getIntent().getBooleanExtra("openWeatherSettings", false)) {
+                replaceFragment(new Mods());
+                replaceFragment(new WeatherSettings());
+            }
         }
 
         if (!prefsList.isEmpty()) prefsList.clear();
