@@ -22,8 +22,7 @@ import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
-    public static final boolean SKIP_INSTALLATION = false;
-    public static final boolean SKIP_TO_HOMEPAGE_FOR_TESTING = SKIP_INSTALLATION && BuildConfig.DEBUG;
+    public static final boolean SKIP_INSTALLATION = true;
 
     static {
         Shell.enableVerboseLogging = BuildConfig.DEBUG;
@@ -57,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
 
         boolean isModuleProperlyInstalled = isModuleInstalled && (isOverlayInstalled || isXposedOnlyMode);
 
-        if (SKIP_TO_HOMEPAGE_FOR_TESTING || (isRooted && isModuleProperlyInstalled && isVersionCodeCorrect)) {
+        if (SKIP_INSTALLATION || (isRooted && isModuleProperlyInstalled && isVersionCodeCorrect)) {
             keepShowing = false;
             intent = new Intent(SplashActivity.this, MainActivity.class);
         } else {

@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.utils;
 
-import static it.dhd.oxygencustomizer.SplashActivity.SKIP_TO_HOMEPAGE_FOR_TESTING;
+import static it.dhd.oxygencustomizer.SplashActivity.SKIP_INSTALLATION;
 
 import android.os.Environment;
 
@@ -39,7 +39,7 @@ public class ModuleConstants {
 
     public static final String XPOSED_ONLY_MODE = "OCXposedOnlyMode";
     public static boolean isXposedOnlyMode = Prefs.getBoolean(XPOSED_ONLY_MODE, true) &&
-            !SKIP_TO_HOMEPAGE_FOR_TESTING;
+            !SKIP_INSTALLATION;
 
     // Module script
     public static final String MAGISK_UPDATE_BINARY = """
