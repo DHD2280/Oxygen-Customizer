@@ -72,6 +72,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.net.wifi.WifiConfiguration;
@@ -156,11 +157,19 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     // Colors
     private boolean mCustomInactive = false;
+    private int mCustomInactiveColor;
     private boolean mCustomActive = false;
+    private int mCustomActiveColor;
     private int mInactiveColor;
     private int mIconInactiveColor;
     private int mActiveColor;
     private int mIconActiveColor;
+
+    // Radius
+    private boolean mCustomFabRadius = false;
+    private float[] mFabRadius = new float[8];
+    private boolean mCustomTileRadius = false;
+    private float[] mTileRadius = new float[8];
 
     // Our Views
     private QsMediaTile mMediaPlayer; // Use own media player
@@ -437,6 +446,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void loadColors() {
+        log(TAG + "start loadColors");
         try {
             appContext = mContext.createPackageContext(
                     BuildConfig.APPLICATION_ID,
@@ -468,6 +478,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active", "color", SYSTEM_UI),
                 appContext.getTheme()
         );
+        log(TAG + "end loadColors");
     }
 
     private boolean isNightMode() {
@@ -742,6 +753,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
                     0, h2, 1);
             layoutParams2.gravity = Gravity.CENTER;
+            ShapeDrawable fabBackground = new ShapeDrawable();
+            if (mCustomFabRadius) {
+                fabBackground.setShape(new RoundRectShape(mFabRadius, null, null));
+            } else {
+                fabBackground.setShape(getShapeForHighlightTile(mContext));
+            }
+            fab.setBackground(fabBackground);
             fab.requestFocus();
             fab.setLayoutParams(layoutParams2);
             fab.requestLayout();
@@ -800,38 +818,15 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         updateHotspotButtonState(0);
     }
 
-    private void updateWidgetsColors() {
-        for (View v : mPages) {
-            if (v instanceof LinearLayout ll) {
-                if (ll.getTag() != null && ll.getTag().equals("widgetsContainer")) {
-                    for (int i = 0; i < ll.getChildCount(); i++) {
-                        View child = ll.getChildAt(i);
-                        if (child instanceof LinearLayout) {
-                            for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-                                View widget = ((LinearLayout) child).getChildAt(j);
-                                if (widget instanceof ImageView) {
-                                    updateWidgetsResources((ImageView) widget);
-                                } else if (widget instanceof ExtendedFAB) {
-                                    updateMainWidgetResources((ExtendedFAB) widget, false);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        updateWidgetsState();
-    }
-
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
         int bgTint;
         int tintColor;
 
         if (active) {
-            bgTint = mActiveColor;
+            bgTint = mCustomActive ? mCustomActiveColor : mActiveColor;
             tintColor = mIconActiveColor;
         } else {
-            bgTint = mInactiveColor;
+            bgTint = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
             tintColor = mIconInactiveColor;
         }
         if (iv != null) {
@@ -847,14 +842,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             }
         }
         if (efab != null) {
-//            Drawable bg = efab.getBackground();
-//            if (bg instanceof ShapeDrawable) {
-//                ((ShapeDrawable) bg).getPaint().setColor(bgTint);
-//                bg.invalidateSelf();
-//            } else if (bg instanceof GradientDrawable) {
-//                ((GradientDrawable) bg).setColor(bgTint);
-//                bg.invalidateSelf();
-//            }
             efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
             efab.setBackgroundTintMode(PorterDuff.Mode.SRC_IN);
             if (efab.getTag() != null && efab.getTag().equals("app")) {
@@ -907,13 +894,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         if (efab == null) return;
         log(TAG + "updateMainWidgetResources: " + efab.getText());
         ShapeDrawable shapeDrawable = new ShapeDrawable();
-        shapeDrawable.setShape(getShapeForHighlightTile(mContext));
+        if (mCustomFabRadius) {
+            shapeDrawable.setShape(new RoundRectShape(mFabRadius, null, null));
+        } else {
+            shapeDrawable.setShape(getShapeForHighlightTile(mContext));
+        }
         efab.setBackground(shapeDrawable);
-        efab.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            ShapeDrawable shapeDrawable2 = new ShapeDrawable();
-            shapeDrawable2.setShape(getShapeForHighlightTile(mContext));
-            efab.setBackground(shapeDrawable2);
-        });
         efab.setElevation(0);
         setButtonActiveState(null, efab, false);
     }
@@ -921,7 +907,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private void updateWidgetsResources(ImageView iv) {
         if (iv == null) return;
         ShapeDrawable shapeDrawable = new ShapeDrawable();
-        shapeDrawable.setShape(getLastShape(mContext));
+        if (mCustomTileRadius) {
+            shapeDrawable.setShape(new RoundRectShape(mTileRadius, null, null));
+        } else {
+            shapeDrawable.setShape(getLastShape(mContext));
+        }
         iv.setBackground(shapeDrawable);
         setButtonActiveState(iv, null, false);
     }
@@ -1438,7 +1428,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 int actualState = (Integer) method.invoke(SystemUtils.WifiManager(), (Object[]) null);
                 return actualState == HOTSPOT_ENABLED;
             } catch (Throwable t) {
-                log("LockscreenWidgetsView isHotspotEnabled error: " + t.getMessage());
+                log(TAG + "isHotspotEnabled error: " + t.getMessage());
             }
         }
         return false;
@@ -1454,7 +1444,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
             }
         } catch (Throwable t) {
-            log("LockscreenWidgetsView getHotspotSSID error: " + t.getMessage());
+            log( TAG + "getHotspotSSID error: " + t.getMessage());
         }
         return "";
     }
@@ -1505,9 +1495,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      */
     public void updateWidgets(String widgets) {
         if (instance == null) return;
-        instance.mWidgets = widgets;
-        instance.setupWidgets();
-        instance.updateWidgetsState();
+        mWidgets = widgets;
+        setupWidgets();
+        updateWidgetsState();
     }
 
     /**
@@ -1527,18 +1517,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     /**
      * Update the media colors based on chosen prefs for stock media player
      * @param defBg Default background (obtained from OplusQsMediaTileView)
-     * @param customColor Use custom color if qsInactiveColor enabled
-     * @param color The color to use when customColor is true
      */
-    public void updateControlsBg(Drawable defBg, boolean customColor, int color) {
+    public void updateDefaultMediaBg(Drawable defBg) {
         if (instance == null) return;
-        instance.mDefaultBackground = defBg;
-        instance.mCustomInactive = customColor;
-        instance.mInactiveColor = color;
-        if (instance.mMediaPlayer != null) {
-            instance.mMediaPlayer.updateColors(defBg, customColor, color);
-        }
-        instance.reloadBackground();
+        mDefaultBackground = defBg;
     }
 
     /**
@@ -1549,15 +1531,40 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      * @param inactiveColor Inactive color state
      * @param customActive Use custom color for active state
      * @param activeColor Active color state
+     * @param force Force update
      */
     public void updateQsTileColors(boolean customInactive, int inactiveColor, boolean customActive, int activeColor, boolean force) {
         if (instance == null) return;
-        instance.loadColors();
-        instance.mCustomInactive = customInactive;
-        if (customInactive) instance.mInactiveColor = inactiveColor;
-        instance.mCustomActive = customActive;
-        if (customActive) instance.mActiveColor = activeColor;
-        if (force) instance.updateWidgetsColors();
+        mCustomInactive = customInactive;
+        mCustomInactiveColor = inactiveColor;
+        mCustomActive = customActive;
+        mCustomActiveColor = activeColor;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.updateColors(mDefaultBackground, customInactive, inactiveColor);
+        }
+        if (force) {
+            reloadBackground();
+            updateWidgetsState();
+            setButtonActiveState(weatherButton, weatherButtonFab, false);
+        }
+    }
+
+    /**
+     * Update the radius of the widgets
+     * @param customHighlight Use custom highlight radius
+     * @param highlightRadius Highlight radius float of 8 int @Px
+     * @param customTile Use custom tile radius
+     * @param tileRadius Tile radius float of 8 int @Px
+     * @param force Force update
+     */
+    public void updateTileShapes(boolean customHighlight, float[] highlightRadius,
+                                 boolean customTile, float[] tileRadius, boolean force) {
+        if (instance == null) return;
+        mCustomFabRadius = customHighlight;
+        mFabRadius = highlightRadius;
+        mCustomTileRadius = customTile;
+        mTileRadius = tileRadius;
+        if (force) updateWidgets(mWidgets);
     }
 
     /**
@@ -1567,27 +1574,32 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      */
     private void reloadBackground() {
         if (mDefaultBackground == null || mPages.isEmpty()) return;
+        log(TAG + "reloadBackground");
+        int i = 0;
         for (View v : mPages) {
             if (v.getTag() != null && v.getTag().equals("widgetsContainer")) {
                 v.setBackground(null);
             } else {
                 Drawable back = mDefaultBackground.getConstantState().newDrawable().mutate();
-                if (back instanceof GradientDrawable) {
-                    if (v instanceof QsWeatherWidget) {
-                        ((GradientDrawable)back).setColor(Color.parseColor("#0D47A1"));
-                    } else {
-                        ((GradientDrawable)back).setColor(mInactiveColor);
-                    }
-                } else if (back instanceof ShapeDrawable) {
-                    if (v instanceof QsWeatherWidget) {
+                if (v instanceof QsWeatherWidget) {
+                    log(TAG + "reloadBackground: weather widget");
+                    if (back instanceof GradientDrawable) {
+                        ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
+                    } else if (back instanceof ShapeDrawable) {
                         ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
-                    } else {
-                        ((ShapeDrawable) back).getPaint().setColor(mInactiveColor);
+                    }
+                } else {
+                    int color = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
+                    if (back instanceof GradientDrawable) {
+                        ((GradientDrawable)back).setColors(new int[]{color, color});
+                    } else if (back instanceof ShapeDrawable) {
+                        ((ShapeDrawable)back).getPaint().setColor(color);
                     }
                 }
                 back.invalidateSelf();
                 v.setBackground(back);
             }
+            i++;
         }
     }
 

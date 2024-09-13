@@ -489,7 +489,7 @@ public class QsMediaTile extends LinearLayout {
         qsInactiveColorEnabled = customColor;
         qsInactiveColor = color;
         mOplusQsMediaDefaultBackground = defDrawable;
-        mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable();
+        mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable().mutate();
         updateBackground();
     }
 

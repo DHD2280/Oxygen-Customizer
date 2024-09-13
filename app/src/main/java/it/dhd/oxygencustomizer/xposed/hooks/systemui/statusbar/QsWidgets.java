@@ -14,13 +14,24 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -50,7 +61,12 @@ public class QsWidgets extends XposedMods {
     // Qs Media Tile colors
     private Drawable mDefaultMediaBg = null;
     private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false;
-    private int qsInactiveColor = Color.WHITE, qsActiveColor = getPrimaryColor(mContext);
+    private int qsInactiveColor = Color.GRAY, qsActiveColor = getPrimaryColor(mContext);
+
+    // Qs Tile Radius
+    private boolean customHighlightTileRadius = false, customTileRadius = false;
+    private int highlightTSRadius, highlightTDRadius, highlightBSRadius, highlightBDRadius;
+    private int tileTSRadius, tileTDRadius, tileBSRadius, tileBDRadius;
 
     // Qs Media Tile Album Art
     private boolean showMediaArtMediaQs = false;
@@ -72,17 +88,31 @@ public class QsWidgets extends XposedMods {
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
         mQsWidgetsList = Xprefs.getString(QS_WIDGETS_LIST, "media");
         mQsPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
+
         // Media QS
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
         mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
         mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
         mMediaQsTintColor = Xprefs.getInt(QS_MEDIA_ART_TINT_COLOR, Color.WHITE);
         mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
+
         // Tile Colors
         qsActiveColorEnabled = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
-        qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, Color.RED);
+        qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, getPrimaryColor(mContext));
         qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
+
+        // Qs Radius
+        customHighlightTileRadius = Xprefs.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
+        highlightTSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0);
+        highlightTDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0);
+        highlightBSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0);
+        highlightBDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0);
+        customTileRadius = Xprefs.getBoolean(QS_TILE_RADIUS, false);
+        tileTSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0);
+        tileTDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0);
+        tileBSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0);
+        tileBDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0);
 
         if (Key.length > 0) {
             if (Key[0].equals(QS_WIDGETS_LIST)) {
@@ -102,8 +132,19 @@ public class QsWidgets extends XposedMods {
                     Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) ||
                     Key[0].equals(QS_TILE_ACTIVE_COLOR) ||
                     Key[0].equals(QS_TILE_ACTIVE_COLOR_ENABLED)) {
-                updateControlsBg();
                 updateTileColors(true);
+            }
+            if (Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS) ||
+                    Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT) ||
+                    Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT) ||
+                    Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT) ||
+                    Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT) ||
+                    Key[0].equals(QS_TILE_RADIUS) ||
+                    Key[0].equals(QS_TILE_RADIUS_TOP_LEFT) ||
+                    Key[0].equals(QS_TILE_RADIUS_TOP_RIGHT) ||
+                    Key[0].equals(QS_TILE_RADIUS_BOTTOM_LEFT) ||
+                    Key[0].equals(QS_TILE_RADIUS_BOTTOM_RIGHT)) {
+                updateTileShapes(true);
             }
         }
     }
@@ -184,10 +225,11 @@ public class QsWidgets extends XposedMods {
             mOplusQsMediaView.addView(qsControlsView, 0);
             qsControlsView.bringToFront();
             qsControlsView.requestLayout();
+            updateControlsBg();
             updateTileColors(false);
+            updateTileShapes(false);
             updateWidgets();
             updateMediaPlayerPrefs();
-            updateControlsBg();
             updatePhotoRadius();
         } catch (Throwable t) {
             log(TAG + "Error: " + t.getMessage());
@@ -211,7 +253,7 @@ public class QsWidgets extends XposedMods {
     private void updateControlsBg() {
         QsControlsView qsControlsView = QsControlsView.getInstance();
         if (qsControlsView != null) {
-            qsControlsView.updateControlsBg(mDefaultMediaBg, qsInactiveColorEnabled, qsInactiveColor);
+            qsControlsView.updateDefaultMediaBg(mDefaultMediaBg);
         }
     }
 
@@ -219,6 +261,33 @@ public class QsWidgets extends XposedMods {
         QsControlsView qsControlsView = QsControlsView.getInstance();
         if (qsControlsView != null) {
             qsControlsView.updateQsTileColors(qsInactiveColorEnabled, qsInactiveColor, qsActiveColorEnabled, qsActiveColor, force);
+        }
+    }
+
+    private void updateTileShapes(boolean force) {
+        QsControlsView qsControlsView = QsControlsView.getInstance();
+        if (qsControlsView != null) {
+            qsControlsView.updateTileShapes(customHighlightTileRadius,
+                    new float[]{
+                            dp2px(mContext, highlightTSRadius),
+                            dp2px(mContext, highlightTSRadius),
+                            dp2px(mContext, highlightTDRadius),
+                            dp2px(mContext, highlightTDRadius),
+                            dp2px(mContext, highlightBDRadius),
+                            dp2px(mContext, highlightBDRadius),
+                            dp2px(mContext, highlightBSRadius),
+                            dp2px(mContext, highlightBSRadius)},
+                    customTileRadius,
+                    new float[]{
+                            dp2px(mContext, tileTSRadius),
+                            dp2px(mContext, tileTSRadius),
+                            dp2px(mContext, tileTDRadius),
+                            dp2px(mContext, tileTDRadius),
+                            dp2px(mContext, tileBDRadius),
+                            dp2px(mContext, tileBDRadius),
+                            dp2px(mContext, tileBSRadius),
+                            dp2px(mContext, tileBSRadius)},
+                    force);
         }
     }
 
