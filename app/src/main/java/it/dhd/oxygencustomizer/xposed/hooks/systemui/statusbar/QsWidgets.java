@@ -175,13 +175,7 @@ public class QsWidgets extends XposedMods {
             }
         });
         if (Build.VERSION.SDK_INT == 33) {
-            hookAllMethods(OplusQSTileMediaContainer, "setQsMediaPanelShown", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mQsWidgetsEnabled) return;
-                    param.args[0] = true;
-                }
-            });
+            forceMediaPanelA13(lpparam);
         }
 
         Class<?> QSSecurityFooterUtilsClass;
@@ -213,6 +207,41 @@ public class QsWidgets extends XposedMods {
         });
 
 
+    }
+
+    private void forceMediaPanelA13(XC_LoadPackage.LoadPackageParam lpparam) {
+        // Classes
+        Class<?> OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); //1
+        Class<?> OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); //2
+        Class<?> QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
+
+        // Hooks
+        XC_MethodHook boolHook = new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (!mQsWidgetsEnabled) return;
+                setBooleanField(param.thisObject, "mIsMediaMode", true);
+            }
+        };
+
+        XC_MethodHook methodHook = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (!mQsWidgetsEnabled) return;
+                param.args[0] = true;
+            }
+        };
+
+        // Constructors
+        hookAllConstructors(OplusQSFooterImpl, boolHook);
+        hookAllConstructors(OplusQSContainerImpl, boolHook);
+        hookAllConstructors(QuickStatusBarHeader, boolHook);
+
+        // Methods
+        hookAllMethods(OplusQSContainerImpl, "setQsMediaPanelShown", methodHook);
+        hookAllMethods(OplusQSFooterImpl, "setQsMediaPanelShown", methodHook);
+        hookAllMethods(OplusQSFooterImpl, "setMediaMode", methodHook);
+        hookAllMethods(QuickStatusBarHeader, "setQsMediaPanelShown", methodHook);
     }
 
     private void placeWidgets() {
