@@ -235,6 +235,7 @@ public class PreferenceHelper {
                  "BBOpacity",
                  "BBarHeight",
                  "BBSetCentered",
+                 "BBAnimateCharging",
                  "indicateCharging",
                  "indicateFastCharging",
                  "indicatePowerSave",
