@@ -34,6 +34,8 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class AlbumArtLockscreen extends XposedMods {
 
+    private final static String TAG = "AlbumArtLockscreen: ";
+
     private static final String listenPackage = SYSTEM_UI;
     private Bitmap mArt;
     public static boolean showAlbumArt = true;
@@ -82,6 +84,10 @@ public class AlbumArtLockscreen extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
+                if (mScrimController == null) {
+                    log(TAG + "ScrimController is null!");
+                    return;
+                }
                 View scrimBehind = (View) getObjectField(callMethod(mScrimController, "getScrimController"), "mScrimBehind");
                 if (scrimBehind == null) {
                     log("ScrimBehind is null");

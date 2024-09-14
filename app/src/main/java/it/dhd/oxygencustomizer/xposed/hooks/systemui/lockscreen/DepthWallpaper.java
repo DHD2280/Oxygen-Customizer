@@ -493,6 +493,9 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private Object getScrimController() {
+        if (mScrimController == null) {
+            log(TAG + "ScrimController is null!");
+        }
         return callMethod(mScrimController, "getScrimController");
     }
 
