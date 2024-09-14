@@ -161,7 +161,7 @@ public class BatteryBar extends XposedMods {
 
 
     private void refreshBatteryBar(BatteryBarView instance) {
-        BatteryBarView.setStaticColor(batteryLevels, batteryColors, indicateCharging, chargingColor, indicateFastCharging, fastChargingColor, indicatePowerSave, powerSaveColor, BBarTransitColors);
+        BatteryBarView.setStaticColor(batteryLevels, batteryColors, indicateCharging, chargingColor, indicateFastCharging, fastChargingColor, indicatePowerSave, powerSaveColor, BBarTransitColors, BBAnimateCharging);
         instance.setVisibility((BBarEnabled) ? VISIBLE : GONE);
         instance.setColorful(BBarColorful);
         instance.setOnlyWhileCharging(BBOnlyWhileCharging);
