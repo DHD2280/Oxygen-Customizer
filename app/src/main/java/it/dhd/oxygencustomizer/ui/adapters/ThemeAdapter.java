@@ -111,7 +111,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
                 for (int i = 0; i <= itemList.size()-1; i++) {
                     if (itemList.get(i).isEnabled()) enabledItem = i;
                     itemList.get(i).setEnabled(i == holder.getBindingAdapterPosition());
-                    Prefs.putBoolean(itemList.get(holder.getBindingAdapterPosition()).getPkgName(), i == holder.getBindingAdapterPosition());
                     OverlayUtil.disableOverlay(itemList.get(i).getPkgName());
                 }
                 OverlayUtil.enableOverlay(itemList.get(holder.getBindingAdapterPosition()).getPkgName());
