@@ -138,7 +138,6 @@ public class QsMediaTile extends LinearLayout {
 
     public void bindMediaAction(Object mediaData) {
 
-        log("QsMediaTile onBindPlaybackState " + mediaData);
         Object MediaButton = callMethod(mediaData, "getSemanticActions");
         Object prevOrCustom = callMethod(MediaButton, "getPrevOrCustom");
         Object playOrPause = callMethod(MediaButton, "getPlayOrPause");
