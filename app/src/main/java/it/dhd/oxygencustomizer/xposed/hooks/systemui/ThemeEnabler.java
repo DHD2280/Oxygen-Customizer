@@ -18,7 +18,7 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class ThemeEnabler extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    private int themeNum;
+    private int themeNum = -1;
 
     @SuppressLint("StaticFieldLeak")
     private static ThemeEnabler instance = null;
