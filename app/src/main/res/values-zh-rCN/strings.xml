@@ -93,6 +93,7 @@
     <string name="top">顶部</string>
     <string name="bottom">底部</string>
     <string name="reset">重置</string>
+    <string name="lang_follow_system">跟随系统</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">选择图像</string>
     <!-- Search Preference -->
@@ -367,6 +368,7 @@
     <string name="add_widget">添加小组件</string>
     <string name="qs_widget_photo">照片展示</string>
     <string name="qs_widget_weather">天气</string>
+    <string name="qs_widget_mini_weather">迷你天气</string>
     <string name="qs_widget_custom_app">自定义 App</string>
     <string name="qs_widget_media_player">媒体播放器</string>
     <string name="qs_media_alert">无法移除媒体播放器！</string>
@@ -656,8 +658,15 @@
     <string name="depth_wallpaper_category">景深壁纸</string>
     <string name="depth_wallpaper_title">深度效果壁纸</string>
     <string name="depth_wallpaper_summary">动态整合壁纸前景和时钟</string>
+    <string name="depth_wallpaper_mode_title">深景壁纸模式</string>
+    <string name="depth_wallpaper_mode_ai">AI</string>
+    <string name="depth_wallpaper_mode_custom_images">自定义图像</string>
     <string name="depth_wallpaper_opacity_title">壁纸前景透明度</string>
     <string name="depth_wallpaper_aod_title">也在“息屏显示”上展示</string>
+    <string name="depth_wallpaper_pick_background_title">填充背景</string>
+    <string name="depth_wallpaper_pick_background_summary">填充你的背景图像</string>
+    <string name="depth_wallpaper_pick_subject_title">填充前景</string>
+    <string name="depth_wallpaper_pick_subject_summary">填充你的前景图像，必须是你的背景主题</string>
     <string name="depth_wallpaper_model_ready">AI 模型已下载到设备</string>
     <string name="depth_wallpaper_model_not_available">AI 模型在设备上(暂时) 不可用</string>
     <!-- Media art -->
@@ -906,6 +915,7 @@
     <!-- Own Settings -->
     <string name="general_settings">一般</string>
     <string name="app_icon_themed">使用主题应用图标</string>
+    <string name="language_title">语言</string>
     <string name="delete_all_title">全部删除</string>
     <string name="delete_all_summary">删除所有设置</string>
     <string name="export_title">导出</string>
@@ -985,6 +995,8 @@
     <string name="weather_config_title">服务设置</string>
     <string name="with_forecast_title">包含 4 天预报和详细信息</string>
     <string name="owm_key">自定义OWM密钥</string>
+    <string name="yandex_key">Yandex API密钥</string>
+    <string name="omnijaws_city_unknown">未知</string>
     <string name="activity_title">天气</string>
     <string name="omnijaws_service_error_long">加载天气数据时出错</string>
     <string name="omnijaws_detail_header">天气</string>
@@ -1007,6 +1019,7 @@
     <string name="weather_margin_left">左侧边距</string>
     <string name="weather_permission_dialog_title">启用位置权限</string>
     <string name="weather_permission_dialog_message">获取天气数据需要位置权限。点击确定打开设置。</string>
+    <string name="weather_yandex_key_required">对于Yandex天气提供商，一个密钥是必须的!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">天气背景样式</string>
     <string name="lockscreen_weather_selection_default">默认</string>
