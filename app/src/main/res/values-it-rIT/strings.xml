@@ -658,8 +658,15 @@
     <string name="depth_wallpaper_category">Profondità Sfondo</string>
     <string name="depth_wallpaper_title">Sfondo con effetto profondità</string>
     <string name="depth_wallpaper_summary">Integra dinamicamente il primo piano dello sfondo con l\'orologio</string>
+    <string name="depth_wallpaper_mode_title">Modalità Profondità Sfondo</string>
+    <string name="depth_wallpaper_mode_ai">Intelligenza Artificiale</string>
+    <string name="depth_wallpaper_mode_custom_images">Immagini personalizzate</string>
     <string name="depth_wallpaper_opacity_title">Opacità dello sfondo in primo piano</string>
     <string name="depth_wallpaper_aod_title">Anche su \"always on display\"</string>
+    <string name="depth_wallpaper_pick_background_title">Scegli sfondo</string>
+    <string name="depth_wallpaper_pick_background_summary">Scegli la tua immagine di sfondo</string>
+    <string name="depth_wallpaper_pick_subject_title">Scegli immagine primo piano</string>
+    <string name="depth_wallpaper_pick_subject_summary">Scegli la tua immagine in primo piano, deve essere l\'oggetto dello sfondo</string>
     <string name="depth_wallpaper_model_ready">Il modello AI è stato scaricato nel dispositivo</string>
     <string name="depth_wallpaper_model_not_available">Il modello AI non è (ancora) disponibile nel dispositivo</string>
     <!-- Media art -->
