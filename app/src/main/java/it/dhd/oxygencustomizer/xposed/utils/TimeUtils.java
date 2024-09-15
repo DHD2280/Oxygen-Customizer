@@ -144,7 +144,7 @@ public class TimeUtils {
     public static void setCurrentTimeTextClockRed(Context context, TextClock tickIndicator, TextView hourView, int color) {
         if (tickIndicator == null || hourView == null) return;
 
-        setCurrentTimeHourRed(context, hourView, color);
+        setCurrentTimeHourRed(tickIndicator, hourView, color);
 
         tickIndicator.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,7 +156,7 @@ public class TimeUtils {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-                    setCurrentTimeHourRed(context, hourView, color);
+                    setCurrentTimeHourRed(tickIndicator, hourView, color);
                 }
             }
         });
@@ -168,10 +168,9 @@ public class TimeUtils {
         hourView.setText(convertNumberToText(hour));
     }
 
-    private static void setCurrentTimeHourRed(Context context, TextView hourView, int color) {
-        String hourFormat = DateFormat.is24HourFormat(context) ? "HH" : "hh";
-        String hour = new SimpleDateFormat(hourFormat, Locale.getDefault()).format(Calendar.getInstance().getTime());
-        StringBuilder sb = new StringBuilder(hour);
+    private static void setCurrentTimeHourRed(TextClock tickIndicator, TextView hourView, int color) {
+        String hourFormat = tickIndicator.getText().toString();
+        StringBuilder sb = new StringBuilder(hourFormat);
         SpannableString spannableString = new SpannableString(sb);
         for (int i = 0; i < 2 && i < sb.length(); i++) {
             if (sb.charAt(i) == '1') {
