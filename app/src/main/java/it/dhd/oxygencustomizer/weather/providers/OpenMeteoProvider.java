@@ -19,7 +19,7 @@ import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;
 import it.dhd.oxygencustomizer.weather.WeatherInfo;
 
 public class OpenMeteoProvider extends AbstractWeatherProvider {
-    private static final String TAG = "OpenWeatherMapProvider";
+    private static final String TAG = "OpenMeteoProvider";
 
     private static final int FORECAST_DAYS = 5;
     private static final String URL_WEATHER =
@@ -27,7 +27,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
     private static final String PART_COORDINATES =
             "latitude=%f&longitude=%f";
     private static final String PART_PARAMETERS =
-            "%s&hourly=relativehumidity_2m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
+            "%s&current=temperature_2m,relative_humidity_2m,weathercode,wind_speed_10m,wind_direction_10m,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
 
 
     public OpenMeteoProvider(Context context) {
@@ -57,7 +57,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         log(TAG, "Condition URL = " + conditionUrl + " returning a response of " + conditionResponse);
 
         try {
-            JSONObject weather = new JSONObject(conditionResponse).getJSONObject("current_weather");
+            JSONObject weather = new JSONObject(conditionResponse).getJSONObject("current");
 
             String city = getWeatherDataLocality(selection);
 
@@ -69,11 +69,11 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
                     /* cityId */ city,
                     /* condition */ getWeatherDescription(weathercode),
                     /* conditionCode */ mapConditionIconToCode(weathercode, isDay),
-                    /* temperature */ (float) weather.getDouble("temperature"),
-                    // Api: Possibly future inclusion humidity in current weather; may eliminate need for hourly forecast request.
-                    /* humidity */ getCurrentHumidity(new JSONObject(conditionResponse).getJSONObject("hourly")),
-                    /* wind */ (float) weather.getDouble("windspeed"),
-                    /* windDir */ weather.getInt("winddirection"),
+                    /* temperature */ (float) weather.getDouble("temperature_2m"),
+                    // Api: Humidity included in current
+                    /* humidity */ (float) weather.getDouble("relative_humidity_2m"),
+                    /* wind */ (float) weather.getDouble("wind_speed_10m"),
+                    /* windDir */ weather.getInt("wind_direction_10m"),
                     metric,
                     parseForecasts(new JSONObject(conditionResponse).getJSONObject("daily"), metric),
                     System.currentTimeMillis());
