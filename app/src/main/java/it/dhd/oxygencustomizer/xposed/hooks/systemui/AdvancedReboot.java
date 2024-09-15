@@ -10,6 +10,7 @@ import static it.dhd.oxygencustomizer.BuildConfig.APPLICATION_ID;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -191,11 +192,11 @@ public class AdvancedReboot extends XposedMods {
 
         int viewWidth = (int) callMethod(param, "getWidth");
 
-        radius = mContext.getResources().getDimensionPixelSize(
-                mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage));
+        radius = (int) (mContext.getResources().getDimensionPixelSize(
+                        mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage)) / 2.0f);
 
         centerX = viewWidth / 2;
-        centerY = radius + 100;
+        centerY = radius + dp2px(mContext, 50);
 
         canvas.drawCircle(centerX, centerY, radius, buttonPaint);
 
@@ -208,7 +209,7 @@ public class AdvancedReboot extends XposedMods {
         }
 
         float textX = (float) viewWidth / 2;
-        float textY = centerY + radius + 75;
+        float textY = centerY + radius + dp2px(mContext, 15);
         String buttonText = modRes.getString(R.string.advanced_reboot_title);
         canvas.drawText(buttonText, textX, textY, textPaint);
     }
