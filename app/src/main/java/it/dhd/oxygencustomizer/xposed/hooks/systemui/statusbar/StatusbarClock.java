@@ -29,15 +29,20 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.StaticLayout;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -121,6 +126,7 @@ public class StatusbarClock extends XposedMods {
     private int chipPaddingSx, chipPaddingDx, chipPaddingTop, chipPaddingBottom;
     private GradientDrawable mClockChipDrawable;
     private int mClockSize = 12;
+    private SpannableStringBuilder mSpannable;
 
 
     public StatusbarClock(Context context) {
@@ -367,11 +373,20 @@ public class StatusbarClock extends XposedMods {
 
         if (StatClock != null) {
             try {
-                hookAllMethods(StatClock, "measureText", new XC_MethodHook() {
+                hookAllMethods(StatClock, "updateMinWidth", new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.args.length >= 2 && param.args[1] instanceof Float) {
-                            param.args[1] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mClockSize, mContext.getResources().getDisplayMetrics());
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        // StatClock has a method to update the minimum width of the clock
+                        // we can use it to update the clock width
+                        // Based on our custom formats
+                        TextView tv = (TextView) param.thisObject;
+                        if (!mShowSeconds) {
+                            float measuredWidth = measureTextWithSpans();
+                            int totalWidth = tv.getPaddingStart() + (int) Math.ceil(measuredWidth);
+                            tv.setMinWidth(totalWidth);
+                            if (tv.getMinimumWidth() != tv.getMinWidth()) {
+                                tv.setMinimumWidth(tv.getMinWidth());
+                            }
                         }
                     }
                 });
@@ -479,6 +494,7 @@ public class StatusbarClock extends XposedMods {
                             stringFormatter.registerCallback(callback);
                             setAdditionalInstanceField(param.thisObject, "stringFormatCallBack", callback);
                         }
+                        mSpannable = result;
                         param.setResult(result);
                     }
                 });
@@ -513,6 +529,56 @@ public class StatusbarClock extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
+    private float measureTextWithSpans() {
+        TextPaint textPaint = new TextPaint();
+        textPaint.setTextSize(mClockSize);
+
+        float totalWidth = 0f;
+        int start = 0;
+        int end;
+
+        SpannableStringBuilder result = new SpannableStringBuilder();
+
+        SpannableStringBuilder clockText = SpannableStringBuilder.valueOf((CharSequence) "00:00"); //fake a clock just to calculate dimensions
+
+        result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
+
+        if (mClockCustomColor) {
+            clockText.setSpan(new ForegroundColorSpan(mClockColor), 0, (clockText).length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        result.append(clockText);
+
+        if (mAmPmStyle != AM_PM_STYLE_GONE) {
+            result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
+        }
+
+        result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
+        result.append(" "); //add a space to avoid small end padding
+
+        while (start < result.length()) {
+            CharacterStyle[] spans = result.getSpans(start, result.length(), CharacterStyle.class);
+            if (spans.length > 0) {
+                end = result.getSpanEnd(spans[0]);
+            } else {
+                end = result.length();
+            }
+            CharSequence subText = result.subSequence(start, end);
+            float subTextWidth = textPaint.measureText(subText, 0, subText.length());
+            for (CharacterStyle span : spans) {
+                if (span instanceof RelativeSizeSpan) {
+                    // we use 0.7f as the relative size for small text
+                    subTextWidth *= 0.7f;
+                }
+            }
+
+            totalWidth += subTextWidth;
+            start = end;
+        }
+
+        log(TAG + "totalWidth: " + totalWidth);
+        return dp2px(mContext, totalWidth);
+    }
 
     private void autoHideClock(Object clock) {
         callMethod(clock, "setVisibility", View.GONE);
