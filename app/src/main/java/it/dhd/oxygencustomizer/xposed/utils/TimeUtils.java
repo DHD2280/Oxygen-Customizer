@@ -141,7 +141,7 @@ public class TimeUtils {
 
     }
 
-    public static void setCurrentTimeTextClockRed(Context context, TextClock tickIndicator, TextView hourView, int color) {
+    public static void setCurrentTimeTextClockRed(TextClock tickIndicator, TextView hourView, int color) {
         if (tickIndicator == null || hourView == null) return;
 
         setCurrentTimeHourRed(tickIndicator, hourView, color);

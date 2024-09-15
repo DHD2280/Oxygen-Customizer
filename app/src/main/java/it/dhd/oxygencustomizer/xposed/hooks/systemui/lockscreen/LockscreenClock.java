@@ -464,7 +464,7 @@ public class LockscreenClock extends XposedMods {
                 TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
                 tickIndicator.setVisibility(View.GONE);
                 TextView hourView = (TextView) findViewWithTag(clockView, "hours");
-                TimeUtils.setCurrentTimeTextClockRed(mContext, tickIndicator, hourView, customColor ? accent1 : getPrimaryColor(mContext));
+                TimeUtils.setCurrentTimeTextClockRed(tickIndicator, hourView, customColor ? accent1 : getPrimaryColor(mContext));
             }
             case 5 -> {
                 mBatteryStatusView = (TextView) findViewWithTag(clockView, "battery_status");
