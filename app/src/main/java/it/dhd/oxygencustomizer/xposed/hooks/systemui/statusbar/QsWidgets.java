@@ -220,7 +220,11 @@ public class QsWidgets extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!mQsWidgetsEnabled) return;
-                setBooleanField(param.thisObject, "mIsMediaMode", true);
+                try {
+                    setBooleanField(param.thisObject, "mIsMediaMode", true);
+                } catch (Throwable t) {
+                    log(TAG + "No boolean field mIsMediaMode: " + t.getMessage());
+                }
             }
         };
 
