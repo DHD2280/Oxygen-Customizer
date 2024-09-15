@@ -67,7 +67,7 @@ public class LocationBrowseActivity extends BaseActivity {
     public static final String DATA_LOCATION_LON = "location_lon";
 
     private List<LocationBrowseItem> mLocationBrowseList = new ArrayList<>();
-    private LocagtionListAdapter mAdapter;
+    private LocationListAdapter mAdapter;
     private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     private Handler mHandler = new Handler();
     private String mQueryString;
@@ -125,7 +125,7 @@ public class LocationBrowseActivity extends BaseActivity {
         }
     }
 
-    public class LocagtionListAdapter extends RecyclerView.Adapter<LocagtionListAdapter.ViewHolder> {
+    public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapter.ViewHolder> {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -200,7 +200,7 @@ public class LocationBrowseActivity extends BaseActivity {
             }
         });
 
-        mAdapter = new LocagtionListAdapter();
+        mAdapter = new LocationListAdapter();
         RecyclerView queryList = findViewById(R.id.query_result);
         queryList.setAdapter(mAdapter);
         queryList.setLayoutManager(new LinearLayoutManager(this));
