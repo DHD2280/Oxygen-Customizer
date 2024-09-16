@@ -56,6 +56,11 @@ public class WeatherContentProvider extends ContentProvider {
     private static final String COLUMN_FORECAST_CONDITION_CODE = "forecast_condition_code";
     private static final String COLUMN_FORECAST_DATE = "forecast_date";
 
+    private static final String COLUMN_FORECAST_HOUR = "forecast_hour";
+    private static final String COLUMN_FORECAST_HOUR_TEMP = "forecast_hour_temp";
+    private static final String COLUMN_FORECAST_HOUR_CONDITION = "forecast_hour_condition";
+    private static final String COLUMN_FORECAST_HOUR_CONDITION_CODE = "forecast_hour_condition_code";
+
     private static final String COLUMN_ENABLED = "enabled";
     private static final String COLUMN_PROVIDER = "provider";
     private static final String COLUMN_INTERVAL = "interval";
@@ -81,7 +86,11 @@ public class WeatherContentProvider extends ContentProvider {
             COLUMN_FORECAST_HIGH,
             COLUMN_FORECAST_CONDITION,
             COLUMN_FORECAST_CONDITION_CODE,
-            COLUMN_FORECAST_DATE
+            COLUMN_FORECAST_DATE,
+            COLUMN_FORECAST_HOUR,
+            COLUMN_FORECAST_HOUR_TEMP,
+            COLUMN_FORECAST_HOUR_CONDITION,
+            COLUMN_FORECAST_HOUR_CONDITION_CODE
     };
 
     private static final String[] PROJECTION_DEFAULT_SETTINGS = new String[] {
@@ -155,12 +164,22 @@ public class WeatherContentProvider extends ContentProvider {
 
                 // forecast
                 for (WeatherInfo.DayForecast day : weather.getForecasts()) {
+                    Log.w(TAG, "getForecasts query: " + day.date + " " + day.getLow() + " " + day.getHigh() + " " + day.getCondition(mContext));
                     result.newRow()
                             .add(COLUMN_FORECAST_CONDITION, day.getCondition(mContext))
                             .add(COLUMN_FORECAST_LOW, day.getLow())
                             .add(COLUMN_FORECAST_HIGH, day.getHigh())
                             .add(COLUMN_FORECAST_CONDITION_CODE, day.getConditionCode())
                             .add(COLUMN_FORECAST_DATE, day.date);
+                }
+
+                for (WeatherInfo.HourForecast hour : weather.getHourForecasts()) {
+                    Log.w(TAG, "getHourForecasts query: " + hour.date + " " + hour.getTemp() + " " + hour.getCondition(mContext));
+                    result.newRow()
+                            .add(COLUMN_FORECAST_HOUR, hour.date)
+                            .add(COLUMN_FORECAST_HOUR_TEMP, hour.getTemp())
+                            .add(COLUMN_FORECAST_HOUR_CONDITION, hour.getCondition(mContext))
+                            .add(COLUMN_FORECAST_HOUR_CONDITION_CODE, hour.getConditionCode());
                 }
 
 

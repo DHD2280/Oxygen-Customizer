@@ -18,6 +18,10 @@ package it.dhd.oxygencustomizer.weather;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -39,13 +43,14 @@ public class WeatherInfo {
     private int windDirection;
     private long timestamp;
     private ArrayList<DayForecast> forecasts;
+    private ArrayList<HourForecast> hourForecasts;
     private boolean metric;
 
     private WeatherInfo(Context context, String id,
                         String city, String condition, int conditionCode, float temp,
                         float humidity, float wind, int windDir,
-                        boolean metric, ArrayList<DayForecast> forecasts, long timestamp,
-                        String pinWheel) {
+                        boolean metric, ArrayList<HourForecast> hforecasts, ArrayList<DayForecast> forecasts,
+                        long timestamp, String pinWheel) {
         this.mContext = context.getApplicationContext();
         this.id = id;
         this.city = city;
@@ -57,6 +62,7 @@ public class WeatherInfo {
         this.timestamp = timestamp;
         this.temperature = temp;
         this.forecasts = forecasts;
+        this.hourForecasts = hforecasts;
         this.metric = metric;
         this.pinWheel = pinWheel;
     }
@@ -64,9 +70,9 @@ public class WeatherInfo {
     public WeatherInfo(Context context, String id,
                        String city, String condition, int conditionCode, float temp,
                        float humidity, float wind, int windDir,
-                       boolean metric, ArrayList<DayForecast> forecasts, long timestamp) {
+                       boolean metric, ArrayList<HourForecast> hforecasts, ArrayList<DayForecast> forecasts, long timestamp) {
         this(context, id, city, condition, conditionCode, temp, humidity, wind, windDir,
-                metric, forecasts, timestamp, "");
+                metric, hforecasts, forecasts, timestamp, "");
         this.pinWheel = getFormattedWindDirection(windDir);
     }
 
@@ -100,6 +106,40 @@ public class WeatherInfo {
 
         public float getHigh() {
             return high;
+        }
+
+        public String getCondition(Context context) {
+            return WeatherInfo.getCondition(context, conditionCode, condition);
+        }
+
+        public int getConditionCode() {
+            return conditionCode;
+        }
+
+        @NonNull
+        public String toString() {
+            return "DayForecast: " + date + " " + low + " " + high + " " + condition + " " + conditionCode;
+        }
+
+    }
+
+    public static class HourForecast {
+        public final float temp;
+        public final int conditionCode;
+        public final String condition;
+        public boolean metric;
+        public String date;
+
+        public HourForecast(float tmp, String condition, int conditionCode, String date, boolean metric) {
+            this.temp = tmp;
+            this.condition = condition;
+            this.conditionCode = conditionCode;
+            this.metric = metric;
+            this.date = date;
+        }
+
+        public float getTemp() {
+            return temp;
         }
 
         public String getCondition(Context context) {
@@ -210,6 +250,10 @@ public class WeatherInfo {
         return forecasts;
     }
 
+    public ArrayList<HourForecast> getHourForecasts() {
+        return hourForecasts;
+    }
+
     public float getTemperature() {
         return temperature;
     }
@@ -254,6 +298,20 @@ public class WeatherInfo {
             builder.append(", ").append(d.condition);
             builder.append("(").append(d.conditionCode).append(")");
         }
+        if (!hourForecasts.isEmpty()) {
+            builder.append(", hourForecasts:");
+        }
+        for (int i = 0; i < hourForecasts.size(); i++) {
+            HourForecast d = hourForecasts.get(i);
+            if (i != 0) {
+                builder.append(";");
+            }
+            builder.append(" hour ").append(i + 1).append(":");
+            builder.append(d.date);
+            builder.append(" temp ").append(getFormattedValue(d.getTemp(), getTemperatureUnit()));
+            builder.append(", ").append(d.condition);
+            builder.append("(").append(d.conditionCode).append(")");
+        }
         return builder.toString();
     }
 
@@ -273,6 +331,9 @@ public class WeatherInfo {
         if (!forecasts.isEmpty()) {
             serializeForecasts(builder);
         }
+        if (!hourForecasts.isEmpty()) {
+            serializeHourForecasts(builder);
+        }
         return builder.toString();
     }
 
@@ -289,13 +350,26 @@ public class WeatherInfo {
         }
     }
 
+    private void serializeHourForecasts(StringBuilder builder) {
+        builder.append('|');
+        builder.append(hourForecasts.size());
+        for (HourForecast d : hourForecasts) {
+            builder.append(';');
+            builder.append(d.temp).append(';');
+            builder.append(d.condition).append(';');
+            builder.append(d.conditionCode).append(';');
+            builder.append(d.date);
+        }
+    }
+
     public static WeatherInfo fromSerializedString(Context context, String input) {
         if (input == null) {
             return null;
         }
 
         String[] parts = input.split("\\|");
-        boolean hasForecast = parts.length == 12;
+        boolean hasForecast = parts.length > 11;
+        Log.w("WeatherInfo", "parts.length: " + parts.length);
 
         int conditionCode, windDirection;
         long timestamp;
@@ -303,13 +377,23 @@ public class WeatherInfo {
         boolean metric;
         String pinWheel;
         String[] forecastParts = null;
+        String[] hourForecastParts = null;
         if (hasForecast) {
-            forecastParts = parts[11].split(";");
+            Log.d("WeatherInfo", "hasForecast");
+            if (parts.length > 11) {
+                forecastParts = parts[11].split(";");
+            }
+            if (parts.length > 12) {
+                hourForecastParts = parts[12].split(";");
+            }
         }
         int forecastItems;
-        ArrayList<DayForecast> forecasts = new ArrayList<DayForecast>();
+        int hourForecastItems;
+        ArrayList<DayForecast> forecasts = new ArrayList<>();
+        ArrayList<HourForecast> hourForecasts = new ArrayList<>();
 
         // Parse the core data
+        Log.d("WeatherInfo", "Parse the core data");
         try {
             conditionCode = Integer.parseInt(parts[3]);
             temperature = Float.parseFloat(parts[4]);
@@ -320,11 +404,15 @@ public class WeatherInfo {
             timestamp = Long.parseLong(parts[9]);
             pinWheel = parts[10];
             forecastItems = forecastParts == null ? 0 : Integer.parseInt(forecastParts[0]);
+            hourForecastItems = hourForecastParts == null ? 0 : Integer.parseInt(hourForecastParts[0]);
         } catch (NumberFormatException e) {
+            Log.e("WeatherInfo", "Error parsing weather data", e);
             return null;
         }
+        Log.d("WeatherInfo", "forecastItems: " + forecastItems + " hourForecastItems: " + hourForecastItems);
 
         if (hasForecast && (forecastItems == 0 || forecastParts.length != 5 * forecastItems + 1)) {
+            Log.e("WeatherInfo", "Forecast parts length mismatch");
             return null;
         }
 
@@ -339,14 +427,34 @@ public class WeatherInfo {
                         /* conditionCode */ Integer.parseInt(forecastParts[offset + 3]),
                         forecastParts[offset + 4],
                         metric);
-                if (!Float.isNaN(day.low) && !Float.isNaN(day.high) /*&& day.conditionCode >= 0*/) {
+                if (!Float.isNaN(day.low) && !Float.isNaN(day.high) && !TextUtils.isEmpty(day.date)/*&& day.conditionCode >= 0*/) {
+                    Log.w("WeatherInfo", "Added day forecast: " + day.date + ", low: " + day.low + ", high: " + day.high);
                     forecasts.add(day);
                 }
             }
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException t) {
+            Log.e("WeatherInfo", "Error parsing forecast data", t);
         }
 
-        if (hasForecast && forecasts.isEmpty()) {
+        try {
+            for (int item = 0; item < hourForecastItems; item ++) {
+                int offset = item * 4 + 1;
+                HourForecast hour = new HourForecast(
+                        /* temp */ Float.parseFloat(hourForecastParts[offset]),
+                        /* condition */ hourForecastParts[offset + 1],
+                        /* conditionCode */ Integer.parseInt(hourForecastParts[offset + 2]),
+                        hourForecastParts[offset + 3],
+                        metric);
+                if (!Float.isNaN(hour.temp) && !TextUtils.isEmpty(hour.date) /*&& hour.conditionCode >= 0*/) {
+                    Log.w("WeatherInfo", "Added hour forecast: " + hour.date + ", temp: " + hour.temp);
+                    hourForecasts.add(hour);
+                }
+            }
+        } catch (NumberFormatException t) {
+            Log.e("WeatherInfo", "Error parsing hour forecast data", t);
+        }
+
+        if (hasForecast && forecasts.isEmpty() && hourForecasts.isEmpty()) {
             return null;
         }
 
@@ -354,6 +462,7 @@ public class WeatherInfo {
                 /* id */ parts[0], /* city */ parts[1], /* condition */ parts[2],
                 conditionCode, temperature,
                 humidity, wind, windDirection, metric,
+                /* hourForecasts */ hourForecasts,
                 /* forecasts */ forecasts, timestamp, pinWheel);
     }
 }

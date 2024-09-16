@@ -84,6 +84,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             JSONObject conditionData = conditions.getJSONObject("main");
             JSONObject weather = conditions.getJSONArray("weather").getJSONObject(0);
             ArrayList<DayForecast> forecasts = new ArrayList<>();
+            ArrayList<WeatherInfo.HourForecast> hourlyForecasts = new ArrayList<>();
             if (conditions.has("daily")) {
                 forecasts =
                         parseForecasts(conditions.getJSONArray("daily"), metric);
@@ -106,6 +107,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
                     /* wind */ windSpeed,
                     /* windDir */ wind.has("deg") ? wind.getInt("deg") : 0,
                     metric,
+                    hourlyForecasts,
                     forecasts,
                     System.currentTimeMillis());
 

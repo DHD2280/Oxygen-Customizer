@@ -27,7 +27,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
     private static final String PART_COORDINATES =
             "latitude=%f&longitude=%f";
     private static final String PART_PARAMETERS =
-            "%s&current=temperature_2m,relative_humidity_2m,weathercode,wind_speed_10m,wind_direction_10m,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
+            "%s&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day&hourly=weather_code,temperature_2m&forecast_hours=24&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
 
 
     public OpenMeteoProvider(Context context) {
@@ -49,7 +49,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         String speedUnit = metric ? "kmh" : "mph";
         String timeZone = java.util.TimeZone.getDefault().getID();
         String conditionUrl = String.format(Locale.US,URL_WEATHER + PART_PARAMETERS, selection, tempUnit, speedUnit, timeZone);
-        Log.d(TAG, "Condition URL = " + conditionUrl);
+        Log.w(TAG, "Condition URL = " + conditionUrl);
         String conditionResponse = retrieve(conditionUrl);
         if (conditionResponse == null) {
             return null;
@@ -61,7 +61,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
 
             String city = getWeatherDataLocality(selection);
 
-            int weathercode = weather.getInt("weathercode");
+            int weathercode = weather.getInt("weather_code");
             boolean isDay = weather.getInt("is_day") == 1;
 
             WeatherInfo w = new WeatherInfo(mContext,
@@ -75,6 +75,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
                     /* wind */ (float) weather.getDouble("wind_speed_10m"),
                     /* windDir */ weather.getInt("wind_direction_10m"),
                     metric,
+                    parseHourlyForecasts(new JSONObject(conditionResponse).getJSONObject("hourly"), metric),
                     parseForecasts(new JSONObject(conditionResponse).getJSONObject("daily"), metric),
                     System.currentTimeMillis());
 
@@ -137,14 +138,14 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         };
     }
 
-    private ArrayList<WeatherInfo.DayForecast> parseForecasts(JSONObject dailyForecasts, boolean metric) throws JSONException {
+    private ArrayList<WeatherInfo.DayForecast> parseForecasts(JSONObject forecasts, boolean metric) throws JSONException {
         ArrayList<WeatherInfo.DayForecast> result = new ArrayList<>(5);
 
-        JSONArray timeJson = dailyForecasts.getJSONArray("time");
-        JSONArray temperatureMinJson = dailyForecasts.getJSONArray("temperature_2m_min_best_match");
-        JSONArray temperatureMaxJson = dailyForecasts.getJSONArray("temperature_2m_max_best_match");
-        JSONArray weatherCodeJson = dailyForecasts.getJSONArray("weathercode_best_match");
-        JSONArray altWeatherCodeJson = dailyForecasts.getJSONArray("weathercode_gfs_seamless");
+        JSONArray timeJson = forecasts.getJSONArray("time");
+        JSONArray temperatureMinJson = forecasts.getJSONArray("temperature_2m_min_best_match");
+        JSONArray temperatureMaxJson = forecasts.getJSONArray("temperature_2m_max_best_match");
+        JSONArray weatherCodeJson = forecasts.getJSONArray("weather_code_best_match");
+        JSONArray altWeatherCodeJson = forecasts.getJSONArray("weather_code_gfs_seamless");
         String currentDay = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime());
 
         int startIndex = 1;
@@ -197,19 +198,60 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         return result;
     }
 
-    private static float getCurrentHumidity(JSONObject hourlyJson) throws JSONException {
-        String currentHour = new SimpleDateFormat("yyyy-MM-dd'T'HH", Locale.US).format(Calendar.getInstance().getTime());
-        JSONArray hourlyTimes = hourlyJson.getJSONArray("time");
-        JSONArray hourlyHumidity = hourlyJson.getJSONArray("relativehumidity_2m_best_match");
+    private ArrayList<WeatherInfo.HourForecast> parseHourlyForecasts(JSONObject forecasts, boolean metric) throws JSONException {
+        ArrayList<WeatherInfo.HourForecast> result = new ArrayList<>();
 
-        int currentIndex = 36;
-        for (int i = 0; i < hourlyTimes.length(); i++)
-            if (hourlyTimes.getString(i).startsWith(currentHour)) {
-                currentIndex = i;
-                break;
+        JSONArray timeJson = forecasts.getJSONArray("time");
+        JSONArray temperature = forecasts.getJSONArray("temperature_2m_best_match");
+        JSONArray weatherCodeJson = forecasts.getJSONArray("weather_code_best_match");
+        JSONArray altWeatherCodeJson = forecasts.getJSONArray("weather_code_gfs_seamless");
+        String currentDay = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US).format(Calendar.getInstance().getTime());
+
+        int startIndex = 1;
+        if (currentDay.equals(timeJson.getString(0)))
+            startIndex = 0;
+        else if (currentDay.equals(timeJson.getString(2)))
+            startIndex = 2;
+
+        for (int i = startIndex; i < timeJson.length() && result.size() < 10; i++) {
+            WeatherInfo.HourForecast item;
+            int weatherCode = weatherCodeJson.getInt(i);
+            if(weatherCode == 45 || weatherCode == 48)
+                weatherCode = altWeatherCodeJson.getInt(i);
+
+            try {
+                item = new WeatherInfo.HourForecast(
+                        /* temp */ (float) temperature.getDouble(i),
+                        /* condition */ getWeatherDescription(weatherCode),
+                        /* conditionCode */ mapConditionIconToCode(weatherCode, true),
+                        timeJson.getString(i),
+                        metric);
+            } catch (JSONException e) {
+                Log.w(TAG, "Invalid forecast for day " + i + " creating dummy", e);
+                item = new WeatherInfo.HourForecast(
+                        /* temp */ 0,
+                        /* condition */ "",
+                        /* conditionCode */ -1,
+                        "NaN",
+                        metric);
             }
+            result.add(item);
+        }
+        // clients assume there are 5  entries - so fill with dummy if needed
+        if (result.size() < 10) {
+            for (int i = result.size(); i < 10; i++) {
+                Log.w(TAG, "Missing forecast for hour " + i + " creating dummy");
+                WeatherInfo.HourForecast item = new WeatherInfo.HourForecast(
+                        /* temp */ 0,
+                        /* condition */ "",
+                        /* conditionCode */ -1,
+                        "NaN",
+                        metric);
+                result.add(item);
+            }
+        }
 
-        return (float) hourlyHumidity.getDouble(currentIndex);
+        return result;
     }
 
     // OpenWeatherMap sometimes returns temperatures in Kelvin even if we ask it

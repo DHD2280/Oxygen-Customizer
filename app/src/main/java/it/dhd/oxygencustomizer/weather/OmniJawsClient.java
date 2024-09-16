@@ -21,6 +21,7 @@ package it.dhd.oxygencustomizer.weather;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,6 +35,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.text.DecimalFormat;
@@ -78,7 +80,11 @@ public class OmniJawsClient {
             "forecast_condition_code",
             "time_stamp",
             "forecast_date",
-            "pin_wheel"
+            "pin_wheel",
+            "forecast_hour",
+            "forecast_hour_temp",
+            "forecast_hour_condition",
+            "forecast_hour_condition_code"
     };
 
     public static final String[] SETTINGS_PROJECTION = new String[] {
@@ -103,7 +109,8 @@ public class OmniJawsClient {
         public String humidity;
         public String condition;
         public Long timeStamp;
-        public List<DayForecast> forecasts;
+        public List<DayForecast> dayForecasts;
+        public List<HourForecast> hourlyForecasts;
         public String tempUnits;
         public String windUnits;
         public String provider;
@@ -111,7 +118,7 @@ public class OmniJawsClient {
         public String iconPack;
 
         public String toString() {
-            return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" +conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + forecasts + ": " + iconPack;
+            return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" +conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + hourlyForecasts + ": " + dayForecasts + ": " + iconPack;
         }
 
         public String getLastUpdateTime() {
@@ -127,8 +134,21 @@ public class OmniJawsClient {
         public String condition;
         public String date;
 
+        @NonNull
         public String toString() {
             return "[" + low + ":" + high + ":" +conditionCode + ":" + condition + ":" + date + "]";
+        }
+    }
+
+    public static class HourForecast {
+        public String condition;
+        public String time;
+        public int conditionCode;
+        public String temperature;
+
+        @NonNull
+        public String toString() {
+            return "[" + temperature + ":" +conditionCode + ":" + condition + ":" + time + "]";
         }
     }
 
@@ -169,6 +189,13 @@ public class OmniJawsClient {
         mObserver = new ArrayList<>();
     }
 
+    public Intent getSettingsIntent() {
+        final Intent launchIntent = new Intent();
+        launchIntent.setComponent(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".ui.activity.MainActivity"));
+        launchIntent.putExtra("openWeatherSettings", true);
+        return launchIntent;
+    }
+
     public WeatherInfo getWeatherInfo() {
         return mCachedInfo;
     }
@@ -195,9 +222,12 @@ public class OmniJawsClient {
                     if (count > 0) {
                         mCachedInfo = new WeatherInfo();
                         List<DayForecast> forecastList = new ArrayList<DayForecast>();
+                        List<HourForecast> hourlyForecastList = new ArrayList<HourForecast>();
                         int i = 0;
                         for (i = 0; i < count; i++) {
                             c.moveToPosition(i);
+                            boolean isDailyForecast = c.getString(12) != null && !TextUtils.isEmpty(c.getString(12));
+                            boolean isHourlyForecast = c.getString(14) != null && !TextUtils.isEmpty(c.getString(14));
                             if (i == 0) {
                                 mCachedInfo.city = c.getString(0);
                                 mCachedInfo.windSpeed = getFormattedValue(c.getFloat(1));
@@ -208,7 +238,7 @@ public class OmniJawsClient {
                                 mCachedInfo.condition = c.getString(6);
                                 mCachedInfo.timeStamp = Long.valueOf(c.getString(11));
                                 mCachedInfo.pinWheel = c.getString(13);
-                            } else {
+                            } else if (isDailyForecast) {
                                 DayForecast day = new DayForecast();
                                 day.low = getFormattedValue(c.getFloat(7));
                                 day.high = getFormattedValue(c.getFloat(8));
@@ -216,9 +246,17 @@ public class OmniJawsClient {
                                 day.conditionCode = c.getInt(10);
                                 day.date = c.getString(12);
                                 forecastList.add(day);
+                            } else if (isHourlyForecast) {
+                                HourForecast hour = new HourForecast();
+                                hour.time = c.getString(14);
+                                hour.temperature = getFormattedValue(c.getFloat(15));
+                                hour.condition = c.getString(16);
+                                hour.conditionCode = c.getInt(17);
+                                hourlyForecastList.add(hour);
                             }
                         }
-                        mCachedInfo.forecasts = forecastList;
+                        mCachedInfo.dayForecasts = forecastList;
+                        mCachedInfo.hourlyForecasts = hourlyForecastList;
                     }
                 } finally {
                     c.close();

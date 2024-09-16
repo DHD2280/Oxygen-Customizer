@@ -11,6 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -29,7 +34,7 @@ public class YandexProvider extends AbstractWeatherProvider {
     private static final String URL_WEATHER =
             "https://api.weather.yandex.ru/v2/forecast?";
     private static final String PART_PARAMETERS =
-            "&limit=6&hours=false&lang=%s";
+            "&limit=6&hours=true&lang=%s";
     private static final String URL_PLACES =
             "http://api.geonames.org/searchJSON?q=%s&lang=%s&username=omnijaws&isNameRequired=true";
     private static final String PART_COORDINATES =
@@ -57,11 +62,12 @@ public class YandexProvider extends AbstractWeatherProvider {
             Log.e(TAG, "Yandex API key is not set");
             return null;
         }
-        String response = retrieve(url, new String[]{"X-Yandex-Weather-Key", WeatherConfig.getYandexKey(mContext)});
+        String response = retrieve(url, new String[]{"X-Yandex-Weather-Key", apiKey});
         if (response == null) {
             return null;
         }
         log(TAG, "URL = " + url + " returning a response of " + response);
+        Log.w(TAG, "URL = " + url + " returning a response of " + response);
 
         try {
             JSONObject weather = new JSONObject(response);
@@ -72,6 +78,7 @@ public class YandexProvider extends AbstractWeatherProvider {
                 city = mContext.getResources().getString(R.string.omnijaws_city_unknown);
             }
 
+            ArrayList<WeatherInfo.HourForecast> hourlyForecasts = new ArrayList<>();
             WeatherInfo w = new WeatherInfo(mContext,
                     /* id */ coordinates,
                     /* cityId */ city,
@@ -82,6 +89,7 @@ public class YandexProvider extends AbstractWeatherProvider {
                     /* wind */ convertWind(current.getInt("wind_speed"), metric),
                     /* windDir */ convertWindDegree(current.getString("wind_dir")),
                     metric,
+                    parseHourlyForecasts(weather.getJSONArray("forecasts"), metric),
                     parseForecasts(weather.getJSONArray("forecasts"), metric),
                     weather.getLong("now") * 1000L);
 
@@ -148,7 +156,68 @@ public class YandexProvider extends AbstractWeatherProvider {
             }
         }
 
+        for (WeatherInfo.DayForecast item : result) {
+            Log.d(TAG, "Day forecast: " + item.toString());
+        }
+
         return result;
+    }
+
+    private ArrayList<WeatherInfo.HourForecast> parseHourlyForecasts(JSONArray forecasts, boolean metric) throws JSONException {
+        ArrayList<WeatherInfo.HourForecast> result = new ArrayList<>(10);
+        int count = forecasts.length();
+
+        if (count == 0) {
+            throw new JSONException("Empty forecasts array");
+        }
+
+        if (count >= 2) {
+            JSONObject firstForecast = forecasts.getJSONObject(0);
+            JSONObject secondForecast = forecasts.getJSONObject(1);
+
+            int currentHour = LocalTime.now().getHour();
+
+            List<JSONObject> nextHours = new ArrayList<>(getNextHours(firstForecast, currentHour, 10));
+
+            if (nextHours.size() < 10) {
+                int remainingHours = 10 - nextHours.size();
+                nextHours.addAll(getNextHours(secondForecast, 0, remainingHours));
+            }
+
+            for (JSONObject hour : nextHours) {
+                Log.w(TAG, "Hour forecast: " + hour.toString());
+                result.add(new WeatherInfo.HourForecast(
+                        /* temp */ convertTemperature(hour.getInt("temp"), metric),
+                        /* condition */ hour.getString("condition"),
+                        /* conditionCode */ ICON_MAPPING.getOrDefault(hour.getString("icon"), -1),
+                        /* date */ formatDate(hour.getString("hour_ts")),
+                        metric));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<JSONObject> getNextHours(JSONObject forecast, int startHour, int maxHours) throws JSONException {
+        List<JSONObject> hoursList = new ArrayList<>();
+
+
+        JSONArray hours = forecast.getJSONArray("hours");
+        for (int i = 0; i < hours.length(); i++) {
+            JSONObject hour = hours.getJSONObject(i);
+            int hourValue = hour.getInt("hour");
+
+            if (hourValue >= startHour && hoursList.size() < maxHours) {
+                Log.w(TAG, "Adding hour " + hourValue);
+                hoursList.add(hour);
+            }
+
+            if (hoursList.size() == maxHours) {
+                break;
+            }
+        }
+
+        return hoursList;
     }
 
     private static final HashMap<String, Integer> ICON_MAPPING = new HashMap<>();
@@ -223,6 +292,12 @@ public class YandexProvider extends AbstractWeatherProvider {
         CONDITION_MAPPING.put("cloudy-and-light-snow", "cloudy_and_light_snow");
         CONDITION_MAPPING.put("overcast-and-light-snow", "overcast_and_light_snow");
         CONDITION_MAPPING.put("cloudy-and-snow", "snow");
+    }
+
+    private String formatDate(String unixTimestamp) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(unixTimestamp)), ZoneId.systemDefault());
+        return dateTime.format(formatter);
     }
 
     private static String getLanguage() {
