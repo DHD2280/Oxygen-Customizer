@@ -1083,6 +1083,8 @@
     <string name="omnijaws_service_error_location">No location available</string>
     <string name="omnijaws_service_error_network">No network found</string>
     <string name="omnijaws_service_error_permissions">Location permissions not granted</string>
+    <string name="omnijaws_today">Today</string>
+    <string name="omnijaws_tomorrow">Tomorrow</string>
     <string name="weather_widget_desc">"Actual weather and 4-day forecast"</string>
     <string name="theme_system">Follow System</string>
     <string name="theme_dark">Dark</string>

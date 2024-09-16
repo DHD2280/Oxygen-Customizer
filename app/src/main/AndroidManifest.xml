@@ -107,6 +107,12 @@
             android:exported="true"
             android:theme="@style/Theme.OxygenCustomizer"/>
 
+        <activity
+            android:name=".ui.activity.WeatherActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.OxygenCustomizer"/>
+
         <provider
             android:name=".xposed.utils.RemotePrefProvider"
             android:authorities="it.dhd.oxygencustomizer"
