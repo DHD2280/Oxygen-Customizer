@@ -11,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 
@@ -26,7 +27,6 @@ public class ControllersProvider extends XposedMods {
 
     public static Class<?> LaunchableLinearLayout = null;
     public static Class<?> LaunchableImageView = null;
-    public static Class<?> LaunchableFrameLayout = null;
     public static Object PersonalityManagerEx = null;
     public static Class<?> PersonalityManagerClass = null;
 
@@ -55,6 +55,8 @@ public class ControllersProvider extends XposedMods {
     private Object mMediaOutputDialogFactory = null;
 
     private Object mCameraGestureHelper = null;
+
+    private Class<?> SystemUIDialog = null;
 
     private final ArrayList<OnMobileDataChanged> mMobileDataChangedListeners = new ArrayList<>();
     private final ArrayList<OnWifiChanged> mWifiChangedListeners = new ArrayList<>();
@@ -93,14 +95,6 @@ public class ControllersProvider extends XposedMods {
         }
 
         try {
-            // LaunchableFrameLayout
-            // This is a FrameLayout that can launch dialogs with a GhostView
-            LaunchableFrameLayout = findClass("com.android.systemui.animation.view.LaunchableFrameLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            log(TAG + "LaunchableFrameLayout not found: " + t.getMessage());
-        }
-
-        try {
             Class<?> PersonalityManagerExImpl = findClass("com.android.systemui.qs.personality.PersonalityManagerEx", lpparam.classLoader);
             hookAllConstructors(PersonalityManagerExImpl, new XC_MethodHook() {
                 @Override
@@ -116,6 +110,12 @@ public class ControllersProvider extends XposedMods {
             PersonalityManagerClass = findClass("com.oplusos.systemui.qs.personality.PersonalityManager$Companion", lpparam.classLoader);
         } catch (Throwable t) {
             log(TAG + "PersonalityManager not found: " + t.getMessage());
+        }
+
+        try {
+            SystemUIDialog = findClass("com.android.systemui.statusbar.phone.SystemUIDialog", lpparam.classLoader);
+        } catch (Throwable t) {
+            log(TAG + "SystemUIDialog not found: " + t.getMessage());
         }
 
         // Network Callbacks
@@ -659,6 +659,17 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getHotspotController() {
         return instance.mHotspotController;
+    }
+
+    public static AlertDialog getSystemUiDialog(Context context) {
+        if (instance.SystemUIDialog != null) {
+            try {
+                return (AlertDialog) instance.SystemUIDialog.getConstructor(Context.class).newInstance(context);
+            } catch (Throwable t) {
+                log(TAG + "getSystemUiDialog not found: " + t.getMessage());
+            }
+        }
+        return null;
     }
 
 }

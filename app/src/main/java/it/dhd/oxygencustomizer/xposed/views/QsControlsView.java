@@ -369,7 +369,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         for (View view : views) {
             try {
                 ((ViewGroup) view.getParent()).removeView(view);
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
             if (view != null && !viewList.contains(view)) {
                 if (view == mMediaPlayer) {
                     view.setOnLongClickListener(v -> {
@@ -379,6 +380,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
                 if (view instanceof QsPhotoShowcaseContainer) {
                     ((QsPhotoShowcaseContainer) view).setRadius(mPhotoRadius);
+                } else if (view instanceof QsWeatherWidget weatherWidget) {
+                    weatherWidget.setOnLongClickListener(v -> {
+                        mActivityLauncherUtils.launchWeatherActivity(true);
+                        return true;
+                    });
                 }
                 viewList.add(view);
             }
@@ -419,7 +425,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0; i<mPages.size(); i++) {
+                for (int i = 0; i < mPages.size(); i++) {
                     if (i == position) {
                         mPages.get(i).setVisibility(VISIBLE);
                     } else {
@@ -439,7 +445,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         if (viewPager != null) {
             viewPager.setAdapter(null);
             viewPager.setAdapter(pagerAdapter);
-            if (mPages.size() >=2) viewPager.setCurrentItem(1);
+            if (mPages.size() >= 2) viewPager.setCurrentItem(1);
             viewPager.setCurrentItem(0);
             viewPager.addOnPageChangeListener(listener);
         }
@@ -452,7 +458,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     BuildConfig.APPLICATION_ID,
                     Context.CONTEXT_IGNORE_SECURITY
             );
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         mActiveColor = getTileActiveColor(mContext);
         try {
             mInactiveColor = (int) callStaticMethod(QsColorUtil, "obtainColorForQsPanelBackground", mContext);
@@ -461,7 +468,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         }
 
         try {
-            if ((boolean)callStaticMethod(QsColorUtil, "isIconNeedUseLightColor", mContext)) {
+            if ((boolean) callStaticMethod(QsColorUtil, "isIconNeedUseLightColor", mContext)) {
                 mIconInactiveColor = getStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
             } else {
                 mIconInactiveColor = ResourcesCompat.getColor(
@@ -556,7 +563,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0; i<mPages.size(); i++) {
+                for (int i = 0; i < mPages.size(); i++) {
                     mPages.get(i).setVisibility(i == position ? VISIBLE : GONE);
                 }
             }
@@ -623,7 +630,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 0);
         secondRow.setLayoutParams(secondRowParams);
 
-        int numItems=  group.size();
+        int numItems = group.size();
         log(TAG + "createGroupView: " + numItems + " items" + group);
         if (numItems == 0) {
             log(TAG + "createGroupView: No items found");
@@ -697,7 +704,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 updateMainWidgetResources((ExtendedFAB) v, false);
             }
         }
-        for(int i = 0; i < secondRow.getChildCount(); i++) {
+        for (int i = 0; i < secondRow.getChildCount(); i++) {
             View v = secondRow.getChildAt(i);
             if (v instanceof ImageView) {
                 updateWidgetsResources((ImageView) v);
@@ -996,7 +1003,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     });
                 }
                 // Set a null on click listener to weather button to avoid running previous button action
-                setUpWidgetResources(iv, efab, v-> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
+                setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchWeatherActivity(true), ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
                 enableWeatherUpdates();
                 break;
             case "w:wifi":
@@ -1089,7 +1096,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }, getDrawable(mContext, CAMERA_ICON, SYSTEM_UI), getString(mContext, CAMERA_LABEL, SYSTEM_UI));
                 break;
             case "w:calculator":
-                setUpWidgetResources(iv, efab, v-> mActivityLauncherUtils.launchCalculator(), getDrawable(mContext, CALCULATOR_ICON, SYSTEM_UI), getString(mContext, CALCULATOR_LABEL, SYSTEM_UI));
+                setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchCalculator(), getDrawable(mContext, CALCULATOR_ICON, SYSTEM_UI), getString(mContext, CALCULATOR_LABEL, SYSTEM_UI));
                 break;
             case "w:homecontrols":
                 setUpWidgetResources(iv, efab, this::launchHomeControls, getDrawable(mContext, HOME_CONTROLS, SYSTEM_UI), getString(mContext, HOME_CONTROLS_LABEL, SYSTEM_UI));
@@ -1328,14 +1335,14 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         if (wifiButton == null && wifiButtonFab == null) return;
         String theSsid = SystemUtils.WifiManager().getConnectionInfo().getSSID();
         if (theSsid.equals(UNKNOWN_SSID)) {
-            theSsid = getString(mContext,WIFI_LABEL_INACTIVE, SYSTEM_UI);
+            theSsid = getString(mContext, WIFI_LABEL_INACTIVE, SYSTEM_UI);
         } else {
             if (theSsid.startsWith("\"") && theSsid.endsWith("\"")) {
                 theSsid = theSsid.substring(1, theSsid.length() - 1);
             }
         }
         updateTileButtonState(wifiButton, wifiButtonFab, isWifiEnabled(),
-                WIFI_ACTIVE, WIFI_INACTIVE, theSsid, getString(mContext,WIFI_LABEL_INACTIVE, SYSTEM_UI));
+                WIFI_ACTIVE, WIFI_INACTIVE, theSsid, getString(mContext, WIFI_LABEL_INACTIVE, SYSTEM_UI));
     }
 
     private void updateRingerButtonState() {
@@ -1357,7 +1364,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         String networkName =
                 networkController == null ? "" : (String) callMethod(networkController, "getMobileDataNetworkName");
         boolean hasNetwork = networkController != null && !TextUtils.isEmpty(networkName);
-        String inactive = getString(mContext,DATA_LABEL_INACTIVE, SYSTEM_UI);
+        String inactive = getString(mContext, DATA_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(dataButton, dataButtonFab, enabled,
                 DATA_ACTIVE, DATA_INACTIVE, hasNetwork && enabled ? networkName : inactive, inactive);
     }
@@ -1368,15 +1375,15 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         Object bluetoothController = getBluetoothController();
         String deviceName = isBluetoothEnabled() ? (String) callMethod(bluetoothController, "getConnectedDeviceName") : "";
         boolean isConnected = !TextUtils.isEmpty(deviceName);
-        String inactiveString = getString(mContext,BT_LABEL_INACTIVE, SYSTEM_UI);
+        String inactiveString = getString(mContext, BT_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(btButton, btButtonFab, isBluetoothEnabled(),
                 BT_ACTIVE, BT_INACTIVE, isConnected ? deviceName : inactiveString, inactiveString);
     }
 
     public void updateTorchButtonState() {
         if (!isWidgetEnabled("torch")) return;
-        String activeString = getString(mContext,TORCH_LABEL_ACTIVE, SYSTEM_UI);
-        String inactiveString = getString(mContext,TORCH_LABEL_INACTIVE, SYSTEM_UI);
+        String activeString = getString(mContext, TORCH_LABEL_ACTIVE, SYSTEM_UI);
+        String inactiveString = getString(mContext, TORCH_LABEL_INACTIVE, SYSTEM_UI);
         updateTileButtonState(torchButton, torchButtonFab, isFlashOn,
                 TORCH_RES_ACTIVE, TORCH_RES_INACTIVE, activeString, inactiveString);
     }
@@ -1384,8 +1391,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private void updateHotspotButtonState(int numDevices) {
         if (!isWidgetEnabled("hotspot")) return;
         if (hotspotButton == null && hotspotButtonFab == null) return;
-        String inactiveString = getString(mContext,HOTSPOT_LABEL, SYSTEM_UI);
-        String activeString = getString(mContext,HOTSPOT_LABEL, SYSTEM_UI);
+        String inactiveString = getString(mContext, HOTSPOT_LABEL, SYSTEM_UI);
+        String activeString = getString(mContext, HOTSPOT_LABEL, SYSTEM_UI);
         if (isHotspotEnabled()) {
             String hotspotSSID = getHotspotSSID();
             String devices = "(" + numDevices + ")";
@@ -1452,7 +1459,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
             }
         } catch (Throwable t) {
-            log( TAG + "getHotspotSSID error: " + t.getMessage());
+            log(TAG + "getHotspotSSID error: " + t.getMessage());
         }
         return "";
     }
@@ -1483,7 +1490,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     throw new IllegalStateException("Unexpected value: " + SystemUtils.AudioManager().getRingerMode());
         };
 
-        return getString(mContext,resName, SYSTEM_UI);
+        return getString(mContext, resName, SYSTEM_UI);
 
     }
 
@@ -1510,10 +1517,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     /**
      * Update the media player preferences
-     * @param showAlbumArt Show album art as media tile background
-     * @param mediaQsArtFilter Media tile art filter [
-     * @param mediaQsTintColor Media tile tint color
-     * @param mediaQsTintAmount Media tile tint amount [int 25 - 70%]
+     *
+     * @param showAlbumArt         Show album art as media tile background
+     * @param mediaQsArtFilter     Media tile art filter [
+     * @param mediaQsTintColor     Media tile tint color
+     * @param mediaQsTintAmount    Media tile tint amount [int 25 - 70%]
      * @param mediaQsArtBlurAmount Media tile art blur amount [float 0.1 - 1f]
      */
     public void updateMediaPlayerPrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor,
@@ -1524,6 +1532,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     /**
      * Update the media colors based on chosen prefs for stock media player
+     *
      * @param defBg Default background (obtained from OplusQsMediaTileView)
      */
     public void updateDefaultMediaBg(Drawable defBg) {
@@ -1536,10 +1545,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      * this will match qs tile customizations
      *
      * @param customInactive Use custom color for inactive state
-     * @param inactiveColor Inactive color state
-     * @param customActive Use custom color for active state
-     * @param activeColor Active color state
-     * @param force Force update
+     * @param inactiveColor  Inactive color state
+     * @param customActive   Use custom color for active state
+     * @param activeColor    Active color state
+     * @param force          Force update
      */
     public void updateQsTileColors(boolean customInactive, int inactiveColor, boolean customActive, int activeColor, boolean force) {
         if (instance == null) return;
@@ -1559,11 +1568,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     /**
      * Update the radius of the widgets
+     *
      * @param customHighlight Use custom highlight radius
      * @param highlightRadius Highlight radius float of 8 int @Px
-     * @param customTile Use custom tile radius
-     * @param tileRadius Tile radius float of 8 int @Px
-     * @param force Force update
+     * @param customTile      Use custom tile radius
+     * @param tileRadius      Tile radius float of 8 int @Px
+     * @param force           Force update
      */
     public void updateTileShapes(boolean customHighlight, float[] highlightRadius,
                                  boolean customTile, float[] tileRadius, boolean force) {
@@ -1599,9 +1609,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 } else {
                     int color = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
                     if (back instanceof GradientDrawable) {
-                        ((GradientDrawable)back).setColors(new int[]{color, color});
+                        ((GradientDrawable) back).setColors(new int[]{color, color});
                     } else if (back instanceof ShapeDrawable) {
-                        ((ShapeDrawable)back).getPaint().setColor(color);
+                        ((ShapeDrawable) back).getPaint().setColor(color);
                     }
                 }
                 back.invalidateSelf();
@@ -1613,6 +1623,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     /**
      * Update the radius of the photo showcase
+     *
      * @param radius New radius
      */
     public void updatePhotoRadius(int radius) {

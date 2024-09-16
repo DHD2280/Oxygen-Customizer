@@ -83,6 +83,20 @@ public class ActivityLauncherUtils {
         callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
     }
 
+    /**
+     * Launches the weather activity {@link it.dhd.oxygencustomizer.ui.activity.WeatherActivity}
+     * @param fromQs Whether the intent is launched from Quick Settings
+     */
+    public void launchWeatherActivity(boolean fromQs) {
+        final Intent launchIntent = new Intent();
+        launchIntent.setComponent(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".ui.activity.WeatherActivity"));
+        if (mActivityStarter == null) {
+            log("ActivityStarter is null");
+            return;
+        }
+        callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
+    }
+
     public void launchCamera(boolean fromQs) {
         Object mCameraGestureHelper = getCameraGestureHelper();
 

@@ -870,7 +870,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     });
                 }
                 // Set a null on click listener to weather button to avoid running previous button action
-                setUpWidgetResources(iv, efab, v -> {}, ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
+                setUpWidgetResources(iv, efab, v -> mActivityLauncherUtils.launchWeatherActivity(false), ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()), appContext.getString(R.string.weather_settings));
                 enableWeatherUpdates();
                 break;
             case "hotspot":
