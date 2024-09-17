@@ -380,6 +380,7 @@ public class StatusbarClock extends XposedMods {
                         // we can use it to update the clock width
                         // Based on our custom formats
                         TextView tv = (TextView) param.thisObject;
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
                         if (!mShowSeconds) {
                             float measuredWidth = measureTextWithSpans();
                             int totalWidth = tv.getPaddingStart() + (int) Math.ceil(measuredWidth);
@@ -539,16 +540,10 @@ public class StatusbarClock extends XposedMods {
 
         SpannableStringBuilder result = new SpannableStringBuilder();
 
-        SpannableStringBuilder clockText = SpannableStringBuilder.valueOf((CharSequence) "00:00"); //fake a clock just to calculate dimensions
+        SpannableStringBuilder clockText = SpannableStringBuilder.valueOf("00:00"); //fake a clock just to calculate dimensions
 
         result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
-
-        if (mClockCustomColor) {
-            clockText.setSpan(new ForegroundColorSpan(mClockColor), 0, (clockText).length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
         result.append(clockText);
-
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
             result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
         }
