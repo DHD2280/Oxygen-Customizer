@@ -108,7 +108,7 @@ public class OmniJawsClient {
         public String temp;
         public String humidity;
         public String condition;
-        public Long timeStamp = 0;
+        public Long timeStamp = 0L;
         public List<DayForecast> dayForecasts;
         public List<HourForecast> hourlyForecasts;
         public String tempUnits;
