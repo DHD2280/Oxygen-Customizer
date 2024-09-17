@@ -40,26 +40,17 @@
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_settings" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
                 <TextView
                     android:id="@+id/current_location"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginStart="@dimen/activity_city_side_margin"
                     android:layout_marginEnd="@dimen/activity_city_side_margin"
                     android:ellipsize="end"
                     android:gravity="center_horizontal"
                     android:maxLines="2"
                     android:textAppearance="@style/HeaderWeatherText" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/refresh"
