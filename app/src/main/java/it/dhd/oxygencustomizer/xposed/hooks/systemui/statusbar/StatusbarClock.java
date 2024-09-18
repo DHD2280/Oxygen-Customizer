@@ -571,7 +571,6 @@ public class StatusbarClock extends XposedMods {
             start = end;
         }
 
-        log(TAG + "totalWidth: " + totalWidth);
         return dp2px(mContext, totalWidth);
     }
 
