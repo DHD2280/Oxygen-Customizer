@@ -143,9 +143,21 @@ public class QsMediaTile extends LinearLayout {
         Object playOrPause = callMethod(MediaButton, "getPlayOrPause");
         Object nextOrCustom = callMethod(MediaButton, "getNextOrCustom");
 
-        setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom);
-        setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause);
-        setSemanticButton(mNext, mNextIconDrawable, nextOrCustom);
+        if (prevOrCustom != null) {
+            setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom);
+        } else {
+            mPrev.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+        }
+        if (playOrPause != null) {
+            setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause);
+        } else {
+            mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+        }
+        if (nextOrCustom != null) {
+            setSemanticButton(mNext, mNextIconDrawable, nextOrCustom);
+        } else {
+            mNext.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT));
+        }
 
     }
 
@@ -196,7 +208,6 @@ public class QsMediaTile extends LinearLayout {
     private void setAppIcon(Object mediaData) {
         try {
             String packageName = (String) callMethod(mediaData, "getPackageName");
-            log("QsMediaTile setAppIcon packageName " + packageName);
             Drawable icon = mContext.getPackageManager().getApplicationIcon(packageName);
             mAppIcon.setVisibility(VISIBLE);
             mAppIcon.setOnClickListener(v -> {
@@ -205,7 +216,6 @@ public class QsMediaTile extends LinearLayout {
                     if (intent != null) {
                         mActivityLauncherUtils.launchApp(intent);
                     }
-                    log("QsMediaTile setAppIcon onClick " + packageName);
                 } catch (Throwable t) {
                     log("QsMediaTile setAppIcon onClick error " + t);
                 }
