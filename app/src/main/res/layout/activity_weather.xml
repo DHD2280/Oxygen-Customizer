@@ -192,7 +192,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/colorBackground"
                 app:layout_constraintTop_toBottomOf="@id/wind_humidity_info">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -210,7 +209,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/colorBackground"
                 app:layout_constraintTop_toBottomOf="@id/hourly_forecast_card">
 
                 <androidx.recyclerview.widget.RecyclerView

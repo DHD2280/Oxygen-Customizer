@@ -35,6 +35,10 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
             "#332847", "#382a53", "#3e2c5f", "#442e6c", "#393a7a", "#2e4687", "#235395", "#185fa2",
             "#0d6baf", "#0277bd", "#0d6cb1", "#1861a6", "#23569b", "#2d4a8f", "#383f84", "#433478",
             "#3d3169", "#382e5b", "#322b4d", "#2c273e", "#272430" };
+    public static final String[] BACKGROUND_CARD_SPECTRUM = { "#171717", "#1b1820", "#201a29",
+            "#241c32", "#271d3a", "#2b1f42", "#30204c", "#282955", "#20315e", "#183a68", "#114271",
+            "#094b7a", "#015384", "#094c7c", "#114474", "#183c6c", "#203464", "#272c5c", "#2f2454",
+            "#2b224a", "#272040", "#231e36", "#1f1b2b", "#1b1922" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,9 +169,18 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         return Color.parseColor(BACKGROUND_SPECTRUM[hourOfDay]);
     }
 
+    private int getCurrentCardColor() {
+        final int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        return Color.parseColor(BACKGROUND_CARD_SPECTRUM[hourOfDay]);
+    }
+
     public void updateHourColor() {
         getWindow().getDecorView().setBackgroundColor(getCurrentHourColor());
         getWindow().setNavigationBarColor(getCurrentHourColor());
         getWindow().setStatusBarColor(getCurrentHourColor());
+        binding.hourlyForecastCard.setCardBackgroundColor(getCurrentCardColor());
+        binding.hourlyForecastCard.setStrokeColor(getCurrentCardColor());
+        binding.dailyForecastCard.setCardBackgroundColor(getCurrentCardColor());
+        binding.dailyForecastCard.setStrokeColor(getCurrentCardColor());
     }
 }
