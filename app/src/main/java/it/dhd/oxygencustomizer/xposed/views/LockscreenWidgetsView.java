@@ -611,6 +611,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             enableWeatherUpdates();
         }
         updateTorchButtonState();
+        updateBtState();
         updateRingerButtonState();
         updateWiFiButtonState(isWifiEnabled());
         updateMobileDataState(isMobileDataEnabled());
@@ -1382,8 +1383,13 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     private boolean isBluetoothEnabled() {
-        if (SystemUtils.BluetoothManager().getAdapter() == null) return false;
-        return SystemUtils.BluetoothManager().getAdapter().isEnabled();
+        Object bluetoothController = getBluetoothController();
+        try {
+            return getBooleanField(bluetoothController, "mEnabled");
+        } catch (Throwable ignored) {
+            if (SystemUtils.BluetoothManager().getAdapter() == null) return false;
+            return SystemUtils.BluetoothManager().getAdapter().isEnabled();
+        }
     }
 
     private boolean isMobileDataEnabled() {
