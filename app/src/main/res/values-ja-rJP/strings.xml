@@ -188,7 +188,6 @@
     <string name="statusbar_padding">ステータスバーの余白</string>
     <string name="statusbar_top_padding">上部の余白</string>
     <string name="sb_padding_title">ステータスバー左右の余白</string>
-    <string name="sb_padding_summary">値を最小または最大に設定するとデバイスのデフォルトと同等になります</string>
     <string name="statusbar_left_padding">左の余白</string>
     <string name="statusbar_right_padding">右の余白</string>
     <!-- Battery Bar Strings -->

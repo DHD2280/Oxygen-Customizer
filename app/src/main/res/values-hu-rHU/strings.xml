@@ -215,7 +215,6 @@
     <string name="statusbar_padding">Állapotsáv-kitöltés</string>
     <string name="statusbar_top_padding">Felső kitöltés</string>
     <string name="sb_padding_title">Bal és Jobb kitöltés</string>
-    <string name="sb_padding_summary">Az értékek min/max beállítása megegyezik a készülék alapértelmezett értékével</string>
     <string name="statusbar_left_padding">Baloldali kitöltés</string>
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
     <!-- Battery Bar Strings -->

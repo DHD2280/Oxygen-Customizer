@@ -116,25 +116,27 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
-            android:key="statusbar_top_padding"
-            android:title="@string/statusbar_top_padding"
+            android:key="statusbar_padding_start"
+            android:title="@string/statusbar_left_padding"
+            android:summary="@string/statusbar_padding_info"
+            app:isDecimalFormat="true"
             app:defaultValue="0"
             app:iconSpaceReserved="false"
             app:maxVal="20"
             app:minVal="-20"
-            app:updatesContinuously="true"
+            app:tickInterval=".5"
             app:valueFormat="dp" />
 
         <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
-            android:key="statusbarPaddings"
-            android:summary="@string/sb_padding_summary"
-            android:title="@string/sb_padding_title"
-            app:defaultValue="-.5,100.5"
+            android:key="statusbar_padding_end"
+            android:title="@string/statusbar_right_padding"
+            android:summary="@string/statusbar_padding_info"
+            app:isDecimalFormat="true"
+            app:defaultValue="0"
             app:iconSpaceReserved="false"
-            app:maxVal="100.5"
-            app:minVal="-.5"
+            app:maxVal="20"
+            app:minVal="-20"
             app:tickInterval=".5"
-            app:valueCount="2"
             app:valueFormat="dp" />
 
     </PreferenceCategory>

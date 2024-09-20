@@ -130,35 +130,21 @@ public class StatusbarMods extends XposedMods {
         mBrightnessControl = Xprefs.getBoolean("brightness_control", false);
 
         // Padding
-        mLeftPad = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                Xprefs.getSliderFloat("statusbar_left_padding", PADDING_DEFAULT),
-                mContext.getResources().getDisplayMetrics());
+        mLeftPad = Xprefs.getSliderFloat("statusbar_padding_start", PADDING_DEFAULT);
         mTopPad = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 Xprefs.getSliderFloat("statusbar_top_padding", 0f),
                 mContext.getResources().getDisplayMetrics());
-        mRightPad = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                Xprefs.getSliderFloat("statusbar_right_padding", PADDING_DEFAULT),
-                mContext.getResources().getDisplayMetrics());
+        mRightPad = Xprefs.getSliderFloat("statusbar_padding_end", PADDING_DEFAULT);
         statusBarPadding = Xprefs.getBoolean("statusbar_padding_enabled", false);
-
-        List<Float> paddings = Xprefs.getSliderValues("statusbarPaddings", 0);
 
         // Notifications
         mNewIconStyle = Xprefs.getBoolean("statusbar_notification_app_icon", false);
 
-        if (paddings.size() > 1) {
-            SBPaddingStart = paddings.get(0);
-            SBPaddingEnd = 100f - paddings.get(1);
-        }
-
         if (Key.length > 0) {
             switch (Key[0]) {
-                case "statusbarPaddings",
-                     "statusbar_top_padding" -> updateStatusbarHeight();
-                case "statusbar_padding_enabled" -> updateResources();
+                case "statusbar_padding_start", "statusbar_padding_end",
+                     "statusbar_padding_enabled" -> updateResources();
                 case "statusbar_notification_app_icon" -> updateNotificationIcons();
             }
         }
@@ -244,24 +230,26 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        hookAllMethods(PhoneStatusBarView, "updateStatusBarHeight", new XC_MethodHook() {
+        Class<?> PhoneStatusBarViewExImpl = findClass("com.oplus.systemui.statusbar.phone.PhoneStatusBarViewExImpl", lpparam.classLoader);
+        hookAllMethods(PhoneStatusBarViewExImpl, "updateSafeInsets", new XC_MethodHook() {
             @SuppressLint("DiscouragedApi")
             @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//                mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
 
                 if (!statusBarPadding) return;
 
                 int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
-                int paddingStart = SBPaddingStart == PADDING_DEFAULT
-                        ? mContext.getResources().getIdentifier("status_bar_padding_start", "type/dimen", listenPackage)
-                        : Math.round(SBPaddingStart * screenWidth / 100f);
+                int paddingStart = Math.round(mLeftPad * screenWidth / 100f);
 
-                int paddingEnd = SBPaddingEnd == PADDING_DEFAULT
-                        ? mContext.getResources().getIdentifier("status_bar_padding_end", "type/dimen", listenPackage)
-                        : Math.round(SBPaddingEnd * screenWidth / 100f);
-                mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
+                int paddingEnd = Math.round(mRightPad * screenWidth / 100f);
+
+                log(TAG + "Padding Start: " + paddingStart + " SBPaddingStart: " + SBPaddingStart + " Padding End: " + paddingEnd + " mRightPad: " + mRightPad);
+
+                if (mLeftPad != 0f) param.args[0] = paddingStart;
+                if (mRightPad != 0f) param.args[1] = paddingEnd;
+//                mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
             }
         });
 

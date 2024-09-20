@@ -215,7 +215,6 @@
     <string name="statusbar_padding">Padding barra di stato</string>
     <string name="statusbar_top_padding">Padding superiore</string>
     <string name="sb_padding_title">Paddin sinistro e destro</string>
-    <string name="sb_padding_summary">Setting the values to min/max is equivalent to device Default</string>
     <string name="statusbar_left_padding">Padding sinistro</string>
     <string name="statusbar_right_padding">Padding destro</string>
     <!-- Battery Bar Strings -->

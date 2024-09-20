@@ -208,7 +208,6 @@
     <string name="statusbar_padding">Margen de la barra de estado</string>
     <string name="statusbar_top_padding">Margen superior</string>
     <string name="sb_padding_title">Margen izquierdo y derecho de la barra de estado</string>
-    <string name="sb_padding_summary">Establecer los valores en min/max es equivalente al predeterminado del dispositivo</string>
     <string name="statusbar_left_padding">Margen izquierdo</string>
     <string name="statusbar_right_padding">Margen derecho</string>
     <!-- Battery Bar Strings -->

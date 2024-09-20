@@ -235,9 +235,9 @@
     <string name="statusbar_padding">Status bar padding</string>
     <string name="statusbar_top_padding">Top padding</string>
     <string name="sb_padding_title">Status bar Left and Right Padding</string>
-    <string name="sb_padding_summary">Setting the values to min/max is equivalent to device Default</string>
     <string name="statusbar_left_padding">Left padding</string>
     <string name="statusbar_right_padding">Right padding</string>
+    <string name="statusbar_padding_info">Set 0 to keep stock</string>
 
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Enable Battery Bar</string>

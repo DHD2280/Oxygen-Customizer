@@ -215,7 +215,6 @@
     <string name="statusbar_padding">Заполнение строки состояния</string>
     <string name="statusbar_top_padding">Отступ сверху</string>
     <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
-    <string name="sb_padding_summary">Установка значений min/max эквивалентна настройкам устройства по умолчанию</string>
     <string name="statusbar_left_padding">Отступ слева</string>
     <string name="statusbar_right_padding">Правильное заполнение</string>
     <!-- Battery Bar Strings -->

@@ -254,7 +254,7 @@ public class PreferenceHelper {
             }
 
             // Statusbar Prefs
-            case "statusbar_top_padding", "statusbarPaddings" -> {
+            case "statusbar_padding_start", "statusbar_padding_end" -> {
                 return instance.mPreferences.getBoolean("statusbar_padding_enabled", false);
             }
             case "status_bar_clock_color" -> {
@@ -847,9 +847,9 @@ public class PreferenceHelper {
 
         return switch (key) {
             // Padding
-            case "statusbar_top_padding" -> instance.mPreferences.getSliderInt(key, 0) + "dp";
-            case "statusbar_left_padding", "statusbar_right_padding" ->
-                    String.valueOf(instance.mPreferences.getSliderFloat(key, -0.5f));
+            case "statusbar_padding_start", "statusbar_padding_end" ->
+                    fragmentCompat.getString(R.string.statusbar_padding_info) + "\n" +
+                    instance.mPreferences.getSliderFloat(key, 0);
 
             // Statusbar Clock
             case "status_bar_java_custom" ->

@@ -215,7 +215,6 @@
     <string name="statusbar_padding">狀態欄填充</string>
     <string name="statusbar_top_padding">頂部填充</string>
     <string name="sb_padding_title">狀態欄左右邊填充</string>
-    <string name="sb_padding_summary">將值設為最小值/最大值相當於設備預設值</string>
     <string name="statusbar_left_padding">左邊填充</string>
     <string name="statusbar_right_padding">右邊填充</string>
     <!-- Battery Bar Strings -->

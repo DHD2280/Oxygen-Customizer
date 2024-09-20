@@ -214,7 +214,6 @@
     <string name="statusbar_padding">Preenchimento de barra de status</string>
     <string name="statusbar_top_padding">Preenchimento superior</string>
     <string name="sb_padding_title">Barra de status para Preenchimento esquerda e direita</string>
-    <string name="sb_padding_summary">Configurar os valores para min/max é equivalente ao dispositivo padrão</string>
     <string name="statusbar_left_padding">Preenchimento esquerdo</string>
     <string name="statusbar_right_padding">Preenchimento direito</string>
     <!-- Battery Bar Strings -->
