@@ -31,7 +31,7 @@ import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 
 public class WeatherContentProvider extends ContentProvider {
     private static final String TAG = "WeatherService:WeatherContentProvider";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     static WeatherInfo sCachedWeatherInfo;
 
@@ -164,7 +164,6 @@ public class WeatherContentProvider extends ContentProvider {
 
                 // forecast
                 for (WeatherInfo.DayForecast day : weather.getForecasts()) {
-                    Log.w(TAG, "getForecasts query: " + day.date + " " + day.getLow() + " " + day.getHigh() + " " + day.getCondition(mContext));
                     result.newRow()
                             .add(COLUMN_FORECAST_CONDITION, day.getCondition(mContext))
                             .add(COLUMN_FORECAST_LOW, day.getLow())
@@ -174,7 +173,6 @@ public class WeatherContentProvider extends ContentProvider {
                 }
 
                 for (WeatherInfo.HourForecast hour : weather.getHourForecasts()) {
-                    Log.w(TAG, "getHourForecasts query: " + hour.date + " " + hour.getTemp() + " " + hour.getCondition(mContext));
                     result.newRow()
                             .add(COLUMN_FORECAST_HOUR, hour.date)
                             .add(COLUMN_FORECAST_HOUR_TEMP, hour.getTemp())
