@@ -30,6 +30,9 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 - [Contribution](#-contribution)
 - [FAQ](#-faq)
 - [Credits](#-credits)
+- [License](#-license)
+- [Disclaimer](#-disclaimer)
+- [Donations](#-donations)
 
 > [!CAUTION]
 > 
@@ -134,7 +137,7 @@ We highly appreciate and welcome all forms of contributions, ranging from code, 
 <details>
   <summary>Where can I make a donation?</summary>
 
-- The preferred and designated means for donating to the project's developer is via "[PayPal](https://www.paypal.me/luigifale)".
+- You can donate via "[PayPal](https://www.paypal.me/luigifale)", or via "[Buy me a coffee](https://www.buymeacoffee.com/DHD2280)".
 </details>
 
 # ❤ Credits
@@ -162,3 +165,12 @@ Oxygen Customizer is licensed under GPLv3. Please see [`LICENSE`](./LICENSE.md) 
 > [!WARNING]
 > - Please note that Oxygen Customizer may not be fully compatible with all custom OOS variants.
 > - I cannot be held responsible for any potential damage or issues that may occur to your device while using Oxygen Customizer.
+
+# ⭐ Donations
+
+<div align="left">
+  <br>
+  <a href="https://www.buymeacoffee.com/DHD2280"><img src=".github/resources/bmc-button.png" width="30%" alt="Buy me a coffee" /></a>
+  <br><br>
+  <a href="https://www.paypal/luigifale"><img src=".github/resources/PayPal.svg" width="34%" alt="PayPal" /></a>
+</div>
