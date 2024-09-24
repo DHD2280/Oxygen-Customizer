@@ -106,7 +106,7 @@ public class Hooks extends Fragment {
         }
 
         intentFilterHookedPackages.addAction(Constants.ACTION_XPOSED_CONFIRMED);
-        getContext().registerReceiver(receiverHookedPackages, intentFilterHookedPackages, Context.RECEIVER_EXPORTED);
+        requireContext().registerReceiver(receiverHookedPackages, intentFilterHookedPackages, Context.RECEIVER_EXPORTED);
         monitorPackageList = Arrays.asList(getResources().getStringArray(R.array.xposed_scope));
         checkHookedPackages();
 
@@ -130,7 +130,7 @@ public class Hooks extends Fragment {
                     if (pkgName.equals(broadcastPackageName)) {
                         binding.content.post(() -> {
                             desc.setText(getText(R.string.package_hooked_successful));
-                            desc.setTextColor(getContext().getColor(android.R.color.system_accent1_400));
+                            desc.setTextColor(requireContext().getColor(android.R.color.system_accent1_400));
                         });
                     }
                 }
@@ -170,7 +170,7 @@ public class Hooks extends Fragment {
         hookedPackageList.clear();
 
         initListItem(monitorPackageList);
-        new Thread(() -> getContext().sendBroadcast(new Intent().setAction(Constants.ACTION_CHECK_XPOSED_ENABLED))).start();
+        new Thread(() -> requireContext().sendBroadcast(new Intent().setAction(Constants.ACTION_CHECK_XPOSED_ENABLED))).start();
         waitAndRefresh();
     }
 
@@ -204,7 +204,7 @@ public class Hooks extends Fragment {
                 desc.setText(getString(R.string.package_checking, ""));
             } else {
                 desc.setText(getText(R.string.package_not_found));
-                desc.setTextColor(getContext().getColor(com.google.android.material.R.color.design_default_color_error));
+                desc.setTextColor(requireContext().getColor(com.google.android.material.R.color.design_default_color_error));
             }
 
             ImageView preview = list.findViewById(R.id.icon);
@@ -224,14 +224,14 @@ public class Hooks extends Fragment {
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.launch_app) {
-                    Intent intent = getContext()
+                    Intent intent = requireContext()
                             .getPackageManager()
                             .getLaunchIntentForPackage(pack.get(finalI));
                     if (intent != null) {
                         startActivity(intent);
                     } else {
                         Toast.makeText(
-                                getContext(),
+                                requireContext(),
                                 OxygenCustomizer.getAppContextLocale().getString(R.string.package_not_launchable),
                                 Toast.LENGTH_SHORT
                         ).show();
@@ -262,7 +262,7 @@ public class Hooks extends Fragment {
                     "killall " + packageName,
                     "am force-stop " + packageName
             ).exec();
-            Intent intent = getContext()
+            Intent intent = requireContext()
                     .getPackageManager()
                     .getLaunchIntentForPackage(packageName);
             if (intent != null) {
@@ -279,9 +279,9 @@ public class Hooks extends Fragment {
 
             if (hookedPackageList.contains(pkgName)) {
                 desc.setText(getText(R.string.package_hooked_successful));
-                desc.setTextColor(getContext().getColor(android.R.color.system_accent1_400));
+                desc.setTextColor(requireContext().getColor(android.R.color.system_accent1_400));
             } else {
-                desc.setTextColor(getContext().getColor(R.color.error));
+                desc.setTextColor(requireContext().getColor(R.color.error));
 
                 desc.setText(getText(
                         isAppInstalled(pkgName)
@@ -303,9 +303,9 @@ public class Hooks extends Fragment {
 
     private Drawable getAppIcon(String packageName) {
         try {
-            return getContext().getPackageManager().getApplicationIcon(packageName);
+            return requireContext().getPackageManager().getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException ignored) {
-            return ContextCompat.getDrawable(getContext(), R.drawable.ic_android);
+            return ContextCompat.getDrawable(requireContext(), R.drawable.ic_android);
         }
     }
 
@@ -366,9 +366,9 @@ public class Hooks extends Fragment {
         int startSpan = 0, endSpan = 0;
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(description);
         List<Object[]> targets = new ArrayList<>();
-        targets.add(new Object[]{getString(R.string.package_hooked_successful), getContext().getColor(android.R.color.system_accent1_400)});
-        targets.add(new Object[]{getString(R.string.package_hook_no_response), getContext().getColor(R.color.error)});
-        targets.add(new Object[]{getString(R.string.package_hook_bootlooped), getContext().getColor(R.color.error)});
+        targets.add(new Object[]{getString(R.string.package_hooked_successful), requireContext().getColor(android.R.color.system_accent1_400)});
+        targets.add(new Object[]{getString(R.string.package_hook_no_response), requireContext().getColor(R.color.error)});
+        targets.add(new Object[]{getString(R.string.package_hook_bootlooped), requireContext().getColor(R.color.error)});
         for (Object[] target : targets) {
             String targetText = (String) target[0];
             int color = (int) target[1];
@@ -393,7 +393,7 @@ public class Hooks extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         try {
-            getContext().unregisterReceiver(receiverHookedPackages);
+            requireContext().unregisterReceiver(receiverHookedPackages);
         } catch (Exception ignored) {
         }
         countDownTimer.cancel();
