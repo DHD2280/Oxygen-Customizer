@@ -217,6 +217,7 @@
     <string name="sb_padding_title">Paddin sinistro e destro</string>
     <string name="statusbar_left_padding">Padding sinistro</string>
     <string name="statusbar_right_padding">Padding destro</string>
+    <string name="statusbar_padding_info">Imposta 0 per non modificare</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Abilita barra batteria</string>
     <string name="BB_onlycharging_title">Solo durante la ricarica</string>
@@ -225,6 +226,7 @@
     <string name="BB_Opacity_title">Opacità barra</string>
     <string name="BB_center_align_title">Allinea al centro</string>
     <string name="BB_Thickness_title">Spessore barra</string>
+    <string name="BB_animate_charging">Anima carica</string>
     <string name="BB_indicate_charging">Indica la ricarica</string>
     <string name="BB_indicate_power_save">Indica risparmio energetico</string>
     <string name="BB_indicate_fast_charging">Indica ricarica rapida</string>
@@ -1004,6 +1006,8 @@
     <string name="omnijaws_service_error_location">Nessuna posizione disponibile</string>
     <string name="omnijaws_service_error_network">Nessuna rete trovata</string>
     <string name="omnijaws_service_error_permissions">Permessi di localizzazione non concessi</string>
+    <string name="omnijaws_today">Oggi</string>
+    <string name="omnijaws_tomorrow">Domani</string>
     <string name="weather_widget_desc">"Tempo effettivo e previsioni di 4 giorni"</string>
     <string name="theme_system">Segui Il Sistema</string>
     <string name="theme_dark">Scuro</string>

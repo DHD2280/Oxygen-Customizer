@@ -217,6 +217,7 @@
     <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
     <string name="statusbar_left_padding">حشو اليسار</string>
     <string name="statusbar_right_padding">حشو اليمين</string>
+    <string name="statusbar_padding_info">قم بتعيين 0 لإبقاء الأصل</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">تفعيل شريط البطارية</string>
     <string name="BB_onlycharging_title">فقط أثناء الشحن</string>
@@ -225,6 +226,7 @@
     <string name="BB_Opacity_title">شفافية الشريط</string>
     <string name="BB_center_align_title">محاذاة مركزية</string>
     <string name="BB_Thickness_title">سمك الشريط</string>
+    <string name="BB_animate_charging">حرك الشحن</string>
     <string name="BB_indicate_charging">الإشارة إلى الشحن</string>
     <string name="BB_indicate_power_save">الإشارة إلى وضع توفير الطاقة</string>
     <string name="BB_indicate_fast_charging">الإشارة إلى الشحن السريع</string>
@@ -657,8 +659,15 @@
     <string name="depth_wallpaper_category">خلفية عمق</string>
     <string name="depth_wallpaper_title">خلفية بتأثير العمق</string>
     <string name="depth_wallpaper_summary">دمج ديناميكي لواجهة الخلفية مع الساعة</string>
+    <string name="depth_wallpaper_mode_title">وضع خلفية العمق</string>
+    <string name="depth_wallpaper_mode_ai">الذكاء الإصطناعي</string>
+    <string name="depth_wallpaper_mode_custom_images">صورة مخصصة</string>
     <string name="depth_wallpaper_opacity_title">شفافية واجهة الخلفية</string>
     <string name="depth_wallpaper_aod_title">أيضًا على \"الشاشة دائمًا قيد التشغيل\"</string>
+    <string name="depth_wallpaper_pick_background_title">اختيار الخلفية</string>
+    <string name="depth_wallpaper_pick_background_summary">اختر صورة الخلفية الخاصة بك</string>
+    <string name="depth_wallpaper_pick_subject_title">اختر المقدمة</string>
+    <string name="depth_wallpaper_pick_subject_summary">اختر صورة المقدمة الخاصة بك، يجب أن تكون هي موضوع الخلفية</string>
     <string name="depth_wallpaper_model_ready">نموذج الذكاء الاصطناعي تم تنزيله على الجهاز</string>
     <string name="depth_wallpaper_model_not_available">نموذج الذكاء الاصطناعي غير متاح على الجهاز (حتى الآن)</string>
     <!-- Media art -->
@@ -997,6 +1006,8 @@
     <string name="omnijaws_service_error_location">لا يوجد موقع متاح</string>
     <string name="omnijaws_service_error_network">لا توجد شبكة متاحة</string>
     <string name="omnijaws_service_error_permissions">أذونات الموقع غير مُعطاة</string>
+    <string name="omnijaws_today">اليوم</string>
+    <string name="omnijaws_tomorrow">غداً</string>
     <string name="weather_widget_desc">"الطقس الحالي وتوقعات لمدة 4 أيام"</string>
     <string name="theme_system">اتباع النظام</string>
     <string name="theme_dark">داكن</string>

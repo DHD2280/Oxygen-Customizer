@@ -225,6 +225,7 @@
     <string name="BB_Opacity_title">不透明度</string>
     <string name="BB_center_align_title">居中對齊</string>
     <string name="BB_Thickness_title">厚度</string>
+    <string name="BB_animate_charging">生動的充電</string>
     <string name="BB_indicate_charging">充電顯示</string>
     <string name="BB_indicate_power_save">省電顯示</string>
     <string name="BB_indicate_fast_charging">快充顯示</string>
@@ -1004,6 +1005,8 @@
     <string name="omnijaws_service_error_location">沒有可用的位置</string>
     <string name="omnijaws_service_error_network">未找到網絡</string>
     <string name="omnijaws_service_error_permissions">未授予位置權限</string>
+    <string name="omnijaws_today">今天</string>
+    <string name="omnijaws_tomorrow">明天</string>
     <string name="weather_widget_desc">"實際天氣及 4 天天氣預報"</string>
     <string name="theme_system">跟隨系統</string>
     <string name="theme_dark">暗色</string>
