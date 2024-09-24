@@ -217,6 +217,7 @@
     <string name="sb_padding_title">Bal és Jobb kitöltés</string>
     <string name="statusbar_left_padding">Baloldali kitöltés</string>
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
+    <string name="statusbar_padding_info">A gyári megtartásához állítsa 0 értékre</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>
@@ -225,6 +226,7 @@
     <string name="BB_Opacity_title">A sáv átlátszósága</string>
     <string name="BB_center_align_title">Középre igazítva</string>
     <string name="BB_Thickness_title">A sor vastagsága</string>
+    <string name="BB_animate_charging">Töltésanimálás</string>
     <string name="BB_indicate_charging">Töltés jelzéssel</string>
     <string name="BB_indicate_power_save">Akkukímélés jelzéssel</string>
     <string name="BB_indicate_fast_charging">Gyorstöltés jelzéssel</string>
@@ -657,8 +659,15 @@
     <string name="depth_wallpaper_category">Térhatású Háttérkép</string>
     <string name="depth_wallpaper_title">Mélységi effektes háttérkép</string>
     <string name="depth_wallpaper_summary">Dinamikusan előtérbe helyezi a háttér bizonyos részei az óra elé</string>
+    <string name="depth_wallpaper_mode_title">Térhatású Háttérkép mód</string>
+    <string name="depth_wallpaper_mode_ai">AI</string>
+    <string name="depth_wallpaper_mode_custom_images">Egyedi képek</string>
     <string name="depth_wallpaper_opacity_title">Háttérkép előtérbeni áttetszősége</string>
     <string name="depth_wallpaper_aod_title">\'Mindig bekapcsolva\' módban is</string>
+    <string name="depth_wallpaper_pick_background_title">Háttérválasztó</string>
+    <string name="depth_wallpaper_pick_background_summary">Jelölje ki a háttér-képet</string>
+    <string name="depth_wallpaper_pick_subject_title">Előtérválasztó</string>
+    <string name="depth_wallpaper_pick_subject_summary">Jelölje ki az előtér-képet, a háttér tárgyának kell lennie</string>
     <string name="depth_wallpaper_model_ready">Az AI modell letöltődik a készülékére</string>
     <string name="depth_wallpaper_model_not_available">Az AI modell még nem elérhető erre a készülékre</string>
     <!-- Media art -->
@@ -997,6 +1006,8 @@
     <string name="omnijaws_service_error_location">Nincs helymeghatározás</string>
     <string name="omnijaws_service_error_network">Nincs hálózat</string>
     <string name="omnijaws_service_error_permissions">Nincs engedélyezve a helymeghatározás</string>
+    <string name="omnijaws_today">Ma</string>
+    <string name="omnijaws_tomorrow">Holnap</string>
     <string name="weather_widget_desc">"Jelenlegi időjárás és 4 napos előrejelzés"</string>
     <string name="theme_system">Rendszertéma követése</string>
     <string name="theme_dark">Sötét</string>

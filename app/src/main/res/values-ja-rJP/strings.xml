@@ -50,6 +50,7 @@
     <string name="btn_back">戻る</string>
     <string name="btn_lets_go">Let\'s Go</string>
     <string name="btn_close">閉じる</string>
+    <string name="btn_cancel">キャンセル</string>
     <string name="btn_reboot_now">今すぐ再起動</string>
     <string name="btn_reboot">再起動</string>
     <string name="btn_enable">有効化</string>
@@ -61,6 +62,7 @@
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">お知らせ</string>
+    <string name="app_kill_alert_body">アプリを今すぐに閉じます。新しいアイコンをタップで再度開くことができます。</string>
     <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">設定を適用するにはシステムの再起動が必要です。</string>
@@ -79,7 +81,21 @@
     <string name="general_color_text2">テキスト 2</string>
     <string name="sysui_restart_needed">適用するにはシステム UI の再起動が必要です。</string>
     <string name="one_time_reboot_needed">デバイスを再起動します!</string>
+    <string name="gradient_left_right">左から右</string>
+    <string name="gradient_top_bottom">上から下</string>
+    <string name="gradient_tl_br">左上から右下</string>
+    <string name="gradient_tr_bl">右上から左下</string>
+    <string name="warning">警告</string>
+    <string name="custom_margins">マージンのカスタマイズ</string>
+    <string name="custom_padding">パディングのカスタマイズ</string>
+    <string name="left">左</string>
+    <string name="right">右</string>
+    <string name="top">上部</string>
+    <string name="bottom">下部</string>
+    <string name="reset">リセット</string>
+    <string name="lang_follow_system">システムに従う</string>
     <!-- Image Crop Strings -->
+    <string name="pick_image">画像を選択</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">検索…</string>
     <string name="searchpreference_clear">消去</string>
@@ -110,6 +126,8 @@
     <string name="general_on">ON</string>
     <string name="general_off">OFF</string>
     <string name="accent_color">アクセントカラー</string>
+    <string name="white_color">ホワイト</string>
+    <string name="black_color">ブラック</string>
     <string name="custom_color">カスタムカラー</string>
     <string name="battery_info_button_title">バッテリー情報…</string>
     <!-- Statusbar Strings -->
@@ -146,6 +164,7 @@
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">時計と日付</string>
     <string name="status_bar_clock_summary">時計と日付をカスタマイズします</string>
+    <string name="status_bar_clock_format_category">フォーマットの設定</string>
     <string name="status_bar_clock_seconds_title">時計の秒</string>
     <string name="status_bar_clock_seconds_summary">ステータスバーの時計に秒を表示します</string>
     <string name="status_bar_clock_position_title">時計のスタイル</string>
@@ -153,6 +172,7 @@
     <string name="status_bar_clock_position_left">左</string>
     <string name="status_bar_clock_position_center">中央</string>
     <string name="status_bar_clock_position_hidden">非表示</string>
+    <string name="status_bar_clock_hide_category">時計を非表示</string>
     <string name="status_bar_clock_auto_hide_title">自動的に隠す</string>
     <string name="status_bar_clock_auto_hide_launcher_summary">ランチャーが表示されている場合は時計を非表示にします</string>
     <string name="status_bar_clock_auto_hide_summary">一定間隔で時計を非表示にします</string>
@@ -174,6 +194,7 @@
     <string name="status_bar_date_style_lowercase">小文字</string>
     <string name="status_bar_date_style_uppercase">大文字</string>
     <string name="status_bar_date_format_custom">カスタム Java フォーマット</string>
+    <string name="preview">プレビュー</string>
     <string name="clock_date_position">日付の位置</string>
     <string name="clock_date_right">時間の右側</string>
     <string name="clock_date_left">時間の左側</string>
@@ -182,8 +203,10 @@
     <string name="status_bar_clock_color_title">時計のカスタム色</string>
     <string name="status_bar_custom_clock_color_title">時計のカスタム色</string>
     <string name="status_bar_custom_clock_color_summary">時計の色</string>
+    <string name="status_bar_clock_chip_category">時計のチップ</string>
     <string name="status_bar_clock_background_chip_title">背景チップ</string>
     <string name="status_bar_clock_background_chip_style_title">背景チップのスタイル</string>
+    <string name="status_bar_clock_advanced_formatting">高度 (上記の設定よりも優先されます!)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">ステータスバーの余白</string>
     <string name="statusbar_top_padding">上部の余白</string>
@@ -198,6 +221,7 @@
     <string name="BB_Opacity_title">バーの透過度</string>
     <string name="BB_center_align_title">中央揃え</string>
     <string name="BB_Thickness_title">バーの太さ</string>
+    <string name="BB_animate_charging">充電中のアニメーション</string>
     <string name="BB_indicate_charging">充電中を表示</string>
     <string name="BB_indicate_power_save">省エネモードを表示</string>
     <string name="BB_indicate_fast_charging">高速充電を表示</string>
@@ -314,10 +338,13 @@
     <string name="quick_pulldown_side_left">左</string>
     <string name="quick_pulldown_side_right">右</string>
     <string name="quick_collapse">素早い折りたたみ</string>
+    <string name="my_device">マイデバイス</string>
+    <string name="my_device_title">マイデバイスを強制</string>
     <!-- Quick Settings Tiles -->
     <string name="quick_settings_tiles_title">クイック設定タイル</string>
     <string name="quick_settings_tiles_number">クイック設定タイル数の設定</string>
     <string name="quick_settings_tiles_main">クイック設定タイルをカスタマイズ</string>
+    <string name="quick_settings_widgets">クイック設定ウィジェット</string>
     <string name="qs_transparency">クイック設定の透過度とぼかし</string>
     <string name="qs_transparency_title">クイック設定の透過をカスタマイズ</string>
     <string name="qs_transparency_value">クイック設定の透過度</string>
@@ -331,6 +358,14 @@
     <string name="quick_settings_tiles_vertical_rows">クイック設定の行 (横画面)</string>
     <string name="quick_settings_tiles_vertical_columns">クイック設定カラム (横画面)</string>
     <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">クイック設定ウィジェットを表示します</string>
+    <string name="add_widget">ウィジェットを追加</string>
+    <string name="qs_widget_weather">天気</string>
+    <string name="qs_widget_mini_weather">ミニ天気</string>
+    <string name="qs_widget_custom_app">カスタムアプリ</string>
+    <string name="qs_widget_media_player">メディアプレーヤー</string>
+    <string name="qs_media_alert">メディアプレーヤーを削除できません!</string>
+    <string name="qs_widget_set_custom_photo">カスタム画像を設定</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">クイック設定のカスタマイズ</string>
     <string name="quick_settings_tiles_customize_category_title">クイック設定タイルの背景</string>
@@ -354,6 +389,7 @@
     <string name="brightness_slider_background_color_title">背景色のカスタマイズ</string>
     <!-- QS Tile Radius -->
     <!-- Media Tile -->
+    <string name="media_tile">メディアタイル</string>
     <!-- QS Tiles animation -->
     <string name="qs_tile_animation_title">タイルのアニメーション</string>
     <string name="qs_tile_animation_style_title">アニメーションのスタイル</string>
@@ -440,6 +476,7 @@
     <string name="qs_header_clock_enabled">カスタムヘッダー時計</string>
     <string name="qs_header_clock_enabled_summary">クイック設定パネルにカスタム時計を追加します</string>
     <string name="qs_header_clock_custom">時計のスタイル</string>
+    <string name="qs_header_clock_custom_summary">スワイプして好みのスタイルを選択します。</string>
     <string name="qs_header_clock_custom_user">カスタムユーザー名を使用</string>
     <string name="qs_header_clock_custom_user_title">ユーザー名</string>
     <string name="qs_header_clock_custom_user_image">カスタムユーザー画像を使用</string>
@@ -500,6 +537,7 @@
     <!-- Chip Styles Strings -->
     <string name="chip_filled">Filled</string>
     <string name="chip_outlined">Outlined</string>
+    <string name="chip_mixed">混合</string>
     <string name="chip_use_accent">アクセントカラーを使用する</string>
     <string name="chip_use_gradient">グラデーションを使用</string>
     <string name="chip_color_accent">アクセントを使用</string>
@@ -535,6 +573,7 @@
     <string name="launcher_app_details_title">アプリ情報を開く</string>
     <string name="launcher_app_details_summary">アプリのアイコンをタップで設定内のアプリの詳細を開きます。</string>
     <string name="remove_home_pagination">ホームのページネーションを削除</string>
+    <string name="force_themed_launcher_icons">アプリアイコンテーマを強制する</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">ナビゲーションバー</string>
     <string name="gesture_navigation_title">ジェスチャーナビゲーション</string>
@@ -561,6 +600,7 @@
     <string name="gesture_override_back_hold_command_notification_panel">通知パネルを開く</string>
     <string name="gesture_override_back_hold_command_screen_off">画面 OFF</string>
     <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">ナビゲーションバーピル</string>
     <!-- Buttons Title -->
     <string name="buttons_title">ボタン</string>
     <string name="power_button_category_title">電源ボタン</string>
@@ -602,12 +642,24 @@
     <string name="depth_wallpaper_category">奥行きのある壁紙</string>
     <string name="depth_wallpaper_title">奥行き効果の壁紙</string>
     <string name="depth_wallpaper_summary">壁紙の前景と時計を動的に統合します</string>
+    <string name="depth_wallpaper_mode_ai">AI</string>
+    <string name="depth_wallpaper_mode_custom_images">カスタム画像</string>
     <string name="depth_wallpaper_opacity_title">壁紙の前景の不透過度</string>
     <string name="depth_wallpaper_aod_title">AOD 時でも適用</string>
+    <string name="depth_wallpaper_pick_background_title">背景を選択</string>
+    <string name="depth_wallpaper_pick_background_summary">背景画像を選択します</string>
     <string name="depth_wallpaper_model_ready">AI モデルがデバイスにダウンロードされます</string>
     <string name="depth_wallpaper_model_not_available">AI モデルはデバイスにまだ搭載されていません</string>
     <!-- Media art -->
+    <string name="media_art_title">メディアカバーアート</string>
+    <string name="albumart_blur_title">メディアアートのぼかしレベル</string>
     <!-- Album art filter -->
+    <string name="albumart_filter_title">メディアカバーアートのフィルター</string>
+    <string name="albumart_filter_none">なし</string>
+    <string name="albumart_filter_grayscale">グレースケール</string>
+    <string name="albumart_filter_blur">ぼかし</string>
+    <string name="albumart_filter_grayblur">グレースケールとぼかし</string>
+    <string name="albumart_filter_custom_tint">カスタムカラー</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">警告</string>
     <string name="depth_effect_ok_btn">OK</string>
@@ -623,11 +675,14 @@
     <string name="lockscreen_clock_custom_color_title">カスタムカラー時計</string>
     <string name="lockscreen_clock_custom_color_summary">プライマリカラーの代わりにカスタムカラーを使用します</string>
     <string name="lockscreen_clock_text_scaling">テキストの大きさ</string>
+    <string name="lockscreen_clock_custom_format_title">日付のフォーマットをカスタマイズ</string>
     <string name="lockscreen_clock_custom_user">カスタムユーザー名を使用</string>
     <string name="lockscreen_clock_custom_user_title">ユーザー名</string>
     <string name="lockscreen_clock_custom_user_image">カスタムユーザー画像を使用</string>
     <string name="lockscreen_clock_custom_user_image_title">ユーザー画像</string>
     <string name="lockscreen_clock_custom_user_image_summary">タップで画像を選択します。</string>
+    <string name="lockscreen_clock_custom_image_title">カスタム画像を使用する</string>
+    <string name="lockscreen_clock_custom_image_picker_title">カスタム画像</string>
     <string name="lockscreen_font_line_height_title">行の高さ</string>
     <string name="lockscreen_clock_custom_margins">時計の余白</string>
     <string name="lockscreen_clock_top_margin_title">上部の余白</string>
@@ -663,6 +718,7 @@
     <string name="aod_clock_custom_user_image_summary">タップで画像を選択します。</string>
     <string name="aod_font_line_height_title">行の高さ</string>
     <!-- Aod Weather -->
+    <string name="aod_weather">AOD の天気</string>
     <!-- Sound Mods -->
     <string name="misc_category">その他</string>
     <!-- Pulse music visualizer -->
@@ -717,6 +773,10 @@
     <string name="pulse_vertical_mirror_title">垂直ミラー</string>
     <string name="pulse_vertical_mirror_summary">他の Pluse を作成して垂直に反転させます</string>
     <!-- Fluid Music -->
+    <string name="fluid_music">Fluid Music</string>
+    <string name="fluid_music_summary">Fluid Music をカスタマイズします</string>
+    <string name="fluid_music_custom_list">Fluid Music をカスタマイズ</string>
+    <string name="fluid_music_custom_list_summary">Fluid Music アプリをカスタマイズします。\nこのリストはシステム内の Fluid Music アプリリストを置き換えます。</string>
     <!-- Volume Steps -->
     <string name="volume_steps_title">音量ステップ</string>
     <string name="volume_steps_summary">各ストリームの粒度を制御します</string>
@@ -825,6 +885,9 @@
     <string name="advanced_reboot_fast_reboot">高速な再起動</string>
     <string name="advanced_reboot_systemui">SystemUI を再起動</string>
     <!-- Own Settings -->
+    <string name="general_settings">一般</string>
+    <string name="app_icon_themed">アプリアイコンテーマを使用する</string>
+    <string name="language_title">言語</string>
     <string name="delete_all_title">すべて削除</string>
     <string name="delete_all_summary">すべての設定を削除します</string>
     <string name="export_title">エクスポート</string>
@@ -837,6 +900,9 @@
     <string name="import_failed">インポートに失敗しました</string>
     <string name="settings_about_section_title">アプリについて</string>
     <string name="github_repo_title">GitHub リポジトリ</string>
+    <string name="support_group_title">サポートグループ</string>
+    <string name="translate_title">Oxygen Customizer を翻訳</string>
+    <string name="translate_summary">Oxygen Customizer をあなたの母国語に翻訳しましょう</string>
     <string name="check_updates">アップデートを確認</string>
     <string name="check_updates_summary">現在のバージョン: %s</string>
     <string name="check_auto_updates">自動でアップデートを確認</string>
@@ -901,6 +967,8 @@
     <string name="weather_config_title">サービスの設定</string>
     <string name="with_forecast_title">4 日間の天気予報と詳細</string>
     <string name="owm_key">カスタム OWM キー</string>
+    <string name="yandex_key">Yandex API キー</string>
+    <string name="omnijaws_city_unknown">不明</string>
     <string name="activity_title">天気</string>
     <string name="omnijaws_service_error_long">気象データの読み込みに失敗しました</string>
     <string name="omnijaws_detail_header">天気</string>
@@ -908,6 +976,9 @@
     <string name="omnijaws_service_last_update">最終更新:</string>
     <string name="omnijaws_service_error_location">利用可能な場所がありません</string>
     <string name="omnijaws_service_error_network">ネットワークが見つかりません</string>
+    <string name="omnijaws_service_error_permissions">位置情報の権限が許可されていません</string>
+    <string name="omnijaws_today">今日</string>
+    <string name="omnijaws_tomorrow">明日</string>
     <string name="weather_widget_desc">"実際の天気と 4 日間の予報"</string>
     <string name="theme_system">システムに従う</string>
     <string name="theme_dark">ダーク</string>
@@ -917,9 +988,12 @@
     <string name="location_query_hint">場所を検索</string>
     <string name="weather_custom_margins">余白のカスタマイズ</string>
     <string name="weather_margin_top">上部の余白</string>
+    <string name="weather_centered">天気を中央に表示</string>
+    <string name="weather_centered_summary">天気の表示を水平方向の中央に移動します</string>
     <string name="weather_margin_left">左の余白</string>
     <string name="weather_permission_dialog_title">位置情報の許可を有効化</string>
     <string name="weather_permission_dialog_message">気象情報の取得には位置情報の許可が必要です。OK をタップで設定を開きます。</string>
+    <string name="weather_yandex_key_required">Yandex Weather のプロバイダーキーが必要です!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">天気の背景スタイル</string>
     <string name="lockscreen_weather_selection_default">デフォルト</string>
@@ -951,6 +1025,8 @@
     <!-- Icon pack -->
     <string name="theme_customization_icon_pack_title">アイコンパック</string>
     <string name="theme_customization_icon_pack_summary">カスタムアイコンパックのスタイルを設定します</string>
+    <string name="theme_customization_settings_icons_title">設定アイコン</string>
+    <string name="theme_customization_settings_icons_summary">設定のカスタムアイコンを設定します</string>
     <string name="theme_customization_signal_icon_title">電波アイコンのスタイル</string>
     <string name="theme_customization_signal_icon_summary">カスタム電波アイコンを設定します</string>
     <string name="theme_customization_wifi_icon_title">Wi-Fi アイコンのスタイル</string>
@@ -960,6 +1036,16 @@
     <string name="theme_customization_toast_frame_title">トーストのフレーム</string>
     <string name="theme_customization_toast_frame_summary">トースト通知のスタイルを変更します</string>
     <!-- Settings Icons -->
+    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_customized">カスタマイズされたストック</string>
+    <string name="settings_icons_pui">PUI</string>
+    <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_bg_color">背景の色</string>
+    <string name="settings_bg_use_solid">塗りつぶしの背景</string>
+    <string name="settings_bg_shape">背景の形状</string>
+    <string name="circle">サークル</string>
+    <string name="teardrop">ティアドロップ</string>
+    <string name="settings_icon_color">アイコンの色</string>
     <!-- Notification -->
     <string name="notification_styles">通知のスタイル</string>
     <string name="notification_styles_desc">通知のカスタムスタイルを設定します</string>
@@ -968,14 +1054,77 @@
     <string name="notification_corner_radius_title">通知のコーナーの半径</string>
     <string name="notif_roundness_preview_desc">通知のプレビュー。</string>
     <!-- USB Dialog -->
+    <string name="theme_customization_usb_dialog_title">USB ダイアログのスタイル</string>
+    <string name="theme_customization_usb_dialog_summary">USB ダイアログのカスタムスタイルを設定します。</string>
     <!-- Toast Styles -->
     <string name="toast_styles">トーストのスタイル</string>
     <string name="toast_message">トーストメッセージ</string>
     <!-- Style List -->
     <string name="style_0">なし</string>
+    <string name="style">%d スタイル</string>
     <!-- Dark Mode -->
+    <string name="menu_show_system_apps">システムを表示</string>
+    <string name="dark_mode">ダークモード</string>
+    <string name="dark_mode_pref">ダークモードをカスタマイズ</string>
+    <string name="custom_dark_mode_title">ダークモードをカスタマイズ</string>
+    <string name="custom_dark_mode_summary">ダークモードのアプリリストのカスタマイズを許可します</string>
+    <string name="dark_mode_intensity">ダークモードの強さ</string>
     <!-- Lockscreen Widgets -->
+    <string name="lockscreen_widgets_title">ロック画面ウィジェット</string>
+    <string name="lockscreen_widgets_enabled_title">ロック画面ウィジェットを有効化する</string>
+    <string name="lockscreen_widgets_enabled_summary">ロック画面にウィジェットを追加します</string>
+    <string name="lockscreen_display_widgets_title">デバイス情報ウィジェット</string>
+    <string name="lockscreen_display_widgets_summary">デバイス情報ウィジェットをロック画面に表示します</string>
+    <string name="linear_progress_color">線形な進捗の色</string>
+    <string name="circular_progress_color">円形な進捗の色</string>
+    <string name="text_color">テキストの色</string>
+    <string name="custom_device_name">カスタムデバイス名</string>
+    <string name="custom_device_name_summary">カスタムデバイス名を設定します。\n無効にするには空白のままにしてください。</string>
+    <string name="large_widgets_category_title">大きなウィジェット</string>
+    <string name="main_custom_widgets1">大きなウィジェット 1</string>
+    <string name="main_custom_widgets2">大きなウィジェット 2</string>
+    <string name="mini_widgets_category_title">ミニウィジェット</string>
+    <string name="custom_widgets1">ミニウィジェット 1</string>
+    <string name="custom_widgets2">ミニウィジェット 2</string>
+    <string name="custom_widgets3">ミニウィジェット 3</string>
+    <string name="custom_widgets4">ミニウィジェット 4</string>
+    <string name="widgets_custom_color">カラー設定</string>
+    <string name="widgets_custom_color_title">ウィジェットの色をカスタマイズ</string>
+    <string name="big_active">大きなウィジェットのアクティブ色</string>
+    <string name="big_inactive">大きなウィジェットの非アクティブ色</string>
+    <string name="big_icon_active">大きなウィジェットアイコンのアクティブ色</string>
+    <string name="big_icon_inactive">大きなウィジェットアイコンの非アクティブ色</string>
+    <string name="mini_active">ミニウィジェットのアクティブ色</string>
+    <string name="mini_inactive">ミニウィジェットの非アクティブ色</string>
+    <string name="mini_icon_active">ミニウィジェットアイコンのアクティブ色</string>
+    <string name="mini_icon_inactive">ミニウィジェットアイコンの非アクティブ色</string>
+    <string name="weather_settings">天気の設定</string>
+    <string name="widgets_scale">ウィジェットの大きさ</string>
     <!-- LS Widgets Actions -->
+    <string name="camera">カメラ</string>
+    <string name="clock_timer">時計とタイマー</string>
+    <string name="calculator">計算機</string>
+    <string name="gallery">ギャラリー</string>
+    <string name="media">メディアプレーヤー</string>
+    <string name="torch">トーチ</string>
+    <string name="controls_media_button_play">再生</string>
+    <string name="weather">天気</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="data">データ</string>
+    <string name="ringer">着信音</string>
+    <string name="bt">Bluetooth</string>
+    <string name="home_controls">ホームのコントロール</string>
+    <string name="wallet">ウォレット</string>
+    <string name="hotspot">ホットスポット</string>
     <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">アプリのラグ修正</string>
+    <string name="fix_lag_summary">最近開いたアプリからアプリを開いたときのラグを修正します</string>
+    <string name="fix_lag_force_all_apps_title">すべてのアプリに強制</string>
+    <string name="fix_lag_force_all_apps_summary">すべてのアプリに修正を強制的に適用します。\n警告: アプリに何らかの問題を発生させる可能性があります。自己責任で使用してください!</string>
+    <string name="fix_lag_apps_summary">修正を適用するアプリを選択します</string>
+    <string name="fix_lag_apps_title">アプリを選択</string>
+    <string name="fix_lag_dialog_message">使用している OOS のバージョンはこの修正と互換性がありません。\n必要に応じて強制的に修正を適用することができます。</string>
+    <string name="fix_lag_apply_anyway">強制的に有効化する</string>
     <!-- Caffeine -->
+    <string name="caffeine">カフェイン</string>
 </resources>
