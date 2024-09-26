@@ -489,7 +489,7 @@ public class DepthWallpaper extends XposedMods {
         }
         catch (Throwable ignored){}
         lockScreenSubjectCacheValid = false;
-        mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(null));
+        if (mWallpaperBackground != null) mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(null));
     }
 
     private Object getScrimController() {
