@@ -90,11 +90,9 @@ public class SettingsIconsAdapter extends RecyclerView.Adapter<SettingsIconsAdap
             }
 
             if (position == selectedItem) {
-                binding.iconPackChild.setBackground(ContextCompat.getDrawable(mContext, R.drawable.container_selected));
                 binding.iconpackTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 binding.iconpackDesc.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
             } else {
-                binding.iconPackChild.setBackground(ContextCompat.getDrawable(mContext, R.drawable.item_background_material));
                 binding.iconpackTitle.setTextColor(ContextCompat.getColor(mContext, R.color.text_color_primary));
                 binding.iconpackDesc.setTextColor(ContextCompat.getColor(mContext, R.color.text_color_secondary));
             }

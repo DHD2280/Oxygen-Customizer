@@ -14,12 +14,14 @@
   limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackground"
+    android:background="@drawable/preference_background_center"
     android:gravity="center"
+    android:clickable="false"
     android:importantForAccessibility="noHideDescendants"
+    android:layout_margin="@dimen/preference_card_margin_horizontal"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:contentDescription="@android:string/untitled"
             android:src="@drawable/protection_background" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -57,4 +60,4 @@
             android:visibility="gone" />
     </FrameLayout>
 
-</FrameLayout>
+</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>

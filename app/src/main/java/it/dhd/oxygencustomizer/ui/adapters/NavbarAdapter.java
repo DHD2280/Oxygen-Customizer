@@ -1,8 +1,6 @@
 package it.dhd.oxygencustomizer.ui.adapters;
 
-import static it.dhd.oxygencustomizer.utils.AssetsReader.getDrawableFromAssets;
 import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NAVBAR;
-import static it.dhd.oxygencustomizer.utils.ViewBindingHelpers.setDrawable;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
 
 import android.annotation.SuppressLint;

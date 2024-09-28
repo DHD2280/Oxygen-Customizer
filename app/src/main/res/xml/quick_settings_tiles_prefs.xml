@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_tiles_customize"
         android:summaryOff="@string/general_off"
@@ -11,7 +11,7 @@
         android:title="@string/quick_settings_tiles_main"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
         android:key="quick_settings_quick_tiles"
         android:title="@string/quick_settings_tiles_qqs"
         app:defaultValue="5"
@@ -20,13 +20,13 @@
         app:minVal="1"
         app:tickInterval="1" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="qs_tile_potrait"
         android:title="@string/quick_settings_tiles_portrait"
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="quick_settings_tiles_rows"
             android:title="@string/quick_settings_tiles_horizontal_rows"
             app:defaultValue="3"
@@ -34,7 +34,7 @@
             app:maxVal="6"
             app:minVal="1" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="quick_settings_tiles_horizontal_columns"
             android:title="@string/quick_settings_tiles_horizontal_columns"
             app:defaultValue="4"
@@ -43,15 +43,15 @@
             app:minVal="1"
             app:tickInterval="1" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="qs_tile_landscape"
         android:title="@string/quick_settings_tiles_landscape"
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="quick_settings_tiles_vertical_columns"
             android:title="@string/quick_settings_tiles_vertical_columns"
             app:defaultValue="4"
@@ -60,9 +60,9 @@
             app:minVal="1"
             app:tickInterval="1" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <!-- <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+    <!-- <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="quick_settings_disable_lockscreen"
         android:title="@string/quick_settings_tiles_disable_qs_title"

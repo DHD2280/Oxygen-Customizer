@@ -8,11 +8,11 @@
         app:lottie_cacheComposition="false"
         app:lottie_rawRes="@raw/sb_illustration" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/status_bar_clock_title"
         app:iconSpaceReserved="false">
 
-        <ListPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
             android:defaultValue="2"
             android:dialogTitle="@string/status_bar_clock_position_title"
             android:entries="@array/status_bar_clock_position_entries"
@@ -22,7 +22,7 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="status_bar_clock_size"
             android:title="@string/clock_font_size_title"
             app:defaultValue="12"
@@ -30,7 +30,7 @@
             app:minVal="4"
             app:valueFormat="sp" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Clock"
             android:key="clock"
             android:summary="@string/status_bar_clock_summary"
@@ -38,7 +38,7 @@
             app:iconSpaceReserved="false" />
 
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="status_bar_custom_clock_color"
             android:summaryOff="@string/general_off"
@@ -46,7 +46,7 @@
             android:title="@string/status_bar_custom_clock_color_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="0xffffffff"
             android:dependency="status_bar_custom_clock_color"
             android:key="status_bar_clock_color"
@@ -54,20 +54,20 @@
             app:iconSpaceReserved="false" />
 
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/statusbar_options"
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Notifications"
             android:key="statusbar_notifications"
             android:title="@string/statusbar_notifications"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="double_tap_sleep_statusbar"
             android:summaryOff="@string/general_off"
@@ -75,39 +75,39 @@
             android:title="@string/statusbar_double_tap_sleep"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="brightness_control"
             android:summary="@string/status_bar_toggle_brightness_summary"
             android:title="@string/status_bar_toggle_brightness_title"
             app:iconSpaceReserved="false" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="battery_bar"
             android:title="@string/statusbar_batterybar_title"
             app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryBar"
             app:iconSpaceReserved="false" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="battery_icon"
             android:title="@string/statusbar_battery_icon_options"
             app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
             app:iconSpaceReserved="false" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="statusbar_icons"
             android:title="@string/statusbar_icons"
             app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="statusbar_padding"
         android:title="@string/statusbar_padding"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_padding_enabled"
             android:summaryOff="@string/general_off"
@@ -115,7 +115,7 @@
             android:title="@string/statusbar_padding"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="statusbar_padding_start"
             android:title="@string/statusbar_left_padding"
             android:summary="@string/statusbar_padding_info"
@@ -127,7 +127,7 @@
             app:tickInterval=".5"
             app:valueFormat="dp" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="statusbar_padding_end"
             android:title="@string/statusbar_right_padding"
             android:summary="@string/statusbar_padding_info"
@@ -139,6 +139,6 @@
             app:tickInterval=".5"
             app:valueFormat="dp" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
 </PreferenceScreen>

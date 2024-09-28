@@ -465,7 +465,7 @@ public class ViewHelper {
         return null;
     }
 
-    public static GradientDrawable getChip(int gradientOrientation, int[] colors, int strokeWidth, int strokeColor, float[] cornerRadii) {
+    public static LayerDrawable getChip(int gradientOrientation, int[] colors, int strokeWidth, int strokeColor, float[] cornerRadii) {
         GradientDrawable gradient = new GradientDrawable();
         gradient.setShape(GradientDrawable.RECTANGLE);
         gradient.setGradientType(GradientDrawable.LINEAR_GRADIENT);
@@ -484,7 +484,7 @@ public class ViewHelper {
             gradient.setCornerRadius(0);
         }
 
-        return gradient;
+        return new LayerDrawable(new Drawable[]{gradient});
     }
 
 }

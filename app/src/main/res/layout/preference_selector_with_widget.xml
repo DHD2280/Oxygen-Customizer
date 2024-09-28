@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
     <LinearLayout
         android:id="@android:id/widget_frame"
@@ -34,41 +33,38 @@
     </LinearLayout>
 
     <LinearLayout
+        style="@style/PreferenceContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:paddingBottom="16dp">
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
 
         <TextView
             android:id="@android:id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:textAppearance="?android:attr/textAppearanceListItem" />
+            style="@style/PreferenceTitleStyle" />
 
         <LinearLayout
             android:id="@+id/summary_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
                 android:id="@android:id/summary"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textAlignment="viewStart"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary" />
+                style="@style/PreferenceSummaryStyle" />
 
             <TextView
                 android:id="@+id/appendix"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAlignment="viewEnd"
@@ -104,4 +100,4 @@
             android:paddingEnd="24dp"
             android:src="@drawable/ic_settings_accent" />
     </LinearLayout>
-</LinearLayout>
+</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>

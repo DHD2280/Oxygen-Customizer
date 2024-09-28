@@ -4,12 +4,22 @@
     <color name="colorContainer">@android:color/system_neutral2_900</color>
     <color name="colorContainerOverlay">@color/color_container_overlay_dark</color>
 
-    <color name="textColorPrimary">@android:color/system_neutral1_100</color>
-    <color name="textColorSecondary">@android:color/system_neutral1_300</color>
+    <!-- Text -->
+    <color name="textColorPrimary">#E9E9E9</color>
+    <color name="textColorPrimaryDisabled">#4dffffff</color>
+    <color name="textColorSecondary">#969696</color>
 
-    <color name="changelog_bg">@android:color/system_neutral1_900</color>
+    <!-- Preferences -->
+    <color name="preference_category_text">#8A8A8A</color>
+    <color name="preference_background_color_pressed">#33ffffff</color>
 
     <color name="colorBackground">@android:color/system_neutral2_900</color>
+    <color name="colorBackgroundSoft">#303030</color>
+    <color name="colorBackgroundMedium">#171717</color>
+    <color name="colorBackgroundHard">#000000</color>
+    <color name="colorDivider">#33ffffff</color>
+    <color name="colorPressBackground">#26ffffff</color>
+    <color name="cardview_background">@color/cardview_dark_background</color>
 
     <color name="colorAppbarOverlay">@color/color_appbar_overlay_dark</color>
     <color name="colorNavbarOverlay">@color/color_navbar_overlay_dark</color>
@@ -34,5 +44,7 @@
     <color name="settings_pui_monet_v2">@android:color/system_accent1_100</color>
 
     <color name="card_surface_color">@android:color/system_neutral1_900</color>
+
+    <color name="oplusColorSurfaces">#2E2E2E</color>
 
 </resources>

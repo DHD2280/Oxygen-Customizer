@@ -8,40 +8,40 @@
         app:lottie_rawRes="@raw/buttons_illustration" />
 
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="volume_keys"
         android:title="@string/volume_buttons_category_title"
         app:iconSpaceReserved="false">
 
-        <!-- <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <!-- <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="volume_wake_screen"
             app:iconSpaceReserved="false"
             android:title="@string/button_wake_title"
             android:summary="@string/button_wake_summary"
             android:defaultValue="false" /> -->
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_music_controls"
             android:summary="@string/volbtn_music_controls_summary"
             android:title="@string/volbtn_music_controls_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_torch"
             android:summary="@string/torch_long_press_volbtn_torch_desc"
             android:title="@string/torch_long_press_volbtn_torch_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="volbtn_torch_enable_timeout"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/torch_long_press_volbtn_torch_enable_timeout_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="volbtn_torch_timeout"
             android:title="@string/torch_long_press_volbtn_torch_timeout_title"
             app:defaultValue="5"
@@ -50,7 +50,7 @@
             app:tickInterval="5"
             app:valueFormat="s" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volbtn_torch_use_proximity"
             android:summaryOff="@string/general_off"
@@ -58,6 +58,6 @@
             android:title="@string/torch_long_press_volbtn_torch_use_proximity"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
 </PreferenceScreen>

@@ -30,7 +30,7 @@ public class CategoryWidget extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(context, R.layout.preference_category, this);
+        inflate(context, R.layout.custom_preference_category, this);
 
         initializeId();
 
@@ -57,7 +57,7 @@ public class CategoryWidget extends RelativeLayout {
 
     // to avoid listener bug, we need to re-generate unique id for each view
     private void initializeId() {
-        titleTextView = findViewById(R.id.title);
+        titleTextView = findViewById(android.R.id.title);
     }
 
 }

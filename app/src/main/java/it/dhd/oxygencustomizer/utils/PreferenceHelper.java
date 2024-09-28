@@ -161,7 +161,7 @@ import java.util.Collections;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
 public class PreferenceHelper {
@@ -1079,9 +1079,9 @@ public class PreferenceHelper {
                 preference.setSummary(summary);
             }
 
-            if (preference instanceof SliderPreference) {
-                ((SliderPreference) preference).slider.setLabelFormatter(value -> {
-                    if (value == ((SliderPreference) preference).defaultValue.get(0))
+            if (preference instanceof OplusSliderPreference) {
+                ((OplusSliderPreference) preference).slider.setLabelFormatter(value -> {
+                    if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
                         return getAppContext().getString(R.string.default_value);
                     else return String.valueOf(Math.round(value));
                 });
@@ -1091,7 +1091,7 @@ public class PreferenceHelper {
             switch (key) {
                 // Quick Settings
                 case "QSLabelScaleFactor", "QSSecondaryLabelScaleFactor" ->
-                        ((SliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
+                        ((OplusSliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
             }
         } catch (Throwable ignored) {
         }

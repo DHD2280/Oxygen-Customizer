@@ -3,8 +3,6 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.qsheader;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_FONT_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_USER_IMAGE;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_CUSTOM_VALUE;
@@ -21,18 +19,16 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.RecyclerPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
 import it.dhd.oxygencustomizer.utils.Constants;
 
 public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
@@ -111,7 +107,7 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
             });
         }
 
-        RecyclerPreference mQsClockStyle = findPreference("qs_header_clock_custom");
+        OplusRecyclerPreference mQsClockStyle = findPreference("qs_header_clock_custom");
         if (mQsClockStyle != null) {
             mQsClockStyle.setAdapter(initHeaderClockStyles());
             mQsClockStyle.setPreference(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);

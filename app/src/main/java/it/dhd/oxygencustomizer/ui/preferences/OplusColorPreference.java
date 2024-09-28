@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import com.jaredrummler.android.colorpicker.ColorPanelView;
@@ -19,7 +18,7 @@ import com.jaredrummler.android.colorpicker.ColorShape;
 
 import it.dhd.oxygencustomizer.R;
 
-public class MaterialColorPreference extends Preference implements ColorPickerDialogListener {
+public class OplusColorPreference extends OplusPreference implements ColorPickerDialogListener {
 
     private static final int SIZE_NORMAL = 0;
     private static final int SIZE_LARGE = 1;
@@ -38,12 +37,12 @@ public class MaterialColorPreference extends Preference implements ColorPickerDi
     private int[] presets;
     private int dialogTitle;
 
-    public MaterialColorPreference(Context context, AttributeSet attrs) {
+    public OplusColorPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public MaterialColorPreference(Context context, AttributeSet attrs, int defStyle) {
+    public OplusColorPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
     }
@@ -75,11 +74,6 @@ public class MaterialColorPreference extends Preference implements ColorPickerDi
                     previewSize == SIZE_LARGE ? R.layout.cpv_preference_square_large : R.layout.cpv_preference_square);
         }
         a.recycle();
-        initResource();
-    }
-
-    private void initResource() {
-        setLayoutResource(R.layout.custom_preference_color);
     }
 
     @Override
@@ -136,7 +130,7 @@ public class MaterialColorPreference extends Preference implements ColorPickerDi
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        ColorPanelView preview = (ColorPanelView) holder.itemView.findViewById(R.id.cpv_preference_preview_color_panel);
+        ColorPanelView preview = holder.itemView.findViewById(R.id.cpv_preference_preview_color_panel);
         if (preview != null) {
             preview.setColor(color);
         }

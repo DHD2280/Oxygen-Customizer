@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
+import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.PACKAGE_STRIKE_KEY_KEY;
@@ -31,15 +32,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -56,11 +56,12 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentHooksBinding;
 import it.dhd.oxygencustomizer.services.RootProvider;
+import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 
-public class Hooks extends Fragment {
+public class Hooks extends BaseFragment {
 
     private FragmentHooksBinding binding;
     private final String TAG = getClass().getSimpleName();
@@ -397,5 +398,15 @@ public class Hooks extends Fragment {
         } catch (Exception ignored) {
         }
         countDownTimer.cancel();
+    }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.hooks_title);
+    }
+
+    @Override
+    public boolean backButtonEnabled() {
+        return true;
     }
 }

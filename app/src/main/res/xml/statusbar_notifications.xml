@@ -5,11 +5,11 @@
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/notification_illustration" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/statusbar_notifications_cat"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_notification_app_icon"
             android:summaryOff="@string/general_off"
@@ -19,13 +19,13 @@
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:selectable="false"
             android:title="@string/requires_sysui_restart" />
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/statusbar_notifications_transparency"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="statusbar_notification_transparency"
             android:summaryOff="@string/general_off"
@@ -33,7 +33,7 @@
             android:title="@string/statusbar_notification_transparency"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="statusbar_notification_transparency_value"
             android:title="@string/statusbar_notification_transparency_value"
             app:defaultValue="25"
@@ -41,41 +41,41 @@
             app:minVal="0"
             app:valueFormat="dp" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/statusbar_notifications_related"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="remove_charging_complete_notification"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_charging_complete_notification_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="remove_dev_mode"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_dev_mode_notification"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="remove_flashlight_notification"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_flashlight_notification"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="remove_low_battery_notification"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_low_battery_notification"
             app:iconSpaceReserved="false" />
 
-        <ListPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
             android:defaultValue="0"
             android:entries="@array/notif_default_expansion_entries"
             android:entryValues="@array/notif_default_expansion_values"
@@ -83,42 +83,44 @@
             android:summary="%s"
             android:title="@string/notif_default_expansion_title"
             app:iconSpaceReserved="false" />
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+    <PreferenceCategory>
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="customizeClearButton"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/customize_clear_all_button"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="linkBackgroundAccent"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/clear_all_link_bg_accent"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="0x555555"
             android:key="clearButtonBgColor"
             android:title="@string/clear_all_bg_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="linkIconAccent"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/clear_all_link_bg_icon_accent"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="0xffffff"
             android:key="clearButtonIconColor"
             android:title="@string/clear_all_icon_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>

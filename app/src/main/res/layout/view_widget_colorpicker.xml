@@ -4,7 +4,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:background="@drawable/preference_background_center"
     android:clickable="true"
     android:paddingStart="6dp"
     android:paddingEnd="24dp">
@@ -33,22 +34,18 @@
 
         <TextView
             android:id="@+id/title"
-            style="?android:attr/textAppearanceListItem"
+            style="@style/PreferenceTitleStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_color_primary"
             app:layout_constraintBottom_toTopOf="@+id/summary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/summary"
-            style="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_color_secondary"
+            style="@style/PreferenceSummaryStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 

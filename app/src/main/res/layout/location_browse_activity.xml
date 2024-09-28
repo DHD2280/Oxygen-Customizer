@@ -17,21 +17,20 @@
  *
  */
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clipChildren="false"
-    android:fillViewport="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:fillViewport="true"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="@drawable/top_appbar_bg"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -41,56 +40,59 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/PopupMenu"
             android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:popupTheme="@style/PopupMenu" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/query_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+        android:layout_marginTop="8dp"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/appbarLayout">
+
         <LinearLayout
-            android:id="@+id/query_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/query_pattern"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/appbarLayout"
-            android:baselineAligned="false">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/query_pattern"
+            <EditText
+                android:id="@+id/query_pattern_text"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
+                android:background="@drawable/preference_background_center"
+                android:ellipsize="start"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:hint="@string/location_query_hint"
+                android:paddingStart="16dp"
+                android:singleLine="true"
+                android:textColorHint="@drawable/search_hint_color"
+                android:textSize="16dp" />
 
-                <EditText
-                    android:id="@+id/query_pattern_text"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_field_corners"
-                    android:ellipsize="start"
-                    android:gravity="center_vertical"
-                    android:hint="@string/location_query_hint"
-                    android:paddingStart="16dp"
-                    android:singleLine="true"
-                    android:textColorHint="@drawable/search_hint_color"
-                    android:textSize="16dp" />
-
-            </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/preference_background_center"
         app:layout_constraintTop_toBottomOf="@+id/query_header">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -111,8 +113,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
             style="?android:attr/progressBarStyle"

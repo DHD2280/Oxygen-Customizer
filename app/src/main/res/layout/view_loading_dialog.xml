@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="26dp"
-    android:background="@drawable/container_main"
+    android:background="@drawable/custom_popup_background"
     android:elevation="8dp"
     android:gravity="center"
     android:orientation="vertical"
@@ -19,7 +19,7 @@
         android:indeterminate="true"
         app:indicatorColor="@color/colorAccent"
         app:indicatorSize="80dp"
-        app:trackColor="@color/trasp"
+        app:trackColor="@color/transparent"
         app:trackCornerRadius="24dp"
         app:trackThickness="6dp" />
 

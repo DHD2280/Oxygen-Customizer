@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coui_preference"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/preference_min_height"
+    android:paddingStart="@dimen/preference_title_padding_start"
+    android:paddingEnd="@dimen/preference_title_padding_end">
+
+    <ImageView
+        android:id="@android:id/icon"
+        style="@style/PreferenceIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no" />
+
+    <RelativeLayout
+        style="@style/PreferenceContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@android:id/title"
+            style="@style/PreferenceTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:forceDarkAllowed="false" />
+
+        <TextView
+            android:id="@android:id/summary"
+            style="@style/PreferenceSummaryStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/title"
+            android:layout_alignStart="@android:id/title"
+            android:layout_marginTop="@dimen/preference_margin_between_line"
+            android:typeface="normal" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@android:id/widget_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center_vertical"
+        android:orientation="vertical" />
+
+</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>

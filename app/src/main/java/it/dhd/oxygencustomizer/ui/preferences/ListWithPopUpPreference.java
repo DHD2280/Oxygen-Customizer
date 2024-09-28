@@ -21,7 +21,7 @@ import java.util.List;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 
-public class ListWithPopUpPreference extends ListPreference {
+public class ListWithPopUpPreference extends OplusListPreference {
 
     private int[] mEntryIcons;
     private Drawable[] mEntryDrawables;
@@ -32,7 +32,6 @@ public class ListWithPopUpPreference extends ListPreference {
 
     public ListWithPopUpPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-
     }
 
     public ListWithPopUpPreference(Context context, AttributeSet attrs, int defStyleAttr) {

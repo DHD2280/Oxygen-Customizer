@@ -2,11 +2,11 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/general_settings"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="themed_icon"
             android:summaryOff="@string/general_off"
@@ -14,7 +14,7 @@
             android:title="@string/app_icon_themed"
             app:icon="@drawable/app_icon" />
 
-        <ListPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusListPreference
             android:entries="@array/locale_name"
             android:entryValues="@array/locale_code"
             android:icon="@drawable/ic_language"
@@ -23,84 +23,84 @@
             app:useSimpleSummaryProvider="true"
             android:title="@string/language_title" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/misc"
         app:iconSpaceReserved="false">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="deleteAllPrefs"
             android:summary="@string/delete_all_summary"
             android:title="@string/delete_all_title"
             app:icon="@drawable/ic_delete" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="export"
             android:summary="@string/export_summary"
             android:title="@string/export_title"
             app:icon="@drawable/ic_export" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="import"
             android:summary="@string/import_summary"
             android:title="@string/import_title"
             app:icon="@drawable/ic_import" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/update"
         app:iconSpaceReserved="false">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="updates"
             android:title="@string/check_updates"
             app:icon="@drawable/ic_update" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="true"
             android:key="autoUpdate"
             android:summary="@string/auto_update_summary"
             android:title="@string/auto_update_title"
             app:icon="@drawable/ic_check_updates" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="checkOnWifi"
             android:summary="@string/update_over_wifi_summary"
             android:title="@string/update_over_wifi_title"
             app:icon="@drawable/ic_wifi_only" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/settings_about_section_title"
         app:iconSpaceReserved="false">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="GitHubRepo"
             android:summary="@string/github_repo_summary"
             android:title="@string/github_repo_title"
             app:icon="@drawable/ic_github" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="SupportGroup"
             android:summary="@string/support_group_summary"
             android:title="@string/support_group_title"
             app:icon="@drawable/ic_group" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="translate"
             android:summary="@string/translate_summary"
             android:title="@string/translate_title"
             app:icon="@drawable/ic_translate" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="credits"
             android:summary="@string/credits_summary"
             android:title="@string/credits_title"
             app:icon="@drawable/ic_credits" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -10,8 +10,8 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="90.0"
-                android:centerColor="@color/trasp"
-                android:endColor="@color/trasp"
+                android:centerColor="@color/transparent"
+                android:endColor="@color/transparent"
                 android:startColor="@color/shadow" />
             <corners android:radius="24dp" />
         </shape>
@@ -34,8 +34,8 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="270.0"
-                android:centerColor="@color/trasp"
-                android:endColor="@color/trasp"
+                android:centerColor="@color/transparent"
+                android:endColor="@color/transparent"
                 android:startColor="@color/shadow" />
             <corners android:radius="20dp" />
         </shape>

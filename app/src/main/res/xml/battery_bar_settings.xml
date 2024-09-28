@@ -2,142 +2,153 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="BBarEnabled"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
         android:title="@string/BB_enable_title"
+        app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="BBOnlyWhileCharging"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_onlycharging_title"
-        app:iconSpaceReserved="false" />
+    <PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="BBOnBottom"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_move_SB_bottom_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="BBOnlyWhileCharging"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_onlycharging_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="BBarColorful"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_colorful_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="BBOnBottom"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_move_SB_bottom_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
-        android:key="BBOpacity"
-        android:title="@string/BB_Opacity_title"
-        app:defaultValue="100"
-        app:iconSpaceReserved="false"
-        app:updatesContinuously="true"
-        app:valueFormat="%" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
+            android:key="BBOpacity"
+            android:title="@string/BB_Opacity_title"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:updatesContinuously="true"
+            app:valueFormat="%" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
-        android:key="BBarHeight"
-        android:title="@string/BB_Thickness_title"
-        app:defaultValue="50"
-        app:iconSpaceReserved="false"
-        app:updatesContinuously="true"
-        app:valueFormat="dp" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
+            android:key="BBarHeight"
+            android:title="@string/BB_Thickness_title"
+            app:defaultValue="50"
+            app:iconSpaceReserved="false"
+            app:updatesContinuously="true"
+            app:valueFormat="dp" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="BBSetCentered"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_center_align_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="BBSetCentered"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_center_align_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="true"
-        android:key="BBAnimateCharging"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_animate_charging"
-        app:iconSpaceReserved="false" />
+    <PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="indicateCharging"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_indicate_charging"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="BBarColorful"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_colorful_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
-        android:defaultValue="-16711936"
-        android:key="batteryChargingColor"
-        android:title="@string/BB_batteryChargingColor"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="true"
+            android:key="BBAnimateCharging"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_animate_charging"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="indicateFastCharging"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_indicate_fast_charging"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="indicateCharging"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_charging"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
-        android:defaultValue="0xFF6C54B2"
-        android:key="batteryFastChargingColor"
-        android:title="@string/BB_batteryFastChargingColor"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-16711936"
+            android:key="batteryChargingColor"
+            android:title="@string/BB_batteryChargingColor"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="indicatePowerSave"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_indicate_power_save"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="indicateFastCharging"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_fast_charging"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
-        android:defaultValue="-16711936"
-        android:key="batteryPowerSaveColor"
-        android:title="@string/BB_batteryPowerSaveColor"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-16711936"
+            android:key="batteryFastChargingColor"
+            android:title="@string/BB_batteryFastChargingColor"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
-        android:key="batteryWarningRange"
-        android:summary="@string/BB_warning_tip"
-        android:title="@string/BB_warning_level"
-        app:defaultValue="15,40"
-        app:iconSpaceReserved="false"
-        app:maxVal="100"
-        app:minVal="0"
-        app:tickInterval="1"
-        app:valueCount="2"
-        app:valueFormat="%" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="indicatePowerSave"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_power_save"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
-        android:defaultValue="false"
-        android:key="BBarTransitColors"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/BB_transit_colors"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-16711936"
+            android:key="batteryPowerSaveColor"
+            android:title="@string/BB_batteryPowerSaveColor"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
-        android:defaultValue="-65536"
-        android:key="batteryCriticalColor"
-        android:title="@string/BB_batteryCriticalColor"
-        app:iconSpaceReserved="false" />
+    <PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
-        android:defaultValue="-256"
-        android:key="batteryWarningColor"
-        android:title="@string/BB_batteryWarningColor"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
+            android:key="batteryWarningRange"
+            android:summary="@string/BB_warning_tip"
+            android:title="@string/BB_warning_level"
+            app:defaultValue="15,40"
+            app:iconSpaceReserved="false"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueCount="2"
+            app:valueFormat="%" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="BBarTransitColors"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_transit_colors"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-65536"
+            android:key="batteryCriticalColor"
+            android:title="@string/BB_batteryCriticalColor"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-256"
+            android:key="batteryWarningColor"
+            android:title="@string/BB_batteryWarningColor"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -59,6 +59,7 @@ import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Environment;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -159,8 +160,8 @@ public class HeaderClock extends XposedMods {
     private int systemIconStrokeWidth;
 
     private int mAccent;
-    private static GradientDrawable mClockChipDrawable = new GradientDrawable();
-    private static GradientDrawable mDateChipDrawable = new GradientDrawable();
+    private static LayerDrawable mClockChipDrawable;
+    private static LayerDrawable mDateChipDrawable;
     private static final GradientDrawable mSystemIconsChipDrawable = new GradientDrawable();
     private Typeface mStockClockTypeface, mStockDateTypeface;
     private Object OQC = null;

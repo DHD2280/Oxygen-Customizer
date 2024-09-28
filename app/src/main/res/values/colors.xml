@@ -67,9 +67,15 @@
 
     <color name="settingslib_protection_color">?backgroundColor</color>
 
+    <!-- Preferences -->
+    <color name="preference_category_text">#6F7071 </color>
+    <color name="preference_background_color_pressed">#e6e6e6</color>
+    <color name="list_color_pressed">#000000</color>
+    <color name="list_selector_color_pressed">#0f000000</color>
+
     <color name="error">#DA000E</color>
     <color name="success">#008753</color>
-    <color name="trasp">#00000000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="option_border_default">#5f6368</color>
     <color name="rippleDark">#66000000</color>
@@ -78,8 +84,9 @@
     <color name="holo_blue_dark">@color/holo_blue_dark_dark</color>
 
     <!-- Text -->
-    <color name="textColorPrimary">@android:color/system_neutral1_900</color>
-    <color name="textColorSecondary">@android:color/system_neutral1_700</color>
+    <color name="textColorPrimary">#191919</color>
+    <color name="textColorPrimaryDisabled">#4d000000</color>
+    <color name="textColorSecondary">#757575</color>
 
     <drawable name="notification_number_text_color">#ff000000</drawable>
 
@@ -94,9 +101,13 @@
     <color name="ic_launcher_foreground_themed">@android:color/system_neutral2_700</color>
     <color name="ic_launcher_background_themed">@android:color/system_accent1_100</color>
 
-    <color name="changelog_bg">@android:color/system_neutral1_50</color>
-
-    <color name="colorBackground">@android:color/system_neutral2_50</color>
+    <color name="colorBackground">#F3F4F6</color>
+    <color name="colorBackgroundSoft">@color/colorBackground</color>
+    <color name="colorBackgroundMedium">@color/colorBackground</color>
+    <color name="colorBackgroundHard">@color/colorBackground</color>
+    <color name="colorDivider">#1f000000</color>
+    <color name="colorPressBackground">#14000000</color>
+    <color name="cardview_background">@color/cardview_light_background</color>
 
     <!-- Splash screen -->
     <color name="splash_logo">@color/colorAccent</color>
@@ -129,5 +140,7 @@
     <color name="lockscreen_widget_active_color_dark">@android:color/system_accent1_100</color>
     <color name="lockscreen_widget_active_color_light">@android:color/system_accent1_600</color>
     <color name="card_surface_color">@android:color/system_neutral1_100</color>
+
+    <color name="oplusColorSurfaces">#F3F4F6</color>
 
 </resources>

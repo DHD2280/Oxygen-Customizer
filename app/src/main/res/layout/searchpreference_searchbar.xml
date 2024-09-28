@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/searchbar_height"
     android:layout_gravity="center"
-    android:background="@drawable/container"
+    android:background="@drawable/preference_background_center"
     android:foregroundGravity="center_vertical"
     android:gravity="center_vertical"
     android:orientation="horizontal"

@@ -4,7 +4,9 @@ import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -74,8 +76,30 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         splashScreen.setKeepOnScreenCondition(() -> keepShowing);
+        setDarkTheme();
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
 
         new Thread(runner).start();
+    }
+
+    private void setDarkTheme() {
+        if (isNightMode()) {
+            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", 2);
+            switch (darkStyle) {
+                case 0:
+                    setTheme(R.style.Theme_OxygenCustomizer_DarkHard);
+                    break;
+                case 1:
+                    setTheme(R.style.Theme_OxygenCustomizer_DarkMedium);
+                    break;
+                case 2:
+                    setTheme(R.style.Theme_OxygenCustomizer_DarkSoft);
+                    break;
+            }
+        }
+    }
+
+    private boolean isNightMode() {
+        return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 }

@@ -17,12 +17,13 @@ import androidx.preference.Preference;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 
 public class UserInterface extends ControlledPreferenceFragmentCompat {
 
     Preference mRebootPreference;
-    Preference mUiStyle, mNotifications, mNavBar, mSignalIcons, mWifiIcons;
+    OplusJumpPreference mUiStyle, mNotifications, mNavBar, mSignalIcons, mWifiIcons;
 
     @Override
     public String getTitle() {

@@ -6,16 +6,17 @@
         android:key="adaptive_playback_header"
         app:lottie_rawRes="@raw/lottie_adaptive_playback" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:key="sound_adaptive_playback_main_switch"
         android:title="@string/adaptive_playback_enabled"
+        app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
         android:key="gesture_adaptive_playback_intro_text"
         android:title="@string/adaptive_playback_intro_text" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="sound_adaptive_playback_category"
         android:title="@string/adaptive_playback_timeout_title" />
 

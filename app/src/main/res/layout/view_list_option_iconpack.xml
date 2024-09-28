@@ -5,7 +5,9 @@
     android:id="@+id/icon_pack_child"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background_material"
+    android:background="@drawable/preference_background_center"
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:layout_marginTop="14dp"
     android:clickable="true"
     android:orientation="vertical">
 

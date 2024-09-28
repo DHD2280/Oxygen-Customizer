@@ -9,11 +9,11 @@
         app:iconSpaceReserved="false"
         search:ignore="true" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/launcher_layout"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="rearrange_home"
             android:summaryOff="@string/general_off"
@@ -21,7 +21,7 @@
             android:title="@string/launcher_edit_layout"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:dependency="rearrange_home"
             android:key="launcher_max_columns"
             android:title="@string/launcher_columns"
@@ -31,7 +31,7 @@
             app:minVal="4"
             app:tickInterval="1" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:dependency="rearrange_home"
             android:key="launcher_max_rows"
             android:title="@string/launcher_rows"
@@ -41,13 +41,13 @@
             app:minVal="3"
             app:tickInterval="1" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/launcher_folder_layout"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="rearrange_folder"
             android:summaryOff="@string/general_off"
@@ -55,7 +55,7 @@
             android:title="@string/launcher_folder_edit_layout"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:dependency="rearrange_folder"
             android:key="folder_columns"
             android:title="@string/launcher_folder_columns"
@@ -64,7 +64,7 @@
             app:maxVal="7"
             app:minVal="3"
             app:tickInterval="1" />
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:dependency="rearrange_folder"
             android:key="folder_rows"
             android:title="@string/launcher_folder_rows"
@@ -73,7 +73,7 @@
             app:maxVal="7"
             app:minVal="3"
             app:tickInterval="1" />
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="rearrange_preview"
             android:summaryOff="@string/general_off"
@@ -81,20 +81,20 @@
             android:title="@string/launcher_folder_update_preview"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="remove_folder_pagination"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_folder_pagination_title"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/drawer"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="rearrange_drawer"
             android:summaryOff="@string/general_off"
@@ -102,7 +102,7 @@
             android:title="@string/launcher_drawer_edit_columns"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:dependency="rearrange_drawer"
             android:key="drawer_columns"
             android:title="@string/drawer_columns"
@@ -111,25 +111,25 @@
             app:maxVal="7"
             app:minVal="3"
             app:tickInterval="1" />
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/launcher_recents"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="launcher_open_app_details"
             android:summary="@string/launcher_app_details_summary"
             android:title="@string/launcher_app_details_title"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="remove_home_pagination"
             android:summaryOff="@string/general_off"
@@ -137,13 +137,13 @@
             android:title="@string/remove_home_pagination"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="force_themed_launcher_icons"
             android:summary="@string/force_themed_launcher_icons_summary"
             android:title="@string/force_themed_launcher_icons"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
 </PreferenceScreen>

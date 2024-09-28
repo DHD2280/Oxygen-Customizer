@@ -3,7 +3,6 @@
     android:id="@android:id/widget_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingStart="6dp"
@@ -16,17 +15,17 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="8dip"
         android:src="@drawable/ic_drag_handle"
-        app:tint="?android:attr/textColorPrimary" />
+        app:tint="@color/text_color_primary" />
 
     <TextView
         android:id="@+id/widget_item"
+        style="@style/PreferenceTitleStyle"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:ellipsize="end"
         android:focusable="false"
-        android:gravity="center_vertical"
-        android:textAppearance="?android:attr/textAppearanceListItem" />
+        android:gravity="center_vertical" />
 
 </LinearLayout>

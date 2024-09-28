@@ -2,38 +2,38 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/qs_header_image_title"
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage"
             android:key="qs_header_image_main"
             android:title="@string/qs_header_image_title"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/qs_header_clock"
         app:iconSpaceReserved="false"
         search:ignore="true">
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock"
             android:key="qs_header_clock_main"
             android:title="@string/qs_header_clock"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
-    <!-- <PreferenceCategory
+    <!-- <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         app:iconSpaceReserved="false"
         android:title="@string/qs_header_misc"
         search:ignore="true">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             app:iconSpaceReserved="false"
             android:title="@string/qs_header_system_icons_chip"
             android:key="qs_header_system_icons_chip_switch"
@@ -46,5 +46,5 @@
             android:title="@string/qs_header_system_icons_chip_style"
             android:key="qs_header_system_icons_chip" />
 
-    </PreferenceCategory> -->
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory> -->
 </PreferenceScreen>

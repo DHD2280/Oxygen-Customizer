@@ -4,6 +4,7 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.TypedValue;
 
 import androidx.annotation.ColorInt;
@@ -28,4 +29,11 @@ public class ThemeUtils {
         return typedValue.data;
     }
 
+    public static int getAttrColor(Context context, int colorAttr) {
+        TypedArray obtainStyledAttributes = context.getTheme().obtainStyledAttributes(new int[]{colorAttr});
+        int color = obtainStyledAttributes.getColor(0, 0);
+        obtainStyledAttributes.recycle();
+        return color;
+
+    }
 }

@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import com.google.android.material.button.MaterialButton;
@@ -37,7 +36,7 @@ import java.util.Scanner;
 
 import it.dhd.oxygencustomizer.R;
 
-public class SliderPreference extends Preference {
+public class OplusSliderPreference extends OplusPreference {
     @SuppressWarnings("unused")
     private static final String TAG = "Slider Preference";
     private float valueFrom;
@@ -57,14 +56,12 @@ public class SliderPreference extends Preference {
     boolean updateConstantly, showValueLabel;
 
     @SuppressWarnings("unused")
-    public SliderPreference(Context context, AttributeSet attrs) {
+    public OplusSliderPreference(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        setSelectable(false);
     }
 
-    public SliderPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public OplusSliderPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setSelectable(false);
         setLayoutResource(R.layout.custom_preference_slider);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SliderPreference);
@@ -95,7 +92,7 @@ public class SliderPreference extends Preference {
                 defaultValue.add(scanner.nextFloat());
             }
         } catch (Exception ignored) {
-            Log.e(TAG, String.format("SliderPreference: Error parsing default values for key: %s", getKey()));
+            Log.e(TAG, String.format("OplusSliderPreference: Error parsing default values for key: %s", getKey()));
         }
 
         a.recycle();

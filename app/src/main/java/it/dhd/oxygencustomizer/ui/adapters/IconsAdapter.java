@@ -285,13 +285,11 @@ public class IconsAdapter extends RecyclerView.Adapter<IconsAdapter.ViewHolder> 
 
     private void itemSelected(View parent, boolean state) {
         if (state) {
-            parent.setBackground(ContextCompat.getDrawable(context, R.drawable.container_selected));
             ((TextView) parent.findViewById(R.id.iconpack_title)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
             ((TextView) parent.findViewById(R.id.iconpack_desc)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
             parent.findViewById(R.id.icon_selected).setVisibility(View.VISIBLE);
             parent.findViewById(R.id.iconpack_desc).setAlpha(0.8f);
         } else {
-            parent.setBackground(ContextCompat.getDrawable(context, R.drawable.item_background_material));
             ((TextView) parent.findViewById(R.id.iconpack_title)).setTextColor(ContextCompat.getColor(context, R.color.text_color_primary));
             ((TextView) parent.findViewById(R.id.iconpack_desc)).setTextColor(ContextCompat.getColor(context, R.color.text_color_secondary));
             parent.findViewById(R.id.icon_selected).setVisibility(View.INVISIBLE);

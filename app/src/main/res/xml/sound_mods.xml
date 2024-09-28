@@ -6,12 +6,12 @@
         android:key="sound_illustration"
         app:lottie_rawRes="@raw/sound_illustration" />
 
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
         <!-- Pulse music visualizer -->
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.PulseSettings"
             android:key="pulse_settings"
             android:summary="@string/pulse_settings_summary"
@@ -19,28 +19,30 @@
             app:iconSpaceReserved="false" />
 
         <!-- Fluid Music -->
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="fluid_settings"
             android:summary="@string/fluid_music_summary"
             android:title="@string/fluid_music"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <!-- Adaptive Playback -->
-    <Preference
-        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings"
-        android:key="sound_adaptive_playback_summary"
-        android:title="@string/adaptive_playback_screen_title"
-        app:iconSpaceReserved="false" />
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory android:title="@string/adaptive_playback_screen_title">
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings"
+            android:key="sound_adaptive_playback_summary"
+            android:title="@string/adaptive_playback_screen_title"
+            app:iconSpaceReserved="false" />
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <!-- Volume panel -->
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="volume_panel"
         android:title="@string/volume_panel_category"
         app:iconSpaceReserved="false">
 
-        <ListPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
             android:defaultValue="0"
             android:entries="@array/volume_panel_position_entries"
             android:entryValues="@array/volume_panel_position_values"
@@ -49,20 +51,20 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <Preference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$VolumePanelCustomizations"
             android:key="volume_panel_custom"
             android:summary="@string/volume_panel_custom_summary"
             android:title="@string/volume_panel_custom_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volume_disable_volume_warning"
             android:title="@string/volume_disable_volume_warning"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.SliderPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="volume_dialog_timeout"
             android:title="@string/volume_dialog_timeout_title"
             app:defaultValue="3"
@@ -70,5 +72,5 @@
             app:minVal="1"
             app:valueFormat="s" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 </PreferenceScreen>

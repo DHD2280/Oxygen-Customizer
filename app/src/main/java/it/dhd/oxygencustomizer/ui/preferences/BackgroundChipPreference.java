@@ -37,10 +37,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.DialogPreference;
+import androidx.preference.PreferenceViewHolder;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.appcompat.cardlist.CardListHelper;
 import it.dhd.oxygencustomizer.databinding.QsChipLayoutBinding;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
@@ -74,7 +76,7 @@ public class BackgroundChipPreference extends DialogPreference {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
         chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
         a.recycle();
-
+        initResources();
     }
 
     public BackgroundChipPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -82,6 +84,7 @@ public class BackgroundChipPreference extends DialogPreference {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
         chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
         a.recycle();
+        initResources();
     }
 
     public BackgroundChipPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -89,17 +92,30 @@ public class BackgroundChipPreference extends DialogPreference {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
         chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
         a.recycle();
+        initResources();
     }
 
     public BackgroundChipPreference(@NonNull Context context) {
         super(context);
+        initResources();
+    }
+
+    private void initResources() {
+        setLayoutResource(R.layout.custom_preference);
+        setWidgetLayoutResource(R.layout.custom_preference_widget_jump);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        CardListHelper.setItemCardBackground(holder.itemView, CardListHelper.getPositionInGroup(this));
     }
 
     @Override
     protected void onClick() {
         bottomSheetDialog = new BottomSheetDialog(getContext());
         mAccentColor = ThemeUtils.getPrimaryColor(getContext());
-        SharedPreferences prefs = PreferenceHelper.getModulePrefs();
+        SharedPreferences prefs = getSharedPreferences();
 
         // def props
         loadPrefs(prefs);

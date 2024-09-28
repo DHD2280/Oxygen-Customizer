@@ -24,7 +24,6 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.ThemeModel;
-import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
@@ -221,13 +220,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
 
     private void itemSelected(View parent, boolean state) {
         if (state) {
-            parent.setBackground(ContextCompat.getDrawable(context, R.drawable.container_selected));
             ((TextView) parent.findViewById(R.id.iconpack_title)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
             ((TextView) parent.findViewById(R.id.iconpack_desc)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
             parent.findViewById(R.id.icon_selected).setVisibility(View.VISIBLE);
             parent.findViewById(R.id.iconpack_desc).setAlpha(0.8f);
         } else {
-            parent.setBackground(ContextCompat.getDrawable(context, R.drawable.item_background_material));
             ((TextView) parent.findViewById(R.id.iconpack_title)).setTextColor(ContextCompat.getColor(context, R.color.text_color_primary));
             ((TextView) parent.findViewById(R.id.iconpack_desc)).setTextColor(ContextCompat.getColor(context, R.color.text_color_secondary));
             parent.findViewById(R.id.icon_selected).setVisibility(View.INVISIBLE);

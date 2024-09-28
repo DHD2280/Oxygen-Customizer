@@ -15,18 +15,16 @@
         android:layout_height="@dimen/list_dialog_toolbar_height"
         android:layout_marginTop="-20dp" />
 
-    <View
-        android:id="@+id/breakpointsDiv"
-        style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/select_dialog_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="@dimen/list_dialog_list_margin_bottom"
         android:background="@android:color/transparent"
-        android:layout_gravity="center_horizontal"
         android:divider="@null"
         android:overScrollMode="ifContentScrolls"
         android:scrollbarStyle="insideOverlay"

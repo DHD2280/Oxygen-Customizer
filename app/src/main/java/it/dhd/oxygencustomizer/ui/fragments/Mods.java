@@ -4,13 +4,10 @@ package it.dhd.oxygencustomizer.ui.fragments;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.backButtonDisabled;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
-import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,7 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
@@ -248,7 +245,7 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                     .setMessage(R.string.fix_lag_dialog_message)
                     .setNegativeButton(R.string.btn_cancel, (dialog, which) -> {
                         mPreferences.putBoolean("fix_lag_switch", false);
-                        ((MaterialSwitchPreference)findPreference("fix_lag_switch")).setChecked(false);
+                        ((OplusSwitchPreference)findPreference("fix_lag_switch")).setChecked(false);
                         dialog.dismiss();
                     })
                     .setPositiveButton(R.string.fix_lag_apply_anyway, (dialog, which) -> {

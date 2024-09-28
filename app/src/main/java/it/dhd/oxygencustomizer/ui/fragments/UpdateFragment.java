@@ -49,11 +49,13 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.UpdateFragmentBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
+import it.dhd.oxygencustomizer.ui.base.BaseFragment;
+import it.dhd.oxygencustomizer.utils.ThemeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
-public class UpdateFragment extends Fragment {
-    public static final String MOD_NAME = "OxygenCustomizer";
+public class UpdateFragment extends BaseFragment {
 
+    public static final String MOD_NAME = "OxygenCustomizer";
     public static final String UPDATES_CHANNEL_ID = "Updates";
     private static final String stableUpdatesURL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/stable/latestStable.json";
     private static final String betaUpdatesURL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/beta/latestBeta.json";
@@ -130,6 +132,16 @@ public class UpdateFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public String getTitle() {
+        return getString(R.string.update);
+    }
+
+    @Override
+    public boolean backButtonEnabled() {
+        return true;
+    }
+
     private void installApk(String downloadPath) {
         Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(
                 FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(downloadPath)),
@@ -186,9 +198,9 @@ public class UpdateFragment extends Fragment {
                         try {
                             MarkdownView mMarkdownView = view.findViewById(R.id.changelogView);
                             InternalStyleSheet css = new Github();
-                            css.addRule("body, kbd", "background-color: " + intToHex(requireContext().getColor(R.color.changelog_bg)));
+                            css.addRule("body, kbd", "background-color: " + intToHex(ThemeUtils.getAttrColor(requireContext(), R.attr.preferenceBackgroundColor)));
                             css.addRule("body, p, h1, h2, h3, h4, h5, h6, span, div", "color: " + intToHex(getColorFromAttribute(requireContext(), R.attr.colorOnSurface)));
-                            css.addRule("kbd", "border-color: " + intToHex(requireContext().getColor(R.color.changelog_bg)));
+                            css.addRule("kbd", "border-color: " + intToHex(ThemeUtils.getAttrColor(requireContext(), R.attr.preferenceBackgroundColor)));
                             css.addRule("kbd", "color: " + intToHex(getColorFromAttribute(requireContext(), R.attr.colorOnSurface)));
                             css.addRule("a", "color: " + intToHex(getColorFromAttribute(requireContext(), R.attr.colorPrimary)));
                             mMarkdownView.addStyleSheet(css);

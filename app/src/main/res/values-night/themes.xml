@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="Theme.OxygenCustomizer" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
@@ -28,8 +29,8 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
         <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
         <item name="snackbarStyle">@style/Widget.Material3.Snackbar</item>
-        <item name="android:navigationBarColor">@color/trasp</item>
-        <item name="android:statusBarColor">@color/trasp</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
 
         <!-- Background color. -->
@@ -51,6 +52,33 @@
 
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="preferenceBackgroundColorPressed">@color/preference_background_color_pressed</item>
+
+        <item name="popupMenuBackground">@drawable/custom_popup_background</item>
+
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
 
     </style>
+
+    <style name="Theme.OxygenCustomizer.DarkSoft" parent="Theme.OxygenCustomizer">
+        <!-- Background color. -->
+        <item name="android:windowBackground">@color/colorBackgroundSoft</item>
+        <item name="android:colorBackground">@color/colorBackgroundSoft</item>
+        <item name="preferenceBackgroundColor">#454545</item>
+    </style>
+
+    <style name="Theme.OxygenCustomizer.DarkMedium" parent="Theme.OxygenCustomizer">
+        <!-- Background color. -->
+        <item name="android:windowBackground">@color/colorBackgroundMedium</item>
+        <item name="android:colorBackground">@color/colorBackgroundMedium</item>
+        <item name="preferenceBackgroundColor">#2F2F2F</item>
+    </style>
+
+    <style name="Theme.OxygenCustomizer.DarkHard" parent="Theme.OxygenCustomizer">
+        <!-- Background color. -->
+        <item name="android:windowBackground">@color/colorBackgroundHard</item>
+        <item name="android:colorBackground">@color/colorBackgroundHard</item>
+        <item name="preferenceBackgroundColor">#1A1A1A</item>
+    </style>
+
 </resources>

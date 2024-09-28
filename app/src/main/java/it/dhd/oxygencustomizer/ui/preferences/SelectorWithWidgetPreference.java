@@ -12,6 +12,8 @@ import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceViewHolder;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.appcompat.cardlist.CardListHelper;
+import it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout;
 
 public class SelectorWithWidgetPreference extends CheckBoxPreference {
 
@@ -120,6 +122,8 @@ public class SelectorWithWidgetPreference extends CheckBoxPreference {
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+
+        CardListHelper.setItemCardBackground(holder.itemView, CardListHelper.getPositionInGroup(this));
 
         View summaryContainer = holder.findViewById(R.id.summary_container);
         if (summaryContainer != null) {

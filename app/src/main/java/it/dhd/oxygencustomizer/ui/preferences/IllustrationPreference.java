@@ -103,6 +103,9 @@ public class IllustrationPreference extends Preference {
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
+        holder.setDividerAllowedAbove(false);
+        holder.setDividerAllowedBelow(false);
+
         final ImageView backgroundView =
                 (ImageView) holder.findViewById(R.id.background_view);
         final FrameLayout middleGroundLayout =
@@ -408,7 +411,9 @@ public class IllustrationPreference extends Preference {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setLayoutResource(R.layout.illustration_preference);
+        setLayoutResource(R.layout.custom_preference_illustration);
+
+        setSelectable(false);
 
         mIsAutoScale = false;
         if (attrs != null) {

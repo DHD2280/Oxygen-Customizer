@@ -5,7 +5,7 @@
     <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/nav_illustration" />
-    <Preference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
         android:key="gesturenav_header"
         android:title="@string/gesture_navigation_title"
         app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture"

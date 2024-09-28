@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/volume_panel_custom_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_color_enabled"
             android:summaryOff="@string/general_off"
@@ -13,7 +13,7 @@
             android:title="@string/volume_panel_custom_enabled_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_link_primary"
             android:summaryOff="@string/general_off"
@@ -21,13 +21,13 @@
             android:title="@string/volume_panel_seekbar_link_primary"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="0xffffffff"
             android:key="volume_panel_seekbar_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="volume_panel_seekbar_bg_color_enabled"
             android:summaryOff="@string/general_off"
@@ -35,12 +35,12 @@
             android:title="@string/volume_panel_bg_color"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oxygencustomizer.ui.preferences.MaterialColorPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="-7829368"
             android:key="volume_panel_seekbar_bg_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
 </PreferenceScreen>

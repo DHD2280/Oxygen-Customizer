@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference;
 
 public class ExtendedSharedPreferences implements SharedPreferences {
     private final SharedPreferences prefs;
@@ -23,15 +23,15 @@ public class ExtendedSharedPreferences implements SharedPreferences {
     }
 
     public int getSliderInt(String key, int defaultVal) {
-        return SliderPreference.getSingleIntValue(this, key, defaultVal);
+        return OplusSliderPreference.getSingleIntValue(this, key, defaultVal);
     }
 
     public List<Float> getSliderValues(String key, float defaultValue) {
-        return SliderPreference.getValues(this, key, defaultValue);
+        return OplusSliderPreference.getValues(this, key, defaultValue);
     }
 
     public float getSliderFloat(String key, float defaultVal) {
-        return SliderPreference.getSingleFloatValue(this, key, defaultVal);
+        return OplusSliderPreference.getSingleFloatValue(this, key, defaultVal);
     }
 
     @Override

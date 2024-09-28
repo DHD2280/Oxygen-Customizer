@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:dialogCornerRadius">32dp</item>
+        <item name="android:background">@color/oplusColorSurfaces</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text</item>
+    </style>
+
+</resources>

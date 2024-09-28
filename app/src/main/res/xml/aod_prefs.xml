@@ -6,13 +6,14 @@
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/aod_illustration" />
 
-    <Preference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
         android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock"
         android:key="aod_clock"
         android:title="@string/aod_clock"
+        app:forcePosition="top"
         app:iconSpaceReserved="false" />
 
-    <Preference
+    <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
         android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather"
         android:key="aod_weather"
         android:title="@string/aod_weather"

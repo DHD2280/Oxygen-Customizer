@@ -9,9 +9,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,31 +20,57 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.PrefManager;
 import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 
-public class Settings extends PreferenceFragmentCompat {
+public class Settings extends ControlledPreferenceFragmentCompat {
 
     // Language Pref
     private ListPreference languagePref;
 
     private Preference ghPref, deleteAllPref, importPref, exportPref, creditsPref, supportGroupPref, translatePref;
-    private MaterialSwitchPreference appIconThemed;
+    private OplusSwitchPreference appIconThemed;
 
     // Updater Prefs
-    private Preference updatePref;
-    private MaterialSwitchPreference autoUpdatePref;
+    private OplusJumpPreference updatePref;
+    private OplusSwitchPreference autoUpdatePref;
 
     boolean export = true;
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.settings_title);
+    }
+
+    @Override
+    public boolean backButtonEnabled() {
+        return true;
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.xml.own_settings;
+    }
+
+    @Override
+    public boolean hasMenu() {
+        return false;
+    }
+
+    @Override
+    public String[] getScopes() {
+        return new String[0];
+    }
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -127,11 +150,8 @@ public class Settings extends PreferenceFragmentCompat {
         }
 
         if (updatePref != null) {
-            updatePref.setSummary(
-                    String.format(
-                            getString(R.string.check_updates_summary),
-                            BuildConfig.VERSION_NAME
-                    )
+            updatePref.setJumpText(
+                    BuildConfig.VERSION_NAME
             );
             updatePref.setOnPreferenceClickListener(preference -> {
                 MainActivity.replaceFragment(new UpdateFragment());
@@ -226,10 +246,5 @@ public class Settings extends PreferenceFragmentCompat {
                     }
                 }
             });
-
-    @Override
-    public void setDivider(Drawable divider) {
-        super.setDivider(new ColorDrawable(Color.TRANSPARENT));
-    }
 
 }

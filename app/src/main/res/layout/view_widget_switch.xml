@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:background="?selectableItemBackground"
-    android:paddingStart="6dp"
-    android:paddingEnd="24dp">
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:background="@drawable/preference_background_center"
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/icon"
@@ -15,14 +13,15 @@
         android:layout_height="20dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="18dp" />
+        android:layout_marginStart="18dp"
+        android:importantForAccessibility="no" />
 
     <LinearLayout
         android:id="@+id/text_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginVertical="22dp"
+        style="@style/PreferenceContent"
         android:layout_marginStart="9dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@id/switch_widget"
@@ -31,19 +30,15 @@
 
         <TextView
             android:id="@+id/title"
-            style="?android:attr/textAppearanceListItem"
+            style="@style/PreferenceTitleStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_color_primary" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/summary"
-            style="?android:attr/textAppearanceListItemSmall"
+            style="@style/PreferenceSummaryStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_color_secondary" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -51,6 +46,7 @@
         android:id="@+id/switch_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true" />
 

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<resources>
 
     <style name="AppPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
         <item name="preferenceCategoryStyle">@style/AppPreferenceCategory</item>
     </style>
 
     <style name="AppPreferenceCategory" parent="@style/Preference.Category.Material">
-        <item name="dividerColor">@color/trasp</item>
+        <item name="dividerColor">@color/transparent</item>
     </style>
 
     <style name="MaterialButtonIcon">
@@ -21,32 +20,37 @@
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
-    <style name="DefaultBottomSheetDialog" parent="@style/Widget.Material3.BottomSheet">
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:background">@null</item>
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
-        <item name="android:windowElevation">0dp</item>
+        <item name="android:background">@drawable/bottom_sheet_background</item>
+        <item name="android:navigationBarColor">@color/oplusColorSurfaces</item>
+        <item name="android:windowElevation">17dp</item>
         <item name="panelBackground">@drawable/panel_bg_without_shadow</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+        <item name="backgroundTint">@color/oplusColorSurfaces</item>
     </style>
 
-    <style name="TextAppearance.TopIntroText"
-        parent="@android:style/TextAppearance.DeviceDefault">
+    <style name="TextAppearance.TopIntroText" parent="@style/OplusTextAppearanceBody">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textColor">@color/text_color_secondary</item>
     </style>
 
-    <style name="TextAppearance.Footer.Title.SettingsLib"
-        parent="@android:style/TextAppearance.DeviceDefault.WindowTitle">
+    <style name="TextAppearance.Footer.Title.SettingsLib" parent="@android:style/TextAppearance.DeviceDefault.WindowTitle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:dialogCornerRadius">32dp</item>
-        <item name="android:background">@color/colorContainer</item>
-        <item name="android:backgroundDimAmount">0.60</item>
+        <item name="android:background">@color/oplusColorSurfaces</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:backgroundDimAmount">0.40</item>
+        <item name="android:layout_gravity">bottom</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text</item>
     </style>
 
@@ -59,7 +63,7 @@
     <style name="HorizontalDivider" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">?attr/colorOnSurfaceVariant</item>
+        <item name="android:background">@color/colorDivider</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
     </style>
@@ -98,8 +102,8 @@
     </style>
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">?attr/colorSurfaceVariant</item>
-        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:popupBackground">@drawable/custom_popup_background</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
     <style name="Widget.MaterialButton" parent="Widget.Material3.Button">
@@ -131,7 +135,7 @@
     </style>
 
     <style name="Widget.BottomNavigationView" parent="Base.Widget.Material3.BottomNavigationView">
-        <item name="android:background">@drawable/bottom_navbar_bg</item>
+        <item name="android:background">@drawable/top_appbar_bg</item>
         <item name="itemRippleColor">@color/rippleAccent</item>
         <item name="itemIconTint">@color/text_color_primary</item>
         <item name="itemTextColor">@color/text_color_primary</item>
@@ -179,5 +183,66 @@
         <item name="android:textSize">96sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="OplusPreferenceCategoryStyle" parent="@android:style/Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/preference_category_text_height</item>
+        <item name="android:layout_marginTop">@dimen/preference_item_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/preference_item_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/preference_item_padding_side</item>
+        <item name="android:layout_marginRight">@dimen/preference_item_padding_side</item>
+        <item name="android:paddingStart">@dimen/preference_category_padding_start</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/preference_category_text</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="OplusTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="OplusTextAppearanceBody" parent="@style/OplusTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+    </style>
+
+    <style name="PreferenceTitleStyle" parent="@style/OplusTextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.05</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_color_primary</item>
+    </style>
+
+    <style name="PreferenceSummaryStyle" parent="@style/OplusTextAppearanceBody">
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/text_color_secondary</item>
+    </style>
+
+    <style name="PreferenceIcon" parent="">
+        <item name="android:layout_marginTop">@dimen/preference_icon_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/preference_icon_margin_bottom</item>
+        <item name="android:layout_marginEnd">@dimen/preference_icon_margin_right</item>
+    </style>
+
+    <style name="PreferenceContent" parent="">
+        <item name="android:paddingTop">@dimen/preference_text_content_padding_top</item>
+        <item name="android:paddingBottom">@dimen/preference_text_content_padding_bottom</item>
+        <item name="android:layout_marginStart">@dimen/preference_text_margin_left</item>
+    </style>
+
+    <style name="PreferenceStatusText" parent="">
+        <item name="android:textAppearance">@style/OplusTextAppearanceBody</item>
+        <item name="android:textColor">@color/text_color_secondary</item>
+    </style>
+
+    <style name="PreferenceStatusText.Tiny" parent="@style/PreferenceStatusText">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 
 </resources>

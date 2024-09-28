@@ -5,18 +5,19 @@
     android:id="@+id/clock_preview_child"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/container_no_ripple"
+    android:background="@drawable/custom_popup_background"
     android:clickable="false"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="false"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/wallpaper_view"
@@ -29,7 +30,8 @@
         <LinearLayout
             android:id="@+id/clock_view_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false">
 
             <ViewStub
                 android:id="@+id/clock_view"
@@ -43,7 +45,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginHorizontal="16dp"
         android:orientation="horizontal"
         tools:ignore="UseCompoundDrawables">
 
@@ -61,6 +63,7 @@
             android:layout_height="18dp"
             android:layout_gravity="start|center"
             android:layout_marginHorizontal="8dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_tick"
             android:visibility="invisible"
             app:tint="?attr/colorPrimary" />
@@ -78,7 +81,7 @@
             android:letterSpacing="0"
             android:paddingTop="6dp"
             android:paddingBottom="8dp"
-            android:text="Select" />
+            android:text="@string/btn_select" />
 
     </LinearLayout>
 </LinearLayout>

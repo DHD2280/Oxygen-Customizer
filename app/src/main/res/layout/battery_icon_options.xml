@@ -9,10 +9,10 @@
         android:id="@+id/rootLayout"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="10dp"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:orientation="vertical"
-        app:cardBackgroundColor="@color/colorAppbarOverlay"
+        app:cardBackgroundColor="@color/cardview_background"
         app:cardCornerRadius="16dp"
         app:strokeWidth="2dp">
 
@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:importantForAccessibility="no" />
 
     </com.google.android.material.card.MaterialCardView>
 

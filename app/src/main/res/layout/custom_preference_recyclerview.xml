@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    android:id="@+id/coui_preference"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background_material"
-    android:paddingStart="@dimen/preference_padding_start"
-    android:paddingTop="@dimen/preference_padding_top"
-    android:paddingEnd="@dimen/preference_padding_end"
-    android:paddingBottom="@dimen/preference_padding_bottom"
-    android:clickable="true">
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:minHeight="@dimen/preference_min_height"
+    android:paddingStart="@dimen/preference_title_padding_start"
+    android:paddingEnd="@dimen/preference_title_padding_end">
 
     <ImageView
         android:id="@android:id/icon"
@@ -18,31 +20,30 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="24dp"
         android:visibility="gone"
+        android:importantForAccessibility="no"
         app:tint="?attr/colorPrimary" />
 
     <LinearLayout
         android:id="@+id/text_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        style="@style/PreferenceContent"
         android:layout_toStartOf="@android:id/widget_frame"
         android:layout_toEndOf="@android:id/icon"
         android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@android:id/title"
-            style="?android:attr/textAppearanceListItem"
-            android:layout_width="wrap_content"
+            style="@style/PreferenceTitleStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorOnSurface" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@android:id/summary"
-            style="?android:attr/textAppearanceSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:textColor="?attr/colorOnSurface" />
+            style="@style/PreferenceSummaryStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@android:id/widget_frame"
@@ -58,7 +59,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_container"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
@@ -72,4 +72,4 @@
             android:paddingHorizontal="16dp" />
 
     </LinearLayout>
-</RelativeLayout>
+</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>

@@ -35,8 +35,8 @@ import java.util.List;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
 import it.dhd.oxygencustomizer.ui.activity.LocationBrowseActivity;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.weather.WeatherConfig;
@@ -45,7 +45,7 @@ public abstract class WeatherPreferenceFragment extends ControlledPreferenceFrag
         implements OmniJawsClient.OmniJawsObserver {
 
     private static final String DEFAULT_WEATHER_ICON_PACKAGE = "it.dhd.oxygencustomizer.google";
-    private MaterialSwitchPreference mCustomLocation;
+    private OplusSwitchPreference mCustomLocation;
     private boolean mInitialCheck = true;
     private ListWithPopUpPreference mWeatherIconPack;
     private Preference mUpdateStatus;

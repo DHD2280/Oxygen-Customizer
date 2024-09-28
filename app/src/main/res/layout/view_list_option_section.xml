@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title"
-    style="@style/TextAppearance.Material3.TitleLarge"
+    style="@style/OplusPreferenceCategoryStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:textColor="?colorPrimary" />
+    android:layout_height="wrap_content" />

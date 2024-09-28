@@ -29,27 +29,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.ButtonsAdapter;
-import it.dhd.oxygencustomizer.ui.adapters.IconsAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.SectionTitleAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.SettingsIconOptions;
 import it.dhd.oxygencustomizer.ui.adapters.SettingsIconsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.ui.models.SettingsIconModel;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
-import it.dhd.oxygencustomizer.utils.overlay.compiler.OnDemandCompiler;
 import it.dhd.oxygencustomizer.utils.overlay.manager.SettingsIconsResourceManager;
 
 public class SettingsIcons extends BaseFragment {

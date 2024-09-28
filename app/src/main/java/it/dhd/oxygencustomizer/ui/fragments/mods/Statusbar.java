@@ -4,7 +4,6 @@ import static android.content.Context.BATTERY_SERVICE;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
-import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
@@ -17,7 +16,7 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
@@ -57,7 +56,6 @@ import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryColorOS;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleB;
-import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class Statusbar extends ControlledPreferenceFragmentCompat {
     @Override
@@ -322,7 +320,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                 mChargingIcon.setAdapterType(ListPreferenceAdapter.TYPE_BATTERY_ICONS);
             }
 
-            MaterialSwitchPreference mBatteryCustomize = findPreference("battery_icon_customize");
+            OplusSwitchPreference mBatteryCustomize = findPreference("battery_icon_customize");
             if (mBatteryCustomize != null) {
                 mBatteryCustomize.setOnPreferenceChangeListener((preference, newValue) -> {
                     AppUtils.restartAllScope(new String[]{SYSTEM_UI});

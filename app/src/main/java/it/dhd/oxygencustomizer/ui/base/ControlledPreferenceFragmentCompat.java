@@ -9,12 +9,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
+import it.dhd.oxygencustomizer.ui.recyclerview.OplusRecyclerView;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
@@ -47,6 +50,7 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
         try {
             setPreferencesFromResource(getLayoutResource(), rootKey);
         } catch (Exception e) {
+            Log.e("ControlledPreferenceFragmentCompat", "Error loading preferences", e);
             setPreferencesFromResource(R.xml.mods, rootKey);
         }
 
@@ -87,11 +91,8 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
     @Override
     public RecyclerView.Adapter<?> onCreateAdapter(@NonNull PreferenceScreen preferenceScreen) {
         mPreferences = ExtendedSharedPreferences.from(getDefaultSharedPreferences(requireContext().createDeviceProtectedStorageContext()));
-
         mPreferences.registerOnSharedPreferenceChangeListener(changeListener);
-
         updateScreen(null);
-
         return super.onCreateAdapter(preferenceScreen);
     }
 
@@ -115,7 +116,6 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
     public void updateScreen(String key) {
         PreferenceHelper.setupAllPreferences(this.getPreferenceScreen());
     }
-
     @Override
     public void setDivider(Drawable divider) {
         super.setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -125,6 +125,5 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
     public void setDividerHeight(int height) {
         super.setDividerHeight(0);
     }
-
 
 }

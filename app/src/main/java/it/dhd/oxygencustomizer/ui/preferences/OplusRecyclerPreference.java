@@ -5,8 +5,6 @@ import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,35 +15,24 @@ import it.dhd.oxygencustomizer.ui.adapters.SnapOnScrollListener;
 import it.dhd.oxygencustomizer.utils.CarouselLayoutManager;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 
-public class RecyclerPreference extends Preference {
+public class OplusRecyclerPreference extends OplusPreference {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mAdapter;
     private String mKey = null;
     private int mDefaultValue = 0;
 
-    public RecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+    @SuppressWarnings("unused")
+    public OplusRecyclerPreference(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public RecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public OplusRecyclerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public RecyclerPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public RecyclerPreference(Context context) {
-        super(context);
-        init();
-    }
-
     private void init() {
-        setSelectable(false);
         setLayoutResource(R.layout.custom_preference_recyclerview);
     }
 

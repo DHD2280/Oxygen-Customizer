@@ -6,7 +6,7 @@ import com.crossbowffs.remotepreferences.RemotePreferences;
 
 import java.util.List;
 
-import it.dhd.oxygencustomizer.ui.preferences.SliderPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference;
 
 public class ExtendedRemotePreferences extends RemotePreferences {
     public ExtendedRemotePreferences(Context context, String authority, String prefFileName) {
@@ -18,14 +18,14 @@ public class ExtendedRemotePreferences extends RemotePreferences {
     }
 
     public int getSliderInt(String key, int defaultVal) {
-        return SliderPreference.getSingleIntValue(this, key, defaultVal);
+        return OplusSliderPreference.getSingleIntValue(this, key, defaultVal);
     }
 
     public float getSliderFloat(String key, float defaultVal) {
-        return SliderPreference.getSingleFloatValue(this, key, defaultVal);
+        return OplusSliderPreference.getSingleFloatValue(this, key, defaultVal);
     }
 
     public List<Float> getSliderValues(String key, float defaultValue) {
-        return SliderPreference.getValues(this, key, defaultValue);
+        return OplusSliderPreference.getValues(this, key, defaultValue);
     }
 }

@@ -139,7 +139,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private AppItemBinding binding;
+        private final AppItemBinding binding;
 
         public ViewHolder(@NonNull AppItemBinding binding) {
             super(binding.getRoot());

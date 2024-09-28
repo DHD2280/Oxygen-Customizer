@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.RecyclerPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
@@ -85,7 +85,7 @@ public class AodClock extends ControlledPreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
-        RecyclerPreference mAodClockStyles = findPreference("aod_clock_custom");
+        OplusRecyclerPreference mAodClockStyles = findPreference("aod_clock_custom");
         if (mAodClockStyles != null) {
             mAodClockStyles.setAdapter(initLockscreenClockStyles());
             mAodClockStyles.setPreference(AOD_CLOCK_STYLE, 0);

@@ -22,7 +22,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCacheP
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
-import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -43,8 +42,8 @@ import java.util.Objects;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.ui.preferences.MaterialSwitchPreference;
-import it.dhd.oxygencustomizer.ui.preferences.RecyclerPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
@@ -167,7 +166,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
             });
         }
 
-        MaterialSwitchPreference hideCarrier, hideCapsule, hideStatusbar;
+        OplusSwitchPreference hideCarrier, hideCapsule, hideStatusbar;
         hideCarrier = findPreference(LOCKSCREEN_HIDE_CARRIER);
         hideCapsule = findPreference(LOCKSCREEN_HIDE_CAPSULE);
         hideStatusbar = findPreference(LOCKSCREEN_HIDE_STATUSBAR);
@@ -325,7 +324,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
 
-            RecyclerPreference mLockscreenClockStyles = findPreference("lockscreen_clock_custom");
+            OplusRecyclerPreference mLockscreenClockStyles = findPreference("lockscreen_clock_custom");
             if (mLockscreenClockStyles != null) {
                 mLockscreenClockStyles.setAdapter(initLockscreenClockStyles());
                 mLockscreenClockStyles.setPreference(LOCKSCREEN_CLOCK_STYLE, 0);
