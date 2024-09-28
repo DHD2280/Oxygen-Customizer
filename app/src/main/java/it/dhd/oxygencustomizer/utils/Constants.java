@@ -15,7 +15,7 @@ import java.util.List;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
 
-public class Constants {
+public final class Constants {
 
     public static class Packages {
         public static final String FRAMEWORK = "android";
