@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAlignment="center"
+        android:textColor="@color/text_color_primary"
         android:textAppearance="?attr/textAppearanceTitleMedium" />
 
 </LinearLayout>

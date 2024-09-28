@@ -6,7 +6,7 @@
     android:layout_height="85dp"
     android:layout_marginBottom="4dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="?preferenceBackgroundColor"
+    app:cardBackgroundColor="@color/cardview_background"
     android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
     app:cardCornerRadius="8dp"
     app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:text=""
+            android:textColor="@color/text_color_primary"
             android:textAppearance="?textAppearanceHeadline5" />
 
     </LinearLayout>
