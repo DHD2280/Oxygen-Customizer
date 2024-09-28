@@ -29,20 +29,16 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Layout;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.StaticLayout;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -80,7 +76,6 @@ public class StatusbarClock extends XposedMods {
     private static final int HIDE_DURATION = 60; // 1 minute
     private static final int SHOW_DURATION = 5; // 5 seconds
     private static final int STYLE_DATE_LEFT = 0;
-    private static final int STYLE_DATE_RIGHT = 1;
 
     private boolean mClockAutoHideLauncher = false;
     private boolean mScreenOn = true;
@@ -124,11 +119,11 @@ public class StatusbarClock extends XposedMods {
     private int chipTopSxRound, chipTopDxRound, chipBottomSxRound, chipBottomDxRound;
     private int chipMarginSx, chipMarginDx, chipMarginTop, chipMarginBottom;
     private int chipPaddingSx, chipPaddingDx, chipPaddingTop, chipPaddingBottom;
-    private GradientDrawable mClockChipDrawable;
+    private LayerDrawable mClockChipDrawable;
     private int mClockSize = 12;
-    private SpannableStringBuilder mSpannable;
 
 
+    @SuppressLint("DiscouragedApi")
     public StatusbarClock(Context context) {
         super(context);
 
@@ -288,8 +283,6 @@ public class StatusbarClock extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        mClockChipDrawable = new GradientDrawable();
-
         Class<?> ClockClass = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
         Class<?> CollapsedStatusBarFragmentClass = findClass("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
         Class<?> TaskStackListenerImpl = findClass("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
@@ -315,6 +308,7 @@ public class StatusbarClock extends XposedMods {
             try {
                 Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
                 hookAllMethods(PhoneStatusBarView, "onFinishInflate", new XC_MethodHook() {
+                    @SuppressLint("DiscouragedApi")
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         FrameLayout mStatusBar = (FrameLayout) param.thisObject;
@@ -495,7 +489,6 @@ public class StatusbarClock extends XposedMods {
                             stringFormatter.registerCallback(callback);
                             setAdditionalInstanceField(param.thisObject, "stringFormatCallBack", callback);
                         }
-                        mSpannable = result;
                         param.setResult(result);
                     }
                 });
@@ -549,7 +542,7 @@ public class StatusbarClock extends XposedMods {
         }
 
         result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
-        result.append(" "); //add a space to avoid small end padding
+        result.append("  "); //add a space to avoid small end padding
 
         while (start < result.length()) {
             CharacterStyle[] spans = result.getSpans(start, result.length(), CharacterStyle.class);
@@ -662,6 +655,7 @@ public class StatusbarClock extends XposedMods {
         return formatted;
     }
 
+    @SuppressLint("RtlHardcoded")
     private void setClockSize() {
         if (mClockView == null) return;
         if (mClockSize > 12) {
