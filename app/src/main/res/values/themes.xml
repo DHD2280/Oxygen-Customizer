@@ -55,6 +55,8 @@
 
         <item name="popupMenuBackground">@drawable/custom_popup_background</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+
+        <item name="homeAsUpIndicator">@drawable/ic_home_up</item>
     </style>
 
     <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">
