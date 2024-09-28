@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/preference_background_center"
     android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
-    android:layout_marginTop="14dp"
+    android:layout_marginTop="10dp"
     android:clickable="true"
     android:orientation="vertical">
 
