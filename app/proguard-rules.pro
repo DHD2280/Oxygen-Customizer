@@ -71,8 +71,9 @@
 -allowaccessmodification
 
 # Root Service
--keep class it.dhd.oxygencustomizer.services.RootProviderProxy { *; }
+-keep class it.dhd.oxygencustomizer.services.* { *; }
 -keep class it.dhd.oxygencustomizer.IRootProviderProxy { *; }
+-keep class it.dhd.oxygencustomizer.IRootProviderService { *; }
 
 # AIDL Classes
 -keep interface **.I* { *; }
