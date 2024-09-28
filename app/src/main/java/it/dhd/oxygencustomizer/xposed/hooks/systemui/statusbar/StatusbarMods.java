@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.log;
@@ -10,13 +11,16 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
@@ -68,9 +72,7 @@ public class StatusbarMods extends XposedMods {
     private static final int PULLDOWN_SIDE_LEFT = 2;
     private static final int STATUSBAR_MODE_SHADE = 0;
     private static final int STATUSBAR_MODE_KEYGUARD = 1;
-    /**
-     * @noinspection unused
-     */
+    @SuppressWarnings("unused")
     private static final int STATUSBAR_MODE_SHADE_LOCKED = 2;
     private static float statusbarPortion = 0.25f;
 
@@ -94,9 +96,6 @@ public class StatusbarMods extends XposedMods {
     GestureDetector mLockscreenDoubleTapToSleep; //event callback for double tap to sleep detection of statusbar only
 
     // Padding Vars
-    private String mLeftDefaultPad = null, mRightDefaultPad = null;
-    private float mLeftPad;
-    private float mRightPad;
     private float mTopPad;
     private boolean mKeyguardShowing = false;
     // End Padding Vars
@@ -108,6 +107,18 @@ public class StatusbarMods extends XposedMods {
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private boolean oos13 = false;
+    private boolean mBroadcastRegistered = false;
+
+    final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                if (intent.getAction().equals(ACTIONS_BOOT_COMPLETED)) {
+                    updateStatusbarHeight();
+                }
+            }
+        }
+    };
 
     public StatusbarMods(Context context) {
         super(context);
@@ -130,21 +141,26 @@ public class StatusbarMods extends XposedMods {
         mBrightnessControl = Xprefs.getBoolean("brightness_control", false);
 
         // Padding
-        mLeftPad = Xprefs.getSliderFloat("statusbar_padding_start", PADDING_DEFAULT);
         mTopPad = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 Xprefs.getSliderFloat("statusbar_top_padding", 0f),
                 mContext.getResources().getDisplayMetrics());
-        mRightPad = Xprefs.getSliderFloat("statusbar_padding_end", PADDING_DEFAULT);
         statusBarPadding = Xprefs.getBoolean("statusbar_padding_enabled", false);
 
         // Notifications
         mNewIconStyle = Xprefs.getBoolean("statusbar_notification_app_icon", false);
 
+        List<Float> paddings = Xprefs.getSliderValues("statusbarPaddings", 0);
+        if (paddings.size() > 1) {
+            SBPaddingStart = paddings.get(0);
+            SBPaddingEnd = 100f - paddings.get(1);
+        }
+
         if (Key.length > 0) {
             switch (Key[0]) {
-                case "statusbar_padding_start", "statusbar_padding_end",
-                     "statusbar_padding_enabled" -> updateResources();
+                case "statusbarPaddings",
+                     "statusbar_top_padding" -> updateStatusbarHeight();
+                case "statusbar_padding_enabled" -> updateResources();
                 case "statusbar_notification_app_icon" -> updateNotificationIcons();
             }
         }
@@ -155,6 +171,14 @@ public class StatusbarMods extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
+
+        if (!mBroadcastRegistered) {
+            mBroadcastRegistered = true;
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTIONS_BOOT_COMPLETED);
+            mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
+        }
 
         mLockscreenDoubleTapToSleep = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -230,26 +254,24 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> PhoneStatusBarViewExImpl = findClass("com.oplus.systemui.statusbar.phone.PhoneStatusBarViewExImpl", lpparam.classLoader);
-        hookAllMethods(PhoneStatusBarViewExImpl, "updateSafeInsets", new XC_MethodHook() {
+        hookAllMethods(PhoneStatusBarView, "updateStatusBarHeight", new XC_MethodHook() {
             @SuppressLint("DiscouragedApi")
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-//                mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
 
                 if (!statusBarPadding) return;
 
                 int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
-                int paddingStart = Math.round(mLeftPad * screenWidth / 100f);
+                int paddingStart = SBPaddingStart == PADDING_DEFAULT
+                        ? mContext.getResources().getIdentifier("status_bar_padding_start", "type/dimen", listenPackage)
+                        : Math.round(SBPaddingStart * screenWidth / 100f);
 
-                int paddingEnd = Math.round(mRightPad * screenWidth / 100f);
-
-                log(TAG + "Padding Start: " + paddingStart + " SBPaddingStart: " + SBPaddingStart + " Padding End: " + paddingEnd + " mRightPad: " + mRightPad);
-
-                if (mLeftPad != 0f) param.args[0] = paddingStart;
-                if (mRightPad != 0f) param.args[1] = paddingEnd;
-//                mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
+                int paddingEnd = SBPaddingEnd == PADDING_DEFAULT
+                        ? mContext.getResources().getIdentifier("status_bar_padding_end", "type/dimen", listenPackage)
+                        : Math.round(SBPaddingEnd * screenWidth / 100f);
+                mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
             }
         });
 
