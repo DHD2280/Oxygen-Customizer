@@ -68,8 +68,7 @@ public class SystemUtils {
     private WindowManager mWindowManager;
     private UserManager mUserManager;
 
-    public static void killSelf()
-    {
+    public static void killSelf() {
         BootLoopProtector.resetCounter(android.os.Process.myProcessName());
 
         android.os.Process.killProcess(android.os.Process.myPid());
@@ -81,15 +80,16 @@ public class SystemUtils {
         XPLauncher.enqueueProxyCommand(proxy -> {
             try {
                 proxy.runCommand("killall com.android.systemui");
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         });
     }
 
-    public static void sleep(int millis)
-    {
+    public static void sleep(int millis) {
         try {
             Thread.sleep(millis);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     @Nullable
@@ -126,8 +126,7 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
-    public static WifiManager WifiManager()
-    {
+    public static WifiManager WifiManager() {
         return instance == null
                 ? null
                 : instance.getWifiManager();
@@ -135,8 +134,7 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
-    public static BluetoothManager BluetoothManager()
-    {
+    public static BluetoothManager BluetoothManager() {
         return instance == null
                 ? null
                 : instance.getBluetoothManager();
@@ -159,8 +157,7 @@ public class SystemUtils {
     }
 
     private CameraManager getCameraManager() {
-        if(mCameraManager == null)
-        {
+        if (mCameraManager == null) {
             try {
                 HandlerThread thread = new HandlerThread("", THREAD_PRIORITY_BACKGROUND);
                 thread.start();
@@ -186,13 +183,18 @@ public class SystemUtils {
 
     public SystemUtils(Context context) {
         mContext = context;
-
         instance = this;
     }
 
+    public static void threadSleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (Throwable ignored) {
+        }
+    }
+
     private PowerManager getPowerManager() {
-        if(mPowerManager == null)
-        {
+        if (mPowerManager == null) {
             try {
                 mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
             } catch (Throwable t) {
@@ -223,11 +225,11 @@ public class SystemUtils {
     }
 
     public static void sleep() {
-        if (instance != null)
-        {
+        if (instance != null) {
             try {
                 callMethod(PowerManager(), "goToSleep", SystemClock.uptimeMillis());
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
     }
 
@@ -267,8 +269,7 @@ public class SystemUtils {
     }
 
     private AlarmManager getAlarmManager() {
-        if(mAlarmManager == null)
-        {
+        if (mAlarmManager == null) {
             try {
                 mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
             } catch (Throwable t) {
@@ -295,10 +296,8 @@ public class SystemUtils {
     }
 
     private WifiManager getWifiManager() {
-        if(mWifiManager == null)
-        {
-            try
-            {
+        if (mWifiManager == null) {
+            try {
                 mWifiManager = mContext.getSystemService(WifiManager.class);
             } catch (Throwable t) {
                 if (BuildConfig.DEBUG) {
@@ -311,10 +310,8 @@ public class SystemUtils {
     }
 
     private BluetoothManager getBluetoothManager() {
-        if(mBluetoothManager == null)
-        {
-            try
-            {
+        if (mBluetoothManager == null) {
+            try {
                 mBluetoothManager = mContext.getSystemService(BluetoothManager.class);
             } catch (Throwable t) {
                 if (BuildConfig.DEBUG) {
@@ -327,10 +324,8 @@ public class SystemUtils {
     }
 
     private ConnectivityManager getConnectivityManager() {
-        if(mConnectivityManager == null)
-        {
-            try
-            {
+        if (mConnectivityManager == null) {
+            try {
                 mConnectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             } catch (Throwable t) {
                 if (BuildConfig.DEBUG) {
@@ -355,10 +350,8 @@ public class SystemUtils {
         return mUserManager;
     }
 
-    private VibratorManager getVibrationManager()
-    {
-        if(mVibrationManager == null)
-        {
+    private VibratorManager getVibrationManager() {
+        if (mVibrationManager == null) {
             try {
                 mVibrationManager = (VibratorManager) mContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
                 mHasVibrator = mVibrationManager.getDefaultVibrator().hasVibrator();
@@ -384,11 +377,9 @@ public class SystemUtils {
     public static void vibrate(VibrationEffect effect, @Nullable Integer vibrationUsage) {
         if (instance == null || !instance.hasVibrator()) return;
         try {
-            if(vibrationUsage != null) {
+            if (vibrationUsage != null) {
                 instance.getVibrationManager().getDefaultVibrator().vibrate(effect, VibrationAttributes.createForUsage(vibrationUsage));
-            }
-            else
-            {
+            } else {
                 instance.getVibrationManager().getDefaultVibrator().vibrate(effect);
             }
         } catch (Exception ignored) {
@@ -419,8 +410,7 @@ public class SystemUtils {
 
 
     private boolean supportsFlashLevelsInternal() {
-        if(getCameraManager() == null)
-        {
+        if (getCameraManager() == null) {
             return false;
         }
 
@@ -441,7 +431,7 @@ public class SystemUtils {
     }
 
     private void setFlashInternal(boolean enabled) {
-        if(getCameraManager() == null)
+        if (getCameraManager() == null)
             return;
 
         try {
@@ -468,8 +458,7 @@ public class SystemUtils {
     }
 
     private void setFlashInternal(boolean enabled, float pct) {
-        if(getCameraManager() == null)
-        {
+        if (getCameraManager() == null) {
             return;
         }
 
