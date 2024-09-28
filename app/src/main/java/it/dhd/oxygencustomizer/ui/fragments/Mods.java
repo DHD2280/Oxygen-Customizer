@@ -29,7 +29,9 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
 import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
@@ -45,7 +47,10 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
     @Override
     public boolean backButtonEnabled() {
-        return !Prefs.getBoolean(XPOSED_ONLY_MODE, true);
+        boolean isModuleInstalled = ModuleUtil.moduleExists();
+        boolean isOverlayInstalled = OverlayUtil.overlayExists();
+
+        return (isModuleInstalled && isOverlayInstalled);
     }
 
     @Override
@@ -82,7 +87,6 @@ public class Mods extends ControlledPreferenceFragmentCompat {
     }
 
     public void onSearchResultClicked(SearchPreferenceResult result) {
-        Log.d("Mods", "onSearchResultClicked: " + result.getKey() + " " + result.getResourceFile() + " " + result.toString());
         if (result.getResourceFile() == R.xml.mods) {
             if (searchPreference != null) searchPreference.setVisible(false);
             SearchPreferenceResult.highlight(new Mods(), result.getKey());
@@ -95,12 +99,6 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                 }
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        backButtonDisabled();
     }
 
     public static class Sound extends ControlledPreferenceFragmentCompat {

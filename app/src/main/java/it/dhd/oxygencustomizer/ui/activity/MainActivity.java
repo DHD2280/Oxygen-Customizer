@@ -32,6 +32,7 @@ import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
+import it.dhd.oxygencustomizer.ui.fragments.uistyle.UiStyle;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.databinding.ActivityMainBinding;
@@ -58,7 +59,9 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTile
 import it.dhd.oxygencustomizer.ui.fragments.UserInterface;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
@@ -167,28 +170,18 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
                 selectedFragment = R.id.ui;
                 binding.bottomNavigationView.getMenu().getItem(0).setChecked(true);
-                setHeader(this, getString(R.string.app_name));
-                backButtonDisabled();
             } else if (Objects.equals(tag, Mods.class.getSimpleName())) {
                 selectedFragment = R.id.mods;
                 binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 0 : 1).setChecked(true);
-                setHeader(this, !OverlayUtil.overlayExists() ? getString(R.string.app_name) : getString(R.string.mods_title));
-                backButtonDisabled();
             } else if (Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
                 selectedFragment = R.id.updates;
                 binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 1 : 2).setChecked(true);
-                setHeader(this, getString(R.string.update));
-                backButtonDisabled();
             } else if (Objects.equals(tag, Hooks.class.getSimpleName())) {
                 selectedFragment = R.id.hooks;
                 binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 2 : 3).setChecked(true);
-                setHeader(this, getString(R.string.hooked_packages_title));
-                backButtonDisabled();
             } else if (Objects.equals(tag, Settings.class.getSimpleName())) {
                 selectedFragment = R.id.settings;
                 binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 3 : 4).setChecked(true);
-                setHeader(this, getString(R.string.navbar_settings));
-                backButtonDisabled();
             }
         });
 
@@ -306,18 +299,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowHomeEnabled(false);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Objects.equals(getTopFragment(), Mods.class.getSimpleName()) ||
-                Objects.equals(getTopFragment(), Hooks.class.getSimpleName()) ||
-                Objects.equals(getTopFragment(), Settings.class.getSimpleName())) {
-            backButtonDisabled();
-        } else {
-            backButtonEnabled();
         }
     }
 
