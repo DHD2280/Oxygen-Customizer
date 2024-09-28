@@ -40,7 +40,7 @@ public class SystemReceiver extends BroadcastReceiver {
             UpdateScheduler.scheduleUpdates(context);
 
             // Update QS Clock on BOOT_COMPLETED
-            Intent broadcast = new Intent(Constants.ACTIONS_QS_CLOCK_UPDATE);
+            Intent broadcast = new Intent(Constants.ACTIONS_BOOT_COMPLETED);
             broadcast.putExtra("packageName", SYSTEM_UI);
             context.sendBroadcast(broadcast);
         }
