@@ -140,7 +140,7 @@ public class LockscreenWidgets extends ControlledPreferenceFragmentCompat {
         boolean weatherEnabled =
                 mainWidgets.contains("weather") || extraWidgets.contains("weather");
 
-        if (weatherEnabled && wasWeatherEnabled) {
+        if (weatherEnabled && wasWeatherEnabled && mWeatherClient.getWeatherInfo() != null) {
             // Weather enabled but updater more than 1h ago
             if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
                 WeatherScheduler.scheduleUpdateNow(getContext());

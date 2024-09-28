@@ -242,7 +242,7 @@ public class QuickSettingsWidgets extends BaseFragment {
         if (widget.contains("weather")) {
             boolean wasWeatherEnabled = WeatherConfig.isEnabled(getContext());
 
-            if (wasWeatherEnabled) {
+            if (wasWeatherEnabled && mWeatherClient.getWeatherInfo() != null) {
                 // Weather enabled but updated more than 1h ago
                 if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
                     WeatherScheduler.scheduleUpdateNow(getContext());
