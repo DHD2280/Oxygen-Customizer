@@ -743,8 +743,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         fab.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         fab.setSingleLine(true);
         fab.setMarqueeRepeatLimit(-1);
-        fab.setFocusable(true);
-        fab.setFocusableInTouchMode(true);
+        fab.setFocusable(false);
+        fab.setFocusableInTouchMode(false);
         fab.setHorizontallyScrolling(true);
         fab.setClickable(true);
         fab.setTypeface(null, Typeface.BOLD);
@@ -767,9 +767,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 fabBackground.setShape(getShapeForHighlightTile(mContext));
             }
             fab.setBackground(fabBackground);
-            fab.requestFocus();
             fab.setLayoutParams(layoutParams2);
             fab.requestLayout();
+        });
+        fab.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                fab.setSelected(true);
+            }
         });
         QsTileTouchAnim anim = new QsTileTouchAnim();
         anim.initTouchAnim(fab, true);
