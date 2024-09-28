@@ -38,6 +38,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -112,6 +113,8 @@ public class QsMediaTile extends LinearLayout {
 
         MediaPlayerObserver.registerMediaData(mMediaDataObserver);
 
+        ThemeEnabler.registerThemeChangedListener(this::setupColors);
+
     }
 
     private final MediaPlayerObserver.OnBindMediaData mMediaDataObserver = new MediaPlayerObserver.OnBindMediaData() {
@@ -136,6 +139,22 @@ public class QsMediaTile extends LinearLayout {
         }
     };
 
+    private void setupColors() {
+
+        mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
+        post(() -> {
+            if (mTextColor != null) {
+                mDeviceIcon.setImageTintList(mTextColor);
+                mTitle.setTextColor(mTextColor);
+                mText.setTextColor(mTextColor);
+                mPrev.setImageTintList(mTextColor);
+                mPlayPause.setImageTintList(mTextColor);
+                mNext.setImageTintList(mTextColor);
+            }
+            updateBackground();
+        });
+    }
+
     public void bindMediaAction(Object mediaData) {
 
         Object MediaButton = callMethod(mediaData, "getSemanticActions");
@@ -143,25 +162,14 @@ public class QsMediaTile extends LinearLayout {
         Object playOrPause = callMethod(MediaButton, "getPlayOrPause");
         Object nextOrCustom = callMethod(MediaButton, "getNextOrCustom");
 
-        if (prevOrCustom != null) {
-            setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom);
-        } else {
-            mPrev.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-        }
-        if (playOrPause != null) {
-            setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause);
-        } else {
-            mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-        }
-        if (nextOrCustom != null) {
-            setSemanticButton(mNext, mNextIconDrawable, nextOrCustom);
-        } else {
-            mNext.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT));
-        }
+        setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        setSemanticButton(mNext, mNextIconDrawable, nextOrCustom, KeyEvent.KEYCODE_MEDIA_NEXT);
 
     }
 
-    private void setSemanticButton(ImageView imageView, Drawable image, Object mediaAction) {
+    private void setSemanticButton(ImageView imageView, Drawable image, Object mediaAction, final int keycode) {
+        log("QsMediaTile setSemanticButton " + mediaAction);
         if (imageView == null) {
             return;
         }
@@ -170,13 +178,14 @@ public class QsMediaTile extends LinearLayout {
         imageView.setImageDrawable(image);
 
         if (mediaAction == null) {
-            imageView.setContentDescription(null);
-            imageView.setEnabled(false);
-            return; // Disable button if no media action
+            imageView.setEnabled(true);
+            imageView.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(keycode));
+            return;
         }
 
         imageView.setOnClickListener(view -> {
-            // Handle button click here// You can access 'imageButton', 'mediaData', 'mediaAction', and 'view' in this lambda
+            // Handle button click here
+            // You can access 'imageButton', 'mediaData', 'mediaAction', and 'view' in this lambda
             handleSemanticButtonClick(mediaAction);
         });
     }
@@ -304,7 +313,7 @@ public class QsMediaTile extends LinearLayout {
             mText.setVisibility(GONE);
 
             mPlayPause.setImageDrawable(getDrawable(PLAY_ICON, SYSTEM_UI));
-            mPlayPause.setOnClickListener( v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+            mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 
             setupOtherViews(mTextColor.getDefaultColor());
         });
@@ -447,12 +456,16 @@ public class QsMediaTile extends LinearLayout {
         switch (mMediaQsArtFilter) {
             default -> finalArt = art;
             case 1 -> finalArt = DrawableConverter.toGrayscale(art);
-            case 2 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                    getPrimaryColor(mContext));
-            case 3 -> finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 4 -> finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 5 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                    mMediaQsTintColor, mMediaQsTintAmount);
+            case 2 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            getPrimaryColor(mContext));
+            case 3 ->
+                    finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 4 ->
+                    finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 5 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            mMediaQsTintColor, mMediaQsTintAmount);
         }
         return finalArt;
     }
