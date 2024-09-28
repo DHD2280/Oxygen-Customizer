@@ -8,6 +8,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.getMarginBottom;
 import static it.dhd.oxygencustomizer.utils.Constants.getMarginDx;
 import static it.dhd.oxygencustomizer.utils.Constants.getMarginSx;
 import static it.dhd.oxygencustomizer.utils.Constants.getMarginTop;
+import static it.dhd.oxygencustomizer.utils.Constants.getPaddingBottom;
+import static it.dhd.oxygencustomizer.utils.Constants.getPaddingDx;
+import static it.dhd.oxygencustomizer.utils.Constants.getPaddingSx;
+import static it.dhd.oxygencustomizer.utils.Constants.getPaddingTop;
 import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeColor;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
@@ -64,7 +68,6 @@ public class BackgroundChipPreference extends DialogPreference {
     private QsChipLayoutBinding binding;
 
     private int chipStyle = 0;
-
 
     public BackgroundChipPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -286,19 +289,19 @@ public class BackgroundChipPreference extends DialogPreference {
 
         // Padding
         binding.chipPaddingLeft.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginSx(getKey()), (int) value).apply();
+            prefs.edit().putInt(getPaddingSx(getKey()), (int) value).apply();
             paddingSx = (int) value;
         });
         binding.chipPaddingRight.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginDx(getKey()), (int) value).apply();
+            prefs.edit().putInt(getPaddingDx(getKey()), (int) value).apply();
             paddingDx = (int) value;
         });
         binding.chipPaddingTop.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginTop(getKey()), (int) value).apply();
+            prefs.edit().putInt(getPaddingTop(getKey()), (int) value).apply();
             paddingTop = (int) value;
         });
         binding.chipPaddingBottom.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginBottom(getKey()), (int) value).apply();
+            prefs.edit().putInt(getPaddingBottom(getKey()), (int) value).apply();
             paddingBottom = (int) value;
         });
 
