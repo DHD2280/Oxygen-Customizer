@@ -255,7 +255,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     boolean DepthEffectEnabled = mPreferences.getBoolean("DWallpaperEnabled", false);
 
                     if (DepthEffectEnabled) {
-                        new MaterialAlertDialogBuilder(getContext(), R.style.MaterialComponents_MaterialAlertDialog)
+                        new MaterialAlertDialogBuilder(getContext())
                                 .setTitle(R.string.depth_effect_alert_title)
                                 .setMessage(getString(R.string.depth_effect_alert_body, getString(R.string.sysui_restart_needed)))
                                 .setPositiveButton(R.string.depth_effect_ok_btn, (dialog, which) -> AppUtils.restartScope("systemui"))

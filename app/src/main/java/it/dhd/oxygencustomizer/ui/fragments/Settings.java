@@ -91,7 +91,7 @@ public class Settings extends ControlledPreferenceFragmentCompat {
         if (appIconThemed != null) {
             appIconThemed.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean isThemed = (boolean) newValue;
-                new MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialComponents_MaterialAlertDialog)
+                new MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.app_kill_alert_title)
                         .setMessage(R.string.app_kill_alert_body)
                         .setPositiveButton(R.string.app_kill_ok_btn, (dialog, which) -> changeIcon(isThemed))
