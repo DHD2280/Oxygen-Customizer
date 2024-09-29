@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
-import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_DIR;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_CODE;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_NAME;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
