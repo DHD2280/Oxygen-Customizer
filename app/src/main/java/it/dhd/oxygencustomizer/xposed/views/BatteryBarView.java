@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views;
 
 
+import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.getCurrentLevel;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isCharging;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isFastCharging;
@@ -40,6 +41,7 @@ public class BatteryBarView extends FrameLayout {
     private final ShapeDrawable mDrawable = new ShapeDrawable();
     FrameLayout maskLayout;
     private final ImageView chargingIndicatorView;
+    private final ImageView chargingIndicatorViewForCenter;
     private boolean colorful = false;
     private int alphaPct = 100;
     private int singleColorTone = Color.WHITE;
@@ -110,6 +112,7 @@ public class BatteryBarView extends FrameLayout {
         maskLayout.setLayoutParams(maskLayoutParams());
         barView.setLayoutParams(barLayoutParams());
         chargingIndicatorView.setLayoutParams(charginLayoutParams());
+        chargingIndicatorViewForCenter.setLayoutParams(charginLayoutParams());
 
         refreshColors(barView.getWidth(), barView.getHeight());
         mDrawable.invalidateSelf();
@@ -153,6 +156,8 @@ public class BatteryBarView extends FrameLayout {
     }
 
     private void stopChargingAnimation() {
+        chargingIndicatorView.post(() -> chargingIndicatorView.setVisibility(GONE));
+        chargingIndicatorViewForCenter.post(() -> chargingIndicatorViewForCenter.setVisibility(GONE));
         if (chargingAnimationRunnable != null) {
             animationHandler.removeCallbacks(chargingAnimationRunnable);
             chargingAnimationRunnable = null;
@@ -161,13 +166,20 @@ public class BatteryBarView extends FrameLayout {
 
     private void animateChargingIndicator() {
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        float startX, endX;
+
+        chargingIndicatorView.post(() -> chargingIndicatorView.setVisibility(VISIBLE));
+        int secondaryVisiblity = (isCenterBased) ? GONE : VISIBLE;
+        chargingIndicatorViewForCenter.post(() -> chargingIndicatorViewForCenter.setVisibility(secondaryVisiblity));
+
+        float startX, startXCenter, endX;
 
         if (RTL) {
             startX = 0;
+            startXCenter = getWidth();
             endX = getWidth() - Math.round(getWidth() * getCurrentLevel() / 100f);
         } else {
             startX = screenWidth;
+            startXCenter = 0;
             endX = Math.round(getWidth() * getCurrentLevel() / 100f);
         }
         if (isCenterBased) endX = getWidth() / 2f;
@@ -176,6 +188,13 @@ public class BatteryBarView extends FrameLayout {
         animation.setDuration(ANIM_DURATION);
         animation.setInterpolator(new LinearInterpolator());
         chargingIndicatorView.startAnimation(animation);
+
+        if (isCenterBased) {
+            TranslateAnimation animationCenter = new TranslateAnimation(startXCenter, endX, 0, 0);
+            animationCenter.setDuration(ANIM_DURATION);
+            animationCenter.setInterpolator(new LinearInterpolator());
+            chargingIndicatorViewForCenter.startAnimation(animationCenter);
+        }
     }
 
     public BatteryBarView(Context context) {
@@ -195,12 +214,17 @@ public class BatteryBarView extends FrameLayout {
         chargingIndicatorView.setLayoutParams(new LayoutParams(20, barHeight));
         chargingIndicatorView.setBackgroundColor(singleColorTone);
 
+        chargingIndicatorViewForCenter = new ImageView(context);
+        chargingIndicatorViewForCenter.setLayoutParams(new LayoutParams(20, barHeight));
+        chargingIndicatorViewForCenter.setBackgroundColor(singleColorTone);
+
         maskLayout = new FrameLayout(context);
         maskLayout.addView(barView);
         maskLayout.setClipChildren(true);
 
         this.addView(maskLayout);
         this.addView(chargingIndicatorView);
+        this.addView(chargingIndicatorViewForCenter);
         this.setClipChildren(true);
 
         RTL = (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL);
@@ -227,7 +251,11 @@ public class BatteryBarView extends FrameLayout {
         float dp = 4f;
         int pixels = (int) (metrics.density * dp + 0.5f);
         LayoutParams result = new LayoutParams(pixels, barHeight);
-        result.gravity = Gravity.START;
+        if (RTL) {
+            result.gravity = Gravity.END;
+        } else {
+            result.gravity = Gravity.START;
+        }
         result.gravity |= (onTop) ? Gravity.TOP : Gravity.BOTTOM;
         return result;
     }
@@ -257,10 +285,12 @@ public class BatteryBarView extends FrameLayout {
         if (isFastCharging() && indicateFastCharging) //fast charging color
         {
             chargingIndicatorView.setBackgroundColor(fastChargingColor);
+            chargingIndicatorViewForCenter.setBackgroundColor(fastChargingColor);
             mPaint.setColor(fastChargingColor);
         } else if (isCharging() && indicateCharging) //normal charging color
         {
             chargingIndicatorView.setBackgroundColor(chargingColor);
+            chargingIndicatorViewForCenter.setBackgroundColor(chargingColor);
             mPaint.setColor(chargingColor);
         } else if (isPowerSaving() && indicatePowerSave) { //power save color
             mPaint.setColor(powerSaveColor);
