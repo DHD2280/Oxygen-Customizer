@@ -213,9 +213,9 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Preenchimento de barra de status</string>
     <string name="statusbar_top_padding">Preenchimento superior</string>
-    <string name="sb_padding_title">Barra de status para Preenchimento esquerda e direita</string>
     <string name="statusbar_left_padding">Preenchimento esquerdo</string>
     <string name="statusbar_right_padding">Preenchimento direito</string>
+    <string name="sb_padding_title">Barra de status para Preenchimento esquerda e direita</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Habilitar barra de bateria</string>
     <string name="BB_onlycharging_title">Somente durante o carregamento</string>

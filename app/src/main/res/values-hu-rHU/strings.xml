@@ -214,10 +214,10 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Állapotsáv-kitöltés</string>
     <string name="statusbar_top_padding">Felső kitöltés</string>
-    <string name="sb_padding_title">Bal és Jobb kitöltés</string>
+    <string name="statusbar_padding_info">A gyári megtartásához állítsa 0 értékre</string>
     <string name="statusbar_left_padding">Baloldali kitöltés</string>
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
-    <string name="statusbar_padding_info">A gyári megtartásához állítsa 0 értékre</string>
+    <string name="sb_padding_title">Bal és Jobb kitöltés</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>

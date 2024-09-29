@@ -214,10 +214,10 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">حشو شريط الحالة</string>
     <string name="statusbar_top_padding">حشو العلوي</string>
-    <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
+    <string name="statusbar_padding_info">قم بتعيين 0 لإبقاء الأصل</string>
     <string name="statusbar_left_padding">حشو اليسار</string>
     <string name="statusbar_right_padding">حشو اليمين</string>
-    <string name="statusbar_padding_info">قم بتعيين 0 لإبقاء الأصل</string>
+    <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">تفعيل شريط البطارية</string>
     <string name="BB_onlycharging_title">فقط أثناء الشحن</string>
