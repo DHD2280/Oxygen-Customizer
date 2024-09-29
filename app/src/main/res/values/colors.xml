@@ -143,4 +143,9 @@
 
     <color name="oplusColorSurfaces">#F3F4F6</color>
 
+    <!-- Radio Button -->
+    <color name="btn_radio_background_color">#4d000000</color>
+    <color name="btn_radio_color_on_disabled">#ffffff</color>
+
+
 </resources>

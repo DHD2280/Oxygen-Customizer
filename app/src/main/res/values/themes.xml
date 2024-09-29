@@ -57,6 +57,8 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
 
         <item name="homeAsUpIndicator">@drawable/ic_home_up</item>
+
+        <item name="radioButtonStyle">@style/Widget.CompoundButton.RadioButton</item>
     </style>
 
     <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">

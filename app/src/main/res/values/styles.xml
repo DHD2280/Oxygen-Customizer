@@ -244,5 +244,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Widget.CompoundButton.RadioButton" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/custom_radio_selector</item>
+    </style>
+
 
 </resources>

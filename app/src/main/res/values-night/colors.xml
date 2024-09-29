@@ -47,4 +47,8 @@
 
     <color name="oplusColorSurfaces">#2E2E2E</color>
 
+    <!-- Radio Button -->
+    <color name="btn_radio_background_color">#80999999</color>
+    <color name="btn_radio_color_on_disabled">#4dffffff</color>
+
 </resources>
