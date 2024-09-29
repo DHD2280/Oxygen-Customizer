@@ -214,10 +214,11 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Padding barra di stato</string>
     <string name="statusbar_top_padding">Padding superiore</string>
-    <string name="sb_padding_title">Paddin sinistro e destro</string>
+    <string name="statusbar_padding_info">Imposta 0 per non modificare</string>
     <string name="statusbar_left_padding">Padding sinistro</string>
     <string name="statusbar_right_padding">Padding destro</string>
-    <string name="statusbar_padding_info">Imposta 0 per non modificare</string>
+    <string name="sb_padding_title">Paddin sinistro e destro</string>
+    <string name="sb_padding_summary">Impostare i valori al min/max equivale a impostare quelli di default</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Abilita barra batteria</string>
     <string name="BB_onlycharging_title">Solo durante la ricarica</string>

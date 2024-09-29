@@ -212,9 +212,9 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Durum çubuğu dolgusu</string>
     <string name="statusbar_top_padding">Üst dolgu</string>
-    <string name="sb_padding_title">Durum Çubuğu Sol ve Sağ Dolgusu</string>
     <string name="statusbar_left_padding">Sol dolgu</string>
     <string name="statusbar_right_padding">Sağ dolgu</string>
+    <string name="sb_padding_title">Durum Çubuğu Sol ve Sağ Dolgusu</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Pil Çubuğunu Etkinleştir</string>
     <string name="BB_onlycharging_title">Sadece şarj olurken</string>

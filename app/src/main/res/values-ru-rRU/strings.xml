@@ -214,9 +214,9 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Заполнение строки состояния</string>
     <string name="statusbar_top_padding">Отступ сверху</string>
-    <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
     <string name="statusbar_left_padding">Отступ слева</string>
     <string name="statusbar_right_padding">Правильное заполнение</string>
+    <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Включить индикатор заряда батареи</string>
     <string name="BB_onlycharging_title">Только во время зарядки</string>

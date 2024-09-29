@@ -214,9 +214,9 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">狀態欄填充</string>
     <string name="statusbar_top_padding">頂部填充</string>
-    <string name="sb_padding_title">狀態欄左右邊填充</string>
     <string name="statusbar_left_padding">左邊填充</string>
     <string name="statusbar_right_padding">右邊填充</string>
+    <string name="sb_padding_title">狀態欄左右邊填充</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">啟用電池條</string>
     <string name="BB_onlycharging_title">僅充電時</string>
