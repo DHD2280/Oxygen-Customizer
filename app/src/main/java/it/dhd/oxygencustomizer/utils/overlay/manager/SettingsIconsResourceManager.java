@@ -16,7 +16,8 @@ public class SettingsIconsResourceManager {
     ) throws IOException {
         String resources = "";
 
-        if (iconSet == 1 || iconSet == 2) {
+        if (iconSet == 1 || iconSet == 2 || iconSet == 4) {
+            // PUI Icon Pack
             resources += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                     "<resources>\n" +
                     "    <color name=\"monet_color\">" +
