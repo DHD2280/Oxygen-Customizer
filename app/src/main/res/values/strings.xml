@@ -1153,6 +1153,7 @@
     <string name="settings_icons_customized">Stock Customized</string>
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Background Color</string>
     <string name="settings_bg_use_solid">Solid Background</string>
     <string name="settings_bg_shape">Background Shape</string>

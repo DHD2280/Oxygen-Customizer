@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="30.0dip" android:width="30.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/monet_color" android:pathData="M13.89,2.88L9.2,2.14C5.29,1.53 3.48,2.85 2.86,6.76L2.12,11.45C1.72,14.01 2.14,15.67 3.59,16.68C4.35,17.22 5.39,17.58 6.74,17.79L11.43,18.53C15.34,19.14 17.15,17.82 17.77,13.91L18.5,9.22C18.62,8.45 18.67,7.76 18.63,7.15C18.5,4.65 17.03,3.37 13.89,2.88ZM8.24,9.35C7.07,9.35 6.12,8.4 6.12,7.24C6.12,6.07 7.07,5.12 8.24,5.12C9.4,5.12 10.35,6.07 10.35,7.24C10.35,8.4 9.4,9.35 8.24,9.35Z" android:strokeAlpha="0.4" android:fillAlpha="0.4" />
+    <path android:fillColor="@color/monet_color" android:pathData="M20.5,13.47L19,17.98C17.75,21.74 15.75,22.74 11.99,21.49L7.48,19.99C5.21,19.24 3.95,18.2 3.59,16.68C4.35,17.22 5.39,17.58 6.74,17.79L11.43,18.53C15.34,19.14 17.15,17.82 17.77,13.91L18.5,9.22C18.62,8.45 18.67,7.76 18.63,7.15C21.02,8.42 21.54,10.34 20.5,13.47Z" />
+    <path android:fillColor="@color/monet_color" android:pathData="M10.349,7.24C10.349,8.4 9.399,9.35 8.239,9.35C7.069,9.35 6.119,8.4 6.119,7.24C6.119,6.07 7.069,5.12 8.239,5.12C9.399,5.12 10.349,6.07 10.349,7.24Z" />
+</vector>

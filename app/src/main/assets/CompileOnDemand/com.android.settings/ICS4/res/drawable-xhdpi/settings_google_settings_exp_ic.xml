@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="30.0dip" android:width="30.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/monet_color" android:pathData="M18.7,8.98L4.14,17.71C4.05,17.38 4,17.03 4,16.67V7.33C4,4.25 7.33,2.33 10,3.87L14.04,6.2L18.09,8.54C18.31,8.67 18.52,8.81 18.7,8.98Z" />
+    <path android:fillColor="@color/monet_color" android:pathData="M18.091,15.46L14.041,17.8L10.001,20.13C8.091,21.23 5.841,20.57 4.721,18.96L5.141,18.71L19.581,10.05C20.581,11.85 20.091,14.31 18.091,15.46Z" android:strokeAlpha="0.4" android:fillAlpha="0.4" />
+</vector>

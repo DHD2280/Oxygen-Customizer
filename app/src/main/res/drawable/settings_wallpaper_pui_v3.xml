@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30.0dip"
+    android:height="30.0dip"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:fillAlpha="0.4"
+        android:fillColor="@color/settings_pui_monet_v1"
+        android:pathData="M22.021,16.82L18.891,9.5C18.321,8.16 17.471,7.4 16.501,7.35C15.541,7.3 14.611,7.97 13.901,9.25L12.001,12.66C11.601,13.38 11.031,13.81 10.411,13.86C9.781,13.92 9.151,13.59 8.641,12.94L8.421,12.66C7.711,11.77 6.831,11.34 5.931,11.43C5.031,11.52 4.261,12.14 3.751,13.15L2.021,16.6C1.401,17.85 1.461,19.3 2.191,20.48C2.921,21.66 4.191,22.37 5.581,22.37H18.341C19.681,22.37 20.931,21.7 21.671,20.58C22.431,19.46 22.551,18.05 22.021,16.82Z"
+        android:strokeAlpha="0.4" />
+    <path
+        android:fillColor="@color/settings_pui_monet_v1"
+        android:pathData="M6.97,8.38C8.837,8.38 10.35,6.867 10.35,5C10.35,3.133 8.837,1.62 6.97,1.62C5.103,1.62 3.59,3.133 3.59,5C3.59,6.867 5.103,8.38 6.97,8.38Z" />
+</vector>

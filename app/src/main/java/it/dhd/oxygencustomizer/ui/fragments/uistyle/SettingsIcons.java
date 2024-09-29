@@ -131,6 +131,21 @@ public class SettingsIcons extends BaseFragment {
                         true,
                         true));
 
+        // PUI v3
+        settingsIcons.add(
+                new SettingsIconModel(
+                        getString(R.string.settings_icons_pui_v3),
+                        "",
+                        ContextCompat.getDrawable(requireContext(), R.drawable.settings_wifi_pui_v3),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.settings_wallpaper_pui_v3),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.settings_battery_pui_v3),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.settings_about_pui_v3),
+                        true,
+                        false,
+                        false,
+                        false,
+                        false));
+
         iconsAdapter = new SettingsIconsAdapter(requireContext(), settingsIcons, onSettingsIconClick);
         settingsIconOptions = new SettingsIconOptions(requireContext(), onSettingsIconChange);
         buttonsAdapter = new ButtonsAdapter(onButtonsClick);
