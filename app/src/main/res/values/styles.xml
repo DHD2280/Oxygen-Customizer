@@ -48,9 +48,7 @@
     <style name="AppTheme.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:dialogCornerRadius">32dp</item>
         <item name="android:background">@color/oplusColorSurfaces</item>
-        <item name="android:gravity">bottom</item>
         <item name="android:backgroundDimAmount">0.40</item>
-        <item name="android:layout_gravity">bottom</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text</item>
     </style>
 
@@ -66,12 +64,6 @@
         <item name="android:background">@color/colorDivider</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
-    </style>
-
-    <style name="MaterialComponents.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">@color/colorContainer</item>
-        <item name="android:dialogCornerRadius">@dimen/ui_container_radius</item>
-        <item name="android:backgroundDimAmount">0.6</item>
     </style>
 
     <style name="Theme.Material3.Translucent" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -244,8 +236,26 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/text_color_primary</item>
+        <item name="trackDecorationTint">@color/transparent</item>
+        <item name="trackTint">@drawable/switch_track</item>
+    </style>
+
     <style name="Widget.CompoundButton.RadioButton" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:button">@drawable/custom_radio_selector</item>
+    </style>
+
+    <style name="Widget.App.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="backgroundTint">@color/oplusColorSurfaces</item>
+    </style>
+
+    <style name="Widget.App.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:lineSpacingMultiplier">1.05</item>
     </style>
 
 

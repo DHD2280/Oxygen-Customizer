@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.OxygenCustomizer" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
@@ -27,7 +27,8 @@
         <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
         <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
-        <item name="snackbarStyle">@style/Widget.Material3.Snackbar</item>
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.App.Snackbar.TextView</item>
         <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -58,11 +59,14 @@
 
         <item name="homeAsUpIndicator">@drawable/ic_home_up</item>
 
+        <!-- Switch Theme -->
+        <item name="materialSwitchStyle">@style/Widget.App.Switch</item>
+
         <item name="radioButtonStyle">@style/Widget.CompoundButton.RadioButton</item>
     </style>
 
     <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenBackground">@color/colorBackground</item>
+        <item name="android:windowSplashScreenBackground">#ffffff</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.OxygenCustomizer</item>
