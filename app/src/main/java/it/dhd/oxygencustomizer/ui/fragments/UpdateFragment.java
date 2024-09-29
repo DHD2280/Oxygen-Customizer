@@ -47,7 +47,7 @@ import br.tiagohm.markdownview.css.InternalStyleSheet;
 import br.tiagohm.markdownview.css.styles.Github;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.databinding.UpdateFragmentBinding;
+import it.dhd.oxygencustomizer.databinding.FragmentUpdatesBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
@@ -106,7 +106,7 @@ public class UpdateFragment extends BaseFragment {
             }
         }
     };
-    private UpdateFragmentBinding binding;
+    private FragmentUpdatesBinding binding;
     private int currentVersionCode = -1;
     private int currentVersionType = -1;
     private String currentVersionName = "";
@@ -122,7 +122,7 @@ public class UpdateFragment extends BaseFragment {
         downloadManager = (DownloadManager) requireContext().getSystemService(Context.DOWNLOAD_SERVICE);
 
         //finally
-        binding = UpdateFragmentBinding.inflate(inflater, container, false);
+        binding = FragmentUpdatesBinding.inflate(inflater, container, false);
 
         if (getArguments() != null && getArguments().getBoolean("updateTapped", false)) {
             String downloadPath = getArguments().getString("filePath");
