@@ -50,8 +50,22 @@ public class ModuleUtil {
         // Clean temporary directory
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_DIR).exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR).exec();
-        Shell.cmd("printf 'id=OxygenCustomizer\nname=Oxygen Customizer\nversion=" + MODULE_VERSION_NAME + "\nversionCode=" + MODULE_VERSION_CODE + "\nauthor=@DHD2280\ndescription=Systemless module for Oxygen Customizer. " + OxygenCustomizer.getAppContext().getResources().getString(R.string.xposeddescription) + ".\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/module.prop").exec();
-        Shell.cmd("printf 'MODDIR=${0%%/*}\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh").exec();
+
+        Shell.cmd(
+                "printf 'id=OxygenCustomizer\n" +
+                        "name=Oxygen Customizer\n" +
+                        "version=" + MODULE_VERSION_NAME + "\n" +
+                        "versionCode=" + MODULE_VERSION_CODE + "\n" +
+                        "author=@DHD2280\n" +
+                        "description=Systemless module for Oxygen Customizer.\n" +
+                        "' > " + ModuleConstants.TEMP_MODULE_DIR + "/module.prop"
+        ).exec();
+
+        Shell.cmd(
+                "printf 'MODDIR=${0%%/*}\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh"
+        ).exec();
+
+        Log.d(TAG, "skipped installation: " + skippedInstallation);
         if (!skippedInstallation) {
             Shell.cmd("printf 'MODDIR=${0%%/*}\n\nwhile [ \"$(getprop sys.boot_completed | tr -d \"\\r\")\" != \"1\" ]\ndo\n sleep 1\ndone\nsleep 5\n\nsh $MODDIR/post-exec.sh\n\nuntil [ -d /storage/emulated/0/Android ]; do\n  sleep 1\ndone\nsleep 3\n\n" + "sleep 6\n\ntheme=$(cmd overlay list | grep \".x..OxygenCustomizerComponentTH\")\nnum=$(echo $theme | cut -d \"H\" -f 2 | cut -d \".\" -f 1)\nif [ \"${#num}\" -gt 0 ]\nthen\n cmd overlay enable OxygenCustomizerComponentTH$num.overlay\n cmd overlay set-priority OxygenCustomizerComponentTH$num.overlay highest\nfi\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/service.sh").exec();
         } else {
@@ -71,12 +85,14 @@ public class ModuleUtil {
     }
 
     private static void createMETAINF() {
+        Log.d(TAG, "Creating META-INF directory");
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF/com").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF/com/google").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF/com/google/android").exec();
         Shell.cmd("printf '" + ModuleConstants.MAGISK_UPDATE_BINARY + "' > " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF/com/google/android/update-binary").exec();
         Shell.cmd("printf '#MAGISK' > " + ModuleConstants.TEMP_MODULE_DIR + "/META-INF/com/google/android/updater-script").exec();
+        Log.d(TAG, "META-INF directory created");
     }
 
     private static void writePostExec() {
