@@ -268,5 +268,20 @@
         <item name="backgroundTint">@color/oplusColorSurfaces</item>
     </style>
 
+    <!-- Toolbar -->
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.App.TitleLarge</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.App.TitleMedium</item>
+        <item name="navigationIconTint">@color/text_color_primary</item>
+    </style>
+
+    <style name="TextAppearance.App.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/text_color_primary</item>
+    </style>
+
+    <style name="TextAppearance.App.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/text_color_secondary</item>
+    </style>
+
 
 </resources>

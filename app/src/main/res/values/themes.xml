@@ -67,6 +67,9 @@
 
         <!-- Slider -->
         <item name="sliderStyle">@style/Widget.App.Slider</item>
+
+        <!-- Toolbar -->
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
     </style>
 
     <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">
