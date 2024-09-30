@@ -2,24 +2,24 @@ package it.dhd.oxygencustomizer.ui.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.appcompat.cardlist.CardListHelper;
-import it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout;
-import it.dhd.oxygencustomizer.ui.recyclerview.OplusRecyclerView;
 
 public class OplusPreference extends Preference {
 
     private int mClickStyle = 0;
     private String mForcePosition = null;
+    private boolean mTintTitle = false;
+    private boolean mTitleCentered = false;
     private boolean mShowDivider;
     private View mItemView;
 
@@ -36,6 +36,8 @@ public class OplusPreference extends Preference {
         if (a.hasValue(R.styleable.OplusPreference_forcePosition)) {
             mForcePosition = a.getString(R.styleable.OplusPreference_forcePosition);
         }
+        mTintTitle = a.getBoolean(R.styleable.OplusPreference_tintTitle, false);
+        mTitleCentered = a.getBoolean(R.styleable.OplusPreference_centerTitle, false);
         a.recycle();
     }
 
@@ -68,6 +70,13 @@ public class OplusPreference extends Preference {
             } else {
                 findViewById.setClickable(false);
             }
+        }
+        TextView title = (TextView) holder.findViewById(android.R.id.title);
+        if (mTintTitle) {
+            title.setTextColor(ContextCompat.getColor(getContext(), android.R.color.system_accent1_400));
+        }
+        if (mTitleCentered) {
+            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         }
     }
 

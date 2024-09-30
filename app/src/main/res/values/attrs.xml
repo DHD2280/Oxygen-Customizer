@@ -7,6 +7,8 @@
     <declare-styleable name="OplusPreference">
         <attr name="clickStyle" format="integer"/>
         <attr name="forcePosition" format="string"/>
+        <attr name="tintTitle" format="boolean"/>
+        <attr name="centerTitle" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="OplusSwitchPreference">
