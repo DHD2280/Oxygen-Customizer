@@ -17,10 +17,13 @@ import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BaseInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -66,7 +69,7 @@ public class BatteryBarView extends FrameLayout {
     private static boolean animateCharging = true;
     private static final int ANIM_DURATION = 1000; // 5 seconds
     private static final int ANIM_DELAY = 2000; // 5 seconds
-    private final Handler animationHandler = new Handler();
+    private final Handler animationHandler = new Handler(Looper.getMainLooper());;
     private Runnable chargingAnimationRunnable;
 
     public static void setStaticColor(List<Float> batteryLevels, int[] batteryColors, boolean indicateCharging,
@@ -116,12 +119,6 @@ public class BatteryBarView extends FrameLayout {
 
         refreshColors(barView.getWidth(), barView.getHeight());
         mDrawable.invalidateSelf();
-
-        if (isCharging() && animateCharging) {
-            startChargingAnimation();
-        } else {
-            stopChargingAnimation();
-        }
     }
 
     private LayoutParams maskLayoutParams() {
@@ -138,11 +135,6 @@ public class BatteryBarView extends FrameLayout {
     }
 
     private void startChargingAnimation() {
-        if (!isCharging() || !animateCharging) {
-            stopChargingAnimation();
-            return;
-        }
-
         if (chargingAnimationRunnable == null) {
             chargingAnimationRunnable = new Runnable() {
                 @Override
@@ -156,20 +148,25 @@ public class BatteryBarView extends FrameLayout {
     }
 
     private void stopChargingAnimation() {
-        chargingIndicatorView.post(() -> chargingIndicatorView.setVisibility(GONE));
-        chargingIndicatorViewForCenter.post(() -> chargingIndicatorViewForCenter.setVisibility(GONE));
-        if (chargingAnimationRunnable != null) {
-            animationHandler.removeCallbacks(chargingAnimationRunnable);
-            chargingAnimationRunnable = null;
-        }
+        animationHandler.removeCallbacks(chargingAnimationRunnable);
+
+        post(() -> {
+            chargingIndicatorView.setVisibility(GONE);
+            chargingIndicatorView.clearAnimation();
+
+            chargingIndicatorViewForCenter.setVisibility(GONE);
+            chargingIndicatorViewForCenter.clearAnimation();
+        });
+
+        chargingAnimationRunnable = null;
     }
 
     private void animateChargingIndicator() {
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         chargingIndicatorView.post(() -> chargingIndicatorView.setVisibility(VISIBLE));
-        int secondaryVisiblity = (isCenterBased) ? GONE : VISIBLE;
-        chargingIndicatorViewForCenter.post(() -> chargingIndicatorViewForCenter.setVisibility(secondaryVisiblity));
+        int secondaryVisibility = (isCenterBased) ? GONE : VISIBLE;
+        chargingIndicatorViewForCenter.post(() -> chargingIndicatorViewForCenter.setVisibility(secondaryVisibility));
 
         float startX, startXCenter, endX;
 
@@ -182,17 +179,20 @@ public class BatteryBarView extends FrameLayout {
             startXCenter = 0;
             endX = Math.round(getWidth() * getCurrentLevel() / 100f);
         }
-        if (isCenterBased) endX = getWidth() / 2f;
+
+        if (isCenterBased) endX = getWidth() * (1 - ((100 - getCurrentLevel()) / 200f));
+
+        BaseInterpolator interpolator = new AccelerateInterpolator();
 
         TranslateAnimation animation = new TranslateAnimation(startX, endX, 0, 0);
         animation.setDuration(ANIM_DURATION);
-        animation.setInterpolator(new LinearInterpolator());
+        animation.setInterpolator(interpolator);
         chargingIndicatorView.startAnimation(animation);
 
         if (isCenterBased) {
-            TranslateAnimation animationCenter = new TranslateAnimation(startXCenter, endX, 0, 0);
+            TranslateAnimation animationCenter = new TranslateAnimation(startXCenter, getWidth() - endX, 0, 0);
             animationCenter.setDuration(ANIM_DURATION);
-            animationCenter.setInterpolator(new LinearInterpolator());
+            animationCenter.setInterpolator(interpolator);
             chargingIndicatorViewForCenter.startAnimation(animationCenter);
         }
     }
@@ -251,12 +251,9 @@ public class BatteryBarView extends FrameLayout {
         float dp = 4f;
         int pixels = (int) (metrics.density * dp + 0.5f);
         LayoutParams result = new LayoutParams(pixels, barHeight);
-        if (RTL) {
-            result.gravity = Gravity.END;
-        } else {
-            result.gravity = Gravity.START;
-        }
+        result.gravity = (RTL) ? Gravity.END : Gravity.START;
         result.gravity |= (onTop) ? Gravity.TOP : Gravity.BOTTOM;
+
         return result;
     }
 
@@ -362,8 +359,15 @@ public class BatteryBarView extends FrameLayout {
     private void refreshVisibility() {
         if (!mIsEnabled || mIsHidden || (onlyWhileCharging && !isCharging())) {
             barView.setVisibility(GONE);
+            stopChargingAnimation();
         } else {
             barView.setVisibility(VISIBLE);
+
+            if(isCharging() && animateCharging) {
+                startChargingAnimation();
+            } else {
+                stopChargingAnimation();
+            }
         }
     }
 
