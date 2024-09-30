@@ -36,6 +36,7 @@ public class OplusColorPreference extends OplusPreference implements ColorPicker
     private int previewSize;
     private int[] presets;
     private int dialogTitle;
+    private ColorPanelView preview;
 
     public OplusColorPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -130,7 +131,7 @@ public class OplusColorPreference extends OplusPreference implements ColorPicker
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        ColorPanelView preview = holder.itemView.findViewById(R.id.cpv_preference_preview_color_panel);
+        preview = holder.itemView.findViewById(R.id.cpv_preference_preview_color_panel);
         if (preview != null) {
             preview.setColor(color);
         }
@@ -210,6 +211,21 @@ public class OplusColorPreference extends OplusPreference implements ColorPicker
      */
     public String getFragmentTag() {
         return "color_" + getKey();
+    }
+
+    /**
+     * Sets the current color
+     * @param color The newly selected color
+     * @param persist Whether to persist the color
+     */
+    public void setPreviewColor(int color, boolean persist) {
+        this.color = color;
+        if (persist) {
+            persistInt(color);
+        }
+        if (preview != null) {
+            preview.setColor(color);
+        }
     }
 
     public interface OnShowDialogListener {
