@@ -135,6 +135,7 @@
     <string name="qs_header_title">Quick Settings Header</string>
     <string name="sound">Sound</string>
     <string name="misc">Miscellaneous</string>
+    <string name="colors">Colors</string>
     <string name="package_manager">Package Manager</string>
 
     <!-- General Strings -->
@@ -1255,5 +1256,9 @@
 
     <!-- Caffeine -->
     <string name="caffeine">Caffeine</string>
+
+    <!-- Colors Fragment -->
+    <string name="primary_color">Primary Color</string>
+    <string name="apply_color">Apply Color</string>
 
 </resources>

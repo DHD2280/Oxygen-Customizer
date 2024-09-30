@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
+        android:key="sb_illustration"
+        app:lottie_cacheComposition="false"
+        app:lottie_rawRes="@raw/themes_illustration" />
+
+    <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+        android:key="primary_color"
+        android:title="@string/primary_color"
+        app:cpv_showAlphaSlider="true"
+        app:forcePosition="full" />
+
+    <PreferenceCategory/>
+
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+        android:key="apply_colors"
+        android:title="@string/apply_color"
+        app:centerTitle="true"
+        app:iconSpaceReserved="false"
+        app:forcePosition="full"
+        app:tintTitle="true" />
+
+</PreferenceScreen>

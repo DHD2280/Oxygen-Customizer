@@ -82,6 +82,13 @@
         search:ignore="true"/> -->
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
+        android:icon="@drawable/ic_colors"
+        android:key="colors"
+        android:title="@string/colors"
+        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.ColorsFragment"
+        search:ignore="true" />
+
+    <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
         android:icon="@drawable/ic_mods_misc"
         android:key="misc"
         android:title="@string/misc"
