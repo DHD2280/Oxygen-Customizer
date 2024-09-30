@@ -258,5 +258,15 @@
         <item name="android:lineSpacingMultiplier">1.05</item>
     </style>
 
+    <style name="Widget.App.Slider" parent="Widget.Material3.Slider">
+        <item name="labelStyle">@style/Widget.App.Tooltip</item>
+    </style>
+
+    <style name="Widget.App.Tooltip" parent="Widget.Material3.Tooltip">
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="backgroundTint">@color/oplusColorSurfaces</item>
+    </style>
+
 
 </resources>

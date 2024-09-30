@@ -65,6 +65,9 @@
 
         <item name="radioButtonStyle">@style/Widget.CompoundButton.RadioButton</item>
         <item name="android:listChoiceIndicatorSingle">@drawable/custom_radio_selector</item>
+
+        <!-- Slider -->
+        <item name="sliderStyle">@style/Widget.App.Slider</item>
     </style>
 
     <style name="Theme.OxygenCustomizer.DarkSoft" parent="Theme.OxygenCustomizer">
