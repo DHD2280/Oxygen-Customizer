@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 
 public class SettingsIconsCompiler {
@@ -29,6 +30,7 @@ public class SettingsIconsCompiler {
 
     private static final List<String> mPackages = new ArrayList<>() {{
         add(SETTINGS);
+        add(BuildConfig.APPLICATION_ID.replaceAll(".debug", ""));
     }};
 
     public static boolean buildOverlay(int iconSet, String resources, boolean force) throws IOException {
@@ -100,7 +102,9 @@ public class SettingsIconsCompiler {
         Shell.cmd("rm -rf " + ModuleConstants.DATA_DIR + "/CompileOnDemand").exec();
 
         // Extract overlay from assets
-        copyAssets("CompileOnDemand/com.android.settings/ICS" + mIconSet);
+        for (String packageName : mPackages) {
+            copyAssets("CompileOnDemand/" + packageName + "/ICS" + mIconSet);
+        }
 
         // Create temp directory
         Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR + "; mkdir -p " + ModuleConstants.TEMP_DIR).exec();
@@ -110,12 +114,15 @@ public class SettingsIconsCompiler {
         Shell.cmd("mkdir -p " + ModuleConstants.UNSIGNED_DIR).exec();
         Shell.cmd("mkdir -p " + ModuleConstants.SIGNED_DIR).exec();
 
-        Shell.cmd("mkdir -p " + ModuleConstants.TEMP_CACHE_DIR + "/com.android.settings/").exec();
+        for (String packageName : mPackages) {
+            Shell.cmd("mkdir -p " + ModuleConstants.TEMP_CACHE_DIR + "/" + packageName + "/").exec();
+        }
 
         if (!mForce) {
             Shell.cmd("mkdir -p " + ModuleConstants.BACKUP_DIR).exec();
         } else {
             disableOverlay("OxygenCustomizerComponentSIP1.overlay");
+            disableOverlay("OxygenCustomizerComponentSIP2.overlay");
         }
     }
 
