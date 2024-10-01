@@ -50,6 +50,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
+/** @noinspection RedundantThrows*/
 public class StatusbarMods extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;

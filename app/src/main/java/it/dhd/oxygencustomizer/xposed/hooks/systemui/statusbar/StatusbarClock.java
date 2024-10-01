@@ -29,7 +29,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +63,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
+/** @noinspection RedundantThrows*/
 public class StatusbarClock extends XposedMods {
 
     private final String TAG = "Oxygen Customizer - Statusbar Clock: ";
@@ -256,9 +256,7 @@ public class StatusbarClock extends XposedMods {
                      "status_bar_clock_background_chip" + "_PADDING_LEFT",
                      "status_bar_clock_background_chip" + "_PADDING_RIGHT",
                      "status_bar_clock_background_chip" + "_PADDING_TOP",
-                     "status_bar_clock_background_chip" + "_PADDING_BOTTOM" -> {
-                    updateChip();
-                }
+                     "status_bar_clock_background_chip" + "_PADDING_BOTTOM" -> updateChip();
             }
         }
 
@@ -391,7 +389,7 @@ public class StatusbarClock extends XposedMods {
                     }
                 });
             } catch (Throwable ignored) {
-                log(TAG + "measureText in StatClock not found");
+                log(TAG + "updateMinWidth in StatClock not found");
             }
         }
 
