@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (C) 2020 The Android Open Source Project
 
@@ -13,7 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="6dp" android:insetRight="6dp" android:insetLeft="6dp" android:insetBottom="6dp"> <vector xmlns:android="http://schemas.android.com/apk/res/android"
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="6dp"
+    android:insetTop="6dp"
+    android:insetRight="6dp"
+    android:insetBottom="6dp">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
         android:viewportWidth="24"
@@ -21,4 +27,5 @@
         <path
             android:fillColor="@android:color/white"
             android:pathData="M12,2C7.76,2,3.89,3.67,1,6.38v2.23L11,21h2L23,8.61V6.38C20.11,3.67,16.24,2,12,2z" />
-    </vector></inset>
+    </vector>
+</inset>
