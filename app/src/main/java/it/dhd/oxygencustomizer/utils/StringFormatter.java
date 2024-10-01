@@ -197,17 +197,12 @@ public class StringFormatter {
     }
 
     private CharSequence valueOf(String match) {
-        switch (match.substring(0,1))
-        {
-            case "G":
-                return georgianDateOf(match.substring(1));
-            case "P":
-                return persianDateOf(match.substring(1));
-            case "T":
-                return temperatureOf(match.substring(1));
-            default:
-                return "$" + match;
-        }
+        return switch (match.substring(0, 1)) {
+            case "G" -> georgianDateOf(match.substring(1));
+            case "P" -> persianDateOf(match.substring(1));
+            case "T" -> temperatureOf(match.substring(1));
+            default -> "$" + match;
+        };
     }
 
     public void registerCallback(@NonNull FormattedStringCallback callback) {
