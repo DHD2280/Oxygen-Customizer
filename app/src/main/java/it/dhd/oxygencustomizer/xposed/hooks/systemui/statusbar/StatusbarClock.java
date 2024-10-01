@@ -29,6 +29,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +54,10 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -376,11 +380,12 @@ public class StatusbarClock extends XposedMods {
                         TextView tv = (TextView) param.thisObject;
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
                         if (!mShowSeconds) {
-                            float measuredWidth = measureTextWithSpans();
-                            int totalWidth = tv.getPaddingStart() + (int) Math.ceil(measuredWidth);
-                            tv.setMinWidth(totalWidth);
-                            if (tv.getMinimumWidth() != tv.getMinWidth()) {
-                                tv.setMinimumWidth(tv.getMinWidth());
+                            float totalWidth = measureTextWithSpans();
+                            totalWidth += tv.getPaddingStart();
+                            totalWidth += tv.getPaddingEnd();
+                            int calculatedMinWidth = (int) totalWidth;
+                            if (tv.getMinimumWidth() != calculatedMinWidth) {
+                                tv.setMinimumWidth(calculatedMinWidth);
                             }
                         }
                     }
@@ -526,43 +531,44 @@ public class StatusbarClock extends XposedMods {
     private float measureTextWithSpans() {
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(mClockSize);
+        textPaint.setTypeface(mClockView.getTypeface());
 
         float totalWidth = 0f;
-        int start = 0;
-        int end;
 
-        SpannableStringBuilder result = new SpannableStringBuilder();
+        CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
+        float beforeClockWidth = textPaint.measureText(beforeClock.toString());
 
-        SpannableStringBuilder clockText = SpannableStringBuilder.valueOf("00:00"); //fake a clock just to calculate dimensions
+        // Applica il ridimensionamento se mCustomBeforeSmall è vero
+        if (mCustomBeforeSmall) {
+            beforeClockWidth *= 0.7f; // o un altro fattore di ridimensionamento a seconda del bisogno
+        }
+        log(TAG + "beforeClock: " + beforeClock + " width: " + beforeClockWidth);
+        totalWidth += beforeClockWidth;
 
-        result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
-        result.append(clockText);
+        String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        log(TAG + "timeText: " + timeText + " width: " + textPaint.measureText(timeText));
+        totalWidth += textPaint.measureText(timeText);
+
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
-            result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
+            CharSequence amPmText = getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, AM_PM_STYLE_SMALL, mClockCustomColor ? mClockColor : null);
+            float amPmWidth = textPaint.measureText(amPmText.toString());
+            if (mAmPmStyle == AM_PM_STYLE_SMALL) {
+                amPmWidth *= 0.7f;
+            }
+            log(TAG + "amPmText: " + amPmText + " width: " + amPmWidth);
+            totalWidth += amPmWidth;
         }
 
-        result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
-        result.append("  "); //add a space to avoid small end padding
+        CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
+        float afterClockWidth = textPaint.measureText(afterClock.toString());
 
-        while (start < result.length()) {
-            CharacterStyle[] spans = result.getSpans(start, result.length(), CharacterStyle.class);
-            if (spans.length > 0) {
-                end = result.getSpanEnd(spans[0]);
-            } else {
-                end = result.length();
-            }
-            CharSequence subText = result.subSequence(start, end);
-            float subTextWidth = textPaint.measureText(subText, 0, subText.length());
-            for (CharacterStyle span : spans) {
-                if (span instanceof RelativeSizeSpan) {
-                    // we use 0.7f as the relative size for small text
-                    subTextWidth *= 0.7f;
-                }
-            }
-
-            totalWidth += subTextWidth;
-            start = end;
+        // Applica il ridimensionamento se mCustomAfterSmall è vero
+        if (mCustomAfterSmall) {
+            afterClockWidth *= 0.7f; // o un altro fattore di ridimensionamento a seconda del bisogno
         }
+        log(TAG + "afterClock: " + afterClock + " width: " + afterClockWidth);
+        totalWidth += afterClockWidth;
+
 
         return dp2px(mContext, totalWidth);
     }
