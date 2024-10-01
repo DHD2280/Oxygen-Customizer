@@ -245,6 +245,7 @@ public class SettingsIcons extends BaseFragment {
                 AtomicBoolean hasErroredOut = new AtomicBoolean(false);
 
                 disableOverlay("OxygenCustomizerComponentSIP1.overlay");
+                disableOverlay("OxygenCustomizerComponentSIP2.overlay");
 
                 if (!hasErroredOut.get()) {
                     Prefs.putInt(SELECTED_SETTINGS_ICONS_SET, -1);
