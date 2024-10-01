@@ -539,15 +539,12 @@ public class StatusbarClock extends XposedMods {
         CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
         float beforeClockWidth = textPaint.measureText(beforeClock.toString());
 
-        // Applica il ridimensionamento se mCustomBeforeSmall è vero
         if (mCustomBeforeSmall) {
-            beforeClockWidth *= 0.7f; // o un altro fattore di ridimensionamento a seconda del bisogno
+            beforeClockWidth *= 0.7f;
         }
-        log(TAG + "beforeClock: " + beforeClock + " width: " + beforeClockWidth);
         totalWidth += beforeClockWidth;
 
         String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        log(TAG + "timeText: " + timeText + " width: " + textPaint.measureText(timeText));
         totalWidth += textPaint.measureText(timeText);
 
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
@@ -557,18 +554,15 @@ public class StatusbarClock extends XposedMods {
             if (mAmPmStyle == AM_PM_STYLE_SMALL) {
                 amPmWidth *= 0.7f;
             }
-            log(TAG + "amPmText: " + amPmText + " width: " + amPmWidth);
             totalWidth += amPmWidth;
         }
 
         CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
         float afterClockWidth = textPaint.measureText(afterClock.toString());
 
-        // Applica il ridimensionamento se mCustomAfterSmall è vero
         if (mCustomAfterSmall) {
-            afterClockWidth *= 0.7f; // o un altro fattore di ridimensionamento a seconda del bisogno
+            afterClockWidth *= 0.7f;
         }
-        log(TAG + "afterClock: " + afterClock + " width: " + afterClockWidth);
         totalWidth += afterClockWidth;
 
 
