@@ -369,7 +369,7 @@ public class WeatherInfo {
 
         String[] parts = input.split("\\|");
         boolean hasForecast = parts.length > 11;
-        Log.w("WeatherInfo", "parts.length: " + parts.length);
+        Log.d("WeatherInfo", "parts.length: " + parts.length);
 
         int conditionCode, windDirection;
         long timestamp;
@@ -428,7 +428,7 @@ public class WeatherInfo {
                         forecastParts[offset + 4],
                         metric);
                 if (!Float.isNaN(day.low) && !Float.isNaN(day.high) && !TextUtils.isEmpty(day.date)/*&& day.conditionCode >= 0*/) {
-                    Log.w("WeatherInfo", "Added day forecast: " + day.date + ", low: " + day.low + ", high: " + day.high);
+                    Log.d("WeatherInfo", "Added day forecast: " + day.date + ", low: " + day.low + ", high: " + day.high);
                     forecasts.add(day);
                 }
             }
@@ -446,7 +446,7 @@ public class WeatherInfo {
                         hourForecastParts[offset + 3],
                         metric);
                 if (!Float.isNaN(hour.temp) && !TextUtils.isEmpty(hour.date) /*&& hour.conditionCode >= 0*/) {
-                    Log.w("WeatherInfo", "Added hour forecast: " + hour.date + ", temp: " + hour.temp);
+                    Log.d("WeatherInfo", "Added hour forecast: " + hour.date + ", temp: " + hour.temp);
                     hourForecasts.add(hour);
                 }
             }
