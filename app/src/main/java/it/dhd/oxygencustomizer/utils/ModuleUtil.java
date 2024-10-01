@@ -22,7 +22,6 @@ import java.util.Map;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
-import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.helper.BackupRestore;
 import it.dhd.oxygencustomizer.utils.helper.BinaryInstaller;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
