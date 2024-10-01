@@ -7,10 +7,10 @@
     <group
         android:pivotX="15"
         android:pivotY="15"
-        android:translateX="-16.2"
-        android:translateY="-16.2"
-        android:scaleX="0.055"
-        android:scaleY="0.055">
+        android:translateX="-17"
+        android:translateY="-17"
+        android:scaleX="0.058"
+        android:scaleY="0.058">
         <path
             android:fillColor="@android:color/system_accent1_400"
             android:pathData="m354.22,397.62q-2.83,0 -5.31,-0.89 -2.48,-0.89 -4.6,-3.01l-72.24,-72.24q-2.12,-2.12 -3.01,-4.6 -0.89,-2.48 -0.89,-5.31 0,-2.83 0.89,-5.31 0.89,-2.48 3.01,-4.6l30.1,-30.1q2.12,-2.12 4.6,-3.01 2.48,-0.89 5.31,-0.89 2.83,0 5.31,0.89 2.48,0.89 4.6,3.01l72.24,72.24q2.12,2.12 3.01,4.6 0.89,2.48 0.89,5.31 0,2.83 -0.89,5.31 -0.89,2.48 -3.01,4.6l-30.1,30.1q-2.12,2.12 -4.6,3.01 -2.48,0.89 -5.31,0.89z" />
