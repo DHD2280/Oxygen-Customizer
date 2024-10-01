@@ -480,7 +480,8 @@ public class StatusbarClock extends XposedMods {
                         result.append(clockText);
 
                         if (mAmPmStyle != AM_PM_STYLE_GONE) {
-                            result.append(getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
+                            CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null).toString().replaceAll(" ", "");
+                            result.append(" ").append(String.valueOf(amPmText));
                         }
 
                         result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
@@ -550,8 +551,9 @@ public class StatusbarClock extends XposedMods {
         totalWidth += textPaint.measureText(timeText);
 
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
-            CharSequence amPmText = getFormattedString(" $Ga", mAmPmStyle == AM_PM_STYLE_SMALL, AM_PM_STYLE_SMALL, mClockCustomColor ? mClockColor : null);
-            float amPmWidth = textPaint.measureText(amPmText.toString());
+            CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null).toString().replaceAll(" ", "");
+            String amPm = " " + amPmText;
+            float amPmWidth = textPaint.measureText(amPm);
             if (mAmPmStyle == AM_PM_STYLE_SMALL) {
                 amPmWidth *= 0.7f;
             }
