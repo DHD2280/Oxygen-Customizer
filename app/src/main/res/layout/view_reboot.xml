@@ -21,7 +21,7 @@
             android:layout_gravity="start|center"
             android:layout_marginEnd="18dp"
             android:background="@drawable/container_semi_transparent"
-            android:backgroundTint="@color/colorAccent">
+            android:backgroundTint="@color/cardview_background">
 
             <ImageView
                 android:id="@+id/list_icon"
@@ -29,7 +29,7 @@
                 android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_app_updated"
-                android:backgroundTint="@color/textColorPrimary" />
+                android:backgroundTint="@color/text_color_primary" />
 
         </FrameLayout>
 
