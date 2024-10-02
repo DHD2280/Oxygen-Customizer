@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.ui.adapters;
 
-import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-
 import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
