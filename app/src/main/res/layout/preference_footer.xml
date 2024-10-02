@@ -53,7 +53,7 @@
             android:ellipsize="marquee"
             android:paddingTop="16dp"
             android:paddingBottom="8dp"
-            android:textColor="?android:attr/textColorSecondary" />
+            android:textColor="@color/text_color_primary" />
 
         <it.dhd.oxygencustomizer.ui.preferences.LinkTextView
             android:id="@+id/settingslib_learn_more"
