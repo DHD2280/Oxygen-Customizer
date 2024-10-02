@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.utils;
 import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_CODE;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_NAME;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.MY_PRODUCT_EXTENSION_DIR;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.content.Context;
@@ -60,7 +61,7 @@ public class ModuleUtil {
         ).exec();
 
         Shell.cmd(
-                "printf 'MODDIR=${0%%/*}\n\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh"
+                "printf 'MODDIR=${0%%/*}\n\nmount --bind $MODDIR/my_product/etc/extension/com.oplus.oplus-feature.xml /my_product/etc/extension/com.oplus.oplus-feature.xml\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh"
         ).exec();
 
         Log.d(TAG, "skipped installation: " + skippedInstallation);
@@ -74,6 +75,11 @@ public class ModuleUtil {
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/system").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/system/product").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/system/product/overlay").exec();
+        Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product").exec();
+        Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product/etc").exec();
+        Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product/etc/extension").exec();
+        Shell.cmd("cp -a /my_product/etc/extension/com.oplus.oplus-feature.xml " + MY_PRODUCT_EXTENSION_DIR + "/").exec();
+
         createMETAINF();
 
         writePostExec();
@@ -164,6 +170,25 @@ public class ModuleUtil {
             return version != null && version.equals(MODULE_VERSION_NAME);
         }
         return false;
+    }
+
+    public static void enablePocketStudio(boolean enable) {
+        if (!moduleExists()) return;
+
+        List<String> fileRead = Shell.cmd("cat /my_product/etc/extension/com.oplus.oplus-feature.xml").exec().getOut();
+        boolean featureAlreadyAdded = fileRead.contains("oplus.software.pocketstudio.support");
+
+        Log.w(TAG, "oplusFeatures: " + fileRead);
+
+        if (enable && !featureAlreadyAdded) {
+            fileRead.add(fileRead.size()-2, "\t<oplus-feature name=\"oplus.software.pocketstudio.support\" />");
+        } else if (!enable && featureAlreadyAdded) {
+            fileRead.remove("\t<oplus-feature name=\"oplus.software.pocketstudio.support\" />");
+        }
+
+        String oplusFeatures = String.join("\n", fileRead).replace("\"", "\\\"") ;
+
+        Shell.cmd("printf \"" + oplusFeatures + "\" > /data/adb/modules/OxygenCustomizer/my_product/etc/extension/com.oplus.oplus-feature.xml").exec();
     }
 
 }

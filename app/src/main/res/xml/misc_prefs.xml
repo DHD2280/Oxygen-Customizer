@@ -102,4 +102,22 @@
 
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/pocket_studio" >
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            app:forcePosition="full"
+            android:defaultValue="false"
+            android:key="enable_pocket_studio"
+            android:title="@string/pocket_studio_title"
+            android:summary="@string/pocket_studio_summary" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
+            android:key="pocket_studio_footer"
+            android:selectable="false"
+            android:title="@string/pocket_studio_info" />
+
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
+
 </PreferenceScreen>

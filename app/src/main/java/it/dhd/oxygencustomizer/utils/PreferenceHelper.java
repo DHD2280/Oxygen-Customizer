@@ -727,6 +727,11 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 34;
             }
 
+            // Pocket Studio
+            case "enable_pocket_studio" -> {
+                return ModuleUtil.moduleExists();
+            }
+
         }
         return true;
     }

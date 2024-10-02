@@ -1261,4 +1261,10 @@
     <string name="primary_color">Primary Color</string>
     <string name="apply_color">Apply Color</string>
 
+    <!-- Pocket Studio -->
+    <string name="pocket_studio">Pocket Studio</string>
+    <string name="pocket_studio_title">Enable Pocket Studio</string>
+    <string name="pocket_studio_summary">Enable Pocket Studio on your device.\nRequires a reboot.</string>
+    <string name="pocket_studio_info">Pocket Studio allows to have more than two apps opened at same time. It\'s not guaranteed that this feature will work on your devices: it only force the feature to be enabled.</string>
+
 </resources>

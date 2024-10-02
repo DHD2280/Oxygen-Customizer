@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 
 public class ModuleConstants {
 
-    public final static String MODULE_VERSION_NAME = "0.0.38";
+    public final static String MODULE_VERSION_NAME = "0.0.41";
     public final static int MODULE_VERSION_CODE = 1;
 
     // Storage location
@@ -36,6 +36,9 @@ public class ModuleConstants {
     public static final String COMPANION_RES_DIR = COMPANION_MODULE_DIR + "/substratumXML/SystemUI/res";
     public static final String COMPANION_DRAWABLE_DIR = COMPANION_RES_DIR + "/drawable";
     public static final String COMPANION_LAYOUT_DIR = COMPANION_RES_DIR + "/layout";
+    public static final String MY_PRODUCT_DIR = TEMP_MODULE_DIR + "/my_product";
+    public static final String MY_PRODUCT_ETC_DIR = MY_PRODUCT_DIR + "/etc";
+    public static final String MY_PRODUCT_EXTENSION_DIR = MY_PRODUCT_ETC_DIR + "/extension";
 
     public static final String XPOSED_ONLY_MODE = "OCXposedOnlyMode";
     public static boolean isXposedOnlyMode = Prefs.getBoolean(XPOSED_ONLY_MODE, true) &&

@@ -270,6 +270,9 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                 case "fix_lag_force_all_apps":
                     sendIntent();
                     break;
+                case "enable_pocket_studio":
+                    ModuleUtil.enablePocketStudio(mPreferences.getBoolean("enable_pocket_studio", false));
+                    break;
             }
         }
 
