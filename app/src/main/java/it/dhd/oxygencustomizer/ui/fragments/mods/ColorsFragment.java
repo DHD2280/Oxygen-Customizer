@@ -158,23 +158,10 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
         if (mColorToApply == 0) return;
 
         mLoadingDialog.show(getString(R.string.loading_dialog_wait));
-        Runnable runnable = () -> {
+        Log.d("ColorsFragment", "Applying color: " + String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
+        generateColorFiles(String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
+        saveSecureSettings();
 
-            Log.d("ColorsFragment", "Applying color: " + String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
-            generateColorFiles(String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
-            saveSecureSettings();
-
-            ((Activity) requireContext()).runOnUiThread(() -> {
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    // Hide loading dialog
-                    mLoadingDialog.hide();
-
-                    Toast.makeText(OxygenCustomizer.getAppContext(), getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
-                }, 3000);
-            });
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
     }
 
     private void generateColorFiles(String colorHex) {
@@ -271,6 +258,12 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLoadingDialog.hide();
     }
 
 }
