@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
@@ -84,6 +85,8 @@ public class DeviceWidgetView extends FrameLayout {
             context.registerReceiver(mVolumeReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
         } catch (Exception ignored) {
         }
+
+        ThemeEnabler.registerThemeChangedListener(this::reloadColors);
 
         inflateView();
     }
@@ -206,6 +209,11 @@ public class DeviceWidgetView extends FrameLayout {
 
         post(() -> ((TextView) ViewHelper.findViewWithTag(this, "device_name")).setText(deviceName));
 
+    }
+
+    private void reloadColors() {
+        initSoundManager();
+        initBatteryStatus();
     }
 
 }
