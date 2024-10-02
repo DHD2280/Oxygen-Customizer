@@ -23,6 +23,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import okhttp3.Call;
@@ -40,7 +41,9 @@ public class NetworkUtils {
 
         if (DEBUG) Log.d(TAG, "download: " + url);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         Request apiRequest = new Request.Builder()
                 .url(url)
@@ -83,7 +86,9 @@ public class NetworkUtils {
 
         if (DEBUG) Log.d(TAG, "download: " + url);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         Request apiRequest = new Request.Builder()
                 .url(url)
