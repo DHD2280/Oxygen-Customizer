@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.NetworkUtils;
@@ -55,31 +56,6 @@ public abstract class AbstractWeatherProvider {
         mContext = context;
     }
 
-    protected String retrieve(String url) {
-        response = "";
-        CountDownLatch latch = new CountDownLatch(1);
-
-        NetworkUtils.asynchronousGetRequest(url, result -> {
-            if (!TextUtils.isEmpty(result)) {
-                Log.d(TAG, "Download success " + result);
-                response = result;
-            } else {
-                response = "";
-                Log.d(TAG, "Download failed");
-            }
-            latch.countDown();
-        });
-
-        try {
-            latch.await(); // Wait until the response is set
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restore interrupt status
-            Log.e(TAG, "retrieve interrupted", e);
-        }
-
-        return response;
-    }
-
     protected String retrieve(String url, String[] header) {
         response = "";
         CountDownLatch latch = new CountDownLatch(1);
@@ -90,13 +66,15 @@ public abstract class AbstractWeatherProvider {
                 response = result;
             } else {
                 response = "";
-                Log.d(TAG, "Download failed");
+                Log.e(TAG, "Download " + url + " failed");
             }
             latch.countDown();
         });
 
         try {
-            latch.await(); // Wait until the response is set
+            if (!latch.await(10, TimeUnit.SECONDS)) {
+                Log.d(TAG, "Timeout while waiting for network response");
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore interrupt status
             Log.e(TAG, "retrieve interrupted", e);
@@ -142,7 +120,7 @@ public abstract class AbstractWeatherProvider {
 
         String lang = Locale.getDefault().getLanguage().replaceFirst("_", "-");
         String url = String.format(URL_LOCALITY, latitude, longitude, lang);
-        String response = retrieve(url);
+        String response = retrieve(url, null);
         if (response == null) {
             return null;
         }

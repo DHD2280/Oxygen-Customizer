@@ -269,7 +269,7 @@ public class LocationBrowseActivity extends BaseActivity {
         response = "";
         CountDownLatch latch = new CountDownLatch(1);
 
-        NetworkUtils.asynchronousGetRequest(url, result -> {
+        NetworkUtils.asynchronousGetRequest(url, null, result -> {
             if (!TextUtils.isEmpty(result)) {
                 Log.d(TAG, "Download success " + result);
                 response = result;

@@ -37,51 +37,6 @@ public class NetworkUtils {
     private static final boolean DEBUG = false;
     private static final String TAG = "NetworkUtils";
 
-    public static void asynchronousGetRequest(String url, DownloadCallback callback) {
-
-        if (DEBUG) Log.d(TAG, "download: " + url);
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-
-        Request apiRequest = new Request.Builder()
-                .url(url)
-                .build();
-
-        Request metRequest = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "OxygenCustomizer/" + BuildConfig.VERSION_NAME + "-" + BuildConfig.VERSION_CODE)
-                .build();
-
-        Request finalRequest;
-        if (url.contains("api.met.no")) {
-            finalRequest = metRequest;
-        } else {
-            finalRequest = apiRequest;
-        }
-
-        client.newCall(finalRequest).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                // Handle failure
-                if (callback != null) {
-                    callback.onDownloadComplete("");
-                }
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                // Handle success
-                String result = response.body() != null ? response.body().string() : "";
-                // Process the response data
-                if (callback != null) {
-                    callback.onDownloadComplete(result);
-                }
-            }
-        });
-    }
-
     public static void asynchronousGetRequest(String url, String[] header, DownloadCallback callback) {
 
         if (DEBUG) Log.d(TAG, "download: " + url);
@@ -90,12 +45,21 @@ public class NetworkUtils {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
+        Request apiHeaderRequest = null;
+        boolean hasHeader = header != null && header.length == 2;
+        
+        if (hasHeader) {
+            apiHeaderRequest = new Request.Builder()
+                    .url(url)
+                    .header(header[0], header[1])
+                    .build();
+        }
+        
         Request apiRequest = new Request.Builder()
                 .url(url)
-                .header(header[0], header[1])
                 .build();
 
-        client.newCall(apiRequest).enqueue(new Callback() {
+        client.newCall(hasHeader ? apiHeaderRequest : apiRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 // Handle failure
@@ -107,6 +71,11 @@ public class NetworkUtils {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 // Handle success
+                if (!response.isSuccessful()) {
+                    if (callback != null) {
+                        callback.onDownloadComplete("");
+                    }
+                }
                 String result = response.body() != null ? response.body().string() : "";
                 // Process the response data
                 if (callback != null) {

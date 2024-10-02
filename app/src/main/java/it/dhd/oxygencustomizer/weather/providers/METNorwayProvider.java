@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.weather.AbstractWeatherProvider;
 import it.dhd.oxygencustomizer.weather.WeatherInfo;
 import it.dhd.oxygencustomizer.weather.WeatherInfo.DayForecast;
@@ -48,7 +49,7 @@ public class METNorwayProvider extends AbstractWeatherProvider {
 
     private WeatherInfo getAllWeather(String coordinates, boolean metric) {
         String url = URL_WEATHER + coordinates;
-        String response = retrieve(url);
+        String response = retrieve(url, new String[]{"User-Agent", "OxygenCustomizer/" + BuildConfig.VERSION_NAME + "-" + BuildConfig.VERSION_CODE});
         if (response == null) {
             return null;
         }

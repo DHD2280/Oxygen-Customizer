@@ -73,7 +73,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         String units = metric ? "metric" : "imperial";
         String locale = getLanguageCode();
         String conditionUrl = String.format(Locale.US, URL_WEATHER, selection, units, locale, getAPIKey());
-        String conditionResponse = retrieve(conditionUrl);
+        String conditionResponse = retrieve(conditionUrl, null);
         if (conditionResponse == null) {
             return null;
         }

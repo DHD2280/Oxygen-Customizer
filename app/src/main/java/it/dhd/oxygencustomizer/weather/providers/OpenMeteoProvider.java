@@ -50,7 +50,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         String timeZone = java.util.TimeZone.getDefault().getID();
         String conditionUrl = String.format(Locale.US,URL_WEATHER + PART_PARAMETERS, selection, tempUnit, speedUnit, timeZone);
         Log.w(TAG, "Condition URL = " + conditionUrl);
-        String conditionResponse = retrieve(conditionUrl);
+        String conditionResponse = retrieve(conditionUrl, null);
         if (conditionResponse == null) {
             return null;
         }
@@ -82,7 +82,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
             log(TAG, "Weather updated: " + w);
             return w;
         } catch (JSONException e) {
-            Log.w(TAG, "Received malformed weather data (coordinates = " + selection + ")", e);
+            Log.e(TAG, "Received malformed weather data (coordinates = " + selection + ")" + " response:\n" + conditionResponse, e);
         }
 
 
