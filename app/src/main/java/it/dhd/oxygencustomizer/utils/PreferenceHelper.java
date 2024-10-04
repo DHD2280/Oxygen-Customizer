@@ -438,25 +438,34 @@ public class PreferenceHelper {
             }
 
             // Header Clock
-            case "qs_header_stock_clock_prefs" -> {
+            case "qs_header_stock_clock_prefs",
+                 "qs_header_stock_clock_red_one_mode",
+                 "qs_header_stock_clock_date_hide",
+                 "qs_header_stock_clock_background_chip_switch",
+                 "qs_header_stock_clock_hide_carrier_label" -> {
                 return !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
+
             case "qs_header_stock_clock_date_custom_color_switch" -> {
-                return !instance.mPreferences.getBoolean("qs_header_stock_clock_date_hide", false);
+                return !instance.mPreferences.getBoolean("qs_header_stock_clock_date_hide", false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_clock_custom",
                  "qs_header_clock_prefs", "qs_header_clock_custom_margins" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case QS_HEADER_CLOCK_STOCK_RED_MODE_COLOR -> {
-                return instance.mPreferences.getString(QS_HEADER_CLOCK_STOCK_RED_MODE, "0").equals("3");
+                return instance.mPreferences.getString(QS_HEADER_CLOCK_STOCK_RED_MODE, "0").equals("3") &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_stock_clock_custom_color" -> {
-                return instance.mPreferences.getBoolean("qs_header_stock_clock_custom_color_switch", false);
+                return instance.mPreferences.getBoolean("qs_header_stock_clock_custom_color_switch", false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_stock_clock_date_custom_color" -> {
                 return instance.mPreferences.getBoolean("qs_header_stock_clock_date_custom_color_switch", false) &&
-                        !instance.mPreferences.getBoolean("qs_header_stock_clock_date_hide", false);
+                        !instance.mPreferences.getBoolean("qs_header_stock_clock_date_hide", false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_clock_font_custom" -> {
                 return instance.mPreferences.getBoolean("qs_header_clock_custom_font", false);
@@ -479,13 +488,17 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean("qs_header_clock_custom_user_image", false);
             }
             case "qs_header_stock_clock_background_chip" -> {
-                return instance.mPreferences.getBoolean("qs_header_stock_clock_background_chip_switch", false);
+                return instance.mPreferences.getBoolean("qs_header_stock_clock_background_chip_switch", false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_stock_date_background_chip_switch" -> {
-                return !instance.mPreferences.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_DATE, false);
+                return !instance.mPreferences.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_DATE, false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
             case "qs_header_stock_date_background_chip" -> {
-                return !instance.mPreferences.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_DATE, false) && instance.mPreferences.getBoolean("qs_header_stock_date_background_chip_switch", false);
+                return !instance.mPreferences.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_DATE, false) &&
+                        instance.mPreferences.getBoolean("qs_header_stock_date_background_chip_switch", false) &&
+                        !instance.mPreferences.getBoolean("qs_header_clock_custom_enabled", false);
             }
 
             // Pulse Prefs
@@ -557,7 +570,8 @@ public class PreferenceHelper {
                 return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
             }
             case "lockscreen_stock_clock_red_one_color" -> {
-                return Integer.parseInt(instance.mPreferences.getString("lockscreen_stock_clock_red_one_mode", "0")) == 3;
+                return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) &&
+                        Integer.parseInt(instance.mPreferences.getString("lockscreen_stock_clock_red_one_mode", "0")) == 3;
             }
             case "lockscreen_clock_font_custom" -> {
                 return instance.mPreferences.getBoolean("lockscreen_custom_font", false);
