@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
@@ -23,13 +24,23 @@ public class OplusPreference extends Preference {
     private boolean mShowDivider;
     private View mItemView;
 
-    @SuppressWarnings("unused")
-    public OplusPreference(Context context, AttributeSet attrs) {
+
+    public OplusPreference(@NonNull Context context) {
+        this(context, null);
+    }
+
+    public OplusPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public OplusPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public OplusPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+        initResources();
+    }
+
+    public OplusPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                                 int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         initResources();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OplusPreference);
         mClickStyle = a.getInt(R.styleable.OplusPreference_clickStyle, 0);

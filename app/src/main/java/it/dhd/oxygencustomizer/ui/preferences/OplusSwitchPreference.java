@@ -3,10 +3,9 @@ package it.dhd.oxygencustomizer.ui.preferences;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -18,13 +17,24 @@ public class OplusSwitchPreference extends SwitchPreferenceCompat {
 
     private String mForcePosition = null;
 
-    @SuppressWarnings("unused")
-    public OplusSwitchPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public OplusSwitchPreference(@NonNull Context context) {
+        this(context, null);
     }
 
-    public OplusSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public OplusSwitchPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, R.attr.switchPreferenceCompatStyle);
+    }
+
+    public OplusSwitchPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                                 int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+        initResources();
+
+    }
+
+    public OplusSwitchPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                                 int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         initResources();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OplusSwitchPreference);
         if (a.hasValue(R.styleable.OplusSwitchPreference_forcePosition)) {
@@ -53,22 +63,5 @@ public class OplusSwitchPreference extends SwitchPreferenceCompat {
         } else {
             CardListHelper.setItemCardBackground(holder.itemView, CardListHelper.getPositionInGroup(this));
         }
-        // Handle top margin for the first item
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
-        if (holder.getBindingAdapterPosition() == 0) {
-            layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getContext().getResources().getDisplayMetrics());
-        } else {
-            layoutParams.topMargin = 0; // Reset margin for non-first items
-        }
-
-        // Handle bottom margin for the last item
-        if (holder.getBindingAdapterPosition() == holder.getBindingAdapter().getItemCount() - 1) {
-            layoutParams.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getContext().getResources().getDisplayMetrics());
-        } else {
-            layoutParams.bottomMargin = 0; // Reset margin for non-last items
-        }
-
-        // Apply the adjusted layout params back to the item view
-        holder.itemView.setLayoutParams(layoutParams);
     }
 }

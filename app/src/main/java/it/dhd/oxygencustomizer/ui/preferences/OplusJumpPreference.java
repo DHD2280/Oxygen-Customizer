@@ -16,13 +16,24 @@ public class OplusJumpPreference extends OplusPreference {
     private TextView mJumpText;
     private String mPendingJumpText;
 
-    @SuppressWarnings("unused")
-    public OplusJumpPreference(Context context, AttributeSet attrs) {
+    public OplusJumpPreference(@NonNull Context context) {
+        this(context, null);
+        initResources();
+    }
+
+    public OplusJumpPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
+        initResources();
     }
 
     public OplusJumpPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+        initResources();
+    }
+
+    public OplusJumpPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                               int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         initResources();
     }
 

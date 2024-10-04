@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +23,23 @@ public class OplusRecyclerPreference extends OplusPreference {
     private String mKey = null;
     private int mDefaultValue = 0;
 
-    @SuppressWarnings("unused")
-    public OplusRecyclerPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public OplusRecyclerPreference(@NonNull Context context) {
+        super(context, null);
+        init();
     }
 
-    public OplusRecyclerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public OplusRecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs, 0);
+        init();
+    }
+
+    public OplusRecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr, 0);
+        init();
+    }
+
+    public OplusRecyclerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
