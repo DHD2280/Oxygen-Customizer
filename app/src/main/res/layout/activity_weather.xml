@@ -38,7 +38,8 @@
                     android:layout_width="@dimen/activity_actions_image_size"
                     android:layout_height="@dimen/activity_actions_image_size"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_settings" />
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/white" />
 
                 <TextView
                     android:id="@+id/current_location"
@@ -60,7 +61,8 @@
                     android:layout_width="@dimen/activity_actions_image_size"
                     android:layout_height="@dimen/activity_actions_image_size"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_refresh" />
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
