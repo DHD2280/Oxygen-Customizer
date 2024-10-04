@@ -28,7 +28,7 @@ public class OtaCard extends XposedMods {
     private static final String listenPackage = SETTINGS;
 
     private boolean mCustomStyle = false;
-    private RelativeLayout mOtaCard;
+    private View mOtaCard;
 
     public OtaCard(Context context) {
         super(context);
@@ -43,15 +43,15 @@ public class OtaCard extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
 
-
         Class<?> AboutDeviceOtaUpdatePreference = findClass("com.oplus.settings.widget.preference.AboutDeviceOtaUpdatePreference", lpparam.classLoader);
         hookAllMethods(AboutDeviceOtaUpdatePreference, "onBindViewHolder", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!mCustomStyle) return;
-                View iView = (View) getObjectField(param.thisObject, "mLogoView");
+                Object preferenceHolder = param.args[0];
+                View iView = (View) getObjectField(preferenceHolder, "itemView");
 
-                mOtaCard = (RelativeLayout) iView.getParent();
+                mOtaCard = iView;
                 setCustomImage();
             }
         });
