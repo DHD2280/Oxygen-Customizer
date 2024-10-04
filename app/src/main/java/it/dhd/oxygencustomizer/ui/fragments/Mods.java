@@ -1,10 +1,21 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 
+import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
+import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
+import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.app.Activity;
@@ -16,6 +27,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -30,10 +43,12 @@ import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
 import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
+import it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
@@ -229,7 +244,32 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                 return true;
             });
 
+            OplusJumpPreference mOtaCardPicker = findPreference("ota_card_picker");
+            mOtaCardPicker.setOnPreferenceClickListener(preference -> {
+                if (!AppUtils.hasStoragePermission()) {
+                    AppUtils.requestStoragePermission(requireContext());
+                } else {
+                    launchFilePicker(pickImageIntent, "image/*");
+                }
+                return true;
+            });
+
         }
+
+        ActivityResultLauncher<Intent> pickImageIntent = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        String path = getRealPath(data);
+
+                        if (path != null && moveToOCHiddenDir(path, SETTINGS_OTA_CARD_DIR)) {
+                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
         private void checkOplusVersion() {
             String osVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);

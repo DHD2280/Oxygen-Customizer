@@ -13,10 +13,11 @@ import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
+import it.dhd.oxygencustomizer.xposed.hooks.settings.OtaCard;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.CaffeineTile;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
@@ -27,6 +28,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodWeather;
@@ -50,7 +52,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarNotification;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 
 public class ModPacks {
 
@@ -143,6 +144,7 @@ public class ModPacks {
             case Constants.Packages.SETTINGS -> {
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
+                modPacks.add(OtaCard.class);
             }
             case Constants.Packages.LAUNCHER -> {
                 modPacks.add(Launcher.class);

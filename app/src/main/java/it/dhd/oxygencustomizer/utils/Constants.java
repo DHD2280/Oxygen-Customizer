@@ -683,6 +683,7 @@ public final class Constants {
     public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
     public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
+    public static final String SETTINGS_OTA_CARD_DIR = XPOSED_RESOURCE_TEMP_DIR + "/settings_ota_card.png";
 
     // Resource names
     public static final String LOCKSCREEN_CLOCK_LAYOUT = "preview_lockscreen_clock_";
