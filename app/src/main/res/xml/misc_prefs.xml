@@ -9,18 +9,18 @@
     <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="misc_remove_rotate_floating"
-        app:forcePosition="top"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
         android:title="@string/misc_remove_rotate_floating_title"
+        app:forcePosition="top"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="remove_usb_dialog"
-        app:forcePosition="bottom"
         android:summary="@string/remove_usb_dialog_summary"
         android:title="@string/remove_usb_dialog"
+        app:forcePosition="bottom"
         app:iconSpaceReserved="false" />
 
 
@@ -103,34 +103,35 @@
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
-        app:iconSpaceReserved="false"
-        android:title="@string/ota_card_category">
+        android:title="@string/ota_card_category"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="custom_ota_card"
-            android:title="@string/ota_card_title"
+            android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
-            android:summaryOff="@string/general_off" />
+            android:title="@string/ota_card_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="ota_card_picker"
-            android:title="@string/pick_image"
-            android:summary="@string/pick_image_summary" />
+            android:summary="@string/pick_image_summary"
+            android:title="@string/pick_image" />
 
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
-        app:iconSpaceReserved="false"
+        android:key="pocket_studio_cat"
         android:title="@string/pocket_studio"
-        android:key="pocket_studio_cat" >
+        app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-            app:forcePosition="full"
             android:defaultValue="false"
             android:key="enable_pocket_studio"
+            android:summary="@string/pocket_studio_summary"
             android:title="@string/pocket_studio_title"
-            android:summary="@string/pocket_studio_summary" />
+            app:forcePosition="full" />
 
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:key="pocket_studio_footer"
