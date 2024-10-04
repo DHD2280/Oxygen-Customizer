@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
-
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.Manifest;
@@ -26,10 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
-import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
 public class AppUtils {
 
@@ -77,7 +74,7 @@ public class AppUtils {
         builder.setPositiveButton(context.getString(android.R.string.ok), (dialog, which) -> {
             new Thread(() -> {
                 try {
-                    ShellUtils.execCommand(commands, true);
+                    Shell.cmd(String.valueOf(commands)).exec();
                 } catch (Exception ignored) {
                 }
             }).start();
@@ -98,7 +95,7 @@ public class AppUtils {
             commands.add("killall " + scope);
             commands.add("am force-stop " + scope);
         }
-        ShellUtils.execCommand(commands, true);
+        Shell.cmd(String.valueOf(commands)).exec();
     }
 
     public static boolean hasStoragePermission() {

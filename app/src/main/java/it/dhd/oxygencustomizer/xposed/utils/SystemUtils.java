@@ -236,23 +236,25 @@ public class SystemUtils {
     static boolean darkSwitching = false;
 
     public static void doubleToggleDarkMode() {
-        boolean isDark = isDarkMode();
-        new Thread(() -> {
-            try {
-                while (darkSwitching) {
-                    Thread.currentThread().wait(100);
+        XPLauncher.enqueueProxyCommand(proxy -> {
+            boolean isDark = isDarkMode();
+            new Thread(() -> {
+                try {
+                    while (darkSwitching) {
+                        Thread.currentThread().wait(100);
+                    }
+                    darkSwitching = true;
+
+                    proxy.runCommand("cmd uimode night " + (isDark ? "no" : "yes"));
+                    threadSleep(1000);
+                    proxy.runCommand("cmd uimode night " + (isDark ? "yes" : "no"));
+
+                    threadSleep(500);
+                    darkSwitching = false;
+                } catch (Exception ignored) {
                 }
-                darkSwitching = true;
-
-                ShellUtils.execCommand("cmd uimode night " + (isDark ? "no" : "yes"), false);
-                Thread.sleep(1000);
-                ShellUtils.execCommand("cmd uimode night " + (isDark ? "yes" : "no"), false);
-
-                Thread.sleep(500);
-                darkSwitching = false;
-            } catch (Exception ignored) {
-            }
-        }).start();
+            }).start();
+        });
     }
 
     private AudioManager getAudioManager() {

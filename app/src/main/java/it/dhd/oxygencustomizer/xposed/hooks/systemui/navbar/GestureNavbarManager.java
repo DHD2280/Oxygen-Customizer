@@ -43,11 +43,11 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
-import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class GestureNavbarManager extends XposedMods {
@@ -438,7 +438,7 @@ public class GestureNavbarManager extends XposedMods {
 
                 if (foregroundApp != null && !foregroundApp.equals(Constants.Packages.SYSTEM_UI) && !foregroundApp.equals(getDefaultLauncherPackageName())) {
                     //am.killBackgroundProcesses(foregroundApp);
-                    if (ShellUtils.checkRootPermission()) {
+                    if (RootUtil.isDeviceRooted()) {
                         String finalForegroundApp = foregroundApp;
                         XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + finalForegroundApp));
                         XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("am force-stop " + finalForegroundApp));

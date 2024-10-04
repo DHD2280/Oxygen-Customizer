@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import com.topjohnwu.superuser.Shell;
 
@@ -50,8 +49,8 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentUpdatesBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
+import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
-import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
 public class UpdateFragment extends BaseFragment {
 
@@ -167,9 +166,9 @@ public class UpdateFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         //Android 13 requires notification permission to be granted or it won't allow it
-        ShellUtils.execCommand(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID), true); //will ask root if not granted yet
+        Shell.cmd(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID)).exec(); //will ask root if not granted yet
 
-        if (!ShellUtils.checkRootPermission()) {
+        if (!RootUtil.isDeviceRooted()) {
             currentVersionName = getString(R.string.root_not_here);
             currentVersionType = -1;
             currentVersionCode = 9999;

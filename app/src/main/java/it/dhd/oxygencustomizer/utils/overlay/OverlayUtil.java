@@ -1,26 +1,19 @@
 package it.dhd.oxygencustomizer.utils.overlay;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_ANDROID_THEMES;
-import static it.dhd.oxygencustomizer.utils.Dynamic.TOTAL_NAVBAR;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.content.Context;
-import android.content.om.OverlayInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.RemoteException;
 import android.util.Log;
 
 import com.topjohnwu.superuser.Shell;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.Prefs;
 

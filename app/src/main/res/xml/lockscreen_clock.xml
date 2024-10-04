@@ -34,9 +34,10 @@
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="lockscreen_clock_font_custom"
-            android:summary="@string/lockscreen_clock_font_custom_summary"
-            android:title="@string/lockscreen_clock_font_custom_title"
+            android:summary="@string/pick_font_summary"
+            android:title="@string/pick_font_title"
             app:iconSpaceReserved="false" />
+
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory

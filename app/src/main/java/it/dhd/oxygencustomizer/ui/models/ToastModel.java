@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.models;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
 
 public class ToastModel {
 

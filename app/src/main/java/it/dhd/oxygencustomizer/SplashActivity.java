@@ -77,6 +77,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         splashScreen.setKeepOnScreenCondition(() -> keepShowing);
         setDarkTheme();
+        DynamicColors.applyToActivityIfAvailable(this);
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
 
         new Thread(runner).start();

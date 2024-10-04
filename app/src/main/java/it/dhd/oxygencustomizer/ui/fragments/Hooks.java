@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
-import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.PACKAGE_STRIKE_KEY_KEY;

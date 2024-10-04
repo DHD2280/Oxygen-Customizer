@@ -103,9 +103,12 @@
     <string name="bottom">Bottom</string>
     <string name="reset">Reset</string>
     <string name="lang_follow_system">Follow System</string>
+    <string name="pick_font_title">Pick Font</string>
+    <string name="pick_font_summary">Pick your font.\nDo not select file from Recent.</string>
 
     <!-- Image Crop Strings -->
     <string name="pick_image">Pick Image</string>
+    <string name="pick_image_summary">Click to pick an image</string>
 
     <!-- Search Preference -->
     <string name="searchpreference_search">Search…</string>
@@ -550,8 +553,6 @@
     <string name="qs_header_stock_date_background_chip_style">Date background chip style</string>
     <string name="qs_header_clock_font_prefs_title">Font</string>
     <string name="qs_header_clock_font_custom_enabled">Use Custom font</string>
-    <string name="qs_header_clock_font_custom_title">Pick Font</string>
-    <string name="qs_header_clock_font_custom_summary">Pick your font.\nDo not select file from Recent.</string>
     <string name="qs_header_clock_prefs">Custom Clock Preferences</string>
     <string name="qs_header_clock_custom_color_title">Custom Color Clock</string>
     <string name="qs_header_clock_custom_color_summary">Custom color instead of primary color</string>
@@ -745,8 +746,6 @@
     <string name="lockscreen_clock_custom_summary">Swipe to pick a style of your choice.</string>
     <string name="lockscreen_clock_font_prefs_title">Font</string>
     <string name="lockscreen_clock_font_custom_enabled">Use Custom font</string>
-    <string name="lockscreen_clock_font_custom_title">Pick Font</string>
-    <string name="lockscreen_clock_font_custom_summary">Pick your font.\nDo not select file from Recent.</string>
     <string name="lockscreen_clock_prefs">Lockscreen Clock Prefs</string>
     <string name="lockscreen_clock_custom_color_title">Custom Color Clock</string>
     <string name="lockscreen_clock_custom_color_summary">Custom color instead of primary color</string>
@@ -798,7 +797,6 @@
     <string name="aod_clock_custom_user_title">User Name</string>
     <string name="aod_clock_custom_user_image">Use Custom User Image</string>
     <string name="aod_clock_custom_user_image_title">User Image</string>
-    <string name="aod_clock_custom_user_image_summary">Click to pick an image.</string>
     <string name="aod_font_line_height_title">Line Height</string>
 
     <!-- Aod Weather -->
@@ -1266,5 +1264,10 @@
     <string name="pocket_studio_title">Enable Pocket Studio</string>
     <string name="pocket_studio_summary">Enable Pocket Studio on your device.\nRequires a reboot.</string>
     <string name="pocket_studio_info">Pocket Studio allows to have more than two apps opened at same time. It\'s not guaranteed that this feature will work on your devices: it only force the feature to be enabled.</string>
+
+    <!-- OTA Card -->
+    <string name="ota_card_category">OTA Card</string>
+    <string name="ota_card_title">Custom OTA Card image</string>
+
 
 </resources>

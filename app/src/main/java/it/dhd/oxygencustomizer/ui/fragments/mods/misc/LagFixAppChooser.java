@@ -13,7 +13,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import it.dhd.oxygencustomizer.R;

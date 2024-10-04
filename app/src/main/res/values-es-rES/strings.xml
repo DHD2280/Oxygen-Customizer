@@ -494,8 +494,6 @@
     <string name="qs_header_stock_date_background_chip_style">Estilo de chip de fondo de la fecha</string>
     <string name="qs_header_clock_font_prefs_title">Fuente</string>
     <string name="qs_header_clock_font_custom_enabled">Usar fuente personalizada</string>
-    <string name="qs_header_clock_font_custom_title">Elegir fuente</string>
-    <string name="qs_header_clock_font_custom_summary">Elige tu fuente.\nNo selecciones un archivo de Reciente.</string>
     <string name="qs_header_clock_prefs">Preferencias del reloj personalizado</string>
     <string name="qs_header_clock_custom_color_title">Reloj de color personalizado</string>
     <string name="qs_header_clock_custom_color_summary">Color personalizado en lugar del color primario</string>
@@ -663,8 +661,6 @@
     <string name="lockscreen_clock_custom_summary">Deslice para elegir un estilo de su elección.</string>
     <string name="lockscreen_clock_font_prefs_title">Fuente</string>
     <string name="lockscreen_clock_font_custom_enabled">Usar fuente personalizada</string>
-    <string name="lockscreen_clock_font_custom_title">Elegir fuente</string>
-    <string name="lockscreen_clock_font_custom_summary">Elige tu fuente.\nNo selecciones un archivo de Reciente.</string>
     <string name="lockscreen_clock_prefs">Preferencias del reloj de la pantalla de bloqueo</string>
     <string name="lockscreen_clock_custom_color_title">Reloj de color personalizado</string>
     <string name="lockscreen_clock_custom_color_summary">Color personalizado en lugar del color primario</string>
@@ -709,7 +705,6 @@
     <string name="aod_clock_custom_user_title">Nombre de usuario</string>
     <string name="aod_clock_custom_user_image">Usar imagen de usuario personalizada</string>
     <string name="aod_clock_custom_user_image_title">Imagen de usuario</string>
-    <string name="aod_clock_custom_user_image_summary">Haz clic para elegir una imagen.</string>
     <string name="aod_font_line_height_title">Altura de línea</string>
     <!-- Aod Weather -->
     <!-- Sound Mods -->

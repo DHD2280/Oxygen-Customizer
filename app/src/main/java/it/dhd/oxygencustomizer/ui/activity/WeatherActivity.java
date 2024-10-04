@@ -7,13 +7,12 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import it.dhd.oxygencustomizer.databinding.ActivityWeatherBinding;
 import it.dhd.oxygencustomizer.ui.adapters.ForecastDayAdapter;

@@ -500,8 +500,6 @@
     <string name="qs_header_stock_date_background_chip_style">日付の背景チップのスタイル</string>
     <string name="qs_header_clock_font_prefs_title">フォント</string>
     <string name="qs_header_clock_font_custom_enabled">カスタムフォントを使用</string>
-    <string name="qs_header_clock_font_custom_title">フォントを選択</string>
-    <string name="qs_header_clock_font_custom_summary">フォントを選択します。\n最近のファイルからフォントを選択しないでください。</string>
     <string name="qs_header_clock_prefs">時計のカスタム設定</string>
     <string name="qs_header_clock_custom_color_title">時計のカスタムカラー</string>
     <string name="qs_header_clock_custom_color_summary">プライマリカラーの代わりにカスタムカラーを使用します</string>
@@ -669,8 +667,6 @@
     <string name="lockscreen_clock_custom">時計のスタイル</string>
     <string name="lockscreen_clock_font_prefs_title">フォント</string>
     <string name="lockscreen_clock_font_custom_enabled">カスタムフォントを使用</string>
-    <string name="lockscreen_clock_font_custom_title">フォントを選択</string>
-    <string name="lockscreen_clock_font_custom_summary">フォントを選択します。\n最近のファイルからフォントを選択しないでください。</string>
     <string name="lockscreen_clock_prefs">ロック画面の時計の設定</string>
     <string name="lockscreen_clock_custom_color_title">カスタムカラー時計</string>
     <string name="lockscreen_clock_custom_color_summary">プライマリカラーの代わりにカスタムカラーを使用します</string>
@@ -715,7 +711,6 @@
     <string name="aod_clock_custom_user_title">ユーザー名</string>
     <string name="aod_clock_custom_user_image">カスタムユーザー画像を使用</string>
     <string name="aod_clock_custom_user_image_title">ユーザー画像</string>
-    <string name="aod_clock_custom_user_image_summary">タップで画像を選択します。</string>
     <string name="aod_font_line_height_title">行の高さ</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD の天気</string>

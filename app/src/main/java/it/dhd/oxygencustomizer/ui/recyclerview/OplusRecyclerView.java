@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.ThemeUtils;
 
 public class OplusRecyclerView extends RecyclerView {
 

@@ -1,8 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.sound;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.os.Bundle;

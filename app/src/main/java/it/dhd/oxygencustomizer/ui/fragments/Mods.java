@@ -2,13 +2,11 @@ package it.dhd.oxygencustomizer.ui.fragments;
 
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
-import static it.dhd.oxygencustomizer.ui.activity.MainActivity.backButtonDisabled;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,15 +25,15 @@ import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
+import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
+import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
-import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
-import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
-import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
-import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;

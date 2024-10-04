@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.TextView;
 
-
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;

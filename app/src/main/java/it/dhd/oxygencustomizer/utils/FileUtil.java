@@ -9,6 +9,8 @@ import android.provider.OpenableColumns;
 
 import androidx.activity.result.ActivityResultLauncher;
 
+import com.topjohnwu.superuser.Shell;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
-import it.dhd.oxygencustomizer.xposed.utils.ShellUtils;
 
 public class FileUtil {
 
@@ -31,7 +32,7 @@ public class FileUtil {
     }
 
     public static void cleanDir(String dirName) {
-        ShellUtils.execCommand("rm -rf " + DATA_DIR + "/" + dirName, false);
+        Shell.cmd("rm -rf " + DATA_DIR + "/" + dirName).exec();
     }
 
     private static void createDir(String dirName) {
@@ -126,12 +127,12 @@ public class FileUtil {
     }
 
     public static boolean moveToOCHiddenDir(String source, String destination) {
-        return ShellUtils.execCommand(
+        return Shell.cmd(
                 new String[]{
                         "mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR,
                         "rm -f \"" + destination + "\"",
                         "mv -f \"" + source + "\" \"" + destination + "\""}
-                , true).result == 0;
+                ).exec().isSuccess();
     }
 
     public static void launchFilePicker(ActivityResultLauncher<Intent> launcher, String type) {

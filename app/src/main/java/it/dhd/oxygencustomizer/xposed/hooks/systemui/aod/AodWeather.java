@@ -25,8 +25,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_WIND;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setPaddings;
 
 import android.content.Context;
 import android.graphics.Color;

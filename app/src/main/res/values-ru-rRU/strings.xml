@@ -508,9 +508,6 @@
     <string name="qs_header_stock_date_background_chip_style">Стиль фоновой подложки даты</string>
     <string name="qs_header_clock_font_prefs_title">Шрифт</string>
     <string name="qs_header_clock_font_custom_enabled">Используйте пользовательский шрифт</string>
-    <string name="qs_header_clock_font_custom_title">Выберите шрифт</string>
-    <string name="qs_header_clock_font_custom_summary">Выберите свой шрифт.
-Не выбирайте файл из списка \"Последние\".</string>
     <string name="qs_header_clock_prefs">Пользовательские настройки часов</string>
     <string name="qs_header_clock_custom_color_title">Пользовательские цветные часы</string>
     <string name="qs_header_clock_custom_color_summary">Пользовательский цвет вместо основного</string>
@@ -686,9 +683,6 @@
     <string name="lockscreen_clock_custom">Стиль часов</string>
     <string name="lockscreen_clock_font_prefs_title">Шрифт</string>
     <string name="lockscreen_clock_font_custom_enabled">Используйте пользовательский шрифт</string>
-    <string name="lockscreen_clock_font_custom_title">Выберите шрифт</string>
-    <string name="lockscreen_clock_font_custom_summary">Выберите свой шрифт.
-Не выбирайте файл из списка \"Последние\".</string>
     <string name="lockscreen_clock_prefs">Настройки часов на экране блокировки</string>
     <string name="lockscreen_clock_custom_color_title">Пользовательские цветные часы</string>
     <string name="lockscreen_clock_custom_color_summary">Пользовательский цвет вместо основного</string>
@@ -732,7 +726,6 @@
     <string name="aod_clock_custom_user_title">Имя пользователя</string>
     <string name="aod_clock_custom_user_image">Использовать собственное изображение пользователя</string>
     <string name="aod_clock_custom_user_image_title">Изображение пользователя</string>
-    <string name="aod_clock_custom_user_image_summary">Нажмите, чтобы выбрать изображение.</string>
     <string name="aod_font_line_height_title">Высота линии</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Погода на AOD</string>

@@ -728,7 +728,7 @@ public class PreferenceHelper {
             }
 
             // Pocket Studio
-            case "enable_pocket_studio" -> {
+            case "enable_pocket_studio", "pocket_studio_cat", "pocket_studio_footer" -> {
                 return ModuleUtil.moduleExists();
             }
 

@@ -513,8 +513,6 @@
     <string name="qs_header_stock_date_background_chip_style">Stile bordo sfondo data</string>
     <string name="qs_header_clock_font_prefs_title">Font</string>
     <string name="qs_header_clock_font_custom_enabled">Usa carattere personalizzato</string>
-    <string name="qs_header_clock_font_custom_title">Scegli Carattere</string>
-    <string name="qs_header_clock_font_custom_summary">Scegliere il carattere.\nNon selezionare il file dei recenti.</string>
     <string name="qs_header_clock_prefs">Preferenze Orologio Personalizzato</string>
     <string name="qs_header_clock_custom_color_title">Personalizza colore orologio</string>
     <string name="qs_header_clock_custom_color_summary">Colore personalizzato al posto del colore primario</string>
@@ -696,8 +694,6 @@
     <string name="lockscreen_clock_custom_summary">Scorri per scegliere lo stile che preferisci.</string>
     <string name="lockscreen_clock_font_prefs_title">Carattere</string>
     <string name="lockscreen_clock_font_custom_enabled">Usa carattere personalizzato</string>
-    <string name="lockscreen_clock_font_custom_title">Seleziona Carattere</string>
-    <string name="lockscreen_clock_font_custom_summary">Seleziona il carattere.\nNon selezionare il file da Recenti.</string>
     <string name="lockscreen_clock_prefs">Preferenze orologio schermata di blocco</string>
     <string name="lockscreen_clock_custom_color_title">Personalizza colore orologio</string>
     <string name="lockscreen_clock_custom_color_summary">Colore personalizzato invece del colore primario</string>
@@ -745,7 +741,6 @@
     <string name="aod_clock_custom_user_title">Nome Utente</string>
     <string name="aod_clock_custom_user_image">Usa immagine Utente personalizzata</string>
     <string name="aod_clock_custom_user_image_title">Immagine Utente</string>
-    <string name="aod_clock_custom_user_image_summary">Fai clic per selezionare un\'immagine.</string>
     <string name="aod_font_line_height_title">Altezza Linea</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Meteo AOD</string>

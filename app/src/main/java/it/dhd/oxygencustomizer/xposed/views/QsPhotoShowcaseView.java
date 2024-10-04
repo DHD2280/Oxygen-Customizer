@@ -3,8 +3,6 @@ package it.dhd.oxygencustomizer.xposed.views;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setPaddings;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

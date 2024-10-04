@@ -6,10 +6,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_BG
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_COLOR;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 import it.dhd.oxygencustomizer.databinding.ViewListOptionSettingsiconsBinding;
-import it.dhd.oxygencustomizer.ui.models.IconModel;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
 

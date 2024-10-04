@@ -2,8 +2,8 @@ package it.dhd.oxygencustomizer.ui.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.widget.TextView;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -508,8 +508,6 @@
     <string name="qs_header_stock_date_background_chip_style">Estilo de chip de fundo da data</string>
     <string name="qs_header_clock_font_prefs_title">Fonte</string>
     <string name="qs_header_clock_font_custom_enabled">Usar fonte customizada</string>
-    <string name="qs_header_clock_font_custom_title">Escolher fonte</string>
-    <string name="qs_header_clock_font_custom_summary">Escolha sua fonte.\nNão selecione arquivo dos recentes.</string>
     <string name="qs_header_clock_prefs">Preferências do relógio personalizado</string>
     <string name="qs_header_clock_custom_color_title">Relógio de Cor Personalizado</string>
     <string name="qs_header_clock_custom_color_summary">Cor personalizada em vez da cor primária</string>
@@ -684,8 +682,6 @@
     <string name="lockscreen_clock_custom_summary">Arraste para escolher um estilo de sua escolha.</string>
     <string name="lockscreen_clock_font_prefs_title">Fonte</string>
     <string name="lockscreen_clock_font_custom_enabled">Usar fonte personalizada</string>
-    <string name="lockscreen_clock_font_custom_title">Escolher fonte</string>
-    <string name="lockscreen_clock_font_custom_summary">Escolha sua fonte.\nNão selecione arquivos da seção recente.</string>
     <string name="lockscreen_clock_prefs">Preferências do relógio da tela de bloqueio</string>
     <string name="lockscreen_clock_custom_color_title">Relógio de Cor Personalizado</string>
     <string name="lockscreen_clock_custom_color_summary">Cor personalizada em vez de cor primária</string>
@@ -733,7 +729,6 @@
     <string name="aod_clock_custom_user_title">Nome de Usuário</string>
     <string name="aod_clock_custom_user_image">Usar Nome de Usuário Personalizado</string>
     <string name="aod_clock_custom_user_image_title">Imagem do Usuário</string>
-    <string name="aod_clock_custom_user_image_summary">Clique para escolher uma imagem.</string>
     <string name="aod_font_line_height_title">Altura da linha</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Tempo AOD</string>

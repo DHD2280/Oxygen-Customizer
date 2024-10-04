@@ -500,9 +500,6 @@
     <string name="qs_header_stock_date_background_chip_style">Tarih arka plan çip stili</string>
     <string name="qs_header_clock_font_prefs_title">Yazı tipi</string>
     <string name="qs_header_clock_font_custom_enabled">Özel yazı tipi kullanın</string>
-    <string name="qs_header_clock_font_custom_title">Yazı Tipi Seç</string>
-    <string name="qs_header_clock_font_custom_summary">Yazı tipinizi seçin.
-  Son Kullanılanlar\'dan dosya seçmeyin.</string>
     <string name="qs_header_clock_prefs">Özel Saat Tercihleri</string>
     <string name="qs_header_clock_custom_color_title">Özel Renkli Saat</string>
     <string name="qs_header_clock_custom_color_summary">Özel renk, birincil renk yerine</string>
@@ -678,9 +675,6 @@
     <string name="lockscreen_clock_custom">Saat Stili</string>
     <string name="lockscreen_clock_font_prefs_title">Yazı tipi</string>
     <string name="lockscreen_clock_font_custom_enabled">Özel yazı tipi kullanın</string>
-    <string name="lockscreen_clock_font_custom_title">Yazı Tipi Seçin</string>
-    <string name="lockscreen_clock_font_custom_summary">Yazı tipinizi seçin.
-  Son Kullanılanlar\'dan dosya seçmeyin.</string>
     <string name="lockscreen_clock_prefs">Kilit Ekranı Saat Tercihleri</string>
     <string name="lockscreen_clock_custom_color_title">Özel Renkli Saat</string>
     <string name="lockscreen_clock_custom_color_summary">Özel renk, birincil renk yerine</string>
@@ -725,7 +719,6 @@
     <string name="aod_clock_custom_user_title">Kullanıcı Adı</string>
     <string name="aod_clock_custom_user_image">Özel Kullanıcı Resmi Kullanın</string>
     <string name="aod_clock_custom_user_image_title">Kullanıcı Resmi</string>
-    <string name="aod_clock_custom_user_image_summary">Bir resim seçmek için tıklayın.</string>
     <string name="aod_font_line_height_title">Satır Yüksekliği</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD Hava Durumu</string>

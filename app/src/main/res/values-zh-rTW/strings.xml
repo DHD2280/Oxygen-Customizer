@@ -511,8 +511,6 @@
     <string name="qs_header_stock_date_background_chip_style">日期背景風格</string>
     <string name="qs_header_clock_font_prefs_title">字體</string>
     <string name="qs_header_clock_font_custom_enabled">使用自定義字體</string>
-    <string name="qs_header_clock_font_custom_title">選擇字體</string>
-    <string name="qs_header_clock_font_custom_summary">選擇您的字體 \n不要從「最近」選擇檔案</string>
     <string name="qs_header_clock_prefs">自定義時鐘選項</string>
     <string name="qs_header_clock_custom_color_title">自定義時鐘顏色</string>
     <string name="qs_header_clock_custom_color_summary">自定義時鐘的顏色取代原本的顏色</string>
@@ -694,8 +692,6 @@
     <string name="lockscreen_clock_custom_summary">滑動即可選擇您喜歡的風格。</string>
     <string name="lockscreen_clock_font_prefs_title">字體</string>
     <string name="lockscreen_clock_font_custom_enabled">自定義字體</string>
-    <string name="lockscreen_clock_font_custom_title">選擇字體</string>
-    <string name="lockscreen_clock_font_custom_summary">選擇您的字體。 \n不要從「最近」中選擇檔案。</string>
     <string name="lockscreen_clock_prefs">鎖定介面時鐘選項</string>
     <string name="lockscreen_clock_custom_color_title">自定義時鐘顏色</string>
     <string name="lockscreen_clock_custom_color_summary">自定義顏色代替主顏色</string>
@@ -743,7 +739,6 @@
     <string name="aod_clock_custom_user_title">使用者名稱</string>
     <string name="aod_clock_custom_user_image">使用自定義使用者圖片</string>
     <string name="aod_clock_custom_user_image_title">使用者圖片</string>
-    <string name="aod_clock_custom_user_image_summary">點擊選取圖片</string>
     <string name="aod_font_line_height_title">線條高度</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD天氣</string>

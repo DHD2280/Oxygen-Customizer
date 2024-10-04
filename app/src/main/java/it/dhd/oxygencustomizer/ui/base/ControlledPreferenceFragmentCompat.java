@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.base;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
-
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 
 import android.content.SharedPreferences;
@@ -16,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
@@ -26,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
-import it.dhd.oxygencustomizer.ui.recyclerview.OplusRecyclerView;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;

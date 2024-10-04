@@ -31,8 +31,8 @@
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="aod_clock_font_custom"
-            android:summary="@string/lockscreen_clock_font_custom_summary"
-            android:title="@string/lockscreen_clock_font_custom_title"
+            android:summary="@string/pick_font_summary"
+            android:title="@string/pick_font_title"
             app:iconSpaceReserved="false" />
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
@@ -128,7 +128,7 @@
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
             android:key="aod_clock_custom_user_image_picker"
-            android:summary="@string/aod_clock_custom_user_image_summary"
+            android:summary="@string/pick_image_summary"
             android:title="@string/aod_clock_custom_user_image_title"
             app:iconSpaceReserved="false" />
 

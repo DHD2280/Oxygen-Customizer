@@ -13,7 +13,6 @@ import androidx.preference.PreferenceViewHolder;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.appcompat.cardlist.CardListHelper;
-import it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout;
 
 public class SelectorWithWidgetPreference extends CheckBoxPreference {
 

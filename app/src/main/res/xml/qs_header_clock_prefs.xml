@@ -115,8 +115,8 @@
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="qs_header_clock_font_custom"
-            android:summary="@string/qs_header_clock_font_custom_summary"
-            android:title="@string/qs_header_clock_font_custom_title"
+            android:summary="@string/pick_font_summary"
+            android:title="@string/pick_font_title"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>

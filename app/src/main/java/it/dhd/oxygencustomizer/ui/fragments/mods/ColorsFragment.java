@@ -1,19 +1,13 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
-import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuHost;
@@ -25,15 +19,12 @@ import com.topjohnwu.superuser.Shell;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference;
 import it.dhd.oxygencustomizer.ui.preferences.OplusPreference;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.ColorUtils;
-import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class ColorsFragment extends ControlledPreferenceFragmentCompat {
 

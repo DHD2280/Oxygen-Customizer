@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.weather.providers;
 
 import android.content.Context;
 import android.location.Location;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 

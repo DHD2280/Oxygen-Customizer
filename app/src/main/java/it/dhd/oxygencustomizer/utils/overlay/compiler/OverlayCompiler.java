@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.utils.overlay.compiler;
 
-import static it.dhd.oxygencustomizer.utils.ModuleConstants.FRAMEWORK_DIR;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
 import static it.dhd.oxygencustomizer.utils.Dynamic.isAtleastA14;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.FRAMEWORK_DIR;
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readCertificate;
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readPrivateKey;
 import static it.dhd.oxygencustomizer.utils.helper.Logger.writeLog;
@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.apksigner.SignAPK;
 

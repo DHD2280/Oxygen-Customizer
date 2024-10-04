@@ -1,16 +1,11 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SELECTED_TOAST_FRAME;
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_BG_SHAPE;
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_BG_SOLID;
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.SELECTED_SETTINGS_ICONS_SET;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.disableOverlay;
-import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getDrawableFromOverlay;
-import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getOverlayForComponent;
-import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.os.Bundle;
 import android.os.Handler;

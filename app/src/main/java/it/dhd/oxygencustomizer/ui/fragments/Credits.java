@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 import static it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter.VIEW_TYPE_ITEM;
-import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

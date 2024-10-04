@@ -18,7 +18,6 @@ package it.dhd.oxygencustomizer.receivers;
  *
  */
 
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.BroadcastReceiver;

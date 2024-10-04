@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.utils.helper;
 
-import static it.dhd.oxygencustomizer.utils.ModuleConstants.BIN_DIR;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2LIB;
@@ -8,12 +7,12 @@ import static it.dhd.oxygencustomizer.utils.Dynamic.AAPTLIB;
 import static it.dhd.oxygencustomizer.utils.Dynamic.NATIVE_LIBRARY_DIR;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGNLIB;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.BIN_DIR;
 
 import android.util.Log;
 
 import com.topjohnwu.superuser.Shell;
 
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.FileUtil;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 

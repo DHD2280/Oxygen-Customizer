@@ -512,8 +512,6 @@
     <string name="qs_header_stock_date_background_chip_style">A dátumháttér stílusa</string>
     <string name="qs_header_clock_font_prefs_title">Betűtípus</string>
     <string name="qs_header_clock_font_custom_enabled">Egyéni karakterkészletet használhat</string>
-    <string name="qs_header_clock_font_custom_title">Betűtípus-választó</string>
-    <string name="qs_header_clock_font_custom_summary">Válasszon betűtípust.\nNe válasszon az Előzményekből.</string>
     <string name="qs_header_clock_prefs">Az egyéni óra tulajdonságai</string>
     <string name="qs_header_clock_custom_color_title">Az egyéni óra színe</string>
     <string name="qs_header_clock_custom_color_summary">Lecserélheti az elsődleges színt egyénire</string>
@@ -695,8 +693,6 @@
     <string name="lockscreen_clock_custom_summary">Csúsztassa az ujját arra a stílusra amit szeretne.</string>
     <string name="lockscreen_clock_font_prefs_title">Betűtípus</string>
     <string name="lockscreen_clock_font_custom_enabled">Egyéni karakterkészlet használata</string>
-    <string name="lockscreen_clock_font_custom_title">Betűtípus-választó</string>
-    <string name="lockscreen_clock_font_custom_summary">Válasszon betűtípust.\nNe válasszon az Előzményekből.</string>
     <string name="lockscreen_clock_prefs">Beállítások a záróképernyő órájához</string>
     <string name="lockscreen_clock_custom_color_title">Egyéni óraszín</string>
     <string name="lockscreen_clock_custom_color_summary">Lecserélheti az elsődleges színt egyénire</string>
@@ -744,7 +740,6 @@
     <string name="aod_clock_custom_user_title">Felhasználónév</string>
     <string name="aod_clock_custom_user_image">Egyéni felhasználókép</string>
     <string name="aod_clock_custom_user_image_title">Felhasználókép</string>
-    <string name="aod_clock_custom_user_image_summary">Klikkeljen egy képre</string>
     <string name="aod_font_line_height_title">Sormagasság</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Időjárás mindig bekapcsolva</string>

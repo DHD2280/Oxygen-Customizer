@@ -33,6 +33,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -41,14 +42,14 @@ import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
-import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
-import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
-import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ClockPreviewAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
+import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
+import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 

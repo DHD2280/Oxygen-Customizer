@@ -512,8 +512,6 @@
     <string name="qs_header_stock_date_background_chip_style">نمط شريحة خلفية التاريخ</string>
     <string name="qs_header_clock_font_prefs_title">الخط</string>
     <string name="qs_header_clock_font_custom_enabled">استخدم خط مخصص</string>
-    <string name="qs_header_clock_font_custom_title">اختر خط</string>
-    <string name="qs_header_clock_font_custom_summary">اختر خطك.\nلا تحدد ملفًا من الملفات الحديثة.</string>
     <string name="qs_header_clock_prefs">تفضيلات الساعة المخصصة</string>
     <string name="qs_header_clock_custom_color_title">ساعة بلون مخصص</string>
     <string name="qs_header_clock_custom_color_summary">لون مخصص بدلاً من اللون الأساسي</string>
@@ -695,8 +693,6 @@
     <string name="lockscreen_clock_custom_summary">اسحب لإختيار نمط من اختيارك.</string>
     <string name="lockscreen_clock_font_prefs_title">الخط</string>
     <string name="lockscreen_clock_font_custom_enabled">استخدام خط مخصص</string>
-    <string name="lockscreen_clock_font_custom_title">اختر خط</string>
-    <string name="lockscreen_clock_font_custom_summary">اختر الخط الخاص بك.\nلا تحدد ملفًا من الملفات الحديثة.</string>
     <string name="lockscreen_clock_prefs">تفضيلات ساعة شاشة القفل</string>
     <string name="lockscreen_clock_custom_color_title">ساعة بلون مخصص</string>
     <string name="lockscreen_clock_custom_color_summary">لون مخصص بدلاً من اللون الأساسي</string>
@@ -744,7 +740,6 @@
     <string name="aod_clock_custom_user_title">اسم المستخدم</string>
     <string name="aod_clock_custom_user_image">استخدام صورة مستخدم مخصصة</string>
     <string name="aod_clock_custom_user_image_title">صورة المستخدم</string>
-    <string name="aod_clock_custom_user_image_summary">انقر لاختيار صورة.</string>
     <string name="aod_font_line_height_title">ارتفاع السطر</string>
     <!-- Aod Weather -->
     <string name="aod_weather">طقس AOD</string>

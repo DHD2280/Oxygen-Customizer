@@ -1,21 +1,14 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.General.APP_LANGUAGE;
-import static it.dhd.oxygencustomizer.utils.Prefs.getString;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.LocaleList;
-import android.text.TextUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.Locale;
-
-import it.dhd.oxygencustomizer.R;
 
 public class LocaleHelper {
 

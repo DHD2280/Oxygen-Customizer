@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.ui.dialogs;
 
-import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,22 +7,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.text.HtmlCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 
