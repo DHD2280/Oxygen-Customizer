@@ -131,7 +131,8 @@
             android:key="enable_pocket_studio"
             android:summary="@string/pocket_studio_summary"
             android:title="@string/pocket_studio_title"
-            app:forcePosition="full" />
+            app:forcePosition="full"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:key="pocket_studio_footer"
