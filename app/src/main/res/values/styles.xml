@@ -237,7 +237,7 @@
     </style>
 
     <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
-        <item name="thumbTint">@color/text_color_primary</item>
+        <item name="thumbTint">@color/white</item>
         <item name="trackDecorationTint">@color/transparent</item>
         <item name="trackTint">@drawable/switch_track</item>
     </style>
