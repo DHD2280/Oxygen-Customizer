@@ -60,7 +60,7 @@ public class DarkMode extends XposedMods {
                     }
                 }
             } catch (Throwable t) {
-                log("Oxygen Customizer - Buttons: " + t.getMessage());
+                log("Oxygen Customizer - DarkMode: " + t.getMessage());
             }
         }
     };
