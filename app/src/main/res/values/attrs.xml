@@ -66,6 +66,8 @@
         <attr name="summaryText" />
         <attr name="icon" />
         <attr name="iconSpaceReserved" />
+        <attr name="iconWidth" format="dimension" />
+        <attr name="iconHeight" format="dimension" />
         <attr name="isChecked" format="boolean" />
     </declare-styleable>
 

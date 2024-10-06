@@ -27,6 +27,7 @@ public class SwitchWidget extends RelativeLayout {
     private ImageView iconImageView;
     private MaterialSwitch materialSwitch;
     private BeforeSwitchChangeListener beforeSwitchChangeListener;
+    private int iconWidth, iconHeight;
 
     public SwitchWidget(Context context) {
         super(context);
@@ -52,12 +53,15 @@ public class SwitchWidget extends RelativeLayout {
         setTitle(typedArray.getString(R.styleable.SwitchWidget_titleText));
         setSummary(typedArray.getString(R.styleable.SwitchWidget_summaryText));
         setSwitchChecked(typedArray.getBoolean(R.styleable.SwitchWidget_isChecked, false));
+        iconWidth = typedArray.getDimensionPixelSize(R.styleable.SwitchWidget_iconWidth, 20);
+        iconHeight = typedArray.getDimensionPixelSize(R.styleable.SwitchWidget_iconHeight, 20);
         int icon = typedArray.getResourceId(R.styleable.SwitchWidget_icon, 0);
         boolean iconSpaceReserved = typedArray.getBoolean(R.styleable.SwitchWidget_iconSpaceReserved, false);
         typedArray.recycle();
 
         if (icon != 0) {
             iconSpaceReserved = true;
+            setImageDimensions(iconWidth, iconHeight);
             iconImageView.setImageResource(icon);
         }
 
@@ -99,11 +103,13 @@ public class SwitchWidget extends RelativeLayout {
 
     public void setIcon(int icon) {
         iconImageView.setImageResource(icon);
+        setImageDimensions(iconWidth, iconHeight);
         iconImageView.setVisibility(VISIBLE);
     }
 
     public void setIcon(Drawable drawable) {
         iconImageView.setImageDrawable(drawable);
+        setImageDimensions(iconWidth, iconHeight);
         iconImageView.setVisibility(VISIBLE);
     }
 
