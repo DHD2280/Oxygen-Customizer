@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.ui.activity;
 
+import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+
 import android.content.ContentValues;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ActivityWeatherBinding;
 import it.dhd.oxygencustomizer.ui.adapters.ForecastDayAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.ForecastHourAdapter;
@@ -82,7 +85,7 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         // Current Condition
         binding.currentTemperature.setText(mWeatherClient.getWeatherInfo().temp);
         binding.currentTemperatureUnit.setText(mWeatherClient.getWeatherInfo().tempUnits);
-        binding.currentCondition.setText(mWeatherClient.getWeatherInfo().condition);
+        binding.currentCondition.setText(getWeatherCondition(mWeatherClient.getWeatherInfo().condition));
         binding.currentConditionIcon.setImageDrawable(mWeatherClient.getWeatherConditionImage(mWeatherClient.getWeatherInfo().conditionCode));
 
         // Wind and Humidity
@@ -96,6 +99,25 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         binding.lastUpdate.setText(sdf.format(mWeatherClient.getWeatherInfo().timeStamp));
 
+    }
+    
+    private String getWeatherCondition(String formattedCondition) {
+        if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
+            formattedCondition = getString(R.string.weather_condition_clouds);
+        } else if (formattedCondition.toLowerCase().contains("rain")) {
+            formattedCondition = getString(R.string.weather_condition_rain);
+        } else if (formattedCondition.toLowerCase().contains("clear")) {
+            formattedCondition = getString(R.string.weather_condition_clear);
+        } else if (formattedCondition.toLowerCase().contains("storm")) {
+            formattedCondition = getString(R.string.weather_condition_storm);
+        } else if (formattedCondition.toLowerCase().contains("snow")) {
+            formattedCondition = getString(R.string.weather_condition_snow);
+        } else if (formattedCondition.toLowerCase().contains("wind")) {
+            formattedCondition = getString(R.string.weather_condition_wind);
+        } else if (formattedCondition.toLowerCase().contains("mist")) {
+            formattedCondition = getString(R.string.weather_condition_mist);
+        }
+        return formattedCondition;
     }
 
     @Override
