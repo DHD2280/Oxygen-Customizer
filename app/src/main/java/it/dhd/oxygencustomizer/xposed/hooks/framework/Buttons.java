@@ -88,7 +88,6 @@ public class Buttons extends XposedMods {
                 String action = intent.getAction();
                 if (action == null) return;
                 String className = intent.getStringExtra("class");
-                log("Buttons: Intent received - action: " + action + " class: " + className);
                 if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
                     if (!TextUtils.isEmpty(className) && className.equals(Buttons.class.getSimpleName())) {
                         log("Buttons: Intent received - will update preferences");

@@ -68,7 +68,6 @@ public class OplusStartingWindowManager extends XposedMods {
                 String action = intent.getAction();
                 if (action == null) return;
                 String className = intent.getStringExtra("class");
-                log("OplusStartingWindowManager: Intent received - action: " + action + " class: " + className);
                 if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
                     if (!TextUtils.isEmpty(className) && className.equals(OplusStartingWindowManager.class.getSimpleName())) {
                         log("OplusStartingWindowManager: Intent received - will update preferences");

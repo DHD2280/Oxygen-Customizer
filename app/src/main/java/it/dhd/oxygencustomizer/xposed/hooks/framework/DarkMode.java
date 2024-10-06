@@ -51,7 +51,6 @@ public class DarkMode extends XposedMods {
                 String action = intent.getAction();
                 if (action == null) return;
                 String className = intent.getStringExtra("class");
-                log("DarkMode: Intent received - action: " + action + " class: " + className);
                 if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
                     if (!TextUtils.isEmpty(className) && className.equals(DarkMode.class.getSimpleName())) {
                         log("DarkMode: Intent received - will update preferences");
