@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
@@ -113,11 +115,13 @@ public abstract class AppFragmentBase extends BaseFragment {
                 if (hasRestartScopes() && getScopes() != null) {
                     menu.add(0, 1, 0, R.string.restart_scopes)
                             .setIcon(R.drawable.ic_restart)
+                            .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 }
                 if (hasQuickLaunch()) {
                     menu.add(0, 2, 0, R.string.menu_launch_app)
                             .setIcon(R.drawable.ic_launch)
+                            .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 }
                 menu.add(0, 3, 0, R.string.menu_show_system_apps)

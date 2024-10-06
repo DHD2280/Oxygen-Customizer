@@ -4,12 +4,14 @@
     <item
         android:id="@+id/main_action_rotate"
         android:icon="@drawable/ic_rotate"
+        android:iconTint="@color/text_color_primary"
         android:title="@string/rotate_layout_title"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/main_action_flip"
         android:icon="@drawable/ic_flip"
+        android:iconTint="@color/text_color_primary"
         android:title="@string/ic_flip_24"
         app:showAsAction="ifRoom">
         <menu>
@@ -25,5 +27,6 @@
     <item
         android:id="@+id/main_action_crop"
         android:title="@string/crop_image_menu_crop"
+        android:iconTint="@color/text_color_primary"
         app:showAsAction="always" />
 </menu>

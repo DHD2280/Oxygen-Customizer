@@ -4,6 +4,7 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
@@ -68,6 +70,7 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
                     // Add menu items here
                     menu.add(0, 1, 0, R.string.restart_scopes)
                             .setIcon(R.drawable.ic_restart)
+                            .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 }
 

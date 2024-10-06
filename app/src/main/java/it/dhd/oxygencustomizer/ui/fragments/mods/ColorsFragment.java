@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
@@ -76,6 +78,7 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
                 // Add menu items here
                 menu.add(0, 1, 0, R.string.menu_launch_app)
                         .setIcon(R.drawable.ic_launch)
+                        .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             }
 

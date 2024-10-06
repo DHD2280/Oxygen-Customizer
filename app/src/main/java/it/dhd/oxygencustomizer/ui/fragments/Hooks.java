@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -338,6 +339,7 @@ public class Hooks extends BaseFragment {
                     // Add menu items here
                     menu.add(0, 1, 0, R.string.info_hooks)
                             .setIcon(R.drawable.settingslib_ic_info_outline_24)
+                            .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 }
 
