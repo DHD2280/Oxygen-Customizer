@@ -438,11 +438,9 @@ public class GestureNavbarManager extends XposedMods {
 
                 if (foregroundApp != null && !foregroundApp.equals(Constants.Packages.SYSTEM_UI) && !foregroundApp.equals(getDefaultLauncherPackageName())) {
                     //am.killBackgroundProcesses(foregroundApp);
-                    if (RootUtil.isDeviceRooted()) {
-                        String finalForegroundApp = foregroundApp;
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + finalForegroundApp));
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("am force-stop " + finalForegroundApp));
-                    }
+                    String finalForegroundApp = foregroundApp;
+                    XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + finalForegroundApp));
+                    XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("am force-stop " + finalForegroundApp));
                     String appLabel = getApplicationLabel(foregroundApp, mContext.getPackageManager());
                     Toast.makeText(mContext, "Killed: " + appLabel, Toast.LENGTH_SHORT).show();
                 } else {
