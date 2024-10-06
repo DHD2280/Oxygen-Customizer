@@ -2,18 +2,23 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:defaultValue="false"
-        android:key="aod_custom_clock_switch"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/aod_clock_switch"
-        app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference
-        android:key="aod_clock_custom"
-        android:summary="@string/aod_clock_custom_summary"
-        android:title="@string/aod_clock_custom" />
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory android:title="@string/aod_clock_switch">
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="aod_custom_clock_switch"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/aod_clock_switch"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference
+            android:key="aod_clock_custom"
+            android:summary="@string/aod_clock_custom_summary"
+            android:title="@string/aod_clock_custom" />
+
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="aod_clock_font_prefs"
@@ -99,11 +104,11 @@
             app:tickInterval=".1" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusEditTextPreference
+            android:dialogMessage="@string/lockscreen_clock_custom_format_dmessage"
             android:key="aod_clock_custom_format"
-            android:title="@string/lockscreen_clock_custom_format_title"
             android:summary="@string/lockscreen_clock_custom_format_summary"
-            app:iconSpaceReserved="false"
-            android:dialogMessage="@string/lockscreen_clock_custom_format_dmessage" />
+            android:title="@string/lockscreen_clock_custom_format_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:key="aod_clock_custom_user_switch"

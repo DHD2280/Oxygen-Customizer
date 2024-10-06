@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
+        android:title="@string/qs_header_clock_enabled">
+
     <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
         android:defaultValue="false"
         android:key="qs_header_clock_custom_enabled"
@@ -16,6 +19,8 @@
         android:title="@string/qs_header_clock_custom"
         app:forcePosition="bottom"
         app:iconSpaceReserved="false" />
+
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="qs_header_stock_clock_prefs"
