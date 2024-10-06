@@ -74,7 +74,7 @@ public class AppUtils {
         builder.setPositiveButton(context.getString(android.R.string.ok), (dialog, which) -> {
             new Thread(() -> {
                 try {
-                    Shell.cmd(String.valueOf(commands)).exec();
+                    Shell.cmd(commands.toArray(new String[0])).exec();
                 } catch (Exception ignored) {
                 }
             }).start();
@@ -95,7 +95,7 @@ public class AppUtils {
             commands.add("killall " + scope);
             commands.add("am force-stop " + scope);
         }
-        Shell.cmd(String.valueOf(commands)).exec();
+        Shell.cmd(commands.toArray(new String[0])).exec();
     }
 
     public static boolean hasStoragePermission() {
