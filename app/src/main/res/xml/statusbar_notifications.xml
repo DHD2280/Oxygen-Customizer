@@ -15,7 +15,9 @@
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/statusbar_use_app_icon"
+            app:forcePosition="full"
             app:iconSpaceReserved="false" />
+
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:selectable="false"
             android:title="@string/requires_sysui_restart" />
