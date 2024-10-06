@@ -365,7 +365,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void collectViews(List<View> viewList, View... views) {
-        log(TAG + "collectViews: " + views.length);
         for (View view : views) {
             try {
                 ((ViewGroup) view.getParent()).removeView(view);
@@ -392,7 +391,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void setupViewPager() {
-        log(TAG + "setupViewPager: " + mPages.size());
         mPagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {
@@ -441,7 +439,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void setupSingleViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, ViewPager.OnPageChangeListener listener) {
-        log(TAG + "setupSingleViewPager " + (viewPager != null));
         if (viewPager != null) {
             viewPager.setAdapter(null);
             viewPager.setAdapter(pagerAdapter);
@@ -452,7 +449,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void loadColors() {
-        log(TAG + "start loadColors");
         try {
             appContext = mContext.createPackageContext(
                     BuildConfig.APPLICATION_ID,
@@ -485,7 +481,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active", "color", SYSTEM_UI),
                 appContext.getTheme()
         );
-        log(TAG + "end loadColors");
     }
 
     private boolean isNightMode() {
@@ -524,24 +519,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         mPages.clear();
         mPagerAdapter.notifyDataSetChanged();
         List<View> views = new ArrayList<>();
-        log(TAG + "setupWidgets: " + mWidgets);
         List<List<String>> orderedGroups = splitString(mWidgets);
-        for (List<String> group : orderedGroups) {
-            log(TAG + "setupWidgets: " + group);
-        }
         resetButtons();
         for (List<String> group : orderedGroups) {
-            log(TAG + "setupWidgets current group:" + group);
             if (group.size() == 1 && !group.get(0).contains(":")) {
                 String s = group.get(0);
-                log(TAG + "setupWidgets: add widget " + s);
                 switch (s) {
                     case "media" -> views.add(mMediaPlayer);
                     case "weather" -> views.add(new QsWeatherWidget(mContext));
                     case "photo" -> views.add(new QsPhotoShowcaseContainer(mContext));
                 }
             } else {
-                log(TAG + "setupWidgets: add group " + group);
                 try {
                     views.add(createGroupView(mContext, group));
                 } catch (Throwable t) {
@@ -631,9 +619,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         secondRow.setLayoutParams(secondRowParams);
 
         int numItems = group.size();
-        log(TAG + "createGroupView: " + numItems + " items" + group);
         if (numItems == 0) {
-            log(TAG + "createGroupView: No items found");
             return widgetsContainer; // Return empty layout if no items
         }
 
@@ -715,8 +701,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
         widgetsContainer.addView(firstRow);
         widgetsContainer.addView(secondRow);
-
-        log(TAG + "createGroupView: done");
 
         return widgetsContainer;
     }
@@ -895,15 +879,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             groups.add(new ArrayList<>(currentGroup));
         }
 
-        for (List<String> group : groups) {
-            log(TAG + "splitV2: " + group);
-        }
         return groups;
     }
 
     private void updateMainWidgetResources(ExtendedFAB efab, boolean active) {
         if (efab == null) return;
-        log(TAG + "updateMainWidgetResources: " + efab.getText());
         ShapeDrawable shapeDrawable = new ShapeDrawable();
         if (mCustomFabRadius) {
             shapeDrawable.setShape(new RoundRectShape(mFabRadius, null, null));
@@ -1230,7 +1210,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     @SuppressLint("ClickableViewAccessibility")
     private void setUpWidgetResources(ImageView iv, ExtendedFAB efab,
                                       final OnClickListener cl, Drawable icon, String text) {
-        log(TAG + "setUpWidgetResources: " + text);
         if (efab != null) {
             efab.setOnClickListener(cl);
             if (icon != null) efab.setIcon(icon);
@@ -1288,11 +1267,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void toggleWiFi() {
-        log(TAG + "toggleWiFi");
         Object networkController = getNetworkController();
         boolean enabled = SystemUtils.WifiManager().isWifiEnabled();
         if (networkController != null) {
-            log(TAG + "toggleWiFi networkController is null");
             callMethod(networkController, "setWifiEnabled", !enabled);
         } else {
             SystemUtils.WifiManager().setWifiEnabled(!enabled);
@@ -1596,7 +1573,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      */
     private void reloadBackground() {
         if (mDefaultBackground == null || mPages.isEmpty()) return;
-        log(TAG + "reloadBackground");
         int i = 0;
         for (View v : mPages) {
             if (v.getTag() != null && v.getTag().equals("widgetsContainer")) {
@@ -1604,7 +1580,6 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             } else {
                 Drawable back = mDefaultBackground.getConstantState().newDrawable().mutate();
                 if (v instanceof QsWeatherWidget) {
-                    log(TAG + "reloadBackground: weather widget");
                     if (back instanceof GradientDrawable) {
                         ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
                     } else if (back instanceof ShapeDrawable) {
