@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.ui.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.setFragmentResult
@@ -92,6 +95,16 @@ class FragmentCropImage :
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.image_pick_menu, menu)
+
+                val cropItem = menu.findItem(R.id.main_action_crop)
+                cropItem.title = SpannableString(cropItem.title).apply {
+                    setSpan(
+                        ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.text_color_primary)),
+                        0,
+                        length,
+                        0
+                    )
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem) = when (menuItem.itemId) {
