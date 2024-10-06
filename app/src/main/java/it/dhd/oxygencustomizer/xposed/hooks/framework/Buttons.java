@@ -56,7 +56,7 @@ public class Buttons extends XposedMods {
     private static SensorManager sensorManager;
     private static Sensor proximitySensor;
     private static SensorEventListener proximitySensorListener;
-    private static boolean shouldTorch = false;
+    private static boolean shouldTorch = true;
     Handler mHandler;
     private static Object PWM;
 
@@ -182,6 +182,8 @@ public class Buttons extends XposedMods {
                         if (proximitySensor != null) {
                             sensorManager.unregisterListener(proximitySensorListener);
                         }
+                    } else {
+                        shouldTorch = true;
                     }
                     if (volumeToTorchProximity && !shouldTorch) {
                         return;
