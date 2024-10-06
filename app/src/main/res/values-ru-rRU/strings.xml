@@ -1133,4 +1133,7 @@
     <string name="fix_lag_apply_anyway">Включить в любом случае</string>
     <!-- Caffeine -->
     <string name="caffeine">Запрет сна</string>
+    <!-- Colors Fragment -->
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
 </resources>

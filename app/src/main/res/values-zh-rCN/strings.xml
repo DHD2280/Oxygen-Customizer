@@ -121,6 +121,7 @@
     <string name="qs_header_title">快速设置标题</string>
     <string name="sound">声音</string>
     <string name="misc">其他</string>
+    <string name="colors">颜色</string>
     <string name="package_manager">包管理器</string>
     <!-- General Strings -->
     <string name="general_on">开启</string>
@@ -214,9 +215,11 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">状态栏填充</string>
     <string name="statusbar_top_padding">顶部填充</string>
+    <string name="statusbar_padding_info">设置0保存库存</string>
     <string name="statusbar_left_padding">左侧填充</string>
     <string name="statusbar_right_padding">右侧填充</string>
     <string name="sb_padding_title">状态栏左侧和右侧填充</string>
+    <string name="sb_padding_summary">将最大/最小值设置为系统默认值</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">启用电池条</string>
     <string name="BB_onlycharging_title">仅充电时</string>
@@ -225,6 +228,7 @@
     <string name="BB_Opacity_title">不透明度</string>
     <string name="BB_center_align_title">居中对齐</string>
     <string name="BB_Thickness_title">厚度</string>
+    <string name="BB_animate_charging">生动的充电</string>
     <string name="BB_indicate_charging">充电显示</string>
     <string name="BB_indicate_power_save">省电显示</string>
     <string name="BB_indicate_fast_charging">快充显示</string>
@@ -999,6 +1003,8 @@
     <string name="omnijaws_service_error_location">无可用位置</string>
     <string name="omnijaws_service_error_network">未发现网络</string>
     <string name="omnijaws_service_error_permissions">未授予位置权限</string>
+    <string name="omnijaws_today">今天</string>
+    <string name="omnijaws_tomorrow">明天</string>
     <string name="weather_widget_desc">"实际天气和 4 天预测"</string>
     <string name="theme_system">跟随系统</string>
     <string name="theme_dark">暗色</string>
@@ -1060,6 +1066,7 @@
     <string name="settings_icons_customized">自定义库存</string>
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">背景颜色</string>
     <string name="settings_bg_use_solid">纯色背景</string>
     <string name="settings_bg_shape">背景形状</string>
@@ -1151,4 +1158,9 @@
     <string name="fix_lag_apply_anyway">仍然启用</string>
     <!-- Caffeine -->
     <string name="caffeine">咖啡因</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">主要颜色</string>
+    <string name="apply_color">应用颜色</string>
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
 </resources>

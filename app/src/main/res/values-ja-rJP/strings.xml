@@ -1122,4 +1122,7 @@
     <string name="fix_lag_apply_anyway">強制的に有効化する</string>
     <!-- Caffeine -->
     <string name="caffeine">カフェイン</string>
+    <!-- Colors Fragment -->
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
 </resources>

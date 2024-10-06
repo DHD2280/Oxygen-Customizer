@@ -218,6 +218,7 @@
     <string name="statusbar_left_padding">حشو اليسار</string>
     <string name="statusbar_right_padding">حشو اليمين</string>
     <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
+    <string name="sb_padding_summary">تعيين القيم إلى الحد الأدنى/الحد الأقصى يعادل الإعداد الافتراضي للجهاز</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">تفعيل شريط البطارية</string>
     <string name="BB_onlycharging_title">فقط أثناء الشحن</string>
@@ -1155,4 +1156,7 @@
     <string name="fix_lag_apply_anyway">تفعيل على أي حال</string>
     <!-- Caffeine -->
     <string name="caffeine">كافيين</string>
+    <!-- Colors Fragment -->
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
 </resources>

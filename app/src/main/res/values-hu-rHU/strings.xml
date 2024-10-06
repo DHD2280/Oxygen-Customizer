@@ -121,6 +121,7 @@
     <string name="qs_header_title">Gyorsbeállítások-fejléc</string>
     <string name="sound">Hang</string>
     <string name="misc">Hasznos cuccok</string>
+    <string name="colors">Színek</string>
     <string name="package_manager">Csomagkezelő</string>
     <!-- General Strings -->
     <string name="general_on">Be</string>
@@ -218,6 +219,7 @@
     <string name="statusbar_left_padding">Baloldali kitöltés</string>
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
     <string name="sb_padding_title">Bal és Jobb kitöltés</string>
+    <string name="sb_padding_summary">Az értékek min/max beállításai megegyeznek a készülék alapértelmezett értékeivel</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>
@@ -1064,6 +1066,7 @@
     <string name="settings_icons_customized">Megvariált gyári</string>
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Háttérszín</string>
     <string name="settings_bg_use_solid">Telt háttér</string>
     <string name="settings_bg_shape">A háttér alakja</string>
@@ -1155,4 +1158,9 @@
     <string name="fix_lag_apply_anyway">Mindenképp fusson le</string>
     <!-- Caffeine -->
     <string name="caffeine">Koffein</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">Elsődleges szín</string>
+    <string name="apply_color">A szín alkalmazása</string>
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
 </resources>
