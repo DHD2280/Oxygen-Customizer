@@ -100,7 +100,6 @@ public class CaffeineTile extends XposedMods {
                     Object tile = getObjectField(record, "tile");
 
                     if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
-                        log(TAG + "CaffeineTile found");
                         mTileView = (View) getObjectField(record, "tileView");
                         setupTile(tile, mTileView);
                     }
@@ -164,9 +163,7 @@ public class CaffeineTile extends XposedMods {
             String newLabel = formatValueWithRemainingTime();
             label.post(() -> label.setText(state == STATE_ACTIVE ? newLabel : modRes.getString(R.string.caffeine)));
 
-        } catch (Throwable t) {
-            log(TAG + "Error updating tile view: " + t.getMessage());
-        }
+        } catch (Throwable ignored) {}
     }
 
     @SuppressLint("DefaultLocale")
