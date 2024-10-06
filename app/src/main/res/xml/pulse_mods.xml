@@ -2,89 +2,93 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:key="navbar_pulse_enabled"
-        android:summary="@string/show_navbar_pulse_summary"
-        android:title="@string/show_navbar_pulse_title"
-        app:iconSpaceReserved="false" />
+    <PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:key="lockscreen_pulse_enabled"
-        android:summary="@string/show_lockscreen_pulse_summary"
-        android:title="@string/show_lockscreen_pulse_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:key="navbar_pulse_enabled"
+            android:summary="@string/show_navbar_pulse_summary"
+            android:title="@string/show_navbar_pulse_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:key="ambient_pulse_enabled"
-        android:summary="@string/show_ambient_pulse_summary"
-        android:title="@string/show_ambient_pulse_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:key="lockscreen_pulse_enabled"
+            android:summary="@string/show_lockscreen_pulse_summary"
+            android:title="@string/show_lockscreen_pulse_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
-        android:defaultValue="0"
-        android:entries="@array/pulse_render_mode_entries"
-        android:entryValues="@array/pulse_render_mode_values"
-        android:key="pulse_render_style"
-        android:title="@string/pulse_render_mode_title"
-        app:iconSpaceReserved="false"
-        app:useSimpleSummaryProvider="true" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:key="ambient_pulse_enabled"
+            android:summary="@string/show_ambient_pulse_summary"
+            android:title="@string/show_ambient_pulse_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
-        android:defaultValue="0"
-        android:entries="@array/pulse_custom_gravity_entries"
-        android:entryValues="@array/pulse_custom_gravity_values"
-        android:key="pulse_gravity"
-        android:summary="%s"
-        android:title="@string/pulse_custom_gravity_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/pulse_render_mode_entries"
+            android:entryValues="@array/pulse_render_mode_values"
+            android:key="pulse_render_style"
+            android:title="@string/pulse_render_mode_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:defaultValue="false"
-        android:key="pulse_center_mirrored"
-        android:summary="@string/visualizer_center_mirrored_summary"
-        android:title="@string/visualizer_center_mirrored_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/pulse_custom_gravity_entries"
+            android:entryValues="@array/pulse_custom_gravity_values"
+            android:key="pulse_gravity"
+            android:summary="%s"
+            android:title="@string/pulse_custom_gravity_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:defaultValue="false"
-        android:key="pulse_vertical_mirror"
-        android:summary="@string/pulse_vertical_mirror_summary"
-        android:title="@string/pulse_vertical_mirror_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="pulse_center_mirrored"
+            android:summary="@string/visualizer_center_mirrored_summary"
+            android:title="@string/visualizer_center_mirrored_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
-        android:defaultValue="false"
-        android:key="pulse_smoothing_enabled"
-        android:summary="@string/pulse_smoothing_enabled_summary"
-        android:title="@string/pulse_smoothing_enabled_title"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="pulse_vertical_mirror"
+            android:summary="@string/pulse_vertical_mirror_summary"
+            android:title="@string/pulse_vertical_mirror_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
-        android:defaultValue="2"
-        android:entries="@array/pulse_color_mode_entries"
-        android:entryValues="@array/pulse_color_mode_values"
-        android:key="pulse_color_mode"
-        android:title="@string/pulse_color_mode_title"
-        app:iconSpaceReserved="false"
-        app:useSimpleSummaryProvider="true" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="pulse_smoothing_enabled"
+            android:summary="@string/pulse_smoothing_enabled_summary"
+            android:title="@string/pulse_smoothing_enabled_title"
+            app:iconSpaceReserved="false" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-        android:defaultValue="0x92FFFFFF"
-        android:key="pulse_color_user"
-        android:title="@string/pulse_color_user_title"
-        app:forcePosition="bottom"
-        app:cpv_showAlphaSlider="true"
-        app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusMenuPreference
+            android:defaultValue="2"
+            android:entries="@array/pulse_color_mode_entries"
+            android:entryValues="@array/pulse_color_mode_values"
+            android:key="pulse_color_mode"
+            android:title="@string/pulse_color_mode_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
-        android:key="pulse_lavalamp_speed"
-        android:title="@string/pulse_lavalamp_speed_title"
-        app:forcePosition="bottom"
-        app:defaultValue="10000"
-        app:maxVal="30000"
-        app:minVal="200"
-        app:tickInterval="200"
-        app:valueFormat="ms" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0x92FFFFFF"
+            android:key="pulse_color_user"
+            android:title="@string/pulse_color_user_title"
+            app:cpv_showAlphaSlider="true"
+            app:forcePosition="bottom"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
+            android:key="pulse_lavalamp_speed"
+            android:title="@string/pulse_lavalamp_speed_title"
+            app:defaultValue="10000"
+            app:forcePosition="bottom"
+            app:maxVal="30000"
+            app:minVal="200"
+            app:tickInterval="200"
+            app:valueFormat="ms" />
+
+    </PreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="pulse_fading_bars_category"
