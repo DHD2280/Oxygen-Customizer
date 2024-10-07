@@ -149,6 +149,9 @@
     <string name="black_color">Black</string>
     <string name="custom_color">Custom Color</string>
     <string name="battery_info_button_title">Battery info…</string>
+    <string name="general_enabled">Enabled</string>
+    <string name="general_disabled">Disabled</string>
+    <string name="requires_reboot">Requires reboot</string>
 
     <!-- Statusbar Strings -->
     <string name="statusbar_options">Statusbar options</string>
@@ -1269,5 +1272,28 @@
     <string name="ota_card_category">OTA Card</string>
     <string name="ota_card_title">Custom OTA Card image</string>
 
+    <!-- MEMC Strings -->
+    <string name="memc_page_title" translatable="false">MEMC</string>
+    <string name="memc_feature_on">MEMC Feature On</string>
+    <string name="pwx7_enabled">PWX7 Enabled</string>
+    <string name="memc_enabled">MEMC Enabled</string>
+    <string name="sdr2hdr_enabled">SDR2HDR Enabled</string>
+    <string name="video_osie_support">Video Osie Support</string>
+    <string name="memc_mode">MEMC Mode</string>
+    <string name="force_memc_enabled">Force enable MEMC</string>
+    <string name="custom_memc_config_title">Custom MEMC Configuration</string>
+    <string name="custom_memc_configuration_title">Customize MEMC</string>
+    <string name="custom_memc_configuration_summary">Set MEMC configuration for each app/activity</string>
+    <string name="memc_help">Iris Config Help</string>
+    <string name="memc_refresh_rate">Refresh Rate: %s</string>
+    <string name="memc_params">MEMC Config: %s</string>
+    <string name="applications">Applications</string>
+    <string name="activities">Activities</string>
+    <string name="add_activity">Add Activity</string>
+    <string name="add_app">Add App</string>
+    <string name="select_app">Select App</string>
+    <string name="memc_config_error">Memc Config empty!</string>
+    <string name="refresh_rate_error">Refresh Rate empty!</string>
+    <string name="memc_footer">If your device does not have Pixelwork chip or does not support Memc, don\'t touch those settings.</string>
 
 </resources>

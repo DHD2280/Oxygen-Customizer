@@ -10,7 +10,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INT
 import android.os.Environment;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
@@ -670,6 +672,8 @@ public final class Constants {
     public static final String ACTION_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
     public static final String ACTION_DEPTH_BACKGROUND_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_BACKGROUND_CHANGED_OC";
     public static final String ACTION_DEPTH_SUBJECT_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_SUBJECT_CHANGED_OC";
+    public static final String ACTIONS_MEMC_FEATURE_GET = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_GET_OC";
+    public static final String ACTIONS_MEMC_FEATURE_RECEIVED = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_RECEIVED_OC";
 
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
@@ -684,6 +688,23 @@ public final class Constants {
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
     public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
     public static final String SETTINGS_OTA_CARD_DIR = XPOSED_RESOURCE_TEMP_DIR + "/settings_ota_card.png";
+
+    public static final String OPLUS_FEATURE_XML = "\t<oplus-feature name=\"%s\" />";
+
+    // Oplus Features
+    public static final String OPLUS_POCKET_STUDIO_FEATURE = "oplus.software.pocketstudio.support";
+
+    // MEMC
+    public static final String SETTINGS_SECURE_IRIS5_SWITCH = "osie_iris5_switch";
+    public static final String SETTINGS_SECURE_OSIE_MOTION_FLUENCY_SWITCH = "osie_motion_fluency_switch";
+    public static final String SETTINGS_SECURE_OSIE_MOTION_VALUE = "osie_motion_value";
+    public static final String SETTINGS_SECURE_OSIE_VIDEO_SWITCH = "osie_video_display_switch";
+    public static final Set<String> OPLUS_MEMC_FEATURES = new HashSet<>(Arrays.asList(
+            "oplus.software.display.pixelworks_enable",
+            "oplus.software.display.iris_enable",
+            "oplus.software.display.memc_enable",
+            "oplus.software.display.game.memc_enable"
+    ));
 
     // Resource names
     public static final String LOCKSCREEN_CLOCK_LAYOUT = "preview_lockscreen_clock_";

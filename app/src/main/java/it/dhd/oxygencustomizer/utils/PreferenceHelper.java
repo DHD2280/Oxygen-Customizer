@@ -746,6 +746,10 @@ public class PreferenceHelper {
                 return ModuleUtil.moduleExists();
             }
 
+            case "custom_memc_values" -> {
+                return instance.mPreferences.getBoolean("custom_memc_config", false);
+            }
+
         }
         return true;
     }

@@ -122,6 +122,18 @@
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
+        android:title="MEMC"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
+            android:key="memc_prefs"
+            android:title="MEMC"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.misc.MemcFragment"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
+
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="pocket_studio_cat"
         android:title="@string/pocket_studio"
         app:iconSpaceReserved="false">

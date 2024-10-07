@@ -44,6 +44,7 @@ import java.util.TreeSet;
 import it.dhd.oxygencustomizer.R;
 
 public class PackageListAdapter extends BaseAdapter implements Runnable {
+
     private final PackageManager mPm;
     private final LayoutInflater mInflater;
     private final List<PackageItem> mInstalledPackages = new LinkedList<>();

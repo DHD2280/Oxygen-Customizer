@@ -1,9 +1,13 @@
 package it.dhd.oxygencustomizer.utils;
 
+import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_FEATURE_XML;
+import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_MEMC_FEATURES;
+import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_POCKET_STUDIO_FEATURE;
 import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_CODE;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MODULE_VERSION_NAME;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.MY_PRODUCT_EXTENSION_DIR;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.MY_PRODUCT_PERMISSIONS_DIR;
 import static it.dhd.oxygencustomizer.utils.overlay.OverlayUtil.getStringFromOverlay;
 
 import android.content.Context;
@@ -18,8 +22,11 @@ import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
@@ -61,7 +68,7 @@ public class ModuleUtil {
         ).exec();
 
         Shell.cmd(
-                "printf 'MODDIR=${0%%/*}\n\nmount --bind $MODDIR/my_product/etc/extension/com.oplus.oplus-feature.xml /my_product/etc/extension/com.oplus.oplus-feature.xml\n' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh"
+                "printf 'MODDIR=${0%%/*}\n\nmount --bind $MODDIR/my_product/etc/extension/com.oplus.oplus-feature.xml /my_product/etc/extension/com.oplus.oplus-feature.xml\nmount --bind $MODDIR/my_product/etc/permissions/oplus.product.display_features.xml /my_product/etc/permissions/oplus.product.display_features.xml' > " + ModuleConstants.TEMP_MODULE_DIR + "/post-fs-data.sh"
         ).exec();
 
         Log.d(TAG, "skipped installation: " + skippedInstallation);
@@ -78,7 +85,11 @@ public class ModuleUtil {
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product/etc").exec();
         Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product/etc/extension").exec();
+        Shell.cmd("mkdir -p " + ModuleConstants.TEMP_MODULE_DIR + "/my_product/etc/permissions").exec();
         Shell.cmd("cp -a /my_product/etc/extension/com.oplus.oplus-feature.xml " + MY_PRODUCT_EXTENSION_DIR + "/").exec();
+        Shell.cmd("cp -a /my_product/etc/extension/com.oplus.oplus-feature.xml " + MY_PRODUCT_EXTENSION_DIR + "/com.oplus.oplus-feature.xml.bak").exec();
+        Shell.cmd("cp -a /my_product/etc/permissions/oplus.product.display_features.xml " + MY_PRODUCT_PERMISSIONS_DIR + "/").exec();
+        Shell.cmd("cp -a /my_product/etc/permissions/oplus.product.display_features.xml " + MY_PRODUCT_PERMISSIONS_DIR + "/oplus.product.display_features.xml.bak").exec();
 
         createMETAINF();
 
@@ -176,19 +187,101 @@ public class ModuleUtil {
         if (!moduleExists()) return;
 
         List<String> fileRead = Shell.cmd("cat /my_product/etc/extension/com.oplus.oplus-feature.xml").exec().getOut();
-        boolean featureAlreadyAdded = fileRead.contains("oplus.software.pocketstudio.support");
+        Log.d(TAG, "com.oplus.oplus-feature: " + fileRead);
 
-        Log.w(TAG, "oplusFeatures: " + fileRead);
+        Pattern pattern = Pattern.compile("oplus\\.software\\.pocketstudio\\.support");
+
+        boolean featureAlreadyAdded = fileRead.stream().anyMatch(item -> pattern.matcher(item).find());
 
         if (enable && !featureAlreadyAdded) {
-            fileRead.add(fileRead.size()-2, "\t<oplus-feature name=\"oplus.software.pocketstudio.support\" />");
+            fileRead.add(fileRead.size()-2, String.format(OPLUS_FEATURE_XML, OPLUS_POCKET_STUDIO_FEATURE));
         } else if (!enable && featureAlreadyAdded) {
-            fileRead.remove("\t<oplus-feature name=\"oplus.software.pocketstudio.support\" />");
+            fileRead.removeIf(element -> element.contains(OPLUS_POCKET_STUDIO_FEATURE));
         }
 
         String oplusFeatures = String.join("\n", fileRead).replace("\"", "\\\"") ;
 
         Shell.cmd("printf \"" + oplusFeatures + "\" > /data/adb/modules/OxygenCustomizer/my_product/etc/extension/com.oplus.oplus-feature.xml").exec();
+    }
+
+    public static void enableMemcFeature(boolean enable) {
+        if (!moduleExists()) return;
+
+        enableMemcOplusFeature(enable);
+        enableMemcOplusDisplayFeature(enable);
+    }
+
+    private static void enableMemcOplusFeature(boolean enable) {
+        List<String> fileRead = Shell.cmd("cat /my_product/etc/extension/com.oplus.oplus-feature.xml").exec().getOut();
+        Log.d(TAG, "com.oplus.oplus-feature: " + fileRead);
+
+        Pattern pattern = Pattern.compile("name=\"(.*?)\"");
+        if (!enable) {
+            fileRead.removeIf(item -> {
+                Matcher matcher = pattern.matcher(item);
+                if (matcher.find()) {
+                    String extractedText = matcher.group(1);
+                    return OPLUS_MEMC_FEATURES.contains(extractedText);
+                }
+                return false;
+            });
+        } else {
+            for (String memcFeature : OPLUS_MEMC_FEATURES) {
+                boolean alreadyPresent = fileRead.stream().anyMatch(item -> {
+                    Matcher matcher = pattern.matcher(item);
+                    if (matcher.find()) {
+                        String extractedText = matcher.group(1);
+                        return extractedText.equals(memcFeature);
+                    }
+                    return false;
+                });
+
+                if (!alreadyPresent) {
+                    fileRead.add(fileRead.size() - 2, String.format(OPLUS_FEATURE_XML, memcFeature));
+                }
+            }
+        }
+
+        String oplusFeatures = String.join("\n", fileRead).replace("\"", "\\\"") ;
+
+        Shell.cmd("printf \"" + oplusFeatures + "\" > /data/adb/modules/OxygenCustomizer/my_product/etc/extension/com.oplus.oplus-feature.xml").exec();
+    }
+
+    private static void enableMemcOplusDisplayFeature(boolean enable) {
+        List<String> fileRead = Shell.cmd("cat /my_product/etc/permissions/oplus.product.display_features.xml").exec().getOut();
+        Log.d(TAG, "oplus.product.display_features: " + fileRead);
+
+        Pattern pattern = Pattern.compile("name=\"(.*?)\"");
+
+        if (!enable) {
+            fileRead.removeIf(item -> {
+                Matcher matcher = pattern.matcher(item);
+                if (matcher.find()) {
+                    String extractedText = matcher.group(1);
+                    return OPLUS_MEMC_FEATURES.contains(extractedText);
+                }
+                return false;
+            });
+        } else {
+            for (String memcFeature : OPLUS_MEMC_FEATURES) {
+                boolean alreadyPresent = fileRead.stream().anyMatch(item -> {
+                    Matcher matcher = pattern.matcher(item);
+                    if (matcher.find()) {
+                        String extractedText = matcher.group(1);
+                        return extractedText.equals(memcFeature);
+                    }
+                    return false;
+                });
+
+                if (!alreadyPresent) {
+                    fileRead.add(fileRead.size() - 2, String.format(OPLUS_FEATURE_XML, memcFeature));
+                }
+            }
+        }
+
+        String oplusFeatures = String.join("\n", fileRead).replace("\"", "\\\"") ;
+
+        Shell.cmd("printf \"" + oplusFeatures + "\" > /data/adb/modules/OxygenCustomizer/my_product/etc/permissions/oplus.product.display_features.xml").exec();
     }
 
 }

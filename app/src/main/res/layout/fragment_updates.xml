@@ -162,7 +162,7 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
                     android:padding="12dp"
                     android:text="@string/changelog_title"
                     android:textAlignment="center"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="@color/text_color_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

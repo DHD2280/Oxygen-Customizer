@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory>
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="memc_feature_on"
+            android:title="@string/memc_feature_on"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="pwx7_enabled"
+            android:title="@string/pwx7_enabled"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="memc_enabled"
+            android:title="@string/memc_enabled"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="sdr2hdr_enabled"
+            android:title="@string/sdr2hdr_enabled"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="video_osie_support"
+            android:title="@string/video_osie_support"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPreference
+            android:key="memc_mode"
+            android:title="@string/memc_mode"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="force_memc_enabled"
+            android:title="@string/force_memc_enabled"
+            android:summary="@string/requires_reboot"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="custom_memc_config"
+            android:title="@string/custom_memc_config_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.misc.memc.MemcConfigurationFragment"
+            android:key="custom_memc_values"
+            android:title="@string/custom_memc_configuration_title"
+            android:summary="@string/custom_memc_configuration_summary"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
+        android:key="footer"
+        android:title="@string/memc_footer"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

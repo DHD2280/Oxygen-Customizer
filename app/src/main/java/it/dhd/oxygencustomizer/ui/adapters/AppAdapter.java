@@ -70,9 +70,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppModel model = filteredApps.get(holder.getBindingAdapterPosition());
         holder.binding.appSwitch.setTitle(model.getAppName());
         holder.binding.appSwitch.setSummary(model.getPackageName());
-        holder.binding.appSwitch.setImageDimensions(
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getAppContext().getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getAppContext().getResources().getDisplayMetrics()));
         holder.binding.appSwitch.setImageMargin(
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 9, getAppContext().getResources().getDisplayMetrics())
         );

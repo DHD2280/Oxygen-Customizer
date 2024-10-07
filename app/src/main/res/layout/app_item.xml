@@ -11,6 +11,8 @@
 
     <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
         android:id="@+id/app_switch"
+        app:iconWidth="40dp"
+        app:iconHeight="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

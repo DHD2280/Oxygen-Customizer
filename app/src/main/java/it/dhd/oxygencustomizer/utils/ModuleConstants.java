@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 
 public class ModuleConstants {
 
-    public final static String MODULE_VERSION_NAME = "0.0.41";
+    public final static String MODULE_VERSION_NAME = "0.0.42";
     public final static int MODULE_VERSION_CODE = 1;
 
     // Storage location
@@ -39,6 +39,7 @@ public class ModuleConstants {
     public static final String MY_PRODUCT_DIR = TEMP_MODULE_DIR + "/my_product";
     public static final String MY_PRODUCT_ETC_DIR = MY_PRODUCT_DIR + "/etc";
     public static final String MY_PRODUCT_EXTENSION_DIR = MY_PRODUCT_ETC_DIR + "/extension";
+    public static final String MY_PRODUCT_PERMISSIONS_DIR = MY_PRODUCT_DIR + "/permissions";
 
     public static final String XPOSED_ONLY_MODE = "OCXposedOnlyMode";
     public static boolean isXposedOnlyMode = Prefs.getBoolean(XPOSED_ONLY_MODE, true) &&

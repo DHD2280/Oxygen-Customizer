@@ -8,11 +8,13 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.MemcEnhancer;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
+import it.dhd.oxygencustomizer.xposed.hooks.settings.MemcEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.OtaCard;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdvancedReboot;
@@ -67,6 +69,7 @@ public class ModPacks {
                 modPacks.add(Buttons.class);
                 modPacks.add(DarkMode.class);
                 modPacks.add(OplusStartingWindowManager.class);
+                modPacks.add(MemcEnhancer.class);
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
@@ -145,6 +148,7 @@ public class ModPacks {
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
                 modPacks.add(OtaCard.class);
+                modPacks.add(MemcEnabler.class);
             }
             case Constants.Packages.LAUNCHER -> {
                 modPacks.add(Launcher.class);
