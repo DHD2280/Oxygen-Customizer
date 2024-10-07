@@ -12,7 +12,6 @@ import android.content.Context;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 
 public class MemcEnabler extends XposedMods {
 
@@ -34,7 +33,6 @@ public class MemcEnabler extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
         Class<?> SysFeatureUtils = findClass("com.oplus.settings.utils.SysFeatureUtils", lpparam.classLoader);
-        ReflectionTools.dumpClass(SysFeatureUtils);
         hookAllMethods(SysFeatureUtils, "hasOplusFeature", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
