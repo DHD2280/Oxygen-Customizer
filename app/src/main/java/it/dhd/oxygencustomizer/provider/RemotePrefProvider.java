@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.utils;
+package it.dhd.oxygencustomizer.provider;
 
 import com.crossbowffs.remotepreferences.RemotePreferenceFile;
 import com.crossbowffs.remotepreferences.RemotePreferenceProvider;

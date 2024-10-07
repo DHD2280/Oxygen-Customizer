@@ -114,7 +114,7 @@
             android:theme="@style/Theme.OxygenCustomizer"/>
 
         <provider
-            android:name=".xposed.utils.RemotePrefProvider"
+            android:name=".provider.RemotePrefProvider"
             android:authorities="it.dhd.oxygencustomizer"
             android:directBootAware="true"
             android:exported="true"
