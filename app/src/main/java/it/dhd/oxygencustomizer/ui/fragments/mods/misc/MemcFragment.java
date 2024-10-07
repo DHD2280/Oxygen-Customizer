@@ -140,7 +140,7 @@ public class MemcFragment extends ControlledPreferenceFragmentCompat {
         }
 
         if (mMemcMode != null) {
-            mMemcMode.setSummary(String.valueOf(getMemcModeFromSettings()));
+            mMemcMode.setSummary(getMemcModeFromSettings());
         }
 
     }
@@ -160,15 +160,15 @@ public class MemcFragment extends ControlledPreferenceFragmentCompat {
         return ret.equals("1");
     }
 
-    public int getMemcModeFromSettings() {
+    public String getMemcModeFromSettings() {
         String ret = Shell.cmd("settings get secure " + SETTINGS_SECURE_OSIE_MOTION_VALUE).exec().getOut().get(0);
-        return Integer.parseInt(ret);
+        return ret;
     }
 
     public boolean getSdr2hdrEnableFromSettings() {
-        int ret = Integer.parseInt(Shell.cmd("settings get secure " + SETTINGS_SECURE_OSIE_VIDEO_SWITCH).exec().getOut().get(0));
+        String ret = Shell.cmd("settings get secure " + SETTINGS_SECURE_OSIE_VIDEO_SWITCH).exec().getOut().get(0);
         if (!this.mVideoOsieSupport) {
-            return ret == 1;
+            return ret.equals("1");
         }
         Log.d("MemcFragment", "mVideoOsieSupport on, not support pw sdr2hdr");
         return false;
