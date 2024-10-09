@@ -7,6 +7,7 @@
         android:key="lockscreen_widgets_enabled"
         android:summary="@string/lockscreen_widgets_enabled_summary"
         android:title="@string/lockscreen_widgets_enabled_title"
+        app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
