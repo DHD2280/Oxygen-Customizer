@@ -270,6 +270,7 @@
 
     <!-- Toolbar -->
     <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="colorOnSurface">@color/text_color_primary</item>
         <item name="titleTextAppearance">@style/TextAppearance.App.TitleLarge</item>
         <item name="subtitleTextAppearance">@style/TextAppearance.App.TitleMedium</item>
         <item name="navigationIconTint">@color/text_color_primary</item>
