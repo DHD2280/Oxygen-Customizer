@@ -179,6 +179,7 @@ public class BackgroundChipPreference extends DialogPreference {
         });
         binding.accentSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(getUseAccentColor(getKey()), isChecked).apply();
+            binding.accentSwitch.forcePosition(isChecked ? "full" : "top");
             useAccentColor = isChecked;
 
             setupWidgets();
@@ -254,6 +255,7 @@ public class BackgroundChipPreference extends DialogPreference {
         });
         binding.roundCornersSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(getRoundedCorners(getKey()), isChecked).apply();
+            binding.roundCornersSwitch.forcePosition(isChecked ? "top" : "full");
             roundCorners = isChecked;
 
             setupWidgets();
@@ -443,9 +445,12 @@ public class BackgroundChipPreference extends DialogPreference {
         binding.mixedChip.setChecked(mixed);
         // Gradient Prefs
         binding.gradientPrefs.setVisibility(filled || mixed ? View.VISIBLE : View.GONE);
-        binding.gradientOrientation.setVisibility((filled || mixed) && useGradient ? View.VISIBLE : View.GONE);
+        binding.gradientOrientation.setVisibility((filled || mixed) && useGradient && !useAccentColor ? View.VISIBLE : View.GONE);
         binding.gradientOrientation.setSelectedValue(String.valueOf(gradientOrientation));
         binding.accentSwitch.setVisibility((filled || mixed) ? View.VISIBLE : View.GONE);
+        if ((filled || mixed) && useGradient && !useAccentColor) {
+            binding.accentSwitch.forcePosition("middle");
+        }
         binding.gradientSwitch.setVisibility((filled || mixed) && !useAccentColor ? View.VISIBLE : View.GONE);
         binding.gradientSwitch.setSwitchChecked(useGradient);
         binding.colorPickerGradient1.setTitle(useGradient ? getContext().getString(R.string.chip_gradient_color_1) : getContext().getString(R.string.chip_color_color));
@@ -457,6 +462,20 @@ public class BackgroundChipPreference extends DialogPreference {
             binding.colorPickerGradient2.setVisibility(View.GONE);
         }
         binding.colorPickerGradient2.setPreviewColor(gradientColor2);
+
+        if (binding.gradientOrientation.getVisibility() == View.VISIBLE && binding.gradientSwitch.getVisibility() == View.VISIBLE) {
+            binding.accentSwitch.forcePosition("middle");
+        } else if (binding.gradientOrientation.getVisibility() == View.GONE && binding.gradientSwitch.getVisibility() == View.VISIBLE) {
+            binding.accentSwitch.forcePosition("top");
+        } else {
+            binding.accentSwitch.forcePosition("full");
+        }
+
+        if (binding.colorPickerGradient2.getVisibility() == View.VISIBLE) {
+            binding.colorPickerGradient1.forcePosition("middle");
+        } else {
+            binding.colorPickerGradient1.forcePosition("bottom");
+        }
 
         // Stroke Prefs
         binding.strokePrefs.setVisibility(outlined || mixed ? View.VISIBLE : View.GONE);
