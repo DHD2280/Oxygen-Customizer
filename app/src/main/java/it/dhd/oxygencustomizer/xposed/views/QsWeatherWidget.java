@@ -56,7 +56,7 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 appContext
                         .getResources()
                         .getIdentifier(
-                                "view_qw_weather_widget",
+                                "view_qs_weather_widget",
                                 "layout",
                                 BuildConfig.APPLICATION_ID
                         ),
