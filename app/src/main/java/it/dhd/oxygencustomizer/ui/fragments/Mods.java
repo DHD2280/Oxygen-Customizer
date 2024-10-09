@@ -5,11 +5,15 @@ import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
+import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
+import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
@@ -20,6 +24,7 @@ import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,11 +38,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.canhub.cropper.CropImage;
+import com.canhub.cropper.CropImageOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
@@ -53,6 +61,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
@@ -227,6 +236,23 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         }
 
         @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            requireActivity().getSupportFragmentManager()
+                    .setFragmentResultListener(DATA_CROP_KEY, this, (requestKey, result) -> {
+                        String resultString = result.getString(DATA_FILE_URI);
+                        String path = getRealPath(Uri.parse(resultString));
+                        if (path != null && moveToOCHiddenDir(path, SETTINGS_OTA_CARD_DIR)) {
+                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
+
+        @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
 
@@ -246,30 +272,28 @@ public class Mods extends ControlledPreferenceFragmentCompat {
 
             OplusJumpPreference mOtaCardPicker = findPreference("ota_card_picker");
             mOtaCardPicker.setOnPreferenceClickListener(preference -> {
-                if (!AppUtils.hasStoragePermission()) {
-                    AppUtils.requestStoragePermission(requireContext());
-                } else {
-                    launchFilePicker(pickImageIntent, "image/*");
-                }
+                pickImage();
                 return true;
             });
 
         }
 
-        ActivityResultLauncher<Intent> pickImageIntent = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-                        String path = getRealPath(data);
 
-                        if (path != null && moveToOCHiddenDir(path, SETTINGS_OTA_CARD_DIR)) {
-                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        public void pickImage() {
+            if (!AppUtils.hasStoragePermission()) {
+                AppUtils.requestStoragePermission(requireContext());
+            } else {
+                Bundle bundle = new Bundle();
+                CropImageOptions options = new CropImageOptions();
+                options.aspectRatioX = (int) 2.65;
+                options.aspectRatioY = 1;
+                options.fixAspectRatio = true;
+                bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options);
+                FragmentCropImage fragmentCropImage = new FragmentCropImage();
+                fragmentCropImage.setArguments(bundle);
+                replaceFragment(fragmentCropImage);
+            }
+        }
 
         private void checkOplusVersion() {
             String osVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);
