@@ -122,12 +122,12 @@
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
-        android:title="MEMC"
+        android:title="@string/memc_page_title"
         app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
             android:key="memc_prefs"
-            android:title="MEMC"
+            android:title="@string/memc_page_title"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.misc.MemcFragment"
             app:iconSpaceReserved="false" />
 
