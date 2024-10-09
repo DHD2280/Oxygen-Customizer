@@ -183,24 +183,24 @@ public abstract class AppFragmentBase extends BaseFragment {
                             Map<String, Integer> enabledApps,
                             boolean hasSlider,
                             OnPreTaskExecution preExecutionListener,
-                            OnTaskCompleted tastCompleted) {
+                            OnTaskCompleted taskCompleted) {
             this.mContext = context;
             this.hasSlider = hasSlider;
             this.mEnabledApps = enabledApps;
             this.preExecutionListener = preExecutionListener;
-            this.taskCompletedListener = tastCompleted;
+            this.taskCompletedListener = taskCompleted;
         }
 
         public LoadAppsTask(Context context,
                             Set<String> enabledApps,
                             boolean hasSlider,
                             OnPreTaskExecution preExecutionListener,
-                            OnTaskCompleted tastCompleted) {
+                            OnTaskCompleted taskCompleted) {
             this.mContext = context;
             this.hasSlider = hasSlider;
             this.mEnabledSetApps = enabledApps;
             this.preExecutionListener = preExecutionListener;
-            this.taskCompletedListener = tastCompleted;
+            this.taskCompletedListener = taskCompleted;
         }
 
         public void execute() {
