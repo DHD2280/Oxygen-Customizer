@@ -741,6 +741,11 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 34;
             }
 
+            // Ota Card
+            case "ota_card_picker" -> {
+                return instance.mPreferences.getBoolean("custom_ota_card", false);
+            }
+
             // Pocket Studio
             case "enable_pocket_studio", "pocket_studio_cat", "pocket_studio_footer" -> {
                 return ModuleUtil.moduleExists();
