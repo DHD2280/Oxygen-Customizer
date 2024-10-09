@@ -5,14 +5,20 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllMethods;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -22,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 
 public class OtaCard extends XposedMods {
 
@@ -69,13 +76,11 @@ public class OtaCard extends XposedMods {
                     try {
                         ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/settings_ota_card.png"));
 
-                        Drawable drawable = ImageDecoder.decodeDrawable(source);
-                        mOtaCard.setBackground(drawable);
-
-                        if (drawable instanceof AnimatedImageDrawable) {
-                            ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
-                            ((AnimatedImageDrawable) drawable).start();
-                        }
+                        RoundedBitmapDrawable otaImage = RoundedBitmapDrawableFactory.create(
+                                mContext.getResources(),
+                                ImageDecoder.decodeBitmap(source));
+                        otaImage.setCornerRadius(dp2px(mContext, 12));
+                        mOtaCard.setBackground(otaImage);
                     } catch (Throwable ignored) {}
 
                     executor.shutdown();
