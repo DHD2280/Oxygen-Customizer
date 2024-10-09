@@ -285,8 +285,8 @@ public class Mods extends ControlledPreferenceFragmentCompat {
             } else {
                 Bundle bundle = new Bundle();
                 CropImageOptions options = new CropImageOptions();
-                options.aspectRatioX = (int) 2.65;
-                options.aspectRatioY = 1;
+                options.aspectRatioX = 82;
+                options.aspectRatioY = 31;
                 options.fixAspectRatio = true;
                 bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options);
                 FragmentCropImage fragmentCropImage = new FragmentCropImage();
