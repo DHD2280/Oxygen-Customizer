@@ -233,7 +233,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
         try {
-            if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
+            if (mWeatherClient == null) {
                 setErrorView(2);
                 return;
             }

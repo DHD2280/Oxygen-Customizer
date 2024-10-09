@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views;
 
+import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -21,6 +22,8 @@ import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 @SuppressWarnings("viewConstructor")
 public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
+
+    private final static String TAG = "QsWeatherWidget: ";
 
     private final Context mContext;
     private Context appContext;
@@ -120,8 +123,9 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
 
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
+        log(TAG + "Querying weather");
         try {
-            if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
+            if (mWeatherClient == null) {
                 return;
             }
             mWeatherClient.queryWeather();
@@ -152,7 +156,7 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 mWeatherIcon.setImageDrawable(d);
             }
         } catch (Exception e) {
-            // Do nothing
+            log(TAG + "Error updating weather: " + e.getMessage());
         }
     }
 

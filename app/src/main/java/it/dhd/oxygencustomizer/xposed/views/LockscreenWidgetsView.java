@@ -503,7 +503,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
         try {
-            if (mWeatherClient == null || !mWeatherClient.isOmniJawsEnabled()) {
+            if (mWeatherClient == null) {
                 return;
             }
             mWeatherClient.queryWeather();
@@ -525,17 +525,6 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     formattedCondition = modRes.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
                     formattedCondition = modRes.getString(R.string.weather_condition_mist);
-                }
-
-                // MET Norway
-                if (formattedCondition.toLowerCase().contains("_")) {
-                    final String[] words = formattedCondition.split("_");
-                    final StringBuilder formattedConditionBuilder = new StringBuilder();
-                    for (String word : words) {
-                        final String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1);
-                        formattedConditionBuilder.append(capitalizedWord).append(" ");
-                    }
-                    formattedCondition = formattedConditionBuilder.toString().trim();
                 }
 
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
