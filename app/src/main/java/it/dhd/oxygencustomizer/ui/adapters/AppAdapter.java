@@ -70,6 +70,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.binding.appSwitch.setTitle(model.getAppName());
         holder.binding.appSwitch.setSummary(model.getPackageName());
         holder.binding.appSwitch.setIcon(model.getAppIcon());
+        if (!hasSlider) {
+            holder.binding.appSwitch.forcePosition("full");
+        } else {
+            if (model.isEnabled()) {
+                holder.binding.appSlider.setVisibility(View.VISIBLE);
+                holder.binding.appSwitch.forcePosition("top");
+                holder.binding.appSlider.forcePosition("bottom");
+            } else {
+                holder.binding.appSlider.setVisibility(View.GONE);
+                holder.binding.appSwitch.forcePosition("full");
+            }
+        }
 
         holder.binding.appSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
             if (hasSlider) {
@@ -92,7 +104,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         holder.binding.appSlider.setTitle(getAppContext().getString(R.string.dark_mode_intensity));
         holder.binding.appSlider.setSliderValue(model.getDarkModeValue());
-        holder.binding.appSlider.setVisibility(hasSlider && model.isEnabled() ? View.VISIBLE : View.GONE);
     }
 
     public void showSystem(boolean show) {
