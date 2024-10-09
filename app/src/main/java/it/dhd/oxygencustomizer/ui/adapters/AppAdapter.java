@@ -4,7 +4,6 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +69,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppModel model = filteredApps.get(holder.getBindingAdapterPosition());
         holder.binding.appSwitch.setTitle(model.getAppName());
         holder.binding.appSwitch.setSummary(model.getPackageName());
-        holder.binding.appSwitch.setImageMargin(
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 9, getAppContext().getResources().getDisplayMetrics())
-        );
         holder.binding.appSwitch.setIcon(model.getAppIcon());
 
         holder.binding.appSwitch.setSwitchChangeListener((buttonView, isChecked) -> {

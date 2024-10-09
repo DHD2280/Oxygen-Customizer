@@ -19,6 +19,7 @@
         android:id="@+id/app_function_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         app:iconSpaceReserved="false" />
 
     <com.google.android.material.textfield.TextInputLayout
