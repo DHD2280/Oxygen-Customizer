@@ -46,6 +46,7 @@
     <color name="card_surface_color">@android:color/system_neutral1_900</color>
 
     <color name="oplusColorSurfaces">#2E2E2E</color>
+    <color name="bottomNavigationBackground">#141414</color>
 
     <!-- Radio Button -->
     <color name="btn_radio_background_color">#80999999</color>

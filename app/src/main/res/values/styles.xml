@@ -127,7 +127,7 @@
     </style>
 
     <style name="Widget.BottomNavigationView" parent="Base.Widget.Material3.BottomNavigationView">
-        <item name="android:background">@drawable/top_appbar_bg</item>
+        <item name="android:background">@color/bottomNavigationBackground</item>
         <item name="itemRippleColor">@color/rippleAccent</item>
         <item name="itemIconTint">@color/text_color_primary</item>
         <item name="itemTextColor">@color/text_color_primary</item>
