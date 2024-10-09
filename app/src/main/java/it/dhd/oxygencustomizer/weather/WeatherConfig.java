@@ -53,15 +53,9 @@ public class WeatherConfig {
     public static final String PREF_KEY_UPDATE_ERROR = "update_error";
     public static final String WEATHER_PREFS = BuildConfig.APPLICATION_ID + "_weatherprefs";
 
-    private static SharedPreferences getPrefs(Context context)
-    {
-        try {
-            if (Xprefs != null)
-                return Xprefs;
-            return getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
-        } catch (Throwable t) {
-            return getDefaultSharedPreferences(context.createDeviceProtectedStorageContext());
-        }
+    private static SharedPreferences getPrefs(Context context) {
+        Context deviceProtectedContext = context.createDeviceProtectedStorageContext();
+        return getDefaultSharedPreferences(deviceProtectedContext);
     }
 
     private static SharedPreferences getWeatherPrefs(Context context) {
