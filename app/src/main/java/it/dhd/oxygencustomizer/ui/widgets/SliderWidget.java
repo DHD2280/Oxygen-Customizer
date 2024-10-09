@@ -20,10 +20,11 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout;
 
-public class SliderWidget extends RelativeLayout {
+public class SliderWidget extends CardListSelectedItemLayout {
 
-    private LinearLayout container;
+    private CardListSelectedItemLayout container;
     private TextView titleTextView;
     private TextView summaryTextView;
     private Slider materialSlider;
@@ -36,6 +37,7 @@ public class SliderWidget extends RelativeLayout {
     private String decimalFormat = "#.#";
     private OnLongClickListener resetClickListener;
     private Slider.OnSliderTouchListener onSliderTouchListener;
+    private String mForcePosition = null;
 
     public SliderWidget(Context context) {
         super(context);
@@ -61,6 +63,9 @@ public class SliderWidget extends RelativeLayout {
         valueFormat = typedArray.getString(R.styleable.SliderWidget_valueFormat);
         defaultValue = typedArray.getInt(R.styleable.SliderWidget_sliderDefaultValue, Integer.MAX_VALUE);
         hasResetButton = typedArray.getBoolean(R.styleable.SliderWidget_hasResetButton, false);
+        if (typedArray.hasValue(R.styleable.SliderWidget_forcePosition)) {
+            mForcePosition = typedArray.getString(R.styleable.SliderWidget_forcePosition);
+        }
         setTitle(typedArray.getString(R.styleable.SliderWidget_titleText));
         setSliderValueFrom(typedArray.getInt(R.styleable.SliderWidget_sliderValueFrom, 0));
         setSliderValueTo(typedArray.getInt(R.styleable.SliderWidget_sliderValueTo, 100));
@@ -82,6 +87,7 @@ public class SliderWidget extends RelativeLayout {
             decimalFormat = "#.#";
         }
 
+        setPosition();
         setSelectedText();
         setOnSliderTouchListener(null);
         setResetClickListener(null);
@@ -224,6 +230,24 @@ public class SliderWidget extends RelativeLayout {
         if (resetClickListener != null) {
             resetClickListener.onLongClick(v);
         }
+    }
+
+    private void setPosition() {
+        if (TextUtils.isEmpty(mForcePosition) || container == null) return;
+
+        int bgRes = switch(mForcePosition) {
+            case "top" -> R.drawable.preference_background_top;
+            case "middle" -> R.drawable.preference_background_middle;
+            case "bottom" -> R.drawable.preference_background_bottom;
+            default -> R.drawable.preference_background_center;
+        };
+
+        container.setBackgroundResource(bgRes);
+    }
+
+    public void forcePosition(String position) {
+        mForcePosition = position;
+        setPosition();
     }
 
     @Override

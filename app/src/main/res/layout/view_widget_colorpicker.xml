@@ -7,26 +7,24 @@
     android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
     android:background="@drawable/preference_background_center"
     android:clickable="true"
-    android:paddingStart="6dp"
-    android:paddingEnd="24dp">
+    android:paddingStart="@dimen/preference_title_padding_start"
+    android:paddingEnd="@dimen/preference_title_padding_end">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        style="@style/PreferenceIcon"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="18dp"
-        android:visibility="gone"
-        app:tint="?attr/colorPrimary" />
+        android:importantForAccessibility="no" />
 
     <LinearLayout
         android:id="@+id/text_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginVertical="22dp"
-        android:layout_marginStart="9dp"
+        style="@style/PreferenceContent"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@id/color_widget"
         android:layout_toEndOf="@id/icon"
@@ -53,8 +51,8 @@
 
     <View
         android:id="@+id/color_widget"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="@dimen/cpv_color_preference_normal"
+        android:layout_height="@dimen/cpv_color_preference_normal"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@drawable/preview_color_picker" />

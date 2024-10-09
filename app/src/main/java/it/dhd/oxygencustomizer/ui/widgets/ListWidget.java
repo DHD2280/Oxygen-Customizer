@@ -31,6 +31,7 @@ public class ListWidget extends RelativeLayout {
     private CharSequence[] mEntryValues;
     private OnSelectedListener mOnSelectedListener;
     private int selectedPosition = -1;
+    private String mForcePosition = null;
 
     public ListWidget(Context context) {
         super(context);
@@ -57,6 +58,9 @@ public class ListWidget extends RelativeLayout {
         setSummary(typedArray.getString(R.styleable.ListWidget_summaryText));
         mEntries = typedArray.getTextArray(R.styleable.ListWidget_entries);
         mEntryValues = typedArray.getTextArray(R.styleable.ListWidget_entryValues);
+        if (typedArray.hasValue(R.styleable.ListWidget_forcePosition)) {
+            mForcePosition = typedArray.getString(R.styleable.ListWidget_forcePosition);
+        }
         int icon = typedArray.getResourceId(R.styleable.ListWidget_icon, 0);
         boolean iconSpaceReserved = typedArray.getBoolean(R.styleable.ListWidget_iconSpaceReserved, false);
         typedArray.recycle();
@@ -69,6 +73,8 @@ public class ListWidget extends RelativeLayout {
         if (!iconSpaceReserved) {
             iconImageView.setVisibility(GONE);
         }
+
+        setPosition();
 
         container.setOnClickListener(v -> showDialog());
     }
@@ -121,6 +127,24 @@ public class ListWidget extends RelativeLayout {
 
     public void setIconVisibility(int visibility) {
         iconImageView.setVisibility(visibility);
+    }
+
+    private void setPosition() {
+        if (TextUtils.isEmpty(mForcePosition) || container == null) return;
+
+        int bgRes = switch(mForcePosition) {
+            case "top" -> R.drawable.preference_background_top;
+            case "middle" -> R.drawable.preference_background_middle;
+            case "bottom" -> R.drawable.preference_background_bottom;
+            default -> R.drawable.preference_background_center;
+        };
+
+        container.setBackgroundResource(bgRes);
+    }
+
+    public void forcePosition(String position) {
+        mForcePosition = position;
+        setPosition();
     }
 
     @Override

@@ -28,6 +28,7 @@ public class SwitchWidget extends RelativeLayout {
     private MaterialSwitch materialSwitch;
     private BeforeSwitchChangeListener beforeSwitchChangeListener;
     private int iconWidth, iconHeight;
+    private String mForcePosition = null;
 
     public SwitchWidget(Context context) {
         super(context);
@@ -55,6 +56,9 @@ public class SwitchWidget extends RelativeLayout {
         setSwitchChecked(typedArray.getBoolean(R.styleable.SwitchWidget_isChecked, false));
         iconWidth = typedArray.getDimensionPixelSize(R.styleable.SwitchWidget_iconWidth, 20);
         iconHeight = typedArray.getDimensionPixelSize(R.styleable.SwitchWidget_iconHeight, 20);
+        if (typedArray.hasValue(R.styleable.SwitchWidget_forcePosition)) {
+            mForcePosition = typedArray.getString(R.styleable.SwitchWidget_forcePosition);
+        }
         int icon = typedArray.getResourceId(R.styleable.SwitchWidget_icon, 0);
         boolean iconSpaceReserved = typedArray.getBoolean(R.styleable.SwitchWidget_iconSpaceReserved, false);
         typedArray.recycle();
@@ -68,6 +72,8 @@ public class SwitchWidget extends RelativeLayout {
         if (!iconSpaceReserved) {
             iconImageView.setVisibility(GONE);
         }
+
+        setPosition();
 
         container.setOnClickListener(v -> {
             if (materialSwitch.isEnabled()) {
@@ -142,6 +148,24 @@ public class SwitchWidget extends RelativeLayout {
 
     public void setBeforeSwitchChangeListener(BeforeSwitchChangeListener listener) {
         beforeSwitchChangeListener = listener;
+    }
+
+    private void setPosition() {
+        if (TextUtils.isEmpty(mForcePosition) || container == null) return;
+
+        int bgRes = switch(mForcePosition) {
+            case "top" -> R.drawable.preference_background_top;
+            case "middle" -> R.drawable.preference_background_middle;
+            case "bottom" -> R.drawable.preference_background_bottom;
+            default -> R.drawable.preference_background_center;
+        };
+
+        container.setBackgroundResource(bgRes);
+    }
+
+    public void forcePosition(String position) {
+        mForcePosition = position;
+        setPosition();
     }
 
     @Override
