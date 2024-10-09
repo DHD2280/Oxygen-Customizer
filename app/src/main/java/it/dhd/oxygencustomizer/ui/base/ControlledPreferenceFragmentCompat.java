@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.base;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -85,6 +86,8 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
                 }
             }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         }
+        final RecyclerView rv = getListView();
+        rv.setPadding(0, 0, 0, dp2px(requireContext(), 12));
     }
 
     @NonNull
