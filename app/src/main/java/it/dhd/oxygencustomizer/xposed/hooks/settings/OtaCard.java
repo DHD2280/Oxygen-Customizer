@@ -1,21 +1,16 @@
 package it.dhd.oxygencustomizer.xposed.hooks.settings;
 
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllMethods;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
-import android.graphics.drawable.AnimatedImageDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -28,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 
 public class OtaCard extends XposedMods {
 
