@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:gravity="center">
+		<shape android:shape="rectangle" android:tintMode="src_atop">
+            <size android:height="0dip" android:width="0dip" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <shape android:shape="rectangle" android:tintMode="src_atop">
+        <corners android:topLeftRadius="@dimen/top_left" android:topRightRadius="@dimen/top_right" android:bottomLeftRadius="@dimen/bottom_left" android:bottomRightRadius="@dimen/bottom_right"/>
+            <size android:height="36.0dip" android:width="36.0dip" />
+            <stroke android:width="1.5dip" android:color="@color/bg_color"/>
+            <solid android:color="@color/solid_bg_color" />
+        </shape>
+    </item>
+    <item>
+        <vector android:height="32.0dip" android:width="32.0dip" android:viewportWidth="32.0" android:viewportHeight="32.0">
+            <group android:pivotX="24.0" android:pivotY="24.0" android:scaleX="1.0" android:scaleY="1.0">
+                <path android:fillColor="@color/icon_color" android:pathData="M24.5524,16.0009L24.5504,16.001L22.1814,10.7561C22.0295,10.4199 21.951,10.0552 21.951,9.6863V9.6863H17.1814C17.1814,8.8705 16.6465,8.2811 15.9392,8.2811C15.2709,8.2811 14.6971,8.8314 14.6971,9.6863H10.049H10.0057V9.6863C10.0057,10.116 9.9142,10.5408 9.7374,10.9324L7.4491,16.0009L7.4476,16.0009L7.4477,16.0042C7.4493,17.6805 8.6558,19.2064 10.5258,19.2064C12.4372,19.2064 13.6019,17.6812 13.604,16.0053L13.604,16.0008L13.6021,16.0009L11.2731,10.8238H14.9843V21.7437H12.2731C12.2731,21.7437 12.2731,22.4333 12.2731,23.7189H19.7264C19.7264,22.615 19.7264,21.7437 19.7264,21.7437H18.7158H16.801V10.8227H20.728L18.3985,16.001L18.396,16.0009C18.396,17.6785 19.6028,19.2064 21.4741,19.2064C23.3855,19.2064 24.5503,17.6813 24.5523,16.0053L24.5524,16.0009ZM12.2731,15.1286C11.2388,15.1291 9.811,15.1291 8.777,15.1286L10.5263,11.56L12.2731,15.1286ZM19.7264,15.1286L21.4736,11.56L23.2204,15.1286C22.1865,15.1291 20.76,15.1291 19.7264,15.1286Z"/>
+            </group>
+        </vector>
+    </item>
+</layer-list>
