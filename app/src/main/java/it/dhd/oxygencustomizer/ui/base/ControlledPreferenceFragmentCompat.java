@@ -4,6 +4,7 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.base.BaseActivity.setHeader;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.core.view.WindowCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
@@ -28,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.LocaleHelper;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
@@ -88,6 +91,16 @@ public abstract class ControlledPreferenceFragmentCompat extends PreferenceFragm
         }
         final RecyclerView rv = getListView();
         rv.setPadding(0, 0, 0, dp2px(requireContext(), 12));
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(LocaleHelper.setLocale(context));
+
+        if (getActivity() != null) {
+            var window = requireActivity().getWindow();
+            WindowCompat.setDecorFitsSystemWindows(window, false);
+        }
     }
 
     @NonNull
