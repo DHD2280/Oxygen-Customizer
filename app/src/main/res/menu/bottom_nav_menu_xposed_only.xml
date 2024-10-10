@@ -8,12 +8,12 @@
     <item
         android:id="@+id/updates"
         android:enabled="true"
-        android:icon="@drawable/ic_updates"
+        android:icon="@drawable/ic_navbar_updates_unchecked"
         android:title="@string/update" />
     <item
         android:id="@+id/hooks"
         android:enabled="true"
-        android:icon="@drawable/ic_hooks"
+        android:icon="@drawable/ic_navbar_hooks"
         android:title="@string/navbar_hooks" />
     <item
         android:id="@+id/settings"
