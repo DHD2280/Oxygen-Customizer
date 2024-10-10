@@ -194,6 +194,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/hourly_forecast_recycler"
+                    android:requiresFadingEdge="horizontal|vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
