@@ -23,6 +23,7 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setDarkTheme();
+        DynamicColors.applyToActivityIfAvailable(this);
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
 
         binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
