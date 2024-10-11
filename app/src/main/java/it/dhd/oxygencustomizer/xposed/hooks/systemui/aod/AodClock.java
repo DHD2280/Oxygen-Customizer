@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.AOD_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT2;
@@ -325,16 +326,24 @@ public class AodClock extends XposedMods {
         if (appContext == null) return null;
         LayoutInflater inflater = LayoutInflater.from(appContext);
 
-        View v = inflater.inflate(
-                appContext
-                        .getResources()
-                        .getIdentifier(
-                                LOCKSCREEN_CLOCK_LAYOUT + mAodClockStyle,
-                                "layout",
-                                BuildConfig.APPLICATION_ID
-                        ),
-                null
-        );
+        int resId = appContext
+                .getResources()
+                .getIdentifier(
+                        AOD_CLOCK_LAYOUT + mAodClockStyle,
+                        "layout",
+                        BuildConfig.APPLICATION_ID
+                );
+        if (resId == 0) {
+            resId = appContext
+                    .getResources()
+                    .getIdentifier(
+                            LOCKSCREEN_CLOCK_LAYOUT + mAodClockStyle,
+                            "layout",
+                            BuildConfig.APPLICATION_ID
+                    );
+        }
+
+        View v = inflater.inflate(resId, null);
 
         loadLottieAnimationView(
                 appContext,

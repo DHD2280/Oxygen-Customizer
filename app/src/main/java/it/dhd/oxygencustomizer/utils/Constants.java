@@ -709,6 +709,7 @@ public final class Constants {
 
     // Resource names
     public static final String LOCKSCREEN_CLOCK_LAYOUT = "preview_lockscreen_clock_";
+    public static final String AOD_CLOCK_LAYOUT = "preview_aod_clock_";
     public static final String HEADER_CLOCK_LAYOUT = "preview_header_clock_";
 
     public static final String CLOCK_TAG = "clock";
