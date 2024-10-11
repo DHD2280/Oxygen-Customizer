@@ -95,10 +95,13 @@ jobs:
           message: ${{ env.TMessage }}
           format: markdown
 
-      - name: Telegram File Attachment
-        run: |
-          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.apk"
+      - name: Zip artifact for deployment
+        run: cd ./app/build/outputs/apk/release/ && zip OxygenCustomizer.zip *.apk -r
 
       - name: Telegram File Attachment
         run: |
-          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL2 }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.apk"
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
+
+      - name: Telegram File Attachment
+        run: |
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL2 }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
