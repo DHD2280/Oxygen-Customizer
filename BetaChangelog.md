@@ -4,8 +4,7 @@
 - Added Pocket Studio feature  
 - Added the ability to change system color  
 - New UI  
-- Added animate battery bar charging  
-- Added Yandex Weather Provider  
+- Added animate battery bar charging
 - Added Yandex Weather Provider  
 - Introduce Qs Widgets  
 - Added Caffeine Tile  
