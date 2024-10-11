@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -20,7 +19,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class StatusbarIcons extends XposedMods {
 
-    private static final String TAG = "Oxygen Customizer - Statusbar Icons: ";
     private final static String listenPackage = SYSTEM_UI;
     private boolean hideBluetooth, mHideWifiActivity = false, mHideMobileActivity = false;
 
@@ -51,21 +49,21 @@ public class StatusbarIcons extends XposedMods {
                     int.class,
                     CharSequence.class,
                     boolean.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    boolean enabled = (boolean) param.args[3];
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            boolean enabled = (boolean) param.args[3];
 
-                    if (!enabled || !hideBluetooth) return;
+                            if (!enabled || !hideBluetooth) return;
 
-                    Object bluetoothController = getObjectField(param.thisObject, Build.VERSION.SDK_INT >= 34 ? "bluetoothController" : "mBluetooth");
-                    boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                            Object bluetoothController = getObjectField(param.thisObject, Build.VERSION.SDK_INT >= 34 ? "bluetoothController" : "mBluetooth");
+                            boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
 
-                    if (!connected)
-                        param.setResult(connected);
-                }
-            });
+                            if (!connected)
+                                param.setResult(connected);
+                        }
+                    });
         } catch (Throwable t) {
-            log(TAG + "Class Not Found " + t.getMessage());
+            log("Class Not Found " + t.getMessage());
         }
 
         try {
@@ -85,7 +83,7 @@ public class StatusbarIcons extends XposedMods {
             });
 
         } catch (Throwable t) {
-            log(TAG + " getWifiActivityId " + t.getMessage());
+            log(" getWifiActivityId " + t.getMessage());
         }
 
         try {
@@ -103,7 +101,7 @@ public class StatusbarIcons extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + " - Class Not Found " + t.toString());
+            log(" - Class Not Found " + t);
         }
 
     }

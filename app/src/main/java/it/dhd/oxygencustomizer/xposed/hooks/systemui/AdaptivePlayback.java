@@ -20,17 +20,15 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class AdaptivePlayback extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
+    private static final Object ADAPTIVE_PLAYBACK_TOKEN = new Object();
+    private final int STREAM_MUSIC = 3;
     private boolean mAdaptivePlaybackEnabled;
     private int mAdaptivePlaybackTimeout;
     private boolean mAdaptivePlaybackResumable;
-    private final int STREAM_MUSIC = 3;
-
+    final Runnable mAdaptivePlaybackRunnable = () -> mAdaptivePlaybackResumable = false;
     private Class<?> mVolumeState = null;
     private Object mAudio = null;
     private Handler mWorker = null;
-    private static final Object ADAPTIVE_PLAYBACK_TOKEN = new Object();
-
 
     public AdaptivePlayback(Context context) {
         super(context);
@@ -52,8 +50,6 @@ public class AdaptivePlayback extends XposedMods {
 
     }
 
-    final Runnable mAdaptivePlaybackRunnable = () -> mAdaptivePlaybackResumable = false;
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
@@ -73,7 +69,7 @@ public class AdaptivePlayback extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!mAdaptivePlaybackEnabled) return;
                 Object volState = callMethod(param.thisObject, "streamStateW", param.args[0]);
-                int level = (int) getIntField(volState, "level");
+                int level = getIntField(volState, "level");
                 int stream = (int) param.args[0];
                 boolean isMusicActive = (boolean) callMethod(mAudio, "isMusicActive");
                 if (mAdaptivePlaybackEnabled && stream == STREAM_MUSIC && level == 0

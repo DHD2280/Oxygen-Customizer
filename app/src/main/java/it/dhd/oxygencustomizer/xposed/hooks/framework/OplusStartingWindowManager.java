@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -32,13 +31,31 @@ public class OplusStartingWindowManager extends XposedMods {
     private final static String listenPackage = FRAMEWORK;
 
     private final static String TAG = "Oxygen Customizer - OplusStartingWindowManager: ";
+    private final String LOG_FILE = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/OplusStartingWindowManager_fix.log";
     private boolean mEnableLagFix = false;
     private boolean mForceAllApps = false;
     private Set<String> mLagFixApps = new HashSet<>();
     private boolean settingsUpdated = false;
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                String action = intent.getAction();
+                if (action == null) return;
+                String className = intent.getStringExtra("class");
+                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
+                    if (!TextUtils.isEmpty(className) && className.equals(OplusStartingWindowManager.class.getSimpleName())) {
+                        log("OplusStartingWindowManager: Intent received - will update preferences");
+                        settingsUpdated = false;
+                        updatePrefs();
+                    }
+                }
+            } catch (Throwable t) {
+                log("OplusStartingWindowManager: " + t.getMessage());
+            }
+        }
+    };
     private boolean broadcastRegistered = false;
-
-    private final String LOG_FILE = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/OplusStartingWindowManager_fix.log";
 
     public OplusStartingWindowManager(Context context) {
         super(context);
@@ -61,33 +78,13 @@ public class OplusStartingWindowManager extends XposedMods {
         settingsUpdated = true;
     }
 
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                if (action == null) return;
-                String className = intent.getStringExtra("class");
-                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
-                    if (!TextUtils.isEmpty(className) && className.equals(OplusStartingWindowManager.class.getSimpleName())) {
-                        log("OplusStartingWindowManager: Intent received - will update preferences");
-                        settingsUpdated = false;
-                        updatePrefs();
-                    }
-                }
-            } catch (Throwable t) {
-                log("OplusStartingWindowManager: " + t.getMessage());
-            }
-        }
-    };
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (Build.VERSION.SDK_INT < 34) return;
 
         XPLauncher.enqueueProxyCommand((proxy) ->
-            proxy.runCommand("echo " + getFormattedDate() + " - OplusStartingWindowManager: hook started >> " + LOG_FILE));
-        
+                proxy.runCommand("echo " + getFormattedDate() + " - OplusStartingWindowManager: hook started >> " + LOG_FILE));
+
         if (!broadcastRegistered) {
             broadcastRegistered = true;
 
@@ -139,7 +136,7 @@ public class OplusStartingWindowManager extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + " error: " + t.getMessage());
+            log(" error: " + t.getMessage());
         }
 
 

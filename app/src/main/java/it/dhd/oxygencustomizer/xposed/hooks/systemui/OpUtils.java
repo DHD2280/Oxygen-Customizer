@@ -17,18 +17,14 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class OpUtils extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
+    public static Class<?> QsColorUtil = null;
     private static Class<?> OpUtils = null;
     private static Class<?> QSFragmentHelper = null;
-    public static Class<?> QsColorUtil = null;
     private static Class<?> OplusChargingStrategy = null;
 
     public OpUtils(Context context) {
         super(context);
     }
-
-    @Override
-    public void updatePrefs(String... Key) {}
 
     public static int getPrimaryColor(Context mContext) {
         if (mContext == null) return Color.WHITE;
@@ -64,7 +60,7 @@ public class OpUtils extends XposedMods {
     public static int getIconLightColor() {
         if (QsColorUtil == null) return Color.WHITE;
         try {
-            return (int) getStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
+            return getStaticIntField(QsColorUtil, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
         } catch (Throwable t) {
             return Color.WHITE;
         }
@@ -78,6 +74,10 @@ public class OpUtils extends XposedMods {
         } catch (Throwable t) {
             return getPrimaryColor(context);
         }
+    }
+
+    @Override
+    public void updatePrefs(String... Key) {
     }
 
     @Override

@@ -32,12 +32,6 @@ import it.dhd.oxygencustomizer.xposed.views.BatteryBarView;
 public class BatteryBar extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private FrameLayout fullStatusbar;
-    private Object mStatusBarIconController;
-    private ViewGroup mStatusBar;
-    private Object mCollapsedStatusBarFragment = null;
-
-    private boolean BBarEnabled;
     private static boolean BBarColorful;
     private static boolean BBOnlyWhileCharging;
     private static boolean BBOnBottom;
@@ -54,6 +48,11 @@ public class BatteryBar extends XposedMods {
     private static boolean BBarTransitColors = false;
     private static boolean indicatePowerSave = false;
     private static int powerSaveColor = Color.GREEN;
+    private FrameLayout fullStatusbar;
+    private Object mStatusBarIconController;
+    private ViewGroup mStatusBar;
+    private Object mCollapsedStatusBarFragment = null;
+    private boolean BBarEnabled;
 
     public BatteryBar(Context context) {
         super(context);

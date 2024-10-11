@@ -51,13 +51,13 @@ public class CustomShortcut extends XposedMods {
                 int.class,
                 int.class,
                 new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (c == null) {
-                    c = (Context) param.args[0];
-                }
-            }
-        });
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (c == null) {
+                            c = (Context) param.args[0];
+                        }
+                    }
+                });
         Class<?> TopLevelSettingsClass = findClass("com.android.settings.homepage.TopLevelSettings", lpparam.classLoader);
         hookAllMethods(TopLevelSettingsClass, "onPreferenceTreeClick", new XC_MethodHook() {
             @Override
@@ -70,12 +70,14 @@ public class CustomShortcut extends XposedMods {
                 }
             }
         });
-        try { ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
-        } catch (Throwable ignored) {}
+        try {
+            ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
+        } catch (Throwable ignored) {
+        }
         hookAllMethods(TopLevelSettingsClass, "onCreateAdapter", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if(!showInSettings) return;
+                if (!showInSettings) return;
 
                 Object OCPreference = TopHomePreferenceClass.getConstructor(Context.class)
                         .newInstance(c);
@@ -105,6 +107,7 @@ public class CustomShortcut extends XposedMods {
             }
         });
     }
+
     @Override
     public boolean listensTo(String packageName) {
         return packageName.equals(this.listenPackage);

@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findMethodExact;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -32,18 +31,10 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class DarkMode extends XposedMods {
 
     private static final String listenPackage = FRAMEWORK;
-
+    private static final int[] mapping = {4, 3, 2, 1, 0};
     private boolean enableCustomDarkMode = false;
     private Set<String> darkModeApps = new HashSet<>();
-
     private boolean settingsUpdated = false;
-    private boolean broadcastRegistered = false;
-    private static final int[] mapping = {4, 3, 2, 1, 0};
-
-    public DarkMode(Context context) {
-        super(context);
-    }
-
     final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -63,6 +54,11 @@ public class DarkMode extends XposedMods {
             }
         }
     };
+    private boolean broadcastRegistered = false;
+
+    public DarkMode(Context context) {
+        super(context);
+    }
 
     @Override
     public void updatePrefs(String... Key) {

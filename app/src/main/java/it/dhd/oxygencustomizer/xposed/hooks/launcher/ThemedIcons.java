@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
@@ -62,29 +61,26 @@ public class ThemedIcons extends XposedMods {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     try {
-                        if(param.getResult() == null && ForceThemedLauncherIcons)
-                        {
+                        if (param.getResult() == null && ForceThemedLauncherIcons) {
 
-                            if(new Throwable().getStackTrace()[4].getMethodName().toLowerCase().contains("override")) //It's from com.android.launcher3.icons.IconProvider.getIconWithOverrides. Monochrome is included
+                            if (new Throwable().getStackTrace()[4].getMethodName().toLowerCase().contains("override")) //It's from com.android.launcher3.icons.IconProvider.getIconWithOverrides. Monochrome is included
                             {
                                 return;
                             }
 
                             GoogleMonochromeIconFactory mono = (GoogleMonochromeIconFactory) getAdditionalInstanceField(param.thisObject, "mMonoFactoryOC");
-                            if(mono == null)
-                            {
+                            if (mono == null) {
                                 mono = new GoogleMonochromeIconFactory((AdaptiveIconDrawable) param.thisObject, mIconBitmapSize);
                                 setAdditionalInstanceField(param.thisObject, "mMonoFactoryOC", mono);
                             }
                             param.setResult(mono);
                         }
+                    } catch (Throwable ignored) {
                     }
-                    catch (Throwable ignored){}
                 }
             });
-        }
-        catch (Throwable t){
-            log(TAG + t.getMessage());
+        } catch (Throwable t) {
+            log(t.getMessage());
         }
     }
 

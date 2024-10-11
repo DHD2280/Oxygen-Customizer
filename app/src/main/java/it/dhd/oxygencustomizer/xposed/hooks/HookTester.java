@@ -17,7 +17,8 @@ public class HookTester extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void updatePrefs(String... Key) {
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {

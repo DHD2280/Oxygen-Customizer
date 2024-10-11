@@ -999,6 +999,8 @@
     <string name="export_failed">Export failed</string>
     <string name="import_success">Import successful</string>
     <string name="import_failed">Import failed</string>
+    <string name="more_logging_title">More logging</string>
+    <string name="more_logging_summary">Enable more logging.\nThis can help when sending Bug Reports.</string>
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>

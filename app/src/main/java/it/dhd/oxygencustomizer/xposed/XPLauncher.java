@@ -114,7 +114,6 @@ public class XPLauncher implements ServiceConnection {
         }
 
         new SystemUtils(mContext);
-        XPrefs.setPackagePrefs(lpparam.packageName);
 
         loadModpacks(lpparam);
     }

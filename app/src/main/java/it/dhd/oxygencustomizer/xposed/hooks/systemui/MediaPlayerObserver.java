@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
@@ -28,8 +27,20 @@ public class MediaPlayerObserver extends XposedMods {
         instance = this;
     }
 
+    public static void registerMediaData(OnBindMediaData callback) {
+        instance.mMediaDataListeners.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterregisterMediaData(OnBindMediaData callback) {
+        instance.mMediaDataListeners.remove(callback);
+    }
+
     @Override
-    public void updatePrefs(String... Key) {}
+    public void updatePrefs(String... Key) {
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -53,22 +64,6 @@ public class MediaPlayerObserver extends XposedMods {
         }
     }
 
-    public interface OnBindMediaData {
-        void onBindMediaData(Object mediaData);
-        void onUnBindMediaData();
-    }
-
-    public static void registerMediaData(OnBindMediaData callback)
-    {
-        instance.mMediaDataListeners.add(callback);
-    }
-
-    /** @noinspection unused*/
-    public static void unRegisterregisterMediaData(OnBindMediaData callback)
-    {
-        instance.mMediaDataListeners.remove(callback);
-    }
-
     private void bindMediaData(Object mediaData) {
         for (OnBindMediaData listener : mMediaDataListeners) {
             listener.onBindMediaData(mediaData);
@@ -84,5 +79,11 @@ public class MediaPlayerObserver extends XposedMods {
     @Override
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
+    }
+
+    public interface OnBindMediaData {
+        void onBindMediaData(Object mediaData);
+
+        void onUnBindMediaData();
     }
 }

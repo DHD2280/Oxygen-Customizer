@@ -18,24 +18,33 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class ThemeEnabler extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    private int themeNum = -1;
-
     @SuppressLint("StaticFieldLeak")
     private static ThemeEnabler instance = null;
-
     private final ArrayList<OnThemeChangedListener> mThemeChangedListeners = new ArrayList<>();
+    private int themeNum = -1;
 
     public ThemeEnabler(Context context) {
         super(context);
         instance = this;
     }
 
+    public static void registerThemeChangedListener(ThemeEnabler.OnThemeChangedListener listener) {
+        instance.mThemeChangedListeners.add(listener);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterThemeChangedListener(OnThemeChangedListener listener) {
+        instance.mThemeChangedListeners.remove(listener);
+    }
+
     @Override
     public void updatePrefs(String... Key) {
         if (Xprefs == null) return;
-        for (int i = 0; i<Xprefs.getInt("UiStylesThemes", 0); i++) {
-            if (Xprefs.getBoolean("OxygenCustomizerComponentTH" + (i+1) + ".overlay", false)) {
-                themeNum = (i+1);
+        for (int i = 0; i < Xprefs.getInt("UiStylesThemes", 0); i++) {
+            if (Xprefs.getBoolean("OxygenCustomizerComponentTH" + (i + 1) + ".overlay", false)) {
+                themeNum = (i + 1);
             } else {
                 themeNum = -1;
             }
@@ -57,7 +66,8 @@ public class ThemeEnabler extends XposedMods {
                     notifyThemeChanged();
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         try {
             Class<?> NotificationPanelViewController = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
@@ -68,7 +78,8 @@ public class ThemeEnabler extends XposedMods {
                     notifyThemeChanged();
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
     }
 
@@ -77,29 +88,21 @@ public class ThemeEnabler extends XposedMods {
         XPLauncher.enqueueProxyCommand(proxy -> proxy.applyTheme("OxygenCustomizerComponentTH" + themeNum + ".overlay"));
     }
 
-    public interface OnThemeChangedListener {
-        void onThemeChanged();
-    }
-
-    public static void registerThemeChangedListener(ThemeEnabler.OnThemeChangedListener listener) {
-        instance.mThemeChangedListeners.add(listener);
-    }
-
-    /** @noinspection unused*/
-    public static void unRegisterThemeChangedListener(OnThemeChangedListener listener) {
-        instance.mThemeChangedListeners.remove(listener);
-    }
-
     private void notifyThemeChanged() {
         for (ThemeEnabler.OnThemeChangedListener listener : mThemeChangedListeners) {
             try {
-            listener.onThemeChanged();
-            } catch (Throwable ignored) {}
+                listener.onThemeChanged();
+            } catch (Throwable ignored) {
+            }
         }
     }
 
     @Override
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
+    }
+
+    public interface OnThemeChangedListener {
+        void onThemeChanged();
     }
 }

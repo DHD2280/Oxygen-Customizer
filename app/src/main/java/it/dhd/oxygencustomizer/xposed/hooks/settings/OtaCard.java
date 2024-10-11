@@ -75,7 +75,8 @@ public class OtaCard extends XposedMods {
                                 ImageDecoder.decodeBitmap(source));
                         otaImage.setCornerRadius(dp2px(mContext, 12));
                         mOtaCard.setBackground(otaImage);
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
 
                     executor.shutdown();
                     executor.shutdownNow();

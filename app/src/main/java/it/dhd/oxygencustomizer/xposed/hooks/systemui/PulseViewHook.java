@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
@@ -50,7 +49,6 @@ import it.dhd.oxygencustomizer.xposed.views.pulse.SolidLineRenderer;
 
 public class PulseViewHook extends XposedMods {
 
-    private static final String TAG = "PulseViewHook ";
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private static Class<?> CentralSurfacesImpl = null;
     private FrameLayout mNotificationShadeView = null;
@@ -125,7 +123,7 @@ public class PulseViewHook extends XposedMods {
         DWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
 
         if (Key.length > 0) {
-            for(String PulsePref : PULSE_PREFS) {
+            for (String PulsePref : PULSE_PREFS) {
                 if (Key[0].equals(PulsePref)) {
                     if (PulseControllerImpl.hasInstance()) {
                         refreshPulse(PulseControllerImpl.getInstance());
@@ -195,7 +193,7 @@ public class PulseViewHook extends XposedMods {
                     mStartButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("start_button", "id", Constants.Packages.SYSTEM_UI));
                     mEndButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("end_button", "id", Constants.Packages.SYSTEM_UI));
                 } catch (Throwable t) {
-                    log(TAG + "Failed to find start/end button");
+                    log("Failed to find start/end button");
                 }
                 updateLockscreenIcons();
             }
@@ -205,7 +203,7 @@ public class PulseViewHook extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (PulseControllerImpl.hasInstance()) {
-                    ///log(TAG + "keyguardGoingAway");
+                    ///log("keyguardGoingAway");
                     PulseControllerImpl.getInstance().notifyKeyguardGoingAway();
                 }
             }
@@ -215,7 +213,7 @@ public class PulseViewHook extends XposedMods {
         hookAllMethods(CentralSurfacesImpl, "updateDozingState", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //log(TAG + "updateDozingState, dozing: " + getBooleanField(param.thisObject, "mDozing"));
+                //log("updateDozingState, dozing: " + getBooleanField(param.thisObject, "mDozing"));
                 if (PulseControllerImpl.hasInstance()) {
                     PulseControllerImpl.getInstance().setDozing(getBooleanField(param.thisObject, "mDozing"));
                 }
@@ -228,7 +226,7 @@ public class PulseViewHook extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (PulseControllerImpl.hasInstance()) {
-                    //log(TAG + "Keyguard is showing: " + param.args[0]);
+                    //log("Keyguard is showing: " + param.args[0]);
                     PulseControllerImpl.getInstance().setKeyguardShowing((boolean) param.args[0]);
                     VisualizerView.getInstance().bringToFront();
                     VisualizerView.getInstance().requestLayout();
@@ -243,12 +241,13 @@ public class PulseViewHook extends XposedMods {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     if (PulseControllerImpl.hasInstance()) {
-                        //log(TAG + "Screen pinning: " + (boolean)param.args[0]);
+                        //log("Screen pinning: " + (boolean)param.args[0]);
                         PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
                     }
                 }
             });
-        } catch (Throwable ignored){}
+        } catch (Throwable ignored) {
+        }
 
     }
 
@@ -266,6 +265,7 @@ public class PulseViewHook extends XposedMods {
         mKeyguardBottomArea.bringToFront();
         mKeyguardBottomArea.requestLayout();
     }
+
     private void onPrimaryMetadataOrStateChanged(int state) {
         if (mPulseEnabled && PulseControllerImpl.hasInstance()) {
             PulseControllerImpl.getInstance().onPrimaryMetadataOrStateChanged(state);
@@ -278,7 +278,7 @@ public class PulseViewHook extends XposedMods {
     }
 
     private void placePulseView() {
-        log(TAG + "Placing PulseView");
+        log("Placing PulseView");
         VisualizerView visualizerView;
         if (VisualizerView.hasInstance()) {
             visualizerView = VisualizerView.getInstance();

@@ -35,7 +35,8 @@ public class MiscMods extends XposedMods {
         mRemoveUsb = Xprefs.getBoolean("remove_usb_dialog", false);
 
         if (Key.length > 0 && Key[0].equals("misc_remove_rotate_floating")) {
-            if (mRotationButton != null) mRotationButton.setVisibility(mHideRotationButton ? View.GONE : View.VISIBLE);
+            if (mRotationButton != null)
+                mRotationButton.setVisibility(mHideRotationButton ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -52,7 +53,8 @@ public class MiscMods extends XposedMods {
                     if (mHideRotationButton) mRotationButton.setVisibility(View.GONE);
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         try {
             Class<?> UsbService = findClass("com.oplus.systemui.usb.UsbService", lpparam.classLoader);
@@ -76,7 +78,8 @@ public class MiscMods extends XposedMods {
                     setBooleanField(param.thisObject, "mNeedShowUsbDialog", false);
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
     }
 

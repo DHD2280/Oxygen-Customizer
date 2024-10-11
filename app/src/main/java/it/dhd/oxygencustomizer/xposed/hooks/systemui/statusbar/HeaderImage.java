@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
@@ -65,7 +64,7 @@ public class HeaderImage extends XposedMods {
     private final String TAG = "Oxygen Customizer " + this.getClass().getSimpleName() + ": ";
 
     private final int MAX_TINT_OPACITY = 250;
-
+    ValueAnimator alphaAnimator;
     // QS Header Image
     private FadingEdgeLayout mQsHeaderLayout = null;
     private ImageView mQsHeaderImageView = null;
@@ -79,11 +78,9 @@ public class HeaderImage extends XposedMods {
     private int qshiTintCustom;
     private int qshiPaddingSide;
     private int qshiPaddingTop;
-    private int qshiMinHeight = 50;
-    private int qshiDefaultHeight = 200;
+    private final int qshiMinHeight = 50;
+    private final int qshiDefaultHeight = 200;
     private int qshiTintIntensity = 50;
-    ValueAnimator alphaAnimator;
-
     private int mColorAccent;
     private int mColorTextPrimary;
     private int mColorTextPrimaryInverse;
@@ -91,7 +88,7 @@ public class HeaderImage extends XposedMods {
     private boolean newControlCenter = false;
     private boolean isFirstExpansionIgnored = true;
     private boolean isResetNeeded = false;
-    private boolean ignore = true;
+    private final boolean ignore = true;
 
     public HeaderImage(Context context) {
         super(context);
@@ -134,8 +131,9 @@ public class HeaderImage extends XposedMods {
         try {
             NewBrightnessSlider = findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
             newControlCenter = true;
-            log(TAG + "New Control Center");
-        } catch (Throwable ignored) {}
+            log("New Control Center");
+        } catch (Throwable ignored) {
+        }
 
         Class<?> OplusQSContainerImpl;
         try {
@@ -145,11 +143,11 @@ public class HeaderImage extends XposedMods {
         }
 
         try {
-            log(TAG + "Hooking");
+            log("Hooking");
             hookAllMethods(OplusQSContainerImpl, "onFinishInflate", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
-                    log(TAG + "onFinishInflate");
+                    log("onFinishInflate");
 
                     FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
 
@@ -180,7 +178,8 @@ public class HeaderImage extends XposedMods {
                 }
             });
 
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         if (newControlCenter) {
             try {
@@ -193,7 +192,7 @@ public class HeaderImage extends XposedMods {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (param.args[0] instanceof Float) {
                             float f = (float) param.args[0];
-                            log(TAG + "applyBackScaling: " + f);
+                            log("applyBackScaling: " + f);
                         }
                     }
                 });
@@ -206,7 +205,7 @@ public class HeaderImage extends XposedMods {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (param.args[0] instanceof Float) {
                             float height = (float) param.args[0];
-                            log(TAG + "setFractionToShade: " + height);
+                            log("setFractionToShade: " + height);
                         }
                     }
                 });*/
@@ -221,12 +220,12 @@ public class HeaderImage extends XposedMods {
                                 if (!qshiEnabled || mQsHeaderLayout == null) return;
                                 if (param.args[0] instanceof Float) {
                                     float expansion = (float) param.args[0];
-                                    //log(TAG + "canScaleFadePanelAtExpandFraction: " + expansion);
+                                    //log("canScaleFadePanelAtExpandFraction: " + expansion);
 
                                     if (isFirstExpansionIgnored) {
-                                        //log(TAG + "Ignoring first expansion");
+                                        //log("Ignoring first expansion");
                                         if (expansion >= 0.9f) {
-                                            //log(TAG + "First expansion ignored f>=0.9");
+                                            //log("First expansion ignored f>=0.9");
                                             isFirstExpansionIgnored = false;
                                             isResetNeeded = true;
                                         }
@@ -238,7 +237,7 @@ public class HeaderImage extends XposedMods {
                                     }
 
                                     if (expansion <= .2f) {
-                                        //log(TAG + "Resetting");
+                                        //log("Resetting");
                                         isFirstExpansionIgnored = true;
                                         isResetNeeded = false;
                                     }
@@ -294,7 +293,7 @@ public class HeaderImage extends XposedMods {
                 });*/
 
             } catch (Throwable t) {
-                log(TAG + "Error hooking new Control Center " + t.getMessage());
+                log("Error hooking new Control Center " + t.getMessage());
             }
         }
 
@@ -368,11 +367,11 @@ public class HeaderImage extends XposedMods {
             tintColor = -1;
         }
         if (qshiValue != -1) {
-            @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("qs_header_image_" + qshiValue,"drawable", BuildConfig.APPLICATION_ID);
+            @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("qs_header_image_" + qshiValue, "drawable", BuildConfig.APPLICATION_ID);
             Drawable drw = ResourcesCompat.getDrawable(ResourceManager.modRes,
                     resId,
                     mContext.getTheme());
-            iv.post(()->loadImageMain(iv, drw));
+            iv.post(() -> loadImageMain(iv, drw));
             applyTint.set(true);
         } else {
             try {
@@ -401,7 +400,8 @@ public class HeaderImage extends XposedMods {
                             } else {
                                 applyTint.set(true);
                             }
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable ignored) {
+                        }
 
                         executor.shutdown();
                         executor.shutdownNow();
@@ -447,8 +447,7 @@ public class HeaderImage extends XposedMods {
         if (alpha > MAX_TINT_OPACITY) {
             alpha = MAX_TINT_OPACITY;
             return Color.argb(alpha, red, green, blue);
-        }
-        else {
+        } else {
             return customTint;
         }
     }

@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
@@ -76,13 +75,11 @@ import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class AodClock extends XposedMods {
 
-    private static final String TAG = "Oxygen Customizer: AOD ";
-
+    public static final String OC_AOD_CLOCK_TAG = "oxygencustomizer_aod_clock";
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+    Class<?> LottieAn = null;
     private ViewGroup mRootLayout = null;
     private Context appContext;
-    Class<?> LottieAn = null;
-    public static final String OC_AOD_CLOCK_TAG = "oxygencustomizer_aod_clock";
     private boolean mAodClockEnabled = false;
     private int accent1, accent2, accent3, text1, text2;
     private boolean mCustomColor, mCustomFont, mCustomImage, mCustomUser, mCustomUserImage;
@@ -102,13 +99,14 @@ public class AodClock extends XposedMods {
     private ProgressBar mBatteryProgress;
     private ProgressBar mVolumeProgress;
     private ImageView mVolumeLevelArcProgress;
+    private final BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initSoundManager();
+        }
+    };
     private ImageView mRamUsageArcProgress;
     private ImageView mBatteryArcProgress;
-
-    public AodClock(Context context) {
-        super(context);
-    }
-
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -121,12 +119,9 @@ public class AodClock extends XposedMods {
             }
         }
     };
-    private final BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            initSoundManager();
-        }
-    };
+    public AodClock(Context context) {
+        super(context);
+    }
 
     @Override
     public void updatePrefs(String... Key) {
@@ -173,7 +168,7 @@ public class AodClock extends XposedMods {
                 if (!mAodClockEnabled) return;
                 FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
                 for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
-                    if (BuildConfig.DEBUG) log(TAG + " mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
+                    log(" mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
                     if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
                         for (int j = 0; j < v.getChildCount(); j++) {
                             mRootLayout = v;
@@ -186,7 +181,7 @@ public class AodClock extends XposedMods {
                         }
                     }
                 }
-                if (BuildConfig.DEBUG) log(TAG + " initForAodApk");
+                log(" initForAodApk");
                 updateClockView();
             }
         });
@@ -203,7 +198,7 @@ public class AodClock extends XposedMods {
 
         if (mRootLayout == null) return;
 
-        if (BuildConfig.DEBUG) log(TAG + " updateClockView " + mRootLayout.getChildCount());
+        log(" updateClockView " + mRootLayout.getChildCount());
 
         View clockView = getClockView();
 
@@ -239,8 +234,7 @@ public class AodClock extends XposedMods {
         }
 
         ViewHelper.setMargins(clockView, mContext, 0, 0, 0, 0);
-
-        if (BuildConfig.DEBUG) log(TAG + " customColor: " + mCustomColor);
+        log(" customColor: " + mCustomColor);
 
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent1", mCustomColor ? accent1 : systemAccent);
         ViewHelper.findViewWithTagAndChangeColor(clockView, "accent2", mCustomColor ? accent2 : systemAccent);
@@ -267,7 +261,7 @@ public class AodClock extends XposedMods {
                 textClock.setFormat12Hour(mCustomDateFormat);
                 textClock.setFormat24Hour(mCustomDateFormat);
             } catch (Throwable t) {
-                log(TAG + "Error setting date format: " + t.getMessage());
+                log("Error setting date format: " + t.getMessage());
             }
         }
 
@@ -465,7 +459,7 @@ public class AodClock extends XposedMods {
             Bitmap bitmapUserIcon = (Bitmap) getUserIconMethod.invoke(mUserManager, userId);
             return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
         } catch (Throwable throwable) {
-            if (BuildConfig.DEBUG) log(TAG + throwable);
+            log(throwable);
             return appContext.getResources().getDrawable(R.drawable.default_avatar);
         }
     }

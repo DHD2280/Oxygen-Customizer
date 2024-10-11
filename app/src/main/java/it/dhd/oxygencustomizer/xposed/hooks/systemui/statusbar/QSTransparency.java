@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -23,7 +22,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class QSTransparency extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    private static final String TAG = "Oxygen Customizer - " + QSTransparency.class.getSimpleName() + ": ";
     private final float keyguard_alpha = 0.85f;
     boolean qsTransparencyActive = false;
     private float alpha = 40;
@@ -101,7 +99,7 @@ public class QSTransparency extends XposedMods {
                         param.setResult(blurRadius);
                     }
                 } catch (Throwable throwable) {
-                    log(TAG + throwable);
+                    log(throwable);
                 }
             }
         });

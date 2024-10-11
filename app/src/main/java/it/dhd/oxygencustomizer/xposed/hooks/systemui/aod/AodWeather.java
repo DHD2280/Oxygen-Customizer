@@ -5,7 +5,6 @@ import static android.view.Gravity.START;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -42,13 +41,11 @@ import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 public class AodWeather extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
-
-
+    private final int weatherStartPadding = 20;
     private boolean weatherEnabled = true, weatherShowLocation = true, weatherShowCondition = true;
     private boolean weatherShowHumidity = true, weatherShowWind = true;
     private boolean weatherCustomColor = false;
     private int weatherColor = Color.WHITE;
-    private final int weatherStartPadding = 20;
     private int weatherTextSize = 16, weatherImageSize = 18;
     private boolean mCustomMargins = false;
     private int mLeftMargin = 0, mTopMargin = 0;
@@ -160,7 +157,8 @@ public class AodWeather extends XposedMods {
     private void setWeatherCentered() {
         CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(AOD_WEATHER);
         mWeatherContainer.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
-        if (currentWeatherView != null) currentWeatherView.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
+        if (currentWeatherView != null)
+            currentWeatherView.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
         if (currentWeatherView != null) currentWeatherView.requestLayout();
         ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
         for (int i = 0; i < weatherContainer.getChildCount(); i++) {

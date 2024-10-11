@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
@@ -30,33 +29,32 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class MemcEnhancer extends XposedMods {
 
-    private static final String TAG = "MemcEnhancer--> ";
     private static final String listenPackage = FRAMEWORK;
-
+    private static final ArrayList<String> sConfigPackage = new ArrayList<>();
+    private static final ArrayList<String> sConfigActivity = new ArrayList<>();
+    private static final HashMap<String, String> sSdr2hdrCommandMap = new HashMap<>();
+    private static final HashMap<String, String> sMemcCommandMap = new HashMap<>();
+    private static final HashMap<String, String> sAppScreenRateMap = new HashMap<>();
     private boolean mBroadcastRegistered = false;
     private boolean mSettingsBroadcastRegistered = false;
     private boolean settingsUpdated = false;
-
     private boolean mIsFeatureOn = false;
     private boolean mIsPwX7Enable = false;
     private boolean mMemcEnable = false;
     private boolean mSdr2hdrEnable = false;
     private boolean mVideoOsieSupport = false;
-
     private Object mOplusFeatureMEMC = null;
-
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, android.content.Intent intent) {
+            if (intent.getAction() == null) return;
+            if (intent.getAction().equals(ACTIONS_MEMC_FEATURE_GET)) {
+                getAndSendBroadcast();
+            }
+        }
+    };
     private boolean enableMemcFeature = false;
     private boolean useCustomMemcConfig = false;
-    private static ArrayList<String> sConfigPackage = new ArrayList<>();
-    private static ArrayList<String> sConfigActivity = new ArrayList<>();
-    private static HashMap<String, String> sSdr2hdrCommandMap = new HashMap<>();
-    private static HashMap<String, String> sMemcCommandMap = new HashMap<>();
-    private static HashMap<String, String> sAppScreenRateMap = new HashMap<>();
-
-    public MemcEnhancer(Context context) {
-        super(context);
-    }
-
     final BroadcastReceiver mSettingsBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -66,16 +64,20 @@ public class MemcEnhancer extends XposedMods {
                 String className = intent.getStringExtra("class");
                 if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
                     if (!TextUtils.isEmpty(className) && className.equals(MemcEnhancer.class.getSimpleName())) {
-                        log(TAG + "Intent received - will update preferences");
+                        log("Intent received - will update preferences");
                         settingsUpdated = false;
                         updatePrefs();
                     }
                 }
             } catch (Throwable t) {
-                log(TAG + "error: " + t.getMessage());
+                log("error: " + t.getMessage());
             }
         }
     };
+
+    public MemcEnhancer(Context context) {
+        super(context);
+    }
 
     @Override
     public void updatePrefs(String... Key) {
@@ -117,16 +119,6 @@ public class MemcEnhancer extends XposedMods {
         sMemcCommandMap.clear();
         sAppScreenRateMap.clear();
     }
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, android.content.Intent intent) {
-            if (intent.getAction() == null) return;
-            if (intent.getAction().equals(ACTIONS_MEMC_FEATURE_GET)) {
-                getAndSendBroadcast();
-            }
-        }
-    };
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -178,7 +170,7 @@ public class MemcEnhancer extends XposedMods {
         OplusFeatureManager = findClassIfExists("com.oplus.content.OplusFeatureConfigManager", lpparam.classLoader);
 
         if (OplusFeatureManager == null) {
-            log(TAG + "OplusFeatureManager not found");
+            log("OplusFeatureManager not found");
             return;
         }
 
@@ -193,7 +185,7 @@ public class MemcEnhancer extends XposedMods {
                      */
                 String requestedFeature = (String) param.args[0];
                 if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && enableMemcFeature) {
-                    log(TAG + "hasFeature: " + param.args[0] + " called, returning true");
+                    log("hasFeature: " + param.args[0] + " called, returning true");
                     param.setResult(true);
                 }
             }
@@ -205,7 +197,7 @@ public class MemcEnhancer extends XposedMods {
         SystemProperties = findClassIfExists("android.os.SystemProperties", lpparam.classLoader);
 
         if (SystemProperties == null) {
-            log(TAG + "SystemProperties not found");
+            log("SystemProperties not found");
             return;
         }
 
@@ -215,7 +207,7 @@ public class MemcEnhancer extends XposedMods {
                 if (!enableMemcFeature) return;
                 if (param.args[0].equals("ro.oplus.display.memc_video_refreshrate") ||
                         param.args[0].equals("vendor.display.show_memc_tomast")) {
-                    log(TAG + "get: " + param.args[0] + " called, returning true");
+                    log("get: " + param.args[0] + " called, returning true");
                     param.setResult(true);
                 }
             }
@@ -227,7 +219,7 @@ public class MemcEnhancer extends XposedMods {
         OplusFeatureMEMC = findClassIfExists("com.android.server.display.OplusFeatureMEMC", lpparam.classLoader);
 
         if (OplusFeatureMEMC == null) {
-            log(TAG + "OplusFeatureMEMC not found");
+            log("OplusFeatureMEMC not found");
             return;
         }
 
@@ -253,7 +245,7 @@ public class MemcEnhancer extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
-                log(TAG + "getConfigAppList called");
+                log("getConfigAppList called");
                 param.setResult(sConfigPackage);
             }
         });
@@ -262,7 +254,7 @@ public class MemcEnhancer extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
-                log(TAG + "getConfigActivityList called");
+                log("getConfigActivityList called");
                 param.setResult(sConfigActivity);
             }
         });
@@ -271,7 +263,7 @@ public class MemcEnhancer extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
-                log(TAG + "getSdr2hdrCommandMap called");
+                log("getSdr2hdrCommandMap called");
                 param.setResult(sSdr2hdrCommandMap);
             }
         });
@@ -280,7 +272,7 @@ public class MemcEnhancer extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
-                log(TAG + "getMemcCommandMap called");
+                log("getMemcCommandMap called");
                 param.setResult(sMemcCommandMap);
             }
         });
@@ -289,7 +281,7 @@ public class MemcEnhancer extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
-                log(TAG + "getAppScreenRateMap called");
+                log("getAppScreenRateMap called");
                 param.setResult(sAppScreenRateMap);
             }
         });
@@ -312,14 +304,14 @@ public class MemcEnhancer extends XposedMods {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!useCustomMemcConfig) return;
                 String packageName = (String) param.args[0];
-                log(TAG + "isInConfigpackageList called with: " + packageName + " returning: " + sConfigPackage.contains(packageName));
+                log("isInConfigpackageList called with: " + packageName + " returning: " + sConfigPackage.contains(packageName));
                 param.setResult(sConfigPackage.contains(packageName));
             }
         });
     }
 
     private void logLists() {
-        log(TAG + "logLists: " + "\n" +
+        log("logLists: " + "\n" +
                 "enableMemcFeature: " + enableMemcFeature + "\n" +
                 "useCustomMemcConfig: " + useCustomMemcConfig + "\n" +
                 "sConfigPackage: " + Arrays.toString(sConfigPackage.toArray()) + "\n" +

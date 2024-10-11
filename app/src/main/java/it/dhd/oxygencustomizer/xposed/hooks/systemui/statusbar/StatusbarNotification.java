@@ -32,27 +32,26 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class StatusbarNotification extends XposedMods {
 
-    private final String TAG = this.getClass().getSimpleName() + ": ";
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private Object mCollapsedStatusBarFragment = null;
-    private View mStatusBar;
-    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery;
-
     // Notification Expander
     private static final int DEFAULT = 0;
     private static final int EXPAND_ALWAYS = 1;
-    /** @noinspection unused*/
+    /**
+     * @noinspection unused
+     */
     private static final int COLLAPSE_ALWAYS = 2;
     private static int notificationDefaultExpansion = DEFAULT;
+    private static Drawable defaultClearAllIcon = null, defaultClearAllBg = null;
+    private final String TAG = this.getClass().getSimpleName() + ": ";
+    private Object mCollapsedStatusBarFragment = null;
+    private View mStatusBar;
+    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery;
     private Object Scroller;
     private Object NotifCollection = null;
-
     private ImageView mClearAllButton = null;
-
     // Close All Notification Button
     private boolean customizeClearButton = false, linkBackgroundAccent = true, linkIconAccent = false;
     private int clearButtonBgColor = Color.GRAY, clearButtonIconColor = Color.WHITE;
-    private static Drawable defaultClearAllIcon = null, defaultClearAllBg = null;
 
     public StatusbarNotification(Context context) {
         super(context);
@@ -167,7 +166,7 @@ public class StatusbarNotification extends XposedMods {
         hookAllMethods(NotificationPanelViewControllerClass, "notifyExpandingStarted", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-                if(notificationDefaultExpansion != DEFAULT)
+                if (notificationDefaultExpansion != DEFAULT)
                     expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
             }
         });
@@ -194,8 +193,7 @@ public class StatusbarNotification extends XposedMods {
         Class<?> OplusClearAllButton;
         try {
             OplusClearAllButton = findClass("com.oplus.systemui.statusbar.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 14
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             OplusClearAllButton = findClass("com.oplusos.systemui.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 13
         }
 

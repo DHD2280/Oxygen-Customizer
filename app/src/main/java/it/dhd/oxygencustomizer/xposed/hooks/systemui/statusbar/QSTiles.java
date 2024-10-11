@@ -81,34 +81,34 @@ public class QSTiles extends XposedMods {
                 int.class,
                 int.class,
                 new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mCustomizeQSTiles ||
-                        mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) return;
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!mCustomizeQSTiles ||
+                                mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                            return;
 
-                int mRows = getIntField(param.thisObject, "mRows");
-                setIntField(param.thisObject, "mRows", QSRowQty);
-                param.setResult(mRows != QSRowQty);
+                        int mRows = getIntField(param.thisObject, "mRows");
+                        setIntField(param.thisObject, "mRows", QSRowQty);
+                        param.setResult(mRows != QSRowQty);
 
-            }
-        });
-
+                    }
+                });
 
 
         hookAllMethods(TileLayout, "updateColumns",
                 new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mCustomizeQSTiles) return;
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!mCustomizeQSTiles) return;
 
-                int mColumns = getIntField(param.thisObject, "mColumns");
-                int orientation = mContext.getResources().getConfiguration().orientation;
-                int newColumns = orientation == Configuration.ORIENTATION_PORTRAIT ? QSColQty : QSColQtyL;
-                setIntField(param.thisObject, "mColumns", newColumns);
-                param.setResult(mColumns != newColumns);
+                        int mColumns = getIntField(param.thisObject, "mColumns");
+                        int orientation = mContext.getResources().getConfiguration().orientation;
+                        int newColumns = orientation == Configuration.ORIENTATION_PORTRAIT ? QSColQty : QSColQtyL;
+                        setIntField(param.thisObject, "mColumns", newColumns);
+                        param.setResult(mColumns != newColumns);
 
-            }
-        });
+                    }
+                });
 
     }
 

@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -36,8 +35,9 @@ public class AlbumArtLockscreen extends XposedMods {
     private final static String TAG = "AlbumArtLockscreen: ";
 
     private static final String listenPackage = SYSTEM_UI;
-    private Bitmap mArt;
     public static boolean showAlbumArt = true;
+    public static boolean canShowArt = false;
+    private Bitmap mArt;
     private int albumArtFilter = 0;
     private float albumArtBlurAmount = 7.5f;
     private FrameLayout albumArtContainer;
@@ -45,7 +45,6 @@ public class AlbumArtLockscreen extends XposedMods {
     private Object mScrimController;
     private boolean shouldShowArt = false;
     private boolean mDepthWallpaperEnabled = false;
-    public static boolean canShowArt = false;
 
     public AlbumArtLockscreen(Context context) {
         super(context);
@@ -57,7 +56,7 @@ public class AlbumArtLockscreen extends XposedMods {
 
         showAlbumArt = Xprefs.getBoolean("lockscreen_album_art", false);
         albumArtFilter = Integer.parseInt(Xprefs.getString("lockscreen_album_art_filter", "0"));
-        albumArtBlurAmount = (Xprefs.getSliderInt("lockscreen_media_blur", 30)/100f) * 25f;
+        albumArtBlurAmount = (Xprefs.getSliderInt("lockscreen_media_blur", 30) / 100f) * 25f;
         mDepthWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
     }
 
@@ -84,7 +83,7 @@ public class AlbumArtLockscreen extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
                 if (mScrimController == null) {
-                    log(TAG + "ScrimController is null!");
+                    log("ScrimController is null!");
                     return;
                 }
                 View scrimBehind = (View) getObjectField(callMethod(mScrimController, "getScrimController"), "mScrimBehind");
@@ -143,7 +142,7 @@ public class AlbumArtLockscreen extends XposedMods {
         }
         canShowArt = (getMediaMetadata() != null &&
                 (isMusicActive ||
-                state == PlaybackState.STATE_PLAYING ||
+                        state == PlaybackState.STATE_PLAYING ||
                         state == PlaybackState.STATE_PAUSED) && getArt() != null);
         if (showAlbumArt && canShowArt) {
             Bitmap oldArt = mArt;
@@ -160,17 +159,20 @@ public class AlbumArtLockscreen extends XposedMods {
         }
         updateAlbumArt();
     }
-    
+
     private Bitmap getArtFilter(Bitmap art) {
         Bitmap finalArt;
         switch (albumArtFilter) {
             default -> finalArt = art;
             case 1 -> finalArt = DrawableConverter.toGrayscale(art);
-            case 2 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                    getPrimaryColor(mContext));
-            case 3 -> finalArt = DrawableConverter.getBlurredImage(mContext, art, albumArtBlurAmount);
-            case 4 -> finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, albumArtBlurAmount);
-        };
+            case 2 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            getPrimaryColor(mContext));
+            case 3 ->
+                    finalArt = DrawableConverter.getBlurredImage(mContext, art, albumArtBlurAmount);
+            case 4 ->
+                    finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, albumArtBlurAmount);
+        }
         return finalArt;
     }
 

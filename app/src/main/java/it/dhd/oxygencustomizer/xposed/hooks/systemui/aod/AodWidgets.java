@@ -5,7 +5,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_WEATHER_INFLATED;
@@ -54,9 +53,18 @@ public class AodWidgets extends XposedMods {
     private ViewGroup mAodRootLayout = null;
 
     // Lockscreen Widgets
-    private LinearLayout mWidgetsContainer = new LinearLayout(mContext);
+    private final LinearLayout mWidgetsContainer = new LinearLayout(mContext);
     private boolean mWeatherEnabled = false;
     private boolean mWeatherInflated = false;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, android.content.Intent intent) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_WEATHER_INFLATED)) {
+                mWeatherInflated = true;
+//                placeLockscreenWidgets();
+            }
+        }
+    };
     private boolean mWidgetsEnabled = false;
     private boolean mDeviceWidgetEnabled = false;
     private boolean mDeviceCustomColor = false;
@@ -77,7 +85,6 @@ public class AodWidgets extends XposedMods {
     private String mExtraWidgets;
     private float mWidgetsScale = 1f;
     private Object mActivityStarter = null;
-
     private boolean mReceiverRegistered = false;
 
     public AodWidgets(Context context) {
@@ -140,16 +147,6 @@ public class AodWidgets extends XposedMods {
 
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, android.content.Intent intent) {
-            if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_WEATHER_INFLATED)) {
-                mWeatherInflated = true;
-//                placeLockscreenWidgets();
-            }
-        }
-    };
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
@@ -184,7 +181,7 @@ public class AodWidgets extends XposedMods {
             //OplusBlackScreenGestureControllEx = callStaticMethod(DependencyEx, "get", OplusKeyguardDependencyEx);
 
         } catch (Throwable t) {
-            log(TAG + "OplusBlackScreenGestureControllEx not found");
+            log("OplusBlackScreenGestureControllEx not found");
         }
 
         try {
@@ -196,7 +193,7 @@ public class AodWidgets extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "OplusBlackScreenGestureControllEx not found");
+            log("OplusBlackScreenGestureControllEx not found");
         }
 
         try {
@@ -204,11 +201,11 @@ public class AodWidgets extends XposedMods {
             hookAllMethods(OplusBlackScreenGestureControllExImpl, "onReceiveGesture", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    log(TAG + "onReceiveGesture: " + param.args[0]);
+                    log("onReceiveGesture: " + param.args[0]);
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "OplusBlackScreenGestureControllEx not found");
+            log("OplusBlackScreenGestureControllEx not found");
         }
 
         if (Build.VERSION.SDK_INT == 33) {

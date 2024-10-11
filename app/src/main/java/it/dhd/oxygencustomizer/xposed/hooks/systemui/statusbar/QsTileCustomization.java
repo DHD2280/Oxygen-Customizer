@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -105,13 +104,9 @@ import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutTransformer;
 
 public class QsTileCustomization extends XposedMods {
 
-    private static final String TAG = "Oxygen Customizer - QsTileCustomization: ";
-
+    private static final String listenerPackage = Constants.Packages.SYSTEM_UI;
     private final int STATE_ACTIVE = 2;
     private final int STATE_INACTIVE = 1;
-
-    private static final String listenerPackage = Constants.Packages.SYSTEM_UI;
-
     private Object mPersonalityManager = null;
 
     // Qs Tile Colors
@@ -134,7 +129,7 @@ public class QsTileCustomization extends XposedMods {
     // QS Media Tile
     private View mOplusQsMediaView = null;
     private Drawable mOplusQsMediaDefaultBackground = null;
-    private Drawable mOplusQsMediaDrawable = null;
+    private final Drawable mOplusQsMediaDrawable = null;
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
     private ImageView mExpandIndicator = null;
@@ -188,7 +183,7 @@ public class QsTileCustomization extends XposedMods {
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
         mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
-        mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
+        mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30) / 100f) * 25f;
         mMediaQsTintColor = Xprefs.getInt(QS_MEDIA_ART_TINT_COLOR, Color.WHITE);
         mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
 
@@ -212,7 +207,7 @@ public class QsTileCustomization extends XposedMods {
         mTrasformations = Integer.parseInt(Xprefs.getString(QS_TILE_ANIMATION_TRANSFORMATIONS, "1"));
 
         if (Key.length > 0) {
-            for(String k : QS_UPDATE_PREFS) {
+            for (String k : QS_UPDATE_PREFS) {
                 if (Key[0].equals(k)) {
                     if (Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) || Key[0].equals(QS_TILE_INACTIVE_COLOR)) {
                         updateMediaQs();
@@ -250,12 +245,13 @@ public class QsTileCustomization extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "PersonalityManager error: " + t.getMessage());
+            log("PersonalityManager error: " + t.getMessage());
         }
 
         try {
             QsColorUtil = findClassIfExists("com.oplus.systemui.qs.util.QsColorUtil", lpparam.classLoader);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         Class<?> OplusQSTileBaseView;
         try {
@@ -297,11 +293,12 @@ public class QsTileCustomization extends XposedMods {
                 } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsActiveColor);
-                } else if (qsDisabledColorEnabled && state!=1 && state!=2) // Disabled State
+                } else if (qsDisabledColorEnabled && state != 1 && state != 2) // Disabled State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
                 }
-                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled) mPersonalityDrawable.invalidateSelf();
+                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled)
+                    mPersonalityDrawable.invalidateSelf();
             }
         };
 
@@ -309,7 +306,7 @@ public class QsTileCustomization extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 View qsTile = (View) param.thisObject;
-                qsTile.post(()->getTileAnimation(qsTile));
+                qsTile.post(() -> getTileAnimation(qsTile));
             }
         };
 
@@ -449,7 +446,7 @@ public class QsTileCustomization extends XposedMods {
                 }
                 if (qsBrightnessBackgroundCustomize) {
                     setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                }  else {
+                } else {
                     int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
                     if (color != 0x0) {
                         setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
@@ -473,7 +470,7 @@ public class QsTileCustomization extends XposedMods {
 
                 if (qsBrightnessBackgroundCustomize) {
                     callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                }  else {
+                } else {
                     int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
                     callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
                 }
@@ -488,7 +485,8 @@ public class QsTileCustomization extends XposedMods {
                     newUiHook
             );
 
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
 
         try {
@@ -509,7 +507,7 @@ public class QsTileCustomization extends XposedMods {
                                         final View child = (View) callMethod(vPager, "getChildAt", i);
                                         final Object lp = callMethod(child, "getLayoutParams");
                                         if (getBooleanField(lp, "isDecor")) continue;
-                                        final float transformPos = (float) (child.getLeft() - (int)callMethod(vPager, "getScrollX")) / child.getWidth();
+                                        final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
                                         getCustomTransitions().transformPage(child, transformPos);
                                     }
                                 }
@@ -588,12 +586,16 @@ public class QsTileCustomization extends XposedMods {
         switch (mMediaQsArtFilter) {
             default -> finalArt = art;
             case 1 -> finalArt = DrawableConverter.toGrayscale(art);
-            case 2 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                    getPrimaryColor(mContext));
-            case 3 -> finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 4 -> finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 5 -> finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                    mMediaQsTintColor, mMediaQsTintAmount);
+            case 2 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            getPrimaryColor(mContext));
+            case 3 ->
+                    finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 4 ->
+                    finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 5 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            mMediaQsTintColor, mMediaQsTintAmount);
         }
         return finalArt;
     }
@@ -730,11 +732,13 @@ public class QsTileCustomization extends XposedMods {
         if (mLabelContainer == null) return;
 
         if (qsLabelsHide) {
-            if (mLabelContainer.getVisibility() != View.GONE) mLabelContainer.setVisibility(View.GONE);
+            if (mLabelContainer.getVisibility() != View.GONE)
+                mLabelContainer.setVisibility(View.GONE);
             return;
         }
 
-        if (mLabelContainer.getVisibility() != View.VISIBLE) mLabelContainer.setVisibility(View.VISIBLE);
+        if (mLabelContainer.getVisibility() != View.VISIBLE)
+            mLabelContainer.setVisibility(View.VISIBLE);
 
         if (qsLabelsColorEnabled) {
             mTitle.setTextColor(qsLabelsColor);
@@ -765,11 +769,12 @@ public class QsTileCustomization extends XposedMods {
                 } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsActiveColor);
-                } else if (qsDisabledColorEnabled && state!=STATE_INACTIVE && state!=STATE_ACTIVE) // Disabled State
+                } else if (qsDisabledColorEnabled && state != STATE_INACTIVE && state != STATE_ACTIVE) // Disabled State
                 {
                     mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
                 }
-                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius) mPersonalityDrawable.invalidateSelf();
+                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius)
+                    mPersonalityDrawable.invalidateSelf();
             }
         };
     }

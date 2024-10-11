@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -41,15 +40,13 @@ public class AdvancedReboot extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private boolean hideSosPowerMenu, showAdvancedReboot, useAuthForAdvancedReboot;
-    private Drawable mAdvancedRebootDrawable;
+    private final Drawable mAdvancedRebootDrawable;
     private Paint buttonPaint;
     private Paint textPaint;
     private int centerX;
     private int centerY;
     private int radius;
     private Class<?> SystemUIDialogClass;
-    private boolean broadcastRegistered = false;
-
     final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -64,6 +61,7 @@ public class AdvancedReboot extends XposedMods {
             }
         }
     };
+    private boolean broadcastRegistered = false;
 
     public AdvancedReboot(Context context) {
         super(context);
@@ -118,7 +116,7 @@ public class AdvancedReboot extends XposedMods {
 
                     if (distanceFromCenter <= radius) {
 
-                        if (useAuthForAdvancedReboot && ((BiometricManager) mContext.getSystemService(BiometricManager.class)).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
+                        if (useAuthForAdvancedReboot && mContext.getSystemService(BiometricManager.class).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
                             showAuth();
                         } else {
                             try {
@@ -167,11 +165,16 @@ public class AdvancedReboot extends XposedMods {
         listView.setScrollContainer(false);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             switch (position) {
-                case 0 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));
-                case 1 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));
-                case 2 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));
-                case 3 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));
-                case 4 -> XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));
+                case 0 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));
+                case 1 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));
+                case 2 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));
+                case 3 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));
+                case 4 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));
             }
         });
 
@@ -193,7 +196,7 @@ public class AdvancedReboot extends XposedMods {
         int viewWidth = (int) callMethod(param, "getWidth");
 
         radius = (int) (mContext.getResources().getDimensionPixelSize(
-                        mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage)) / 2.0f);
+                mContext.getResources().getIdentifier("oplus_default_bar_radius", "dimen", listenPackage)) / 2.0f);
 
         centerX = viewWidth / 2;
         centerY = radius + dp2px(mContext, 50);

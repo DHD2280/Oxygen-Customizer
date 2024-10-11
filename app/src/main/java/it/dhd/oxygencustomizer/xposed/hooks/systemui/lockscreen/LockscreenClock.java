@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -93,17 +92,17 @@ import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class LockscreenClock extends XposedMods {
 
-    private static final String TAG = "Oxygen Customizer - " + LockscreenClock.class.getSimpleName() + ": ";
-    private final static String listenPackage = Constants.Packages.SYSTEM_UI;
     public static final String OC_LOCKSCREEN_CLOCK_TAG = "oxygencustomizer_lockscreen_clock";
-
+    private final static String listenPackage = Constants.Packages.SYSTEM_UI;
+    private static final long thresholdTime = 500; // milliseconds
+    private static Object mStockClock;
+    private static long lastUpdated = System.currentTimeMillis();
     private final String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/lockscreen_clock_font.ttf";
-
+    Class<?> LottieAn = null;
     private ViewGroup mClockViewContainer = null;
     private ViewGroup mStatusViewContainer = null;
     private RelativeLayout mClockView = null;
     private View mMediaHostContainer = null;
-
     // Lockscreen Clock Prefs
     private boolean customLockscreenClock = false;
     private int lockscreenClockStyle = 1;
@@ -116,10 +115,8 @@ public class LockscreenClock extends XposedMods {
     private boolean useCustomUserImage;
     private boolean useCustomImage;
     private String mCustomDateFormat = "";
-
     // Stock Clock
     private int mStockClockRed, mStockClockRedColor;
-    private static Object mStockClock;
     private UserManager mUserManager;
     private AudioManager mAudioManager;
     private ActivityManager mActivityManager;
@@ -134,12 +131,8 @@ public class LockscreenClock extends XposedMods {
     private ImageView mVolumeLevelArcProgress;
     private ImageView mRamUsageArcProgress;
     private ImageView mBatteryArcProgress;
-    private static long lastUpdated = System.currentTimeMillis();
-    private static final long thresholdTime = 500; // milliseconds
     private int accent1, accent2, accent3, text1, text2;
     private boolean customColor;
-    Class<?> LottieAn = null;
-
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -455,7 +448,7 @@ public class LockscreenClock extends XposedMods {
                 textClock.setFormat12Hour(mCustomDateFormat);
                 textClock.setFormat24Hour(mCustomDateFormat);
             } catch (Throwable t) {
-                log(TAG + "Error setting date format: " + t.getMessage());
+                log("Error setting date format: " + t.getMessage());
             }
         }
 
@@ -626,7 +619,7 @@ public class LockscreenClock extends XposedMods {
             Bitmap bitmapUserIcon = (Bitmap) getUserIconMethod.invoke(mUserManager, userId);
             return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
         } catch (Throwable throwable) {
-            log(TAG + throwable);
+            log(throwable);
             return appContext.getResources().getDrawable(R.drawable.default_avatar);
         }
     }

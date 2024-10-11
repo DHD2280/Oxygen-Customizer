@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -57,8 +56,9 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class Lockscreen extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
+    final StringFormatter carrierStringFormatter = new StringFormatter();
     private final String TAG = "Oxygen Customizer - Lockscreen: ";
-    private Class<?> KeyguardHelper = null;
+    private final Class<?> KeyguardHelper = null;
     private Object OSF = null;
     private boolean removeSOS;
     private boolean hideFingerprint = false, customFingerprint = false;
@@ -72,7 +72,6 @@ public class Lockscreen extends XposedMods {
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
-    final StringFormatter carrierStringFormatter = new StringFormatter();
 
     public Lockscreen(Context context) {
         super(context);
@@ -108,7 +107,8 @@ public class Lockscreen extends XposedMods {
                 hideLockscreenStuff();
             }
             if (Key[0].equals(LOCKSCREEN_REMOVE_LOCK)) {
-                if (mLockIcon != null) mLockIcon.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
+                if (mLockIcon != null)
+                    mLockIcon.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
             }
         }
 
@@ -135,7 +135,7 @@ public class Lockscreen extends XposedMods {
         try {
             hideLockscreenStuff();
         } catch (Throwable t) {
-            log(TAG + "hideLockscreenStuff failed " + t.getMessage());
+            log("hideLockscreenStuff failed " + t.getMessage());
         }
 
         try {
@@ -147,7 +147,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "OplusEmergencyButtonExImpl not found");
+            log("OplusEmergencyButtonExImpl not found");
         }
 
         Class<?> OnScreenFingerprint;
@@ -170,7 +170,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "loadAnimDrawables not found");
+            log("loadAnimDrawables not found");
         }
 
         try {
@@ -181,7 +181,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "loadAnimDrawables not found");
+            log("loadAnimDrawables not found");
         }
 
         if (Build.VERSION.SDK_INT == 33) {
@@ -195,7 +195,7 @@ public class Lockscreen extends XposedMods {
                     }
                 });
             } catch (Throwable t) {
-                log(TAG + "updateFpIconColor not found");
+                log("updateFpIconColor not found");
             }
         }
 
@@ -209,7 +209,7 @@ public class Lockscreen extends XposedMods {
                     }
                 });
             } catch (Throwable t) {
-                log(TAG + "updateFpIconColor not found");
+                log("updateFpIconColor not found");
             }
         }
 
@@ -223,7 +223,7 @@ public class Lockscreen extends XposedMods {
         try {
             hookCarrier(lpparam);
         } catch (Throwable t) {
-            log(TAG + "Carrier not found");
+            log("Carrier not found");
         }
 
     }
@@ -231,7 +231,7 @@ public class Lockscreen extends XposedMods {
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
         Object mFpIcon = getObjectField(param.thisObject, "mFpIcon");
 
-        if (BuildConfig.DEBUG) log(TAG + "updateFingerprintIcon");
+        log("updateFingerprintIcon");
 
         if (mFpDrawable == null) {
             setObjectField(param.thisObject, "mFadeInAnimDrawable", null);
@@ -250,7 +250,7 @@ public class Lockscreen extends XposedMods {
     private void updateDrawable() {
         if (customFingerprint) {
             if (fingerprintStyle != -1) {
-                @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("fingerprint_" + fingerprintStyle,"drawable", BuildConfig.APPLICATION_ID);
+                @SuppressLint("DiscouragedApi") int resId = ResourceManager.modRes.getIdentifier("fingerprint_" + fingerprintStyle, "drawable", BuildConfig.APPLICATION_ID);
                 mFpDrawable = (ResourcesCompat.getDrawable(ResourceManager.modRes,
                         resId,
                         mContext.getTheme()));
@@ -269,7 +269,7 @@ public class Lockscreen extends XposedMods {
                                     ((AnimatedImageDrawable) mFpDrawable).start();
                                 }
                             } catch (Throwable t) {
-                                log(TAG + "Failed to load custom fingerprint icon: " + t.getMessage());
+                                log("Failed to load custom fingerprint icon: " + t.getMessage());
                             }
                         }
                     }, 0, 5, TimeUnit.SECONDS);
@@ -285,8 +285,10 @@ public class Lockscreen extends XposedMods {
 
     private void updateAffordance() {
         if (removeLeftAffordance || removeRightAffordance) {
-            if (mStartButton != null) mStartButton.setVisibility(removeLeftAffordance ? View.GONE : View.VISIBLE);
-            if (mEndButton != null) mEndButton.setVisibility(removeRightAffordance ? View.GONE : View.VISIBLE);
+            if (mStartButton != null)
+                mStartButton.setVisibility(removeLeftAffordance ? View.GONE : View.VISIBLE);
+            if (mEndButton != null)
+                mEndButton.setVisibility(removeRightAffordance ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -346,7 +348,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "LockIconViewController not found");
+            log("LockIconViewController not found");
         }
     }
 
@@ -428,7 +430,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "hideLockscreenCarrier Error: " + t.getMessage());
+            log("hideLockscreenCarrier Error: " + t.getMessage());
         }
     }
 

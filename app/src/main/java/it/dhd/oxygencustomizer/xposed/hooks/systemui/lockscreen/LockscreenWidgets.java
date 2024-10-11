@@ -76,7 +76,15 @@ public class LockscreenWidgets extends XposedMods {
     private String mExtraWidgets;
     private float mWidgetsScale = 1f;
     private Object mActivityStarter = null;
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, android.content.Intent intent) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_WEATHER_INFLATED)) {
+                mWeatherInflated = true;
+                placeLockscreenWidgets();
+            }
+        }
+    };
     private boolean mReceiverRegistered = false;
 
     public LockscreenWidgets(Context context) {
@@ -138,16 +146,6 @@ public class LockscreenWidgets extends XposedMods {
         }
 
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, android.content.Intent intent) {
-            if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_WEATHER_INFLATED)) {
-                mWeatherInflated = true;
-                placeLockscreenWidgets();
-            }
-        }
-    };
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {

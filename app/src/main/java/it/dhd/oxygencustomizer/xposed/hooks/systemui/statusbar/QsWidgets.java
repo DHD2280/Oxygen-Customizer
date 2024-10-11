@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
@@ -48,33 +47,24 @@ import it.dhd.oxygencustomizer.xposed.views.QsControlsView;
 public class QsWidgets extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    private static final String TAG = "QsWidgets: ";
-
+    public static Object mActivityStarter = null;
     private ViewGroup mOplusQsMediaView = null;
-
     private boolean mQsWidgetsEnabled = false;
     private String mQsWidgetsList = "media";
-
     // Photo Showcase
     private int mQsPhotoRadius = 22;
-
     // Qs Media Tile colors
     private Drawable mDefaultMediaBg = null;
     private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false;
     private int qsInactiveColor = Color.GRAY, qsActiveColor = getPrimaryColor(mContext);
-
     // Qs Tile Radius
     private boolean customHighlightTileRadius = false, customTileRadius = false;
     private int highlightTSRadius, highlightTDRadius, highlightBSRadius, highlightBDRadius;
     private int tileTSRadius, tileTDRadius, tileBSRadius, tileBDRadius;
-
     // Qs Media Tile Album Art
     private boolean showMediaArtMediaQs = false;
     private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
     private float mMediaQsArtBlurAmount = 7.5f;
-
-    public static Object mActivityStarter = null;
-
     private LinearLayout mWidgetsContainer;
 
     public QsWidgets(Context context) {
@@ -92,7 +82,7 @@ public class QsWidgets extends XposedMods {
         // Media QS
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
         mMediaQsArtFilter = Integer.parseInt(Xprefs.getString(QS_MEDIA_ART_FILTER, "0"));
-        mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30)/100f) * 25f;
+        mMediaQsArtBlurAmount = (Xprefs.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 30) / 100f) * 25f;
         mMediaQsTintColor = Xprefs.getInt(QS_MEDIA_ART_TINT_COLOR, Color.WHITE);
         mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
 
@@ -152,7 +142,7 @@ public class QsWidgets extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        log(TAG + "Hooking OplusQSTileMediaContainer");
+        log("Hooking OplusQSTileMediaContainer");
 
         Class<?> OplusQSTileMediaContainer;
         try {
@@ -223,7 +213,7 @@ public class QsWidgets extends XposedMods {
                 try {
                     setBooleanField(param.thisObject, "mIsMediaMode", true);
                 } catch (Throwable t) {
-                    log(TAG + "No boolean field mIsMediaMode: " + t.getMessage());
+                    log("No boolean field mIsMediaMode: " + t.getMessage());
                 }
             }
         };
@@ -265,7 +255,7 @@ public class QsWidgets extends XposedMods {
             updateMediaPlayerPrefs();
             updatePhotoRadius();
         } catch (Throwable t) {
-            log(TAG + "Error: " + t.getMessage());
+            log("Error: " + t.getMessage());
         }
     }
 
@@ -326,7 +316,7 @@ public class QsWidgets extends XposedMods {
 
     private void updatePhotoRadius() {
         QsControlsView qsControlsView = QsControlsView.getInstance();
-        log(TAG + "updatePhotoRadius: " + mQsPhotoRadius);
+        log("updatePhotoRadius: " + mQsPhotoRadius);
         if (qsControlsView != null) {
             qsControlsView.updatePhotoRadius(mQsPhotoRadius);
         }

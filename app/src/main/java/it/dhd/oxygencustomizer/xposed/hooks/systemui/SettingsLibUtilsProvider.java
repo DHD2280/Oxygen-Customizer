@@ -17,6 +17,10 @@ public class SettingsLibUtilsProvider extends XposedMods {
     private static Class<?> UtilsClass = null;
     private static Class<?> CoUIColors = null;
 
+    public SettingsLibUtilsProvider(Context context) {
+        super(context);
+    }
+
     public static ColorStateList getColorAttr(int resID, Context context) {
         if (UtilsClass == null) return null;
 
@@ -84,10 +88,6 @@ public class SettingsLibUtilsProvider extends XposedMods {
         int theme = ta.getResourceId(0, defaultValue);
         ta.recycle();
         return theme;
-    }
-
-    public SettingsLibUtilsProvider(Context context) {
-        super(context);
     }
 
     @Override

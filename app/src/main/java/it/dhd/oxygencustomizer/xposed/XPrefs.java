@@ -28,16 +28,11 @@ public class XPrefs {
         if (key.length > 0 && (key[0] == null || Constants.Preferences.General.PREF_UPDATE_EXCLUSIONS.stream().anyMatch(exclusion -> key[0].startsWith(exclusion))))
             return;
 
-        setPackagePrefs(packageName);
+        boolean moreLogging = Xprefs.getBoolean(Constants.Preferences.General.PREF_MORE_LOGGING, false);
 
         for (XposedMods thisMod : XPLauncher.runningMods) {
+            thisMod.mDebug = moreLogging;
             thisMod.updatePrefs(key);
-        }
-    }
-
-    public static void setPackagePrefs(String packageName) {
-        if (Constants.Packages.SYSTEM_UI.equals(packageName) && !XPLauncher.isChildProcess) {
-            //Overlays.setAll(false);
         }
     }
 }

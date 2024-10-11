@@ -3,7 +3,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -50,24 +49,14 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
-/** @noinspection RedundantThrows*/
+/**
+ * @noinspection RedundantThrows
+ */
 public class StatusbarMods extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
-    private static final String TAG = "StatusbarMods: ";
-
-    // general use
-    private Object PSBV;
-    private View mStatusBarContents = null;
     private static final int SHADE = 0; //frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/StatusBarState.java - screen unlocked - pulsing means screen is locked - shade locked means (Q)QS is open on lockscreen
     private static final float PADDING_DEFAULT = -0.5f;
-    private static float SBPaddingStart = 0, SBPaddingEnd = 0;
-    private boolean statusBarPadding;
-    private Object NotificationPanelViewController;
-    boolean oneFingerPulldownEnabled = false;
-    boolean oneFingerPullupEnabled = false;
-    private int pullDownSide = PULLDOWN_SIDE_RIGHT;
     private static final int PULLDOWN_SIDE_RIGHT = 1;
     @SuppressWarnings("unused")
     private static final int PULLDOWN_SIDE_LEFT = 2;
@@ -75,41 +64,17 @@ public class StatusbarMods extends XposedMods {
     private static final int STATUSBAR_MODE_KEYGUARD = 1;
     @SuppressWarnings("unused")
     private static final int STATUSBAR_MODE_SHADE_LOCKED = 2;
-    private static float statusbarPortion = 0.25f;
-
-    private float mMinimumBacklight;
-    private float mMaximumBacklight;
-    private int mInitialTouchX;
-    private int mInitialTouchY;
-    private int mLinger;
-    private int mQuickQsOffsetHeight;
-    private boolean mBrightnessControl;
-    private boolean mJustPeeked;
-    private Object OplusBrightnessControllerExt = null;
     private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
     private static final int BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT = 750; // ms
     private static final int BRIGHTNESS_CONTROL_LINGER_THRESHOLD = 20;
-    private DisplayMetrics mDisplayMetrics = null;
-    private DisplayManager mDisplayManager = null;
-    private Object mCollapsedStatusBarFragment = null;
-    private ViewGroup mStatusBar;
-    private boolean doubleTapToSleepStatusbarEnabled;
+    private static float SBPaddingStart = 0, SBPaddingEnd = 0;
+    private static float statusbarPortion = 0.25f;
+    final Handler handler = new Handler(Looper.getMainLooper());
+    boolean oneFingerPulldownEnabled = false;
+    boolean oneFingerPullupEnabled = false;
     GestureDetector mLockscreenDoubleTapToSleep; //event callback for double tap to sleep detection of statusbar only
-
-    // Padding Vars
-    private float mTopPad;
-    private boolean mKeyguardShowing = false;
-    // End Padding Vars
-
-    private Object mActivityStarter;
-    private Class<?> NotificationIconAreaController;
-    private Class<?> DrawableSize = null, ScalingDrawableWrapper = null;
-    private Object mNotificationIconAreaController = null;
-    private Object mNotificationIconContainer = null;
-    private boolean mNewIconStyle;
-    private boolean oos13 = false;
-    private boolean mBroadcastRegistered = false;
-
+    // general use
+    private Object PSBV;
     final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -120,6 +85,38 @@ public class StatusbarMods extends XposedMods {
             }
         }
     };
+    private View mStatusBarContents = null;
+    private boolean statusBarPadding;
+    private Object NotificationPanelViewController;
+    private int pullDownSide = PULLDOWN_SIDE_RIGHT;
+    private float mMinimumBacklight;
+    private float mMaximumBacklight;
+    private int mInitialTouchX;
+    private int mInitialTouchY;
+    private int mLinger;
+    private int mQuickQsOffsetHeight;
+    private boolean mBrightnessControl;
+    private boolean mJustPeeked;
+    private Object OplusBrightnessControllerExt = null;
+    private DisplayMetrics mDisplayMetrics = null;
+    private DisplayManager mDisplayManager = null;
+    private Object mCollapsedStatusBarFragment = null;
+    private ViewGroup mStatusBar;
+    Runnable mLongPressed = this::onLongPressBrightnessChange;
+    // End Padding Vars
+    private boolean doubleTapToSleepStatusbarEnabled;
+    // Padding Vars
+    private float mTopPad;
+    private boolean mKeyguardShowing = false;
+    private Object mActivityStarter;
+    private Class<?> NotificationIconAreaController;
+    private Class<?> DrawableSize = null, ScalingDrawableWrapper = null;
+    private Object mNotificationIconAreaController = null;
+    private Object mNotificationIconContainer = null;
+    private boolean mNewIconStyle;
+    private boolean oos13 = false;
+    private boolean mBroadcastRegistered = false;
+
 
     public StatusbarMods(Context context) {
         super(context);
@@ -167,7 +164,6 @@ public class StatusbarMods extends XposedMods {
         }
 
     }
-
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -552,44 +548,6 @@ public class StatusbarMods extends XposedMods {
 
     }
 
-    //region icon tap related
-    class ClickListener implements View.OnClickListener, View.OnLongClickListener {
-        public ClickListener() {
-        }
-
-        @Override
-        public void onClick(View v) {
-            String name = mContext.getResources().getResourceName(v.getId());
-            if (name.endsWith("batteryRemainingIcon")) {
-                showBatteryPage();
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            String name = mContext.getResources().getResourceName(v.getId());
-
-            if (name.endsWith("batteryRemainingIcon")) {
-                showBatteryPage();
-                return true;
-            }
-            return false;
-        }
-    }
-
-    class LongClickListener implements View.OnLongClickListener {
-        @Override
-        public boolean onLongClick(View v) {
-            String name = mContext.getResources().getResourceName(v.getId());
-
-            if (name.endsWith("settings_button")) {
-                openOxygenCustomizer();
-                return true;
-            }
-            return false;
-        }
-    }
-
     private void openOxygenCustomizer() {
         Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(BuildConfig.APPLICATION_ID);
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", intent, 0 /* dismissShade */);
@@ -621,9 +579,6 @@ public class StatusbarMods extends XposedMods {
                 mStatusBarContents.getPaddingBottom());
 
     }
-
-    final Handler handler = new Handler(Looper.getMainLooper());
-    Runnable mLongPressed = this::onLongPressBrightnessChange;
 
     private void onLongPressBrightnessChange() {
         if (mStatusBar != null)
@@ -790,6 +745,44 @@ public class StatusbarMods extends XposedMods {
 
         @Override
         public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
+    }
+
+    //region icon tap related
+    class ClickListener implements View.OnClickListener, View.OnLongClickListener {
+        public ClickListener() {
+        }
+
+        @Override
+        public void onClick(View v) {
+            String name = mContext.getResources().getResourceName(v.getId());
+            if (name.endsWith("batteryRemainingIcon")) {
+                showBatteryPage();
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            String name = mContext.getResources().getResourceName(v.getId());
+
+            if (name.endsWith("batteryRemainingIcon")) {
+                showBatteryPage();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    class LongClickListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View v) {
+            String name = mContext.getResources().getResourceName(v.getId());
+
+            if (name.endsWith("settings_button")) {
+                openOxygenCustomizer();
+                return true;
+            }
             return false;
         }
     }

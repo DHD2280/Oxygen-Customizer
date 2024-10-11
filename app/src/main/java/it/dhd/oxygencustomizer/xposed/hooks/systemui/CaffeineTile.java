@@ -4,7 +4,6 @@ import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.service.quicksettings.Tile.STATE_ACTIVE;
 import static android.service.quicksettings.Tile.STATE_INACTIVE;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
@@ -38,25 +37,20 @@ public class CaffeineTile extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     private static final String TARGET_SPEC = "custom(" + BuildConfig.APPLICATION_ID + "/.services.tiles.CaffeineTileService)";
-    private static final String TAG = "Oxygen Customizer - Caffeine Tile: ";
-
-    private final PowerManager.WakeLock mWakeLock;
-    private int mSecondsRemaining;
-    private int mDuration;
     private static final int[] DURATIONS = new int[]{
             5 * 60,   // 5 min
             10 * 60,  // 10 min
             30 * 60,  // 30 min
             -1,       // infinity
     };
-
     private static final int INFINITE_DURATION_INDEX = DURATIONS.length - 1;
-    private CountDownTimer mCountdownTimer = null;
+    private final PowerManager.WakeLock mWakeLock;
     public long mLastClickTime = -1;
+    private int mSecondsRemaining;
+    private int mDuration;
+    private CountDownTimer mCountdownTimer = null;
     private boolean mRegistered = false;
     private View mTileView;
-    private Object mTile;
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, android.content.Intent intent) {
@@ -70,6 +64,7 @@ public class CaffeineTile extends XposedMods {
             }
         }
     };
+    private Object mTile;
 
     public CaffeineTile(Context context) {
         super(context);
@@ -78,7 +73,8 @@ public class CaffeineTile extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void updatePrefs(String... Key) {
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -119,7 +115,7 @@ public class CaffeineTile extends XposedMods {
                 try {
                     if (getAdditionalInstanceField(param.thisObject, "mParentTile") != null) {
                         mTile = param.args[0];
-                        log(TAG + "handleStateChanged");
+                        log("handleStateChanged");
                         updateTileView((LinearLayout) param.thisObject, (int) getObjectField(param.args[0] /* QSTile.State */, "state"));
                     }
                 } catch (Throwable ignored) {
@@ -141,7 +137,7 @@ public class CaffeineTile extends XposedMods {
                         }
                     }
                 } catch (Throwable t) {
-                    log(TAG + "Error handling long click: " + t.getMessage());
+                    log("Error handling long click: " + t.getMessage());
                 }
             }
         });
@@ -163,7 +159,8 @@ public class CaffeineTile extends XposedMods {
             String newLabel = formatValueWithRemainingTime();
             label.post(() -> label.setText(state == STATE_ACTIVE ? newLabel : modRes.getString(R.string.caffeine)));
 
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -179,46 +176,6 @@ public class CaffeineTile extends XposedMods {
     private void setOnClickListener(LinearLayout tileView) {
         final ClickListener clickListener = new ClickListener();
         tileView.setOnClickListener(clickListener);
-    }
-
-    class ClickListener implements View.OnClickListener {
-
-        public ClickListener() {
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mWakeLock.isHeld() && (mLastClickTime != -1) &&
-                    (SystemClock.elapsedRealtime() - mLastClickTime < 5000)) {
-                // cycle duration
-                mDuration++;
-                if (mDuration >= DURATIONS.length) {
-                    // all durations cycled, turn if off
-                    mDuration = -1;
-                    stopCountDown(true);
-                    if (mWakeLock.isHeld()) {
-                        mWakeLock.release();
-                    }
-                } else {
-                    // change duration
-                    startCountDown(DURATIONS[mDuration]);
-                    if (!mWakeLock.isHeld()) {
-                        mWakeLock.acquire();
-                    }
-                }
-            } else {
-                // toggle
-                if (mWakeLock.isHeld()) {
-                    mWakeLock.release();
-                    stopCountDown(true);
-                } else {
-                    mWakeLock.acquire();
-                    mDuration = 0;
-                    startCountDown(DURATIONS[mDuration]);
-                }
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-        }
     }
 
     private void handleLongClick() {
@@ -287,5 +244,45 @@ public class CaffeineTile extends XposedMods {
     @Override
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
+    }
+
+    class ClickListener implements View.OnClickListener {
+
+        public ClickListener() {
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mWakeLock.isHeld() && (mLastClickTime != -1) &&
+                    (SystemClock.elapsedRealtime() - mLastClickTime < 5000)) {
+                // cycle duration
+                mDuration++;
+                if (mDuration >= DURATIONS.length) {
+                    // all durations cycled, turn if off
+                    mDuration = -1;
+                    stopCountDown(true);
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                    }
+                } else {
+                    // change duration
+                    startCountDown(DURATIONS[mDuration]);
+                    if (!mWakeLock.isHeld()) {
+                        mWakeLock.acquire();
+                    }
+                }
+            } else {
+                // toggle
+                if (mWakeLock.isHeld()) {
+                    mWakeLock.release();
+                    stopCountDown(true);
+                } else {
+                    mWakeLock.acquire();
+                    mDuration = 0;
+                    startCountDown(DURATIONS[mDuration]);
+                }
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+        }
     }
 }

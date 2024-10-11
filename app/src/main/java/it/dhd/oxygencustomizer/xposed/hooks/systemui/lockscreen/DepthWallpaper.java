@@ -5,7 +5,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -58,30 +57,23 @@ import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 
-/** @noinspection RedundantThrows*/
+/**
+ * @noinspection RedundantThrows
+ */
 public class DepthWallpaper extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
 
-    private static final String TAG = "Oxygen Customizer - DepthWallpaper: ";
     private static boolean lockScreenSubjectCacheValid = false;
-    private Object mScrimController;
     private static boolean DWallpaperEnabled = false;
     private static int DWOpacity = 192;
     private static int DWMode = 0;
-    private final boolean DEBUG = BuildConfig.DEBUG;
+    private Object mScrimController;
     private FrameLayout mLockScreenSubject;
     private Drawable mSubjectDimmingOverlay;
     private FrameLayout mWallpaperBackground;
     private FrameLayout mWallpaperBitmapContainer;
     private FrameLayout mWallpaperDimmingOverlay;
     private boolean mLayersCreated = false;
-    private boolean superPowerSave = false;
-    private boolean mBroadcastRegistered = false;
-
-    public DepthWallpaper(Context context) {
-        super(context);
-    }
-
     final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -93,6 +85,12 @@ public class DepthWallpaper extends XposedMods {
             }
         }
     };
+    private boolean superPowerSave = false;
+    private boolean mBroadcastRegistered = false;
+
+    public DepthWallpaper(Context context) {
+        super(context);
+    }
 
     @Override
     public void updatePrefs(String... Key) {
@@ -131,11 +129,11 @@ public class DepthWallpaper extends XposedMods {
                 "onChange",
                 boolean.class,
                 new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                superPowerSave = getBooleanField(param.thisObject, "mIsSuperPowerSaveState");
-            }
-        });
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        superPowerSave = getBooleanField(param.thisObject, "mIsSuperPowerSaveState");
+                    }
+                });
 
         Class<?> CentralSurfacesImplClass = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpParam.classLoader);
         Class<?> ScrimControllerClassEx = findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpParam.classLoader);
@@ -145,23 +143,23 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(ScrimViewClass, "setViewAlpha", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if(!mLayersCreated) return;
+                if (!mLayersCreated) return;
 
                 @SuppressLint("DiscouragedApi") String notificationScrim =
                         mContext.getResources().getString(mContext.getResources().getIdentifier("scrim_notification_name", "string", SYSTEM_UI));
 
-                if (DEBUG) log(TAG + "ScrimViewExImp setViewAlpha " + notificationScrim + " " + getObjectField(param.thisObject, "name"));
+                log("ScrimViewExImp setViewAlpha " + notificationScrim + " " + getObjectField(param.thisObject, "name"));
 
                 String scrimName = (String) getObjectField(param.thisObject, "name");
 
-                if (DEBUG) log(TAG + "ScrimViewExImp setViewAlpha " + scrimName + " " + param.args[0]);
+                log("ScrimViewExImp setViewAlpha " + scrimName + " " + param.args[0]);
 
-                if(mLayersCreated) {
+                if (mLayersCreated) {
                     if (scrimName.equals(notificationScrim)) {
-                        if (DEBUG)log(TAG + "ScrimViewExImp Notification Scrim Alpha: " + param.args[0]);
+                        log("ScrimViewExImp Notification Scrim Alpha: " + param.args[0]);
                         float notificationAlpha = (float) param.args[0];
                         final float finalAlpha = calculateAlpha(notificationAlpha);// * getFloatField(getScrimController(), "mBehindAlpha");
-                        if (DEBUG)log(TAG + "ScrimViewExImp finalAlpha: " + finalAlpha);
+                        log("ScrimViewExImp finalAlpha: " + finalAlpha);
                         mLockScreenSubject.post(() -> mLockScreenSubject.setAlpha(finalAlpha));
                     }
                 }
@@ -171,9 +169,9 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(CentralSurfacesImplClass, "start", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if(!DWallpaperEnabled) return;
+                if (!DWallpaperEnabled) return;
 
-                if (DEBUG) log(TAG + "CentralSurfacesImpl started");
+                log("CentralSurfacesImpl started");
 
                 View scrimBehind = (View) getObjectField(getScrimController(), "mScrimBehind");
                 ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
@@ -181,19 +179,19 @@ public class DepthWallpaper extends XposedMods {
                 @SuppressLint("DiscouragedApi")
                 ViewGroup targetView = rootView.findViewById(mContext.getResources().getIdentifier("notification_container_parent", "id", mContext.getPackageName()));
 
-                if(!mLayersCreated) {
+                if (!mLayersCreated) {
                     createLayers();
                 }
 
                 rootView.addView(mWallpaperBackground, 2);
 
-                targetView.addView(mLockScreenSubject,1);
+                targetView.addView(mLockScreenSubject, 1);
 
                 if (DWMode == 1) {
                     setDepthBackground();
                 }
 
-                if (DEBUG) log(TAG + "CentralSurfacesImpl finished");
+                log("CentralSurfacesImpl finished");
             }
         });
 
@@ -209,19 +207,19 @@ public class DepthWallpaper extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Object mLockscreenWallpaper = param.thisObject;
                 Object mWallpaperChangeListener = getObjectField(param.thisObject, "mWallpaperChangeListener");
-                if (DEBUG) log(TAG + "OplusLockScreenWallpaperController created");
+                log("OplusLockScreenWallpaperController created");
                 hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if(DWallpaperEnabled && DWMode == 0) {
+                        if (DWallpaperEnabled && DWMode == 0) {
                             if (superPowerSave) return;
-                            if (DEBUG) log(TAG + "Wallpaper Changed");
+                            log("Wallpaper Changed");
 
                             Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap((Drawable) callMethod(mLockscreenWallpaper, "loadBitmap")));
 
                             boolean cacheIsValid = assertCache(wallpaperBitmap);
 
-                            Rect displayBounds =  ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
+                            Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
                                     .getCurrentWindowMetrics()
                                     .getBounds();
 
@@ -233,7 +231,7 @@ public class DepthWallpaper extends XposedMods {
                                     scale = v.getScaleX();
                                 }
                             } catch (Throwable t) {
-                                if (DEBUG) log(TAG + "Error getting scale: " + t.getMessage());
+                                log("Error getting scale: " + t.getMessage());
                             }
 
                             float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
@@ -251,19 +249,18 @@ public class DepthWallpaper extends XposedMods {
                             scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
                             Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
 
-                            if(!mLayersCreated) {
-                                if (DEBUG) log(TAG + "drawFrameOnCanvas Layers not created");
+                            if (!mLayersCreated) {
+                                log("drawFrameOnCanvas Layers not created");
                                 createLayers();
                             }
 
-                            if (DEBUG) log(TAG + "finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
+                            log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
 
                             mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
 
-                            if (DEBUG) log(TAG + "cacheIsValid " + cacheIsValid);
+                            log("cacheIsValid " + cacheIsValid);
 
-                            if(!cacheIsValid)
-                            {
+                            if (!cacheIsValid) {
                                 XPLauncher.enqueueProxyCommand(proxy -> proxy.extractSubject(finalScaledWallpaperBitmap, Constants.getLockScreenSubjectCachePath()));
                             }
                         }
@@ -283,7 +280,7 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(ScrimControllerClass, "applyAndDispatchState", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (DEBUG) log(TAG + "ScrimController applyAndDispatchState");
+                log("ScrimController applyAndDispatchState");
                 setDepthWallpaper();
 
             }
@@ -292,8 +289,7 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(QSImplClass, "setQsExpansion", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if((boolean) callMethod(param.thisObject, "isKeyguardState"))
-                {
+                if ((boolean) callMethod(param.thisObject, "isKeyguardState")) {
                     setDepthWallpaper();
                 }
             }
@@ -316,41 +312,34 @@ public class DepthWallpaper extends XposedMods {
     private boolean assertCache(Bitmap wallpaperBitmap) {
 
         boolean cacheIsValid = false;
-        try
-        {
+        try {
             File wallpaperCacheFile = new File(Constants.getLockScreenBitmapCachePath());
-            if (DEBUG) log(TAG + "Checking cache: " + wallpaperCacheFile.getAbsolutePath());
+            log("Checking cache: " + wallpaperCacheFile.getAbsolutePath());
             ByteArrayOutputStream compressedBitmap = new ByteArrayOutputStream();
             wallpaperBitmap.compress(Bitmap.CompressFormat.JPEG, 100, compressedBitmap);
-            if(wallpaperCacheFile.exists())
-            {
-                if (DEBUG) log(TAG + "Cache file exists");
+            if (wallpaperCacheFile.exists()) {
+                log("Cache file exists");
                 FileInputStream cacheStream = new FileInputStream(wallpaperCacheFile);
 
-                if(Arrays.equals(cacheStream.readAllBytes(), compressedBitmap.toByteArray()))
-                {
+                if (Arrays.equals(cacheStream.readAllBytes(), compressedBitmap.toByteArray())) {
                     cacheIsValid = true;
-                    if (DEBUG) log(TAG + "Cache file is valid");
-                }
-                else
-                {
-                    if (DEBUG) log(TAG + "Cache file is invalid");
+                    log("Cache file is valid");
+                } else {
+                    log("Cache file is invalid");
                     FileOutputStream newCacheStream = new FileOutputStream(wallpaperCacheFile);
                     compressedBitmap.writeTo(newCacheStream);
                     newCacheStream.close();
                 }
                 cacheStream.close();
             } else {
-                if (DEBUG) log(TAG + "Cache file does not exist");
+                log("Cache file does not exist");
                 FileOutputStream newCacheStream = new FileOutputStream(wallpaperCacheFile);
                 compressedBitmap.writeTo(newCacheStream);
                 newCacheStream.close();
             }
             compressedBitmap.close();
-        }
-        catch (Throwable t)
-        {
-            if (DEBUG) log(TAG + "Error asserting cache: " + t.getMessage());
+        } catch (Throwable t) {
+            log("Error asserting cache: " + t.getMessage());
         }
 
         if (!cacheIsValid) invalidateLSWSC();
@@ -359,7 +348,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private void createLayers() {
-        if (DEBUG) log(TAG + "Creating Layers");
+        log("Creating Layers");
 
         mWallpaperBackground = new FrameLayout(mContext);
         mWallpaperDimmingOverlay = new FrameLayout(mContext);
@@ -379,11 +368,10 @@ public class DepthWallpaper extends XposedMods {
         mLockScreenSubject.setLayoutParams(lp);
 
         mLayersCreated = true;
-        if (DEBUG) log(TAG + "Layers Created");
+        log("Layers Created");
     }
 
-    private void setDepthWallpaper()
-    {
+    private void setDepthWallpaper() {
         String state = getObjectField(getScrimController(), "mState").toString();
         boolean canShow = true;
         if (showAlbumArt && !canShowArt) {
@@ -397,16 +385,14 @@ public class DepthWallpaper extends XposedMods {
                         state.contains("KEYGUARD") // OOS 13
                 )
                 && canShow;
-        if (DEBUG) log(TAG + "Setting Depth Wallpaper ScrimState: " + state + " showSubject: " + showSubject + " lockScreenSubjectCacheValid: " + lockScreenSubjectCacheValid);
+        log("Setting Depth Wallpaper ScrimState: " + state + " showSubject: " + showSubject + " lockScreenSubjectCacheValid: " + lockScreenSubjectCacheValid);
 
-        if(showSubject) {
-            if (DEBUG) log(TAG + "Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(Constants.getLockScreenSubjectCachePath()).exists());
-            if(!lockScreenSubjectCacheValid && new File(Constants.getLockScreenSubjectCachePath()).exists())
-            {
-                if (DEBUG) log(TAG + "lockScreenSubjectCacheValid false");
-                try (FileInputStream inputStream = new FileInputStream(Constants.getLockScreenSubjectCachePath()))
-                {
-                    if (DEBUG) log(TAG + "Loading Lock Screen Subject Cache file exists");
+        if (showSubject) {
+           log("Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(Constants.getLockScreenSubjectCachePath()).exists());
+            if (!lockScreenSubjectCacheValid && new File(Constants.getLockScreenSubjectCachePath()).exists()) {
+                log("lockScreenSubjectCacheValid false");
+                try (FileInputStream inputStream = new FileInputStream(Constants.getLockScreenSubjectCachePath())) {
+                    log("Loading Lock Screen Subject Cache file exists");
                     Drawable bitmapDrawable = BitmapDrawable.createFromStream(inputStream, "");
                     bitmapDrawable.setAlpha(255);
 
@@ -415,34 +401,30 @@ public class DepthWallpaper extends XposedMods {
 
                     mLockScreenSubject.setBackground(new LayerDrawable(new Drawable[]{bitmapDrawable, mSubjectDimmingOverlay}));
                     lockScreenSubjectCacheValid = true;
-                    if (DEBUG) log(TAG + "Lock Screen Subject Cache Loaded " + lockScreenSubjectCacheValid);
-                }
-                catch (Throwable t) {
-                    if (DEBUG) log(TAG + "Error loading lockscreen subject cache: " + t.getMessage());
+                    log("Lock Screen Subject Cache Loaded " + lockScreenSubjectCacheValid);
+                } catch (Throwable t) {
+                    log("Error loading lockscreen subject cache: " + t.getMessage());
                 }
             }
 
-            if(lockScreenSubjectCacheValid) {
-                if (DEBUG) log(TAG + "lockScreenSubjectCacheValid true");
+            if (lockScreenSubjectCacheValid) {
+                log("lockScreenSubjectCacheValid true");
                 mLockScreenSubject.getBackground().setAlpha(DWOpacity);
 
-                if(!state.equals("KEYGUARD")) {
+                if (!state.equals("KEYGUARD")) {
                     mSubjectDimmingOverlay.setAlpha(192 /*Math.round(192 * (DWOpacity / 255f))*/);
-                }
-                else {
-                    if (DEBUG) log(TAG + "Setting Alpha");
+                } else {
+                    log("Setting Alpha");
                     //this is the dimmed wallpaper coverage
                     mSubjectDimmingOverlay.setAlpha(Math.round(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard") * 240)); //A tad bit lower than max. show it a bit lighter than other stuff
                     mWallpaperDimmingOverlay.setAlpha(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard"));
 
                 }
-                if (DEBUG) log(TAG + "Setting Visibility");
+                log("Setting Visibility");
                 mWallpaperBackground.setVisibility(VISIBLE);
                 mLockScreenSubject.setVisibility(VISIBLE);
             }
-        }
-        else if(mLayersCreated)
-        {
+        } else if (mLayersCreated) {
             mLockScreenSubject.setVisibility(GONE);
 
             if (state.contains("UNLOCKED")) {
@@ -454,9 +436,9 @@ public class DepthWallpaper extends XposedMods {
 
     private void invalidateLSWSC() //invalidate lock screen wallpaper subject cache
     {
-        if (DEBUG) log(TAG + "Invalidating Lock Screen Wallpaper Subject Cache");
+        log("Invalidating Lock Screen Wallpaper Subject Cache");
         lockScreenSubjectCacheValid = false;
-        if(mLayersCreated) {
+        if (mLayersCreated) {
             mLockScreenSubject.post(() -> {
                 mLockScreenSubject.setVisibility(GONE);
                 mLockScreenSubject.setBackground(null);
@@ -467,28 +449,29 @@ public class DepthWallpaper extends XposedMods {
         try {
             //noinspection ResultOfMethodCallIgnored
             new File(getLockScreenSubjectCachePath()).delete();
+        } catch (Throwable ignored) {
         }
-        catch (Throwable ignored){}
     }
 
     private void cleanFiles() {
         try {
             //noinspection ResultOfMethodCallIgnored
             new File(getLockScreenBitmapCachePath()).delete();
+        } catch (Throwable ignored) {
         }
-        catch (Throwable ignored){}
         try {
             //noinspection ResultOfMethodCallIgnored
             new File(getLockScreenSubjectCachePath()).delete();
+        } catch (Throwable ignored) {
         }
-        catch (Throwable ignored){}
         lockScreenSubjectCacheValid = false;
-        if (mWallpaperBackground != null) mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(null));
+        if (mWallpaperBackground != null)
+            mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(null));
     }
 
     private Object getScrimController() {
         if (mScrimController == null) {
-            log(TAG + "ScrimController is null!");
+            log("ScrimController is null!");
         }
         return callMethod(mScrimController, "getScrimController");
     }
@@ -511,7 +494,8 @@ public class DepthWallpaper extends XposedMods {
                             ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
                             ((AnimatedImageDrawable) drawable).start();
                         }
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
 
                     executor.shutdown();
                     executor.shutdownNow();

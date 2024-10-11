@@ -18,17 +18,36 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class AudioDataProvider extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
-    public MediaMetadata mMediaMetadata;
-    public int mPlaybackState;
-    private final ArrayList<AudioInfoCallbacks> mInfoCallbacks = new ArrayList<>();
     @SuppressLint("StaticFieldLeak")
     private static AudioDataProvider instance = null;
+    private final ArrayList<AudioInfoCallbacks> mInfoCallbacks = new ArrayList<>();
+    public MediaMetadata mMediaMetadata;
+    public int mPlaybackState;
     public Bitmap mArt;
 
     public AudioDataProvider(Context context) {
         super(context);
         instance = this;
+    }
+
+    public static void registerInfoCallback(AudioInfoCallbacks callback) {
+        instance.mInfoCallbacks.add(callback);
+    }
+
+    public static void unregisterInfoCallback(AudioInfoCallbacks callback) {
+        instance.mInfoCallbacks.remove(callback);
+    }
+
+    public static int getPlaybackState() {
+        return instance.mPlaybackState;
+    }
+
+    public static MediaMetadata getMediaMetadata() {
+        return instance.mMediaMetadata;
+    }
+
+    public static Bitmap getArt() {
+        return instance.mArt;
     }
 
     @Override
@@ -62,37 +81,12 @@ public class AudioDataProvider extends XposedMods {
     }
 
     private void onPrimaryMetadataOrStateChanged(int state) {
-        for(AudioInfoCallbacks callback : mInfoCallbacks)
-        {
-            try
-            {
+        for (AudioInfoCallbacks callback : mInfoCallbacks) {
+            try {
                 callback.onPrimaryMetadataOrStateChanged(state);
+            } catch (Throwable ignored) {
             }
-            catch (Throwable ignored){}
         }
-    }
-
-    public interface AudioInfoCallbacks
-    {
-        void onPrimaryMetadataOrStateChanged(int state);
-    }
-
-    public static void registerInfoCallback(AudioInfoCallbacks callback)
-    {
-        instance.mInfoCallbacks.add(callback);
-    }
-
-    public static void unregisterInfoCallback(AudioInfoCallbacks callback)
-    {
-        instance.mInfoCallbacks.remove(callback);
-    }
-
-    public static int getPlaybackState() {
-        return instance.mPlaybackState;
-    }
-
-    public static MediaMetadata getMediaMetadata() {
-        return instance.mMediaMetadata;
     }
 
     private Bitmap getArtWork() {
@@ -107,7 +101,7 @@ public class AudioDataProvider extends XposedMods {
         return art;
     }
 
-    public static Bitmap getArt() {
-        return instance.mArt;
+    public interface AudioInfoCallbacks {
+        void onPrimaryMetadataOrStateChanged(int state);
     }
 }

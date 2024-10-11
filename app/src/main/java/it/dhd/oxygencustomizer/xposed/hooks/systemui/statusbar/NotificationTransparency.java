@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -54,14 +53,14 @@ public class NotificationTransparency extends XposedMods {
                 Canvas.class,
                 Drawable.class,
                 new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                Drawable d = (Drawable) param.args[1];
-                if (d!=null && notificationTransparency && !hasOverlays) {
-                    d.setAlpha(notificationTransparencyValue);
-                }
-            }
-        });
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        Drawable d = (Drawable) param.args[1];
+                        if (d != null && notificationTransparency && !hasOverlays) {
+                            d.setAlpha(notificationTransparencyValue);
+                        }
+                    }
+                });
         findAndHookMethod(ExpandableNotificationRow, "updateBackgroundForGroupState", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -77,14 +76,14 @@ public class NotificationTransparency extends XposedMods {
             findAndHookMethod(OpNotificationBackgroundView,
                     "drawBlur",
                     new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (notificationTransparency || hasOverlays) param.setResult(false);
-                }
-            });
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            if (notificationTransparency || hasOverlays) param.setResult(false);
+                        }
+                    });
 
         } catch (Throwable t) {
-            log(TAG + "ERROR IN OpNotificationBackgroundView " + t.getMessage());
+            log("ERROR IN OpNotificationBackgroundView " + t.getMessage());
         }
 
         fixNotificationColorA14(lpparam);
@@ -109,7 +108,7 @@ public class NotificationTransparency extends XposedMods {
                     View notificationBackgroundView = (View) getObjectField(param.thisObject, "mBackgroundNormal");
 
                     try {
-                        setObjectField(param.thisObject, "mCurrentBackgroundTint", (int) param.args[0]);
+                        setObjectField(param.thisObject, "mCurrentBackgroundTint", param.args[0]);
                     } catch (Throwable ignored) {
                     }
 
@@ -142,13 +141,13 @@ public class NotificationTransparency extends XposedMods {
             try {
                 hookAllMethods(NotificationBackgroundViewClass, "setCustomBackground$1", replaceTintColor);
             } catch (Throwable t) {
-                log(TAG + "setCustomBackground$1" + t);
+                log("setCustomBackground$1" + t);
             }
 
             try {
                 hookAllMethods(NotificationBackgroundViewClass, "setCustomBackground", replaceTintColor);
             } catch (Throwable t) {
-                log(TAG + "setCustomBackground" + t);
+                log("setCustomBackground" + t);
             }
 
             XC_MethodHook removeButtonTint = new XC_MethodHook() {
@@ -170,15 +169,15 @@ public class NotificationTransparency extends XposedMods {
             try {
                 hookAllMethods(FooterViewClass, "updateColors", removeButtonTint);
             } catch (Throwable t) {
-                log(TAG + "updateColors" + t);
+                log("updateColors" + t);
             }
             try {
                 hookAllMethods(FooterViewClass, "updateColors$3", removeButtonTint);
             } catch (Throwable t) {
-                log(TAG + "updateColors$3" + t);
+                log("updateColors$3" + t);
             }
         } catch (Throwable throwable) {
-            log(TAG + throwable);
+            log(throwable);
         }
     }
 

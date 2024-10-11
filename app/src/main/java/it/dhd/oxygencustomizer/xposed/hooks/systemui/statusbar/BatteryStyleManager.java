@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -150,14 +149,10 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 public class BatteryStyleManager extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    private static final String TAG = "Oxygen Customizer - " + BatteryStyleManager.class.getSimpleName() + ": ";
-    private static final boolean DEBUG = false;
-
-    private TextView batteryPercentInView, batteryPercentOutView;
     private static final ArrayList<View> batteryViews = new ArrayList<>();
     private static final int BatteryIconOpacity = 100;
-    private static int BatteryStyle = 0;
     public static int mBatteryStyle = 0;
+    private static int BatteryStyle = 0;
     private static boolean mShowPercentInside = true;
     private static boolean mHidePercentage = false;
     private static boolean mHideBattery = false;
@@ -166,10 +161,15 @@ public class BatteryStyleManager extends XposedMods {
     private static int mBatteryScaleWidth = 20;
     private static int mBatteryScaleHeight = 20;
     private static int mBatteryStockMarginLeft = 0, mBatteryStockMarginRight = 0;
-    private boolean DefaultLandscapeBatteryEnabled = false;
     private static int frameColor = Color.WHITE;
     private static int backgroundColor = Color.WHITE;
     private static int singleToneColor = Color.WHITE;
+    private static boolean mChargingIconSwitch = false;
+    private static boolean mIsPowerSaving = false;
+    private static boolean mIsCharging = false;
+    private static boolean oos13 = false;
+    private TextView batteryPercentInView, batteryPercentOutView;
+    private boolean DefaultLandscapeBatteryEnabled = false;
     private boolean mBatteryLayoutReverse = false;
     private boolean mScaledPerimeterAlpha = false;
     private boolean mScaledFillAlpha = false;
@@ -180,24 +180,21 @@ public class BatteryStyleManager extends XposedMods {
     private int mCustomFillGradColor = Color.BLACK;
     private int mCustomPowerSaveColor = Color.BLACK;
     private int mCustomPowerSaveFillColor = Color.BLACK;
-    private int mCustomFastChargingColor = Color.BLACK;
+    private final int mCustomFastChargingColor = Color.BLACK;
     private boolean mSwapPercentage = false;
-    private static boolean mChargingIconSwitch = false;
     private int mChargingIconStyle = 0;
     private int mChargingIconML = 1;
     private int mChargingIconMR = 0;
     private int mChargingIconWH = 14;
-    private static boolean mIsPowerSaving = false;
-    private static boolean mIsCharging = false;
-    private ImageView mStockChargingIcon = null, mBatteryIcon = null;
-    private boolean updating = false;
+    private final ImageView mStockChargingIcon = null;
+    private ImageView mBatteryIcon = null;
+    private final boolean updating = false;
     private boolean customizePercSize = false;
     private int mBatteryPercSize = 12;
-    private static boolean oos13 = false;
     private Class<?> DarkIconDispatcher = null;
     private Class<?> DualToneHandler = null;
     private View mQsBattery = null;
-    private List<String> batteryCharging = new ArrayList<>() {{
+    private final List<String> batteryCharging = new ArrayList<>() {{
         add("battery_dash_charge_view");
         add("battery_charge_icon");
     }};
@@ -290,7 +287,8 @@ public class BatteryStyleManager extends XposedMods {
         if (!listensTo(lpparam.packageName)) return;
 
         Class<?> QuickStatusBarHeader;
-        try { QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+        try {
+            QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
         } catch (Throwable t) {
             QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
         }
@@ -330,7 +328,7 @@ public class BatteryStyleManager extends XposedMods {
 
             @Override
             public void onViewDetachedFromWindow(@NonNull View v) {
-                if (DEBUG) log(TAG + "BatteryMeter detached from window");
+                log("BatteryMeter detached from window");
                 batteryViews.remove(v);
             }
         };
@@ -340,7 +338,7 @@ public class BatteryStyleManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
-                if (DEBUG) log(TAG + "StatBatteryMeterView constructor called");
+                log("StatBatteryMeterView constructor called");
 
                 ((View) param.thisObject).addOnAttachStateChangeListener(listener);
 
@@ -356,7 +354,7 @@ public class BatteryStyleManager extends XposedMods {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 //((View) param.thisObject).addOnAttachStateChangeListener(listener);
 
-                if (DEBUG) log(TAG + "StatBatteryMeterView onFinishInflate called");
+                log("StatBatteryMeterView onFinishInflate called");
 
                 if (!CustomBatteryEnabled) return;
 
@@ -429,7 +427,7 @@ public class BatteryStyleManager extends XposedMods {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (DEBUG) log(TAG + "BatteryViewBinder bind called");
+                log("BatteryViewBinder bind called");
                 if (param.args[0] instanceof View v) updateBatteryViewValues(v);
             }
         });
@@ -450,7 +448,7 @@ public class BatteryStyleManager extends XposedMods {
                 7   TwoBatteryDashChargeView twoBatteryDashChargeView,
                 8   StatBatteryIcon statBatteryIcon) {
                  */
-                if (DEBUG) log(TAG + "BatteryViewBinder bind$initView called");
+                log("BatteryViewBinder bind$initView called");
                 if (param.args[2] instanceof View v) {
                     Object statBattery = param.args[2];
                     if (statBattery.getClass().getCanonicalName().equals(StatBatteryMeterView.getCanonicalName())) {
@@ -507,12 +505,12 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateBatteryViewValues(View view) {
-        if (DEBUG) log(TAG + "updateBatteryViewValues called");
+        log("updateBatteryViewValues called");
         TextView batteryOutPercentage = null;
         try {
             batteryOutPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_percentage_view", "id", mContext.getPackageName()));
         } catch (Throwable ignored) {
-            if (DEBUG) log(TAG + "battery_percentage_view not found");
+            log("battery_percentage_view not found");
         }
         if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE && !CustomBatteryEnabled) {
             batteryOutPercentage.setTextSize(TypedValue.COMPLEX_UNIT_SP, customizePercSize ? mBatteryPercSize : 12);
@@ -525,20 +523,20 @@ public class BatteryStyleManager extends XposedMods {
             try {
                 batteryIcon = view.findViewById(mContext.getResources().getIdentifier("battery_icon_view", "id", mContext.getPackageName()));
             } catch (Throwable ignored) {
-                log(TAG + "battery_icon_view not found");
+                log("battery_icon_view not found");
             }
             for (String s : batteryCharging) {
                 try {
                     chargingIcon = view.findViewById(mContext.getResources().getIdentifier(s, "id", SYSTEM_UI));
                 } catch (Throwable ignored) {
-                    log(TAG + s + " not found");
+                    log(s + " not found");
                 }
             }
             try {
                 batteryInPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_text", "id", mContext.getPackageName()));
                 batteryInPercentage.setVisibility(View.GONE);
             } catch (Throwable ignored) {
-                if (DEBUG) log(TAG + "battery_text not found");
+                log("battery_text not found");
             }
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View child = ((ViewGroup) view).getChildAt(i);
@@ -556,7 +554,7 @@ public class BatteryStyleManager extends XposedMods {
             }
         }
         if (CustomBatteryEnabled && batteryIcon != null) {
-            if (DEBUG) log(TAG + "CustomBatteryEnabled && batteryIcon != null");
+            log("CustomBatteryEnabled && batteryIcon != null");
             scaleBatteryMeterViews(batteryIcon);
             updateBatteryRotation(batteryIcon);
             updateFlipper(batteryIcon.getParent());
@@ -596,7 +594,7 @@ public class BatteryStyleManager extends XposedMods {
                 drawable.invalidateSelf();
                 batteryIcon.setImageDrawable(drawable);
             } catch (Throwable t) {
-                if (DEBUG) log(TAG + "BatteryDrawable not found " + t.getMessage());
+                log("BatteryDrawable not found " + t.getMessage());
             } //it's probably the default battery. no action needed
         }
 
@@ -612,7 +610,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconsColor() {
-        if (DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
+        log("updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         for (View v : batteryViews) {
             if (v instanceof ImageView) {
@@ -631,7 +629,7 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconColor(View view, int singleColor, int fillColor, int bgColor) {
-        if (DEBUG) log(TAG + "updateIconsColor " + batteryViews.size());
+        log("updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         BatteryDrawable mBatteryDrawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
         mBatteryDrawable.setColors(fillColor, bgColor, singleColor);
@@ -683,7 +681,7 @@ public class BatteryStyleManager extends XposedMods {
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
+            public void onViewDetachedFromWindow(@NonNull View v) {
                 batteryViews.remove(v);
             }
         };
@@ -712,7 +710,7 @@ public class BatteryStyleManager extends XposedMods {
                 }
                  */
                         //batteryLevel = (int) param.args[0];
-                        if (DEBUG) log(TAG + "onBatteryLevelChanged");
+                        log("onBatteryLevelChanged");
                         mIsCharging = (boolean) param.args[2];
                         mBatteryIcon = (ImageView) getObjectField(param.thisObject, "mBatteryIconView");
                         batteryPercentOutView = (TextView) getObjectField(param.thisObject, "batteryPercentText");
@@ -784,67 +782,43 @@ public class BatteryStyleManager extends XposedMods {
 
     private BatteryDrawable getNewBatteryDrawable(Context context) {
         BatteryDrawable mBatteryDrawable = switch (mBatteryStyle) {
-            case BATTERY_STYLE_CUSTOM_RLANDSCAPE ->
-                    new RLandscapeBattery(context, frameColor);
+            case BATTERY_STYLE_CUSTOM_RLANDSCAPE -> new RLandscapeBattery(context, frameColor);
             case BATTERY_STYLE_CUSTOM_LANDSCAPE -> new LandscapeBattery(context, frameColor);
-            case BATTERY_STYLE_PORTRAIT_CAPSULE ->
-                    new PortraitBatteryCapsule(context, frameColor);
+            case BATTERY_STYLE_PORTRAIT_CAPSULE -> new PortraitBatteryCapsule(context, frameColor);
             case BATTERY_STYLE_PORTRAIT_LORN -> new PortraitBatteryLorn(context, frameColor);
             case BATTERY_STYLE_PORTRAIT_MX -> new PortraitBatteryMx(context, frameColor);
-            case BATTERY_STYLE_PORTRAIT_AIROO ->
-                    new PortraitBatteryAiroo(context, frameColor);
+            case BATTERY_STYLE_PORTRAIT_AIROO -> new PortraitBatteryAiroo(context, frameColor);
             case BATTERY_STYLE_RLANDSCAPE_STYLE_A ->
                     new RLandscapeBatteryStyleA(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_STYLE_A ->
-                    new LandscapeBatteryStyleA(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_STYLE_A -> new LandscapeBatteryStyleA(context, frameColor);
             case BATTERY_STYLE_RLANDSCAPE_STYLE_B ->
                     new RLandscapeBatteryStyleB(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_STYLE_B ->
-                    new LandscapeBatteryStyleB(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_IOS_15 ->
-                    new LandscapeBatteryiOS15(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_IOS_16 ->
-                    new LandscapeBatteryiOS16(context, frameColor);
-            case BATTERY_STYLE_PORTRAIT_ORIGAMI ->
-                    new PortraitBatteryOrigami(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_SMILEY ->
-                    new LandscapeBatterySmiley(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_STYLE_B -> new LandscapeBatteryStyleB(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_IOS_15 -> new LandscapeBatteryiOS15(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_IOS_16 -> new LandscapeBatteryiOS16(context, frameColor);
+            case BATTERY_STYLE_PORTRAIT_ORIGAMI -> new PortraitBatteryOrigami(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_SMILEY -> new LandscapeBatterySmiley(context, frameColor);
             case BATTERY_STYLE_LANDSCAPE_MIUI_PILL ->
                     new LandscapeBatteryMIUIPill(context, frameColor);
             case BATTERY_STYLE_LANDSCAPE_COLOROS ->
                     new LandscapeBatteryColorOS(context, frameColor);
             case BATTERY_STYLE_RLANDSCAPE_COLOROS ->
                     new RLandscapeBatteryColorOS(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYA ->
-                    new LandscapeBatteryA(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYB ->
-                    new LandscapeBatteryB(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYC ->
-                    new LandscapeBatteryC(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYD ->
-                    new LandscapeBatteryD(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYE ->
-                    new LandscapeBatteryE(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYF ->
-                    new LandscapeBatteryF(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYG ->
-                    new LandscapeBatteryG(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYH ->
-                    new LandscapeBatteryH(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYI ->
-                    new LandscapeBatteryI(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYJ ->
-                    new LandscapeBatteryJ(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYK ->
-                    new LandscapeBatteryK(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYL ->
-                    new LandscapeBatteryL(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYM ->
-                    new LandscapeBatteryM(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYN ->
-                    new LandscapeBatteryN(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_BATTERYO ->
-                    new LandscapeBatteryO(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYA -> new LandscapeBatteryA(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYB -> new LandscapeBatteryB(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYC -> new LandscapeBatteryC(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYD -> new LandscapeBatteryD(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYE -> new LandscapeBatteryE(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYF -> new LandscapeBatteryF(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYG -> new LandscapeBatteryG(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYH -> new LandscapeBatteryH(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYI -> new LandscapeBatteryI(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYJ -> new LandscapeBatteryJ(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYK -> new LandscapeBatteryK(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYL -> new LandscapeBatteryL(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYM -> new LandscapeBatteryM(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYN -> new LandscapeBatteryN(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_BATTERYO -> new LandscapeBatteryO(context, frameColor);
             case BATTERY_STYLE_CIRCLE, BATTERY_STYLE_DOTTED_CIRCLE ->
                     new CircleBattery(context, frameColor);
             case BATTERY_STYLE_FILLED_CIRCLE -> new CircleFilledBattery(context, frameColor);
@@ -853,7 +827,7 @@ public class BatteryStyleManager extends XposedMods {
 
         if (mBatteryDrawable != null) {
             if (mBatteryStyle == BATTERY_STYLE_DOTTED_CIRCLE && mBatteryDrawable instanceof CircleBattery) {
-                ((CircleBattery)mBatteryDrawable).setMeterStyle(BATTERY_STYLE_DOTTED_CIRCLE);
+                ((CircleBattery) mBatteryDrawable).setMeterStyle(BATTERY_STYLE_DOTTED_CIRCLE);
             }
             mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);
             mBatteryDrawable.setAlpha(Math.round(BatteryIconOpacity * 2.55f));
@@ -925,7 +899,7 @@ public class BatteryStyleManager extends XposedMods {
         };
     }
 
-    public static void scaleBatteryMeterViews(@Nullable ImageView mBatteryIconView) {
+    public void scaleBatteryMeterViews(@Nullable ImageView mBatteryIconView) {
         if (mBatteryIconView == null) {
             return;
         }
@@ -943,18 +917,13 @@ public class BatteryStyleManager extends XposedMods {
             int batteryHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mBatteryScaleHeight, mBatteryIconView.getContext().getResources().getDisplayMetrics());
 
             LinearLayout.LayoutParams scaledLayoutParams = (LinearLayout.LayoutParams) mBatteryIconView.getLayoutParams();
-            if (!oos13) {
-                scaledLayoutParams.width = (int) (batteryWidth * iconScaleFactor);
-                scaledLayoutParams.height = (int) (batteryHeight * iconScaleFactor);
-            } else {
-                scaledLayoutParams.width = batteryWidth;
-                scaledLayoutParams.height = batteryHeight;
-            }
+            scaledLayoutParams.width = (int) (batteryWidth * iconScaleFactor);
+            scaledLayoutParams.height = (int) (batteryHeight * iconScaleFactor);
             mBatteryIconView.setLayoutParams(scaledLayoutParams);
             mBatteryIconView.setVisibility(mHideBattery ? View.GONE : View.VISIBLE);
             mBatteryIconView.requestLayout();
         } catch (Throwable throwable) {
-            log(TAG + throwable);
+            log(throwable);
         }
     }
 

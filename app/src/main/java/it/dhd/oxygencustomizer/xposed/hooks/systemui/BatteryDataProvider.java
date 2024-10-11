@@ -22,21 +22,15 @@ import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class BatteryDataProvider extends XposedMods {
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
     public static final int CHARGING_FAST = 2;
-
     public static final int BATTERY_STATUS_DISCHARGING = 3;
-
+    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     @SuppressLint("StaticFieldLeak")
     private static BatteryDataProvider instance = null;
-
+    private final ArrayList<BatteryInfoCallback> mInfoCallbacks = new ArrayList<>();
     List<BatteryStatusCallback> mStatusCallbacks = new ArrayList<>();
     private boolean mCharging;
     private int mCurrentLevel = 0;
-
-
-    private final ArrayList<BatteryInfoCallback> mInfoCallbacks = new ArrayList<>();
     private boolean mPowerSave = false;
     private boolean mIsFastCharging = false;
 
@@ -46,8 +40,51 @@ public class BatteryDataProvider extends XposedMods {
         instance = this;
     }
 
+    public static void registerStatusCallback(BatteryStatusCallback callback) {
+        instance.mStatusCallbacks.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterStatusCallback(BatteryStatusCallback callback) {
+        instance.mStatusCallbacks.remove(callback);
+    }
+
+    public static void registerInfoCallback(BatteryInfoCallback callback) {
+        instance.mInfoCallbacks.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterInfoCallback(BatteryInfoCallback callback) {
+        instance.mInfoCallbacks.remove(callback);
+    }
+
+    public static boolean isCharging() {
+        return instance.mCharging;
+    }
+
+    public static int getCurrentLevel() {
+        return instance.mCurrentLevel;
+    }
+
+    public static boolean isPowerSaving() {
+        return instance.mPowerSave;
+    }
+
+    public static boolean isFastCharging() {
+        return instance.mCharging && instance.mIsFastCharging;
+    }
+
+    public static void refreshAllInfoCallbacks() {
+        instance.onBatteryInfoChanged();
+    }
+
     @Override
-    public void updatePrefs(String... Key) {}
+    public void updatePrefs(String... Key) {
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -91,25 +128,12 @@ public class BatteryDataProvider extends XposedMods {
     }
 
     private void onBatteryStatusChanged(int status, Intent intent) {
-        for(BatteryStatusCallback callback : mStatusCallbacks)
-        {
-            try
-            {
+        for (BatteryStatusCallback callback : mStatusCallbacks) {
+            try {
                 callback.onBatteryStatusChanged(status, intent);
+            } catch (Throwable ignored) {
             }
-            catch (Throwable ignored){}
         }
-    }
-
-    public static void registerStatusCallback(BatteryStatusCallback callback)
-    {
-        instance.mStatusCallbacks.add(callback);
-    }
-
-    /** @noinspection unused*/
-    public static void unRegisterStatusCallback(BatteryStatusCallback callback)
-    {
-        instance.mStatusCallbacks.remove(callback);
     }
 
     @Override
@@ -117,59 +141,21 @@ public class BatteryDataProvider extends XposedMods {
         return listenPackage.equals(packageName) && !XPLauncher.isChildProcess;
     }
 
-    public static void registerInfoCallback(BatteryInfoCallback callback)
-    {
-        instance.mInfoCallbacks.add(callback);
-    }
-
-    /** @noinspection unused*/
-    public static void unRegisterInfoCallback(BatteryInfoCallback callback)
-    {
-        instance.mInfoCallbacks.remove(callback);
-    }
-
-    public static boolean isCharging()
-    {
-        return instance.mCharging;
-    }
-
-    public static int getCurrentLevel()
-    {
-        return instance.mCurrentLevel;
-    }
-
-    public static boolean isPowerSaving()
-    {
-        return instance.mPowerSave;
-    }
-
-    public static boolean isFastCharging()
-    {
-        return instance.mCharging && instance.mIsFastCharging;
-    }
-
-    public static void refreshAllInfoCallbacks()
-    {
-        instance.onBatteryInfoChanged();
-    }
     private void onBatteryInfoChanged() {
-        for(BatteryInfoCallback callback : mInfoCallbacks)
-        {
-            try
-            {
+        for (BatteryInfoCallback callback : mInfoCallbacks) {
+            try {
                 callback.onBatteryInfoChanged();
+            } catch (Throwable ignored) {
             }
-            catch (Throwable ignored){}
         }
     }
-    public interface BatteryInfoCallback
-    {
+
+    public interface BatteryInfoCallback {
         void onBatteryInfoChanged();
     }
 
 
-    public interface BatteryStatusCallback
-    {
+    public interface BatteryStatusCallback {
         void onBatteryStatusChanged(int batteryStatus, Intent batteryStatusIntent);
     }
 }

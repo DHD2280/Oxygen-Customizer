@@ -4,7 +4,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -63,15 +62,17 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
-/** @noinspection RedundantThrows*/
+/**
+ * @noinspection RedundantThrows
+ */
 public class StatusbarClock extends XposedMods {
 
-    private final String TAG = "Oxygen Customizer - Statusbar Clock: ";
+    public static final int POSITION_LEFT = 2;
+    public static final int POSITION_CENTER = 1;
+    public static final int POSITION_RIGHT = 0;
     private static final String listenPackage = SYSTEM_UI;
-
     private static final int AM_PM_STYLE_SMALL = 1;
     private static final int AM_PM_STYLE_GONE = 2;
-
     private static final int CLOCK_DATE_DISPLAY_GONE = 0;
     private static final int CLOCK_DATE_DISPLAY_SMALL = 1;
     private static final int CLOCK_DATE_STYLE_REGULAR = 0;
@@ -80,11 +81,11 @@ public class StatusbarClock extends XposedMods {
     private static final int HIDE_DURATION = 60; // 1 minute
     private static final int SHOW_DURATION = 5; // 5 seconds
     private static final int STYLE_DATE_LEFT = 0;
-
+    private final String TAG = "Oxygen Customizer - Statusbar Clock: ";
+    private final Handler autoHideHandler = new Handler(Looper.getMainLooper());
+    private final StringFormatter stringFormatter = new StringFormatter();
     private boolean mClockAutoHideLauncher = false;
     private boolean mScreenOn = true;
-    private final Handler autoHideHandler = new Handler(Looper.getMainLooper());
-
     private boolean mClockAutoHide;
     private boolean mClockAutoHideLauncherSwitch;
     private int mHideDuration = HIDE_DURATION, mShowDuration = SHOW_DURATION;
@@ -98,20 +99,32 @@ public class StatusbarClock extends XposedMods {
     private String mCustomBeforeClock = "", mCustomAfterClock = "";
     private boolean mCustomBeforeSmall = false, mCustomAfterSmall = false;
     private Object Clock = null;
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Clock == null) return;
+            Handler handler = (Handler) callMethod(Clock, "getHandler");
+            if (handler == null) return;
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenOn = false;
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                mScreenOn = true;
+            }
+            if (mScreenOn) {
+                if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility(Clock));
+            }
+        }
+    };
     private TextView mClockView;
     private Object mCollapsedStatusBarFragment = null;
     private ViewGroup mStatusbarStartSide = null;
     private View mCenteredIconArea = null;
     private LinearLayout mSystemIconArea = null;
-    public static final int POSITION_LEFT = 2;
-    public static final int POSITION_CENTER = 1;
-    public static final int POSITION_RIGHT = 0;
     private int mClockPosition = POSITION_LEFT;
     private int leftClockPadding = 0, rightClockPadding = 0;
-
     private boolean mClockCustomColor;
     private int mClockColor = Color.WHITE;
-
     // Clock Chip
     private boolean clockChip;
     private int chipStyle;
@@ -125,7 +138,6 @@ public class StatusbarClock extends XposedMods {
     private int chipPaddingSx, chipPaddingDx, chipPaddingTop, chipPaddingBottom;
     private LayerDrawable mClockChipDrawable;
     private int mClockSize = 12;
-
 
     @SuppressLint("DiscouragedApi")
     public StatusbarClock(Context context) {
@@ -262,24 +274,6 @@ public class StatusbarClock extends XposedMods {
 
     }
 
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Clock == null) return;
-            Handler handler = (Handler) callMethod(Clock, "getHandler");
-            if (handler == null) return;
-            String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                mScreenOn = false;
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                mScreenOn = true;
-            }
-            if (mScreenOn) {
-                if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility(Clock));
-            }
-        }
-    };
-
     //noinspection throwableresult of the method is ignored
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -292,7 +286,7 @@ public class StatusbarClock extends XposedMods {
         try {
             StatClock = findClass("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
         } catch (Throwable ignored) {
-            log(TAG + "StatClock not found");
+            log("StatClock not found");
         }
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -332,7 +326,7 @@ public class StatusbarClock extends XposedMods {
                         try {
                             mClockView = (TextView) getObjectField(param.thisObject, "mClockView");
                         } catch (Throwable ignored) {
-                            log(TAG + "mClockView not found");
+                            log("mClockView not found");
                         }
 
                         ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
@@ -389,7 +383,7 @@ public class StatusbarClock extends XposedMods {
                     }
                 });
             } catch (Throwable ignored) {
-                log(TAG + "updateMinWidth in StatClock not found");
+                log("updateMinWidth in StatClock not found");
             }
         }
 
@@ -427,7 +421,7 @@ public class StatusbarClock extends XposedMods {
                 }
                 callMethod(param.thisObject, "setVisibility", visibility);
                 if (mClockAutoHide && visible && mScreenOn) {
-                    autoHideHandler.postDelayed(() -> autoHideClock(param.thisObject), mShowDuration * 1000);
+                    autoHideHandler.postDelayed(() -> autoHideClock(param.thisObject), mShowDuration * 1000L);
                 }
                 param.setResult(null);
             }
@@ -567,7 +561,7 @@ public class StatusbarClock extends XposedMods {
 
     private void autoHideClock(Object clock) {
         callMethod(clock, "setVisibility", View.GONE);
-        autoHideHandler.postDelayed(() -> updateClockVisibility(clock), mHideDuration * 1000);
+        autoHideHandler.postDelayed(() -> updateClockVisibility(clock), mHideDuration * 1000L);
     }
 
     private void updateClockVisibility(Object clock) {
@@ -622,8 +616,6 @@ public class StatusbarClock extends XposedMods {
         }
         updateChip();
     }
-
-    private final StringFormatter stringFormatter = new StringFormatter();
 
     private CharSequence getFormattedString(String dateFormat, boolean small, int caseStyle, @Nullable @ColorInt Integer textColor) {
         if (dateFormat.isEmpty()) return "";

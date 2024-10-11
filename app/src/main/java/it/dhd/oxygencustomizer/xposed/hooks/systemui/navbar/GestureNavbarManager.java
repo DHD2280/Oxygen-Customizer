@@ -43,7 +43,6 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -53,9 +52,13 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 public class GestureNavbarManager extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-
+    private static final int mLightColor = 0xEBFFFFFF, mDarkColor = 0x99000000; //original navbar colors
+    //region pill size
+    private static float widthFactor = 1f;
+    private static boolean navPillColorAccent = false;
+    private static boolean navPillCustomColor = false;
+    private static int navPillColor = Color.GRAY;
     private Object SideGestureConfigurationEx;
-
     //region Back gesture
     private List<Float> backGestureHeightFractionLeft = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
     private List<Float> backGestureHeightFractionRight = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
@@ -66,22 +69,13 @@ public class GestureNavbarManager extends XposedMods {
     private int overrideMode = 0;
     private int overrideLeft = 0;
     private int overrideRight = 0;
+    //endregion
     private int mDirection;
     private String QSExpandMethodName = "";
     private Object NotificationPanelViewController;
-
-    //region pill size
-    private static float widthFactor = 1f;
-
     private Object mNavigationBarInflaterView = null;
-    //endregion
-
     //region pill color
     private boolean colorReplaced = false;
-    private static boolean navPillColorAccent = false;
-    private static boolean navPillCustomColor = false;
-    private static int navPillColor = Color.GRAY;
-    private static final int mLightColor = 0xEBFFFFFF, mDarkColor = 0x99000000; //original navbar colors
     //endregion
 
 
@@ -192,7 +186,7 @@ public class GestureNavbarManager extends XposedMods {
                             Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
                             boolean isLeftSide = x < (mDisplaySize.x / 3f);
                             mDirection = isLeftSide ? 0 : 1;
-                            int mBottomGestureHeight = (int) mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("bottom_gesture_area_height", "dimen", listenPackage));
+                            int mBottomGestureHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("bottom_gesture_area_height", "dimen", listenPackage));
                             int rotation = (int) getFloatField(param.thisObject, "mRotation");
                             if (notWithinInsets(x,
                                     y,

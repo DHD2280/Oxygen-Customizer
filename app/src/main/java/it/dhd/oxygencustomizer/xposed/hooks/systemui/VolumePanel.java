@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
@@ -23,8 +22,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class VolumePanel extends XposedMods {
-
-    private static final String TAG = "Oxygen Customizer - VolumePanel:";
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private int mTimeOut;
@@ -89,11 +86,11 @@ public class VolumePanel extends XposedMods {
                 if (mDesiredTimeout == 3) return;
 
                 if (getBooleanField(param.thisObject, "mHovering")) {
-                    param.setResult((int) callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 16000, 4));
+                    param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 16000, 4));
                 }
                 synchronized (getObjectField(param.thisObject, "mSafetyWarningLock")) {
                     if (getBooleanField(param.thisObject, "mExpanded")) {
-                        param.setResult((int) callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 5000, 4));
+                        param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 5000, 4));
                     } else {
                         param.setResult(mTimeOut);
                     }
@@ -108,7 +105,8 @@ public class VolumePanel extends XposedMods {
                 if (mDisableVolumeWarning) {
                     try {
                         callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                     param.setResult(null);
                 }
             }
@@ -119,7 +117,8 @@ public class VolumePanel extends XposedMods {
                 if (mDisableVolumeWarning) {
                     try {
                         callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                     param.setResult(null);
                 }
             }
@@ -132,14 +131,15 @@ public class VolumePanel extends XposedMods {
                     if (mDisableVolumeWarning) {
                         try {
                             callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable ignored) {
+                        }
                         param.setResult(null);
                     }
                 }
             });
 
         } catch (Throwable t) {
-            log(TAG + "Error: " + t.getMessage());
+            log("Error: " + t.getMessage());
         }
 
         try {
@@ -158,12 +158,12 @@ public class VolumePanel extends XposedMods {
                             }
                         });
                     } catch (Throwable t) {
-                        log(TAG + "OplusQsVolumeController, no volumeCallback " + t.getMessage());
+                        log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
                     }
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "Error OplusQsVolumeController: " + t.getMessage());
+            log("Error OplusQsVolumeController: " + t.getMessage());
         }
 
         hookAllConstructors(OplusVolumeDialogImpl, new XC_MethodHook() {

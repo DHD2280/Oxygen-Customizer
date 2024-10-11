@@ -47,6 +47,12 @@
             android:title="@string/import_title"
             app:icon="@drawable/ic_import" />
 
+        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
+            android:key="moreLogging"
+            android:summary="@string/more_logging_summary"
+            android:title="@string/more_logging_title"
+            app:icon="@drawable/ic_logging" />
+
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
@@ -72,7 +78,6 @@
             app:icon="@drawable/ic_wifi_only" />
 
     </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>
-
 
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:title="@string/settings_about_section_title"

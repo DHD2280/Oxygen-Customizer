@@ -47,16 +47,14 @@ import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 public class LockscreenWeather extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-
+    private final int mWeatherStartPadding;
     private ViewGroup mStatusViewContainer = null;
-
     // Weather
     private LinearLayout mWeatherContainer = null;
     private boolean mWeatherEnabled = false, mWeatherShowLocation = true, mWeatherShowCondition = true;
     private boolean mWeatherShowHumidity = true, mWeatherShowWind = true;
     private boolean mWeatherCustomColor = false;
     private int mWeatherColor = Color.WHITE;
-    private final int mWeatherStartPadding;
     private int mWeatherTextSize = 16;
     private int mWeatherImageSize = 18;
     private boolean mWeatherCustomMargins = false;
@@ -164,7 +162,8 @@ public class LockscreenWeather extends XposedMods {
     private void setWeatherCentered() {
         CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
         mWeatherContainer.setGravity(mWeatherCentered ? CENTER_HORIZONTAL : START);
-        if (currentWeatherView != null) currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
+        if (currentWeatherView != null)
+            currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
         if (currentWeatherView != null) currentWeatherView.requestLayout();
         ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
         for (int i = 0; i < weatherContainer.getChildCount(); i++) {

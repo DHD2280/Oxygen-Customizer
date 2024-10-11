@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.log;
+
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
@@ -12,52 +12,32 @@ import android.content.Context;
 
 import java.util.Arrays;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class ThermalProvider extends XposedMods {
-    private static final String listenPackage = SYSTEM_UI;
-
     public static final int CPU = 0;
     public static final int GPU = 1;
     public static final int BATTERY = 2;
     public static final int SKIN = 3;
-    private static String container = "";
-
-    private static boolean TemperatureUnitF = false;
-
+    private static final String listenPackage = SYSTEM_UI;
     static Class<?> ThermalServiceNative = null;
+    private static String container = "";
+    private static boolean TemperatureUnitF = false;
 
     public ThermalProvider(Context context) {
         super(context);
     }
 
-    @Override
-    public void updatePrefs(String... Key)
-    {
-        TemperatureUnitF = Xprefs.getBoolean("TemperatureUnitF", false);
-    }
-
-    @Override
-    public boolean listensTo(String packageName) {
-        return listenPackage.equals(packageName) && !XPLauncher.isChildProcess;
-    }
-
-    @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
-        ThermalServiceNative = findClass("com.oplus.compat.os.ThermalServiceNative", lpParam.classLoader);
-    }
-
-    public static float getTemperatureMaxFloat(int type)
-    {
+    public static float getTemperatureMaxFloat(int type) {
         Object[] temperatures = getTemperatures();
 
         container = "";
 
-        switch (type)
-        {
+        switch (type) {
             case CPU:
                 container = "CPU";
                 break;
@@ -82,32 +62,27 @@ public class ThermalProvider extends XposedMods {
                 })
                 .forEach(temperature -> maxValue[0] = Math.max(maxValue[0], getFloatField(temperature, "mValue")));
 
-        if(TemperatureUnitF)
-        {
+        if (TemperatureUnitF) {
             maxValue[0] = toFahrenheit(maxValue[0]);
         }
 
         return maxValue[0];
     }
 
-    public static int getTemperatureMaxInt(int type)
-    {
+    public static int getTemperatureMaxInt(int type) {
         return Math.round(getTemperatureMaxFloat(type));
     }
 
-    public static float getTemperatureAvgFloat(int type)
-    {
+    public static float getTemperatureAvgFloat(int type) {
         Object[] temperatures = getTemperatures();
 
-        if (temperatures.length > 0)
-        {
+        if (temperatures.length > 0) {
             final float[] totalValue = {0};
             Arrays.stream(temperatures).forEach(temperature -> totalValue[0] += getFloatField(temperature, "mValue"));
 
-            float ret = totalValue[0]/temperatures.length;
+            float ret = totalValue[0] / temperatures.length;
 
-            if(TemperatureUnitF)
-            {
+            if (TemperatureUnitF) {
                 ret = toFahrenheit(ret);
             }
 
@@ -116,14 +91,11 @@ public class ThermalProvider extends XposedMods {
         return -999;
     }
 
-    public static int getTemperatureAvgInt(int type)
-    {
+    public static int getTemperatureAvgInt(int type) {
         return Math.round(getTemperatureAvgFloat(type));
     }
 
-
-    private static Object[] getTemperatures()
-    {
+    private static Object[] getTemperatures() {
         try {
 
             Object[] temps = (Object[]) callStaticMethod(ThermalServiceNative, "getCurrentTemperatures");
@@ -132,20 +104,32 @@ public class ThermalProvider extends XposedMods {
                     if (temp != null) {
                         float value = getFloatField(temp, "mValue");
                         String name = (String) getObjectField(temp, "mName");
-                        log("Temperature: " + name + " = " + value);
+                        XposedBridge.log("Temperature: " + name + " = " + value);
                     }
                 }
             }
             return temps;
-        }
-        catch (Throwable ignored)
-        {
+        } catch (Throwable ignored) {
             return new Object[0];
         }
     }
 
-    private static float toFahrenheit(float celsius)
-    {
+    private static float toFahrenheit(float celsius) {
         return (celsius * 1.8f) + 32f;
+    }
+
+    @Override
+    public void updatePrefs(String... Key) {
+        TemperatureUnitF = Xprefs.getBoolean("TemperatureUnitF", false);
+    }
+
+    @Override
+    public boolean listensTo(String packageName) {
+        return listenPackage.equals(packageName) && !XPLauncher.isChildProcess;
+    }
+
+    @Override
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+        ThermalServiceNative = findClass("com.oplus.compat.os.ThermalServiceNative", lpParam.classLoader);
     }
 }

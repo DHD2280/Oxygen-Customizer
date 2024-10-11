@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -30,7 +29,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 public class Launcher extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.LAUNCHER;
-    private static final String TAG = "OxygenCustomizer - Launcher: ";
     private int mFolderRows, mFolderColumns, mDrawerColumns;
     private boolean mRearrangeHome = false, mFolderRearrange = false, mFolderPreview = false, mDrawerRearrange = false, mOpenAppDetails;
     private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
@@ -71,8 +69,10 @@ public class Launcher extends XposedMods {
                     XposedHelpers.setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
                     XposedHelpers.setIntField(param.thisObject, "numFolderRows", mFolderRows);
                 }
-                if (mFolderPreview) if (mFolderColumns > 3) XposedHelpers.setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
-                if (mDrawerRearrange) XposedHelpers.setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
+                if (mFolderPreview) if (mFolderColumns > 3)
+                    XposedHelpers.setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
+                if (mDrawerRearrange)
+                    XposedHelpers.setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
             }
         });
 
@@ -142,7 +142,8 @@ public class Launcher extends XposedMods {
                     if (mRemoveHomePagination) param.setResult(false);
                 }
             });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         try {
             Class<?> UiConfig = findClass("com.android.launcher.UiConfig", lpparam.classLoader);
@@ -167,9 +168,14 @@ public class Launcher extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log(TAG + "Error in Launcher Layout " + t);
+            log("Error in Launcher Layout " + t);
         }
 
+    }
+
+    @Override
+    public boolean listensTo(String packageName) {
+        return listenPackage.equals(packageName);
     }
 
     class ClickListener implements View.OnLongClickListener {
@@ -192,10 +198,5 @@ public class Launcher extends XposedMods {
             mContext.startActivity(appDetails);
             return true;
         }
-    }
-
-    @Override
-    public boolean listensTo(String packageName) {
-        return listenPackage.equals(packageName);
     }
 }
