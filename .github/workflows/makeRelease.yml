@@ -41,14 +41,11 @@ jobs:
       - name: Gradle Build
         run: ./gradlew assembleRelease
 
-      - name: Magisk Module Generation
-        run: .github/make_zip.sh
-
       - name: Upload Zip
         uses: actions/upload-artifact@v4.3.1
         with:
           name: OxygenCustomizer
-          path: output
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Release the binaries
         uses: ncipollo/release-action@v1.14.0
@@ -78,3 +75,14 @@ jobs:
           token: ${{ secrets.TELEGRAM_TK }}
           message: ${{ env.TMessage }}
           format: markdown
+
+      - name: Zip artifact for deployment
+        run: cd ./app/build/outputs/apk/release/ && zip OxygenCustomizer.zip *.apk -r
+
+      - name: Telegram File Attachment
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        run: |
+          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup" \
+              -F chat_id=${{ secrets.OC_CHANNEL }} \
+              -F media='[{"type":"document", "media":"attach://Xposed", "caption":"Oxygen Customizer ${{ github.ref }}"}]' \
+              -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
