@@ -254,7 +254,7 @@ public class PreferenceHelper {
             }
 
             // Statusbar Prefs
-            case "statusbar_padding_start", "statusbar_padding_end" -> {
+            case "statusbarPaddings", "statusbar_top_padding" -> {
                 return instance.mPreferences.getBoolean("statusbar_padding_enabled", false);
             }
             case "status_bar_clock_color" -> {
