@@ -173,15 +173,15 @@ public class ReflectionTools {
 
 	public static void dumpClass(Class<?> ourClass) {
 		Method[] ms = ourClass.getDeclaredMethods();
-		log("Class: " + ourClass.getName());
-		log("extends: " + ourClass.getSuperclass().getName());
-		log("Subclasses:");
+		log("ReflectionTools - Class: " + ourClass.getName());
+		log("ReflectionTools - extends: " + ourClass.getSuperclass().getName());
+		log("ReflectionTools - Subclasses:");
 		Class<?>[] scs = ourClass.getClasses();
 		for(Class <?> c : scs)
 		{
 			log(c.getName());
 		}
-		log("Methods:");
+		log("ReflectionTools - Methods:");
 
 		Constructor<?>[] cons = ourClass.getDeclaredConstructors();
 		for (Constructor<?> m : cons) {
@@ -200,13 +200,13 @@ public class ReflectionTools {
 				log("\t\t" + c.getTypeName());
 			}
 		}
-		log("Fields:");
+		log("ReflectionTools - Fields:");
 
 		Field[] fs = ourClass.getDeclaredFields();
 		for (Field f : fs) {
 			log("\t\t" + f.getName() + "-" + f.getType().getName());
 		}
-		log("End dump");
+		log("ReflectionTools - End dump");
 	}
 
 	public static void tryHookAllMethods(Class<?> clazz, String method, XC_MethodHook hook) {
