@@ -109,7 +109,6 @@ public class MemcFragment extends ControlledPreferenceFragmentCompat {
         mVideoOsieSupported = findPreference("video_osie_support");
         mMemcMode = findPreference("memc_mode");
 
-        new Intent(ACTIONS_MEMC_FEATURE_GET);
         requireContext().sendBroadcast(new Intent(ACTIONS_MEMC_FEATURE_GET));
 
     }
