@@ -1154,4 +1154,8 @@
     <string name="fix_lag_apply_anyway">仍然啟用</string>
     <!-- Caffeine -->
     <string name="caffeine">咖啡因</string>
+    <!-- Colors Fragment -->
+    <!-- Pocket Studio -->
+    <!-- OTA Card -->
+    <!-- MEMC Strings -->
 </resources>
