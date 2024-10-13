@@ -94,8 +94,11 @@
     <string name="bottom">In basso</string>
     <string name="reset">Ripristina</string>
     <string name="lang_follow_system">Segui Il Sistema</string>
+    <string name="pick_font_title">Seleziona Carattere</string>
+    <string name="pick_font_summary">Scegli il tuo carattere.\nNon selezionare il file da Recenti.</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">Scegli Immagine</string>
+    <string name="pick_image_summary">Fai clic per selezionare un\'immagine</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Cerca…</string>
     <string name="searchpreference_clear">Cancella</string>
@@ -121,6 +124,7 @@
     <string name="qs_header_title">Header Quick Settings</string>
     <string name="sound">Suono</string>
     <string name="misc">Varie</string>
+    <string name="colors">Colori</string>
     <string name="package_manager">Package Manager</string>
     <!-- General Strings -->
     <string name="general_on">On</string>
@@ -130,6 +134,9 @@
     <string name="black_color">Nero</string>
     <string name="custom_color">Colore Personalizzato</string>
     <string name="battery_info_button_title">Info batteria…</string>
+    <string name="general_enabled">Abilitato</string>
+    <string name="general_disabled">Disabilitato</string>
+    <string name="requires_reboot">Richiede il riavvio</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">Opzioni barra di stato</string>
     <string name="statusbar_double_tap_sleep">Doppio tocco per spegnere</string>
@@ -928,7 +935,7 @@
     <string name="support_group_title">Gruppo di supporto</string>
     <string name="translate_title">Traduci nella tua lingua</string>
     <string name="translate_summary">Aiutaci a tradurre Oxygen Customizer nella tua lingua</string>
-    <string name="check_updates">Controlla Aggiornamenti</string>
+    <string name="check_updates">Controlla\nAggiornamenti</string>
     <string name="check_updates_summary">Versione corrente: %s</string>
     <string name="check_auto_updates">Controlla automaticamente gli aggiornamenti</string>
     <string name="check_auto_updates_summary">Controlla nuovi aggiornamenti </string>
@@ -1065,6 +1072,7 @@
     <string name="settings_icons_customized">Stock Personalizzato</string>
     <string name="settings_icons_pui">PUI v1</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Colore sfondo</string>
     <string name="settings_bg_use_solid">Fondo Solido</string>
     <string name="settings_bg_shape">Forma Sfondo</string>
@@ -1156,4 +1164,37 @@
     <string name="fix_lag_apply_anyway">Abilita comunque</string>
     <!-- Caffeine -->
     <string name="caffeine">Caffeine</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">Colore Primario</string>
+    <string name="apply_color">Applica colore</string>
+    <!-- Pocket Studio -->
+    <string name="pocket_studio">Pocket Studio</string>
+    <string name="pocket_studio_title">Abilita Pocket Studio</string>
+    <string name="pocket_studio_summary">Abilita Pocket Studio sul tuo dispositivo.\nRichiede un riavvio.</string>
+    <string name="pocket_studio_info">Pocket Studio permette di avere più di due app aperte allo stesso tempo. Non è garantito che questa funzione funzionerà sui tuoi dispositivi: forza solo l\'abilitazione di questa funzione.</string>
+    <!-- OTA Card -->
+    <string name="ota_card_category">Scheda OTA</string>
+    <string name="ota_card_title">Immagine personalizzata della scheda OTA</string>
+    <!-- MEMC Strings -->
+    <string name="memc_feature_on">Funzione MEMC Attivata</string>
+    <string name="pwx7_enabled">PWX7 Abilitato</string>
+    <string name="memc_enabled">MEMC Abilitato</string>
+    <string name="sdr2hdr_enabled">SDR2HDR Abilitato</string>
+    <string name="video_osie_support">Supporto Osie Video</string>
+    <string name="memc_mode">Modalità MEMC</string>
+    <string name="force_memc_enabled">Forza attivazione MEMC</string>
+    <string name="custom_memc_config_title">Configurazione MEMC Personalizzata</string>
+    <string name="custom_memc_configuration_title">Personalizza MEMC</string>
+    <string name="custom_memc_configuration_summary">Imposta la configurazione MEMC per ogni applicazione/attività</string>
+    <string name="memc_help">Guida configurazione Iris</string>
+    <string name="memc_refresh_rate">Frequenza Di Aggiornamento: %s</string>
+    <string name="memc_params">Configurazione MEMC: %s</string>
+    <string name="applications">Applicazioni</string>
+    <string name="activities">Attività</string>
+    <string name="add_activity">Aggiungi attività</string>
+    <string name="add_app">Aggiungi applicazioni</string>
+    <string name="select_app">Seleziona App</string>
+    <string name="memc_config_error">Configurazione Memc vuota!</string>
+    <string name="refresh_rate_error">Frequenza aggiornamento vuoto!</string>
+    <string name="memc_footer">Se il tuo dispositivo non dispone di un chip Pixelwork o non supporta Memc, non toccare queste impostazioni.</string>
 </resources>

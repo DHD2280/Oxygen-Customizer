@@ -218,6 +218,7 @@
     <string name="statusbar_left_padding">حشو اليسار</string>
     <string name="statusbar_right_padding">حشو اليمين</string>
     <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
+    <string name="sb_padding_summary">تعيين القيم إلى الحد الأدنى/الحد الأقصى يعادل الإعداد الافتراضي للجهاز</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">تفعيل شريط البطارية</string>
     <string name="BB_onlycharging_title">فقط أثناء الشحن</string>
@@ -1155,4 +1156,12 @@
     <string name="fix_lag_apply_anyway">تفعيل على أي حال</string>
     <!-- Caffeine -->
     <string name="caffeine">كافيين</string>
+    <!-- Colors Fragment -->
+    <!-- Pocket Studio -->
+    <string name="pocket_studio">Pocket Studio</string>
+    <string name="pocket_studio_title">تمكين Pocket Studio</string>
+    <string name="pocket_studio_summary">تمكين Pocked Studio على جهازك يتطلب إعادة تشغيل.</string>
+    <string name="pocket_studio_info">Pocket Studio يسمح بفتح أكثر من تطبيقين في نفس الوقت. ليس مضمونا أن هذه الميزة ستعمل على أجهزتك: إنها تفرض فقط على الميزة أن تكون ممكنة.</string>
+    <!-- OTA Card -->
+    <!-- MEMC Strings -->
 </resources>
