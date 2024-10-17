@@ -148,13 +148,7 @@ public class HeaderClock extends XposedMods {
     private int clockGradient1, clockGradient2, dateGradient1, dateGradient2;
     private boolean clockUseGradient, dateUseGradient;
     private boolean customFontEnabled;
-    private int systemIconBackgroundChipStyle;
-    private boolean systemIconsChipEnabled = false;
-    private boolean systemIconRoundCorners = false, systemIconUseAccent = true;
-    private int systemIconTopSxRound, systemIconTopDxRound, systemIconBottomSxRound, systemIconBottomDxRound;
-    private int systemIconChipGradient1, systemIconChipGradient2;
-    private boolean systemIconChipGradient = false;
-    private int systemIconStrokeWidth;
+
     private int mAccent;
     final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -233,8 +227,6 @@ public class HeaderClock extends XposedMods {
         stockClockDateBackgroundChip = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP_SWITCH, false);
         dateChipStyle = Xprefs.getInt(getStyle(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP), 0);
         stockClockHideCarrier = Xprefs.getBoolean(QS_HEADER_CLOCK_STOCK_HIDE_CARRIER, false);
-        systemIconsChipEnabled = Xprefs.getBoolean(QS_SYSTEM_ICON_CHIP_SWITCH, false);
-        systemIconBackgroundChipStyle = Xprefs.getInt(getStyle(QS_SYSTEM_ICON_CHIP), 0);
 
         // Font pref
         customFontEnabled = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_FONT, false);
@@ -268,18 +260,6 @@ public class HeaderClock extends XposedMods {
         dateBottomSxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_BOTTOM_LEFT_RADIUS", 28);
         dateBottomDxRound = Xprefs.getInt(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP + "_BOTTOM_RIGHT_RADIUS", 28);
 
-        // System Icon Chip
-        systemIconUseAccent = Xprefs.getBoolean(QS_SYSTEM_ICON_CHIP + "_USE_ACCENT_COLOR", true);
-        systemIconChipGradient = Xprefs.getBoolean(QS_SYSTEM_ICON_CHIP + "_USE_GRADIENT", false);
-        systemIconChipGradient1 = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_GRADIENT_1", mAccent);
-        systemIconChipGradient2 = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_GRADIENT_2", mAccent);
-        systemIconStrokeWidth = Xprefs.getInt(getStrokeWidth(QS_SYSTEM_ICON_CHIP), 10);
-        systemIconRoundCorners = Xprefs.getBoolean(getRoundedCorners(QS_SYSTEM_ICON_CHIP), true);
-        systemIconTopSxRound = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_TOP_LEFT_RADIUS", 28);
-        systemIconTopDxRound = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_TOP_RIGHT_RADIUS", 28);
-        systemIconBottomSxRound = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_BOTTOM_LEFT_RADIUS", 28);
-        systemIconBottomDxRound = Xprefs.getInt(QS_SYSTEM_ICON_CHIP + "_BOTTOM_RIGHT_RADIUS", 28);
-
 
         if (Key.length > 0) {
             if (Key[0].equals(QS_HEADER_CLOCK_STOCK_RED_MODE)
@@ -297,12 +277,6 @@ public class HeaderClock extends XposedMods {
                 if (Key[0].equals(k)) {
                     setupChips();
                 }
-            }
-            for (String k : QS_HEADER_SYSTEM_ICON_CHIP) {
-                if (Key[0].equals(k)) {
-                    setupStatusChips();
-                }
-
             }
         }
     }
@@ -338,7 +312,6 @@ public class HeaderClock extends XposedMods {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
                     mStatusIconsView = (View) getObjectField(param.thisObject, "mStatusIconsView");
-                    if (systemIconsChipEnabled) updateStatusChips();
                 }
             });
         } catch (Throwable t) {
@@ -652,37 +625,6 @@ public class HeaderClock extends XposedMods {
 
     }
 
-    private void setupStatusChips() {
-        mSystemIconsChipDrawable.setShape(GradientDrawable.RECTANGLE);
-        mSystemIconsChipDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        mSystemIconsChipDrawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-        if (systemIconRoundCorners) {
-            mSystemIconsChipDrawable.setCornerRadii(new float[]{
-                    dp2px(mContext, systemIconTopSxRound), dp2px(mContext, systemIconTopSxRound),
-                    dp2px(mContext, systemIconTopDxRound), dp2px(mContext, systemIconTopDxRound),
-                    dp2px(mContext, systemIconBottomDxRound), dp2px(mContext, systemIconBottomDxRound),
-                    dp2px(mContext, systemIconBottomSxRound), dp2px(mContext, systemIconBottomSxRound)
-            });
-        } else {
-            mSystemIconsChipDrawable.setCornerRadius(0);
-        }
-        mSystemIconsChipDrawable.setPadding(20, 0, 20, 0);
-        if (systemIconBackgroundChipStyle == 0) {
-            if (systemIconUseAccent)
-                mSystemIconsChipDrawable.setColors(new int[]{mAccent, mAccent});
-            else if (systemIconChipGradient)
-                mSystemIconsChipDrawable.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient2});
-            else
-                mSystemIconsChipDrawable.setColors(new int[]{systemIconChipGradient1, systemIconChipGradient1});
-            mSystemIconsChipDrawable.setStroke(0, Color.TRANSPARENT);
-        } else {
-            mSystemIconsChipDrawable.setColors(new int[]{Color.TRANSPARENT, Color.TRANSPARENT});
-            mSystemIconsChipDrawable.setStroke(clockStrokeWitdh, clockGradientAccent ? mAccent : systemIconChipGradient1);
-        }
-        mSystemIconsChipDrawable.invalidateSelf();
-        updateStatusChips();
-    }
-
     private void updateChips() {
         if (stockClockTimeBackgroundChip) {
             applyChip(mOplusClock);
@@ -980,22 +922,6 @@ public class HeaderClock extends XposedMods {
                         ),
                 null
         );
-    }
-
-    private void updateStatusChips() {
-        if (mStatusIconsView == null) return;
-        int paddingStartEnd = 0;
-        int paddingTopBottom = 0;
-        if (systemIconsChipEnabled) {
-            mStatusIconsView.setBackground(mSystemIconsChipDrawable);
-            paddingStartEnd = dp2px(mContext, 12);
-            paddingTopBottom = dp2px(mContext, 4);
-            mStatusIconsView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            mStatusIconsView.requestLayout();
-        } else {
-            mStatusIconsView.setBackground(null);
-        }
-        mStatusIconsView.setPadding(paddingStartEnd, paddingTopBottom, paddingStartEnd, paddingTopBottom);
     }
 
     class ClickListener implements View.OnClickListener {
