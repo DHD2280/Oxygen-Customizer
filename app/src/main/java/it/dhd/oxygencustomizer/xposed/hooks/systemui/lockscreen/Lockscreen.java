@@ -135,7 +135,7 @@ public class Lockscreen extends XposedMods {
         try {
             hideLockscreenStuff();
         } catch (Throwable t) {
-            log("hideLockscreenStuff failed " + t.getMessage());
+            log(t);
         }
 
         try {
@@ -147,7 +147,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log("OplusEmergencyButtonExImpl not found");
+            log(t);
         }
 
         Class<?> OnScreenFingerprint;
@@ -170,7 +170,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log("loadAnimDrawables not found");
+            log(t);
         }
 
         try {
@@ -181,7 +181,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log("loadAnimDrawables not found");
+            log(t);
         }
 
         if (Build.VERSION.SDK_INT == 33) {
@@ -195,7 +195,7 @@ public class Lockscreen extends XposedMods {
                     }
                 });
             } catch (Throwable t) {
-                log("updateFpIconColor not found");
+                log(t);
             }
         }
 
@@ -209,7 +209,7 @@ public class Lockscreen extends XposedMods {
                     }
                 });
             } catch (Throwable t) {
-                log("updateFpIconColor not found");
+                log(t);
             }
         }
 
@@ -223,7 +223,7 @@ public class Lockscreen extends XposedMods {
         try {
             hookCarrier(lpparam);
         } catch (Throwable t) {
-            log("Carrier not found");
+            log(t);
         }
 
     }
@@ -430,7 +430,7 @@ public class Lockscreen extends XposedMods {
                 }
             });
         } catch (Throwable t) {
-            log("hideLockscreenCarrier Error: " + t.getMessage());
+            log(t);
         }
     }
 
