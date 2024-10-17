@@ -126,8 +126,8 @@ dependencies {
     // App Compat
     implementation("androidx.appcompat:appcompat:1.7.0")
     // Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.2")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.3")
 
     // Recycler View
     implementation("androidx.recyclerview:recyclerview:1.3.2")
