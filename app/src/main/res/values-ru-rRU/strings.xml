@@ -94,8 +94,12 @@
     <string name="top">Сверху</string>
     <string name="bottom">Снизу</string>
     <string name="reset">Перезагрузить</string>
+    <string name="lang_follow_system">Как в системе</string>
+    <string name="pick_font_title">Выбрать шрифт</string>
+    <string name="pick_font_summary">Выберите свой шрифт.\nНе выбирайте файл из списка «Недавние».</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">Выбрать изображение</string>
+    <string name="pick_image_summary">Нажмите, чтобы выбрать изображение</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Поиск…</string>
     <string name="searchpreference_clear">Очистить </string>
@@ -121,6 +125,7 @@
     <string name="qs_header_title">Верхняя панель в QS</string>
     <string name="sound">Звук</string>
     <string name="misc">Другое</string>
+    <string name="colors">Цвета</string>
     <string name="package_manager">Установщик пакетов</string>
     <!-- General Strings -->
     <string name="general_on">Вкл</string>
@@ -130,6 +135,9 @@
     <string name="black_color">Чёрный</string>
     <string name="custom_color">Пользовательский цвет</string>
     <string name="battery_info_button_title">Информация о батарее…</string>
+    <string name="general_enabled">Включено</string>
+    <string name="general_disabled">Выключено</string>
+    <string name="requires_reboot">Требуется перезагрузка</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">Параметры строки состояния</string>
     <string name="statusbar_double_tap_sleep">Даблтап для перехода в спящий режим</string>
@@ -214,9 +222,11 @@
     <!-- Status bar padding -->
     <string name="statusbar_padding">Заполнение строки состояния</string>
     <string name="statusbar_top_padding">Отступ сверху</string>
+    <string name="statusbar_padding_info">Установите 0, чтобы оставить сток</string>
     <string name="statusbar_left_padding">Отступ слева</string>
     <string name="statusbar_right_padding">Правильное заполнение</string>
     <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
+    <string name="sb_padding_summary">Настройка значений в мин/макс эквивалентна по умолчанию</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Включить индикатор заряда батареи</string>
     <string name="BB_onlycharging_title">Только во время зарядки</string>
@@ -225,6 +235,7 @@
     <string name="BB_Opacity_title">Непрозрачность полосы</string>
     <string name="BB_center_align_title">Выравнивание по центру</string>
     <string name="BB_Thickness_title">Толщина строки</string>
+    <string name="BB_animate_charging">Анимация зарядки</string>
     <string name="BB_indicate_charging">Индикатор зарядки</string>
     <string name="BB_indicate_power_save">Индикатор энергосбережения</string>
     <string name="BB_indicate_fast_charging">Индикатор быстрой зарядки</string>
@@ -367,6 +378,8 @@
     <string name="add_widget">Добавить виджет</string>
     <string name="qs_widget_photo">Фото витрина</string>
     <string name="qs_widget_weather">Погода</string>
+    <string name="qs_widget_mini_weather">Мини Погода</string>
+    <string name="qs_widget_custom_app">Пользовательское приложение</string>
     <string name="qs_widget_media_player">Медиа плеер</string>
     <string name="qs_media_alert">Невозможно удалить медиаплеер!</string>
     <string name="qs_widget_set_radius">Установить радиус изображения</string>
@@ -485,6 +498,7 @@
     <string name="qs_header_clock_enabled">Настройка часов в QS</string>
     <string name="qs_header_clock_enabled_summary">Смена часов в QS</string>
     <string name="qs_header_clock_custom">Стиль часов</string>
+    <string name="qs_header_clock_custom_summary">Проведите пальцем, чтобы выбрать стиль по вашему выбору.</string>
     <string name="qs_header_clock_custom_user">Используйте собственное имя пользователя</string>
     <string name="qs_header_clock_custom_user_title">Имя пользователя</string>
     <string name="qs_header_clock_custom_user_image">Используйте собственное имя пользователя</string>
@@ -655,8 +669,15 @@
     <string name="depth_wallpaper_category">Глубина Обоев</string>
     <string name="depth_wallpaper_title">Обои с эффектом глубины</string>
     <string name="depth_wallpaper_summary">Динамически интегрируйте передний план обоев с часами</string>
+    <string name="depth_wallpaper_mode_title">Режим обоев «Глубина»</string>
+    <string name="depth_wallpaper_mode_ai">ИИ</string>
+    <string name="depth_wallpaper_mode_custom_images">Пользовательские изображения</string>
     <string name="depth_wallpaper_opacity_title">Непрозрачность обоев на переднем плане</string>
     <string name="depth_wallpaper_aod_title">Также в режиме «Всегда на экране»</string>
+    <string name="depth_wallpaper_pick_background_title">Выбрать фон</string>
+    <string name="depth_wallpaper_pick_background_summary">Выбрать фоновое изображение</string>
+    <string name="depth_wallpaper_pick_subject_title">Выбрать передний план</string>
+    <string name="depth_wallpaper_pick_subject_summary">Выберите изображение переднего плана, оно должно быть предметом вашего фона</string>
     <string name="depth_wallpaper_model_ready">Модель AI загружена на устройство</string>
     <string name="depth_wallpaper_model_not_available">Модель AI не доступна на этом устройстве</string>
     <!-- Media art -->
@@ -681,12 +702,16 @@
     <string name="lockscreen_clock">Часы на экране блокировки</string>
     <string name="lockscreen_clock_switch">Кастомные часы на экране блокировки</string>
     <string name="lockscreen_clock_custom">Стиль часов</string>
+    <string name="lockscreen_clock_custom_summary">Проведите пальцем, чтобы выбрать стиль по вашему выбору.</string>
     <string name="lockscreen_clock_font_prefs_title">Шрифт</string>
     <string name="lockscreen_clock_font_custom_enabled">Используйте пользовательский шрифт</string>
     <string name="lockscreen_clock_prefs">Настройки часов на экране блокировки</string>
     <string name="lockscreen_clock_custom_color_title">Пользовательские цветные часы</string>
     <string name="lockscreen_clock_custom_color_summary">Пользовательский цвет вместо основного</string>
     <string name="lockscreen_clock_text_scaling">Масштабирование текста</string>
+    <string name="lockscreen_clock_custom_format_title">Пользовательский формат даты</string>
+    <string name="lockscreen_clock_custom_format_summary">Настройте формат даты.\nОставьте пустым, чтобы отключить</string>
+    <string name="lockscreen_clock_custom_format_dmessage">Для документации найдите \"Формат даты Java\"</string>
     <string name="lockscreen_clock_custom_user">Используйте свое имя пользователя</string>
     <string name="lockscreen_clock_custom_user_title">Имя пользователя</string>
     <string name="lockscreen_clock_custom_user_image">Используйте свое изображение пользователя</string>
@@ -714,6 +739,7 @@
     <string name="aod_clock">Часы на AOD</string>
     <string name="aod_clock_switch">Пользовательские часы AOD</string>
     <string name="aod_clock_custom">Стиль часов</string>
+    <string name="aod_clock_custom_summary">Проведите пальцем, чтобы выбрать стиль.</string>
     <string name="aod_clock_font_prefs_title">Шрифт</string>
     <string name="aod_clock_font_custom_enabled">Использовать собственный шрифт</string>
     <string name="aod_clock_font_custom_title">Выберите шрифт</string>
@@ -898,6 +924,7 @@
     <!-- Own Settings -->
     <string name="general_settings">Основное</string>
     <string name="app_icon_themed">Принудительные тематические значки приложений</string>
+    <string name="language_title">Язык</string>
     <string name="delete_all_title">Удалить все настройки</string>
     <string name="delete_all_summary">Сбрасывает все настройки приложения</string>
     <string name="export_title">Экспорт</string>
@@ -908,6 +935,8 @@
     <string name="export_failed">Экспорт не удался</string>
     <string name="import_success">Импорт выполнен успешно</string>
     <string name="import_failed">Импорт не удался</string>
+    <string name="more_logging_title">Больше логов</string>
+    <string name="more_logging_summary">Включите дополнительное ведение журналов.\nЭто может помочь при отправке отчетов об ошибках.</string>
     <string name="settings_about_section_title">О приложении </string>
     <string name="github_repo_title">Репозиторий на GitHub</string>
     <string name="support_group_title">Группа поддержки</string>
@@ -979,6 +1008,8 @@
     <string name="weather_config_title">Настройки сервиса</string>
     <string name="with_forecast_title">С прогнозом на 4 дня и подробной информацией</string>
     <string name="owm_key">Пользовательский ключ OWM</string>
+    <string name="yandex_key">Ключ API Яндекса</string>
+    <string name="omnijaws_city_unknown">Неизвестно</string>
     <string name="activity_title">Погода</string>
     <string name="omnijaws_service_error_long">Ошибка при загрузке погодных данных</string>
     <string name="omnijaws_detail_header">Погода</string>
@@ -987,6 +1018,8 @@
     <string name="omnijaws_service_error_location">Нет доступного местоположения</string>
     <string name="omnijaws_service_error_network">Сеть не найдена</string>
     <string name="omnijaws_service_error_permissions">Доступ к геолокации не предоставлен</string>
+    <string name="omnijaws_today">Cегодня</string>
+    <string name="omnijaws_tomorrow">Завтра</string>
     <string name="weather_widget_desc">"Фактическая погода и прогноз на 4 дня"</string>
     <string name="theme_system">Следуйте системе</string>
     <string name="theme_dark">Темный</string>
@@ -1001,6 +1034,7 @@
     <string name="weather_margin_left">Левое поле</string>
     <string name="weather_permission_dialog_title">Включить разрешения на определение местоположения</string>
     <string name="weather_permission_dialog_message">Для получения данных о погоде необходимы разрешения на определение местоположения. Нажмите «ОК», чтобы открыть «Настройки».</string>
+    <string name="weather_yandex_key_required">Для провайдера погоды Яндекс необходим ключ!</string>
     <!-- Lockscreen Weather styles -->
     <string name="lockscreen_weather_selection_title">Стиль фона погоды</string>
     <string name="lockscreen_weather_selection_default">По умолчанию</string>
@@ -1133,4 +1167,36 @@
     <string name="fix_lag_apply_anyway">Включить в любом случае</string>
     <!-- Caffeine -->
     <string name="caffeine">Запрет сна</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">Основной цвет</string>
+    <string name="apply_color">Применить цвет</string>
+    <!-- Pocket Studio -->
+    <string name="pocket_studio_title">Включить Pocket Studio</string>
+    <string name="pocket_studio_summary">Включите Pocket Studio на вашем устройстве.\nТребуется перезагрузка.</string>
+    <string name="pocket_studio_info">Pocket Studio позволяет одновременно открывать более двух приложений. Не гарантируется, что эта функция будет работать на ваших устройствах: она только принудительно включается.</string>
+    <!-- OTA Card -->
+    <string name="ota_card_category">ОТА-карта</string>
+    <string name="ota_card_title">Пользовательское изображение карты OTA</string>
+    <!-- MEMC Strings -->
+    <string name="memc_feature_on">Вкл. функции MEMC</string>
+    <string name="pwx7_enabled">PWX7 включено</string>
+    <string name="memc_enabled">MEMC включено</string>
+    <string name="sdr2hdr_enabled">SDR2HDR включено</string>
+    <string name="video_osie_support">Поддержка видео Osie</string>
+    <string name="memc_mode">Режим MEMC</string>
+    <string name="force_memc_enabled">Принудительное включение MEMC</string>
+    <string name="custom_memc_config_title">Пользовательская конфигурация MEMC</string>
+    <string name="custom_memc_configuration_title">Настройка MEMC</string>
+    <string name="custom_memc_configuration_summary">Установите конфигурацию MEMC для каждого приложения/действия</string>
+    <string name="memc_help">Помощь по настройке Iris</string>
+    <string name="memc_refresh_rate">Частота обновления: %s</string>
+    <string name="memc_params">Конфигурация MEMC: %s</string>
+    <string name="applications">Приложения</string>
+    <string name="activities">Действия</string>
+    <string name="add_activity">Добавить действие</string>
+    <string name="add_app">Добавить приложение</string>
+    <string name="select_app">Выбрать приложение</string>
+    <string name="memc_config_error">Конфигурация Memc пуста!</string>
+    <string name="refresh_rate_error">Частота обновления пуста!</string>
+    <string name="memc_footer">Если ваше устройство не оснащено чипом Pixelwork или не поддерживает Memc, не трогайте эти настройки.</string>
 </resources>

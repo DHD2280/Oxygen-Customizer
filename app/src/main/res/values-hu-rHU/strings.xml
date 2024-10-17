@@ -94,8 +94,11 @@
     <string name="bottom">Alsó</string>
     <string name="reset">Visszaállítás</string>
     <string name="lang_follow_system">Kövesse a rendszert</string>
+    <string name="pick_font_title">Betűtípus-választó</string>
+    <string name="pick_font_summary">Válasszon betűtípust.\nNe válasszon az Előzményekből.</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">Képválasztás</string>
+    <string name="pick_image_summary">Klikkeljen egy képre a kiválasztáshoz</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Keresés…</string>
     <string name="searchpreference_clear">Törlés</string>
@@ -121,6 +124,7 @@
     <string name="qs_header_title">Gyorsbeállítások-fejléc</string>
     <string name="sound">Hang</string>
     <string name="misc">Hasznos cuccok</string>
+    <string name="colors">Színek</string>
     <string name="package_manager">Csomagkezelő</string>
     <!-- General Strings -->
     <string name="general_on">Be</string>
@@ -130,6 +134,9 @@
     <string name="black_color">Fekete</string>
     <string name="custom_color">Egyéni szín</string>
     <string name="battery_info_button_title">Akkumulátor infó…</string>
+    <string name="general_enabled">Engedélyezve</string>
+    <string name="general_disabled">Letiltva</string>
+    <string name="requires_reboot">Újraindítást igényel</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">Az Állapotsor beállításai</string>
     <string name="statusbar_double_tap_sleep">Dupla érintésre alvómód</string>
@@ -218,6 +225,7 @@
     <string name="statusbar_left_padding">Baloldali kitöltés</string>
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
     <string name="sb_padding_title">Bal és Jobb kitöltés</string>
+    <string name="sb_padding_summary">Az értékek min/max beállításai megegyeznek a készülék alapértelmezett értékeivel</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>
@@ -922,6 +930,8 @@
     <string name="export_failed">Sikertelen exportálás</string>
     <string name="import_success">Sikeres importálás</string>
     <string name="import_failed">Sikertelen importálás</string>
+    <string name="more_logging_title">Még több naplózás</string>
+    <string name="more_logging_summary">Több naplózás engedélyezése.\nEz segíthet a hibajelentések küldésekor.</string>
     <string name="settings_about_section_title">Névjegy</string>
     <string name="github_repo_title">GitHub repó</string>
     <string name="support_group_title">Támogatói csoport</string>
@@ -1064,6 +1074,7 @@
     <string name="settings_icons_customized">Megvariált gyári</string>
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Háttérszín</string>
     <string name="settings_bg_use_solid">Telt háttér</string>
     <string name="settings_bg_shape">A háttér alakja</string>
@@ -1155,4 +1166,37 @@
     <string name="fix_lag_apply_anyway">Mindenképp fusson le</string>
     <!-- Caffeine -->
     <string name="caffeine">Koffein</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">Elsődleges szín</string>
+    <string name="apply_color">A szín alkalmazása</string>
+    <!-- Pocket Studio -->
+    <string name="pocket_studio">Pocket Stúdió</string>
+    <string name="pocket_studio_title">A Pocket Stúdió bekapcsolása</string>
+    <string name="pocket_studio_summary">Készülékén bekapcsolaja Pocket Stúdiót.\nÚjraindítást igényel.</string>
+    <string name="pocket_studio_info">A Pocket Studio lehetővé teszi, hogy kettőnél több alkalmazást nyisson meg egyszerre. Nem garantált, hogy ez a funkció működik az Ön készülékein: ez csak kényszerítetten engedélyezi a funkciót.</string>
+    <!-- OTA Card -->
+    <string name="ota_card_category">OTA-kártya</string>
+    <string name="ota_card_title">Egyedi kép az OTA-kártyához</string>
+    <!-- MEMC Strings -->
+    <string name="memc_feature_on">MEMC-funkció bekapcsolva</string>
+    <string name="pwx7_enabled">PWX7 engedélyezve</string>
+    <string name="memc_enabled">MEMC engedélyezve</string>
+    <string name="sdr2hdr_enabled">SDR2HDR engedélyezve</string>
+    <string name="video_osie_support">Video OSIE-támogatás</string>
+    <string name="memc_mode">MEMC-mód</string>
+    <string name="force_memc_enabled">Kényszeríti a MEMC-et</string>
+    <string name="custom_memc_config_title">Egyedi MEMC-konfiguráció</string>
+    <string name="custom_memc_configuration_title">A MEMC testreszabása</string>
+    <string name="custom_memc_configuration_summary">Állítsa be külön minden alkalmazáshoz/művelethez a MEMC-konfigurációt</string>
+    <string name="memc_help">Segítség az Iris beállításához</string>
+    <string name="memc_refresh_rate">Frissítési gyakoriság: %s</string>
+    <string name="memc_params">MEMC-beállítás: %s</string>
+    <string name="applications">Alkalmazások</string>
+    <string name="activities">Műveletek</string>
+    <string name="add_activity">Művelet hozzáadása</string>
+    <string name="add_app">Alkalmazás hozzáadása</string>
+    <string name="select_app">Alkalmazás kiválasztása</string>
+    <string name="memc_config_error">A MEMC-konfiguráció üres!</string>
+    <string name="refresh_rate_error">A Frissítési gyakoriság üres!</string>
+    <string name="memc_footer">Ha készüléke nem rendelkezik Pixelwork chippel, vagy nem támogatja a MEMC-et, ne módosítsa ezeket a beállításokat.</string>
 </resources>

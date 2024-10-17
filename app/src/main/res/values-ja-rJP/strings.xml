@@ -94,8 +94,11 @@
     <string name="bottom">下部</string>
     <string name="reset">リセット</string>
     <string name="lang_follow_system">システムに従う</string>
+    <string name="pick_font_title">フォントを選択</string>
+    <string name="pick_font_summary">フォントを選択します。\n最近のファイルからフォントを選択しないでください。</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">画像を選択</string>
+    <string name="pick_image_summary">タップで画像を選択します。</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">検索…</string>
     <string name="searchpreference_clear">消去</string>
@@ -121,6 +124,7 @@
     <string name="qs_header_title">クイック設定のヘッダー</string>
     <string name="sound">サウンド</string>
     <string name="misc">その他</string>
+    <string name="colors">色</string>
     <string name="package_manager">パッケージマネージャー</string>
     <!-- General Strings -->
     <string name="general_on">ON</string>
@@ -207,6 +211,7 @@
     <string name="status_bar_clock_background_chip_title">背景チップ</string>
     <string name="status_bar_clock_background_chip_style_title">背景チップのスタイル</string>
     <string name="status_bar_clock_advanced_formatting">高度 (上記の設定よりも優先されます!)</string>
+    <string name="status_bar_clock_smaller">最小 (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">ステータスバーの余白</string>
     <string name="statusbar_top_padding">上部の余白</string>
@@ -360,6 +365,7 @@
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">クイック設定ウィジェットを表示します</string>
     <string name="add_widget">ウィジェットを追加</string>
+    <string name="qs_widget_photo">フォトショーケース</string>
     <string name="qs_widget_weather">天気</string>
     <string name="qs_widget_mini_weather">ミニ天気</string>
     <string name="qs_widget_custom_app">カスタムアプリ</string>
@@ -1035,6 +1041,7 @@
     <string name="settings_icons_customized">カスタマイズされたストック</string>
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">背景の色</string>
     <string name="settings_bg_use_solid">塗りつぶしの背景</string>
     <string name="settings_bg_shape">背景の形状</string>
@@ -1122,4 +1129,16 @@
     <string name="fix_lag_apply_anyway">強制的に有効化する</string>
     <!-- Caffeine -->
     <string name="caffeine">カフェイン</string>
+    <!-- Colors Fragment -->
+    <string name="primary_color">プライマリカラー</string>
+    <string name="apply_color">色を適用</string>
+    <!-- Pocket Studio -->
+    <string name="pocket_studio">ポケットスタジオ</string>
+    <string name="pocket_studio_title">ポケットスタジオを有効化する</string>
+    <string name="pocket_studio_summary">デバイスでポケットスタジオを有効化します。\n再起動が必要です。</string>
+    <string name="pocket_studio_info">ポケットスタジオは、同時に 2 つ以上のアプリを開くことができます。この機能がデバイス上で正常に動作するかは保証しません: あくまで機能を強制的に有効化するだけです。</string>
+    <!-- OTA Card -->
+    <string name="ota_card_category">OTA カード</string>
+    <string name="ota_card_title">OTA カード画像をカスタマイズする</string>
+    <!-- MEMC Strings -->
 </resources>
