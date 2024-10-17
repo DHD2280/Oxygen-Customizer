@@ -71,14 +71,12 @@ public class AppUtils {
         }
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setMessage(context.getString(R.string.restart_scope_message));
-        builder.setPositiveButton(context.getString(android.R.string.ok), (dialog, which) -> {
-            new Thread(() -> {
-                try {
-                    Shell.cmd(commands.toArray(new String[0])).exec();
-                } catch (Exception ignored) {
-                }
-            }).start();
-        });
+        builder.setPositiveButton(context.getString(android.R.string.ok), (dialog, which) -> new Thread(() -> {
+            try {
+                Shell.cmd(commands.toArray(new String[0])).exec();
+            } catch (Exception ignored) {
+            }
+        }).start());
         builder.setNeutralButton(context.getString(android.R.string.cancel), null);
         builder.show();
     }
@@ -197,5 +195,4 @@ public class AppUtils {
             activity.startActivity(intent);
         }, 600);
     }
-
 }
