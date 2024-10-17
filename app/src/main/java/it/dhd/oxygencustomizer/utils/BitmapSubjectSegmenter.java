@@ -18,10 +18,11 @@ import com.google.mlkit.vision.segmentation.subject.SubjectSegmenterOptions;
 import java.nio.FloatBuffer;
 
 public class BitmapSubjectSegmenter {
-    final SubjectSegmenter mSegmenter;
+
+    private SubjectSegmenter mSegmenter;
     final Context mContext;
-    public BitmapSubjectSegmenter(Context context)
-    {
+
+    public BitmapSubjectSegmenter(Context context) {
         mContext = context;
 
         try {
@@ -29,16 +30,20 @@ public class BitmapSubjectSegmenter {
         }
         catch (Throwable ignored){}
 
-        mSegmenter = SubjectSegmentation.getClient(
-                new SubjectSegmenterOptions.Builder()
-                        .enableForegroundConfidenceMask()
-                        .build());
-
+        try {
+            mSegmenter = SubjectSegmentation.getClient(
+                    new SubjectSegmenterOptions.Builder()
+                            .enableForegroundConfidenceMask()
+                            .build());
+        } catch (Throwable e) {
+            mSegmenter = null;
+            return;
+        }
         downloadModelIfNeeded();
     }
 
-    public void downloadModelIfNeeded()
-    {
+    public void downloadModelIfNeeded() {
+
         ModuleInstallClient moduleInstallClient = ModuleInstall.getClient(mContext);
 
         moduleInstallClient
@@ -55,15 +60,23 @@ public class BitmapSubjectSegmenter {
                         });
     }
 
-    public void checkModelAvailability(OnSuccessListener<ModuleAvailabilityResponse> resultListener)
-    {
-        ModuleInstallClient moduleInstallClient = ModuleInstall.getClient(mContext);
+    public void checkModelAvailability(OnSuccessListener<ModuleAvailabilityResponse> resultListener) {
 
+        if (mSegmenter == null) {
+            resultListener.onSuccess(new ModuleAvailabilityResponse(false, 0));
+            return;
+        }
+
+        ModuleInstallClient moduleInstallClient = ModuleInstall.getClient(mContext);
         moduleInstallClient.areModulesAvailable(mSegmenter).addOnSuccessListener(resultListener);
     }
 
-    public void segmentSubject(Bitmap inputBitmap, SegmentResultListener listener)
-    {
+    public void segmentSubject(Bitmap inputBitmap, SegmentResultListener listener) {
+        if (mSegmenter == null) {
+            listener.onFail();
+            return;
+        }
+
         int transparentColor = Color.alpha(Color.TRANSPARENT);
 
         Bitmap resultBitmap = inputBitmap.copy(Bitmap.Config.ARGB_8888, true);
