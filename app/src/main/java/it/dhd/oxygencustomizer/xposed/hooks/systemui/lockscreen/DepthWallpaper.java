@@ -13,6 +13,7 @@ import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_FAILURE;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_SUBJECT;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_SUCCESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -53,6 +54,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
@@ -94,6 +97,11 @@ public class DepthWallpaper extends XposedMods {
             if (intent != null && intent.getAction() != null) {
                 switch (intent.getAction()) {
                     case ACTION_EXTRACT_SUCCESS -> lockScreenSubjectCacheValid = false;
+                    case ACTION_EXTRACT_FAILURE -> {
+                        lockScreenSubjectCacheValid = false;
+                        String error = intent.getStringExtra("error");
+                        XposedBridge.log("Subject extraction failed \n" + error);
+                    }
                 }
             }
         }
