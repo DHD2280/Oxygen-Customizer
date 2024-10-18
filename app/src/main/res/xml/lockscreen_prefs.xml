@@ -121,6 +121,11 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
+        <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
+            android:key="DWAIStatus"
+            android:title="@string/depth_wallpaper_ai_status"
+            app:iconSpaceReserved="false" />
+
         <it.dhd.oxygencustomizer.ui.preferences.OplusSliderPreference
             android:key="DWOpacity"
             android:title="@string/depth_wallpaper_opacity_title"

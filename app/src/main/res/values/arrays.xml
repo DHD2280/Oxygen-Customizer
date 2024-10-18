@@ -356,10 +356,12 @@
     <string-array name="depth_wallpaper_mode_entries" translatable="false">
         <item>@string/depth_wallpaper_mode_ai</item>
         <item>@string/depth_wallpaper_mode_custom_images</item>
+        <item>@string/depth_wallpaper_mode_ai_plugin</item>
     </string-array>
     <string-array name="depth_wallpaper_mode_values" translatable="false">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <!-- Pulse -->

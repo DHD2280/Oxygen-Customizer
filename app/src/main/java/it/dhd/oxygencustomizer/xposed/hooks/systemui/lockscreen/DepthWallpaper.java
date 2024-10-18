@@ -13,6 +13,8 @@ import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_SUBJECT;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_SUCCESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
@@ -22,6 +24,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtL
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -51,7 +54,6 @@ import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -61,6 +63,7 @@ import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
  * @noinspection RedundantThrows
  */
 public class DepthWallpaper extends XposedMods {
+
     private static final String listenPackage = SYSTEM_UI;
 
     private static boolean lockScreenSubjectCacheValid = false;
@@ -85,8 +88,19 @@ public class DepthWallpaper extends XposedMods {
             }
         }
     };
+    final BroadcastReceiver mPluginReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case ACTION_EXTRACT_SUCCESS -> lockScreenSubjectCacheValid = false;
+                }
+            }
+        }
+    };
     private boolean superPowerSave = false;
     private boolean mBroadcastRegistered = false;
+    private boolean mPluginBroadcastRegistered = false;
 
     public DepthWallpaper(Context context) {
         super(context);
@@ -115,6 +129,12 @@ public class DepthWallpaper extends XposedMods {
             filter.addAction(ACTION_DEPTH_SUBJECT_CHANGED);
             mContext.registerReceiver(mReceiver, filter, RECEIVER_EXPORTED);
             mBroadcastRegistered = true;
+        }
+        if (!mPluginBroadcastRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_EXTRACT_SUCCESS);
+            mContext.registerReceiver(mPluginReceiver, filter, RECEIVER_EXPORTED);
+            mPluginBroadcastRegistered = true;
         }
 
         Class<?> QSImplClass = findClass("com.android.systemui.qs.QSFragment", lpParam.classLoader);
@@ -211,13 +231,11 @@ public class DepthWallpaper extends XposedMods {
                 hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (DWallpaperEnabled && DWMode == 0) {
+                        if (DWallpaperEnabled && DWMode == 0 || DWMode == 2) {
                             if (superPowerSave) return;
                             log("Wallpaper Changed");
 
                             Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap((Drawable) callMethod(mLockscreenWallpaper, "loadBitmap")));
-
-                            boolean cacheIsValid = assertCache(wallpaperBitmap);
 
                             Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
                                     .getCurrentWindowMetrics()
@@ -249,6 +267,8 @@ public class DepthWallpaper extends XposedMods {
                             scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
                             Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
 
+                            boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
+
                             if (!mLayersCreated) {
                                 log("drawFrameOnCanvas Layers not created");
                                 createLayers();
@@ -261,7 +281,23 @@ public class DepthWallpaper extends XposedMods {
                             log("cacheIsValid " + cacheIsValid);
 
                             if (!cacheIsValid) {
-                                XPLauncher.enqueueProxyCommand(proxy -> proxy.extractSubject(finalScaledWallpaperBitmap, Constants.getLockScreenSubjectCachePath()));
+                                XPLauncher.enqueueProxyCommand(proxy -> {
+                                    if (DWMode == 0) {
+                                        proxy.extractSubject(finalScaledWallpaperBitmap, Constants.getLockScreenSubjectCachePath());
+                                    } else if (DWMode == 2) {
+                                        try {
+                                            Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
+                                            intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
+                                            intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
+                                            intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
+                                            intent.setPackage(mContext.getPackageName());
+                                            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                                            mContext.sendBroadcast(intent);
+                                        } catch (Throwable t) {
+                                            log(t);
+                                        }
+                                    }
+                                });
                             }
                         }
                     }

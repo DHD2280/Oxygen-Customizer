@@ -676,6 +676,14 @@ public final class Constants {
     public static final String ACTIONS_MEMC_FEATURE_GET = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_GET_OC";
     public static final String ACTIONS_MEMC_FEATURE_RECEIVED = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_RECEIVED_OC";
 
+    // AI Plugin
+    public static final String ACTION_EXTRACT_SUBJECT = "it.dhd.oxygencustomizer.aiplugin.ACTION_EXTRACT_SUBJECT";
+    public static final String ACTION_EXTRACT_SUCCESS = "it.dhd.oxygencustomizer.aiplugin.ACTION_EXTRACT_SUCCESS";
+    public static final String ACTION_EXTRACT_FAILURE = "it.dhd.oxygencustomizer.aiplugin.ACTION_EXTRACT_FAILURE";
+
+    // AI Plugin Extras
+    public static final String PLUGIN_URL = "https://github.com/DHD2280/Oxygen-Customizer-AI-Plugin/releases/latest/";
+
     public static final String XPOSED_RESOURCE_TEMP_DIR = Environment.getExternalStorageDirectory() + "/.oxygen_customizer";
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
     public static final String HEADER_CLOCK_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_user_image.png";

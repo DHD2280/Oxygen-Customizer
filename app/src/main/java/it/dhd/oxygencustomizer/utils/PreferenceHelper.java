@@ -515,7 +515,7 @@ public class PreferenceHelper {
             case "DWCategory", "DWallpaperEnabled" -> {
                 return Build.VERSION.SDK_INT >= 34;
             }
-            case "DWOpacity", "DWMode" -> {
+            case "DWOpacity", "DWMode", "DWAIStatus" -> {
                 return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false);
             }
             case "DWBackground", "DWSubject" -> {

@@ -8,6 +8,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.PLUGIN_URL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
@@ -25,6 +26,7 @@ import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.models.ClockModel;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
+import it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.OplusRecyclerPreference;
 import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
@@ -61,6 +64,8 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     private final int PICK_DEPTH_BACKGROUND = 1;
     private final int PICK_DEPTH_SUBJECT = 2;
     private int mPick = -1;
+
+    private OplusJumpPreference mAiStatus;
 
     @Override
     public String getTitle() {
@@ -196,13 +201,36 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
             });
         }
 
-        new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->
-                findPreference("DWallpaperEnabled")
-                        .setSummary(
-                                moduleAvailabilityResponse.areModulesAvailable()
-                                        ? R.string.depth_wallpaper_model_ready
-                                        : R.string.depth_wallpaper_model_not_available));
+    }
 
+    private void checkAiStatus() {
+        mAiStatus = findPreference("DWAIStatus");
+        if (mPreferences.getString("DWMode", "0").equals("0")) {
+            new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->
+                    mAiStatus
+                            .setSummary(
+                                    moduleAvailabilityResponse.areModulesAvailable()
+                                            ? R.string.depth_wallpaper_model_ready
+                                            : R.string.depth_wallpaper_model_not_available));
+            mAiStatus.setJumpEnabled(false);
+        } else if (mPreferences.getString("DWMode", "0").equals("2")) {
+            mAiStatus.setJumpEnabled(true);
+            if (AppUtils.isAppInstalled(requireContext(), "it.dhd.oxygencustomizer.aiplugin")) {
+                mAiStatus.setSummary(R.string.depth_wallpaper_plugin_installed);
+                mAiStatus.setOnPreferenceClickListener(preference -> {
+                    Intent intent = requireContext().getPackageManager().getLaunchIntentForPackage("it.dhd.oxygencustomizer.aiplugin");
+                    startActivity(intent);
+                    return true;
+                });
+            } else {
+                mAiStatus.setSummary(R.string.depth_wallpaper_plugin_not_installed);
+                mAiStatus.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(PLUGIN_URL));
+                    startActivity(intent);
+                    return true;
+                });
+            }
+        }
     }
 
     ActivityResultLauncher<Intent> pickImageIntent = registerForActivityResult(
@@ -248,7 +276,10 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     public void updateScreen(String key) {
         super.updateScreen(key);
 
-        if (key == null) return;
+        if (key == null) {
+            checkAiStatus();
+            return;
+        }
 
         switch (key) {
             case "DWallpaperEnabled":
@@ -265,6 +296,9 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     }
                 } catch (Exception ignored) {
                 }
+                break;
+            case "DWMode":
+                checkAiStatus();
                 break;
         }
     }
@@ -284,6 +318,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         public int getLayoutResource() {
             return R.xml.lockscreen_clock;
         }
+
         @Override
         public boolean hasMenu() {
             return true;
@@ -293,6 +328,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         public String[] getScopes() {
             return new String[]{SYSTEM_UI};
         }
+
         private int type = 0;
 
         ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
