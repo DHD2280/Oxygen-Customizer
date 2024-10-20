@@ -205,7 +205,6 @@ public class LockscreenWidgets extends XposedMods {
 
     private void placeLockscreenWidgets() {
         if (mWeatherEnabled && !mWeatherInflated) return;
-        if (!mWidgetsEnabled) return;
         try {
             LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance(mContext, mActivityStarter);
             try {
