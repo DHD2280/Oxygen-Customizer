@@ -15,6 +15,7 @@
         android:key="quick_settings_quick_tiles"
         android:title="@string/quick_settings_tiles_qqs"
         app:defaultValue="5"
+        app:forcePosition="bottom"
         app:iconSpaceReserved="false"
         app:maxVal="6"
         app:minVal="1"
