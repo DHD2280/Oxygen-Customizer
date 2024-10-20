@@ -694,7 +694,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Kırmızı Bir davranışı</string>
     <string name="lockscreen_stock_clock_red_one_disable">Kırmızı Bir\'i Devre Dışı Bırak</string>
     <string name="lockscreen_stock_clock_red_one_color">Saatte 1 için renk</string>
-    <string name="welcome_back">Tekrar Hoş Geldiniz</string>
     <string name="default_user_name">Kullanıcı</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Zaman</string>

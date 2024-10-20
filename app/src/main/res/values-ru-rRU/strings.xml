@@ -727,7 +727,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Настройки стиля 1+</string>
     <string name="lockscreen_stock_clock_red_one_disable">Отключение красного цвета</string>
     <string name="lockscreen_stock_clock_red_one_color">Цвет в течение 1 часа</string>
-    <string name="welcome_back">С возвращением</string>
     <string name="default_user_name">Пользователь</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Время</string>

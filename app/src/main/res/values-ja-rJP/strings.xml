@@ -693,7 +693,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Red One の振る舞い</string>
     <string name="lockscreen_stock_clock_red_one_disable">赤い 1 を無効化</string>
     <string name="lockscreen_stock_clock_red_one_color">時計の 1 の色</string>
-    <string name="welcome_back">おかえりなさい</string>
     <string name="default_user_name">ユーザー</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">時間は</string>
