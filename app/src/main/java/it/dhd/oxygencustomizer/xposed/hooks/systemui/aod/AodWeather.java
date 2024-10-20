@@ -42,8 +42,8 @@ public class AodWeather extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
     private final int weatherStartPadding = 20;
-    private boolean weatherEnabled = true, weatherShowLocation = true, weatherShowCondition = true;
-    private boolean weatherShowHumidity = true, weatherShowWind = true;
+    private boolean weatherEnabled = false, weatherShowLocation = true, weatherShowCondition = true;
+    private boolean weatherShowHumidity = false, weatherShowWind = false;
     private boolean weatherCustomColor = false;
     private int weatherColor = Color.WHITE;
     private int weatherTextSize = 16, weatherImageSize = 18;
@@ -61,13 +61,13 @@ public class AodWeather extends XposedMods {
     @Override
     public void updatePrefs(String... Key) {
         // Weather
-        weatherEnabled = Xprefs.getBoolean(AOD_WEATHER_SWITCH, true);
+        weatherEnabled = Xprefs.getBoolean(AOD_WEATHER_SWITCH, false);
         weatherTextSize = Xprefs.getSliderInt(AOD_WEATHER_TEXT_SIZE, 16);
         weatherImageSize = Xprefs.getSliderInt(AOD_WEATHER_IMAGE_SIZE, 18);
         weatherShowLocation = Xprefs.getBoolean(AOD_WEATHER_SHOW_LOCATION, true);
         weatherShowCondition = Xprefs.getBoolean(AOD_WEATHER_SHOW_CONDITION, true);
-        weatherShowHumidity = Xprefs.getBoolean(AOD_WEATHER_HUMIDITY, true);
-        weatherShowWind = Xprefs.getBoolean(AOD_WEATHER_WIND, true);
+        weatherShowHumidity = Xprefs.getBoolean(AOD_WEATHER_HUMIDITY, false);
+        weatherShowWind = Xprefs.getBoolean(AOD_WEATHER_WIND, false);
         weatherCustomColor = Xprefs.getBoolean(AOD_WEATHER_CUSTOM_COLOR_SWITCH, false);
         weatherColor = Xprefs.getInt(AOD_WEATHER_CUSTOM_COLOR, Color.WHITE);
         mCustomMargins = Xprefs.getBoolean(AOD_WEATHER_CUSTOM_MARGINS, false);
