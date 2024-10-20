@@ -666,8 +666,12 @@
     <string name="depth_wallpaper_title">Sfondo con effetto profondità</string>
     <string name="depth_wallpaper_summary">Integra dinamicamente il primo piano dello sfondo con l\'orologio</string>
     <string name="depth_wallpaper_mode_title">Modalità Profondità Sfondo</string>
+    <string name="depth_wallpaper_ai_status">Stato IA</string>
+    <string name="depth_wallpaper_plugin_installed">Plugin IA Installato</string>
+    <string name="depth_wallpaper_plugin_not_installed">Plugin IA non installato.\nClicca qui per scaricare.</string>
     <string name="depth_wallpaper_mode_ai">Intelligenza Artificiale</string>
     <string name="depth_wallpaper_mode_custom_images">Immagini personalizzate</string>
+    <string name="depth_wallpaper_mode_ai_plugin">IA (locale)</string>
     <string name="depth_wallpaper_opacity_title">Opacità dello sfondo in primo piano</string>
     <string name="depth_wallpaper_aod_title">Anche su \"always on display\"</string>
     <string name="depth_wallpaper_pick_background_title">Scegli sfondo</string>
@@ -723,7 +727,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Comportamento Uno rosso</string>
     <string name="lockscreen_stock_clock_red_one_disable">Disabilita Uno Rosso</string>
     <string name="lockscreen_stock_clock_red_one_color">Colore per 1 in Orologio</string>
-    <string name="welcome_back">Bentornato</string>
     <string name="default_user_name">Utente</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Il tempo è</string>
@@ -930,6 +933,8 @@
     <string name="export_failed">Esportazione fallita</string>
     <string name="import_success">Importazione riuscita</string>
     <string name="import_failed">Importazione fallita</string>
+    <string name="more_logging_title">Log aggiuntivi</string>
+    <string name="more_logging_summary">Abilita log aggiuntivi.\nQuesto può aiutare quando si inviano Bug Report.</string>
     <string name="settings_about_section_title">Informazioni</string>
     <string name="github_repo_title">Repository GitHub</string>
     <string name="support_group_title">Gruppo di supporto</string>

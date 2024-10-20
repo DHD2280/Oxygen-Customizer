@@ -680,7 +680,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Comportamiento de Red One</string>
     <string name="lockscreen_stock_clock_red_one_disable">Deshabilitar Red One</string>
     <string name="lockscreen_stock_clock_red_one_color">Color para 1 en reloj</string>
-    <string name="welcome_back">Te damos la bienvenida de regreso</string>
     <string name="default_user_name">Usuario</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">La hora es</string>

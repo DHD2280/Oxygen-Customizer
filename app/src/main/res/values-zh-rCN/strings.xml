@@ -717,7 +717,6 @@
     <string name="lockscreen_stock_clock_red_one_title">红“1”行为</string>
     <string name="lockscreen_stock_clock_red_one_disable">禁用红色“1”</string>
     <string name="lockscreen_stock_clock_red_one_color">时钟中1的颜色</string>
-    <string name="welcome_back">欢迎回来！</string>
     <string name="default_user_name">用户</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">时间是</string>

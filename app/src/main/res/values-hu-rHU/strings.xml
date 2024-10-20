@@ -723,7 +723,6 @@
     <string name="lockscreen_stock_clock_red_one_title">\'Red One\'-viselkedés</string>
     <string name="lockscreen_stock_clock_red_one_disable">A \'Red One\' letiltása</string>
     <string name="lockscreen_stock_clock_red_one_color">Szín az órában</string>
-    <string name="welcome_back">Örülünk, hogy visszatért!</string>
     <string name="default_user_name">Felhasználó</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Az idő</string>

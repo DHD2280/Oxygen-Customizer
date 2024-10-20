@@ -716,7 +716,6 @@
     <string name="lockscreen_stock_clock_red_one_title">سلوك الرقم الأحمر واحد</string>
     <string name="lockscreen_stock_clock_red_one_disable">تعطيل الرقم الأحمر واحد</string>
     <string name="lockscreen_stock_clock_red_one_color">لون الرقم 1 في الساعة</string>
-    <string name="welcome_back">مرحباً بعودتك</string>
     <string name="default_user_name">مستخدم</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">الوقت هو</string>

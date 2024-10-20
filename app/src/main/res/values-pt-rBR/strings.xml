@@ -704,7 +704,6 @@
     <string name="lockscreen_stock_clock_red_one_title">Comportamento do vermelho</string>
     <string name="lockscreen_stock_clock_red_one_disable">Desativar o vermelho</string>
     <string name="lockscreen_stock_clock_red_one_color">Cor para 1 no relógio</string>
-    <string name="welcome_back">Bem-vindo de volta</string>
     <string name="default_user_name">Usuário</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">O tempo é</string>
