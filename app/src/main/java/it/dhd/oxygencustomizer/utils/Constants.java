@@ -511,10 +511,12 @@ public final class Constants {
             public static final String AOD_WEATHER_SWITCH = "aod_weather_enabled";
             public static final String AOD_WEATHER_TEXT_SIZE = "aod_weather_text_size";
             public static final String AOD_WEATHER_IMAGE_SIZE = "aod_weather_image_size";
+            public static final String AOD_WEATHER_UI_PREFS = "aod_weather_prefs";
             public static final String AOD_WEATHER_SHOW_LOCATION = "aod_weather_show_location";
             public static final String AOD_WEATHER_SHOW_CONDITION = "aod_weather_show_condition";
             public static final String AOD_WEATHER_HUMIDITY = "aod_weather_show_humidity";
             public static final String AOD_WEATHER_WIND = "aod_weather_show_wind";
+            public static final String AOD_WEATHER_COLOR_CAT = "aod_weather_colors_prefs";
             public static final String AOD_WEATHER_CUSTOM_COLOR_SWITCH = "aod_weather_custom_color_switch";
             public static final String AOD_WEATHER_CUSTOM_COLOR = "aod_weather_custom_color";
             public static final String AOD_WEATHER_CENTERED = "aod_weather_centered";

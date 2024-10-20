@@ -70,7 +70,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory>
+    <PreferenceCategory android:key="aod_weather_prefs">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="true"
@@ -128,7 +128,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory>
+    <PreferenceCategory android:key="aod_weather_colors_prefs">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"

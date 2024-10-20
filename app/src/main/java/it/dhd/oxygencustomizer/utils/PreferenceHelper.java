@@ -30,6 +30,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_COLOR_CAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGINS;
@@ -41,6 +42,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SHOW_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_TEXT_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_UI_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_WIND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DEFAULT;
@@ -668,8 +670,10 @@ public class PreferenceHelper {
                  AOD_WEATHER_WIND,
                  AOD_WEATHER_TEXT_SIZE,
                  AOD_WEATHER_IMAGE_SIZE,
+                 AOD_WEATHER_UI_PREFS,
                  AOD_WEATHER_SHOW_LOCATION,
                  AOD_WEATHER_SHOW_CONDITION,
+                 AOD_WEATHER_COLOR_CAT,
                  AOD_WEATHER_CUSTOM_COLOR_SWITCH,
                  AOD_WEATHER_CUSTOM_MARGINS,
                  AOD_WEATHER_CENTERED -> {
