@@ -563,11 +563,13 @@ public final class Constants {
         public static final String LOCKSCREEN_WEATHER_SWITCH = "lockscreen_weather_enabled";
         public static final String LOCKSCREEN_WEATHER_TEXT_SIZE = "weather_text_size";
         public static final String LOCKSCREEN_WEATHER_IMAGE_SIZE = "weather_image_size";
+        public static final String LOCKSCREEN_WEATHER_UI_PREFS = "lockscreen_weather_prefs";
         public static final String LOCKSCREEN_WEATHER_SHOW_LOCATION = "weather_show_location";
         public static final String LOCKSCREEN_WEATHER_SHOW_CONDITION = "weather_show_condition";
         public static final String LOCKSCREEN_WEATHER_HUMIDITY = "weather_show_humidity";
         public static final String LOCKSCREEN_WEATHER_WIND = "weather_show_wind";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH = "weather_custom_color_switch";
+        public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR_CAT = "lockscreen_weather_colors_prefs";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_COLOR = "weather_custom_color";
         public static final String LOCKSCREEN_WEATHER_CENTERED = "weather_centered";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGINS = "weather_custom_margins";
