@@ -19,6 +19,8 @@ import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
 
 public final class Constants {
 
+    public static final int DEFAULT_DARK_MODE_STYLE = 0;
+
     public static class Packages {
         public static final String FRAMEWORK = "android";
         public static final String SYSTEM_UI = "com.android.systemui";

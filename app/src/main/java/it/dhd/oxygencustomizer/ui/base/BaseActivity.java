@@ -20,6 +20,7 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.shape.MaterialShapeDrawable;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.LocaleHelper;
 
 public class BaseActivity extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void setDarkTheme() {
         if (isNightMode()) {
-            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", 2);
+            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", Constants.DEFAULT_DARK_MODE_STYLE);
             switch (darkStyle) {
                 case 0:
                     setTheme(R.style.Theme_OxygenCustomizer_DarkHard);

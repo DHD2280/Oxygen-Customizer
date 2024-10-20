@@ -13,6 +13,7 @@ import com.google.android.material.color.DynamicColors;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ActivityOnboardingBinding;
 import it.dhd.oxygencustomizer.ui.views.OnboardingView;
+import it.dhd.oxygencustomizer.utils.Constants;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -56,7 +57,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private void setDarkTheme() {
         if (isNightMode()) {
-            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", 2);
+            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", Constants.DEFAULT_DARK_MODE_STYLE);
             switch (darkStyle) {
                 case 0:
                     setTheme(R.style.Theme_OxygenCustomizer_DarkHard);

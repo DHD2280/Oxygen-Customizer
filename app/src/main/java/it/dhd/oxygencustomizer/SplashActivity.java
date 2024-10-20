@@ -16,6 +16,7 @@ import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.activity.OnboardingActivity;
+import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.RootUtil;
@@ -85,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setDarkTheme() {
         if (isNightMode()) {
-            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", 2);
+            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", Constants.DEFAULT_DARK_MODE_STYLE);
             switch (darkStyle) {
                 case 0:
                     setTheme(R.style.Theme_OxygenCustomizer_DarkHard);
