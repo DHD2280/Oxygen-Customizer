@@ -48,11 +48,27 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 
 # 👨‍💻 Installation
 
-  1. Download and install Oxygen Customizer app.
+  1. Download and install the Oxygen Customizer app.
 
-  2. Enable app in LSPosed.
+  ### Installation for Magisk Users:
+
+  2. Enable the Xposed module in LSPosed app.
+
+  3. Open the app, grant root permission and follow the instructions.
+
+  4. Wait for it to finish generating rom specific module.
+
+  5. Reboot the device when prompted.
+
+  ### Installation for KernelSU/APatch Users:
+
+  2. Grant SuperSU/root permission for Oxygen Customizer & SystemUI from KernelSU app
   
-  3. Restart your device.
+  3. Disable `Unmount modules` option if it's available in the app
+  
+  4. Open the app, wait for it to finish generating rom specific module.
+  
+  5. Reboot the device when prompted.
 
 # 🔒 Permissions
 
