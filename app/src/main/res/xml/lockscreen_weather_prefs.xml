@@ -85,7 +85,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory>
+    <PreferenceCategory android:key="lockscreen_weather_prefs">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="true"
@@ -143,7 +143,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory>
+    <PreferenceCategory android:key="lockscreen_weather_colors_prefs">
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"
             android:key="weather_custom_color_switch"
@@ -160,8 +160,7 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
-        android:title="@string/weather_custom_location_title">
+    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory android:title="@string/weather_custom_location_title">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference
             android:defaultValue="false"

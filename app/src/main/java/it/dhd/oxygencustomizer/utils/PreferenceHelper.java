@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_CAT;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT;
@@ -15,6 +16,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCRE
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SHOW_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_TEXT_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_UI_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_WIND;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_COLOR_CODE_ACCENT1;
@@ -585,6 +587,7 @@ public class PreferenceHelper {
                  LOCKSCREEN_WEATHER_WIND,
                  LOCKSCREEN_WEATHER_TEXT_SIZE,
                  LOCKSCREEN_WEATHER_IMAGE_SIZE,
+                 LOCKSCREEN_WEATHER_UI_PREFS,
                  LOCKSCREEN_WEATHER_SHOW_LOCATION,
                  LOCKSCREEN_WEATHER_SHOW_CONDITION,
                  LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
@@ -593,7 +596,8 @@ public class PreferenceHelper {
                  LOCKSCREEN_WEATHER_BACKGROUND -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
             }
-            case LOCKSCREEN_WEATHER_CUSTOM_COLOR -> {
+            case LOCKSCREEN_WEATHER_CUSTOM_COLOR,
+                 LOCKSCREEN_WEATHER_CUSTOM_COLOR_CAT -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
             }
