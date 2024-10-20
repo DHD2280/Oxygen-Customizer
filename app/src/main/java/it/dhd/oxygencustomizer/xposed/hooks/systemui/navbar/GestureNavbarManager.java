@@ -104,7 +104,7 @@ public class GestureNavbarManager extends XposedMods {
         //endregion
 
         //region pill color
-        navPillColorAccent = Xprefs.getBoolean("navPillColorAccent", true);
+        navPillColorAccent = Xprefs.getBoolean("navPillColorAccent", false);
         navPillCustomColor = Xprefs.getBoolean("navPillCustomColor", false);
         navPillColor = Xprefs.getInt("navPillColor", Color.GRAY);
         //endregion
