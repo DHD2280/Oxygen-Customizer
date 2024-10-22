@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 
 public class ModuleConstants {
 
-    public final static String MODULE_VERSION_NAME = "0.0.43";
+    public final static String MODULE_VERSION_NAME = "0.0.44";
     public final static int MODULE_VERSION_CODE = 1;
 
     // Storage location
