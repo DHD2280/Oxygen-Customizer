@@ -60,6 +60,12 @@ public abstract class ClockPickerFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentClockPickerBinding.inflate(inflater, container, false);
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(binding.fragmentContainer.getId(), getPreferenceFragment())
+                .commit();
+
         return binding.getRoot();
     }
 
@@ -135,31 +141,28 @@ public abstract class ClockPickerFragment extends BaseFragment {
                     ));
         }
 
-        clockCarouselView.setUpClockCarouselView(
-                ls_clock,
-                onClockSelected -> {
-                    int selectedClock = onClockSelected.getClockLayout();
-                    if (updateRunnable != null) {
-                        handler.removeCallbacks(updateRunnable);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            clockCarouselView.setUpClockCarouselView(
+                    ls_clock,
+                    onClockSelected -> {
+                        int selectedClock = onClockSelected.getClockLayout();
+                        if (updateRunnable != null) {
+                            handler.removeCallbacks(updateRunnable);
+                        }
+                        updateRunnable = () -> {
+                            setPref(selectedClock);
+                        };
+                        handler.postDelayed(updateRunnable, 500);
                     }
-                    updateRunnable = () -> {
-                        setPref(selectedClock);
-                    };
-                    handler.postDelayed(updateRunnable, 500);
-                }
-        );
-        binding.clockCarouselView.screenPreviewClickView.setOnSideClickedListener(
-                (isStart) -> {
-                    if (isStart) clockCarouselView.scrollToPrevious();
-                    else clockCarouselView.scrollToNext();
-                    return null;
-                }
-        );
-
-        FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.getId(), getPreferenceFragment())
-                .commit();
+            );
+            binding.clockCarouselView.screenPreviewClickView.setOnSideClickedListener(
+                    (isStart) -> {
+                        if (isStart) clockCarouselView.scrollToPrevious();
+                        else clockCarouselView.scrollToNext();
+                        return null;
+                    }
+            );
+        }, 50);
 
         if (shouldLoadWallpaper()) new WallpaperLoaderTask(requireContext(), this::onWallpaperLoad).loadWallpaper();
         else binding.clockCarouselView.preview.wallpaperPreviewSpinner.setVisibility(View.GONE);
