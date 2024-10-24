@@ -36,7 +36,6 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ClockPickerFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
 import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
@@ -114,7 +113,6 @@ public class Mods extends ControlledPreferenceFragmentCompat {
                 if (mItem.getXml() == result.getResourceFile()) {
                     replaceFragment(mItem.getFragment());
                     if (mItem.getFragment() instanceof ClockPickerFragment clockPicker) {
-                        Log.d("Mods", "ClockPickerFragment");
                         ControlledPreferenceFragmentCompat fragment = clockPicker.getPreferenceFragment();
                         clockPicker.scrollToPreference();
                         SearchPreferenceResult.highlight(fragment, result.getKey());
