@@ -13,7 +13,7 @@
         search:ignore="true">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen$LockscreenClock"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment"
             android:key="lockscreen_clock_main"
             android:title="@string/lockscreen_clock"
             app:iconSpaceReserved="false" />

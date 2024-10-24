@@ -148,5 +148,7 @@
     <color name="btn_radio_background_color">#4d000000</color>
     <color name="btn_radio_color_on_disabled">#ffffff</color>
 
+    <color name="wallpaper_preview_scrim_color">#99000000</color>
+
 
 </resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<it.dhd.oxygencustomizer.ui.widgets.HorizontalTouchMovementAwareNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <it.dhd.oxygencustomizer.ui.widgets.CategoryWidget
+            android:id="@+id/clock_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
+            android:id="@+id/clock_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <include
+            android:id="@+id/clock_carousel_view"
+            layout="@layout/screen_preview_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</it.dhd.oxygencustomizer.ui.widgets.HorizontalTouchMovementAwareNestedScrollView>

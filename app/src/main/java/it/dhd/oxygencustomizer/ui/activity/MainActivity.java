@@ -47,6 +47,7 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock;
 import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
+import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock;
@@ -54,6 +55,7 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles;
+import it.dhd.oxygencustomizer.ui.models.SearchPreferenceItem;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -70,7 +72,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
     private static final String TITLE_TAG = "mainActivityTitle";
     private static ActionBar actionBar;
     private ColorPickerDialog.Builder colorPickerDialog;
-    public static final List<Object[]> prefsList = new ArrayList<>();
+    public static final List<SearchPreferenceItem> prefsList = new ArrayList<>();
     private Mods modsFragment;
 
     @Override
@@ -108,30 +110,30 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         }
 
         if (!prefsList.isEmpty()) prefsList.clear();
-        prefsList.add(new Object[]{R.xml.mods, R.string.mods_title, new Mods()});
-        prefsList.add(new Object[]{R.xml.statusbar, R.string.statusbar_title, new Statusbar()});
-        prefsList.add(new Object[]{R.xml.statusbar_clock, R.string.status_bar_clock_title, new Statusbar.Clock()});
-        prefsList.add(new Object[]{R.xml.statusbar_notifications, R.string.statusbar_notifications, new Statusbar.Notifications()});
-        prefsList.add(new Object[]{R.xml.battery_bar_settings, R.string.statusbar_batterybar_title, new Statusbar.BatteryBar()});
-        prefsList.add(new Object[]{R.xml.statusbar_battery_icon, R.string.statusbar_battery_icon_options, new Statusbar.BatteryIcon()});
-        prefsList.add(new Object[]{R.xml.statusbar_icons, R.string.statusbar_icons, new Statusbar.Icons()});
-        prefsList.add(new Object[]{R.xml.quick_settings_mods, R.string.quick_settings_title, new QuickSettings()});
-        prefsList.add(new Object[]{R.xml.quick_settings_tiles_prefs, R.string.quick_settings_tiles_title, new QuickSettingsTiles()});
-        prefsList.add(new Object[]{R.xml.quick_settings_tiles_customizations_prefs, R.string.quick_settings_tiles_customization_title, new QuickSettingsCustomization()});
-        prefsList.add(new Object[]{R.xml.qs_header_image_prefs, R.string.qs_header_image_title, new QsHeaderImage()});
-        prefsList.add(new Object[]{R.xml.qs_header_clock_prefs, R.string.qs_header_clock, new QsHeaderClock()});
-        prefsList.add(new Object[]{R.xml.gesture_prefs, R.string.gesture_navigation_title, new Gesture()});
-        prefsList.add(new Object[]{R.xml.buttons_prefs, R.string.buttons_title, new Buttons()});
+        prefsList.add(new SearchPreferenceItem(R.xml.mods, R.string.mods_title, new Mods()));
+        prefsList.add(new SearchPreferenceItem(R.xml.statusbar, R.string.statusbar_title, new Statusbar()));
+        prefsList.add(new SearchPreferenceItem(R.xml.statusbar_clock, R.string.status_bar_clock_title, new Statusbar.Clock()));
+        prefsList.add(new SearchPreferenceItem(R.xml.statusbar_notifications, R.string.statusbar_notifications, new Statusbar.Notifications()));
+        prefsList.add(new SearchPreferenceItem(R.xml.battery_bar_settings, R.string.statusbar_batterybar_title, new Statusbar.BatteryBar()));
+        prefsList.add(new SearchPreferenceItem(R.xml.statusbar_battery_icon, R.string.statusbar_battery_icon_options, new Statusbar.BatteryIcon()));
+        prefsList.add(new SearchPreferenceItem(R.xml.statusbar_icons, R.string.statusbar_icons, new Statusbar.Icons()));
+        prefsList.add(new SearchPreferenceItem(R.xml.quick_settings_mods, R.string.quick_settings_title, new QuickSettings()));
+        prefsList.add(new SearchPreferenceItem(R.xml.quick_settings_tiles_prefs, R.string.quick_settings_tiles_title, new QuickSettingsTiles()));
+        prefsList.add(new SearchPreferenceItem(R.xml.quick_settings_tiles_customizations_prefs, R.string.quick_settings_tiles_customization_title, new QuickSettingsCustomization()));
+        prefsList.add(new SearchPreferenceItem(R.xml.qs_header_image_prefs, R.string.qs_header_image_title, new QsHeaderImage()));
+        prefsList.add(new SearchPreferenceItem(R.xml.qs_header_clock_prefs, R.string.qs_header_clock, new QsHeaderClock()));
+        prefsList.add(new SearchPreferenceItem(R.xml.gesture_prefs, R.string.gesture_navigation_title, new Gesture()));
+        prefsList.add(new SearchPreferenceItem(R.xml.buttons_prefs, R.string.buttons_title, new Buttons()));
         if (AppUtils.isAppInstalled(this, Constants.Packages.LAUNCHER))
-            prefsList.add(new Object[]{R.xml.launcher_mods, R.string.launcher_title, new Launcher()});
-        prefsList.add(new Object[]{R.xml.lockscreen_prefs, R.string.lockscreen_title, new Lockscreen()});
-        prefsList.add(new Object[]{R.xml.lockscreen_clock, R.string.lockscreen_clock, new Lockscreen.LockscreenClock()});
-        prefsList.add(new Object[]{R.xml.lockscreen_weather_prefs, R.string.lockscreen_weather, new LockscreenWeather()});
-        prefsList.add(new Object[]{R.xml.aod_clock_prefs, R.string.aod_clock, new AodClock()});
-        prefsList.add(new Object[]{R.xml.aod_weather_prefs, R.string.aod_weather, new AodWeather()});
-        prefsList.add(new Object[]{R.xml.sound_mods, R.string.sound, new Mods.Sound()});
-        prefsList.add(new Object[]{R.xml.package_manager_prefs, R.string.package_manager, new Mods.PackageManager()});
-        prefsList.add(new Object[]{R.xml.misc_prefs, R.string.misc, new Mods.Misc()});
+            prefsList.add(new SearchPreferenceItem(R.xml.launcher_mods, R.string.launcher_title, new Launcher()));
+        prefsList.add(new SearchPreferenceItem(R.xml.lockscreen_prefs, R.string.lockscreen_title, new Lockscreen()));
+        prefsList.add(new SearchPreferenceItem(R.xml.lockscreen_clock, R.string.lockscreen_clock, new LockscreenClockFragment()));
+        prefsList.add(new SearchPreferenceItem(R.xml.lockscreen_weather_prefs, R.string.lockscreen_weather, new LockscreenWeather()));
+        prefsList.add(new SearchPreferenceItem(R.xml.aod_clock_prefs, R.string.aod_clock, new AodClock()));
+        prefsList.add(new SearchPreferenceItem(R.xml.aod_weather_prefs, R.string.aod_weather, new AodWeather()));
+        prefsList.add(new SearchPreferenceItem(R.xml.sound_mods, R.string.sound, new Mods.Sound()));
+        prefsList.add(new SearchPreferenceItem(R.xml.package_manager_prefs, R.string.package_manager, new Mods.PackageManager()));
+        prefsList.add(new SearchPreferenceItem(R.xml.misc_prefs, R.string.misc, new Mods.Misc()));
 
         PreferenceHelper.init(ExtendedSharedPreferences.from(getDefaultSharedPreferences(createDeviceProtectedStorageContext())));
 

@@ -1,24 +1,14 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 
-import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
-import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
-import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
-import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
-import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
@@ -32,8 +22,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -45,12 +33,14 @@ import com.topjohnwu.superuser.Shell;
 
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
+import it.dhd.oxygencustomizer.ui.base.ClockPickerFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
+import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
 import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
 import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
+import it.dhd.oxygencustomizer.ui.models.SearchPreferenceItem;
 import it.dhd.oxygencustomizer.ui.preferences.OplusJumpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
@@ -61,7 +51,6 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
-import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
@@ -107,8 +96,8 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         config.setActivity((AppCompatActivity) requireActivity());
         config.setFragmentContainerViewId(R.id.frame_layout);
 
-        for (Object[] obj : prefsList) {
-            config.index((Integer) obj[0]).addBreadcrumb(this.getResources().getString((Integer) obj[1]));
+        for (SearchPreferenceItem mItem : prefsList) {
+            config.index(mItem.getXml()).addBreadcrumb(this.getResources().getString(mItem.getTitle()));
         }
 
         config.setBreadcrumbsEnabled(true);
@@ -121,10 +110,17 @@ public class Mods extends ControlledPreferenceFragmentCompat {
             if (searchPreference != null) searchPreference.setVisible(false);
             SearchPreferenceResult.highlight(new Mods(), result.getKey());
         } else {
-            for (Object[] obj : prefsList) {
-                if ((Integer) obj[0] == result.getResourceFile()) {
-                    replaceFragment((PreferenceFragmentCompat) obj[2]);
-                    SearchPreferenceResult.highlight((PreferenceFragmentCompat) obj[2], result.getKey());
+            for (SearchPreferenceItem mItem : prefsList) {
+                if (mItem.getXml() == result.getResourceFile()) {
+                    replaceFragment(mItem.getFragment());
+                    if (mItem.getFragment() instanceof ClockPickerFragment clockPicker) {
+                        Log.d("Mods", "ClockPickerFragment");
+                        ControlledPreferenceFragmentCompat fragment = clockPicker.getPreferenceFragment();
+                        clockPicker.scrollToPreference();
+                        SearchPreferenceResult.highlight(fragment, result.getKey());
+                    } else {
+                        SearchPreferenceResult.highlight((PreferenceFragmentCompat) mItem.getFragment(), result.getKey());
+                    }
                     break;
                 }
             }
