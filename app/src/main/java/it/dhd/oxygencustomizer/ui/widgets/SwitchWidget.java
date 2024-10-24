@@ -95,6 +95,7 @@ public class SwitchWidget extends RelativeLayout {
     }
 
     public void setSummary(int summaryResId) {
+        summaryTextView.setVisibility(VISIBLE);
         summaryTextView.setText(summaryResId);
     }
 
