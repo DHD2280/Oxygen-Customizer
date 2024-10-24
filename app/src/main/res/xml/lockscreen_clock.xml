@@ -3,25 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-<!--    <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory android:title="@string/lockscreen_clock_switch">-->
-
-<!--        <it.dhd.oxygencustomizer.ui.preferences.OplusSwitchPreference-->
-<!--            android:defaultValue="false"-->
-<!--            android:key="lockscreen_custom_clock_switch"-->
-<!--            android:summaryOff="@string/general_off"-->
-<!--            android:summaryOn="@string/general_on"-->
-<!--            android:title="@string/lockscreen_clock_switch"-->
-<!--            app:iconSpaceReserved="false" />-->
-
-<!--        <it.dhd.oxygencustomizer.ui.preferences.OplusClockPreference-->
-<!--            android:key="lockscreen_clock_style"-->
-<!--            android:summary="@string/lockscreen_clock_custom_summary"-->
-<!--            android:title="@string/lockscreen_clock_custom"-->
-<!--            app:forcePosition="bottom"-->
-<!--            app:iconSpaceReserved="false" />-->
-
-<!--    </it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory>-->
-
     <it.dhd.oxygencustomizer.ui.preferences.OplusPreferenceCategory
         android:key="lockscreen_clock_font_prefs"
         android:title="@string/lockscreen_clock_font_prefs_title"
