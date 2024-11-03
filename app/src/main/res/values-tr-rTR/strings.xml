@@ -646,7 +646,6 @@
     <string name="depth_wallpaper_title">Derinlik etkisi duvar kağıdı</string>
     <string name="depth_wallpaper_summary">Duvar kağıdının ön planını saatinle dinamik bir şekilde entegre et.</string>
     <string name="depth_wallpaper_opacity_title">Duvar kağıdı ön plan opaklığı</string>
-    <string name="depth_wallpaper_aod_title">Ayrıca \"her zaman açık ekran\" üzerinde</string>
     <string name="depth_wallpaper_model_ready">AI modeli cihaza indirildi</string>
     <string name="depth_wallpaper_model_not_available">AI modeli cihazda (henüz) mevcut değil.</string>
     <!-- Media art -->

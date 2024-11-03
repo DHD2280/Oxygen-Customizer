@@ -663,7 +663,6 @@
     <string name="depth_wallpaper_mode_ai">AI</string>
     <string name="depth_wallpaper_mode_custom_images">自定义图像</string>
     <string name="depth_wallpaper_opacity_title">壁纸前景透明度</string>
-    <string name="depth_wallpaper_aod_title">也在“息屏显示”上展示</string>
     <string name="depth_wallpaper_pick_background_title">填充背景</string>
     <string name="depth_wallpaper_pick_background_summary">填充你的背景图像</string>
     <string name="depth_wallpaper_pick_subject_title">填充前景</string>

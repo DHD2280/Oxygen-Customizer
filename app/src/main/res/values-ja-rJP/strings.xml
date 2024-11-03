@@ -649,7 +649,6 @@
     <string name="depth_wallpaper_mode_ai">AI</string>
     <string name="depth_wallpaper_mode_custom_images">カスタム画像</string>
     <string name="depth_wallpaper_opacity_title">壁紙の前景の不透過度</string>
-    <string name="depth_wallpaper_aod_title">AOD 時でも適用</string>
     <string name="depth_wallpaper_pick_background_title">背景を選択</string>
     <string name="depth_wallpaper_pick_background_summary">背景画像を選択します</string>
     <string name="depth_wallpaper_model_ready">AI モデルがデバイスにダウンロードされます</string>

@@ -673,7 +673,6 @@
     <string name="depth_wallpaper_mode_custom_images">Egyedi képek</string>
     <string name="depth_wallpaper_mode_ai_plugin">AI (helyi)</string>
     <string name="depth_wallpaper_opacity_title">Háttérkép előtérbeni áttetszősége</string>
-    <string name="depth_wallpaper_aod_title">\'Mindig bekapcsolva\' módban is</string>
     <string name="depth_wallpaper_pick_background_title">Háttérválasztó</string>
     <string name="depth_wallpaper_pick_background_summary">Jelölje ki a háttér-képet</string>
     <string name="depth_wallpaper_pick_subject_title">Előtérválasztó</string>

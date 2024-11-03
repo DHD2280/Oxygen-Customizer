@@ -660,7 +660,6 @@
     <string name="depth_wallpaper_mode_ai">AI</string>
     <string name="depth_wallpaper_mode_custom_images">自訂圖片</string>
     <string name="depth_wallpaper_opacity_title">桌布前景透明度</string>
-    <string name="depth_wallpaper_aod_title">也在息屏顯示上展示</string>
     <string name="depth_wallpaper_pick_background_title">選取背景</string>
     <string name="depth_wallpaper_pick_background_summary">選取您的背景圖片</string>
     <string name="depth_wallpaper_pick_subject_title">選取前景</string>

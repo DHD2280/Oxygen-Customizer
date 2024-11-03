@@ -654,7 +654,6 @@
     <string name="depth_wallpaper_title">Papel de parede com efeito de profundidade</string>
     <string name="depth_wallpaper_summary">Integrar dinamicamente o primeiro plano de fundo com o relógio</string>
     <string name="depth_wallpaper_opacity_title">Opacidade do primeiro plano do papel de parede</string>
-    <string name="depth_wallpaper_aod_title">Também em \"sempre em exibição\"</string>
     <string name="depth_wallpaper_model_ready">O modelo IA está sendo baixado no dispositivo</string>
     <string name="depth_wallpaper_model_not_available">O modelo IA não está disponível no dispositivo (ainda)</string>
     <!-- Media art -->
