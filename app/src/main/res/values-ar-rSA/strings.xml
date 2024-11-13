@@ -671,6 +671,7 @@
     <string name="depth_wallpaper_mode_custom_images">صورة مخصصة</string>
     <string name="depth_wallpaper_mode_ai_plugin">ذكاء اصطناعي (محلي)</string>
     <string name="depth_wallpaper_opacity_title">شفافية واجهة الخلفية</string>
+    <string name="depth_wallpaper_aod_title">أيضًا على AOD</string>
     <string name="depth_wallpaper_pick_background_title">اختيار الخلفية</string>
     <string name="depth_wallpaper_pick_background_summary">اختر صورة الخلفية الخاصة بك</string>
     <string name="depth_wallpaper_pick_subject_title">اختر المقدمة</string>

@@ -1050,13 +1050,13 @@
     <string name="lockscreen_weather_selection_str_border_accent">Темный с акцентом границ</string>
     <string name="lockscreen_weather_selection_str_border_gradient">Темный с градиентными границами</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Облачный</string>
+    <string name="weather_condition_clouds">Пасмурно</string>
     <string name="weather_condition_rain">Дождливый</string>
     <string name="weather_condition_clear">Солнечный</string>
     <string name="weather_condition_storm">Штормовой</string>
     <string name="weather_condition_snow">Снег</string>
-    <string name="weather_condition_wind">Ветреный</string>
-    <string name="weather_condition_mist">Туманный</string>
+    <string name="weather_condition_wind">Ветер</string>
+    <string name="weather_condition_mist">Туман</string>
     <!-- UI Strings -->
     <string name="style_category">Темы и стили</string>
     <string name="icon_theme_category">Пакет значков и стили</string>
