@@ -16,10 +16,10 @@ jobs:
       - name: Source Code Download
         run: git clone --branch stable --single-branch --recurse-submodules https://github.com/DHD2280/Oxygen-Customizer.git .
 
-      - name: JDK 17 Setup
+      - name: JDK 21 Setup
         uses: actions/setup-java@v4.1.0
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
@@ -76,10 +76,10 @@ jobs:
         run: |
           curl -X POST \
             -H 'Content-Type: application/json' \
-            -d '{"chat_id": ${{ secrets.OC_CHANNEL }}, "text": "'"$(${{ env.TMessage }})"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/download/"${{ github.ref }}"/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
+            -d '{"chat_id": ${{ secrets.OC_CHANNEL }}, "text": "'"$(cat telegram.msg)"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/download/"${{ github.ref }}"/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
 
       - name: Telegram Channel Post
         run: |
           curl -X POST \
             -H 'Content-Type: application/json' \
-            -d '{"chat_id": ${{ secrets.OC_CHANNEL2 }}, "text": "'"$(${{ env.TMessage }})"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/download/"${{ github.ref }}"/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
+            -d '{"chat_id": ${{ secrets.OC_CHANNEL2 }}, "text": "'"$(cat telegram.msg)"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/download/"${{ github.ref }}"/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
