@@ -76,7 +76,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         if (position == 0) {
             holder.binding.appSwitch.forcePosition(filteredApps.size() == 1 ? "full" : "top");
         } else if (position == filteredApps.size() - 1) {
-            holder.binding.appSwitch.forcePosition("middle");
+            holder.binding.appSwitch.forcePosition(hasSlider && model.isEnabled() ?
+                    "middle" : "bottom");
             holder.binding.appSlider.forcePosition("bottom");
         } else {
             holder.binding.appSwitch.forcePosition("middle");
@@ -117,7 +118,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private void checkChange() {
         filteredApps.sort((app1, app2) -> {
             if (app1.isEnabled() == app2.isEnabled()) {
-                return app1.getAppName().compareTo(app2.getAppName());
+                return app1.getAppName().toLowerCase().compareTo(app2.getAppName().toLowerCase());
             }
             return app1.isEnabled() ? -1 : 1;
         });

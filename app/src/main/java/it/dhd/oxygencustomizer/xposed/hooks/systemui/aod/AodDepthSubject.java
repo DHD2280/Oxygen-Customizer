@@ -228,9 +228,7 @@ public class AodDepthSubject extends XposedMods {
             mLockScreenSubject.setBackground(bitmapDrawable);
             mLockScreenSubject.getBackground().setAlpha(mDepthSubjectAlpha);
             mSubjectCacheValid = true;
-        } catch (Throwable t) {
-            log(t);
-        }
+        } catch (Throwable ignored) {}
     }
 
     @Override

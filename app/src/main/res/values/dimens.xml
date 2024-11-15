@@ -5,36 +5,6 @@
     <dimen name="ui_container_margin_side">16dp</dimen>
     <dimen name="container_paddingSide">24dp</dimen>
 
-    <!-- Preferences -->
-    <dimen name="preference_item_padding_side">16dp</dimen>
-    <dimen name="preference_item_margin_top">12dp</dimen>
-    <dimen name="preference_category_padding_start">18dp</dimen>
-    <dimen name="preference_category_text_height">16dp</dimen>
-    <dimen name="preference_item_margin_bottom">4dp</dimen>
-    <dimen name="preference_card_margin_horizontal">16dp</dimen>
-    <dimen name="preference_card_margin_horizontal_tiny">12dp</dimen>
-    <dimen name="preference_min_height">48dp</dimen>
-    <dimen name="preference_title_padding_start">24dp</dimen>
-    <dimen name="preference_title_padding_end">24dp</dimen>
-    <dimen name="preference_icon_margin_top">14dp</dimen>
-    <dimen name="preference_icon_margin_bottom">14dp</dimen>
-    <dimen name="preference_icon_margin_right">16dp</dimen>
-    <dimen name="preference_slider_bottom_margin">8dp</dimen>
-    <dimen name="preference_text_content_padding_top">10dp</dimen>
-    <dimen name="preference_text_content_padding_bottom">10dp</dimen>
-    <dimen name="preference_text_margin_left">0dp</dimen>
-    <dimen name="preference_margin_between_line">2dp</dimen>
-    <dimen name="preference_widget_focus_jump_padding_top">12dp</dimen>
-    <dimen name="preference_widget_focus_jump_padding_bottom">12dp</dimen>
-    <dimen name="preference_status_text_max_width">162dp</dimen>
-    <dimen name="preference_widget_focus_jump_margin_start">24dp</dimen>
-    <dimen name="preference_widget_jump_margin_start">16dp</dimen>
-    <dimen name="bar_height">24dp</dimen>
-    <dimen name="bar_width">38dp</dimen>
-    <dimen name="preference_switch_margin_left">16dp</dimen>
-    <dimen name="list_divider_height">0.33dp</dimen>
-    <dimen name="preference_divider_default_horizontal_padding">32dp</dimen>
-
     <!-- Padding of illustration -->
     <dimen name="settingslib_illustration_padding">16dp</dimen>
 

@@ -112,11 +112,14 @@
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="iconGravity">textStart</item>
+        <item name="backgroundTint">@color/transparent</item>
+        <item name="android:textColor">@android:color/system_accent1_400</item>
+        <item name="textAllCaps">true</item>
     </style>
 
     <style name="Widget.MaterialButton.Red" parent="Widget.MaterialButton">
-        <item name="backgroundTint">?attr/colorError</item>
-        <item name="android:textColor">?attr/colorOnError</item>
+        <item name="backgroundTint">@color/transparent</item>
+        <item name="android:textColor">?attr/colorError</item>
     </style>
 
     <style name="OptionTitleTextAppearance" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
@@ -239,12 +242,6 @@
 
     <style name="PreferenceStatusText.Tiny" parent="@style/PreferenceStatusText">
         <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
-        <item name="thumbTint">@color/white</item>
-        <item name="trackDecorationTint">@color/transparent</item>
-        <item name="trackTint">@drawable/switch_track</item>
     </style>
 
     <style name="Widget.CompoundButton.RadioButton" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">

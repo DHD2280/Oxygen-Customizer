@@ -17,12 +17,12 @@ public class AdaptivePlaybackSoundSettings extends ControlledPreferenceFragmentC
     private static final String KEY_5_MIN = "adaptive_playback_timeout_5_min";
     private static final String KEY_10_MIN = "adaptive_playback_timeout_10_min";
 
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_NONE = 0;
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS = 30000;
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_1_MIN = 60000;
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_2_MIN = 120000;
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_5_MIN = 300000;
-    static final int ADAPTIVE_PLAYBACK_TIMEOUT_10_MIN = 600000;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_NONE = 0;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS = 30000;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_1_MIN = 60000;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_2_MIN = 120000;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_5_MIN = 300000;
+    public static final int ADAPTIVE_PLAYBACK_TIMEOUT_10_MIN = 600000;
 
     private boolean mAdaptivePlaybackEnabled;
     private int mAdaptivePlaybackTimeout;

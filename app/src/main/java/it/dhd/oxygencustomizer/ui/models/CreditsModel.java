@@ -12,12 +12,14 @@ public class CreditsModel {
     private final String url;
     private int icon;
     private Drawable drawable;
+    private String onlineIcon;
 
     public CreditsModel(String title) {
         this.viewType = CreditsAdapter.VIEW_TYPE_HEADER;
         this.title = title;
         this.summary = null;
         this.url = null;
+        this.onlineIcon = null;
     }
 
     public CreditsModel(int viewType, String title, String summary, String url, int icon) {
@@ -26,6 +28,7 @@ public class CreditsModel {
         this.summary = summary;
         this.url = url;
         this.icon = icon;
+        this.onlineIcon = null;
     }
 
     public CreditsModel(int viewType, String title, String summary, String url, Drawable drawable) {
@@ -34,6 +37,15 @@ public class CreditsModel {
         this.summary = summary;
         this.url = url;
         this.drawable = drawable;
+        this.onlineIcon = null;
+    }
+
+    public CreditsModel(int viewType, String title, String summary, String url, String onlinePicture) {
+        this.viewType = viewType;
+        this.title = title;
+        this.summary = summary;
+        this.url = url;
+        this.onlineIcon = onlinePicture;
     }
 
     /**
@@ -66,6 +78,10 @@ public class CreditsModel {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getOnlineIcon() {
+        return onlineIcon;
     }
 
 }

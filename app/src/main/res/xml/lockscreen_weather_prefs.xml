@@ -25,7 +25,7 @@
         app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="2"
@@ -83,9 +83,9 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory android:key="lockscreen_weather_prefs">
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:key="lockscreen_weather_prefs">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="true"
@@ -141,9 +141,9 @@
             app:minVal="13"
             app:valueFormat="dp" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory android:key="lockscreen_weather_colors_prefs">
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:key="lockscreen_weather_colors_prefs">
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="weather_custom_color_switch"
@@ -158,7 +158,7 @@
             android:key="weather_custom_color"
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/weather_custom_location_title">
 
@@ -177,7 +177,7 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
             android:dependency="lockscreen_weather_enabled"
@@ -230,6 +230,6 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

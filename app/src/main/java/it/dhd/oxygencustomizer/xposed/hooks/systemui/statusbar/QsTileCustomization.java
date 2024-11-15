@@ -47,6 +47,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
@@ -61,6 +62,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -127,9 +129,10 @@ public class QsTileCustomization extends XposedMods {
     private int qsBrightnessSliderColorMode, qsBrightnessSliderColor, qsBrightnessBackgroundColor;
 
     // QS Media Tile
+    private ImageView mCoverImg = null;
     private View mOplusQsMediaView = null;
     private Drawable mOplusQsMediaDefaultBackground = null;
-    private final Drawable mOplusQsMediaDrawable = null;
+    private Drawable mOplusQsMediaDrawable = null;
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
     private ImageView mExpandIndicator = null;
@@ -253,11 +256,12 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable ignored) {
         }
 
-        Class<?> OplusQSTileBaseView;
-        try {
-            OplusQSTileBaseView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
-        } catch (Throwable ignored) {
-            OplusQSTileBaseView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView", lpparam.classLoader);
+        Class<?> OplusQSTileBaseView = findClassInArray(lpparam,
+                "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
+                "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS14 */,
+                "com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS13 */);
+        if (OplusQSTileBaseView == null) {
+            log(new Throwable("OplusQSTileBaseView not found"));
         }
 
         /*if (QsColorUtil != null) {
@@ -314,11 +318,12 @@ public class QsTileCustomization extends XposedMods {
 
         hookAllMethods(OplusQSTileBaseView, "performClick", animationHook);
 
-        Class<?> OplusQSHighlightTileView;
-        try {
-            OplusQSHighlightTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
-        } catch (Throwable ignored) {
-            OplusQSHighlightTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView", lpparam.classLoader);
+        Class<?> OplusQSHighlightTileView = findClassInArray(lpparam,
+                "com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView" /* OOS15 */,
+                "com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS14 */,
+                "com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS13 */);
+        if (OplusQSHighlightTileView == null) {
+            log(new Throwable("OplusQSHighlightTileView not found"));
         }
         hookAllMethods(OplusQSHighlightTileView, "generateDrawable", getColorHook(true));
         hookAllMethods(OplusQSHighlightTileView, "performClick", animationHook);
@@ -331,11 +336,19 @@ public class QsTileCustomization extends XposedMods {
                 mOplusQsMediaView = (View) param.thisObject;
                 if (mQsWidgetsEnabled) return;
                 mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
+                if (mOplusQsMediaDefaultBackground != null) {
+                    mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
+                }
                 if (qsInactiveColorEnabled) {
                     mOplusQsMediaDrawable.setTint(qsInactiveColor);
                     mOplusQsMediaDrawable.invalidateSelf();
                     mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
                 } else mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+
+                // Get OOS15 cover
+                if (Build.VERSION.SDK_INT >= 35) {
+                    mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
+                }
 
                 // Listen for default tip change
                 View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
@@ -354,11 +367,12 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
-        Class<?> OplusQSTileView;
-        try {
-            OplusQSTileView = findClass("com.oplus.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader);
-        } catch (Throwable ignored) {
-            OplusQSTileView = findClass("com.oplusos.systemui.qs.qstileimpl.OplusQSTileView", lpparam.classLoader); // OOS 13
+        Class<?> OplusQSTileView = findClassInArray(lpparam,
+                "com.oplus.systemui.plugins.qs.tile.OplusQSTileView" /* OOS15 */,
+                "com.oplus.systemui.qs.qstileimpl.OplusQSTileView" /* OOS14 */,
+                "com.oplusos.systemui.qs.qstileimpl.OplusQSTileView" /* OOS13 */);
+        if (OplusQSTileView == null) {
+            log(new Throwable("OplusQSTileView not found"));
         }
         hookAllMethods(OplusQSTileView, "createLabel", new XC_MethodHook() {
             @Override
@@ -539,6 +553,7 @@ public class QsTileCustomization extends XposedMods {
     private void updateMediaQsBackground() {
         if (!showMediaArtMediaQs || mOplusQsMediaView == null) return;
         if (mQsWidgetsEnabled) return;
+        mCoverImg.setVisibility(View.GONE);
         Bitmap oldArt = mArt;
         Bitmap tempArt = getArt();
         if (tempArt == null) {
@@ -584,7 +599,6 @@ public class QsTileCustomization extends XposedMods {
     private Bitmap getFilteredArt(Bitmap art) {
         Bitmap finalArt;
         switch (mMediaQsArtFilter) {
-            default -> finalArt = art;
             case 1 -> finalArt = DrawableConverter.toGrayscale(art);
             case 2 ->
                     finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
@@ -596,6 +610,7 @@ public class QsTileCustomization extends XposedMods {
             case 5 ->
                     finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
                             mMediaQsTintColor, mMediaQsTintAmount);
+            default -> finalArt = art;
         }
         return finalArt;
     }

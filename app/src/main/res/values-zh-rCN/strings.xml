@@ -1082,9 +1082,6 @@
     <string name="notification_corner_radius_title">通知圆角半径</string>
     <string name="notification_corner_radius_summary">设置通知栏圆角样式</string>
     <string name="notif_roundness_preview_desc">通知预览</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">USB 对话框样式</string>
-    <string name="theme_customization_usb_dialog_summary">为 USB 对话框设置自定义样式。</string>
     <!-- Toast Styles -->
     <string name="toast_styles">吐司样式</string>
     <string name="toast_message">吐司消息</string>

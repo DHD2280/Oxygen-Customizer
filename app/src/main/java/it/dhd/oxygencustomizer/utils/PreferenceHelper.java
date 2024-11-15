@@ -1119,8 +1119,9 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("pulse_line_wave_opacity", 200));
 
             // Buttons
-            case "volbtn_torch_enable_timeout" ->
-                    instance.mPreferences.getSliderInt("volbtn_torch_enable_timeout", 5) + " s";
+            case "volbtn_torch_timeout" ->
+                    instance.mPreferences.getSliderInt("volbtn_torch_timeout", 5) + " " +
+                            fragmentCompat.getString(R.string.seconds);
 
             default -> null;
         };

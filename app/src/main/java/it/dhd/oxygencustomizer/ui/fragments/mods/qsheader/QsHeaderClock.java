@@ -148,8 +148,8 @@ public class QsHeaderClock extends ControlledPreferenceFragmentCompat {
         for (int i = 0; i < maxIndex; i++) {
             header_clock.add(new ClockModel(
                     i == 0 ?
-                            "No Clock" :
-                            "Clock Style " + i,
+                            getString(R.string.clock_none) :
+                            String.format(getString(R.string.clock_style_name), i),
                     requireContext()
                             .getResources()
                             .getIdentifier(

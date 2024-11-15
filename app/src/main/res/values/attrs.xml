@@ -23,21 +23,6 @@
         <attr name="forcePosition" />
     </declare-styleable>
 
-    <declare-styleable name="SliderPreference">
-        <attr name="valueCount" format="integer"/>
-        <attr name="updatesContinuously" format="boolean"/>
-        <attr name="tickInterval" format="float"/>
-        <attr name="minVal" format="float"/>
-        <attr name="maxVal" format="float"/>
-        <attr name="showResetButton" format="float"/>
-        <attr name="showValueLabel" format="boolean"/>
-        <attr name="units" format="string"/>
-        <attr name="isDecimalFormat" format="boolean" />
-        <attr name="decimalFormat" format="string" />
-        <attr name="valueFormat" format="string" />
-        <attr name="outputScale" format="float" />
-    </declare-styleable>
-
     <declare-styleable name="footerPreferenceStyle">
         <attr name="footerPreferenceStyle" format="reference"/>
     </declare-styleable>

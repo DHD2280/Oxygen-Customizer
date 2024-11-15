@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coui_preference"
     android:layout_width="match_parent"
@@ -72,4 +72,4 @@
             android:paddingHorizontal="16dp" />
 
     </LinearLayout>
-</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>
+</it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout>

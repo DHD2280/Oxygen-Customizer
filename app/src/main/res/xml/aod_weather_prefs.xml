@@ -10,7 +10,7 @@
         app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="2"
@@ -68,9 +68,9 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory android:key="aod_weather_prefs">
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:key="aod_weather_prefs">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="true"
@@ -126,9 +126,9 @@
             app:minVal="13"
             app:valueFormat="dp" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory android:key="aod_weather_colors_prefs">
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:key="aod_weather_colors_prefs">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -145,7 +145,7 @@
             android:title="@string/custom_color"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/weather_custom_location_title">
 
@@ -164,7 +164,7 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
             android:dependency="aod_weather_enabled"
@@ -208,6 +208,6 @@
             app:minVal="0"
             app:valueFormat="dp" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

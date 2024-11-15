@@ -70,7 +70,7 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
                 android:id="@+id/updateChannelRadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/preference_card_margin_horizontal_tiny"
+                android:layout_marginTop="@dimen/preference_icon_margin_top"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:paddingBottom="@dimen/preference_item_margin_top">

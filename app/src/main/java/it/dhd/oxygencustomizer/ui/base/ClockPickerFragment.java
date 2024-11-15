@@ -60,7 +60,7 @@ public abstract class ClockPickerFragment extends BaseFragment {
 
     public abstract PREVIEW_TYPE getPreviewType();
 
-    public static enum PREVIEW_TYPE {
+    public enum PREVIEW_TYPE {
         LOCKSCREEN,
         AOD,
         QS
@@ -83,8 +83,13 @@ public abstract class ClockPickerFragment extends BaseFragment {
 
         FragmentManager fragmentManager = getChildFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.getId(), getPreferenceFragment())
+                .replace(R.id.fragment_container, getPreferenceFragment())
                 .commit();
+
+        mPreferences = PreferenceHelper.getModulePrefs();
+        boolean lockscreenClockEnabled = mPreferences.getBoolean(getSwitchPreferenceKey(), false);
+
+        setupPreferences(lockscreenClockEnabled);
 
         return binding.getRoot();
     }
@@ -92,11 +97,6 @@ public abstract class ClockPickerFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mPreferences = PreferenceHelper.getModulePrefs();
-        boolean lockscreenClockEnabled = mPreferences.getBoolean(getSwitchPreferenceKey(), false);
-
-        setupPreferences(lockscreenClockEnabled);
 
         binding.clockCarouselView.clockCarouselViewStub.setLayoutResource(R.layout.clock_carousel_view);
         clockCarouselView = (ClockCarouselView) binding.clockCarouselView.clockCarouselViewStub.inflate();
@@ -151,16 +151,18 @@ public abstract class ClockPickerFragment extends BaseFragment {
                         FrameLayout.LayoutParams.WRAP_CONTENT
                 );
                 params.gravity = Gravity.CENTER_HORIZONTAL;
-
-                View v = LayoutInflater.from(requireContext()).inflate(
+                if (getContext() == null) {
+                    executor.shutdownNow();
+                }
+                View v = LayoutInflater.from(getAppContext()).inflate(
                         getResources().getIdentifier(getLayoutName() + maxIndex, "layout", BuildConfig.APPLICATION_ID),
                         null
                 );
                 v.setLayoutParams(params);
-                ViewHelper.loadLottieAnimationView(requireContext(), null, v, maxIndex);
+                ViewHelper.loadLottieAnimationView(getAppContext(), null, v, maxIndex);
 
                 ls_clock.add(new ClockCarouselItemViewModel(
-                        maxIndex == 0 ? "No Clock" : "Clock Style " + maxIndex,
+                        maxIndex == 0 ? getString(R.string.clock_none) : String.format(getString(R.string.clock_style_name), maxIndex),
                         maxIndex,
                         mPreferences.getInt(getPreferenceKey(), 0) == maxIndex,
                         "preview_lockscreen_clock_" + maxIndex,
@@ -168,7 +170,9 @@ public abstract class ClockPickerFragment extends BaseFragment {
                 ));
                 maxIndex++;
             }
-
+            if (getContext() == null) {
+                executor.shutdownNow();
+            }
             mainHandler.postDelayed(() -> {
                 setupClockCarousel(ls_clock);
                 setupPreview();
@@ -226,7 +230,7 @@ public abstract class ClockPickerFragment extends BaseFragment {
             wallpaperBitmap = null;
         }
         if (!executor.isTerminated()) {
-            executor.shutdown();
+            executor.shutdownNow();
         }
     }
 

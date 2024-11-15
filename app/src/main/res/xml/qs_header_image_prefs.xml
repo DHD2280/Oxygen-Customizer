@@ -2,17 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="qs_header_image_enabled"
             android:summary="@string/qs_header_image_enabled_summary"
             android:title="@string/qs_header_image_enabled_title"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
         <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
             android:defaultValue="-1"
             android:dependency="qs_header_image_enabled"
@@ -29,9 +29,9 @@
             android:title="@string/file_header_select_title"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="0"
@@ -95,9 +95,9 @@
             android:title="@string/qs_header_image_landscape_enabled_title"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:dependency="qs_header_image_enabled"
@@ -124,7 +124,7 @@
             android:title="@string/qs_header_image_zoomtofit_title"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 
 </PreferenceScreen>

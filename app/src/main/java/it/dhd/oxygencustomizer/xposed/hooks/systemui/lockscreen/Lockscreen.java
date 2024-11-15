@@ -222,7 +222,8 @@ public class Lockscreen extends XposedMods {
     }
 
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
-        Object mFpIcon = getObjectField(param.thisObject, "mFpIcon");
+        Object mFpIcon;
+        mFpIcon = getObjectField(param.thisObject, Build.VERSION.SDK_INT == 35 ? "fpIcon" : "mFpIcon");
 
         log("updateFingerprintIcon");
 
@@ -230,7 +231,7 @@ public class Lockscreen extends XposedMods {
             setObjectField(param.thisObject, "mFadeInAnimDrawable", null);
             setObjectField(param.thisObject, "mFadeOutAnimDrawable", null);
         }
-        setObjectField(param.thisObject, "mImMobileDrawable", mFpDrawable);
+        setObjectField(param.thisObject, Build.VERSION.SDK_INT == 35 ? "imMobileDrawable" : "mImMobileDrawable", mFpDrawable);
         if (mFpIcon != null) {
             callMethod(mFpIcon, "setImageDrawable", mFpDrawable == null ? null : mFpDrawable);
         }

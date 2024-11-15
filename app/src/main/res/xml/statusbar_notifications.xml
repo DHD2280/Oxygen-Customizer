@@ -87,7 +87,7 @@
             app:iconSpaceReserved="false" />
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:key="customizeClearButton"
@@ -123,6 +123,6 @@
             android:title="@string/clear_all_icon_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

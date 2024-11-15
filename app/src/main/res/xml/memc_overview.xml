@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusPreference
             android:key="memc_feature_on"
@@ -34,9 +34,9 @@
             android:title="@string/memc_mode"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -58,7 +58,7 @@
             android:summary="@string/custom_memc_configuration_summary"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
         android:key="footer"

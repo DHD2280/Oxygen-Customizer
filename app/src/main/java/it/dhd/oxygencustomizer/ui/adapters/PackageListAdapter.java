@@ -130,6 +130,7 @@ public class PackageListAdapter extends BaseAdapter implements Runnable {
             holder.title = convertView.findViewById(R.id.title);
             holder.summary = convertView.findViewById(R.id.summary);
             holder.icon = convertView.findViewById(R.id.icon);
+            holder.divider = convertView.findViewById(R.id.divider);
         }
 
         PackageItem applicationInfo = getItem(position);
@@ -149,6 +150,8 @@ public class PackageListAdapter extends BaseAdapter implements Runnable {
         } else {
             holder.summary.setVisibility(View.GONE);
         }
+
+        holder.divider.setVisibility(position == getCount() - 1 ? View.GONE : View.VISIBLE);
 
         return convertView;
     }
@@ -200,5 +203,6 @@ public class PackageListAdapter extends BaseAdapter implements Runnable {
         TextView title;
         TextView summary;
         ImageView icon;
+        ImageView divider;
     }
 }

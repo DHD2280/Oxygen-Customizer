@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.PLUGIN_URL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
@@ -11,6 +12,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CAPSULE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CARRIER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_STATUSBAR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
@@ -102,7 +106,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         }
 
         for (int i = 0; i < maxIndex; i++) {
-            fpIconsEntries.add("Fingerprint " + i);
+            fpIconsEntries.add(String.format(getString(R.string.lockscreen_fp_style), i));
             fpIconsValues.add(String.valueOf(i));
             fpIconsDrawables.add(
                     ResourcesCompat.getDrawable(
@@ -222,6 +226,26 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         }
     }
 
+    private void setJumps() {
+        OplusJumpPreference mLockscreenClock = findPreference("lockscreen_clock_main");
+        OplusJumpPreference mLockscreenWeather = findPreference("lockscreen_weather");
+        OplusJumpPreference mLockscreenWidgets = findPreference("lockscreen_widgets");
+
+        if (mLockscreenClock != null) {
+            mLockscreenClock.setJumpText(mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) ?
+                    mPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0) == 0 ? getString(R.string.clock_none) : String.format(getString(R.string.clock_style_name), mPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0)) :
+                    getString(R.string.general_off));
+        }
+
+        if (mLockscreenWeather != null) {
+            mLockscreenWeather.setJumpText(mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+        }
+
+        if (mLockscreenWidgets != null) {
+            mLockscreenWidgets.setJumpText(mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+        }
+    }
+
     ActivityResultLauncher<Intent> pickImageIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -267,6 +291,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
         if (key == null) {
             checkAiStatus();
+            setJumps();
             return;
         }
 

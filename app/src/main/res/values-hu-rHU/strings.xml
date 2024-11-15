@@ -1095,9 +1095,6 @@
     <string name="notification_corner_radius_title">Az értesítés saroksugara</string>
     <string name="notification_corner_radius_summary">Egyéni sarok-kerekítés állítható be ez értesítésekhez.</string>
     <string name="notif_roundness_preview_desc">Értesítés-előnézet</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">Az USB-párbeszédpanel stílusa</string>
-    <string name="theme_customization_usb_dialog_summary">Egyedi stílust állíthat be a z USB-párbeszédpanelhez.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Buborékstílusok</string>
     <string name="toast_message">Üzenetbuborék</string>

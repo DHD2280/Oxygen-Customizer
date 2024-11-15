@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceViewHolder;
 
+import it.dhd.oneplusui.appcompat.cardlist.CardListHelper;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.appcompat.cardlist.CardListHelper;
 
 public class SelectorWithWidgetPreference extends CheckBoxPreference {
 

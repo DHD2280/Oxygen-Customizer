@@ -163,7 +163,6 @@ public class AlbumArtLockscreen extends XposedMods {
     private Bitmap getArtFilter(Bitmap art) {
         Bitmap finalArt;
         switch (albumArtFilter) {
-            default -> finalArt = art;
             case 1 -> finalArt = DrawableConverter.toGrayscale(art);
             case 2 ->
                     finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
@@ -172,6 +171,7 @@ public class AlbumArtLockscreen extends XposedMods {
                     finalArt = DrawableConverter.getBlurredImage(mContext, art, albumArtBlurAmount);
             case 4 ->
                     finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, albumArtBlurAmount);
+            default -> finalArt = art;
         }
         return finalArt;
     }

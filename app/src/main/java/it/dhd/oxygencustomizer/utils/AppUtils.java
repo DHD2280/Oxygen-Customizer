@@ -47,7 +47,7 @@ public class AppUtils {
                 context.getString(R.string.restart_module),
                 context.getString(R.string.restart_page_scope)
         };
-        SummaryAdapter mAdapter = new SummaryAdapter(context, false, true, list, null, null);
+        SummaryAdapter mAdapter = new SummaryAdapter(context, list);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setAdapter(mAdapter, (dialog, which) -> {
@@ -60,12 +60,6 @@ public class AppUtils {
                     break;
             }
         });
-//        builder.setItems(list, (dialog, which) -> {
-//            switch (which) {
-//                case 0 -> restartAllScope(context);
-//                case 1 -> restartAllScope(scopes);
-//            }
-//        });
         builder.show();
     }
 

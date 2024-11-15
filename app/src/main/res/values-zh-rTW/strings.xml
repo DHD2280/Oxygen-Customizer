@@ -1078,9 +1078,6 @@
     <string name="notification_corner_radius_title">通知圓角半徑</string>
     <string name="notification_corner_radius_summary">設定通知的圓角樣式</string>
     <string name="notif_roundness_preview_desc">通知預覽</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">USB 對話框樣式</string>
-    <string name="theme_customization_usb_dialog_summary">為 USB 對話框的自訂樣式</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Toast樣式</string>
     <string name="toast_message">Toast訊息</string>

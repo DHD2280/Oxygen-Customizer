@@ -20,6 +20,7 @@
 
         <!-- Fluid Music -->
         <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings"
             android:key="fluid_settings"
             android:summary="@string/fluid_music_summary"
             android:title="@string/fluid_music"
@@ -31,7 +32,7 @@
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/adaptive_playback_screen_title">
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings"
-            android:key="sound_adaptive_playback_summary"
+            android:key="adaptive_playback"
             android:title="@string/adaptive_playback_screen_title"
             app:iconSpaceReserved="false" />
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>

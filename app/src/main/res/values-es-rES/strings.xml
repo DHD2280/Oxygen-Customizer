@@ -1041,9 +1041,6 @@
     <string name="notification_corner_radius_title">Radio de esquina de notificación</string>
     <string name="notification_corner_radius_summary">Establecer radio de esquinas personalizado para las notificaciones.</string>
     <string name="notif_roundness_preview_desc">Vista previa de notificación.</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">Estilos de diálogos de USB</string>
-    <string name="theme_customization_usb_dialog_summary">Establecer estilo personalizado para diálogos de USB.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Estilos de mensajes emergentes</string>
     <string name="toast_message">Mensaje de mensajes emergentes</string>

@@ -181,7 +181,7 @@
             android:title="@string/media_art_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oneplusui.preference.OplusListPreference
+        <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="0"
             android:entries="@array/lockscreen_albumart_filter_entries"
             android:entryValues="@array/lockscreen_albumart_filter_values"

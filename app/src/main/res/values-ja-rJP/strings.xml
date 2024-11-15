@@ -1053,9 +1053,6 @@
     <!-- Notification Corner Radius -->
     <string name="notification_corner_radius_title">通知のコーナーの半径</string>
     <string name="notif_roundness_preview_desc">通知のプレビュー。</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">USB ダイアログのスタイル</string>
-    <string name="theme_customization_usb_dialog_summary">USB ダイアログのカスタムスタイルを設定します。</string>
     <!-- Toast Styles -->
     <string name="toast_styles">トーストのスタイル</string>
     <string name="toast_message">トーストメッセージ</string>

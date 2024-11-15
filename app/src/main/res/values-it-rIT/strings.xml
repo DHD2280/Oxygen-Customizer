@@ -1099,9 +1099,6 @@
     <string name="notification_corner_radius_title">Raggio Angolo Notifiche</string>
     <string name="notification_corner_radius_summary">Imposta un raggio di angolo personalizzato per le notifiche.</string>
     <string name="notif_roundness_preview_desc">Anteprima notifica.</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">Stili Di Dialogo Usb</string>
-    <string name="theme_customization_usb_dialog_summary">Imposta stile personalizzato per la finestra USB.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Stile Toast</string>
     <string name="toast_message">Messaggio Toast</string>

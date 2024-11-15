@@ -671,6 +671,7 @@
     <string name="depth_wallpaper_mode_custom_images">صورة مخصصة</string>
     <string name="depth_wallpaper_mode_ai_plugin">ذكاء اصطناعي (محلي)</string>
     <string name="depth_wallpaper_opacity_title">شفافية واجهة الخلفية</string>
+    <string name="depth_wallpaper_aod_title">أيضًا على AOD</string>
     <string name="depth_wallpaper_pick_background_title">اختيار الخلفية</string>
     <string name="depth_wallpaper_pick_background_summary">اختر صورة الخلفية الخاصة بك</string>
     <string name="depth_wallpaper_pick_subject_title">اختر المقدمة</string>
@@ -1092,9 +1093,6 @@
     <string name="notification_corner_radius_title">نصف قطر زاوية الإشعار</string>
     <string name="notification_corner_radius_summary">حدد نصف قطر الزاوية المخصص للإشعارات.</string>
     <string name="notif_roundness_preview_desc">معاينة الإشعار.</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">أنماط حوار USB</string>
-    <string name="theme_customization_usb_dialog_summary">حدد نمط مخصص لحوار USB.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">أنماط التوست</string>
     <string name="toast_message">رسالة التوست</string>

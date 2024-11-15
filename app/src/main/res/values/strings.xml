@@ -697,6 +697,7 @@
     <string name="lockscreen_fingerprint">Fingerprint Icon</string>
     <string name="lockscreen_fp_remove_icon">Remove Fingerprint Icon</string>
     <string name="lockscreen_fp_custom_icon">Custom Fingerprint Icon</string>
+    <string name="lockscreen_fp_style">Fingerprint %d</string>
     <string name="lockscreen_fp_icon_title">Fingerprint Icons Presets</string>
     <string name="lockscreen_fp_icon_picker_title">Pick Custom Icon</string>
     <string name="lockscreen_fp_icon_picker_summary">Pick your custom icon.\nThe recommended image resolution is around 216 x 216.</string>
@@ -1185,10 +1186,6 @@
     <string name="notification_corner_radius_summary">Set custom corner radius for notifications.</string>
     <string name="notif_roundness_preview_desc">Notification Preview.</string>
 
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">USB Dialog Styles</string>
-    <string name="theme_customization_usb_dialog_summary">Set custom style for USB dialog.</string>
-
     <!-- Toast Styles -->
     <string name="toast_styles">Toast Styles</string>
     <string name="toast_message">Toast Message</string>
@@ -1196,6 +1193,8 @@
     <!-- Style List -->
     <string name="style_0">None</string>
     <string name="style">Style %d</string>
+    <string name="clock_none">No Clock</string>
+    <string name="clock_style_name">Clock Style %d</string>
 
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">Show System</string>

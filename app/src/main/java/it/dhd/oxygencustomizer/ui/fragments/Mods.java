@@ -6,7 +6,16 @@ import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_10_MIN;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_1_MIN;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_2_MIN;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_5_MIN;
+import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_NONE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
@@ -155,17 +164,28 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         }
 
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
+        public void updateScreen(String key) {
+            super.updateScreen(key);
 
-            Preference mFluid = findPreference("fluid_settings");
-            if (mFluid != null) {
-                mFluid.setOnPreferenceClickListener(preference -> {
-                    replaceFragment(new FluidSettings());
-                    return true;
-                });
+            if (key == null) {
+                final boolean mAdaptivePlaybackEnabled = mPreferences.getBoolean("sound_adaptive_playback_main_switch", false);
+                final int mAdaptivePlaybackTimeout = mPreferences.getInt("adaptive_playback_timeout", ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS);
+                int jumpString = switch (mAdaptivePlaybackTimeout) {
+                    case ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS -> R.string.adaptive_playback_timeout_30_secs;
+                    case ADAPTIVE_PLAYBACK_TIMEOUT_1_MIN -> R.string.adaptive_playback_timeout_1_min;
+                    case ADAPTIVE_PLAYBACK_TIMEOUT_2_MIN -> R.string.adaptive_playback_timeout_2_min;
+                    case ADAPTIVE_PLAYBACK_TIMEOUT_5_MIN -> R.string.adaptive_playback_timeout_5_min;
+                    case ADAPTIVE_PLAYBACK_TIMEOUT_10_MIN -> R.string.adaptive_playback_timeout_10_min;
+                    default -> R.string.adaptive_playback_timeout_none;
+                };
+                ((OplusJumpPreference)findPreference("adaptive_playback")).setJumpText(
+                        mAdaptivePlaybackEnabled ?
+                                jumpString :
+                                R.string.general_off);
             }
+
         }
+
     }
 
     public static class VolumePanelCustomizations extends ControlledPreferenceFragmentCompat {
@@ -437,6 +457,26 @@ public class Mods extends ControlledPreferenceFragmentCompat {
         public String[] getScopes() {
             return null;
         }
+
+        @Override
+        public void updateScreen(String key) {
+            super.updateScreen(key);
+
+            OplusJumpPreference mAodClock = findPreference("aod_clock");
+            OplusJumpPreference mAodWeather = findPreference("aod_weather");
+            if (mAodClock != null) {
+                mAodClock.setJumpText(mPreferences.getBoolean(AOD_CLOCK_SWITCH, false) ?
+                        mPreferences.getInt(AOD_CLOCK_STYLE, 0) == 0 ? getString(R.string.clock_none) : String.format(getString(R.string.clock_style_name), mPreferences.getInt(AOD_CLOCK_STYLE, 0)) :
+                        getString(R.string.general_off));
+            }
+            if (mAodWeather != null) {
+                mAodWeather.setJumpText(mPreferences.getBoolean(AOD_WEATHER_SWITCH, false) ?
+                        getString(R.string.general_on) :
+                        getString(R.string.general_off));
+            }
+
+        }
+
     }
 
 }

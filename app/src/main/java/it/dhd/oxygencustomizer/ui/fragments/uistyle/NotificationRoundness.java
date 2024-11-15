@@ -28,6 +28,7 @@ import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.utils.overlay.manager.RoundnessManager;
 
 public class NotificationRoundness extends BaseFragment {
@@ -60,7 +61,7 @@ public class NotificationRoundness extends BaseFragment {
         gradientDrawable.setColor(ContextCompat.getColor(OxygenCustomizer.getAppContext(), R.color.offStateColor));
         binding.notifRoundPreview.notificationChild.setBackground(gradientDrawable);
         binding.notifRoundPreview.notifDesc.setText(getString(R.string.notif_roundness_preview_desc));
-
+        binding.disableRadius.setVisibility(OverlayUtil.isOverlayEnabled("CRN1") ? View.VISIBLE : View.GONE);
 
         final int[] finalUiCornerRadius = {Prefs.getInt(NOTIFICATION_CORNER_RADIUS, 28)};
 
@@ -119,8 +120,10 @@ public class NotificationRoundness extends BaseFragment {
 
                             if (hasErroredOut.get())
                                 Toast.makeText(OxygenCustomizer.getAppContext(), OxygenCustomizer.getAppContext().getResources().getString(R.string.toast_error), Toast.LENGTH_SHORT).show();
-                            else
+                            else {
                                 Toast.makeText(OxygenCustomizer.getAppContext(), OxygenCustomizer.getAppContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                                binding.disableRadius.setVisibility(View.VISIBLE);
+                            }
                         }, 2000);
                     });
                 }).start();

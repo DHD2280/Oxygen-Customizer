@@ -7,13 +7,15 @@
         app:lottie_cacheComposition="false"
         app:lottie_rawRes="@raw/themes_illustration" />
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory/>
+
     <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
         android:key="primary_color"
         android:title="@string/primary_color"
         app:cpv_showAlphaSlider="true"
         app:forcePosition="full" />
 
-    <PreferenceCategory/>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory/>
 
     <it.dhd.oneplusui.preference.OplusPreference
         android:key="apply_colors"

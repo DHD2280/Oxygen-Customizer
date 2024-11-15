@@ -30,7 +30,7 @@ public class CategoryWidget extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(context, R.layout.custom_preference_category, this);
+        inflate(context, R.layout.oplus_preference_category, this);
 
         initializeId();
 

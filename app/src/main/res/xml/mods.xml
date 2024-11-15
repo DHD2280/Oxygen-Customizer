@@ -3,96 +3,98 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference
-        android:key="searchPreference" />
+    <it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference android:key="searchPreference" />
 
     <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/main" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_statusbar"
-        android:key="statusbar"
-        android:title="@string/statusbar_title"
-        app:forcePosition="top"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar"
-        search:ignore="true" />
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_qs"
-        android:key="quick_settings"
-        android:title="@string/quick_settings_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_statusbar"
+            android:key="statusbar"
+            android:title="@string/statusbar_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_mods_qs_header"
-        android:key="qs_header"
-        android:title="@string/qs_header_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeader"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_qs"
+            android:key="quick_settings"
+            android:title="@string/quick_settings_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_navigationbar"
-        android:key="navbar"
-        android:title="@string/navbar_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Navigation"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_mods_qs_header"
+            android:key="qs_header"
+            android:title="@string/qs_header_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeader"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_buttons"
-        android:key="buttons"
-        android:title="@string/buttons_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Buttons"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_navigationbar"
+            android:key="navbar"
+            android:title="@string/navbar_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Navigation"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_navbar_home"
-        android:key="launcher"
-        android:title="@string/launcher_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Launcher"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_buttons"
+            android:key="buttons"
+            android:title="@string/buttons_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Buttons"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_mods_lockscreen"
-        android:key="lockscreen"
-        android:title="@string/lockscreen_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_navbar_home"
+            android:key="launcher"
+            android:title="@string/launcher_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Launcher"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_aod"
-        android:key="aod"
-        android:title="@string/aod_title"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Aod"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_mods_lockscreen"
+            android:key="lockscreen"
+            android:title="@string/lockscreen_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_volume"
-        android:key="sound"
-        android:title="@string/sound"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Sound"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_aod"
+            android:key="aod"
+            android:title="@string/aod_title"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Aod"
+            search:ignore="true" />
 
-    <!-- not ready <it.dhd.oneplusui.preference.OplusJumpPreferencerence
-        android:icon="@drawable/ic_mods_package_manager"
-        android:key="package_manager"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$PackageManager"
-        android:title="@string/package_manager"
-        search:ignore="true"/> -->
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_volume"
+            android:key="sound"
+            android:title="@string/sound"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Sound"
+            search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_colors"
-        android:key="colors"
-        android:title="@string/colors"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.ColorsFragment"
-        search:ignore="true" />
+        <!-- not ready <it.dhd.oneplusui.preference.OplusJumpPreferencerence
+            android:icon="@drawable/ic_mods_package_manager"
+            android:key="package_manager"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$PackageManager"
+            android:title="@string/package_manager"
+            search:ignore="true"/> -->
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:icon="@drawable/ic_mods_misc"
-        android:key="misc"
-        android:title="@string/misc"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Misc"
-        search:ignore="true" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_colors"
+            android:key="colors"
+            android:title="@string/colors"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.ColorsFragment"
+            search:ignore="true" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_mods_misc"
+            android:key="misc"
+            android:title="@string/misc"
+            app:fragment="it.dhd.oxygencustomizer.ui.fragments.Mods$Misc"
+            search:ignore="true" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

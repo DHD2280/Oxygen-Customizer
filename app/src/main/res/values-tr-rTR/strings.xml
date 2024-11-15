@@ -1058,9 +1058,6 @@
     <string name="notification_corner_radius_title">Bildirim Köşe Yarıçapı</string>
     <string name="notification_corner_radius_summary">Bildirimler için özel köşe yarıçapı ayarlayın.</string>
     <string name="notif_roundness_preview_desc">Bildirim Önizlemesi.</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">USB Diyalog Stilleri</string>
-    <string name="theme_customization_usb_dialog_summary">USB diyalogu için özel stil ayarlayın.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Tost Stilleri</string>
     <string name="toast_message">Tost Mesajı</string>

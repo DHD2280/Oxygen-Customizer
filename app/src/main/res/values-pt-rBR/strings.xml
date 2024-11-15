@@ -1063,9 +1063,6 @@
     <string name="notification_corner_radius_title">Raio do canto de notificação</string>
     <string name="notification_corner_radius_summary">Defina o raio do canto personalizado para notificações.</string>
     <string name="notif_roundness_preview_desc">Visualização da notificação</string>
-    <!-- USB Dialog -->
-    <string name="theme_customization_usb_dialog_title">Estilos de Diálogo USB</string>
-    <string name="theme_customization_usb_dialog_summary">Defina um estilo personalizado para a caixa de diálogo USB.</string>
     <!-- Toast Styles -->
     <string name="toast_styles">Estilos de notificação</string>
     <string name="toast_message">Notificação</string>

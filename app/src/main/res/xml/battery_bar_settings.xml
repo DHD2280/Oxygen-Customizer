@@ -11,7 +11,7 @@
         app:forcePosition="full"
         app:iconSpaceReserved="false" />
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -52,9 +52,9 @@
             android:summaryOn="@string/general_on"
             android:title="@string/BB_center_align_title"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -113,9 +113,9 @@
             android:key="batteryPowerSaveColor"
             android:title="@string/BB_batteryPowerSaveColor"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <PreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:key="batteryWarningRange"
@@ -149,6 +149,6 @@
             android:title="@string/BB_batteryWarningColor"
             app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

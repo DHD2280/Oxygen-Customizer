@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.ui.fragments;
 import static it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter.VIEW_TYPE_ITEM;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OplusRecyclerView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,8 @@ import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.adapters.CreditsAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.models.CreditsModel;
+import it.dhd.oxygencustomizer.utils.ContributorParser;
+import it.dhd.oxygencustomizer.utils.TranslatorParser;
 
 public class Credits extends BaseFragment {
 
@@ -30,6 +36,7 @@ public class Credits extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRecyclerBinding.inflate(inflater, container, false);
+        binding.recyclerViewFragment.addItemDecoration(new OplusRecyclerView.OplusRecyclerViewItemDecoration(requireContext()));
         return binding.getRoot();
 
     }
@@ -68,7 +75,12 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "thecubed", """
         Recognized Developer
         For finding a fix to lag issue from recents""", "https://github.com/thecubed", R.drawable.ic_default_person));
-                                     
+        try {
+            credits.addAll(new ContributorParser().parseContributors());
+        } catch (JSONException e) {
+            Log.e("Credits", "Error parsing contributors", e);
+        }
+
         credits.add(new CreditsModel("Testers"));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Max", "", "", R.drawable.ic_default_person));
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Siri00", "", "", R.drawable.ic_default_person));
@@ -77,31 +89,11 @@ public class Credits extends BaseFragment {
         credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ℤ\uD835\uDD56\uD835\uDD5F\uD835\uDD60 \uD835\uDD4F", "OOS 13 Tester", "", R.drawable.ic_default_person));
 
         credits.add(new CreditsModel("Translators"));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Osean22", "Russian", "https://t.me/Osean22", R.drawable.flag_ru));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "ANTI SEMPAI", "Russian", "https://crowdin.com/profile/senpai4ek", R.drawable.flag_ru));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Kirrillak", "Russian", "https://crowdin.com/profile/Kirrillak", R.drawable.flag_ru));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Дилшод Исматов", "Russian", "https://crowdin.com/profile/dilshod199714", R.drawable.flag_ru));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Andfi", "Russian", "https://crowdin.com/profile/andfi", R.drawable.flag_ru));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Pasqui1978", "Italian", "https://crowdin.com/profile/pasqui1978", R.drawable.flag_it));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "tugaia56", "Italian", "https://crowdin.com/profile/tugaia56", R.drawable.flag_it));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "𝗦𝗵𝗟𝗲𝗿𝗣", "Turkish", "https://crowdin.com/profile/mikropsoft", R.drawable.flag_tr));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "\uD835\uDDE6\uD835\uDDF5\uD835\uDDDF\uD835\uDDF2\uD835\uDDFF\uD835\uDDE3", "Turkish", "https://crowdin.com/profile/mikropsoft", R.drawable.flag_tr));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "凌天", "Chinese Simplified", "https://crowdin.com/profile/lingtian", R.drawable.flag_cn));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "芜蚌湖埠", "Chinese Simplified", "https://crowdin.com/profile/11451420", R.drawable.flag_cn));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "-拂暁-", "Chinese Simplified", "https://crowdin.com/profile/Neko-Madoka", R.drawable.flag_cn));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Lorie Eckerson", "Chinese Simplified", "https://crowdin.com/profile/lorieeckersonbq2284", R.drawable.flag_cn));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "haosiang0331", "Chinese Traditional", "https://crowdin.com/profile/haosiang0331", R.drawable.flag_cn));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Re*Index.", "Japanese", "https://crowdin.com/profile/ot_inc", R.drawable.flag_jp));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Serge Croise ", "French", "https://crowdin.com/profile/serge.croise", R.drawable.flag_fr));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Serge Croise ", "Spanish", "https://crowdin.com/profile/serge.croise", R.drawable.flag_es));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "AlejandroMoc", "Spanish", "https://crowdin.com/profile/AlejandroMoc", R.drawable.flag_es));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Jean Rivera", "Spanish", "https://crowdin.com/profile/jeanrivera ", R.drawable.flag_es));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "MKAdam", "Hungarian", "https://crowdin.com/profile/If.you.know.better.than.me.do.it.If.not.shut.up", R.drawable.flag_hu));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Czak", "Polish", "https://crowdin.com/profile/Czak", R.drawable.flag_pl));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Wiktor Gajewicz", "Polish", "https://crowdin.com/profile/wgajuraj", R.drawable.flag_pl));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Ahmed Hamada", "Arabic", "https://crowdin.com/profile/a7medhamada76", R.drawable.flag_sa));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Muhammad Bahaa", "Arabic", "https://crowdin.com/profile/muhammadbahaa2001", R.drawable.flag_sa));
-        credits.add(new CreditsModel(VIEW_TYPE_ITEM, "Marvin Grasberger", "German", "https://crowdin.com/profile/marvingrasberger14", R.drawable.flag_de));
+        try {
+            credits.addAll(new TranslatorParser().parseContributors());
+        } catch (Exception e) {
+            Log.e("Credits", "Error parsing translators", e);
+        }
 
         CreditsAdapter adapter = new CreditsAdapter(credits);
         binding.recyclerViewFragment.setLayoutManager(new LinearLayoutManager(getContext()));

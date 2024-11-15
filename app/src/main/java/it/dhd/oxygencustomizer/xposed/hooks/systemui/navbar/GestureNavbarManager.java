@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -36,8 +37,11 @@ import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -446,8 +450,61 @@ public class GestureNavbarManager extends XposedMods {
         });
     }
 
-    private void takeScreenshot() {
+    public final class ScreenShotRunnable implements Runnable {
+        public final Context context;
+        public final String relationId;
+        public final String screenshotSource;
+        public final long startTime;
 
+        public ScreenShotRunnable(String str, Context context, long j, String str2) {
+            this.screenshotSource = str;
+            this.context = context;
+            this.startTime = j;
+            this.relationId = str2;
+        }
+
+        @Override
+        public void run() {
+            takeScreenshot(this.screenshotSource);
+        }
+
+        public final void takeScreenshot(String str) {
+            Class<?> OplusLongshotUtils = null;
+            try {
+                Context otherAppContext = context.createPackageContext("com.oplus.screenshot", Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+                ClassLoader classLoader = otherAppContext.getClassLoader();
+                OplusLongshotUtils = Class.forName("com.oplus.screenshot.OplusLongshotUtils", false, classLoader);
+            } catch (Exception e) {
+                log(e);
+            }
+            if (OplusLongshotUtils == null) return;
+            Method getScreenshotManagerMethod = null;
+            Object screenshotManager = null;
+            try {
+                getScreenshotManagerMethod = OplusLongshotUtils.getMethod("getScreenshotManager", Context.class);
+                screenshotManager = getScreenshotManagerMethod.invoke(null, context);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                log(e);
+            }
+
+            if (screenshotManager != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("screenshot_source", str);
+                bundle.putString("screenshot_relation_id", this.relationId);
+                bundle.putLong("screenshot_start_time", this.startTime);
+                bundle.putBoolean("statusbar_visible", false);
+                bundle.putBoolean("navigationbar_visible", false);
+                bundle.putBoolean("global_action_visible", false);
+                bundle.putBoolean("screenshot_orientation", this.context.getResources().getConfiguration().orientation == 2);
+                callMethod(screenshotManager, "takeScreenshot", bundle);
+            }
+        }
+    }
+
+
+    private void takeScreenshot() {
+        new Handler(Looper.getMainLooper()).postDelayed(
+                new ScreenShotRunnable("systemQuickTileScreenshotIn", mContext, SystemClock.uptimeMillis(), UUID.randomUUID().toString().replace("-", "")), 750L);
     }
 
     private void showQs() {

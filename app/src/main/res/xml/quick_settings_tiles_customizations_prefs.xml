@@ -192,7 +192,7 @@
         android:title="@string/qs_tile_animation_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oneplusui.preference.OplusListPreference
+        <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="0"
             android:entries="@array/qs_tile_animation_style_entries"
             android:entryValues="@array/qs_tile_animation_style_values"

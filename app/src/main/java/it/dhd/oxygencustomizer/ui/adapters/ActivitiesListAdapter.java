@@ -115,13 +115,15 @@ public class ActivitiesListAdapter extends BaseAdapter implements Runnable {
             holder.title = convertView.findViewById(R.id.title);
             holder.summary = convertView.findViewById(R.id.summary);
             holder.icon = convertView.findViewById(R.id.icon);
+            holder.divider = convertView.findViewById(R.id.divider);
         }
 
         ActivityItem applicationInfo = getItem(position);
         holder.title.setText(applicationInfo.title);
         holder.icon.setImageDrawable(applicationInfo.icon);
-        holder.summary.setText(String.join("/", mPackageName, applicationInfo.activityName));
+        holder.summary.setText(String.join("/n", mPackageName, applicationInfo.activityName));
         holder.summary.setVisibility(View.VISIBLE);
+        holder.divider.setVisibility(position == getCount() - 1 ? View.GONE : View.VISIBLE);
 
         return convertView;
     }
@@ -170,5 +172,6 @@ public class ActivitiesListAdapter extends BaseAdapter implements Runnable {
         TextView title;
         TextView summary;
         ImageView icon;
+        ImageView divider;
     }
 }

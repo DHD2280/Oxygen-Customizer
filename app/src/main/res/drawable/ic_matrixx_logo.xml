@@ -4,7 +4,7 @@
     android:height="20dp"
     android:viewportWidth="24"
     android:viewportHeight="24"
-    android:tint="?colorOnSurface">
+    android:tint="@color/oplusColorControls">
     <path
         android:pathData="M3.36,20.883C2.707,20.038 2.175,19.095 1.789,18.08L8.986,9.162L11.999,13.228L12,13.226L12.001,13.228L15.014,9.162L22.211,18.08C21.779,19.218 21.162,20.265 20.397,21.184L14.882,13.812L12,17.193L9.117,13.812L3.36,20.883Z"
         android:fillColor="#fff"/>

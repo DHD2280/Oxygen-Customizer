@@ -14,14 +14,15 @@
   limitations under the License.
   -->
 
-<it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/preference_background_center"
     android:gravity="center"
     android:clickable="false"
     android:importantForAccessibility="noHideDescendants"
-    android:layout_margin="@dimen/preference_card_margin_horizontal"
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:layout_marginTop="@dimen/preference_card_margin_horizontal"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -60,4 +61,4 @@
             android:visibility="gone" />
     </FrameLayout>
 
-</it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout>
+</it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout>

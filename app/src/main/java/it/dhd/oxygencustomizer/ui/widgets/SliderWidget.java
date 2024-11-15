@@ -7,8 +7,6 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,8 +17,8 @@ import com.google.android.material.slider.Slider;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
+import it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.appcompat.cardlist.CardListSelectedItemLayout;
 
 public class SliderWidget extends CardListSelectedItemLayout {
 

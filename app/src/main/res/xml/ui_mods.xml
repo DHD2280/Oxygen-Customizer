@@ -38,14 +38,6 @@
             android:summary="@string/notification_corner_radius_summary"
             android:title="@string/notification_corner_radius_title" />
 
-        <!-- USB Dialog
-        <it.dhd.oneplusui.preference.OplusJumpPreferencerence
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.UsbDialog"
-            android:icon="@drawable/ic_usb"
-            android:key="android.theme.customization.usb_dialog"
-            android:summary="@string/theme_customization_usb_dialog_summary"
-            android:title="@string/theme_customization_usb_dialog_title" />  -->
-
         <!-- Navbar Style -->
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NavbarStyle"

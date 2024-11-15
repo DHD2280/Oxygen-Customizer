@@ -91,7 +91,7 @@ public abstract class ControlledPreferenceFragmentCompat extends OplusPreference
             }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         }
         final RecyclerView rv = getListView();
-        rv.setPadding(0, 0, 0, dp2px(requireContext(), 12));
+        rv.setPadding(0, 0, 0, dp2px(requireContext(), 16));
     }
 
     @Override

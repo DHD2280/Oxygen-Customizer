@@ -85,6 +85,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_apply" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/disable_radius"
+                    style="@style/Widget.MaterialButton.Red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="@string/btn_disable" />
+
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
