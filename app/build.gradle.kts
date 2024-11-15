@@ -2,22 +2,21 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
 
     namespace = "it.dhd.oxygencustomizer"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
-        targetSdk = 34
-        versionCode = 12
+        targetSdk = 35
+        versionCode = 20
         versionName = "2.0.0"
         setProperty("archivesBaseName", "OxygenCustomizer.apk")
         buildConfigField("int", "MIN_SDK_VERSION", "$minSdk")
@@ -70,7 +69,6 @@ android {
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
                 val outputFileName = "OxygenCustomizer.apk"
-                println("OutputFileName: $outputFileName")
                 output.outputFileName = outputFileName
             }
     }
@@ -83,11 +81,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
     packaging {
         jniLibs.excludes += setOf(
@@ -117,101 +115,101 @@ android {
 dependencies {
 
     // Magisk libsu version
-    val libsuVersion = "6.0.0"
+    implementation(libs.libsu.core)
+    implementation(libs.libsu.service)
+    implementation(libs.libsu.nio)
 
     // Xposed
     compileOnly(files("libs/api-82.jar"))
     compileOnly(files("libs/api-82-sources.jar"))
 
     // App Compat
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation(libs.appcompat)
+
     // Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.3")
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
     // Recycler View
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.recyclerview)
 
     // Work
-    implementation("androidx.work:work-runtime:2.9.1")
-    implementation("androidx.concurrent:concurrent-futures:1.2.0")
+    implementation(libs.work.runtime)
+    implementation(libs.concurrent.futures)
 
     // Biometric Auth
-    implementation("androidx.biometric:biometric:1.1.0")
+    implementation(libs.biometric)
 
     // Material Design
-    implementation("com.google.android.material:material:1.12.0")
+    implementation(libs.material)
 
     // Splash Screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.splashscreen)
 
     // Preference
-    //noinspection KtxExtensionAvailable
-    implementation("androidx.preference:preference:1.2.1")
-    implementation("org.apache.commons:commons-text:${rootProject.extra["commonsTextVersion"]}")
+    implementation(libs.preference)
+    implementation(libs.apache.commons.text)
+
     // SwipeRefreshLayout
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+    implementation(libs.swiperefreshlayout)
+
     // ColorPicker
-    implementation("com.jaredrummler:colorpicker:1.1.0") //Color Picker Component for UI
+    implementation(libs.colorpicker)
 
     // Lottie
-    implementation("com.airbnb.android:lottie:6.4.1")
+    implementation(libs.lottie)
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    //noinspection KaptUsageInsteadOfKsp
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
 
     // Fading Edge Layout
-    implementation("com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0")
-
-    // The core module that provides APIs to a shell
-    implementation("com.github.topjohnwu.libsu:core:${libsuVersion}")
-    // Optional: APIs for creating root services. Depends on ":core"
-    implementation("com.github.topjohnwu.libsu:service:${libsuVersion}")
-    // Optional: Provides remote file system support
-    implementation("com.github.topjohnwu.libsu:nio:${libsuVersion}")
+    implementation(libs.fadingedgelayout)
 
     // Constraint
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation(libs.constraintlayout)
 
-    implementation("org.greenrobot:eventbus:3.3.1")
+    // EventBus
+    implementation(libs.eventbus)
 
-    implementation("com.crossbowffs.remotepreferences:remotepreferences:0.8")
+    // Remote Preferences
+    implementation(libs.remotepreferences)
 
-    implementation("com.github.tiagohm.MarkdownView:library:0.19.0")
+    // Markdown View
+    implementation(libs.markdownview)
 
-    //Google Subject Segmentation - MLKit
-    implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
-    implementation("com.google.android.gms:play-services-base:18.5.0")
+    // Google Subject Segmentation - MLKit
+    implementation(libs.mlkit.segmentation)
+    implementation(libs.play.services.base)
 
     // APK Signer
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
+    implementation(libs.bcpkix)
 
     // Zip Util
-    implementation("net.lingala.zip4j:zip4j:2.11.5")
+    implementation(libs.zip4j)
 
     // Dots Indicator
-    implementation("com.tbuonomo:dotsindicator:5.0")
+    implementation(libs.dotsindicator)
 
     // Flexbox
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation(libs.flexbox)
 
     // Palette
-    //noinspection KtxExtensionAvailable
-    implementation("androidx.palette:palette:1.0.0")
+    implementation(libs.palette)
 
     // Persian Date
-    implementation("com.github.mfathi91:persian-date-time:4.2.1")
+    implementation(libs.persian.date.time)
 
     // OkHTTP
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(libs.okhttp)
 
     // Image Cropper
-    implementation("com.vanniktech:android-image-cropper:4.6.0")
+    implementation(libs.image.cropper)
 
     // Oneplus UI
-    implementation("com.github.DHD2280:Oneplus-UI:1.2.3")
+    implementation(libs.oneplus.ui)
+//    implementation("it.dhd:oneplusui:1.3.6")
+
 }
 
 tasks.register("printVersionName") {
