@@ -488,6 +488,17 @@ public final class Constants {
             public static final String LOCKSCREEN_WIDGETS_WEATHER_SETTINGS = "weather_settings";
 
         }
+        public static class DepthWallpaper {
+            public static final String DEPTH_WALLPAPER_CATEGORY = "DWCategory";
+            public static final String DEPTH_WALLPAPER_ENABLED = "DWallpaperEnabled";
+            public static final String DEPTH_WALLPAPER_MODE = "DWMode";
+            public static final String DEPTH_WALLPAPER_AI_STATUS = "DWAIStatus";
+            public static final String DEPTH_WALLPAPER_OPACITY = "DWOpacity";
+            public static final String DEPTH_WALLPAPER_BACKGROUND = "DWBackground";
+            public static final String DEPTH_WALLPAPER_SUBJECT = "DWSubject";
+            public static final String DEPTH_WALLPAPER_AOD = "DWShowOnAod";
+            public static final String DEPTH_WALLPAPER_AOD_OPACITY = "DWAodOpacity";
+        }
 
         // AOD
         public static class AodClock {

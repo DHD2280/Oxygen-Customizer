@@ -53,13 +53,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
     private DateFormatDialog mDateFormatDialog;
 
-    private final int PICK_FP_ICON = 0;
-    private final int PICK_DEPTH_BACKGROUND = 1;
-    private final int PICK_DEPTH_SUBJECT = 2;
-    private int mPick = -1;
-
-    private OplusJumpPreference mAiStatus;
-
     @Override
     public String getTitle() {
         return getString(R.string.lockscreen_title);
@@ -129,33 +122,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         Preference mFingerprintPicker = findPreference("lockscreen_fp_icon_picker");
         if (mFingerprintPicker != null) {
             mFingerprintPicker.setOnPreferenceClickListener(preference -> {
-                mPick = PICK_FP_ICON;
-                if (!AppUtils.hasStoragePermission()) {
-                    AppUtils.requestStoragePermission(requireContext());
-                } else {
-                    launchFilePicker(pickImageIntent, "image/*");
-                }
-                return true;
-            });
-        }
-
-        Preference mDepthBackground = findPreference("DWBackground");
-        if (mDepthBackground != null) {
-            mDepthBackground.setOnPreferenceClickListener(preference -> {
-                mPick = PICK_DEPTH_BACKGROUND;
-                if (!AppUtils.hasStoragePermission()) {
-                    AppUtils.requestStoragePermission(requireContext());
-                } else {
-                    launchFilePicker(pickImageIntent, "image/*");
-                }
-                return true;
-            });
-        }
-
-        Preference mDepthSubject = findPreference("DWSubject");
-        if (mDepthSubject != null) {
-            mDepthSubject.setOnPreferenceClickListener(preference -> {
-                mPick = PICK_DEPTH_SUBJECT;
                 if (!AppUtils.hasStoragePermission()) {
                     AppUtils.requestStoragePermission(requireContext());
                 } else {
@@ -199,36 +165,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
     }
 
-    private void checkAiStatus() {
-        mAiStatus = findPreference("DWAIStatus");
-        if (mPreferences.getString("DWMode", "0").equals("0")) {
-            new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->
-                    mAiStatus
-                            .setSummary(
-                                    moduleAvailabilityResponse.areModulesAvailable()
-                                            ? R.string.depth_wallpaper_model_ready
-                                            : R.string.depth_wallpaper_model_not_available));
-            mAiStatus.setJumpEnabled(false);
-        } else if (mPreferences.getString("DWMode", "0").equals("2")) {
-            mAiStatus.setJumpEnabled(true);
-            if (AppUtils.isAppInstalled(requireContext(), "it.dhd.oxygencustomizer.aiplugin")) {
-                mAiStatus.setSummary(R.string.depth_wallpaper_plugin_installed);
-                mAiStatus.setOnPreferenceClickListener(preference -> {
-                    Intent intent = requireContext().getPackageManager().getLaunchIntentForPackage("it.dhd.oxygencustomizer.aiplugin");
-                    startActivity(intent);
-                    return true;
-                });
-            } else {
-                mAiStatus.setSummary(R.string.depth_wallpaper_plugin_not_installed);
-                mAiStatus.setOnPreferenceClickListener(preference -> {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(PLUGIN_URL));
-                    startActivity(intent);
-                    return true;
-                });
-            }
-        }
-    }
-
     private void setJumps() {
         OplusJumpPreference mLockscreenClock = findPreference("lockscreen_clock_main");
         OplusJumpPreference mLockscreenWeather = findPreference("lockscreen_weather");
@@ -262,25 +198,8 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     Intent data = result.getData();
                     String path = getRealPath(data);
 
-                    String dest = switch (mPick) {
-                        case PICK_FP_ICON -> LOCKSCREEN_FINGERPRINT_FILE;
-                        case PICK_DEPTH_BACKGROUND -> getLockScreenBitmapCachePath();
-                        case PICK_DEPTH_SUBJECT -> getLockScreenSubjectCachePath();
-                        default -> "";
-                    };
-
-                    if (path != null && moveToOCHiddenDir(path, dest)) {
-                        switch (mPick) {
-                            case PICK_FP_ICON:
-                                mPreferences.edit().putString(LOCKSCREEN_FINGERPRINT_STYLE, "-1").apply();
-                                break;
-                            case PICK_DEPTH_BACKGROUND:
-                                sendIntent(ACTION_DEPTH_BACKGROUND_CHANGED);
-                                break;
-                            case PICK_DEPTH_SUBJECT:
-                                sendIntent(ACTION_DEPTH_SUBJECT_CHANGED);
-                                break;
-                        }
+                    if (path != null && moveToOCHiddenDir(path, LOCKSCREEN_FINGERPRINT_FILE)) {
+                        mPreferences.edit().putString(LOCKSCREEN_FINGERPRINT_STYLE, "-1").apply();
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
@@ -288,18 +207,11 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                 }
             });
 
-    private void sendIntent(String action) {
-        Intent intent = new Intent(action);
-        intent.putExtra("packageName", SYSTEM_UI);
-        requireContext().sendBroadcast(intent);
-    }
-
     @Override
     public void updateScreen(String key) {
         super.updateScreen(key);
 
         if (key == null) {
-            checkAiStatus();
             setJumps();
             return;
         }
@@ -310,7 +222,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     boolean DepthEffectEnabled = mPreferences.getBoolean("DWallpaperEnabled", false);
 
                     if (DepthEffectEnabled) {
-                        new MaterialAlertDialogBuilder(getContext())
+                        new MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(R.string.depth_effect_alert_title)
                                 .setMessage(getString(R.string.depth_effect_alert_body))
                                 .setPositiveButton(R.string.depth_effect_ok_btn, (dialog, which) -> dialog.dismiss())
@@ -319,9 +231,6 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
                     }
                 } catch (Exception ignored) {
                 }
-                break;
-            case "DWMode":
-                checkAiStatus();
                 break;
         }
     }

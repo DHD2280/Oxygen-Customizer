@@ -66,6 +66,15 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AI_STATUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD_OPACITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_CATEGORY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_OPACITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_SUBJECT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
@@ -548,23 +557,16 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("lockscreen_fp_custom_icon", false);
             }
 
-            case "DWCategory", "DWallpaperEnabled" -> {
+            case DEPTH_WALLPAPER_CATEGORY,
+                 DEPTH_WALLPAPER_ENABLED -> {
                 return Build.VERSION.SDK_INT >= 34;
             }
-            case "DWOpacity", "DWMode", "DWAIStatus" -> {
-                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false);
+            case DEPTH_WALLPAPER_BACKGROUND,
+                 DEPTH_WALLPAPER_SUBJECT -> {
+                return instance.mPreferences.getString("DWMode", "0").equals("1");
             }
-            case "DWBackground", "DWSubject" -> {
-                return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("DWallpaperEnabled", false) &&
-                        instance.mPreferences.getString("DWMode", "0").equals("1");
-            }
-            case "DWShowOnAod" -> {
-                return isVisible("DWallpaperEnabled") &&
-                        instance.mPreferences.getBoolean("DWallpaperEnabled", false);
-            }
-            case "DWAodOpacity" -> {
-                return isVisible("DWShowOnAod") &&
-                        instance.mPreferences.getBoolean("DWShowOnAod", false);
+            case DEPTH_WALLPAPER_AOD_OPACITY -> {
+                return instance.mPreferences.getBoolean(DEPTH_WALLPAPER_AOD_OPACITY, false);
             }
 
             case "lockscreen_album_art_category" -> {
@@ -897,6 +899,14 @@ public class PreferenceHelper {
                             (instance.mPreferences.getString(LOCKSCREEN_WIDGETS, "").contains("weather") ||
                                     instance.mPreferences.getString(LOCKSCREEN_WIDGETS_EXTRAS, "").contains("weather"));
 
+            // Depth Wallpaper
+            case DEPTH_WALLPAPER_MODE,
+                 DEPTH_WALLPAPER_AI_STATUS,
+                 DEPTH_WALLPAPER_OPACITY,
+                 DEPTH_WALLPAPER_AOD,
+                 DEPTH_WALLPAPER_BACKGROUND,
+                 DEPTH_WALLPAPER_SUBJECT -> instance.mPreferences.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
+
             case "fix_lag_force_all_apps" ->
                     instance.mPreferences.getBoolean("fix_lag_switch", false);
             case "fix_lag_app_chooser" ->
@@ -1060,8 +1070,8 @@ public class PreferenceHelper {
             // Lockscreen
             case LOCKSCREEN_FINGERPRINT_SCALING ->
                     instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
-            case "DWOpacity" -> instance.mPreferences.getSliderInt("DWOpacity", 192) + "dp";
-            case "DWAodOpacity" -> instance.mPreferences.getSliderInt("DWAodOpacity", 192) + "dp";
+            case DEPTH_WALLPAPER_OPACITY -> instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192) + "dp";
+            case DEPTH_WALLPAPER_AOD_OPACITY -> instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_AOD_OPACITY, 192) + "dp";
             case "lockscreen_media_blur" ->
                     instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
 
