@@ -23,7 +23,7 @@ public class OxygenCustomizer extends Application {
 
     public static Context getAppContext() {
         if (contextReference == null || contextReference.get() == null) {
-            contextReference = new WeakReference<>(OxygenCustomizer.getInstance().getApplicationContext());
+            contextReference = new WeakReference<>(OxygenCustomizer.get().getApplicationContext());
         }
         return contextReference.get();
     }
@@ -32,7 +32,7 @@ public class OxygenCustomizer extends Application {
         return LocaleHelper.setLocale(getAppContext());
     }
 
-    private static OxygenCustomizer getInstance() {
+    public static OxygenCustomizer get() {
         if (instance == null) {
             instance = new OxygenCustomizer();
         }
