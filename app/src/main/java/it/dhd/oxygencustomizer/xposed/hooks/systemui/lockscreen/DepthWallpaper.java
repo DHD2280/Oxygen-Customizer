@@ -18,6 +18,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTION_EXTRACT_SUCCESS;
 import static it.dhd.oxygencustomizer.utils.Constants.DEPTH_BG_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.DEPTH_SUBJECT_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_OPACITY;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -122,14 +125,14 @@ public class DepthWallpaper extends XposedMods {
 
     @Override
     public void updatePrefs(String... Key) {
-        DWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
-        DWOpacity = Xprefs.getSliderInt("DWOpacity", 192);
-        DWMode = Integer.parseInt(Xprefs.getString("DWMode", "0"));
+        DWallpaperEnabled = Xprefs.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
+        DWOpacity = Xprefs.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192);
+        DWMode = Integer.parseInt(Xprefs.getString(DEPTH_WALLPAPER_MODE, "0"));
 
         if (Key.length > 0) {
-            if (Key[0].equals("DWallpaperEnabled")) {
+            if (Key[0].equals(DEPTH_WALLPAPER_ENABLED)) {
                 setupViews();
-            } else if (Key[0].equals("DWMode")) {
+            } else if (Key[0].equals(DEPTH_WALLPAPER_MODE)) {
                 cleanFiles();
             }
         }
