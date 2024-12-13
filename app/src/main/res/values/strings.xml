@@ -81,6 +81,7 @@
     <string name="battery_level_percentage">Battery Level</string>
     <string name="percentage_text" translatable="false">%d%%</string>
     <string name="seconds">Seconds</string>
+    <string name="duration_seconds">%d seconds</string>
     <string name="milliseconds">Milliseconds</string>
     <string name="steps">Steps</string>
     <string name="general_color_accent1">Accent 1</string>

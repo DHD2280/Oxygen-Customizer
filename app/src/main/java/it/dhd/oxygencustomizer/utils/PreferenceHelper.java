@@ -175,7 +175,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import it.dhd.oneplusui.preference.OplusListPreference;
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -904,9 +903,6 @@ public class PreferenceHelper {
                     instance.mPreferences.getBoolean("fix_lag_switch", false) &&
                             !instance.mPreferences.getBoolean("fix_lag_force_all_apps", false);
 
-            case "SleepOnFlatScreen" ->
-                    instance.mPreferences.getBoolean("SleepOnFlatScreen", false);
-
             case "moreLogging" -> !BuildConfig.VERSION_NAME.contains("nightly");
 
             default -> true;
@@ -998,12 +994,12 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";
             case "status_bar_clock_auto_hide_hduration" ->
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_hdur_summary) + "\n" +
-                            instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_hduration", 60) + " " +
-                            fragmentCompat.getString(R.string.seconds);
+                            String.format(fragmentCompat.getString(R.string.duration_seconds),
+                                    instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_hduration", 60));
             case "status_bar_clock_auto_hide_sduration" ->
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_sdur_summary) + "\n" +
-                            instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_sduration", 5) + " " +
-                            fragmentCompat.getString(R.string.seconds);
+                            String.format(fragmentCompat.getString(R.string.duration_seconds),
+                                    instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_sduration", 5));
             case NOTIF_TRANSPARENCY_VALUE ->
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
 
@@ -1139,8 +1135,11 @@ public class PreferenceHelper {
 
             // Buttons
             case "volbtn_torch_timeout" ->
-                    instance.mPreferences.getSliderInt("volbtn_torch_timeout", 5) + " " +
-                            fragmentCompat.getString(R.string.seconds);
+                    String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt("volbtn_torch_timeout", 5));
+
+            // Screen Off On Flat
+            case "FlatStandbyTime" ->
+                    String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt("FlatStandbyTime", 5));
 
             default -> null;
         };
