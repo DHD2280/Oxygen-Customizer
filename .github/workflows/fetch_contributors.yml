@@ -41,6 +41,7 @@ jobs:
           push-branch: 'beta'
           commit-message: 'Fetch Contributors'
           force-add: 'true'
+          rebase: 'true'
           files: app/src/main/assets/Misc/contributors.json docs/contributors.md
           name: GitHub
           email: OxygenCustomizer@dhd.it
