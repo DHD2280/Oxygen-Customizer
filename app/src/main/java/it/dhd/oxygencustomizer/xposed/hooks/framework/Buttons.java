@@ -84,18 +84,6 @@ public class Buttons extends XposedMods {
         super(context);
     }
 
-    public static void toggleNotifications() {
-        if (PWM != null) {
-            Object statusBarService = callMethod(PWM, "getStatusBarService");
-            try {
-                if (statusBarService != null)
-                    callMethod(PWM, "statusBarService");
-            } catch (Throwable t) {
-                XposedBridge.log("[ Oxygen Customizer - Buttons ] ERROR: " + t);
-            }
-        }
-    }
-
     @Override
     public void updatePrefs(String... Key) {
 

@@ -12,7 +12,6 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.toggleNotifications;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -33,6 +32,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -78,6 +79,7 @@ public class GestureNavbarManager extends XposedMods {
     private String QSExpandMethodName = "";
     private Object NotificationPanelViewController;
     private Object mNavigationBarInflaterView = null;
+    private Object mCentralSurfacesImpl = null;
     //region pill color
     private boolean colorReplaced = false;
     //endregion
@@ -140,6 +142,14 @@ public class GestureNavbarManager extends XposedMods {
         } catch (Throwable t) {
             SideGestureNavView = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader); // OOS 13
         }
+
+        Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+        hookAllConstructors(CentralSurfacesImpl, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                mCentralSurfacesImpl = param.thisObject;
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= 34) {
             hookAllConstructors(SideGestureDetector, new XC_MethodHook() {
@@ -313,6 +323,13 @@ public class GestureNavbarManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mNavigationBarInflaterView = param.thisObject;
+//                android.app.contextualsearch.ContextualSearchManager
+//                ContextualSearchManager contextualSearchManager = (ContextualSearchManager) this.context.getSystemService(ContextualSearchManager.class);
+                FrameLayout frame = (FrameLayout) mNavigationBarInflaterView;
+                frame.setOnLongClickListener(v -> {
+                    XposedBridge.log("Long click");
+                    return true;
+                });
                 refreshNavbar();
             }
         });
@@ -520,6 +537,16 @@ public class GestureNavbarManager extends XposedMods {
 
     private void showPowerMenu() {
 
+    }
+
+    private void toggleNotifications() {
+        if (mCentralSurfacesImpl == null) return;
+
+        try {
+            new Handler(Looper.getMainLooper()).post(() -> callMethod(mCentralSurfacesImpl, "togglePanel"));
+        } catch (Throwable t) {
+            log(t);
+        }
     }
 
     private String getDefaultLauncherPackageName() {
