@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="16dp"
         android:layout_marginEnd="?android:attr/listPreferredItemPaddingStart" >
 
         <ImageView
