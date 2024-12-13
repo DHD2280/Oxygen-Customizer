@@ -139,6 +139,19 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="Face Up Screen Off"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPrimarySwitchPreference
+            android:key="SleepOnFlatScreen"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.misc.SleepOnFlatFragment"
+            android:title="@string/sleep_on_flat_screen_title"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:key="pocket_studio_cat"
         android:title="@string/pocket_studio"
         app:iconSpaceReserved="false">

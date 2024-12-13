@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/sleep_on_flat_screen_title" >
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="FlatStandbyTime"
+            android:title="@string/flat_screen_timeout_title"
+            app:defaultValue="5"
+            app:iconSpaceReserved="false"
+            app:maxVal="100"
+            app:minVal="5"
+            app:tickInterval="5"
+            app:valueCount="1" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="true"
+            android:key="SleepOnFlatRespectWakeLock"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/flat_screen_timeout_respect_wakelock_title"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

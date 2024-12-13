@@ -904,6 +904,9 @@ public class PreferenceHelper {
                     instance.mPreferences.getBoolean("fix_lag_switch", false) &&
                             !instance.mPreferences.getBoolean("fix_lag_force_all_apps", false);
 
+            case "SleepOnFlatScreen" ->
+                    instance.mPreferences.getBoolean("SleepOnFlatScreen", false);
+
             case "moreLogging" -> !BuildConfig.VERSION_NAME.contains("nightly");
 
             default -> true;

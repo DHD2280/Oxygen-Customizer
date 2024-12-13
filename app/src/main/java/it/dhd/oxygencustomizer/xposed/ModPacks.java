@@ -10,6 +10,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.MemcEnhancer;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.SleepOnFlat;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
@@ -72,6 +73,7 @@ public class ModPacks {
                 modPacks.add(DarkMode.class);
                 modPacks.add(OplusStartingWindowManager.class);
                 modPacks.add(MemcEnhancer.class);
+                modPacks.add(SleepOnFlat.class);
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
