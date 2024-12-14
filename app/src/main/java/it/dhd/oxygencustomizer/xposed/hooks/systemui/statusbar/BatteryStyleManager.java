@@ -497,7 +497,6 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateBatteryViewValues(View view) {
-        log("updateBatteryViewValues called");
         TextView batteryOutPercentage = null;
         try {
             batteryOutPercentage = view.findViewById(mContext.getResources().getIdentifier("battery_percentage_view", "id", mContext.getPackageName()));
@@ -546,7 +545,6 @@ public class BatteryStyleManager extends XposedMods {
             }
         }
         if (CustomBatteryEnabled && batteryIcon != null) {
-            log("CustomBatteryEnabled && batteryIcon != null");
             scaleBatteryMeterViews(batteryIcon);
             updateBatteryRotation(batteryIcon);
             updateFlipper(batteryIcon.getParent());
@@ -602,7 +600,6 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateIconsColor() {
-        log("updateIconsColor " + batteryViews.size());
         if (batteryViews.isEmpty()) return;
         for (View v : batteryViews) {
             if (v instanceof ImageView) {
