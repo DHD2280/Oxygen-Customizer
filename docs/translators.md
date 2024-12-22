@@ -11,7 +11,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Luigi Conte (lc98)</b></sub></a>
         <br />
-        <sub><b>43538 words</b></sub>
+        <sub><b>43563 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/If.you.know.better.than.me.do.it.If.not.shut.up"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/13525964/medium/22265802c0ad24a0a71f1abfc4776771.jpg" />
@@ -69,7 +69,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>tugaia56</b></sub></a>
         <br />
-        <sub><b>3240 words</b></sub>
+        <sub><b>3260 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/carlosrobertow"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/16560677/medium/bd5c8e4bd49f74b0da1710010b71eadd.jpg" />
@@ -197,6 +197,13 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>61 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/jkmaxfli76"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/16781989/medium/d136e914c14575b2e1fdaf4e6c5f75f5.jpeg" />
+          <br />
+          <sub><b>J.K. (jkmaxfli76)</b></sub></a>
+        <br />
+        <sub><b>19 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/inok.go"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/16664999/medium/5c05f3c5db8faeedeedfadb0c7db3369.png" />
           <br />
           <sub><b>Дмитрий Мелешкин (inok.go)</b></sub></a>
@@ -217,6 +224,8 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>4 words</b></sub>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/nalankang521"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/16521037/medium/ac82f8d386129a7af83597c7607d0c28.jpeg" />
           <br />
@@ -224,8 +233,6 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>3 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/dilshod199714"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/13264140/medium/f3f0167bfdcd66bcf3c7e365513a5e68.jpg" />
           <br />

@@ -1179,4 +1179,5 @@
     <string name="custom_memc_config_title">自定义MEMC配置</string>
     <string name="custom_memc_configuration_summary">为每个应用或活动配置MEMC</string>
     <string name="memc_footer">如果你的设备未配备视觉处理器或不支持MEMC，请不要修改这些设置</string>
+    <!-- Screen Off On Flat -->
 </resources>

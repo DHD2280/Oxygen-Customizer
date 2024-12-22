@@ -72,6 +72,7 @@
     <string name="battery_full">Batteria Carica</string>
     <string name="battery_level_percentage">Livello Batteria</string>
     <string name="seconds">Secondi</string>
+    <string name="duration_seconds">%d secondi</string>
     <string name="milliseconds">Millisecondi</string>
     <string name="steps">Steps</string>
     <string name="general_color_accent1">Accento 1</string>
@@ -1207,4 +1208,8 @@
     <string name="memc_config_error">Configurazione Memc vuota!</string>
     <string name="refresh_rate_error">Frequenza aggiornamento vuoto!</string>
     <string name="memc_footer">Se il tuo dispositivo non dispone di un chip Pixelwork o non supporta Memc, non toccare queste impostazioni.</string>
+    <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_screen_title">Spegni lo schermo su superficie piana</string>
+    <string name="flat_screen_timeout_title">Timeout spegni schermo</string>
+    <string name="flat_screen_timeout_respect_wakelock_title">Rispetta i wakelock</string>
 </resources>

@@ -1207,4 +1207,5 @@
     <string name="memc_config_error">A MEMC-konfiguráció üres!</string>
     <string name="refresh_rate_error">A Frissítési gyakoriság üres!</string>
     <string name="memc_footer">Ha készüléke nem rendelkezik Pixelwork chippel, vagy nem támogatja a MEMC-et, ne módosítsa ezeket a beállításokat.</string>
+    <!-- Screen Off On Flat -->
 </resources>
