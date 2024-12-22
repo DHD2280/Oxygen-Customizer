@@ -1089,4 +1089,5 @@
     <string name="add_app">Añadir aplicación</string>
     <string name="select_app">Seleccionar aplicación</string>
     <string name="memc_footer">Si tu dispositivo no tiene el chip Pixelwork o no soporta Memc, no toques esos ajustes.</string>
+    <!-- Screen Off On Flat -->
 </resources>
