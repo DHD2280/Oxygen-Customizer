@@ -185,14 +185,22 @@ public class AodClock extends XposedMods {
                     }
                 }
                 log(" initForAodApk");
-                updateClockView();
+                try {
+                    updateClockView();
+                } catch (Throwable t) {
+                    log(t);
+                }
             }
         });
         hookAllMethods(AodClockLayout, "performTimeUpdate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!mAodClockEnabled) return;
-                updateClockView();
+                try {
+                    updateClockView();
+                } catch (Throwable t) {
+                    log(t);
+                }
             }
         });
 
