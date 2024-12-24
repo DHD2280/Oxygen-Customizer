@@ -459,6 +459,19 @@ public class PreferenceHelper {
                 return mode.equals("1") && instance.mPreferences.getBoolean("gesture_override_holdback", false);
             }
 
+            case "leftSwipeUpPercentage" -> {
+                return !instance.mPreferences.getString("leftSwipeUpAction", "-1").equals("-1");
+            }
+            case "rightSwipeUpPercentage" -> {
+                return !instance.mPreferences.getString("rightSwipeUpAction", "-1").equals("-1");
+            }
+
+            case "swipeUpPercentage" -> {
+                return !instance.mPreferences.getString("leftSwipeUpAction", "-1").equals("-1") ||
+                        !instance.mPreferences.getString("rightSwipeUpAction", "-1").equals("-1") ||
+                        !instance.mPreferences.getString("twoFingerSwipeUpAction", "-1").equals("-1");
+            }
+
             // Header Image
             case QS_HEADER_IMAGE_TINT,
                  QS_HEADER_IMAGE_ALPHA,
@@ -1039,6 +1052,15 @@ public class PreferenceHelper {
             case "GesPillWidthModPos" ->
                     instance.mPreferences.getSliderInt("GesPillWidthModPos", 0) + "%";
 
+            case "leftSwipeUpPercentage" ->
+                    instance.mPreferences.getSliderInt("leftSwipeUpPercentage", 25) + "%";
+
+            case "rightSwipeUpPercentage" ->
+                instance.mPreferences.getSliderInt("rightSwipeUpPercentage", 25) + "%";
+
+            case "swipeUpPercentage"  ->
+                instance.mPreferences.getSliderInt("swipeUpPercentage", 5) + "%";
+
             // Launcher Prefs
             case "folder_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("folder_columns", 3));
@@ -1161,7 +1183,7 @@ public class PreferenceHelper {
         if (height.size() == 2) {
             return height.get(0).intValue() + "% - " + height.get(1).intValue() + "%";
         } else {
-            return "100%";
+            return "0% - 100%";
         }
     }
 

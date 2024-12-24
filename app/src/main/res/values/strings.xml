@@ -658,16 +658,30 @@
     <string name="gesture_override_back_hold_command_switch_app">Switch to previous app</string>
     <string name="gesture_override_back_hold_command_close_recents">Clear all recents</string>
     <string name="gesture_override_back_hold_command_kill_app">Kill active app</string>
-    <string name="gesture_override_back_hold_command_screenshot">Make Screenshot</string>
+    <string name="gesture_override_back_hold_command_screenshot">Screenshot</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">Scrolling screenshot</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">Partial screenshot</string>
     <string name="gesture_override_back_hold_command_quick_settings">Open quick settings</string>
     <string name="gesture_override_back_hold_command_power_menu">Open power menu</string>
     <string name="gesture_override_back_hold_command_notification_panel">Open notification panel</string>
+    <string name="gesture_override_back_hold_command_toggle_one_handed">Toggle one handed mode</string>
     <string name="gesture_override_back_hold_command_screen_off">Screen Off</string>
 
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Navigation bar pill</string>
     <string name="gesture_nav_pill_width_title">Width compared to standard size</string>
     <string name="colorpill">Accent colored gesture pill</string>
+
+    <!-- Custom Gestures -->
+    <string name="gesture_nav_extra_cat">Extra navigation bar gestures</string>
+    <string name="gesture_nav_extra_title">Extra gestures</string>
+    <string name="gesture_nav_long_swipe_fc_title">Swipe to top of screen to kill foreground app</string>
+    <string name="gesture_nav_left_swipe_up_title">Swipe up action from left of Navbar</string>
+    <string name="gesture_nav_right_swipe_up_title">Swipe up action from right of Navbar</string>
+    <string name="gesture_nav_left_swipe_up_percent">Left swipe-up area width (%)</string>
+    <string name="gesture_nav_right_swipe_up_percent">Right swipe-up area width (%)</string>
+    <string name="gesture_nav_two_finger_title">Two-finger swipe-up action</string>
+    <string name="gesture_nav_swipe_up_height">Swipe-up actions minimum trigger height</string>
 
     <!-- Buttons Title -->
     <string name="buttons_title">Buttons</string>
@@ -1030,6 +1044,7 @@
     <string name="usage_summary">Open wiki page</string>
     <string name="credits_title">Credits</string>
     <string name="credits_summary">Thanking those who made this possible.</string>
+    <string name="none">None</string>
 
     <!-- Omni Jaws Strings -->
     <string name="provider_title">Weather provider</string>

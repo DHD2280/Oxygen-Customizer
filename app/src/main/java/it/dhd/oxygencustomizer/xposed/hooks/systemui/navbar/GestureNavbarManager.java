@@ -11,23 +11,27 @@ import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,8 +41,6 @@ import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -47,24 +49,22 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
-import it.dhd.oxygencustomizer.xposed.utils.ScreenShotRunnable;
+import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class GestureNavbarManager extends XposedMods {
 
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+    private static final String listenPackage = SYSTEM_UI;
     private static final int mLightColor = 0xEBFFFFFF, mDarkColor = 0x99000000; //original navbar colors
     //region pill size
     private static float widthFactor = 1f;
     private static boolean navPillColorAccent = false;
-    private static boolean navPillCustomColor = false;
-    private static int navPillColor = Color.GRAY;
     private Object SideGestureConfigurationEx;
+    private Object mOverviewProxyService = null;
     //region Back gesture
     private List<Float> backGestureHeightFractionLeft = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
     private List<Float> backGestureHeightFractionRight = Arrays.asList(0f, 1f); // % of screen height. can be anything between 0 to 1
@@ -77,13 +77,20 @@ public class GestureNavbarManager extends XposedMods {
     private int overrideRight = 0;
     //endregion
     private int mDirection;
-    private String QSExpandMethodName = "";
-    private Object NotificationPanelViewController;
     private Object mNavigationBarInflaterView = null;
-    private Object mCentralSurfacesImpl = null;
     //region pill color
     private boolean colorReplaced = false;
     //endregion
+
+    private boolean mBroadcastRegistered = false;
+
+    private final BroadcastReceiver mSwitchAppReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int side = intent.getIntExtra("side", 0);
+            switchApp(side);
+        }
+    };
 
 
     public GestureNavbarManager(Context context) {
@@ -112,8 +119,6 @@ public class GestureNavbarManager extends XposedMods {
 
         //region pill color
         navPillColorAccent = Xprefs.getBoolean("navPillColorAccent", false);
-        navPillCustomColor = Xprefs.getBoolean("navPillCustomColor", false);
-        navPillColor = Xprefs.getInt("navPillColor", Color.GRAY);
         //endregion
 
         if (Key.length > 0) {
@@ -131,6 +136,12 @@ public class GestureNavbarManager extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
+        if (!mBroadcastRegistered) {
+            IntentFilter filter = new IntentFilter(ACTIONS_SWITCH_APP);
+            mContext.registerReceiver(mSwitchAppReceiver, filter, Context.RECEIVER_EXPORTED);
+            mBroadcastRegistered = true;
+        }
+
         Class<?> SideGestureDetector;
         try {
             SideGestureDetector = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader);
@@ -144,19 +155,12 @@ public class GestureNavbarManager extends XposedMods {
             SideGestureNavView = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader); // OOS 13
         }
 
-        Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.CommandQueue", lpparam.classLoader);
-        hookAllConstructors(CentralSurfacesImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCentralSurfacesImpl = param.thisObject;
-            }
-        });
-
         if (Build.VERSION.SDK_INT >= 34) {
             hookAllConstructors(SideGestureDetector, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
+                    mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
                 }
             });
 
@@ -257,26 +261,6 @@ public class GestureNavbarManager extends XposedMods {
             }
         });
 
-        Class<?> NotificationPanelViewControllerClass;
-        try {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
-        } catch (Throwable t) {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader); // A13
-        }
-
-        QSExpandMethodName = Arrays.stream(NotificationPanelViewControllerClass.getMethods())
-                .anyMatch(m -> m.getName().equals("expandToQs"))
-                ? "expandToQs" //A14
-                : "expandWithQs"; //A13
-
-
-        hookAllConstructors(NotificationPanelViewControllerClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                NotificationPanelViewController = param.thisObject;
-            }
-        });
-
         Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
 
         Class<?> OplusNavigationHandle;
@@ -374,7 +358,9 @@ public class GestureNavbarManager extends XposedMods {
     private void runAction(int action) {
         switch (action) {
             case 2 -> killForegroundApp();
-            case 3 -> takeScreenshot();
+            case 3 -> takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
+            case 8 -> takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
+            case 9 -> takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
             case 4 -> showQs();
             case 5 -> showPowerMenu();
             case 6 -> toggleNotifications();
@@ -452,7 +438,7 @@ public class GestureNavbarManager extends XposedMods {
                 String[] appInfo = getForegroundApp();
                 foregroundApp = appInfo[0];
 
-                if (foregroundApp != null && !foregroundApp.equals(Constants.Packages.SYSTEM_UI) && !foregroundApp.equals(getDefaultLauncherPackageName())) {
+                if (foregroundApp != null && !foregroundApp.equals(SYSTEM_UI) && !foregroundApp.equals(getDefaultLauncherPackageName())) {
                     //am.killBackgroundProcesses(foregroundApp);
                     String finalForegroundApp = foregroundApp;
                     XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + finalForegroundApp));
@@ -468,35 +454,37 @@ public class GestureNavbarManager extends XposedMods {
         });
     }
 
-    private void takeScreenshot() {
-        new Handler(Looper.getMainLooper()).postDelayed(
-                new ScreenShotRunnable("systemQuickTileScreenshotIn", mContext, SystemClock.uptimeMillis(), UUID.randomUUID().toString().replace("-", "")), 750L);
+    private void takeScreenshot(ScreenshotUtils.ScreenshotType type) {
+        ScreenshotUtils.takeScreenshot(type, mContext, 750L);
     }
 
     private void showQs() {
-        if (TextUtils.isEmpty(QSExpandMethodName) || NotificationPanelViewController == null)
-            return;
-
-        try {
-            new Handler(Looper.getMainLooper()).post(() -> callMethod(NotificationPanelViewController, QSExpandMethodName));
-        } catch (Throwable t) {
-            Log.e("ShowQs", "Error in showQs", t);
-        }
+        Intent intent = new Intent(ACTIONS_OPEN_QUICK_SETTINGS);
+        intent.setPackage(SYSTEM_UI);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        mContext.sendBroadcast(intent);
     }
 
     private void showPowerMenu() {
 
     }
 
-    private void toggleNotifications() {
-        if (mCentralSurfacesImpl == null) return;
-
+    private void switchApp(int side) {
         try {
-//            new Handler(Looper.getMainLooper()).post(() -> );
-            callMethod(mCentralSurfacesImpl, "togglePanel");
+            Object proxy = callMethod(mOverviewProxyService, "getProxy");
+            if (proxy != null) {
+                callMethod(proxy, "switchApp", side);
+            }
         } catch (Throwable t) {
             log(t);
         }
+    }
+
+    private void toggleNotifications() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_PANEL);
+        intent.setPackage(LAUNCHER);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        mContext.sendBroadcast(intent);
     }
 
     private String getDefaultLauncherPackageName() {

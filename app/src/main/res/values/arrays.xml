@@ -190,24 +190,54 @@
     </string-array>
 
     <string-array name="gesture_holdback_commands_entries">
-        <item>@string/gesture_override_back_hold_command_switch_app</item>
+        <item>@string/gesture_override_back_hold_command_switch_app</item> <!-- 0 -->
         <!-- <item>@string/gesture_override_back_hold_command_close_recents</item> -->
-        <item>@string/gesture_override_back_hold_command_kill_app</item>
-        <item>@string/gesture_override_back_hold_command_screenshot</item>
-        <item>@string/gesture_override_back_hold_command_quick_settings</item>
-        <item>@string/gesture_override_back_hold_command_power_menu</item>
-        <item>@string/gesture_override_back_hold_command_notification_panel</item>
-        <item>@string/gesture_override_back_hold_command_screen_off</item>
+        <item>@string/gesture_override_back_hold_command_kill_app</item> <!-- 2 -->
+        <item>@string/gesture_override_back_hold_command_screenshot</item> <!-- 3 -->
+        <item>@string/gesture_override_back_hold_command_scroll_screenshot</item> <!-- 8 -->
+        <item>@string/gesture_override_back_hold_command_area_screenshot</item> <!-- 9 -->
+        <item>@string/gesture_override_back_hold_command_quick_settings</item> <!-- 4 -->
+        <item>@string/gesture_override_back_hold_command_power_menu</item> <!-- 5 -->
+        <item>@string/gesture_override_back_hold_command_notification_panel</item> <!-- 6 -->
+        <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 7 -->
     </string-array>
     <string-array name="gesture_holdback_commands_values">
         <item>0</item>
         <!-- <item>1</item> -->
         <item>2</item>
         <item>3</item>
+        <item>8</item>
+        <item>9</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
         <item>7</item>
+    </string-array>
+
+    <string-array name="custom_action_titles">
+        <item>@string/none</item> <!-- -1 -->
+        <item>@string/gesture_override_back_hold_command_screenshot</item> <!-- 1 -->
+        <item>@string/gesture_override_back_hold_command_area_screenshot</item> <!-- 8 -->
+        <item>@string/gesture_override_back_hold_command_scroll_screenshot</item> <!-- 9 -->
+        <item>@string/gesture_override_back_hold_command_quick_settings</item> <!-- 2 -->
+<!--        <item>@string/gesture_override_back_hold_command_kill_app</item> &lt;!&ndash; 3 &ndash;&gt;-->
+        <item>@string/gesture_override_back_hold_command_notification_panel</item> <!-- 4 -->
+        <item>@string/gesture_override_back_hold_command_toggle_one_handed</item> <!-- 5 -->
+        <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 6 -->
+<!--        <item>@string/gesture_override_back_hold_command_switch_app</item> &lt;!&ndash; 7 &ndash;&gt;-->
+    </string-array>
+
+    <string-array name="custom_action_codes">
+        <item>-1</item>
+        <item>1</item>
+        <item>8</item>
+        <item>9</item>
+        <item>2</item>
+<!--        <item>3</item>-->
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+<!--        <item>7</item>-->
     </string-array>
 
     <!-- Statusbar Clock -->

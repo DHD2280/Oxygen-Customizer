@@ -102,6 +102,14 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
+    public static WindowManager WindowManager() {
+        return instance == null
+                ? null
+                : instance.getWindowManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
     public static CameraManager CameraManager() {
         return instance == null
                 ? null
@@ -268,6 +276,19 @@ public class SystemUtils {
             }
         }
         return mAudioManager;
+    }
+
+    private WindowManager getWindowManager() {
+        if (mWindowManager == null) {
+            try {
+                mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mWindowManager;
     }
 
     private AlarmManager getAlarmManager() {

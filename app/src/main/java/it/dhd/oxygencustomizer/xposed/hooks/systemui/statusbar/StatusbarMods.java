@@ -11,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
@@ -79,8 +80,13 @@ public class StatusbarMods extends XposedMods {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null && intent.getAction() != null) {
-                if (intent.getAction().equals(ACTIONS_BOOT_COMPLETED)) {
-                    updateStatusbarHeight();
+                switch (intent.getAction()) {
+                    case ACTIONS_BOOT_COMPLETED:
+                        updateStatusbarHeight();
+                        break;
+                    case ACTIONS_OPEN_QUICK_SETTINGS:
+                        openQuickSettings();
+                        break;
                 }
             }
         }
@@ -106,6 +112,7 @@ public class StatusbarMods extends XposedMods {
     // End Padding Vars
     private boolean doubleTapToSleepStatusbarEnabled;
     // Padding Vars
+    private static String QSExpandMethodName;
     private float mTopPad;
     private boolean mKeyguardShowing = false;
     private Object mActivityStarter;
@@ -116,7 +123,6 @@ public class StatusbarMods extends XposedMods {
     private boolean mNewIconStyle;
     private boolean oos13 = false;
     private boolean mBroadcastRegistered = false;
-
 
     public StatusbarMods(Context context) {
         super(context);
@@ -174,6 +180,7 @@ public class StatusbarMods extends XposedMods {
 
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ACTIONS_BOOT_COMPLETED);
+            intentFilter.addAction(ACTIONS_OPEN_QUICK_SETTINGS);
             mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
@@ -322,7 +329,7 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        String QSExpandMethodName = Arrays.stream(NotificationPanelViewControllerClass.getMethods())
+        QSExpandMethodName = Arrays.stream(NotificationPanelViewControllerClass.getMethods())
                 .anyMatch(m -> m.getName().equals("expandToQs"))
                 ? "expandToQs" //A14
                 : "expandWithQs"; //A13
@@ -408,7 +415,7 @@ public class StatusbarMods extends XposedMods {
             }
         }
 
-        final GestureDetector mGestureDetector = new GestureDetector(mContext, getPullDownLPListener(QSExpandMethodName));
+        final GestureDetector mGestureDetector = new GestureDetector(mContext, getPullDownLPListener());
 
         hookAllMethods(PhoneStatusBarViewControllerClass, "onTouch", new XC_MethodHook() {
             @Override
@@ -607,18 +614,23 @@ public class StatusbarMods extends XposedMods {
         callMethod(OplusBrightnessControllerExt, "setBrightness", (int) val);
     }
 
-    private GestureDetector.OnGestureListener getPullDownLPListener(String QSExpandMethodName) {
+    private GestureDetector.OnGestureListener getPullDownLPListener() {
         return new LongpressListener(true) {
             @Override
             public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
                 if (STATUSBAR_MODE_SHADE == (int) getObjectField(NotificationPanelViewController, "mBarState")
                         && isValidFling(e1, e2, velocityY, .15f, 0.01f)) {
-                    callMethod(NotificationPanelViewController, QSExpandMethodName);
+                    openQuickSettings();
                     return true;
                 }
                 return false;
             }
         };
+    }
+
+    private void openQuickSettings() {
+        log("Opening Quick Settings " + QSExpandMethodName);
+        callMethod(NotificationPanelViewController, QSExpandMethodName);
     }
 
     private GestureDetector.OnGestureListener getPullUpListener() {

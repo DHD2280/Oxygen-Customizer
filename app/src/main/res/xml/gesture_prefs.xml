@@ -106,4 +106,13 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/gesture_nav_extra_cat">
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/gesture_nav_extra_cat"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.navbar.CustomGestures" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>
