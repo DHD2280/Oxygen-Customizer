@@ -21,7 +21,6 @@ import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 public class Gesture extends ControlledPreferenceFragmentCompat {
 
     FrameLayout leftBackGestureIndicator, rightBackGestureIndicator;
-    FrameLayout leftSwipeGestureIndicator, rightSwipeGestureIndicator;
     private ListWithPopUpPreference mOverrideBackLeft, mOverrideBackRight;
     int navigationBarHeight = 0;
 
@@ -59,6 +58,8 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
                 R.drawable.ic_switch_app, // Switch App
                 R.drawable.ic_kill, // Kill App
                 R.drawable.ic_screenshot, // Screenshot
+                R.drawable.ic_screenshot_scroll, // Scroll Screenshot
+                R.drawable.ic_screenshot_area, // Partial Screenshot
                 R.drawable.ic_quick_settings, // Quick Settings
                 R.drawable.ic_power_menu, // Power Menu
                 R.drawable.ic_notifications, // Notification Panel
@@ -76,11 +77,9 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
 
         rightBackGestureIndicator = prepareBackGestureView(Gravity.RIGHT);
         leftBackGestureIndicator = prepareBackGestureView(Gravity.LEFT);
-
-        rightSwipeGestureIndicator = prepareSwipeGestureView(Gravity.RIGHT);
-        leftSwipeGestureIndicator = prepareSwipeGestureView(Gravity.LEFT);
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void updateScreen(String key) {
         super.updateScreen(key);
@@ -92,24 +91,6 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
             );
 
             int displayHeight = requireActivity().getWindowManager().getCurrentWindowMetrics().getBounds().height();
-            int displayWidth = requireActivity().getWindowManager().getCurrentWindowMetrics().getBounds().width();
-
-            float leftSwipeUpPercentage = mPreferences.getSliderFloat("gesture_left_height_double", 25);
-
-            float rightSwipeUpPercentage = mPreferences.getSliderFloat("gesture_right_height_double", 25);
-
-            int edgeWidth = Math.round(displayWidth * leftSwipeUpPercentage / 100f);
-            ViewGroup.LayoutParams lp = leftSwipeGestureIndicator.getLayoutParams();
-            lp.width = edgeWidth;
-            leftSwipeGestureIndicator.setLayoutParams(lp);
-
-            edgeWidth = Math.round(displayWidth * rightSwipeUpPercentage / 100f);
-            lp = rightSwipeGestureIndicator.getLayoutParams();
-            lp.width = edgeWidth;
-            rightSwipeGestureIndicator.setLayoutParams(lp);
-
-            setVisibility(rightSwipeGestureIndicator, false, 400);
-            setVisibility(leftSwipeGestureIndicator, false, 400);
 
             setVisibility(rightBackGestureIndicator, PreferenceHelper.isVisible("gesture_right_height_double"), 400);
             setVisibility(leftBackGestureIndicator, PreferenceHelper.isVisible("gesture_left_height_double"), 400);
@@ -223,9 +204,6 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
     public void onDestroy() {
         ((ViewGroup) rightBackGestureIndicator.getParent()).removeView(rightBackGestureIndicator);
         ((ViewGroup) leftBackGestureIndicator.getParent()).removeView(leftBackGestureIndicator);
-
-        ((ViewGroup) rightSwipeGestureIndicator.getParent()).removeView(rightSwipeGestureIndicator);
-        ((ViewGroup) leftSwipeGestureIndicator.getParent()).removeView(leftSwipeGestureIndicator);
 
         super.onDestroy();
     }
