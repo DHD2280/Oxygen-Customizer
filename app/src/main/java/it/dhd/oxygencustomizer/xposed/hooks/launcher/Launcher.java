@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
+import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
@@ -33,6 +34,9 @@ public class Launcher extends XposedMods {
     private boolean mRearrangeHome = false, mFolderRearrange = false, mFolderPreview = false, mDrawerRearrange = false, mOpenAppDetails;
     private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
     private int mMaxRows = 6, mMaxColumns = 4;
+    private boolean mHideScroller = false;
+
+    private View OplusFastScroll;
 
     public Launcher(Context context) {
         super(context);
@@ -54,6 +58,11 @@ public class Launcher extends XposedMods {
         mOpenAppDetails = Xprefs.getBoolean("launcher_open_app_details", false);
         mRemoveFolderPagination = Xprefs.getBoolean("remove_folder_pagination", false);
         mRemoveHomePagination = Xprefs.getBoolean("remove_home_pagination", false);
+        mHideScroller = Xprefs.getBoolean("hide_scroller", false);
+
+        if (Key.length > 0 && Key[0].equals("hide_scroller")) {
+            updateFastScroll();
+        }
 
     }
 
@@ -171,6 +180,20 @@ public class Launcher extends XposedMods {
             log("Error in Launcher Layout " + t);
         }
 
+        Class<?> OplusFastScrollLayoutClass = findClass("com.android.launcher3.allapps.OplusFastScrollLayout", lpparam.classLoader);
+        hookAllConstructors(OplusFastScrollLayoutClass, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                OplusFastScroll = (View) param.thisObject;
+                updateFastScroll();
+            }
+        });
+
+    }
+
+    private void updateFastScroll() {
+        if (OplusFastScroll == null) return;
+        OplusFastScroll.setVisibility(mHideScroller ? View.GONE : View.VISIBLE);
     }
 
     @Override

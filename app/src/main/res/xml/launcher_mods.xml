@@ -144,6 +144,13 @@
             android:title="@string/force_themed_launcher_icons"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="hide_scroller"
+            android:summary="@string/hide_scroller_summary"
+            android:title="@string/hide_scroller"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>
