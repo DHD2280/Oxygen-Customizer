@@ -171,7 +171,6 @@ public class CustomNavGestures extends XposedMods {
 		hookAllMethods(OtherActivityInputConsumerClass, "onMotionEvent", new XC_MethodHook() {
 			@Override
 			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				log("OtherActivityInputConsumerClass");
 				onMotionEvent(param, false);
 			}
 		});
@@ -179,7 +178,6 @@ public class CustomNavGestures extends XposedMods {
 		hookAllMethods(OplusOverviewInputConsumerImpl, "onMotionEvent", new XC_MethodHook() {
 			@Override
 			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				log("OverviewInputConsumerClass");
 				onMotionEvent(param, true);
 			}
 		});
@@ -252,7 +250,6 @@ public class CustomNavGestures extends XposedMods {
 		if (action == MotionEvent.ACTION_UP
 				&& swipeType != SWIPE_NONE) {
 			if (!isOverViewListener) {
-				log("Force cancel gesture");
 				setObjectField(param.thisObject, "mActivePointerId", MotionEvent.INVALID_POINTER_ID);
 				setObjectField(param.thisObject, "mPassedWindowMoveSlop", false);
 				setBooleanField(param.thisObject, "mPassedPilferInputSlop", false);
@@ -294,12 +291,7 @@ public class CustomNavGestures extends XposedMods {
 					1,
 					callMethod(Process.myUserHandle(), "getIdentifier"));
 
-			if(recentTaskList.isEmpty()) {
-				log("No recent tasks");
-				return;
-			}
-
-			log("Recent tasks: " + Arrays.toString(recentTaskList.toArray()));
+			if(recentTaskList.isEmpty()) return;
 
 			if(mTasksFieldName == null) {
 				for(Field f : recentTaskList.get(0).getClass().getDeclaredFields()) {
