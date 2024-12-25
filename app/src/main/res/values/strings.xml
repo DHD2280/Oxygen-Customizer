@@ -636,6 +636,8 @@
     <string name="remove_home_pagination">Remove Home Pagination</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
+    <string name="hide_scroller">Hide scroller</string>
+    <string name="hide_scroller_summary">Hide scroller in app drawer</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
