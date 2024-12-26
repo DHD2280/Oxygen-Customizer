@@ -11,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -83,10 +84,17 @@ public class CustomNavGestures extends XposedMods {
 
 	private boolean mBroadcastRegistered = false;
 
-	private final BroadcastReceiver mTogglePanelReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver mSystemUiReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			toggleNotification();
+			switch (intent.getAction()) {
+				case ACTIONS_TOGGLE_ONE_HANDED:
+					startOneHandedMode();
+					break;
+				case ACTIONS_TOGGLE_PANEL:
+					toggleNotification();
+					break;
+			}
 		}
 	};
 
@@ -124,7 +132,8 @@ public class CustomNavGestures extends XposedMods {
 		if (!mBroadcastRegistered) {
 			IntentFilter filter = new IntentFilter();
 			filter.addAction(ACTIONS_TOGGLE_PANEL);
-			mContext.registerReceiver(mTogglePanelReceiver, filter, Context.RECEIVER_EXPORTED);
+			filter.addAction(ACTIONS_TOGGLE_ONE_HANDED);
+			mContext.registerReceiver(mSystemUiReceiver, filter, Context.RECEIVER_EXPORTED);
 			mBroadcastRegistered = true;
 		}
 

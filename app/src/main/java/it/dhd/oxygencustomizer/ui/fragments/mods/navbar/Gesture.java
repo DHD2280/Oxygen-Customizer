@@ -61,7 +61,7 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
                 R.drawable.ic_screenshot_scroll, // Scroll Screenshot
                 R.drawable.ic_screenshot_area, // Partial Screenshot
                 R.drawable.ic_quick_settings, // Quick Settings
-                R.drawable.ic_power_menu, // Power Menu
+                R.drawable.ic_one_hand, // Toggle One Handed
                 R.drawable.ic_notifications, // Notification Panel
                 R.drawable.ic_screen_off, // Volume Panel
         };

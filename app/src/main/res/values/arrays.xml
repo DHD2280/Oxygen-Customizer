@@ -197,7 +197,7 @@
         <item>@string/gesture_override_back_hold_command_scroll_screenshot</item> <!-- 8 -->
         <item>@string/gesture_override_back_hold_command_area_screenshot</item> <!-- 9 -->
         <item>@string/gesture_override_back_hold_command_quick_settings</item> <!-- 4 -->
-        <item>@string/gesture_override_back_hold_command_power_menu</item> <!-- 5 -->
+        <item>@string/gesture_override_back_hold_command_toggle_one_handed</item> <!-- 5 -->
         <item>@string/gesture_override_back_hold_command_notification_panel</item> <!-- 6 -->
         <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 7 -->
     </string-array>
@@ -220,7 +220,7 @@
         <item>@string/gesture_override_back_hold_command_area_screenshot</item> <!-- 8 -->
         <item>@string/gesture_override_back_hold_command_scroll_screenshot</item> <!-- 9 -->
         <item>@string/gesture_override_back_hold_command_quick_settings</item> <!-- 2 -->
-<!--        <item>@string/gesture_override_back_hold_command_kill_app</item> &lt;!&ndash; 3 &ndash;&gt;-->
+        <item>@string/gesture_override_back_hold_command_kill_app</item> <!-- 3 -->
         <item>@string/gesture_override_back_hold_command_notification_panel</item> <!-- 4 -->
         <item>@string/gesture_override_back_hold_command_toggle_one_handed</item> <!-- 5 -->
         <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 6 -->
@@ -233,7 +233,7 @@
         <item>8</item>
         <item>9</item>
         <item>2</item>
-<!--        <item>3</item>-->
+        <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>

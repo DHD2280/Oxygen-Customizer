@@ -13,6 +13,7 @@ import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -345,7 +346,7 @@ public class GestureNavbarManager extends XposedMods {
             case 2 -> R.drawable.ic_kill;
             case 3 -> R.drawable.ic_screenshot;
             case 4 -> R.drawable.ic_quick_settings;
-            case 5 -> R.drawable.ic_power_menu;
+            case 5 -> R.drawable.ic_one_hand;
             case 6 -> R.drawable.ic_notifications;
             case 7 -> R.drawable.ic_screen_off;
             default -> 0;
@@ -359,10 +360,10 @@ public class GestureNavbarManager extends XposedMods {
         switch (action) {
             case 2 -> killForegroundApp();
             case 3 -> takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
-            case 8 -> takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
+            case 8 -> takeScreenshot(ScreenshotUtils.ScreenshotType.SCROLL);
             case 9 -> takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
             case 4 -> showQs();
-            case 5 -> showPowerMenu();
+            case 5 -> toggleOneHanded();
             case 6 -> toggleNotifications();
             case 7 ->
                     callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
@@ -465,8 +466,11 @@ public class GestureNavbarManager extends XposedMods {
         mContext.sendBroadcast(intent);
     }
 
-    private void showPowerMenu() {
-
+    private void toggleOneHanded() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_ONE_HANDED);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.setPackage(LAUNCHER);
+        mContext.sendBroadcast(intent);
     }
 
     private void switchApp(int side) {

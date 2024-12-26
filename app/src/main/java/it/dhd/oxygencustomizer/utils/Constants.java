@@ -700,6 +700,7 @@ public final class Constants {
     public static final String ACTIONS_MEMC_FEATURE_RECEIVED = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_RECEIVED_OC";
     public static final String ACTIONS_AOD_INVALIDATE_DEPTH = BuildConfig.APPLICATION_ID + ".ACTIONS_AOD_INVALIDATE_DEPTH";
     public static final String ACTIONS_TOGGLE_PANEL = BuildConfig.APPLICATION_ID + ".ACTIONS_TOGGLE_PANEL";
+    public static final String ACTIONS_TOGGLE_ONE_HANDED = BuildConfig.APPLICATION_ID + ".ACTIONS_TOGGLE_ONE_HANDED";
     public static final String ACTIONS_OPEN_QUICK_SETTINGS = BuildConfig.APPLICATION_ID + ".ACTIONS_OPEN_QUICK_SETTINGS";
     public static final String ACTIONS_SWITCH_APP = BuildConfig.APPLICATION_ID + ".ACTIONS_SWITCH_APP";
 
