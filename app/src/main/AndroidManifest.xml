@@ -140,6 +140,17 @@
                 android:value="true" />
         </service>
 
+        <service
+            android:name=".services.tiles.SleepOnSurfaceTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_sleep_surface_off"
+            android:label="@string/sleep_on_flat_screen_tile_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
