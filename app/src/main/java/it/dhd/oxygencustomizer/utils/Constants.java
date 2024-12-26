@@ -483,6 +483,7 @@ public final class Constants {
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE = "lockscreen_widgets_small_icon_active";
             public static final String LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE = "lockscreen_widgets_small_icon_inactive";
             public static final String LOCKSCREEN_WIDGETS_SCALE = "widget_scale";
+            public static final String LOCKSCREEN_WIDGETS_STYLE = "lockscreen_widgets_style";
 
             // Weather Settings
             public static final String LOCKSCREEN_WIDGETS_WEATHER_SETTINGS = "weather_settings";

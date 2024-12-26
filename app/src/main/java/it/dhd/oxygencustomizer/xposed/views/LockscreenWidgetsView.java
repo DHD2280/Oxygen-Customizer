@@ -63,6 +63,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
@@ -86,6 +87,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -133,6 +135,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private int mLightColor;
     private int mLightColorActive;
 
+    // Widgets style
+    private int mWidgetsStyle = 0;
     // Custom Widgets Colors
     private boolean mCustomColors = false;
     private int mBigInactiveColor, mBigActiveColor, mSmallInactiveColor, mSmallActiveColor;
@@ -744,7 +748,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private void updateWidgetsResources(ImageView iv) {
         if (iv == null) return;
-        Drawable d = ResourcesCompat.getDrawable(modRes, R.drawable.lockscreen_widget_background_circle, mContext.getTheme());
+        int bgRes = switch (mWidgetsStyle) {
+            case 1 -> R.drawable.lockscreen_widget_background_square;
+            default -> R.drawable.lockscreen_widget_background_circle;
+        };
+        Drawable d = ResourcesCompat.getDrawable(modRes, bgRes, mContext.getTheme());
         iv.setBackground(d);
         setButtonActiveState(iv, null, false);
     }
@@ -1012,12 +1020,21 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         if (!mCustomColors) {
             if (active) {
-                bgTint = isNightMode() ? mDarkColorActive : mLightColorActive;
-                tintColor = isNightMode() ? mDarkColor : mLightColor;
+                bgTint = mWidgetsStyle == 2 ?
+                        applyAlpha(0.3f, mDarkColorActive) :
+                        isNightMode() ? mDarkColorActive : mLightColorActive;
+                tintColor = mWidgetsStyle == 2 ?
+                        mDarkColorActive :
+                        isNightMode() ? mDarkColor : mLightColor;
             } else {
-                bgTint = isNightMode() ? mDarkColor : mLightColor;
-                tintColor = isNightMode() ? mLightColor : mDarkColor;
+                bgTint = mWidgetsStyle == 2 ?
+                        applyAlpha(0.3f, Color.WHITE) :
+                        isNightMode() ? mDarkColor : mLightColor;
+                tintColor = mWidgetsStyle == 2 ?
+                        Color.WHITE :
+                        isNightMode() ? mLightColor : mDarkColor;
             }
+
             if (iv != null) {
                 iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
                 if (iv != weatherButton) {
@@ -1566,9 +1583,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     }
 
     public void setCustomColors(
+            int widgetsStyle,
             boolean customColorsEnabled,
             int bigInactive, int bigActive, int smallInactive, int smallActive,
             int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
+        instance.mWidgetsStyle = widgetsStyle;
         instance.mCustomColors = customColorsEnabled;
         instance.mBigInactiveColor = bigInactive;
         instance.mBigActiveColor = bigActive;
@@ -1632,6 +1651,16 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         } else if (type == 1) {
             this.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
         }
+    }
+
+    @ColorInt
+    public static int applyAlpha(float alpha, int inputColor) {
+        alpha *= Color.alpha(inputColor);
+        return Color.argb(
+                (int) (alpha),
+                Color.red(inputColor),
+                Color.green(inputColor),
+                Color.blue(inputColor));
     }
 
 }

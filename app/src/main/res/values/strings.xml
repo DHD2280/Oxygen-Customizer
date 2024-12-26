@@ -1255,6 +1255,12 @@
     <string name="weather_settings">Weather Settings</string>
     <string name="widgets_scale">Widgets Scale</string>
 
+    <!-- Lockscreen Widgets Styles -->
+    <string name="lockscreen_widgets_style_title">Lockscreen widgets style</string>
+    <string name="lockscreen_widgets_style1">Material Rounded</string>
+    <string name="lockscreen_widgets_style2">Material Square</string>
+    <string name="lockscreen_widgets_style3">Translucent</string>
+
     <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>
     <string name="clock_timer">Clock/Timer</string>

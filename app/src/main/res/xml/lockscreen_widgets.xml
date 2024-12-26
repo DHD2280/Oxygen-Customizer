@@ -57,6 +57,14 @@
             android:title="@string/custom_device_name"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/lockscreen_widgets_style_entries"
+            android:entryValues="@array/lockscreen_widgets_style_values"
+            android:key="lockscreen_widgets_style"
+            android:title="@string/lockscreen_widgets_style_title"
+            app:useSimpleSummaryProvider="true" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

@@ -29,6 +29,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_STYLE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.annotation.SuppressLint;
@@ -75,6 +76,7 @@ public class LockscreenWidgets extends XposedMods {
     private String mMainWidgets;
     private String mExtraWidgets;
     private float mWidgetsScale = 1f;
+    private int mWidgetsStyle = 0;
     private Object mActivityStarter = null;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -116,6 +118,7 @@ public class LockscreenWidgets extends XposedMods {
         mSmallIconActiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE, Color.BLACK);
         mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
         mWidgetsScale = Xprefs.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f);
+        mWidgetsStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WIDGETS_STYLE, "0"));
 
         if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET) ||
@@ -138,7 +141,8 @@ public class LockscreenWidgets extends XposedMods {
                 Key[0].equals(LOCKSCREEN_WIDGETS_BIG_ICON_ACTIVE) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE) ||
-                Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE)) {
+                Key[0].equals(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE) ||
+                Key[0].equals(LOCKSCREEN_WIDGETS_STYLE)) {
             updateLockscreenWidgetsColors();
         }
         if (Key[0].equals(LOCKSCREEN_WIDGETS_SCALE)) {
@@ -256,6 +260,7 @@ public class LockscreenWidgets extends XposedMods {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
         lsWidgets.setCustomColors(
+                mWidgetsStyle,
                 mWidgetsCustomColor,
                 mBigInactiveColor, mBigActiveColor,
                 mSmallInactiveColor, mSmallActiveColor,
