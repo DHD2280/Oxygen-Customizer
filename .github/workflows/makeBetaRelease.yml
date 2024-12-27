@@ -18,10 +18,10 @@ jobs:
       - name: Source Code Download
         run: git clone --branch beta --single-branch --recurse-submodules https://github.com/DHD2280/Oxygen-Customizer.git .
 
-      - name: JDK 17 Setup
+      - name: set up JDK 21
         uses: actions/setup-java@v4.1.0
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
@@ -59,12 +59,11 @@ jobs:
       - name: Oxygen Customizer Binary Release
         uses: ncipollo/release-action@v1.14.0
         with:
-          tag: 'beta_builds'
-          name: 'Latest Beta'
-          omitBodyDuringUpdate: true
+          tag: ${{ env.TGName }}
+          name: ${{ env.VName }}
+          body: ${{ env.TMessage }}
           prerelease: true
-          allowUpdates: true
-          replacesArtifacts: true
+          allowUpdates: false
           draft: false
           artifacts: 'app/build/outputs/apk/release/*.apk'
 

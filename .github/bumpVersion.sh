@@ -3,11 +3,20 @@
 NEWVERCODE=$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')+1))
 NEWVERNAME="beta-$NEWVERCODE"
 
+echo 'VTag<<EOF' >> $GITHUB_ENV
+echo $NEWVERNAME >> $GITHUB_ENV
+echo 'EOF' >> $GITHUB_ENV
+
+echo 'VName<<EOF' >> $GITHUB_ENV
+echo 'Beta 'NEWVERCODE >> $GITHUB_ENV
+echo 'EOF' >> $GITHUB_ENV
+
 sed -i 's/versionCode.*/versionCode = '$NEWVERCODE'/' app/build.gradle.kts
 sed -i 's/versionName =.*/versionName = "'$NEWVERNAME'"/' app/build.gradle.kts
 
 sed -i 's/"version":.*/"version": "'$NEWVERNAME'",/' latestBeta.json
 sed -i 's/"versionCode":.*/"versionCode": '$NEWVERCODE',/' latestBeta.json
+sed -i 's/"apkUrl":.*/"apkUrl": "https:\/\/github.com\/DHD2280\/Oxygen-Customizer\/releases\/download\/'$NEWVERNAME'\/OxygenCustomizer.apk"/' latestBeta.json
 
 # module changelog
 echo "**$NEWVERNAME**  " > newChangeLog.md
