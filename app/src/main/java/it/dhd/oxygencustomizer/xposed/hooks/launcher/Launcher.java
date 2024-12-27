@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -75,15 +77,29 @@ public class Launcher extends XposedMods {
             @Override
             protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
                 if (mFolderRearrange) {
-                    XposedHelpers.setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
-                    XposedHelpers.setIntField(param.thisObject, "numFolderRows", mFolderRows);
+                    setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
+                    setIntField(param.thisObject, "numFolderRows", mFolderRows);
                 }
-                if (mFolderPreview) if (mFolderColumns > 3)
-                    XposedHelpers.setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
+                if (mFolderPreview && mFolderColumns > 3)
+                    setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
                 if (mDrawerRearrange)
-                    XposedHelpers.setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
+                    setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
             }
         });
+
+        if (Build.VERSION.SDK_INT >= 35) { // OOS15
+            Class<?> OplusInvariantDeviceProfile = findClass("com.android.launcher3.OplusInvariantDeviceProfile", lpparam.classLoader);
+            hookAllMethods(OplusInvariantDeviceProfile, "injectInitGrid", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!mDrawerRearrange) return;
+
+                    Object mGridOption = param.args[1];
+                    setIntField(mGridOption, "numAllAppsColumns", mDrawerColumns);
+                }
+            });
+
+        }
 
         Class<?> OplusTaskViewImpl = findClass("com.android.quickstep.views.OplusTaskViewImpl", lpparam.classLoader);
 
@@ -122,26 +138,30 @@ public class Launcher extends XposedMods {
             }
         });
 
-        Class<?> OplusPageIndicator = findClass("com.android.launcher.pageindicators.OplusPageIndicator", lpparam.classLoader);
-        findAndHookMethod(OplusPageIndicator, "onDraw", Canvas.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
-                View v = (View) param.thisObject;
-                switch (v.getParent().getClass().getCanonicalName()) {
-                    case "com.android.launcher3.OplusDragLayer":
-                        v.setVisibility(View.GONE);
-                        if (mRemoveHomePagination) param.setResult(null);
-                        break;
-                    case "android.widget.FrameLayout":
-                        v.setVisibility(View.GONE);
-                        if (mRemoveFolderPagination) param.setResult(null);
-                        break;
-                    default:
-                        break;
+        try {
+            Class<?> OplusPageIndicator = findClass("com.android.launcher.pageindicators.OplusPageIndicator", lpparam.classLoader);
+            findAndHookMethod(OplusPageIndicator, "onDraw", Canvas.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
+                    View v = (View) param.thisObject;
+                    switch (v.getParent().getClass().getCanonicalName()) {
+                        case "com.android.launcher3.OplusDragLayer":
+                            v.setVisibility(View.GONE);
+                            if (mRemoveHomePagination) param.setResult(null);
+                            break;
+                        case "android.widget.FrameLayout":
+                            v.setVisibility(View.GONE);
+                            if (mRemoveFolderPagination) param.setResult(null);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        } catch (Throwable t) {
+            log(t);
+        }
 
         try {
             Class<?> PageIndicatorTouchHelper = findClass("com.android.launcher.pageindicators.PageIndicatorTouchHelper", lpparam.classLoader);
