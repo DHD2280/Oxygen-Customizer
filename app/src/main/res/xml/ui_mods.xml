@@ -6,6 +6,8 @@
         android:key="sb_illustration"
         app:lottie_rawRes="@raw/ui_illustration" />
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory />
+
     <it.dhd.oneplusui.preference.OplusPreference
         android:key="reboot_pref"
         android:layout="@layout/view_reboot"
