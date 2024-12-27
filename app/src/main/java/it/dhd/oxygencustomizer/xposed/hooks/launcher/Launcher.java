@@ -87,20 +87,6 @@ public class Launcher extends XposedMods {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= 35) { // OOS15
-            Class<?> OplusInvariantDeviceProfile = findClass("com.android.launcher3.OplusInvariantDeviceProfile", lpparam.classLoader);
-            hookAllMethods(OplusInvariantDeviceProfile, "injectInitGrid", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mDrawerRearrange) return;
-
-                    Object mGridOption = param.args[1];
-                    setIntField(mGridOption, "numAllAppsColumns", mDrawerColumns);
-                }
-            });
-
-        }
-
         Class<?> OplusTaskViewImpl = findClass("com.android.quickstep.views.OplusTaskViewImpl", lpparam.classLoader);
 
         hookAllMethods(OplusTaskViewImpl, "setIcon", new XC_MethodHook() {
