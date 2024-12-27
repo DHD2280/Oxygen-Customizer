@@ -37,19 +37,17 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -298,7 +296,6 @@ public class GestureNavbarManager extends XposedMods {
                                 originalWidth = resultLayoutParams.width;
                                 setAdditionalInstanceField(param.thisObject, "originalWidth", originalWidth);
                             }
-
                             resultLayoutParams.width = Math.round(originalWidth * widthFactor);
                         }
                     }
@@ -342,6 +339,9 @@ public class GestureNavbarManager extends XposedMods {
             case 5 -> R.drawable.ic_one_hand;
             case 6 -> R.drawable.ic_notifications;
             case 7 -> R.drawable.ic_screen_off;
+            case 8 -> R.drawable.ic_screenshot_scroll;
+            case 9 -> R.drawable.ic_screenshot_area;
+            case 10 -> R.drawable.ic_circle_search;
             default -> 0;
         };
         return ResourcesCompat.getDrawable(ResourceManager.modRes,
@@ -360,6 +360,7 @@ public class GestureNavbarManager extends XposedMods {
             case 6 -> toggleNotifications();
             case 7 ->
                     callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+            case 10 -> runCircleToSearch();
         }
     }
 
@@ -482,6 +483,10 @@ public class GestureNavbarManager extends XposedMods {
         intent.setPackage(LAUNCHER);
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         mContext.sendBroadcast(intent);
+    }
+
+    private void runCircleToSearch() {
+        new Handler(Looper.getMainLooper()).postDelayed(AppUtils::circleToSearch, 150L);
     }
 
     private String getDefaultLauncherPackageName() {

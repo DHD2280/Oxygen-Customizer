@@ -43,6 +43,7 @@ okhttp = "4.12.0"
 image-cropper = "4.6.0"
 commons-text = "1.12.0"
 oneplus-ui = "1.3.10"
+lsposed-hiddenapi = "4.3"
 
 [libraries]
 
@@ -90,6 +91,9 @@ libsu-nio = { module = "com.github.topjohnwu.libsu:nio", version.ref = "libsu" }
 
 # Apache
 apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
+
+# Lsposed Hidden Api
+lsposed-hiddenapi = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "lsposed-hiddenapi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

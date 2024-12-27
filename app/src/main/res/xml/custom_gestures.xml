@@ -7,6 +7,12 @@
     android:title="@string/gesture_nav_extra_cat"
     app:iconSpaceReserved="false">
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:title="@string/circle_to_search_title"
+            android:summary="@string/circle_to_search_summary"
+            android:key="circleToSearchEnabled" />
+
 <!--    <it.dhd.oneplusui.preference.OplusSwitchPreference-->
 <!--        android:defaultValue="false"-->
 <!--        android:key="FCLongSwipeEnabled"-->
@@ -20,7 +26,7 @@
         android:entries="@array/custom_action_titles"
         android:entryValues="@array/custom_action_codes"
         android:key="leftSwipeUpAction"
-        android:summary="%s"
+        app:useSimpleSummaryProvider="true"
         android:title="@string/gesture_nav_left_swipe_up_title"
         app:iconSpaceReserved="false" />
 
@@ -39,7 +45,7 @@
         android:entries="@array/custom_action_titles"
         android:entryValues="@array/custom_action_codes"
         android:key="rightSwipeUpAction"
-        android:summary="%s"
+        app:useSimpleSummaryProvider="true"
         android:title="@string/gesture_nav_right_swipe_up_title"
         app:iconSpaceReserved="false" />
 

@@ -58,7 +58,6 @@ public class CustomGestures extends ControlledPreferenceFragmentCompat {
         super.updateScreen(key);
         try {
             if (getActivity() != null) {
-                int displayHeight = getActivity().getWindowManager().getCurrentWindowMetrics().getBounds().height();
                 int displayWidth = getActivity().getWindowManager().getCurrentWindowMetrics().getBounds().width();
 
                 float leftSwipeUpPercentage = mPreferences.getSliderFloat("leftSwipeUpPercentage", 25);
@@ -94,27 +93,6 @@ public class CustomGestures extends ControlledPreferenceFragmentCompat {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(0, navigationBarHeight);
         lp.gravity = gravity | Gravity.BOTTOM;
         lp.bottomMargin = 0;
-        result.setLayoutParams(lp);
-
-        result.setBackgroundColor(requireContext().getColor(android.R.color.system_accent1_300));
-        result.setAlpha(.7f);
-        ((ViewGroup) requireActivity().getWindow().getDecorView().getRootView()).addView(result);
-        result.setVisibility(View.GONE);
-        return result;
-    }
-
-    private FrameLayout prepareBackGestureView(int gravity) {
-        int navigationBarHeight = 0;
-        @SuppressLint({"InternalInsetResource", "DiscouragedApi"})
-        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            navigationBarHeight = requireContext().getResources().getDimensionPixelSize(resourceId);
-        }
-
-        FrameLayout result = new FrameLayout(getContext());
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(50, 0);
-        lp.gravity = gravity | Gravity.BOTTOM;
-        lp.bottomMargin = navigationBarHeight;
         result.setLayoutParams(lp);
 
         result.setBackgroundColor(requireContext().getColor(android.R.color.system_accent1_300));

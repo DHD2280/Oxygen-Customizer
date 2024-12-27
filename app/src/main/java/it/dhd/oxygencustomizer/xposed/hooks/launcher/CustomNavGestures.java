@@ -25,19 +25,19 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Process;
 import android.os.SystemClock;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -57,6 +57,7 @@ public class CustomNavGestures extends XposedMods {
 	private static final int ACTION_SWITCH_APP = 7;
 	private static final int ACTION_SCREENSHOT_PARTIAL = 8;
 	private static final int ACTION_SCREENSHOT_SCROLL = 9;
+	private static final int ACTION_CIRCLE_TO_SEARCH = 10;
 
 	private static final int SWIPE_NONE = 0;
 	private static final int SWIPE_LEFT = 1;
@@ -74,13 +75,22 @@ public class CustomNavGestures extends XposedMods {
 	private float mSwipeUpThreshold = 0;
 	private float mLongThreshold = 0;
 	private static boolean FCLongSwipeEnabled = false;
+	private static boolean mCircleToSearch = false;
 	private Object mSystemUIProxy = null;
 	private static int leftSwipeUpAction = NO_ACTION, rightSwipeUpAction = NO_ACTION, twoFingerSwipeUpAction = NO_ACTION;
 	private Object mSysUiProxy;
 	private Object currentFocusedTask = null;
 	private Class<?> OplusInputInterceptHelper = null;
-	private Object OplusAbsOverviewProxyImpl = null;
-	private Object OneHandedController = null;
+
+	private static final long LONG_PRESS_THRESHOLD = 500;
+	private final int TOUCH_SLOP = ViewConfiguration.get(mContext).getScaledTouchSlop();
+	private int mInitialTouchX;
+	private boolean isLongPress = false;
+	private final Handler longPressHandler = new Handler();
+	private final Runnable longPressRunnable = () -> {
+        isLongPress = true;
+        if (isLongPress && mCircleToSearch) AppUtils.circleToSearch();
+    };
 
 	private boolean mBroadcastRegistered = false;
 
@@ -111,6 +121,7 @@ public class CustomNavGestures extends XposedMods {
 		leftSwipeUpPercentage = Xprefs.getSliderFloat( "leftSwipeUpPercentage", 25f) / 100f;
 		rightSwipeUpPercentage = Xprefs.getSliderFloat( "rightSwipeUpPercentage", 25f) / 100f;
 		swipeUpPercentage = Xprefs.getSliderFloat( "swipeUpPercentage", 25f) / 100f;
+		mCircleToSearch = Xprefs.getBoolean("circleToSearchEnabled", false);
 	}
 
 	private static int readAction(SharedPreferences xprefs, String prefName) {
@@ -138,26 +149,10 @@ public class CustomNavGestures extends XposedMods {
 		}
 
 		OplusInputInterceptHelper = findClass("com.oplus.quickstep.gesture.helper.OplusInputInterceptHelper", lpParam.classLoader);
-		Class<?> OneHandedControllerClass = findClass("com.android.wm.shell.onehanded.OneHandedController", lpParam.classLoader);
-		Class<?> OplusAbsOverviewProxyImplClass = findClass("com.oplus.quickstep.proxy.OplusAbsOverviewProxyImpl", lpParam.classLoader);
 		Class<?> OtherActivityInputConsumerClass = findClass("com.android.quickstep.inputconsumers.OtherActivityInputConsumer", lpParam.classLoader); //When apps are open
 		Class<?> OplusOverviewInputConsumerImpl = findClass("com.android.quickstep.inputconsumers.OplusOverviewInputConsumerImpl", lpParam.classLoader); //When on Home screen and Recents
 		Class<?> SystemUiProxyClass = findClass("com.android.quickstep.SystemUiProxy", lpParam.classLoader);
 		Class<?> RecentTasksListClass = findClass("com.android.quickstep.RecentTasksList", lpParam.classLoader);
-
-		hookAllConstructors(OplusAbsOverviewProxyImplClass, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				OplusAbsOverviewProxyImpl = param.thisObject;
-			}
-		});
-
-		hookAllConstructors(OneHandedControllerClass, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				OneHandedController = param.thisObject;
-			}
-		});
 
 		Rect displayBounds = SystemUtils.WindowManager().getMaximumWindowMetrics().getBounds();
 		displayW = Math.min(displayBounds.width(), displayBounds.height());
@@ -199,10 +194,18 @@ public class CustomNavGestures extends XposedMods {
 				|| getBooleanField(param.thisObject, "mPassedWindowMoveSlop"); //checking if they've swiped long enough to cancel touch for app
 
 		int action = e.getActionMasked();
+		final int x = (int) e.getRawX();
 		int pointers = e.getPointerCount();
 
 		if (action == MotionEvent.ACTION_DOWN) //Let's get ready
 		{
+			isLandscape = e.getY() < displayW; //launcher rotation can be always 0. So....
+			int currentW = isLandscape ? displayH : displayW;
+
+			mInitialTouchX = x;
+			isLongPress = false; // Reset flag
+			if (pointers == 1 && isInPill(currentW, x)) longPressHandler.postDelayed(longPressRunnable, LONG_PRESS_THRESHOLD);
+
 			saveFocusedTask();
 
 			FCHandled = false;
@@ -216,9 +219,6 @@ public class CustomNavGestures extends XposedMods {
 			mSwipeUpThreshold = e.getY() * (1f - swipeUpPercentage);
 			mLongThreshold = e.getY() / 10f;
 
-			isLandscape = e.getY() < displayW; //launcher rotation can be always 0. So....
-			int currentW = isLandscape ? displayH : displayW;
-
 			if (pointers == 1) {
 				if (leftSwipeUpAction != NO_ACTION
 						&& e.getX() < currentW * leftSwipeUpPercentage) {
@@ -227,6 +227,11 @@ public class CustomNavGestures extends XposedMods {
 						&& e.getX() > currentW * (1f - rightSwipeUpPercentage)) {
 					swipeType = SWIPE_RIGHT;
 				}
+			}
+		}
+		if (action == MotionEvent.ACTION_MOVE) {
+			if (Math.abs(e.getX() - mInitialTouchX) > TOUCH_SLOP) {
+				longPressHandler.removeCallbacks(longPressRunnable);
 			}
 		}
 
@@ -288,7 +293,17 @@ public class CustomNavGestures extends XposedMods {
 			}
 
 			currentFocusedTask = null;
+		} else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+			longPressHandler.removeCallbacks(longPressRunnable);
 		}
+	}
+
+	private boolean isInPill(int displayW, int x) {
+		int pillWidth = displayW / 3;
+		int pillCenter = displayW / 2;
+		int pillStart = pillCenter - pillWidth / 2;
+		int pillEnd = pillCenter + pillWidth / 2;
+		return x >= pillStart && x <= pillEnd;
 	}
 
 	String mTasksFieldName = null; // in case the code was obfuscated
@@ -351,6 +366,9 @@ public class CustomNavGestures extends XposedMods {
 				break;
 			case ACTION_SLEEP:
 				goToSleep();
+				break;
+			case ACTION_CIRCLE_TO_SEARCH:
+				AppUtils.circleToSearch();
 				break;
 		}
 	}

@@ -10,9 +10,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,6 +24,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,4 +207,27 @@ public class AppUtils {
             activity.startActivity(intent);
         }, 600);
     }
+
+    public static void circleToSearch() {
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putLong("invocation_time_ms", SystemClock.elapsedRealtime());
+            bundle.putInt("omni.entry_point", 1);
+            bundle.putBoolean("micts_trigger", true);
+
+            Class<?> iVimsClass = Class.forName("com.android.internal.app.IVoiceInteractionManagerService");
+            Object vis = Class.forName("android.os.ServiceManager").getMethod("getService", String.class).invoke(null, "voiceinteraction");
+            Object vims = Class.forName("com.android.internal.app.IVoiceInteractionManagerService$Stub").getMethod("asInterface", IBinder.class).invoke(null, vis);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                HiddenApiBypass.invoke(iVimsClass, vims, "showSessionFromSession", null, bundle, 7, "hyperOS_home");
+            } else {
+                HiddenApiBypass.invoke(iVimsClass, vims, "showSessionFromSession", null, bundle, 7);
+            }
+        } catch (Exception e) {
+            String errMsg = "triggerCircleToSearch failed: " + e.getStackTrace();
+            Log.e("MiCTS", errMsg);
+        };
+    }
+
 }

@@ -668,6 +668,7 @@
     <string name="gesture_override_back_hold_command_notification_panel">Open notification panel</string>
     <string name="gesture_override_back_hold_command_toggle_one_handed">Toggle one handed mode</string>
     <string name="gesture_override_back_hold_command_screen_off">Screen Off</string>
+    <string name="gesture_override_back_hold_command_circle_to_search">Circle to search</string>
 
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Navigation bar pill</string>
@@ -678,6 +679,8 @@
     <string name="gesture_nav_extra_cat">Extra navigation bar gestures</string>
     <string name="gesture_nav_extra_title">Extra gestures</string>
     <string name="gesture_nav_long_swipe_fc_title">Swipe to top of screen to kill foreground app</string>
+    <string name="circle_to_search_title">Circle to search</string>
+    <string name="circle_to_search_summary">Touch and hold gesture guide bar to start searching for content on the screen.</string>
     <string name="gesture_nav_left_swipe_up_title">Swipe up action from left of Navbar</string>
     <string name="gesture_nav_right_swipe_up_title">Swipe up action from right of Navbar</string>
     <string name="gesture_nav_left_swipe_up_percent">Left swipe-up area width (%)</string>
