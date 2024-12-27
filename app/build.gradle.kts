@@ -210,6 +210,9 @@ dependencies {
     implementation(libs.oneplus.ui)
 //    implementation("it.dhd:oneplusui:1.3.6")
 
+    // Hidden API
+    implementation(libs.lsposed.hiddenapi)
+
 }
 
 tasks.register("printVersionName") {
