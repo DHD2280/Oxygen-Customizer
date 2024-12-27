@@ -309,13 +309,6 @@ public class GestureNavbarManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mNavigationBarInflaterView = param.thisObject;
-//                android.app.contextualsearch.ContextualSearchManager
-//                ContextualSearchManager contextualSearchManager = (ContextualSearchManager) this.context.getSystemService(ContextualSearchManager.class);
-                FrameLayout frame = (FrameLayout) mNavigationBarInflaterView;
-                frame.setOnLongClickListener(v -> {
-                    XposedBridge.log("Long click");
-                    return true;
-                });
                 refreshNavbar();
             }
         });
