@@ -63,7 +63,8 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
                 R.drawable.ic_quick_settings, // Quick Settings
                 R.drawable.ic_one_hand, // Toggle One Handed
                 R.drawable.ic_notifications, // Notification Panel
-                R.drawable.ic_screen_off, // Volume Panel
+                R.drawable.ic_screen_off, // Screen Off
+                R.drawable.ic_circle_search
         };
 
         mOverrideBackLeft = findPreference("gesture_override_holdback_left");
@@ -126,26 +127,6 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
 
         } catch (Exception ignored) {
         }
-    }
-
-    private FrameLayout prepareSwipeGestureView(int gravity) {
-        @SuppressLint({"DiscouragedApi", "InternalInsetResource"})
-        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            navigationBarHeight = requireContext().getResources().getDimensionPixelSize(resourceId);
-        }
-
-        FrameLayout result = new FrameLayout(requireContext());
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(0, navigationBarHeight);
-        lp.gravity = gravity | Gravity.CENTER_VERTICAL;
-        lp.bottomMargin = 0;
-        result.setLayoutParams(lp);
-
-        result.setBackgroundColor(requireContext().getColor(android.R.color.system_accent1_300));
-        result.setAlpha(.7f);
-        ((ViewGroup) requireActivity().getWindow().getDecorView().getRootView()).addView(result);
-        result.setVisibility(View.GONE);
-        return result;
     }
 
     private FrameLayout prepareBackGestureView(int gravity) {
