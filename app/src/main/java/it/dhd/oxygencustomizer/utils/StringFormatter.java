@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
 import static de.robv.android.xposed.XposedBridge.log;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getLunarDate;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -105,26 +106,15 @@ public class StringFormatter {
 
             nextUpdate *= 1000L;
 
-            int type;
+            int type = switch (typeStr.toLowerCase()) {
+                case "b" -> ThermalProvider.BATTERY;
+                case "c" -> ThermalProvider.CPU;
+                case "g" -> ThermalProvider.GPU;
+                case "s" -> ThermalProvider.SKIN;
+                default -> throw new Exception();
+            };
 
             //noinspection ConstantConditions
-            switch (typeStr.toLowerCase())
-            {
-                case "b":
-                    type = ThermalProvider.BATTERY;
-                    break;
-                case "c":
-                    type = ThermalProvider.CPU;
-                    break;
-                case "g":
-                    type = ThermalProvider.GPU;
-                    break;
-                case "s":
-                    type = ThermalProvider.SKIN;
-                    break;
-                default:
-                    throw new Exception();
-            }
 
             int temperature = ThermalProvider.getTemperatureMaxInt(type);
 
@@ -158,6 +148,14 @@ public class StringFormatter {
         }
     }
 
+    private CharSequence lunarDate() {
+        try {
+            return getLunarDate();
+        } catch (Exception ignored) {
+            return "Err";
+        }
+    }
+
     private CharSequence persianDateOf(String format) {
         try {
             String result = PersianDate.now().format(
@@ -179,7 +177,7 @@ public class StringFormatter {
         Log.d("StringFormatter", "Formatting string: " + input);
         SpannableStringBuilder result = new SpannableStringBuilder(input);
         hasDate = false;
-        Pattern pattern = Pattern.compile("\\$((T[a-zA-Z][0-9]*)|([A-Z][A-Za-z]+))"); //variables start with $ and continue with characters, until they don't!
+        Pattern pattern = Pattern.compile("\\$((T[a-zA-Z][0-9]*)|([A-Z][A-Za-z]*))"); //variables start with $ and continue with characters, until they don't!
 
         //We'll locate each variable and replace it with a value, if possible
         Matcher matcher = pattern.matcher(input);
@@ -201,6 +199,7 @@ public class StringFormatter {
             case "G" -> georgianDateOf(match.substring(1));
             case "P" -> persianDateOf(match.substring(1));
             case "T" -> temperatureOf(match.substring(1));
+            case "L" -> lunarDate();
             default -> "$" + match;
         };
     }

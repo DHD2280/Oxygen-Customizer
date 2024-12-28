@@ -3,25 +3,32 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllConstructors;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class OpUtils extends XposedMods {
 
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+    private static final String listenPackage = SYSTEM_UI;
     public static Class<?> QsColorUtil = null;
     private static Class<?> OpUtils = null;
     private static Class<?> QSFragmentHelper = null;
+    private static Object LunarHelper = null;
 
     public OpUtils(Context context) {
         super(context);
@@ -68,6 +75,15 @@ public class OpUtils extends XposedMods {
         }
     }
 
+    public static String getLunarDate() {
+        if (LunarHelper == null) return "Err";
+        try {
+            return (String) callMethod(LunarHelper, "getDateToString", System.currentTimeMillis());
+        } catch (Throwable t) {
+            return "Err";
+        }
+    }
+
     @Override
     public void updatePrefs(String... Key) {
     }
@@ -90,6 +106,19 @@ public class OpUtils extends XposedMods {
             QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
         } catch (Throwable ignored) {
             QSFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
+        }
+
+        Class<?> LunarHelperClass = findClassInArray(lpparam,
+                "com.oplus.systemui.keyguard.clock.LunarHelper", // OOS14
+                "com.oplusos.systemui.keyguard.clock.LunarHelper" /* OOS13 */);
+
+        if (LunarHelperClass != null) {
+            hookAllConstructors(LunarHelperClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (LunarHelper == null) LunarHelper = param.thisObject;
+                }
+            });
         }
 
     }
