@@ -138,16 +138,32 @@ public class Lockscreen extends XposedMods {
             log(t);
         }
 
-        try {
-            Class<?> OplusEmergencyButtonExImpl = findClass("com.oplus.keyguard.OplusEmergencyButtonExImpl", lpparam.classLoader);
-            findAndHookMethod(OplusEmergencyButtonExImpl, "disableShowEmergencyButton", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (removeSOS) param.setResult(true);
-                }
-            });
-        } catch (Throwable t) {
-            log(t);
+        if (Build.VERSION.SDK_INT >= 34) {
+            try {
+                Class<?> OplusEmergencyButtonExImpl = findClass("com.oplus.keyguard.OplusEmergencyButtonExImpl", lpparam.classLoader);
+                findAndHookMethod(OplusEmergencyButtonExImpl, "disableShowEmergencyButton", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (removeSOS) param.setResult(true);
+                    }
+                });
+            } catch (Throwable t) {
+                log(t);
+            }
+        } else {
+            try {
+                Class<?> EmergencyButton = findClass("com.oplus.keyguard.EmergencyButton", lpparam.classLoader);
+                hookAllMethods(EmergencyButton, "updateEmergencyCallButton", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!removeSOS) return;
+                        View button = (View) param.thisObject;
+                        button.setVisibility(View.GONE);
+                    }
+                });
+            } catch (Throwable t) {
+                log(t);
+            }
         }
 
         Class<?> OnScreenFingerprint = findClassInArray(lpparam,
