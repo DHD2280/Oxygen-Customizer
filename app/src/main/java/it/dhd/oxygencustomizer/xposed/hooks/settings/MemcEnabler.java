@@ -31,17 +31,19 @@ public class MemcEnabler extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        Class<?> SysFeatureUtils = findClass("com.oplus.settings.utils.SysFeatureUtils", lpparam.classLoader);
-        hookAllMethods(SysFeatureUtils, "hasOplusFeature", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        try {
+            Class<?> SysFeatureUtils = findClass("com.oplus.settings.utils.SysFeatureUtils", lpparam.classLoader);
+            hookAllMethods(SysFeatureUtils, "hasOplusFeature", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 
-                String requestedFeature = (String) param.args[0];
-                if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && mForceEnableMemc) {
-                    param.setResult(true);
+                    String requestedFeature = (String) param.args[0];
+                    if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && mForceEnableMemc) {
+                        param.setResult(true);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Throwable ignored) {}
     }
 
     @Override
