@@ -186,14 +186,25 @@ public class Launcher extends XposedMods {
             log("Error in Launcher Layout " + t);
         }
 
-        Class<?> OplusFastScrollLayoutClass = findClass("com.android.launcher3.allapps.OplusFastScrollLayout", lpparam.classLoader);
-        hookAllConstructors(OplusFastScrollLayoutClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                OplusFastScroll = (View) param.thisObject;
-                updateFastScroll();
-            }
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            Class<?> OplusFastScrollLayoutClass = findClass("com.android.launcher3.allapps.OplusFastScrollLayout", lpparam.classLoader);
+            hookAllConstructors(OplusFastScrollLayoutClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    OplusFastScroll = (View) param.thisObject;
+                    updateFastScroll();
+                }
+            });
+        } else {
+            Class<?> LetterIndexFastScrollHelper = findClass("com.android.launcher3.allapps.LetterIndexFastScrollHelper", lpparam.classLoader);
+            hookAllConstructors(LetterIndexFastScrollHelper, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    OplusFastScroll = (View) getObjectField(param.thisObject, "mFastScrollerLayout");
+                    updateFastScroll();
+                }
+            });
+        }
 
     }
 
