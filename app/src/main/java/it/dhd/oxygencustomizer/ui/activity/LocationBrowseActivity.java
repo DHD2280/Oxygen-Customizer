@@ -44,6 +44,7 @@ import androidx.recyclerview.widget.OplusRecyclerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.color.DynamicColors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -167,7 +168,7 @@ public class LocationBrowseActivity extends OplusActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.location_browse_activity);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
