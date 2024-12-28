@@ -29,6 +29,7 @@ public class BaseActivity extends OplusActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         getWindow().setNavigationBarContrastEnforced(false);
         DynamicColors.applyToActivityIfAvailable(this);
