@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.WindowManager;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 
 import com.google.android.material.color.DynamicColors;
@@ -21,8 +22,9 @@ public class OnboardingActivity extends OplusActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-
+        getWindow().setNavigationBarContrastEnforced(false);
         DynamicColors.applyToActivityIfAvailable(this);
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
 
