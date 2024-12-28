@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oxygencustomizer.R;
@@ -23,6 +24,7 @@ import it.dhd.oxygencustomizer.utils.ModuleUtil;
 public class UserInterface extends ControlledPreferenceFragmentCompat {
 
     Preference mRebootPreference;
+    PreferenceCategory mRebootCategory;
     OplusJumpPreference mUiStyle, mNotifications, mNavBar, mSignalIcons, mWifiIcons;
 
     @Override
@@ -39,6 +41,7 @@ public class UserInterface extends ControlledPreferenceFragmentCompat {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
         mRebootPreference = findPreference("reboot_pref");
+        mRebootCategory = findPreference("reboot_category");
 
         if (mRebootPreference != null) {
             mRebootPreference.setOnPreferenceClickListener(preference -> {
@@ -66,7 +69,7 @@ public class UserInterface extends ControlledPreferenceFragmentCompat {
     public void updateScreen(String key) {
         super.updateScreen(key);
 
-        mRebootPreference.setVisible(!ModuleUtil.checkModuleVersion(getContext()) && !skippedInstallation);
+        mRebootCategory.setVisible(!ModuleUtil.checkModuleVersion(getContext()) && !skippedInstallation);
         mUiStyle.setVisible(TOTAL_ANDROID_THEMES > 0);
         mNotifications.setVisible(TOTAL_NOTIFICATIONS > 0);
         mNavBar.setVisible(TOTAL_NAVBAR > 0);
