@@ -591,12 +591,12 @@
     <string name="gesture_override_back_hold_command_switch_app">Cambiar a la aplicación anterior</string>
     <string name="gesture_override_back_hold_command_close_recents">Limpiar todos los recientes</string>
     <string name="gesture_override_back_hold_command_kill_app">Cerrar aplicación activa</string>
-    <string name="gesture_override_back_hold_command_screenshot">Capturar pantalla</string>
     <string name="gesture_override_back_hold_command_quick_settings">Abrir ajustes rápidos</string>
     <string name="gesture_override_back_hold_command_power_menu">Abrir menú de apagado</string>
     <string name="gesture_override_back_hold_command_notification_panel">Abrir panel de notificaciones</string>
     <string name="gesture_override_back_hold_command_screen_off">Pantalla apagada</string>
     <!-- Gesture Pill Strings -->
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">Botones</string>
     <string name="power_button_category_title">Botón de encendido</string>
@@ -1058,6 +1058,7 @@
     <string name="lockscreen_widgets_enabled_summary">Añadir widgets a la pantalla de bloqueo</string>
     <string name="text_color">Color del texto</string>
     <string name="custom_device_name">Nombre del dispositivo personalizado</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">Cámara</string>
     <string name="clock_timer">Reloj/temporizador</string>

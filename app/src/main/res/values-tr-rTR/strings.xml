@@ -184,15 +184,6 @@
     <string name="status_bar_date_style_lowercase">Küçük harf</string>
     <string name="status_bar_date_style_uppercase">Büyük harf</string>
     <string name="status_bar_date_format_custom">Özel Java formatı</string>
-    <string name="string_formatter_manual_body">Normal metinden ek olarak, Tarih ve Sıcaklık gibi dinamik değişkenler de mevcuttur:
-
-  $G&lt;format&gt; : Formatına dayalı Gregoryen tarih*
-  $P&lt;format&gt; : Formatına dayalı Fars tarihi*
-  $T&lt;format&gt;[aralık] : Sıcaklık; 
-  format b (pil için), c (CPU için), g (GPU için) ve s (skin için) olabilir 
-  Son olarak, saniye cinsinden güncelleme aralığının İSTEĞE BAĞLI sayısı vardır (varsayılan: 60 saniye)
-
-  *format belgeleri için, \"Java Tarih Formatı\"nı arayın.</string>
     <string name="preview">Önizleme</string>
     <string name="clock_date_position">Tarih pozisyonu</string>
     <string name="clock_date_right">Zaman hakkı</string>
@@ -596,12 +587,12 @@
     <string name="gesture_override_back_hold_command_switch_app">Önceki uygulamaya geçin</string>
     <string name="gesture_override_back_hold_command_close_recents">Tüm sonları temizle</string>
     <string name="gesture_override_back_hold_command_kill_app">Aktif uygulamayı kapat</string>
-    <string name="gesture_override_back_hold_command_screenshot">Ekran Görüntüsü Al</string>
     <string name="gesture_override_back_hold_command_quick_settings">Hızlı ayarları açın</string>
     <string name="gesture_override_back_hold_command_power_menu">Güç menüsünü açın</string>
     <string name="gesture_override_back_hold_command_notification_panel">Bildirim panelini aç</string>
     <string name="gesture_override_back_hold_command_screen_off">Ekran Kapalı</string>
     <!-- Gesture Pill Strings -->
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">Düğmeler</string>
     <string name="power_button_category_title">Güç Düğmesi</string>
@@ -1098,6 +1089,7 @@
     <string name="mini_icon_active">Mini Widget İkon Aktif Rengi</string>
     <string name="mini_icon_inactive">Mini Widget İkonu Pasif Renk</string>
     <string name="weather_settings">Hava Durumu Ayarları</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">Kamera</string>
     <string name="clock_timer">Saat/Kronometre</string>

@@ -202,7 +202,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
-    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
+    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$L per Data Lunare\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -597,6 +597,8 @@
     <string name="remove_home_pagination">Rimuovi impaginazione Home</string>
     <string name="force_themed_launcher_icons">Forza icone delle app a tema</string>
     <string name="force_themed_launcher_icons_summary">FUNZIONE BETA: forza le icone a tema per tutte le app.\nRiattiva le icone a tema nel launcher per applicarle.</string>
+    <string name="hide_scroller">Nascondi scroller</string>
+    <string name="hide_scroller_summary">Nascondi scroller nel drawer delle app</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -617,15 +619,28 @@
     <string name="gesture_override_back_hold_command_switch_app">Passa all\'app precedente</string>
     <string name="gesture_override_back_hold_command_close_recents">Cancella tutti i recenti</string>
     <string name="gesture_override_back_hold_command_kill_app">Termina app attiva</string>
-    <string name="gesture_override_back_hold_command_screenshot">Fai Screenshot</string>
+    <string name="gesture_override_back_hold_command_screenshot">Screenshot</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">Screenshot a scorrimento</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">Screenshot parziale</string>
     <string name="gesture_override_back_hold_command_quick_settings">Apri impostazioni rapide</string>
     <string name="gesture_override_back_hold_command_power_menu">Apri menù alimentazione</string>
     <string name="gesture_override_back_hold_command_notification_panel">Apri pannello notifiche</string>
+    <string name="gesture_override_back_hold_command_toggle_one_handed">Attiva/disattiva modalità a una mano</string>
     <string name="gesture_override_back_hold_command_screen_off">Schermo Spento</string>
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Pillola barra di navigazione</string>
     <string name="gesture_nav_pill_width_title">Larghezza rispetto alla misura standard</string>
     <string name="colorpill">Pillola colore accento</string>
+    <!-- Custom Gestures -->
+    <string name="gesture_nav_extra_cat">Gesti aggiuntivi della barra di navigazione</string>
+    <string name="gesture_nav_extra_title">Gesti extra</string>
+    <string name="gesture_nav_long_swipe_fc_title">Scorri verso l\'alto per chiudere l\'app in primo piano</string>
+    <string name="gesture_nav_left_swipe_up_title">Scorri verso l\'alto dal lato sinistro della NavBar</string>
+    <string name="gesture_nav_right_swipe_up_title">Scorri verso l\'alto dal lato destro della NavBar</string>
+    <string name="gesture_nav_left_swipe_up_percent">Larghezza area swipe-up sinistra (%)</string>
+    <string name="gesture_nav_right_swipe_up_percent">Larghezza area swipe-up destra (%)</string>
+    <string name="gesture_nav_two_finger_title">Azione con due dita</string>
+    <string name="gesture_nav_swipe_up_height">Altezza minima di attivazione delle azioni di scorrimento</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Pulsanti</string>
     <string name="power_button_category_title">Pulsante Alimentazione</string>
@@ -959,6 +974,7 @@
     <string name="usage_summary">Apri pagina wiki</string>
     <string name="credits_title">Riconoscimenti</string>
     <string name="credits_summary">Ringraziando coloro che hanno reso possibile questo.</string>
+    <string name="none">Nessuno</string>
     <!-- Omni Jaws Strings -->
     <string name="provider_title">Provider meteo</string>
     <string name="units_title">Unità</string>
@@ -1128,9 +1144,9 @@
     <string name="text_color">Colore testo</string>
     <string name="custom_device_name">Personalizza nome dispositivo</string>
     <string name="custom_device_name_summary">Imposta un nome dispositivo personalizzato.\nLasciare vuoto per disabilitare.</string>
-    <string name="large_widgets_category_title">Widget grande</string>
-    <string name="main_custom_widgets1">Widget grande 1</string>
-    <string name="main_custom_widgets2">Widget grande 2</string>
+    <string name="large_widgets_category_title">Widget Grande</string>
+    <string name="main_custom_widgets1">Widget Grande 1</string>
+    <string name="main_custom_widgets2">Widget Grande 2</string>
     <string name="mini_widgets_category_title">Widget Mini</string>
     <string name="custom_widgets1">Widget Mini 1</string>
     <string name="custom_widgets2">Widget Mini 2</string>
@@ -1138,16 +1154,19 @@
     <string name="custom_widgets4">Widget Mini 4</string>
     <string name="widgets_custom_color">Impostazioni colore</string>
     <string name="widgets_custom_color_title">Personalizza colori widget</string>
-    <string name="big_active">Colore attivo Widget grande</string>
-    <string name="big_inactive">Colore inattivo Widget grande</string>
-    <string name="big_icon_active">Colore attivo icona Widget grande</string>
-    <string name="big_icon_inactive">Colorein attivo icona Widget grande</string>
-    <string name="mini_active">Colore attivo Mini Widget</string>
-    <string name="mini_inactive">Colore inattivo Mini Widget</string>
-    <string name="mini_icon_active">Colore attivo icona Mini Widget</string>
-    <string name="mini_icon_inactive">Colore inattivo icona Mini Widget</string>
+    <string name="big_inactive">Colore inattivo Widget Grande</string>
+    <string name="big_icon_active">Colore attivo icona Widget Grande</string>
+    <string name="big_icon_inactive">Colore inattivo icona Widget Grande</string>
+    <string name="mini_inactive">Colore inattivo Widget Mini</string>
+    <string name="mini_icon_active">Colore attivo icona Widget Mini</string>
+    <string name="mini_icon_inactive">Colore inattivo icona Widget Mini</string>
     <string name="weather_settings">Impostazioni Meteo</string>
     <string name="widgets_scale">Scala Widget</string>
+    <!-- Lockscreen Widgets Styles -->
+    <string name="lockscreen_widgets_style_title">Stile widget Schermata di Blocco</string>
+    <string name="lockscreen_widgets_style1">Material Arrotondato</string>
+    <string name="lockscreen_widgets_style2">Material Quadrato</string>
+    <string name="lockscreen_widgets_style3">Trasparente</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fotocamera</string>
     <string name="clock_timer">Orologio/Timer</string>
@@ -1210,6 +1229,7 @@
     <string name="memc_footer">Se il tuo dispositivo non dispone di un chip Pixelwork o non supporta Memc, non toccare queste impostazioni.</string>
     <!-- Screen Off On Flat -->
     <string name="sleep_on_flat_screen_title">Spegni lo schermo su superficie piana</string>
+    <string name="sleep_on_flat_screen_tile_title">Spegni lo schermo</string>
     <string name="flat_screen_timeout_title">Timeout spegni schermo</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Rispetta i wakelock</string>
 </resources>

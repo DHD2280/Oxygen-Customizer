@@ -72,6 +72,7 @@
     <string name="battery_full">Az akku feltöltve</string>
     <string name="battery_level_percentage">Akkuszint</string>
     <string name="seconds">Másodperc</string>
+    <string name="duration_seconds">%d másodperc</string>
     <string name="milliseconds">Ezredmásodperc</string>
     <string name="steps">Lépések</string>
     <string name="general_color_accent1">Kiemelőszín 1</string>
@@ -201,7 +202,6 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
-    <string name="string_formatter_manual_body">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátumformátum alapján*\n$P\&lt;format\&gt; : Perzsa-dátumformátum alapján*\n$T\&lt;format\&gt;[intervallum] : Hőmérsékletformátumnál - b (akku), c (CPU), g (GPU) és s (bőr) \nVégül, van OPCIONÁLIS számú frissítési időköz másodpercben (alapértelmezetten: 60 másodperc)\n\n*a formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre</string>
     <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
@@ -596,6 +596,8 @@
     <string name="remove_home_pagination">Képernyőlapozás eltávolítása</string>
     <string name="force_themed_launcher_icons">Témázott alkalmazásikon kényszerítve</string>
     <string name="force_themed_launcher_icons_summary">BETA FUNKCIÓ: Kényszerítés minden alkalmazáshoz.\nAz alkalmazáshoz engedélyezze újra a témázott ikonokat a launcherben.</string>
+    <string name="hide_scroller">Rejtett görgetősáv</string>
+    <string name="hide_scroller_summary">Görgetősáv elrejtése az alkalmazásfiókban</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigációs sáv</string>
     <string name="gesture_navigation_title">Navigáció kézmozdulatokkal</string>
@@ -616,15 +618,28 @@
     <string name="gesture_override_back_hold_command_switch_app">Váltás az előző alkalmazásra</string>
     <string name="gesture_override_back_hold_command_close_recents">Az összes előzmény törlése</string>
     <string name="gesture_override_back_hold_command_kill_app">Az aktív alkalmazás leállítása </string>
-    <string name="gesture_override_back_hold_command_screenshot">Képernyőkép készítése</string>
+    <string name="gesture_override_back_hold_command_screenshot">Képernyőmentés</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">Görgethető képernyőmentés</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">Részleges képernyőmentés</string>
     <string name="gesture_override_back_hold_command_quick_settings">A Gyorsbeállítások megnyitása</string>
     <string name="gesture_override_back_hold_command_power_menu">A Kikapcsolómenü megnyitása</string>
     <string name="gesture_override_back_hold_command_notification_panel">Az Értesítési panel megnyitása</string>
+    <string name="gesture_override_back_hold_command_toggle_one_handed">Egykezes mód be / ki</string>
     <string name="gesture_override_back_hold_command_screen_off">Kijelző kikapcsolása</string>
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Kapszula navigációs-sáv</string>
     <string name="gesture_nav_pill_width_title">Szélesség a szabványos mérethez</string>
     <string name="colorpill">Kiemelőszínnel színezett kapszula</string>
+    <!-- Custom Gestures -->
+    <string name="gesture_nav_extra_cat">Különleges navigációs-sáv vezérlések</string>
+    <string name="gesture_nav_extra_title">Különleges vezérlők</string>
+    <string name="gesture_nav_long_swipe_fc_title">Felül csúsztató mozdulattal az előtérben lévő alkalmazás leállításához</string>
+    <string name="gesture_nav_left_swipe_up_title">A sáv bal oldaláról felfelé csúsztatás művelete</string>
+    <string name="gesture_nav_right_swipe_up_title">A sáv jobb oldaláról felfelé csúsztatás művelete</string>
+    <string name="gesture_nav_left_swipe_up_percent">A bal felfelé csúsztatási terület szélessége (%)</string>
+    <string name="gesture_nav_right_swipe_up_percent">A jobb felfelé csúsztatási terület szélessége (%)</string>
+    <string name="gesture_nav_two_finger_title">A felfelé csúsztatás két ujjal művelete</string>
+    <string name="gesture_nav_swipe_up_height">A csúsztatás felfelé műveletek minimális indítómagassága</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Gombok</string>
     <string name="power_button_category_title">Bekapcsológomb</string>
@@ -958,6 +973,7 @@
     <string name="usage_summary">Wiki-oldal megnyitása</string>
     <string name="credits_title">Közreműködők</string>
     <string name="credits_summary">Köszönet azoknak, akik ezt az alkalmazást lehetővé tették.</string>
+    <string name="none">Nincs</string>
     <!-- Omni Jaws Strings -->
     <string name="provider_title">Időjárás-szolgáltató</string>
     <string name="units_title">Egység</string>
@@ -1147,6 +1163,11 @@
     <string name="mini_icon_inactive">A mini ikon színe, mikor inaktív</string>
     <string name="weather_settings">Időjárás-beállítások</string>
     <string name="widgets_scale">Kisalkalmazások méretskálázása</string>
+    <!-- Lockscreen Widgets Styles -->
+    <string name="lockscreen_widgets_style_title">A záróképernyő kisalkalmazások stílusa</string>
+    <string name="lockscreen_widgets_style1">Material lekerekített</string>
+    <string name="lockscreen_widgets_style2">Material négyzetes</string>
+    <string name="lockscreen_widgets_style3">Átlátszó</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Fényképezőgép</string>
     <string name="clock_timer">Óra/Időzítő</string>
@@ -1208,4 +1229,8 @@
     <string name="refresh_rate_error">A Frissítési gyakoriság üres!</string>
     <string name="memc_footer">Ha készüléke nem rendelkezik Pixelwork chippel, vagy nem támogatja a MEMC-et, ne módosítsa ezeket a beállításokat.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_screen_title">Képernyőkikapcsolás ha a készülék lapos felületre kerül</string>
+    <string name="sleep_on_flat_screen_tile_title">Készülék alvó állapot, ha a készüléket lerakja</string>
+    <string name="flat_screen_timeout_title">Képernyő-időtúllépés sík felületen</string>
+    <string name="flat_screen_timeout_respect_wakelock_title">Ébresztések elfogadása</string>
 </resources>

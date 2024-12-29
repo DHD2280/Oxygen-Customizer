@@ -34,6 +34,7 @@
     <!-- Reboot alert -->
     <!-- General Strings -->
     <string name="gradient_top_bottom">Trên xuống dưới</string>
+    <string name="gradient_tl_br">Ở trên bên trái &amp; Ở dưới bên phải</string>
     <!-- Image Crop Strings -->
     <!-- Search Preference -->
     <!-- Menu Strings -->
@@ -43,6 +44,7 @@
     <!-- Statusbar Strings -->
     <string name="statusbar_double_tap_sleep">Chạm hai lần để tắt màn hình</string>
     <string name="status_bar_toggle_brightness_title">Điều khiển độ sáng</string>
+    <string name="status_bar_toggle_brightness_summary">Điều chỉnh độ sáng bằng cách trượt trên thanh trạng thái</string>
     <string name="statusbar_battery_icon_options">Biểu tượng pin</string>
     <string name="statusbar_icons">Biểu tượng thanh trạng thái</string>
     <!-- Statusbar notification strings -->
@@ -57,6 +59,7 @@
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
     <string name="status_bar_date_style">Kiểu ngày</string>
+    <string name="status_bar_clock_color_title">Tùy chỉnh màu đồng hồ</string>
     <!-- Status bar padding -->
     <!-- Battery Bar Strings -->
     <!-- Battery Icon Strings -->
@@ -65,10 +68,12 @@
     <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_horizontal_rows">Hàng cài đặt nhanh</string>
     <!-- Quick Settings Widgets -->
     <!-- Quick Settings Tiles Customizations -->
     <!-- QS Tile Radius -->
     <!-- Media Tile -->
+    <string name="media_tile"></string>
     <!-- QS Tiles animation -->
     <!-- QS Page Transitions -->
     <!-- QS Header Image Strings -->
@@ -85,6 +90,7 @@
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
     <!-- Gesture Pill Strings -->
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
     <!-- Media art -->
@@ -123,6 +129,7 @@
     <!-- Style List -->
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <!-- Lag Fix Strings -->
     <!-- Caffeine -->

@@ -201,7 +201,6 @@
     <string name="status_bar_date_style_lowercase">حروف صغيرة</string>
     <string name="status_bar_date_style_uppercase">حروف كبيرة</string>
     <string name="status_bar_date_format_custom">تنسيق جافا مخصص</string>
-    <string name="string_formatter_manual_body">بالإضافة إلى النص العادي، تتوفر أيضًا متغيرات ديناميكية، مثل التاريخ ودرجة الحرارة:\n\n$G\&lt;format\&gt; : تاريخ هجري، بناءً على التنسيق*\n$P\&lt;format\&gt; : تاريخ فارسي، بناءً على التنسيق*\n$T\&lt;format\&gt;[interval] : درجة الحرارة; \nيمكن أن يكون التنسيق b (للبطارية)، c (للوحدة المركزية)، g (لوحدة معالجة الرسوميات) و s (للبشرة) \nأخيرًا، هناك عدد اختياري من فترة التحديث بالثواني (الافتراضي: 60 ثانية)\n\n*للوثائق التنسيقية، ابحث عن \"تنسيق تاريخ جافا\"</string>
     <string name="preview">معاينة</string>
     <string name="clock_date_position">موضع التاريخ</string>
     <string name="clock_date_right">يمين الوقت</string>
@@ -615,7 +614,6 @@
     <string name="gesture_override_back_hold_command_switch_app">التبديل إلى التطبيق السابق</string>
     <string name="gesture_override_back_hold_command_close_recents">مسح جميع التطبيقات الحديثة</string>
     <string name="gesture_override_back_hold_command_kill_app">قتل التطبيق النشط</string>
-    <string name="gesture_override_back_hold_command_screenshot">التقاط لقطة شاشة</string>
     <string name="gesture_override_back_hold_command_quick_settings">فتح الإعدادات السريعة</string>
     <string name="gesture_override_back_hold_command_power_menu">فتح قائمة الطاقة</string>
     <string name="gesture_override_back_hold_command_notification_panel">فتح لوحة الإشعارات</string>
@@ -624,6 +622,7 @@
     <string name="gesture_nav_pill_cat">شريط التنقل بالإيماءات</string>
     <string name="gesture_nav_pill_width_title">العرض مقارنة بالحجم القياسي</string>
     <string name="colorpill">شريط إيماءة بلون بارز</string>
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">الأزرار</string>
     <string name="power_button_category_title">زر الطاقة</string>
@@ -1143,6 +1142,7 @@
     <string name="mini_icon_inactive">لون أيقونة الأداة الصغيرة غير النشطة</string>
     <string name="weather_settings">إعدادات الطقس</string>
     <string name="widgets_scale">مقياس الأدوات</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">كاميرا</string>
     <string name="clock_timer">ساعة/مؤقت</string>

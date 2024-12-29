@@ -11,14 +11,14 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Luigi Conte (lc98)</b></sub></a>
         <br />
-        <sub><b>43563 words</b></sub>
+        <sub><b>43920 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/If.you.know.better.than.me.do.it.If.not.shut.up"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/13525964/medium/22265802c0ad24a0a71f1abfc4776771.jpg" />
           <br />
           <sub><b>MKAdam (If.you.know.better.than.me.do.it.If.not.shut.up)</b></sub></a>
         <br />
-        <sub><b>4033 words</b></sub>
+        <sub><b>4123 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/muhammadbahaa2001"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/15231004/medium/1f277872da157dce11a9a6d1fc9120b6.png" />
@@ -51,6 +51,13 @@ Thanks to these translators and proofreaders, this project exists:
     </tr>
     <tr>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/tugaia56"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/34554/medium/b0c4255e0353f5a6efed51ddce3bbc28_default.png" />
+          <br />
+          <sub><b>tugaia56</b></sub></a>
+        <br />
+        <sub><b>3332 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/AlejandroMoc"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/15175038/medium/d8ddd9948d0a952bff7713e558dcc152.png" />
           <br />
           <sub><b>Alejandro Moctezuma (AlejandroMoc)</b></sub></a>
@@ -63,13 +70,6 @@ Thanks to these translators and proofreaders, this project exists:
           <sub><b>芜蚌湖埠 (11451420)</b></sub></a>
         <br />
         <sub><b>3292 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/tugaia56"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/34554/medium/b0c4255e0353f5a6efed51ddce3bbc28_default.png" />
-          <br />
-          <sub><b>tugaia56</b></sub></a>
-        <br />
-        <sub><b>3260 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/carlosrobertow"><img alt="logo" style="width: 32px" src="https://crowdin-static.downloads.crowdin.com/avatar/16560677/medium/bd5c8e4bd49f74b0da1710010b71eadd.jpg" />
