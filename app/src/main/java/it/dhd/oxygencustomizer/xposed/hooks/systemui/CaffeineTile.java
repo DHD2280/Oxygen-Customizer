@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -127,7 +128,9 @@ public class CaffeineTile extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 try {
-                    View v = (View) param.args[0];
+                    View v = (Build.VERSION.SDK_INT >= 35) ?
+                            (View) callMethod(param.args[0], "getView") :
+                            (View) param.args[0];
                     if (v != null) {
                         if (getAdditionalInstanceField(v, "mTileTag") != null &&
                                 getAdditionalInstanceField(v, "mTileTag").equals("caffeine")) {
