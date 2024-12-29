@@ -1,3 +1,20 @@
+**beta-202**  
+- Introduce Lockscreen Widgets styles  
+- Added extra navigation bar gestures  
+- Added sleep on flat feature  
+- Lockscreen Widgets: added ability to launch custom apps  
+- Temp fix for OOS15 framework  
+- Added disable button for Notification Roundness  
+- Fixed screenshot back gesture  
+- Improved Depth on AOD  
+- Improved UI  
+- Depth on AOD  
+- Fix fast charging battery colors  
+- New LS/AOD clock styles  
+- New Clock Picker UI  
+- Add AI Plugin for depth wallpaper  
+- Fix Lockscreen page crash on some devices  
+  
 **beta-11**  
 - Added custom MEMC Configuration  
 - Added custom OTA card background  
