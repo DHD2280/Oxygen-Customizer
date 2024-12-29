@@ -202,7 +202,6 @@
     <string name="status_bar_date_style_lowercase">Строчные буквы</string>
     <string name="status_bar_date_style_uppercase">Заглавные</string>
     <string name="status_bar_date_format_custom">Пользовательский формат Java</string>
-    <string name="string_formatter_manual_body">Помимо обычного текста, также доступны динамические переменные, такие как Дата и Температура:\n\n$G\&lt;format\&gt; : дата по григорианскому календарю, основанная на формате*\n$P\&lt;format\&gt; : персидская дата, на основе формата*\n$T\&lt;format\&gt;[interval] : Температура; \nформат может быть b (для батареи), c (для процессора), g (для графического процессора) и s (для скина) \nНаконец, существует НЕОБЯЗАТЕЛЬНОЕ количество интервалов обновления в секундах (по умолчанию: 60 секунд)\n\n*для документации по формату найдите «Формат даты Java»</string>
     <string name="preview">Предпросмотр</string>
     <string name="clock_date_position">Положение даты</string>
     <string name="clock_date_right">Самое подходящее время</string>
@@ -619,7 +618,6 @@
     <string name="gesture_override_back_hold_command_switch_app">Переход к предыдущему приложению</string>
     <string name="gesture_override_back_hold_command_close_recents">Очистить все последние записи</string>
     <string name="gesture_override_back_hold_command_kill_app">Закрыть активное приложение</string>
-    <string name="gesture_override_back_hold_command_screenshot">Сделайте скриншот</string>
     <string name="gesture_override_back_hold_command_quick_settings">Откройте быстрые настройки</string>
     <string name="gesture_override_back_hold_command_power_menu">Откройте меню питания</string>
     <string name="gesture_override_back_hold_command_notification_panel">Откройте панель уведомлений</string>
@@ -628,6 +626,7 @@
     <string name="gesture_nav_pill_cat">Таблетка навигационной панели</string>
     <string name="gesture_nav_pill_width_title">Ширина по сравнению со стандартным размером</string>
     <string name="colorpill">Панель жестов с акцентом темы</string>
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
     <string name="power_button_category_title">Кнопка питания</string>
@@ -1150,6 +1149,7 @@
     <string name="mini_icon_inactive">Неактивный значок мини</string>
     <string name="weather_settings">Настройки погоды</string>
     <string name="widgets_scale">Масштаб виджетов</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">Камера</string>
     <string name="clock_timer">Часы/Таймер</string>

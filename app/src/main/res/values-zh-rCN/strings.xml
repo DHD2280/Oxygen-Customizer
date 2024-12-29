@@ -195,7 +195,6 @@
     <string name="status_bar_date_style_lowercase">小写</string>
     <string name="status_bar_date_style_uppercase">大写</string>
     <string name="status_bar_date_format_custom">自定义java格式</string>
-    <string name="string_formatter_manual_body">除常规文本外，还提供比如日期和时间等动态变量：\n\n$G\&lt;format\&gt; :基于格式*的公历日期。\n$P\&lt;format\&gt; :基于格式*的波斯历日期。\n$T\&lt;format\&gt;[区间]：温度；\n格式可以是b(电池)、c(CPU)、g(GPU)和s(皮肤)。\n最后，可选择以秒为单位的更新间隔(默认是60秒)\n\n*有关格式的文档，请搜索“Java日期格式”</string>
     <string name="preview">预览</string>
     <string name="clock_date_position">日期位置</string>
     <string name="clock_date_right">时间右侧</string>
@@ -610,7 +609,6 @@
     <string name="gesture_override_back_hold_command_switch_app">切换到上一应用</string>
     <string name="gesture_override_back_hold_command_close_recents">清除所有最近任务</string>
     <string name="gesture_override_back_hold_command_kill_app">结束活动应用</string>
-    <string name="gesture_override_back_hold_command_screenshot">截图</string>
     <string name="gesture_override_back_hold_command_quick_settings">打开快速设置</string>
     <string name="gesture_override_back_hold_command_power_menu">打开电源菜单</string>
     <string name="gesture_override_back_hold_command_notification_panel">打开通知面板</string>
@@ -619,6 +617,7 @@
     <string name="gesture_nav_pill_cat">小白条宽度</string>
     <string name="gesture_nav_pill_width_title">对比标准大小的宽度</string>
     <string name="colorpill">小白条强调色</string>
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">按键</string>
     <string name="power_button_category_title">电源键</string>
@@ -1131,6 +1130,7 @@
     <string name="mini_icon_inactive">迷你小部件图标非活动颜色</string>
     <string name="weather_settings">天气设置</string>
     <string name="widgets_scale">部件比例</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">相机</string>
     <string name="clock_timer">时钟/计时器</string>
