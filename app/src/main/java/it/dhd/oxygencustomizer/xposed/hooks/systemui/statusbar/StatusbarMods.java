@@ -643,7 +643,11 @@ public class StatusbarMods extends XposedMods {
             @Override
             public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
                 if (isValidFling(e1, e2, velocityY, -.15f, -.06f)) {
-                    callMethod(NotificationPanelViewController, "collapse", true, 1f);
+                    if (Build.VERSION.SDK_INT >= 35) {
+                        callMethod(NotificationPanelViewController, "collapse", true, 1f, "collapse");
+                    } else {
+                        callMethod(NotificationPanelViewController, "collapse", true, 1f);
+                    }
                     return true;
                 }
                 return false;
