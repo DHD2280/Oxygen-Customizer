@@ -59,6 +59,7 @@
 
         <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="0"
+            android:dependency="lockscreen_widgets_enabled"
             android:entries="@array/lockscreen_widgets_style_entries"
             android:entryValues="@array/lockscreen_widgets_style_values"
             android:key="lockscreen_widgets_style"
