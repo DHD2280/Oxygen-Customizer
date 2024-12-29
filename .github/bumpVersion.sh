@@ -8,7 +8,7 @@ echo $NEWVERNAME >> $GITHUB_ENV
 echo 'EOF' >> $GITHUB_ENV
 
 echo 'VName<<EOF' >> $GITHUB_ENV
-echo 'Beta 'NEWVERCODE >> $GITHUB_ENV
+echo 'Beta '$NEWVERCODE >> $GITHUB_ENV
 echo 'EOF' >> $GITHUB_ENV
 
 sed -i 's/versionCode.*/versionCode = '$NEWVERCODE'/' app/build.gradle.kts
