@@ -380,7 +380,7 @@ public class UpdateFragment extends BaseFragment {
                 error.put("version", "Connection Error");
                 error.put("versionCode", -1);
                 mCallback.onFinished(error);
-                e.printStackTrace();
+                Log.e("UpdateFragment", "updateChecker: ", e);
             }
         }
     }
