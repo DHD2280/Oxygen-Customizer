@@ -31,6 +31,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
@@ -107,6 +108,9 @@ public class ModPacks {
 
                     // Oplus Feature Enabler
                     modPacks.add(FeatureOption.class);
+
+                    // Qs and Notification style
+                    modPacks.add(QsStyleObserver.class);
 
                     // Advanced Reboot
                     modPacks.add(AdvancedReboot.class);

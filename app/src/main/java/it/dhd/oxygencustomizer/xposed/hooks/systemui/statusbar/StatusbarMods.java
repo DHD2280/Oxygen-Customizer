@@ -14,6 +14,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -24,6 +25,7 @@ import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -618,6 +620,9 @@ public class StatusbarMods extends XposedMods {
         return new LongpressListener(true) {
             @Override
             public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                if (Build.VERSION.SDK_INT >= 35) {
+                    if (isSeparateStyle()) return false;
+                }
                 if (STATUSBAR_MODE_SHADE == (int) getObjectField(NotificationPanelViewController, "mBarState")
                         && isValidFling(e1, e2, velocityY, .15f, 0.01f)) {
                     openQuickSettings();
