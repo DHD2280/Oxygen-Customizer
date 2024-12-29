@@ -206,7 +206,7 @@
             android:title="@string/weather_margin_top"
             app:defaultValue="0"
             app:iconSpaceReserved="false"
-            app:maxVal="100"
+            app:maxVal="200"
             app:minVal="0"
             app:valueFormat="dp" />
 
