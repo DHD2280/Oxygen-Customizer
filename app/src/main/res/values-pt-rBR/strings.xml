@@ -193,7 +193,6 @@
     <string name="status_bar_date_style_lowercase">Minúscula</string>
     <string name="status_bar_date_style_uppercase">Maiúscula</string>
     <string name="status_bar_date_format_custom">Formato personalizado java</string>
-    <string name="string_formatter_manual_body">Além do texto normal, variáveis ​​dinâmicas também estão disponíveis, como Data e Temperatura:\n\n$G\&lt;format\&gt; : Data gregoriana, com base no formato*\n$P\&lt;format\&gt; : Data persa, baseada no formato*\n$T\&lt;format\&gt;[interval] : Temperatura; \no formato pode ser b (para bateria), c (para CPU), g (para GPU) e s (para skin). \nPor último, há um número OPCIONAL de intervalo de atualização em segundos (padrão: 60 segundos)\n\n* para documentação de formato, procure por \"Java Date Format\".</string>
     <string name="preview">Visualizar</string>
     <string name="clock_date_position">Posição da data</string>
     <string name="clock_date_right">À direita da hora</string>
@@ -603,7 +602,6 @@
     <string name="gesture_override_back_hold_command_switch_app">Alternar para o app anterior</string>
     <string name="gesture_override_back_hold_command_close_recents">Limpar todos os recentes</string>
     <string name="gesture_override_back_hold_command_kill_app">Fechar o aplicativo ativo</string>
-    <string name="gesture_override_back_hold_command_screenshot">Capturar tela</string>
     <string name="gesture_override_back_hold_command_quick_settings">Abrir configurações rápidas</string>
     <string name="gesture_override_back_hold_command_power_menu">Abrir menu de energia</string>
     <string name="gesture_override_back_hold_command_notification_panel">Abrir painel de notificações</string>
@@ -612,6 +610,7 @@
     <string name="gesture_nav_pill_cat">Barra de navegação</string>
     <string name="gesture_nav_pill_width_title">Largura comparada ao tamanho padrão</string>
     <string name="colorpill">Botão de gesto com cor de destaque</string>
+    <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <string name="buttons_title">Botões</string>
     <string name="power_button_category_title">Botão liga/desliga</string>
@@ -1106,6 +1105,7 @@
     <string name="mini_icon_inactive">Cor inativa do ícone do mini widget</string>
     <string name="weather_settings">Configurações de Clima</string>
     <string name="widgets_scale">Escala de widgets</string>
+    <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <string name="camera">Câmera</string>
     <string name="clock_timer">Relógio/Cronômetro</string>
