@@ -59,7 +59,7 @@ jobs:
       - name: Oxygen Customizer Binary Release
         uses: ncipollo/release-action@v1.14.0
         with:
-          tag: ${{ env.TGName }}
+          tag: ${{ env.VTag }}
           name: ${{ env.VName }}
           body: ${{ env.TMessage }}
           prerelease: true
