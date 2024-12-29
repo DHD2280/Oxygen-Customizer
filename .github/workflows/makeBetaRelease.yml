@@ -72,35 +72,20 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: 'beta'
-          commit-message: 'Version update: Release'
+          commit-message: 'Version update: Beta Release'
           force-add: 'true'
           files: app/build.gradle.kts BetaChangelog.md latestBeta.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
 
       - name: Telegram Channel Post
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.OC_CHANNEL }}
-          token: ${{ secrets.TELEGRAM_TK }}
-          message: ${{ env.TMessage }}
-          format: markdown
+        run: |
+          curl -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"chat_id": ${{ secrets.OC_CHANNEL }}, "text": "'"$(cat telegram.msg)"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/${{ env.VTag }}/downloads/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
 
       - name: Telegram Channel Post
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.OC_CHANNEL2 }}
-          token: ${{ secrets.TELEGRAM_TK }}
-          message: ${{ env.TMessage }}
-          format: markdown
-
-      - name: Zip artifact for deployment
-        run: cd ./app/build/outputs/apk/release/ && zip OxygenCustomizer.zip *.apk -r
-
-      - name: Telegram File Attachment
         run: |
-          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
-
-      - name: Telegram File Attachment
-        run: |
-          curl -v "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMediaGroup?chat_id=${{ secrets.OC_CHANNEL2 }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FXposed%22%7D%5D" -F Xposed="@app/build/outputs/apk/release/OxygenCustomizer.zip"
+          curl -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"chat_id": ${{ secrets.OC_CHANNEL2 }}, "text": "'"$(cat telegram.msg)"'", "parse_mode": "Markdown", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://www.github.com/DHD2280/Oxygen-Customizer/releases/${{ env.VTag }}/downloads/OxygenCustomizer.apk"}]]}' https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage
