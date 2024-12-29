@@ -1,10 +1,12 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllConstructors;
@@ -18,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -113,12 +116,22 @@ public class OpUtils extends XposedMods {
                 "com.oplusos.systemui.keyguard.clock.LunarHelper" /* OOS13 */);
 
         if (LunarHelperClass != null) {
-            hookAllConstructors(LunarHelperClass, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (LunarHelper == null) LunarHelper = param.thisObject;
-                }
-            });
+            if (Build.VERSION.SDK_INT >= 35) {
+                Object LunarHelperCompanion = getStaticObjectField(LunarHelperClass, "Companion");
+                hookAllMethods(LunarHelperCompanion.getClass(), "getInstance", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (LunarHelper == null) LunarHelper = param.getResult();
+                    }
+                });
+            } else {
+                hookAllConstructors(LunarHelperClass, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (LunarHelper == null) LunarHelper = param.thisObject;
+                    }
+                });
+            }
         }
 
     }
