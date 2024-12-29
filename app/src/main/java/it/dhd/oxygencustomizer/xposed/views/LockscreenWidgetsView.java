@@ -4,10 +4,12 @@ package it.dhd.oxygencustomizer.xposed.views;
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
@@ -1269,12 +1271,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             return;
         }
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        else {
+            expandable = null;
+        }
+        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1286,12 +1293,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
         if (getCellularTile() == null) return;
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        else {
+            expandable = null;
+        }
+        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1302,12 +1314,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             return;
         }
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        else {
+            expandable = null;
+        }
+        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1319,12 +1336,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
         if (getHotspotTile() == null) return;
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        else {
+            expandable = null;
+        }
+        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 

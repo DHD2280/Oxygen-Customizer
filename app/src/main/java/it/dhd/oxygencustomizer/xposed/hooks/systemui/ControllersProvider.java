@@ -28,6 +28,7 @@ public class ControllersProvider extends XposedMods {
     public static Class<?> LaunchableImageView = null;
     public static Object PersonalityManagerEx = null;
     public static Class<?> PersonalityManagerClass = null;
+    public static Class<?> Expandable = null;
 
     @SuppressLint("StaticFieldLeak")
     private static ControllersProvider instance = null;
@@ -227,6 +228,10 @@ public class ControllersProvider extends XposedMods {
         } catch (Throwable t) {
             log("SystemUIDialog not found: " + t.getMessage());
         }
+
+        try {
+            Expandable = findClass("com.android.systemui.animation.Expandable", lpparam.classLoader);
+        } catch (Throwable ignored) {}
 
         // Network Callbacks
         Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
