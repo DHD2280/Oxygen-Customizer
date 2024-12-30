@@ -79,6 +79,22 @@ public class ReflectedClass {
         return ReflectedClass.ofIfPossible(name, defaultClassloader);
     }
 
+    public HookedMethodData hook(String methodName) {
+        return new HookedMethodData(clazz, methodName, null, false);
+    }
+
+    public HookedMethodData hook(Method method) {
+        return new HookedMethodData(method.getClass(), null, method, false);
+    }
+
+    public HookedMethodData hookConstructor(String methodName) {
+        return new HookedMethodData(clazz, methodName, null, true);
+    }
+
+    public HookedMethodData hookConstructor(Method method) {
+        return new HookedMethodData(method.getClass(), null, method, true);
+    }
+
     public BeforeMethodData before(Method method) {
         return new BeforeMethodData(method.getClass(), null, method, false);
     }
@@ -268,6 +284,23 @@ public class ReflectedClass {
             Set<XC_MethodHook.Unhook> unhooks = new ArraySet<>();
             datas.forEach(data -> unhooks.addAll(data.run(consumer)));
             return unhooks;
+        }
+    }
+
+    public class HookedMethodData extends MethodData {
+
+        public HookedMethodData(Class<?> clazz, String name, Method method, boolean isConstructor) {
+            super(clazz, name, method, isConstructor);
+        }
+
+        public HookedMethodData after(ReflectionConsumer consumer) {
+            runAfter(consumer);
+            return this;
+        }
+
+        public HookedMethodData before(ReflectionConsumer consumer) {
+            runBefore(consumer);
+            return this;
         }
     }
 
