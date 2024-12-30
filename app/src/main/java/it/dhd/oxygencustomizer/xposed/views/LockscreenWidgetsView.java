@@ -1277,7 +1277,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
         else {
             expandable = null;
         }
@@ -1299,7 +1299,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
         else {
             expandable = null;
         }
@@ -1320,7 +1320,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
         else {
             expandable = null;
         }
@@ -1342,7 +1342,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", finalView);
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
         else {
             expandable = null;
         }
