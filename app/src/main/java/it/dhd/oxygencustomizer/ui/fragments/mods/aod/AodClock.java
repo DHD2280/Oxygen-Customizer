@@ -4,6 +4,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 
+import android.os.Build;
+import android.view.View;
+
+import androidx.annotation.StringRes;
+
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ClockPickerFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
@@ -46,6 +51,12 @@ public class AodClock extends ClockPickerFragment {
     public boolean backButtonEnabled() {
         return true;
     }
+
+    @Override
+    public boolean getIntroEnabled() { return (Build.VERSION.SDK_INT >= 35); }
+
+    @Override
+    public @StringRes int getIntroTitle() { return R.string.aod_clock_intro_oos15; }
 
     @Override
     public ControlledPreferenceFragmentCompat getPreferenceFragment() {

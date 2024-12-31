@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -51,6 +53,10 @@ public abstract class ClockPickerFragment extends BaseFragment {
     public abstract String getSwitchPreferenceKey();
 
     public abstract String getSwitchTitle();
+
+    public boolean getIntroEnabled() { return false; }
+
+    public @StringRes int getIntroTitle() { return 0; }
 
     public abstract String getPreferenceKey();
 
@@ -127,6 +133,12 @@ public abstract class ClockPickerFragment extends BaseFragment {
     private void setupPreferences(boolean lockscreenClockEnabled) {
         // Setup category
         binding.clockCategory.setTitle(getCategoryTitle());
+
+        // Setup Intro
+        binding.clockIntro.setVisibility(getIntroEnabled() ? View.VISIBLE : View.GONE);
+        if (getIntroEnabled()) {
+            binding.clockIntro.setTitle(getIntroTitle());
+        }
 
         // Setup switch
         binding.clockSwitch.setTitle(getSwitchTitle());

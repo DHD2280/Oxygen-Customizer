@@ -815,6 +815,7 @@
     <!-- Aod Clock -->
     <string name="aod_clock">AOD Clock</string>
     <string name="aod_clock_switch">Custom AOD Clock</string>
+    <string name="aod_clock_intro_oos15">Custom AOD Clock is available only with classic AOD style.</string>
     <string name="aod_clock_custom">Clock Style</string>
     <string name="aod_clock_custom_summary">Swipe to pick a style of your choice.</string>
     <string name="aod_clock_font_prefs_title">Font</string>

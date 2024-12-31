@@ -17,6 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <it.dhd.oxygencustomizer.ui.widgets.TopIntroWidget
+            android:id="@+id/clock_intro"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
         <it.dhd.oxygencustomizer.ui.widgets.SwitchWidget
             android:id="@+id/clock_switch"
             android:layout_width="match_parent"
