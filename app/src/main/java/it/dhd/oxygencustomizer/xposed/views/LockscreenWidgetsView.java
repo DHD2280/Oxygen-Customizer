@@ -1169,12 +1169,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object controlsTile = getControlsTile();
         if (controlsTile == null) return;
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(controlsTile, "handleClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
+        else {
+            expandable = null;
+        }
+        post(() -> callMethod(controlsTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(1);
     }
 
@@ -1182,12 +1187,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object WalletTile = getWalletTile();
         if (WalletTile != null) {
             View finalView;
+            Object expandable;
             if (view instanceof ExtendedFAB) {
                 finalView = (View) view.getParent();
             } else {
                 finalView = view;
             }
-            post(() -> callMethod(WalletTile, "handleClick", finalView));
+            if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
+            else {
+                expandable = null;
+            }
+            post(() -> callMethod(WalletTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         } else {
             mActivityLauncherUtils.launchWallet();
         }
