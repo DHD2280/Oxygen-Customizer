@@ -16,6 +16,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MiscMods extends XposedMods {
 
@@ -35,8 +36,7 @@ public class MiscMods extends XposedMods {
         mRemoveUsb = Xprefs.getBoolean("remove_usb_dialog", false);
 
         if (Key.length > 0 && Key[0].equals("misc_remove_rotate_floating")) {
-            if (mRotationButton != null)
-                mRotationButton.setVisibility(mHideRotationButton ? View.GONE : View.VISIBLE);
+            setupButton();
         }
     }
 
@@ -45,42 +45,43 @@ public class MiscMods extends XposedMods {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
         try {
-            Class<?> FloatingRotationButton = findClass("com.android.systemui.shared.rotation.FloatingRotationButton", lpparam.classLoader);
-            hookAllConstructors(FloatingRotationButton, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mRotationButton = (View) getObjectField(param.thisObject, "mKeyButtonView");
-                    if (mHideRotationButton) mRotationButton.setVisibility(View.GONE);
-                }
-            });
+            ReflectedClass FloatingRotationButton = ReflectedClass.of("com.android.systemui.shared.rotation.FloatingRotationButton");
+            FloatingRotationButton
+                    .afterConstruction()
+                    .run(param -> {
+                        mRotationButton = (View) getObjectField(param.thisObject, "mKeyButtonView");
+                        setupButton();
+                    });
         } catch (Throwable ignored) {
         }
 
         try {
-            Class<?> UsbService = findClass("com.oplus.systemui.usb.UsbService", lpparam.classLoader);
-            hookAllMethods(UsbService, "onUsbConnected", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mRemoveUsb) return;
-                    Context c = (Context) param.args[0];
-                    param.setResult(null);
-                    callMethod(param.thisObject, "onUsbSelect", 1);
-                    callMethod(param.thisObject, "updateAdbNotification", c);
-                    callMethod(param.thisObject, "updateUsbNotification", c, 1);
-                    callMethod(param.thisObject, "changeUsbConfig", c, 1);
-                }
+            ReflectedClass UsbService = ReflectedClass.of("com.oplus.systemui.usb.UsbService");
+
+            UsbService.after("onUsbConnected").run(param -> {
+                if (!mRemoveUsb) return;
+                Context c = (Context) param.args[0];
+                param.setResult(null);
+                callMethod(param.thisObject, "onUsbSelect", 1);
+                callMethod(param.thisObject, "updateAdbNotification", c);
+                callMethod(param.thisObject, "updateUsbNotification", c, 1);
+                callMethod(param.thisObject, "changeUsbConfig", c, 1);
             });
 
-            findAndHookMethod(UsbService, "helpUpdateUsbNotification", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mRemoveUsb) return;
-                    setBooleanField(param.thisObject, "mNeedShowUsbDialog", false);
-                }
+            UsbService.before("helpUpdateUsbNotification").run(param -> {
+                if (!mRemoveUsb) return;
+                setBooleanField(param.thisObject, "mNeedShowUsbDialog", false);
             });
+
         } catch (Throwable ignored) {
         }
 
+    }
+
+    private void setupButton() {
+        if (mRotationButton != null) {
+            mRotationButton.setVisibility(mHideRotationButton ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
