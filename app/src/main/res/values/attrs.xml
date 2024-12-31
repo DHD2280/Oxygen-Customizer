@@ -59,6 +59,13 @@
         <attr name="isChecked" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="TopIntroWidget">
+        <attr name="titleText" />
+        <attr name="icon" />
+        <attr name="forcePosition" />
+        <attr name="drawBackground" />
+    </declare-styleable>
+
     <declare-styleable name="ColorPickerWidget">
         <attr name="titleText" />
         <attr name="summaryText" />
