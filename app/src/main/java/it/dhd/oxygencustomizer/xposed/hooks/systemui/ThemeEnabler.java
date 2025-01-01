@@ -10,10 +10,10 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class ThemeEnabler extends XposedMods {
 
@@ -58,26 +58,24 @@ public class ThemeEnabler extends XposedMods {
 
         // Get monet change so we can apply theme
         try {
-            Class<?> ScrimController = findClass("com.android.systemui.statusbar.phone.ScrimController", lpparam.classLoader);
-            hookAllMethods(ScrimController, "updateThemeColors", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    enableTheme();
-                    notifyThemeChanged();
-                }
-            });
+            ReflectedClass ScrimController = ReflectedClass.of("com.android.systemui.statusbar.phone.ScrimController");
+            ScrimController
+                    .after("updateThemeColors")
+                    .run(param -> {
+                        enableTheme();
+                        notifyThemeChanged();
+                    });
         } catch (Throwable ignored) {
         }
 
         try {
-            Class<?> NotificationPanelViewController = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
-            hookAllMethods(NotificationPanelViewController, "onThemeChanged", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    enableTheme();
-                    notifyThemeChanged();
-                }
-            });
+            ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController");
+            NotificationPanelViewController
+                    .after("onThemeChanged")
+                    .run(param -> {
+                        enableTheme();
+                        notifyThemeChanged();
+                    });
         } catch (Throwable ignored) {
         }
 

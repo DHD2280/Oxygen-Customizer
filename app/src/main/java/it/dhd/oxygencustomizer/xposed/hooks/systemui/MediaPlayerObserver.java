@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
@@ -9,9 +7,9 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MediaPlayerObserver extends XposedMods {
 
@@ -46,21 +44,20 @@ public class MediaPlayerObserver extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
         try {
-            Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
-            hookAllMethods(OplusQsMediaPanelView, "bindTitleAndText", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    bindMediaData(param.args[0]);
-                }
-            });
-            hookAllMethods(OplusQsMediaPanelView, "unBindMediaData", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    unBindMediaData();
-                }
-            });
+            ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+            OplusQsMediaPanelView
+                    .after("bindTitleAndText")
+                    .run(param -> {
+                        bindMediaData(param.args[0]);
+                    });
+
+            OplusQsMediaPanelView
+                    .after("unBindMediaData")
+                    .run(param -> {
+                        unBindMediaData();
+                    });
         } catch (Throwable t) {
-            log("MediaPlayerObserver error: " + t.getMessage());
+            log(t);
         }
     }
 

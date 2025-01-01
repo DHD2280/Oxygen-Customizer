@@ -10,10 +10,9 @@ import android.os.Build;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class SuperPowerSaveObserver extends XposedMods {
 
@@ -43,23 +42,19 @@ public class SuperPowerSaveObserver extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> SuperPowerSaveSettingsObserver = findClassInArray(lpparam,
-                "com.oplus.systemui.qs.observer.SuperPowerSaveSettingsObserver" /* OOS15-14 */,
+        ReflectedClass SuperPowerSaveSettingsObserver = ReflectedClass.of("com.oplus.systemui.qs.observer.SuperPowerSaveSettingsObserver" /* OOS15-14 */,
                 "com.oplusos.systemui.common.observer.SuperPowerSaveSettingsObserver" /* OOS13 */);
-        findAndHookMethod(SuperPowerSaveSettingsObserver,
-                "onChange",
-                boolean.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        mIsSuperPowerSave = getBooleanField(param.thisObject,
-                                Build.VERSION.SDK_INT >= 35 ?
-                                        "isSuperPowerSaveState" :
-                                        "mIsSuperPowerSaveState");
-                        XposedBridge.log("SuperPowerSaveObserver: SuperPowerSave is " + mIsSuperPowerSave);
-                        onSuperPowerSaveChanged(mIsSuperPowerSave);
-                    }
-                });
+
+        SuperPowerSaveSettingsObserver
+                .after("onChange")
+                        .run(param -> {
+                            mIsSuperPowerSave = getBooleanField(param.thisObject,
+                                    Build.VERSION.SDK_INT >= 35 ?
+                                            "isSuperPowerSaveState" :
+                                            "mIsSuperPowerSaveState");
+                            log("SuperPowerSaveObserver: SuperPowerSave is " + mIsSuperPowerSave);
+                            onSuperPowerSaveChanged(mIsSuperPowerSave);
+                        });
     }
 
     @Override
