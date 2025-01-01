@@ -8,9 +8,14 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.text.SimpleDateFormat;
@@ -44,12 +49,26 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
 
         setShowWhenLocked(true);
         setTurnScreenOn(true);
 
         binding = ActivityWeatherBinding.inflate(getLayoutInflater());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.weatherScroll, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = insets.top;
+            mlp.leftMargin = insets.left;
+            mlp.bottomMargin = insets.bottom;
+            mlp.rightMargin = insets.right;
+            v.setLayoutParams(mlp);
+
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            return WindowInsetsCompat.CONSUMED;
+        });
         setContentView(binding.getRoot());
 
         mWeatherClient = new OmniJawsClient(this);
