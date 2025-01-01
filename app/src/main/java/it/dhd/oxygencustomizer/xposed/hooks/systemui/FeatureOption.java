@@ -1,15 +1,13 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class FeatureOption extends XposedMods {
 
@@ -30,27 +28,24 @@ public class FeatureOption extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        Class<?> FeatureOptions = findClass("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        ReflectedClass FeatureOptions = ReflectedClass.of("com.oplusos.systemui.common.feature.FeatureOption");
 
+        FeatureOptions
+                .before("isOplusVolumeKeyInRight")
+                .run(param -> {
+                    if (volumePanelPosition == 0) return;
 
-        hookAllMethods(FeatureOptions, "isOplusVolumeKeyInRight", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (volumePanelPosition == 0) return;
+                    if (volumePanelPosition == 1)
+                        param.setResult(true);
+                    else
+                        param.setResult(false);
+                });
 
-                if (volumePanelPosition == 1)
-                    param.setResult(true);
-                else
-                    param.setResult(false);
-            }
-        });
-
-        hookAllMethods(FeatureOptions, "isSupportMyDevice", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (showMyDevice) param.setResult(true);
-            }
-        });
+        FeatureOptions
+                .before("isSupportMyDevice")
+                .run(param -> {
+                    if (showMyDevice) param.setResult(true);
+                });
 
     }
 
