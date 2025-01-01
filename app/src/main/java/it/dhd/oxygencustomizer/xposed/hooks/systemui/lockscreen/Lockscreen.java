@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -22,7 +19,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.resparams;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -53,6 +49,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Lockscreen extends XposedMods {
 
@@ -140,69 +137,61 @@ public class Lockscreen extends XposedMods {
 
         if (Build.VERSION.SDK_INT >= 34) {
             try {
-                Class<?> OplusEmergencyButtonExImpl = findClass("com.oplus.keyguard.OplusEmergencyButtonExImpl", lpparam.classLoader);
-                findAndHookMethod(OplusEmergencyButtonExImpl, "disableShowEmergencyButton", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (removeSOS) param.setResult(true);
-                    }
+                ReflectedClass OplusEmergencyButtonExImpl = ReflectedClass.of("com.oplus.keyguard.OplusEmergencyButtonExImpl");
+                OplusEmergencyButtonExImpl.before("disableShowEmergencyButton").run(param -> {
+                    if (removeSOS) param.setResult(true);
                 });
             } catch (Throwable t) {
                 log(t);
             }
         } else {
             try {
-                Class<?> EmergencyButton = findClass("com.oplus.keyguard.EmergencyButton", lpparam.classLoader);
-                hookAllMethods(EmergencyButton, "updateEmergencyCallButton", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!removeSOS) return;
-                        View button = (View) param.thisObject;
-                        button.setVisibility(View.GONE);
-                    }
+                ReflectedClass EmergencyButton = ReflectedClass.of("com.oplus.keyguard.EmergencyButton");
+                EmergencyButton.before("updateEmergencyCallButton").run(param -> {
+                    if (!removeSOS) return;
+                    View button = (View) param.thisObject;
+                    button.setVisibility(View.GONE);
                 });
             } catch (Throwable t) {
                 log(t);
             }
         }
 
-        Class<?> OnScreenFingerprint = findClassInArray(lpparam,
-                "com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMech", /* OOS15 */
+        ReflectedClass OnScreenFingerprint = ReflectedClass.of("com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMech", /* OOS15 */
                 "com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMach", /* OOS14 */
                 "com.oplus.systemui.keyguard.finger.onscreenfingerprint.OnScreenFingerprintUiMech" /* OOS13 */);
 
         try {
-            hookAllMethods(OnScreenFingerprint, "loadAnimDrawables", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, false);
-                }
-            });
+            OnScreenFingerprint
+                    .after("loadAnimDrawables")
+                    .run(param -> {
+                        if (hideFingerprint || customFingerprint)
+                            updateFingerprintIcon(param, false);
+                    });
         } catch (Throwable t) {
             log(t);
         }
 
         try {
-            hookAllMethods(OnScreenFingerprint, "startFadeInAnimation", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (hideFingerprint || customFingerprint) updateFingerprintIcon(param, true);
-                }
-            });
+            OnScreenFingerprint
+                    .before("startFadeInAnimation")
+                    .run(param -> {
+                        if (hideFingerprint || customFingerprint)
+                            updateFingerprintIcon(param, true);
+                    });
         } catch (Throwable t) {
             log(t);
         }
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
-                hookAllMethods(OnScreenFingerprint, "updateFpIconColor", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!customFingerprint || hideFingerprint) return;
-                        Drawable d = (Drawable) getObjectField(param.thisObject, "mImMobileDrawable");
-                        if (d != null) d.clearColorFilter();
-                    }
-                });
+                OnScreenFingerprint
+                        .after("updateFpIconColor")
+                        .run(param -> {
+                            if (!customFingerprint || hideFingerprint) return;
+                            Drawable d = (Drawable) getObjectField(param.thisObject, "mImMobileDrawable");
+                            if (d != null) d.clearColorFilter();
+                        });
             } catch (Throwable t) {
                 log(t);
             }
@@ -210,13 +199,12 @@ public class Lockscreen extends XposedMods {
 
         if (Build.VERSION.SDK_INT >= 34) {
             try {
-                findAndHookMethod(OnScreenFingerprint, "updateFpColor", int.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!customFingerprint || hideFingerprint) return;
-                        param.args[0] = Color.TRANSPARENT;
-                    }
-                });
+                OnScreenFingerprint
+                        .before("updateFpColor")
+                        .run(param -> {
+                            if (!customFingerprint || hideFingerprint) return;
+                            param.args[0] = Color.TRANSPARENT;
+                        });
             } catch (Throwable t) {
                 log(t);
             }
@@ -304,59 +292,56 @@ public class Lockscreen extends XposedMods {
 
     private void hookAffordance(XC_LoadPackage.LoadPackageParam lpparam) {
         if (Build.VERSION.SDK_INT >= 34) {
-            Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder", lpparam.classLoader);
-            hookAllMethods(KeyguardBottomAreaView, "updateButton", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!(removeLeftAffordance || removeRightAffordance)) return;
-                    ImageView view = (ImageView) param.args[0];
-                    if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
-                        mStartButton = view;
-                        if (removeLeftAffordance) {
-                            view.setVisibility(View.GONE);
+            ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
+            KeyguardBottomAreaView
+                    .after("updateButton")
+                    .run(param -> {
+                        if (!(removeLeftAffordance || removeRightAffordance)) return;
+                        ImageView view = (ImageView) param.args[0];
+                        if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                            mStartButton = view;
+                            if (removeLeftAffordance) {
+                                view.setVisibility(View.GONE);
+                            }
+                        } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
+                            mEndButton = view;
+                            if (removeRightAffordance) {
+                                view.setVisibility(View.GONE);
+                            }
                         }
-                    } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage))
-                        mEndButton = view;
-                    if (removeRightAffordance) {
-                        view.setVisibility(View.GONE);
-                    }
-                }
-            });
+                    });
         } else {
-            Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
-            hookAllMethods(KeyguardBottomAreaView, "updateCameraVisibility", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mEndButton = (View) getObjectField(param.thisObject, "mRightAffordanceView");
-                    if (removeRightAffordance) {
-                        mEndButton.setVisibility(View.GONE);
-                    }
-                }
-            });
-            hookAllMethods(KeyguardBottomAreaView, "updateLeftAffordanceVisibility", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mStartButton = (View) getObjectField(param.thisObject, "mLeftAffordanceView");
-                    if (removeLeftAffordance) {
-                        mStartButton.setVisibility(View.GONE);
-                    }
-                }
-            });
+            ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardBottomAreaView");
+            KeyguardBottomAreaView
+                    .after("updateCameraVisibility")
+                    .run(param -> {
+                        mEndButton = (View) getObjectField(param.thisObject, "mRightAffordanceView");
+                        if (removeRightAffordance) {
+                            mEndButton.setVisibility(View.GONE);
+                        }
+                    });
+            KeyguardBottomAreaView
+                    .after("updateLeftAffordanceVisibility")
+                    .run(param -> {
+                        mStartButton = (View) getObjectField(param.thisObject, "mLeftAffordanceView");
+                        if (removeLeftAffordance) {
+                            mStartButton.setVisibility(View.GONE);
+                        }
+                    });
         }
     }
 
     private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
         try {
-            Class<?> LockIconView = findClass("com.android.keyguard.LockIconView", lpparam.classLoader);
-            hookAllMethods(LockIconView, "onFinishInflate", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mLockIcon = (ImageView) getObjectField(param.thisObject, "mLockIcon");
-                    if (removeLockIcon) {
-                        mLockIcon.setVisibility(View.GONE);
-                    }
-                }
-            });
+            ReflectedClass LockIconView = ReflectedClass.of("com.android.keyguard.LockIconView");
+            LockIconView
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        mLockIcon = (ImageView) getObjectField(param.thisObject, "mLockIcon");
+                        if (removeLockIcon) {
+                            mLockIcon.setVisibility(View.GONE);
+                        }
+                    });
         } catch (Throwable t) {
             log("LockIconViewController not found");
         }
@@ -366,18 +351,17 @@ public class Lockscreen extends XposedMods {
 
         carrierStringFormatter.registerCallback(this::setCarrierText);
 
-        Class<?> OplusStatCarrierTextController = findClass("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController", lpparam.classLoader);
-        hookAllMethods(OplusStatCarrierTextController, "updateCarrierInfo", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                TextView mView = (TextView) getObjectField(param.thisObject, "mView");
-                if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
-                    mCarrierText = mView;
-                    setCarrierText();
-                    if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
-                }
-            }
-        });
+        ReflectedClass OplusStatCarrierTextController = ReflectedClass.of("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController", lpparam.classLoader);
+        OplusStatCarrierTextController
+                .before("updateCarrierInfo")
+                .run(param -> {
+                    TextView mView = (TextView) getObjectField(param.thisObject, "mView");
+                    if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
+                        mCarrierText = mView;
+                        setCarrierText();
+                        if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
+                    }
+                });
     }
 
     private void setCarrierText() {
