@@ -4,7 +4,6 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -12,17 +11,14 @@ import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInAr
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllConstructors;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class OpUtils extends XposedMods {
@@ -32,6 +28,7 @@ public class OpUtils extends XposedMods {
     private static Class<?> OpUtils = null;
     private static Class<?> QSFragmentHelper = null;
     private static Object LunarHelper = null;
+    private static Class<?> FlavorTwoFeatureOption = null;
 
     public OpUtils(Context context) {
         super(context);
@@ -56,6 +53,16 @@ public class OpUtils extends XposedMods {
             return (boolean) callStaticMethod(QsColorUtil, Build.VERSION.SDK_INT >= 35 ? "isIconNeedUseLightColor" : "isMediaIconNeedUseLightColor", context);
         } catch (Throwable t) {
             return false;
+        }
+    }
+
+    public static boolean isNeedSeparateDarkThemeColor(Context context) {
+        boolean isNightMode = (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        if (QsColorUtil == null) return isNightMode;
+        try {
+            return (boolean) callStaticMethod(QsColorUtil, "isNeedSeparateDarkThemeColor", context);
+        } catch (Throwable t) {
+            return isNightMode;
         }
     }
 
@@ -84,6 +91,15 @@ public class OpUtils extends XposedMods {
             return (String) callMethod(LunarHelper, "getDateToString", System.currentTimeMillis());
         } catch (Throwable t) {
             return "Err";
+        }
+    }
+
+    public static Object getTwoFeature() {
+        if (FlavorTwoFeatureOption == null) return null;
+        try {
+            return getStaticObjectField(FlavorTwoFeatureOption, "INSTANCE");
+        } catch (Throwable t) {
+            return null;
         }
     }
 
@@ -133,6 +149,10 @@ public class OpUtils extends XposedMods {
                 });
             }
         }
+
+        try {
+            Class<?> FlavorTwoFeatureOptionClass = findClass("com.oplusos.systemui.common.feature.FlavorTwoFeatureOptionClass", lpparam.classLoader);
+        } catch (Throwable ignored) {}
 
     }
 

@@ -47,6 +47,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isNeedSeparateDarkThemeColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -88,6 +89,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.CubeInTransformer;
@@ -380,7 +382,7 @@ public class QsTileCustomization extends XposedMods {
             }
         };
 
-        Class <?> OplusQsBaseToggleSliderLayout;
+        Class<?> OplusQsBaseToggleSliderLayout;
         if (Build.VERSION.SDK_INT >= 35) {
             try {
                 OplusQsBaseToggleSliderLayout = findClass("com.oplus.systemui.qs.base.seek.OplusQsBaseToggleSliderLayout", lpparam.classLoader);
@@ -401,6 +403,9 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable ignored) {
         }
 
+        if (Build.VERSION.SDK_INT >= 35) {
+            hookSliders(lpparam);
+        }
 
         try {
             Class<?> PagedTileLayout = findClass("com.android.systemui.qs.PagedTileLayout", lpparam.classLoader);
@@ -598,6 +603,82 @@ public class QsTileCustomization extends XposedMods {
             default -> finalArt = art;
         }
         return finalArt;
+    }
+
+    private void hookSliders(XC_LoadPackage.LoadPackageParam lpparam) {
+        ReflectedClass OplusQsVerticalSeekBar = ReflectedClass.of("com.oplus.systemui.qs.base.seek.OplusQsVerticalSeekBar");
+
+        // Run on sysui start
+        OplusQsVerticalSeekBar
+                .before("createActiveTrackBlurParams")
+                .run(param -> {
+                    if (!qsBrightnessSliderCustomize) return;
+                    param.setResult(
+                            callMethod(
+                                    param.thisObject,
+                                    "createForegroundBlurParams",
+                                    isNeedSeparateDarkThemeColor(mContext),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext)
+                            )
+                    );
+                });
+
+        OplusQsVerticalSeekBar
+                .before("createInactiveTrackBlurParams")
+                .run(param -> {
+                    if (!qsBrightnessBackgroundCustomize) return;
+                    param.setResult(
+                            callMethod(
+                                    param.thisObject,
+                                    "createForegroundBlurParams",
+                                    isNeedSeparateDarkThemeColor(mContext),
+                                    qsBrightnessBackgroundColor,
+                                    qsBrightnessBackgroundColor
+                            )
+                    );
+                });
+
+        // now hook when update colors
+//        getTwoFeature
+        // public final void drawForegroundBlur(Canvas canvas, Paint paint, ForegroundBlurParam foregroundBlurParam, Path path) {
+        OplusQsVerticalSeekBar
+                .before("drawForegroundBlur")
+                .run(param -> {
+                    Object foregroundBlurParam = param.args[2];
+                    Object activeTrackParam = getObjectField(param.thisObject, "activeTrackParam");
+                    Object inactiveTrackParam = getObjectField(param.thisObject, "inactiveTrackParam");
+
+                    if (foregroundBlurParam == activeTrackParam) { // draw active color
+                        if (!qsBrightnessSliderCustomize) return;
+                        Object newForeground;
+                        if (qsBrightnessSliderColorMode == 0) {
+                            newForeground = callMethod(param.thisObject, "createActiveTrackBlurParams");
+                            param.args[2] = newForeground;
+                        } else {
+                            newForeground = callMethod(param.thisObject, "createForegroundBlurParams",
+                                    isNeedSeparateDarkThemeColor(mContext),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext)
+                            );
+                        }
+                        param.args[2] = newForeground;
+                    } else { // only remains inactive color
+                        Object newForeground;
+                        if (qsBrightnessBackgroundCustomize) {
+                            newForeground = callMethod(param.thisObject, "createForegroundBlurParams",
+                                    isNeedSeparateDarkThemeColor(mContext),
+                                    qsBrightnessBackgroundColor,
+                                    qsBrightnessBackgroundColor
+                            );
+                        } else {
+                            newForeground = callMethod(param.thisObject, "createInactiveTrackBlurParams");
+                        }
+                        param.args[2] = newForeground;
+                    }
+
+                });
+
     }
 
     private void setupOtherViews(View parent, int color) {
