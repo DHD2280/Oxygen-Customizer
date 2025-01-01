@@ -211,14 +211,14 @@ public class Lockscreen extends XposedMods {
         }
 
         // Affordance Section
-        hookAffordance(lpparam);
+        hookAffordance();
 
         // Lock Icon
-        hookLockIcon(lpparam);
+        hookLockIcon();
 
         // Custom Carrier
         try {
-            hookCarrier(lpparam);
+            hookCarrier();
         } catch (Throwable t) {
             log(t);
         }
@@ -290,7 +290,7 @@ public class Lockscreen extends XposedMods {
         }
     }
 
-    private void hookAffordance(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookAffordance() {
         if (Build.VERSION.SDK_INT >= 34) {
             ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
             KeyguardBottomAreaView
@@ -331,7 +331,7 @@ public class Lockscreen extends XposedMods {
         }
     }
 
-    private void hookLockIcon(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookLockIcon() {
         try {
             ReflectedClass LockIconView = ReflectedClass.of("com.android.keyguard.LockIconView");
             LockIconView
@@ -347,11 +347,11 @@ public class Lockscreen extends XposedMods {
         }
     }
 
-    private void hookCarrier(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookCarrier() {
 
         carrierStringFormatter.registerCallback(this::setCarrierText);
 
-        ReflectedClass OplusStatCarrierTextController = ReflectedClass.of("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController", lpparam.classLoader);
+        ReflectedClass OplusStatCarrierTextController = ReflectedClass.of("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController");
         OplusStatCarrierTextController
                 .before("updateCarrierInfo")
                 .run(param -> {
