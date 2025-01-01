@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 
+import android.annotation.SuppressLint;
 import android.util.ArraySet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -223,6 +224,91 @@ public class ReflectionTools {
 			XposedBridge.hookAllConstructors(clazz, hook);
 		} catch (Throwable ignored) {
 		}
+	}
+
+	public static void dumpView(View view) {
+		StringBuilder result = new StringBuilder();
+		dumpView(view, result, "");
+		log("Dump View :\n" + result.toString());
+	}
+
+	private static void dumpView(View view, StringBuilder result, String prefix) {
+		String className = view.getClass().getName();
+
+		String baseClass = getBaseClass(view);
+
+		result.append(prefix)
+				.append(className);
+
+		if (baseClass != null) {
+			result.append(" (extends ").append(baseClass).append(")");
+		}
+
+		result.append(" ").append(getViewDetails(view)).append("\n");
+
+		if (view instanceof ViewGroup viewGroup) {
+            result.append(" [children: ").append(viewGroup.getChildCount()).append("]\n");
+			for (int i = 0; i < viewGroup.getChildCount(); i++) {
+				dumpView(viewGroup.getChildAt(i), result, prefix + "  ");
+			}
+		} else {
+			result.append("\n");
+		}
+	}
+
+	@SuppressLint("DefaultLocale")
+    private static String getViewDetails(View view) {
+		ViewGroup.LayoutParams params = view.getLayoutParams();
+
+		String width = getSizeDescription(params != null ? params.width : -1);
+		String height = getSizeDescription(params != null ? params.height : -1);
+
+		int paddingLeft = view.getPaddingLeft();
+		int paddingRight = view.getPaddingRight();
+		int paddingTop = view.getPaddingTop();
+		int paddingBottom = view.getPaddingBottom();
+
+		String marginDetails = "";
+		if (params instanceof ViewGroup.MarginLayoutParams marginParams) {
+            marginDetails = String.format(
+					"Margins [L:%d, T:%d, R:%d, B:%d]",
+					marginParams.leftMargin,
+					marginParams.topMargin,
+					marginParams.rightMargin,
+					marginParams.bottomMargin
+			);
+		}
+
+		return String.format(
+				"Size [W:%s, H:%s], Padding [L:%d, T:%d, R:%d, B:%d]%s",
+				width, height, paddingLeft, paddingTop, paddingRight, paddingBottom,
+				marginDetails.isEmpty() ? "" : ", " + marginDetails
+		);
+	}
+
+	private static String getSizeDescription(int size) {
+        return switch (size) {
+            case ViewGroup.LayoutParams.MATCH_PARENT -> "MATCH_PARENT";
+            case ViewGroup.LayoutParams.WRAP_CONTENT -> "WRAP_CONTENT";
+            default -> size >= 0 ? size + "dp" : "UNKNOWN";
+        };
+	}
+
+	private static String getBaseClass(View view) {
+		Class<?> currentClass = view.getClass();
+		while (currentClass != null) {
+			currentClass = currentClass.getSuperclass();
+			if (currentClass != null && isAndroidViewClass(currentClass)) {
+				return currentClass.getName();
+			}
+		}
+		return null;
+	}
+
+	private static boolean isAndroidViewClass(Class<?> clazz) {
+		return clazz.getName().startsWith("android.view.") ||
+				clazz.getName().startsWith("android.widget.") ||
+				clazz.getName().startsWith("android.webkit.");
 	}
 
 	public static void dumpParentIDs(View v)
