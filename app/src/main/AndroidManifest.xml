@@ -101,6 +101,7 @@
         <activity
             android:name=".ui.activity.AuthActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.Material3.Translucent"/>
 
         <activity

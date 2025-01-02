@@ -49,22 +49,6 @@ public class AdvancedReboot extends XposedMods {
     private int centerX;
     private int centerY;
     private int radius;
-    private Class<?> SystemUIDialogClass;
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                if (action.equals(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT)) {
-                    log("Oxygen Customizer - Advanced Reboot Auth Success");
-                    showDialog();
-                }
-            } catch (Throwable t) {
-                log("Oxygen Customizer - Advanced Reboot Error: " + t.getMessage());
-            }
-        }
-    };
-    private boolean broadcastRegistered = false;
 
     public AdvancedReboot(Context context) {
         super(context);
@@ -81,16 +65,6 @@ public class AdvancedReboot extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
-
-        if (!broadcastRegistered) {
-            broadcastRegistered = true;
-
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT);
-            mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
-        }
-
-        SystemUIDialogClass = ReflectedClass.of("com.android.systemui.statusbar.phone.SystemUIDialog").getClazz();
 
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
@@ -118,13 +92,9 @@ public class AdvancedReboot extends XposedMods {
                                 if (distanceFromCenter <= radius) {
 
                                     if (useAuthForAdvancedReboot && mContext.getSystemService(BiometricManager.class).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
-                                        showAuth();
+                                        startActivity(true);
                                     } else {
-                                        try {
-                                            showDialog();
-                                        } catch (Throwable t) {
-                                            log("Oxygen Customizer - Advanced Reboot Error: " + t.getMessage());
-                                        }
+                                        startActivity(false);
                                     }
                                 }
                             }
@@ -139,48 +109,13 @@ public class AdvancedReboot extends XposedMods {
 
     }
 
-    private void showAuth() {
-
+    private void startActivity(boolean showAuth) {
         Intent intent = new Intent();
         intent.setComponent(new ComponentName(APPLICATION_ID, APPLICATION_ID + ".ui.activity.AuthActivity"));
+        intent.putExtra("showAuth", showAuth);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         mContext.startActivity(intent);
-
-    }
-
-    private void showDialog() throws Exception {
-        log("Oxygen Customizer - Advanced Reboot Dialog");
-        final AlertDialog dialog = (AlertDialog) SystemUIDialogClass.getConstructor(Context.class).newInstance(mContext);
-        dialog.setTitle(modRes.getString(R.string.advanced_reboot_title));
-        ListView listView = new ListView(mContext);
-        listView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
-        adapter.add(modRes.getString(R.string.advanced_reboot_recovery));
-        adapter.add(modRes.getString(R.string.advanced_reboot_bootloader));
-        adapter.add(modRes.getString(R.string.advanced_reboot_safe_mode));
-        adapter.add(modRes.getString(R.string.advanced_reboot_fast_reboot));
-        adapter.add(modRes.getString(R.string.advanced_reboot_systemui));
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            switch (position) {
-                case 0 ->
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));
-                case 1 ->
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));
-                case 2 ->
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));
-                case 3 ->
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));
-                case 4 ->
-                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));
-            }
-        });
-
-        dialog.setView(listView);
-
-        dialog.show();
     }
 
     private void drawAdvancedReboot(Canvas canvas, Object param) {

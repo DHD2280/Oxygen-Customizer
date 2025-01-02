@@ -19,9 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.topjohnwu.superuser.Shell;
+
 import java.util.concurrent.Executor;
 
+import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.fragments.UpdateFragment;
 import it.dhd.oxygencustomizer.utils.Constants;
 
 public class AuthActivity extends AppCompatActivity {
@@ -35,13 +40,30 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boolean showAuth = false;
+
+        if (getIntent() != null) {
+            if (getIntent().getBooleanExtra("showAuth", false)) {
+                showAuth = true;
+            }
+        }
+
+        if (showAuth) {
+            showAuth();
+        } else {
+            showAdvancedReboot();
+        }
+
+    }
+
+    private void showAuth() {
         executor = ContextCompat.getMainExecutor(this);
         biometricPrompt = new BiometricPrompt(AuthActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode,
                                               @NonNull CharSequence errString) {
-                Log.d("BiometricPrompt", "onAuthenticationError: " + errString + " (" + errorCode + ")");
+                Log.e("BiometricPrompt", "onAuthenticationError: " + errString + " (" + errorCode + ")");
                 if (errorCode == ERROR_CANCELED || errorCode == BiometricPrompt.ERROR_USER_CANCELED && shown < 2) {
                     biometricPrompt.cancelAuthentication();
                     runOnUiThread(() -> {
@@ -61,14 +83,8 @@ public class AuthActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Intent broadcast = new Intent(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT);
 
-                broadcast.putExtra("packageName", SYSTEM_UI);
-
-                broadcast.setPackage(SYSTEM_UI);
-
-                AuthActivity.this.sendBroadcast(broadcast);
-                finishAndRemoveTask();
+                showAdvancedReboot();
             }
 
             @Override
@@ -92,6 +108,34 @@ public class AuthActivity extends AppCompatActivity {
         shown++;
     }
 
+    private void showAdvancedReboot() {
+        CharSequence[] list = new String[]{
+                getString(R.string.advanced_reboot_recovery),
+                getString(R.string.advanced_reboot_bootloader),
+                getString(R.string.advanced_reboot_safe_mode),
+                getString(R.string.advanced_reboot_fast_reboot),
+                getString(R.string.advanced_reboot_systemui)
+        };
+        SummaryAdapter mAdapter = new SummaryAdapter(this, list);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(R.string.advanced_reboot_title);
+        builder.setAdapter(mAdapter, (dialog, which) -> {
+            String cmd = switch (which) {
+                case 0 -> "reboot recovery";
+                case 1 -> "reboot bootloader";
+                case 2 -> "reboot safemode";
+                case 3 -> "killall zygote";
+                case 4 -> "killall " + SYSTEM_UI;
+                default -> "";
+            };
+            try {
+                Shell.cmd(cmd).exec();
+            } catch (Exception ignored) {
+            }
+        });
+        builder.setOnCancelListener(dialog -> finishAndRemoveTask());
+        builder.show();
+    }
 
 
 }
