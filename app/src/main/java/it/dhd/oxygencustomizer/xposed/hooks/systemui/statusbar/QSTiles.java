@@ -1,8 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_COLUMNS;
@@ -16,11 +13,11 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class QSTiles extends XposedMods {
 
@@ -66,48 +63,40 @@ public class QSTiles extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        Class<?> QuickQSPanel = findClass("com.android.systemui.qs.QuickQSPanel", lpparam.classLoader);
-        findAndHookMethod(QuickQSPanel, "getNumQuickTiles", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (mCustomizeQSTiles) {
-                    param.setResult(QQSTileQty);
-                }
-            }
-        });
-
-        Class<?> TileLayout = findClass("com.android.systemui.qs.TileLayout", lpparam.classLoader);
-        findAndHookMethod(TileLayout, "updateMaxRows",
-                int.class,
-                int.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!mCustomizeQSTiles ||
-                                mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-                            return;
-
-                        int mRows = getIntField(param.thisObject, "mRows");
-                        setIntField(param.thisObject, "mRows", QSRowQty);
-                        param.setResult(mRows != QSRowQty);
-
+        ReflectedClass QuickQSPanel = ReflectedClass.of("com.android.systemui.qs.QuickQSPanel");
+        QuickQSPanel
+                .before("getNumQuickTiles")
+                .run(param -> {
+                    if (mCustomizeQSTiles) {
+                        param.setResult(QQSTileQty);
                     }
                 });
 
+        ReflectedClass TileLayout = ReflectedClass.of("com.android.systemui.qs.TileLayout");
+        TileLayout
+                .before("updateMaxRows")
+                .run(param -> {
+                    if (!mCustomizeQSTiles ||
+                            mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                        return;
 
-        hookAllMethods(TileLayout, "updateColumns",
-                new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!mCustomizeQSTiles) return;
+                    int mRows = getIntField(param.thisObject, "mRows");
+                    setIntField(param.thisObject, "mRows", QSRowQty);
+                    param.setResult(mRows != QSRowQty);
+                });
 
-                        int mColumns = getIntField(param.thisObject, "mColumns");
-                        int orientation = mContext.getResources().getConfiguration().orientation;
-                        int newColumns = orientation == Configuration.ORIENTATION_PORTRAIT ? QSColQty : QSColQtyL;
-                        setIntField(param.thisObject, "mColumns", newColumns);
-                        param.setResult(mColumns != newColumns);
 
-                    }
+        TileLayout
+                .before("updateColumns")
+                .run(param -> {
+                    if (!mCustomizeQSTiles) return;
+
+                    int mColumns = getIntField(param.thisObject, "mColumns");
+                    int orientation = mContext.getResources().getConfiguration().orientation;
+                    int newColumns = orientation == Configuration.ORIENTATION_PORTRAIT ? QSColQty : QSColQtyL;
+                    setIntField(param.thisObject, "mColumns", newColumns);
+                    param.setResult(mColumns != newColumns);
+
                 });
 
     }
