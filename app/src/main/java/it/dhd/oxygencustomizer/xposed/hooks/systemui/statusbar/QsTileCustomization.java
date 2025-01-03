@@ -89,6 +89,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
@@ -217,6 +218,13 @@ public class QsTileCustomization extends XposedMods {
                     if (Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) || Key[0].equals(QS_TILE_INACTIVE_COLOR)) {
                         updateMediaQs();
                     }
+                    if (Build.VERSION.SDK_INT >= 35) {
+                        if (Key[0].equals(QS_TILE_HIDE_LABELS) ||
+                                Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR) ||
+                                Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED)) {
+                            SystemUtils.doubleToggleDarkMode();
+                        }
+                    }
                     notifyQsUpdate();
                 }
             }
@@ -266,29 +274,15 @@ public class QsTileCustomization extends XposedMods {
         if (OplusQSTileView == null) {
             log(new Throwable("OplusQSTileView not found"));
         }
-        hookAllMethods(OplusQSTileView, "createLabel", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
-                mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
-                mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
-                mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
-                setupLabels();
-            }
-        });
 
-        hookAllMethods(OplusQSTileView, "updateTextColor", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
-                mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
-                mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
-                mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
-                setupLabels();
-            }
-        });
+        Class<?> OplusQSTileViewPlugin = null;
+        try {
+            OplusQSTileViewPlugin = findClass("com.oplus.systemui.plugins.qs.tile.OplusQSTileView", lpparam.classLoader);
+        } catch (Throwable ignored) {
+        } // OOS15 class, can be ignored
 
-        hookAllMethods(OplusQSTileView, "handleStateChanged", new XC_MethodHook() {
+
+        XC_MethodHook labelHook = new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
@@ -297,7 +291,12 @@ public class QsTileCustomization extends XposedMods {
                 mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
                 setupLabels();
             }
-        });
+        };
+
+        hookAllMethods(OplusQSTileView, "createLabel", labelHook);
+        hookAllMethods(OplusQSTileViewPlugin, "createLabel", labelHook);
+        hookAllMethods(OplusQSTileView, "updateTextColor", labelHook);
+        hookAllMethods(OplusQSTileView, "handleStateChanged", labelHook);
 
         Class<?> OplusToggleSliderView;
         try {
@@ -650,6 +649,7 @@ public class QsTileCustomization extends XposedMods {
                     Object inactiveTrackParam = getObjectField(param.thisObject, "inactiveTrackParam");
 
                     if (foregroundBlurParam == activeTrackParam) { // draw active color
+                        // TODO: check if we need to draw active color
                         if (!qsBrightnessSliderCustomize) return;
                         Object newForeground;
                         if (qsBrightnessSliderColorMode == 0) {
@@ -815,6 +815,12 @@ public class QsTileCustomization extends XposedMods {
         if (qsLabelsHide) {
             if (mLabelContainer.getVisibility() != View.GONE)
                 mLabelContainer.setVisibility(View.GONE);
+            if (mTitle != null && mTitle.getVisibility() != View.GONE)
+                mTitle.setVisibility(View.GONE);
+            if (mSubtitle != null && mSubtitle.getVisibility() != View.GONE)
+                mSubtitle.setVisibility(View.GONE);
+            if (mExpandIndicator != null && mExpandIndicator.getVisibility() != View.GONE)
+                mExpandIndicator.setVisibility(View.GONE);
             return;
         }
 
