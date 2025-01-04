@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -26,6 +27,7 @@ import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 public class SplashActivity extends AppCompatActivity {
 
     public static final boolean SKIP_INSTALLATION = false;
+    private String intentKey = "";
 
     static {
         Shell.enableVerboseLogging = BuildConfig.DEBUG;
@@ -62,6 +64,10 @@ public class SplashActivity extends AppCompatActivity {
         if (SKIP_INSTALLATION || (isRooted && isModuleProperlyInstalled && isVersionCodeCorrect)) {
             keepShowing = false;
             intent = new Intent(SplashActivity.this, MainActivity.class);
+            Log.i("SplashActivity", "Starting MainActivity with intentKey: " + intentKey);
+            if (!intentKey.isEmpty()) {
+                intent.putExtra("launch", intentKey);
+            }
         } else {
             keepShowing = false;
             intent = new Intent(SplashActivity.this, OnboardingActivity.class);
@@ -76,6 +82,11 @@ public class SplashActivity extends AppCompatActivity {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
+        if (getIntent() != null) {
+            if (getIntent().hasExtra("launch")) {
+                intentKey = getIntent().getStringExtra("launch");
+            }
+        }
         splashScreen.setKeepOnScreenCondition(() -> keepShowing);
         setDarkTheme();
         DynamicColors.applyToActivityIfAvailable(this);

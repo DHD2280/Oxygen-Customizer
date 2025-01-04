@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -80,6 +81,24 @@ public class ActivityLauncherUtils {
             return;
         }
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", launchIntent, 0 /* dismissShade */);
+    }
+
+    /**
+     * Launches an app using the ActivityStarter
+     * dismissing the shade.
+     * @param launchIntent The intent to launch the app
+     * @param fromQs Whether the intent is launched from Quick Settings
+     */
+    public void launchIntent(Intent launchIntent, boolean fromQs) {
+        if (mActivityStarter == null) {
+            log("#launchIntent: ActivityStarter is null");
+            return;
+        }
+        if (launchIntent == null) {
+            log("#launchIntent: Launch intent is null");
+            return;
+        }
+        callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
     }
 
     /**

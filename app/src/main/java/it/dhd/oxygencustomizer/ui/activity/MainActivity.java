@@ -55,11 +55,13 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture;
+import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeader;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles;
+import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsWidgets;
 import it.dhd.oxygencustomizer.ui.models.SearchPreferenceItem;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
@@ -111,6 +113,14 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             } else if (getIntent().getBooleanExtra("openWeatherSettings", false)) {
                 replaceFragment(new Mods());
                 replaceFragment(new WeatherSettings());
+            } else if (getIntent().hasExtra("launch")) {
+                replaceFragment(new Mods());
+                if (getIntent().getStringExtra("launch").equals("qs_header_options")) {
+                    replaceFragment(new QsHeader());
+                } else if (getIntent().getStringExtra("launch").equals("qs_widget_options")) {
+                    replaceFragment(new QuickSettings());
+                    replaceFragment(new QuickSettingsWidgets());
+                }
             }
         }
 
