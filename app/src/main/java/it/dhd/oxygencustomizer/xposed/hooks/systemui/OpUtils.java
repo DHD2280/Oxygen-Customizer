@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class OpUtils extends XposedMods {
 
@@ -27,6 +28,7 @@ public class OpUtils extends XposedMods {
     public static Class<?> QsColorUtil = null;
     private static Class<?> OpUtils = null;
     private static Class<?> QSFragmentHelper = null;
+    private Context mSysuiAppContext = null;
     private static Object LunarHelper = null;
     private static Class<?> FlavorTwoFeatureOption = null;
 
@@ -134,12 +136,13 @@ public class OpUtils extends XposedMods {
         if (LunarHelperClass != null) {
             if (Build.VERSION.SDK_INT >= 35) {
                 Object LunarHelperCompanion = getStaticObjectField(LunarHelperClass, "Companion");
-                hookAllMethods(LunarHelperCompanion.getClass(), "getInstance", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (LunarHelper == null) LunarHelper = param.getResult();
-                    }
-                });
+                ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper");
+                StatusBarHelper
+                        .beforeConstruction()
+                        .run(param -> {
+                            mSysuiAppContext = (Context) param.args[0];
+                            LunarHelper = callMethod(LunarHelperCompanion, "getInstance", mSysuiAppContext);
+                        });
             } else {
                 hookAllConstructors(LunarHelperClass, new XC_MethodHook() {
                     @Override
