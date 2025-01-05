@@ -149,7 +149,7 @@ public class MemcActivitiesFragment extends Fragment {
                     info.icon,
                     true,
                     -1,
-                    "250-10-0-0");
+                    "258-40-0-0");
             mActivitiesAdapter.setPackageName(info.packageName);
             MaterialAlertDialogBuilder activityDialog = new MaterialAlertDialogBuilder(requireActivity());
             activityDialog.setAdapter(mActivitiesAdapter, (acDialog, whichApp) -> {
