@@ -1,8 +1,7 @@
 package it.dhd.oxygencustomizer.xposed;
 
 import android.content.Context;
-
-import java.util.Arrays;
+import android.util.Log;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -28,7 +27,7 @@ public abstract class XposedMods {
     }
 
     public void log(Throwable throwable) {
-        XposedBridge.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] ERROR:" + throwable + " \n " + throwable.getMessage() + " \n " + Arrays.toString(throwable.getStackTrace()));
+        XposedBridge.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] ERROR:" + " \n " + Log.getStackTraceString(throwable));
         XposedBridge.log(throwable);
     }
 
