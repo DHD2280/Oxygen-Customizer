@@ -30,7 +30,6 @@ public class OpUtils extends XposedMods {
     private static Class<?> QSFragmentHelper = null;
     private Context mSysuiAppContext = null;
     private static Object LunarHelper = null;
-    private static Class<?> FlavorTwoFeatureOption = null;
 
     public OpUtils(Context context) {
         super(context);
@@ -96,15 +95,6 @@ public class OpUtils extends XposedMods {
         }
     }
 
-    public static Object getTwoFeature() {
-        if (FlavorTwoFeatureOption == null) return null;
-        try {
-            return getStaticObjectField(FlavorTwoFeatureOption, "INSTANCE");
-        } catch (Throwable t) {
-            return null;
-        }
-    }
-
     @Override
     public void updatePrefs(String... Key) {
     }
@@ -152,10 +142,6 @@ public class OpUtils extends XposedMods {
                 });
             }
         }
-
-        try {
-            Class<?> FlavorTwoFeatureOptionClass = findClass("com.oplusos.systemui.common.feature.FlavorTwoFeatureOptionClass", lpparam.classLoader);
-        } catch (Throwable ignored) {}
 
     }
 
