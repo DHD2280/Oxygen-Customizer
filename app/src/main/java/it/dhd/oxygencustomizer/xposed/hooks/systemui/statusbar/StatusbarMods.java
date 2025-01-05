@@ -634,7 +634,6 @@ public class StatusbarMods extends XposedMods {
     }
 
     private void openQuickSettings() {
-        log("Opening Quick Settings " + QSExpandMethodName);
         callMethod(NotificationPanelViewController, QSExpandMethodName);
     }
 
