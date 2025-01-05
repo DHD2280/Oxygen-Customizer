@@ -402,7 +402,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Цвет субтитров QS</string>
     <string name="brightness_slider">Ползунок яркости</string>
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
-    <string name="brightness_slider_progress_color_title">Цветовой режим ползунка яркости</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Пользовательский радиус быстрых настроек</string>

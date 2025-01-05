@@ -385,7 +385,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Color de subtítulos de AR</string>
     <string name="brightness_slider">Deslizador de brillo</string>
     <string name="customize_brightness_slider_title">Personalizar deslizador de brillo</string>
-    <string name="brightness_slider_progress_color_title">Modo de color del deslizador de brillo</string>
     <string name="brightness_slider_background_color_title">Personalizar color del fondo</string>
     <!-- QS Tile Radius -->
     <!-- Media Tile -->

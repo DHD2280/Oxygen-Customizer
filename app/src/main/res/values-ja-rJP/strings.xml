@@ -391,7 +391,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">クイック設定の字幕の色</string>
     <string name="brightness_slider">明るさのスライダー</string>
     <string name="customize_brightness_slider_title">明るさのスライダーをカスタマイズ</string>
-    <string name="brightness_slider_progress_color_title">明るさのスライダーのカラーモード</string>
     <string name="brightness_slider_background_color_title">背景色のカスタマイズ</string>
     <!-- QS Tile Radius -->
     <!-- Media Tile -->

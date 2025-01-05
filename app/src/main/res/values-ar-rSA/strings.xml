@@ -401,7 +401,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">لون العنوان الفرعي لـ QS</string>
     <string name="brightness_slider">شريط السطوع</string>
     <string name="customize_brightness_slider_title">تخصيص شريط السطوع</string>
-    <string name="brightness_slider_progress_color_title">نمط لون شريط السطوع</string>
     <string name="brightness_slider_background_color_title">تخصيص لون الخلفية</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">نصف قطر مربعات QS المخصص</string>

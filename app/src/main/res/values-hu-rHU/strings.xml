@@ -402,7 +402,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">A feliratok színe</string>
     <string name="brightness_slider">Fényerőszabályzó-csúszka</string>
     <string name="customize_brightness_slider_title">Beállítható, milyen legyen a fényerőszabályozó-csúszka</string>
-    <string name="brightness_slider_progress_color_title">A működő fényerő-csúszka színe</string>
     <string name="brightness_slider_background_color_title">Módosítható a háttérszín</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Egyéni lekerekítés</string>
