@@ -103,6 +103,21 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="qs_slider_blur_entries">
+        <item>@string/default_value</item>
+        <item>@string/blur_luminosity_color_dodge</item>
+        <item>@string/blur_color_dodge_luminosity</item>
+        <item>@string/blur_overlay_luminosity</item>
+        <item>@string/blur_luminosity_overlay</item>
+    </string-array>
+    <string-array name="qs_slider_blur_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="gesture_holdback_mode_entries">
         <item>@string/gesture_override_back_hold_mode_default</item>
         <item>@string/gesture_override_back_hold_mode_per_side</item>

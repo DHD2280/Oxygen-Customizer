@@ -18,6 +18,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
@@ -84,7 +86,10 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
 
+import java.lang.reflect.InvocationTargetException;
+
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -114,7 +119,7 @@ public class QsTileCustomization extends XposedMods {
     private static final String listenerPackage = Constants.Packages.SYSTEM_UI;
     private final int STATE_ACTIVE = 2;
     private final int STATE_INACTIVE = 1;
-    private Object mPersonalityManager = null;
+    private static Object mPersonalityManager = null;
 
     // Qs Tile Colors
     private int qsInactiveColor, qsActiveColor, qsDisabledColor;
@@ -130,8 +135,17 @@ public class QsTileCustomization extends XposedMods {
     private int qsLabelsColor;
 
     // Brightness Slider
+    private Class<?> ForegroundBlurParam = null;
     private boolean qsBrightnessSliderCustomize, qsBrightnessBackgroundCustomize;
     private int qsBrightnessSliderColorMode, qsBrightnessSliderColor, qsBrightnessBackgroundColor;
+    private final int SLIDER_PROGRESS = 0;
+    private final int SLIDER_BACKGROUND = 1;
+    private boolean sliderRemoveBlur = false;
+    private int sliderBlendColor = -1;
+    private final int BLEND_LUMINOSITY_COLOR_DODGE = 1;
+    private final int BLEND_COLOR_DODGE_LUMINOSITY = 2;
+    private final int BLEND_OVERLAY_LUMINOSITY = 3;
+    private final int BLEND_LUMINOSITY_OVERLAY = 4;
 
     // QS Media Tile
     private ImageView mCoverImg = null;
@@ -199,6 +213,8 @@ public class QsTileCustomization extends XposedMods {
         qsBrightnessSliderColor = Xprefs.getInt(QS_BRIGHTNESS_SLIDER_COLOR, getPrimaryColor(mContext));
         qsBrightnessBackgroundCustomize = Xprefs.getBoolean(QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED, false);
         qsBrightnessBackgroundColor = Xprefs.getInt(QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR, Color.TRANSPARENT);
+        sliderRemoveBlur = Xprefs.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
+        sliderBlendColor = Integer.parseInt(Xprefs.getString(QS_SLIDERS_BLEND_COLOR, "0"));
 
         // Labels
         qsLabelsHide = Xprefs.getBoolean(QS_TILE_HIDE_LABELS, false);
@@ -403,7 +419,7 @@ public class QsTileCustomization extends XposedMods {
         }
 
         if (Build.VERSION.SDK_INT >= 35) {
-            hookSliders(lpparam);
+            hookSliders();
         }
 
         try {
@@ -604,7 +620,10 @@ public class QsTileCustomization extends XposedMods {
         return finalArt;
     }
 
-    private void hookSliders(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookSliders() {
+
+        ForegroundBlurParam = ReflectedClass.of("com.oplus.posteffect.ForegroundBlurParam").getClazz();
+
         ReflectedClass OplusQsVerticalSeekBar = ReflectedClass.of("com.oplus.systemui.qs.base.seek.OplusQsVerticalSeekBar");
 
         // Run on sysui start
@@ -612,34 +631,31 @@ public class QsTileCustomization extends XposedMods {
                 .before("createActiveTrackBlurParams")
                 .run(param -> {
                     if (!qsBrightnessSliderCustomize) return;
-                    param.setResult(
-                            callMethod(
-                                    param.thisObject,
-                                    "createForegroundBlurParams",
-                                    isNeedSeparateDarkThemeColor(mContext),
-                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
-                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext)
-                            )
-                    );
+
+                    Object ForegroundParams = getForegroundBlur(SLIDER_PROGRESS);
+
+                    param.setResult(ForegroundParams);
                 });
 
         OplusQsVerticalSeekBar
                 .before("createInactiveTrackBlurParams")
                 .run(param -> {
                     if (!qsBrightnessBackgroundCustomize) return;
-                    param.setResult(
-                            callMethod(
-                                    param.thisObject,
-                                    "createForegroundBlurParams",
-                                    isNeedSeparateDarkThemeColor(mContext),
-                                    qsBrightnessBackgroundColor,
-                                    qsBrightnessBackgroundColor
-                            )
-                    );
+                    Object ForegroundParams = getForegroundBlur(SLIDER_BACKGROUND);
+
+                    param.setResult(ForegroundParams);
+//                    param.setResult(
+//                            callMethod(
+//                                    param.thisObject,
+//                                    "createForegroundBlurParams",
+//                                    isNeedSeparateDarkThemeColor(mContext),
+//                                    qsBrightnessBackgroundColor,
+//                                    qsBrightnessBackgroundColor
+//                            )
+//                    );
                 });
 
         // now hook when update colors
-//        getTwoFeature
         // public final void drawForegroundBlur(Canvas canvas, Paint paint, ForegroundBlurParam foregroundBlurParam, Path path) {
         OplusQsVerticalSeekBar
                 .before("drawForegroundBlur")
@@ -650,9 +666,8 @@ public class QsTileCustomization extends XposedMods {
 
                     if (foregroundBlurParam == activeTrackParam) { // draw active color
                         // TODO: check if we need to draw active color
-                        if (!qsBrightnessSliderCustomize) return;
                         Object newForeground;
-                        if (qsBrightnessSliderColorMode == 0) {
+                        if (!qsBrightnessSliderCustomize || qsBrightnessSliderColorMode == 0) {
                             newForeground = callMethod(param.thisObject, "createActiveTrackBlurParams");
                             param.args[2] = newForeground;
                         } else {
@@ -679,6 +694,17 @@ public class QsTileCustomization extends XposedMods {
 
                 });
 
+    }
+
+    private int getBlendMode() {
+        if (sliderRemoveBlur) return 0;
+        return switch (sliderBlendColor) {
+            case 0 -> BLEND_LUMINOSITY_COLOR_DODGE;
+            case 1 -> BLEND_COLOR_DODGE_LUMINOSITY;
+            case 2 -> BLEND_OVERLAY_LUMINOSITY;
+            case 3 -> BLEND_LUMINOSITY_OVERLAY;
+            default -> SystemUtils.isDarkMode() ? BLEND_LUMINOSITY_OVERLAY : BLEND_LUMINOSITY_COLOR_DODGE;
+        };
     }
 
     private void setupOtherViews(View parent, int color) {
@@ -781,14 +807,14 @@ public class QsTileCustomization extends XposedMods {
         return listenerPackage.equals(packageName);
     }
 
-    private void notifyQsUpdate() {
+    public static void notifyQsUpdate() {
         if (mPersonalityManager == null) return;
 
         int currentShape = 0;
         try {
             currentShape = (int) callMethod(mPersonalityManager, "getLastShapeType");
         } catch (Throwable t) {
-            log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+            XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
         }
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }
@@ -904,6 +930,21 @@ public class QsTileCustomization extends XposedMods {
                         dp2px(mContext, isHighlight ? highlightBSRadius : tileBSRadius),
                         dp2px(mContext, isHighlight ? highlightBSRadius : tileBSRadius)},
                 null, null);
+    }
+
+    private Object getForegroundBlur(int type) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+
+        return switch (type) {
+            case SLIDER_PROGRESS ->
+                    ForegroundBlurParam.getConstructor(int.class, int.class, int.class)
+                            .newInstance(getBlendMode(),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
+                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext));
+            case SLIDER_BACKGROUND ->
+                    ForegroundBlurParam.getConstructor(int.class, int.class, int.class)
+                            .newInstance(getBlendMode(), qsBrightnessBackgroundColor, qsBrightnessBackgroundColor);
+            default -> null;
+        };
     }
 
 }

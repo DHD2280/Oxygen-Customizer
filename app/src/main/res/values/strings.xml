@@ -431,9 +431,17 @@
     <string name="quick_settings_tiles_customize_labels_subtitle">Customize Subtitle Color</string>
     <string name="quick_settings_tiles_customize_labels_subtitle_color">QS Subtitle Color</string>
     <string name="brightness_slider">Brightness Slider</string>
+    <string name="qs_sliders">QS Sliders</string>
     <string name="customize_brightness_slider_title">Customize Brightness Slider</string>
-    <string name="brightness_slider_progress_color_title">Brightness Slider Color Mode</string>
+    <string name="customize_qs_sliders_title">Customize QS Sliders</string>
+    <string name="brightness_slider_progress_color_title">Slider Color Mode</string>
     <string name="brightness_slider_background_color_title">Customize background color</string>
+    <string name="qs_sliders_remove_blur">Remove Blur</string>
+    <string name="blur_mode">Blur Mode</string>
+    <string name="blur_luminosity_color_dodge">Luminosity - Color Dodge</string>
+    <string name="blur_color_dodge_luminosity">Color Dodge - Luminosity</string>
+    <string name="blur_overlay_luminosity">Overlay - Luminosity</string>
+    <string name="blur_luminosity_overlay">Luminosity - Overlay</string>
 
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Custom QS Tile Radius</string>

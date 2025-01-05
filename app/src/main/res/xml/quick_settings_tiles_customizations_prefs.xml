@@ -275,6 +275,7 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_sliders_cat"
         android:title="@string/brightness_slider"
         app:iconSpaceReserved="false">
 
@@ -316,6 +317,22 @@
             android:title="@string/custom_color"
             app:cpv_showAlphaSlider="true"
             app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_sliders_remove_blur"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_sliders_remove_blur" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/qs_slider_blur_entries"
+            android:entryValues="@array/qs_slider_blur_values"
+            android:key="qs_slider_blend_color"
+            android:title="@string/blur_mode"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 </PreferenceScreen>

@@ -217,6 +217,8 @@ public final class Constants {
             public static final String QS_BRIGHTNESS_SLIDER_COLOR = "brightness_slider_color";
             public static final String QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED = "brightness_slider_background_color_enabled";
             public static final String QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR = "brightness_slider_background_color";
+            public static final String QS_SLIDERS_REMOVE_BLUR = "qs_sliders_remove_blur";
+            public static final String QS_SLIDERS_BLEND_COLOR = "qs_slider_blend_color";
             public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";
             public static final String QS_TILE_ANIMATION_INTERPOLATOR = "qs_tile_animation_interpolator";
             public static final String QS_TILE_ANIMATION_DURATION = "qs_tile_animation_duration";
@@ -250,6 +252,8 @@ public final class Constants {
                     QS_BRIGHTNESS_SLIDER_COLOR,
                     QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED,
                     QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR,
+                    QS_SLIDERS_REMOVE_BLUR,
+                    QS_SLIDERS_BLEND_COLOR,
                     QS_TILE_HIGHTLIGHT_RADIUS,
                     QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT,
                     QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,

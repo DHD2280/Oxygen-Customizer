@@ -132,11 +132,14 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_CUSTOMIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
@@ -184,6 +187,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import it.dhd.oneplusui.preference.OplusPreferenceCategory;
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -405,6 +409,10 @@ public class PreferenceHelper {
             }
             case "brightness_slider_background_color" -> {
                 return instance.mPreferences.getBoolean("brightness_slider_background_color_enabled", false);
+            }
+            case QS_SLIDERS_REMOVE_BLUR,
+                 QS_SLIDERS_BLEND_COLOR -> {
+                return Build.VERSION.SDK_INT >= 35;
             }
             case QS_TILE_ANIMATION_INTERPOLATOR,
                  QS_TILE_ANIMATION_DURATION -> {
@@ -891,7 +899,7 @@ public class PreferenceHelper {
                     !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
             case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED ->
                     !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
-
+            case QS_SLIDERS_BLEND_COLOR-> !instance.mPreferences.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
             // Lockscreen Widgets
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
@@ -1235,6 +1243,17 @@ public class PreferenceHelper {
                         ((OplusSwitchPreference) preference).setChecked(true);
                     }
                 }
+                case "qs_sliders_cat" -> {
+                    if (Build.VERSION.SDK_INT >= 35) {
+                    preference.setTitle(preference.getContext().getString(R.string.qs_sliders));
+                    }
+                }
+                case QS_BRIGHTNESS_SLIDER_CUSTOMIZE -> {
+                    if (Build.VERSION.SDK_INT >= 35) {
+                        preference.setTitle(preference.getContext().getString(R.string.customize_qs_sliders_title));
+                    }
+                }
+
             }
         } catch (Throwable ignored) {
         }
