@@ -392,7 +392,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">標題顏色</string>
     <string name="brightness_slider">亮度滑桿</string>
     <string name="customize_brightness_slider_title">自定義亮度滑桿</string>
-    <string name="brightness_slider_progress_color_title">亮度滑桿顏色模式</string>
     <string name="brightness_slider_background_color_title">自定義背景顏色</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">自定義磁貼半徑</string>

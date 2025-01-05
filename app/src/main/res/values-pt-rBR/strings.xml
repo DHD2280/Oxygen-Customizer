@@ -389,7 +389,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Cor do subtítulo das Configurações Rápidas</string>
     <string name="brightness_slider">Controle de Brilho</string>
     <string name="customize_brightness_slider_title">Personalizar Controle de Brilho</string>
-    <string name="brightness_slider_progress_color_title">Modo de Cor do Controle de Brilho</string>
     <string name="brightness_slider_background_color_title">Personalizar cor de fundo</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Raio do bloco personalizado</string>

@@ -373,7 +373,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">QS Altyazı Rengi</string>
     <string name="brightness_slider">Parlaklık Kaydırıcısı</string>
     <string name="customize_brightness_slider_title">Parlaklık Kaydırıcısını Özelleştir</string>
-    <string name="brightness_slider_progress_color_title">Parlaklık Kaydırıcı Renk Modu</string>
     <string name="brightness_slider_background_color_title">Arka plan rengini özelleştir</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Özel QS Döşeme Yarıçapı</string>

@@ -94,8 +94,10 @@
     <string name="bottom">底部</string>
     <string name="reset">重置</string>
     <string name="lang_follow_system">跟随系统</string>
+    <string name="pick_font_summary">请选择字体文件\n注意:不要从最近文件中选取</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">选择图像</string>
+    <string name="pick_image_summary">点击这里来选择一张图片</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">搜索...</string>
     <string name="searchpreference_clear">清空</string>
@@ -395,7 +397,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">标题颜色</string>
     <string name="brightness_slider">亮度滑块</string>
     <string name="customize_brightness_slider_title">自定义亮度滑块</string>
-    <string name="brightness_slider_progress_color_title">亮度滑块颜色模式</string>
     <string name="brightness_slider_background_color_title">自定义背景颜色</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">自定义磁贴半径</string>
@@ -666,6 +667,7 @@
     <string name="depth_wallpaper_mode_ai">AI</string>
     <string name="depth_wallpaper_mode_custom_images">自定义图像</string>
     <string name="depth_wallpaper_opacity_title">壁纸前景透明度</string>
+    <string name="depth_wallpaper_aod_title">应用至息屏显示</string>
     <string name="depth_wallpaper_pick_background_title">填充背景</string>
     <string name="depth_wallpaper_pick_background_summary">填充你的背景图像</string>
     <string name="depth_wallpaper_pick_subject_title">填充前景</string>
@@ -688,6 +690,7 @@
     <string name="albumart_tint_intensity_title">自定义颜色亮度</string>
     <!-- Depth Effect Alert -->
     <string name="depth_effect_alert_title">注意</string>
+    <string name="depth_effect_alert_body">使用合适的锁屏壁纸时，让锁屏组件不会阻挡壁纸中的主题部分，在保证功能性的前提下提升锁屏美观度\n在启用后，每次设置新锁屏壁纸，AI模型都会自动尝试提取壁纸中的主体元素</string>
     <string name="depth_effect_ok_btn">确定</string>
     <!-- Lockscreen Clock Strings -->
     <string name="lockscreen_clock">锁屏时钟</string>
@@ -705,6 +708,7 @@
     <string name="lockscreen_clock_custom_format_dmessage">有关格式文档，请搜索“Java Date format”</string>
     <string name="lockscreen_clock_custom_user">使用自定义用户名</string>
     <string name="lockscreen_clock_custom_user_title">用户名称</string>
+    <string name="lockscreen_clock_custom_user_summary">自定义用户名\n留空以禁用此功能</string>
     <string name="lockscreen_clock_custom_user_image">使用自定义用户图像</string>
     <string name="lockscreen_clock_custom_user_image_title">用户图像</string>
     <string name="lockscreen_clock_custom_user_image_summary">点击选取图片</string>

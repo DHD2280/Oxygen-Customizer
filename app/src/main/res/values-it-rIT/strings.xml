@@ -403,7 +403,6 @@
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Colore sottotitoli QS</string>
     <string name="brightness_slider">Cursore Luminosità</string>
     <string name="customize_brightness_slider_title">Personalizza Cursore Luminosità</string>
-    <string name="brightness_slider_progress_color_title">Modalità Colore Cursore Luminosità</string>
     <string name="brightness_slider_background_color_title">Personalizza colore sfondo</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
@@ -627,14 +626,17 @@
     <string name="gesture_override_back_hold_command_notification_panel">Apri pannello notifiche</string>
     <string name="gesture_override_back_hold_command_toggle_one_handed">Attiva/disattiva modalità a una mano</string>
     <string name="gesture_override_back_hold_command_screen_off">Schermo Spento</string>
+    <string name="gesture_override_back_hold_command_circle_to_search">Cerchia per cercare</string>
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Pillola barra di navigazione</string>
     <string name="gesture_nav_pill_width_title">Larghezza rispetto alla misura standard</string>
     <string name="colorpill">Pillola colore accento</string>
     <!-- Custom Gestures -->
-    <string name="gesture_nav_extra_cat">Gesti aggiuntivi della barra di navigazione</string>
+    <string name="gesture_nav_extra_cat">Gesti aggiuntivi barra di navigazione</string>
     <string name="gesture_nav_extra_title">Gesti extra</string>
     <string name="gesture_nav_long_swipe_fc_title">Scorri verso l\'alto per chiudere l\'app in primo piano</string>
+    <string name="circle_to_search_title">Cerchia per cercare</string>
+    <string name="circle_to_search_summary">Tocca e tieni premuta la barra guida dei gesti per iniziare a cercare contenuti sullo schermo.</string>
     <string name="gesture_nav_left_swipe_up_title">Scorri verso l\'alto dal lato sinistro della NavBar</string>
     <string name="gesture_nav_right_swipe_up_title">Scorri verso l\'alto dal lato destro della NavBar</string>
     <string name="gesture_nav_left_swipe_up_percent">Larghezza area swipe-up sinistra (%)</string>
@@ -759,6 +761,7 @@
     <!-- Aod Clock -->
     <string name="aod_clock">Orologio AOD</string>
     <string name="aod_clock_switch">Orologio AOD personalizzato</string>
+    <string name="aod_clock_intro_oos15">L\'orologio AOD personalizzato è disponibile solo con lo stile AOD classico.</string>
     <string name="aod_clock_custom">Stile Orologio</string>
     <string name="aod_clock_custom_summary">Scorri per scegliere lo stile che preferisci.</string>
     <string name="aod_clock_font_prefs_title">Carattere</string>
@@ -936,7 +939,7 @@
     <string name="advanced_reboot_title">Riavvio Avanzato</string>
     <string name="advanced_reboot_auth">Autenticazione Riavvio Avanzato</string>
     <string name="advanced_reboot_auth_summary">Autenticarsi per mostrare le opzioni di riavvio avanzato</string>
-    <string name="advanced_reboot_recovery">Ripristino</string>
+    <string name="advanced_reboot_recovery">Recovery</string>
     <string name="advanced_reboot_bootloader">BootLoader</string>
     <string name="advanced_reboot_safe_mode">Modalità provvisoria</string>
     <string name="advanced_reboot_fast_reboot">Riavvio Veloce</string>
@@ -1154,9 +1157,11 @@
     <string name="custom_widgets4">Widget Mini 4</string>
     <string name="widgets_custom_color">Impostazioni colore</string>
     <string name="widgets_custom_color_title">Personalizza colori widget</string>
+    <string name="big_active">Colore attivo Widget Grande</string>
     <string name="big_inactive">Colore inattivo Widget Grande</string>
     <string name="big_icon_active">Colore attivo icona Widget Grande</string>
     <string name="big_icon_inactive">Colore inattivo icona Widget Grande</string>
+    <string name="mini_active">Colore attivo Widget Mini</string>
     <string name="mini_inactive">Colore inattivo Widget Mini</string>
     <string name="mini_icon_active">Colore attivo icona Widget Mini</string>
     <string name="mini_icon_inactive">Colore inattivo icona Widget Mini</string>
