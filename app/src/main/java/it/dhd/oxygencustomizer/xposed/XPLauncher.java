@@ -139,7 +139,7 @@ public class XPLauncher implements ServiceConnection {
                     instance.updatePrefs();
                 } catch (Throwable ignored) {
                 }
-                instance.handleLoadPackage(lpparam);
+                instance.handleLoadPackageInternal(lpparam);
                 runningMods.add(instance);
             } catch (Throwable T) {
                 log("Start Error Dump - Occurred in " + mod.getName());

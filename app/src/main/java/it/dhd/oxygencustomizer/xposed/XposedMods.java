@@ -5,6 +5,7 @@ import android.util.Log;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public abstract class XposedMods {
 
@@ -18,6 +19,11 @@ public abstract class XposedMods {
     public abstract void updatePrefs(String... Key);
 
     public abstract void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable;
+
+    public final void handleLoadPackageInternal(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+        ReflectedClass.setDefaultClassloader(lpParam.classLoader);
+        handleLoadPackage(lpParam);
+    }
 
     public abstract boolean listensTo(String packageName);
 
