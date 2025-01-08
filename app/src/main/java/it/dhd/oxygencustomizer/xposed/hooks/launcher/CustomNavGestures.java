@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Process;
 import android.os.SystemClock;
@@ -270,7 +271,11 @@ public class CustomNavGestures extends XposedMods {
 				try {
 					Object instance = getStaticObjectField(OplusInputInterceptHelper, "INSTANCE");
 					Object result = callMethod(instance, "get");
-					callMethod(result, "forceCancelGesture");
+					if (Build.VERSION.SDK_INT >= 35) {
+						callMethod(result, "forceCancelGesture", true);
+					} else {
+						callMethod(result, "forceCancelGesture");
+					}
 					callMethod(param.thisObject, "finishTouchTracking", e);
 				} catch (Throwable t) {
 					log(t);
