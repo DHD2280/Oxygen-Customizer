@@ -9,6 +9,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
@@ -23,9 +24,12 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils.applyAutoBlurTint;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.QsColorUtil;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getTileActiveColor;
+import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getHighlightRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getLastShape;
+import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getShapeForHighlightTile;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.BT_ACTIVE;
@@ -63,7 +67,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getString;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -80,7 +83,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -98,6 +100,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -464,9 +467,14 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         } catch (Throwable t) {
             mIconInactiveColor = isNightMode() ? ICON_LIGHT_COLOR : ICON_DARK_COLOR;
         }
+
+        String res = "status_bar_qs_tile_icon_color_active";
+        if (Build.VERSION.SDK_INT >= 35 && isNightMode()) {
+            res = "status_bar_qs_tile_icon_color_active_night";
+        }
         mIconActiveColor = ResourcesCompat.getColor(
                 mContext.getResources(),
-                mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active", "color", SYSTEM_UI),
+                mContext.getResources().getIdentifier(res, "color", SYSTEM_UI),
                 appContext.getTheme()
         );
     }
@@ -479,6 +487,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     private void showMediaDialog(View view) {
         if (Build.VERSION.SDK_INT == 33) return;
+
         Object[] mediaQsHelper = getQsMediaDialog();
         if (mediaQsHelper[0] == null || mediaQsHelper[1] == null) return;
         callMethod(mediaQsHelper[1], "showPrompt", mContext, view, mediaQsHelper[0]);
@@ -521,7 +530,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 try {
                     views.add(createGroupView(mContext, group));
                 } catch (Throwable t) {
-                    log(TAG + "setupWidgets: error creating group view: " + t.getMessage());
+                    log(t);
                 }
             }
         }
@@ -721,7 +730,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         fab.setClickable(true);
         fab.setTypeface(null, Typeface.BOLD);
         fab.setGravity(Gravity.CENTER_VERTICAL);
-        fab.setIconSize(dp2px(mContext, 35));
+        fab.setIconSize(dp2px(mContext, Build.VERSION.SDK_INT >= 35 ? 35 : 24)); //OOS15 has bigger iconm
         fab.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int resIdH2 = mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI);
             if (resIdH2 == 0) {
@@ -736,7 +745,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             if (mCustomFabRadius) {
                 fabBackground.setShape(new RoundRectShape(mFabRadius, null, null));
             } else {
-                fabBackground.setShape(getShapeForHighlightTile(mContext));
+                if (Build.VERSION.SDK_INT >= 35) {
+                    float radius = getHighlightRadius(mContext);
+                    float[] rectRadius = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
+                    fabBackground.setShape(new RoundRectShape(rectRadius, null, null));
+                } else {
+                    fabBackground.setShape(getShapeForHighlightTile(mContext));
+                }
             }
             fab.setBackground(fabBackground);
             fab.setLayoutParams(layoutParams2);
@@ -876,7 +891,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         if (mCustomFabRadius) {
             shapeDrawable.setShape(new RoundRectShape(mFabRadius, null, null));
         } else {
-            shapeDrawable.setShape(getShapeForHighlightTile(mContext));
+            if (Build.VERSION.SDK_INT >= 35) {
+                float radius = getHighlightRadius(mContext);
+                float[] rectRadius = new float[]{radius, radius, radius, radius, radius, radius, radius, radius};
+                shapeDrawable.setShape(new RoundRectShape(rectRadius, null, null));
+            } else {
+                shapeDrawable.setShape(getShapeForHighlightTile(mContext));
+            }
         }
         efab.setBackground(shapeDrawable);
         efab.setElevation(0);
@@ -1112,7 +1133,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", finalView));
+        Object expandable;
+        if (Build.VERSION.SDK_INT >= 35) {
+            expandable = callStaticMethod(Expandable, "fromView", view);
+        } else {
+            expandable = null;
+        }
+        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1170,12 +1197,18 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         Object controlsTile = getControlsTile();
         if (controlsTile == null) return;
         View finalView;
+        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        post(() -> callMethod(controlsTile, "handleClick", finalView));
+        if (Build.VERSION.SDK_INT >= 35) {
+            expandable = callStaticMethod(Expandable, "fromView", view);
+        } else {
+            expandable = null;
+        }
+        post(() -> callMethod(controlsTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(1);
     }
 
@@ -1183,12 +1216,18 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         Object WalletTile = getWalletTile();
         if (WalletTile != null) {
             View finalView;
+            Object expandable;
             if (view instanceof ExtendedFAB) {
                 finalView = (View) view.getParent();
             } else {
                 finalView = view;
             }
-            post(() -> callMethod(WalletTile, "handleClick", finalView));
+            if (Build.VERSION.SDK_INT >= 35) {
+                expandable = callStaticMethod(Expandable, "fromView", view);
+            } else {
+                expandable = null;
+            }
+            post(() -> callMethod(WalletTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         } else {
             mActivityLauncherUtils.launchWallet();
         }
@@ -1497,9 +1536,18 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      *
      * @param defBg Default background (obtained from OplusQsMediaTileView)
      */
-    public void updateDefaultMediaBg(Drawable defBg) {
+    public void updateDefaultMediaBg(Drawable defBg, boolean force) {
         if (instance == null) return;
-        mDefaultBackground = defBg;
+        log(TAG + "updateDefaultMediaBg null? " + (defBg == null));
+        if (defBg == null) return;
+        try {
+            mDefaultBackground = defBg.getConstantState().newDrawable().mutate();
+        } catch (Throwable ignored) {
+            mDefaultBackground = defBg.mutate();
+        }
+        if (force) {
+            reloadBackground();
+        }
     }
 
     /**
@@ -1553,18 +1601,28 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      * to ensure all backgrounds are updated
      */
     private void reloadBackground() {
+        XposedBridge.log(TAG + "reloadBackground - mDefaultBackground null? " + (mDefaultBackground == null));
         if (mDefaultBackground == null || mPages.isEmpty()) return;
-        int i = 0;
         for (View v : mPages) {
             if (v.getTag() != null && v.getTag().equals("widgetsContainer")) {
                 v.setBackground(null);
             } else {
-                Drawable back = mDefaultBackground.getConstantState().newDrawable().mutate();
+                Drawable back = mDefaultBackground.getConstantState() != null
+                        ? mDefaultBackground.getConstantState().newDrawable().mutate()
+                        : mDefaultBackground.mutate();
+                if (v instanceof QsMediaTile && v == mMediaPlayer) {
+                    mMediaPlayer.updateDefaultBackground(back);
+                    continue;
+                }
                 if (v instanceof QsWeatherWidget) {
                     if (back instanceof GradientDrawable) {
                         ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
                     } else if (back instanceof ShapeDrawable) {
                         ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
+                    } else if (back.getClass().getName().contains("AutoBlurDrawable")) {
+                        back = new GradientDrawable();
+                        ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
+                        ((GradientDrawable) back).setCornerRadius(getMediaPanelRadius(mContext));
                     }
                 } else {
                     int color = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
@@ -1572,14 +1630,20 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                         ((GradientDrawable) back).setColors(new int[]{color, color});
                     } else if (back instanceof ShapeDrawable) {
                         ((ShapeDrawable) back).getPaint().setColor(color);
+                    } else if (back.getClass().getName().contains("AutoBlurDrawable")) {
+                        // OOS15 AutoBlurDrawable
+                        if (mCustomActive) {
+                            applyAutoBlurTint(mContext, back, color);
+                        }
                     }
                 }
                 back.invalidateSelf();
                 v.setBackground(back);
             }
-            i++;
         }
     }
+
+
 
     /**
      * Update the radius of the photo showcase

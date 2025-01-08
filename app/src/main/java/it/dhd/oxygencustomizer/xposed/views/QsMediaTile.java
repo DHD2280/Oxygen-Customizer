@@ -6,9 +6,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getMediaOutputDialogFactory;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusQsMediaTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getIconLightColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isMediaIconNeedUseLightColor;
+import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,6 +24,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
@@ -34,6 +37,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.palette.graphics.Palette;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
@@ -50,6 +54,7 @@ public class QsMediaTile extends LinearLayout {
     private final String DEFAULT_LABEL = "oplus_qs_media_panel_title_default";
     private final String APP_ICON = "ic_music_note";
     private final String DEVICE_ICON = "status_bar_qs_bt_cellphone_ic";
+    private final String DEVICE_SWITCH_ICON = "status_bar_qs_bt_device_switch";
     private final String PREV_ICON = "ic_oplus_media_panel_action_pre";
     private final String PLAY_ICON = "ic_oplus_media_panel_action_play";
     private final String PAUSE_ICON = "ic_oplus_media_panel_action_pause";
@@ -62,6 +67,7 @@ public class QsMediaTile extends LinearLayout {
 
     private Drawable mAppIconDrawable;
     private Drawable mDeviceIconDrawable;
+    private Drawable mSwitchDeviceIconDrawable;
     private String mDefaultTipText;
     private Drawable mPrevIconDrawable, mPlayIconDrawable, mPauseIconDrawable, mNextIconDrawable;
 
@@ -103,6 +109,7 @@ public class QsMediaTile extends LinearLayout {
 
         mAppIconDrawable = getDrawable(APP_ICON, SYSTEM_UI);
         mDeviceIconDrawable = getDrawable(DEVICE_ICON, SYSTEM_UI);
+        mSwitchDeviceIconDrawable = getDrawable(DEVICE_SWITCH_ICON, SYSTEM_UI);
         mDefaultTipText = getString(DEFAULT_LABEL, SYSTEM_UI);
         mPrevIconDrawable = getDrawable(PREV_ICON, SYSTEM_UI);
         mPlayIconDrawable = getDrawable(PLAY_ICON, SYSTEM_UI);
@@ -156,11 +163,14 @@ public class QsMediaTile extends LinearLayout {
     }
 
     public void bindMediaAction(Object mediaData) {
-
+        if (mediaData == null) {
+            log("QsMediaTile bindMediaAction mediaData is null");
+            return;
+        }
         Object MediaButton = callMethod(mediaData, "getSemanticActions");
-        Object prevOrCustom = callMethod(MediaButton, "getPrevOrCustom");
-        Object playOrPause = callMethod(MediaButton, "getPlayOrPause");
-        Object nextOrCustom = callMethod(MediaButton, "getNextOrCustom");
+        Object prevOrCustom = MediaButton != null ? callMethod(MediaButton, "getPrevOrCustom") : null;
+        Object playOrPause = MediaButton != null ? callMethod(MediaButton, "getPlayOrPause") : null;
+        Object nextOrCustom = MediaButton != null ? callMethod(MediaButton, "getNextOrCustom") : null;
 
         setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
@@ -254,7 +264,7 @@ public class QsMediaTile extends LinearLayout {
             if (MediaDeviceData != null) {
                 mDeviceIcon.setImageDrawable((Drawable) callMethod(MediaDeviceData, "getIcon"));
             } else {
-                mDeviceIcon.setImageDrawable(mDeviceIconDrawable);
+                mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
             }
 
             // Set color filter based on context
@@ -303,7 +313,7 @@ public class QsMediaTile extends LinearLayout {
             mAppIcon.setOnClickListener(null);
             // Device Icon
             mDeviceIcon.setVisibility(VISIBLE);
-            mDeviceIcon.setImageDrawable(getDrawable(DEVICE_ICON, SYSTEM_UI));
+            mDeviceIcon.setImageDrawable(getDrawable(Build.VERSION.SDK_INT >= 35 ? DEVICE_SWITCH_ICON : DEVICE_ICON, SYSTEM_UI));
             setupDeviceIconColor();
 
             mTitle.setText(mDefaultTipText);
@@ -359,7 +369,7 @@ public class QsMediaTile extends LinearLayout {
                 mNext.setImageTintList(mTextColor);
             }
             mAppIcon.setImageDrawable(mAppIconDrawable);
-            mDeviceIcon.setImageDrawable(mDeviceIconDrawable);
+            mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
 
             mTitle.setText(mDefaultTipText);
             mText.setVisibility(GONE);
@@ -408,11 +418,10 @@ public class QsMediaTile extends LinearLayout {
         }
         mArt = getFilteredArt(tempArt);
         float radius = 0f;
-        try {
-            GradientDrawable defBg = (GradientDrawable) mOplusQsMediaDefaultBackground;
-            radius = defBg.getCornerRadius();
-        } catch (Throwable t) {
-            log("Oxygen Customizer - QsMediaTile error: " + t.getMessage());
+        if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
+                radius = gradientDrawable.getCornerRadius();
+        } else if (Build.VERSION.SDK_INT >= 35) {
+            radius = getMediaPanelRadius(mContext);
         }
         Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
         Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
@@ -470,7 +479,10 @@ public class QsMediaTile extends LinearLayout {
 
     private void hideMediaQsBackground() {
         if (qsInactiveColorEnabled) {
-            mOplusQsMediaDrawable.setTint(qsInactiveColor);
+            if (mOplusQsMediaDrawable == null) return;
+            if (Build.VERSION.SDK_INT < 35) {
+                mOplusQsMediaDrawable.setTint(qsInactiveColor);
+            }
             mOplusQsMediaDrawable.invalidateSelf();
             setBackground(mOplusQsMediaDrawable);
         } else {
@@ -505,18 +517,38 @@ public class QsMediaTile extends LinearLayout {
         updateBackground();
     }
 
+    public void updateDefaultBackground(Drawable defDrawable) {
+        XposedBridge.log("QsMediaTile updateDefaultBackground defDrawable != null? " + (defDrawable != null));
+        if (defDrawable == null) return;
+        try {
+            mOplusQsMediaDefaultBackground = defDrawable.getConstantState().newDrawable().mutate();
+        } catch (Throwable ignored) {
+            mOplusQsMediaDefaultBackground = defDrawable.mutate();
+        }
+        try {
+            mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable().mutate();
+        } catch (Throwable ignored) {
+            mOplusQsMediaDrawable = defDrawable.mutate();
+        }
+        updateBackground();
+    }
+
     public void updateColors(Drawable defDrawable, boolean customColor, int color) {
         qsInactiveColorEnabled = customColor;
         qsInactiveColor = color;
-        mOplusQsMediaDefaultBackground = defDrawable;
-        mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable().mutate();
+        updateDefaultBackground(defDrawable);
         updateBackground();
     }
 
     private void showDeviceDialog() {
         try {
-            Object mediaOutput = getMediaOutputDialogFactory();
-            callMethod(mediaOutput, "create", mMediaData != null ? callMethod(mMediaData, "getPackageName") : null, true, ((View) mDeviceIcon), true);
+            if (Build.VERSION.SDK_INT >= 35) {
+                Object OplusQsMediaTile = getOplusQsMediaTile();
+                callMethod(OplusQsMediaTile, "handleClickMediaOutputBtn", mMediaData);
+            } else {
+                Object mediaOutput = getMediaOutputDialogFactory();
+                callMethod(mediaOutput, "create", mMediaData != null ? callMethod(mMediaData, "getPackageName") : null, true, ((View) mDeviceIcon), true);
+            }
         } catch (Throwable t) {
             log("QsMediaTile showDeviceDialog error " + t);
         }
