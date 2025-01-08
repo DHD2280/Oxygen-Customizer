@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.utils;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManager;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerClass;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerEx;
 
@@ -10,6 +11,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.shapes.PathShape;
 import android.graphics.drawable.shapes.Shape;
+import android.util.Log;
+
+import de.robv.android.xposed.XposedBridge;
 
 public class QsTileHelper {
     public static final int TYPE_QS_QUICK_TILE_SIZE = 1;
@@ -90,6 +94,10 @@ public class QsTileHelper {
         return (Shape) callMethod(PersonalityManagerEx, "getShapeForHighlightTile", c);
     }
 
+    public static float getHighlightRadius(Context c) {
+        return (float) callMethod(PersonalityManager, "getHighlightRadius", c);
+    }
+
     public static PathShape getLastShape(Context c) {
         if (PersonalityManagerEx == null) {
             if (PersonalityManagerClass != null) {
@@ -100,6 +108,15 @@ public class QsTileHelper {
             }
         }
         return (PathShape) callMethod(PersonalityManagerEx, "getLastShape", c);
+    }
+
+    public static float getMediaPanelRadius(Context c) {
+        try {
+            return (float) callMethod(PersonalityManager, "getMediaPanelRadius", c);
+        } catch (Throwable t) {
+            XposedBridge.log("Error getting media panel radius: " + Log.getStackTraceString(t));
+            return getShapeRadius(c, -1);
+        }
     }
 
 }

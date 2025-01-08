@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
+import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
@@ -30,18 +30,30 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomization.notifyQsUpdate;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.QsControlsView;
 
 public class QsWidgets extends XposedMods {
@@ -66,6 +78,9 @@ public class QsWidgets extends XposedMods {
     private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
     private float mMediaQsArtBlurAmount = 7.5f;
     private LinearLayout mWidgetsContainer;
+    Object panelInfo;
+
+    private static Object QsMediaPanelViewBackgroundProxy = null;
 
     public QsWidgets(Context context) {
         super(context);
@@ -142,100 +157,301 @@ public class QsWidgets extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        log("Hooking OplusQSTileMediaContainer");
+        ReflectedClass OplusQSTileMediaContainer = ReflectedClass.of(
+                "com.oplus.systemui.qs.OplusQSTileMediaContainer", /* OOS 14-15 */
+                "com.oplusos.systemui.qs.OplusQSContainerImpl" /* OOS 13 */);
 
-        Class<?> OplusQSTileMediaContainer;
-        try {
-            OplusQSTileMediaContainer = findClass("com.oplus.systemui.qs.OplusQSTileMediaContainer", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusQSTileMediaContainer = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); //OOS 13
-        }
-        hookAllConstructors(OplusQSTileMediaContainer, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mQsWidgetsEnabled) return;
-                setBooleanField(param.thisObject, "mIsMediaMode", true);
-            }
-        });
-        hookAllMethods(OplusQSTileMediaContainer, "setMediaMode", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mQsWidgetsEnabled) return;
-                param.args[0] = true;
-            }
-        });
+        OplusQSTileMediaContainer
+                .afterConstruction()
+                        .run(param -> {
+                            if (!mQsWidgetsEnabled) return;
+                            setBooleanField(param.thisObject, "mIsMediaMode", true);
+                        });
+
+        OplusQSTileMediaContainer
+                .before("setMediaMode")
+                        .run(param -> {
+                            if (!mQsWidgetsEnabled) return;
+                            param.args[0] = true;
+                        });
         if (Build.VERSION.SDK_INT == 33) {
-            forceMediaPanelA13(lpparam);
+            forceMediaPanelA13();
         }
 
-        Class<?> QSSecurityFooterUtilsClass;
-        try {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
-        } catch (Throwable t) {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
+        ReflectedClass QSSecurityFooterUtilsClass = ReflectedClass.of(
+                "com.android.systemui.qs.QSSecurityFooterUtils", /* OOS 14-15 */
+                "com.android.systemui.qs.QSSecurityFooter" /* OOS 13 */
+        );
+        QSSecurityFooterUtilsClass
+                .afterConstruction()
+                        .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
+
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        OplusQsMediaPanelView
+                .after("onFinishInflate")
+                .run(param -> {
+                    if (!mQsWidgetsEnabled) return;
+
+                    mOplusQsMediaView = (ViewGroup) param.thisObject;
+                    if (Build.VERSION.SDK_INT >= 35) { // OOS 15
+                        mDefaultMediaBg = getOOS15Background(param.thisObject);
+                    } else { // OOS 13-14
+                        mDefaultMediaBg = mOplusQsMediaView.getBackground();
+                    }
+                    mOplusQsMediaView.setBackground(null);
+                    mOplusQsMediaView.removeAllViews();
+
+                    placeWidgets();
+                });
+
+        if (Build.VERSION.SDK_INT >= 35) {
+
+            OpDrawableUtils.registerBackgroundUpdatedListener(mTileBackgroundListener);
+
+//            OplusQsMediaPanelView
+//                    .after("onAttachedToWindow")
+//                    .run(param -> {
+//                        if (!mQsWidgetsEnabled) return;
+//                        XposedBridge.log("QsWidgets: onAttachedToWindow");
+//                        Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
+//                        Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
+//                        XposedBridge.log("onAttachedToWindow backgroundProxy null? " + (backgroundProxy == null));
+//                        XposedBridge.log("onAttachedToWindow panelInfo null? " + (panelInfo == null));
+//                        Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
+//                        XposedBridge.log("onAttachedToWindow getBackgroundDrawable null? " + (bg == null));
+//                        XposedBridge.log("onAttachedToWindow mDefaultMediaBg == bg? " + bg.equals(mDefaultMediaBg));
+//                        mDefaultMediaBg = bg;
+//                        updateControlsBg(QsControlsView.getInstance(), true);
+//                        View view = (View) callMethod(panelInfo, "getBackgroundView");
+//                        view.postDelayed(() -> view.setBackground(null), 100L);
+//                    });
+//
+            OplusQsMediaPanelView
+                    .after("onShapeChanged")
+                    .run(param -> {
+                        if (!mQsWidgetsEnabled) return;
+                        new Handler().postDelayed(() -> {
+                            XposedBridge.log("QsWidgets: onShapeChanged");
+                            Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
+                            Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
+                            XposedBridge.log("onShapeChanged backgroundProxy null? " + (backgroundProxy == null));
+                            XposedBridge.log("onShapeChanged panelInfo null? " + (panelInfo == null));
+                            Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
+                            XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (bg == null));
+                            Object getBackgroundDrawable = callMethod(param.thisObject, "getBackgroundDrawable");
+                            XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (getBackgroundDrawable == null));
+                            mDefaultMediaBg = bg;
+                            updateControlsBg(QsControlsView.getInstance(), true);
+                            View view = (View) callMethod(panelInfo, "getBackgroundView");
+                            view.postDelayed(() -> view.setBackground(null), 250L);
+                        }, 250L);
+                    });
+
+//            ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
+//            OplusPanelViewPagerController
+//                    .before("loadQSPanelView")
+//                    .run(param -> {
+//                        boolean shouldLoad = (boolean) param.args[0];
+//                        if (!shouldLoad || !mQsWidgetsEnabled) return;
+//                        Object mView = getObjectField(param.thisObject, "mView");
+//                        Object separateQSManager = getObjectField(param.thisObject, "separateQSManager");
+//                        View onCreateQSPanelView = (View) callMethod(separateQSManager, "onCreateQSPanelView", (ViewGroup) mView);
+//                        XposedBridge.log("QsWidgets: onCreateQSPanelView null? " + (onCreateQSPanelView == null));
+//                        Object CentralSurfaces = getObjectField(param.thisObject, "centralSurfaces");
+//                        if (CentralSurfaces != null) {
+//                            callMethod(CentralSurfaces, "initBrightnessMirrorController");
+//                        }
+//                        QsControlsView qsControlsView = QsControlsView.getInstance(mContext);
+//                        try {
+//                            ((ViewGroup) qsControlsView.getParent()).removeView(qsControlsView);
+//                        } catch (Throwable ignored) {
+//                        }
+//                        qsControlsView.setQsView(onCreateQSPanelView);
+////                        qsControlsView.updateWidgets(mQsWidgetsList);
+//                        ((ViewGroup) mView).addView(qsControlsView);
+//
+//                        setObjectField(param.thisObject, "qsPanelView", qsControlsView);
+//
+//                        param.setResult(null);
+//
+//                    });
+                    /*
+                    QsControlsView qsControlsView = QsControlsView.getInstance(mContext);
+            try {
+                ((ViewGroup) qsControlsView.getParent()).removeView(qsControlsView);
+            } catch (Throwable ignored) {
+            }
+                     */
+
+            ReflectedClass QsViewBackgroundProxyCompanion = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy$Companion");
+            QsViewBackgroundProxyCompanion
+                    .after("getMediaPanelBackgroundProxy")
+                    .run(param -> { // the background proxy QsOnePlusStaticBackgroundProxy or QsStaticBackgroundProxy
+                        QsMediaPanelViewBackgroundProxy = param.getResult();
+                        });
+//                        XposedBridge.log("QsWidgets: QsMediaPanelViewBackgroundProxy class: " + QsMediaPanelViewBackgroundProxy.getClass().getName());
+//                        XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy null? " + (QsMediaPanelViewBackgroundProxy == null));
+//                        ReflectedClass.of(QsMediaPanelViewBackgroundProxy.getClass())
+//                                        .afterConstruction()
+//                                                .run(param1 -> {
+//                                                    Object pInfo = getObjectField(param1.thisObject, "panelInfo");
+//                                                    XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy panelInfo null? " + (pInfo == null));
+//                                                    ReflectedClass.of(pInfo.getClass())
+//                                                            .before("updateBackground")
+//                                                            .run(param2 -> {
+//                                                                if (pInfo == param2.thisObject) {
+//                                                                    XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy updateBackground drawable null? " + (param2.args[0] == null));
+//                                                                }
+//                                                            });
+//                                                });
+////                        ReflectedClass.of(QsMediaPanelViewBackgroundProxy.getClass())
+////                                .after("getTargetQsViewBackground")
+////                                .run(param1 -> { // t
+////                                    ReflectedClass.of(param1.getResult().getClass())
+////                                                    .afterConstruction()
+////                                                            .run(param2 -> {
+////                                                                XposedBridge.log(param2.thisObject.getClass().getName() + " afterConstruction");
+////                                                                panelInfo = getObjectField(param2.thisObject, "panelInfo");
+////                                                                ReflectedClass.of(panelInfo.getClass())
+////                                                                        .before("updateBackground")
+////                                                                        .run(param3 -> {
+////                                                                            if (panelInfo == param.thisObject) {
+////                                                                                XposedBridge.log("panelInfo updateBackground drawable null?" + (param3.args[0] == null));
+////                                                                            }
+////                                                                        });
+////                                                            });
+//////                                    ReflectedClass.of(param1.getResult().getClass())
+//////                                            .after("onBackgroundAttach")
+//////                                            .run(param2 -> {
+//////                                                Object panelInfo = getObjectField(param1.thisObject, "panelInfo");
+//////                                                View view = (View) callMethod(panelInfo, "getBackgroundView");
+//////                                                XposedBridge.log("getTargetQsViewBackground background null? " + (view.getBackground() == null));
+//////                                                mDefaultMediaBg = view.getBackground();
+//////                                                updateControlsBg(QsControlsView.getInstance(), true);
+//////                                                view.postDelayed(() -> view.setBackground(null), 100L);
+//////                                            });
+////                                });
+//                    });
+
+//            ReflectedClass QsOnePlusStaticBackgroundProxy = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsOnePlusStaticBackgroundProxy");
+//            ReflectedClass QsStaticBackgroundProxy = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsStaticBackgroundProxy");
+//
+//            XC_MethodHook QsMediaPanelViewBackgroundProxyHook = new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    if (param.thisObject != QsMediaPanelViewBackgroundProxy) return;
+//                    panelInfo = getObjectField(param.thisObject, "panelInfo");
+//                    XposedBridge.log("panelInfo class " + (panelInfo == null ? "null" : panelInfo.getClass().getName()));
+//                    View view = (View) callMethod(panelInfo, "getBackgroundView");
+//                    XposedBridge.log("getTargetQsViewBackground background null? " + (view.getBackground() == null));
+//                    XposedBridge.log("getTargetQsViewBackground view.getBackground() null? " + (view.getBackground() == null));
+//                    mDefaultMediaBg = view.getBackground();
+//                    updateControlsBg(QsControlsView.getInstance(), true);
+//                    view.postDelayed(() -> view.setBackground(null), 250L);
+//                }
+//            };
+//
+//            hookAllMethods(QsOnePlusStaticBackgroundProxy.getClazz(), "getTargetQsViewBackground", QsMediaPanelViewBackgroundProxyHook);
+//            hookAllMethods(QsStaticBackgroundProxy.getClazz(), "getTargetQsViewBackground", QsMediaPanelViewBackgroundProxyHook);
+//
+//            ReflectedClass QsViewInfoProvider = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsViewInfoProvider");
+//            QsViewInfoProvider
+//                    .before("updateBackground")
+//                    .run(param -> {
+//                        XposedBridge.log("QsWidgets: updateBackground " + (param.thisObject == panelInfo));
+//                        if (param.thisObject != panelInfo) return;
+//                        XposedBridge.log("QsWidgets: updateBackground panelInfo is my object");
+//                        XposedBridge.log("QsWidgets: updateBackground drawable null? " + (param.args[0] == null));
+//                    });
+
+//            XC_MethodHook panelInfoHook = new XC_MethodHook() {
+//                @Override
+//                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//                    if (param.thisObject != panelInfo) return;
+//                    XposedBridge.log("QsWidgets: updateBackground panelInfo is my object");
+//                    XposedBridge.log("QsWidgets: updateBackground drawable null? " + (param.args[0] == null));
+//                }
+//            };
+//
+//            hookAllMethods(QsViewInfoProvider.getClazz(), "updateBackground", panelInfoHook);
+
         }
-        hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
-            }
-        });
-
-        Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
-        hookAllMethods(OplusQsMediaPanelView, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mQsWidgetsEnabled) return;
-
-                mOplusQsMediaView = (ViewGroup) param.thisObject;
-                mDefaultMediaBg = mOplusQsMediaView.getBackground();
-                mOplusQsMediaView.setBackground(null);
-                mOplusQsMediaView.removeAllViews();
-
-                placeWidgets();
-            }
-        });
-
 
     }
 
-    private void forceMediaPanelA13(XC_LoadPackage.LoadPackageParam lpparam) {
+    private final OpDrawableUtils.OnBackgroundUpdated mTileBackgroundListener = new OpDrawableUtils.OnBackgroundUpdated() {
+
+        @Override
+        public void onMediaTileBackgroundUpdated(View view, Drawable drawable) {
+            if (!mQsWidgetsEnabled) return;
+            XposedBridge.log("QsWidgets: onMediaTileBackgroundUpdated: " + drawable);
+            mDefaultMediaBg = drawable;
+            updateControlsBg(QsControlsView.getInstance(), true);
+            view.postDelayed(() -> view.setBackground(null), 100L);
+        }
+
+        @Override
+        public void onHighlightTileBackgroundUpdated(Drawable drawable) {
+
+        }
+
+        @Override
+        public void onTileBackgroundUpdated(Drawable drawable) {
+
+        }
+    };
+
+    private Drawable getOOS15Background(Object mediaPanelView) {
+        try {
+            Object backgroundProxy = getObjectField(mediaPanelView, "backgroundProxy");
+            Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
+            XposedBridge.log("getOOS15Background backgroundProxy null? " + (backgroundProxy == null));
+            XposedBridge.log("getOOS15Background panelInfo null? " + (panelInfo == null));
+            Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
+            XposedBridge.log("getOOS15Background getBackgroundDrawable null? " + (bg == null));
+            return bg;
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+        try {
+            return (Drawable) callMethod(mediaPanelView, "getGlobalThemeBackgroundDrawable");
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+        return null;
+    }
+
+    private void forceMediaPanelA13() {
         // Classes
-        Class<?> OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); //1
-        Class<?> OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); //2
-        Class<?> QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
+        ReflectedClass OplusQSFooterImpl = ReflectedClass.of("com.oplusos.systemui.qs.OplusQSFooterImpl"); //1
+        ReflectedClass OplusQSContainerImpl = ReflectedClass.of("com.oplusos.systemui.qs.OplusQSContainerImpl"); //2
+        ReflectedClass QuickStatusBarHeader = ReflectedClass.of("com.android.systemui.qs.QuickStatusBarHeader");
 
         // Hooks
-        XC_MethodHook boolHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mQsWidgetsEnabled) return;
-                try {
-                    setBooleanField(param.thisObject, "mIsMediaMode", true);
-                } catch (Throwable t) {
-                    log("No boolean field mIsMediaMode: " + t.getMessage());
-                }
+        ReflectedClass.ReflectionConsumer boolHook = param -> {
+            if (!mQsWidgetsEnabled) return;
+            try {
+                setBooleanField(param.thisObject, "mIsMediaMode", true);
+            } catch (Throwable t) {
+                log("No boolean field mIsMediaMode: " + t.getMessage());
             }
         };
 
-        XC_MethodHook methodHook = new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mQsWidgetsEnabled) return;
-                param.args[0] = true;
-            }
+        ReflectedClass.ReflectionConsumer methodHook = param -> {
+            if (!mQsWidgetsEnabled) return;
+            param.args[0] = true;
         };
 
         // Constructors
-        hookAllConstructors(OplusQSFooterImpl, boolHook);
-        hookAllConstructors(OplusQSContainerImpl, boolHook);
-        hookAllConstructors(QuickStatusBarHeader, boolHook);
+        OplusQSFooterImpl.afterConstruction().run(boolHook);
+        OplusQSContainerImpl.afterConstruction().run(boolHook);
+        QuickStatusBarHeader.afterConstruction().run(boolHook);
 
         // Methods
-        hookAllMethods(OplusQSContainerImpl, "setQsMediaPanelShown", methodHook);
-        hookAllMethods(OplusQSFooterImpl, "setQsMediaPanelShown", methodHook);
-        hookAllMethods(OplusQSFooterImpl, "setMediaMode", methodHook);
-        hookAllMethods(QuickStatusBarHeader, "setQsMediaPanelShown", methodHook);
+        OplusQSContainerImpl.before("setQsMediaPanelShown").run(methodHook);
+        OplusQSFooterImpl.before("setQsMediaPanelShown").run(methodHook);
+        OplusQSFooterImpl.before("setMediaMode").run(methodHook);
+        QuickStatusBarHeader.before("setQsMediaPanelShown").run(methodHook);
     }
 
     private void placeWidgets() {
@@ -248,14 +464,14 @@ public class QsWidgets extends XposedMods {
             mOplusQsMediaView.addView(qsControlsView, 0);
             qsControlsView.bringToFront();
             qsControlsView.requestLayout();
-            updateControlsBg(qsControlsView);
+            updateControlsBg(qsControlsView, false);
             updateTileColors(false);
             updateTileShapes(false);
             updateWidgets();
             updateMediaPlayerPrefs();
             updatePhotoRadius();
         } catch (Throwable t) {
-            log("Error: " + t.getMessage());
+            log(t);
         }
     }
 
@@ -273,9 +489,9 @@ public class QsWidgets extends XposedMods {
         }
     }
 
-    private void updateControlsBg(QsControlsView qsControlsView) {
+    private void updateControlsBg(QsControlsView qsControlsView, boolean force) {
         if (qsControlsView != null) {
-            qsControlsView.updateDefaultMediaBg(mDefaultMediaBg);
+            qsControlsView.updateDefaultMediaBg(mDefaultMediaBg, force);
         }
     }
 

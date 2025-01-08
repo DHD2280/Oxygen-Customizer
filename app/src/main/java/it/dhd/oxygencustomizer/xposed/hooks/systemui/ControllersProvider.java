@@ -10,7 +10,6 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class ControllersProvider extends XposedMods {
 
@@ -27,6 +27,7 @@ public class ControllersProvider extends XposedMods {
     public static Class<?> LaunchableLinearLayout = null;
     public static Class<?> LaunchableImageView = null;
     public static Object PersonalityManagerEx = null;
+    public static Object PersonalityManager = null;
     public static Class<?> PersonalityManagerClass = null;
     public static Class<?> Expandable = null;
 
@@ -54,6 +55,7 @@ public class ControllersProvider extends XposedMods {
     private Object mQsMediaDialogController = null;
     private Object mMediaOutputDialogFactory = null;
     private Object mCameraGestureHelper = null;
+    private Object mOplusQsMediaTile = null;
     private Class<?> SystemUIDialog = null;
 
     public ControllersProvider(Context context) {
@@ -152,6 +154,10 @@ public class ControllersProvider extends XposedMods {
         return instance.mMediaOutputDialogFactory;
     }
 
+    public static Object getOplusQsMediaTile() {
+        return instance.mOplusQsMediaTile;
+    }
+
     public static Object getControlsTile() {
         return instance.mDeviceControlsTile;
     }
@@ -192,7 +198,7 @@ public class ControllersProvider extends XposedMods {
         try {
             // LaunchableLinearLayout
             // This is the container of our custom views
-            LaunchableLinearLayout = findClass("com.android.systemui.animation.view.LaunchableLinearLayout", lpparam.classLoader);
+            LaunchableLinearLayout = ReflectedClass.of("com.android.systemui.animation.view.LaunchableLinearLayout").getClazz();
         } catch (Throwable t) {
             log("LaunchableLinearLayout not found: " + t.getMessage());
         }
@@ -200,92 +206,71 @@ public class ControllersProvider extends XposedMods {
         try {
             // LaunchableImageView
             // This is an ImageView that can launch dialogs with a GhostView
-            LaunchableImageView = findClass("com.android.systemui.animation.view.LaunchableImageView", lpparam.classLoader);
+            LaunchableImageView = ReflectedClass.of("com.android.systemui.animation.view.LaunchableImageView").getClazz();
         } catch (Throwable t) {
             log("LaunchableImageView not found: " + t.getMessage());
         }
 
         try {
-            Class<?> PersonalityManagerExImpl = findClass("com.android.systemui.qs.personality.PersonalityManagerEx", lpparam.classLoader);
-            hookAllConstructors(PersonalityManagerExImpl, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    PersonalityManagerEx = param.thisObject;
-                }
-            });
-        } catch (Throwable t) {
-            log("PersonalityManagerExImpl not found: " + t.getMessage());
-        }
-
-        try {
-            PersonalityManagerClass = findClass("com.oplusos.systemui.qs.personality.PersonalityManager$Companion", lpparam.classLoader);
+            ReflectedClass OplusPersonalityManager = ReflectedClass.of("com.oplus.systemui.qs.personality.PersonalityManager");
+            OplusPersonalityManager
+                    .afterConstruction()
+                    .run(param -> PersonalityManager = param.thisObject);
         } catch (Throwable t) {
             log("PersonalityManager not found: " + t.getMessage());
         }
 
         try {
-            SystemUIDialog = findClass("com.android.systemui.statusbar.phone.SystemUIDialog", lpparam.classLoader);
+            ReflectedClass PersonalityManagerExImpl = ReflectedClass.of("com.android.systemui.qs.personality.PersonalityManagerEx");
+            PersonalityManagerExImpl
+                    .afterConstruction()
+                    .run(param -> PersonalityManagerEx = param.thisObject);
+        } catch (Throwable t) {
+            log("PersonalityManagerExImpl not found: " + t.getMessage());
+        }
+
+        try {
+            PersonalityManagerClass = ReflectedClass.of("com.oplusos.systemui.qs.personality.PersonalityManager$Companion").getClazz();
+        } catch (Throwable t) {
+            log("PersonalityManager not found: " + t.getMessage());
+        }
+
+        try {
+            SystemUIDialog = ReflectedClass.of("com.android.systemui.statusbar.phone.SystemUIDialog").getClazz();
         } catch (Throwable t) {
             log("SystemUIDialog not found: " + t.getMessage());
         }
 
         try {
-            Expandable = findClass("com.android.systemui.animation.Expandable", lpparam.classLoader);
-        } catch (Throwable ignored) {}
+            Expandable = ReflectedClass.of("com.android.systemui.animation.Expandable").getClazz();
+        } catch (Throwable ignored) {
+        }
 
         // Network Callbacks
-        Class<?> CallbackHandler = findClass("com.android.systemui.statusbar.connectivity.CallbackHandler", lpparam.classLoader);
+        ReflectedClass CallbackHandler = ReflectedClass.of("com.android.systemui.statusbar.connectivity.CallbackHandler");
 
         // Mobile Data
-        hookAllMethods(CallbackHandler, "setMobileDataIndicators", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                onSetMobileDataIndicators(param.args[0]);
-            }
-        });
+        CallbackHandler.after("setMobileDataIndicators").run(param -> onSetMobileDataIndicators(param.args[0]));
 
-        hookAllMethods(CallbackHandler, "setIsAirplaneMode", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //mAirplane = (boolean) param.args[0];
-                onSetIsAirplaneMode(param.args[0]);
-            }
-        });
+        CallbackHandler.after("setIsAirplaneMode").run(param -> onSetIsAirplaneMode(param.args[0]));
 
-        hookAllMethods(CallbackHandler, "setNoSims", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                onSetNoSims((boolean) param.args[0], (boolean) param.args[1]);
-            }
-        });
+        CallbackHandler.after("setNoSims").run(param -> onSetNoSims((boolean) param.args[0], (boolean) param.args[1]));
 
         // WiFi
-        hookAllMethods(CallbackHandler, "setWifiIndicators", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                onWifiChanged(param.args[0]);
-            }
-        });
+        CallbackHandler.after("setWifiIndicators").run(param -> onWifiChanged(param.args[0]));
 
         // CellularTile, OplusCellularTile extends CellularTile
         // Get some controllers from CellularTile
-        Class<?> CellularTile;
         try {
-            CellularTile = findClass("com.oplus.systemui.qs.tiles.CellularTile", lpparam.classLoader);
+            ReflectedClass CellularTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.CellularTile" /* OOS14-15 */,
+                    "com.android.systemui.qs.tiles.CellularTile" /* OOS 13 */);
+            CellularTile.afterConstruction().run(param -> {
+                mCellularTile = param.thisObject;
+                mNetworkController = getObjectField(param.thisObject, "mController");
+                mDataController = getObjectField(param.thisObject, "mDataController");
+                    });
         } catch (Throwable t) {
-            CellularTile = findClass("com.android.systemui.qs.tiles.CellularTile", lpparam.classLoader); // OOS 13
-        }
-        if (CellularTile != null) {
-            hookAllConstructors(CellularTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mCellularTile = param.thisObject;
-                    mNetworkController = getObjectField(param.thisObject, "mController");
-                    mDataController = getObjectField(param.thisObject, "mDataController");
-                }
-            });
-        } else {
-            log("CellularTile not found");
+            log(t);
         }
 
         // Bluetooth Controller
@@ -303,20 +288,11 @@ public class ControllersProvider extends XposedMods {
 
         // Bluetooth Tile - for Bluetooth Dialog
         try {
-            Class<?> OplusBluetoothTile;
-            try {
-                OplusBluetoothTile = findClass("com.oplus.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader);
-            } catch (Throwable t) {
-                OplusBluetoothTile = findClass("com.oplusos.systemui.qs.tiles.OplusBluetoothTile", lpparam.classLoader); // OOS 13
-            }
-            hookAllConstructors(OplusBluetoothTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mOplusBluetoothTile = param.thisObject;
-                }
-            });
+            ReflectedClass OplusBluetoothTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.OplusBluetoothTile" /* OOS14-15 */,
+                    "com.oplusos.systemui.qs.tiles.OplusBluetoothTile" /* OOS 13 */);
+            OplusBluetoothTile.afterConstruction().run(param -> mOplusBluetoothTile = param.thisObject);
         } catch (Throwable t) {
-            log("OplusBluetoothTile not found " + t.getMessage());
+            log(t);
         }
 
         // Stole a Bluetooth Callback from OplusPhoneStatusBarPolicyExImpl
@@ -400,144 +376,118 @@ public class ControllersProvider extends XposedMods {
             log("FlashlightControllerImpl not found " + t.getMessage());
         }
 
+        // QS Media Tile, for Media Dialog OOS15
+        try {
+            ReflectedClass OplusQsMediaTile = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+            OplusQsMediaTile.afterConstruction().run(param -> mOplusQsMediaTile = param.thisObject);
+        } catch (Throwable t) {
+            log("OplusQsMediaTile not found: " + t.getMessage());
+        }
         // QS Media Tile Controller, for Dialog
         try {
-            Class<?> OplusQsMediaPanelViewController = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelViewController", lpparam.classLoader);
-            hookAllMethods(OplusQsMediaPanelViewController, "bindMediaCarouselController", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (param.args.length > 1) mQsDialogLaunchAnimator = param.args[1];
-                    if (param.args[0].getClass().getSimpleName().contains("OplusQsMediaCarouselController")) {
-                        Object oplusQsMediaCarouselController = param.args[0];
-                        if (oplusQsMediaCarouselController != null) {
-                            mMediaOutputDialogFactory = callMethod(oplusQsMediaCarouselController, "getMediaOutputDialogFactory");
-                        }
-                    }
-                }
-            });
-            hookAllMethods(OplusQsMediaPanelViewController, "setQsMediaDialogController", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mQsMediaDialogController = param.args[0];
-                }
-            });
+            ReflectedClass OplusQsMediaTileController = ReflectedClass.of(
+                    "com.oplus.systemui.qs.media.OplusQsMediaPanelViewController" /* OOS15 */,
+                    "com.oplus.systemui.qs.media.OplusQsMediaTileController" /* OOS14 */);
+            if (Build.VERSION.SDK_INT < 35) {
+                OplusQsMediaTileController
+                        .after("bindMediaCarouselController")
+                        .run(param -> {
+                            if (param.args.length > 1) mQsDialogLaunchAnimator = param.args[1];
+                            if (param.args[0].getClass().getSimpleName().contains("OplusQsMediaCarouselController")) {
+                                Object oplusQsMediaCarouselController = param.args[0];
+                                if (oplusQsMediaCarouselController != null) {
+                                    mMediaOutputDialogFactory = callMethod(oplusQsMediaCarouselController, "getMediaOutputDialogFactory");
+                                }
+                            }
+                        });
+            }
+            if (Build.VERSION.SDK_INT >= 35) {
+                OplusQsMediaTileController
+                        .afterConstruction()
+                        .run(param -> {
+                            mQsDialogLaunchAnimator = getObjectField(param.thisObject, "dialogLaunchAnimator");
+                            mQsMediaDialogController = getObjectField(param.thisObject, "qsMediaDialogController");
+                        });
+            } else {
+                OplusQsMediaTileController
+                        .after("setQsMediaDialogController")
+                        .run(param -> mQsMediaDialogController = param.args[0]);
+            }
         } catch (Throwable t) {
             log("OplusQsMediaPanelViewController not found: " + t.getMessage());
         }
 
-        // Home Controls Tile - for ControlsActivity
-        Class<?> OplusDeviceControlsTile;
+        // Home Controls Tile - for ContrlsActivity
         try {
-            OplusDeviceControlsTile = findClass("com.oplus.systemui.qs.tiles.OplusDeviceControlsTile", lpparam.classLoader);
+            ReflectedClass OplusDeviceControlsTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.OplusDeviceControlsTile" /* OOS14-15 */,
+                    "com.oplusos.systemui.qs.tiles.OplusDeviceControlsTile" /* OOS 13 */);
+            OplusDeviceControlsTile.afterConstruction().run(param -> mDeviceControlsTile = param.thisObject);
         } catch (Throwable t) {
-            OplusDeviceControlsTile = findClass("com.android.systemui.qs.tiles.DeviceControlsTile", lpparam.classLoader); // OOS 13
+            log("OplusDeviceControlsTile not found: " + t.getMessage());
         }
-        hookAllConstructors(OplusDeviceControlsTile, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mDeviceControlsTile = param.thisObject;
-            }
-        });
 
         // Calculator Tile - for opening calculator
         try {
-            Class<?> CalculatorTile;
-            try {
-                CalculatorTile = findClass("com.oplus.systemui.qs.tiles.CalculatorTile", lpparam.classLoader);
-            } catch (Throwable t) {
-                CalculatorTile = findClass("com.oplusos.systemui.qs.tiles.CalculatorTile", lpparam.classLoader); // OOS 13
-            }
-            hookAllConstructors(CalculatorTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mCalculatorTile = param.thisObject;
-                }
-            });
+            ReflectedClass CalculatorTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.CalculatorTile" /* OOS14-15 */,
+                    "com.oplusos.systemui.qs.tiles.CalculatorTile" /* OOS 13 */);
+            CalculatorTile.afterConstruction().run(param -> mCalculatorTile = param.thisObject);
         } catch (Throwable t) {
             log("CalculatorTile not found");
         }
 
         // Camera Launcher, so we can launch camera directly
         try {
-            Class<?> CameraGestureHelper = findClass("com.android.systemui.camera.CameraGestureHelper", lpparam.classLoader);
-            hookAllConstructors(CameraGestureHelper, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mCameraGestureHelper = param.thisObject;
-                }
-            });
+            ReflectedClass CameraGestureHelper = ReflectedClass.of("com.android.systemui.camera.CameraGestureHelper");
+            CameraGestureHelper.afterConstruction().run(param -> mCameraGestureHelper = param.thisObject);
         } catch (Throwable t) {
             log("CameraGestureHelper not found " + t.getMessage());
         }
 
         // Wallet Tile - for opening wallet
         try {
-            Class<?> QuickAccessWalletTile = findClass("com.android.systemui.qs.tiles.QuickAccessWalletTile", lpparam.classLoader);
-            hookAllConstructors(QuickAccessWalletTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mWalletTile = param.thisObject;
-                }
-            });
+            ReflectedClass QuickAccessWalletTile = ReflectedClass.of("com.android.systemui.qs.tiles.QuickAccessWalletTile");
+            QuickAccessWalletTile.afterConstruction().run(param -> mWalletTile = param.thisObject);
         } catch (Throwable t) {
             log("QuickAccessWalletTile not found");
         }
 
         // Three State Ringer Mode Tile - for settings Ringer Mode & DND
         try {
-            Class<?> ThreeStageRingerModeTile = findClass("com.oplus.systemui.qs.tiles.ThreeStageRingerModeTile", lpparam.classLoader);
-            hookAllConstructors(ThreeStageRingerModeTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mThreeStateRingerTile = param.thisObject;
-                }
-            });
+            ReflectedClass ThreeStageRingerModeTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.ThreeStageRingerModeTile");
+            ThreeStageRingerModeTile.afterConstruction().run(param -> mThreeStateRingerTile = param.thisObject);
         } catch (Throwable t) {
             log("ThreeStateRingerTile error: " + t.getMessage());
         }
 
         // Hostpost Tile - for settings Hotspot
         try {
-            Class<?> HotspotTile = findClass("com.android.systemui.qs.tiles.HotspotTile", lpparam.classLoader);
-            hookAllConstructors(HotspotTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mHotspotController = getObjectField(param.thisObject, "mHotspotController");
-                }
-            });
+            ReflectedClass HotspotTile = ReflectedClass.of("com.android.systemui.qs.tiles.HotspotTile");
+            HotspotTile
+                    .afterConstruction()
+                    .run(param ->
+                            mHotspotController = getObjectField(param.thisObject, "mHotspotController"));
         } catch (Throwable t) {
             log("OplusHotspotTile error: " + t.getMessage());
         }
 
         try {
-            Class<?> OplusHotspotTile;
-            try {
-                OplusHotspotTile = findClass("com.oplus.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader);
-            } catch (Throwable t) {
-                OplusHotspotTile = findClass("com.oplusos.systemui.qs.tiles.OplusHotspotTile", lpparam.classLoader); // OOS 13
-            }
-            hookAllConstructors(OplusHotspotTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mHotspotTile = param.thisObject;
-                }
-            });
-
+            ReflectedClass OplusHotspotTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.OplusHotspotTile" /* OOS14-15 */,
+                    "com.oplusos.systemui.qs.tiles.OplusHotspotTile" /* OOS 13 */);
+            OplusHotspotTile.afterConstruction().run(param -> mHotspotTile = param.thisObject);
         } catch (Throwable t) {
             log("OplusHotspotTile error: " + t.getMessage());
         }
 
         // Get an Hotspot Callback
         try {
-            Class<?> HotspotControllerImpl = findClass("com.android.systemui.statusbar.policy.HotspotControllerImpl", lpparam.classLoader);
-            hookAllMethods(HotspotControllerImpl, "fireHotspotChangedCallback", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    boolean enabled = (boolean) callMethod(param.thisObject, "isHotspotEnabled");
-                    int devices = getIntField(param.thisObject, "mNumConnectedDevices");
-                    onHotspotChanged(enabled, devices);
-                }
-            });
+            ReflectedClass HotspotControllerImpl = ReflectedClass.of("com.android.systemui.statusbar.policy.HotspotControllerImpl");
+            HotspotControllerImpl
+                    .after("fireHotspotChangedCallback")
+                    .run(param -> {
+                        boolean enabled = (boolean) callMethod(param.thisObject, "isHotspotEnabled");
+                        int devices = getIntField(param.thisObject, "mNumConnectedDevices");
+                        onHotspotChanged(enabled, devices);
+                    });
         } catch (Throwable t) {
             log("HotspotCallback error: " + t.getMessage());
         }
