@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -30,6 +29,8 @@ public class OpUtils extends XposedMods {
     private static Class<?> QSFragmentHelper = null;
     private Context mSysuiAppContext = null;
     private static Object LunarHelper = null;
+    private static Class<?> FlavorTwoFeatureOption = null;
+    private static Object FlavorTwoFeatureOptionObj = null;
 
     public OpUtils(Context context) {
         super(context);
@@ -142,6 +143,11 @@ public class OpUtils extends XposedMods {
                 });
             }
         }
+
+        try {
+            FlavorTwoFeatureOption = ReflectedClass.of("com.oplusos.systemui.common.feature.FlavorTwoFeatureOption").getClazz();
+            FlavorTwoFeatureOptionObj = getStaticObjectField(FlavorTwoFeatureOption, "INSTANCE");
+        } catch (Throwable ignored) {}
 
     }
 

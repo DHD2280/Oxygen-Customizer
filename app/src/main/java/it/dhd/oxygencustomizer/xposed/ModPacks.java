@@ -29,6 +29,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
@@ -106,6 +107,7 @@ public class ModPacks {
 
                     // System Classes We need
                     modPacks.add(OpUtils.class);
+                    modPacks.add(OpDrawableUtils.class);
 
                     // Oplus Feature Enabler
                     modPacks.add(FeatureOption.class);
