@@ -47,9 +47,9 @@ public class LineRenderer extends Renderer {
     private int mFlashColor = Color.RED;
     private int mWaveOpacity = 200;
 
-    public LineRenderer(Context context, Handler handler, PulseView view,
+    public LineRenderer(PulseView view,
                         PulseControllerImpl controller, ColorController colorController) {
-        super(context, handler, view, colorController);
+        super(view, colorController);
         instance = this;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);

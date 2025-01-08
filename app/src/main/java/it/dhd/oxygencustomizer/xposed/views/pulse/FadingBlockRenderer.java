@@ -21,7 +21,6 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -31,8 +30,10 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 
 public class FadingBlockRenderer extends Renderer {
@@ -68,16 +69,15 @@ public class FadingBlockRenderer extends Renderer {
     private boolean mCenterMirrored = false;
     private boolean mVerticalMirror = false;
 
-    public FadingBlockRenderer(Context context, Handler handler, PulseView view,
+    public FadingBlockRenderer(PulseView view,
                                PulseControllerImpl controller, ColorController colorController) {
-        super(context, handler, view, colorController);
+        super(view, colorController);
         instance = this;
         mPaint = new Paint();
         mFadePaint = new Paint();
         mFadePaint.setColor(Color.argb(200, 255, 255, 255));
         mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
         mMatrix = new Matrix();
-        final Resources res = mContext.getResources();
 
         int emptyBlock = 1;
         int customDimen = 14;
@@ -85,14 +85,14 @@ public class FadingBlockRenderer extends Renderer {
         int fudgeFactor = 5;
         int filledBlock = 4;
 
-        mPathEffect1 = getLimitedDimenValue(filledBlock, 4, 8, res);
-        mPathEffect2 = getLimitedDimenValue(emptyBlock, 0, 4, res);
+        mPathEffect1 = getLimitedDimenValue(filledBlock, 4, 8);
+        mPathEffect2 = getLimitedDimenValue(emptyBlock, 0, 4);
         mPaint.setPathEffect(null);
         mPaint.setPathEffect(new android.graphics.DashPathEffect(new float[] {
                 mPathEffect1,
                 mPathEffect2
         }, 0));
-        mPaint.setStrokeWidth(getLimitedDimenValue(customDimen, 1, 30, res));
+        mPaint.setStrokeWidth(getLimitedDimenValue(customDimen, 1, 30));
         mDivisions = validateDivision(numDivision);
         mDbFuzzFactor = Math.max(2, Math.min(6, fudgeFactor));
 
@@ -308,15 +308,14 @@ public class FadingBlockRenderer extends Renderer {
                                boolean centerMirrored,
                                boolean verticalMirror,
                                int gravity) {
-        final Resources res = mContext.getResources();
-        mPathEffect1 = getLimitedDimenValue(filledBlock, 4, 8, res);
-        mPathEffect2 = getLimitedDimenValue(emptyBlock, 0, 4, res);
+        mPathEffect1 = getLimitedDimenValue(filledBlock, 4, 8);
+        mPathEffect2 = getLimitedDimenValue(emptyBlock, 0, 4);
         mPaint.setPathEffect(null);
         mPaint.setPathEffect(new android.graphics.DashPathEffect(new float[] {
                 mPathEffect1,
                 mPathEffect2
         }, 0));
-        mPaint.setStrokeWidth(getLimitedDimenValue(customDimen, 1, 30, res));
+        mPaint.setStrokeWidth(getLimitedDimenValue(customDimen, 1, 30));
         mDivisions = validateDivision(numDivision);
         mDbFuzzFactor = Math.max(2, Math.min(6, fudgeFactor));
         mCenterMirrored = centerMirrored;
@@ -329,9 +328,11 @@ public class FadingBlockRenderer extends Renderer {
     }
 
 
-    private static int getLimitedDimenValue(int val, int min, int max, Resources res) {
+    private static int getLimitedDimenValue(int val, int min, int max) {
+        DisplayMetrics dm = new DisplayMetrics();
+        SystemUtils.WindowManager().getDefaultDisplay().getMetrics(dm);
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                Math.max(min, Math.min(max, val)), res.getDisplayMetrics());
+                Math.max(min, Math.min(max, val)), dm);
     }
 
     private static int validateDivision(int val) {

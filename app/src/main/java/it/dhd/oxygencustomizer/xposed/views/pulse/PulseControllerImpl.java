@@ -9,13 +9,13 @@ import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.session.PlaybackState;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -25,7 +25,7 @@ import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 
 public class PulseControllerImpl {
 
-    public static final boolean DEBUG = BuildConfig.DEBUG;
+    public static final boolean DEBUG = /*BuildConfig.VERSION_NAME.contains("beta") || BuildConfig.VERSION_NAME.contains("nightly") ||*/ BuildConfig.DEBUG;
     @SuppressLint("StaticFieldLeak")
     private static PulseControllerImpl instance = null;
     private final String STREAM_MUTE_CHANGED_ACTION = "android.media.STREAM_MUTE_CHANGED_ACTION";
@@ -42,8 +42,8 @@ public class PulseControllerImpl {
     private final Context mContext;
     private static AudioManager mAudioManager;
     private static Renderer mRenderer;
-    private static VisualizerStreamHandler mStreamHandler;
-    private static ColorController mColorController;
+    private final VisualizerStreamHandler mStreamHandler;
+    private final ColorController mColorController;
     private static PulseView mPulseView;
     private int mPulseStyle;
     private final PowerManager mPowerManager;
@@ -68,7 +68,7 @@ public class PulseControllerImpl {
     private boolean mKeyguardGoingAway;
     private FrameLayout mNavBar = null;
     private FrameLayout mAodRootLayout = null;
-    private Executor mBgHandler = command -> new Handler(Looper.getMainLooper()).post(command);
+    private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -228,11 +228,11 @@ public class PulseControllerImpl {
             Context context) {
         instance = this;
         mContext = context;
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = SystemUtils.AudioManager();
         mMusicStreamMuted = isMusicMuted(AudioManager.STREAM_MUSIC);
-        mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        mPowerManager = SystemUtils.PowerManager();
         mPowerSaveModeEnabled = mPowerManager.isPowerSaveMode();
-        mStreamHandler = new VisualizerStreamHandler(mContext, this, mStreamListener, mBgHandler);
+        mStreamHandler = new VisualizerStreamHandler(mContext, this, mStreamListener, mExecutor);
         mPulseView = new PulseView(context, instance);
         mColorController = new ColorController(mContext);
         loadRenderer();
@@ -344,11 +344,11 @@ public class PulseControllerImpl {
     private Renderer getRenderer() {
         return switch (mPulseStyle) {
             case RENDER_STYLE_CM ->
-                    new SolidLineRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+                    new SolidLineRenderer(mPulseView, instance, mColorController);
             case RENDER_STYLE_LINE ->
-                    new LineRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+                    new LineRenderer(mPulseView, instance, mColorController);
             default ->
-                    new FadingBlockRenderer(mContext, mHandler, mPulseView, instance, mColorController);
+                    new FadingBlockRenderer(mPulseView, instance, mColorController);
         };
     }
 

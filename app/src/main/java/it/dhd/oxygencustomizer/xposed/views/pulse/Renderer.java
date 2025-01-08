@@ -23,16 +23,14 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  *
  */
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Handler;
 import android.view.WindowManager;
 
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 
 public abstract class Renderer implements VisualizerStreamHandler.Listener {
-    protected Context mContext;
-    protected Handler mHandler;
+
     protected PulseView mView;
     protected ColorController mColorController;
     protected boolean mIsValidStream;
@@ -45,12 +43,10 @@ public abstract class Renderer implements VisualizerStreamHandler.Listener {
 
     protected boolean mKeyguardShowing;
 
-    public Renderer(Context context, Handler handler, PulseView view, ColorController colorController) {
-        mContext = context;
-        mHandler = handler;
+    public Renderer(PulseView view, ColorController colorController) {
         mView = view;
         mColorController = colorController;
-        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = SystemUtils.WindowManager();
         mRenderCounter = System.currentTimeMillis();
         mPulseFPS = (int) wm.getDefaultDisplay().getRefreshRate();
         mPulseFPSToMs = 1000 / mPulseFPS;

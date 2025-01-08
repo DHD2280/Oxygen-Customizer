@@ -41,7 +41,6 @@ public class SolidLineRenderer extends Renderer {
     private static final int GRAVITY_BOTTOM = 0;
     private static final int GRAVITY_TOP = 1;
     private static final int GRAVITY_CENTER = 2;
-    @SuppressLint("StaticFieldLeak")
     private static SolidLineRenderer instance = null;
     private Paint mPaint;
     private int mUnitsOpacity;
@@ -64,9 +63,9 @@ public class SolidLineRenderer extends Renderer {
     private boolean mVerticalMirror;
 
 
-    public SolidLineRenderer(Context context, Handler handler, PulseView view,
+    public SolidLineRenderer(PulseView view,
                              PulseControllerImpl controller, ColorController colorController) {
-        super(context, handler, view, colorController);
+        super(view, colorController);
         instance = this;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);

@@ -33,6 +33,7 @@ import android.os.Message;
 import android.util.Log;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 public class VisualizerStreamHandler {
     public interface Listener {
@@ -65,10 +66,10 @@ public class VisualizerStreamHandler {
     protected PulseControllerImpl mController;
     protected Listener mListener;
 
-    private final Executor mUiBgExecutor;
+    private final ExecutorService mUiBgExecutor;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message m) {
             switch (m.what) {
@@ -89,7 +90,7 @@ public class VisualizerStreamHandler {
     };
 
     public VisualizerStreamHandler(Context context, PulseControllerImpl controller,
-                                   VisualizerStreamHandler.Listener listener, Executor backgroundExecutor) {
+                                   VisualizerStreamHandler.Listener listener, ExecutorService backgroundExecutor) {
         Log.d(TAG, "VisualizerStreamHandler()");
         mContext = context;
         mController = controller;
@@ -110,6 +111,7 @@ public class VisualizerStreamHandler {
                 try {
                     mVisualizer = new Visualizer(0);
                 } catch (Exception e) {
+                    Log.e(TAG, "Error creating visualizer", e);
                     return;
                 }
                 mVisualizer.setEnabled(false);
