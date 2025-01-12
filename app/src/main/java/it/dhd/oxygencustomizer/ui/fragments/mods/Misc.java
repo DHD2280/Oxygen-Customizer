@@ -18,6 +18,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import android.os.Build;
 
 import com.canhub.cropper.CropImage;
 import com.canhub.cropper.CropImageOptions;
@@ -102,8 +103,8 @@ public class Misc extends ControlledPreferenceFragmentCompat {
         } else {
             Bundle bundle = new Bundle();
             CropImageOptions options = new CropImageOptions();
-            options.aspectRatioX = 82;
-            options.aspectRatioY = 31;
+            options.aspectRatioX = Build.VERSION.SDK_INT >= 35 ? 164 : 82;
+            options.aspectRatioY = Build.VERSION.SDK_INT >= 35 ? 117 : 31;
             options.fixAspectRatio = true;
             bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options);
             FragmentCropImage fragmentCropImage = new FragmentCropImage();
