@@ -373,8 +373,8 @@ public class StatusbarClock extends XposedMods {
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
                         if (!mShowSeconds) {
                             float totalWidth = measureTextWithSpans();
-                            totalWidth += tv.getPaddingStart();
-                            totalWidth += tv.getPaddingEnd();
+                            totalWidth += mClockView.getPaddingStart();
+                            totalWidth += mClockView.getPaddingEnd();
                             int calculatedMinWidth = (int) totalWidth;
                             if (tv.getMinimumWidth() != calculatedMinWidth) {
                                 tv.setMinimumWidth(calculatedMinWidth);
@@ -555,7 +555,6 @@ public class StatusbarClock extends XposedMods {
         }
         totalWidth += afterClockWidth;
 
-
         return dp2px(mContext, totalWidth);
     }
 
@@ -594,7 +593,7 @@ public class StatusbarClock extends XposedMods {
             case POSITION_LEFT -> {
                 targetArea = mStatusbarStartSide;
                 index = 1;
-                mClockView.setPadding(leftClockPadding, 0, 0, 0);
+                mClockView.setPadding(leftClockPadding, 0, leftClockPadding, 0);
             }
             case POSITION_CENTER -> {
                 targetArea = (ViewGroup) mCenteredIconArea;
@@ -602,7 +601,7 @@ public class StatusbarClock extends XposedMods {
                 setMargins(mCenteredIconArea, mContext, 0, 4, 0, 4);
             }
             case POSITION_RIGHT -> {
-                mClockView.setPadding(0, 0, 0, 0);
+                mClockView.setPadding(rightClockPadding, 0, 0, 0);
                 targetArea = ((ViewGroup) mSystemIconArea.getParent());
             }
         }
@@ -653,7 +652,6 @@ public class StatusbarClock extends XposedMods {
             params.height = MATCH_PARENT;
             mClockView.setLayoutParams(params);
             setMargins(mClockView, mContext, 0, 0, 0, 0);
-            mClockView.setPadding(0, 0, 0, 0);
             switch (mClockPosition) {
                 case POSITION_LEFT -> mClockView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 case POSITION_CENTER -> mClockView.setGravity(Gravity.CENTER);
