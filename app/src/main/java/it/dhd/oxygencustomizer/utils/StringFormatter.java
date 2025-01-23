@@ -5,6 +5,9 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getLunarDate
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.icu.text.DateFormat;
+import android.icu.util.IslamicCalendar;
+import android.icu.util.ULocale;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
@@ -148,6 +151,33 @@ public class StringFormatter {
         }
     }
 
+    private CharSequence islamDateOf(String format) {
+        try {
+            String calendarTag;
+            char type = !format.isEmpty() ? format.charAt(0) : '\0';
+            if (type == 'C') {
+                calendarTag = "islamic-civil";
+                format = format.substring(1);
+            } else if (type == 'U') {
+                calendarTag = "islamic-umalqura";
+                format = format.substring(1);
+            } else {
+                calendarTag = "islamic"; // Default Islamic
+            }
+            IslamicCalendar islamicCalendar = new IslamicCalendar(
+                    new ULocale("@calendar=" + calendarTag).toLocale()
+            );
+            @SuppressLint("SimpleDateFormat")
+            DateFormat dateFormat = new android.icu.text.SimpleDateFormat(format, ULocale.ENGLISH);
+            dateFormat.setCalendar(islamicCalendar);
+            String result = dateFormat.format(islamicCalendar.getTime());
+            hasDate = true;
+            return result;
+        } catch (Exception ignored) {
+            return "$I" + format;
+        }
+    }
+
     private CharSequence lunarDate() {
         try {
             return getLunarDate();
@@ -197,6 +227,7 @@ public class StringFormatter {
     private CharSequence valueOf(String match) {
         return switch (match.substring(0, 1)) {
             case "G" -> georgianDateOf(match.substring(1));
+            case "I" -> islamDateOf(match.substring(1));
             case "P" -> persianDateOf(match.substring(1));
             case "T" -> temperatureOf(match.substring(1));
             case "L" -> lunarDate();
