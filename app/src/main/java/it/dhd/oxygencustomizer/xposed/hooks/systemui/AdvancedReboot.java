@@ -1,22 +1,15 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.BuildConfig.APPLICATION_ID;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,17 +18,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricManager;
 import android.view.MotionEvent;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -49,6 +37,8 @@ public class AdvancedReboot extends XposedMods {
     private int centerX;
     private int centerY;
     private int radius;
+    private Object mNearbyManager = null;
+    private boolean isFinderActive = false;
 
     public AdvancedReboot(Context context) {
         super(context);
@@ -66,6 +56,17 @@ public class AdvancedReboot extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
+        ReflectedClass ShutdownUi = ReflectedClass.of("com.android.systemui.globalactions.ShutdownUi");
+        ShutdownUi
+                .after("getShutdownDialogContent")
+                .run(param -> {
+                    try {
+                        mNearbyManager = getObjectField(param.thisObject, "mNearbyManager");
+                        int powerOffFindingMode = (int) callMethod(mNearbyManager, "getPoweredOffFindingMode");
+                        isFinderActive = !(boolean) param.args[1] && powerOffFindingMode == 2;
+                    } catch (Throwable ignored) {}
+                });
+
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
                 "com.oplusos.systemui.controls.OplusShutdownView" /* OOS13 */);
@@ -76,7 +77,7 @@ public class AdvancedReboot extends XposedMods {
                             if (showAdvancedReboot) {
                                 drawAdvancedReboot((Canvas) param.args[0], param.thisObject);
                             }
-                                });
+                        });
 
         ShutdownView
                 .after("onTouchEvent")
@@ -137,6 +138,9 @@ public class AdvancedReboot extends XposedMods {
 
         centerX = viewWidth / 2;
         centerY = radius + dp2px(mContext, 50);
+        if (isFinderActive) {
+            centerY += dp2px(mContext, 50);
+        }
 
         canvas.drawCircle(centerX, centerY, radius, buttonPaint);
 
@@ -156,7 +160,6 @@ public class AdvancedReboot extends XposedMods {
         String buttonText = modRes.getString(R.string.advanced_reboot_title);
         canvas.drawText(buttonText, textX, textY, textPaint);
     }
-
 
     @Override
     public boolean listensTo(String packageName) {
