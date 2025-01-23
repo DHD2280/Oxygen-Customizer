@@ -47,6 +47,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,6 @@ import androidx.core.content.res.ResourcesCompat;
 import java.io.File;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -72,8 +72,10 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class AodClock extends XposedMods {
 
@@ -157,53 +159,59 @@ public class AodClock extends XposedMods {
 
         LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
 
-        Class<?> AodClockLayout;
-        try {
-            AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            AodClockLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader); //OOS 13
-        }
+        ReflectedClass AodClockLayout = ReflectedClass.of(
+                "com.oplus.systemui.aod.aodclock.off.AodClockLayout", /* OOS 15, 14 */
+                "com.oplusos.systemui.aod.aodclock.off.AodClockLayout" /* OOS 13 */
+        );
 
 
-        hookAllMethods(AodClockLayout, "initForAodApk", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mAodClockEnabled) return;
-                FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
-                for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
-                    log(" mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
-                    if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
-                        for (int j = 0; j < v.getChildCount(); j++) {
-                            mRootLayout = v;
-                            if (v.getChildAt(j) instanceof ViewGroup v2) {
-                                for (int k = 0; k < v2.getChildCount(); k++) {
-                                    v.getChildAt(k).setVisibility(View.GONE);
+        AodClockLayout
+                .after("initForAodApk")
+                        .run(param -> {
+                            if (!mAodClockEnabled) return;
+                            if (!canShowAodClock()) return;
+                            FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
+                            for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
+                                log(" mAodViewFromApk " + mAodViewFromApk.getChildAt(i).getClass().getCanonicalName());
+                                if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
+                                    for (int j = 0; j < v.getChildCount(); j++) {
+                                        mRootLayout = v;
+                                        if (v.getChildAt(j) instanceof ViewGroup v2) {
+                                            for (int k = 0; k < v2.getChildCount(); k++) {
+                                                v.getChildAt(k).setVisibility(View.GONE);
+                                            }
+                                            break;
+                                        }
+                                    }
                                 }
-                                break;
                             }
-                        }
-                    }
-                }
-                log(" initForAodApk");
-                try {
-                    updateClockView();
-                } catch (Throwable t) {
-                    log(t);
-                }
-            }
-        });
-        hookAllMethods(AodClockLayout, "performTimeUpdate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mAodClockEnabled) return;
-                try {
-                    updateClockView();
-                } catch (Throwable t) {
-                    log(t);
-                }
-            }
-        });
+                            try {
+                                updateClockView();
+                            } catch (Throwable t) {
+                                log(t);
+                            }
+                        });
 
+
+        AodClockLayout
+                .after("performTimeUpdate")
+                        .run(param -> {
+                            if (!mAodClockEnabled) return;
+                            if (!canShowAodClock()) return;
+                            try {
+                                updateClockView();
+                            } catch (Throwable t) {
+                                log(t);
+                            }
+                        });
+
+    }
+
+    private boolean canShowAodClock() {
+        if (Build.VERSION.SDK_INT < 35) return true;
+
+        int fullScreenAod = Settings.Secure.getInt(mContext.getContentResolver(), "full_screen_aod", 0);
+        return fullScreenAod == 0;
     }
 
     private void updateClockView() {
@@ -297,6 +305,15 @@ public class AodClock extends XposedMods {
             customImage.post(() -> customImage.setImageDrawable(getCustomImage()));
         }
 
+        mBatteryArcProgress = null;
+        mBatteryStatusView = null;
+        mBatteryLevelView = null;
+        mBatteryProgress = null;
+        mVolumeLevelView = null;
+        mVolumeProgress = null;
+        mVolumeLevelArcProgress = null;
+        mRamUsageArcProgress = null;
+
         switch (mAodClockStyle) {
             case 2 -> {
                 TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
@@ -336,15 +353,6 @@ public class AodClock extends XposedMods {
                 TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
 
                 TimeUtils.setCurrentTimeTextClock(mContext, tickIndicator, hourView, minuteView);
-            }
-            default -> {
-                mBatteryStatusView = null;
-                mBatteryLevelView = null;
-                mVolumeLevelView = null;
-                mBatteryProgress = null;
-                mVolumeProgress = null;
-                mVolumeLevelArcProgress = null;
-                mBatteryArcProgress = null;
             }
         }
     }
@@ -424,6 +432,7 @@ public class AodClock extends XposedMods {
     }
 
     private void initSoundManager() {
+        if (!mAodClockEnabled || (Build.VERSION.SDK_INT >= 35 && !canShowAodClock())) return;
         int volLevel = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         int maxVolLevel = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int volPercent = (int) (((float) volLevel / maxVolLevel) * 100);
@@ -450,6 +459,7 @@ public class AodClock extends XposedMods {
     }
 
     private void initRamUsage() {
+        if (!mAodClockEnabled || (Build.VERSION.SDK_INT >= 35 && !canShowAodClock())) return;
         if (mActivityManager == null) return;
 
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -536,8 +546,8 @@ public class AodClock extends XposedMods {
         } catch (PackageManager.NameNotFoundException ignored) {
         }
 
-        mUserManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mUserManager = SystemUtils.UserManager();
+        mAudioManager = SystemUtils.AudioManager();
         mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         try {
