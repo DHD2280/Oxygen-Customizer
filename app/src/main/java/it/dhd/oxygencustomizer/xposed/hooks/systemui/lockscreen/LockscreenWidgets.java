@@ -31,6 +31,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_STYLE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -38,17 +39,21 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgetsView;
 
 public class LockscreenWidgets extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
+    public static final String OC_WIDGETS_TAG = "oxygencustomizer_lockscreen_widgets";
     private final String TAG = "LockscreenWidgets-->";
 
     private ViewGroup mStatusViewContainer = null;
@@ -192,49 +197,57 @@ public class LockscreenWidgets extends XposedMods {
             }
         }
 
-        Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
+        if (Build.VERSION.SDK_INT >= 35) {
+            placeLockscreenWidgets();
+        } else {
+            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
 
-        hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
-            @SuppressLint("DiscouragedApi")
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
+            hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
+                @SuppressLint("DiscouragedApi")
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
 
-                mStatusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
+                    mStatusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
 
-                placeLockscreenWidgets();
-            }
-        });
+                    placeLockscreenWidgets();
+                }
+            });
+        }
 
     }
 
     private void placeLockscreenWidgets() {
-        if (mWeatherEnabled && !mWeatherInflated) return;
+        if (Build.VERSION.SDK_INT < 35 && mWeatherEnabled && !mWeatherInflated) return;
         try {
             LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance(mContext, mActivityStarter);
-            try {
-                ((ViewGroup) lsWidgets.getParent()).removeView(lsWidgets);
-            } catch (Throwable ignored) {
-            }
-            if (Build.VERSION.SDK_INT == 33) {
-                if (mWidgetsContainer == null) {
-                    mWidgetsContainer = new LinearLayout(mContext);
-                    mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-                    mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
-                }
+            lsWidgets.setTag(OC_WIDGETS_TAG);
+            if (Build.VERSION.SDK_INT < 35) {
                 try {
-                    ((ViewGroup) mWidgetsContainer.getParent()).removeView(mWidgetsContainer);
+                    ((ViewGroup) lsWidgets.getParent()).removeView(lsWidgets);
                 } catch (Throwable ignored) {
                 }
-                mWidgetsContainer.addView(lsWidgets);
-                mStatusViewContainer.addView(mWidgetsContainer, mStatusViewContainer.getChildCount());
-                mWidgetsContainer.bringToFront();
-                mStatusViewContainer.post(() -> {
-                    mStatusViewContainer.bringToFront();
-                    mStatusViewContainer.invalidate();
-                    mStatusViewContainer.requestLayout();
-                });
-            } else {
-                mStatusViewContainer.addView(lsWidgets);
+            }
+            switch (Build.VERSION.SDK_INT) {
+                case 33 -> {
+                    if (mWidgetsContainer == null) {
+                        mWidgetsContainer = new LinearLayout(mContext);
+                        mWidgetsContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                        mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
+                    }
+                    try {
+                        ((ViewGroup) mWidgetsContainer.getParent()).removeView(mWidgetsContainer);
+                    } catch (Throwable ignored) {
+                    }
+                    mWidgetsContainer.addView(lsWidgets);
+                    mStatusViewContainer.addView(mWidgetsContainer, mStatusViewContainer.getChildCount());
+                    mWidgetsContainer.bringToFront();
+                    mStatusViewContainer.post(() -> {
+                        mStatusViewContainer.bringToFront();
+                        mStatusViewContainer.invalidate();
+                        mStatusViewContainer.requestLayout();
+                    });
+                }
+                case 34 -> mStatusViewContainer.addView(lsWidgets);
             }
             updateLockscreenWidgets();
             updateLsDeviceWidget();
@@ -246,8 +259,10 @@ public class LockscreenWidgets extends XposedMods {
 
     private void updateLockscreenWidgets() {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        if (lsWidgets == null) return;
-        lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
+        if (lsWidgets != null) lsWidgets.setOptions(mWidgetsEnabled, mDeviceWidgetEnabled, mMainWidgets, mExtraWidgets);
+
+        LockscreenView lsView = LockscreenView.getInstance();
+        if (lsView != null) lsView.setLockscreenWidgetsEnabled(mWidgetsEnabled);
     }
 
     private void updateLsDeviceWidget() {
@@ -276,6 +291,7 @@ public class LockscreenWidgets extends XposedMods {
 
     private void setActivityStarter() {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
+        XposedBridge.log(TAG + "setActivityStarter lsWidgets null? " + (lsWidgets == null));
         if (lsWidgets == null) return;
         lsWidgets.setActivityStarter(mActivityStarter);
     }

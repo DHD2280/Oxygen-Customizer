@@ -49,6 +49,18 @@ import it.dhd.oxygencustomizer.xposed.ResourceManager;
 
 public class ViewHelper {
 
+    public static void setMarginsNoConvert(Object viewGroup, Context context, int left, int top, int right, int bottom) {
+        if (viewGroup instanceof View) {
+            if (((View) viewGroup).getLayoutParams() instanceof LinearLayout.LayoutParams)
+                ((LinearLayout.LayoutParams) ((View) viewGroup).getLayoutParams()).setMargins(left, top, right, bottom);
+            else if (((View) viewGroup).getLayoutParams() instanceof FrameLayout.LayoutParams)
+                ((FrameLayout.LayoutParams) ((View) viewGroup).getLayoutParams()).setMargins(left, top, right, bottom);
+        } else if (viewGroup instanceof ViewGroup.MarginLayoutParams)
+            ((ViewGroup.MarginLayoutParams) viewGroup).setMargins(left, top, right, bottom);
+        else
+            throw new IllegalArgumentException("The viewGroup object has to be either a View or a ViewGroup.MarginLayoutParams. Found " + viewGroup.getClass().getSimpleName() + " instead.");
+    }
+
     public static void setMargins(Object viewGroup, Context context, int left, int top, int right, int bottom) {
         if (viewGroup instanceof View) {
             if (((View) viewGroup).getLayoutParams() instanceof LinearLayout.LayoutParams)
