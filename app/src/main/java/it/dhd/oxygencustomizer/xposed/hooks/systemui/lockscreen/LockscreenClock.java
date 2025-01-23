@@ -265,8 +265,8 @@ public class LockscreenClock extends XposedMods {
                         mLockscreenView.setKeyguardLockHeight(keyguardLockHeight);
                         int clockHeight = mLockscreenView.getFullHeight();
                         XposedBridge.log("lockIconViewController Height: " + height + " Custom Clock Height: " + clockHeight);
-                        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin), bottomMargin);
-                        param.setResult((int) (height + clockHeight));
+                        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin));
+                        param.setResult((int) (height + clockHeight - dp2px(mContext, bottomMargin)));
                     });
 
             ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
@@ -451,7 +451,7 @@ public class LockscreenClock extends XposedMods {
         clockView.setTag(OC_LOCKSCREEN_CLOCK_TAG);
         modifyClockView(clockView);
         mLockscreenView.setClockView(clockView);
-        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin), bottomMargin);
+        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin));
     }
 
     // Broadcast receiver for updating clock

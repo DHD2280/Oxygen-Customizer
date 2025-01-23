@@ -112,8 +112,8 @@ public class LockscreenView extends FrameLayout {
         mClockContainer.addView(mClockView);
     }
 
-    public void updateClockMargins(int top, int bottom) {
-        setMarginsNoConvert(mClockContainer, mContext, 0, top, 0, dp2px(mContext, bottom));
+    public void updateClockMargins(int top) {
+        setMarginsNoConvert(mClockContainer, mContext, 0, top, 0, 0);
     }
 
     public int getClockHeight() {
