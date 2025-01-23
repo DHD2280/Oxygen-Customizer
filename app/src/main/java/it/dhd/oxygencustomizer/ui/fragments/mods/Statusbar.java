@@ -37,6 +37,7 @@ import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryH;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryI;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryJ;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryK;
+import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryKim;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryL;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryM;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryMIUIPill;
@@ -263,7 +264,8 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                     new LandscapeBatteryO(requireContext(), batteryColor),
                     new CircleBattery(requireContext(), batteryColor),
                     new CircleBattery(requireContext(), batteryColor),
-                    new CircleFilledBattery(requireContext(), batteryColor)
+                    new CircleFilledBattery(requireContext(), batteryColor),
+                    new LandscapeBatteryKim(requireContext(), batteryColor)
             };
 
 
