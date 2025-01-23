@@ -130,6 +130,7 @@ public final class Constants {
             public static final int BATTERY_STYLE_CIRCLE = 35;
             public static final int BATTERY_STYLE_DOTTED_CIRCLE = 36;
             public static final int BATTERY_STYLE_FILLED_CIRCLE = 37;
+            public static final int BATTERY_STYLE_LANDSCAPE_KIM = 38;
 
         }
         public static class QsHeaderImage {

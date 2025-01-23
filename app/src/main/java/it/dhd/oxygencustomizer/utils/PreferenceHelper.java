@@ -57,6 +57,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_KIM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
@@ -840,6 +841,7 @@ public class PreferenceHelper {
 
     public static boolean isVisibleBattery(String key) {
         int batteryStyle = Integer.parseInt(instance.mPreferences.getString("battery_icon_style", String.valueOf(Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CUSTOM_RLANDSCAPE)));
+        boolean isKim = batteryStyle == BATTERY_STYLE_LANDSCAPE_KIM;
 
         boolean showAdvancedCustomizations = batteryStyle >= Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYA &&
                 batteryStyle <= Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYO;
@@ -853,7 +855,7 @@ public class PreferenceHelper {
                 batteryStyle != BATTERY_STYLE_LANDSCAPE_IOS_16 &&
                 batteryStyle != BATTERY_STYLE_LANDSCAPE_BATTERYL &&
                 batteryStyle != BATTERY_STYLE_LANDSCAPE_BATTERYM;
-        boolean showInsidePercentage = showPercentage && !instance.mPreferences.getBoolean(CUSTOM_BATTERY_HIDE_PERCENTAGE, false);
+        boolean showInsidePercentage = showPercentage && !isKim && !instance.mPreferences.getBoolean(CUSTOM_BATTERY_HIDE_PERCENTAGE, false);
         boolean showChargingIconCustomization = instance.mPreferences.getBoolean(CUSTOM_BATTERY_CHARGING_ICON_SWITCH, false);
         boolean circleBattery = batteryStyle == BATTERY_STYLE_CIRCLE ||
                 batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ||
@@ -866,7 +868,8 @@ public class PreferenceHelper {
             case "battery_perimeter_alpha",
                  "battery_fill_alpha",
                  "battery_rotate_layout" -> showAdvancedCustomizations;
-            case "battery_reverse_layout", "battery_inside_percentage" -> showInsidePercentage;
+            case "battery_reverse_layout" -> showAdvancedCustomizations || isKim;
+            case "battery_inside_percentage" -> showInsidePercentage;
             case "battery_rainbow_color" ->
                     (showAdvancedCustomizations || circleBattery) && showRainbowBattery;
             case "battery_blend_color" -> (showAdvancedCustomizations || circleBattery);
