@@ -52,7 +52,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 @SuppressLint("ViewConstructor")
 public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
 
-    static final String TAG = "CurrentWeatherView: ";
+    private static final String TAG = "CurrentWeatherView: ";
 
     private ImageView mCurrentImage, mHumImage, mWindImage;
     private final OmniJawsClient mWeatherClient;
