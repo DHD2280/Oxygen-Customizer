@@ -40,25 +40,34 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/text_color_primary" />
 
-                <TextView
-                    android:id="@+id/desc"
-                    style="@style/TextAppearance.Material3.BodyMedium"
-                    android:layout_width="wrap_content"
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:gravity="start|center"
-                    android:text="@string/string_formatter_manual_body"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/text_color_secondary" />
+                    android:fadeScrollbars="false"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbars="vertical">
+
+                    <TextView
+                        android:id="@+id/desc"
+                        style="@style/TextAppearance.Material3.BodyMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="start|center"
+                        android:text="@string/string_formatter_manual_body"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/text_color_secondary" />
+
+                </androidx.core.widget.NestedScrollView>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/preview_title"
@@ -81,53 +90,53 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/text_color_secondary" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:hint="dd/MM/yy"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:endIconMode="clear_text"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edit_text_layout"
-                android:hint="dd/MM/yy"
-                app:endIconMode="clear_text"
-                android:layout_marginTop="4dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="end"
-            android:gravity="end">
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@android:string/ok"
-                android:id="@+id/apply"
-                style="@style/Widget.Material3.Button.TextButton.Dialog"
-                android:layout_marginEnd="8dp"/>
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@android:string/cancel"
-                android:id="@+id/cancel"
-                style="@style/Widget.Material3.Button.TextButton.Dialog"
-                android:layout_marginEnd="8dp"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/apply"
+                    style="@style/Widget.Material3.Button.TextButton.Dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@android:string/ok" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="@style/Widget.Material3.Button.TextButton.Dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@android:string/cancel" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
