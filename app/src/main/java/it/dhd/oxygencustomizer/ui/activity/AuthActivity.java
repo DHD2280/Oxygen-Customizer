@@ -124,7 +124,7 @@ public class AuthActivity extends AppCompatActivity {
                 case 0 -> "reboot recovery";
                 case 1 -> "reboot bootloader";
                 case 2 -> "reboot safemode";
-                case 3 -> "killall zygote";
+                case 3 -> "killall zygote && killall zygote64";
                 case 4 -> "killall " + SYSTEM_UI;
                 default -> "";
             };
@@ -132,6 +132,7 @@ public class AuthActivity extends AppCompatActivity {
                 Shell.cmd(cmd).exec();
             } catch (Exception ignored) {
             }
+            finishAndRemoveTask();
         });
         builder.setOnCancelListener(dialog -> finishAndRemoveTask());
         builder.show();
