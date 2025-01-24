@@ -136,11 +136,9 @@ public class AodDepthSubject extends XposedMods {
         hookAllMethods(AodRecord, "onDreamingStarted", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if ((!mLayersCreated) ||
-                        (mDepthWallpaper && !mDepthOnAod) ||
-                        (!mDepthWallpaper && mDepthOnAod)) {
-                    return;
-                }
+                if (!mDepthWallpaper) return;
+                if (!mDepthOnAod) return;
+                if (!mLayersCreated) return;
                 log("onDreamingStarted");
                 animateView(true);
                 startMoving();
@@ -150,11 +148,9 @@ public class AodDepthSubject extends XposedMods {
         hookAllMethods(AodRecord, "onDreamingStopped", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if ((!mLayersCreated) ||
-                        (mDepthWallpaper && !mDepthOnAod) ||
-                        (!mDepthWallpaper && mDepthOnAod)) {
-                    return;
-                }
+                if (!mDepthWallpaper) return;
+                if (!mDepthOnAod) return;
+                if (!mLayersCreated) return;
                 log("onDreamingStopped");
                 animateView(false);
                 stopMoving();
