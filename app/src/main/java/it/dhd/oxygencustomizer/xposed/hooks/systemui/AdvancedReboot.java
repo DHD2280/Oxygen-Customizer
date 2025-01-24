@@ -56,16 +56,19 @@ public class AdvancedReboot extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        ReflectedClass ShutdownUi = ReflectedClass.of("com.android.systemui.globalactions.ShutdownUi");
-        ShutdownUi
-                .after("getShutdownDialogContent")
-                .run(param -> {
-                    try {
-                        mNearbyManager = getObjectField(param.thisObject, "mNearbyManager");
-                        int powerOffFindingMode = (int) callMethod(mNearbyManager, "getPoweredOffFindingMode");
-                        isFinderActive = !(boolean) param.args[1] && powerOffFindingMode == 2;
-                    } catch (Throwable ignored) {}
-                });
+        try {
+            ReflectedClass ShutdownUi = ReflectedClass.of("com.android.systemui.globalactions.ShutdownUi");
+            ShutdownUi
+                    .after("getShutdownDialogContent")
+                    .run(param -> {
+                        try {
+                            mNearbyManager = getObjectField(param.thisObject, "mNearbyManager");
+                            int powerOffFindingMode = (int) callMethod(mNearbyManager, "getPoweredOffFindingMode");
+                            isFinderActive = !(boolean) param.args[1] && powerOffFindingMode == 2;
+                        } catch (Throwable ignored) {
+                        }
+                    });
+        } catch (Throwable ignored) {}
 
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
