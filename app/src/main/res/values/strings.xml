@@ -221,7 +221,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Custom java format</string>
-    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P\&lt;format\&gt; : Persian date, based on format*\n$L for Lunar Date\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
+    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P\&lt;format\&gt; : Persian date, based on format*\n$L for Lunar Date\n$I\&lt;calendar\&gt;&lt;format\&gt; : Islamic calendar. Calendar is optional, default is islamic, you can also use C for Islamic-Civil and U for Islamic Umalqura.\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
     <string name="preview">Preview</string>
     <string name="clock_date_position">Date position</string>
     <string name="clock_date_right">Right of time</string>
