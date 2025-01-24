@@ -40,6 +40,7 @@ public class LockscreenView extends FrameLayout {
     private CurrentWeatherView mWeatherView;
     private LockscreenWidgetsView mWidgetsView;
     private AnimatorSet currentAnimationSet;
+    private float mClockScale = 1f;
 
     private boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
 
@@ -120,6 +121,10 @@ public class LockscreenView extends FrameLayout {
         return mClockContainer.getHeight();
     }
 
+    public void setClockScale(float scale) {
+        mClockScale = scale;
+    }
+
     public void setAodStuff(int aodUiDeBurninY, int stockClockHeight) {
         mAodUiDeBurninY = aodUiDeBurninY;
         mStockClockHeight = stockClockHeight;
@@ -179,7 +184,13 @@ public class LockscreenView extends FrameLayout {
         int measuredHeight = mClockContainer.getMeasuredHeight();
 
         int originalHeight = mClockContainer.getHeight();
-        float scaledHeight = originalHeight * 0.8f;
+        float baseScaleY = 0.8f;
+        float dynamicScaleY = baseScaleY / mClockScale;
+        float scaled = originalHeight * mClockScale;
+        float heightDifference = originalHeight - scaled;
+//        if (scaled < originalHeight) {
+//            heightDifference = 0;
+//        }
 
         float desiredBottomY = (mAodUiDeBurninY + mStockClockHeight);
         float deltaY = desiredBottomY - (mStockClockHeight + originalHeight);
@@ -191,8 +202,8 @@ public class LockscreenView extends FrameLayout {
         ObjectAnimator translationY = ObjectAnimator.ofFloat(this, "translationY", this.getTranslationY() + deltaY);
 
         // Scale View
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 0.8f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 0.8f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", dynamicScaleY);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", dynamicScaleY);
 
         currentAnimationSet = new AnimatorSet();
         List<Animator> animations = new ArrayList<>();
