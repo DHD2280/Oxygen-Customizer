@@ -317,7 +317,7 @@ public class AodClock extends XposedMods {
         switch (mAodClockStyle) {
             case 2 -> {
                 TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
-                tickIndicator.setVisibility(View.GONE);
+                tickIndicator.setTextColor(Color.TRANSPARENT);
                 TextView hourView = (TextView) findViewWithTag(clockView, "hours");
                 TimeUtils.setCurrentTimeTextClockRed(tickIndicator, hourView, mCustomColor ? accent1 : getPrimaryColor(mContext));
             }
