@@ -632,7 +632,7 @@ public class LockscreenClock extends XposedMods {
         switch (lockscreenClockStyle) {
             case 2 -> {
                 TextClock tickIndicator = (TextClock) findViewWithTag(clockView, "tickIndicator");
-                tickIndicator.setVisibility(View.GONE);
+                tickIndicator.setTextColor(Color.TRANSPARENT);
                 TextView hourView = (TextView) findViewWithTag(clockView, "hours");
                 hourView.setVisibility(View.VISIBLE);
                 TimeUtils.setCurrentTimeTextClockRed(tickIndicator, hourView, customColor ? accent1 : getPrimaryColor(mContext));
