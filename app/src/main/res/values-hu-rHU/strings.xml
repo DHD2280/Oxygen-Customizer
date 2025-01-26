@@ -401,8 +401,17 @@
     <string name="quick_settings_tiles_customize_labels_subtitle">Beállítható, hogy milyen színűek a feliratok</string>
     <string name="quick_settings_tiles_customize_labels_subtitle_color">A feliratok színe</string>
     <string name="brightness_slider">Fényerőszabályzó-csúszka</string>
+    <string name="qs_sliders">A Gyorsbeállítások csúszkái</string>
     <string name="customize_brightness_slider_title">Beállítható, milyen legyen a fényerőszabályozó-csúszka</string>
+    <string name="customize_qs_sliders_title">Testreszabhatja a csúszkákat</string>
+    <string name="brightness_slider_progress_color_title">A csúszka színmódja</string>
     <string name="brightness_slider_background_color_title">Módosítható a háttérszín</string>
+    <string name="qs_sliders_remove_blur">Homályosítás eltávolítása</string>
+    <string name="blur_mode">A homáléyosítás módja</string>
+    <string name="blur_luminosity_color_dodge">Fényerő - Színkeverés</string>
+    <string name="blur_color_dodge_luminosity">Színkeverés - Fényerő</string>
+    <string name="blur_overlay_luminosity">Fedőrétegezés - Fényerő</string>
+    <string name="blur_luminosity_overlay">Fényerő - Fedőrétegezés</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Egyéni lekerekítés</string>
     <string name="qs_tile_custom_highlight">Egyedi lekerekítés</string>
@@ -625,6 +634,7 @@
     <string name="gesture_override_back_hold_command_notification_panel">Az Értesítési panel megnyitása</string>
     <string name="gesture_override_back_hold_command_toggle_one_handed">Egykezes mód be / ki</string>
     <string name="gesture_override_back_hold_command_screen_off">Kijelző kikapcsolása</string>
+    <string name="gesture_override_back_hold_command_circle_to_search">Keresés a Körrel</string>
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Kapszula navigációs-sáv</string>
     <string name="gesture_nav_pill_width_title">Szélesség a szabványos mérethez</string>
@@ -633,6 +643,8 @@
     <string name="gesture_nav_extra_cat">Különleges navigációs-sáv vezérlések</string>
     <string name="gesture_nav_extra_title">Különleges vezérlők</string>
     <string name="gesture_nav_long_swipe_fc_title">Felül csúsztató mozdulattal az előtérben lévő alkalmazás leállításához</string>
+    <string name="circle_to_search_title">Keresés nyomvatartással</string>
+    <string name="circle_to_search_summary">Tartsa lenyomva a kézmozdulat-vezetősávot a tartalom keresésének megkezdéséhez.</string>
     <string name="gesture_nav_left_swipe_up_title">A sáv bal oldaláról felfelé csúsztatás művelete</string>
     <string name="gesture_nav_right_swipe_up_title">A sáv jobb oldaláról felfelé csúsztatás művelete</string>
     <string name="gesture_nav_left_swipe_up_percent">A bal felfelé csúsztatási terület szélessége (%)</string>
@@ -757,6 +769,7 @@
     <!-- Aod Clock -->
     <string name="aod_clock">Óra az AOD-hoz</string>
     <string name="aod_clock_switch">Egyéni AOD-Óra</string>
+    <string name="aod_clock_intro_oos15">Az egyéni \'Mindig bekapcsolva\' órája csak klasszikus \'Mindig bekapcsolva\"-stílusban érhető el.</string>
     <string name="aod_clock_custom">Az óra stílusa</string>
     <string name="aod_clock_custom_summary">Csúsztassa az ujját arra a stílusra amit szeretne.</string>
     <string name="aod_clock_font_prefs_title">Betűtípus</string>
