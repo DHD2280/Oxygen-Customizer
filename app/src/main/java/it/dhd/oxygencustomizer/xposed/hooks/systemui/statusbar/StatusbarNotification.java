@@ -1,11 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_ALL_BUTTON_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
@@ -19,16 +14,15 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.Collection;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class StatusbarNotification extends XposedMods {
 
@@ -82,139 +76,107 @@ public class StatusbarNotification extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
-        Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
 
-        hookAllConstructors(CollapsedStatusBarFragmentClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCollapsedStatusBarFragment = param.thisObject;
-            }
-        });
+        if (CollapsedStatusBarFragmentClass.getClazz() != null) {
+            CollapsedStatusBarFragmentClass
+                    .afterConstruction()
+                    .run(param -> mCollapsedStatusBarFragment = param.thisObject);
 
-        findAndHookMethod(CollapsedStatusBarFragmentClass,
-                "onViewCreated", View.class, Bundle.class, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        mStatusBar = (View) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-                    }
-                });
-
-        //Class<?> OplusGutsContent = findClass("com.oplus.systemui.statusbar.notification.row.OpNotificationGuts.OplusGutsContent", lpparam.classLoader);
-        //Class<?> NotificationMenuRowExtImpl = findClass("com.oplus.systemui.statusbar.notification.row.NotificationMenuRowExtImpl", lpparam.classLoader);
-
-        Class<?> OplusPowerNotificationWarnings;
-        try {
-            OplusPowerNotificationWarnings = findClass("com.oplus.systemui.statusbar.notification.power.OplusPowerNotificationWarnings", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusPowerNotificationWarnings = findClass("com.oplusos.systemui.notification.power.OplusPowerNotificationWarnings", lpparam.classLoader); // OOS 13
+            CollapsedStatusBarFragmentClass
+                    .after("onViewCreated")
+                    .run(param -> mStatusBar = (View) getObjectField(mCollapsedStatusBarFragment, "mStatusBar"));
+            
         }
-        findAndHookMethod(OplusPowerNotificationWarnings, "showChargeErrorDialog",
-                int.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (removeChargingCompleteNotification && (int) param.args[0] == 7) {
-                            param.setResult(null);
-                        }
-                    }
-                });
 
-        findAndHookMethod(OplusPowerNotificationWarnings, "showLowBatteryDialog",
-                Context.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (removeLowBattery) param.setResult(null);
-                    }
-                });
+        //ReflectedClass OplusGutsContent = ReflectedClass.of("com.oplus.systemui.statusbar.notification.row.OpNotificationGuts.OplusGutsContent");
+        //ReflectedClass NotificationMenuRowExtImpl = ReflectedClass.of("com.oplus.systemui.statusbar.notification.row.NotificationMenuRowExtImpl");
 
-        Class<?> FlashlightNotification;
-        try {
-            FlashlightNotification = findClass("com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", lpparam.classLoader);
-        } catch (Throwable t) {
-            FlashlightNotification = findClass("com.oplusos.systemui.flashlight.FlashlightNotification", lpparam.classLoader); // OOS 13
-        }
-        findAndHookMethod(FlashlightNotification, "sendNotification",
-                boolean.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (removeFlashlightNotification) param.setResult(null);
-                    }
-                });
+        ReflectedClass OplusPowerNotificationWarnings = ReflectedClass.of(
+                "com.oplus.systemui.statusbar.notification.power.OplusPowerNotificationWarnings", /* OOS 15-14 */
+                "com.oplusos.systemui.notification.power.OplusPowerNotificationWarnings" /* OOS 13 */
+        );
+        OplusPowerNotificationWarnings
+                .before("showChargeErrorDialog")
+                        .run(param -> {
+                            if (removeChargingCompleteNotification && (int) param.args[0] == 7) {
+                                param.setResult(null);
+                            }
+                        });
 
-        Class<?> SystemPromptController;
-        try {
-            SystemPromptController = findClass("com.oplus.systemui.statusbar.controller.SystemPromptController", lpparam.classLoader);
-        } catch (Throwable t) {
-            SystemPromptController = findClass("com.oplusos.systemui.statusbar.policy.SystemPromptController", lpparam.classLoader); // OOS 13
-        }
-        findAndHookMethod(SystemPromptController, "updateDeveloperMode", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (removeDevMode) param.setResult(null);
-            }
-        });
+        OplusPowerNotificationWarnings
+                .before("showLowBatteryDialog")
+                        .run(param -> {
+                            if (removeLowBattery) param.setResult(null);
+                        });
 
-        Class<?> NotificationStackScrollLayoutClass = findClass("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout", lpparam.classLoader);
-        Class<?> NotifCollectionClass = findClassIfExists("com.android.systemui.statusbar.notification.collection.NotifCollection", lpparam.classLoader);
-        Class<?> NotificationPanelViewControllerClass;
-        try {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
-        } catch (Throwable e) {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
-        }
+        ReflectedClass FlashlightNotification = ReflectedClass.of(
+                "com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", /* OOS 15-14 */
+                "com.oplusos.systemui.flashlight.FlashlightNotification" /* OOS 13 */
+        );
+        FlashlightNotification
+                .before("sendNotification")
+                        .run(param -> {
+                            if (removeFlashlightNotification) param.setResult(null);
+                        });
+
+        ReflectedClass SystemPromptController = ReflectedClass.of(
+                "com.oplus.systemui.statusbar.controller.SystemPromptController", /* OOS 15-14 */
+                "com.oplusos.systemui.statusbar.policy.SystemPromptController" /* OOS 13 */
+        );
+        SystemPromptController
+                .before("updateDeveloperMode")
+                        .run(param -> {
+                            if (removeDevMode) param.setResult(null);
+                        });
+
+        ReflectedClass NotificationStackScrollLayoutClass = ReflectedClass.of("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout");
+        ReflectedClass NotifCollectionClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.notification.collection.NotifCollection");
+        ReflectedClass NotificationPanelViewControllerClass = ReflectedClass.of(
+                "com.android.systemui.shade.NotificationPanelViewController", /* OOS 15-14 */
+                "com.android.systemui.statusbar.phone.NotificationPanelViewController" /* OOS 13 */
+        );
 
         //region default notification state
-        hookAllMethods(NotificationPanelViewControllerClass, "notifyExpandingStarted", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-                if (notificationDefaultExpansion != DEFAULT)
-                    expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
-            }
-        });
+        NotificationPanelViewControllerClass
+                .before("notifyExpandingStarted")
+                        .run(param -> {
+                            if (notificationDefaultExpansion != DEFAULT) expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
+                        });
         //endregion
 
         //grab notification container manager
-        if (NotifCollectionClass != null) {
-            hookAllConstructors(NotifCollectionClass, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    NotifCollection = param.thisObject;
-                }
-            });
+        if (NotifCollectionClass.getClazz() != null) {
+            NotifCollectionClass.afterConstruction().run(param -> NotifCollection = param.thisObject);
         }
 
         //grab notification scroll page
-        hookAllConstructors(NotificationStackScrollLayoutClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Scroller = param.thisObject;
-            }
-        });
+        NotificationStackScrollLayoutClass
+                .afterConstruction()
+                .run(param -> Scroller = param.thisObject);
 
-        Class<?> OplusClearAllButton;
-        try {
-            OplusClearAllButton = findClass("com.oplus.systemui.statusbar.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 14
-        } catch (Throwable t) {
-            OplusClearAllButton = findClass("com.oplusos.systemui.notification.view.OplusClearAllButton", lpparam.classLoader); // OOS 13
-        }
+        ReflectedClass OplusClearAllButton = ReflectedClass.of(
+                "com.oplus.systemui.statusbar.notification.view.OplusClearAllButton", /* OOS 15-14 */
+                "com.oplusos.systemui.notification.view.OplusClearAllButton" // OOS 13
+        );
 
         final View.OnLayoutChangeListener listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (v.getVisibility() == View.VISIBLE) updateButton();
         };
 
-        hookAllConstructors(OplusClearAllButton, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mClearAllButton = (ImageView) param.thisObject;
-                if (defaultClearAllIcon == null && mClearAllButton != null) {
-                    defaultClearAllIcon = mClearAllButton.getDrawable();
-                }
-                if (defaultClearAllBg == null && mClearAllButton != null) {
-                    defaultClearAllBg = mClearAllButton.getBackground();
-                }
-                updateButton();
-                mClearAllButton.addOnLayoutChangeListener(listener);
-            }
-        });
+        OplusClearAllButton
+                .afterConstruction()
+                        .run(param -> {
+                            mClearAllButton = (ImageView) param.thisObject;
+                            if (defaultClearAllIcon == null && mClearAllButton != null) {
+                                defaultClearAllIcon = mClearAllButton.getDrawable();
+                            }
+                            if (defaultClearAllBg == null && mClearAllButton != null) {
+                                defaultClearAllBg = mClearAllButton.getBackground();
+                            }
+                            updateButton();
+                            mClearAllButton.addOnLayoutChangeListener(listener);
+                        });
     }
 
     public void expandAll(boolean expand) {
@@ -224,7 +186,7 @@ public class StatusbarNotification extends XposedMods {
             callMethod(
                     Scroller,
                     "setOwnScrollY",
-                    /* pisition */0,
+                    /* position */0,
                     /* animate */ true);
         }
 
