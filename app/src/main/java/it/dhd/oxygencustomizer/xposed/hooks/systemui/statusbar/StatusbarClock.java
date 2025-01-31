@@ -2,11 +2,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -30,7 +26,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Spannable;
@@ -57,10 +52,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
  * @noinspection RedundantThrows
@@ -279,12 +274,12 @@ public class StatusbarClock extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        Class<?> ClockClass = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
-        Class<?> CollapsedStatusBarFragmentClass = findClass("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
-        Class<?> TaskStackListenerImpl = findClass("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
-        Class<?> StatClock = null;
+        ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
+        ReflectedClass TaskStackListenerImpl = ReflectedClass.of("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
+        ReflectedClass StatClock = null;
         try {
-            StatClock = findClass("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
+            StatClock = ReflectedClass.of("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
         } catch (Throwable ignored) {
             log("StatClock not found");
         }
@@ -293,225 +288,200 @@ public class StatusbarClock extends XposedMods {
         filter.addAction(Intent.ACTION_SCREEN_ON);
         mContext.registerReceiver(mBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
 
-        hookAllConstructors(CollapsedStatusBarFragmentClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCollapsedStatusBarFragment = param.thisObject;
-            }
-        });
+        CollapsedStatusBarFragmentClass
+                .afterConstruction()
+                .run(param -> mCollapsedStatusBarFragment = param.thisObject);
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
-                Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
-                hookAllMethods(PhoneStatusBarView, "onFinishInflate", new XC_MethodHook() {
-                    @SuppressLint("DiscouragedApi")
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        FrameLayout mStatusBar = (FrameLayout) param.thisObject;
-                        mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_left_side", "id", mContext.getPackageName()));
-                    }
-                });
+                ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
+                PhoneStatusBarView
+                        .after("onFinishInflate")
+                        .run(param -> {
+                            FrameLayout mStatusBar = (FrameLayout) param.thisObject;
+                            mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_left_side", "id", mContext.getPackageName()));
+                        });
             } catch (Throwable ignored) {
             }
         } else {
             mStatusbarStartSide = null;
         }
 
-        findAndHookMethod(CollapsedStatusBarFragmentClass,
-                "onViewCreated", View.class, Bundle.class, new XC_MethodHook() {
-                    @SuppressLint("DiscouragedApi")
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
-                        try {
-                            mClockView = (TextView) getObjectField(param.thisObject, "mClockView");
-                        } catch (Throwable ignored) {
-                            log("mClockView not found");
-                        }
-
-                        ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-                        try {
-                            mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
-                        } catch (Throwable t) {
-                            mStatusbarStartSide = null;
-                        }
-
-                        try {
-                            mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
-                        } catch (Throwable t) {
-                            mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("system_icon_area", "id", mContext.getPackageName())); // OOS 13
-                        }
-
-
-                        try {
-                            mCenteredIconArea = (View) ((View) getObjectField(param.thisObject, "mCenteredIconArea")).getParent();
-                        } catch (Throwable ignored) {
-                            mCenteredIconArea = new LinearLayout(mContext);
-                            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
-                            lp.gravity = Gravity.CENTER;
-                            mCenteredIconArea.setLayoutParams(lp);
-                            mStatusBar.addView(mCenteredIconArea);
-                        }
-
-                        updateClock();
-                        updateChip();
-                        setupChip();
-                        placeClock();
-                        setClockSize();
+        CollapsedStatusBarFragmentClass
+                .after("onViewCreated")
+                .run(param -> {
+                    try {
+                        mClockView = (TextView) getObjectField(param.thisObject, "mClockView");
+                    } catch (Throwable ignored) {
+                        log("mClockView not found");
                     }
+
+                    ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
+                    try {
+                        mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
+                    } catch (Throwable t) {
+                        mStatusbarStartSide = null;
+                    }
+
+                    try {
+                        mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
+                    } catch (Throwable t) {
+                        mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("system_icon_area", "id", mContext.getPackageName())); // OOS 13
+                    }
+
+
+                    try {
+                        mCenteredIconArea = (View) ((View) getObjectField(param.thisObject, "mCenteredIconArea")).getParent();
+                    } catch (Throwable ignored) {
+                        mCenteredIconArea = new LinearLayout(mContext);
+                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+                        lp.gravity = Gravity.CENTER;
+                        mCenteredIconArea.setLayoutParams(lp);
+                        mStatusBar.addView(mCenteredIconArea);
+                    }
+
+                    updateClock();
+                    updateChip();
+                    setupChip();
+                    placeClock();
+                    setClockSize();
                 });
 
         if (StatClock != null) {
             try {
-                hookAllMethods(StatClock, "updateMinWidth", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        // StatClock has a method to update the minimum width of the clock
-                        // we can use it to update the clock width
-                        // Based on our custom formats
-                        TextView tv = (TextView) param.thisObject;
-                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                        if (!mShowSeconds) {
-                            float totalWidth = measureTextWithSpans();
-                            totalWidth += mClockView.getPaddingStart();
-                            totalWidth += mClockView.getPaddingEnd();
-                            int calculatedMinWidth = (int) totalWidth;
-                            if (tv.getMinimumWidth() != calculatedMinWidth) {
-                                tv.setMinimumWidth(calculatedMinWidth);
+                StatClock
+                        .after("updateMinWidth")
+                        .run(param -> {
+                            // StatClock has a method to update the minimum width of the clock
+                            // we can use it to update the clock width
+                            // Based on our custom formats
+                            TextView tv = (TextView) param.thisObject;
+                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                            if (!mShowSeconds) {
+                                float totalWidth = measureTextWithSpans();
+                                totalWidth += mClockView.getPaddingStart();
+                                totalWidth += mClockView.getPaddingEnd();
+                                int calculatedMinWidth = (int) totalWidth;
+                                if (tv.getMinimumWidth() != calculatedMinWidth) {
+                                    tv.setMinimumWidth(calculatedMinWidth);
+                                }
                             }
-                        }
-                    }
-                });
+                        });
             } catch (Throwable ignored) {
                 log("updateMinWidth in StatClock not found");
             }
         }
 
-        findAndHookMethod(CollapsedStatusBarFragmentClass, "animateShow",
-                View.class, boolean.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.args[0] == mClockView) {
-                            updateClock();
-                        }
+        CollapsedStatusBarFragmentClass
+                .after("animateShow")
+                .run(param -> {
+                    if (param.args[0] == mClockView) {
+                        updateClock();
                     }
                 });
 
-        hookAllMethods(ClockClass, "updateClockVisibility", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        ClockClass
+                .before("updateClockVisibility")
+                .run(param -> {
+                    if (param.thisObject != mClockView)
+                        return;
 
-                if (param.thisObject != mClockView)
-                    return;
+                    if (mClockCustomColor)
+                        mClockView.post(() -> mClockView.setTextColor(mClockColor));
 
-                if (mClockCustomColor)
-                    mClockView.post(() -> mClockView.setTextColor(mClockColor));
+                    Clock = param.thisObject;
 
-                Clock = param.thisObject;
+                    if (!mClockAutoHide) return;
 
-                if (!mClockAutoHide) return;
+                    boolean visible = (boolean) callMethod(param.thisObject, "shouldBeVisible");
+                    int visibility = visible ? View.VISIBLE : View.GONE;
+                    try {
+                        autoHideHandler.removeCallbacksAndMessages(null);
+                    } catch (Throwable ignored) {
 
-                boolean visible = (boolean) callMethod(param.thisObject, "shouldBeVisible");
-                int visibility = visible ? View.VISIBLE : View.GONE;
-                try {
-                    autoHideHandler.removeCallbacksAndMessages(null);
-                } catch (Throwable ignored) {
-
-                }
-                callMethod(param.thisObject, "setVisibility", visibility);
-                if (mClockAutoHide && visible && mScreenOn) {
-                    autoHideHandler.postDelayed(() -> autoHideClock(param.thisObject), mShowDuration * 1000L);
-                }
-                param.setResult(null);
-            }
-        });
-
-        hookAllMethods(ClockClass, "shouldBeVisible", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-
-                if (!mClockAutoHideLauncherSwitch) return;
-
-                if (param.thisObject != mClockView)
-                    return;
-
-                Clock = param.thisObject;
-
-                boolean mClockVisibleByPolicy = getBooleanField(param.thisObject, "mClockVisibleByPolicy");
-                boolean mClockVisibleByUser = getBooleanField(param.thisObject, "mClockVisibleByUser");
-                param.setResult(!mClockAutoHideLauncher && mClockVisibleByPolicy && mClockVisibleByUser);
-            }
-        });
-
-
-        findAndHookMethod(ClockClass,
-                "getSmallTime", new XC_MethodHook() {
-
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        setObjectField(param.thisObject, "mShowSeconds", mShowSeconds);
                     }
-
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.thisObject != mClockView)
-                            return; //We don't want custom format in QS header. do we?
-
-
-                        SpannableStringBuilder result = new SpannableStringBuilder();
-
-                        SpannableStringBuilder clockText = SpannableStringBuilder.valueOf((CharSequence) param.getResult()); //THE clock
-
-                        result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
-
-                        if (mClockCustomColor) {
-                            clockText.setSpan(new ForegroundColorSpan(mClockColor), 0, (clockText).length(),
-                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                        result.append(clockText);
-
-                        if (mAmPmStyle != AM_PM_STYLE_GONE) {
-                            result.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
-                        }
-
-                        result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
-
-                        if (getAdditionalInstanceField(param.thisObject, "stringFormatCallBack") == null) {
-                            StringFormatter.FormattedStringCallback callback = () -> {
-                                if (!mShowSeconds) //don't update again if it's going to do it every second anyway
-                                    updateClock();
-                            };
-
-                            stringFormatter.registerCallback(callback);
-                            setAdditionalInstanceField(param.thisObject, "stringFormatCallBack", callback);
-                        }
-                        param.setResult(result);
+                    callMethod(param.thisObject, "setVisibility", visibility);
+                    if (mClockAutoHide && visible && mScreenOn) {
+                        autoHideHandler.postDelayed(() -> autoHideClock(param.thisObject), mShowDuration * 1000L);
                     }
+                    param.setResult(null);
+                });
+
+        ClockClass
+                .before("shouldBeVisible")
+                .run(param -> {
+                    if (!mClockAutoHideLauncherSwitch) return;
+
+                    if (param.thisObject != mClockView)
+                        return;
+
+                    Clock = param.thisObject;
+
+                    boolean mClockVisibleByPolicy = getBooleanField(param.thisObject, "mClockVisibleByPolicy");
+                    boolean mClockVisibleByUser = getBooleanField(param.thisObject, "mClockVisibleByUser");
+                    param.setResult(!mClockAutoHideLauncher && mClockVisibleByPolicy && mClockVisibleByUser);
                 });
 
 
-        findAndHookMethod(TaskStackListenerImpl, "onTaskStackChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (mClockAutoHideLauncherSwitch) updateShowClock();
-            }
-        });
+        ClockClass
+                .before("getSmallTime")
+                .run(param -> setObjectField(param.thisObject, "mShowSeconds", mShowSeconds));
 
-        findAndHookMethod(TaskStackListenerImpl, "onTaskRemoved", int.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (mClockAutoHideLauncherSwitch) updateShowClock();
-            }
-        });
+        ClockClass
+                .after("getSmallTime")
+                .run(param -> {
+                    if (param.thisObject != mClockView)
+                        return; //We don't want custom format in QS header. do we?
 
-        hookAllMethods(TaskStackListenerImpl, "onTaskMovedToFront", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (mClockAutoHideLauncherSwitch) updateShowClock();
-            }
-        });
 
+                    SpannableStringBuilder result = new SpannableStringBuilder();
+
+                    SpannableStringBuilder clockText = SpannableStringBuilder.valueOf((CharSequence) param.getResult()); //THE clock
+
+                    result.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //before clock
+
+                    if (mClockCustomColor) {
+                        clockText.setSpan(new ForegroundColorSpan(mClockColor), 0, (clockText).length(),
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    result.append(clockText);
+
+                    if (mAmPmStyle != AM_PM_STYLE_GONE) {
+                        result.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
+                    }
+
+                    result.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null)); //after clock
+
+                    if (getAdditionalInstanceField(param.thisObject, "stringFormatCallBack") == null) {
+                        StringFormatter.FormattedStringCallback callback = () -> {
+                            if (!mShowSeconds) //don't update again if it's going to do it every second anyway
+                                updateClock();
+                        };
+
+                        stringFormatter.registerCallback(callback);
+                        setAdditionalInstanceField(param.thisObject, "stringFormatCallBack", callback);
+                    }
+                    param.setResult(result);
+                });
+
+
+        TaskStackListenerImpl
+                .after("onTaskStackChanged")
+                .run(param -> {
+                    if (mClockAutoHideLauncherSwitch) updateShowClock();
+                });
+
+        TaskStackListenerImpl
+                .after("onTaskRemoved")
+                .run(param -> {
+                    if (mClockAutoHideLauncherSwitch) updateShowClock();
+                });
+
+        TaskStackListenerImpl
+                .after("onTaskMovedToFront")
+                .run(param -> {
+                    if (mClockAutoHideLauncherSwitch) updateShowClock();
+                });
 
     }
 
