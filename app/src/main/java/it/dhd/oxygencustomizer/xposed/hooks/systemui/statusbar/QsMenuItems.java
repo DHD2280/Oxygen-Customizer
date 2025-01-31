@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.signature.ObjectKey;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +29,11 @@ public class QsMenuItems extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
 
-    private static Context mMenuContext;
+    private Context mMenuContext;
     private Object mActivityStarter;
     private ActivityLauncherUtils mActivityLauncherUtils;
 
-    private ArrayList<Object[]> mMenuOptions = new ArrayList<>(){{
+    private final ArrayList<Object[]> mMenuOptions = new ArrayList<>(){{
         add(new Object[]{R.string.qs_header_title, "qs_header_options"});
         add(new Object[]{R.string.quick_settings_widgets, "qs_widget_options"});
     }};
