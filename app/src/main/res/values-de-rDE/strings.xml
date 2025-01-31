@@ -20,12 +20,49 @@
     <string name="module_installation_step2">Entpacken notwendiger Dateien</string>
     <string name="module_installation_step3">Erstellen von Overlay-APKs</string>
     <string name="module_installation_step4">Ausrichten der Overlay-APKs</string>
+    <string name="module_installation_step5">Overlay-APKs werden</string>
+    <string name="module_installation_step6">Verzeichnisse werden bereinigt</string>
+    <string name="onboarding_title_1">Bist du gelangweilt von deiner Standard-UI?</string>
+    <string name="onboarding_subtitle_1">Lass uns alles nach unseren Wünschen anpassen.</string>
+    <string name="onboarding_desc_1">Werde das langweilige Standard-UI los – personalisiere jedes Detail, um deinen Style und Vorlieben gerecht zu werden.</string>
+    <string name="onboarding_title_2">Wird mein Gerät unterstützt?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer unterstützt OOS-basierte ROMs.</string>
+    <string name="onboarding_desc_2">Kompatibel mit allen OOS-basierten ROMs, was eine Unterstützung für viele Android-Geräte bietet.</string>
+    <string name="onboarding_title_3">Wollen wir loslegen?</string>
+    <string name="onboarding_subtitle_3">Oxygen Customizer hat einige interne Aufgaben zu erledigen.</string>
+    <string name="onboarding_desc_3">Interne Aufgaben werden gestartet, die der Initialisierung dienen. Bereit loszulegen?</string>
+    <string name="need_storage_perm_title">Benötige Speicherzugriffsberechtigung</string>
+    <string name="need_storage_perm_desc">Speicherzugriffsberechtigung ist für die Erstellung der notwendigen Dateien erforderlich.</string>
+    <string name="compatible_root_not_found_title">Kompatible Root-Methode konnte nicht gefunden werden</string>
+    <string name="compatible_root_not_found_desc">Verwenden Sie eine populäre Root-Lösung, um fortzufahren.</string>
+    <string name="root_not_found_title">Keinen Zugriff auf Root</string>
+    <string name="root_not_found_desc">Es sieht so aus, als wäre dein Gerät nicht gerooted!</string>
+    <string name="need_reboot_title">Gerät Neustart erforderlich</string>
+    <string name="need_reboot_desc">Starte dein Gerät neu, um alle Änderungen zu speichern.</string>
+    <string name="installation_failed_title">Hoppla! Das war unerwartet</string>
+    <string name="installation_failed_desc">Protokolle wurden im Dokumentenverzeichnis gespeichert.</string>
+    <string name="logs">Protokolle</string>
+    <string name="toast_skipped_installation">Installation übersprungen. Einige Funktionen funktionieren möglicherweise nicht richtig.</string>
     <!-- Buttons -->
     <string name="btn_select">Auswählen</string>
+    <string name="btn_skip">Überspringen</string>
+    <string name="btn_next">Weiter</string>
+    <string name="btn_back">Zurück</string>
+    <string name="btn_lets_go">Los geht\'s</string>
+    <string name="btn_close">Schließen</string>
+    <string name="btn_cancel">Abbrechen</string>
+    <string name="btn_reboot_now">Jetzt neustarten</string>
+    <string name="btn_reboot">Neustarten</string>
+    <string name="btn_enable">Aktivieren</string>
+    <string name="btn_disable">Deaktivieren</string>
+    <string name="btn_apply">Anwenden</string>
     <!-- Dialogs -->
+    <string name="installing">Installieren</string>
+    <string name="loading_dialog_wait">Bitte warten</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Hinweis</string>
+    <string name="app_kill_alert_body">Die App wird jetzt geschlossen. Du kannst sie wieder öffnen, indem du das neue Symbol anklickst</string>
     <string name="app_kill_ok_btn">Ok</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Ein Neustart des Systems ist erforderlich, um die Einstellungen zu übernehmen</string>
@@ -35,6 +72,7 @@
     <string name="battery_full">Akku voll</string>
     <string name="battery_level_percentage">Batteriestand</string>
     <string name="seconds">Sekunden</string>
+    <string name="duration_seconds">%d Sekunden</string>
     <string name="milliseconds">Millisekunden</string>
     <string name="steps">Schritte</string>
     <string name="general_color_accent1">Akzent 1</string>
@@ -42,24 +80,224 @@
     <string name="general_color_accent3">Akzent 3</string>
     <string name="general_color_text1">Text 1</string>
     <string name="general_color_text2">Text 2</string>
+    <string name="sysui_restart_needed">Benötigt einen SystemUI Neustart zum Anwenden</string>
+    <string name="one_time_reboot_needed">Starte dein Gerät neu!</string>
+    <string name="gradient_left_right">Links nach rechts</string>
+    <string name="gradient_top_bottom">Oben nach Unten</string>
+    <string name="gradient_tl_br">Oben links nach unten rechts</string>
+    <string name="gradient_tr_bl">Oben rechts nach unten links</string>
+    <string name="warning">Warnung</string>
+    <string name="custom_margins">Eigener Abstand</string>
+    <string name="custom_padding">Eigener Abstand</string>
+    <string name="left">Links</string>
+    <string name="right">Rechts</string>
+    <string name="top">Oben</string>
+    <string name="bottom">Unten</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="lang_follow_system">Folge Systemeinstellung</string>
+    <string name="pick_font_title">Schriftart auswählen</string>
+    <string name="pick_font_summary">Wähle deine Schriftart.\nWähle keine Datei aus \"Zuletzt Verwendet\" aus.</string>
     <!-- Image Crop Strings -->
+    <string name="pick_image">Bild auswählen</string>
+    <string name="pick_image_summary">Klicke, um ein Bild auszuwählen</string>
     <!-- Search Preference -->
     <string name="searchpreference_search">Suche…</string>
+    <string name="searchpreference_clear">Löschen</string>
+    <string name="searchpreference_history_entry">Eintrag im Verlauf</string>
+    <string name="searchpreference_more">Mehr</string>
+    <string name="searchpreference_clear_history">Verlauf löschen</string>
+    <string name="searchpreference_no_results">Keine Ergebnisse</string>
     <!-- Menu Strings -->
+    <string name="restart_scopes">Bereiche neu starten</string>
+    <string name="restart_module">Prozesse im Bereich neu starten</string>
+    <string name="restart_page_scope">Nur den Bereich dieser Seite neu starten</string>
+    <string name="restart_scope_message">Sind Sie sicher, dass Sie alle Prozesse, außer den System-Rahmen, neu starten möchten?\nVerwenden Sie dies, wenn das Modul nicht funktioniert!\nStellen Sie sicher, dass alle relevanten Bereiche überprüft sind!</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">Benutzeroberfläche</string>
+    <string name="navbar_mods">Modifikationen</string>
+    <string name="navbar_hooks">Hooks</string>
+    <string name="navbar_settings">Einstellungen</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Modifikationen</string>
+    <string name="statusbar_title">Statusleiste</string>
+    <string name="launcher_title">Launcher</string>
+    <string name="quick_settings_title">Schnelleinstellungen</string>
+    <string name="qs_header_title">Schnelleinstellungs-Header</string>
+    <string name="sound">Ton</string>
+    <string name="misc">Verschiedenes</string>
+    <string name="colors">Farben</string>
+    <string name="package_manager">Paketmanager</string>
     <!-- General Strings -->
+    <string name="general_on">Ein</string>
+    <string name="general_off">Aus</string>
+    <string name="accent_color">Akzentfarbe</string>
+    <string name="white_color">Weiß</string>
+    <string name="black_color">Schwarz</string>
+    <string name="custom_color">Benutzerdefinierte Farbe</string>
+    <string name="battery_info_button_title">Akku-Info…</string>
+    <string name="general_enabled">Aktiviert</string>
+    <string name="general_disabled">Deaktiviert</string>
+    <string name="requires_reboot">Neustart erforderlich</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">Statusleisten-Optionen</string>
+    <string name="statusbar_double_tap_sleep">Doppeltippen zum Sperren</string>
+    <string name="status_bar_toggle_brightness_title">Helligkeitsregelung</string>
+    <string name="status_bar_toggle_brightness_summary">Helligkeit durch Wischen über die Statusleiste anpassen</string>
+    <string name="statusbar_batterybar_title">Einstellungen der Akkuleiste</string>
+    <string name="statusbar_battery_icon_options">Akku-Symbol</string>
+    <string name="statusbar_icons">Statusleisten-Symbole</string>
     <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">Benachrichtigungen</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">Statusleisten-Benachrichtigungen</string>
+    <string name="statusbar_use_app_icon">App-Symbol für Benachrichtigungen verwenden</string>
+    <string name="statusbar_notifications_transparency">Transparenz der Benachrichtigungen</string>
+    <string name="statusbar_notification_transparency">Benachrichtigungen-Transparenz</string>
+    <string name="statusbar_notification_transparency_value">Transparenzwert</string>
+    <string name="statusbar_notification_count">Benachrichtigungszähler anzeigen</string>
+    <string name="statusbar_notifications_related">Benachrichtigungspräferenzen</string>
+    <string name="remove_charging_complete_notification_title">Vollständig geladen Benachrichtigung entfernen</string>
+    <string name="remove_dev_mode_notification">Entwickleroptionen Benachrichtigung entfernen</string>
+    <string name="remove_flashlight_notification">Taschenlampe Benachrichtigung entfernen</string>
+    <string name="remove_low_battery_notification">Akku niedrig Benachrichtigung entfernen</string>
+    <string name="notif_default_expansion_title">Benachrichtigungen ausklappen</string>
+    <string name="notif_always_expand">Immer ausklappen</string>
+    <string name="notif_always_collapse">Immer einklappen</string>
+    <string name="customize_clear_all_button">Löschen-Schaltfläche anpassen</string>
+    <string name="clear_all_link_bg_accent">Hintergrund mit Akzent verknüpfen</string>
+    <string name="clear_all_bg_color">Benutzerdefinierte Hintergrundfarbe</string>
+    <string name="clear_all_link_bg_icon_accent">Symbol mit Akzent verknüpfen</string>
+    <string name="clear_all_icon_color">Benutzerdefinierte Symbolfarbe</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_title">Uhr &amp; Datum</string>
+    <string name="status_bar_clock_summary">Uhr anpassen &amp; Datum</string>
+    <string name="status_bar_clock_format_category">Formatierungseinstellungen</string>
+    <string name="status_bar_clock_seconds_title">Sekundenanzeige</string>
+    <string name="status_bar_clock_seconds_summary">Sekunden neben der Uhr in der Statusleiste anzeigen</string>
+    <string name="status_bar_clock_position_title">Uhr-Stil</string>
+    <string name="status_bar_clock_position_right">Rechts</string>
+    <string name="status_bar_clock_position_left">Links</string>
+    <string name="status_bar_clock_position_center">Mittig</string>
+    <string name="status_bar_clock_position_hidden">Ausgeblendet</string>
+    <string name="status_bar_clock_hide_category">Uhr ausblenden</string>
+    <string name="status_bar_clock_auto_hide_title">Automatisch ausblenden</string>
+    <string name="status_bar_clock_auto_hide_launcher_summary">Uhr auf Startbildschirm ausblenden</string>
+    <string name="status_bar_clock_auto_hide_summary">Uhr in regelmäßigen Abständen ausblenden</string>
+    <string name="status_bar_clock_auto_hide_hdur_title">Ausblendedauer</string>
+    <string name="status_bar_clock_auto_hide_hdur_summary">Zeit, in der die Uhr ausgeblendet ist, in Sekunden</string>
+    <string name="status_bar_clock_auto_hide_sdur_title">Anzeigedauer</string>
+    <string name="status_bar_clock_auto_hide_sdur_summary">Zeit, bis die Uhr ausgeblendet wird, in Sekunden</string>
+    <string name="status_bar_am_pm_title">AM/PM-Format</string>
+    <string name="status_bar_am_pm_normal">Normal</string>
+    <string name="status_bar_am_pm_small">Klein</string>
+    <string name="status_bar_am_pm_hidden">Ausgeblendet</string>
+    <string name="status_bar_date_title">Datum</string>
+    <string name="status_bar_date_none">Ausgeblendet</string>
+    <string name="status_bar_date_small">Klein</string>
+    <string name="status_bar_date_normal">Normal</string>
+    <string name="status_bar_date_format_title">Datumsformat</string>
+    <string name="status_bar_date_style">Datumsstil</string>
+    <string name="status_bar_date_style_normal">Normal</string>
+    <string name="status_bar_date_style_lowercase">Kleinbuchstaben</string>
+    <string name="status_bar_date_style_uppercase">Großbuchstaben</string>
+    <string name="status_bar_date_format_custom">Benutzerdefiniertes Java-Format</string>
+    <string name="preview">Vorschau</string>
+    <string name="clock_date_position">Position des Datums</string>
+    <string name="clock_date_right">Rechts neben der Uhrzeit</string>
+    <string name="clock_date_left">Links neben der Uhrzeit</string>
+    <string name="clock_font_size_title">Schriftgröße der Uhr</string>
+    <string name="status_bar_clock_font_style_title">Schriftstil der Uhr</string>
+    <string name="status_bar_clock_color_title">Farbe der Uhr</string>
+    <string name="status_bar_custom_clock_color_title">Benutzerdefinierte Farbe der Uhr</string>
+    <string name="status_bar_custom_clock_color_summary">Farbe der Uhr</string>
+    <string name="status_bar_clock_chip_category">Uhr-Chip</string>
+    <string name="status_bar_clock_background_chip_title">Hintergrund-Chip</string>
+    <string name="status_bar_clock_background_chip_style_title">Hintergrund-Chip-Stil</string>
+    <string name="status_bar_clock_advanced_formatting">Erweitert (ersetzt die obere Einstellung!)</string>
+    <string name="status_bar_clock_before_clock">Benutzerdefinierter Text vor Uhr</string>
+    <string name="status_bar_clock_after_clock">Benutzerdefinierter Text nach Uhr</string>
+    <string name="status_bar_clock_smaller">Kleiner (70%)</string>
     <!-- Status bar padding -->
+    <string name="statusbar_padding">Abstand der Statusleiste</string>
+    <string name="statusbar_top_padding">Oberer Abstand</string>
+    <string name="statusbar_padding_info">0 setzen für Standard</string>
+    <string name="statusbar_left_padding">Linker Abstand</string>
+    <string name="statusbar_right_padding">Rechter Abstand</string>
+    <string name="sb_padding_title">Statusleiste links und rechter Abstand</string>
+    <string name="sb_padding_summary">Das Festlegen der Werte auf Min/Max entspricht den Standardeinstellungen</string>
     <!-- Battery Bar Strings -->
+    <string name="BB_enable_title">Aktiviere Akkuleiste</string>
+    <string name="BB_onlycharging_title">Nur beim Laden</string>
+    <string name="BB_move_SB_bottom_title">Unten in der Statusleiste</string>
+    <string name="BB_colorful_title">Mach es bunt</string>
+    <string name="BB_Opacity_title">Leistensichtbarkeit</string>
+    <string name="BB_center_align_title">Mittig Ausgerichtet</string>
+    <string name="BB_Thickness_title">Balkendicke</string>
+    <string name="BB_animate_charging">Laden animieren</string>
+    <string name="BB_indicate_charging">Laden anzeigen</string>
+    <string name="BB_indicate_power_save">Energiesparmodus anzeigen</string>
+    <string name="BB_indicate_fast_charging">Schnelles Laden anzeigen</string>
+    <string name="BB_warning_level">Bereich für Warnung</string>
+    <string name="BB_warning_tip">Setze beide auf 0, um Farben je nach Ladestand zu deaktivieren</string>
+    <string name="BB_batteryCriticalColor">Farbe bei kritischem Akkulevel</string>
+    <string name="BB_batteryWarningColor">Farbe bei Warnung</string>
+    <string name="BB_batteryChargingColor">Farbe beim Aufladen</string>
+    <string name="BB_batteryPowerSaveColor">Farbe beim Energiesparmodus</string>
+    <string name="BB_batteryFastChargingColor">Farbe beim Schnellladen</string>
+    <string name="BB_transit_colors">Schattierungsfarben zwischen den Bereichen</string>
+    <string name="colored_battery_percentage_title">Farbige Akkuzahl beim Laden</string>
     <!-- Battery Icon Strings -->
+    <string name="battery_icon_customize_title">Akku-Symbol anpassen</string>
+    <string name="battery_icon_style">Akku-Symbolstil</string>
+    <string name="battery_icon_change_charging_icon_title">Benutzerdefiniertes Ladesymbol</string>
+    <string name="battery_icon_change_charging_icon_summary">Ladesymbol zu benutzerdefiniertem Symbol ändern</string>
+    <string name="battery_icon_settings">Akku-Symboleinstellungen</string>
+    <string name="battery_width_title">Akku Breite</string>
+    <string name="battery_height_title">Akku Höhe</string>
+    <string name="battery_margin_title">Akku Abstand</string>
+    <string name="hide_battery_title">Verstecke Akkusymbol</string>
+    <string name="hide_battery_desc">Nur Ladesymbol und Prozentsatz behalten</string>
+    <string name="custom_charging_icon_title">Benutzerdefiniertes Ladesymbol</string>
+    <string name="custom_charging_icon_desc">Ladesymbol zu benutzerdefiniertem Symbol ändern</string>
+    <string name="battery_charging_icon">Ladesymbol-Einstellungen</string>
+    <string name="charging_icon_style_title">Ladesymbol-Stil</string>
+    <string name="charging_icon_margin_left_title">Ladesymbol Abstand links</string>
+    <string name="charging_icon_margin_right_title">Ladesymbol Abstand rechts</string>
+    <string name="charging_icon_size_title">Ladesymbol-Größe</string>
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
+    <string name="battery_landscape_l_style_b">Querformat L Stil B</string>
+    <string name="battery_landscape_ios_15">Querformat iOS 15</string>
+    <string name="battery_landscape_ios_16">Querformat iOS 16</string>
+    <string name="battery_portrait_origami">Portrait Origami</string>
+    <string name="battery_landscape_smiley">Querformat Smiley</string>
+    <string name="battery_landscape_miui_pill">Querformat MIUI Pille</string>
+    <string name="battery_landscape_l_coloros">Querformat L ColorOS</string>
+    <string name="battery_landscape_r_coloros">Querformat R ColorOS</string>
+    <string name="battery_landscape_battery_a">Querformat Akku A</string>
+    <string name="battery_landscape_battery_b">Querformat Akku B</string>
+    <string name="battery_landscape_battery_c">Querformat Akku C</string>
+    <string name="battery_landscape_battery_d">Querformat Akku D</string>
+    <string name="battery_landscape_battery_e">Querformat Akku E</string>
+    <string name="battery_landscape_battery_f">Querformat Akku F</string>
+    <string name="battery_landscape_battery_g">Querformat Akku G</string>
+    <string name="battery_landscape_battery_h">Querformat Akku H</string>
+    <string name="battery_landscape_battery_i">Querformat Akku I</string>
+    <string name="battery_landscape_battery_j">Querformat Akku J</string>
+    <string name="battery_landscape_battery_k">Querformat Akku K</string>
+    <string name="battery_landscape_battery_l">Querformat Akku L</string>
+    <string name="battery_landscape_battery_m">Querformat Akku M</string>
+    <string name="battery_landscape_battery_n">Querformat Akku N</string>
+    <string name="battery_landscape_battery_o">Querformat Akku O</string>
+    <string name="battery_circle">Kreis-Akkusymbol</string>
+    <string name="battery_dotted_circle">Gepunktetes Kreis-Akkusymbol</string>
+    <string name="battery_filled_circle">Gefüllter Kreis</string>
     <!-- Statusbar Icons Strings -->
+    <string name="statusbar_icons_bluetooth_hide">Bluetooth-Symbol ausblenden</string>
+    <string name="statusbar_icons_bluetooth_hide_summary">Bluetooth-Symbol ausblenden, wenn nicht verbunden.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">WLAN Pfeile ausblenden</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">WLAN Aus-/Einschalten um Änderungen zu sehen.</string>
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Widgets -->

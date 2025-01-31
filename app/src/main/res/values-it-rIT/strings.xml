@@ -202,7 +202,6 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
-    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Greroriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$L per Data Lunare\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -402,8 +401,17 @@
     <string name="quick_settings_tiles_customize_labels_subtitle">Personalizza colore sottotitoli</string>
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Colore sottotitoli QS</string>
     <string name="brightness_slider">Cursore Luminosità</string>
+    <string name="qs_sliders">Cursori QS</string>
     <string name="customize_brightness_slider_title">Personalizza Cursore Luminosità</string>
+    <string name="customize_qs_sliders_title">Personalizza Cursori QS</string>
+    <string name="brightness_slider_progress_color_title">Modalità colore cursore</string>
     <string name="brightness_slider_background_color_title">Personalizza colore sfondo</string>
+    <string name="qs_sliders_remove_blur">Rimuovi Sfocatura</string>
+    <string name="blur_mode">Modalità Sfocatura</string>
+    <string name="blur_luminosity_color_dodge">Luminosità - Colore schiarito</string>
+    <string name="blur_color_dodge_luminosity">Colore schiarito - Luminosità</string>
+    <string name="blur_overlay_luminosity">Sovrapposizione - Luminosità</string>
+    <string name="blur_luminosity_overlay">Luminosità - Sovrapposizione</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
     <string name="qs_tile_custom_highlight">Raggio personalizzato dei Tile QS in evidenza</string>
