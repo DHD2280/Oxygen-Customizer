@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,9 +39,10 @@ public class DeviceWidgetView extends FrameLayout {
     private ImageView mVolumeLevelArcProgress;
     private ImageView mRamUsageArcProgress;
 
-    private AudioManager mAudioManager;
-    private ActivityManager mActivityManager;
+    private final AudioManager mAudioManager;
+    private final ActivityManager mActivityManager;
 
+    private boolean mAttached = false;
     private boolean mCustomColor = false;
     private int mProgressColor = 0;
     private int mLinearProgressColor = 0;
@@ -115,7 +117,7 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void initBatteryStatus() {
-
+        if (getVisibility() == View.GONE || !mAttached) return;
         if (mBatteryProgress != null) {
             post(() -> {
                 mBatteryProgress.setProgress(mBatteryPercentage);
@@ -136,7 +138,7 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void initSoundManager() {
-
+        if (getVisibility() == View.GONE) return;
         int volLevel = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         int maxVolLevel = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int volPercent = (int) (((float) volLevel / maxVolLevel) * 100);
@@ -160,7 +162,7 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void initRamUsage() {
-
+        if (getVisibility() == View.GONE || !mAttached) return;
         if (mActivityManager == null) return;
 
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -214,6 +216,18 @@ public class DeviceWidgetView extends FrameLayout {
     private void reloadColors() {
         initSoundManager();
         initBatteryStatus();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mAttached = true;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mAttached = false;
     }
 
 }
