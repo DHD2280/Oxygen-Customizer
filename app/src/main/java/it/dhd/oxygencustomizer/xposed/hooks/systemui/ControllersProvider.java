@@ -296,29 +296,23 @@ public class ControllersProvider extends XposedMods {
         }
 
         // Stole a Bluetooth Callback from OplusPhoneStatusBarPolicyExImpl
-        Class<?> OplusPhoneStatusBarPolicyExImpl;
-        try {
-            OplusPhoneStatusBarPolicyExImpl = findClass("com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusPhoneStatusBarPolicyExImpl = findClass("com.oplusos.systemui.statusbar.phone.PhoneStatusBarPolicyEx", lpparam.classLoader); // OOS 13
-        }
+        ReflectedClass OplusPhoneStatusBarPolicyExImpl = ReflectedClass.of(
+                "com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", /* OOS 15-14 */
+                "com.oplusos.systemui.statusbar.phone.PhoneStatusBarPolicyEx" // OOS 13
+        );
         if (OplusPhoneStatusBarPolicyExImpl != null) {
-            findAndHookMethod(
-                    OplusPhoneStatusBarPolicyExImpl,
-                    "updateBluetooth",
-                    new XC_MethodHook() {
-                        @Override
-                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                            Object bluetoothController;
-                            try {
-                                bluetoothController = getObjectField(param.thisObject, "bluetoothController");
-                            } catch (Throwable t) {
-                                bluetoothController = getObjectField(param.thisObject, "mBluetooth");
-                            }
-                            boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
-                            boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
-                            onBluetoothChanged(enabled);
+            OplusPhoneStatusBarPolicyExImpl
+                    .after("updateBluetooth")
+                    .run( param -> {
+                        Object bluetoothController;
+                        try {
+                            bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                        } catch (Throwable t) {
+                            bluetoothController = getObjectField(param.thisObject, "mBluetooth");
                         }
+                        boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
+                        boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                        onBluetoothChanged(enabled);
                     }
             );
         } else {
@@ -342,13 +336,10 @@ public class ControllersProvider extends XposedMods {
                 }
             });
         } else {
-            Class<?> WifiTile = findClass("com.android.systemui.qs.tiles.WifiTile", lpparam.classLoader);
-            hookAllConstructors(WifiTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mSignalCallback = getObjectField(param.thisObject, "mSignalCallback");
-                }
-            });
+            ReflectedClass WifiTile = ReflectedClass.of("com.android.systemui.qs.tiles.WifiTile");
+            WifiTile
+                    .afterConstruction()
+                    .run(param -> mSignalCallback = getObjectField(param.thisObject, "mSignalCallback"));
         }
 
 
