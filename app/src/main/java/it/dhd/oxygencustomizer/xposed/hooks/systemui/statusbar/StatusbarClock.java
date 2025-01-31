@@ -274,12 +274,12 @@ public class StatusbarClock extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
-        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
-        ReflectedClass TaskStackListenerImpl = ReflectedClass.of("com.android.wm.shell.common.TaskStackListenerImpl", lpparam.classLoader);
+        ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock");
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass TaskStackListenerImpl = ReflectedClass.of("com.android.wm.shell.common.TaskStackListenerImpl");
         ReflectedClass StatClock = null;
         try {
-            StatClock = ReflectedClass.of("com.oplus.systemui.statusbar.widget.StatClock", lpparam.classLoader);
+            StatClock = ReflectedClass.of("com.oplus.systemui.statusbar.widget.StatClock");
         } catch (Throwable ignored) {
             log("StatClock not found");
         }
@@ -294,7 +294,7 @@ public class StatusbarClock extends XposedMods {
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
-                ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
+                ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView");
                 PhoneStatusBarView
                         .after("onFinishInflate")
                         .run(param -> {
