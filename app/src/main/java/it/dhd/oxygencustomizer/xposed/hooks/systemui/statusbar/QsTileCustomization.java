@@ -1,10 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -50,7 +47,6 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isNeedSeparateDarkThemeColor;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
@@ -68,6 +64,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -260,30 +257,27 @@ public class QsTileCustomization extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenerPackage)) return;
 
-        Class<?> PersonalityManager = findClassInArray(lpparam,
+        ReflectedClass PersonalityManager = ReflectedClass.of(
                 "com.oplus.systemui.qs.personality.PersonalityManager" /* OOS14-15 */,
                 "com.oplusos.systemui.qs.personality.PersonalityManager" /* OOS13 */);
         if (PersonalityManager != null) {
-            hookAllConstructors(PersonalityManager, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mPersonalityManager = param.thisObject;
-                }
-            });
+            PersonalityManager
+                    .afterConstruction()
+                            .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
         // Color Hooker
-        hookQsColors(lpparam);
+        hookQsColors();
 
         // Animation Hooker
-        hookQsTileAnimation(lpparam);
+        hookQsTileAnimation();
         // End Animation Hooker
 
         // Media Panel Album Art
-        hookMediaPanel(lpparam);
+        hookMediaPanel();
 
         // Qs Labels
-        Class<?> OplusQSTileView = findClassInArray(lpparam,
+        ReflectedClass OplusQSTileView = ReflectedClass.of(
                 "com.oplus.systemui.plugins.qs.tile.OplusQSTileView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileView" /* OOS13 */);
@@ -291,129 +285,107 @@ public class QsTileCustomization extends XposedMods {
             log(new Throwable("OplusQSTileView not found"));
         }
 
-        Class<?> OplusQSTileViewPlugin = null;
-        try {
-            OplusQSTileViewPlugin = findClass("com.oplus.systemui.plugins.qs.tile.OplusQSTileView", lpparam.classLoader);
-        } catch (Throwable ignored) {
-        } // OOS15 class, can be ignored
+        ReflectedClass OplusQSTileViewPlugin = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSTileView");
 
-
-        XC_MethodHook labelHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
-                mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
-                mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
-                mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
-                setupLabels();
-            }
+        ReflectedClass.ReflectionConsumer labelHook = param -> {
+            mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
+            mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
+            mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
+            mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
+            setupLabels();
         };
 
-        hookAllMethods(OplusQSTileView, "createLabel", labelHook);
-        hookAllMethods(OplusQSTileViewPlugin, "createLabel", labelHook);
-        hookAllMethods(OplusQSTileView, "updateTextColor", labelHook);
-        hookAllMethods(OplusQSTileView, "handleStateChanged", labelHook);
+        OplusQSTileView.after("createLabel").run(labelHook);
+        if (OplusQSTileViewPlugin.getClazz() != null) OplusQSTileViewPlugin.after("createLabel").run(labelHook);
+        OplusQSTileView.after("updateTextColor").run(labelHook);
+        OplusQSTileView.after("handleStateChanged").run(labelHook);
 
-        Class<?> OplusToggleSliderView;
-        try {
-            OplusToggleSliderView = findClass("com.oplus.systemui.qs.widget.OplusToggleSliderView", lpparam.classLoader);
-        } catch (Throwable ignored) {
-            OplusToggleSliderView = findClass("com.oplusos.systemui.qs.widget.OplusToggleSliderView", lpparam.classLoader);
-        }
+        ReflectedClass OplusToggleSliderView = ReflectedClass.of(
+                "com.oplus.systemui.qs.widget.OplusToggleSliderView",
+                "com.oplusos.systemui.qs.widget.OplusToggleSliderView");
 
-        findAndHookMethod(OplusToggleSliderView, "onShapeChanged",
-                int.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        OplusToggleSliderView
+                .after("onShapeChanged")
+                        .run(param -> {
+                            if (!qsBrightnessSliderCustomize) return;
 
-                        if (!qsBrightnessSliderCustomize) return;
-
-                        if (qsBrightnessSliderColorMode == 1) {
-                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(getPrimaryColor(mContext)));
-                        } else if (qsBrightnessSliderColorMode == 2) {
-                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessSliderColor));
-                        }
-
-                        if (qsBrightnessBackgroundCustomize) {
-                            setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                        } else {
-                            int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                            if (color != 0x0) {
-                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                            if (qsBrightnessSliderColorMode == 1) {
+                                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(getPrimaryColor(mContext)));
+                            } else if (qsBrightnessSliderColorMode == 2) {
+                                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessSliderColor));
                             }
-                        }
-                    }
-                });
 
-        hookAllMethods(OplusToggleSliderView, "setupSliderProgressDrawable", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!qsBrightnessSliderCustomize) return;
+                            if (qsBrightnessBackgroundCustomize) {
+                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                            } else {
+                                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                                if (color != 0x0) {
+                                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                                }
+                            }
+                        });
 
-                int colorToApply = getPrimaryColor(mContext);
-                if (qsBrightnessSliderColorMode == 2) {
-                    colorToApply = qsBrightnessSliderColor;
-                }
+        OplusToggleSliderView
+                .after("setupSliderProgressDrawable")
+                        .run(param -> {
+                            if (!qsBrightnessSliderCustomize) return;
 
-                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(colorToApply));
-                if (getBooleanField(param.thisObject, "mIsMirror")) {
-                    try {
-                        callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
-                    } catch (Throwable ignored) {
-                        callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbTintList", ColorStateList.valueOf(colorToApply));
-                    }
-                }
-                if (qsBrightnessBackgroundCustomize) {
-                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                } else {
-                    int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                    if (color != 0x0) {
-                        setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
-                    }
-                }
+                            int colorToApply = getPrimaryColor(mContext);
+                            if (qsBrightnessSliderColorMode == 2) {
+                                colorToApply = qsBrightnessSliderColor;
+                            }
+
+                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(colorToApply));
+                            if (getBooleanField(param.thisObject, "mIsMirror")) {
+                                try {
+                                    callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
+                                } catch (Throwable ignored) {
+                                    callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbTintList", ColorStateList.valueOf(colorToApply));
+                                }
+                            }
+                            if (qsBrightnessBackgroundCustomize) {
+                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                            } else {
+                                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                                if (color != 0x0) {
+                                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                                }
+                            }
+                        });
+
+        final ReflectedClass.ReflectionConsumer newUiHook = param -> {
+            if (!qsBrightnessSliderCustomize) return;
+
+            Object slider = getObjectField(param.thisObject, "slider");
+
+            int colorToApply = getPrimaryColor(mContext);
+            if (qsBrightnessSliderColorMode == 2) {
+                colorToApply = qsBrightnessSliderColor;
             }
-        });
+            callMethod(slider, "setProgressColor", ColorStateList.valueOf(colorToApply));
 
-        final XC_MethodHook newUiHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!qsBrightnessSliderCustomize) return;
-
-                Object slider = getObjectField(param.thisObject, "slider");
-
-                int colorToApply = getPrimaryColor(mContext);
-                if (qsBrightnessSliderColorMode == 2) {
-                    colorToApply = qsBrightnessSliderColor;
-                }
-                callMethod(slider, "setProgressColor", ColorStateList.valueOf(colorToApply));
-
-                if (qsBrightnessBackgroundCustomize) {
-                    callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                } else {
-                    int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                    callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
-                }
+            if (qsBrightnessBackgroundCustomize) {
+                callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
+            } else {
+                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
             }
         };
 
-        Class<?> OplusQsBaseToggleSliderLayout;
+        ReflectedClass OplusQsBaseToggleSliderLayout;
         if (Build.VERSION.SDK_INT >= 35) {
             try {
-                OplusQsBaseToggleSliderLayout = findClass("com.oplus.systemui.qs.base.seek.OplusQsBaseToggleSliderLayout", lpparam.classLoader);
-                hookAllConstructors(OplusQsBaseToggleSliderLayout, newUiHook);
+                OplusQsBaseToggleSliderLayout = ReflectedClass.of("com.oplus.systemui.qs.base.seek.OplusQsBaseToggleSliderLayout");
+                OplusQsBaseToggleSliderLayout.afterConstruction().run(newUiHook);
             } catch (Throwable t) {
                 log(t);
             }
         }
 
         try {
-            Class<?> OplusQsToggleSliderLayout = findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
-            hookAllConstructors(OplusQsToggleSliderLayout, newUiHook);
-            findAndHookMethod(OplusQsToggleSliderLayout,
-                    "onShapeChanged", int.class,
-                    newUiHook
-            );
+            ReflectedClass OplusQsToggleSliderLayout = ReflectedClass.of("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout");
+            OplusQsToggleSliderLayout.afterConstruction().run(newUiHook);
+            OplusQsToggleSliderLayout.after("onShapeChanged").run(newUiHook);
 
         } catch (Throwable ignored) {
         }
@@ -423,120 +395,110 @@ public class QsTileCustomization extends XposedMods {
         }
 
         try {
-            Class<?> PagedTileLayout = findClass("com.android.systemui.qs.PagedTileLayout", lpparam.classLoader);
-            hookAllConstructors(PagedTileLayout, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
-                    Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
-                    Object vPager = param.thisObject;
-                    hookAllMethods(VPagerListener.getClass(),
-                            "onPageScrolled", new XC_MethodHook() {
-                                @Override
-                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                    if (!mTrasformationsEnabled) return;
-                                    final int childCount = (int) callMethod(vPager, "getChildCount");
-                                    for (int i = 0; i < childCount; i++) {
-                                        final View child = (View) callMethod(vPager, "getChildAt", i);
-                                        final Object lp = callMethod(child, "getLayoutParams");
-                                        if (getBooleanField(lp, "isDecor")) continue;
-                                        final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
-                                        getCustomTransitions().transformPage(child, transformPos);
-                                    }
-                                }
+            ReflectedClass PagedTileLayout = ReflectedClass.of("com.android.systemui.qs.PagedTileLayout");
+            PagedTileLayout
+                    .afterConstruction()
+                            .run(param -> {
+                                Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
+                                Object vPager = param.thisObject;
+                                hookAllMethods(VPagerListener.getClass(),
+                                        "onPageScrolled", new XC_MethodHook() {
+                                            @Override
+                                            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                                if (!mTrasformationsEnabled) return;
+                                                final int childCount = (int) callMethod(vPager, "getChildCount");
+                                                for (int i = 0; i < childCount; i++) {
+                                                    final View child = (View) callMethod(vPager, "getChildAt", i);
+                                                    final Object lp = callMethod(child, "getLayoutParams");
+                                                    if (getBooleanField(lp, "isDecor")) continue;
+                                                    final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
+                                                    getCustomTransitions().transformPage(child, transformPos);
+                                                }
+                                            }
+                                        });
                             });
-                }
-            });
         } catch (Throwable t) {
-            log(this.getClass().getSimpleName() + " error: " + t.getMessage());
+            log(t);
         }
 
     }
 
 
-    public void hookQsColors(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusQSTileBaseView = findClassInArray(lpparam,
+    public void hookQsColors() {
+        ReflectedClass OplusQSTileBaseView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS13 */);
-        hookAllMethods(OplusQSTileBaseView, "generateDrawable", getColorHook(false));
+        OplusQSTileBaseView.after("generateDrawable").run(getColorHook(false));
 
-
-        Class<?> OplusQSHighlightTileView = findClassInArray(lpparam,
+        ReflectedClass OplusQSHighlightTileView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS13 */);
-        hookAllMethods(OplusQSHighlightTileView, "generateDrawable", getColorHook(true));
+        OplusQSHighlightTileView.after("generateDrawable").run(getColorHook(true));
 
     }
 
-    public void hookQsTileAnimation(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusQSTileBaseView = findClassInArray(lpparam,
+    public void hookQsTileAnimation() {
+        ReflectedClass OplusQSTileBaseView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS13 */);
         if (OplusQSTileBaseView == null) {
             log(new Throwable("OplusQSTileBaseView not found"));
         }
-        final XC_MethodHook animationHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                View qsTile = (View) param.thisObject;
-                qsTile.post(() -> getTileAnimation(qsTile));
-            }
+        final ReflectedClass.ReflectionConsumer animationHook = param -> {
+            View qsTile = (View) param.thisObject;
+            qsTile.post(() -> getTileAnimation(qsTile));
         };
 
-        hookAllMethods(OplusQSTileBaseView, "performClick", animationHook);
+        OplusQSTileBaseView.after("performClick").run(animationHook);
 
-        Class<?> OplusQSHighlightTileView = findClassInArray(lpparam,
+        ReflectedClass OplusQSHighlightTileView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS13 */);
         if (OplusQSHighlightTileView == null) {
             log(new Throwable("OplusQSHighlightTileView not found"));
         }
-
-        hookAllMethods(OplusQSHighlightTileView, "performClick", animationHook);
+        OplusQSHighlightTileView.after("performClick").run(animationHook);
     }
 
-    public void hookMediaPanel(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusQsMediaPanelView = findClass("com.oplus.systemui.qs.media.OplusQsMediaPanelView", lpparam.classLoader);
-        hookAllMethods(OplusQsMediaPanelView, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mOplusQsMediaView = (View) param.thisObject;
-                if (mQsWidgetsEnabled) return;
-                mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                if (mOplusQsMediaDefaultBackground != null) {
-                    mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
-                }
-                if (qsInactiveColorEnabled) {
-                    mOplusQsMediaDrawable.setTint(qsInactiveColor);
-                    mOplusQsMediaDrawable.invalidateSelf();
-                    mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
-                } else mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+    public void hookMediaPanel() {
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        OplusQsMediaPanelView
+                .after("onFinishInflate")
+                        .run(param -> {
+                            mOplusQsMediaView = (View) param.thisObject;
+                            if (mQsWidgetsEnabled) return;
+                            mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
+                            if (mOplusQsMediaDefaultBackground != null) {
+                                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
+                            }
+                            if (qsInactiveColorEnabled) {
+                                mOplusQsMediaDrawable.setTint(qsInactiveColor);
+                                mOplusQsMediaDrawable.invalidateSelf();
+                                mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
+                            } else mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
 
-                // Get OOS15 cover
-                if (Build.VERSION.SDK_INT >= 35) {
-                    mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
-                }
+                            // Get OOS15 cover
+                            if (Build.VERSION.SDK_INT >= 35) {
+                                mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
+                            }
 
-                // Listen for default tip change
-                View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
-                mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    if (v.getVisibility() == View.VISIBLE) {
-                        hideMediaQsBackground();
-                    }
-                });
-            }
-        });
+                            // Listen for default tip change
+                            View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
+                            mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                                if (v.getVisibility() == View.VISIBLE) {
+                                    hideMediaQsBackground();
+                                }
+                            });
+                        });
 
-        hookAllMethods(OplusQsMediaPanelView, "bindTitleAndText", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                updateMediaQsBackground();
-            }
-        });
+        OplusQsMediaPanelView
+                .after("bindTitleAndText")
+                        .run(param -> updateMediaQsBackground());
+
     }
 
     private void setSliderProgressColor(Object mSlider, ColorStateList colorStateList) {
@@ -582,9 +544,7 @@ public class QsTileCustomization extends XposedMods {
                     isColorDark(dominantColor) ?
                             DrawableConverter.findContrastColorAgainstDark(Color.WHITE, dominantColor, true, 2) :
                             DrawableConverter.findContrastColor(Color.BLACK, dominantColor, true, 2);
-            mOplusQsMediaView.post(() -> {
-                setupOtherViews(mOplusQsMediaView, mColorOnAlbum);
-            });
+            mOplusQsMediaView.post(() -> setupOtherViews(mOplusQsMediaView, mColorOnAlbum));
         });
 
         mOplusQsMediaView.post(() -> {
@@ -757,7 +717,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void getTileAnimation(View v) {
-        ObjectAnimator animTile = null;
+        ObjectAnimator animTile;
 
         switch (mAnimStyle) {
             case 1:
@@ -814,7 +774,7 @@ public class QsTileCustomization extends XposedMods {
         try {
             currentShape = (int) callMethod(mPersonalityManager, "getLastShapeType");
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+            XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + Log.getStackTraceString(t));
         }
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }
@@ -861,34 +821,30 @@ public class QsTileCustomization extends XposedMods {
 
     }
 
-    private XC_MethodHook getColorHook(boolean isHighlight) {
-        return new XC_MethodHook() {
-
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                int state = (int) param.args[0];
-                Shape mCustomShape = null;
-                if (customHighlightTileRadius && isHighlight) {
-                    mCustomShape = getTileShape(true);
-                } else if (customTileRadius && !isHighlight) {
-                    mCustomShape = getTileShape(false);
-                }
-                ShapeDrawable mPersonalityDrawable = (ShapeDrawable) param.getResult();
-                if (mCustomShape != null)
-                    mPersonalityDrawable.setShape(mCustomShape);
-                if (state == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
-                {
-                    mPersonalityDrawable.getPaint().setColor(qsInactiveColor);
-                } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
-                {
-                    mPersonalityDrawable.getPaint().setColor(qsActiveColor);
-                } else if (qsDisabledColorEnabled && state != STATE_INACTIVE && state != STATE_ACTIVE) // Disabled State
-                {
-                    mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
-                }
-                if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius)
-                    mPersonalityDrawable.invalidateSelf();
+    private ReflectedClass.ReflectionConsumer getColorHook(boolean isHighlight) {
+        return param -> {
+            int state = (int) param.args[0];
+            Shape mCustomShape = null;
+            if (customHighlightTileRadius && isHighlight) {
+                mCustomShape = getTileShape(true);
+            } else if (customTileRadius && !isHighlight) {
+                mCustomShape = getTileShape(false);
             }
+            ShapeDrawable mPersonalityDrawable = (ShapeDrawable) param.getResult();
+            if (mCustomShape != null)
+                mPersonalityDrawable.setShape(mCustomShape);
+            if (state == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
+            {
+                mPersonalityDrawable.getPaint().setColor(qsInactiveColor);
+            } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
+            {
+                mPersonalityDrawable.getPaint().setColor(qsActiveColor);
+            } else if (qsDisabledColorEnabled && state != STATE_INACTIVE && state != STATE_ACTIVE) // Disabled State
+            {
+                mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
+            }
+            if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius)
+                mPersonalityDrawable.invalidateSelf();
         };
     }
 
