@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.AOD_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
@@ -157,7 +155,7 @@ public class AodClock extends XposedMods {
 
         initResources(mContext);
 
-        LottieAn = findClass("com.airbnb.lottie.LottieAnimationView", lpparam.classLoader);
+        LottieAn = ReflectedClass.of("com.airbnb.lottie.LottieAnimationView").getClazz();
 
         ReflectedClass AodClockLayout = ReflectedClass.of(
                 "com.oplus.systemui.aod.aodclock.off.AodClockLayout", /* OOS 15, 14 */
