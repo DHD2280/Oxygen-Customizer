@@ -3,9 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.service.quicksettings.Tile.STATE_ACTIVE;
 import static android.service.quicksettings.Tile.STATE_INACTIVE;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
@@ -13,7 +11,6 @@ import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_TILE_REMOVED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -29,11 +26,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class CaffeineTile extends XposedMods {
 
@@ -89,76 +86,74 @@ public class CaffeineTile extends XposedMods {
             mRegistered = true;
         }
 
-        Class<?> QSPanelControllerBaseClass = findClass("com.android.systemui.qs.QSPanelControllerBase", lpparam.classLoader);
-        hookAllMethods(QSPanelControllerBaseClass, "setTiles", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                ((ArrayList<?>) getObjectField(param.thisObject, "mRecords")).forEach(record ->
-                {
-                    Object tile = getObjectField(record, "tile");
+        if (Build.VERSION.SDK_INT >= 35) {
+            ReflectedClass QSPanelControllerBaseClass = ReflectedClass.of("com.android.systemui.qs.QSPanelControllerBase");
+            QSPanelControllerBaseClass
+                    .after("setTiles")
+                    .run(param -> {
+                        ((ArrayList<?>) getObjectField(param.thisObject, "mRecords")).forEach(record ->
+                        {
+                            Object tile = getObjectField(record, "tile");
 
-                    if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
-                        mTileView = (View) getObjectField(record, "tileView");
-                        setupTile(tile, mTileView);
-                    }
+                            if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
+                                mTileView = (View) getObjectField(record, "tileView");
+                                setupTile(tile, mTileView);
+                            }
+                        });
+                    });
+        }
+
+        ReflectedClass OplusQSPageViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
+        OplusQSPageViewController
+                .after("setTiles")
+                .run(param -> {
+                    ((ArrayList<?>) getObjectField(param.thisObject, "records")).forEach(record ->
+                    {
+                        Object tile = getObjectField(record, "tile");
+
+                        if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
+                            mTileView = (View) getObjectField(record, "tileView");
+                            setupTile(tile, mTileView);
+                        }
+                    });
                 });
-            }
-        });
 
-        Class<?> OplusQSPageViewController = findClass("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController", lpparam.classLoader);
-        hookAllMethods(OplusQSPageViewController, "setTiles", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                ((ArrayList<?>) getObjectField(param.thisObject, "records")).forEach(record ->
-                {
-                    Object tile = getObjectField(record, "tile");
-
-                    if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
-                        mTileView = (View) getObjectField(record, "tileView");
-                        setupTile(tile, mTileView);
-                    }
-                });
-            }
-        });
-
-        Class<?> QSTileViewImplClass = findClassInArray(lpparam,
+        ReflectedClass QSTileViewImplClass = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView", /* OOS15 */
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", /* OOS14 */
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS13 */);
-        hookAllMethods(QSTileViewImplClass, "handleStateChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                try {
-                    if (getAdditionalInstanceField(param.thisObject, "mParentTile") != null) {
-                        mTile = param.args[0];
-                        log("handleStateChanged");
-                        updateTileView((LinearLayout) param.thisObject, (int) getObjectField(param.args[0] /* QSTile.State */, "state"));
-                    }
-                } catch (Throwable ignored) {
-                }
-            }
-        });
-
-        Class<?> QSTileImpl = findClass("com.android.systemui.qs.tileimpl.QSTileImpl", lpparam.classLoader);
-        hookAllMethods(QSTileImpl, "handleLongClick", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                try {
-                    View v = (Build.VERSION.SDK_INT >= 35) ?
-                            (View) callMethod(param.args[0], "getView") :
-                            (View) param.args[0];
-                    if (v != null) {
-                        if (getAdditionalInstanceField(v, "mTileTag") != null &&
-                                getAdditionalInstanceField(v, "mTileTag").equals("caffeine")) {
-                            handleLongClick();
-                            param.setResult(null);
+        QSTileViewImplClass
+                .after("handleStateChanged")
+                .run(param -> {
+                    try {
+                        if (getAdditionalInstanceField(param.thisObject, "mParentTile") != null) {
+                            mTile = param.args[0];
+                            log("handleStateChanged");
+                            updateTileView((LinearLayout) param.thisObject, (int) getObjectField(param.args[0] /* QSTile.State */, "state"));
                         }
+                    } catch (Throwable ignored) {
                     }
-                } catch (Throwable t) {
-                    log("Error handling long click: " + t.getMessage());
-                }
-            }
-        });
+                });
+
+        ReflectedClass QSTileImpl = ReflectedClass.of("com.android.systemui.qs.tileimpl.QSTileImpl");
+        QSTileImpl
+                .before("handleLongClick")
+                .run(param -> {
+                    try {
+                        View v = (Build.VERSION.SDK_INT >= 35) ?
+                                (View) callMethod(param.args[0], "getView") :
+                                (View) param.args[0];
+                        if (v != null) {
+                            if (getAdditionalInstanceField(v, "mTileTag") != null &&
+                                    getAdditionalInstanceField(v, "mTileTag").equals("caffeine")) {
+                                handleLongClick();
+                                param.setResult(null);
+                            }
+                        }
+                    } catch (Throwable t) {
+                        log("Error handling long click: " + t.getMessage());
+                    }
+                });
 
     }
 
