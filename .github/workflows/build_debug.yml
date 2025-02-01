@@ -42,16 +42,28 @@ jobs:
             echo ${{ secrets.KEYSTORE }} | base64 --decode > ${{ github.workspace }}/key.jks
           fi
 
-      - name: Build with Gradle
+      - name: Build release with Gradle
         if: github.repository == 'DHD2280/Oxygen-Customizer'
         run: ./gradlew assembleRelease
 
-      - name: Upload a Build Artifact
+      - name: Build debug with Gradle
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        run: ./gradlew assembleDebug
+
+      - name: Upload release Build Artifact
         if: github.repository == 'DHD2280/Oxygen-Customizer'
         uses: actions/upload-artifact@v4
         with:
           name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
           path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload debug Build Artifact
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}}) Debug"
+          path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
       - name: Get commit message header
