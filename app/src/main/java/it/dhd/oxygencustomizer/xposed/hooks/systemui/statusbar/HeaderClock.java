@@ -104,7 +104,6 @@ public class HeaderClock extends XposedMods {
     private static LayerDrawable mClockChipDrawable;
     private static LayerDrawable mDateChipDrawable;
     final ClickListener clickListener = new ClickListener();
-    private final String TAG = "HeaderClock: ";
     private final UserManager mUserManager;
     private final ArrayList<LinearLayout> mClockContainers = new ArrayList<>();
     private Context appContext;
