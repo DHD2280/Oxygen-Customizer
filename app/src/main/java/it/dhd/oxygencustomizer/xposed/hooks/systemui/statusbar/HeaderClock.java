@@ -1,11 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
@@ -33,9 +29,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_PREFS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderSystemIcons.QS_HEADER_SYSTEM_ICON_CHIP;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderSystemIcons.QS_SYSTEM_ICON_CHIP;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderSystemIcons.QS_SYSTEM_ICON_CHIP_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
 import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
@@ -45,6 +38,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -57,8 +51,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Environment;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -83,12 +77,12 @@ import androidx.core.text.TextUtilsCompat;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -98,21 +92,21 @@ import it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock;
 import it.dhd.oxygencustomizer.utils.TextUtil;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderClock extends XposedMods {
 
     public static final String OC_HEADER_CLOCK_TAG = "oxygencustomizer_header_clock";
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private static final GradientDrawable mSystemIconsChipDrawable = new GradientDrawable();
-    private static TextView mOplusClock = null;
-    private static TextView mOplusDate = null;
-    private static TextView mOplusCarrier = null;
+    private final ArrayList<TextView> mOplusClock = new ArrayList<>();
+    private final ArrayList<TextView> mOplusDate = new ArrayList<>();
+    private TextView mOplusCarrier = null;
     private static LayerDrawable mClockChipDrawable;
     private static LayerDrawable mDateChipDrawable;
     final ClickListener clickListener = new ClickListener();
     private final String TAG = "HeaderClock: ";
     private final UserManager mUserManager;
-    LinearLayout mQsClockContainer = new LinearLayout(mContext);
+    private final ArrayList<LinearLayout> mClockContainers = new ArrayList<>();
     private Context appContext;
     private boolean mBroadcastRegistered = false;
     // Custom Clock Prefs
@@ -163,7 +157,6 @@ public class HeaderClock extends XposedMods {
     private Typeface mStockClockTypeface, mStockDateTypeface;
     private Object OQC = null;
     private Object mActivityStarter = null;
-    private View mStatusIconsView = null;
 
     public HeaderClock(Context context) {
         super(context);
@@ -281,6 +274,7 @@ public class HeaderClock extends XposedMods {
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
@@ -292,223 +286,192 @@ public class HeaderClock extends XposedMods {
             mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
-        Class<?> QuickStatusBarHeader;
-        try {
-            QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
-        } catch (Throwable t) {
-            QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
-        }
-
-        Class<?> Clock = findClass("com.android.systemui.statusbar.policy.Clock", lpparam.classLoader);
-        hookAllConstructors(Clock, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                OQC = param.thisObject;
-            }
-        });
-
-        try {
-            hookAllMethods(QuickStatusBarHeader, "onFinishInflate", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    mStatusIconsView = (View) getObjectField(param.thisObject, "mStatusIconsView");
-                }
-            });
-        } catch (Throwable t) {
-            log("QuickStatusBarHeader onFinishInflate error: " + t.getMessage());
-        }
+        ReflectedClass Clock = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock");
+        Clock
+                .afterConstruction()
+                        .run(param -> OQC = param.thisObject);
 
         //OplusQSFooterImpl
-        Class<?> OplusQSFooterImpl;
-        try {
-            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
-        }
-        hookAllMethods(OplusQSFooterImpl, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
+        ReflectedClass OplusQSFooterImpl = ReflectedClass.of(
+                "com.oplus.systemui.qs.OplusQSFooterImpl",
+                "com.oplusos.systemui.qs.OplusQSFooterImpl");
 
-                FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;//getObjectField(param.thisObject, "mSettingsContainer");
+        OplusQSFooterImpl
+                .after("onFinishInflate")
+                        .run(param -> {
+                            FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;//getObjectField(param.thisObject, "mSettingsContainer");
 
-                // qs_footer_side_padding
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                mQsClockContainer.setLayoutParams(layoutParams);
-                mQsClockContainer.setPaddingRelative(0, -10, 0, 0);
-                mQsClockContainer.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-                mQsClockContainer.setVisibility(View.GONE);
+                            // qs_footer_side_padding
+                            LinearLayout mQsClockContainer = getQsClockContainer("QS_CLOCK_CLASSIC");
+                            mClockContainers.add(mQsClockContainer);
 
-                if (mQsClockContainer.getParent() != null) {
-                    ((ViewGroup) mQsClockContainer.getParent()).removeView(mQsClockContainer);
-                }
+                            if (mQsClockContainer.getParent() != null) {
+                                ((ViewGroup) mQsClockContainer.getParent()).removeView(mQsClockContainer);
+                            }
 
-                mQuickStatusBarHeader.addView(mQsClockContainer, mQuickStatusBarHeader.getChildCount());
+                            mQuickStatusBarHeader.addView(mQsClockContainer, mQuickStatusBarHeader.getChildCount());
 
-                // Hide stock clock, date and carrier group
-                try {
-                    mOplusDate = (TextView) getObjectField(param.thisObject, "mQsDateView");
-                    mStockDateTypeface = mOplusDate.getTypeface();
-                } catch (Throwable t) {
-                    try {
-                        mOplusDate = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("oplus_date", "id", listenPackage));
-                    } catch (Throwable ignored) {
-                    }
-                }
+                            // Hide stock clock, date and carrier group
+                            try {
+                                TextView date = (TextView) getObjectField(param.thisObject, "mQsDateView");
+                                mOplusDate.add(date);
+                                mStockDateTypeface = date.getTypeface();
+                            } catch (Throwable t) {
+                                try {
+                                    TextView date = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("oplus_date", "id", listenPackage));
+                                    mOplusDate.add(date);
+                                    mStockDateTypeface = date.getTypeface();
+                                } catch (Throwable ignored) {
+                                }
+                            }
 
-                try {
-                    mOplusClock = (TextView) getObjectField(param.thisObject, "mClockView");
-                    mStockClockTypeface = mOplusClock.getTypeface();
-                } catch (Throwable t) {
-                    try {
-                        mOplusClock = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_clock", "id", listenPackage));
-                    } catch (Throwable ignored) {
-                    }
-                }
+                            try {
+                                TextView clock = (TextView) getObjectField(param.thisObject, "mClockView");
+                                mStockClockTypeface = clock.getTypeface();
+                                mOplusClock.add(clock);
+                            } catch (Throwable t) {
+                                try {
+                                    TextView clock = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_clock", "id", listenPackage));
+                                    mStockClockTypeface = clock.getTypeface();
+                                    mOplusClock.add(clock);
+                                } catch (Throwable ignored) {
+                                }
+                            }
 
-                try {
-                    mOplusCarrier = (TextView) getObjectField(param.thisObject, "mOplusQSCarrier");
-                } catch (Throwable t) {
-                    try {
-                        mOplusCarrier = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_carrier_text", "id", listenPackage));
-                    } catch (Throwable ignored) {
-                    }
-                }
+                            try {
+                                mOplusCarrier = (TextView) getObjectField(param.thisObject, "mOplusQSCarrier");
+                            } catch (Throwable t) {
+                                try {
+                                    mOplusCarrier = mQuickStatusBarHeader.findViewById(mContext.getResources().getIdentifier("qs_footer_carrier_text", "id", listenPackage));
+                                } catch (Throwable ignored) {
+                                }
+                            }
 
-                updateStockPrefs();
-                setupChips();
-                updateChips();
-                updateClockView();
-            }
-        });
+                            updateStockPrefs();
+                            setupChips();
+                            updateChips();
+                            updateClockView();
+                        });
 
-        hookAllMethods(OplusQSFooterImpl, "updateResources", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                updateStockPrefs();
-                updateClockView();
-                updateChips();
-            }
-        });
+        OplusQSFooterImpl
+                .after("updateResources")
+                        .run(param -> {
+                            updateStockPrefs();
+                            updateClockView();
+                            updateChips();
+                        });
 
-        Class<?> QsFragmentHelper;
-        try {
-            QsFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
-        } catch (Throwable t) {
-            QsFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
-        }
+        ReflectedClass QsFragmentHelper = ReflectedClass.of(
+                "com.oplus.systemui.qs.helper.QSFragmentHelper",
+                "com.oplusos.systemui.qs.helper.QSFragmentHelper");
 
-        hookAllMethods(QsFragmentHelper, "onFractionUpdated", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                if (!showHeaderClock) return;
+        QsFragmentHelper
+                .after("onFractionUpdated")
+                        .run(param -> {
+                            if (!showHeaderClock) return;
 
-                if (getObjectField(param.thisObject, "mQsFooterClock") == null) return;
+                            if (getObjectField(param.thisObject, "mQsFooterClock") == null) return;
 
-                float f = (float) param.args[0];
-                Interpolator mAlphaAnimInterpolator = (Interpolator) getObjectField(param.thisObject, "mAlphaAnimInterpolator");
-                Interpolator mQsCoveredInterpolator = (Interpolator) getObjectField(param.thisObject, "mQsCoveredInterpolator");
-                float interpolation = mQsCoveredInterpolator.getInterpolation(f) * 833.0f;
-                float interpolation5 = mAlphaAnimInterpolator.getInterpolation(Math.min(interpolation / 500.0f, 1.0f));
-                float f3 = 1.0f - interpolation5;
+                            float f = (float) param.args[0];
+                            Interpolator mAlphaAnimInterpolator = (Interpolator) getObjectField(param.thisObject, "mAlphaAnimInterpolator");
+                            Interpolator mQsCoveredInterpolator = (Interpolator) getObjectField(param.thisObject, "mQsCoveredInterpolator");
+                            float interpolation = mQsCoveredInterpolator.getInterpolation(f) * 833.0f;
+                            float interpolation5 = mAlphaAnimInterpolator.getInterpolation(Math.min(interpolation / 500.0f, 1.0f));
+                            float f3 = 1.0f - interpolation5;
 
-                mQsClockContainer.setAlpha(f3);
-            }
-        });
+                            for (LinearLayout mClockContainer : mClockContainers) {
+                                if (mClockContainer.getTag() != null && mClockContainer.getTag().toString().contains("QS_CLOCK_CLASSIC")) {
+                                    mClockContainer.setAlpha(f3);
+                                }
+                            }
+                        });
 
-        Class<?> OplusClockExImpl;
-        try {
-            OplusClockExImpl = findClass("com.oplus.systemui.common.clock.OplusClockExImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusClockExImpl = findClass("com.oplusos.systemui.ext.BaseClockExt", lpparam.classLoader); // OOS 13
-        }
+        ReflectedClass OplusClockExImpl = ReflectedClass.of("com.oplus.systemui.common.clock.OplusClockExImpl",
+                "com.oplusos.systemui.ext.BaseClockExt");
 
-        hookAllMethods(OplusClockExImpl, "setTextWithRedOneStyleInternal", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                TextView textView = (TextView) param.args[0];
-                if (showHeaderClock || stockClockRedStyle == 1) {
-                    param.setResult(null);
-                    if (showHeaderClock) {
-                        textView.setText("");
-                        textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
-                    }
-                    return;
-                }
+        OplusClockExImpl
+                .before("setTextWithRedOneStyleInternal")
+                        .run(param -> {
+                            TextView textView = (TextView) param.args[0];
+                            if (showHeaderClock || stockClockRedStyle == 1) {
+                                param.setResult(null);
+                                if (showHeaderClock) {
+                                    textView.setText("");
+                                    textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
+                                }
+                                return;
+                            }
 
-                if (stockClockRedStyle == 2 || stockClockRedStyle == 3) {
-                    CharSequence charSequence = (CharSequence) param.args[1];
-                    StringBuilder sb = new StringBuilder(charSequence);
-                    int length = sb.length();
-                    for (int i = 0; i < length; i++) {
-                        char c = sb.charAt(i);
-                        if (c == ':') {
-                            sb.replace(i, i + 1, "\u200e∶");
-                            break;
-                        }
-                    }
+                            if (stockClockRedStyle == 2 || stockClockRedStyle == 3) {
+                                CharSequence charSequence = (CharSequence) param.args[1];
+                                StringBuilder sb = new StringBuilder(charSequence);
+                                int length = sb.length();
+                                for (int i = 0; i < length; i++) {
+                                    char c = sb.charAt(i);
+                                    if (c == ':') {
+                                        sb.replace(i, i + 1, "\u200e∶");
+                                        break;
+                                    }
+                                }
 
-                    int mColorAccent = getPrimaryColor(mContext);
-                    int colorToApply = stockClockRedStyle == 2 ? mColorAccent : stockClockRedOverrideColor;
-                    SpannableString spannableString = new SpannableString(sb);
-                    for (int i = 0; i < 2 && i < length; i++) {
-                        if (sb.charAt(i) == '1') {
-                            spannableString.setSpan(new ForegroundColorSpan(colorToApply), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                    }
-                    textView.setText(spannableString, TextView.BufferType.SPANNABLE);
-                    param.setResult(null);
-                }
-            }
-        });
+                                int mColorAccent = getPrimaryColor(mContext);
+                                int colorToApply = stockClockRedStyle == 2 ? mColorAccent : stockClockRedOverrideColor;
+                                SpannableString spannableString = new SpannableString(sb);
+                                for (int i = 0; i < 2 && i < length; i++) {
+                                    if (sb.charAt(i) == '1') {
+                                        spannableString.setSpan(new ForegroundColorSpan(colorToApply), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    }
+                                }
+                                textView.setText(spannableString, TextView.BufferType.SPANNABLE);
+                                param.setResult(null);
+                            }
+                        });
 
 
         try {
-            Class<?> ShadeHeaderControllerClass = findClassIfExists("com.android.systemui.shade.LargeScreenShadeHeaderController", lpparam.classLoader);
-            if (ShadeHeaderControllerClass == null)
-                ShadeHeaderControllerClass = findClass("com.android.systemui.shade.ShadeHeaderController", lpparam.classLoader);
+            ReflectedClass ShadeHeaderControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.shade.LargeScreenShadeHeaderController");
+            if (ShadeHeaderControllerClass.getClazz() == null)
+                ShadeHeaderControllerClass = ReflectedClass.of("com.android.systemui.shade.ShadeHeaderController");
 
-            hookAllMethods(ShadeHeaderControllerClass, "onInit", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    if (!showHeaderClock) return;
+            ShadeHeaderControllerClass
+                    .after("onInit")
+                            .run(param -> {
+                                if (!showHeaderClock) return;
 
-                    try {
-                        TextView clock = (TextView) getObjectField(param.thisObject, "clock");
-                        ((ViewGroup) clock.getParent()).removeView(clock);
-                    } catch (Throwable ignored) {
-                    }
+                                try {
+                                    TextView clock = (TextView) getObjectField(param.thisObject, "clock");
+                                    ((ViewGroup) clock.getParent()).removeView(clock);
+                                } catch (Throwable ignored) {
+                                }
 
-                    try {
-                        TextView date = (TextView) getObjectField(param.thisObject, "date");
-                        ((ViewGroup) date.getParent()).removeView(date);
-                    } catch (Throwable ignored) {
-                    }
+                                try {
+                                    TextView date = (TextView) getObjectField(param.thisObject, "date");
+                                    ((ViewGroup) date.getParent()).removeView(date);
+                                } catch (Throwable ignored) {
+                                }
 
-                    try {
-                        LinearLayout qsCarrierGroup = (LinearLayout) getObjectField(param.thisObject, "qsCarrierGroup");
-                        ((ViewGroup) qsCarrierGroup.getParent()).removeView(qsCarrierGroup);
-                    } catch (Throwable ignored) {
-                    }
-                }
-            });
+                                try {
+                                    LinearLayout qsCarrierGroup = (LinearLayout) getObjectField(param.thisObject, "qsCarrierGroup");
+                                    ((ViewGroup) qsCarrierGroup.getParent()).removeView(qsCarrierGroup);
+                                } catch (Throwable ignored) {
+                                }
+                            });
         } catch (Throwable t) {
             log("ShadeHeaderController error: " + t.getMessage());
         }
 
 
-        Class<?> QSSecurityFooterUtilsClass;
-        try {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
-        } catch (Throwable t) {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
-        }
-        hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
-            }
-        });
+        ReflectedClass QSSecurityFooterUtilsClass = ReflectedClass.of(
+                "com.android.systemui.qs.QSSecurityFooterUtils",
+                "com.android.systemui.qs.QSSecurityFooter");
+        QSSecurityFooterUtilsClass
+                .afterConstruction()
+                        .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
 
+        if (Build.VERSION.SDK_INT >= 35) {
+            hookNotificationClock();
+            hookPluginClock();
+        }
 
         try {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -530,6 +493,135 @@ public class HeaderClock extends XposedMods {
     @Override
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
+    }
+
+    private void hookNotificationClock() {
+        ReflectedClass OplusQSSimpleHeader = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusQSSimpleHeader");
+
+        if (OplusQSSimpleHeader.getClazz() == null) return;
+
+        OplusQSSimpleHeader
+                .after("onInit")
+                .run(param -> {
+                    FrameLayout view = (FrameLayout) param.thisObject;
+
+                    LinearLayout clockContainer = view.findViewById(
+                            mContext.getResources().getIdentifier(
+                                    "button_container_parent",
+                                    "id",
+                                    mContext.getPackageName()
+                            )
+                    );
+
+                    LinearLayout customClockContainer = getQsClockContainer("QS_CLOCK_NOTIF_CONTAINER");
+                    mClockContainers.add(customClockContainer);
+
+                    if (customClockContainer.getParent() != null) {
+                        ((ViewGroup) customClockContainer.getParent()).removeView(customClockContainer);
+                    }
+
+                    if (clockContainer.findViewWithTag("QS_CLOCK_NOTIF_CONTAINER") == null) clockContainer.addView(customClockContainer, 0);
+
+                    try {
+                        TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
+                        hideView(clockView);
+                    } catch (Throwable ignored) {}
+
+                    try {
+                        TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
+                        hideView(dateView);
+                    } catch (Throwable ignored) {}
+
+                    updateClockView();
+                });
+
+        OplusQSSimpleHeader
+                .after("updateTextColor")
+                .run(param -> {
+
+                    try {
+                        TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
+                        hideView(clockView);
+                    } catch (Throwable ignored) {}
+
+                    try {
+                        TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
+                        hideView(dateView);
+                    } catch (Throwable ignored) {}
+
+                });
+    }
+
+    private void hookPluginClock() {
+
+        ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
+
+        if (OplusQSQuickEntranceContainerViewController.getClazz() == null) return;
+
+        OplusQSQuickEntranceContainerViewController
+                .after("onInit")
+                .run(param -> {
+                    View view = (View) getObjectField(param.thisObject, "view");
+                    ViewGroup viewGroup = view.requireViewById(
+                            mContext.getResources().getIdentifier("qs_clock_and_date_container", "id", mContext.getPackageName())
+                    );
+
+                    LinearLayout clockContaier = getQsClockContainer("QS_CLOCK_PLUGIN_CONTAINER");
+                    mClockContainers.add(clockContaier);
+
+                    if (clockContaier.getParent() != null) {
+                        ((ViewGroup) clockContaier.getParent()).removeView(clockContaier);
+                    }
+
+                    if (viewGroup.findViewWithTag("QS_CLOCK_PLUGIN_CONTAINER") == null) viewGroup.addView(clockContaier, 0);
+
+                    try {
+                        TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
+                        hideView(clockView);
+                    } catch (Throwable ignored) {}
+
+                    try {
+                        TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
+                        hideView(dateView);
+                    } catch (Throwable ignored) {}
+
+                    updateClockView();
+                });
+
+        OplusQSQuickEntranceContainerViewController
+                .after("updateColor")
+                .run(param -> {
+
+                    try {
+                        TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
+                        hideView(clockView);
+                    } catch (Throwable ignored) {}
+
+                    try {
+                        TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
+                        hideView(dateView);
+                    } catch (Throwable ignored) {}
+
+                });
+
+    }
+
+    private LinearLayout getQsClockContainer(String tag) {
+        if (!mClockContainers.isEmpty()) {
+            for (LinearLayout mClockContainer : mClockContainers) {
+                if (mClockContainer.getTag() != null && mClockContainer.getTag().toString().contains(tag)) {
+                    return mClockContainer;
+                }
+            }
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout qsClockContainer = new LinearLayout(mContext);
+        qsClockContainer.setLayoutParams(layoutParams);
+        qsClockContainer.setPaddingRelative(0, -10, 0, 0);
+        qsClockContainer.setGravity(tag.equals("QS_CLOCK_NOTIF_CONTAINER") ? Gravity.START : Gravity.CENTER_VERTICAL | Gravity.START);
+        qsClockContainer.setVisibility(View.GONE);
+        qsClockContainer.setTag(tag);
+        return qsClockContainer;
     }
 
     private void setupClockChip() {
@@ -632,13 +724,26 @@ public class HeaderClock extends XposedMods {
             removeChip(mOplusClock);
         }
         if (!stockClockHideDate && stockClockDateBackgroundChip) {
-            if (mOplusDate != null) {
-                mOplusDate.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                mOplusDate.requestLayout();
+            if (!mOplusDate.isEmpty()) {
+                for (TextView textView : mOplusDate) {
+                    try {
+                        textView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        textView.requestLayout();
+                    } catch (Throwable t) {
+                        log("updateChips: " + t.getMessage());
+                    }
+                }
             }
             applyChip(mOplusDate);
         } else {
             removeChip(mOplusDate);
+        }
+    }
+
+    private void hideView(ArrayList<TextView> textViews) {
+        if (textViews.isEmpty()) return;
+        for (TextView textView : textViews) {
+            hideView(textView);
         }
     }
 
@@ -650,6 +755,13 @@ public class HeaderClock extends XposedMods {
             textView.setTextColor(Color.TRANSPARENT);
         } catch (Throwable t) {
             log("hideView: " + t.getMessage());
+        }
+    }
+
+    private void showView(ArrayList<TextView> textViews) {
+        if (textViews.isEmpty()) return;
+        for (TextView textView : textViews) {
+            showView(textView);
         }
     }
 
@@ -682,13 +794,13 @@ public class HeaderClock extends XposedMods {
             String customFontFile = Environment.getExternalStorageDirectory() + "/.oxygen_files/headerclock_font.ttf";
             if ((new File(customFontFile).exists()))
                 typeface = Typeface.createFromFile(new File(customFontFile));
-            mOplusClock.setTypeface(typeface);
-            mOplusDate.setTypeface(typeface);
+            setFonts(mOplusClock, typeface);
+            setFonts(mOplusDate, typeface);
         } else {
-            if (mStockClockTypeface != null && mOplusClock != null)
-                mOplusClock.setTypeface(mStockClockTypeface);
-            if (mStockDateTypeface != null && mOplusDate != null)
-                mOplusDate.setTypeface(mStockDateTypeface);
+            if (mStockClockTypeface != null && !mOplusClock.isEmpty())
+                setFonts(mOplusClock, mStockClockTypeface);
+            if (mStockDateTypeface != null && !mOplusDate.isEmpty())
+                setFonts(mOplusDate, mStockDateTypeface);
         }
 
         // Stock clock hide date
@@ -708,80 +820,94 @@ public class HeaderClock extends XposedMods {
 
     }
 
+    private void setFonts(ArrayList<TextView> textViews, Typeface typeface) {
+        if (textViews.isEmpty()) return;
+        for (TextView textView : textViews) {
+            textView.setTypeface(typeface);
+        }
+    }
+
+    private void setTextColors(ArrayList<TextView> textViews, int color) {
+        if (textViews.isEmpty()) return;
+        for (TextView textView : textViews) {
+            textView.setTextColor(color);
+        }
+    }
+
     private void setupStockColors() {
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
         int textColor = nightMode ? Color.WHITE : Color.BLACK;
-        if (mOplusClock != null) {
-            if (stockClockTimeColorSwitch) {
-                mOplusClock.setTextColor(stockClockTimeColor);
-            } else {
-                mOplusClock.setTextColor(textColor);
-            }
+        if (!mOplusClock.isEmpty()) {
+            setTextColors(mOplusClock, stockClockTimeColorSwitch ? stockClockTimeColor : textColor);
         }
 
         if (mOplusCarrier != null) {
             if (!stockClockHideDate && stockClockDateColorSwitch) {
-                mOplusDate.setTextColor(stockClockDateColor);
+                setTextColors(mOplusDate, stockClockDateColor);
             } else if (!stockClockHideDate) {
-                mOplusDate.setTextColor(textColor);
+                setTextColors(mOplusDate, textColor);
             }
         }
 
     }
 
-    private void removeChip(TextView textView) {
-        if (textView == null || textView.getVisibility() != View.VISIBLE) return;
-        try {
-            textView.setBackground(null);
-        } catch (Throwable t) {
-            log("removeChip: " + t.getMessage());
+    private void removeChip(ArrayList<TextView> textViews) {
+        for (TextView textView : textViews) {
+            if (textView == null || textView.getVisibility() != View.VISIBLE) return;
+            try {
+                textView.setBackground(null);
+            } catch (Throwable t) {
+                log("removeChip: " + t.getMessage());
+            }
         }
     }
 
-    private void applyChip(TextView textView) {
-        if (textView == null || textView.getVisibility() != View.VISIBLE) return;
-        try {
-            textView.setBackground(textView == mOplusClock ? mClockChipDrawable : mDateChipDrawable);
-        } catch (Throwable t) {
-            log("applyChip: " + t.getMessage());
+    private void applyChip(ArrayList<TextView> textViews) {
+        for (TextView textView : textViews) {
+            if (textView == null || textView.getVisibility() != View.VISIBLE) return;
+            try {
+                textView.setBackground(textViews == mOplusClock ? mClockChipDrawable : mDateChipDrawable);
+            } catch (Throwable t) {
+                log("applyChip: " + t.getMessage());
+            }
         }
     }
 
     private void updateClockView() {
-        if (mQsClockContainer == null) return;
 
-        if (!showHeaderClock) {
-            mQsClockContainer.setVisibility(View.GONE);
-            return;
-        }
-
-        View clockView = getClockView();
-
-        if (mQsClockContainer.findViewWithTag(OC_HEADER_CLOCK_TAG) != null) {
-            mQsClockContainer.removeView(mQsClockContainer.findViewWithTag(OC_HEADER_CLOCK_TAG));
-        }
-
-        if (clockView != null) {
-            if (centeredClockView) {
-                mQsClockContainer.setGravity(Gravity.CENTER);
-            } else {
-                mQsClockContainer.setGravity(Gravity.START);
+        for (LinearLayout mClockContainer : mClockContainers) {
+            if (mClockContainer == null) return;
+            if (!showHeaderClock) {
+                mClockContainer.setVisibility(View.GONE);
+                return;
             }
-            clockView.setTag(OC_HEADER_CLOCK_TAG);
 
-            TextUtil.convertTextViewsToTitleCase((ViewGroup) clockView);
+            View clockView = getClockView();
 
-            mQsClockContainer.addView(clockView);
-            modifyClockView(clockView);
+            mClockContainer.removeAllViews();
+
+            if (clockView != null) {
+                if (centeredClockView) {
+                    mClockContainer.setGravity(Gravity.CENTER);
+                } else {
+                    mClockContainer.setGravity(Gravity.START);
+                }
+                clockView.setTag(OC_HEADER_CLOCK_TAG);
+
+                TextUtil.convertTextViewsToTitleCase((ViewGroup) clockView);
+
+                mClockContainer.addView(clockView);
+                modifyClockView(clockView);
+            }
+
+            try {
+                setOnClickListener(mClockContainer);
+            } catch (Throwable ignored) {
+            }
+
+            mClockContainer.setVisibility(View.VISIBLE);
+            mClockContainer.setAlpha(1.0f);
         }
-
-        try {
-            setOnClickListener(mQsClockContainer);
-        } catch (Throwable ignored) {
-        }
-
-        mQsClockContainer.setVisibility(View.VISIBLE);
-        mQsClockContainer.setAlpha(1.0f);
 
         //hideView(mOplusCarrier);
     }
@@ -814,6 +940,7 @@ public class HeaderClock extends XposedMods {
     }
 
     private void modifyClockView(View clockView) {
+        mAccent = getPrimaryColor(mContext);
         String customFont = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/header_clock_font.ttf";
         boolean nightMode = mContext.getResources().getConfiguration().isNightModeActive();
         int textColor = nightMode ? Color.WHITE : Color.BLACK;
@@ -909,6 +1036,7 @@ public class HeaderClock extends XposedMods {
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", intent, 0 /* dismissShade */);
     }
 
+    @SuppressLint("DiscouragedApi")
     private View getClockView() {
         LayoutInflater inflater = LayoutInflater.from(appContext);
 

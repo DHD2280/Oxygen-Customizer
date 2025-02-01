@@ -487,7 +487,6 @@
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">快速设置顶部时钟</string>
     <string name="qs_header_clock_intro_title">启用和禁用自定义时钟需要重启系统界面。\n点击菜单重启。</string>
-    <string name="qs_header_clock_notice_oos15">自定义顶部时钟仅在旧版快速设置样式下可用</string>
     <string name="qs_header_clock_enabled">自定义顶部时钟</string>
     <string name="qs_header_clock_enabled_summary">在控制中心上添加自定义时钟</string>
     <string name="qs_header_clock_custom">时钟样式</string>

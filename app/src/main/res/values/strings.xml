@@ -539,7 +539,6 @@
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">QS Header Clock</string>
     <string name="qs_header_clock_intro_title">Enabling and disabling Custom Clock needs SystemUI restart.\nTap on menu to restart.</string>
-    <string name="qs_header_clock_notice_oos15">Custom QS Header Clock will only work on old qs style.</string>
     <string name="qs_header_clock_enabled">Custom Header Clock</string>
     <string name="qs_header_clock_enabled_summary">Add a custom clock on QS panel</string>
     <string name="qs_header_clock_custom">Clock Style</string>

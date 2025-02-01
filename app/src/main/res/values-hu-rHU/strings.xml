@@ -501,7 +501,6 @@
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">A QS-feljéckép órája</string>
     <string name="qs_header_clock_intro_title">Az egyéni óra engedélyezéséhez és letiltásához rendszerfelület-újraindítás szükséges.\nÉrintse meg a menüt az újraindításhoz.</string>
-    <string name="qs_header_clock_notice_oos15">A Gyorsbeállítások egyéni fejléc-órája csak a régi gyorsbeállítás-stíluson működik.</string>
     <string name="qs_header_clock_enabled">Egyéni fejléc-óra</string>
     <string name="qs_header_clock_enabled_summary">Adjon hozzá egyéni órát a QS panelhez</string>
     <string name="qs_header_clock_custom">Az óra stílusa</string>

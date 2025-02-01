@@ -501,7 +501,6 @@
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">Orologio Intestazione QS</string>
     <string name="qs_header_clock_intro_title">Abilitando e disabilitando l\'Orologio Personalizzato è necessario riavviare SystemUI.\nTocca il menu per riavviare.</string>
-    <string name="qs_header_clock_notice_oos15">L\'orologio personalizzato dell\'intestazione QS funzionerà solo con il vecchio stile QS.</string>
     <string name="qs_header_clock_enabled">Orologio Intestazione Personalizzato</string>
     <string name="qs_header_clock_enabled_summary">Aggiungi un orologio personalizzato al pannello impostazioni rapide</string>
     <string name="qs_header_clock_custom">Stile Orologio</string>
