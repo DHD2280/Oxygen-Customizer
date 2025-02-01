@@ -493,7 +493,6 @@
     <string name="qs_header_clock">Часы в заголовке QS</string>
     <string name="qs_header_clock_intro_title">Для включения и выключения пользовательских часов требуется перезагрузка системного интерфейса.
 Нажмите на меню, чтобы перезапустить.</string>
-    <string name="qs_header_clock_notice_oos15">Пользовательские часы заголовка QS будут работать только в старом стиле qs.</string>
     <string name="qs_header_clock_enabled">Настройка часов в QS</string>
     <string name="qs_header_clock_enabled_summary">Смена часов в QS</string>
     <string name="qs_header_clock_custom">Стиль часов</string>

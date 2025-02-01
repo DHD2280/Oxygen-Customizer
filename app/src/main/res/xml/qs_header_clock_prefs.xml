@@ -3,10 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
-    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
-        android:key="qs_header_clock_notice_oos15"
-        android:title="@string/qs_header_clock_notice_oos15" />
-
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/qs_header_clock_enabled">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
