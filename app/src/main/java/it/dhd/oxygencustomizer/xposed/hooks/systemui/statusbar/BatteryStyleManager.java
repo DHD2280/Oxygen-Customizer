@@ -84,7 +84,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -549,7 +548,7 @@ public class BatteryStyleManager extends XposedMods {
         if (CustomBatteryEnabled && batteryIcon != null) {
             scaleBatteryMeterViews(batteryIcon);
             updateBatteryRotation(batteryIcon);
-            updateFlipper(batteryIcon.getParent());
+            updateFlipper(Build.VERSION.SDK_INT >= 35 ? batteryIcon : batteryIcon.getParent());
             mIsCharging = isCharging();
             mIsPowerSaving = isPowerSaving();
             batteryIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -920,10 +919,13 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     private void updateFlipper(Object thisObject) {
-        LinearLayout batteryView = (LinearLayout) thisObject;
-        batteryView.setOrientation(LinearLayout.HORIZONTAL);
-        batteryView.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        batteryView.setLayoutDirection(mSwapPercentage ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        if (thisObject instanceof LinearLayout batteryView) {
+            batteryView.setOrientation(LinearLayout.HORIZONTAL);
+            batteryView.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+            batteryView.setLayoutDirection(mSwapPercentage ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        } else if (thisObject instanceof View batteryView) {
+            batteryView.setLayoutDirection(mSwapPercentage ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        }
     }
 
     private void updateBatteryRotation(View mBatteryIconView) {
