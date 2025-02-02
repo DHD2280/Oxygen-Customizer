@@ -202,6 +202,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
+    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Gregoriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$L per Data Lunare\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -338,6 +339,7 @@
     <string name="battery_circle">Rotonda</string>
     <string name="battery_dotted_circle">Rotonda a trattini</string>
     <string name="battery_filled_circle">Cerchio pieno</string>
+    <string name="battery_landscape_kim">Kim Orizzontale</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Nascondi icona Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Nascondi l\'icona Bluetooth quando non è connesso.</string>
