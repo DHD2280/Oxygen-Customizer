@@ -21,6 +21,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
@@ -64,6 +65,7 @@ public class LockscreenWidgets extends XposedMods {
     private boolean mWeatherInflated = false;
     private boolean mWidgetsEnabled = false;
     private boolean mDeviceWidgetEnabled = false;
+    private int mDeviceWidgetStyle = 0;
     private boolean mDeviceCustomColor = false;
     private int mDeviceLinearColor = Color.WHITE;
     private int mDeviceCircularColor = Color.WHITE;
@@ -106,6 +108,7 @@ public class LockscreenWidgets extends XposedMods {
         mWeatherEnabled = Xprefs.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
         mWidgetsEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false);
         mDeviceWidgetEnabled = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+        mDeviceWidgetStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE, "0"));
         mMainWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS, "");
         mExtraWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
         mDeviceCustomColor = Xprefs.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
@@ -135,7 +138,8 @@ public class LockscreenWidgets extends XposedMods {
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR) ||
-                Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE)) {
+                Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE) ||
+                Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE)) {
             updateLsDeviceWidget();
         }
         if (Key[0].equals(LOCKSCREEN_WIDGETS_CUSTOM_COLOR) ||
@@ -268,7 +272,7 @@ public class LockscreenWidgets extends XposedMods {
     private void updateLsDeviceWidget() {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
-        lsWidgets.setDeviceWidgetOptions(mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
+        lsWidgets.setDeviceWidgetOptions(mDeviceWidgetStyle, mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
     }
 
     private void updateLockscreenWidgetsColors() {

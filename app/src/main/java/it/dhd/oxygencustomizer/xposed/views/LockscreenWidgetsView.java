@@ -1601,14 +1601,16 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     /**
      * Set the options for the Device Widget
      *
-     * @param customColor   true if custom color is enabled
-     * @param linearColor   color for linear battery progressbar
-     * @param circularColor color for circular progressbar
-     * @param textColor     color for text
-     * @param devName       device name, keep blank for default Build.MODEL
+     * @param deviceWidgetStyle     style for device widget
+     * @param customColor           true if custom color is enabled
+     * @param linearColor           color for linear battery progressbar
+     * @param circularColor         color for circular progressbar
+     * @param textColor             color for text
+     * @param devName               device name, keep blank for default Build.MODEL
      */
-    public void setDeviceWidgetOptions(boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
+    public void setDeviceWidgetOptions(int deviceWidgetStyle, boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
         if (instance.mDeviceWidgetView == null) return;
+        instance.mDeviceWidgetView.setDeviceWidgetStyle(deviceWidgetStyle);
         instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);

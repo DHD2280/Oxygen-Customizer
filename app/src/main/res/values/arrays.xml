@@ -737,6 +737,16 @@
         <item>customapp</item>
     </string-array>
 
+    <!-- Lockscreen Device Widget style -->
+    <string-array name="lockscreen_device_widget_entries">
+        <item>@string/lockscreen_device_widget_style_classic</item>
+        <item>@string/lockscreen_device_widget_style_arcs</item>
+    </string-array>
+    <string-array name="lockscreen_device_widget_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <!-- Lockscreen widget style  -->
     <string-array name="lockscreen_widgets_style_entries">
         <item>@string/lockscreen_widgets_style1</item>

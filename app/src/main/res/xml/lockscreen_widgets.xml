@@ -22,6 +22,15 @@
             android:title="@string/lockscreen_display_widgets_title"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="lockscreen_device_widget"
+            android:entries="@array/lockscreen_device_widget_entries"
+            android:entryValues="@array/lockscreen_device_widget_values"
+            android:key="lockscreen_device_widget_style"
+            android:title="@string/lockscreen_device_widget_style_title"
+            app:useSimpleSummaryProvider="true" />
+
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="lockscreen_device_widget_custom_color"

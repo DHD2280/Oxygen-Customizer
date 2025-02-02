@@ -101,6 +101,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
@@ -684,10 +685,14 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
             }
 
-            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR,
-                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR -> {
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
+            }
+
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR -> {
+                return isVisible(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR) &&
+                        instance.mPreferences.getString(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE, "0").equals("0");
             }
 
             case LOCKSCREEN_WIDGETS_BIG_ACTIVE,
@@ -907,6 +912,7 @@ public class PreferenceHelper {
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE,
                  LOCKSCREEN_WIDGETS_CUSTOM_COLOR,
                  LOCKSCREEN_WIDGETS_BIG_ACTIVE,
                  LOCKSCREEN_WIDGETS_BIG_INACTIVE,

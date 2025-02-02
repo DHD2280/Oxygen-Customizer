@@ -1241,6 +1241,9 @@
     <string name="lockscreen_widgets_enabled_summary">Add widgets to lockscreen</string>
     <string name="lockscreen_display_widgets_title">Device info Widget</string>
     <string name="lockscreen_display_widgets_summary">Show device info widget on lockscreen</string>
+    <string name="lockscreen_device_widget_style_title">Device Widget Style</string>
+    <string name="lockscreen_device_widget_style_classic">1 bar + 2 arcs</string>
+    <string name="lockscreen_device_widget_style_arcs">4 arcs</string>
     <string name="linear_progress_color">Linear Progress Color</string>
     <string name="circular_progress_color">Circular Progress Color</string>
     <string name="text_color">Text Color</string>

@@ -466,6 +466,7 @@ public final class Constants {
 
             public static final String LOCKSCREEN_WIDGETS_ENABLED = "lockscreen_widgets_enabled";
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET = "lockscreen_device_widget";
+            public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE = "lockscreen_device_widget_style";
             public static final String LOCKSCREEN_WIDGETS = "lockscreen_widgets";
             public static final String LOCKSCREEN_WIDGETS_EXTRAS = "lockscreen_widgets_extras";
 
