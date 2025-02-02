@@ -202,6 +202,7 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
+    <string name="string_formatter_manual_body">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátumformátum alapján*\n$P\&lt;format\&gt; : Perzsa-dátumformátum alapján*\n$L Holddátumhoz\n$I\&lt;calendar\&gt;&lt;format\&gt; : Iszlám naptár. A naptár választható, alapértelmezetten iszlám, használhatja a C-t is a polgárihoz és az U-t az Um al-Qura-hoz.\n$T\&lt;format\&gt;[intervallum] : Hőmérsékletformátumnál; \n - b (akku), c (CPU), g (GPU) és s (bőr) \nVégül, van OPCIONÁLIS számú frissítési időköz másodpercben (alapértelmezetten: 60 másodperc)\n\n*a formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre</string>
     <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
@@ -338,6 +339,7 @@
     <string name="battery_circle">Kör alakú akku</string>
     <string name="battery_dotted_circle">Pontozott kör akku</string>
     <string name="battery_filled_circle">Telített kör</string>
+    <string name="battery_landscape_kim">Fekvő Kim</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Bluetooth-ikon elrejtés</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Amikor nincs kapcsolat, elrejti a BT kijelzőjét.</string>
