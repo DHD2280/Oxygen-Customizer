@@ -25,9 +25,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCRE
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_WIND;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
@@ -40,7 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -204,9 +201,9 @@ public class LockscreenWeather extends XposedMods {
         currentWeatherView.updateSizes(mWeatherTextSize, mWeatherImageSize, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateColors(mWeatherCustomColor ? mWeatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateWeatherSettings(mWeatherShowLocation, mWeatherShowCondition, mWeatherShowHumidity, mWeatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
-        currentWeatherView.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
         currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         updateMargins();
+        if (mWeatherContainer != null) mWeatherContainer.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
     }
 
     private void updateWeatherView() {
