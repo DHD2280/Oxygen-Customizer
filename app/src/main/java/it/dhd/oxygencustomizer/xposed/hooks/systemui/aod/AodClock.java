@@ -25,7 +25,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,12 +51,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
@@ -69,11 +68,11 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.views.ProgressImageView;
 
 public class AodClock extends XposedMods {
 
@@ -95,21 +94,19 @@ public class AodClock extends XposedMods {
     private int mBatteryPercentage = 1;
     private UserManager mUserManager;
     private AudioManager mAudioManager;
-    private ActivityManager mActivityManager;
     private TextView mBatteryStatusView;
     private TextView mBatteryLevelView;
     private TextView mVolumeLevelView;
     private ProgressBar mBatteryProgress;
     private ProgressBar mVolumeProgress;
-    private ImageView mVolumeLevelArcProgress;
+    private ProgressImageView mVolumeLevelArcProgress;
     private final BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             initSoundManager();
         }
     };
-    private ImageView mRamUsageArcProgress;
-    private ImageView mBatteryArcProgress;
+    private ProgressImageView mRamUsageArcProgress;
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -261,6 +258,12 @@ public class AodClock extends XposedMods {
             ViewHelper.findViewWithTagAndChangeColor(clockView, "text1", text1);
             ViewHelper.findViewWithTagAndChangeColor(clockView, "text2", text2);
         }
+        if (mVolumeLevelArcProgress != null) {
+            mVolumeLevelArcProgress.setColors(mCustomColor ? accent1 : systemAccent, text1);
+        }
+        if (mRamUsageArcProgress != null) {
+            mRamUsageArcProgress.setColors(mCustomColor ? accent1 : systemAccent, text1);
+        }
 
         if (typeface != null) {
             ViewHelper.applyFontRecursively((ViewGroup) clockView, typeface);
@@ -303,7 +306,6 @@ public class AodClock extends XposedMods {
             customImage.post(() -> customImage.setImageDrawable(getCustomImage()));
         }
 
-        mBatteryArcProgress = null;
         mBatteryStatusView = null;
         mBatteryLevelView = null;
         mBatteryProgress = null;
@@ -334,8 +336,22 @@ public class AodClock extends XposedMods {
             case 19 -> {
                 mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
                 mBatteryProgress = (ProgressBar) findViewWithTag(clockView, "battery_progressbar");
-                mVolumeLevelArcProgress = (ImageView) findViewWithTag(clockView, "volume_progress");
-                mRamUsageArcProgress = (ImageView) findViewWithTag(clockView, "ram_usage_info");
+                LinearLayout volumeProgress = (LinearLayout) findViewWithTag(clockView, "volume_progress");
+                if (mVolumeLevelArcProgress == null) {
+                    mVolumeLevelArcProgress = new ProgressImageView(mContext);
+                    mVolumeLevelArcProgress.setProgressType(ProgressImageView.ProgressType.VOLUME);
+                    mVolumeLevelArcProgress.setColors(mCustomColor ? accent1 : getPrimaryColor(mContext), text1);
+                }
+                volumeProgress.addView(mVolumeLevelArcProgress);
+                volumeProgress.setBackground(null);
+                LinearLayout ramProgress = (LinearLayout) findViewWithTag(clockView, "ram_usage_info");
+                if (mRamUsageArcProgress == null) {
+                    mRamUsageArcProgress = new ProgressImageView(mContext);
+                    mRamUsageArcProgress.setProgressType(ProgressImageView.ProgressType.MEMORY);
+                    mRamUsageArcProgress.setColors(mCustomColor ? accent1 : getPrimaryColor(mContext), text1);
+                }
+                ramProgress.addView(mRamUsageArcProgress);
+                ramProgress.setBackground(null);
 
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(mCustomColor ? accent1 : getPrimaryColor(mContext)));
             }
@@ -410,23 +426,9 @@ public class AodClock extends XposedMods {
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(mCustomColor ? accent1 : getPrimaryColor(mContext)));
             }
         }
-        if (mBatteryArcProgress != null) {
-            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                    mContext,
-                    mBatteryPercentage,
-                    appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage),
-                    32,
-                    "BATTERY",
-                    20,
-                    mCustomColor ? accent1 : getPrimaryColor(mContext)
-            );
-            mBatteryArcProgress.setImageBitmap(widgetBitmap);
-        }
         if (mBatteryLevelView != null) {
             mBatteryLevelView.setText(appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage));
         }
-
-        initRamUsage();
     }
 
     private void initSoundManager() {
@@ -440,43 +442,6 @@ public class AodClock extends XposedMods {
         }
         if (mVolumeLevelView != null) {
             mVolumeLevelView.setText(appContext.getResources().getString(R.string.percentage_text, volPercent));
-        }
-
-        if (mVolumeLevelArcProgress != null) {
-            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                    mContext,
-                    volPercent,
-                    appContext.getResources().getString(R.string.percentage_text, volPercent),
-                    32,
-                    ContextCompat.getDrawable(appContext, R.drawable.ic_volume_up),
-                    36,
-                    mCustomColor ? accent1 : getPrimaryColor(mContext)
-            );
-            mVolumeLevelArcProgress.setImageBitmap(widgetBitmap);
-        }
-    }
-
-    private void initRamUsage() {
-        if (!mAodClockEnabled || (Build.VERSION.SDK_INT >= 35 && !canShowAodClock())) return;
-        if (mActivityManager == null) return;
-
-        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-        mActivityManager.getMemoryInfo(memoryInfo);
-        long usedMemory = memoryInfo.totalMem - memoryInfo.availMem;
-        if (memoryInfo.totalMem == 0) return;
-        int usedMemoryPercentage = (int) ((usedMemory * 100) / memoryInfo.totalMem);
-
-        if (mRamUsageArcProgress != null) {
-            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                    mContext,
-                    usedMemoryPercentage,
-                    appContext.getResources().getString(R.string.percentage_text, usedMemoryPercentage),
-                    32,
-                    "RAM",
-                    20,
-                    mCustomColor ? accent1 : getPrimaryColor(mContext)
-            );
-            mRamUsageArcProgress.setImageBitmap(widgetBitmap);
         }
     }
 
@@ -546,7 +511,6 @@ public class AodClock extends XposedMods {
 
         mUserManager = SystemUtils.UserManager();
         mAudioManager = SystemUtils.AudioManager();
-        mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         try {
             context.registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT1;
@@ -64,11 +65,13 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
@@ -101,6 +104,7 @@ import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
+import it.dhd.oxygencustomizer.xposed.views.ProgressImageView;
 
 public class LockscreenClock extends XposedMods {
 
@@ -142,9 +146,8 @@ public class LockscreenClock extends XposedMods {
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private final ScheduledExecutorService mDebouncer = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> mScheduledFuture;
-    private ImageView mVolumeLevelArcProgress;
-    private ImageView mRamUsageArcProgress;
-    private ImageView mBatteryArcProgress;
+    private ProgressImageView mVolumeLevelArcProgress;
+    private ProgressImageView mRamUsageArcProgress;
     private int accent1, accent2, accent3, text1, text2;
     private boolean customColor;
     private LockscreenView mLockscreenView;
@@ -253,6 +256,7 @@ public class LockscreenClock extends XposedMods {
         createCustomClockView();
 
         if (Build.VERSION.SDK_INT >= 35) {
+
             ReflectedClass KeyguardStyleClockControllerImpl = ReflectedClass.of("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl");
             KeyguardStyleClockControllerImpl
                     .before("getKeyguardStyleClockHeight")
@@ -270,7 +274,7 @@ public class LockscreenClock extends XposedMods {
                     });
 
             ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
-
+            ReflectedClass OplusKeyguardStyleWrapper = ReflectedClass.ofIfPossible("com.oplus.keyguard.comm.OplusKeyguardStyleWrapper");
             /*
              * OOS15
              * They added a Plugin for Lockscreen Clock
@@ -298,19 +302,26 @@ public class LockscreenClock extends XposedMods {
              * Should be the image bundled with some styles
              * We can try to set our depth here and see what happens
              */
+            ReflectedClass.ReflectionConsumer lockscreenClockHook = param -> {
+                int viewType = (int) param.args[0];
+                if (viewType == 0) {
+                    if (customLockscreenClock) {
+                        param.setResult(mLockscreenView);
+                    }
+                } else if (viewType == 1) {
+                    //TODO: Custom Image for some clock styles
+                }
+            };
+
             OplusKeyguardStyleBaseClock
                     .before("getView")
-                    .run(param -> {
-                        int viewType = (int) param.args[0];
-                        if (viewType == 0) {
-//                            ReflectionTools.dumpView((View) param.getResult());
-                            if (customLockscreenClock) {
-                                param.setResult(mLockscreenView);
-                            }
-                        } else if (viewType == 1) {
-                            //TODO: Custom Image for some clock styles
-                        }
-                    });
+                    .run(lockscreenClockHook);
+
+            if (OplusKeyguardStyleWrapper.getClazz() != null) { // RUI 6.0
+                OplusKeyguardStyleWrapper
+                        .before("getView")
+                        .run(lockscreenClockHook);
+            }
 
             OplusKeyguardStyleBaseClock
                     .before("loadPlugin")
@@ -620,9 +631,15 @@ public class LockscreenClock extends XposedMods {
             customImage.post(() -> customImage.setImageDrawable(getCustomImage()));
         }
 
+        if (mVolumeLevelArcProgress != null) {
+            mVolumeLevelArcProgress.setColors(customColor ? accent1 : systemAccent, text1);
+        }
+        if (mRamUsageArcProgress != null) {
+            mRamUsageArcProgress.setColors(customColor ? accent1 : systemAccent, text1);
+        }
+
         mBatteryLevelView = null;
         mBatteryProgress = null;
-        mBatteryArcProgress = null;
         mBatteryStatusView = null;
         mVolumeLevelView = null;
         mVolumeProgress = null;
@@ -652,8 +669,20 @@ public class LockscreenClock extends XposedMods {
             case 19 -> {
                 mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
                 mBatteryProgress = (ProgressBar) findViewWithTag(clockView, "battery_progressbar");
-                mVolumeLevelArcProgress = (ImageView) findViewWithTag(clockView, "volume_progress");
-                mRamUsageArcProgress = (ImageView) findViewWithTag(clockView, "ram_usage_info");
+                LinearLayout volumeProgress = (LinearLayout) findViewWithTag(clockView, "volume_progress");
+                if (mVolumeLevelArcProgress == null) {
+                    mVolumeLevelArcProgress = new ProgressImageView(mContext);
+                    mVolumeLevelArcProgress.setColors(customColor ? accent1 : getPrimaryColor(mContext), text1);
+                    mVolumeLevelArcProgress.setProgressType(ProgressImageView.ProgressType.VOLUME);
+                }
+                volumeProgress.addView(mVolumeLevelArcProgress);
+                LinearLayout ramProgress = (LinearLayout) findViewWithTag(clockView, "ram_usage_info");
+                if (mRamUsageArcProgress == null) {
+                    mRamUsageArcProgress = new ProgressImageView(mContext);
+                    mRamUsageArcProgress.setColors(customColor ? accent1 : getPrimaryColor(mContext), text1);
+                    mRamUsageArcProgress.setProgressType(ProgressImageView.ProgressType.MEMORY);
+                }
+                ramProgress.addView(mRamUsageArcProgress);
 
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
             }
@@ -671,7 +700,11 @@ public class LockscreenClock extends XposedMods {
         if (!customLockscreenClock) return;
 
         if (mLockscreenView == null) return;
-        mLockscreenView.onUiStateChanged(uiMode);
+        try {
+            mLockscreenView.onUiStateChanged(uiMode);
+        } catch (Throwable t) {
+            XposedBridge.log("Error moving clock view: " + Log.getStackTraceString(t));
+        }
     }
 
     private void initBatteryStatus() {
@@ -694,23 +727,9 @@ public class LockscreenClock extends XposedMods {
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
             }
         }
-        if (mBatteryArcProgress != null) {
-            Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                    mContext,
-                    mBatteryPercentage,
-                    appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage),
-                    32,
-                    "BATTERY",
-                    20,
-                    customColor ? accent1 : getPrimaryColor(mContext)
-            );
-            mBatteryArcProgress.setImageBitmap(widgetBitmap);
-        }
         if (mBatteryLevelView != null) {
             mBatteryLevelView.setText(appContext.getResources().getString(R.string.percentage_text, mBatteryPercentage));
         }
-
-        initRamUsage();
     }
 
     private void initSoundManager() {
@@ -723,59 +742,6 @@ public class LockscreenClock extends XposedMods {
         }
         if (mVolumeLevelView != null) {
             mVolumeLevelView.post(() -> mVolumeLevelView.setText(appContext.getResources().getString(R.string.percentage_text, volPercent)));
-        }
-
-        if (mVolumeLevelArcProgress != null && mVolumeLevelArcProgress.getVisibility() == View.VISIBLE) {
-            updateVolumeLevelDebounced(volPercent);
-        }
-    }
-
-    public void updateVolumeLevelDebounced(int volPercent) {
-        if (mScheduledFuture != null && !mScheduledFuture.isDone()) {
-            mScheduledFuture.cancel(false);
-        }
-
-        mScheduledFuture = mDebouncer.schedule(() -> mExecutor.execute(() -> updateVolumeLevel(volPercent)),
-                300, TimeUnit.MILLISECONDS);
-    }
-
-    private void updateVolumeLevel(int volPercent) {
-        if (mVolumeLevelArcProgress == null) return;
-
-        Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                mContext,
-                volPercent,
-                appContext.getResources().getString(R.string.percentage_text, volPercent),
-                32,
-                ContextCompat.getDrawable(appContext, R.drawable.ic_volume_up),
-                36,
-                customColor ? accent1 : getPrimaryColor(mContext)
-        );
-        mVolumeLevelArcProgress.post(() -> mVolumeLevelArcProgress.setImageBitmap(widgetBitmap));
-    }
-
-    private void initRamUsage() {
-        if (mActivityManager == null) return;
-
-        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-        mActivityManager.getMemoryInfo(memoryInfo);
-        long usedMemory = memoryInfo.totalMem - memoryInfo.availMem;
-        if (memoryInfo.totalMem == 0) return;
-        int usedMemoryPercentage = (int) ((usedMemory * 100) / memoryInfo.totalMem);
-
-        if (mRamUsageArcProgress != null && mRamUsageArcProgress.getVisibility() == View.VISIBLE) {
-            mExecutor.submit(() -> {
-                Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
-                        mContext,
-                        usedMemoryPercentage,
-                        appContext.getResources().getString(R.string.percentage_text, usedMemoryPercentage),
-                        32,
-                        "RAM",
-                        20,
-                        customColor ? accent1 : getPrimaryColor(mContext)
-                );
-                mRamUsageArcProgress.setImageBitmap(widgetBitmap);
-            });
         }
     }
 

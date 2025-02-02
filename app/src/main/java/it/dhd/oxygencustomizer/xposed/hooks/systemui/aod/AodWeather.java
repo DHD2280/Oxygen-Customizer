@@ -93,7 +93,7 @@ public class AodWeather extends XposedMods {
         hookAllMethods(AodClockLayout, "initForAodApk", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //if (!mAodClockEnabled) return;
+                if (!weatherEnabled) return;
                 FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
                 for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
                     if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
