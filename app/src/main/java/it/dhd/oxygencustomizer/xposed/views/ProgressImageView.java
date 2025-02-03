@@ -159,6 +159,7 @@ public class ProgressImageView extends ImageView {
     }
 
     private void updateImageView() {
+        if (progressType == ProgressType.UNKNOWN) return;
         String degree = "\u2103";
         String progressText;
         if (progressType == ProgressType.TEMPERATURE) {

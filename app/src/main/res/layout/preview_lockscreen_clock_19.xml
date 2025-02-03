@@ -103,22 +103,22 @@
 
             </LinearLayout>
 
-            <ImageView
+            <LinearLayout
                 android:tag="volume_progress"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="24dp"
                 android:adjustViewBounds="true"
                 android:alpha="0.9"
-                android:src="@drawable/arc_progress"/>
+                android:background="@drawable/arc_progress"/>
 
-            <ImageView
+            <LinearLayout
                 android:tag="ram_usage_info"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"
                 android:alpha="0.9"
-                android:src="@drawable/arc_progress" />
+                android:background="@drawable/arc_progress" />
 
         </LinearLayout>
     </LinearLayout>

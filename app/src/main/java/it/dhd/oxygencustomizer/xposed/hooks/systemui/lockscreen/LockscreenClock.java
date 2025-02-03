@@ -6,7 +6,6 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT1;
@@ -84,11 +83,6 @@ import androidx.core.content.res.ResourcesCompat;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Calendar;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -98,7 +92,6 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -143,9 +136,6 @@ public class LockscreenClock extends XposedMods {
     private ProgressBar mVolumeProgress;
     private int mBatteryStatus = 1;
     private int mBatteryPercentage = 1;
-    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-    private final ScheduledExecutorService mDebouncer = Executors.newScheduledThreadPool(1);
-    private ScheduledFuture<?> mScheduledFuture;
     private ProgressImageView mVolumeLevelArcProgress;
     private ProgressImageView mRamUsageArcProgress;
     private int accent1, accent2, accent3, text1, text2;
@@ -643,8 +633,13 @@ public class LockscreenClock extends XposedMods {
         mBatteryStatusView = null;
         mVolumeLevelView = null;
         mVolumeProgress = null;
-        mVolumeLevelArcProgress = null;
-        mRamUsageArcProgress = null;
+
+        try {
+            ((ViewGroup) mVolumeLevelArcProgress.getParent()).removeView(mVolumeLevelArcProgress);
+        } catch (Throwable ignored) {}
+        try {
+            ((ViewGroup) mRamUsageArcProgress.getParent()).removeView(mRamUsageArcProgress);
+        } catch (Throwable ignored) {}
 
         switch (lockscreenClockStyle) {
             case 2 -> {
@@ -675,6 +670,7 @@ public class LockscreenClock extends XposedMods {
                     mVolumeLevelArcProgress.setColors(customColor ? accent1 : getPrimaryColor(mContext), text1);
                     mVolumeLevelArcProgress.setProgressType(ProgressImageView.ProgressType.VOLUME);
                 }
+                volumeProgress.setBackground(null);
                 volumeProgress.addView(mVolumeLevelArcProgress);
                 LinearLayout ramProgress = (LinearLayout) findViewWithTag(clockView, "ram_usage_info");
                 if (mRamUsageArcProgress == null) {
@@ -682,6 +678,7 @@ public class LockscreenClock extends XposedMods {
                     mRamUsageArcProgress.setColors(customColor ? accent1 : getPrimaryColor(mContext), text1);
                     mRamUsageArcProgress.setProgressType(ProgressImageView.ProgressType.MEMORY);
                 }
+                ramProgress.setBackground(null);
                 ramProgress.addView(mRamUsageArcProgress);
 
                 mBatteryProgress.setProgressTintList(ColorStateList.valueOf(customColor ? accent1 : getPrimaryColor(mContext)));
