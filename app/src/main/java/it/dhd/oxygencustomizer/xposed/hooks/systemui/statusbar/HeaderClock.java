@@ -523,12 +523,12 @@ public class HeaderClock extends XposedMods {
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
-                        hideView(clockView);
+                        mOplusClock.add(clockView);
                     } catch (Throwable ignored) {}
 
                     try {
                         TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
-                        hideView(dateView);
+                        mOplusDate.add(dateView);
                     } catch (Throwable ignored) {}
 
                     updateClockView();
@@ -537,6 +537,8 @@ public class HeaderClock extends XposedMods {
         OplusQSSimpleHeader
                 .after("updateTextColor")
                 .run(param -> {
+
+                    if (!showHeaderClock) return;
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
@@ -576,12 +578,12 @@ public class HeaderClock extends XposedMods {
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
-                        hideView(clockView);
+                        mOplusClock.add(clockView);
                     } catch (Throwable ignored) {}
 
                     try {
                         TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
-                        hideView(dateView);
+                        mOplusDate.add(dateView);
                     } catch (Throwable ignored) {}
 
                     updateClockView();
@@ -590,6 +592,7 @@ public class HeaderClock extends XposedMods {
         OplusQSQuickEntranceContainerViewController
                 .after("updateColor")
                 .run(param -> {
+                    if (!showHeaderClock) return;
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
