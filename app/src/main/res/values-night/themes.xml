@@ -44,32 +44,4 @@
 
     </style>
 
-    <style name="Theme.OxygenCustomizer.DarkSoft" parent="Theme.OxygenCustomizer">
-        <!-- Background color. -->
-        <item name="android:windowBackground">@color/colorBackgroundSoft</item>
-        <item name="android:colorBackground">@color/colorBackgroundSoft</item>
-        <item name="preferenceBackgroundColor">#454545</item>
-    </style>
-
-    <style name="Theme.OxygenCustomizer.DarkMedium" parent="Theme.OxygenCustomizer">
-        <!-- Background color. -->
-        <item name="android:windowBackground">@color/colorBackgroundMedium</item>
-        <item name="android:colorBackground">@color/colorBackgroundMedium</item>
-        <item name="preferenceBackgroundColor">#2F2F2F</item>
-    </style>
-
-    <style name="Theme.OxygenCustomizer.DarkHard" parent="Theme.OxygenCustomizer">
-        <!-- Background color. -->
-        <item name="android:windowBackground">@color/colorBackgroundHard</item>
-        <item name="android:colorBackground">@color/colorBackgroundHard</item>
-        <item name="preferenceBackgroundColor">#1A1A1A</item>
-    </style>
-
-    <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenBackground">@color/colorBackgroundHard</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_logo</item>
-        <item name="postSplashScreenTheme">@style/Theme.OxygenCustomizer</item>
-    </style>
-
 </resources>

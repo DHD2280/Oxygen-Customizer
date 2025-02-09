@@ -1,8 +1,7 @@
 package it.dhd.oxygencustomizer.ui.activity;
 
-import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
@@ -15,10 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.color.DynamicColors;
 
 import it.dhd.oneplusui.appcompat.app.OplusActivity;
-import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ActivityOnboardingBinding;
 import it.dhd.oxygencustomizer.ui.views.OnboardingView;
-import it.dhd.oxygencustomizer.utils.Constants;
 
 public class OnboardingActivity extends OplusActivity {
 
@@ -26,7 +23,7 @@ public class OnboardingActivity extends OplusActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
+        if (Build.VERSION.SDK_INT < 35) EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         getWindow().setNavigationBarContrastEnforced(false);
         DynamicColors.applyToActivityIfAvailable(this);
@@ -75,26 +72,5 @@ public class OnboardingActivity extends OplusActivity {
     public void onPause() {
         super.onPause();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    private void setDarkTheme() {
-        if (isNightMode()) {
-            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", Constants.DEFAULT_DARK_MODE_STYLE);
-            switch (darkStyle) {
-                case 0:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkHard);
-                    break;
-                case 1:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkMedium);
-                    break;
-                case 2:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkSoft);
-                    break;
-            }
-        }
-    }
-
-    private boolean isNightMode() {
-        return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 }

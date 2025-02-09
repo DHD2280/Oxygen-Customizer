@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.base;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class BaseActivity extends OplusActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
+        if (Build.VERSION.SDK_INT < 35) EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         getWindow().setNavigationBarContrastEnforced(false);
         DynamicColors.applyToActivityIfAvailable(this);

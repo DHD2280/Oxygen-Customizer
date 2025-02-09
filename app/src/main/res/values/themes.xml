@@ -43,7 +43,7 @@
     </style>
 
     <style name="Theme.OxygenCustomizer.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenBackground">#ffffff</item>
+        <item name="android:windowSplashScreenBackground">@color/colorBackground</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.OxygenCustomizer</item>

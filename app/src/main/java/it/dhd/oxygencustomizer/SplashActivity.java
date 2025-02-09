@@ -15,6 +15,7 @@ import androidx.core.splashscreen.SplashScreen;
 import com.google.android.material.color.DynamicColors;
 import com.topjohnwu.superuser.Shell;
 
+import it.dhd.oneplusui.appcompat.app.OplusActivity;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.activity.OnboardingActivity;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -24,7 +25,7 @@ import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 @SuppressLint("CustomSplashScreen")
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends OplusActivity {
 
     public static final boolean SKIP_INSTALLATION = false;
     private String intentKey = "";
@@ -80,7 +81,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
-
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
             if (getIntent().hasExtra("launch")) {
@@ -88,31 +88,9 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         splashScreen.setKeepOnScreenCondition(() -> keepShowing);
-        setDarkTheme();
         DynamicColors.applyToActivityIfAvailable(this);
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
 
         new Thread(runner).start();
-    }
-
-    private void setDarkTheme() {
-        if (isNightMode()) {
-            int darkStyle = Settings.System.getInt(getContentResolver(), "DarkMode_style_key", Constants.DEFAULT_DARK_MODE_STYLE);
-            switch (darkStyle) {
-                case 0:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkHard);
-                    break;
-                case 1:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkMedium);
-                    break;
-                case 2:
-                    setTheme(R.style.Theme_OxygenCustomizer_DarkSoft);
-                    break;
-            }
-        }
-    }
-
-    private boolean isNightMode() {
-        return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 }
