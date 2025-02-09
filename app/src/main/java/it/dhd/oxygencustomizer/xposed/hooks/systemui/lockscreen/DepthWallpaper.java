@@ -244,7 +244,12 @@ public class DepthWallpaper extends XposedMods {
                             if (superPowerSave) return;
                             log("Wallpaper Changed");
 
-                            Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap((Drawable) callMethod(mLockscreenWallpaper, "loadBitmap")));
+                            Drawable wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, "loadDrawable");
+                            if (wallpaperDrawable == null) {
+                                log("Wallpaper Drawable is null");
+                                return;
+                            }
+                            Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
 
                             Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
                                     .getCurrentWindowMetrics()
