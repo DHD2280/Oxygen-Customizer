@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views;
 
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.START;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_LS;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 
 import androidx.annotation.NonNull;
 
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class LockscreenView extends FrameLayout {
 
@@ -113,6 +117,29 @@ public class LockscreenView extends FrameLayout {
         mClockContainer.addView(mClockView);
     }
 
+    public void updateClock(long time) {
+        if (mClockContainer == null || mClockView == null) return;
+
+        processAllTextClocks(mClockContainer);
+    }
+
+    private void processAllTextClocks(ViewGroup parent) {
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            View child = parent.getChildAt(i);
+
+            if (child instanceof TextClock textClock) {
+                CharSequence format12 = textClock.getFormat12Hour();
+                CharSequence format24 = textClock.getFormat24Hour();
+                textClock.setFormat12Hour(null);
+                textClock.setFormat24Hour(null);
+                textClock.setFormat12Hour(format12);
+                textClock.setFormat24Hour(format24);
+            } else if (child instanceof ViewGroup) {
+                processAllTextClocks((ViewGroup) child);
+            }
+        }
+    }
+
     public void updateClockMargins(int top) {
         setMarginsNoConvert(mClockContainer, mContext, 0, top, 0, 0);
     }
@@ -145,6 +172,7 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void setWeatherCentered(boolean centered) {
+        mWeatherContainer.setGravity(centered ? CENTER_HORIZONTAL : START);
         ViewGroup weatherContainer = (ViewGroup) mWeatherContainer.getChildAt(0);
         for (int i = 0; i < weatherContainer.getChildCount(); i++) {
             View child = weatherContainer.getChildAt(i);

@@ -97,7 +97,8 @@ public class LockscreenWeather extends XposedMods {
         for (String LCWeatherPref : LOCKSCREEN_WEATHER_PREFS) {
             if (Key[0].equals(LCWeatherPref)) updateWeatherView();
         }
-        if (Key[0].equals(LOCKSCREEN_WEATHER_CENTERED)) {
+        if (Key[0].equals(LOCKSCREEN_WEATHER_CENTERED) ||
+                Key[0].equals(LOCKSCREEN_WEATHER_CUSTOM_MARGINS)) {
             setWeatherCentered();
         }
         for (String LCWeatherMargins : LOCKSCREEN_WEATHER_MARGINS) {
@@ -155,14 +156,14 @@ public class LockscreenWeather extends XposedMods {
         if (Build.VERSION.SDK_INT >= 35) {
             LockscreenView lockscreenView = LockscreenView.getInstance();
             if (lockscreenView == null) return;
-            lockscreenView.updateWeatherMargins(mWeatherCustomMargins ? mWeatherLeftMargin : mWeatherStartPadding,
+            lockscreenView.updateWeatherMargins(mWeatherCustomMargins ? mWeatherLeftMargin : mWeatherCentered ? 0 : mWeatherStartPadding,
                     mWeatherCustomMargins ? mWeatherTopMargin : 0,
                     mWeatherCustomMargins ? mWeatherLeftMargin : 0,
                     0);
         } else {
             if (mWeatherContainer == null) return;
             setMargins(mWeatherContainer, mContext,
-                    mWeatherCustomMargins ? mWeatherLeftMargin : mWeatherStartPadding,
+                    mWeatherCustomMargins ? mWeatherLeftMargin : mWeatherCentered ? 0 : mWeatherStartPadding,
                     mWeatherCustomMargins ? mWeatherTopMargin : 0,
                     mWeatherCustomMargins ? mWeatherLeftMargin : 0,
                     0);
