@@ -97,6 +97,9 @@ import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 public class HeaderClock extends XposedMods {
 
     public static final String OC_HEADER_CLOCK_TAG = "oxygencustomizer_header_clock";
+    private final String QS_CLOCK_CLASSIC = "QS_CLOCK_CLASSIC";
+    private final String QS_CLOCK_NOTIF_CONTAINER = "QS_CLOCK_NOTIF_CONTAINER";
+    private final String QS_CLOCK_PLUGIN = "QS_CLOCK_PLUGIN";
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
     private final ArrayList<TextView> mOplusClock = new ArrayList<>();
     private final ArrayList<TextView> mOplusDate = new ArrayList<>();
@@ -301,7 +304,7 @@ public class HeaderClock extends XposedMods {
                             FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;//getObjectField(param.thisObject, "mSettingsContainer");
 
                             // qs_footer_side_padding
-                            LinearLayout mQsClockContainer = getQsClockContainer("QS_CLOCK_CLASSIC");
+                            LinearLayout mQsClockContainer = getQsClockContainer(QS_CLOCK_CLASSIC);
                             mClockContainers.add(mQsClockContainer);
 
                             if (mQsClockContainer.getParent() != null) {
@@ -379,7 +382,7 @@ public class HeaderClock extends XposedMods {
                             float f3 = 1.0f - interpolation5;
 
                             for (LinearLayout mClockContainer : mClockContainers) {
-                                if (mClockContainer.getTag() != null && mClockContainer.getTag().toString().contains("QS_CLOCK_CLASSIC")) {
+                                if (mClockContainer.getTag() != null && mClockContainer.getTag().toString().contains(QS_CLOCK_CLASSIC)) {
                                     mClockContainer.setAlpha(f3);
                                 }
                             }
@@ -512,14 +515,14 @@ public class HeaderClock extends XposedMods {
                             )
                     );
 
-                    LinearLayout customClockContainer = getQsClockContainer("QS_CLOCK_NOTIF_CONTAINER");
+                    LinearLayout customClockContainer = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
                     mClockContainers.add(customClockContainer);
 
                     if (customClockContainer.getParent() != null) {
                         ((ViewGroup) customClockContainer.getParent()).removeView(customClockContainer);
                     }
 
-                    if (clockContainer.findViewWithTag("QS_CLOCK_NOTIF_CONTAINER") == null) clockContainer.addView(customClockContainer, 0);
+                    if (clockContainer.findViewWithTag(QS_CLOCK_NOTIF_CONTAINER) == null) clockContainer.addView(customClockContainer, 0);
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
@@ -567,14 +570,14 @@ public class HeaderClock extends XposedMods {
                             mContext.getResources().getIdentifier("qs_clock_and_date_container", "id", mContext.getPackageName())
                     );
 
-                    LinearLayout clockContaier = getQsClockContainer("QS_CLOCK_PLUGIN_CONTAINER");
+                    LinearLayout clockContaier = getQsClockContainer(QS_CLOCK_PLUGIN);
                     mClockContainers.add(clockContaier);
 
                     if (clockContaier.getParent() != null) {
                         ((ViewGroup) clockContaier.getParent()).removeView(clockContaier);
                     }
 
-                    if (viewGroup.findViewWithTag("QS_CLOCK_PLUGIN_CONTAINER") == null) viewGroup.addView(clockContaier, 0);
+                    if (viewGroup.findViewWithTag(QS_CLOCK_PLUGIN) == null) viewGroup.addView(clockContaier, 0);
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
@@ -620,7 +623,7 @@ public class HeaderClock extends XposedMods {
         LinearLayout qsClockContainer = new LinearLayout(mContext);
         qsClockContainer.setLayoutParams(layoutParams);
         qsClockContainer.setPaddingRelative(0, -10, 0, 0);
-        qsClockContainer.setGravity(tag.equals("QS_CLOCK_NOTIF_CONTAINER") ? Gravity.START : Gravity.CENTER_VERTICAL | Gravity.START);
+        qsClockContainer.setGravity(tag.equals(QS_CLOCK_NOTIF_CONTAINER) ? Gravity.START : Gravity.CENTER_VERTICAL | Gravity.START);
         qsClockContainer.setVisibility(View.GONE);
         qsClockContainer.setTag(tag);
         return qsClockContainer;
