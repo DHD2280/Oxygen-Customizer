@@ -258,7 +258,6 @@ public class LockscreenClock extends XposedMods {
                         keyguardLockHeight = (int) height;
                         mLockscreenView.setKeyguardLockHeight(keyguardLockHeight);
                         int clockHeight = mLockscreenView.getFullHeight();
-                        XposedBridge.log("lockIconViewController Height: " + height + " Custom Clock Height: " + clockHeight);
                         mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin));
                         param.setResult((int) (height + clockHeight + dp2px(mContext, bottomMargin)));
                     });
@@ -306,6 +305,16 @@ public class LockscreenClock extends XposedMods {
             OplusKeyguardStyleBaseClock
                     .before("getView")
                     .run(lockscreenClockHook);
+
+            OplusKeyguardStyleBaseClock
+                    .after("setTime")
+                    .run(param -> {
+                        XposedBridge.log("LockscreenClock setTime");
+                        long time = (long) param.args[0];
+                        if (customLockscreenClock) {
+                            mLockscreenView.updateClock(time);
+                        }
+                    });
 
             if (OplusKeyguardStyleWrapper.getClazz() != null) { // RUI 6.0
                 OplusKeyguardStyleWrapper
