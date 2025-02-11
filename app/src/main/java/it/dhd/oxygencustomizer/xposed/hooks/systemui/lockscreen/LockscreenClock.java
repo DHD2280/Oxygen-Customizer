@@ -594,7 +594,7 @@ public class LockscreenClock extends XposedMods {
 
         ViewHelper.applyTextMarginRecursively((ViewGroup) clockView, lineHeight);
 
-        mLockscreenView.setClockScale(clockScale);
+        if (mLockscreenView != null) mLockscreenView.setClockScale(clockScale);
         if (clockScale != 1.0f) {
             ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, clockScale);
         }
