@@ -224,9 +224,7 @@ public class LockscreenClock extends XposedMods {
             for (String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
                 if (Key[0].equals(LCPrefs)) {
                     new Handler(Looper.getMainLooper()).post(this::updateClockView);
-                    if (Build.VERSION.SDK_INT >= 35) {
-                        createCustomClockView();
-                    }
+                    createCustomClockView();
                 }
                 if (Key[0].equals(LOCKSCREEN_STOCK_CLOCK_RED_ONE) ||
                         Key[0].equals(LOCKSCREEN_STOCK_CLOCK_RED_ONE_COLOR)) {
@@ -459,6 +457,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     private void createCustomClockView() {
+        if (Build.VERSION.SDK_INT < 35) return; // No need for lower
         mLockscreenView = LockscreenView.getInstance(mContext);
         View clockView = getClockView();
         clockView.setTag(OC_LOCKSCREEN_CLOCK_TAG);
