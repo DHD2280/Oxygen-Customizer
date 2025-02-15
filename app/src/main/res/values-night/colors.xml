@@ -13,11 +13,6 @@
     <color name="preference_category_text">#8A8A8A</color>
     <color name="preference_background_color_pressed">#33ffffff</color>
 
-    <color name="colorBackground">@android:color/system_neutral2_900</color>
-    <color name="colorBackgroundSoft">#303030</color>
-    <color name="colorBackgroundMedium">#171717</color>
-    <color name="colorBackgroundHard">#000000</color>
-    <color name="colorPressBackground">#26ffffff</color>
     <color name="cardview_background">@color/cardview_dark_background</color>
 
     <color name="colorAppbarOverlay">@color/color_appbar_overlay_dark</color>
