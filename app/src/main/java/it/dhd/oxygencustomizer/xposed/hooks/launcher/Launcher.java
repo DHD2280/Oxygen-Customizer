@@ -28,6 +28,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Launcher extends XposedMods {
 
@@ -86,6 +87,18 @@ public class Launcher extends XposedMods {
                     setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
             }
         });
+
+        try {
+            ReflectedClass AllAppsParam = ReflectedClass.of("com.android.launcher.layoutparam.AllAppsParam");
+            if (AllAppsParam.getClazz() != null) {
+                AllAppsParam
+                        .after("getNumAllAppsColumns")
+                        .run(param -> {
+                            if (mDrawerRearrange)
+                                param.setResult(mDrawerColumns);
+                        });
+            }
+        } catch (Throwable ignored) {}
 
         Class<?> OplusTaskViewImpl = findClass("com.android.quickstep.views.OplusTaskViewImpl", lpparam.classLoader);
 
