@@ -59,7 +59,7 @@ public class ReflectedClass {
                 }
             } catch (Throwable ignored) {}
         }
-        return null;
+        return new ReflectedClass(null);
     }
 
     public static void setDefaultClassloader(ClassLoader classloader) {
