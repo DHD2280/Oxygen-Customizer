@@ -32,7 +32,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 public class VisualizerStreamHandler {
@@ -68,8 +67,7 @@ public class VisualizerStreamHandler {
 
     private final ExecutorService mUiBgExecutor;
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message m) {
             switch (m.what) {
@@ -148,13 +146,15 @@ public class VisualizerStreamHandler {
     }
 
     public final void unlink() {
-        if (mVisualizer != null) {
-            pause();
-            mVisualizer.setEnabled(false);
-            mVisualizer.release();
-            mVisualizer = null;
-            resetAnalyzer();
-        }
+        mUiBgExecutor.execute(() -> {
+            if (mVisualizer != null) {
+                pause();
+                mVisualizer.setEnabled(false);
+                mVisualizer.release();
+                mVisualizer = null;
+                resetAnalyzer();
+            }
+        });
     }
 
     public boolean isValidStream() {
