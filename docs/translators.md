@@ -11,7 +11,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Luigi Conte (lc98)</b></sub></a>
         <br />
-        <sub><b>45795 words</b></sub>
+        <sub><b>46401 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/If.you.know.better.than.me.do.it.If.not.shut.up"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/13525964/medium/22265802c0ad24a0a71f1abfc4776771.jpg" />
@@ -86,14 +86,21 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>2287 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/Dosix97"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16872905/medium/1d1ccc43c63910f58a29c5dc35e0e296_default.png" />
+          <br />
+          <sub><b>Dosix97</b></sub></a>
+        <br />
+        <sub><b>1448 words</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/elimani0411"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12897637/medium/5b1f68860654069044e13cf15e784ac8.jpg" />
           <br />
           <sub><b>Endrit Limani (elimani0411)</b></sub></a>
         <br />
         <sub><b>848 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
           <br />
@@ -107,13 +114,6 @@ Thanks to these translators and proofreaders, this project exists:
           <sub><b>igormiguell</b></sub></a>
         <br />
         <sub><b>836 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/Dosix97"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16872905/medium/1d1ccc43c63910f58a29c5dc35e0e296_default.png" />
-          <br />
-          <sub><b>Dosix97</b></sub></a>
-        <br />
-        <sub><b>709 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/senpai4ek"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14493092/medium/52c9f6b7343f364ccd8d63d1dbc3b1f7.jpeg" />
