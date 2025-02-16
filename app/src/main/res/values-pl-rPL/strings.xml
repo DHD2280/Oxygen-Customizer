@@ -160,14 +160,14 @@
     <string name="remove_dev_mode_notification">Usuń powiadomienie trybu deweloperskiego</string>
     <string name="remove_flashlight_notification">Usuń powiadomienie latarki</string>
     <string name="remove_low_battery_notification">Usuń powiadomienie o niskim poziomie baterii</string>
-    <string name="notif_default_expansion_title">Domyślne rozszerzenie powiadomień</string>
-    <string name="notif_always_expand">Zawsze rozwinięty</string>
-    <string name="notif_always_collapse">Zawsze zawijaj</string>
+    <string name="notif_default_expansion_title">Format powiadomień</string>
+    <string name="notif_always_expand">Pokaż całe powiadomienie</string>
+    <string name="notif_always_collapse">Tylko nagłówek</string>
     <string name="customize_clear_all_button">Dostosuj przycisk \"Wyczyść wszystko\"</string>
     <string name="clear_all_link_bg_accent">Połącz tło z akcentem</string>
     <string name="clear_all_bg_color">Niestandardowe tło</string>
     <string name="clear_all_link_bg_icon_accent">Połącz ikonę z akcentem</string>
-    <string name="clear_all_icon_color">Niestandardowy kolor ikony</string>
+    <string name="clear_all_icon_color">Niestandardowy kolor przycisku</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
     <string name="status_bar_clock_title">Zegar i data</string>
@@ -220,11 +220,11 @@
     <string name="status_bar_clock_after_clock">Własny tekst po zegarze</string>
     <string name="status_bar_clock_smaller">Mniejsze (70%)</string>
     <!-- Status bar padding -->
-    <string name="statusbar_padding">Wypełnienie paska stanu</string>
+    <string name="statusbar_padding">Zmiana odległości wyświetlania paska stanu</string>
     <string name="statusbar_top_padding">Górne wypełnienie</string>
     <string name="statusbar_padding_info">Ustaw \"0\", aby nie zmieniać</string>
-    <string name="statusbar_left_padding">Lewy wypełnienie</string>
-    <string name="statusbar_right_padding"></string>
+    <string name="statusbar_left_padding">Odległość od lewej krawędzi</string>
+    <string name="statusbar_right_padding">Odległość od prawej krawędzi</string>
     <string name="sb_padding_title">Odległość paska stanu od lewej i prawej strony</string>
     <string name="sb_padding_summary">Ustawienie wartości na min/max jest równoznaczne z ustawieniem domyślnym urządzenia</string>
     <!-- Battery Bar Strings -->
@@ -232,14 +232,15 @@
     <string name="BB_onlycharging_title">Tylko podczas ładowania</string>
     <string name="BB_move_SB_bottom_title">U dołu paska stanu</string>
     <string name="BB_colorful_title">Kolorowy</string>
-    <string name="BB_Opacity_title">Krycie paska</string>
-    <string name="BB_center_align_title">Wyśrodkowanie</string>
+    <string name="BB_Opacity_title">Przezroczystość paska</string>
+    <string name="BB_center_align_title">Ustaw centralnie</string>
     <string name="BB_Thickness_title">Grubość paska</string>
     <string name="BB_animate_charging">Animacja ładowania</string>
     <string name="BB_indicate_charging">Pokazuj stan ładowania baterii</string>
     <string name="BB_indicate_power_save">Pokazuj stan oszczędzania baterii</string>
     <string name="BB_indicate_fast_charging">Pokazuj stan szybkiego ładowania energii</string>
     <string name="BB_warning_level">Zakres poziomu ostrzegawczego</string>
+    <string name="BB_warning_tip">Ustaw obie wartości na 0, aby wyłączyć kolory oparte na poziomie</string>
     <string name="BB_batteryCriticalColor">Kolor poziomu krytycznego</string>
     <string name="BB_batteryWarningColor">Kolor poziomu ostrzegawczego</string>
     <string name="BB_batteryChargingColor">Kolor podczas ładowania baterii</string>
@@ -267,15 +268,63 @@
     <string name="charging_icon_size_title">Rozmiar ikony ładowania</string>
     <string name="perimeter_alpha_title"></string>
     <string name="perimeter_alpha_desc">Spraw, aby obwód baterii był półprzezroczysty</string>
+    <string name="fill_alpha_desc">Spraw, aby obwód baterii był półprzezroczysty</string>
     <string name="rainbow_color_title">Kolory tęczy</string>
     <string name="rainbow_color_desc">Pokaż inny kolor w zależności od poziomu baterii</string>
-    <string name="blend_color_title">Mieszany kolor</string>
+    <string name="blend_color_title">Mieszanie kolorów</string>
     <string name="blend_color_desc">Dopasuj kolor baterii do niestandardowego koloru</string>
     <string name="fill_color_title">Kolor wypełnienia</string>
-    <string name="fill_color_desc">Wypełnij baterię niestandardowym kolorem</string>
-    <string name="fill_gradient_color_title">Wypełnij kolor gradientu</string>
+    <string name="fill_color_desc">Dopasuj kolor baterii do własnych predyspozycji</string>
+    <string name="fill_gradient_color_title">Kolor gradientu</string>
+    <string name="fill_gradient_color_desc">Wypełnij ikonę baterii własnym gradientem</string>
+    <string name="charging_fill_color_title">Kolor podczas ładowania baterii</string>
+    <string name="charging_fill_color_desc">Zmień kolor ikony podczas ładowania baterii</string>
+    <string name="fast_charging_fill_color_title">Kolor podczas szybkiego ładowania</string>
+    <string name="fast_charging_fill_color_desc">Zmień kolor podczas szybkiego ładowania</string>
+    <string name="powersave_fill_color_title">Kolor podczas oszczędzania energii</string>
+    <string name="powersave_fill_color_desc">Zmień kolor podczas oszczędzania energii</string>
+    <string name="powersave_indicator_color_title">Kolor wskaźnika oszczędzania energii</string>
+    <string name="powersave_indicator_color_desc">Zmień kolor podczas oszczędzania energii</string>
+    <string name="battery_icon_margins">Odległość wyświetlania ikony baterii</string>
+    <string name="reverse_layout_title">Odwrócony układ</string>
+    <string name="reverse_layout_desc">Pokaż wartość naładowania baterii po przeciwnej stronie</string>
+    <string name="rotate_layout_title">Odbicie lustrzane</string>
+    <string name="rotate_layout_desc">Obróć układ baterii o 180 stopni</string>
+    <string name="hide_percentage_title">Ukryj procent naładowania baterii</string>
+    <string name="hide_percentage_desc">Ukryj tekst procentu baterii</string>
+    <string name="inside_percentage_title">Procent naładowania baterii</string>
+    <string name="inside_percentage_desc">Pokaż procent naładowania baterii w środku ikony</string>
+    <string name="battery_icon_color">Kolor ikony baterii</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_stock_prefs">Domyślne ustawienia baterii</string>
+    <string name="battery_edit_percentage_size_title">Dostosuj rozmiar procentu naładowania baterii</string>
+    <string name="battery_percentage_size">Rozmiar procentu baterii</string>
     <!-- Battery Icon Styles -->
+    <string name="battery_default">Domyślny</string>
+    <string name="battery_landscape_r_default">Landscape R Default</string>
+    <string name="battery_landscape_l_default">Landscape L Default</string>
+    <string name="battery_landscape_r_custom">Landscape R Custom</string>
+    <string name="battery_landscape_l_custom">Landscape L Custom</string>
+    <string name="battery_portrait_capsule">Portrait Capsule</string>
+    <string name="battery_portrait_lorn">Portrait Lorn</string>
+    <string name="battery_portrait_mx">Portrait Mx</string>
+    <string name="battery_portrait_airoo">Portrait Airoo</string>
+    <string name="battery_landscape_r_style_a">Landscape R Style A</string>
+    <string name="battery_landscape_l_style_a">Landscape L Style A</string>
+    <string name="battery_landscape_r_style_b">Landscape R Style B</string>
+    <string name="battery_landscape_l_style_b">Landscape L Style B</string>
+    <string name="battery_landscape_ios_15">Landscape iOS 15</string>
+    <string name="battery_landscape_ios_16">Landscape iOS 16</string>
+    <string name="battery_portrait_origami">Portrait Origami</string>
+    <string name="battery_landscape_smiley">Landscape Smiley</string>
+    <string name="battery_landscape_miui_pill">Landscape MIUI Pill</string>
+    <string name="battery_landscape_l_coloros">Landscape L ColorOS</string>
+    <string name="battery_landscape_r_coloros">Landscape R ColorOS</string>
+    <string name="battery_landscape_battery_a">Landscape Battery A</string>
+    <string name="battery_landscape_battery_b">Landscape Battery B</string>
+    <string name="battery_landscape_battery_c">Landscape Battery C</string>
+    <string name="battery_landscape_battery_d">Landscape Battery D</string>
+    <string name="battery_landscape_battery_e">Landscape Battery E</string>
     <string name="battery_landscape_battery_f">Landscape Battery F</string>
     <string name="battery_landscape_battery_g">Landscape Battery G</string>
     <string name="battery_landscape_battery_h">Landscape Battery H</string>
@@ -298,15 +347,90 @@
     <string name="statusbar_icons_inout_mobile_hide_title">Ukryj ikonę zasięgu sieci</string>
     <string name="statusbar_icons_inout_mobile_hide_summary">Wyłącz i włącz, aby zobaczyć zmiany.</string>
     <!-- Quick Settings Mods -->
-    <string name="quick_pulldown">Dostosuj szybkie ustawienia</string>
+    <string name="quick_pulldown">Dostosuj dostęp do szybkie ustawień</string>
+    <string name="quick_pulldown_length">Szerokość możliwego gestu dostępu tylko do szybkich ustawień</string>
+    <string name="quick_settings_side">Strona dostępu tylko do szybkich ustawień</string>
+    <string name="quick_pulldown_side_left">Z lewej</string>
+    <string name="quick_pulldown_side_right">Z prawej</string>
+    <string name="quick_collapse">Szybkie zwijanie</string>
     <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_title">Kafelki szybkich ustawień</string>
+    <string name="quick_settings_tiles_number">Ustawienia licznika kafelków szybkich ustawień</string>
+    <string name="quick_settings_tiles_main">Dostosuj kafelki szybkich ustawień</string>
+    <string name="quick_settings_widgets">Kafelki szybkich ustawień</string>
+    <string name="qs_transparency">Przezroczystość szybkich ustawień &amp; Rozmycie</string>
+    <string name="qs_transparency_title">Dostosuj przezroczystość szybkich ustawień</string>
+    <string name="qs_transparency_value">Przezroczystość szybkich kafelek</string>
+    <string name="qs_transparency_blur_title">Rozmycie okna</string>
+    <string name="qs_blur_intentisy">Intensywność rozmycia</string>
     <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">Pokaż ustawienia zmiany widżetów na odtwarzaczu multimedialnym</string>
+    <string name="add_widget">Dodaj widżet</string>
+    <string name="qs_widget_photo">Pokaz slajdów</string>
+    <string name="qs_widget_weather">Pogoda</string>
+    <string name="qs_widget_mini_weather">Mini Pogoda</string>
+    <string name="qs_widget_custom_app">Niestandardowe aplikacje</string>
+    <string name="qs_widget_media_player">Odtwarzacz multimedialny</string>
+    <string name="qs_media_alert">Nie można usunąć odtwarzacza multimediów!</string>
+    <string name="qs_widget_set_radius">Ustawienie zaokrąglania obrazu</string>
+    <string name="qs_widget_set_custom_photo">Ustaw własny obraz</string>
     <!-- Quick Settings Tiles Customizations -->
+    <string name="quick_settings_tiles_customization_title">Dostosowanie Szybkich Ustawień</string>
+    <string name="quick_settings_tiles_customize_category_title">Tło kafelków Szybkich Ustawień</string>
+    <string name="qs_tile_active_color_title">Dostosuj kolor aktywnego kafelka</string>
+    <string name="quick_settings_tiles_customize_active_color">Aktywny kolor szybkich ustawień</string>
+    <string name="qs_tile_inactive_color_title">Dostosuj kolor nieaktywnego kafelka</string>
+    <string name="qs_tile_disabled_color_title">Dostosuj kolor nieaktywnego kafelka</string>
+    <string name="brightness_slider_progress_color_title">Tryb koloru suwaka</string>
+    <string name="brightness_slider_background_color_title">Niestandardowe tło ikony sliderów jasności i głośności</string>
     <!-- QS Tile Radius -->
     <!-- Media Tile -->
+    <string name="media_tile">Kafel multimediów</string>
     <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_title">Animacja kafelków</string>
+    <string name="qs_tile_animation_style_title">Styl animacji</string>
+    <string name="qs_tile_animation_duration_title">Czas trwania animacji</string>
+    <string name="qs_tile_animation_interpolator_title">Rodzaj animacji kafelków</string>
+    <string name="qs_tile_animation_style_off">Bez animacji</string>
+    <string name="qs_tile_animation_style_flip">Obrót w pionie</string>
+    <string name="qs_tile_animation_style_rotate">Obrór 360°</string>
+    <string name="qs_tile_animation_duration_low">Niska</string>
+    <string name="qs_tile_animation_duration_default">Domyślny</string>
+    <string name="qs_tile_animation_duration_fast">Szybko</string>
+    <string name="qs_tile_animation_interpolator_linearInterpolator">Liniowy</string>
+    <string name="qs_tile_animation_interpolator_accelerateInterpolator">Przyspieszony</string>
+    <string name="qs_tile_animation_interpolator_decelerateInterpolator">Zwalnianie</string>
+    <string name="qs_tile_animation_interpolator_accelerateDecelerateInterpolator">Przyspiesz i zwolnij</string>
+    <string name="qs_tile_animation_interpolator_bounceInterpolator">Podskocz</string>
+    <string name="qs_tile_animation_interpolator_overshootInterpolator">Przestrzelenie</string>
+    <string name="qs_tile_animation_interpolator_anticipateInterpolator">Podrzuć i opadnij</string>
+    <string name="qs_tile_animation_interpolator_anticipateOvershootInterpolator">Podrzuć i opadnij oraz przestrzel</string>
     <!-- QS Page Transitions -->
+    <string name="qs_transitions_title_switch_title">Włącz przejście do strony szybkich ustawień</string>
+    <string name="qs_transitions_title">Przejścia stron szybkich ustawień</string>
+    <string name="qs_transitions_cube_in">Kostka (w środku)</string>
+    <string name="qs_transitions_cube_out">Kostka (na zewnątrz)</string>
+    <string name="qs_transitions_accordion">Efekt akordeonu</string>
+    <string name="qs_transitions_background_to_foreground">Od wewnątrz do zewnątrz</string>
+    <string name="qs_transitions_depth_page">Efekt głębi</string>
+    <string name="qs_transitions_fade">Przejście</string>
+    <string name="qs_transitions_foreground_to_background">Od zewnątrz do wewnątrz</string>
+    <string name="qs_transitions_rotate_down">Obracanie w dół</string>
+    <string name="qs_transitions_rotate_up">Obracanie w górę</string>
+    <string name="qs_transitions_stack">Nakładka</string>
+    <string name="qs_transitions_tablet">Tabletowy</string>
+    <string name="qs_transitions_zoom_in">Przybliżanie</string>
+    <string name="qs_transitions_zoom_out">Oddalanie</string>
+    <string name="qs_transitions_zoom_out_slide">Oddalaj i zsuń</string>
+    <string name="qs_transitions_raise_from_center">Zwiększanie z centrum</string>
+    <string name="qs_transitions_rotate_about_bottom">Obrót w dół (kalejdoskop)</string>
+    <string name="qs_transitions_translate_y_ttb">Od góry do dołu</string>
+    <string name="qs_transitions_translate_y_btt">Od dołu do góry</string>
     <!-- QS Header Image Strings -->
+    <string name="qs_header_image_title">Obrazek w nagłówku szybkich ustawień</string>
+    <string name="qs_header_image_summary">Wybierz obraz nagłówka szybkich ustawień</string>
+    <string name="qs_header_image_enabled_title">Dostosowanie obrazu nagłówka Szybkich Ustawień</string>
+    <string name="qs_header_image_enabled_summary">Włącz dostosowywanie obrazu nagłówka Szybkich Ustawień</string>
     <!-- Omni Provider" -->
     <!-- QS Header Clock Strings -->
     <!-- Qs Header Per Clock Prefs -->
@@ -316,6 +440,7 @@
     <!-- QS Header Clock Margins -->
     <!-- QS Header Misc -->
     <!-- Chip Styles Strings -->
+    <string name="chip_filled">Wypełnienie</string>
     <!-- Launcher Mods -->
     <!-- NavBar Strings -->
     <!-- Gesture Strings -->
@@ -344,18 +469,67 @@
     <!-- Misc Strings -->
     <!-- Hooks Fragment -->
     <!-- Update Fragment -->
+    <string name="update_checking">Sprawdzanie…</string>
     <!-- Advanced Reboot -->
     <!-- Own Settings -->
+    <string name="app_icon_themed">Użyj ikony innego dostawcy</string>
+    <string name="language_title">Język</string>
+    <string name="delete_all_title">Usuń wszystko</string>
+    <string name="delete_all_summary">Usuń wszystkie wprowadzone ustawienia</string>
+    <string name="export_title">Eksportuj</string>
+    <string name="export_summary">Ustawienia eksportu</string>
+    <string name="import_title">Importuj</string>
+    <string name="import_summary">Ustawienia importu</string>
+    <string name="export_success">Eksport zakończony powodzeniem</string>
+    <string name="export_failed">Eksportowanie nie powiodło się</string>
+    <string name="import_success">Importowanie zakończone powodzeniem</string>
+    <string name="import_failed">Importowanie nie powiodło się</string>
+    <string name="more_logging_title">Więcej logów</string>
+    <string name="more_logging_summary">Włącz więcej logów.\nTo może pomóc podczas wysyłania raportów o błędach aplikacji.</string>
+    <string name="settings_about_section_title">O programie...</string>
+    <string name="translate_title">Przetłumacz na swój język</string>
+    <string name="translate_summary">Pomóż nam przetłumaczyć Oxygen Customizer na Twój język</string>
+    <string name="check_updates">Sprawdź aktualizacje</string>
+    <string name="check_updates_summary">Aktualna wersja: %s</string>
+    <string name="check_auto_updates">Automatycznie sprawdzaj aktualizacje</string>
+    <string name="check_auto_updates_summary">Sprawdź dostępność nowych aktualizacji </string>
     <!-- Omni Jaws Strings -->
+    <string name="auto_update_summary">Sprawdź nowe wersje raz na jakiś czas</string>
+    <string name="update_over_wifi_title">Sprawdź aktualizacje tylko przez WiFi</string>
+    <string name="update_over_wifi_summary">Sprawdzaj aktualizacje w tle tylko przy połączeniu z Wi-Fi</string>
     <!-- Lockscreen Weather styles -->
     <!-- Weather -->
     <!-- UI Strings -->
+    <string name="style_category">Motywy i style</string>
+    <string name="icon_theme_category">Zestawy ikon i stylów</string>
     <!-- UI styles -->
+    <string name="theme_customization_ui_style_title">Styl interfejsu</string>
+    <string name="theme_customization_ui_style_summary">Ustaw jeden z niestandardowych stylów dla Twojego interfejsu</string>
     <!-- Icon pack -->
+    <string name="theme_customization_icon_pack_title">Ikony paska stanu</string>
+    <string name="theme_customization_icon_pack_summary">Ustaw własny styl paska stanu</string>
+    <string name="theme_customization_settings_icons_title">Ikony w Ustawieniach Systemu</string>
+    <string name="theme_customization_settings_icons_summary">Ustaw niestandardowe ikony w Ustawieniach Systemu</string>
+    <string name="theme_customization_signal_icon_title">Styl ikony zasięgu komórkowego</string>
+    <string name="theme_customization_signal_icon_summary">Ustaw niestandardowy wygląd ikony zasięgu</string>
+    <string name="theme_customization_wifi_icon_title">Styl ikony Wi-Fi</string>
+    <string name="theme_customization_wifi_icon_summary">Ustaw niestandardowy wygląd ikony Wi-Fi</string>
+    <string name="theme_customization_navbar_title">Styl paska nawigacyjnego</string>
+    <string name="theme_customization_navbar_summary">Zmień styl paska nawigacji</string>
+    <string name="theme_customization_toast_frame_summary">Zmień styl powiadomienia pokazującego się na dole ekranu</string>
     <!-- Settings Icons -->
+    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_pui">PUI</string>
+    <string name="settings_icons_pui_v2">PUI v2</string>
+    <string name="settings_icons_pui_v3">PUI v3</string>
     <!-- Notification -->
+    <string name="notification_styles">Style powiadomień</string>
+    <string name="notification_styles_desc">Ustaw jeden z niestandardowych stylów powiadomień</string>
     <!-- Notification Corner Radius -->
+    <string name="notification_corner_radius_title">Zaokrąglanie powiadomień</string>
+    <string name="notification_corner_radius_summary">Zmień zaokrąglenie powiadomień.</string>
     <!-- Toast Styles -->
+    <string name="toast_styles">Powiadomienie typu Toast</string>
     <!-- Style List -->
     <!-- Dark Mode -->
     <!-- Lockscreen Widgets -->
@@ -367,5 +541,30 @@
     <!-- Pocket Studio -->
     <!-- OTA Card -->
     <!-- MEMC Strings -->
+    <string name="memc_feature_on">Funkcja MEMC włączona</string>
+    <string name="pwx7_enabled">PWX7 włączony</string>
+    <string name="memc_enabled">MEMC włączony</string>
+    <string name="sdr2hdr_enabled">SDR2HDR włączony</string>
+    <string name="video_osie_support">Wsparcie usługi Video OSIE</string>
+    <string name="memc_mode">Tryb MEMC</string>
+    <string name="force_memc_enabled">Wymuś włączenie MEMC</string>
+    <string name="custom_memc_config_title">Niestandardowe ustawienia MEMC</string>
+    <string name="custom_memc_configuration_title">Dostosuj ustawienia MEMC</string>
+    <string name="custom_memc_configuration_summary">Ustaw konfigurację MEMC dla każdej aplikacji/aktywności</string>
+    <string name="memc_help">Pomoc w konfiguracji Iris</string>
+    <string name="memc_refresh_rate">Częstotliwość odświeżania: %s</string>
+    <string name="memc_params">Konfiguracja MEMC: %s</string>
+    <string name="applications">Aplikacje</string>
+    <string name="activities">Aktywności</string>
+    <string name="add_activity">Dodaj aktywność</string>
+    <string name="add_app">Dodaj aplikację</string>
+    <string name="select_app">Wybierz aplikację</string>
+    <string name="memc_config_error">Konfiguracja Memc jest pusta!</string>
+    <string name="refresh_rate_error">Częstotliwość odświeżania jest pusta!</string>
+    <string name="memc_footer">Jeśli Twoje urządzenie nie posiada chipu Pixelwork lub nie obsługuje MEMC, nie dotykaj tych ustawień.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_screen_title">Wyłącz ekran na płaskiej powierzchni</string>
+    <string name="sleep_on_flat_screen_tile_title">Uspanie ekranu na płaskiej powierzchni</string>
+    <string name="flat_screen_timeout_title">Czas wygaszania ekranu podczas ułożenia telefonu na płaskiej powierzchni</string>
+    <string name="flat_screen_timeout_respect_wakelock_title">Respektuj blokadę wybudzania</string>
 </resources>
