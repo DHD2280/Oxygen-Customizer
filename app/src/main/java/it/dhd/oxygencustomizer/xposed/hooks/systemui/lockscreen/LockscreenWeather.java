@@ -172,9 +172,10 @@ public class LockscreenWeather extends XposedMods {
 
     private void setWeatherCentered() {
         CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
-        if (currentWeatherView != null)
+        if (currentWeatherView != null) {
             currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
-        if (currentWeatherView != null) currentWeatherView.requestLayout();
+            currentWeatherView.requestLayout();
+        }
 
         LockscreenView lockscreenView = LockscreenView.getInstance();
         if (lockscreenView != null) {
