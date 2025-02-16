@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <it.dhd.oxygencustomizer.ui.section.ScreenPreviewView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/screen_preview_section_vertical_space">
+
+        <it.dhd.oxygencustomizer.ui.widgets.FixedWidthDisplayRatioFrameLayout
+            android:id="@+id/preview_host"
+            android:layout_width="@dimen/screen_preview_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/FullContentPreviewCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="true"
+                app:cardBackgroundColor="@color/black"
+                app:cardCornerRadius="28dp"
+                app:strokeWidth="3dp">
+
+                <FrameLayout
+                    android:id="@+id/edge_light_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="noHideDescendants">
+
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </it.dhd.oxygencustomizer.ui.widgets.FixedWidthDisplayRatioFrameLayout>
+
+    </it.dhd.oxygencustomizer.ui.section.ScreenPreviewView>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/edge_light_style_title"
+        app:titleCentered="true" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="1dp"
+        android:background="@drawable/preference_background_top"
+        android:backgroundTint="@color/oplusColorSurfaces"
+        android:orientation="vertical" />
+
+</LinearLayout>

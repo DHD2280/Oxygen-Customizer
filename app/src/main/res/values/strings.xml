@@ -843,6 +843,41 @@
     <!-- Aod Weather -->
     <string name="aod_weather">AOD Weather</string>
 
+    <!-- Aod Pulse -->
+    <string name="aod_pulse_category_title">Pulse/Doze</string>
+
+    <!-- Edge light -->
+    <string name="edge_light_title">Edge light</string>
+    <string name="edge_light_summary">Light up the side edges of the screen on notification pulse</string>
+    <string name="edge_light_always_trigger_on_pulse_title">Always trigger on pulse</string>
+    <string name="edge_light_always_trigger_on_pulse_summary">Whether to show edge light whenever ambient display is shown and not just for notifications</string>
+    <string name="edge_light_repeat_animation_title">Repeat animation</string>
+    <string name="edge_light_repeat_animation_summary_on">Repeat until timeout</string>
+    <string name="edge_light_repeat_animation_summary_off">Show only once</string>
+    <string name="edge_light_advice">In order to show Edge Light, you must set a color in Stock AOD Edge Light.</string>
+    <string name="edge_light_show_blur">Blur style</string>
+    <string name="edge_light_blur_mode_title">Blur Mode</string>
+    <string name="edge_light_blur_mode_both">Line and Blur</string>
+    <string name="edge_light_blur_mode_blur_only">Only Blur</string>
+    <string name="edge_light_blur_type_title">Blur Type</string>
+    <string name="edge_light_blur_type_normal">Normal</string>
+    <string name="edge_light_blur_type_solid">Solid</string>
+    <string name="edge_light_blur_type_inner">Inner</string>
+    <string name="edge_light_blur_type_outer">Outer</string>
+    <string name="edge_light_color_mode_title">Edge light color mode</string>
+    <string name="edge_light_enabled_title">Enable Edge light</string>
+    <string name="edge_light_rainbow_gradient">Rainbow Gradient</string>
+    <string name="notification_color">Notification Color</string>
+    <string name="wallpaper_color">Wallpaper Color</string>
+    <string name="edge_light_style_title">Edge light style</string>
+    <string name="edge_light_stroke_width_title">Edge light stroke width</string>
+    <string name="edge_light_stroke_width_summary">Configure edge light thickness</string>
+    <string name="edge_light_line">Draw Line</string>
+    <string name="edge_light_blink">Blink/Pulse</string>
+    <string name="edge_light_side_lines">Side Lines</string>
+    <string name="edge_light_snake">Snake</string>
+    <string name="edge_light_echo">Echo</string>
+
     <!-- Sound Mods -->
     <string name="misc_category">Miscellaneous</string>
 

@@ -22,4 +22,16 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="aod_pulse"
+        android:title="@string/aod_pulse_category_title">
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:key="edge_light_settings"
+            android:title="@string/edge_light_title"
+            android:summary="@string/edge_light_summary"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.EdgeLightSettings" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>

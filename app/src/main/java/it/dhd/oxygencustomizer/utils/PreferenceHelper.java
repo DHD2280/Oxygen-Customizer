@@ -31,6 +31,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_LINE_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_COLOR_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_COLOR_CAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR;
@@ -189,12 +191,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import it.dhd.oneplusui.preference.OplusPreferenceCategory;
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
 
 public class PreferenceHelper {
     public static boolean showOverlays, showFonts;
@@ -766,6 +768,11 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean(AOD_WEATHER_CUSTOM_MARGINS, false);
             }
 
+            // Edge Light
+            case Constants.Preferences.AodEdgeLight.EDGE_LIGHT_CUSTOM_COLOR -> {
+                return Integer.parseInt(instance.mPreferences.getString(EDGE_LIGHT_COLOR_MODE, "0")) == EdgeLightView.ColorMode.CUSTOM.ordinal();
+            }
+
             // Volume Panel Customization
             case "volume_panel_seekbar_link_primary" -> {
                 return instance.mPreferences.getBoolean("volume_panel_seekbar_color_enabled", false);
@@ -1154,6 +1161,11 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_TOP, 0) + "dp";
             case AOD_WEATHER_CUSTOM_MARGIN_LEFT ->
                     instance.mPreferences.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_LEFT, 0) + "dp";
+
+            // Edge Light
+            case EDGE_LIGHT_WIDTH ->
+                fragmentCompat.getString(R.string.edge_light_stroke_width_summary) + "\n" +
+                        instance.mPreferences.getSliderFloat(EDGE_LIGHT_WIDTH, 20f) + " dp";
 
             // Sound Prefs
             case "volume_dialog_timeout" ->

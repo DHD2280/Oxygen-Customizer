@@ -549,6 +549,18 @@ public final class Constants {
 
         }
 
+        public static class AodEdgeLight {
+            public static final String EDGE_LIGHT_ENABLED = "edge_light_enabled";
+            public static final String EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE = "edge_light_always_trigger_on_pulse";
+            public static final String EDGE_LIGHT_COLOR_MODE = "edge_light_color_mode";
+            public static final String EDGE_LIGHT_STYLE = "edge_light_style";
+            public static final String EDGE_LIGHT_DRAW_BLUR = "edge_light_show_blur";
+            public static final String EDGE_LIGHT_BLUR_TYPE = "edge_light_blur_type";
+            public static final String EDGE_LIGHT_BLUR_MODE = "edge_light_blur_mode";
+            public static final String EDGE_LIGHT_WIDTH = "edge_light_width";
+            public static final String EDGE_LIGHT_CUSTOM_COLOR = "edge_light_custom_color";
+        }
+
         public static class StatusbarNotificationPrefs {
             public static final String NOTIF_TRANSPARENCY = "statusbar_notification_transparency";
             public static final String NOTIF_TRANSPARENCY_VALUE = "statusbar_notification_transparency_value";

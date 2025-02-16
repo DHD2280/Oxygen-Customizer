@@ -760,4 +760,71 @@
         <item>2</item>
     </string-array>
 
+    <!-- Edge light -->
+    <string-array name="edge_light_color_mode_entries" translatable="false">
+        <item>@string/accent_color</item>
+        <item>@string/notification_color</item>
+        <item>@string/wallpaper_color</item>
+        <item>@string/edge_light_rainbow_gradient</item>
+        <item>@string/custom_color</item>
+    </string-array>
+
+    <string-array name="edge_light_color_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!-- Edge light blur -->
+    <string-array name="edge_light_blur_mode_entires" translatable="false">
+        <item>@string/edge_light_blur_mode_both</item>
+        <item>@string/edge_light_blur_mode_blur_only</item>
+    </string-array>
+
+    <string-array name="edge_light_blur_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="edge_light_blur_type_entires" translatable="false">
+        <item>@string/edge_light_blur_type_normal</item>
+        <item>@string/edge_light_blur_type_solid</item>
+        <item>@string/edge_light_blur_type_inner</item>
+        <item>@string/edge_light_blur_type_outer</item>
+    </string-array>
+
+    <string-array name="edge_light_blur_type_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Edge light Styles -->
+    <string-array name="edge_light_style_entries" translatable="false">
+        <item>@string/edge_light_line</item>
+        <item>@string/edge_light_blink</item>
+        <item>@string/edge_light_side_lines</item>
+        <item>@string/edge_light_snake</item>
+        <item>@string/edge_light_echo</item>
+    </string-array>
+
+    <string-array name="edge_light_style_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="edge_light_style_previews">
+        <item>aod_preview</item>
+        <item>aod_preview</item>
+        <item>aod_side_lines</item>
+        <item>aod_snake</item>
+        <item>aod_echo</item>
+    </string-array>
+
 </resources>

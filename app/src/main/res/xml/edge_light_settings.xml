@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
+        android:key="edge_lights"
+        app:lottie_rawRes="@raw/edge_lights" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory />
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference android:title="@string/edge_light_advice" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="edge_light_enabled"
+            android:summary="@string/edge_light_summary"
+            android:title="@string/edge_light_enabled_title" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="edge_light_enabled"
+            android:key="edge_light_always_trigger_on_pulse"
+            android:summary="@string/edge_light_always_trigger_on_pulse_summary"
+            android:title="@string/edge_light_always_trigger_on_pulse_title" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:dependency="edge_light_enabled"
+        android:title="@string/edge_light_style_title">
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.aod.edgelight.EdgeLightPreviewFragment"
+            android:key="edge_light_style_jump"
+            android:title="@string/edge_light_style_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="edge_light_show_blur"
+            android:title="@string/edge_light_show_blur" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="edge_light_show_blur"
+            android:entries="@array/edge_light_blur_mode_entires"
+            android:entryValues="@array/edge_light_blur_mode_values"
+            android:key="edge_light_blur_mode"
+            android:title="@string/edge_light_blur_mode_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="edge_light_show_blur"
+            android:entries="@array/edge_light_blur_type_entires"
+            android:entryValues="@array/edge_light_blur_type_values"
+            android:key="edge_light_blur_type"
+            android:title="@string/edge_light_blur_type_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/edge_light_color_mode_entries"
+            android:entryValues="@array/edge_light_color_mode_values"
+            android:key="edge_light_color_mode"
+            android:title="@string/edge_light_color_mode_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="edge_light_custom_color"
+            android:title="@string/custom_color" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="edge_light_width"
+            android:summary="@string/edge_light_stroke_width_summary"
+            android:title="@string/edge_light_stroke_width_title"
+            app:defaultValue="20"
+            app:maxVal="20"
+            app:minVal="1"
+            app:valueCount="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>
