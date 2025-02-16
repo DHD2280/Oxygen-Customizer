@@ -1,11 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
@@ -14,17 +9,10 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -73,20 +61,19 @@ public class Launcher extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
-        findAndHookConstructor("com.android.launcher3.InvariantDeviceProfile$GridOption", lpparam.classLoader, Context.class, AttributeSet.class, int.class, new XC_MethodHook() {
-
-            @Override
-            protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
-                if (mFolderRearrange) {
-                    setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
-                    setIntField(param.thisObject, "numFolderRows", mFolderRows);
-                }
-                if (mFolderPreview && mFolderColumns > 3)
-                    setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
-                if (mDrawerRearrange)
-                    setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
-            }
-        });
+        ReflectedClass GridOption = ReflectedClass.of("com.android.launcher3.InvariantDeviceProfile$GridOption");
+        GridOption
+                .afterConstruction()
+                .run(param -> {
+                    if (mFolderRearrange) {
+                        setIntField(param.thisObject, "numFolderColumns", mFolderColumns);
+                        setIntField(param.thisObject, "numFolderRows", mFolderRows);
+                    }
+                    if (mFolderPreview && mFolderColumns > 3)
+                        setIntField(param.thisObject, "numFolderPreview", mFolderColumns);
+                    if (mDrawerRearrange)
+                        setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
+                });
 
         try {
             ReflectedClass AllAppsParam = ReflectedClass.of("com.android.launcher.layoutparam.AllAppsParam");
@@ -100,123 +87,111 @@ public class Launcher extends XposedMods {
             }
         } catch (Throwable ignored) {}
 
-        Class<?> OplusTaskViewImpl = findClass("com.android.quickstep.views.OplusTaskViewImpl", lpparam.classLoader);
+        ReflectedClass OplusTaskViewImpl = ReflectedClass.of("com.android.quickstep.views.OplusTaskViewImpl");
 
-        hookAllMethods(OplusTaskViewImpl, "setIcon", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                View headerView = (View) callMethod(param.thisObject, "getHeaderView");
-                View iconView = (View) callMethod(headerView, "getTaskIcon");
-                View titleView = (View) callMethod(headerView, "getTitleTv");
-                Object task = callMethod(param.thisObject, "getTask");
-                if (task == null) return;
-                Object key = getObjectField(task, "key");
-                if (key == null) return;
-                String pkgName = (String) callMethod(key, "getPackageName");
-                int userId = getIntField(key, "userId");
-                final ClickListener clickListener = new ClickListener(pkgName, userId);
+        OplusTaskViewImpl
+                .after("setIcon")
+                        .run(param -> {
+                            View headerView = (View) callMethod(param.thisObject, "getHeaderView");
+                            View iconView = (View) callMethod(headerView, "getTaskIcon");
+                            View titleView = (View) callMethod(headerView, "getTitleTv");
+                            Object task = callMethod(param.thisObject, "getTask");
+                            if (task == null) return;
+                            Object key = getObjectField(task, "key");
+                            if (key == null) return;
+                            String pkgName = (String) callMethod(key, "getPackageName");
+                            int userId = getIntField(key, "userId");
+                            final ClickListener clickListener = new ClickListener(pkgName, userId);
 
-                iconView.setOnLongClickListener(clickListener);
-                titleView.setOnLongClickListener(clickListener);
-            }
-        });
+                            iconView.setOnLongClickListener(clickListener);
+                            titleView.setOnLongClickListener(clickListener);
+                        });
 
-        Class<?> DockIconView = findClass("com.oplus.quickstep.dock.DockIconView", lpparam.classLoader);
-        findAndHookMethod(DockIconView, "setIcon", Drawable.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object task = callMethod(param.thisObject, "getTask");
-                if (task == null) return;
-                Object key = getObjectField(task, "key");
-                if (key == null) return;
-                String pkgName = (String) callMethod(key, "getPackageName");
-                int userId = getIntField(key, "userId");
-                View iconView = (View) param.thisObject;
-                final ClickListener clickListener = new ClickListener(pkgName, userId);
-                iconView.setOnLongClickListener(clickListener);
-            }
-        });
+        ReflectedClass DockIconView = ReflectedClass.of("com.oplus.quickstep.dock.DockIconView");
+        DockIconView
+                .after("setIcon")
+                        .run(param -> {
+                            Object task = callMethod(param.thisObject, "getTask");
+                            if (task == null) return;
+                            Object key = getObjectField(task, "key");
+                            if (key == null) return;
+                            String pkgName = (String) callMethod(key, "getPackageName");
+                            int userId = getIntField(key, "userId");
+                            View iconView = (View) param.thisObject;
+                            final ClickListener clickListener = new ClickListener(pkgName, userId);
+                            iconView.setOnLongClickListener(clickListener);
+                        });
 
         try {
-            Class<?> OplusPageIndicator = findClass("com.android.launcher.pageindicators.OplusPageIndicator", lpparam.classLoader);
-            findAndHookMethod(OplusPageIndicator, "onDraw", Canvas.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
-                    View v = (View) param.thisObject;
-                    switch (v.getParent().getClass().getCanonicalName()) {
-                        case "com.android.launcher3.OplusDragLayer":
-                            v.setVisibility(View.GONE);
-                            if (mRemoveHomePagination) param.setResult(null);
-                            break;
-                        case "android.widget.FrameLayout":
-                            v.setVisibility(View.GONE);
-                            if (mRemoveFolderPagination) param.setResult(null);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            });
+            ReflectedClass OplusPageIndicator = ReflectedClass.of("com.android.launcher.pageindicators.OplusPageIndicator");
+            OplusPageIndicator
+                    .before("onDraw")
+                            .run(param -> {
+                                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
+                                View v = (View) param.thisObject;
+                                if (v.getParent() == null) return;
+                                switch (v.getParent().getClass().getCanonicalName()) {
+                                    case "com.android.launcher3.OplusDragLayer":
+                                        v.setVisibility(View.GONE);
+                                        if (mRemoveHomePagination) param.setResult(null);
+                                        break;
+                                    case "android.widget.FrameLayout":
+                                        v.setVisibility(View.GONE);
+                                        if (mRemoveFolderPagination) param.setResult(null);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
         } catch (Throwable t) {
             log(t);
         }
 
         try {
-            Class<?> PageIndicatorTouchHelper = findClass("com.android.launcher.pageindicators.PageIndicatorTouchHelper", lpparam.classLoader);
-            findAndHookMethod(PageIndicatorTouchHelper, "dispatchTouchEvent", MotionEvent.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (mRemoveHomePagination) param.setResult(false);
-                }
-            });
+            ReflectedClass PageIndicatorTouchHelper = ReflectedClass.of("com.android.launcher.pageindicators.PageIndicatorTouchHelper");
+            PageIndicatorTouchHelper
+                    .before("dispatchTouchEvent")
+                            .run(param -> {
+                                if (mRemoveHomePagination) param.setResult(false);
+                            });
         } catch (Throwable ignored) {
         }
 
         try {
-            Class<?> UiConfig = findClass("com.android.launcher.UiConfig", lpparam.classLoader);
-            hookAllMethods(UiConfig, "isSupportLayout", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (mRearrangeHome) param.setResult(true);
-                }
-            });
+            ReflectedClass UiConfig = ReflectedClass.of("com.android.launcher.UiConfig");
+            UiConfig
+                    .before("isSupportLayout")
+                            .run(param -> {
+                                if (mRearrangeHome) param.setResult(true);
+                            });
 
-            Class<?> ToggleBarLayoutAdapter = findClass("com.android.launcher.togglebar.adapter.ToggleBarLayoutAdapter", lpparam.classLoader);
-            hookAllMethods(ToggleBarLayoutAdapter, "initToggleBarLayoutConfigs", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!mRearrangeHome) return;
-                    int[] mMinMaxRows = (int[]) getObjectField(param.thisObject, "MIN_MAX_ROW");
-                    int[] mMinMaxColumns = (int[]) getObjectField(param.thisObject, "MIN_MAX_COLUMN");
-                    mMinMaxRows[1] = mMaxRows;
-                    mMinMaxColumns[1] = mMaxColumns;
-                    setObjectField(param.thisObject, "MIN_MAX_ROW", mMinMaxRows);
-                    setObjectField(param.thisObject, "MIN_MAX_COLUMN", mMinMaxColumns);
-                }
-            });
+            ReflectedClass ToggleBarLayoutAdapter = ReflectedClass.of("com.android.launcher.togglebar.adapter.ToggleBarLayoutAdapter");
+            ToggleBarLayoutAdapter
+                    .before("initToggleBarLayoutConfigs")
+                            .run(param -> {
+                                if (!mRearrangeHome) return;
+                                int[] mMinMaxRows = (int[]) getObjectField(param.thisObject, "MIN_MAX_ROW");
+                                int[] mMinMaxColumns = (int[]) getObjectField(param.thisObject, "MIN_MAX_COLUMN");
+                                mMinMaxRows[1] = mMaxRows;
+                                mMinMaxColumns[1] = mMaxColumns;
+                                setObjectField(param.thisObject, "MIN_MAX_ROW", mMinMaxRows);
+                                setObjectField(param.thisObject, "MIN_MAX_COLUMN", mMinMaxColumns);
+                            });
         } catch (Throwable t) {
             log("Error in Launcher Layout " + t);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            Class<?> OplusFastScrollLayoutClass = findClass("com.android.launcher3.allapps.OplusFastScrollLayout", lpparam.classLoader);
-            hookAllConstructors(OplusFastScrollLayoutClass, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    OplusFastScroll = (View) param.thisObject;
-                    updateFastScroll();
-                }
-            });
-        } else {
-            Class<?> LetterIndexFastScrollHelper = findClass("com.android.launcher3.allapps.LetterIndexFastScrollHelper", lpparam.classLoader);
-            hookAllConstructors(LetterIndexFastScrollHelper, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    OplusFastScroll = (View) getObjectField(param.thisObject, "mFastScrollerLayout");
-                    updateFastScroll();
-                }
-            });
+        ReflectedClass OplusFastScrollLayoutClass = ReflectedClass.of(
+                "com.android.launcher3.allapps.OplusFastScrollLayout", /* OOS 14-15 */
+                "com.android.launcher3.allapps.LetterIndexFastScrollHelper" // OOS 13
+        );
+        if (OplusFastScrollLayoutClass.getClazz() != null) {
+            OplusFastScrollLayoutClass
+                    .afterConstruction()
+                    .run(param -> {
+                        OplusFastScroll = (View) param.thisObject;
+                        updateFastScroll();
+                    });
         }
 
     }
