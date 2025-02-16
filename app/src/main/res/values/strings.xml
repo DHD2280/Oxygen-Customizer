@@ -629,6 +629,9 @@
     <string name="launcher_edit_layout">Edit home layout</string>
     <string name="launcher_columns">Home Columns</string>
     <string name="launcher_rows">Home Rows</string>
+    <string name="hide_app_labels">Hide app labels</string>
+    <string name="hide_app_labels_desktop">Hide app labels in home screen</string>
+    <string name="hide_app_labels_drawer">Hide app labels in drawer</string>
     <string name="launcher_folder_layout">Folder layout</string>
     <string name="launcher_folder_edit_layout">Edit layout</string>
     <string name="launcher_folder_columns">Columns</string>

@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -26,6 +27,7 @@ public class Launcher extends XposedMods {
     private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
     private int mMaxRows = 6, mMaxColumns = 4;
     private boolean mHideScroller = false;
+    private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
 
     private View OplusFastScroll;
 
@@ -50,6 +52,8 @@ public class Launcher extends XposedMods {
         mRemoveFolderPagination = Xprefs.getBoolean("remove_folder_pagination", false);
         mRemoveHomePagination = Xprefs.getBoolean("remove_home_pagination", false);
         mHideScroller = Xprefs.getBoolean("hide_scroller", false);
+        mHideDesktopLabels = Xprefs.getBoolean("desktop_hide_app_labels", false);
+        mHideDrawerLabels = Xprefs.getBoolean("drawer_hide_app_labels", false);
 
         if (Key.length > 0 && Key[0].equals("hide_scroller")) {
             updateFastScroll();
@@ -193,6 +197,27 @@ public class Launcher extends XposedMods {
                         updateFastScroll();
                     });
         }
+
+        // App Labels
+        ReflectedClass BubbleTextView = ReflectedClass.of("com.android.launcher3.BubbleTextView");
+        BubbleTextView
+                .before("applyLabel")
+                .run(param -> {
+                    int mDisplay = getIntField(param.thisObject, "mDisplay");
+                    int DRAWER_DISPLAY = 1;
+                    try {
+                        DRAWER_DISPLAY = getStaticIntField(BubbleTextView.getClazz(), "DISPLAY_ALL_APPS");
+                    } catch (Throwable ignored) {}
+                    if (mDisplay == DRAWER_DISPLAY) {
+                        if (mHideDrawerLabels) {
+                            param.setResult(null);
+                        }
+                    } else {
+                        if (mHideDesktopLabels) {
+                            param.setResult(null);
+                        }
+                    }
+                });
 
     }
 
