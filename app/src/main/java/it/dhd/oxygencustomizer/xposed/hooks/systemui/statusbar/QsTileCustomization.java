@@ -721,10 +721,37 @@ public class QsTileCustomization extends XposedMods {
 
         switch (mAnimStyle) {
             case 1:
-                animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
+                animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f); // Rotate
                 break;
             case 2:
-                animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
+                animTile = ObjectAnimator.ofFloat(v, "rotationX", 0f, 360f); // Flip X
+                break;
+            case 3:
+                animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f); // Flip Y
+                break;
+            case 4:
+                animTile = ObjectAnimator.ofFloat(v, "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0); // Shake
+                break;
+            case 5:
+                animTile = ObjectAnimator.ofFloat(v, "alpha", 0f, 1f); // Fade In
+                break;
+            case 6:
+                animTile = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.2f, 0.8f, 1f); // Bounce Effect (Scale X)
+                break;
+            case 7:
+                animTile = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.2f, 0.8f, 1f); // Bounce Effect (Scale Y)
+                break;
+            case 8:
+                // Pulse Animation X
+                animTile = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.1f, 1f);
+                animTile.setRepeatCount(0);
+                animTile.setDuration(1000);
+                break;
+            case 9:
+                // Pulse Animation Y
+                animTile = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.1f, 1f);
+                animTile.setRepeatCount(0);
+                animTile.setDuration(1000);
                 break;
             default:
                 return;

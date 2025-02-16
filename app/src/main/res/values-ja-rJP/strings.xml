@@ -401,7 +401,6 @@
     <string name="qs_tile_animation_duration_title">アニメーションの長さ</string>
     <string name="qs_tile_animation_interpolator_title">タイルアニメーションの補間</string>
     <string name="qs_tile_animation_style_off">アニメーションなし</string>
-    <string name="qs_tile_animation_style_flip">フリップ</string>
     <string name="qs_tile_animation_style_rotate">回転</string>
     <string name="qs_tile_animation_duration_low">低</string>
     <string name="qs_tile_animation_duration_default">デフォルト</string>

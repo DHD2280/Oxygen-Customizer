@@ -426,7 +426,6 @@
     <string name="qs_tile_animation_duration_title">Durata animazione</string>
     <string name="qs_tile_animation_interpolator_title">Interpolatore animazione Tile</string>
     <string name="qs_tile_animation_style_off">Nessuna animazione</string>
-    <string name="qs_tile_animation_style_flip">Capovolgimento</string>
     <string name="qs_tile_animation_style_rotate">Ruota</string>
     <string name="qs_tile_animation_duration_low">Bassa</string>
     <string name="qs_tile_animation_duration_default">Predefinito</string>

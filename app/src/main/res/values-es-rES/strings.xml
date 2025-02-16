@@ -395,7 +395,6 @@
     <string name="qs_tile_animation_duration_title">Duración de animación</string>
     <string name="qs_tile_animation_interpolator_title">Interpolador de animación de mosaicos</string>
     <string name="qs_tile_animation_style_off">Sin animación</string>
-    <string name="qs_tile_animation_style_flip">Voltear</string>
     <string name="qs_tile_animation_style_rotate">Rotar</string>
     <string name="qs_tile_animation_duration_low">Bajo</string>
     <string name="qs_tile_animation_duration_default">Predeterminado</string>

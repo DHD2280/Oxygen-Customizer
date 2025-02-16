@@ -457,8 +457,15 @@
     <string name="qs_tile_animation_duration_title">Animation duration</string>
     <string name="qs_tile_animation_interpolator_title">Tiles animation interpolator</string>
     <string name="qs_tile_animation_style_off">No animation</string>
-    <string name="qs_tile_animation_style_flip">Flip</string>
     <string name="qs_tile_animation_style_rotate">Rotate</string>
+    <string name="qs_tile_animation_style_flipx">Flip X</string>
+    <string name="qs_tile_animation_style_flipy">Flip Y</string>
+    <string name="qs_tile_animation_style_shake">Shake</string>
+    <string name="qs_tile_animation_style_fade_in">Fade In</string>
+    <string name="qs_tile_animation_style_bounce_x">Bounce Effect (Scale X)</string>
+    <string name="qs_tile_animation_style_bounce_y">Bounce Effect (Scale Y)</string>
+    <string name="qs_tile_animation_style_pulse_x">Pulse Effect (Scale X)</string>
+    <string name="qs_tile_animation_style_pulse_y">Pulse Effect (Scale Y)</string>
     <string name="qs_tile_animation_duration_low">Low</string>
     <string name="qs_tile_animation_duration_default">Default</string>
     <string name="qs_tile_animation_duration_fast">Fast</string>

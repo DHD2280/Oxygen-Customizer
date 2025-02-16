@@ -426,7 +426,6 @@
     <string name="qs_tile_animation_duration_title">Az animáció hossza</string>
     <string name="qs_tile_animation_interpolator_title">Csempeanimáció-interpolátor</string>
     <string name="qs_tile_animation_style_off">Nincsenek animációk</string>
-    <string name="qs_tile_animation_style_flip">Átfordítás</string>
     <string name="qs_tile_animation_style_rotate">Elforgatás</string>
     <string name="qs_tile_animation_duration_low">Lassú</string>
     <string name="qs_tile_animation_duration_default">Közepes</string>

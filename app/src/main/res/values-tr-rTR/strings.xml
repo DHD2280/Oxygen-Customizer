@@ -386,7 +386,6 @@
     <string name="qs_tile_animation_duration_title">Animasyon süresi</string>
     <string name="qs_tile_animation_interpolator_title">Döşeme animasyonu interpolatörü</string>
     <string name="qs_tile_animation_style_off">Animasyon yok</string>
-    <string name="qs_tile_animation_style_flip">Çevir</string>
     <string name="qs_tile_animation_style_rotate">Döndür</string>
     <string name="qs_tile_animation_duration_low">Düşük</string>
     <string name="qs_tile_animation_duration_default">Varsayılan</string>

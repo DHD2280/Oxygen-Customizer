@@ -402,7 +402,6 @@
     <string name="qs_tile_animation_duration_title">Duração da animação</string>
     <string name="qs_tile_animation_interpolator_title">Interpolador de animação dos blocos</string>
     <string name="qs_tile_animation_style_off">Sem animação</string>
-    <string name="qs_tile_animation_style_flip">Inverter</string>
     <string name="qs_tile_animation_style_rotate">Girar</string>
     <string name="qs_tile_animation_duration_low">Baixa</string>
     <string name="qs_tile_animation_duration_default">Padrão</string>

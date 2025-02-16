@@ -415,7 +415,6 @@
     <string name="qs_tile_animation_duration_title">Продолжительность анимации</string>
     <string name="qs_tile_animation_interpolator_title">Интерполяция анимации плиток</string>
     <string name="qs_tile_animation_style_off">Без анимации</string>
-    <string name="qs_tile_animation_style_flip">Переворот</string>
     <string name="qs_tile_animation_style_rotate">Поворот</string>
     <string name="qs_tile_animation_duration_low">Низко</string>
     <string name="qs_tile_animation_duration_default">По умолчанию</string>

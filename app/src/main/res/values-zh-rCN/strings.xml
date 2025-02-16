@@ -410,7 +410,6 @@
     <string name="qs_tile_animation_duration_title">动画时长</string>
     <string name="qs_tile_animation_interpolator_title">磁贴动画插值器</string>
     <string name="qs_tile_animation_style_off">无动画</string>
-    <string name="qs_tile_animation_style_flip">翻转</string>
     <string name="qs_tile_animation_style_rotate">旋转</string>
     <string name="qs_tile_animation_duration_low">慢速</string>
     <string name="qs_tile_animation_duration_default">默认</string>

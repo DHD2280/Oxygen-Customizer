@@ -414,7 +414,6 @@
     <string name="qs_tile_animation_duration_title">مدة الرسوم المتحركة</string>
     <string name="qs_tile_animation_interpolator_title">مؤشر رسوم متحركة للمربعات</string>
     <string name="qs_tile_animation_style_off">لا توجد رسوم متحركة</string>
-    <string name="qs_tile_animation_style_flip">تقليب</string>
     <string name="qs_tile_animation_style_rotate">تدوير</string>
     <string name="qs_tile_animation_duration_low">منخفض</string>
     <string name="qs_tile_animation_duration_default">افتراضي</string>
