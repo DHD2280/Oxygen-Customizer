@@ -29,6 +29,13 @@ public class EdgeLineAnimator extends EdgeAnimator {
     }
 
     @Override
+    public void setScreenRadius(float radius) {
+        super.setScreenRadius(radius);
+        log("setScreenRadius");
+        initPath();
+    }
+
+    @Override
     public void draw(Canvas canvas) {
         edgeLightPath.reset();
         drawnPath.reset();
@@ -103,12 +110,6 @@ public class EdgeLineAnimator extends EdgeAnimator {
         edgeLightPath.addRoundRect(rect, mScreenRadius, mScreenRadius, Path.Direction.CW);
 
         pathMeasure = new PathMeasure(edgeLightPath, false);
-    }
-
-    @Override
-    public void setPaintColor(int color, boolean rainbow) {
-        super.setPaintColor(color, rainbow);
-        mEdgeBlurPaint.setColor(color);
     }
 
 
