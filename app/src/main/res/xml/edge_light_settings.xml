@@ -25,6 +25,22 @@
             android:summary="@string/edge_light_always_trigger_on_pulse_summary"
             android:title="@string/edge_light_always_trigger_on_pulse_title" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="edge_light_enabled"
+            android:key="edge_light_retick"
+            android:summary="@string/edge_light_retick_summary"
+            android:title="@string/edge_light_retick_title" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="edge_light_enabled"
+            android:entries="@array/edge_light_retick_entries"
+            android:entryValues="@array/edge_light_retick_values"
+            android:key="edge_light_retick_duration"
+            android:title="@string/edge_light_retick_time"
+            app:useSimpleSummaryProvider="true" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

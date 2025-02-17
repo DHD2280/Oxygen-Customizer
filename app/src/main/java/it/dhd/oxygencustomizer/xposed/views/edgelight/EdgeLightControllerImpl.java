@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeAnimator;
 
 public class EdgeLightControllerImpl {
 
@@ -43,6 +44,7 @@ public class EdgeLightControllerImpl {
 
     private boolean mDozing = false;
     private boolean mCurved = false;
+    private boolean mIsFromOc = false;
 
     public static EdgeLightControllerImpl getInstance(Context context) {
         if (instance != null) return instance;
@@ -97,10 +99,9 @@ public class EdgeLightControllerImpl {
     }
 
     public void setDozing(boolean dozing) {
+        logD("setDozing: " + dozing);
         if (mDozing != dozing) {
             mDozing = dozing;
-            if (mEdgeLightEnabled)
-                updateEdgeVisibility();
         }
     }
 
@@ -138,7 +139,7 @@ public class EdgeLightControllerImpl {
     private void updateEdgeVisibility() {
         logD("updateEdgeVisibility");
         boolean allowCurved = mCurved;
-        boolean allowAlwaysPulse = mAlwaysTriggerOnPulse && !mCurved;
+        boolean allowAlwaysPulse = (mAlwaysTriggerOnPulse || mIsFromOc) && !mCurved;
 
         detachEdge();
         if (allowAlwaysPulse) {
@@ -148,10 +149,12 @@ public class EdgeLightControllerImpl {
         }
     }
 
-    public void triggerShow() {
+    public void triggerShow(boolean isFromOc) {
         logD("triggerShow");
+        if (mCurved) return;
         mCurved = false;
         mDozing = true;
+        mIsFromOc = isFromOc;
         updateEdgeVisibility();
     }
 
@@ -163,13 +166,18 @@ public class EdgeLightControllerImpl {
             parent.addView(mEdgeLightView);
             mEdgeLightView.bringToFront();
             mEdgeLightView.requestLayout();
-            mEdgeLightView.setPulsing(mEdgeLightEnabled, mCurved ? mEdgeLightView.PULSE_REASON_NOTIFICATION : 0);
+            mEdgeLightView.setPulsing(mEdgeLightEnabled, mCurved || mIsFromOc ? mEdgeLightView.PULSE_REASON_NOTIFICATION : 0);
         }
+        mIsFromOc = false;
     }
 
     private void detachEdge() {
         try {
             ((ViewGroup) mEdgeLightView.getParent()).removeView(mEdgeLightView);
+            EdgeAnimator animator = mEdgeLightView.getCurrentEdgeAnimator();
+            if (animator != null) {
+                animator.stopAnimation();
+            }
         } catch (Throwable ignored) {}
     }
 
@@ -179,6 +187,7 @@ public class EdgeLightControllerImpl {
                 "mEdgeLightEnabled: " + mEdgeLightEnabled + " " +
                 "mDozing: " + mDozing + " " +
                 "mCurved: " + mCurved + " " +
+                " mIsFromOc: " + mIsFromOc + " " +
                 "mAlwaysTriggerOnPulse: " + mAlwaysTriggerOnPulse + "\n" +
                 msg);
     }

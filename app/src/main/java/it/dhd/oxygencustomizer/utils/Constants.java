@@ -552,6 +552,8 @@ public final class Constants {
         public static class AodEdgeLight {
             public static final String EDGE_LIGHT_ENABLED = "edge_light_enabled";
             public static final String EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE = "edge_light_always_trigger_on_pulse";
+            public static final String EDGE_LIGHT_RETICK = "edge_light_retick";
+            public static final String EDGE_LIGHT_RETICK_DURATION = "edge_light_retick_duration";
             public static final String EDGE_LIGHT_COLOR_MODE = "edge_light_color_mode";
             public static final String EDGE_LIGHT_STYLE = "edge_light_style";
             public static final String EDGE_LIGHT_DRAW_BLUR = "edge_light_show_blur";

@@ -55,6 +55,8 @@ public abstract class EdgeAnimator {
             Color.parseColor("#8A2BE2")
     );
 
+    private final Runnable hideRunnable = () -> mEdgeLightView.hide();
+
     protected final Animator.AnimatorListener mAnimationListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(@NonNull Animator animation) {}
@@ -62,11 +64,13 @@ public abstract class EdgeAnimator {
         @Override
         public void onAnimationEnd(@NonNull Animator animation) {
             if (mEdgeLightView.isSettingsInterface()) return;
-            mEdgeLightView.postDelayed(() -> mEdgeLightView.hide(), 500L);
+            mEdgeLightView.postDelayed(hideRunnable, 500L);
         }
 
         @Override
-        public void onAnimationCancel(@NonNull Animator animation) {}
+        public void onAnimationCancel(@NonNull Animator animation) {
+            mEdgeLightView.removeCallbacks(hideRunnable);
+        }
 
         @Override
         public void onAnimationRepeat(@NonNull Animator animation) {}
@@ -169,7 +173,7 @@ public abstract class EdgeAnimator {
     }
 
     protected final void log(String message) {
-        Log.w(this.getClass().getSimpleName(), message);
+        mEdgeLightView.logD(this.getClass().getSimpleName() + " - " + message);
     }
 
     public boolean isAnimating() {

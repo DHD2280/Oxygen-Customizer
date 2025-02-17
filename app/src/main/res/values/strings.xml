@@ -861,9 +861,14 @@
     <string name="edge_light_summary">Light up the side edges of the screen on notification pulse</string>
     <string name="edge_light_always_trigger_on_pulse_title">Always trigger on pulse</string>
     <string name="edge_light_always_trigger_on_pulse_summary">Whether to show edge light whenever ambient display is shown and not just for notifications</string>
-    <string name="edge_light_repeat_animation_title">Repeat animation</string>
-    <string name="edge_light_repeat_animation_summary_on">Repeat until timeout</string>
-    <string name="edge_light_repeat_animation_summary_off">Show only once</string>
+    <string name="edge_light_retick_title">Pulse for unread notifications</string>
+    <string name="edge_light_retick_summary">Show edge light after an amount of time for unread notifications.\nThe light color will be the same as the last notification received if color mode set as notification.</string>
+    <string name="edge_light_retick_time">Pulse time</string>
+    <string name="edge_light_30_sec">30 seconds</string>
+    <string name="edge_light_1_min">1 minute</string>
+    <string name="edge_light_2_min">2 minutes</string>
+    <string name="edge_light_5_min">5 minutes</string>
+    <string name="edge_light_10_min">10 minutes</string>
     <string name="edge_light_advice">In order to show Edge Light, you must set a color in Stock AOD Edge Light.</string>
     <string name="edge_light_show_blur">Blur style</string>
     <string name="edge_light_blur_mode_title">Blur Mode</string>

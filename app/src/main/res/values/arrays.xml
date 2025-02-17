@@ -841,4 +841,20 @@
         <item>aod_echo</item>
     </string-array>
 
+    <string-array name="edge_light_retick_entries">
+        <item>@string/edge_light_30_sec</item>
+        <item>@string/edge_light_1_min</item>
+        <item>@string/edge_light_2_min</item>
+        <item>@string/edge_light_5_min</item>
+        <item>@string/edge_light_10_min</item>
+    </string-array>
+
+    <string-array name="edge_light_retick_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 </resources>

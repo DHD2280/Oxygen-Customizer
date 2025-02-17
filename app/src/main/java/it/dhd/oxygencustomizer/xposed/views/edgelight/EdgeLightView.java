@@ -17,7 +17,6 @@ package it.dhd.oxygencustomizer.xposed.views.edgelight;
  * limitations under the License
  */
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.WallpaperColors;
 import android.app.WallpaperManager;
@@ -28,8 +27,6 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-
-import java.lang.ref.WeakReference;
 
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
@@ -46,7 +43,7 @@ import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeSnakeAnimato
 public class EdgeLightView extends View {
 
     @SuppressLint("StaticFieldLeak")
-    public static WeakReference<EdgeLightView> instance;
+    public static EdgeLightView instance;
     private final Context mContext;
     public static final String TAG = "EdgeLightView";
 
@@ -83,8 +80,6 @@ public class EdgeLightView extends View {
     private long pulsingDuration = 2100;
     private int repeatCount = 1;
 
-    private Object mDozeParameters = null;
-
     public enum ColorMode {
         ACCENT,
         NOTIFICATION,
@@ -104,12 +99,12 @@ public class EdgeLightView extends View {
     }
 
     public static EdgeLightView getInstance(Context context) {
-        if (instance != null) return instance.get();
+        if (instance != null) return instance;
         return new EdgeLightView(context, false);
     }
 
     public static EdgeLightView getInstance() {
-        return instance.get();
+        return instance;
     }
 
     public static boolean hasInstance() {
@@ -120,9 +115,13 @@ public class EdgeLightView extends View {
         super(context);
         mContext = context;
         mSettingsInterface = settingsInterface;
-        if (!mSettingsInterface) instance = new WeakReference<>(this);
+        if (!mSettingsInterface) instance = this;
         this.wallpaperManager = (WallpaperManager) mContext.getSystemService(Context.WALLPAPER_SERVICE);
         loadEdgeAnimator();
+    }
+
+    public EdgeAnimator getCurrentEdgeAnimator() {
+        return mEdgeAnimator;
     }
 
     public void setOptions(
@@ -151,7 +150,7 @@ public class EdgeLightView extends View {
                 setColor(mSettingsInterface ? ThemeUtils.getPrimaryColor(mContext) : OpUtils.getPrimaryColor(mContext));
                 break;
             case NOTIFICATION:
-                setColor(mNotificationColor);
+                setColor(mNotificationColor == -1 || mNotificationColor == -2 ? mSettingsInterface ? ThemeUtils.getPrimaryColor(mContext) : OpUtils.getPrimaryColor(mContext) : mNotificationColor);
                 break;
             case CUSTOM:
                 setColor(mCustomColor);
@@ -258,6 +257,9 @@ public class EdgeLightView extends View {
 
     public void setScreenRadius(float radius) {
         mCornerRadius = radius;
+        if (mEdgeAnimator != null) {
+            mEdgeAnimator.setScreenRadius(mCornerRadius);
+        }
     }
 
     public void setDurations(int anim, int pulsing, long duration) {
@@ -296,7 +298,7 @@ public class EdgeLightView extends View {
         }
     }
 
-    private void logD(String msg) {
+    public void logD(String msg) {
         if (mSettingsInterface) {
             Log.w("EdgeLightView", msg);
         } else {
