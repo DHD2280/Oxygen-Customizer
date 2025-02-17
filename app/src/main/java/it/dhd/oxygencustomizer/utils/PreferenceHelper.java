@@ -32,6 +32,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_COLOR_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_RETICK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_RETICK_DURATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_COLOR_CAT;
@@ -944,6 +947,10 @@ public class PreferenceHelper {
                  DEPTH_WALLPAPER_AOD,
                  DEPTH_WALLPAPER_BACKGROUND,
                  DEPTH_WALLPAPER_SUBJECT -> instance.mPreferences.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
+
+            case EDGE_LIGHT_RETICK_DURATION ->
+                instance.mPreferences.getBoolean(EDGE_LIGHT_ENABLED, false) &&
+                        instance.mPreferences.getBoolean(EDGE_LIGHT_RETICK, false);
 
             case "fix_lag_force_all_apps" ->
                     instance.mPreferences.getBoolean("fix_lag_switch", false);
