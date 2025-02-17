@@ -476,8 +476,6 @@ public class QsTileCustomization extends XposedMods {
                             mOplusQsMediaView = (View) param.thisObject;
                             if (mQsWidgetsEnabled) return;
                             if (Build.VERSION.SDK_INT >= 35) { // OOS 15
-                                Drawable bgg = getOOS15Background(param.thisObject);
-                                XposedBridge.log("OplusQsMediaPanelView onFinishInflate background null? " + (bgg == null));
                                 mOplusQsMediaDefaultBackground = getOOS15Background(param.thisObject);
                                 mOplusQsMediaView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                                     @Override
@@ -523,16 +521,9 @@ public class QsTileCustomization extends XposedMods {
                 .run(param -> {
                     if (mQsWidgetsEnabled) return;
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        XposedBridge.log("QsWidgets: onShapeChanged");
                         Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
                         Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-                        XposedBridge.log("onShapeChanged backgroundProxy null? " + (backgroundProxy == null));
-                        XposedBridge.log("onShapeChanged panelInfo null? " + (panelInfo == null));
-                        Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-                        XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (bg == null));
-                        Object getBackgroundDrawable = callMethod(param.thisObject, "getBackgroundDrawable");
-                        XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (getBackgroundDrawable == null));
-                        mOplusQsMediaDefaultBackground = bg;
+                        mOplusQsMediaDefaultBackground = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
                         View view = (View) callMethod(panelInfo, "getBackgroundView");
                         view.postDelayed(() -> view.setBackground(null), 250L);
                     }, 250L);
@@ -554,10 +545,7 @@ public class QsTileCustomization extends XposedMods {
         try {
             Object backgroundProxy = getObjectField(mediaPanelView, "backgroundProxy");
             Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-            XposedBridge.log("getOOS15Background backgroundProxy null? " + (backgroundProxy == null));
-            XposedBridge.log("getOOS15Background panelInfo null? " + (panelInfo == null));
             Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-            XposedBridge.log("getOOS15Background getBackgroundDrawable null? " + (bg == null));
             if (bg != null) return bg;
             else return global;
         } catch (Throwable t) {
