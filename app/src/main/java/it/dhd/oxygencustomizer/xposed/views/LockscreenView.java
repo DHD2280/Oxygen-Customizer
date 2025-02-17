@@ -187,6 +187,10 @@ public class LockscreenView extends FrameLayout {
         post(() -> mWidgetsContainer.setVisibility(enabled ? VISIBLE : GONE));
     }
 
+    public void updateWidgetsMargin(int topMargin) {
+        post(() -> setMargins(mWidgetsContainer, mContext, 0, topMargin, 0, 0));
+    }
+
     public void onUiStateChanged(int uiState) {
 
         if (mLockscreenWeatherEnabled) {

@@ -242,6 +242,14 @@
             app:tickInterval="0.05"
             app:valueFormat="%" />
 
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="lockscreen_widgets_top_margin"
+            android:title="@string/lockscreen_clock_top_margin_title"
+            app:defaultValue="0"
+            app:maxVal="200"
+            app:minVal="-50"
+            app:valueFormat="dp" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

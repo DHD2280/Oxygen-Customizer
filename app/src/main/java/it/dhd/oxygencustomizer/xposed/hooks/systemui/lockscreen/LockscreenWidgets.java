@@ -31,6 +31,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 
@@ -48,6 +49,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgetsView;
 
@@ -84,6 +86,7 @@ public class LockscreenWidgets extends XposedMods {
     private String mExtraWidgets;
     private float mWidgetsScale = 1f;
     private int mWidgetsStyle = 0;
+    private int mTopMargin = 0;
     private Object mActivityStarter = null;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -127,6 +130,7 @@ public class LockscreenWidgets extends XposedMods {
         mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
         mWidgetsScale = Xprefs.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f);
         mWidgetsStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WIDGETS_STYLE, "0"));
+        mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WIDGETS_TOP_MARGIN, 0);
 
         if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET) ||
@@ -156,6 +160,9 @@ public class LockscreenWidgets extends XposedMods {
         }
         if (Key[0].equals(LOCKSCREEN_WIDGETS_SCALE)) {
             updateLockscreenWidgetsScale();
+        }
+        if (Key[0].equals(LOCKSCREEN_WIDGETS_TOP_MARGIN)) {
+            updateMargins();
         }
 
     }
@@ -257,6 +264,7 @@ public class LockscreenWidgets extends XposedMods {
             updateLsDeviceWidget();
             updateLockscreenWidgetsColors();
             updateLockscreenWidgetsScale();
+            updateMargins();
         } catch (Throwable ignored) {
         }
     }
@@ -298,6 +306,15 @@ public class LockscreenWidgets extends XposedMods {
         XposedBridge.log(TAG + "setActivityStarter lsWidgets null? " + (lsWidgets == null));
         if (lsWidgets == null) return;
         lsWidgets.setActivityStarter(mActivityStarter);
+    }
+
+    private void updateMargins() {
+        LockscreenView lsView = LockscreenView.getInstance();
+        if (lsView != null) lsView.updateWidgetsMargin(mTopMargin);
+
+        if (mWidgetsContainer != null) {
+            ViewHelper.setMargins(mWidgetsContainer, mContext, 0, mTopMargin, 0, 0);
+        }
     }
 
     @Override
