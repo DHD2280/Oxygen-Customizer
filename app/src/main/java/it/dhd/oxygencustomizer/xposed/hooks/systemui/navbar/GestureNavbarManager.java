@@ -220,13 +220,14 @@ public class GestureNavbarManager extends XposedMods {
         hookAllMethods(SideGestureNavView, "setAppIcon", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                int side = (int) callMethod(param.thisObject, "getSide");
                 if (overrideBack) {
                     Drawable icon;
                     if (overrideMode == 0) {
                         if (overrideLeft == 0) return;
                         icon = getActionIcon(overrideLeft);
                     } else {
-                        if (mDirection == 0) {
+                        if (side == 0) {
                             if (overrideLeft == 0) return;
                             icon = getActionIcon(overrideLeft);
                         } else {
@@ -242,12 +243,13 @@ public class GestureNavbarManager extends XposedMods {
         findAndHookMethod(SideGestureDetector, "switchApp", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                int side = (int) callMethod(param.thisObject, "getSide");
                 if (overrideBack) {
                     if (overrideMode == 0) {
                         if (overrideLeft == 0) return;
                         runAction(overrideLeft);
                     } else {
-                        if (mDirection == 0) {
+                        if (side == 0) {
                             if (overrideLeft == 0) return;
                             runAction(overrideLeft);
                         } else {
