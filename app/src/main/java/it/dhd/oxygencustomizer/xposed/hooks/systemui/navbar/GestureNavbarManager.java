@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -220,14 +221,14 @@ public class GestureNavbarManager extends XposedMods {
         hookAllMethods(SideGestureNavView, "setAppIcon", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                int side = (int) callMethod(param.thisObject, "getSide");
+                int mPosition = getIntField(param.thisObject, "mPosition");
                 if (overrideBack) {
                     Drawable icon;
                     if (overrideMode == 0) {
                         if (overrideLeft == 0) return;
                         icon = getActionIcon(overrideLeft);
                     } else {
-                        if (side == 0) {
+                        if (mPosition == 0) {
                             if (overrideLeft == 0) return;
                             icon = getActionIcon(overrideLeft);
                         } else {
