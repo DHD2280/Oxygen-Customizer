@@ -26,6 +26,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MemcEnhancer extends XposedMods {
 
@@ -136,7 +137,7 @@ public class MemcEnhancer extends XposedMods {
             mContext.registerReceiver(mSettingsBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         }
 
-        hookFeatureManager(lpparam);
+        hookFeatureManager();
         hookSystemProperties(lpparam);
         hookOplusFeatureMEMC(lpparam);
         hookOplusMemcHelper(lpparam);
@@ -165,31 +166,32 @@ public class MemcEnhancer extends XposedMods {
         mContext.sendBroadcast(intent);
     }
 
-    private void hookFeatureManager(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusFeatureManager;
-        OplusFeatureManager = findClassIfExists("com.oplus.content.OplusFeatureConfigManager", lpparam.classLoader);
+    private void hookFeatureManager() {
+        ReflectedClass OplusFeatureManager = ReflectedClass.of(
+                "com.android.server.content.OplusFeatureConfigManagerService" /* new OOS15 */,
+                "com.oplus.content.OplusFeatureConfigManager" /* OOS14-15 */
+        );
 
-        if (OplusFeatureManager == null) {
-            log("OplusFeatureManager not found");
+        if (OplusFeatureManager.getClazz() == null) {
+            log(new Throwable("OplusFeatureManager not found"));
             return;
         }
 
-        hookAllMethods(OplusFeatureManager, "hasFeature", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        OplusFeatureManager
+                .before("hasFeature")
+                .run(param -> {
                     /*
                         oplus.software.display.pixelworks_enable
                         oplus.software.display.iris_enable
                         oplus.software.display.memc_enable
                         oplus.software.display.game.memc_enable
-                     */
-                String requestedFeature = (String) param.args[0];
-                if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && enableMemcFeature) {
-                    log("hasFeature: " + param.args[0] + " called, returning true");
-                    param.setResult(true);
-                }
-            }
-        });
+                    */
+                    String requestedFeature = (String) param.args[0];
+                    if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && enableMemcFeature) {
+                        log("hasFeature: " + param.args[0] + " called, returning true");
+                        param.setResult(true);
+                    }
+                });
     }
 
     private void hookSystemProperties(XC_LoadPackage.LoadPackageParam lpparam) {
