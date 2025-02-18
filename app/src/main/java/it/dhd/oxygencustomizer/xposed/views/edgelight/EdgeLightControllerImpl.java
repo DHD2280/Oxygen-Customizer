@@ -37,6 +37,7 @@ public class EdgeLightControllerImpl {
     private int mEdgeLightStyle = 0;
     private EdgeLightView.ColorMode mEdgeLightColorMode = EdgeLightView.ColorMode.ACCENT;
     private boolean mAlwaysTriggerOnPulse = false;
+    private boolean mRetick = false;
     private int mEdgeLightCustomColor = Color.RED;
     private int mScreenCornerRadius = 20;
     private boolean mEdgeDrawBlur = false;
@@ -71,6 +72,7 @@ public class EdgeLightControllerImpl {
             float edgeLightWidth,
             EdgeLightView.ColorMode colorMode,
             boolean alwaysTriggerOnPulse,
+            boolean retick,
             int customColor,
             boolean drawBlur,
             int blurMode,
@@ -81,6 +83,7 @@ public class EdgeLightControllerImpl {
         mEdgeLightWidth = edgeLightWidth;
         mEdgeLightColorMode = colorMode;
         mAlwaysTriggerOnPulse = alwaysTriggerOnPulse;
+        mRetick = retick;
         mEdgeLightCustomColor = customColor;
         mEdgeDrawBlur = drawBlur;
         mEdgeBlurMode = blurMode;
@@ -123,12 +126,10 @@ public class EdgeLightControllerImpl {
 
     public void setAodRootLayout(FrameLayout aodRootLayout) {
         mAodRootLayout = aodRootLayout;
-        updateEdgeVisibility();
     }
 
     public void setBlockLayout(FrameLayout aodBlockLayout) {
         mAodBlockLayout = aodBlockLayout;
-        updateEdgeVisibility();
     }
 
     public void setCurved(boolean curved) {
@@ -139,7 +140,7 @@ public class EdgeLightControllerImpl {
     private void updateEdgeVisibility() {
         logD("updateEdgeVisibility");
         boolean allowCurved = mCurved;
-        boolean allowAlwaysPulse = (mAlwaysTriggerOnPulse || mIsFromOc) && !mCurved;
+        boolean allowAlwaysPulse = (mAlwaysTriggerOnPulse || mRetick) && !mCurved;
 
         detachEdge();
         if (allowAlwaysPulse) {
@@ -151,7 +152,6 @@ public class EdgeLightControllerImpl {
 
     public void triggerShow(boolean isFromOc) {
         logD("triggerShow");
-        if (mCurved) return;
         mCurved = false;
         mDozing = true;
         mIsFromOc = isFromOc;
@@ -183,13 +183,13 @@ public class EdgeLightControllerImpl {
 
     private void logD(String msg) {
         if (!DEBUG) return;
-        XposedBridge.log(TAG + "\n" +
+        XposedBridge.log(TAG + "\n" + msg + "\n" +
                 "mEdgeLightEnabled: " + mEdgeLightEnabled + " " +
                 "mDozing: " + mDozing + " " +
                 "mCurved: " + mCurved + " " +
-                " mIsFromOc: " + mIsFromOc + " " +
-                "mAlwaysTriggerOnPulse: " + mAlwaysTriggerOnPulse + "\n" +
-                msg);
+                "mIsFromOc: " + mIsFromOc + " " +
+                "mRetick: " + mRetick + " " +
+                "mAlwaysTriggerOnPulse: " + mAlwaysTriggerOnPulse);
     }
 
 }

@@ -170,6 +170,7 @@ public class AodEdgeLight extends XposedMods {
                         .run(param -> {
                             boolean dozing = getBooleanField(param.thisObject, "mDozing");
                             if (!dozing) {
+                                XposedBridge.log("AodEdgeLight: dozing = false, removing reticker callbacks");
                                 mRetickerHandler.removeCallbacks(mTriggerShow);
                             }
                             if (EdgeLightControllerImpl.hasInstance()) {
@@ -188,6 +189,8 @@ public class AodEdgeLight extends XposedMods {
                     FrameLayout mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
                     edgeController.setBlockLayout(mAodBlackLayout);
                     edgeController.setCurved(true);
+                    XposedBridge.log("AodEdgeLight: addCurvedDisplayView - removing reticker callbacks");
+                    mRetickerHandler.removeCallbacks(mTriggerShow);
                 });
 
         AodRecord
@@ -196,6 +199,7 @@ public class AodEdgeLight extends XposedMods {
                     XposedBridge.log("AodEdgeLight: removing view");
                     EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
                     edgeController.setCurved(false);
+                    XposedBridge.log("AodEdgeLight: removeCurvedDisplayView - removing reticker callbacks & trigger again in " + mRetickDuration);
                     mRetickerHandler.removeCallbacks(mTriggerShow);
                     mRetickerHandler.postDelayed(mTriggerShow, mRetickDuration);
                 });
@@ -276,7 +280,7 @@ public class AodEdgeLight extends XposedMods {
     }
 
     private void refreshEdgeLight() {
-        EdgeLightControllerImpl.getInstance(mContext).setOptions(mEdgeLightEnabled, mEdgeLightStyle, mEdgeLightWidth, mEdgeLightColorMode, mAlwaysTriggerOnPulse, mEdgeLightCustomColor, mEdgeDrawBlur, mEdgeBlurMode, mEdgeBlurType);
+        EdgeLightControllerImpl.getInstance(mContext).setOptions(mEdgeLightEnabled, mEdgeLightStyle, mEdgeLightWidth, mEdgeLightColorMode, mAlwaysTriggerOnPulse, mRetick, mEdgeLightCustomColor, mEdgeDrawBlur, mEdgeBlurMode, mEdgeBlurType);
     }
 
     @Override

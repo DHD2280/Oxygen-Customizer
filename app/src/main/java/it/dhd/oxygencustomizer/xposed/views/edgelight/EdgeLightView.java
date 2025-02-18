@@ -136,9 +136,8 @@ public class EdgeLightView extends View {
         this.mDrawBlur = drawBlur;
         this.mBlurType = blurType;
         this.mBlurMode = blurMode;
-        setEdgeLightStyle(edgeLightStyle);
+        setEdgeLightStyle(edgeLightStyle); // This will also set the stroke width
         this.mCustomColor = customColor;
-        setStrokeWidth(mEdgeLightWidth);
         setColorMode(colorMode);
     }
 
@@ -212,6 +211,7 @@ public class EdgeLightView extends View {
         mEdgeLightStyle = style;
         loadEdgeAnimator();
         setStrokeWidth(mEdgeLightWidth);
+        mEdgeAnimator.setScreenRadius(mCornerRadius);
         invalidate();
     }
 
