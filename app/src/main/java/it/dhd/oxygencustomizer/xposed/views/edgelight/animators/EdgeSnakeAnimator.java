@@ -26,10 +26,10 @@ public class EdgeSnakeAnimator extends EdgeLineAnimator {
         drawnPath.reset();
 
         RectF rect = new RectF(
-                mEdgePaint.getStrokeWidth() / 2,
-                mEdgePaint.getStrokeWidth() / 2,
-                mEdgeLightView.getWidth() - mEdgePaint.getStrokeWidth() / 2,
-                mEdgeLightView.getHeight() - mEdgePaint.getStrokeWidth() / 2
+                mEdgePaint.getStrokeWidth(),
+                mEdgePaint.getStrokeWidth(),
+                mEdgeLightView.getWidth() - mEdgePaint.getStrokeWidth(),
+                mEdgeLightView.getHeight() - mEdgePaint.getStrokeWidth()
         );
 
         edgeLightPath.addRoundRect(rect, mScreenRadius, mScreenRadius, Path.Direction.CW);

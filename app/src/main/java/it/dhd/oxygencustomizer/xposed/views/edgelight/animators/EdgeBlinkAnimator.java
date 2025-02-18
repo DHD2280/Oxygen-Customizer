@@ -21,10 +21,10 @@ public class EdgeBlinkAnimator extends EdgeAnimator {
                 ", mEdgeLightView.getHeight() = " + mEdgeLightView.getHeight() +
                 ", mScreenRadius = " + mScreenRadius);
         RectF rect = new RectF(
-                mEdgePaint.getStrokeWidth() / 2,
-                mEdgePaint.getStrokeWidth() / 2,
-                mEdgeLightView.getWidth() - mEdgePaint.getStrokeWidth() / 2,
-                mEdgeLightView.getHeight() - mEdgePaint.getStrokeWidth() / 2
+                mEdgePaint.getStrokeWidth(),
+                mEdgePaint.getStrokeWidth(),
+                mEdgeLightView.getWidth() - mEdgePaint.getStrokeWidth(),
+                mEdgeLightView.getHeight() - mEdgePaint.getStrokeWidth()
         );
         canvas.drawRoundRect(rect, mScreenRadius, mScreenRadius, mDrawBlur && mBlurMode == 1 ? mEdgeBlurPaint : mEdgePaint);
         if (mDrawBlur && mBlurMode == 0) canvas.drawRoundRect(rect, mScreenRadius, mScreenRadius, mEdgeBlurPaint);

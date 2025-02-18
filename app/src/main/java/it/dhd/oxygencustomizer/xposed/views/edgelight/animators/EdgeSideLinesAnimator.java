@@ -62,17 +62,17 @@ public class EdgeSideLinesAnimator extends EdgeAnimator {
 
         float halfHeight = height * 0.5f * currentHeight;
 
-        canvas.drawLine(mEdgePaint.getStrokeWidth() / 2,
+        canvas.drawLine(mEdgePaint.getStrokeWidth(),
                 centerY - halfHeight,
-                mEdgePaint.getStrokeWidth() / 2,
+                mEdgePaint.getStrokeWidth(),
                 centerY + halfHeight, mDrawBlur && mBlurMode == 1 ? mEdgeBlurPaint : mEdgePaint);
         if (mDrawBlur && mBlurMode == 0)
             canvas.drawRect(0, centerY - halfHeight, barWidth, centerY + halfHeight, mEdgeBlurPaint);
 
 
-        canvas.drawLine(width - mEdgePaint.getStrokeWidth() / 2,
+        canvas.drawLine(width - mEdgePaint.getStrokeWidth(),
                 centerY - halfHeight,
-                width - mEdgePaint.getStrokeWidth() / 2,
+                width - mEdgePaint.getStrokeWidth(),
                 centerY + halfHeight, mDrawBlur && mBlurMode == 1 ? mEdgeBlurPaint : mEdgePaint);
 
         if (mDrawBlur && mBlurMode == 0)

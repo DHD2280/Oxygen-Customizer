@@ -63,12 +63,15 @@ public abstract class EdgeAnimator {
 
         @Override
         public void onAnimationEnd(@NonNull Animator animation) {
+            log("onAnimationEnd");
             if (mEdgeLightView.isSettingsInterface()) return;
+            stopAnimation();
             mEdgeLightView.postDelayed(hideRunnable, 500L);
         }
 
         @Override
         public void onAnimationCancel(@NonNull Animator animation) {
+            log("onAnimationCancel");
             mEdgeLightView.removeCallbacks(hideRunnable);
         }
 
@@ -129,6 +132,7 @@ public abstract class EdgeAnimator {
     }
 
     public void setDurations(int anim, int pulsing, long duration) {
+        if (mFinalAnimDuration == duration) return;
         this.mAnimationDuration = anim;
         this.mPulsingDuration = pulsing;
         if (duration == 0) duration = mAnimationDuration;
