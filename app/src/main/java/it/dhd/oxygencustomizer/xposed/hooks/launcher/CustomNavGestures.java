@@ -320,7 +320,7 @@ public class CustomNavGestures extends XposedMods {
 					1,
 					callMethod(Process.myUserHandle(), "getIdentifier"));
 
-			if(recentTaskList.isEmpty()) return;
+			if(recentTaskList == null || recentTaskList.isEmpty()) return;
 
 			if(mTasksFieldName == null) {
 				for(Field f : recentTaskList.get(0).getClass().getDeclaredFields()) {
