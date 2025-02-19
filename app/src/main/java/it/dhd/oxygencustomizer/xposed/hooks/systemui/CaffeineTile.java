@@ -103,20 +103,22 @@ public class CaffeineTile extends XposedMods {
                     });
         }
 
-        ReflectedClass OplusQSPageViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
-        OplusQSPageViewController
-                .after("setTiles")
-                .run(param -> {
-                    ((ArrayList<?>) getObjectField(param.thisObject, "records")).forEach(record ->
-                    {
-                        Object tile = getObjectField(record, "tile");
+        ReflectedClass OplusQSPageViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
+        if (OplusQSPageViewController.getClazz() != null) {
+            OplusQSPageViewController
+                    .after("setTiles")
+                    .run(param -> {
+                        ((ArrayList<?>) getObjectField(param.thisObject, "records")).forEach(record ->
+                        {
+                            Object tile = getObjectField(record, "tile");
 
-                        if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
-                            mTileView = (View) getObjectField(record, "tileView");
-                            setupTile(tile, mTileView);
-                        }
+                            if (TARGET_SPEC.equals(getObjectField(tile, "mTileSpec"))) {
+                                mTileView = (View) getObjectField(record, "tileView");
+                                setupTile(tile, mTileView);
+                            }
+                        });
                     });
-                });
+        }
 
         ReflectedClass QSTileViewImplClass = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView", /* OOS15 */
