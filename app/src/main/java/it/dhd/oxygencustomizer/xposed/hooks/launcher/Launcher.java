@@ -89,64 +89,92 @@ public class Launcher extends XposedMods {
                                 param.setResult(mDrawerColumns);
                         });
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         ReflectedClass OplusTaskViewImpl = ReflectedClass.of("com.android.quickstep.views.OplusTaskViewImpl");
 
         OplusTaskViewImpl
                 .after("setIcon")
-                        .run(param -> {
-                            View headerView = (View) callMethod(param.thisObject, "getHeaderView");
-                            View iconView = (View) callMethod(headerView, "getTaskIcon");
-                            View titleView = (View) callMethod(headerView, "getTitleTv");
-                            Object task = callMethod(param.thisObject, "getTask");
-                            if (task == null) return;
-                            Object key = getObjectField(task, "key");
-                            if (key == null) return;
-                            String pkgName = (String) callMethod(key, "getPackageName");
-                            int userId = getIntField(key, "userId");
-                            final ClickListener clickListener = new ClickListener(pkgName, userId);
+                .run(param -> {
+                    View headerView = (View) callMethod(param.thisObject, "getHeaderView");
+                    View iconView = (View) callMethod(headerView, "getTaskIcon");
+                    View titleView = (View) callMethod(headerView, "getTitleTv");
+                    Object task = callMethod(param.thisObject, "getTask");
+                    if (task == null) return;
+                    Object key = getObjectField(task, "key");
+                    if (key == null) return;
+                    String pkgName = (String) callMethod(key, "getPackageName");
+                    int userId = getIntField(key, "userId");
+                    final ClickListener clickListener = new ClickListener(pkgName, userId);
 
-                            iconView.setOnLongClickListener(clickListener);
-                            titleView.setOnLongClickListener(clickListener);
-                        });
+                    iconView.setOnLongClickListener(clickListener);
+                    titleView.setOnLongClickListener(clickListener);
+                });
 
         ReflectedClass DockIconView = ReflectedClass.of("com.oplus.quickstep.dock.DockIconView");
         DockIconView
                 .after("setIcon")
-                        .run(param -> {
-                            Object task = callMethod(param.thisObject, "getTask");
-                            if (task == null) return;
-                            Object key = getObjectField(task, "key");
-                            if (key == null) return;
-                            String pkgName = (String) callMethod(key, "getPackageName");
-                            int userId = getIntField(key, "userId");
-                            View iconView = (View) param.thisObject;
-                            final ClickListener clickListener = new ClickListener(pkgName, userId);
-                            iconView.setOnLongClickListener(clickListener);
-                        });
+                .run(param -> {
+                    Object task = callMethod(param.thisObject, "getTask");
+                    if (task == null) return;
+                    Object key = getObjectField(task, "key");
+                    if (key == null) return;
+                    String pkgName = (String) callMethod(key, "getPackageName");
+                    int userId = getIntField(key, "userId");
+                    View iconView = (View) param.thisObject;
+                    final ClickListener clickListener = new ClickListener(pkgName, userId);
+                    iconView.setOnLongClickListener(clickListener);
+                });
 
         try {
             ReflectedClass OplusPageIndicator = ReflectedClass.of("com.android.launcher.pageindicators.OplusPageIndicator");
             OplusPageIndicator
-                    .before("onDraw")
+                    .before("dispatchDraw")
                             .run(param -> {
                                 if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
                                 View v = (View) param.thisObject;
                                 if (v.getParent() == null) return;
                                 switch (v.getParent().getClass().getCanonicalName()) {
                                     case "com.android.launcher3.OplusDragLayer":
-                                        v.setVisibility(View.GONE);
-                                        if (mRemoveHomePagination) param.setResult(null);
+                                        if (mRemoveHomePagination) {
+                                            v.setVisibility(View.GONE);
+                                            param.setResult(null);
+                                        }
                                         break;
                                     case "android.widget.FrameLayout":
-                                        v.setVisibility(View.GONE);
-                                        if (mRemoveFolderPagination) param.setResult(null);
+                                        if (mRemoveFolderPagination) {
+                                            v.setVisibility(View.GONE);
+                                            param.setResult(null);
+                                        }
                                         break;
                                     default:
                                         break;
                                 }
                             });
+            OplusPageIndicator
+                    .before("onDraw")
+                    .run(param -> {
+                        if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
+                        View v = (View) param.thisObject;
+                        if (v.getParent() == null) return;
+                        switch (v.getParent().getClass().getCanonicalName()) {
+                            case "com.android.launcher3.OplusDragLayer":
+                                if (mRemoveHomePagination) {
+                                    v.setVisibility(View.GONE);
+                                    param.setResult(null);
+                                }
+                                break;
+                            case "android.widget.FrameLayout":
+                                if (mRemoveFolderPagination) {
+                                    v.setVisibility(View.GONE);
+                                    param.setResult(null);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
         } catch (Throwable t) {
             log(t);
         }
@@ -155,9 +183,9 @@ public class Launcher extends XposedMods {
             ReflectedClass PageIndicatorTouchHelper = ReflectedClass.of("com.android.launcher.pageindicators.PageIndicatorTouchHelper");
             PageIndicatorTouchHelper
                     .before("dispatchTouchEvent")
-                            .run(param -> {
-                                if (mRemoveHomePagination) param.setResult(false);
-                            });
+                    .run(param -> {
+                        if (mRemoveHomePagination) param.setResult(false);
+                    });
         } catch (Throwable ignored) {
         }
 
@@ -165,22 +193,22 @@ public class Launcher extends XposedMods {
             ReflectedClass UiConfig = ReflectedClass.of("com.android.launcher.UiConfig");
             UiConfig
                     .before("isSupportLayout")
-                            .run(param -> {
-                                if (mRearrangeHome) param.setResult(true);
-                            });
+                    .run(param -> {
+                        if (mRearrangeHome) param.setResult(true);
+                    });
 
             ReflectedClass ToggleBarLayoutAdapter = ReflectedClass.of("com.android.launcher.togglebar.adapter.ToggleBarLayoutAdapter");
             ToggleBarLayoutAdapter
                     .before("initToggleBarLayoutConfigs")
-                            .run(param -> {
-                                if (!mRearrangeHome) return;
-                                int[] mMinMaxRows = (int[]) getObjectField(param.thisObject, "MIN_MAX_ROW");
-                                int[] mMinMaxColumns = (int[]) getObjectField(param.thisObject, "MIN_MAX_COLUMN");
-                                mMinMaxRows[1] = mMaxRows;
-                                mMinMaxColumns[1] = mMaxColumns;
-                                setObjectField(param.thisObject, "MIN_MAX_ROW", mMinMaxRows);
-                                setObjectField(param.thisObject, "MIN_MAX_COLUMN", mMinMaxColumns);
-                            });
+                    .run(param -> {
+                        if (!mRearrangeHome) return;
+                        int[] mMinMaxRows = (int[]) getObjectField(param.thisObject, "MIN_MAX_ROW");
+                        int[] mMinMaxColumns = (int[]) getObjectField(param.thisObject, "MIN_MAX_COLUMN");
+                        mMinMaxRows[1] = mMaxRows;
+                        mMinMaxColumns[1] = mMaxColumns;
+                        setObjectField(param.thisObject, "MIN_MAX_ROW", mMinMaxRows);
+                        setObjectField(param.thisObject, "MIN_MAX_COLUMN", mMinMaxColumns);
+                    });
         } catch (Throwable t) {
             log("Error in Launcher Layout " + t);
         }
@@ -211,7 +239,8 @@ public class Launcher extends XposedMods {
                     int DRAWER_DISPLAY = 1;
                     try {
                         DRAWER_DISPLAY = getStaticIntField(BubbleTextView.getClazz(), "DISPLAY_ALL_APPS");
-                    } catch (Throwable ignored) {}
+                    } catch (Throwable ignored) {
+                    }
                     if (mDisplay == DRAWER_DISPLAY) {
                         if (mHideDrawerLabels) {
                             param.setResult(null);
