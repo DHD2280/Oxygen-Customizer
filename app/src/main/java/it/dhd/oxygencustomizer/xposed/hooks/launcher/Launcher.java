@@ -128,53 +128,34 @@ public class Launcher extends XposedMods {
                 });
 
         try {
+            ReflectedClass.ReflectionConsumer pageIndicator = param -> {
+                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
+                View v = (View) param.thisObject;
+                if (v.getParent() == null) return;
+                switch (v.getParent().getClass().getCanonicalName()) {
+                    case "com.android.launcher3.OplusDragLayer":
+                        if (mRemoveHomePagination) {
+                            v.setVisibility(View.GONE);
+                            param.setResult(null);
+                        }
+                        break;
+                    case "android.widget.FrameLayout":
+                        if (mRemoveFolderPagination) {
+                            v.setVisibility(View.GONE);
+                            param.setResult(null);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            };
             ReflectedClass OplusPageIndicator = ReflectedClass.of("com.android.launcher.pageindicators.OplusPageIndicator");
             OplusPageIndicator
                     .before("dispatchDraw")
-                            .run(param -> {
-                                if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
-                                View v = (View) param.thisObject;
-                                if (v.getParent() == null) return;
-                                switch (v.getParent().getClass().getCanonicalName()) {
-                                    case "com.android.launcher3.OplusDragLayer":
-                                        if (mRemoveHomePagination) {
-                                            v.setVisibility(View.GONE);
-                                            param.setResult(null);
-                                        }
-                                        break;
-                                    case "android.widget.FrameLayout":
-                                        if (mRemoveFolderPagination) {
-                                            v.setVisibility(View.GONE);
-                                            param.setResult(null);
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            });
+                            .run(pageIndicator);
             OplusPageIndicator
                     .before("onDraw")
-                    .run(param -> {
-                        if (!mRemoveHomePagination && !mRemoveFolderPagination) return;
-                        View v = (View) param.thisObject;
-                        if (v.getParent() == null) return;
-                        switch (v.getParent().getClass().getCanonicalName()) {
-                            case "com.android.launcher3.OplusDragLayer":
-                                if (mRemoveHomePagination) {
-                                    v.setVisibility(View.GONE);
-                                    param.setResult(null);
-                                }
-                                break;
-                            case "android.widget.FrameLayout":
-                                if (mRemoveFolderPagination) {
-                                    v.setVisibility(View.GONE);
-                                    param.setResult(null);
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    });
+                    .run(pageIndicator);
         } catch (Throwable t) {
             log(t);
         }
