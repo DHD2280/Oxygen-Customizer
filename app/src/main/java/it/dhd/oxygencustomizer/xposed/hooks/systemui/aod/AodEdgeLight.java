@@ -54,7 +54,6 @@ public class AodEdgeLight extends XposedMods {
     private final Handler mRetickerHandler = new Handler(Looper.getMainLooper());
 
     private Object mDozeParameters = null;
-    private Class<?> mAodThreadUtil = null;
     private Object mAodSensorManager = null;
     private Object mAodTriggerSensor = null;
     private boolean mIsOc = false;
@@ -110,9 +109,6 @@ public class AodEdgeLight extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-
-        ReflectedClass AodThreadUtil = ReflectedClass.of("com.oplus.systemui.aod.aodclock.util.AodThreadUtil");
-        mAodThreadUtil = AodThreadUtil.getClazz();
 
         ReflectedClass QuickSettingsControllerImpl = ReflectedClass.of("com.android.systemui.shade.QuickSettingsControllerImpl");
         QuickSettingsControllerImpl
