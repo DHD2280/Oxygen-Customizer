@@ -145,15 +145,13 @@ public class Lockscreen extends XposedMods {
                 log(t);
             }
         } else {
-            try {
-                ReflectedClass EmergencyButton = ReflectedClass.of("com.oplus.keyguard.EmergencyButton");
+            ReflectedClass EmergencyButton = ReflectedClass.ofIfPossible("com.oplus.keyguard.EmergencyButton");
+            if (EmergencyButton.getClazz() != null) {
                 EmergencyButton.before("updateEmergencyCallButton").run(param -> {
                     if (!removeSOS) return;
                     View button = (View) param.thisObject;
                     button.setVisibility(View.GONE);
                 });
-            } catch (Throwable t) {
-                log(t);
             }
         }
 
@@ -351,17 +349,19 @@ public class Lockscreen extends XposedMods {
 
         carrierStringFormatter.registerCallback(this::setCarrierText);
 
-        ReflectedClass OplusStatCarrierTextController = ReflectedClass.of("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController");
-        OplusStatCarrierTextController
-                .before("updateCarrierInfo")
-                .run(param -> {
-                    TextView mView = (TextView) getObjectField(param.thisObject, "mView");
-                    if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
-                        mCarrierText = mView;
-                        setCarrierText();
-                        if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
-                    }
-                });
+        ReflectedClass OplusStatCarrierTextController = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.widget.OplusStatCarrierTextController");
+        if (OplusStatCarrierTextController.getClazz() != null) {
+            OplusStatCarrierTextController
+                    .before("updateCarrierInfo")
+                    .run(param -> {
+                        TextView mView = (TextView) getObjectField(param.thisObject, "mView");
+                        if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
+                            mCarrierText = mView;
+                            setCarrierText();
+                            if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
+                        }
+                    });
+        }
     }
 
     private void setCarrierText() {
