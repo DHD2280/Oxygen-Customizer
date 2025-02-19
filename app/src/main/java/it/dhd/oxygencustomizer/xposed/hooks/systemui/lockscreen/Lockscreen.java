@@ -145,7 +145,7 @@ public class Lockscreen extends XposedMods {
                 log(t);
             }
         } else {
-            ReflectedClass EmergencyButton = ReflectedClass.ofIfPossible("com.oplus.keyguard.EmergencyButton");
+            ReflectedClass EmergencyButton = ReflectedClass.of("com.oplus.keyguard.EmergencyButton", "com.android.keyguard.EmergencyButton");
             if (EmergencyButton.getClazz() != null) {
                 EmergencyButton.before("updateEmergencyCallButton").run(param -> {
                     if (!removeSOS) return;
