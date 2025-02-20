@@ -187,7 +187,7 @@ public class ProgressImageView extends ImageView {
                 mProgressColor,
                 mTextColor
         );
-        setImageBitmap(widgetBitmap);
+        post(() -> setImageBitmap(widgetBitmap));
     }
 
     private int getMemoryLevel() {
