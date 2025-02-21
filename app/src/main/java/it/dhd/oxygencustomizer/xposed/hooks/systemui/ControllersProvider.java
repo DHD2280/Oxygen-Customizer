@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -268,20 +267,17 @@ public class ControllersProvider extends XposedMods {
                 mCellularTile = param.thisObject;
                 mNetworkController = getObjectField(param.thisObject, "mController");
                 mDataController = getObjectField(param.thisObject, "mDataController");
-                    });
+            });
         } catch (Throwable t) {
             log(t);
         }
 
         // Bluetooth Controller
         try {
-            Class<?> BluetoothControllerImpl = findClass("com.android.systemui.statusbar.policy.BluetoothControllerImpl", lpparam.classLoader);
-            hookAllConstructors(BluetoothControllerImpl, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mBluetoothController = param.thisObject;
-                }
-            });
+            ReflectedClass BluetoothControllerImpl = ReflectedClass.of("com.android.systemui.statusbar.policy.BluetoothControllerImpl");
+            BluetoothControllerImpl
+                    .afterConstruction()
+                    .run(param -> mBluetoothController = param.thisObject);
         } catch (Throwable t) {
             log("BluetoothControllerImpl not found " + t.getMessage());
         }
@@ -300,41 +296,35 @@ public class ControllersProvider extends XposedMods {
                 "com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl", /* OOS 15-14 */
                 "com.oplusos.systemui.statusbar.phone.PhoneStatusBarPolicyEx" // OOS 13
         );
-        if (OplusPhoneStatusBarPolicyExImpl != null) {
+        if (OplusPhoneStatusBarPolicyExImpl.getClazz() != null) {
             OplusPhoneStatusBarPolicyExImpl
                     .after("updateBluetooth")
-                    .run( param -> {
-                        Object bluetoothController;
-                        try {
-                            bluetoothController = getObjectField(param.thisObject, "bluetoothController");
-                        } catch (Throwable t) {
-                            bluetoothController = getObjectField(param.thisObject, "mBluetooth");
-                        }
-                        boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
-                        boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
-                        onBluetoothChanged(enabled);
-                    }
-            );
+                    .run(param -> {
+                                Object bluetoothController;
+                                try {
+                                    bluetoothController = getObjectField(param.thisObject, "bluetoothController");
+                                } catch (Throwable t) {
+                                    bluetoothController = getObjectField(param.thisObject, "mBluetooth");
+                                }
+                                boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
+                                boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                                onBluetoothChanged(enabled);
+                            }
+                    );
         } else {
             log("OplusPhoneStatusBarPolicyExImpl not found");
         }
 
         // WiFi Tile - for WiFi Dialog
         if (!oos13) {
-            Class<?> OplusWifiTile = findClass("com.oplus.systemui.qs.tiles.OplusWifiTile", lpparam.classLoader);
-            hookAllConstructors(OplusWifiTile, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mOplusWifiTile = param.thisObject;
-                }
-            });
+            ReflectedClass OplusWifiTile = ReflectedClass.of("com.oplus.systemui.qs.tiles.OplusWifiTile");
+            OplusWifiTile
+                    .afterConstruction()
+                    .run(param -> mOplusWifiTile = param.thisObject);
 
-            hookAllMethods(OplusWifiTile, "createSignalCallback", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mSignalCallback = param.getResult();
-                }
-            });
+            OplusWifiTile
+                    .after("createSignalCallback")
+                    .run(param -> mSignalCallback = param.getResult());
         } else {
             ReflectedClass WifiTile = ReflectedClass.of("com.android.systemui.qs.tiles.WifiTile");
             WifiTile
