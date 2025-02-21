@@ -4,6 +4,7 @@ import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -32,11 +33,14 @@ public class ControllersProvider extends XposedMods {
 
     @SuppressLint("StaticFieldLeak")
     private static ControllersProvider instance = null;
+
     private final ArrayList<OnMobileDataChanged> mMobileDataChangedListeners = new ArrayList<>();
     private final ArrayList<OnWifiChanged> mWifiChangedListeners = new ArrayList<>();
     private final ArrayList<OnBluetoothChanged> mBluetoothChangedListeners = new ArrayList<>();
     private final ArrayList<OnTorchModeChanged> mTorchModeChangedListeners = new ArrayList<>();
     private final ArrayList<OnHotspotChanged> mHotspotChangedListeners = new ArrayList<>();
+    private final ArrayList<OnDozingChanged> mDozingChangedListeners = new ArrayList<>();
+
     private Object mBluetoothController = null;
     private Object mDataController = null;
     private Object mNetworkController = null;
@@ -115,6 +119,17 @@ public class ControllersProvider extends XposedMods {
      */
     public static void unRegisterHotspotCallback(ControllersProvider.OnHotspotChanged callback) {
         instance.mHotspotChangedListeners.remove(callback);
+    }
+
+    public static void registerDozingCallback(ControllersProvider.OnDozingChanged callback) {
+        instance.mDozingChangedListeners.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterDozingCallback(ControllersProvider.OnDozingChanged callback) {
+        instance.mDozingChangedListeners.remove(callback);
     }
 
     public static Object getBluetoothController() {
@@ -209,6 +224,15 @@ public class ControllersProvider extends XposedMods {
         } catch (Throwable t) {
             log("LaunchableImageView not found: " + t.getMessage());
         }
+
+        // Dozing Callback
+        ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
+        CentralSurfacesImpl
+                .after("updateDozingState")
+                .run(param -> {
+                    boolean dozing = getBooleanField(param.thisObject, "mDozing");
+                    updateDozingState(dozing);
+                });
 
         try {
             ReflectedClass OplusPersonalityManager = ReflectedClass.of("com.oplus.systemui.qs.personality.PersonalityManager");
@@ -543,6 +567,15 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
+    private void updateDozingState(boolean dozing) {
+        for (ControllersProvider.OnDozingChanged callback : mDozingChangedListeners) {
+            try {
+                callback.onDozingChanged(dozing);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     /**
      * Callbacks for Mobile Data
      */
@@ -580,6 +613,13 @@ public class ControllersProvider extends XposedMods {
      */
     public interface OnHotspotChanged {
         void onHotspotChanged(boolean enabled, int connectedDevices);
+    }
+
+    /**
+     * Callback for Doze
+     */
+    public interface OnDozingChanged {
+        void onDozingChanged(boolean dozing);
     }
 
 }
