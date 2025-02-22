@@ -265,7 +265,8 @@ public class LockscreenWidgets extends XposedMods {
             updateLockscreenWidgetsColors();
             updateLockscreenWidgetsScale();
             updateMargins();
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            log(t);
         }
     }
 
