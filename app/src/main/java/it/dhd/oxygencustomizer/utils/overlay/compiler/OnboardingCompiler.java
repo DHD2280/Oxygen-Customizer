@@ -3,7 +3,6 @@ package it.dhd.oxygencustomizer.utils.overlay.compiler;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
-import static it.dhd.oxygencustomizer.utils.Dynamic.isAtleastA14;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.FRAMEWORK_DIR;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.UNSIGNED_UNALIGNED_DIR;
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readCertificate;
@@ -53,13 +52,7 @@ public class OnboardingCompiler {
     public static boolean runAapt(String source, String name) {
         Shell.Result result = null;
         int attempt = 3;
-        String command;
-
-        if (!isAtleastA14) {
-            command = aapt + " p -f -M " + source + "/AndroidManifest.xml -I " + FRAMEWORK_DIR + " -S " + source + "/res -F " + UNSIGNED_UNALIGNED_DIR + '/' + name + "-unsigned-unaligned.apk --include-meta-data --auto-add-overlay";
-        } else {
-            command = getAAPT2Command(source, name);
-        }
+        String command = getAAPT2Command(source, name);
 
         while (attempt-- != 0) {
             result = Shell.cmd(command).exec();
