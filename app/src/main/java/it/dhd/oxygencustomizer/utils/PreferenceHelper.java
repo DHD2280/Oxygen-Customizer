@@ -115,6 +115,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_SMALL_INACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_WEATHER_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_2_KEY;
@@ -1152,6 +1153,8 @@ public class PreferenceHelper {
             // Lockscreen Widgets
             case LOCKSCREEN_WIDGETS_SCALE ->
                     instance.mPreferences.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f) + "%";
+            case LOCKSCREEN_WIDGETS_TOP_MARGIN ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_WIDGETS_TOP_MARGIN, 0) + "dp";
 
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->
