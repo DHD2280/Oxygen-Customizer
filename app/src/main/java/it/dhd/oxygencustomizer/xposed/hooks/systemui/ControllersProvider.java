@@ -16,6 +16,7 @@ import android.os.Build;
 import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -60,6 +61,7 @@ public class ControllersProvider extends XposedMods {
     private Object mCameraGestureHelper = null;
     private Object mOplusQsMediaTile = null;
     private Class<?> SystemUIDialog = null;
+    private Object mActivityStarterImpl = null;
 
     public ControllersProvider(Context context) {
         super(context);
@@ -201,13 +203,17 @@ public class ControllersProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
-
-    }
+    public void updatePrefs(String... Key) {}
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         boolean oos13 = Build.VERSION.SDK_INT == 33;
+
+        try {
+            getActivityStarter();
+        } catch (Throwable t) {
+            log(t);
+        }
 
         try {
             // LaunchableLinearLayout
@@ -497,6 +503,17 @@ public class ControllersProvider extends XposedMods {
             log("HotspotCallback error: " + t.getMessage());
         }
 
+    }
+
+    private void getActivityStarter() {
+        ReflectedClass SectionHeaderNodeControllerImpl = ReflectedClass.of("com.android.systemui.statusbar.notification.collection.render.SectionHeaderNodeControllerImpl");
+        SectionHeaderNodeControllerImpl
+                .afterConstruction()
+                .run(param -> mActivityStarterImpl = getObjectField(param.thisObject, "activityStarter"));
+    }
+
+    public static Object getActivityStarterExternal() {
+        return instance.mActivityStarterImpl;
     }
 
     @Override
