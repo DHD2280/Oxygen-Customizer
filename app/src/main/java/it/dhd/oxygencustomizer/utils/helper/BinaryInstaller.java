@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.utils.helper;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2LIB;
-import static it.dhd.oxygencustomizer.utils.Dynamic.AAPTLIB;
 import static it.dhd.oxygencustomizer.utils.Dynamic.NATIVE_LIBRARY_DIR;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGNLIB;
@@ -25,11 +23,9 @@ public class BinaryInstaller {
         Shell.cmd("mkdir -p " + BIN_DIR).exec();
         extractTools();
 
-        if (AAPT.exists()) AAPT.delete();
         if (AAPT2.exists()) AAPT2.delete();
         if (ZIPALIGN.exists()) ZIPALIGN.delete();
 
-        Shell.cmd("ln -sf " + AAPTLIB.getAbsolutePath() + ' ' + AAPT.getAbsolutePath()).exec();
         Shell.cmd("ln -sf " + AAPT2LIB.getAbsolutePath() + ' ' + AAPT2.getAbsolutePath()).exec();
         Shell.cmd("ln -sf " + ZIPALIGNLIB.getAbsolutePath() + ' ' + ZIPALIGN.getAbsolutePath()).exec();
     }

@@ -25,9 +25,7 @@ public class Dynamic {
     public static final int TOTAL_WIFI_ICONS = Shell.cmd("cmd overlay list | grep '....OxygenCustomizerComponentWIFI'").exec().getOut().size();
     // Overlay compiler tools
     public static final String NATIVE_LIBRARY_DIR = OxygenCustomizer.getAppContext().getApplicationInfo().nativeLibraryDir;
-    public static final File AAPTLIB = new File(NATIVE_LIBRARY_DIR, "libaapt.so");
     public static final File AAPT2LIB = new File(NATIVE_LIBRARY_DIR, "libaapt2.so");
-    public static final File AAPT = new File(BIN_DIR, "aapt");
     public static final File AAPT2 = new File(BIN_DIR, "aapt2");
     public static final File ZIPALIGNLIB = new File(NATIVE_LIBRARY_DIR, "libzipalign.so");
     public static final File ZIPALIGN = new File(BIN_DIR, "zipalign");

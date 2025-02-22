@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.utils.overlay.compiler;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
-import static it.dhd.oxygencustomizer.utils.Dynamic.isAtleastA14;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.FRAMEWORK_DIR;
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readCertificate;
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readPrivateKey;
@@ -29,7 +27,6 @@ import it.dhd.oxygencustomizer.utils.apksigner.SignAPK;
 public class OverlayCompiler {
 
     private static final String TAG = OverlayCompiler.class.getSimpleName();
-    private static final String aapt = AAPT.getAbsolutePath();
     private static final String aapt2 = AAPT2.getAbsolutePath();
     private static final String zipalign = ZIPALIGN.getAbsolutePath();
     private static PrivateKey key = null;
@@ -88,11 +85,8 @@ public class OverlayCompiler {
                 ModuleConstants.COMPANION_COMPILED_DIR :
                 ModuleConstants.UNSIGNED_UNALIGNED_DIR;
 
-        if (!isAtleastA14) {
-            return new StringBuilder(aapt + " p -f -M " + source + "/AndroidManifest.xml -S " + source + "/res -F " + outputDir + '/' + name + " -I " + FRAMEWORK_DIR + " --include-meta-data --auto-add-overlay");
-        } else {
-            return new StringBuilder(getAAPT2Command(source, name, outputDir));
-        }
+
+        return new StringBuilder(getAAPT2Command(source, name, outputDir));
     }
 
     @NonNull
