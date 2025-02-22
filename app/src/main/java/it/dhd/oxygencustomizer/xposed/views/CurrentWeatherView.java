@@ -66,7 +66,6 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     private boolean mShowWeatherLocation;
     private boolean mShowWeatherText;
     private boolean mShowWeatherHumidity, mShowWeatherWind;
-    @SuppressLint("StaticFieldLeak")
     public static ArrayList<Object[]> instances = new ArrayList<>();
     private int mWeatherHorPadding = 0, mWeatherVerPadding = 0;
     private final Context mContext;
@@ -95,6 +94,7 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         ThemeEnabler.registerThemeChangedListener(this::reloadWeatherBg);
     }
 
+    @SuppressLint("DiscouragedApi")
     private void inflateView() {
         LayoutInflater inflater = LayoutInflater.from(appContext);
         View v = inflater.inflate(
