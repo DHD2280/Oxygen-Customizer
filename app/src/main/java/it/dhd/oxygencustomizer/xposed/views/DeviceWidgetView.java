@@ -11,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -75,7 +76,18 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void inflateView() {
-        inflate(appContext, R.layout.device_widget, this);
+        LayoutInflater inflater = LayoutInflater.from(appContext);
+        View view = inflater.inflate(
+                appContext
+                        .getResources()
+                        .getIdentifier(
+                                "device_widget",
+                                "layout",
+                                BuildConfig.APPLICATION_ID
+                        ),
+                null
+        );
+        addView(view);
         setupViews();
     }
 
@@ -151,7 +163,6 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     public void setDeviceWidgetStyle(int newStyle) {
-        if (mDeviceWidgetStyle == newStyle) return;
         mDeviceWidgetStyle = newStyle;
         setupRows();
     }
