@@ -300,6 +300,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             mDeviceWidgetView = new DeviceWidgetView(context);
 
         try {
+            if (mDeviceWidgetContainer != null)
+                mDeviceWidgetContainer.removeAllViews();
+        } catch (Throwable ignored) {}
+
+        try {
             ((ViewGroup)(mDeviceWidgetView.getParent())).removeView(mDeviceWidgetView);
         } catch (Throwable ignored) {}
 
