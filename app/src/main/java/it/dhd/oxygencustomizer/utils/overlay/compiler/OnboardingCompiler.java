@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.utils.overlay.compiler;
 
-import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT;
 import static it.dhd.oxygencustomizer.utils.Dynamic.AAPT2;
 import static it.dhd.oxygencustomizer.utils.Dynamic.ZIPALIGN;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.FRAMEWORK_DIR;
@@ -26,7 +25,6 @@ import it.dhd.oxygencustomizer.utils.apksigner.SignAPK;
 public class OnboardingCompiler {
 
     private static final String TAG = OnboardingCompiler.class.getSimpleName();
-    private static final String aapt = AAPT.getAbsolutePath();
     private static final String aapt2 = AAPT2.getAbsolutePath();
     private static final String zipalign = ZIPALIGN.getAbsolutePath();
 
