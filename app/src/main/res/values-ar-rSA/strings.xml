@@ -753,6 +753,8 @@
     <string name="aod_font_line_height_title">ارتفاع السطر</string>
     <!-- Aod Weather -->
     <string name="aod_weather">طقس AOD</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">متنوع</string>
     <!-- Pulse music visualizer -->

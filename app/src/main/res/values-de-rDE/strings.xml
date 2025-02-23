@@ -202,6 +202,7 @@
     <string name="status_bar_date_style_lowercase">Kleinbuchstaben</string>
     <string name="status_bar_date_style_uppercase">Großbuchstaben</string>
     <string name="status_bar_date_format_custom">Benutzerdefiniertes Java-Format</string>
+    <string name="string_formatter_manual_body">Zusätzlich zum normalen Text sind auch dynamische Variablen verfügbar wie Datum und Temperatur:\n\n$G\&lt;format\&gt; : Gregorianisches Datum basierend auf Format*\n$P\&lt;format\&gt; : Persisches Datum basierend auf Format*\n$L für das Monddatum\n$I\&lt;calendar\&gt;&lt;format\&gt; : Islamischer Kalender. Kalender ist optional, Standard ist islamisch, Sie können auch C für islamisch-zivile und U für islamische Umalqura.\n$T\&lt;format\&gt;[interval] : Temperatur; \nFormat kann b (für Batterie), c (für CPU), g (für GPU) und s (für Skin) sein \nLetztlich gibt es eine OPTIONALE Anzahl der Aktualisierungsintervalle in Sekunden (Standard: 60 Sekunden)\n\n*nach Formatdokumentation, suche nach \"Java Datumsformat\"</string>
     <string name="preview">Vorschau</string>
     <string name="clock_date_position">Position des Datums</string>
     <string name="clock_date_right">Rechts neben der Uhrzeit</string>
@@ -265,6 +266,21 @@
     <string name="charging_icon_margin_left_title">Ladesymbol Abstand links</string>
     <string name="charging_icon_margin_right_title">Ladesymbol Abstand rechts</string>
     <string name="charging_icon_size_title">Ladesymbol-Größe</string>
+    <string name="perimeter_alpha_title">Umriss Alpha</string>
+    <string name="perimeter_alpha_desc">Akku-Umriss halbtransparent machen</string>
+    <string name="fill_alpha_title">Alpha füllen</string>
+    <string name="fill_alpha_desc">Batteriefüllung halbtransparent machen</string>
+    <string name="rainbow_color_title">Regenbogenfarben</string>
+    <string name="rainbow_color_desc">Zeige verschiedene Farben je nach Akkuladestand</string>
+    <string name="blend_color_title">Farbe mischen</string>
+    <string name="blend_color_desc">Akku-Farbe mit benutzerdefinierter Farbe mischen</string>
+    <string name="fill_color_title">Füllfarbe</string>
+    <string name="fill_color_desc">Akku mit benutzerdefinierter Farbe füllen</string>
+    <string name="fill_gradient_color_title">Farbverlauf füllen</string>
+    <string name="fill_gradient_color_desc">Akku mit Farbverlauf füllen</string>
+    <string name="charging_fill_color_title">Füllfarbe beim Laden</string>
+    <string name="charging_fill_color_desc">Farbe beim Laden ändern</string>
+    <string name="fast_charging_fill_color_title">Füllfarbe für schnelles Aufladen</string>
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
     <string name="battery_landscape_l_style_b">Querformat L Stil B</string>
@@ -331,6 +347,8 @@
     <!-- Aod Strings -->
     <!-- Aod Clock -->
     <!-- Aod Weather -->
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->

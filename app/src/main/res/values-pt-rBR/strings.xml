@@ -726,6 +726,8 @@
     <string name="aod_font_line_height_title">Altura da linha</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Tempo AOD</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">Diversos</string>
     <!-- Pulse music visualizer -->

@@ -736,6 +736,8 @@
     <string name="aod_font_line_height_title">線條高度</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD天氣</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">雜項</string>
     <!-- Pulse music visualizer -->

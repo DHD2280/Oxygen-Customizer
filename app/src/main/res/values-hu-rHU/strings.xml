@@ -427,6 +427,14 @@
     <string name="qs_tile_animation_interpolator_title">Csempeanimáció-interpolátor</string>
     <string name="qs_tile_animation_style_off">Nincsenek animációk</string>
     <string name="qs_tile_animation_style_rotate">Elforgatás</string>
+    <string name="qs_tile_animation_style_flipx">Átfordítás X</string>
+    <string name="qs_tile_animation_style_flipy">Átfordítás Y</string>
+    <string name="qs_tile_animation_style_shake">Rázás</string>
+    <string name="qs_tile_animation_style_fade_in">Előtűnés</string>
+    <string name="qs_tile_animation_style_bounce_x">Pattogó hatás (X-tengely)</string>
+    <string name="qs_tile_animation_style_bounce_y">Pattogó hatás (Y-tengely)</string>
+    <string name="qs_tile_animation_style_pulse_x">Pulzáló hatás (X-tengely)</string>
+    <string name="qs_tile_animation_style_pulse_y">Pulzáló hatás (Y-tengely)</string>
     <string name="qs_tile_animation_duration_low">Lassú</string>
     <string name="qs_tile_animation_duration_default">Közepes</string>
     <string name="qs_tile_animation_duration_fast">Gyors</string>
@@ -589,6 +597,9 @@
     <string name="launcher_edit_layout">A kezdőképernyő-elrendezés szerkesztése</string>
     <string name="launcher_columns">Oszlopok</string>
     <string name="launcher_rows">Sorok</string>
+    <string name="hide_app_labels">Alkalmazásnevek elrejtése</string>
+    <string name="hide_app_labels_desktop">Alkalmazásnevek elrejtése a kezdőoldalon</string>
+    <string name="hide_app_labels_drawer">Alkalmazásnevek elrejtése az alkalmazásfiókban</string>
     <string name="launcher_folder_layout">Mapparendezés</string>
     <string name="launcher_folder_edit_layout">Az elrendezés szerkesztése</string>
     <string name="launcher_folder_columns">Oszlopok</string>
@@ -787,6 +798,44 @@
     <string name="aod_font_line_height_title">Sormagasság</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Időjárás mindig bekapcsolva</string>
+    <!-- Aod Pulse -->
+    <string name="aod_pulse_category_title">Pulzálás/Doze</string>
+    <!-- Edge light -->
+    <string name="edge_light_title">Oldalfény</string>
+    <string name="edge_light_summary">A képernyő oldalsó széleit világítsa meg az értesítés villogó jelzése</string>
+    <string name="edge_light_always_trigger_on_pulse_title">Oldalfény-kapcsoló</string>
+    <string name="edge_light_always_trigger_on_pulse_summary">Itt dönthető el, hogy a környezeti kijelző megjelenésekor is megjelenjen az oldalfény, ne csak az értesítéskor</string>
+    <string name="edge_light_retick_title">Pulzálás az nem olvasott értesítésekhez</string>
+    <string name="edge_light_retick_summary">Az értesítés érkezése után egy bizonyos idővel megjelenik az oldalfény.\nHa színmód van beállítva az értesítésekhez, a fény színe megegyezik az utoljára kapottal.</string>
+    <string name="edge_light_retick_time">A pulzálás ideje</string>
+    <string name="edge_light_30_sec">30 másodperc</string>
+    <string name="edge_light_1_min">1 perc</string>
+    <string name="edge_light_2_min">2 perc</string>
+    <string name="edge_light_5_min">5 perc</string>
+    <string name="edge_light_10_min">10 perc</string>
+    <string name="edge_light_advice">Be kell állítania egy színt a \'Mindig látható\' (AOD) oldalfényében hogy a pulzálás megjelenhessen.</string>
+    <string name="edge_light_show_blur">A homályosítás stílusa</string>
+    <string name="edge_light_blur_mode_title">A homályosítás módja</string>
+    <string name="edge_light_blur_mode_both">Vonalas és homályosított</string>
+    <string name="edge_light_blur_mode_blur_only">Csak homályosított</string>
+    <string name="edge_light_blur_type_title">A homályosítás típusa</string>
+    <string name="edge_light_blur_type_normal">Szokásos</string>
+    <string name="edge_light_blur_type_solid">Folyamatos</string>
+    <string name="edge_light_blur_type_inner">Belső</string>
+    <string name="edge_light_blur_type_outer">Külső</string>
+    <string name="edge_light_color_mode_title">Az oldalfény színmódja</string>
+    <string name="edge_light_enabled_title">Az \'Oldalfény\' bekapcsolása</string>
+    <string name="edge_light_rainbow_gradient">Szivárványos átmenetes</string>
+    <string name="notification_color">Értesítési szín</string>
+    <string name="wallpaper_color">Háttérkép-szín</string>
+    <string name="edge_light_style_title">Az \'Oldalfények\' stílusa</string>
+    <string name="edge_light_stroke_width_title">Az \'Oldalfények\' vonalszélessége</string>
+    <string name="edge_light_stroke_width_summary">Beállíthatja az \'Oldalfények\' vastagságát</string>
+    <string name="edge_light_line">Rajzolt vonalas</string>
+    <string name="edge_light_blink">Villogás/Pulzálás</string>
+    <string name="edge_light_side_lines">Oldalsó vonalak</string>
+    <string name="edge_light_snake">Kígyó</string>
+    <string name="edge_light_echo">Visszhang</string>
     <!-- Sound Mods -->
     <string name="misc_category">Hasznos cuccok</string>
     <!-- Pulse music visualizer -->
@@ -1150,6 +1199,9 @@
     <string name="lockscreen_widgets_enabled_summary">Új kisalkalmazás hozzáadása</string>
     <string name="lockscreen_display_widgets_title">Készülékinformáció</string>
     <string name="lockscreen_display_widgets_summary">Megjeleníti a készülékinfót a záróképernyőn</string>
+    <string name="lockscreen_device_widget_style_title">A készülék kisalkalmazás (widget) stílusa</string>
+    <string name="lockscreen_device_widget_style_classic">1 sáv + 2 ív</string>
+    <string name="lockscreen_device_widget_style_arcs">4 körív</string>
     <string name="linear_progress_color">A lineáris haladás színe</string>
     <string name="circular_progress_color">A körkörös haladás színe</string>
     <string name="text_color">Szövegszín</string>

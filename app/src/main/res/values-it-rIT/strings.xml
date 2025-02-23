@@ -427,6 +427,14 @@
     <string name="qs_tile_animation_interpolator_title">Interpolatore animazione Tile</string>
     <string name="qs_tile_animation_style_off">Nessuna animazione</string>
     <string name="qs_tile_animation_style_rotate">Ruota</string>
+    <string name="qs_tile_animation_style_flipx">Capovolgi X</string>
+    <string name="qs_tile_animation_style_flipy">Capovolgi Y</string>
+    <string name="qs_tile_animation_style_shake">Scuoti</string>
+    <string name="qs_tile_animation_style_fade_in">Dissolvenza in entrata</string>
+    <string name="qs_tile_animation_style_bounce_x">Effetto Rimbalzo (Scala X)</string>
+    <string name="qs_tile_animation_style_bounce_y">Effetto Rimbalzo (Scala Y)</string>
+    <string name="qs_tile_animation_style_pulse_x">Effetto Impulso (Scala X)</string>
+    <string name="qs_tile_animation_style_pulse_y">Effetto Impulso (Scale Y)</string>
     <string name="qs_tile_animation_duration_low">Bassa</string>
     <string name="qs_tile_animation_duration_default">Predefinito</string>
     <string name="qs_tile_animation_duration_fast">Veloce</string>
@@ -589,6 +597,9 @@
     <string name="launcher_edit_layout">Modifica la disposizione della home</string>
     <string name="launcher_columns">Colonne home</string>
     <string name="launcher_rows">Righe home</string>
+    <string name="hide_app_labels">Nascondi etichette app</string>
+    <string name="hide_app_labels_desktop">Nascondi etichette app nella schermata iniziale</string>
+    <string name="hide_app_labels_drawer">Nascondi etichette app nel drawer</string>
     <string name="launcher_folder_layout">Disposizione cartelle</string>
     <string name="launcher_folder_edit_layout">Modifica disposizione</string>
     <string name="launcher_folder_columns">Colonne</string>
@@ -787,6 +798,41 @@
     <string name="aod_font_line_height_title">Altezza Linea</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Meteo AOD</string>
+    <!-- Aod Pulse -->
+    <string name="aod_pulse_category_title">Impulso/Doze</string>
+    <!-- Edge light -->
+    <string name="edge_light_title">Illuminazione bordi</string>
+    <string name="edge_light_summary">Abilita illuminazione bordi laterali dello schermo all\'arrivo di notifiche</string>
+    <string name="edge_light_always_trigger_on_pulse_title">Attiva sempre su impulso</string>
+    <string name="edge_light_always_trigger_on_pulse_summary">Indica se mostrare l\'illuminazione del bordo ogni volta che viene mostrato l\'ambient display e non solo per le notifiche</string>
+    <string name="edge_light_retick_title">Iluminazione bordi per notifiche non lette</string>
+    <string name="edge_light_retick_summary">Mostra la luce di bordo dopo un certo lasso di tempo per le notifiche non lette.\nIl colore della luce sarà lo stesso dell\'ultima notifica ricevuta se la modalità colore è impostata come notifica.</string>
+    <string name="edge_light_retick_time">Tempo impulso</string>
+    <string name="edge_light_30_sec">30 secondi</string>
+    <string name="edge_light_1_min">1 minuto</string>
+    <string name="edge_light_2_min">2 minuti</string>
+    <string name="edge_light_5_min">5 minuti</string>
+    <string name="edge_light_10_min">10 minuti</string>
+    <string name="edge_light_advice">Per mostrare l\'illuminazione bordi, è necessario impostare un colore in Illuminazione Bordo Stock.</string>
+    <string name="edge_light_show_blur">Stile sfocatura</string>
+    <string name="edge_light_blur_mode_title">Modalità Sfocatura</string>
+    <string name="edge_light_blur_mode_both">Linea e sfocatura</string>
+    <string name="edge_light_blur_mode_blur_only">Solo Sfocatura</string>
+    <string name="edge_light_blur_type_title">Tipo Di Sfocatura</string>
+    <string name="edge_light_blur_type_normal">Normale</string>
+    <string name="edge_light_color_mode_title">Modalità colore illuminazione del bordo</string>
+    <string name="edge_light_enabled_title">Abilita Illuminazione bordi</string>
+    <string name="edge_light_rainbow_gradient">Gradiente Arcobaleno</string>
+    <string name="notification_color">Colore notifica</string>
+    <string name="wallpaper_color">Colore Sfondo</string>
+    <string name="edge_light_style_title">Stile illuminazione bordo</string>
+    <string name="edge_light_stroke_width_title">Larghezza del tratto luce bordo</string>
+    <string name="edge_light_stroke_width_summary">Configura spessore luce bordo</string>
+    <string name="edge_light_line">Disegna linea</string>
+    <string name="edge_light_blink">Lampeggio/Impulso</string>
+    <string name="edge_light_side_lines">Linee Laterali</string>
+    <string name="edge_light_snake">Serpente</string>
+    <string name="edge_light_echo">Eco</string>
     <!-- Sound Mods -->
     <string name="misc_category">Varie</string>
     <!-- Pulse music visualizer -->

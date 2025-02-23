@@ -760,6 +760,8 @@
     <string name="aod_font_line_height_title">Высота линии</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Погода на AOD</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">Другое</string>
     <!-- Pulse music visualizer -->
