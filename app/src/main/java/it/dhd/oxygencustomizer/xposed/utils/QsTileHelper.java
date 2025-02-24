@@ -99,15 +99,18 @@ public class QsTileHelper {
     }
 
     public static PathShape getLastShape(Context c) {
-        if (PersonalityManagerEx == null) {
+        try {
+            return (PathShape) callMethod(PersonalityManagerEx, "getLastShape", c);
+        } catch (Throwable t) {
+            XposedBridge.log("QsTileHelper, get last shape error: \n" + Log.getStackTraceString(t));
             if (PersonalityManagerClass != null) {
                 Object PersonalityManager = callStaticMethod(PersonalityManagerClass, "getInstance");
                 if (PersonalityManager != null) {
                     return (PathShape) callMethod(PersonalityManager, "getLastShape", c);
                 }
             }
+            return null;
         }
-        return (PathShape) callMethod(PersonalityManagerEx, "getLastShape", c);
     }
 
     public static float getMediaPanelRadius(Context c) {
