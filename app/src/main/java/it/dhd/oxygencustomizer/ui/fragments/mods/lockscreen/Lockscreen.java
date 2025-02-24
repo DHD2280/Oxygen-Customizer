@@ -1,11 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static android.app.Activity.RESULT_OK;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.PLUGIN_URL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
@@ -14,16 +11,14 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_STATUSBAR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
-import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -47,7 +42,6 @@ import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.utils.BitmapSubjectSegmenter;
 
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
@@ -169,6 +163,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         OplusJumpPreference mLockscreenClock = findPreference("lockscreen_clock_main");
         OplusJumpPreference mLockscreenWeather = findPreference("lockscreen_weather");
         OplusJumpPreference mLockscreenWidgets = findPreference("lockscreen_widgets");
+        OplusJumpPreference mLockscreenNowBar = findPreference("lockscreen_nowbar_jump");
         OplusJumpPreference mLsCarrierText = findPreference("ls_carrier_replacement");
 
         if (mLockscreenClock != null) {
@@ -183,6 +178,10 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
         if (mLockscreenWidgets != null) {
             mLockscreenWidgets.setJumpText(mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+        }
+
+        if (mLockscreenNowBar != null) {
+            mLockscreenNowBar.setJumpText(mPreferences.getBoolean(NOW_BAR_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
         }
 
         if (mLsCarrierText != null) {
