@@ -496,6 +496,13 @@ public final class Constants {
             public static final String LOCKSCREEN_WIDGETS_WEATHER_SETTINGS = "weather_settings";
 
         }
+
+        public static class LockscreenNowBar {
+            public static final String NOW_BAR_ENABLED = "lockscreen_now_bar_enabled";
+            public static final String NOW_BAR_BOTTOM_MARGIN = "lockscreen_now_bar_bottom_margin";
+            public static final String NOW_BAR_WEATHER = "lockscreen_now_bar_weather";
+        }
+
         public static class DepthWallpaper {
             public static final String DEPTH_WALLPAPER_CATEGORY = "DWCategory";
             public static final String DEPTH_WALLPAPER_ENABLED = "DWallpaperEnabled";

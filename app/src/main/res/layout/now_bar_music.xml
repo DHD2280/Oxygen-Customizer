@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="@dimen/nowbar_album_art_size"
+        android:layout_height="@dimen/nowbar_album_art_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginVertical="12dp"
+        android:layout_marginStart="12dp"
+        android:scaleType="centerCrop"
+        android:tag="albumArt" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minWidth="180dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="6dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:tag="trackTitle"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:tag="buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:layout_width="@dimen/nowbar_media_buttons_size"
+                    android:layout_height="@dimen/nowbar_media_buttons_size"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_previous"
+                    android:tag="previous_action" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:layout_width="@dimen/nowbar_media_buttons_size"
+                    android:layout_height="@dimen/nowbar_media_buttons_size"
+                    android:background="@drawable/ic_play"
+                    android:clickable="true"
+                    android:importantForAccessibility="no"
+                    android:tag="play_pause" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:layout_width="@dimen/nowbar_media_buttons_size"
+                    android:layout_height="@dimen/nowbar_media_buttons_size"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_next"
+                    android:tag="next_action" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

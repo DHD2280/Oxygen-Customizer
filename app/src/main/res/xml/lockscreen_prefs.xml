@@ -30,6 +30,11 @@
             android:title="@string/lockscreen_widgets_title"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenNowBarFragment"
+            android:key="lockscreen_nowbar_jump"
+            android:title="@string/lockscreen_now_bar_title" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

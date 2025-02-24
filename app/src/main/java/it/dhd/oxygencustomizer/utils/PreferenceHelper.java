@@ -91,6 +91,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_2_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_3_KEY;
@@ -1155,6 +1156,10 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f) + "%";
             case LOCKSCREEN_WIDGETS_TOP_MARGIN ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_WIDGETS_TOP_MARGIN, 0) + "dp";
+
+            // Now Bar
+            case NOW_BAR_BOTTOM_MARGIN ->
+                    instance.mPreferences.getSliderInt(NOW_BAR_BOTTOM_MARGIN, 0) + "dp";
 
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->

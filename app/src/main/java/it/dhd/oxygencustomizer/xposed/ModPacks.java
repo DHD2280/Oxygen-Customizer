@@ -47,6 +47,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscre
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.DepthWallpaper;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenNowBar;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.navbar.GestureNavbarManager;
@@ -132,7 +133,7 @@ public class ModPacks {
                     modPacks.add(StatusbarClock.class);
                     modPacks.add(StatusbarIcons.class);
                     modPacks.add(BatteryStyleManager.class);
-                    modPacks.add(NotificationTransparency.class);
+//                    modPacks.add(NotificationTransparency.class);
                     // QS
                     modPacks.add(HeaderImage.class); // Load first QS Header Image since we have to check ScrimView Alpha before set by QS Transparency
                     modPacks.add(DepthWallpaper.class); // Load first Depth Wallpaper since we have to check ScrimView Alpha before set by QS Transparency
@@ -152,6 +153,7 @@ public class ModPacks {
                     modPacks.add(LockscreenWidgets.class);
                     modPacks.add(LockscreenWeather.class);
                     modPacks.add(AlbumArtLockscreen.class);
+                    modPacks.add(LockscreenNowBar.class);
 
                     // Volume Panel
                     modPacks.add(VolumePanel.class);
