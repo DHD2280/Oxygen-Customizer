@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -15,11 +12,13 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class BatteryDataProvider extends XposedMods {
     public static final int CHARGING_FAST = 2;
@@ -29,6 +28,7 @@ public class BatteryDataProvider extends XposedMods {
     private static BatteryDataProvider instance = null;
     private final ArrayList<BatteryInfoCallback> mInfoCallbacks = new ArrayList<>();
     List<BatteryStatusCallback> mStatusCallbacks = new ArrayList<>();
+    private final ArrayList<OplusBatteryStatusCallback> mOplusBatteryCallbacks = new ArrayList<>();
     private boolean mCharging;
     private int mCurrentLevel = 0;
     private boolean mPowerSave = false;
@@ -62,6 +62,17 @@ public class BatteryDataProvider extends XposedMods {
         instance.mInfoCallbacks.remove(callback);
     }
 
+    public static void registerOplusBatteryCallback(OplusBatteryStatusCallback callback) {
+        instance.mOplusBatteryCallbacks.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterOplusBatteryCallback(OplusBatteryStatusCallback callback) {
+        instance.mOplusBatteryCallbacks.remove(callback);
+    }
+
     public static boolean isCharging() {
         return instance.mCharging;
     }
@@ -88,43 +99,58 @@ public class BatteryDataProvider extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> BatteryStatusClass = findClass("com.android.settingslib.fuelgauge.BatteryStatus", lpparam.classLoader);
-        Class<?> BatteryControllerImplClass = findClass("com.android.systemui.statusbar.policy.BatteryControllerImpl", lpparam.classLoader);
+        ReflectedClass BatteryStatusClass = ReflectedClass.of("com.android.settingslib.fuelgauge.BatteryStatus");
+        ReflectedClass BatteryControllerImplClass = ReflectedClass.of("com.android.systemui.statusbar.policy.BatteryControllerImpl");
+        ReflectedClass OplusBatteryController = ReflectedClass.of("com.oplusos.systemui.common.battery.OplusBatteryController");
 
-        XC_MethodHook batteryDataRefreshHook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCurrentLevel = getIntField(param.thisObject, "mLevel");
-                mCharging = getBooleanField(param.thisObject, "mPluggedIn")
-                        || getBooleanField(param.thisObject, "mCharging")
-                        || getBooleanField(param.thisObject, "mWirelessCharging");
-                mPowerSave = getBooleanField(param.thisObject, "mPowerSave");
+        ReflectedClass.ReflectionConsumer batteryDataRefreshHook = param -> {
+            mCurrentLevel = getIntField(param.thisObject, "mLevel");
+            mCharging = getBooleanField(param.thisObject, "mPluggedIn")
+                    || getBooleanField(param.thisObject, "mCharging")
+                    || getBooleanField(param.thisObject, "mWirelessCharging");
+            mPowerSave = getBooleanField(param.thisObject, "mPowerSave");
 
-                onBatteryInfoChanged();
-            }
+            onBatteryInfoChanged();
         };
 
-        hookAllMethods(BatteryControllerImplClass, "fireBatteryLevelChanged", batteryDataRefreshHook);
-        hookAllMethods(BatteryControllerImplClass, "firePowerSaveChanged", batteryDataRefreshHook);
+        BatteryControllerImplClass
+                .after("fireBatteryLevelChanged")
+                        .run(batteryDataRefreshHook);
+        BatteryControllerImplClass
+                .after("firePowerSaveChanged")
+                .run(batteryDataRefreshHook);
 
+        BatteryStatusClass
+                .afterConstruction()
+                        .run(param -> {
+                            mIsFastCharging = callMethod(param.thisObject, "getChargingSpeed", mContext).equals(CHARGING_FAST);
+                            if (param.args[0] instanceof Intent) {
+                                try {
+                                    onBatteryStatusChanged((int) getObjectField(param.thisObject, "status"), (Intent) param.args[0]);
+                                } catch (Throwable ignored) {
+                                }
+                            } else if (param.args[0] instanceof Integer) {
+                                try {
+                                    onBatteryStatusChanged((int) param.args[0], null);
+                                } catch (Throwable ignored) {
+                                }
+                            }
+                        });
 
-        hookAllConstructors(BatteryStatusClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mIsFastCharging = callMethod(param.thisObject, "getChargingSpeed", mContext).equals(CHARGING_FAST);
-                if (param.args[0] instanceof Intent) {
-                    try {
-                        onBatteryStatusChanged((int) getObjectField(param.thisObject, "status"), (Intent) param.args[0]);
-                    } catch (Throwable ignored) {
-                    }
-                } else if (param.args[0] instanceof Integer) {
-                    try {
-                        onBatteryStatusChanged((int) param.args[0], null);
-                    } catch (Throwable ignored) {
-                    }
-                }
-            }
-        });
+        ReflectedClass.ReflectionConsumer additionalBatteryHook = param -> {
+            XposedBridge.log("fireAdditionalBatteryStateChanged");
+            OplusBatteryStatus batteryStatus = new OplusBatteryStatus(param.args[0]);
+            onOplusBatteryChanged(batteryStatus);
+        };
+
+        OplusBatteryController
+                .after("fireAdditionalBatteryStateChanged")
+                .run(additionalBatteryHook);
+
+        OplusBatteryController
+                .after("fireAdditionalBatteryStateChanged")
+                .run(additionalBatteryHook);
+
     }
 
     private void onBatteryStatusChanged(int status, Intent intent) {
@@ -150,6 +176,14 @@ public class BatteryDataProvider extends XposedMods {
         }
     }
 
+    private void onOplusBatteryChanged(OplusBatteryStatus oplusBatteryStatus) {
+        for (OplusBatteryStatusCallback callback : mOplusBatteryCallbacks) {
+            try {
+                callback.onOplusBatteryStatusChanged(oplusBatteryStatus);
+            } catch (Throwable ignored) {}
+        }
+    }
+
     public interface BatteryInfoCallback {
         void onBatteryInfoChanged();
     }
@@ -157,5 +191,9 @@ public class BatteryDataProvider extends XposedMods {
 
     public interface BatteryStatusCallback {
         void onBatteryStatusChanged(int batteryStatus, Intent batteryStatusIntent);
+    }
+
+    public interface OplusBatteryStatusCallback {
+        void onOplusBatteryStatusChanged(OplusBatteryStatus oplusBatteryStatus);
     }
 }
