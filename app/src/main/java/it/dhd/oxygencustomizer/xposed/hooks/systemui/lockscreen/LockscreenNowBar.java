@@ -98,7 +98,6 @@ public class LockscreenNowBar extends XposedMods {
         NotificationPanelViewController
                 .after("onFinishInflate")
                 .run(param -> {
-                    XposedBridge.log("LockscreenNowBar, NotificationPanelViewController onFinishInflate");
                     mKeyguardBottomArea = (ViewGroup) getObjectField(param.thisObject, "mView");
                     placeNowBar();
                 });
@@ -114,7 +113,6 @@ public class LockscreenNowBar extends XposedMods {
         QSImpl
                 .after("onStateChanged")
                 .run(param -> {
-                    XposedBridge.log("LockscreenNowBar, QSImpl onStateChanged " + (int) param.args[0]);
                     mStatusBarState = (int) param.args[0];
                     NowBarController.getInstance(mContext).setStatusBarState(mStatusBarState);
                 });
@@ -123,7 +121,6 @@ public class LockscreenNowBar extends XposedMods {
         KeyguardUpdateMonitor
                 .after("setKeyguardShowing")
                         .run(param -> {
-                            XposedBridge.log("LockscreenNowBar, KeyguardUpdateMonitor setKeyguardShowing");
                             mKeyguardShowing = (boolean) param.args[1];
                             NowBarController.getInstance(mContext).setKeyguardShowing(mKeyguardShowing);
                         });
