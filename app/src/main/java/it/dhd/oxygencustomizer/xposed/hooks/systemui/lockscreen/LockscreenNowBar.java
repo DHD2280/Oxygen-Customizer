@@ -102,7 +102,10 @@ public class LockscreenNowBar extends XposedMods {
                     placeNowBar();
                 });
 
-        ReflectedClass QSImpl = ReflectedClass.of("com.android.systemui.qs.QSImpl");
+        ReflectedClass QSImpl = ReflectedClass.of(
+            "com.android.systemui.qs.QSImpl", //OOS15
+            "com.android.systemui.qs.QSFragment" //OOS14
+        );
         QSImpl
                 .after("setQsExpansion")
                 .run(param -> {
