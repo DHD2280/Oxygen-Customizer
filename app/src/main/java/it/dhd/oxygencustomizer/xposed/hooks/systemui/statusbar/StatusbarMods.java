@@ -116,7 +116,6 @@ public class StatusbarMods extends XposedMods {
     // Padding Vars
     private static String QSExpandMethodName;
     private float mTopPad;
-    private boolean mKeyguardShowing = false;
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
     private Class<?> DrawableSize = null, ScalingDrawableWrapper = null;
@@ -354,16 +353,6 @@ public class StatusbarMods extends XposedMods {
 
                     }
                 });
-
-
-        // Stole Keyguard is showing
-        Class<?> KayguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
-        hookAllMethods(KayguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mKeyguardShowing = (boolean) param.args[0];
-            }
-        });
 
         Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
 
