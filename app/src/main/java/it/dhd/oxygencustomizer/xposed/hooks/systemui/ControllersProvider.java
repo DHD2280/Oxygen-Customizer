@@ -41,6 +41,7 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnTorchModeChanged> mTorchModeChangedListeners = new ArrayList<>();
     private final ArrayList<OnHotspotChanged> mHotspotChangedListeners = new ArrayList<>();
     private final ArrayList<OnDozingChanged> mDozingChangedListeners = new ArrayList<>();
+    private final ArrayList<OnKeyguardShowing> mKeyguardShowingListeners = new ArrayList<>();
 
     private Object mBluetoothController = null;
     private Object mDataController = null;
@@ -62,6 +63,7 @@ public class ControllersProvider extends XposedMods {
     private Object mOplusQsMediaTile = null;
     private Class<?> SystemUIDialog = null;
     private Object mActivityStarterImpl = null;
+    private Object mBatteryInfo = null;
 
     public ControllersProvider(Context context) {
         super(context);
@@ -132,6 +134,14 @@ public class ControllersProvider extends XposedMods {
      */
     public static void unRegisterDozingCallback(ControllersProvider.OnDozingChanged callback) {
         instance.mDozingChangedListeners.remove(callback);
+    }
+
+    public static void registerKeyguardShowingCallback(OnKeyguardShowing callback) {
+        instance.mKeyguardShowingListeners.add(callback);
+    }
+
+    public static void unRegisterKeyguardShowingCallback(ControllersProvider.OnKeyguardShowing callback) {
+        instance.mKeyguardShowingListeners.remove(callback);
     }
 
     public static Object getBluetoothController() {
@@ -216,6 +226,12 @@ public class ControllersProvider extends XposedMods {
         }
 
         try {
+            getBatteryInfo();
+        } catch (Throwable t) {
+            log(t);
+        }
+
+        try {
             // LaunchableLinearLayout
             // This is the container of our custom views
             LaunchableLinearLayout = ReflectedClass.of("com.android.systemui.animation.view.LaunchableLinearLayout").getClazz();
@@ -238,6 +254,15 @@ public class ControllersProvider extends XposedMods {
                 .run(param -> {
                     boolean dozing = getBooleanField(param.thisObject, "mDozing");
                     updateDozingState(dozing);
+                });
+
+        // Keyguard Showing Callback
+        ReflectedClass KeyguardUpdateMonitor = ReflectedClass.of("com.android.keyguard.KeyguardUpdateMonitor");
+        KeyguardUpdateMonitor
+                .after("setKeyguardShowing")
+                .run(param -> {
+                    boolean keyguardShowing = (boolean) param.args[1];
+                    onKeyguardShowing(keyguardShowing);
                 });
 
         try {
@@ -512,8 +537,21 @@ public class ControllersProvider extends XposedMods {
                 .run(param -> mActivityStarterImpl = getObjectField(param.thisObject, "activityStarter"));
     }
 
+    private void getBatteryInfo() {
+        ReflectedClass KeyguardIndicationController = ReflectedClass.of("com.android.systemui.statusbar.KeyguardIndicationController");
+        KeyguardIndicationController
+                .afterConstruction()
+                .run(param -> {
+                    mBatteryInfo = getObjectField(param.thisObject, "mBatteryInfo");
+                });
+    }
+
     public static Object getActivityStarterExternal() {
         return instance.mActivityStarterImpl;
+    }
+
+    public static Object getBatteryInfoExternal() {
+        return instance.mBatteryInfo;
     }
 
     @Override
@@ -593,6 +631,15 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
+    private void onKeyguardShowing(boolean keyguardShowing) {
+        for (ControllersProvider.OnKeyguardShowing callback : mKeyguardShowingListeners) {
+            try {
+                callback.onKeyguardShowing(keyguardShowing);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     /**
      * Callbacks for Mobile Data
      */
@@ -637,6 +684,13 @@ public class ControllersProvider extends XposedMods {
      */
     public interface OnDozingChanged {
         void onDozingChanged(boolean dozing);
+    }
+
+    /**
+     * Callback for keyguard showing
+     */
+    public interface OnKeyguardShowing {
+        void onKeyguardShowing(boolean showing);
     }
 
 }
