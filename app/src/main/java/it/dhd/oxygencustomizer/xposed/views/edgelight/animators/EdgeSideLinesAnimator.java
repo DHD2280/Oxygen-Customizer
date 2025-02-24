@@ -26,10 +26,6 @@ public class EdgeSideLinesAnimator extends EdgeAnimator {
 
         float halfHeight = height * 0.5f * currentHeight;
 
-        log("getShader - height = " + height +
-                ", centerY = " + centerY +
-                ", halfHeight = " + halfHeight);
-
         return new LinearGradient(
                 0, centerY - halfHeight, 0, centerY + halfHeight,
                 new int[]{Color.TRANSPARENT, mCurrentPaintColor, Color.TRANSPARENT},
@@ -53,12 +49,6 @@ public class EdgeSideLinesAnimator extends EdgeAnimator {
         int height = mEdgeLightView.getHeight();
         float barWidth = mEdgePaint.getStrokeWidth() * 2;
         float centerY = height / 2f;
-
-        log("draw, width = " + width +
-                ", height = " + height +
-                ", barWidth = " + barWidth +
-                ", centerY = " + centerY +
-                ", currentHeight = " + currentHeight);
 
         float halfHeight = height * 0.5f * currentHeight;
 
