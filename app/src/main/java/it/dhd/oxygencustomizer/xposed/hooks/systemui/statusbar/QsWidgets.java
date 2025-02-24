@@ -405,10 +405,7 @@ public class QsWidgets extends XposedMods {
         try {
             Object backgroundProxy = getObjectField(mediaPanelView, "backgroundProxy");
             Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-            XposedBridge.log("getOOS15Background backgroundProxy null? " + (backgroundProxy == null));
-            XposedBridge.log("getOOS15Background panelInfo null? " + (panelInfo == null));
             Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-            XposedBridge.log("getOOS15Background getBackgroundDrawable null? " + (bg == null));
             return bg;
         } catch (Throwable t) {
             XposedBridge.log(t);
