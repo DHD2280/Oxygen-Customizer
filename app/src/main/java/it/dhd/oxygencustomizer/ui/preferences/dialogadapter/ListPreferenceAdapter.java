@@ -34,6 +34,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static final int DEFAULT_TYPE = 0;
     public static final int TYPE_QS_IMAGE = 1;
     public static final int TYPE_BATTERY_ICONS = 2;
+    private int mHeaderNum;
     private List<String> mResImages = new ArrayList<>();
     private final CharSequence[] mEntries;
     private final CharSequence[] mEntryValues;
@@ -62,6 +63,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mHasImage = hasImage;
         this.onItemClickListener = onItemClickListener;
         this.mType = DEFAULT_TYPE;
+        mHeaderNum = getCurrentHeaderNumber();
     }
 
     public ListPreferenceAdapter(CharSequence[] entries,
@@ -78,6 +80,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mHasImage = hasImage;
         this.onItemClickListener = onItemClickListener;
         this.mType = DEFAULT_TYPE;
+        mHeaderNum = getCurrentHeaderNumber();
     }
 
     public void setListener(onItemClickListener onItemClickListener) {
@@ -103,7 +106,6 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (mType == TYPE_QS_IMAGE) {
-            int currentHeaderNumber = getCurrentHeaderNumber();
 
             String loadedImage = mResImages.get(position);
 
@@ -112,7 +114,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .transform(new RoundedCorners(20))
                     .into(((QsImageViewHolder) holder).binding.qsHeaderImage);
 
-            if (PreferenceHelper.instance.mPreferences.getInt("qs_header_image_number", -1) == (holder.getBindingAdapterPosition() + 1)) {
+            if (getCurrentHeaderNumber() == (holder.getBindingAdapterPosition() + 1)) {
                 ((QsImageViewHolder) holder).binding.rootLayout.setStrokeColor(getAppContext().getColor(android.R.color.system_accent1_400));
             } else {
                 ((QsImageViewHolder) holder).binding.rootLayout.setStrokeColor(Color.TRANSPARENT);
@@ -121,8 +123,9 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.itemView.setOnClickListener(v -> {
                 PreferenceHelper.instance.mPreferences.edit().putInt("qs_header_image_number", (holder.getBindingAdapterPosition() + 1)).apply();
                 onItemClickListener.onItemClick(v, holder.getBindingAdapterPosition());
-                notifyItemChanged(currentHeaderNumber);
+                notifyItemChanged(mHeaderNum);
                 notifyItemChanged(holder.getBindingAdapterPosition());
+                mHeaderNum = holder.getBindingAdapterPosition();
             });
         } else if (mType == TYPE_BATTERY_ICONS) {
             ((BatteryIconsViewHolder)holder).binding.typeTitle.setText(mEntries[position]);
