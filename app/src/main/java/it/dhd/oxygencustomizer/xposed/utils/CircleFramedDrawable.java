@@ -28,15 +28,13 @@ public class CircleFramedDrawable extends Drawable {
     private Paint mIconPaint;
 
     private float mScale;
-    private Rect mSrcRect;
-    private RectF mDstRect;
+    private final Rect mSrcRect;
+    private final RectF mDstRect;
 
     public static CircleFramedDrawable getInstance(Context context, Bitmap icon) {
-        Resources res = context.getResources();
         int iconSize = dp2px(context, 190);
 
-        CircleFramedDrawable instance = new CircleFramedDrawable(icon, iconSize);
-        return instance;
+        return new CircleFramedDrawable(icon, iconSize);
     }
 
     public CircleFramedDrawable(Bitmap icon, int size) {
@@ -110,6 +108,7 @@ public class CircleFramedDrawable extends Drawable {
             mIconPaint = new Paint();
         }
         mIconPaint.setColorFilter(cf);
+        invalidateSelf();
     }
 
     @Override
