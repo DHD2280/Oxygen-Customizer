@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 
 public class NowBarController {
 
-    private final boolean DEBUG = BuildConfig.DEBUG;
+    private final boolean DEBUG = true;
 
     @SuppressLint("StaticFieldLeak")
     private static NowBarController instance;
@@ -18,8 +18,8 @@ public class NowBarController {
     @SuppressLint("StaticFieldLeak")
     private static NowBarHolder mView = null;
     private int mStatusBarState = -1;
-    private boolean mKeyguardShowing = false;
-    private boolean isFullyCollapsed = false;
+    private boolean mKeyguardShowing = true; // MUST initialize as true
+    private boolean isFullyCollapsed = true; // MUST initialize as true
     private boolean mDozing = false;
 
     private boolean mEnabled = true;
@@ -28,12 +28,19 @@ public class NowBarController {
 
     private NowBarController(Context context) {
         this.mContext = context;
+        instance = this;
     }
 
-    public static synchronized NowBarController getInstance(Context context) {
-        if (instance == null) {
-            instance = new NowBarController(context);
-        }
+    public static boolean hasInstance() {
+        return instance != null;
+    }
+
+    public static NowBarController getInstance(Context context) {
+        if (instance != null) return instance;
+        return new NowBarController(context);
+    }
+
+    public static NowBarController getInstance() {
         return instance;
     }
 
@@ -58,36 +65,40 @@ public class NowBarController {
     }
 
     public void setNowBarEnabled(boolean enabled) {
-        logD("setNowBarEnabled: " + enabled);
+//        logD("setNowBarEnabled: " + enabled);
         this.mEnabled = enabled;
         updateVisibility();
     }
 
     public void setFullyCollapsed(boolean fullyCollapsed) {
-        logD("setFullyCollapsed: " + fullyCollapsed);
+//        logD("setFullyCollapsed: " + fullyCollapsed);
         isFullyCollapsed = fullyCollapsed;
         updateVisibility();
     }
 
     public void setStatusBarState(int state) {
-        logD("setStatusBarState: " + state);
+//        logD("setStatusBarState: " + state);
+        if (mStatusBarState == state) return;
         mStatusBarState = state;
         updateVisibility();
     }
 
     public void setKeyguardShowing(boolean keyguardShowing) {
-        logD("setKeyguardShowing: " + keyguardShowing);
+//        logD("setKeyguardShowing: " + keyguardShowing);
+        if (mKeyguardShowing == keyguardShowing) return;
         mKeyguardShowing = keyguardShowing;
         updateVisibility();
     }
 
     public void setDozing(boolean dozing) {
-        logD("setDozing: " + dozing);
+//        logD("setDozing: " + dozing);
+        if (mDozing == dozing) return;
         mDozing = dozing;
         updateVisibility();
     }
 
     private void updateVisibility() {
+        logD("updateVisibility");
         if (mView == null) return;
         if (!mEnabled) {
             mView.setVisibility(View.GONE);

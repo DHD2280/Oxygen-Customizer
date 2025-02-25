@@ -66,7 +66,7 @@ public class NowBarHolder extends LinearLayout {
 
     public static NowBarHolder getInstance(Context context) {
         if (instance == null) {
-            instance = new NowBarHolder(context);
+            return new NowBarHolder(context);
         }
         return instance;
     }
@@ -99,6 +99,7 @@ public class NowBarHolder extends LinearLayout {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         mContext.registerReceiver(batteryReceiver, filter, Context.RECEIVER_EXPORTED);
+        mController.setNowBarHolder(this);
     }
 
     @Override

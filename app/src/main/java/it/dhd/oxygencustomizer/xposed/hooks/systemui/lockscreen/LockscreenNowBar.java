@@ -11,28 +11,24 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
-import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 import it.dhd.oxygencustomizer.xposed.views.nowbar.NowBarController;
 import it.dhd.oxygencustomizer.xposed.views.nowbar.NowBarHolder;
-import it.dhd.oxygencustomizer.xposed.views.pulse.PulseControllerImpl;
 
 public class LockscreenNowBar extends XposedMods {
 
@@ -40,11 +36,9 @@ public class LockscreenNowBar extends XposedMods {
 
     private Object mAffordanceSqlHelper = null;
     private ViewGroup mKeyguardBottomArea = null;
-    private int mStatusBarState = -1;
-    private boolean mKeyguardShowing = false;
-    private final LinearLayout mNowBarLayout = new LinearLayout(mContext);
+    private final FrameLayout mNowBarLayout = new FrameLayout(mContext);
 
-    private final ControllersProvider.OnDozingChanged mDozingChanged = isDozing -> NowBarController.getInstance(mContext).setDozing(isDozing);
+    private final ControllersProvider.OnDozingChanged mDozingChanged = isDozing -> NowBarController.getInstance().setDozing(isDozing);
 
     private boolean mNowBarEnabled = true;
     private boolean mHideLeftAfforfance = false, mHideRightAffordance = false;
@@ -87,13 +81,6 @@ public class LockscreenNowBar extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
-        KeyguardStatusViewController
-                .after("setAlpha")
-                .run(param -> {
-                    mNowBarLayout.setAlpha((float) param.args[0]);
-                });
-
         ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController");
         NotificationPanelViewController
                 .after("onFinishInflate")
@@ -102,31 +89,38 @@ public class LockscreenNowBar extends XposedMods {
                     placeNowBar();
                 });
 
-        ReflectedClass QSImpl = ReflectedClass.of(
+        ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
+        KeyguardStatusViewController
+                .after("setAlpha")
+                .run(param -> {
+                    mNowBarLayout.setAlpha((float) param.args[0]);
+                });
+
+        Class<?> QSImpl = findClassInArray(
+                lpparam,
             "com.android.systemui.qs.QSImpl", //OOS15
             "com.android.systemui.qs.QSFragment" //OOS14
         );
-        QSImpl
-                .after("setQsExpansion")
-                .run(param -> {
-                    boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
-                    NowBarController.getInstance(mContext).setFullyCollapsed(isFullyCollapsed);
-                });
+        hookAllMethods(QSImpl, "setQsExpansion", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
+                XposedBridge.log("LockscreenNowBar, setQsExpansion " + isFullyCollapsed);
+                if (NowBarController.hasInstance()) {
+                    NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
+                }
+            }
+        });
 
-        QSImpl
-                .after("onStateChanged")
-                .run(param -> {
-                    mStatusBarState = (int) param.args[0];
-                    NowBarController.getInstance(mContext).setStatusBarState(mStatusBarState);
-                });
-
-        ReflectedClass KeyguardUpdateMonitor = ReflectedClass.of("com.android.keyguard.KeyguardUpdateMonitor");
-        KeyguardUpdateMonitor
-                .after("setKeyguardShowing")
-                        .run(param -> {
-                            mKeyguardShowing = (boolean) param.args[1];
-                            NowBarController.getInstance(mContext).setKeyguardShowing(mKeyguardShowing);
-                        });
+        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
+        hookAllMethods(KeyguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (NowBarController.hasInstance()) {
+                    NowBarController.getInstance().setKeyguardShowing((boolean) param.args[0]);
+                }
+            }
+        });
 
         ReflectedClass MediaHierarchyManager = ReflectedClass.of("com.android.systemui.media.controls.ui.controller.MediaHierarchyManager");
         MediaHierarchyManager
@@ -152,8 +146,7 @@ public class LockscreenNowBar extends XposedMods {
             ((ViewGroup) mNowBarHolder.getParent()).removeView(mNowBarHolder);
         } catch (Throwable ignored) {
         }
-        mNowBarLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        mNowBarLayout.setGravity(Gravity.BOTTOM);
+        mNowBarLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         mNowBarLayout.addView(mNowBarHolder);
         mKeyguardBottomArea.addView(mNowBarLayout, mKeyguardBottomArea.getChildCount() - 1);
         updateNowBar();
@@ -176,7 +169,7 @@ public class LockscreenNowBar extends XposedMods {
         } catch (Throwable ignored) {
             isLeftHidden = mHideLeftAfforfance;
         }
-        NowBarController mNowBarController = NowBarController.getInstance(mContext);
+        NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.setNowBarEnabled(mNowBarEnabled);
         mNowBarController.setNowBarWeatherEnabled(mNowBarWeather);
         mNowBarController.updateMargins(
