@@ -60,6 +60,10 @@ public class EdgeLightControllerImpl {
         return instance != null;
     }
 
+    public EdgeLightView getEdgeLightView() {
+        return mEdgeLightView;
+    }
+
     public EdgeLightControllerImpl(Context context) {
         instance = this;
         mContext = context;
@@ -121,7 +125,7 @@ public class EdgeLightControllerImpl {
 
     public void setAnimationDuration(long dur) {
         this.totalDuration = dur;
-        mEdgeLightView.setDurations(animationDuration, pulsingDuration, totalDuration);
+        mEdgeLightView.setDurations(animationDuration, (int) (totalDuration/3), totalDuration);
     }
 
     public void setAodRootLayout(FrameLayout aodRootLayout) {
@@ -138,9 +142,9 @@ public class EdgeLightControllerImpl {
     }
 
     private void updateEdgeVisibility() {
-        logD("updateEdgeVisibility");
         boolean allowCurved = mCurved;
         boolean allowAlwaysPulse = (mAlwaysTriggerOnPulse || mRetick) && !mCurved;
+        logD("updateEdgeVisibility, allowCurved: " + allowCurved + " allowAlwaysPulse: " + allowAlwaysPulse);
 
         detachEdge();
         if (allowAlwaysPulse) {
@@ -172,6 +176,7 @@ public class EdgeLightControllerImpl {
     }
 
     private void detachEdge() {
+        logD("detachEdge()");
         try {
             ((ViewGroup) mEdgeLightView.getParent()).removeView(mEdgeLightView);
             EdgeAnimator animator = mEdgeLightView.getCurrentEdgeAnimator();

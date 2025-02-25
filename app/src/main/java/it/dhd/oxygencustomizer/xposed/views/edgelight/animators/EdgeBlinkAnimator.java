@@ -16,10 +16,6 @@ public class EdgeBlinkAnimator extends EdgeAnimator {
 
     @Override
     public void draw(Canvas canvas) {
-        log("draw, mEdgePaint.getStrokeWidth() = " + mEdgePaint.getStrokeWidth() +
-                ", mEdgeLightView.getWidth() = " + mEdgeLightView.getWidth() +
-                ", mEdgeLightView.getHeight() = " + mEdgeLightView.getHeight() +
-                ", mScreenRadius = " + mScreenRadius);
         RectF rect = new RectF(
                 mEdgePaint.getStrokeWidth(),
                 mEdgePaint.getStrokeWidth(),
@@ -36,7 +32,7 @@ public class EdgeBlinkAnimator extends EdgeAnimator {
         if (mAnimating) return;
         mAnimator = ValueAnimator.ofFloat(0.3f, 1f);
         mAnimator.setDuration(mPulsingDuration);
-        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mAnimator.setRepeatCount(3);
         mAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mAnimator.addListener(mAnimationListener);
         mAnimator.setInterpolator(new LinearInterpolator());

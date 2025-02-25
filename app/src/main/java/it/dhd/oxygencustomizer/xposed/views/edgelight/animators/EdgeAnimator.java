@@ -131,7 +131,7 @@ public abstract class EdgeAnimator {
         mScreenRadius = radius;
     }
 
-    public void setDurations(int anim, int pulsing, long duration) {
+    public void setDurations(int anim, long pulsing, long duration) {
         if (mFinalAnimDuration == duration) return;
         this.mAnimationDuration = anim;
         this.mPulsingDuration = pulsing;
