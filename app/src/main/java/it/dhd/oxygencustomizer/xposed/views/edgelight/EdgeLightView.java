@@ -173,7 +173,7 @@ public class EdgeLightView extends View {
         mEdgeAnimator = getEdgeAnimator();
         mEdgeAnimator.setBlurOptions(mDrawBlur, mBlurType, mBlurMode);
         mEdgeAnimator.setScreenRadius(mCornerRadius);
-        mEdgeAnimator.setDurations((int) animationDuration, (int) pulsingDuration, mAnimationDuration);
+        mEdgeAnimator.setDurations((int) animationDuration, pulsingDuration, mAnimationDuration);
     }
 
     private EdgeAnimator getEdgeAnimator() {
@@ -262,7 +262,7 @@ public class EdgeLightView extends View {
         }
     }
 
-    public void setDurations(int anim, int pulsing, long duration) {
+    public void setDurations(int anim, long pulsing, long duration) {
         this.animationDuration = anim;
         this.pulsingDuration = pulsing;
         if (duration == 0) duration = animationDuration;
