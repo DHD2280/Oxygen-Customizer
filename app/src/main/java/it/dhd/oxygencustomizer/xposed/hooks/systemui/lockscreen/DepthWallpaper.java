@@ -244,7 +244,12 @@ public class DepthWallpaper extends XposedMods {
                             if (superPowerSave) return;
                             log("Wallpaper Changed");
 
-                            Drawable wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, "loadDrawable");
+                            Drawable wallpaperDrawable;
+                            try {
+                            wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, "loadDrawable");
+                            } catch (Throwable t) {
+                                wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, "loadBitmap");
+                            }
                             if (wallpaperDrawable == null) {
                                 log("Wallpaper Drawable is null");
                                 return;
