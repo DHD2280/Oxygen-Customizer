@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory/>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <it.dhd.oneplusui.preference.OplusSwitchPreference
-        android:defaultValue="false"
-        android:key="lockscreen_now_bar_enabled"
-        android:summaryOff="@string/general_off"
-        android:summaryOn="@string/general_on"
-        android:title="@string/lockscreen_now_bar_enabled_title" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_now_bar_enabled_title" />
 
-    <it.dhd.oneplusui.preference.OplusSwitchPreference
-        android:defaultValue="false"
-        android:dependency="lockscreen_now_bar_enabled"
-        android:key="lockscreen_now_bar_weather"
-        android:summary="@string/lockscreen_now_bar_weather_summary"
-        android:title="@string/lockscreen_now_bar_weather" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_weather"
+            android:summary="@string/lockscreen_now_bar_weather_summary"
+            android:title="@string/lockscreen_now_bar_weather" />
 
-    <it.dhd.oneplusui.preference.OplusJumpPreference
-        android:key="now_bar_weather_settings"
-        android:dependency="lockscreen_now_bar_weather"
-        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings"
-        android:title="@string/weather_settings" />
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:dependency="lockscreen_now_bar_weather"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings"
+            android:key="now_bar_weather_settings"
+            android:title="@string/weather_settings" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:dependency="lockscreen_now_bar_enabled"
-            android:title="@string/lockscreen_now_bar_bottom_margin"
             android:key="lockscreen_now_bar_bottom_margin"
+            android:title="@string/lockscreen_now_bar_bottom_margin"
             app:defaultValue="12"
-            app:minVal="0"
             app:maxVal="30"
+            app:minVal="0"
             app:tickInterval="1" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
