@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
@@ -43,14 +44,9 @@ public class LockscreenView extends FrameLayout {
     private View mClockView;
     private CurrentWeatherView mWeatherView;
     private LockscreenWidgetsView mWidgetsView;
-    private AnimatorSet currentAnimationSet;
-    private float mClockScale = 1f;
+    private int mStockClockHeight;
 
     private boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
-
-    private int mAodUiDeBurninY = -1;
-    private int mStockClockHeight = -1;
-    private int keyguardLockHeight = -1;
 
     @SuppressLint("StaticFieldLeak")
     public static LockscreenView instance = null;
@@ -60,6 +56,8 @@ public class LockscreenView extends FrameLayout {
 
         instance = this;
         mContext = context;
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
 
         createViews();
     }
@@ -148,19 +146,6 @@ public class LockscreenView extends FrameLayout {
         return mClockContainer.getHeight();
     }
 
-    public void setClockScale(float scale) {
-        mClockScale = scale;
-    }
-
-    public void setAodStuff(int aodUiDeBurninY, int stockClockHeight) {
-        mAodUiDeBurninY = aodUiDeBurninY;
-        mStockClockHeight = stockClockHeight;
-    }
-
-    public void setKeyguardLockHeight(int height) {
-        keyguardLockHeight = height;
-    }
-
     public void setLockscreenWeatherEnabled(boolean enabled) {
         mLockscreenWeatherEnabled = enabled;
         post(() -> mWeatherContainer.setVisibility(enabled ? VISIBLE : GONE));
@@ -192,7 +177,6 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void onUiStateChanged(int uiState) {
-
         if (mLockscreenWeatherEnabled) {
             post(() -> mWeatherContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
@@ -200,79 +184,6 @@ public class LockscreenView extends FrameLayout {
             post(() -> mWidgetsContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
 
-        try {
-            switch (uiState) {
-                case CLOCK_UI_STATE_AOD -> animateViewToAod();
-                case CLOCK_UI_STATE_LS, CLOCK_UI_STATE_SHADE -> animateViewBack();
-            }
-        } catch (Throwable t) {
-            XposedBridge.log("LockscreenView.onUiStateChanged: " + Log.getStackTraceString(t));
-        }
-    }
-
-    public void animateViewToAod() {
-        stopCurrentAnimation();
-        int clockHeight = mClockContainer.getHeight();
-        int measuredHeight = mClockContainer.getMeasuredHeight();
-
-        int originalHeight = mClockContainer.getHeight();
-        float baseScaleY = 0.8f;
-        float dynamicScaleY = baseScaleY / mClockScale;
-        float scaled = originalHeight * mClockScale;
-        float heightDifference = originalHeight - scaled;
-//        if (scaled < originalHeight) {
-//            heightDifference = 0;
-//        }
-
-        float desiredBottomY = (mAodUiDeBurninY + mStockClockHeight);
-        float deltaY = desiredBottomY - (mStockClockHeight + originalHeight);
-
-        XposedBridge.log("animateViewToAod: keyguardLockHeight: " + keyguardLockHeight + " clockHeight: " + clockHeight + " measuredHeight: " + measuredHeight + " mAodUiDeBurninY: " + mAodUiDeBurninY + " desiredBottomY: " + desiredBottomY + " deltaY: " + deltaY);
-
-        // Translate View
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(this, "translationX", -200f);
-        ObjectAnimator translationY = ObjectAnimator.ofFloat(this, "translationY", this.getTranslationY() + deltaY);
-
-        // Scale View
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", dynamicScaleY);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", dynamicScaleY);
-
-        currentAnimationSet = new AnimatorSet();
-        List<Animator> animations = new ArrayList<>();
-        if (!isClockCentered()) {
-            animations.add(translationX);
-        }
-        animations.add(translationY);
-        animations.add(scaleX);
-        animations.add(scaleY);
-        currentAnimationSet.playTogether(animations);
-        currentAnimationSet.setDuration(500);
-        currentAnimationSet.start();
-    }
-
-    public void animateViewBack() {
-        stopCurrentAnimation();
-
-        // Reset state
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(this, "translationX", 0f);
-        ObjectAnimator translationY = ObjectAnimator.ofFloat(this, "translationY", 0f);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1f);
-
-        currentAnimationSet = new AnimatorSet();
-        currentAnimationSet.playTogether(translationX, translationY, scaleX, scaleY);
-        currentAnimationSet.setDuration(500);
-        currentAnimationSet.start();
-    }
-
-    private boolean isClockCentered() {
-        return Settings.System.getInt(mContext.getContentResolver(), "keyguard_style_aod_clock_gravity", 0) == 0;
-    }
-
-    private void stopCurrentAnimation() {
-        if (currentAnimationSet != null && currentAnimationSet.isRunning()) {
-            currentAnimationSet.cancel();
-        }
     }
 
     public int getFullHeight() {
@@ -280,7 +191,8 @@ public class LockscreenView extends FrameLayout {
         int weatherHeight = mWeatherContainer.getHeight();
         int widgetsHeight = mWidgetsContainer.getHeight();
 
-        int fullHeight = clockHeight;
+        int fullHeight = 0;
+        if (mLockscreenClockEnabled) fullHeight += clockHeight;
         if (mLockscreenWeatherEnabled) fullHeight += weatherHeight;
         if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
 

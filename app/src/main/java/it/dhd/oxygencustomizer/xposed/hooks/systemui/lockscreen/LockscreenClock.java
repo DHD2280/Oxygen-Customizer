@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT1;
@@ -34,9 +35,9 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -101,7 +102,8 @@ import it.dhd.oxygencustomizer.xposed.views.ProgressImageView;
 
 public class LockscreenClock extends XposedMods {
 
-    public static final String OC_LOCKSCREEN_CLOCK_TAG = "oxygencustomizer_lockscreen_clock";
+    private static final String OC_LOCKSCREEN_CLOCK_LAYOUT = "lockscreen_clock_layout";
+    private static final String OC_LOCKSCREEN_CLOCK_TAG = "oxygencustomizer_lockscreen_clock";
     private final static String listenPackage = Constants.Packages.SYSTEM_UI;
     private static final long thresholdTime = 500; // milliseconds
     private static Object mStockClock;
@@ -127,7 +129,6 @@ public class LockscreenClock extends XposedMods {
     private int mStockClockRed, mStockClockRedColor;
     private UserManager mUserManager;
     private AudioManager mAudioManager;
-    private ActivityManager mActivityManager;
     private Context appContext;
     private TextView mBatteryStatusView;
     private TextView mBatteryLevelView;
@@ -141,13 +142,10 @@ public class LockscreenClock extends XposedMods {
     private int accent1, accent2, accent3, text1, text2;
     private boolean customColor;
     private LockscreenView mLockscreenView;
-    private View mStockClockView = null;
     public final static int CLOCK_UI_STATE_SHADE = 1;
     public final static int CLOCK_UI_STATE_LS = 2;
     public final static int CLOCK_UI_STATE_AOD = 3;
-    private int mAodUiDeBurninY = -1;
-    private int mStockClockHeight = -1;
-    private int keyguardLockHeight = -1;
+    private Object mKeyguardStyleClockControllerImpl = null;
 
     private boolean mBatteryReceiverRegistered = false;
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
@@ -222,6 +220,9 @@ public class LockscreenClock extends XposedMods {
 
         if (Key.length > 0) {
             for (String LCPrefs : LOCKSCREEN_CLOCK_PREFS) {
+                if (Key[0].equals(LOCKSCREEN_CLOCK_SWITCH)) {
+                    reloadPlugin();
+                }
                 if (Key[0].equals(LCPrefs)) {
                     new Handler(Looper.getMainLooper()).post(this::updateClockView);
                     createCustomClockView();
@@ -249,60 +250,59 @@ public class LockscreenClock extends XposedMods {
             KeyguardStyleClockControllerImpl
                     .before("getKeyguardStyleClockHeight")
                     .run(param -> {
-                        if (mLockscreenView == null || !customLockscreenClock) return;
                         Object lockIconViewController = getObjectField(param.thisObject, "lockIconViewController");
                         Object obj = callMethod(lockIconViewController, "get");
                         float height = (float) callMethod(obj, "getBottom");
-                        keyguardLockHeight = (int) height;
-                        mLockscreenView.setKeyguardLockHeight(keyguardLockHeight);
+                        if (mLockscreenView == null) return;
                         int clockHeight = mLockscreenView.getFullHeight();
-                        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin));
-                        param.setResult((int) (height + clockHeight + dp2px(mContext, bottomMargin)));
+                        int finalResult = (int) (height + clockHeight);
+                        if (customLockscreenClock) {
+                            finalResult += dp2px(mContext, topMargin);
+                            finalResult += dp2px(mContext, bottomMargin);
+                            setMarginsNoConvert(mLockscreenView, mContext, 0, 0, 0, 0);
+                        } else {
+                            int mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
+                            setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
+                        }
+                        param.setResult(finalResult);
                     });
 
             ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
             ReflectedClass OplusKeyguardStyleWrapper = ReflectedClass.ofIfPossible("com.oplus.keyguard.comm.OplusKeyguardStyleWrapper");
-            /*
-             * OOS15
-             * They added a Plugin for Lockscreen Clock
-             * OplusKeyguardStyleBaseClock and OplusKeyguardStyleClock
-             * responsible to load everything related to lockscreen
-             *
-             * we have getView(int i) method that returns views
-             * we refers i to the following: (source KeyguardStyleClockControllerImpl)
-             *
-             * 0 used in setKeyguardStyleClockVisibility, setKeyguardStyleClockAlpha
-             * Apparently we can set the Lockscreen Clock here
-             *
-             * 1 used in setKeyguardStyleClockScale, getKeyguardStyleClockHeight - This maybe is custom image
-             * Apparently we can set the Lockscreen Clock here
-             * With Weather and Widgets
-             * since is called getKeyguardStyleClockHeight
-             * putting our clock to the bottom of LockIconView
-             * and calculating height for notifications
-             * so we need to calculate height with weather and widgets
-             *
-             * 2 never seen
-             * 3 same as 2
-             *
-             * 4 used in addDeepSceneryImageView, removeDeepSceneryImageView, setKeyguardStyleForegroundScale, refreshDeepSceneryMatrix
-             * Should be the image bundled with some styles
-             * We can try to set our depth here and see what happens
-             */
-            ReflectedClass.ReflectionConsumer lockscreenClockHook = param -> {
+
+            ReflectedClass.ReflectionConsumer lockscreenClockPostHook = param -> {
                 int viewType = (int) param.args[0];
-                if (viewType == 0) {
-                    if (customLockscreenClock) {
-                        param.setResult(mLockscreenView);
+                if (viewType != 1) return;
+                View view = (View) param.getResult();
+                if (view instanceof ViewGroup viewGroup) {
+                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                        View child = viewGroup.getChildAt(i);
+                        if (child instanceof LockscreenView) {
+                            continue;
+                        }
+                        if (child.getTag() != null && child.getTag().toString().contains("BY_OC")) {
+                            child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
+                        }
+                        if (child.getVisibility() == View.VISIBLE) {
+                            child.setTag("BY_OC");
+                            child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
+                        }
                     }
-                } else if (viewType == 1) {
-                    //TODO: Custom Image for some clock styles
+                }
+                if (ViewHelper.findViewWithTag(view, OC_LOCKSCREEN_CLOCK_LAYOUT) != null) {
+                    return;
+                }
+                try {
+                    ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
+                } catch (Throwable ignored) {}
+                mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
+                if (view instanceof ViewGroup viewGroup) {
+                    viewGroup.addView(mLockscreenView);
                 }
             };
-
             OplusKeyguardStyleBaseClock
-                    .before("getView")
-                    .run(lockscreenClockHook);
+                    .after("getView")
+                    .run(lockscreenClockPostHook);
 
             OplusKeyguardStyleBaseClock
                     .after("setTime")
@@ -316,45 +316,41 @@ public class LockscreenClock extends XposedMods {
 
             if (OplusKeyguardStyleWrapper.getClazz() != null) { // RUI 6.0
                 OplusKeyguardStyleWrapper
-                        .before("getView")
-                        .run(lockscreenClockHook);
+                        .after("getView")
+                        .run(lockscreenClockPostHook);
             }
 
             OplusKeyguardStyleBaseClock
                     .before("loadPlugin")
                     .run(param -> {
                         boolean isPluginLoaded = (boolean) callMethod(param.thisObject, "isPluginLoaded");
+                        if (mLockscreenView != null) {
+                            try {
+                                ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
+                            } catch (Throwable ignored) {}
+                        }
                         if (!isPluginLoaded) {
                             try {
-                                if (mLockscreenView.getParent() != null) {
-                                    ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
-                                }
                                 createCustomClockView();
                             } catch (Throwable ignored) {
                             }
-                            mAodUiDeBurninY = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_margin_top", 378);
-                            mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
-                            mLockscreenView.setAodStuff(mAodUiDeBurninY, mStockClockHeight);
                         }
+                    });
+
+            ReflectedClass AodClockLayout = ReflectedClass.of("com.oplus.systemui.aod.aodclock.off.AodClockLayout");
+            AodClockLayout
+                    .after("initAodViewInfo")
+                    .run(param -> {
+                        if (!customLockscreenClock) return;
+                        setIntField(param.thisObject, "mAodWorkShopClockHeight", mLockscreenView.getClockHeight());
                     });
 
             ReflectedClass OplusKeyguardStyleClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleClock");
             OplusKeyguardStyleClock
                     .after("onUiStateChanged")
-                    .run(param -> moveClockView((int) param.args[0]));
-
-            OplusKeyguardStyleClock
-                    .after("setAodUiDeBurnin")
                     .run(param -> {
-                        int x = (int) param.args[0];
-                        int y = (int) param.args[1];
-                        mAodUiDeBurninY = y;
-                        mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
-                        if (mLockscreenView != null) {
-                            mLockscreenView.setAodStuff(mAodUiDeBurninY, mStockClockHeight);
-                        }
-                        moveClockView(CLOCK_UI_STATE_AOD);
-                        XposedBridge.log("setAodUiDeBurnin: X: " + x + " Y: " + y);
+                        if (mLockscreenView == null) return;
+                        mLockscreenView.onUiStateChanged((int) param.args[0]);
                     });
 
         } else {
@@ -438,7 +434,6 @@ public class LockscreenClock extends XposedMods {
 
         mUserManager = SystemUtils.UserManager();
         mAudioManager = SystemUtils.AudioManager();
-        mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         try {
             if (!mBatteryReceiverRegistered) {
@@ -459,11 +454,25 @@ public class LockscreenClock extends XposedMods {
     private void createCustomClockView() {
         if (Build.VERSION.SDK_INT < 35) return; // No need for lower
         mLockscreenView = LockscreenView.getInstance(mContext);
+        mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
         View clockView = getClockView();
         clockView.setTag(OC_LOCKSCREEN_CLOCK_TAG);
         modifyClockView(clockView);
         mLockscreenView.setClockView(clockView);
-        mLockscreenView.updateClockMargins(keyguardLockHeight + dp2px(mContext, topMargin));
+        mLockscreenView.setLockscreeClockEnabled(customLockscreenClock);
+        mLockscreenView.updateClockMargins(dp2px(mContext, topMargin));
+    }
+
+    private void reloadPlugin() {
+        if (Build.VERSION.SDK_INT < 35) return;
+        XposedBridge.log("LockscreenClock reloadPlugin (mKeyguardStyleClockControllerImpl == null) " + (mKeyguardStyleClockControllerImpl == null));
+        if (mKeyguardStyleClockControllerImpl == null) return;
+        try {
+            boolean isPluginLoaded = getBooleanField(mKeyguardStyleClockControllerImpl, "isPluginLoaded");
+            callMethod(mKeyguardStyleClockControllerImpl, "loadOrUnloadPlugin");
+        } catch (Throwable t) {
+            log("Error reloading plugin: " + t.getMessage());
+        }
     }
 
     // Broadcast receiver for updating clock
@@ -594,7 +603,6 @@ public class LockscreenClock extends XposedMods {
 
         ViewHelper.applyTextMarginRecursively((ViewGroup) clockView, lineHeight);
 
-        if (mLockscreenView != null) mLockscreenView.setClockScale(clockScale);
         if (clockScale != 1.0f) {
             ViewHelper.applyTextScalingRecursively((ViewGroup) clockView, clockScale);
         }

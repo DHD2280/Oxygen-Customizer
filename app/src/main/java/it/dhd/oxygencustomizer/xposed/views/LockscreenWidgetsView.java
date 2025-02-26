@@ -263,6 +263,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         // Circle Dimens
         mWidgetCircleSize = modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size);
         mWidgetMarginHorizontal = modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
+        if (Build.VERSION.SDK_INT >= 35) {
+            mWidgetCircleSize = (int) (mWidgetCircleSize * 0.85f);
+        }
         mWidgetIconPadding = modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
     }
 
@@ -329,8 +332,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         // Add FABs to the main widgets container
         mMainWidgetViews = new ExtendedFAB[]{
-                createFAB(context),
-                createFAB(context)
+                createFAB(context, 0),
+                createFAB(context, 1)
         };
 
         for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
@@ -340,16 +343,16 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         return mainWidgetsContainer;
     }
 
-    private ExtendedFAB createFAB(Context context) {
+    private ExtendedFAB createFAB(Context context, int position) {
         ExtendedFAB fab = new ExtendedFAB(context);
         fab.setId(View.generateViewId());
         LayoutParams params = new LayoutParams(
                 (int)(mFabWidth*mWidgetsScale),
                 (int)(mFabHeight*mWidgetsScale));
         params.setMargins(
-                (int)(mFabMarginStart*mWidgetsScale),
+                Build.VERSION.SDK_INT >= 35 && position == 0 ? 0 : (int)(mFabMarginStart*mWidgetsScale),
                 0,
-                (int)(mFabMarginEnd*mWidgetsScale),
+                Build.VERSION.SDK_INT >= 35 && position == 1 ? 0 : (int)(mFabMarginEnd*mWidgetsScale),
                 0);
         fab.setLayoutParams(params);
         fab.setPadding(
@@ -381,10 +384,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         // Add ImageViews to the secondary widgets container
         mSecondaryWidgetViews = new ImageView[]{
-                createImageView(context),
-                createImageView(context),
-                createImageView(context),
-                createImageView(context)
+                createImageView(context, 0),
+                createImageView(context, 1),
+                createImageView(context, 2),
+                createImageView(context, 3)
         };
 
         for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
@@ -394,7 +397,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         return secondaryWidgetsContainer;
     }
 
-    private ImageView createImageView(Context context) {
+    private ImageView createImageView(Context context, int position) {
         ImageView imageView;
         try {
             imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
@@ -408,9 +411,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 (int)(mWidgetCircleSize*mWidgetsScale),
                 (int)(mWidgetCircleSize*mWidgetsScale));
         params.setMargins(
-                (int)(mWidgetMarginHorizontal*mWidgetsScale),
+                Build.VERSION.SDK_INT >= 35 && position == 0 ? 0 : (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0,
-                (int)(mWidgetMarginHorizontal*mWidgetsScale),
+                Build.VERSION.SDK_INT >= 35 && position == 3 ? 0 : (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0);
         imageView.setLayoutParams(params);
         imageView.setPadding(
