@@ -1,11 +1,22 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
+
+import android.os.Bundle;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
+import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 
 public class LockscreenNowBarFragment extends ControlledPreferenceFragmentCompat {
+
+    private OmniJawsClient mWeatherClient;
+
     @Override
     public String getTitle() {
         return getString(R.string.lockscreen_now_bar_title);
@@ -30,4 +41,51 @@ public class LockscreenNowBarFragment extends ControlledPreferenceFragmentCompat
     public String[] getScopes() {
         return new String[]{SYSTEM_UI};
     }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
+
+        mWeatherClient = new OmniJawsClient(getContext());
+        mWeatherClient.queryWeather();
+    }
+
+    @Override
+    public void updateScreen(String key) {
+        super.updateScreen(key);
+
+        if (key == null) return;
+
+        if (key.equals(NOW_BAR_WEATHER)) {
+            boolean enabled = mPreferences.getBoolean(NOW_BAR_WEATHER, false);
+            if (enabled) {
+                if (mWeatherClient.getWeatherInfo() != null) {
+                    // Weather enabled but updater more than 1h ago
+                    if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
+                        WeatherScheduler.scheduleUpdateNow(getContext());
+                    }
+                } else {
+                    // Force refresh
+                    WeatherScheduler.scheduleUpdates(getContext());
+                    WeatherScheduler.scheduleUpdateNow(getContext());
+                }
+            }
+            } else if (key.equals(NOW_BAR_ENABLED)) {
+                boolean barEnabled = mPreferences.getBoolean(NOW_BAR_WEATHER, false);
+                boolean weatherEnabled = mPreferences.getBoolean(NOW_BAR_ENABLED, false);
+                if (barEnabled && weatherEnabled) {
+                    if (mWeatherClient.getWeatherInfo() != null) {
+                        // Weather enabled but updater more than 1h ago
+                        if (System.currentTimeMillis() - mWeatherClient.getWeatherInfo().timeStamp > 3600000) {
+                            WeatherScheduler.scheduleUpdateNow(getContext());
+                        }
+                    } else {
+                        // Force refresh
+                        WeatherScheduler.scheduleUpdates(getContext());
+                        WeatherScheduler.scheduleUpdateNow(getContext());
+                    }
+                }
+            }
+    }
+
 }
