@@ -221,7 +221,7 @@ public class NowBarBattery extends RelativeLayout {
         String finalText = "";
         if (mPowerCharged || mIsCharging) {
             if (TextUtils.isEmpty(mChargingString)) {
-                finalText = "Charging " + mExtraLevel + "% " + mTemperature + "°C";
+                finalText = getSystemUiString(mContext, "keyguard_charging_progress", NumberFormat.getPercentInstance().format(mExtraLevel / 100f)) + " " + mTemperature + "°C";
             } else {
                 finalText = computePowerChargingStringIndication() + " " + mTemperature + "°C";
             }
@@ -250,13 +250,13 @@ public class NowBarBattery extends RelativeLayout {
     private void updateOplusBatteryStats(OplusBatteryStatus oplusBatteryStatus) {
         mOplusBatteryStatus = oplusBatteryStatus;
         XposedBridge.log("OplusBatteryStatus changed: " + oplusBatteryStatus.toString());
-        mChargingString = getChargingStringByTechnology(mContext, String.valueOf(mExtraLevel));
+        mChargingString = getChargingStringByTechnology(mContext, NumberFormat.getPercentInstance().format(mExtraLevel / 100f));
         updateBatteryUI();
     }
 
     public final String getChargingStringByTechnology(Context context, String str) {
         String string;
-        if (mOplusBatteryStatus == null) return "Charging " + str;
+        if (mOplusBatteryStatus == null) return getSystemUiString(context, "keyguard_charging_progress", str);
         if (mOplusBatteryStatus.isHeatStateActive()) {
             string = getSystemUiString(context, "arctic_mode_started");
         } else if (mOplusBatteryStatus.isWirelessVoocCharge()) {
