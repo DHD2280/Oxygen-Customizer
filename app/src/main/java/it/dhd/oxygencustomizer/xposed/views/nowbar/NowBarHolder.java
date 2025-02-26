@@ -47,7 +47,7 @@ public class NowBarHolder extends LinearLayout {
                     }
                     break;
                 case Intent.ACTION_POWER_DISCONNECTED:
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(mWeatherEnabled ? 2 : 0);
                     isChargingStatusHandled = false;
                     break;
             }
@@ -202,6 +202,7 @@ public class NowBarHolder extends LinearLayout {
 
     private void refreshViewPager() {
         mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled));
+        if (mWeatherEnabled) mViewPager.setCurrentItem(2);
     }
 
     public void setWeatherEnabled(boolean enabled) {
