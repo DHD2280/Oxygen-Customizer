@@ -21,6 +21,8 @@ package it.dhd.oxygencustomizer.weather;
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
@@ -145,11 +147,14 @@ public class WeatherConfig {
         String bigWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS, "");
         String miniWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
         String qsWidgets = getPrefs(context).getString(QS_WIDGETS_LIST, "media");
+        boolean nowBar = getPrefs(context).getBoolean(NOW_BAR_ENABLED, false);
+        boolean weathrNowBar = getPrefs(context).getBoolean(NOW_BAR_WEATHER, false);
 
         boolean weatherWidget = bigWidgets.contains("weather") || miniWidgets.contains("weather");
         boolean qsWeather = qsWidgets.contains("weather");
+        boolean weatherInBar = nowBar && weathrNowBar;
 
-        return lsWeather || aodWeather || weatherWidget || qsWeather;
+        return lsWeather || aodWeather || weatherWidget || qsWeather ||weatherInBar;
     }
 
     public static void setEnabled(Context context, boolean value, String key) {
