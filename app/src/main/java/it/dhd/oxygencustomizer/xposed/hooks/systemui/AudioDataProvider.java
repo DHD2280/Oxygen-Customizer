@@ -294,6 +294,10 @@ public class AudioDataProvider extends XposedMods {
             mActiveController = localController;
             mActiveController.registerCallback(mediaControllerCallback);
             notifyListeners();
+        } else if (localController == null && mActiveController != null) {
+            mActiveController.unregisterCallback(mediaControllerCallback);
+            mActiveController = null;
+            notifyListeners();
         }
     }
 
