@@ -1,14 +1,19 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.media.session.PlaybackState;
 import android.os.BatteryManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -18,10 +23,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.views.ExtendedViewPager;
 
+@SuppressLint("ViewConstructor")
 public class NowBarHolder extends LinearLayout {
 
     @SuppressLint("StaticFieldLeak")
@@ -30,11 +36,35 @@ public class NowBarHolder extends LinearLayout {
     private final Context mContext;
     private Context appContext;
 
-    private ViewPager mViewPager;
+    private FrameLayout mBlurredBackground;
+    private LinearLayout mPagerContainer;
+    private ExtendedViewPager mViewPager;
     private NowBarController mController;
     private boolean mWeatherEnabled = false;
+    public NowBarMusic.MusicExpansionListener parentExpandedListener;
+    private boolean mExpanded = false;
 
     private boolean isChargingStatusHandled = false;
+
+    private static final NowBarMusic.MusicExpansionListener musicExpansionListener = expanded -> {
+        instance.mExpanded = expanded;
+        instance.mViewPager.setExpanded(expanded);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                expanded ? RelativeLayout.LayoutParams.MATCH_PARENT : dp2px(instance.mContext, 72)
+        );
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        instance.parentExpandedListener.onExpandedStateChanged(expanded);
+        instance.mPagerContainer.setLayoutParams(params);
+        instance.mPagerContainer.requestLayout();
+        instance.mViewPager.requestLayout();
+        instance.mBlurredBackground.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        instance.mBlurredBackground.setRenderEffect(
+                expanded ?
+                RenderEffect.createBlurEffect(
+                        75, 75, Shader.TileMode.CLAMP) :
+                null);
+    };
 
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
@@ -54,25 +84,25 @@ public class NowBarHolder extends LinearLayout {
         }
     };
 
-    public NowBarHolder(Context context) {
+    public NowBarHolder(Context context, NowBarMusic.MusicExpansionListener listener) {
         super(context);
         instance = this;
         mContext = context;
+        parentExpandedListener = listener;
         try {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
         } catch (Throwable ignored) {}
         init();
     }
 
-    public static NowBarHolder getInstance(Context context) {
+    public static NowBarHolder getInstance(Context context, NowBarMusic.MusicExpansionListener listener) {
         if (instance == null) {
-            return new NowBarHolder(context);
+            return new NowBarHolder(context, listener);
         }
         return instance;
     }
 
     private void init() {
-        XposedBridge.log("NowBarHolder init");
         LayoutInflater inflater = LayoutInflater.from(appContext);
         View view = inflater.inflate(
                 appContext
@@ -85,14 +115,33 @@ public class NowBarHolder extends LinearLayout {
                 null
         );
         mController = NowBarController.getInstance(mContext);
-        LinearLayout mPagerContainer = (LinearLayout) ViewHelper.findViewWithTag(view, "nowBarViewPagerContainer");
-        mViewPager = new ViewPager(mContext);
+        mBlurredBackground = (FrameLayout) ViewHelper.findViewWithTag(view, "nowBarBlurredBackground");
+        mBlurredBackground.setRenderEffect(
+                RenderEffect.createBlurEffect(
+                        75, 75, Shader.TileMode.CLAMP));
+        mPagerContainer = (LinearLayout) ViewHelper.findViewWithTag(view, "nowBarViewPagerContainer");
+        mViewPager = new ExtendedViewPager(mContext);
         mViewPager.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
         mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled));
         mViewPager.setPageTransformer(false, new PageTransitionTransformer());
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // ensure that media player is match parent height if expanded
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        mExpanded && position == 0 ? RelativeLayout.LayoutParams.MATCH_PARENT : dp2px(instance.mContext, 72)
+                );
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                mPagerContainer.setLayoutParams(params);
+                if (position != 0) {
+                    mViewPager.setExpanded(false); // if there is a page change, ensure that it can swipe
+                }
+            }
+        });
         mPagerContainer.addView(mViewPager);
         addView(view);
         IntentFilter filter = new IntentFilter();
@@ -140,7 +189,7 @@ public class NowBarHolder extends LinearLayout {
             View view = switch (position) {
                 case 1 -> new NowBarBattery(context);
                 case 2 -> new NowBarWeather(context);
-                default -> NowBarMusic.getInstance(context);
+                default -> NowBarMusic.getInstance(context, musicExpansionListener);
             };
             ((ViewPager) container).addView(view);
             return view;

@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CUSTOM_FINGERPRINT;
@@ -18,10 +19,14 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_SOS;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.resparams;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
 import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
@@ -35,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -42,6 +48,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -56,7 +63,6 @@ public class Lockscreen extends XposedMods {
     private final static String listenPackage = SYSTEM_UI;
     final StringFormatter carrierStringFormatter = new StringFormatter();
     private final String TAG = "Oxygen Customizer - Lockscreen: ";
-    private final Class<?> KeyguardHelper = null;
     private boolean removeSOS;
     private boolean hideFingerprint = false, customFingerprint = false;
     private int fingerprintStyle = 0;
@@ -64,11 +70,21 @@ public class Lockscreen extends XposedMods {
     private Drawable mFpDrawable = null;
     private boolean removeLeftAffordance = false, removeRightAffordance = false;
     private boolean removeLockIcon = false;
-    private View mStartButton = null, mEndButton = null;
+    @SuppressLint("StaticFieldLeak")
+    private static View mStartButton = null, mEndButton = null;
     private ImageView mLockIcon = null;
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
+
+    private boolean mReceiverRegistered = false;
+    private final BroadcastReceiver mNowBarReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isExpanded = intent.getBooleanExtra("isExpanded", false);
+            animateButtons(isExpanded);
+        }
+    };
 
     public Lockscreen(Context context) {
         super(context);
@@ -114,6 +130,13 @@ public class Lockscreen extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
+
+        if (!mReceiverRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTIONS_NOW_BAR_EXPANDED_CHANGED);
+            mContext.registerReceiver(mNowBarReceiver, filter, Context.RECEIVER_EXPORTED);
+            mReceiverRegistered = true;
+        }
 
         try {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -288,6 +311,7 @@ public class Lockscreen extends XposedMods {
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     private void hookAffordance() {
         if (Build.VERSION.SDK_INT >= 34) {
             ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
@@ -358,7 +382,8 @@ public class Lockscreen extends XposedMods {
                         if (mView.getId() == mContext.getResources().getIdentifier("keyguard_carrier_text", "id", listenPackage)) {
                             mCarrierText = mView;
                             setCarrierText();
-                            if (!TextUtils.isEmpty(lockscreenCarrierReplacement)) param.setResult(null);
+                            if (!TextUtils.isEmpty(lockscreenCarrierReplacement))
+                                param.setResult(null);
                         }
                     });
         }
@@ -425,6 +450,62 @@ public class Lockscreen extends XposedMods {
             });
         } catch (Throwable t) {
             log(t);
+        }
+    }
+
+    private void animateButtons(boolean isExpanded) {
+        XposedBridge.log("animateButtons: " + isExpanded);
+        if (removeLeftAffordance && removeRightAffordance) return;
+        if (isExpanded) {
+            if (mStartButton != null) {
+                mStartButton
+                        .animate()
+                        .scaleX(0.4f)
+                        .scaleY(0.4f)
+                        .alpha(0f)
+                        .setDuration(175L)
+                        .setInterpolator(new FastOutLinearInInterpolator())
+                        .withEndAction(() -> mStartButton.setVisibility(View.GONE))
+                        .start();
+            }
+            if (mEndButton != null) {
+                mEndButton
+                        .animate()
+                        .scaleX(0.4f)
+                        .scaleY(0.4f)
+                        .alpha(0f)
+                        .setDuration(175L)
+                        .setInterpolator(new FastOutLinearInInterpolator())
+                        .withEndAction(() -> mEndButton.setVisibility(View.GONE))
+                        .start();
+            }
+        } else {
+            if (!isLeftAffordanceHidden(mContext, removeLeftAffordance) && mStartButton != null) {
+                mStartButton.setVisibility(View.VISIBLE);
+                mStartButton.setScaleX(0.4f);
+                mStartButton.setScaleY(0.4f);
+                mStartButton.setAlpha(0f);
+                mStartButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration(300L)
+                        .setInterpolator(new FastOutLinearInInterpolator())
+                        .start();
+            }
+            if (!removeRightAffordance && mEndButton != null) {
+                mEndButton.setVisibility(View.VISIBLE);
+                mEndButton.setScaleX(0.4f);
+                mEndButton.setScaleY(0.4f);
+                mEndButton.setAlpha(0f);
+                mEndButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration(300L)
+                        .setInterpolator(new FastOutLinearInInterpolator())
+                        .start();
+            }
         }
     }
 

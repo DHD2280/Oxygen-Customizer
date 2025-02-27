@@ -84,6 +84,7 @@ public class NowBarBattery extends RelativeLayout {
     }
 
     private void init() {
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         inflate(appContext, R.layout.now_bar_charging_info, this);
         mChargingIcon = (ImageView) ViewHelper.findViewWithTag(this, "charging_icon");
         mChargingInfo = (TextView) ViewHelper.findViewWithTag(this, "charging_info");

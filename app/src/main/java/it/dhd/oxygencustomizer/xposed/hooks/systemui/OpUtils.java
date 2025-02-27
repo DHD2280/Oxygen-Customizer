@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -29,8 +30,9 @@ public class OpUtils extends XposedMods {
     private static Class<?> QSFragmentHelper = null;
     private Context mSysuiAppContext = null;
     private static Object LunarHelper = null;
-    private static Class<?> FlavorTwoFeatureOption = null;
-    private static Object FlavorTwoFeatureOptionObj = null;
+    private static Object mAffordanceSqlHelper = null;
+    public static Class<?> COUISeekBar = null;
+    public static Class<?> COUISeekBarListener = null;
 
     public OpUtils(Context context) {
         super(context);
@@ -96,6 +98,18 @@ public class OpUtils extends XposedMods {
         }
     }
 
+    public static boolean isLeftAffordanceHidden(Context context, boolean placeHolder) {
+        boolean isLeftHidden;
+        try {
+            Object affordance = callMethod(mAffordanceSqlHelper, "getInstance");
+            String left = (String) callMethod(affordance, "queryStartSelection", context);
+            isLeftHidden = !TextUtils.isEmpty(left) && left.equals("none");
+        } catch (Throwable ignored) {
+            isLeftHidden = placeHolder;
+        }
+        return isLeftHidden;
+    }
+
     @Override
     public void updatePrefs(String... Key) {
     }
@@ -127,7 +141,7 @@ public class OpUtils extends XposedMods {
         if (LunarHelperClass != null) {
             if (Build.VERSION.SDK_INT >= 35) {
                 Object LunarHelperCompanion = getStaticObjectField(LunarHelperClass, "Companion");
-                ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper");
+                ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper", lpparam.classLoader);
                 StatusBarHelper
                         .beforeConstruction()
                         .run(param -> {
@@ -145,8 +159,19 @@ public class OpUtils extends XposedMods {
         }
 
         try {
-            FlavorTwoFeatureOption = ReflectedClass.of("com.oplusos.systemui.common.feature.FlavorTwoFeatureOption").getClazz();
-            FlavorTwoFeatureOptionObj = getStaticObjectField(FlavorTwoFeatureOption, "INSTANCE");
+            ReflectedClass AffordanceSqlHelper = ReflectedClass.of("com.oplus.systemui.keyguard.domain.quickaffordance.AffordanceSqlHelper");
+            mAffordanceSqlHelper = getStaticObjectField(AffordanceSqlHelper.getClazz(), "Companion");
+        } catch (Throwable ignored) {}
+
+        try {
+            COUISeekBar = findClass("com.coui.appcompat.seekbar.COUISeekBar", lpparam.classLoader);
+        } catch (Throwable ignored) {}
+
+        try {
+            COUISeekBarListener = findClass(
+                    "com.coui.appcompat.seekbar.COUISeekBar$OnSeekBarChangeListener",
+                    lpparam.classLoader
+            );
         } catch (Throwable ignored) {}
 
     }

@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LEFT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE;
@@ -12,10 +13,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -29,12 +32,12 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.nowbar.NowBarController;
 import it.dhd.oxygencustomizer.xposed.views.nowbar.NowBarHolder;
+import it.dhd.oxygencustomizer.xposed.views.nowbar.NowBarMusic;
 
 public class LockscreenNowBar extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
 
-    private Object mAffordanceSqlHelper = null;
     private ViewGroup mKeyguardBottomArea = null;
     private final FrameLayout mNowBarLayout = new FrameLayout(mContext);
 
@@ -105,7 +108,6 @@ public class LockscreenNowBar extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
-                XposedBridge.log("LockscreenNowBar, setQsExpansion " + isFullyCollapsed);
                 if (NowBarController.hasInstance()) {
                     NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
                 }
@@ -122,7 +124,7 @@ public class LockscreenNowBar extends XposedMods {
             }
         });
 
-        ReflectedClass MediaHierarchyManager = ReflectedClass.of("com.android.systemui.media.controls.ui.controller.MediaHierarchyManager");
+        ReflectedClass MediaHierarchyManager = ReflectedClass.of("com.android.systemui.media.controls.ui.controller.MediaHierarchyManager", lpparam.classLoader);
         MediaHierarchyManager
                 .before("getAllowMediaPlayerOnLockScreen")
                 .run(param -> {
@@ -132,16 +134,30 @@ public class LockscreenNowBar extends XposedMods {
                 .before("setAllowMediaPlayerOnLockScreen")
                 .run(param -> param.args[0] = !mNowBarEnabled);
 
-        ReflectedClass AffordanceSqlHelper = ReflectedClass.of("com.oplus.systemui.keyguard.domain.quickaffordance.AffordanceSqlHelper");
-        mAffordanceSqlHelper = getStaticObjectField(AffordanceSqlHelper.getClazz(), "Companion");
-
         ControllersProvider.registerDozingCallback(mDozingChanged);
 
     }
 
+    private final NowBarMusic.MusicExpansionListener musicExpansionListener = expanded -> {
+        if (!expanded) {
+            updateBarMargins();
+        } else {
+            NowBarController mNowBarController = NowBarController.getInstance();
+            mNowBarController.updateMargins(
+                    dp2px(mContext, 12),
+                    dp2px(mContext, 12),
+                    dp2px(mContext, mNowBarBottomMargin)
+            );
+        }
+        Intent intent = new Intent(ACTIONS_NOW_BAR_EXPANDED_CHANGED);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.putExtra("isExpanded", expanded);
+        mContext.sendBroadcast(intent);
+    };
+
     private void placeNowBar() {
         if (mKeyguardBottomArea == null) return;
-        NowBarHolder mNowBarHolder = NowBarHolder.getInstance(mContext);
+        NowBarHolder mNowBarHolder = NowBarHolder.getInstance(mContext, musicExpansionListener);
         try {
             ((ViewGroup) mNowBarHolder.getParent()).removeView(mNowBarHolder);
         } catch (Throwable ignored) {
@@ -161,20 +177,18 @@ public class LockscreenNowBar extends XposedMods {
                     "mNowBarBottomMargin: " + mNowBarBottomMargin + "\n" +
                     "mNowBarWeather: " + mNowBarWeather);
         }
-        boolean isLeftHidden = false;
-        try {
-            Object affordance = callMethod(mAffordanceSqlHelper, "getInstance");
-            String left = (String) callMethod(affordance, "queryStartSelection", mContext);
-            isLeftHidden = !TextUtils.isEmpty(left) && left.equals("none");
-        } catch (Throwable ignored) {
-            isLeftHidden = mHideLeftAfforfance;
-        }
         NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.setNowBarEnabled(mNowBarEnabled);
         mNowBarController.setNowBarWeatherEnabled(mNowBarWeather);
+        updateBarMargins();
+    }
+
+    private void updateBarMargins() {
+        boolean isLeftHidden = isLeftAffordanceHidden(mContext, mHideLeftAfforfance);
+        NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.updateMargins(
-                isLeftHidden && mHideRightAffordance ? 18 : mAffordanceWidth,
-                isLeftHidden && mHideRightAffordance ? 18 : mAffordanceWidth,
+                isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
+                isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
                 dp2px(mContext, mNowBarBottomMargin)
         );
     }

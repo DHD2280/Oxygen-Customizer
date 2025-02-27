@@ -262,16 +262,27 @@ public class AudioDataProvider extends XposedMods {
         }
     }
 
+    public long getCurrentTime() {
+        MediaController controller = getActiveLocalMediaController();
+        if (controller != null) {
+            return controller.getPlaybackState().getPosition();
+        }
+        return 0;
+    }
+
     public static long getTotalDuration() {
         MediaMetadata metadata = getMediaMetadata();
         return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 0L;
     }
 
     private void saveLastNonNullPackageName() {
-        String packageName = getActiveLocalMediaController() != null ? getActiveLocalMediaController().getPackageName() : null;
-        if (!TextUtils.isEmpty(packageName) && !packageName.equals(lastSavedPackageName)) {
-            lastSavedPackageName = packageName;
-        }
+        try {
+            MediaController controller = getActiveLocalMediaController();
+            String packageName = controller != null ? controller.getPackageName() : null;
+            if (!TextUtils.isEmpty(packageName) && !packageName.equals(lastSavedPackageName)) {
+                lastSavedPackageName = packageName;
+            }
+        } catch (Throwable ignored) {} // rare case when the controller is null while saving the package name
     }
 
     public void updateMediaController() {

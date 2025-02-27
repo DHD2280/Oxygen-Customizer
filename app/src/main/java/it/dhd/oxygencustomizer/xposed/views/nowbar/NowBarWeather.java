@@ -67,6 +67,7 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
     }
 
     private void inflateView() {
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         LayoutInflater inflater = LayoutInflater.from(appContext);
         @SuppressLint("DiscouragedApi") View v = inflater.inflate(
                 appContext
@@ -81,6 +82,8 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         mCity = (TextView) ViewHelper.findViewWithTag(v, "city");
         mCondition = (TextView) ViewHelper.findViewWithTag(v, "current_condition");
         mConditionImage = (ImageView) ViewHelper.findViewWithTag(v, "condition_image");
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        v.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         addView(v);
     }
 

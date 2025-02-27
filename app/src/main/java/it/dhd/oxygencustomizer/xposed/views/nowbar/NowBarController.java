@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 
 public class NowBarController {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = BuildConfig.DEBUG;
 
     @SuppressLint("StaticFieldLeak")
     private static NowBarController instance;
@@ -72,6 +72,7 @@ public class NowBarController {
 
     public void setFullyCollapsed(boolean fullyCollapsed) {
 //        logD("setFullyCollapsed: " + fullyCollapsed);
+        if (isFullyCollapsed == fullyCollapsed) return;
         isFullyCollapsed = fullyCollapsed;
         updateVisibility();
     }
