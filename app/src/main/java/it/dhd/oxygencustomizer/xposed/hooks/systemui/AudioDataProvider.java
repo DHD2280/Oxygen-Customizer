@@ -272,7 +272,7 @@ public class AudioDataProvider extends XposedMods {
 
     public static long getTotalDuration() {
         MediaMetadata metadata = getMediaMetadata();
-        return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 0L;
+        return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 1L;
     }
 
     private void saveLastNonNullPackageName() {
