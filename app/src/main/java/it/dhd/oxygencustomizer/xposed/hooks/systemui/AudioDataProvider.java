@@ -267,7 +267,7 @@ public class AudioDataProvider extends XposedMods {
         if (controller != null) {
             return controller.getPlaybackState().getPosition();
         }
-        return 0;
+        return 1L;
     }
 
     public static long getTotalDuration() {
