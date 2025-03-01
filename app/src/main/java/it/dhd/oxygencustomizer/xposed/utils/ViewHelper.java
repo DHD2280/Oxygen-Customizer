@@ -89,56 +89,6 @@ public class ViewHelper {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
-    public static void loadLottieAnimation(Context context, int rawResourceId, LottieDrawable lottieDrawable) {
-        LottieTask<LottieComposition> lottieTask = LottieCompositionFactory.fromRawRes(context, rawResourceId);
-        lottieTask.addListener(result -> {
-            lottieDrawable.setComposition(result);
-            lottieDrawable.playAnimation();
-        });
-    }
-
-    public static JSONObject loadJSONFromRaw(int rawResourceId) {
-        try {
-            InputStream inputStream = ResourceManager.modRes.openRawResource(rawResourceId);
-            String jsonString = convertStreamToString(inputStream);
-            inputStream.close();
-            return new JSONObject(jsonString);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static InputStream getRawInputStream(int rawResourceId) {
-        if (ResourceManager.modRes == null) {
-            return null;
-        }
-        return ResourceManager.modRes.openRawResource(rawResourceId);
-    }
-
-    public static String convertStreamToString(InputStream is) {
-        if (is == null) return null;
-        Scanner scanner = new Scanner(is);
-        return scanner.hasNext() ? scanner.next() : "";
-    }
-
-    public static LayerDrawable generateProgressDrawable(Context context, int backgroundColor, int progressColor) {
-
-        GradientDrawable backgroundDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{backgroundColor, backgroundColor});
-        backgroundDrawable.setCornerRadius(dp2px(context, 12));
-
-        GradientDrawable progressDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{progressColor, progressColor});
-        progressDrawable.setCornerRadius(dp2px(context, 12));
-
-        ClipDrawable clipDrawable = new ClipDrawable(progressDrawable, Gravity.START, ClipDrawable.HORIZONTAL);
-
-        Drawable[] layers = new Drawable[2];
-        layers[0] = backgroundDrawable;
-        layers[1] = clipDrawable;
-
-        return new LayerDrawable(layers);
-    };
-
     public static ViewGroup getParent(View view) {
         return (ViewGroup)view.getParent();
     }
@@ -148,18 +98,6 @@ public class ViewHelper {
         if(parent != null) {
             parent.removeView(view);
         }
-    }
-
-    public static void replaceView(View currentView, View newView) {
-        ViewGroup parent = getParent(currentView);
-        if(parent == null) {
-            return;
-        }
-        final int index = parent.indexOfChild(currentView);
-        removeView(currentView);
-        removeView(newView);
-        newView.setId(currentView.getId());
-        parent.addView(newView, index);
     }
 
     public static void findViewWithTagAndChangeColor(View view, String tagContains, int color) {
