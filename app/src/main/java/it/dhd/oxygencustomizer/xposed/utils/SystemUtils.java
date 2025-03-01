@@ -110,6 +110,14 @@ public class SystemUtils {
 
     @Nullable
     @Contract(pure = true)
+    public static PackageManager PackageManager() {
+        return instance == null
+                ? null
+                : instance.getPackageManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
     public static CameraManager CameraManager() {
         return instance == null
                 ? null
@@ -187,6 +195,19 @@ public class SystemUtils {
             }
         }
         return mCameraManager;
+    }
+
+    private PackageManager getPackageManager() {
+        if (mPackageManager == null) {
+            try {
+                mPackageManager = mContext.getPackageManager();
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mPackageManager;
     }
 
     public SystemUtils(Context context) {
