@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.utils;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.LOAD_TIME_KEY_KEY;
+import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.PACKAGE_STRIKE_KEY_KEY;
 
 import android.Manifest;
 import android.app.Activity;
@@ -28,6 +30,7 @@ import com.topjohnwu.superuser.Shell;
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
@@ -97,7 +100,7 @@ public class AppUtils {
         List<String> commands = new ArrayList<>();
         for (String scope : scopes) {
             if ("android".equals(scope)) continue;
-            BootLoopProtector.resetCounter(scope);
+            resetCounter(scope);
             if (scope.contains("systemui")) {
                 commands.add("kill -9 `pgrep systemui`");
                 continue;
@@ -106,6 +109,20 @@ public class AppUtils {
             commands.add("am force-stop " + scope);
         }
         Shell.cmd(commands.toArray(new String[0])).exec();
+    }
+
+    public static void resetCounter(String packageName) {
+        try {
+            String loadTimeKey = String.format("%s%s", LOAD_TIME_KEY_KEY, packageName);
+            String strikeKey = String.format("%s%s", PACKAGE_STRIKE_KEY_KEY, packageName);
+            long currentTime = Calendar.getInstance().getTime().getTime();
+
+            OCPreferences.getPrefs().edit()
+                    .putLong(loadTimeKey, currentTime)
+                    .putInt(strikeKey, 0)
+                    .commit();
+        } catch (Throwable ignored) {
+        }
     }
 
     public static boolean hasStoragePermission() {
