@@ -70,8 +70,8 @@ public class Lockscreen extends XposedMods {
     private Drawable mFpDrawable = null;
     private boolean removeLeftAffordance = false, removeRightAffordance = false;
     private boolean removeLockIcon = false;
-    @SuppressLint("StaticFieldLeak")
-    private static View mStartButton = null, mEndButton = null;
+    private View mStartAnimatable = null, mEndAnimatable = null;
+    private View mStartButton = null, mEndButton = null;
     private ImageView mLockIcon = null;
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private TextView mCarrierText = null;
@@ -313,6 +313,20 @@ public class Lockscreen extends XposedMods {
 
     @SuppressLint("DiscouragedApi")
     private void hookAffordance() {
+
+        ReflectedClass OplusKeyguardBottomAreaController = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.OplusKeyguardBottomAreaController");
+        if (OplusKeyguardBottomAreaController.getClazz() != null) {
+            OplusKeyguardBottomAreaController
+                    .after("bindKeyguardBottomAreaView")
+                    .run(param -> {
+                        try {
+                            mStartAnimatable = (View) getObjectField(param.thisObject, "startButton");
+                            mEndAnimatable = (View) getObjectField(param.thisObject, "endButton");
+                        } catch (Throwable ignored) {
+                        }
+                    });
+        }
+
         if (Build.VERSION.SDK_INT >= 34) {
             ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
             KeyguardBottomAreaView
@@ -457,35 +471,35 @@ public class Lockscreen extends XposedMods {
         XposedBridge.log("animateButtons: " + isExpanded);
         if (removeLeftAffordance && removeRightAffordance) return;
         if (isExpanded) {
-            if (mStartButton != null) {
-                mStartButton
+            if (mStartAnimatable != null) {
+                mStartAnimatable
                         .animate()
                         .scaleX(0.4f)
                         .scaleY(0.4f)
                         .alpha(0f)
                         .setDuration(175L)
                         .setInterpolator(new FastOutLinearInInterpolator())
-                        .withEndAction(() -> mStartButton.setVisibility(View.GONE))
+                        .withEndAction(() -> mStartAnimatable.setVisibility(View.GONE))
                         .start();
             }
-            if (mEndButton != null) {
-                mEndButton
+            if (mEndAnimatable != null) {
+                mEndAnimatable
                         .animate()
                         .scaleX(0.4f)
                         .scaleY(0.4f)
                         .alpha(0f)
                         .setDuration(175L)
                         .setInterpolator(new FastOutLinearInInterpolator())
-                        .withEndAction(() -> mEndButton.setVisibility(View.GONE))
+                        .withEndAction(() -> mEndAnimatable.setVisibility(View.GONE))
                         .start();
             }
         } else {
-            if (!isLeftAffordanceHidden(mContext, removeLeftAffordance) && mStartButton != null) {
-                mStartButton.setVisibility(View.VISIBLE);
-                mStartButton.setScaleX(0.4f);
-                mStartButton.setScaleY(0.4f);
-                mStartButton.setAlpha(0f);
-                mStartButton.animate()
+            if (!isLeftAffordanceHidden(mContext, removeLeftAffordance) && mStartAnimatable != null) {
+                mStartAnimatable.setVisibility(View.VISIBLE);
+                mStartAnimatable.setScaleX(0.4f);
+                mStartAnimatable.setScaleY(0.4f);
+                mStartAnimatable.setAlpha(0f);
+                mStartAnimatable.animate()
                         .scaleX(1f)
                         .scaleY(1f)
                         .alpha(1f)
@@ -493,12 +507,12 @@ public class Lockscreen extends XposedMods {
                         .setInterpolator(new FastOutLinearInInterpolator())
                         .start();
             }
-            if (!removeRightAffordance && mEndButton != null) {
-                mEndButton.setVisibility(View.VISIBLE);
-                mEndButton.setScaleX(0.4f);
-                mEndButton.setScaleY(0.4f);
-                mEndButton.setAlpha(0f);
-                mEndButton.animate()
+            if (!removeRightAffordance && mEndAnimatable != null) {
+                mEndAnimatable.setVisibility(View.VISIBLE);
+                mEndAnimatable.setScaleX(0.4f);
+                mEndAnimatable.setScaleY(0.4f);
+                mEndAnimatable.setAlpha(0f);
+                mEndAnimatable.animate()
                         .scaleX(1f)
                         .scaleY(1f)
                         .alpha(1f)
