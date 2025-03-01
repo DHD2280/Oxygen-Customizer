@@ -184,8 +184,8 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         mTextColor = textColor;
         mBackgroundColor = backgroundColor;
         setBarBackground();
-        mCity.setTextColor(mTextColor);
-        mCondition.setTextColor(mTextColor);
+        mCity.setTextColor(mCustomColors ? mTextColor : Color.WHITE);
+        mCondition.setTextColor(mCustomColors ? mTextColor : Color.WHITE);
     }
 
 }
