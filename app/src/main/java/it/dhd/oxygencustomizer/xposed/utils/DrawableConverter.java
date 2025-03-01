@@ -198,6 +198,9 @@ public class DrawableConverter {
         ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(renderScript,
                 Element.U8_4(renderScript));
         blur.setInput(blurInput);
+        if (radius > 25) {
+            radius = 25;
+        }
         blur.setRadius(radius); // radius must be 0 < r <= 25
         blur.forEach(blurOutput);
         blurOutput.copyTo(bitmap);
