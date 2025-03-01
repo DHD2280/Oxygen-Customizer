@@ -22,8 +22,11 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaMetadata;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.AbsSeekBar;
 import android.widget.ImageButton;
@@ -33,6 +36,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
@@ -45,7 +50,6 @@ import java.util.concurrent.TimeUnit;
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
@@ -82,19 +86,33 @@ public class NowBarMusic extends LinearLayout {
     private TextView trackTitle;
     private TextView mTitle, mAuthor;
     private TextView mCurrentTime, mTotalTime;
+
+    // App Info
     private TextView mAppName;
+    private ImageView mAppIcon;
 
     // SeekBar
     private AbsSeekBar mTrackSeekBar;
 
     // Vars
+    private boolean mExtendedPlayer = true;
+    private int mBackgroundColor = Color.BLACK;
     private boolean mIsSeeking = false;
     private int mSeekingProgress = 0;
-    private ImageView mAppIcon;
     private Object mCurrentColorScheme = null;
     private boolean mExpanded = false;
+    private String mLastTitle = "";
+    private String mLastAuthor = "";
+
+    // Activity Launcher
     private final ActivityLauncherUtils mActivityLauncherUtils;
+
+    // Music Expansion listener
     private final MusicExpansionListener mExpansionListener;
+
+    public boolean isExpanded() {
+        return mExpanded;
+    }
 
     public interface MusicExpansionListener {
         void onExpandedStateChanged(boolean expanded);
@@ -157,10 +175,12 @@ public class NowBarMusic extends LinearLayout {
         // Setup album art big as 90% of the screen width
         mAlbumArtBig = (ImageView) ViewHelper.findViewWithTag(v, "album_art_big");
         Rect bounds = SystemUtils.WindowManager().getCurrentWindowMetrics().getBounds();
-        mAlbumArtBig.setLayoutParams(new LinearLayout.LayoutParams(
-                (int) (bounds.right * 0.9f),
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 (int) (bounds.right * 0.9f)
-        ));
+        );
+        imageParams.gravity = Gravity.CENTER_HORIZONTAL;
+        mAlbumArtBig.setLayoutParams(imageParams);
         mTitle = (TextView) ViewHelper.findViewWithTag(v, "title_big");
         mAuthor = (TextView) ViewHelper.findViewWithTag(v, "album_big");
         // Big Media Player
@@ -262,6 +282,7 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void triggerMediaPlayer() {
+        if (!mExtendedPlayer) return;
         mExpanded = !mExpanded;
         View[] viewToAnimate = new View[]{mAlbumArtBig, mTitle, mAuthor, mBigMediaPlayer};
         if (mExpanded) {
@@ -276,6 +297,7 @@ public class NowBarMusic extends LinearLayout {
                         mLittleMediaPlayer.setVisibility(View.GONE);
                         mExpansionListener.onExpandedStateChanged(mExpanded);
                         animateOthers();
+                        setBarBackground(mBackgroundColor);
                     })
                     .start();
         } else {
@@ -301,6 +323,7 @@ public class NowBarMusic extends LinearLayout {
                                     .setDuration(300L)
                                     .setInterpolator(new FastOutLinearInInterpolator())
                                     .start();
+                            setBarBackground(mBackgroundColor);
                         })
                         .start();
             }
@@ -329,17 +352,19 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void setBarBackground(int color) {
+        if (mBackgroundColor != color) mBackgroundColor = color;
         GradientDrawable background = new GradientDrawable();
         background.setColor(color);
         background.setCornerRadius(100f);
-        mLittleMediaPlayer.setBackground(background);
         mBigMediaPlayer.setBackground(background);
+        mLittleMediaPlayer.setBackground(background);
+
     }
 
     private void updateMediaPlaybackState() {
         MediaMetadata mediaMetadata = AudioDataProvider.getMediaMetadata();
         boolean isPlaying = AudioDataProvider.isMediaPlaying();
-
+        XposedBridge.log("NowBarMusic, updateMediaPlaybackState() - isPlaying: " + isPlaying);
         if (resetMediaIfNeeded()) {
             return;
         }
@@ -349,10 +374,22 @@ public class NowBarMusic extends LinearLayout {
 
         if (mediaMetadata != null) {
             String title = mediaMetadata.getString(MediaMetadata.METADATA_KEY_TITLE);
-            String album = mediaMetadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
-            trackTitle.setText(title != null && !title.isEmpty() ? title : modRes.getString(R.string.omnijaws_city_unknown));
-            mTitle.setText(title != null && !title.isEmpty() ? title : modRes.getString(R.string.omnijaws_city_unknown));
-            mAuthor.setText(album != null && !album.isEmpty() ? album : modRes.getString(R.string.omnijaws_city_unknown));
+            String artist = mediaMetadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
+            if (!TextUtils.isEmpty(title) && !title.equals(mLastTitle) && !TextUtils.equals(title, trackTitle.getText())) {
+                mLastTitle = title;
+                trackTitle.setText(title);
+                mTitle.setText(title);
+                trackTitle.setSelected(true);
+            } else if (TextUtils.isEmpty(title)) {
+                trackTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
+                mTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
+            }
+            if (!TextUtils.isEmpty(artist) && !artist.equals(mLastAuthor) && !TextUtils.equals(artist, mAuthor.getText())) {
+                mLastAuthor = artist;
+                mAuthor.setText(artist);
+            } else if (TextUtils.isEmpty(artist)) {
+                mAuthor.setText(modRes.getString(R.string.omnijaws_city_unknown));
+            }
 
             long currentMillis = AudioDataProvider.instance.getCurrentTime();
             long durationMillis = AudioDataProvider.getTotalDuration();
@@ -360,15 +397,22 @@ public class NowBarMusic extends LinearLayout {
                 mCurrentTime.setText(formatTime(currentMillis));
             }
             mTotalTime.setText(formatTime(durationMillis));
-            int progress = (int) ((currentMillis * 100) / durationMillis);
-            mTrackSeekBar.setProgress(progress);
-            mAppIcon.setImageDrawable(getAppIcon(mContext, getLastNonNullPackageName()));
-            mAppName.setText(getAppName(mContext, getLastNonNullPackageName()));
+            if (durationMillis == 0L) {
+                mTrackSeekBar.setProgress(0);
+            } else {
+                int progress = (int) ((currentMillis * 100) / durationMillis);
+                mTrackSeekBar.setProgress(progress);
+            }
+            mAppIcon.setImageDrawable(getAppIcon(getLastNonNullPackageName()));
+            mAppName.setText(getAppName(getLastNonNullPackageName()));
 
             Bitmap bitmap = getArt();
             if (bitmap != null) {
                 mAlbumArtBig.clearColorFilter();
-                mAlbumArtBig.setImageBitmap(DrawableConverter.getRoundedCornerBitmap(bitmap, 32f));
+                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                roundedDrawable.setCornerRadius(32f);
+                roundedDrawable.setAntiAlias(true);
+                mAlbumArtBig.setImageDrawable(roundedDrawable);
                 int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
                 CircleFramedDrawable drawable = new CircleFramedDrawable(bitmap, roundSize);
                 albumArt.setImageDrawable(drawable);
@@ -379,8 +423,8 @@ public class NowBarMusic extends LinearLayout {
         }
     }
 
-    private Drawable getAppIcon(Context context, String packageName) {
-        PackageManager pm = context.getPackageManager();
+    private Drawable getAppIcon(String packageName) {
+        PackageManager pm = SystemUtils.PackageManager();
         try {
             return pm.getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException e) {
@@ -388,8 +432,8 @@ public class NowBarMusic extends LinearLayout {
         }
     }
 
-    private String getAppName(Context context, String packageName) {
-        PackageManager pm = context.getPackageManager();
+    private String getAppName(String packageName) {
+        PackageManager pm = SystemUtils.PackageManager();
         try {
             return pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
         } catch (PackageManager.NameNotFoundException e) {
@@ -412,7 +456,9 @@ public class NowBarMusic extends LinearLayout {
             mTotalTime.setText("0:00");
             mTrackSeekBar.setProgress(0);
             mTitle.setText(NO_MEDIA_STRING);
+            mLastTitle = "";
             mAuthor.setText("");
+            mLastAuthor = "";
             trackTitle.setText(NO_MEDIA_STRING);
             trackTitle.setSelected(true);
             setDefaultIcon();
@@ -428,18 +474,6 @@ public class NowBarMusic extends LinearLayout {
         albumArt.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         mAlbumArtBig.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_volume_eq, null));
         mAlbumArtBig.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        AudioDataProvider.registerMediaMetadataListener(mMediaMetaDataListener);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        AudioDataProvider.unregisterMediaMetadataListener(mMediaMetaDataListener);
     }
 
     private final AudioDataProvider.MediaMetadataListener mMediaMetaDataListener = new AudioDataProvider.MediaMetadataListener() {
@@ -494,7 +528,17 @@ public class NowBarMusic extends LinearLayout {
         mPlayPauseButtonBig.setBackgroundTintList(ColorStateList.valueOf(color));
         callMethod(mTrackSeekBar, "setProgressColor", ColorStateList.valueOf(color));
         callMethod(mTrackSeekBar, "setThumbColor", ColorStateList.valueOf(color));
+        mAppName.setTextColor(color);
         trackTitle.setTextColor(color);
+        mCurrentTime.setTextColor(color);
+        mTotalTime.setTextColor(color);
+    }
+
+    public void setExtendedPlayerEnabled(boolean enabled) {
+        if (mExpanded) {
+            triggerMediaPlayer();
+        }
+        mExtendedPlayer = enabled;
     }
 
 }

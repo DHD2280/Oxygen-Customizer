@@ -35,12 +35,12 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodDepthSubject;
-//import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodEdgeLight;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodEdgeLight;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodWeather;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen;
@@ -100,6 +100,9 @@ public class ModPacks {
 
                     // Controllers Provider
                     modPacks.add(ControllersProvider.class);
+
+                    // Notification Listener
+                    modPacks.add(SystemNotificationListener.class);
 
                     // Battery Data Provider
                     modPacks.add(BatteryDataProvider.class);

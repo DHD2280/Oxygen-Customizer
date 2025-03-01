@@ -18,6 +18,13 @@
             android:summary="@string/lockscreen_now_bar_weather_summary"
             android:title="@string/lockscreen_now_bar_weather" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_notifications"
+            android:summary="@string/lockscreen_now_bar_notifications_summary"
+            android:title="@string/lockscreen_now_bar_notifications" />
+
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:dependency="lockscreen_now_bar_weather"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings"
@@ -36,6 +43,116 @@
             app:maxVal="30"
             app:minVal="0"
             app:tickInterval="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/lockscreen_now_bar_battery">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="true"
+            android:key="lockscreen_now_bar_music_extended_player"
+            android:title="@string/lockscreen_now_bar_music_extended_player"
+            android:summary="@string/lockscreen_now_bar_music_extended_player_summary"/>
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:key="lockscreen_now_bar_music_extended_background_mode"
+            android:title="@string/lockscreen_now_bar_music_extended_player_background"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/now_bar_music_background_entries"
+            android:entryValues="@array/now_bar_music_background_values" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/lockscreen_now_bar_battery">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_battery_custom_icon_switch"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_now_bar_battery_custom_icon" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
+            android:dependency="lockscreen_now_bar_battery_custom_icon_switch"
+            android:key="lockscreen_now_bar_battery_custom_style"
+            android:title="@string/lockscreen_now_bar_battery_custom_icon"
+            app:entries="@array/custom_charging_icon_style"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_battery_custom_colors"
+            android:summary="@string/lockscreen_now_bar_battery_custom_colors_summary"
+            android:title="@string/lockscreen_now_bar_battery_custom_colors" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFF0000"
+            android:dependency="lockscreen_now_bar_battery_custom_colors"
+            android:key="lockscreen_now_bar_battery_0_20"
+            android:title="0-20"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFA500"
+            android:dependency="lockscreen_now_bar_battery_custom_colors"
+            android:key="lockscreen_now_bar_battery_21_30"
+            android:title="21-30"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFF48D5C4"
+            android:dependency="lockscreen_now_bar_battery_custom_colors"
+            android:key="lockscreen_now_bar_battery_31_60"
+            android:title="31-60"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFF4CAF50"
+            android:dependency="lockscreen_now_bar_battery_custom_colors"
+            android:key="lockscreen_now_bar_battery_61_100"
+            android:title="61-100"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_battery_indicate_powersave"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_power_save" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFF4CAF50"
+            android:dependency="lockscreen_now_bar_battery_indicate_powersave"
+            android:key="lockscreen_now_bar_battery_powersave_color"
+            android:title="@string/BB_batteryPowerSaveColor"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_battery_indicate_fastcharge"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_fast_charging"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xff247cff"
+            android:dependency="lockscreen_now_bar_battery_indicate_fastcharge"
+            android:key="lockscreen_now_bar_battery_fastcharge_color"
+            android:title="@string/BB_batteryFastChargingColor"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            android:key="lockscreen_now_bar_battery_text_color"
+            android:title="@string/text_color"
+            app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 

@@ -4,13 +4,28 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LEFT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_3;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_4;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_FAST_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_FAST;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
@@ -19,7 +34,8 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
+import android.graphics.Color;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -38,8 +54,9 @@ public class LockscreenNowBar extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
 
-    private ViewGroup mKeyguardBottomArea = null;
+    private ViewGroup mNotificationPanelView = null;
     private final FrameLayout mNowBarLayout = new FrameLayout(mContext);
+    private View mKeyguardTipView = null;
 
     private final ControllersProvider.OnDozingChanged mDozingChanged = isDozing -> NowBarController.getInstance().setDozing(isDozing);
 
@@ -47,6 +64,24 @@ public class LockscreenNowBar extends XposedMods {
     private boolean mHideLeftAfforfance = false, mHideRightAffordance = false;
     private int mNowBarBottomMargin = 0;
     private boolean mNowBarWeather = false;
+    private boolean mNowBarNotification = false;
+    private boolean mExpanded = false;
+
+    // Music
+    private boolean mShowExtendedPlayer = true;
+    private int mBackgroundMode = 0;
+
+    // Battery
+    private boolean mNowBarBatteryCustomColors = false;
+    private int mNowBarBatteryColor1 = Color.parseColor("#FFFF0000"),
+            mNowBarBatteryColor2 = Color.parseColor("#FFFFA500"),
+            mNowBarBatteryColor3 = Color.parseColor("#FF48D5C4"),
+            mNowBarBatteryColor4 = Color.parseColor("#FF4CAF50");
+    private boolean mNowBarCustomChargingIcon = false;
+    private int mNowBarBatteryChargingIconStyle = -1;
+    private boolean mNowBarBatteryIndicateFastCharging = false, mNowBarBatteryIndicatePowerSave = false;
+    private int mNowBarBatteryFastChargingColor, mNowBarBatteryPowerSaveColor;
+    private int mNowBarBatteryTextColor = Color.WHITE;
 
     private int mAffordanceWidth = 0;
 
@@ -70,25 +105,56 @@ public class LockscreenNowBar extends XposedMods {
         mHideRightAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE, false);
         mNowBarBottomMargin = Xprefs.getSliderInt(NOW_BAR_BOTTOM_MARGIN, 12);
         mNowBarWeather = Xprefs.getBoolean(NOW_BAR_WEATHER, false);
+        mNowBarNotification = Xprefs.getBoolean(NOW_BAR_NOTIFICATIONS, false);
 
-        if (Key.length > 0 &&
-                (Key[0].equals(NOW_BAR_ENABLED) ||
-                        Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE) ||
-                        Key[0].equals(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE) ||
-                        Key[0].equals(NOW_BAR_BOTTOM_MARGIN) ||
-                        Key[0].equals(NOW_BAR_WEATHER))) {
-            updateNowBar();
+        // Music
+        mShowExtendedPlayer = Xprefs.getBoolean(NOW_BAR_MUSIC_EXTENDED_PLAYER, true);
+        mBackgroundMode = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_EXTENDED_BACKGROUND, "0"));
+
+        // Battery
+        mNowBarBatteryCustomColors = Xprefs.getBoolean(NOW_BAR_BATTERY_CUSTOM_COLORS, false);
+        mNowBarBatteryColor1 = Xprefs.getInt(NOW_BAR_BATTERY_COLOR_1, Color.parseColor("#FFFF0000"));
+        mNowBarBatteryColor2 = Xprefs.getInt(NOW_BAR_BATTERY_COLOR_2, Color.parseColor("#FFFFA500"));
+        mNowBarBatteryColor3 = Xprefs.getInt(NOW_BAR_BATTERY_COLOR_3, Color.parseColor("#FF48D5C4"));
+        mNowBarBatteryColor4 = Xprefs.getInt(NOW_BAR_BATTERY_COLOR_4, Color.parseColor("#FF4CAF50"));
+        mNowBarCustomChargingIcon = Xprefs.getBoolean(NOW_BAR_BATTERY_CHARGING_ICON_SWITCH, false);
+        mNowBarBatteryChargingIconStyle = Integer.parseInt(Xprefs.getString(NOW_BAR_BATTERY_CHARGING_ICON_STYLE, "-1"));
+        mNowBarBatteryIndicateFastCharging = Xprefs.getBoolean(NOW_BAR_BATTERY_INDICATE_FAST, false);
+        mNowBarBatteryIndicatePowerSave = Xprefs.getBoolean(NOW_BAR_BATTERY_INDICATE_POWERSAVE, false);
+        mNowBarBatteryFastChargingColor = Xprefs.getInt(NOW_BAR_BATTERY_FAST_COLOR, Color.parseColor("#FF247CFF"));
+        mNowBarBatteryPowerSaveColor = Xprefs.getInt(NOW_BAR_BATTERY_POWERSAVE_COLOR, Color.parseColor("#FFA500"));
+        mNowBarBatteryTextColor = Xprefs.getInt(NOW_BAR_BATTERY_TEXT_COLOR, Color.WHITE);
+
+        if (Key.length > 0) {
+            if (Key[0].equals(NOW_BAR_ENABLED) ||
+                    Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE) ||
+                    Key[0].equals(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE) ||
+                    Key[0].equals(NOW_BAR_BOTTOM_MARGIN) ||
+                    Key[0].equals(NOW_BAR_WEATHER) ||
+                    Key[0].equals(NOW_BAR_NOTIFICATIONS)) {
+                updateNowBar();
+            }
+            if (Key[0].equals(NOW_BAR_MUSIC_EXTENDED_PLAYER) ||
+                    Key[0].equals(NOW_BAR_MUSIC_EXTENDED_BACKGROUND)) {
+                updateMusic();
+            }
+            for (String k : NOW_BAR_BATTERY_PREFS) {
+                if (Key[0].equals(k)) {
+                    updateBattery();
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController");
+        ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
         NotificationPanelViewController
                 .after("onFinishInflate")
                 .run(param -> {
-                    mKeyguardBottomArea = (ViewGroup) getObjectField(param.thisObject, "mView");
+                    mNotificationPanelView = (ViewGroup) getObjectField(param.thisObject, "mView");
                     placeNowBar();
                 });
 
@@ -101,8 +167,8 @@ public class LockscreenNowBar extends XposedMods {
 
         Class<?> QSImpl = findClassInArray(
                 lpparam,
-            "com.android.systemui.qs.QSImpl", //OOS15
-            "com.android.systemui.qs.QSFragment" //OOS14
+                "com.android.systemui.qs.QSImpl", //OOS15
+                "com.android.systemui.qs.QSFragment" //OOS14
         );
         hookAllMethods(QSImpl, "setQsExpansion", new XC_MethodHook() {
             @Override
@@ -124,39 +190,42 @@ public class LockscreenNowBar extends XposedMods {
             }
         });
 
-        ReflectedClass MediaHierarchyManager = ReflectedClass.of("com.android.systemui.media.controls.ui.controller.MediaHierarchyManager", lpparam.classLoader);
-        MediaHierarchyManager
-                .before("getAllowMediaPlayerOnLockScreen")
-                .run(param -> {
-                    if (mNowBarEnabled) param.setResult(false);
-                });
-        MediaHierarchyManager
-                .before("setAllowMediaPlayerOnLockScreen")
-                .run(param -> param.args[0] = !mNowBarEnabled);
+        ReflectedClass KeyguardGlideTipView = ReflectedClass.ofIfPossible("com.oplusos.systemui.keyguard.view.KeyguardGlideTipView", lpparam.classLoader);
+        if (KeyguardGlideTipView.getClazz() != null) {
+            KeyguardGlideTipView
+                    .after("onFinishInflate")
+                    .run(param -> mKeyguardTipView = (View) param.thisObject);
+            KeyguardGlideTipView
+                    .before("getIfNeedHide")
+                    .run(param -> {
+                        if (mNowBarEnabled && mExpanded) {
+                            param.setResult(true);
+                        }
+                    });
+        }
 
         ControllersProvider.registerDozingCallback(mDozingChanged);
 
     }
 
     private final NowBarMusic.MusicExpansionListener musicExpansionListener = expanded -> {
-        if (!expanded) {
-            updateBarMargins();
-        } else {
-            NowBarController mNowBarController = NowBarController.getInstance();
-            mNowBarController.updateMargins(
-                    dp2px(mContext, 12),
-                    dp2px(mContext, 12),
-                    dp2px(mContext, mNowBarBottomMargin)
-            );
-        }
+        mExpanded = expanded;
+        updateTipView();
         Intent intent = new Intent(ACTIONS_NOW_BAR_EXPANDED_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra("isExpanded", expanded);
         mContext.sendBroadcast(intent);
     };
 
+    private void updateTipView() {
+        try {
+            if (mExpanded) mKeyguardTipView.setVisibility(View.GONE);
+        } catch (Throwable ignored) {
+        }
+    }
+
     private void placeNowBar() {
-        if (mKeyguardBottomArea == null) return;
+        if (mNotificationPanelView == null) return;
         NowBarHolder mNowBarHolder = NowBarHolder.getInstance(mContext, musicExpansionListener);
         try {
             ((ViewGroup) mNowBarHolder.getParent()).removeView(mNowBarHolder);
@@ -164,8 +233,10 @@ public class LockscreenNowBar extends XposedMods {
         }
         mNowBarLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         mNowBarLayout.addView(mNowBarHolder);
-        mKeyguardBottomArea.addView(mNowBarLayout, mKeyguardBottomArea.getChildCount() - 1);
+        mNotificationPanelView.addView(mNowBarLayout, mNotificationPanelView.getChildCount() - 1);
         updateNowBar();
+        updateMusic();
+        updateBattery();
     }
 
     private void updateNowBar() {
@@ -180,6 +251,7 @@ public class LockscreenNowBar extends XposedMods {
         NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.setNowBarEnabled(mNowBarEnabled);
         mNowBarController.setNowBarWeatherEnabled(mNowBarWeather);
+        mNowBarController.setNowBarNotificationEnabled(mNowBarNotification);
         updateBarMargins();
     }
 
@@ -190,6 +262,23 @@ public class LockscreenNowBar extends XposedMods {
                 isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
                 isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
                 dp2px(mContext, mNowBarBottomMargin)
+        );
+    }
+
+    private void updateMusic() {
+        NowBarController mNowBarController = NowBarController.getInstance();
+        if (mNowBarController == null) return;
+        mNowBarController.updateMusic(mShowExtendedPlayer, mBackgroundMode);
+    }
+
+    private void updateBattery() {
+        NowBarController mNowBarController = NowBarController.getInstance();
+        if (mNowBarController == null) return;
+        mNowBarController.updateBattery(
+                mNowBarCustomChargingIcon ? mNowBarBatteryChargingIconStyle : -1,
+                mNowBarBatteryCustomColors, mNowBarBatteryColor1, mNowBarBatteryColor2, mNowBarBatteryColor3, mNowBarBatteryColor4,
+                mNowBarBatteryIndicateFastCharging, mNowBarBatteryFastChargingColor, mNowBarBatteryIndicatePowerSave, mNowBarBatteryPowerSaveColor,
+                mNowBarBatteryTextColor
         );
     }
 

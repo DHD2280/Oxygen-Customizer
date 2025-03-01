@@ -501,6 +501,41 @@ public final class Constants {
             public static final String NOW_BAR_ENABLED = "lockscreen_now_bar_enabled";
             public static final String NOW_BAR_BOTTOM_MARGIN = "lockscreen_now_bar_bottom_margin";
             public static final String NOW_BAR_WEATHER = "lockscreen_now_bar_weather";
+            public static final String NOW_BAR_NOTIFICATIONS = "lockscreen_now_bar_notifications";
+
+            // Music
+            public static final String NOW_BAR_MUSIC_EXTENDED_PLAYER = "lockscreen_now_bar_music_extended_player";
+            public static final String NOW_BAR_MUSIC_EXTENDED_BACKGROUND = "lockscreen_now_bar_music_extended_background_mode";
+
+            // Battery
+            public static final String NOW_BAR_BATTERY_CHARGING_ICON_SWITCH = "lockscreen_now_bar_battery_custom_icon_switch";
+            public static final String NOW_BAR_BATTERY_CHARGING_ICON_STYLE = "lockscreen_now_bar_battery_custom_style";
+            public static final String NOW_BAR_BATTERY_CUSTOM_COLORS = "lockscreen_now_bar_battery_custom_colors";
+            public static final String NOW_BAR_BATTERY_COLOR_1 = "lockscreen_now_bar_battery_0_20";
+            public static final String NOW_BAR_BATTERY_COLOR_2 = "lockscreen_now_bar_battery_21_30";
+            public static final String NOW_BAR_BATTERY_COLOR_3 = "lockscreen_now_bar_battery_31_60";
+            public static final String NOW_BAR_BATTERY_COLOR_4 = "lockscreen_now_bar_battery_61_100";
+            public static final String NOW_BAR_BATTERY_INDICATE_FAST = "lockscreen_now_bar_battery_indicate_fastcharge";
+            public static final String NOW_BAR_BATTERY_INDICATE_POWERSAVE = "lockscreen_now_bar_battery_indicate_powersave";
+            public static final String NOW_BAR_BATTERY_FAST_COLOR = "lockscreen_now_bar_battery_powersave_color";
+            public static final String NOW_BAR_BATTERY_POWERSAVE_COLOR = "lockscreen_now_bar_battery_fastcharge_color";
+            public static final String NOW_BAR_BATTERY_TEXT_COLOR = "lockscreen_now_bar_battery_text_color";
+
+            public static final String[] NOW_BAR_BATTERY_PREFS =  {
+                    NOW_BAR_BATTERY_CHARGING_ICON_SWITCH,
+                    NOW_BAR_BATTERY_CHARGING_ICON_STYLE,
+                    NOW_BAR_BATTERY_CUSTOM_COLORS,
+                    NOW_BAR_BATTERY_COLOR_1,
+                    NOW_BAR_BATTERY_COLOR_2,
+                    NOW_BAR_BATTERY_COLOR_3,
+                    NOW_BAR_BATTERY_COLOR_4,
+                    NOW_BAR_BATTERY_INDICATE_FAST,
+                    NOW_BAR_BATTERY_INDICATE_POWERSAVE,
+                    NOW_BAR_BATTERY_FAST_COLOR,
+                    NOW_BAR_BATTERY_POWERSAVE_COLOR,
+                    NOW_BAR_BATTERY_TEXT_COLOR
+            };
+
         }
 
         public static class DepthWallpaper {

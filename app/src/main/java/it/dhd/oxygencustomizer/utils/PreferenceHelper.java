@@ -91,6 +91,17 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_1;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_2;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_3;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_4;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_FAST_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_FAST;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_2_KEY;
@@ -711,6 +722,23 @@ public class PreferenceHelper {
                  LOCKSCREEN_WIDGETS_SMALL_ICON_ACTIVE,
                  LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_CUSTOM_COLOR, false);
+            }
+
+            // Lockscreen Now Bar
+            case NOW_BAR_BATTERY_CHARGING_ICON_STYLE -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_CHARGING_ICON_SWITCH, false);
+            }
+            case NOW_BAR_BATTERY_COLOR_1,
+                 NOW_BAR_BATTERY_COLOR_2,
+                    NOW_BAR_BATTERY_COLOR_3,
+                    NOW_BAR_BATTERY_COLOR_4 -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_CUSTOM_COLORS, false);
+            }
+            case NOW_BAR_BATTERY_FAST_COLOR -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_INDICATE_FAST, false);
+            }
+            case NOW_BAR_BATTERY_POWERSAVE_COLOR -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_INDICATE_POWERSAVE, false);
             }
 
             // Aod Clocks
