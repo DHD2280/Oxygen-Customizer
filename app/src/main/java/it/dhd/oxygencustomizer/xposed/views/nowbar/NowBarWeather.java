@@ -41,6 +41,10 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
     private TextView mCondition;
     private ImageView mConditionImage;
 
+    private boolean mCustomColors = false;
+    private int mTextColor = Color.WHITE;
+    private int mBackgroundColor = Color.parseColor("#0D47A1");
+
     public NowBarWeather(Context context) {
         super(context);
         mContext = context;
@@ -52,7 +56,7 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
 
         inflateView();
         enableUpdates();
-        setBarBackground(Color.parseColor("#0D47A1"));
+        setBarBackground();
 
         setOnLongClickListener(v -> {
             mActivityLauncherUtils.launchWeatherActivity(false);
@@ -60,9 +64,9 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         });
     }
 
-    private void setBarBackground(int color) {
+    private void setBarBackground() {
         GradientDrawable background = new GradientDrawable();
-        background.setColor(color);
+        background.setColor(mCustomColors ? mBackgroundColor : Color.parseColor("#0D47A1"));
         background.setCornerRadius(100f);
         setBackground(background);
     }
@@ -171,6 +175,17 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
             setTextRecursively(this, "");
             mConditionImage.setImageDrawable(null);
         }
+    }
+
+    public void setOptions(
+            boolean customColor, int textColor, int backgroundColor
+    ) {
+        mCustomColors = customColor;
+        mTextColor = textColor;
+        mBackgroundColor = backgroundColor;
+        setBarBackground();
+        mCity.setTextColor(mTextColor);
+        mCondition.setTextColor(mTextColor);
     }
 
 }

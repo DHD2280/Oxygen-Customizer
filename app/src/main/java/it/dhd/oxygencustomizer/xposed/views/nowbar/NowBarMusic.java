@@ -110,6 +110,9 @@ public class NowBarMusic extends LinearLayout {
     // Music Expansion listener
     private final MusicExpansionListener mExpansionListener;
 
+    // Album art listener
+    private final OnAlbumArtChanged mAlbumArtListener;
+
     public boolean isExpanded() {
         return mExpanded;
     }
@@ -118,11 +121,16 @@ public class NowBarMusic extends LinearLayout {
         void onExpandedStateChanged(boolean expanded);
     }
 
-    public NowBarMusic(Context context, MusicExpansionListener listener) {
+    public interface OnAlbumArtChanged {
+        void onAlbumArtChanged(Drawable albumArt);
+    }
+
+    public NowBarMusic(Context context, MusicExpansionListener listener, OnAlbumArtChanged albumArtChanged) {
         super(context);
         instance = this;
         mContext = context;
         mExpansionListener = listener;
+        mAlbumArtListener = albumArtChanged;
         int noMediaString = mContext.getResources().getIdentifier(NO_MEDIA_ID, "string", SYSTEM_UI);
         if (noMediaString != 0x0) {
             NO_MEDIA_STRING = mContext.getResources().getString(noMediaString);
@@ -144,9 +152,9 @@ public class NowBarMusic extends LinearLayout {
         return instance;
     }
 
-    public static NowBarMusic getInstance(Context context, MusicExpansionListener listener) {
+    public static NowBarMusic getInstance(Context context, MusicExpansionListener listener, OnAlbumArtChanged albumArtChanged) {
         if (instance == null) {
-            instance = new NowBarMusic(context, listener);
+            instance = new NowBarMusic(context, listener, albumArtChanged);
         }
         return instance;
     }
@@ -413,6 +421,7 @@ public class NowBarMusic extends LinearLayout {
                 roundedDrawable.setCornerRadius(32f);
                 roundedDrawable.setAntiAlias(true);
                 mAlbumArtBig.setImageDrawable(roundedDrawable);
+                mAlbumArtListener.onAlbumArtChanged(roundedDrawable);
                 int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
                 CircleFramedDrawable drawable = new CircleFramedDrawable(bitmap, roundSize);
                 albumArt.setImageDrawable(drawable);
@@ -470,10 +479,14 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void setDefaultIcon() {
-        albumArt.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_volume_eq, null));
+        Drawable defaultIcon = ResourcesCompat.getDrawable(modRes, R.drawable.ic_volume_eq, appContext.getTheme());
+        albumArt.setImageDrawable(defaultIcon);
         albumArt.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        mAlbumArtBig.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_volume_eq, null));
+        mAlbumArtBig.setImageDrawable(defaultIcon);
         mAlbumArtBig.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(Color.parseColor("#6F161616"));
+        mAlbumArtListener.onAlbumArtChanged(background);
     }
 
     private final AudioDataProvider.MediaMetadataListener mMediaMetaDataListener = new AudioDataProvider.MediaMetadataListener() {

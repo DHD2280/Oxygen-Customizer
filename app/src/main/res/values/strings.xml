@@ -149,6 +149,7 @@
     <string name="white_color">White</string>
     <string name="black_color">Black</string>
     <string name="custom_color">Custom Color</string>
+    <string name="background_color">Background color</string>
     <string name="battery_info_button_title">Battery info…</string>
     <string name="general_enabled">Enabled</string>
     <string name="general_disabled">Disabled</string>
@@ -1355,12 +1356,13 @@
     <string name="lockscreen_now_bar_music_extended_player">Extended player</string>
     <string name="lockscreen_now_bar_music_extended_player_summary">Show extended player in now bar by tapping album art</string>
     <string name="lockscreen_now_bar_music_extended_player_background">Extended player background mode</string>
-    <string name="lockscreen_now_bar_music_extended_player_background_blur">Grey blur</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur">Gray blur</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Blurred album art</string>
     <string name="lockscreen_now_bar_battery">Now bar battery</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Custom charging icon</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Custom colors</string>
     <string name="lockscreen_now_bar_battery_custom_colors_summary">Customize now bar colors</string>
+    <string name="lockscreen_now_bar_weather_category">Now bar weather</string>
     <string name="lockscreen_now_bar_footer">Now bar is a little bar placed between the two affordance buttons in lockscreen.\nIt can show media player, battery status and optionally weather.\nIf you don\'t want to see stock media player, just hide it in stock settings.\nNote: if you hide both affordance buttons, the now bar will take the entire space.</string>
 
     <!-- Lag Fix Strings -->

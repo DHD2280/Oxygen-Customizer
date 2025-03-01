@@ -169,7 +169,9 @@ public class NowBarNotification extends RelativeLayout {
         }
         Pair<String, String> ntf = NotificationUtils.resolveNotificationContent(currentDisplayedNotification);
         mTitle.setText(ntf.first);
+        mTitle.setSelected(true);
         mMessage.setText(ntf.second);
+        mMessage.setSelected(true);
         mIcon.setImageDrawable(NotificationUtils.resolveSmallIcon(currentDisplayedNotification, mContext));
     }
 

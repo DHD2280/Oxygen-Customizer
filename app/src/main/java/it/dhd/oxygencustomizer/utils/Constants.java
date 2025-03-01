@@ -517,9 +517,14 @@ public final class Constants {
             public static final String NOW_BAR_BATTERY_COLOR_4 = "lockscreen_now_bar_battery_61_100";
             public static final String NOW_BAR_BATTERY_INDICATE_FAST = "lockscreen_now_bar_battery_indicate_fastcharge";
             public static final String NOW_BAR_BATTERY_INDICATE_POWERSAVE = "lockscreen_now_bar_battery_indicate_powersave";
-            public static final String NOW_BAR_BATTERY_FAST_COLOR = "lockscreen_now_bar_battery_powersave_color";
-            public static final String NOW_BAR_BATTERY_POWERSAVE_COLOR = "lockscreen_now_bar_battery_fastcharge_color";
+            public static final String NOW_BAR_BATTERY_FAST_COLOR = "lockscreen_now_bar_battery_fastcharge_color";
+            public static final String NOW_BAR_BATTERY_POWERSAVE_COLOR = "lockscreen_now_bar_battery_powersave_color";
             public static final String NOW_BAR_BATTERY_TEXT_COLOR = "lockscreen_now_bar_battery_text_color";
+
+            // Weather
+            public static final String NOW_BAR_WEATHER_CUSTOM_COLORS = "lockscreen_now_bar_weather_custom_colors";
+            public static final String NOW_BAR_WEATHER_BACKGROUND_COLOR = "lockscreen_now_bar_weather_background_color";
+            public static final String NOW_BAR_WEATHER_TEXT_COLOR = "lockscreen_now_bar_weather_text_color";
 
             public static final String[] NOW_BAR_BATTERY_PREFS =  {
                     NOW_BAR_BATTERY_CHARGING_ICON_SWITCH,

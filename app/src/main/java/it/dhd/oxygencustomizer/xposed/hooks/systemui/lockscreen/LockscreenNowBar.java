@@ -27,6 +27,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
@@ -83,6 +86,11 @@ public class LockscreenNowBar extends XposedMods {
     private int mNowBarBatteryFastChargingColor, mNowBarBatteryPowerSaveColor;
     private int mNowBarBatteryTextColor = Color.WHITE;
 
+    // Weather
+    private boolean mNowBarWeatherCustomColors = false;
+    private int mNowBarWeatherBackgroundColor = Color.parseColor("#0D47A1");
+    private int mNowBarWeatherTextColor = Color.WHITE;
+
     private int mAffordanceWidth = 0;
 
     public LockscreenNowBar(Context context) {
@@ -125,6 +133,11 @@ public class LockscreenNowBar extends XposedMods {
         mNowBarBatteryPowerSaveColor = Xprefs.getInt(NOW_BAR_BATTERY_POWERSAVE_COLOR, Color.parseColor("#FFA500"));
         mNowBarBatteryTextColor = Xprefs.getInt(NOW_BAR_BATTERY_TEXT_COLOR, Color.WHITE);
 
+        // Weather
+        mNowBarWeatherCustomColors = Xprefs.getBoolean(NOW_BAR_WEATHER_CUSTOM_COLORS, false);
+        mNowBarWeatherBackgroundColor = Xprefs.getInt(NOW_BAR_WEATHER_BACKGROUND_COLOR, Color.parseColor("#0D47A1"));
+        mNowBarWeatherTextColor = Xprefs.getInt(NOW_BAR_WEATHER_TEXT_COLOR, Color.WHITE);
+
         if (Key.length > 0) {
             if (Key[0].equals(NOW_BAR_ENABLED) ||
                     Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE) ||
@@ -143,6 +156,11 @@ public class LockscreenNowBar extends XposedMods {
                     updateBattery();
                     break;
                 }
+            }
+            if (Key[0].equals(NOW_BAR_WEATHER_BACKGROUND_COLOR) ||
+                    Key[0].equals(NOW_BAR_WEATHER_TEXT_COLOR) ||
+                    Key[0].equals(NOW_BAR_WEATHER_CUSTOM_COLORS)) {
+                updateWeather();
             }
         }
     }
@@ -237,6 +255,7 @@ public class LockscreenNowBar extends XposedMods {
         updateNowBar();
         updateMusic();
         updateBattery();
+        updateWeather();
     }
 
     private void updateNowBar() {
@@ -279,6 +298,14 @@ public class LockscreenNowBar extends XposedMods {
                 mNowBarBatteryCustomColors, mNowBarBatteryColor1, mNowBarBatteryColor2, mNowBarBatteryColor3, mNowBarBatteryColor4,
                 mNowBarBatteryIndicateFastCharging, mNowBarBatteryFastChargingColor, mNowBarBatteryIndicatePowerSave, mNowBarBatteryPowerSaveColor,
                 mNowBarBatteryTextColor
+        );
+    }
+
+    private void updateWeather() {
+        NowBarController mNowBarController = NowBarController.getInstance();
+        if (mNowBarController == null) return;
+        mNowBarController.updateWeather(
+                mNowBarWeatherCustomColors, mNowBarWeatherTextColor, mNowBarWeatherBackgroundColor
         );
     }
 

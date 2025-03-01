@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils.getNewAutoBlurDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -35,7 +34,6 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
-import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.ExtendedViewPager;
 
@@ -99,6 +97,12 @@ public class NowBarHolder extends LinearLayout {
         parentExpandedListener.onExpandedStateChanged(expanded);
         updatePagerParams(expanded);
         updateBackground(expanded);
+    };
+
+    private final NowBarMusic.OnAlbumArtChanged albumArtListener = albumArt -> {
+        if (mBlurredAlbumArt != null) {
+            mBlurredAlbumArt.setImageDrawable(albumArt);
+        }
     };
 
     private final NowBarNotification.OnUsefulNotificationListener notificationListener = () -> {
@@ -165,13 +169,12 @@ public class NowBarHolder extends LinearLayout {
                 MATCH_PARENT,
                 MATCH_PARENT
         ));
-        mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener);
+        mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener, albumArtListener);
         mNowBarBattery = new NowBarBattery(mContext);
         mNowBarWeather = new NowBarWeather(mContext);
         mNowBarNotification = new NowBarNotification(mContext, notificationListener);
         mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
         setupPager();
-//        mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled, mNotificationEnabled));
         mViewPager.setPageTransformer(false, new PageTransitionTransformer());
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -344,7 +347,6 @@ public class NowBarHolder extends LinearLayout {
 
     private void showMusicNowBarIfNeeded(int state) {
         if (state != PlaybackState.STATE_PLAYING) return;
-        mBlurredAlbumArt.setImageBitmap(getArt());
         mViewPager.setCurrentItem(0);
     }
 
@@ -389,6 +391,12 @@ public class NowBarHolder extends LinearLayout {
                     indicateFast, fastColor, indicatePowerSave, powerSaveColor,
                     textColor
             );
+        }
+    }
+
+    public void updateWeather(boolean customColors, int textColor, int backgroundColor) {
+        if (mNowBarWeather != null) {
+            mNowBarWeather.setOptions(customColors, textColor, backgroundColor);
         }
     }
 

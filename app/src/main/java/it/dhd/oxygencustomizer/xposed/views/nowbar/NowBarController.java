@@ -151,6 +151,12 @@ public class NowBarController {
         }
     }
 
+    public void updateWeather(boolean customColors, int textColor, int backgroundColor) {
+        if (mView != null) {
+            mView.updateWeather(customColors, textColor, backgroundColor);
+        }
+    }
+
     private void logD(String message) {
         if (!DEBUG) return;
         XposedBridge.log("NowBarController" + "\n" + message + "\n" +
