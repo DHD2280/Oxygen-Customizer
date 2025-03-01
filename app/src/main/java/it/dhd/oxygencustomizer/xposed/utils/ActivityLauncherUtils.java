@@ -103,6 +103,14 @@ public class ActivityLauncherUtils {
 
     /**
      * Launches an app using the ActivityStarter
+     * @param packageName The package name of the app
+     */
+    public void launchApp(String packageName) {
+        launchApp(packageName, false);
+    }
+
+    /**
+     * Launches an app using the ActivityStarter
      * dismissing the shade.
      * Used for launching apps from Quick Settings.
      * @param packageName The package name of the app
