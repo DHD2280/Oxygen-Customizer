@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.views.nowbar;
 import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setTextRecursively;
 
 import android.annotation.SuppressLint;
@@ -67,7 +68,7 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
     }
 
     private void inflateView() {
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(mContext, 72)));
         LayoutInflater inflater = LayoutInflater.from(appContext);
         @SuppressLint("DiscouragedApi") View v = inflater.inflate(
                 appContext
@@ -82,7 +83,6 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         mCity = (TextView) ViewHelper.findViewWithTag(v, "city");
         mCondition = (TextView) ViewHelper.findViewWithTag(v, "current_condition");
         mConditionImage = (ImageView) ViewHelper.findViewWithTag(v, "condition_image");
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         v.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         addView(v);
     }

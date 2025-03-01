@@ -24,6 +24,7 @@ public class NowBarController {
 
     private boolean mEnabled = true;
     private boolean mWeatherEnabled = false;
+    private boolean mNotificationEnabled = false;
     private int mLeftMargin, mRightMargin, mBottomMargin;
 
     private NowBarController(Context context) {
@@ -49,6 +50,7 @@ public class NowBarController {
         mView = view;
         mView.updateMargins(mLeftMargin, mRightMargin, mBottomMargin);
         mView.setWeatherEnabled(mWeatherEnabled);
+        mView.setNotificationEnabled(mNotificationEnabled);
         updateVisibility();
     }
 
@@ -117,11 +119,36 @@ public class NowBarController {
         if (mView != null) mView.setWeatherEnabled(weatherEnabled);
     }
 
+    public void setNowBarNotificationEnabled(boolean notificationEnabled) {
+        mNotificationEnabled = notificationEnabled;
+        if (mView != null) mView.setNotificationEnabled(notificationEnabled);
+    }
+
     public void updateMargins(int left, int right, int bottom) {
         mLeftMargin = left;
         mRightMargin = right;
         mBottomMargin = bottom;
         if (mView != null) mView.updateMargins(left, right, bottom);
+    }
+
+    public void updateMusic(boolean extendedPlayer, int backgroundMode) {
+        if (mView != null) {
+            mView.updateMusic(extendedPlayer, backgroundMode);
+        }
+    }
+
+    public void updateBattery(int chargingIconStyle,
+                              boolean customColors, int color1, int color2, int color3, int color4,
+                              boolean indicateFast, int fastColor, boolean indicatePowerSave, int powerSaveColor,
+                              int textColor) {
+        if (mView != null) {
+            mView.updateBattery(
+                    chargingIconStyle,
+                    customColors, color1, color2, color3, color4,
+                    indicateFast, fastColor, indicatePowerSave, powerSaveColor,
+                    textColor
+            );
+        }
     }
 
     private void logD(String message) {

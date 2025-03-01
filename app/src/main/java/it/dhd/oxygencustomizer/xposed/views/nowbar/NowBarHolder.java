@@ -1,5 +1,8 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils.getNewAutoBlurDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
@@ -7,23 +10,32 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.session.PlaybackState;
 import android.os.BatteryManager;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import de.robv.android.xposed.XposedBridge;
+import java.util.ArrayList;
+import java.util.List;
+
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.ExtendedViewPager;
 
@@ -36,34 +48,64 @@ public class NowBarHolder extends LinearLayout {
     private final Context mContext;
     private Context appContext;
 
+    // Our pages
+    private NowBarMusic mNowBarMusic;
+    private NowBarBattery mNowBarBattery;
+    private NowBarWeather mNowBarWeather;
+    private NowBarNotification mNowBarNotification;
+
+    // Backgrounds
     private FrameLayout mBlurredBackground;
+    private ImageView mBlurredAlbumArt;
+    private int mBackgroundMode = 0;
+
     private LinearLayout mPagerContainer;
+
+    // Pager
     private ExtendedViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
+    private final List<View> mPages = new ArrayList<>();
+
+    // Controller
     private NowBarController mController;
+
+    // Vars
     private boolean mWeatherEnabled = false;
+    private boolean mNotificationEnabled = true;
     public NowBarMusic.MusicExpansionListener parentExpandedListener;
     private boolean mExpanded = false;
+    private int mLeftMargin, mRightMargin, mBottomMargin;
 
     private boolean isChargingStatusHandled = false;
 
-    private static final NowBarMusic.MusicExpansionListener musicExpansionListener = expanded -> {
-        instance.mExpanded = expanded;
-        instance.mViewPager.setExpanded(expanded);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                expanded ? RelativeLayout.LayoutParams.MATCH_PARENT : dp2px(instance.mContext, 72)
-        );
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        instance.parentExpandedListener.onExpandedStateChanged(expanded);
-        instance.mPagerContainer.setLayoutParams(params);
-        instance.mPagerContainer.requestLayout();
-        instance.mViewPager.requestLayout();
-        instance.mBlurredBackground.setVisibility(expanded ? View.VISIBLE : View.GONE);
-        instance.mBlurredBackground.setRenderEffect(
-                expanded ?
-                RenderEffect.createBlurEffect(
-                        75, 75, Shader.TileMode.CLAMP) :
-                null);
+    private void updateBackground(boolean expanded) {
+        if (mBackgroundMode == 0) {
+            mBlurredAlbumArt.setVisibility(View.GONE);
+            mBlurredBackground.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        } else {
+            mBlurredBackground.setVisibility(View.GONE);
+            mBlurredAlbumArt.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            mBlurredAlbumArt.setRenderEffect(expanded ?
+                    RenderEffect.createBlurEffect(
+                            50, 50, Shader.TileMode.CLAMP) :
+                    null);
+        }
+    }
+
+    private final NowBarMusic.MusicExpansionListener musicExpansionListener = expanded -> {
+        mExpanded = expanded;
+        mViewPager.setExpanded(expanded);
+
+        parentExpandedListener.onExpandedStateChanged(expanded);
+        updatePagerParams(expanded);
+        updateBackground(expanded);
+    };
+
+    private final NowBarNotification.OnUsefulNotificationListener notificationListener = () -> {
+        if (AudioDataProvider.isMediaPlaying()) return;
+        if (mExpanded || !mNotificationEnabled) return;
+        if (mWeatherEnabled) mViewPager.setCurrentItem(3);
+        else mViewPager.setCurrentItem(2);
     };
 
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
@@ -116,39 +158,79 @@ public class NowBarHolder extends LinearLayout {
         );
         mController = NowBarController.getInstance(mContext);
         mBlurredBackground = (FrameLayout) ViewHelper.findViewWithTag(view, "nowBarBlurredBackground");
-        mBlurredBackground.setRenderEffect(
-                RenderEffect.createBlurEffect(
-                        75, 75, Shader.TileMode.CLAMP));
+        mBlurredAlbumArt = (ImageView) ViewHelper.findViewWithTag(view, "nowBarBlurredAlbumArt");
         mPagerContainer = (LinearLayout) ViewHelper.findViewWithTag(view, "nowBarViewPagerContainer");
         mViewPager = new ExtendedViewPager(mContext);
         mViewPager.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
+                MATCH_PARENT,
+                MATCH_PARENT
         ));
-        mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled));
+        mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener);
+        mNowBarBattery = new NowBarBattery(mContext);
+        mNowBarWeather = new NowBarWeather(mContext);
+        mNowBarNotification = new NowBarNotification(mContext, notificationListener);
+        mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
+        setupPager();
+//        mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled, mNotificationEnabled));
         mViewPager.setPageTransformer(false, new PageTransitionTransformer());
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // ensure that media player is match parent height if expanded
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT,
-                        mExpanded && position == 0 ? RelativeLayout.LayoutParams.MATCH_PARENT : dp2px(instance.mContext, 72)
-                );
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                mPagerContainer.setLayoutParams(params);
-                if (position != 0) {
-                    mViewPager.setExpanded(false); // if there is a page change, ensure that it can swipe
-                }
+                boolean expanded = position == 0 && mNowBarMusic != null && mNowBarMusic.isExpanded();
+                mViewPager.setExpanded(expanded); // if there is a page change, ensure that it can swipe
+                updatePagerParams(expanded);
             }
         });
         mPagerContainer.addView(mViewPager);
         addView(view);
+        if (Build.VERSION.SDK_INT >= 35) {
+            GradientDrawable background = new GradientDrawable();
+            background.setColor(Color.parseColor("#6F161616"));
+            Drawable blurred = getNewAutoBlurDrawable(mBlurredBackground, background, 0);
+            mBlurredBackground.setBackground(blurred);
+        }
+        mBlurredBackground.setVisibility(View.GONE);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         mContext.registerReceiver(batteryReceiver, filter, Context.RECEIVER_EXPORTED);
         mController.setNowBarHolder(this);
+    }
+
+    private void setupPager() {
+        mPagerAdapter = new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return mPages.size();
+            }
+
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                return view == object;
+            }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view = mPages.get(position);
+                container.addView(view);
+                return view;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView((View) object);
+            }
+        };
+    }
+
+    private void updatePagerParams(boolean expanded) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mPagerContainer.getLayoutParams();
+        params.height = expanded ? MATCH_PARENT : dp2px(mContext, 72);
+        params.setMargins(expanded ? dp2px(mContext, 12) : mLeftMargin, 0, expanded ? dp2px(mContext, 12) : mRightMargin, mBottomMargin);
+        params.gravity = Gravity.BOTTOM;
+        mPagerContainer.setLayoutParams(params);
     }
 
     @Override
@@ -168,43 +250,59 @@ public class NowBarHolder extends LinearLayout {
         mContext.unregisterReceiver(batteryReceiver);
     }
 
-    private static class NowBarAdapter extends PagerAdapter {
-
-        private final Context context;
-        private final boolean weatherEnabled;
-
-        public NowBarAdapter(Context context, boolean weatherEnabled) {
-            this.context = context;
-            this.weatherEnabled = weatherEnabled;
-        }
-
-        @Override
-        public int getCount() {
-            return weatherEnabled ? 3 : 2;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull View container, int position) {
-            View view = switch (position) {
-                case 1 -> new NowBarBattery(context);
-                case 2 -> new NowBarWeather(context);
-                default -> NowBarMusic.getInstance(context, musicExpansionListener);
-            };
-            ((ViewPager) container).addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(@NonNull View container, int position, @NonNull Object object) {
-            ((ViewPager) container).removeView((View) object);
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-    }
+//    private static class NowBarAdapter extends PagerAdapter {
+//
+//        private final Context context;
+//        private final boolean weatherEnabled;
+//        private final boolean notificationEnabled;
+//
+//        public NowBarAdapter(Context context, boolean weatherEnabled, boolean notificationEnabled) {
+//            this.context = context;
+//            this.weatherEnabled = weatherEnabled;
+//            this.notificationEnabled = notificationEnabled;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            if (weatherEnabled && notificationEnabled) return 4;
+//            if (weatherEnabled || notificationEnabled) return 3;
+//            return 2;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public Object instantiateItem(@NonNull View container, int position) {
+//            View view;
+//            switch (position) {
+//                case 1 -> {
+//                    view = instance.mNowBarBattery;
+//                    break;
+//                }
+//                case 2 -> {
+//                    if (weatherEnabled && !notificationEnabled) {
+//                        view = instance.mNowBarWeather;
+//                    } else {
+//                        view = instance.mNowBarNotification;
+//                    }
+//                    break;
+//                }
+//                case 3 -> view = instance.mNowBarNotification;
+//                default -> view = instance.mNowBarMusic;
+//            };
+//            ((ViewPager) container).addView(view);
+//            return view;
+//        }
+//
+//        @Override
+//        public void destroyItem(@NonNull View container, int position, @NonNull Object object) {
+//            ((ViewPager) container).removeView((View) object);
+//        }
+//
+//        @Override
+//        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+//            return view == object;
+//        }
+//    }
 
     private static class PageTransitionTransformer implements ViewPager.PageTransformer {
 
@@ -246,12 +344,21 @@ public class NowBarHolder extends LinearLayout {
 
     private void showMusicNowBarIfNeeded(int state) {
         if (state != PlaybackState.STATE_PLAYING) return;
+        mBlurredAlbumArt.setImageBitmap(getArt());
         mViewPager.setCurrentItem(0);
     }
 
     private void refreshViewPager() {
-        mViewPager.setAdapter(new NowBarAdapter(mContext, mWeatherEnabled));
+        mViewPager.setAdapter(null);
+        mPages.clear();
+        mPagerAdapter.notifyDataSetChanged();
+        mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
+        if (mWeatherEnabled) mPages.add(mNowBarWeather);
+        if (mNotificationEnabled) mPages.add(mNowBarNotification);
+        mPagerAdapter.notifyDataSetChanged();
+        mViewPager.setAdapter(mPagerAdapter);
         if (mWeatherEnabled) mViewPager.setCurrentItem(2);
+        else mViewPager.setCurrentItem(0);
     }
 
     public void setWeatherEnabled(boolean enabled) {
@@ -259,8 +366,37 @@ public class NowBarHolder extends LinearLayout {
         refreshViewPager();
     }
 
+    public void setNotificationEnabled(boolean enabled) {
+        mNotificationEnabled = enabled;
+        refreshViewPager();
+    }
+
     public void updateMargins(int left, int right, int bottom) {
-        ViewHelper.setMarginsNoConvert(this, mContext, left, 0, right, bottom);
+        mLeftMargin = left;
+        mRightMargin = right;
+        mBottomMargin = bottom;
+        updatePagerParams(false);
+    }
+
+    public void updateBattery(int chargingIconStyle,
+                              boolean customColors, int color1, int color2, int color3, int color4,
+                              boolean indicateFast, int fastColor, boolean indicatePowerSave, int powerSaveColor,
+                              int textColor) {
+        if (mNowBarBattery != null) {
+            mNowBarBattery.setBatteryBarOptions(
+                    chargingIconStyle,
+                    customColors, color1, color2, color3, color4,
+                    indicateFast, fastColor, indicatePowerSave, powerSaveColor,
+                    textColor
+            );
+        }
+    }
+
+    public void updateMusic(boolean extendedPlayer, int backgroundMode) {
+        if (mNowBarMusic != null) {
+            mNowBarMusic.setExtendedPlayerEnabled(extendedPlayer);
+        }
+        mBackgroundMode = backgroundMode;
     }
 
 }

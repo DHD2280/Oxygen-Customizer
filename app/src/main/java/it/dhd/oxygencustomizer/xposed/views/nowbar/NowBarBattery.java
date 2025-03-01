@@ -2,7 +2,10 @@ package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isFastCharging;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isPowerSaving;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -16,27 +19,21 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.icu.text.MeasureFormat;
-import android.icu.util.Measure;
-import android.icu.util.MeasureUnit;
 import android.os.BatteryManager;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.text.NumberFormat;
-import java.util.Locale;
 
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -55,6 +52,7 @@ public class NowBarBattery extends RelativeLayout {
     private float mTemperature;
     private String mChargingString;
     private BroadcastReceiver mBatteryReceiver;
+    private boolean mBroadcastRegistered = false;
 
     private ValueAnimator mColorAnimator;
     private LayerDrawable mChargingIconDrawable;
@@ -64,6 +62,22 @@ public class NowBarBattery extends RelativeLayout {
 
     private String mChargingSpeed;
     private boolean mPowerCharged;
+    private boolean mSuperPowerSave = false;
+
+    private boolean mCustomColors = false;
+    private int mColor1 = Color.parseColor("#FFFF0000"),
+            mColor2 = Color.parseColor("#FFFFA500"),
+            mColor3 = Color.parseColor("#FF48D5C4"),
+            mColor4 = Color.parseColor("#FF4CAF50");
+    private int mFastChargingColor = Color.parseColor("#FF247CFF"), mPowerSaveColor = Color.parseColor("#FFA500");
+    private int mChargingIconStyle = -1;
+    private int mTextColor = Color.WHITE;
+    private boolean mIndicateFastCharging = false, mIndicatePowerSave = false;
+
+    private SuperPowerSaveObserver.SuperPowerSaveListener mSuperPowerSaveListener = superPowerSave -> {
+        mSuperPowerSave = superPowerSave;
+        updateBatteryUI();
+    };
 
     public NowBarBattery(Context context) {
         super(context);
@@ -73,9 +87,13 @@ public class NowBarBattery extends RelativeLayout {
         } catch (Throwable ignored) {}
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
         init();
-        initBatteryReceiver(context);
-        mContext.registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        initBatteryReceiver();
+        if (!mBroadcastRegistered) {
+            mContext.registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            mBroadcastRegistered = true;
+        }
         BatteryDataProvider.registerOplusBatteryCallback(this::updateOplusBatteryStats);
+        SuperPowerSaveObserver.registerSuperPowerSaveCallback(mSuperPowerSaveListener);
 
         setOnLongClickListener(v -> {
             mActivityLauncherUtils.launchApp(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY));
@@ -84,21 +102,64 @@ public class NowBarBattery extends RelativeLayout {
     }
 
     private void init() {
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(mContext, 72)));
         inflate(appContext, R.layout.now_bar_charging_info, this);
         mChargingIcon = (ImageView) ViewHelper.findViewWithTag(this, "charging_icon");
         mChargingInfo = (TextView) ViewHelper.findViewWithTag(this, "charging_info");
 
-        int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
-        GradientDrawable background = new GradientDrawable();
-        background.setCornerRadius(roundSize);
-        background.setColor(Color.WHITE);
-        Drawable chargingIcon = ResourcesCompat.getDrawable(modRes, R.drawable.ic_battery, appContext.getTheme());
-        mChargingIconDrawable = new LayerDrawable(new Drawable[]{background, chargingIcon});
-        mChargingIcon.setImageDrawable(mChargingIconDrawable);
+        updateChargingIcon();
     }
 
-    private void initBatteryReceiver(Context context) {
+    private Drawable getChargingIcon(int style) {
+        return switch (style) {
+            case 0 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_bold, mContext.getTheme());
+            case 1 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_asus, mContext.getTheme());
+            case 2 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_buddy, appContext.getTheme());
+            case 3 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_evplug, appContext.getTheme());
+            case 4 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_idc, appContext.getTheme());
+            case 5 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_ios, appContext.getTheme());
+            case 6 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_koplak, appContext.getTheme());
+            case 7 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_miui, appContext.getTheme());
+            case 8 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_mmk, appContext.getTheme());
+            case 9 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_moto, appContext.getTheme());
+            case 10 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_nokia, appContext.getTheme());
+            case 11 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_plug, appContext.getTheme());
+            case 12 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercable, appContext.getTheme());
+            case 13 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercord, appContext.getTheme());
+            case 14 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powerstation, appContext.getTheme());
+            case 15 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_realme, appContext.getTheme());
+            case 16 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_soak, appContext.getTheme());
+            case 17 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_stres, appContext.getTheme());
+            case 18 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_strip, appContext.getTheme());
+            case 19 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_usbcable, appContext.getTheme());
+            case 20 ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_xiaomi, appContext.getTheme());
+            default ->
+                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_battery, appContext.getTheme());
+        };
+    }
+
+    private void initBatteryReceiver() {
         mBatteryReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -172,21 +233,40 @@ public class NowBarBattery extends RelativeLayout {
 
 
     private int getChargingColor(int level) {
-        if (level < 20) {
-            return Color.parseColor("#FFFF0000");
-        } else if (level < 30) {
-            return Color.parseColor("#FFFFA500");
-        } else if (level < 60) {
-            return Color.parseColor("#FF48D5C4");
+        if (mIndicateFastCharging && (isFastCharging() || (mOplusBatteryStatus != null && mOplusBatteryStatus.isFastCharge()))) {
+            return mFastChargingColor;
+        } else if (mIndicatePowerSave && (isPowerSaving() || mSuperPowerSave)) {
+            return mPowerSaveColor;
         } else {
-            return Color.parseColor("#FF4CAF50");
+            if (level <= 20) {
+                return mCustomColors ? mColor1 : Color.parseColor("#FFFF0000");
+            } else if (level <= 30) {
+                return mCustomColors ? mColor2 : Color.parseColor("#FFFFA500");
+            } else if (level <= 60) {
+                return mCustomColors ? mColor3 : Color.parseColor("#FF48D5C4");
+            } else {
+                return mCustomColors ? mColor4 : Color.parseColor("#FF4CAF50");
+            }
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (!mBroadcastRegistered) {
+            mContext.registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            mBroadcastRegistered = true;
+        }
+        updateBatteryUI();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mContext.unregisterReceiver(mBatteryReceiver);
+        if (mBroadcastRegistered) {
+            mContext.unregisterReceiver(mBatteryReceiver);
+            mBroadcastRegistered = false;
+        }
         if (mColorAnimator != null && mColorAnimator.isRunning()) {
             mColorAnimator.cancel();
         }
@@ -245,7 +325,7 @@ public class NowBarBattery extends RelativeLayout {
         if (mPowerCharged) {
             return getSystemUiString(mContext, "keyguard_charge_full");
         }
-        return getChargingStringByTechnology(mContext, String.valueOf(mExtraLevel));
+        return getChargingStringByTechnology(mContext, NumberFormat.getPercentInstance().format(mExtraLevel / 100f));
     }
 
     private void updateOplusBatteryStats(OplusBatteryStatus oplusBatteryStatus) {
@@ -293,6 +373,43 @@ public class NowBarBattery extends RelativeLayout {
                         SYSTEM_UI),
                 arg
         );
+    }
+
+    public void setBatteryBarOptions(
+            int chargingIconStyle,
+            boolean customColors, int color1, int color2, int color3, int color4,
+            boolean indicateFast, int fastColor, boolean indicatePowerSave, int powerSaveColor,
+            int textColor
+    ) {
+        if (mChargingIconStyle != chargingIconStyle) {
+            this.mChargingIconStyle = chargingIconStyle;
+            updateChargingIcon();
+        }
+        this.mCustomColors = customColors;
+        this.mColor1 = color1;
+        this.mColor2 = color2;
+        this.mColor3 = color3;
+        this.mColor4 = color4;
+        this.mIndicateFastCharging = indicateFast;
+        this.mFastChargingColor = fastColor;
+        this.mIndicatePowerSave = indicatePowerSave;
+        this.mPowerSaveColor = powerSaveColor;
+        if (mTextColor != textColor) {
+            this.mTextColor = textColor;
+            mChargingInfo.setTextColor(mTextColor);
+            updateChargingIcon();
+        }
+        updateBatteryUI();
+    }
+
+    private void updateChargingIcon() {
+        int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
+        GradientDrawable background = new GradientDrawable();
+        background.setCornerRadius(roundSize);
+        background.setColor(mTextColor);
+        Drawable chargingIcon = getChargingIcon(mChargingIconStyle);
+        mChargingIconDrawable = new LayerDrawable(new Drawable[]{background, chargingIcon});
+        mChargingIcon.setImageDrawable(mChargingIconDrawable);
     }
 
 }
