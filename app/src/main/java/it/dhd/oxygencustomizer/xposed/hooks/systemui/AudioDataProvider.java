@@ -264,15 +264,16 @@ public class AudioDataProvider extends XposedMods {
 
     public long getCurrentTime() {
         MediaController controller = getActiveLocalMediaController();
-        if (controller != null) {
-            return controller.getPlaybackState().getPosition();
-        }
-        return 1L;
+        return controller != null ?
+            controller.getPlaybackState() != null ?
+                controller.getPlaybackState().getPosition() :
+                    1L :
+                1L;
     }
 
     public static long getTotalDuration() {
         MediaMetadata metadata = getMediaMetadata();
-        return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 1L;
+        return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 0L;
     }
 
     private void saveLastNonNullPackageName() {
