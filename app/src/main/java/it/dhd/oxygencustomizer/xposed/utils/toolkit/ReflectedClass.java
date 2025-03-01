@@ -62,6 +62,18 @@ public class ReflectedClass {
         return new ReflectedClass(null);
     }
 
+    public static ReflectedClass of(ClassLoader loader, String... classes) {
+        for (String clazz : classes) {
+            try {
+                Class<?> foundClass = findClass(clazz, loader);
+                if (foundClass != null) {
+                    return ReflectedClass.of(foundClass);
+                }
+            } catch (Throwable ignored) {}
+        }
+        return new ReflectedClass(null);
+    }
+
     public static void setDefaultClassloader(ClassLoader classloader) {
         if (defaultClassloader == null)
             defaultClassloader = classloader;
@@ -308,7 +320,13 @@ public class ReflectedClass {
         Set<Method> result = new ArraySet<>();
 
         Method[] methods = clazz.getMethods();
+        Method[] declaredMethods = clazz.getDeclaredMethods();
 
+        for (Method method : declaredMethods) {
+            if (namePattern.matcher(method.getName()).matches()) {
+                result.add(method);
+            }
+        }
         for (Method method : methods) {
             if (namePattern.matcher(method.getName()).matches()) {
                 result.add(method);
