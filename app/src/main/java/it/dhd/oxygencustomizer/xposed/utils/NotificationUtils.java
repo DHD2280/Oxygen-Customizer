@@ -8,8 +8,6 @@ import android.app.Person;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
@@ -19,13 +17,9 @@ import android.util.Log;
 import android.service.notification.StatusBarNotification;
 import android.util.Pair;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import de.robv.android.xposed.XposedBridge;
 
 public class NotificationUtils {
 
@@ -84,9 +78,7 @@ public class NotificationUtils {
                 iconObject = extras.get(Notification.EXTRA_SMALL_ICON);
             }
 
-            XposedBridge.log(TAG + " Icon Object Type: " + (iconObject != null ? iconObject.getClass().getName() : "null"));
-
-            if (iconObject instanceof Bitmap) {
+            if (iconObject instanceof Bitmap bitmap) {
                 return new BitmapDrawable(context.getResources(), (Bitmap) iconObject);
             } else if (iconObject instanceof Icon) {
                 return ((Icon) iconObject).loadDrawable(context);
@@ -123,7 +115,6 @@ public class NotificationUtils {
     public static Drawable resolveSmallIcon(StatusBarNotification sbn, Context context) {
         try {
             Icon icon = sbn.getNotification().getSmallIcon();
-            XposedBridge.log(TAG + " Small Icon Type: " + (icon != null ? icon.getType() : "null"));
             if (icon != null) {
                 return icon.loadDrawable(context);
             }
