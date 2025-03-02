@@ -726,6 +726,8 @@
     <string name="aod_font_line_height_title">Altura da linha</string>
     <!-- Aod Weather -->
     <string name="aod_weather">Tempo AOD</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">Diversos</string>
     <!-- Pulse music visualizer -->
@@ -1120,6 +1122,7 @@
     <string name="home_controls">Controles da tela inicial</string>
     <string name="wallet">Carteira</string>
     <string name="hotspot">Ponto de acesso</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correção de atraso do aplicativo</string>
     <string name="fix_lag_summary">Corrigir lag ao abrir o aplicativo a partir dos recentes</string>

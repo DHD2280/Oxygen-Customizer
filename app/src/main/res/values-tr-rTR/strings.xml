@@ -706,6 +706,8 @@
     <string name="aod_font_line_height_title">Satır Yüksekliği</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD Hava Durumu</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">Çeşitli</string>
     <!-- Pulse music visualizer -->
@@ -1104,6 +1106,7 @@
     <string name="home_controls">Ev Kontrolleri</string>
     <string name="wallet">Cüzdan</string>
     <string name="hotspot">Yayın noktası</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <!-- Caffeine -->
     <!-- Colors Fragment -->

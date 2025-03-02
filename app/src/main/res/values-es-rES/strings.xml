@@ -717,6 +717,8 @@
     <string name="aod_clock_custom_user_image_title">Imagen de usuario</string>
     <string name="aod_font_line_height_title">Altura de línea</string>
     <!-- Aod Weather -->
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">Misceláneo</string>
     <!-- Pulse music visualizer -->
@@ -1071,6 +1073,7 @@
     <string name="ringer">Timbre</string>
     <string name="bt">Bluetooth</string>
     <string name="wallet">Cartera</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_force_all_apps_title">Forzar todas aplicaciones</string>
     <!-- Caffeine -->
