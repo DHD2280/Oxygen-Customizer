@@ -96,5 +96,11 @@
     <dimen name="screen_preview_section_vertical_space">16dp</dimen>
     <dimen name="preview_card_padding">20dp</dimen>
 
+    <!-- Image Illustration preference -->
+    <dimen name="image_illustration_width">96dp</dimen>
+    <dimen name="image_illustration_height">184dp</dimen>
+    <dimen name="image_illustration_margin_top">16dp</dimen>
+    <dimen name="image_illustration_margin_bottom">16dp</dimen>
+    <dimen name="image_illustration_text_bottom_margin">16dp</dimen>
 
 </resources>
