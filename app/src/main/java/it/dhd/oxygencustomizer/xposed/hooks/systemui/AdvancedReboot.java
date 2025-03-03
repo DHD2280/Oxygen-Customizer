@@ -7,6 +7,8 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,10 +19,13 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricManager;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -59,13 +64,15 @@ public class AdvancedReboot extends XposedMods {
         try {
             ReflectedClass ShutdownUi = ReflectedClass.of("com.android.systemui.globalactions.ShutdownUi");
             ShutdownUi
-                    .after("getShutdownDialogContent")
+                    .afterConstruction()
                     .run(param -> {
                         try {
                             mNearbyManager = getObjectField(param.thisObject, "mNearbyManager");
                             int powerOffFindingMode = (int) callMethod(mNearbyManager, "getPoweredOffFindingMode");
-                            isFinderActive = !(boolean) param.args[1] && powerOffFindingMode == 2;
-                        } catch (Throwable ignored) {
+                            isFinderActive = powerOffFindingMode == 2;
+                            XposedBridge.log("mNearbyManager != null? " + (mNearbyManager != null) + " powerOffFindingMode = " + powerOffFindingMode +  " isFinderActive: " + isFinderActive);
+                        } catch (Throwable t) {
+                            log(t);
                         }
                     });
         } catch (Throwable ignored) {}
@@ -142,7 +149,7 @@ public class AdvancedReboot extends XposedMods {
         centerX = viewWidth / 2;
         centerY = radius + dp2px(mContext, 50);
         if (isFinderActive) {
-            centerY += dp2px(mContext, 50);
+            centerY += dp2px(mContext, 75);
         }
 
         canvas.drawCircle(centerX, centerY, radius, buttonPaint);
