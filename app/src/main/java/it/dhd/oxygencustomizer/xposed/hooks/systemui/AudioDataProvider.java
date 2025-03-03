@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 
 import android.annotation.SuppressLint;
 import android.app.WallpaperColors;
@@ -53,6 +54,8 @@ public class AudioDataProvider extends XposedMods {
     private WallpaperColors mWallpaperColors = null;
     private Class<?> mColorSchemeClass = null;
     private Object mCurrentColorScheme = null;
+    private Class<?> mOplusMediaControllerImpl = null;
+    public Object mMediaData = null;
 
     private final Handler handler = new Handler();
     private final Runnable periodicTask = new Runnable() {
@@ -66,6 +69,9 @@ public class AudioDataProvider extends XposedMods {
     private final MediaController.Callback mediaControllerCallback = new MediaController.Callback() {
         @Override
         public void onMetadataChanged(MediaMetadata metadata) {
+            try {
+                mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+            } catch (Throwable ignored) {}
             if (mMediaMetadata != metadata) {
                 mMediaMetadata = metadata;
                 onMediaMetadataChanged();
@@ -75,6 +81,9 @@ public class AudioDataProvider extends XposedMods {
 
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
+            try {
+                mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+            } catch (Throwable ignored) {}
             instance.onPlaybackStateChanged();
         }
     };
@@ -174,6 +183,27 @@ public class AudioDataProvider extends XposedMods {
                             mPlaybackState = (int) param.args[1];
                             onPrimaryMetadataOrStateChanged((int) param.args[1]);
                         });
+
+        // OplusQsMediaUtil
+        try {
+            ReflectedClass OplusQsMediaUtil = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaUtil", lpparam.classLoader);
+            mOplusMediaControllerImpl = OplusQsMediaUtil.getClazz();
+        } catch (Throwable ignored) {}
+
+        ReflectedClass OplusMediaControllerImpl = ReflectedClass.of("com.oplus.systemui.media.OplusMediaControllerImpl");
+        OplusMediaControllerImpl
+                .after("onMediaDataLoaded")
+                .run(param -> {
+                    mMediaData = param.args[2];
+                });
+        OplusMediaControllerImpl
+                .after("dispatchMediaDataOnRemov")
+                .run(param -> {
+                    try {
+                        mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+                    } catch (Throwable ignored) {}
+                });
+
     }
 
     @Override
@@ -239,6 +269,16 @@ public class AudioDataProvider extends XposedMods {
 
     public static Object getColorScheme() {
         return instance.mCurrentColorScheme;
+    }
+
+    public static Object getMediaData() {
+        return instance.mMediaData;
+    }
+
+    public static void refreshMediaData() {
+        try {
+            instance.mMediaData = callStaticMethod(instance.mOplusMediaControllerImpl, "selectPlayingOnes");
+        } catch (Throwable ignored) {}
     }
 
     public static String getLastNonNullPackageName() {
