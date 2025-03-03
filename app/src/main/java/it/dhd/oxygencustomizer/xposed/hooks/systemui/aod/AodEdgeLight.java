@@ -151,12 +151,12 @@ public class AodEdgeLight extends XposedMods {
         OplusAodCurvedDisplayView
                 .before("onDraw")
                 .run(param -> {
+                    if (!mEdgeLightEnabled) return;
                     boolean isSettingInterface = getBooleanField(param.thisObject, "isSettingInterface");
                     Object mIncomingNotiPaint = getObjectField(param.thisObject, "mIncomingNotiPaint");
                     if (!isSettingInterface && mIncomingNotiPaint != null) {
                         callMethod(mIncomingNotiPaint, "draw", param.args[0]);
                     }
-
                     param.setResult(null);
                 });
 
