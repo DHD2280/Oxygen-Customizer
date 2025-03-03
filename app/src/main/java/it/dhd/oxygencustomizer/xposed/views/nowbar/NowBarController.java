@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 
 public class NowBarController {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = BuildConfig.DEBUG;
 
     @SuppressLint("StaticFieldLeak")
     private static NowBarController instance;
