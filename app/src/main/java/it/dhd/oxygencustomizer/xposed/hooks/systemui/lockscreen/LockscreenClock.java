@@ -264,6 +264,9 @@ public class LockscreenClock extends XposedMods {
                             int mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
                             setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
                         }
+                        if (!customLockscreenClock) {
+                            return;
+                        }
                         param.setResult(finalResult);
                     });
 
