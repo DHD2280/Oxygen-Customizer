@@ -134,6 +134,22 @@
                 android:tag="buttons_container">
 
                 <Space
+                    android:visibility="gone"
+                    android:tag="space_action_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:visibility="gone"
+                    android:layout_width="@dimen/nowbar_media_buttons_size_big"
+                    android:layout_height="@dimen/nowbar_media_buttons_size_big"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:importantForAccessibility="no"
+                    android:tag="action1" />
+
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -175,6 +191,22 @@
                     android:tag="next_big" />
 
                 <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:layout_width="@dimen/nowbar_media_buttons_size_big"
+                    android:layout_height="@dimen/nowbar_media_buttons_size_big"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:importantForAccessibility="no"
+                    android:visibility="gone"
+                    android:tag="action2" />
+
+                <Space
+                    android:tag="space_action_2"
+                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
