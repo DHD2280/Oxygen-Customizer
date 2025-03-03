@@ -716,6 +716,8 @@
     <string name="aod_font_line_height_title">行の高さ</string>
     <!-- Aod Weather -->
     <string name="aod_weather">AOD の天気</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">その他</string>
     <!-- Pulse music visualizer -->
@@ -1112,6 +1114,7 @@
     <string name="home_controls">ホームのコントロール</string>
     <string name="wallet">ウォレット</string>
     <string name="hotspot">ホットスポット</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">アプリのラグ修正</string>
     <string name="fix_lag_summary">最近開いたアプリからアプリを開いたときのラグを修正します</string>

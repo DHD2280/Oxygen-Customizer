@@ -455,6 +455,8 @@
     <!-- Aod Strings -->
     <!-- Aod Clock -->
     <!-- Aod Weather -->
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -534,11 +536,34 @@
     <!-- Lockscreen Widgets -->
     <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
+    <string name="weather">Pogoda</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="data">Dane komórkowe</string>
+    <string name="ringer">Dzwonek</string>
+    <string name="bt">Bluetooth</string>
+    <string name="wallet">Portfel</string>
+    <string name="hotspot">Hotspot</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
+    <string name="fix_lag_title">Opóźnienie aplikacji</string>
+    <string name="fix_lag_summary">Napraw opóźnienie podczas otwierania aplikacji z ostatnich aplikacji</string>
+    <string name="fix_lag_force_all_apps_title">Wymuś dla wszystkich aplikacji</string>
+    <string name="fix_lag_force_all_apps_summary">Wymuś użycie poprawki przez wszystkie aplikacje.\nOstrzeżenie: może to powodować dziwne problemy, używaj na własne ryzyko!</string>
+    <string name="fix_lag_apps_summary">Wybierz, aplikacje, do której zastosujesz się poprawkę</string>
+    <string name="fix_lag_apps_title">Wybierz Aplikacje</string>
+    <string name="fix_lag_dialog_message">Twoja wersja OOS nie może być kompatybilna z tą poprawką.\nCzy chcesz, nadal możesz wymusić poprawkę?</string>
+    <string name="fix_lag_apply_anyway">Włącz mimo to</string>
     <!-- Caffeine -->
     <!-- Colors Fragment -->
+    <string name="apply_color">Zastosuj kolor</string>
     <!-- Pocket Studio -->
+    <string name="pocket_studio">Pocket Studio</string>
+    <string name="pocket_studio_title">Włącz Pocket Studio</string>
+    <string name="pocket_studio_summary">Włącz Pocket Studio na twoim urządzeniu.\nWymaga restartu.</string>
+    <string name="pocket_studio_info">Pocket Studio pozwala na otwieranie więcej niż dwóch aplikacji jednocześnie. Nie ma gwarancji, że ta funkcja będzie działać na twoich urządzeniu; wymusza włączanie tylko tej funkcji.</string>
     <!-- OTA Card -->
+    <string name="ota_card_category">Karta Aktualizacji Systemowej</string>
+    <string name="ota_card_title">Niestandardowy obraz karty aktualnej wersji systemu (ustawienia --> informacje o urządzeniu)</string>
     <!-- MEMC Strings -->
     <string name="memc_feature_on">Funkcja MEMC włączona</string>
     <string name="pwx7_enabled">PWX7 włączony</string>

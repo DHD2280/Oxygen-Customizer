@@ -753,6 +753,8 @@
     <string name="aod_font_line_height_title">ارتفاع السطر</string>
     <!-- Aod Weather -->
     <string name="aod_weather">طقس AOD</string>
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <string name="misc_category">متنوع</string>
     <!-- Pulse music visualizer -->
@@ -1157,6 +1159,7 @@
     <string name="home_controls">تحكمات المنزل</string>
     <string name="wallet">محفظة</string>
     <string name="hotspot">نقطة اتصال</string>
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">إصلاح تأخر التطبيق</string>
     <string name="fix_lag_summary">إصلاح التأخر عند فتح التطبيق من التطبيقات الحديثة</string>

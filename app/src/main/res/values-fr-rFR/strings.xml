@@ -8,58 +8,497 @@
     <string name="settings_label">Réglages</string>
     <string name="toast_rename_file">Renommer le fichier en quelque chose de plus simple</string>
     <string name="toast_applied">Appliqué</string>
+    <string name="toast_disabled">Désactivé</string>
+    <string name="toast_error">Une erreur s\'est produite</string>
     <string name="opt_selected1">Sélectionné : %s</string>
     <string name="opt_selected2">Sélectionné: %s%s</string>
     <string name="requires_sysui_restart">Cette section nécessite un redémarrage de SystemUI\nAppuyez sur le menu pour redémarrer.</string>
     <!-- Onboarding -->
+    <string name="init_module_installation">Initialisation de la configuration</string>
+    <string name="step">Etape</string>
+    <string name="module_installation_step1">Création du module shell</string>
+    <string name="module_installation_step2">Extraction des fichiers nécessaires</string>
+    <string name="module_installation_step3">Création d\'APKs superposés</string>
+    <string name="module_installation_step4">Aligner les APK de superposition</string>
+    <string name="module_installation_step5">Signer les APKs de superposition</string>
+    <string name="module_installation_step6">Nettoyage des répertoires</string>
+    <string name="onboarding_title_1">Vous vous ennuyez avec l\'interface de base ?</string>
+    <string name="onboarding_subtitle_1">Modifions tout selon vos préférences.</string>
+    <string name="onboarding_desc_1">Ditch the stock UI monotony – personnalisez chaque détail technique pour correspondre à votre style et vos préférences.</string>
+    <string name="onboarding_title_2">Mon appareil est-il pris en charge ?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer supporte les ROMs basées sur OOS.</string>
+    <string name="onboarding_desc_2">Compatible avec toutes les ROM basées sur OOS, assurant un large support pour les appareils Android.</string>
+    <string name="onboarding_title_3">Devons-nous commencer maintenant ?</string>
+    <string name="onboarding_subtitle_3">Il est temps pour Oxygen Customizer d\'effectuer un travail interne.</string>
+    <string name="onboarding_desc_3">Démarrage des tâches internes, marquant l\'initiation du travail essentiel. Prêt à commencer ?</string>
+    <string name="need_storage_perm_title">Nécessité de l\'autorisation d\'accès au stockage</string>
+    <string name="need_storage_perm_desc">L\'autorisation de stockage est nécessaire pour construire les fichiers nécessaires.</string>
+    <string name="compatible_root_not_found_title">Impossible de trouver l\'accès Root</string>
+    <string name="compatible_root_not_found_desc">Vous devez rooter votre appareil.</string>
+    <string name="root_not_found_title">Root n\'est pas accessible</string>
+    <string name="root_not_found_desc">Il semble que votre appareil n\'est pas rooté !</string>
+    <string name="need_reboot_title">Redémarrage de l\'appareil requis</string>
+    <string name="need_reboot_desc">Redémarrez votre appareil pour mettre en place tous les fichiers.</string>
+    <string name="installation_failed_title">Oops on ne s\'attendait pas à ça</string>
+    <string name="installation_failed_desc">Les journaux ont été enregistrés dans le dossier des documents.</string>
+    <string name="logs">Journaux</string>
+    <string name="toast_skipped_installation">L\'installation a été ignorée. Certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
     <!-- Buttons -->
+    <string name="btn_select">Choisir</string>
+    <string name="btn_skip">Ignorer</string>
+    <string name="btn_next">Suivant</string>
+    <string name="btn_back">Précédent</string>
+    <string name="btn_lets_go">Allons-y</string>
+    <string name="btn_close">Fermer</string>
+    <string name="btn_cancel">Annuler</string>
+    <string name="btn_reboot_now">Redémarrer maintenant</string>
+    <string name="btn_reboot">Redémarrer</string>
+    <string name="btn_enable">Activer</string>
+    <string name="btn_disable">Désactiver</string>
+    <string name="btn_apply">Appliquer</string>
     <!-- Dialogs -->
+    <string name="installing">Installation en cours</string>
+    <string name="loading_dialog_wait">Veuillez patienter</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Remarque</string>
+    <string name="app_kill_alert_body">L\'application va se fermer. Vous pouvez l\'ouvrir à nouveau en appuyant sur la nouvelle icône</string>
     <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
     <string name="reboot_alert_body">Un redémarrage du système est nécessaire pour appliquer les paramètres</string>
     <!-- General Strings -->
+    <string name="battery_charging">Batterie en charge</string>
+    <string name="battery_discharging">Décharge de la batterie</string>
+    <string name="battery_full">Batterie pleine</string>
+    <string name="battery_level_percentage">Niveau de batterie</string>
+    <string name="seconds">Deuxième</string>
+    <string name="duration_seconds">%d secondes</string>
+    <string name="milliseconds">Millisecondes</string>
+    <string name="steps">Étapes</string>
+    <string name="general_color_accent1">Accentuation 1</string>
+    <string name="general_color_accent2">Accentuation 2</string>
+    <string name="general_color_accent3">Accentuation 3</string>
+    <string name="general_color_text1">Texte 1</string>
+    <string name="general_color_text2">Texte 2</string>
+    <string name="sysui_restart_needed">Nécessite un redémarrage de l’interface système pour être appliqué</string>
+    <string name="one_time_reboot_needed">Redémarrer!</string>
+    <string name="gradient_left_right">De gauche à droite</string>
+    <string name="gradient_top_bottom">De haut en bas</string>
+    <string name="gradient_tl_br">D\'en haut à gauche vers en bas à droite</string>
+    <string name="gradient_tr_bl">En haut à droite vers le bas à gauche</string>
+    <string name="warning">Attention</string>
+    <string name="custom_margins">Marges personnalisées</string>
+    <string name="custom_padding">Marges personnalisées</string>
+    <string name="left">Gauche</string>
+    <string name="right">Droite</string>
+    <string name="top">En haut</string>
+    <string name="bottom">En Bas</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="lang_follow_system">Suivre le paramètre système</string>
+    <string name="pick_font_title">Choisir la police</string>
+    <string name="pick_font_summary">Choisissez votre police.\nNe sélectionnez pas le fichier dans Récents.</string>
     <!-- Image Crop Strings -->
+    <string name="pick_image">Sélectionner une image</string>
+    <string name="pick_image_summary">Cliquez pour sélectionner une image</string>
     <!-- Search Preference -->
+    <string name="searchpreference_search">Rechercher…</string>
+    <string name="searchpreference_clear">Effacer</string>
+    <string name="searchpreference_history_entry">Entrée de l\'historique</string>
+    <string name="searchpreference_more">Plus</string>
+    <string name="searchpreference_clear_history">Vider l\'historique</string>
+    <string name="searchpreference_no_results">Aucun résultat</string>
     <!-- Menu Strings -->
+    <string name="restart_scopes">Redémarrer les périmètres</string>
+    <string name="restart_module">Redémarrer les processus à portée</string>
+    <string name="restart_page_scope">Redémarrer seulement cette page</string>
+    <string name="restart_scope_message">Êtes-vous sûr de vouloir redémarrer tous les processus hormis le cadre système?\nUtilisez ceci si le module ne fonctionne pas!\nAssurez-vous que tous les périmètres pertinents sont vérifiés !</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">Interface utilisateur</string>
+    <string name="navbar_mods">Modifications</string>
+    <string name="navbar_hooks">Crochets</string>
+    <string name="navbar_settings">Paramètres</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Modifications</string>
+    <string name="statusbar_title">Barre d\'état</string>
+    <string name="launcher_title">Lanceur d\'applications</string>
+    <string name="quick_settings_title">Paramètres rapides</string>
+    <string name="qs_header_title">Panneau de paramètres rapide</string>
+    <string name="sound">Son</string>
+    <string name="misc">Divers</string>
+    <string name="colors">Couleurs</string>
+    <string name="package_manager">Gestionnaire de paquets</string>
     <!-- General Strings -->
+    <string name="general_on">Activé</string>
+    <string name="general_off">Désactivé</string>
+    <string name="accent_color">Couleur d\'accentuation</string>
+    <string name="white_color">Blanc</string>
+    <string name="black_color">Noir</string>
+    <string name="custom_color">Couleur personnalisée</string>
+    <string name="battery_info_button_title">Infos batterie…</string>
+    <string name="general_enabled">Activé</string>
+    <string name="general_disabled">Désactivé</string>
+    <string name="requires_reboot">Nécessite un redémarrage</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">Options de la barre d\'état</string>
+    <string name="statusbar_double_tap_sleep">Mise en veille par double appui</string>
+    <string name="status_bar_toggle_brightness_title">Réglage de la luminosité</string>
+    <string name="status_bar_toggle_brightness_summary">Régler la luminosité en glissant le doigt sur la barre d\'état</string>
+    <string name="statusbar_batterybar_title">Préférences de la barre de batterie</string>
+    <string name="statusbar_battery_icon_options">Icône de la batterie</string>
+    <string name="statusbar_icons">Icônes de la barre d\'état</string>
     <!-- Statusbar notification strings -->
+    <string name="statusbar_notifications">Notifications</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <string name="statusbar_notifications_cat">Notifications de la barre d\'état</string>
+    <string name="statusbar_use_app_icon">Utiliser les icônes des applications</string>
+    <string name="statusbar_notifications_transparency">Transparence des notifications</string>
+    <string name="statusbar_notification_transparency">Transparence des notifications</string>
+    <string name="statusbar_notification_transparency_value">Niveau de transparence</string>
+    <string name="statusbar_notification_count">Montrer le nombre de notifications</string>
+    <string name="statusbar_notifications_related">Préférences des notifications</string>
+    <string name="remove_charging_complete_notification_title">Retirer la notification de charge complète</string>
+    <string name="remove_dev_mode_notification">Supprimer la notification du mode de développement</string>
+    <string name="remove_flashlight_notification">Supprimer la notification de lampe de poche</string>
+    <string name="remove_low_battery_notification">Supprimer la notification de batterie faible</string>
+    <string name="notif_default_expansion_title">Expansion par défaut des notifications</string>
+    <string name="notif_always_expand">Toujours étendre</string>
+    <string name="notif_always_collapse">Toujours réduire</string>
+    <string name="customize_clear_all_button">Personnaliser le bouton \"Tout effacer\"</string>
+    <string name="clear_all_link_bg_accent">Lier l\'arrière-plan à l\'accentuation</string>
+    <string name="clear_all_bg_color">Couleurs de fond personnalisées</string>
+    <string name="clear_all_link_bg_icon_accent">Lier l\'icône à l\'accentuation</string>
+    <string name="clear_all_icon_color">Couleurs des icônes personnalisées</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_title">Heure &amp; Date</string>
+    <string name="status_bar_clock_summary">Personnaliser l\'horloge &amp; la date</string>
+    <string name="status_bar_clock_format_category">Paramètres de mise en forme</string>
+    <string name="status_bar_clock_seconds_title">Secondes de l\'horloge</string>
+    <string name="status_bar_clock_seconds_summary">Afficher les secondes à côté de l\'horloge dans la barre d\'état</string>
+    <string name="status_bar_clock_position_title">Style du widget Horloge</string>
+    <string name="status_bar_clock_position_right">Droite</string>
+    <string name="status_bar_clock_position_left">Gauche</string>
+    <string name="status_bar_clock_position_center">Centre</string>
+    <string name="status_bar_clock_position_hidden">Masqué</string>
+    <string name="status_bar_clock_hide_category">Masquer l\'horloge</string>
+    <string name="status_bar_clock_auto_hide_title">Masquer automatiquement l\'horloge</string>
+    <string name="status_bar_clock_auto_hide_launcher_summary">Masquer l\'horloge si le lanceur est visible</string>
+    <string name="status_bar_clock_auto_hide_summary">Masquer l\'horloge à intervalles réguliers</string>
+    <string name="status_bar_clock_auto_hide_hdur_title">Masquer la durée</string>
+    <string name="status_bar_clock_auto_hide_hdur_summary">Nombre de secondes pour masquer l’horloge</string>
+    <string name="status_bar_clock_auto_hide_sdur_title">Durée de visibilité</string>
+    <string name="status_bar_clock_auto_hide_sdur_summary">Nombre de secondes avant de masquer l\'horloge</string>
+    <string name="status_bar_am_pm_title">Style AM/PM</string>
+    <string name="status_bar_am_pm_normal">Normal</string>
+    <string name="status_bar_am_pm_small">Petit</string>
+    <string name="status_bar_am_pm_hidden">Masqué</string>
+    <string name="status_bar_date_title">Date</string>
+    <string name="status_bar_date_none">Masqué</string>
+    <string name="status_bar_date_small">Petit</string>
+    <string name="status_bar_date_normal">Normal</string>
+    <string name="status_bar_date_format_title">Format de la date</string>
+    <string name="status_bar_date_style">Style de la date</string>
+    <string name="status_bar_date_style_normal">Normal</string>
+    <string name="status_bar_date_style_lowercase">Minuscule</string>
+    <string name="status_bar_date_style_uppercase">Majuscule</string>
+    <string name="status_bar_date_format_custom">Format java personnalisé</string>
+    <string name="string_formatter_manual_body">En plus du texte normal, des variables dynamiques sont également disponibles, comme Date et Température :\n\n$G\&lt;format\&gt; : Date grégorienne, basé sur le format*\n$P\&lt;format\&gt; : date persane, basé sur le format*\n$L pour la date lunaire\n$I\&lt;calendar\&gt;&lt;format\&gt; : calendrier islamique. Le calendrier est optionnel, la valeur par défaut est islamique, vous pouvez également utiliser C pour Islamic-Civil et U pour Umalqura islamique.\n$T\&lt;format\&gt;[interval] : Température ; \nformat peut être b (pour la batterie), c (pour le CPU), g (pour le GPU) et s (pour la peau) \nEnfin, Il y a un nombre OPTIONAL d\'intervalle de mise à jour en secondes (par défaut: 60 secondes)\n\n*pour la documentation de format, recherchez \"Format de date Java\"</string>
+    <string name="preview">Aperçu</string>
+    <string name="clock_date_position">Position de la date</string>
+    <string name="clock_date_right">À droite de l\'horloge</string>
+    <string name="clock_date_left">À gauche de l\'horloge</string>
+    <string name="clock_font_size_title">Taille de police de l\'horloge</string>
+    <string name="status_bar_clock_font_style_title">Style de police de l\'horloge</string>
+    <string name="status_bar_clock_color_title">Couleur personnalisée de l\'horloge</string>
+    <string name="status_bar_custom_clock_color_title">Couleurs des icônes personnalisées</string>
+    <string name="status_bar_custom_clock_color_summary">Couleur de l\'horloge</string>
+    <string name="status_bar_clock_chip_category">Jeton d\'horloge</string>
+    <string name="status_bar_clock_background_chip_title">Jeton d\'arrière-plan</string>
+    <string name="status_bar_clock_background_chip_style_title">Style de la puce d\'arrière-plan</string>
+    <string name="status_bar_clock_advanced_formatting">Paramètres avancés (remplace les autres paramètres)</string>
+    <string name="status_bar_clock_before_clock">Texte personnalisé avant l’holorge</string>
+    <string name="status_bar_clock_after_clock">Texte personnalisé après l’horloge</string>
+    <string name="status_bar_clock_smaller">Plus petit (70%)</string>
     <!-- Status bar padding -->
+    <string name="statusbar_padding">Marges de la barre d’état</string>
+    <string name="statusbar_top_padding">Marge supérieure</string>
+    <string name="statusbar_padding_info">Définir 0 pour conserver le stock</string>
+    <string name="statusbar_left_padding">Marge de gauche</string>
+    <string name="statusbar_right_padding">Marge de droite</string>
+    <string name="sb_padding_title">Marge de la barre d\'état Gauche et Droite</string>
+    <string name="sb_padding_summary">Les valeurs minimum et maximum sont celles par défaut de l’appareil</string>
     <!-- Battery Bar Strings -->
+    <string name="BB_enable_title">Active la barre de batterie</string>
+    <string name="BB_onlycharging_title">Seulement durant la charge</string>
+    <string name="BB_move_SB_bottom_title">En bas de la barre d’état</string>
+    <string name="BB_colorful_title">Rendre colorée</string>
+    <string name="BB_Opacity_title">Opacité de la barre</string>
+    <string name="BB_center_align_title">Aligné au centre</string>
+    <string name="BB_Thickness_title">Épaisseur de la barre</string>
+    <string name="BB_animate_charging">Animation de chargement</string>
+    <string name="BB_indicate_charging">Animation de chargement</string>
+    <string name="BB_indicate_power_save">Indiquer économie d\'énergie</string>
+    <string name="BB_indicate_fast_charging">Montrer que l’appareil est en charge rapide</string>
+    <string name="BB_warning_level">Plage de niveau d\'avertissement</string>
+    <string name="BB_warning_tip">Mettre tout à 0 pour désactiver les couleurs par niveaux</string>
+    <string name="BB_batteryCriticalColor">Couleur du niveau critique</string>
+    <string name="BB_batteryWarningColor">Couleur du niveau d’alerte</string>
+    <string name="BB_batteryChargingColor">Couleur lors de la recharge</string>
+    <string name="BB_batteryPowerSaveColor">Couleur d\'économie d\'énergie</string>
+    <string name="BB_batteryFastChargingColor">Couleur de charge rapide</string>
+    <string name="BB_transit_colors">Nuancer les couleurs dans cet intervalle</string>
+    <string name="colored_battery_percentage_title">Pourcentage de batterie coloré pendant la charge</string>
     <!-- Battery Icon Strings -->
+    <string name="battery_icon_customize_title">Personnaliser l\'icône de la batterie</string>
+    <string name="battery_icon_style">Style de l\'icône de la batterie</string>
+    <string name="battery_icon_change_charging_icon_title">Icône de charge personnalisée</string>
+    <string name="battery_icon_change_charging_icon_summary">Modifier l\'icône de charge sur l\'icône personnalisée</string>
+    <string name="battery_icon_settings">Préférences de l\'icône de la batterie</string>
+    <string name="battery_width_title">Largeur de la batterie</string>
+    <string name="battery_height_title">Hauteur de la batterie</string>
+    <string name="battery_margin_title">Batterie en charge</string>
+    <string name="hide_battery_title">Masquer la batterie</string>
+    <string name="hide_battery_desc">Garder uniquement l\'icône et le pourcentage de charge</string>
+    <string name="custom_charging_icon_title">Icône de charge personnalisée</string>
+    <string name="custom_charging_icon_desc">Modifier l\'icône de charge sur l\'icône personnalisée</string>
+    <string name="battery_charging_icon">Préférences de l\'icône de la batterie</string>
+    <string name="charging_icon_style_title">Style de l\'icône de charge</string>
+    <string name="charging_icon_margin_left_title">Marge de l\'icône de charge à gauche</string>
+    <string name="charging_icon_margin_right_title">Marge de l\'icône de charge à gauche</string>
+    <string name="charging_icon_size_title">Style de l\'icône de charge</string>
+    <string name="perimeter_alpha_title">Périmètre Alpha</string>
+    <string name="perimeter_alpha_desc">Rendre le périmètre de la batterie semi-transparent</string>
+    <string name="fill_alpha_title">Remplissage Alpha</string>
+    <string name="fill_alpha_desc">Rendre le périmètre de la batterie semi-transparent</string>
+    <string name="rainbow_color_title">Couleurs Arc-en-Ciel</string>
+    <string name="rainbow_color_desc">Afficher une couleur différente en fonction du niveau de la batterie</string>
+    <string name="blend_color_title">Mélange de couleur</string>
+    <string name="blend_color_desc">Mélanger la couleur de la batterie avec une couleur personnalisée</string>
+    <string name="fill_color_title">Couleur de remplissage</string>
+    <string name="fill_color_desc">Mélanger la couleur de la batterie avec une couleur personnalisée</string>
+    <string name="fill_gradient_color_title">Remplir la couleur du dégradé</string>
+    <string name="fill_gradient_color_desc">Mélanger la couleur de la batterie avec une couleur personnalisée</string>
+    <string name="charging_fill_color_title">Couleur de remplissage du chargement</string>
+    <string name="charging_fill_color_desc">Changer la couleur de la batterie de charge</string>
+    <string name="fast_charging_fill_color_title">Couleur de charge rapide</string>
+    <string name="fast_charging_fill_color_desc">Changer la couleur de la batterie de charge</string>
+    <string name="powersave_fill_color_title">Couleur de remplissage de la batterie</string>
+    <string name="powersave_fill_color_desc">Changer la couleur de la batterie de charge</string>
+    <string name="powersave_indicator_color_title">Couleur de l\'indicateur d\'énergie</string>
+    <string name="powersave_indicator_color_desc">Changer la couleur de la batterie de charge</string>
+    <string name="battery_icon_margins">Marges de l\'icône de la batterie</string>
+    <string name="reverse_layout_title">Inverser la mise en page</string>
+    <string name="reverse_layout_desc">Afficher le pourcentage sur le côté opposé</string>
+    <string name="rotate_layout_title">Rotation de la mise en page</string>
+    <string name="rotate_layout_desc">Pivoter la batterie de 180 degrés</string>
+    <string name="hide_percentage_title">Masquer le pourcentage</string>
+    <string name="hide_percentage_desc">Masquer le texte du pourcentage de batterie</string>
+    <string name="inside_percentage_title">Masquer le pourcentage</string>
+    <string name="inside_percentage_desc">Déplacer le pourcentage à l\'intérieur de la batterie</string>
+    <string name="battery_icon_color">Couleur de l\'icône de la batterie</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_stock_prefs">Paramètres de la batterie par défaut</string>
+    <string name="battery_edit_percentage_size_title">Personnaliser la taille du pourcentage</string>
+    <string name="battery_percentage_size">Taille du pourcentage</string>
     <!-- Battery Icon Styles -->
+    <string name="battery_default">Par défaut</string>
+    <string name="battery_landscape_r_default">Landscape droite défaut</string>
+    <string name="battery_landscape_l_default">Landscape gauche défaut</string>
+    <string name="battery_landscape_r_custom">Paysage R personnalisé</string>
+    <string name="battery_landscape_l_custom">Paysage L personnalisé</string>
+    <string name="battery_portrait_capsule">Capsule Portrait</string>
+    <string name="battery_portrait_lorn">Lorn portrait</string>
+    <string name="battery_portrait_mx">Mx en portrait</string>
+    <string name="battery_portrait_airoo">Portrait Airoo</string>
+    <string name="battery_landscape_r_style_a">Style A en paysage R</string>
+    <string name="battery_landscape_l_style_a">Style A en paysage L</string>
+    <string name="battery_landscape_r_style_b">Style B en paysage R</string>
+    <string name="battery_landscape_l_style_b">Style B en paysage L</string>
+    <string name="battery_landscape_ios_15">Paysage iOS 15</string>
+    <string name="battery_landscape_ios_16">Paysage iOS 16</string>
+    <string name="battery_portrait_origami">Portrait Origami</string>
+    <string name="battery_landscape_smiley">Smiley en mode paysage</string>
+    <string name="battery_landscape_miui_pill">Paysage pilule Miui</string>
+    <string name="battery_landscape_l_coloros">Paysage gauche ColorOS</string>
+    <string name="battery_landscape_r_coloros">Paysage droite ColorOS</string>
+    <string name="battery_landscape_battery_a">Paysage batterie A</string>
+    <string name="battery_landscape_battery_b">Paysage batterie B</string>
+    <string name="battery_landscape_battery_c">Paysage batterie C</string>
+    <string name="battery_landscape_battery_d">Paysage batterie D</string>
+    <string name="battery_landscape_battery_e">Paysage batterie E</string>
+    <string name="battery_landscape_battery_f">Paysage batterie F</string>
+    <string name="battery_landscape_battery_g">Paysage batterie G</string>
+    <string name="battery_landscape_battery_h">Paysage batterie H</string>
     <!-- Statusbar Icons Strings -->
     <!-- Quick Settings Mods -->
     <!-- Quick Settings Tiles -->
     <!-- Quick Settings Widgets -->
+    <string name="qs_widget_set_radius">Régler le rayon de l\'image</string>
+    <string name="qs_widget_set_custom_photo">Définir une image personnalisée</string>
     <!-- Quick Settings Tiles Customizations -->
+    <string name="quick_settings_tiles_customization_title">Personnalisation des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_category_title">Arrière-plan des tuiles des réglages rapides</string>
+    <string name="qs_tile_active_color_title">Personnaliser la couleur des tuiles actives</string>
+    <string name="quick_settings_tiles_customize_active_color">Couleur Actif des réglages rapides</string>
+    <string name="qs_tile_inactive_color_title">Personnaliser la couleur des tuiles actives</string>
+    <string name="quick_settings_tiles_customize_inactive_color">Couleur des réglages rapides inactifs</string>
+    <string name="qs_tile_disabled_color_title">Personnaliser la couleur des tuiles actives</string>
+    <string name="quick_settings_tiles_customize_disabled_color">Couleur des réglages rapides désactivés</string>
+    <string name="quick_settings_tiles_customize_labels">Étiquettes des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_hide_labels">Masquer les étiquettes des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_labels_color_switch">Personnaliser la couleur du texte des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_labels_color">Couleur du texte des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_labels_title">Personnaliser la couleur des tuiles actives</string>
+    <string name="quick_settings_tiles_customize_labels_title_color">Couleur Actif des réglages rapides</string>
+    <string name="quick_settings_tiles_customize_labels_subtitle">Personnaliser la couleur des tuiles actives</string>
+    <string name="quick_settings_tiles_customize_labels_subtitle_color">Couleur Actif des réglages rapides</string>
+    <string name="brightness_slider">Curseur de luminosité</string>
+    <string name="qs_sliders">Curseurs des réglages rapides</string>
+    <string name="customize_brightness_slider_title">Personnaliser le curseur de luminosité</string>
+    <string name="customize_qs_sliders_title">Personnaliser les raccourcis rapides</string>
+    <string name="brightness_slider_progress_color_title">Mode Couleur du curseur</string>
+    <string name="brightness_slider_background_color_title">Couleurs de fond personnalisées</string>
+    <string name="qs_sliders_remove_blur">Supprimer le flou</string>
+    <string name="blur_mode">Mode flou</string>
+    <string name="blur_luminosity_color_dodge">Luminosité - Esquive en couleur</string>
+    <string name="blur_color_dodge_luminosity">Esquive colorée - Luminosité</string>
+    <string name="blur_overlay_luminosity">Superposition - Luminosité</string>
+    <string name="blur_luminosity_overlay">Luminosité - Superposition</string>
     <!-- QS Tile Radius -->
+    <string name="qs_tiles_custom_radius">Rayon de tuile des réglages rapides personnalisés</string>
+    <string name="qs_tile_custom_highlight">Rayon des tuiles de surbrillance des réglages rapides</string>
+    <string name="qs_tile_custom_radius">Rayon de tuile des réglages rapides personnalisés</string>
     <!-- Media Tile -->
+    <string name="media_tile">Tuile multimédia</string>
     <!-- QS Tiles animation -->
+    <string name="qs_tile_animation_title">Animation des tuiles</string>
+    <string name="qs_tile_animation_style_title">Style de l\'animation</string>
+    <string name="qs_tile_animation_duration_title">Durée de l\'animation</string>
+    <string name="qs_tile_animation_interpolator_title">Effet supplémentaire</string>
+    <string name="qs_tile_animation_style_off">Aucune animation</string>
+    <string name="qs_tile_animation_style_rotate">Rotation</string>
+    <string name="qs_tile_animation_style_flipx">Inverser X</string>
+    <string name="qs_tile_animation_style_flipy">Inverser X</string>
+    <string name="qs_tile_animation_style_shake">Secouer</string>
+    <string name="qs_tile_animation_style_fade_in">Fondu enchaîné</string>
+    <string name="qs_tile_animation_style_bounce_x">Effet de rebond (Échelle X)</string>
+    <string name="qs_tile_animation_style_bounce_y">Effet de rebond (Échelle Y)</string>
+    <string name="qs_tile_animation_style_pulse_x">Effet d\'impulsion (Échelle X)</string>
+    <string name="qs_tile_animation_style_pulse_y">Effet d\'impulsion (Échelle Y)</string>
+    <string name="qs_tile_animation_duration_low">Faible</string>
+    <string name="qs_tile_animation_duration_default">Par défaut</string>
+    <string name="qs_tile_animation_duration_fast">Rapide</string>
+    <string name="qs_tile_animation_interpolator_linearInterpolator">Linéaire</string>
+    <string name="qs_tile_animation_interpolator_accelerateInterpolator">Accélèrer</string>
+    <string name="qs_tile_animation_interpolator_decelerateInterpolator">Ralentir</string>
+    <string name="qs_tile_animation_interpolator_accelerateDecelerateInterpolator">Accelérer/ralentir</string>
+    <string name="qs_tile_animation_interpolator_bounceInterpolator">Rebond</string>
+    <string name="qs_tile_animation_interpolator_overshootInterpolator">Dépasser</string>
+    <string name="qs_tile_animation_interpolator_anticipateInterpolator">Anticiper</string>
+    <string name="qs_tile_animation_interpolator_anticipateOvershootInterpolator">Anticipation du dépassement</string>
     <!-- QS Page Transitions -->
+    <string name="qs_transitions_title_switch_title">Activer les transitions de page des réglages rapides</string>
+    <string name="qs_transitions_title">Activer les transitions de page des réglages rapides</string>
+    <string name="qs_transitions_cube_in">Cube intérieur</string>
+    <string name="qs_transitions_cube_out">Cube extérieur</string>
+    <string name="qs_transitions_accordion">Accordéon (Panneau d\'extension)</string>
+    <string name="qs_transitions_background_to_foreground">Arrière-plan vers l\'avant-plan</string>
+    <string name="qs_transitions_depth_page">Profondeur de la page</string>
+    <string name="qs_transitions_fade">Fondu</string>
     <!-- QS Header Image Strings -->
     <!-- Omni Provider" -->
     <!-- QS Header Clock Strings -->
+    <string name="qs_header_clock">Horloge de l\'en-tête des réglages rapides</string>
+    <string name="qs_header_clock_intro_title">Activer et désactiver l\'horloge personnalisée nécessite le redémarrage de SystemUI.\nAppuyez sur le menu pour redémarrer.</string>
+    <string name="qs_header_clock_enabled">Horloge d\'en-tête personnalisée</string>
+    <string name="qs_header_clock_enabled_summary">Ajouter une horloge personnalisée sur le panneau des réglages rapides</string>
+    <string name="qs_header_clock_custom">Style de l\'horloge</string>
+    <string name="qs_header_clock_custom_summary">Faites glisser pour choisir un style de votre choix.</string>
+    <string name="qs_header_clock_custom_user">Utiliser un nom d\'utilisateur personnalisé</string>
+    <string name="qs_header_clock_custom_user_title">Nom d\'utilisateur</string>
+    <string name="qs_header_clock_custom_user_image">Utiliser une image utilisateur personnalisée</string>
+    <string name="qs_header_clock_custom_user_image_title">Photo de Profil</string>
+    <string name="qs_header_clock_custom_user_image_summary">Cliquez pour sélectionner une image.</string>
+    <string name="qs_header_stock_clock_prefs">Préférences de l\'horloge par défaut</string>
+    <string name="qs_header_stock_clock_red_one_title">Comportement Red One</string>
+    <string name="qs_header_stock_clock_red_one_disable">Désactiver le Rouge</string>
+    <string name="qs_header_stock_clock_red_one_color">Couleur pour 1 dans l\'horloge</string>
+    <string name="qs_header_stock_clock_custom_color_title">Activer la couleur personnalisée pour l\'heure</string>
+    <string name="qs_header_stock_clock_custom_color">Couleur personnalisée de l\'heure</string>
+    <string name="qs_header_stock_clock_date_hide">Masquer la date</string>
+    <string name="qs_header_stock_clock_date_custom_color_title">Activer la couleur personnalisée pour la date</string>
+    <string name="qs_header_stock_clock_date_custom_color">Couleur personnalisée de la date</string>
+    <string name="qs_header_stock_clock_hide_carrier_label">Masquer le nom de l\'opérateur</string>
+    <string name="qs_header_stock_clock_background_chip">Puce d\'arrière-plan de l\'horloge</string>
+    <string name="qs_header_stock_clock_background_chip_style">Puce d\'arrière-plan de l\'horloge</string>
+    <string name="qs_header_stock_clock_background_chip_color_mode">Mode de couleur de la puce d\'arrière-plan</string>
+    <string name="qs_header_stock_clock_background_chip_color">Puce d\'arrière-plan personnalisée en couleur</string>
+    <string name="qs_header_stock_date_background_chip">Puce de fond de la date</string>
+    <string name="qs_header_stock_date_background_chip_style">Style de la puce d\'arrière-plan de la date</string>
+    <string name="qs_header_clock_font_prefs_title">Police de caractère</string>
+    <string name="qs_header_clock_font_custom_enabled">Utiliser une police personnalisée</string>
+    <string name="qs_header_clock_prefs">Préférences de l\'horloge personnalisées</string>
+    <string name="qs_header_clock_custom_color_title">Horloge couleur personnalisée</string>
+    <string name="qs_header_clock_custom_color_summary">Couleur personnalisée au lieu de la couleur principale</string>
+    <string name="qs_header_clock_text_scaling">Mise à l\'échelle du texte</string>
     <!-- Qs Header Per Clock Prefs -->
     <!-- Hour only color -->
+    <string name="qs_header_clock_custom_color_hour_mode">Mode couleur de l\'heure</string>
+    <string name="qs_header_clock_custom_color_hour_mode_default">Par défaut</string>
+    <string name="qs_header_clock_custom_color_hour_mode_disabled">Aucun</string>
+    <string name="qs_header_clock_custom_color_hour_mode_like_time">Couleur avec l\'heure de l\'horloge</string>
+    <string name="qs_header_clock_custom_color_hour_mode_first_digit">Seulement le premier chiffre</string>
+    <string name="qs_header_clock_custom_color_hour_mode_one">Seulement le caractère \"1\"</string>
+    <string name="qs_header_clock_custom_color_hour_color">Horloge couleur personnalisée</string>
     <!-- Time color -->
+    <string name="qs_header_clock_custom_color_time_mode">Mode couleur de l\'heure</string>
+    <string name="qs_header_clock_custom_color_time_mode_default">Par défaut</string>
+    <string name="qs_header_clock_custom_color_time_mode_accent">Couleur d\'accentuation</string>
+    <string name="qs_header_clock_custom_color_time_mode_custom">Couleur personnalisée</string>
+    <string name="qs_header_clock_custom_color_time_color">Horloge couleur personnalisée</string>
     <!-- Separator Color, Only for first clock -->
+    <string name="qs_header_clock_custom_color_separator_mode">Mode de couleur du séparateur</string>
+    <string name="qs_header_clock_custom_color_separator_mode_accent">Couleur d\'accentuation</string>
+    <string name="qs_header_clock_custom_color_separator_mode_custom">Couleur personnalisée</string>
+    <string name="qs_header_clock_custom_color_separator_color">Séparateur de couleur personnalisé</string>
     <!-- QS Header Clock Margins -->
+    <string name="qs_header_clock_custom_margins">Marges de l\'horloge</string>
     <!-- QS Header Misc -->
     <!-- Chip Styles Strings -->
     <!-- Launcher Mods -->
+    <string name="hide_scroller_summary">Masquer le défileur dans le tiroir d\'applications</string>
     <!-- NavBar Strings -->
+    <string name="navbar_title">Barre de navigation</string>
+    <string name="gesture_navigation_title">Navigation par gestes</string>
+    <string name="three_button_navigation_title">Navigation à trois boutons</string>
     <!-- Gesture Strings -->
+    <string name="gesture_back_title">Configurer le retour en arrière</string>
+    <string name="gesture_left_title">Côté gauche de l’écran</string>
+    <string name="gesture_right_title">Côté droit de l’écran</string>
+    <string name="gesture_height_title">Hauteur du geste</string>
+    <string name="gesture_back_on_rotate">Activer également en mode paysage</string>
+    <string name="gesture_override_back_hold">Remplacer le mouvement arrière de la veille</string>
+    <string name="gesture_override_back_hold_mode">Remplacer le mode retour</string>
+    <string name="gesture_override_back_hold_mode_default">Commandes pour gauche et droite</string>
+    <string name="gesture_override_back_hold_mode_per_side">Choisir une commande pour chaque côté</string>
+    <string name="gesture_override_back_hold_left">Commande de gauche</string>
+    <string name="gesture_override_back_hold_right">Commande de droite</string>
+    <string name="gesture_override_back_hold_common">Maintenir la commande de retour</string>
+    <string name="gesture_override_back_hold_command_switch_app">Passer à l\'application précédente</string>
+    <string name="gesture_override_back_hold_command_close_recents">Effacer tous les récents</string>
+    <string name="gesture_override_back_hold_command_kill_app">Fermer l\'application active</string>
+    <string name="gesture_override_back_hold_command_screenshot">Capture d\'écran</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">Capture d\'écran défilante</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">Capture d’écran partielle</string>
+    <string name="gesture_override_back_hold_command_quick_settings">Ouvrir les réglages rapides</string>
+    <string name="gesture_override_back_hold_command_power_menu">Ouvrir le menu d\'alimentation</string>
+    <string name="gesture_override_back_hold_command_notification_panel">Ouvrir le panneau des notifications</string>
+    <string name="gesture_override_back_hold_command_toggle_one_handed">Basculer en mode à une main</string>
+    <string name="gesture_override_back_hold_command_screen_off">Éteindre écran</string>
+    <string name="gesture_override_back_hold_command_circle_to_search">Cercle de recherche</string>
     <!-- Gesture Pill Strings -->
+    <string name="gesture_nav_pill_cat">Trait de la barre de navigation</string>
+    <string name="gesture_nav_pill_width_title">Largeur par rapport à la taille standard</string>
     <!-- Custom Gestures -->
     <!-- Buttons Title -->
     <!-- Lockscreen Strings -->
@@ -71,6 +510,8 @@
     <!-- Aod Strings -->
     <!-- Aod Clock -->
     <!-- Aod Weather -->
+    <!-- Aod Pulse -->
+    <!-- Edge light -->
     <!-- Sound Mods -->
     <!-- Pulse music visualizer -->
     <!-- Pulse Gravity n Mirror Options -->
@@ -101,6 +542,7 @@
     <!-- Lockscreen Widgets -->
     <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
+    <!-- Lockscreen Now Bar -->
     <!-- Lag Fix Strings -->
     <!-- Caffeine -->
     <!-- Colors Fragment -->
