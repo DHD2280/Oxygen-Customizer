@@ -6,6 +6,7 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getColorScheme;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getLastNonNullPackageName;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaData;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
@@ -21,7 +22,10 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +37,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -44,6 +49,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -76,6 +82,8 @@ public class NowBarMusic extends LinearLayout {
     private ImageButton mPrevButton, mPrevButtonBig;
     private ImageButton mPlayPauseButton, mPlayPauseButtonBig;
     private ImageButton mNextButton, mNextButtonBig;
+    private ImageButton mLocalFavoriteButton, mLocalLyricBtn;
+    private Space mLocalFavoriteSpace, mLocalLyricSpace;
 
     // Containers
     private LinearLayout mNowBarLayout;
@@ -139,7 +147,8 @@ public class NowBarMusic extends LinearLayout {
         }
         try {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
-        } catch (PackageManager.NameNotFoundException ignored) {}
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
         init();
     }
@@ -160,14 +169,14 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void init() {
-        setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         try {
             mNowBarLayout = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(mContext);
         } catch (Exception e) {
             mNowBarLayout = new LinearLayout(mContext);
         }
 
-        mNowBarLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        mNowBarLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         LayoutInflater inflater = LayoutInflater.from(appContext);
         View v = inflater.inflate(
                 appContext
@@ -183,7 +192,7 @@ public class NowBarMusic extends LinearLayout {
         // Setup album art big as 90% of the screen width
         mAlbumArtBig = (ImageView) ViewHelper.findViewWithTag(v, "album_art_big");
         Rect bounds = SystemUtils.WindowManager().getCurrentWindowMetrics().getBounds();
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
+        LayoutParams imageParams = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 (int) (bounds.right * 0.9f)
         );
@@ -203,7 +212,7 @@ public class NowBarMusic extends LinearLayout {
         } catch (Throwable ignored) {
             mTrackSeekBar = new SeekBar(mContext);
         }
-        mTrackSeekBar.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        mTrackSeekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         mTrackSeekBar.setMin(0);
         mTrackSeekBar.setMax(100);
         // create a new proxy for the seekbar listener
@@ -213,10 +222,14 @@ public class NowBarMusic extends LinearLayout {
                 new SeekbarListener()
         ));
         mSeekBarContainer.addView(mTrackSeekBar);
+        mLocalFavoriteSpace = (Space) ViewHelper.findViewWithTag(v, "space_action_1");
+        mLocalFavoriteButton = (ImageButton) ViewHelper.findViewWithTag(v, "action1");
         mBigMediaPlayer = (LinearLayout) ViewHelper.findViewWithTag(v, "big_media_player");
         mPrevButtonBig = (ImageButton) ViewHelper.findViewWithTag(v, "previous_big");
         mPlayPauseButtonBig = (ImageButton) ViewHelper.findViewWithTag(v, "big_playpause");
         mNextButtonBig = (ImageButton) ViewHelper.findViewWithTag(v, "next_big");
+        mLocalLyricSpace = (Space) ViewHelper.findViewWithTag(v, "space_action_2");
+        mLocalLyricBtn = (ImageButton) ViewHelper.findViewWithTag(v, "action2");
         // Little Media Player
         mLittleMediaPlayer = (LinearLayout) ViewHelper.findViewWithTag(v, "little_media_player");
         albumArt = (ImageView) ViewHelper.findViewWithTag(v, "albumArt");
@@ -372,13 +385,15 @@ public class NowBarMusic extends LinearLayout {
     private void updateMediaPlaybackState() {
         MediaMetadata mediaMetadata = AudioDataProvider.getMediaMetadata();
         boolean isPlaying = AudioDataProvider.isMediaPlaying();
-        XposedBridge.log("NowBarMusic, updateMediaPlaybackState() - isPlaying: " + isPlaying);
         if (resetMediaIfNeeded()) {
             return;
         }
 
         mPlayPauseButton.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_pause, null));
         mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_pause, null));
+
+        Object mediaData = getMediaData();
+        bindActions(mediaData);
 
         if (mediaMetadata != null) {
             String title = mediaMetadata.getString(MediaMetadata.METADATA_KEY_TITLE);
@@ -414,10 +429,18 @@ public class NowBarMusic extends LinearLayout {
             mAppIcon.setImageDrawable(getAppIcon(getLastNonNullPackageName()));
             mAppName.setText(getAppName(getLastNonNullPackageName()));
 
+            Drawable artWork = null;
+            try {
+                if (mediaData != null) {
+                    artWork = (Drawable) callMethod(mediaData, "getArtwork");
+                }
+            } catch (Throwable ignored) {}
             Bitmap bitmap = getArt();
-            if (bitmap != null) {
+            if (bitmap != null || artWork != null) {
                 mAlbumArtBig.clearColorFilter();
-                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(),
+                        bitmap != null ? bitmap :
+                                DrawableConverter.drawableToBitmap(artWork));
                 roundedDrawable.setCornerRadius(32f);
                 roundedDrawable.setAntiAlias(true);
                 mAlbumArtBig.setImageDrawable(roundedDrawable);
@@ -470,12 +493,81 @@ public class NowBarMusic extends LinearLayout {
             mLastAuthor = "";
             trackTitle.setText(NO_MEDIA_STRING);
             trackTitle.setSelected(true);
+            restoreActions();
             setDefaultIcon();
             setBarBackground(Color.BLACK);
             updateViewsColors(Color.WHITE);
             return true;
         }
         return false;
+    }
+
+    private void restoreActions() {
+        mLocalFavoriteButton.setVisibility(View.GONE);
+        mLocalLyricBtn.setVisibility(View.GONE);
+        mLocalFavoriteSpace.setVisibility(View.GONE);
+        mLocalLyricSpace.setVisibility(View.GONE);
+    }
+
+    private void bindActions(Object mediaData) {
+        XposedBridge.log("NowBarMusic bindActions");
+        if (mediaData == null) return;
+        List<Object> actions = (List<Object>) callMethod(mediaData, "getActions");
+        XposedBridge.log("NowBarMusic bindActions actions: " + actions);
+        if (actions == null || actions.isEmpty()) return;
+        if (actions.size() < 4) return;
+        int size = actions.size();
+        boolean isRtl = mContext.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        if (size == 4) {
+            bindMediaNotificationButton(mediaData, actions.get(0),null);
+        } else {
+            bindMediaNotificationButton(mediaData, actions.get(isRtl ? 4 : 0), actions.get(isRtl ? 0 : 4));
+        }
+    }
+
+    public final void bindMediaNotificationButton(Object mediaData, Object mediaAction, Object mediaAction1) {
+
+        mLocalFavoriteButton.setVisibility(mediaAction == null ? View.GONE : View.VISIBLE);
+        mLocalFavoriteSpace.setVisibility(mediaAction == null ? View.GONE : View.VISIBLE);
+        mLocalLyricBtn.setVisibility(mediaAction1 == null ? View.GONE : View.VISIBLE);
+        mLocalLyricSpace.setVisibility(mediaAction1 == null ? View.GONE : View.VISIBLE);
+
+        if (mediaAction != null) {
+            setExtraBtnState(this.mLocalFavoriteButton, mediaAction, mediaData);
+        }
+        if (mediaAction1 != null) {
+            setExtraBtnState(this.mLocalLyricBtn, mediaAction1, mediaData);
+        }
+    }
+
+    private void setExtraBtnState(final ImageButton imageButton, final Object mediaAction, final Object mediaData) {
+        if (imageButton == null) return;
+        Icon finalIcon = null;
+        Icon mediaIcon = (Icon) callMethod(callMethod(mediaAction, "getMediaActionEx"), "getIcon");
+        if (mediaIcon != null) {
+            finalIcon = mediaIcon;
+        } else {
+            finalIcon = (Icon) callMethod(mediaAction, "getIcon");
+        }
+        XposedBridge.log("NowBarMusic setExtraBtnState icon: finalIcon =" + (finalIcon != null));
+        if (imageButton != null) {
+            imageButton.setImageIcon(finalIcon);
+            imageButton.setOnClickListener(v -> handleSemanticButtonClick(mediaAction));
+        }
+    }
+
+    private void handleSemanticButtonClick(Object mediaAction) {
+        // Execute media action
+        Runnable action = (Runnable) callMethod(mediaAction, "getAction");
+        if (action != null) {
+            action.run();
+        }
+        new Handler(Looper.getMainLooper()).postDelayed(this::refreshMediaData, 250);
+    }
+
+    private void refreshMediaData() {
+        refreshMediaData();
+        updateMediaPlaybackState();
     }
 
     private void setDefaultIcon() {
@@ -487,6 +579,10 @@ public class NowBarMusic extends LinearLayout {
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
         mAlbumArtListener.onAlbumArtChanged(background);
+        mLocalFavoriteSpace.setVisibility(View.GONE);
+        mLocalFavoriteButton.setVisibility(View.GONE);
+        mLocalLyricSpace.setVisibility(View.GONE);
+        mLocalLyricBtn.setVisibility(View.GONE);
     }
 
     private final AudioDataProvider.MediaMetadataListener mMediaMetaDataListener = new AudioDataProvider.MediaMetadataListener() {
@@ -520,8 +616,8 @@ public class NowBarMusic extends LinearLayout {
         if (mCurrentColorScheme == null) return Color.BLACK;
         boolean isDark = SystemUtils.isDarkMode();
         return (int) ((!isDark) ?
-                        callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS100") :
-                        callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS700"));
+                callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS100") :
+                callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS700"));
     }
 
     private int getColorOnContainer() {
@@ -539,6 +635,8 @@ public class NowBarMusic extends LinearLayout {
         mPrevButtonBig.setImageTintList(ColorStateList.valueOf(color));
         mNextButtonBig.setImageTintList(ColorStateList.valueOf(color));
         mPlayPauseButtonBig.setBackgroundTintList(ColorStateList.valueOf(color));
+        mLocalLyricBtn.setImageTintList(ColorStateList.valueOf(color));
+        mLocalFavoriteButton.setImageTintList(ColorStateList.valueOf(color));
         callMethod(mTrackSeekBar, "setProgressColor", ColorStateList.valueOf(color));
         callMethod(mTrackSeekBar, "setThumbColor", ColorStateList.valueOf(color));
         mAppName.setTextColor(color);
