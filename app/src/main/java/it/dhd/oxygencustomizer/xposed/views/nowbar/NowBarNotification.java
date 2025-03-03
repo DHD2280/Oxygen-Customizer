@@ -12,6 +12,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.provider.Settings;
@@ -24,6 +25,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
 
@@ -57,6 +60,7 @@ public class NowBarNotification extends RelativeLayout {
     private Object mNotificationListener = null;
     private final OnUsefulNotificationListener mOnUsefulNotificationListener;
     private long mLastNotificationTime = 0L;
+    private Drawable mNotificationDrawable;
 
     public NowBarNotification(Context context, OnUsefulNotificationListener listener) {
         super(context);
@@ -67,6 +71,7 @@ public class NowBarNotification extends RelativeLayout {
         } catch (Throwable ignored) {
         }
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
+        mNotificationDrawable = ResourcesCompat.getDrawable(modRes, R.drawable.notifications_24px, appContext.getTheme());
 
         inflateViews();
         mNotificationListener = getNotificationListenerExternal();
@@ -203,7 +208,7 @@ public class NowBarNotification extends RelativeLayout {
         if (currentDisplayedNotification == null) {
             mNotificationTitleText = modRes.getString(R.string.lockscreen_now_bar_no_notifications);
             mNotificationContentText = "";
-            mIcon.setImageDrawable(null);
+            mIcon.setImageDrawable(mNotificationDrawable);
             refreshText();
             return;
         }

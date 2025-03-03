@@ -10,7 +10,7 @@
         android:layout_height="@dimen/nowbar_album_art_size"
         android:layout_margin="12dp"
         android:padding="8dp"
-        android:src="@drawable/google_30"
+        android:src="@drawable/notifications_24px"
         android:tag="notificationIcon"
         android:layout_gravity="center_vertical"/>
 
