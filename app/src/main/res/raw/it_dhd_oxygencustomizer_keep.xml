@@ -15,4 +15,5 @@
     @drawable/weather_vclouds_*,
     @drawable/weather_weezle_*,
     @drawable/outline_*,
-    @drawable/weatherclient_*" />
+    @drawable/weatherclient_*,
+    @drawable/nothing_*" />
