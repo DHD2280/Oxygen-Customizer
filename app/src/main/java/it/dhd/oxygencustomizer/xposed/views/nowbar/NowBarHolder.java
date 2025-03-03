@@ -407,5 +407,11 @@ public class NowBarHolder extends LinearLayout {
         mBackgroundMode = backgroundMode;
     }
 
+    public void updateNotification(boolean ignoreSecurity) {
+        if (mNowBarNotification != null) {
+            mNowBarNotification.setIgnoreSecurity(ignoreSecurity);
+        }
+    }
+
 }
 

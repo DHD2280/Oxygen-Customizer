@@ -1,15 +1,20 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener.getNotificationListenerExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -22,8 +27,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.NotificationUtils;
@@ -39,10 +44,16 @@ public class NowBarNotification extends RelativeLayout {
     private Context appContext;
     private final ActivityLauncherUtils mActivityLauncherUtils;
 
+    private boolean mUnlocked = false;
+    private boolean ignoreSecurity = false;
+    private boolean mSystemAllowSecureNotifications = false;
+
+    private String mNotificationTitleText;
+    private String mNotificationContentText;
+
     private TextView mTitle;
     private TextView mMessage;
     private ImageView mIcon;
-    private TextView mNotificationHeader;
     private Object mNotificationListener = null;
     private final OnUsefulNotificationListener mOnUsefulNotificationListener;
     private long mLastNotificationTime = 0L;
@@ -53,12 +64,25 @@ public class NowBarNotification extends RelativeLayout {
         mOnUsefulNotificationListener = listener;
         try {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
 
         inflateViews();
         mNotificationListener = getNotificationListenerExternal();
         SystemNotificationListener.addNotificationCallback(mNotificationCallback);
+        SystemNotificationListener.addDeviceUnlockListener(mDeviceUnlockListener);
+        ContentResolver contentResolver = mContext.getContentResolver();
+        contentResolver.registerContentObserver(
+                Settings.Secure.getUriFor("keyguard_notification_visibility"),
+                true,
+                mSecureNotificationObserver
+        );
+        mSystemAllowSecureNotifications = Settings.Secure.getInt(
+                mContext.getContentResolver(),
+                "keyguard_notification_visibility",
+                2) == 1;
+
         GradientDrawable fallBack = new GradientDrawable();
         fallBack.setCornerRadius(100f);
         fallBack.setColor(Color.BLACK);
@@ -67,6 +91,17 @@ public class NowBarNotification extends RelativeLayout {
         setOnClickListener(v -> launchNotificationIntent());
 
     }
+
+    private final ContentObserver mSecureNotificationObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mSystemAllowSecureNotifications = Settings.Secure.getInt(
+                    mContext.getContentResolver(),
+                    "keyguard_notification_visibility",
+                    2) == 1;
+            refreshText();
+        }
+    };
 
     private void launchNotificationIntent() {
         StatusBarNotification currentNotification = currentDisplayedNotification;
@@ -86,7 +121,6 @@ public class NowBarNotification extends RelativeLayout {
         if (currentDisplayedNotification != null) {
             StatusBarNotification sbn = currentDisplayedNotification;
             String sbnKey = sbn.getKey();
-            XposedBridge.log("removeCurrentNotification: " + sbnKey + " - mNotificationListener != null " + (mNotificationListener != null));
             if (mNotificationListener != null) {
                 callMethod(mNotificationListener, "cancelNotification", sbnKey);
             }
@@ -124,6 +158,11 @@ public class NowBarNotification extends RelativeLayout {
         }
     };
 
+    private SystemNotificationListener.DeviceUnlockListener mDeviceUnlockListener = unlocked -> {
+        mUnlocked = unlocked;
+        refreshText();
+    };
+
     private void inflateViews() {
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(mContext, 72)));
         LayoutInflater inflater = LayoutInflater.from(appContext);
@@ -140,7 +179,6 @@ public class NowBarNotification extends RelativeLayout {
         mTitle = (TextView) ViewHelper.findViewWithTag(v, "notificationTitle");
         mMessage = (TextView) ViewHelper.findViewWithTag(v, "notificationMessage");
         mIcon = (ImageView) ViewHelper.findViewWithTag(v, "notificationIcon");
-        mNotificationHeader = (TextView) ViewHelper.findViewWithTag(v, "notificationHeader");
         v.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(mContext, 72)));
         addView(v);
         setBarBackground();
@@ -155,28 +193,45 @@ public class NowBarNotification extends RelativeLayout {
 
     public void updateNotifications(List<StatusBarNotification> notificationList) {
         StatusBarNotification usefulNotification = NotificationUtils.getFirstUsefulNotification(notificationList, currentRankingMap);
-        if (usefulNotification != null && usefulNotification != currentDisplayedNotification && mLastNotificationTime < usefulNotification.getPostTime()) {
+        if (usefulNotification != currentDisplayedNotification && mLastNotificationTime < usefulNotification.getPostTime()) {
             mLastNotificationTime = System.currentTimeMillis();
             currentDisplayedNotification = usefulNotification;
             mOnUsefulNotificationListener.onUsefulNotification();
+        } else {
+            currentDisplayedNotification = null;
         }
         if (currentDisplayedNotification == null) {
-            mTitle.setText("No New Notification");
-            mTitle.setSelected(true);
-            mMessage.setText("");
+            mNotificationTitleText = modRes.getString(R.string.lockscreen_now_bar_no_notifications);
+            mNotificationContentText = "";
             mIcon.setImageDrawable(null);
+            refreshText();
             return;
         }
         Pair<String, String> ntf = NotificationUtils.resolveNotificationContent(currentDisplayedNotification);
-        mTitle.setText(ntf.first);
-        mTitle.setSelected(true);
-        mMessage.setText(ntf.second);
-        mMessage.setSelected(true);
+        mNotificationTitleText = ntf.first;
+        mNotificationContentText = ntf.second;
+        refreshText();
         mIcon.setImageDrawable(NotificationUtils.resolveSmallIcon(currentDisplayedNotification, mContext));
     }
 
     public interface OnUsefulNotificationListener {
         void onUsefulNotification();
+    }
+
+    public void setIgnoreSecurity(boolean ignoreSecurity) {
+        this.ignoreSecurity = ignoreSecurity;
+        refreshText();
+    }
+
+    private void refreshText() {
+        mTitle.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
+                mNotificationTitleText :
+                modRes.getString(R.string.lockscreen_now_bar_new_notification));
+        mMessage.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
+                mNotificationContentText :
+                modRes.getString(R.string.lockscreen_now_bar_new_notification_content));
+        mTitle.setSelected(true);
+        mMessage.setSelected(true);
     }
 
 }

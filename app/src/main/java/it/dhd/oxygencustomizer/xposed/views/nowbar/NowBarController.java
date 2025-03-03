@@ -9,7 +9,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 
 public class NowBarController {
 
-    private final boolean DEBUG = BuildConfig.DEBUG;
+    private final boolean DEBUG = true;
 
     @SuppressLint("StaticFieldLeak")
     private static NowBarController instance;
@@ -134,6 +134,12 @@ public class NowBarController {
     public void updateMusic(boolean extendedPlayer, int backgroundMode) {
         if (mView != null) {
             mView.updateMusic(extendedPlayer, backgroundMode);
+        }
+    }
+
+    public void updateNotification(boolean ignoreSecurity) {
+        if (mView != null) {
+            mView.updateNotification(ignoreSecurity);
         }
     }
 

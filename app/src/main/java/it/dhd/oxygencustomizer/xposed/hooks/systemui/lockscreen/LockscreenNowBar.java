@@ -26,6 +26,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_IGNORE_SECURITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
@@ -91,6 +92,9 @@ public class LockscreenNowBar extends XposedMods {
     private int mNowBarWeatherBackgroundColor = Color.parseColor("#0D47A1");
     private int mNowBarWeatherTextColor = Color.WHITE;
 
+    // Notification
+    private boolean mNowBarNotificationIgnoreSecurity = false;
+
     private int mAffordanceWidth = 0;
 
     public LockscreenNowBar(Context context) {
@@ -138,6 +142,9 @@ public class LockscreenNowBar extends XposedMods {
         mNowBarWeatherBackgroundColor = Xprefs.getInt(NOW_BAR_WEATHER_BACKGROUND_COLOR, Color.parseColor("#0D47A1"));
         mNowBarWeatherTextColor = Xprefs.getInt(NOW_BAR_WEATHER_TEXT_COLOR, Color.WHITE);
 
+        // Notification
+        mNowBarNotificationIgnoreSecurity = Xprefs.getBoolean(NOW_BAR_NOTIFICATION_IGNORE_SECURITY, false);
+
         if (Key.length > 0) {
             if (Key[0].equals(NOW_BAR_ENABLED) ||
                     Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE) ||
@@ -162,19 +169,24 @@ public class LockscreenNowBar extends XposedMods {
                     Key[0].equals(NOW_BAR_WEATHER_CUSTOM_COLORS)) {
                 updateWeather();
             }
+            if (Key[0].equals(NOW_BAR_NOTIFICATION_IGNORE_SECURITY)) {
+                updateNotification();
+            }
         }
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
-        NotificationPanelViewController
-                .after("onFinishInflate")
-                .run(param -> {
-                    mNotificationPanelView = (ViewGroup) getObjectField(param.thisObject, "mView");
-                    placeNowBar();
-                });
+        Class<?> NotificationPanelViewController = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        hookAllMethods(NotificationPanelViewController, "onFinishInflate", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("LockscreenNowBar NotificationPanelViewController onFinishInflate");
+                mNotificationPanelView = (ViewGroup) getObjectField(param.thisObject, "mView");
+                placeNowBar();
+            }
+        });
 
         ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
         KeyguardStatusViewController
@@ -243,6 +255,7 @@ public class LockscreenNowBar extends XposedMods {
     }
 
     private void placeNowBar() {
+        XposedBridge.log("LockscreenNowBar, placeNowBar");
         if (mNotificationPanelView == null) return;
         NowBarHolder mNowBarHolder = NowBarHolder.getInstance(mContext, musicExpansionListener);
         try {
@@ -256,6 +269,7 @@ public class LockscreenNowBar extends XposedMods {
         updateMusic();
         updateBattery();
         updateWeather();
+        updateNotification();
     }
 
     private void updateNowBar() {
@@ -307,6 +321,12 @@ public class LockscreenNowBar extends XposedMods {
         mNowBarController.updateWeather(
                 mNowBarWeatherCustomColors, mNowBarWeatherTextColor, mNowBarWeatherBackgroundColor
         );
+    }
+
+    private void updateNotification() {
+        NowBarController mNowBarController = NowBarController.getInstance();
+        if (mNowBarController == null) return;
+        mNowBarController.updateNotification(mNowBarNotificationIgnoreSecurity);
     }
 
     @Override

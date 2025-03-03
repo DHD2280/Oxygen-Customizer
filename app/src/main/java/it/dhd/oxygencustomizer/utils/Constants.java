@@ -526,6 +526,8 @@ public final class Constants {
             public static final String NOW_BAR_WEATHER_BACKGROUND_COLOR = "lockscreen_now_bar_weather_background_color";
             public static final String NOW_BAR_WEATHER_TEXT_COLOR = "lockscreen_now_bar_weather_text_color";
 
+            public static final String NOW_BAR_NOTIFICATION_IGNORE_SECURITY = "lockscreen_now_bar_notification_ignore_security";
+
             public static final String[] NOW_BAR_BATTERY_PREFS =  {
                     NOW_BAR_BATTERY_CHARGING_ICON_SWITCH,
                     NOW_BAR_BATTERY_CHARGING_ICON_STYLE,
