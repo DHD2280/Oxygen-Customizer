@@ -93,4 +93,9 @@
         <attr name="backgroundChipStyle" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="ImageIllustrationPreference">
+        <attr name="backgroundResource" format="reference" />
+        <attr name="imageResource" format="reference" />
+    </declare-styleable>
+
 </resources>
