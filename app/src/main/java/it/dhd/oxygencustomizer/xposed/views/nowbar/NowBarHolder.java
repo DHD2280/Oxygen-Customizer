@@ -253,60 +253,6 @@ public class NowBarHolder extends LinearLayout {
         mContext.unregisterReceiver(batteryReceiver);
     }
 
-//    private static class NowBarAdapter extends PagerAdapter {
-//
-//        private final Context context;
-//        private final boolean weatherEnabled;
-//        private final boolean notificationEnabled;
-//
-//        public NowBarAdapter(Context context, boolean weatherEnabled, boolean notificationEnabled) {
-//            this.context = context;
-//            this.weatherEnabled = weatherEnabled;
-//            this.notificationEnabled = notificationEnabled;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            if (weatherEnabled && notificationEnabled) return 4;
-//            if (weatherEnabled || notificationEnabled) return 3;
-//            return 2;
-//        }
-//
-//        @NonNull
-//        @Override
-//        public Object instantiateItem(@NonNull View container, int position) {
-//            View view;
-//            switch (position) {
-//                case 1 -> {
-//                    view = instance.mNowBarBattery;
-//                    break;
-//                }
-//                case 2 -> {
-//                    if (weatherEnabled && !notificationEnabled) {
-//                        view = instance.mNowBarWeather;
-//                    } else {
-//                        view = instance.mNowBarNotification;
-//                    }
-//                    break;
-//                }
-//                case 3 -> view = instance.mNowBarNotification;
-//                default -> view = instance.mNowBarMusic;
-//            };
-//            ((ViewPager) container).addView(view);
-//            return view;
-//        }
-//
-//        @Override
-//        public void destroyItem(@NonNull View container, int position, @NonNull Object object) {
-//            ((ViewPager) container).removeView((View) object);
-//        }
-//
-//        @Override
-//        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-//            return view == object;
-//        }
-//    }
-
     private static class PageTransitionTransformer implements ViewPager.PageTransformer {
 
         private static final float SCALE_FACTOR = 0.9f;
