@@ -1366,7 +1366,7 @@
     <string name="lockscreen_now_bar_notifications_category">Now bar notification</string>
     <string name="lockscreen_now_bar_notifications_allow_private">Allow private notifications</string>
     <string name="lockscreen_now_bar_notifications_allow_private_summary">Ignore system settings and always show notification content</string>
-    <string name="lockscree_now_bar_footer">Now bar is a little bar placed between the two affordance buttons in lockscreen.\nIt can show media player, battery status and optionally weather.\nIf you don\'t want to see stock media player, just hide it in stock settings.\nNote: if you hide both affordance buttons, the now bar will take the entire space.</string>
+    <string name="lockscreen_now_bar_footer">Now bar is a little bar placed between the two affordance buttons in lockscreen.\nIt can show media player, battery status and optionally weather.\nIf you don\'t want to see stock media player, just hide it in stock settings.\nNote: if you hide both affordance buttons, the now bar will take the entire space.</string>
 
     <!-- Now Bar Notifications string -->
     <string name="lockscreen_now_bar_no_notifications">No new notification</string>
