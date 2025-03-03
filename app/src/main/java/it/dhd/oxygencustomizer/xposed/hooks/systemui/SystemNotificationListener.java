@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
+import static de.robv.android.xposed.XposedBridge.hookAllMethods;
+import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.annotation.SuppressLint;
@@ -10,6 +12,7 @@ import android.service.notification.StatusBarNotification;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -22,6 +25,7 @@ public class SystemNotificationListener extends XposedMods {
     private static SystemNotificationListener instance = null;
 
     private List<NotificationCallback> mNotificationCallbacks = new ArrayList<>();
+    private List<DeviceUnlockListener> mDeviceUnlockListeners = new ArrayList<>();
     public Object mNotificationListener = null;
 
     public SystemNotificationListener(Context context) {
@@ -69,6 +73,16 @@ public class SystemNotificationListener extends XposedMods {
                     onNotificationRankingUpdate(rankingMap);
                 });
 
+
+        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
+        hookAllMethods(KeyguardUpdateMonitor, "getUserCanSkipBouncer", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                boolean canSkipBouncer = (boolean) param.getResult();
+                onDeviceUnlock(canSkipBouncer);
+            }
+        });
+
     }
 
     @Override
@@ -83,12 +97,24 @@ public class SystemNotificationListener extends XposedMods {
         void onNotificationRankingUpdate(NotificationListenerService.RankingMap rankingMap);
     }
 
+    public interface DeviceUnlockListener {
+        void onDeviceUnlock(boolean unlocked);
+    }
+
     public static void addNotificationCallback(NotificationCallback callback) {
         instance.mNotificationCallbacks.add(callback);
     }
 
     public static void removeNotificationCallback(NotificationCallback callback) {
         instance.mNotificationCallbacks.remove(callback);
+    }
+
+    public static void addDeviceUnlockListener(DeviceUnlockListener listener) {
+        instance.mDeviceUnlockListeners.add(listener);
+    }
+
+    public static void removeDeviceUnlockListener(DeviceUnlockListener listener) {
+        instance.mDeviceUnlockListeners.remove(listener);
     }
 
     public static Object getNotificationListenerExternal() {
@@ -116,6 +142,12 @@ public class SystemNotificationListener extends XposedMods {
     private void onNotificationRankingUpdate(NotificationListenerService.RankingMap rankingMap) {
         for (NotificationCallback callback : mNotificationCallbacks) {
             callback.onNotificationRankingUpdate(rankingMap);
+        }
+    }
+
+    private void onDeviceUnlock(boolean unlocked) {
+        for (DeviceUnlockListener listener : mDeviceUnlockListeners) {
+            listener.onDeviceUnlock(unlocked);
         }
     }
 
