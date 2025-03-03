@@ -566,7 +566,7 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void refreshMediaData() {
-        refreshMediaData();
+        AudioDataProvider.refreshMediaData();
         updateMediaPlaybackState();
     }
 
