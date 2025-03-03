@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
@@ -19,17 +20,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -48,7 +47,6 @@ public class AudioDataProvider extends XposedMods {
     public Bitmap mArt;
     private String lastSavedPackageName = "";
     private MediaSessionManager mMediaSessionManager;
-    private ActivityLauncherUtils mActivityLauncherUtils;
     private MediaController mActiveController;
     private int mCurrentMediaArtColor = 0;
     private WallpaperColors mWallpaperColors = null;
@@ -178,7 +176,7 @@ public class AudioDataProvider extends XposedMods {
                             MediaMetadata metaData = (MediaMetadata) param.args[0];
                             if (mMediaMetadata != metaData) {
                                 mMediaMetadata = metaData;
-                                mArt = getArtWork();
+                                setArtWork();
                             }
                             mPlaybackState = (int) param.args[1];
                             onPrimaryMetadataOrStateChanged((int) param.args[1]);
@@ -195,6 +193,7 @@ public class AudioDataProvider extends XposedMods {
                 .after("onMediaDataLoaded")
                 .run(param -> {
                     mMediaData = param.args[2];
+                    setArtWork();
                 });
         OplusMediaControllerImpl
                 .after("dispatchMediaDataOnRemov")
@@ -220,16 +219,28 @@ public class AudioDataProvider extends XposedMods {
         }
     }
 
-    private Bitmap getArtWork() {
+    private void setArtWork() {
         MediaMetadata mediaMetadata = instance.mMediaMetadata;
-        if (mediaMetadata == null) {
-            return null;
+        Object MediaData = null;
+        try {
+            MediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+        } catch (Throwable ignored) {}
+        Bitmap art = null;
+        if (mediaMetadata != null) {
+            art = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null ?
+                    mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) :
+                    mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART) != null ?
+                            mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART) :
+                            mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
         }
-        return mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null ?
-                        mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) :
-                mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART) != null ?
-                                mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART) :
-                                mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
+        Icon artIcon;
+        if (MediaData != null) {
+            artIcon = (Icon) callMethod(MediaData, "getArtwork");
+            if (artIcon != null && art == null) {
+                art = artIcon != null ? DrawableConverter.drawableToBitmap(artIcon.loadDrawable(mContext)) : null;
+            }
+        }
+        instance.mArt = art;
     }
 
     public void updateMediaColors() {

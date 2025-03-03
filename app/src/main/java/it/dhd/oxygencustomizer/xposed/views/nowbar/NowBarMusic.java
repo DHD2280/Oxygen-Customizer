@@ -1,6 +1,8 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
@@ -13,6 +15,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBarListener;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -26,7 +29,9 @@ import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserHandle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -375,7 +380,7 @@ public class NowBarMusic extends LinearLayout {
     private void setBarBackground(int color) {
         if (mBackgroundColor != color) mBackgroundColor = color;
         GradientDrawable background = new GradientDrawable();
-        background.setColor(color);
+        background.setColor(mBackgroundColor);
         background.setCornerRadius(100f);
         mBigMediaPlayer.setBackground(background);
         mLittleMediaPlayer.setBackground(background);
@@ -393,7 +398,11 @@ public class NowBarMusic extends LinearLayout {
         mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_pause, null));
 
         Object mediaData = getMediaData();
-        bindActions(mediaData);
+        try {
+            bindActions(mediaData);
+        } catch (Throwable t) {
+            XposedBridge.log("NowBarMusic bindActions: " + Log.getStackTraceString(t));
+        }
 
         if (mediaMetadata != null) {
             String title = mediaMetadata.getString(MediaMetadata.METADATA_KEY_TITLE);
@@ -432,21 +441,21 @@ public class NowBarMusic extends LinearLayout {
             Drawable artWork = null;
             try {
                 if (mediaData != null) {
-                    artWork = (Drawable) callMethod(mediaData, "getArtwork");
+                    Icon art = (Icon) callMethod(mediaData, "getArtwork");
+                    artWork = art.loadDrawable(mContext);
                 }
             } catch (Throwable ignored) {}
             Bitmap bitmap = getArt();
             if (bitmap != null || artWork != null) {
                 mAlbumArtBig.clearColorFilter();
-                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(),
-                        bitmap != null ? bitmap :
-                                DrawableConverter.drawableToBitmap(artWork));
+                Bitmap artWorkBitmap = bitmap != null ? bitmap : DrawableConverter.drawableToBitmap(artWork);
+                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), artWorkBitmap);
                 roundedDrawable.setCornerRadius(32f);
                 roundedDrawable.setAntiAlias(true);
                 mAlbumArtBig.setImageDrawable(roundedDrawable);
                 mAlbumArtListener.onAlbumArtChanged(roundedDrawable);
                 int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
-                CircleFramedDrawable drawable = new CircleFramedDrawable(bitmap, roundSize);
+                CircleFramedDrawable drawable = new CircleFramedDrawable(artWorkBitmap, roundSize);
                 albumArt.setImageDrawable(drawable);
                 albumArt.clearColorFilter();
             } else {
@@ -493,7 +502,9 @@ public class NowBarMusic extends LinearLayout {
             mLastAuthor = "";
             trackTitle.setText(NO_MEDIA_STRING);
             trackTitle.setSelected(true);
-            restoreActions();
+            mAppIcon.setImageDrawable(null);
+            mAppName.setText("");
+//            restoreActions();
             setDefaultIcon();
             setBarBackground(Color.BLACK);
             updateViewsColors(Color.WHITE);
@@ -509,11 +520,9 @@ public class NowBarMusic extends LinearLayout {
         mLocalLyricSpace.setVisibility(View.GONE);
     }
 
-    private void bindActions(Object mediaData) {
-        XposedBridge.log("NowBarMusic bindActions");
+    private void bindActions(Object mediaData) throws Throwable {
         if (mediaData == null) return;
         List<Object> actions = (List<Object>) callMethod(mediaData, "getActions");
-        XposedBridge.log("NowBarMusic bindActions actions: " + actions);
         if (actions == null || actions.isEmpty()) return;
         if (actions.size() < 4) return;
         int size = actions.size();
@@ -525,7 +534,7 @@ public class NowBarMusic extends LinearLayout {
         }
     }
 
-    public final void bindMediaNotificationButton(Object mediaData, Object mediaAction, Object mediaAction1) {
+    public final void bindMediaNotificationButton(Object mediaData, Object mediaAction, Object mediaAction1) throws Throwable {
 
         mLocalFavoriteButton.setVisibility(mediaAction == null ? View.GONE : View.VISIBLE);
         mLocalFavoriteSpace.setVisibility(mediaAction == null ? View.GONE : View.VISIBLE);
@@ -540,18 +549,23 @@ public class NowBarMusic extends LinearLayout {
         }
     }
 
-    private void setExtraBtnState(final ImageButton imageButton, final Object mediaAction, final Object mediaData) {
+    private void setExtraBtnState(final ImageButton imageButton, final Object mediaAction, final Object mediaData) throws Throwable {
         if (imageButton == null) return;
         Icon finalIcon = null;
-        Icon mediaIcon = (Icon) callMethod(callMethod(mediaAction, "getMediaActionEx"), "getIcon");
-        if (mediaIcon != null) {
-            finalIcon = mediaIcon;
-        } else {
-            finalIcon = (Icon) callMethod(mediaAction, "getIcon");
+        Object mediaActionEx = null;
+        try {
+            mediaActionEx = callMethod(mediaAction, "getMediaActionEx");
+        } catch (Throwable t) {
+            mediaActionEx = getObjectField(mediaAction, "mediaActionEx");
         }
-        XposedBridge.log("NowBarMusic setExtraBtnState icon: finalIcon =" + (finalIcon != null));
+        Icon mediaIcon = (Icon) callMethod(mediaActionEx, "getIcon");
+        Drawable drawable = (Drawable) callMethod(mediaIcon, "loadDrawableAsUser", mContext, callStaticMethod(ActivityManager.class, "getCurrentUser"));
+        if (drawable == null) {
+            Icon mediaIcon2 = (Icon) callMethod(mediaAction, "getIcon");
+            drawable = mediaIcon2.loadDrawable(mContext);
+        }
         if (imageButton != null) {
-            imageButton.setImageIcon(finalIcon);
+            imageButton.setImageDrawable(drawable);
             imageButton.setOnClickListener(v -> handleSemanticButtonClick(mediaAction));
         }
     }
@@ -579,10 +593,6 @@ public class NowBarMusic extends LinearLayout {
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
         mAlbumArtListener.onAlbumArtChanged(background);
-        mLocalFavoriteSpace.setVisibility(View.GONE);
-        mLocalFavoriteButton.setVisibility(View.GONE);
-        mLocalLyricSpace.setVisibility(View.GONE);
-        mLocalLyricBtn.setVisibility(View.GONE);
     }
 
     private final AudioDataProvider.MediaMetadataListener mMediaMetaDataListener = new AudioDataProvider.MediaMetadataListener() {
