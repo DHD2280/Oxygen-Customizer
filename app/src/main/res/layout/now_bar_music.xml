@@ -3,11 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:tag="clock_container">
+
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:tag="clock_hours_tick"
+            android:format12Hour="HH:mm"
+            android:format24Hour="hh:mm"
+            android:textColor="#00000000"
+            android:textSize="60dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:gravity="center_horizontal"
+                android:tag="clock_hours_text"
+                android:textSize="60sp" />
+
+            <TextClock
+                android:textColor="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
+                android:gravity="center_horizontal"
+                android:textSize="40sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="12dp"
         android:gravity="bottom"
         android:orientation="vertical"
         android:tag="full_media_player">
@@ -16,46 +61,45 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/kg_widget_main_width"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="28dp"
             android:tag="album_art_big"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
-            android:gravity="center_horizontal"
-            android:tag="title_big"
-            android:text="Title"
-            android:singleLine="true"
+            android:layout_marginBottom="12dp"
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:gravity="center_horizontal"
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
             android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:tag="title_big"
             android:textColor="#FFFFFF"
             android:textSize="28sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center_horizontal"
-            android:tag="album_big"
-            android:singleLine="true"
+            android:layout_marginBottom="12dp"
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:gravity="center_horizontal"
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
             android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:tag="album_big"
             android:text=""
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,8 +112,55 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="18dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:tag="compact_infos"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:tag="title_medium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:tag="album_medium"
+                    android:text=""
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal"
+                android:tag="app_infos"
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="@dimen/nowbar_media_buttons_size_big"
@@ -134,20 +225,20 @@
                 android:tag="buttons_container">
 
                 <Space
-                    android:visibility="gone"
-                    android:tag="space_action_1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:tag="space_action_1"
+                    android:visibility="gone" />
 
                 <ImageButton
-                    android:visibility="gone"
                     android:layout_width="@dimen/nowbar_media_buttons_size_big"
                     android:layout_height="@dimen/nowbar_media_buttons_size_big"
                     android:background="@null"
                     android:clickable="true"
                     android:importantForAccessibility="no"
-                    android:tag="action1" />
+                    android:tag="action1"
+                    android:visibility="gone" />
 
                 <Space
                     android:layout_width="0dp"
@@ -201,15 +292,15 @@
                     android:background="@null"
                     android:clickable="true"
                     android:importantForAccessibility="no"
-                    android:visibility="gone"
-                    android:tag="action2" />
+                    android:tag="action2"
+                    android:visibility="gone" />
 
                 <Space
-                    android:tag="space_action_2"
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:tag="space_action_2"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -247,7 +338,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="6dp"
@@ -259,6 +349,7 @@
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:tag="trackTitle"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
 

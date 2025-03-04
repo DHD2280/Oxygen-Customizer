@@ -61,6 +61,20 @@
             android:title="@string/lockscreen_now_bar_music_extended_player_background"
             app:useSimpleSummaryProvider="true" />
 
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/now_bar_music_exdended_player_mode_entries"
+            android:entryValues="@array/now_bar_music_exdended_player_mode_values"
+            android:key="lockscreen_now_bar_music_extended_mode"
+            android:title="@string/lockscreen_now_bar_music_extended_player_mode"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_music_extended_player_show_clock"
+            android:summary="@string/lockscreen_now_bar_music_extended_player_show_clock_summary"
+            android:title="@string/lockscreen_now_bar_music_extended_player_show_clock" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

@@ -131,9 +131,11 @@ public class NowBarController {
         if (mView != null) mView.updateMargins(left, right, bottom);
     }
 
-    public void updateMusic(boolean extendedPlayer, int backgroundMode) {
+    public void updateMusic(
+            boolean extendedPlayer, int backgroundMode,
+            int playerMode, boolean showClock) {
         if (mView != null) {
-            mView.updateMusic(extendedPlayer, backgroundMode);
+            mView.updateMusic(extendedPlayer, backgroundMode, playerMode, showClock);
         }
     }
 

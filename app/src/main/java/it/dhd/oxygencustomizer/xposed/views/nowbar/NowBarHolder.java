@@ -346,9 +346,12 @@ public class NowBarHolder extends LinearLayout {
         }
     }
 
-    public void updateMusic(boolean extendedPlayer, int backgroundMode) {
+    public void updateMusic(
+            boolean extendedPlayer, int backgroundMode,
+            int playerMode, boolean showClock) {
         if (mNowBarMusic != null) {
             mNowBarMusic.setExtendedPlayerEnabled(extendedPlayer);
+            mNowBarMusic.setExtendedPlayerOptions(playerMode, showClock);
         }
         mBackgroundMode = backgroundMode;
     }

@@ -29,7 +29,6 @@ import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,11 +37,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.AbsSeekBar;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Space;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -54,6 +55,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -64,9 +66,10 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
-import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 
 @SuppressLint("ViewConstructor")
 public class NowBarMusic extends LinearLayout {
@@ -92,13 +95,20 @@ public class NowBarMusic extends LinearLayout {
 
     // Containers
     private LinearLayout mNowBarLayout;
+    private FrameLayout mClockContainer;
     private LinearLayout mBigMediaPlayer, mLittleMediaPlayer;
     private LinearLayout mSeekBarContainer;
+    private LinearLayout mAppInfos, mCompactInfos;
+
+    // Clock
+    private TextView mHours;
+    private TextClock mTicker;
 
     // Texts
     private TextView trackTitle;
     private TextView mTitle, mAuthor;
     private TextView mCurrentTime, mTotalTime;
+    private TextView mCompactTitle, mCompactAuthor;
 
     // App Info
     private TextView mAppName;
@@ -116,6 +126,10 @@ public class NowBarMusic extends LinearLayout {
     private boolean mExpanded = false;
     private String mLastTitle = "";
     private String mLastAuthor = "";
+    private int mExtendedPlayerMode = 0;
+    private final int MODE_LARGE = 0;
+    private final int MODE_COMPACT = 1;
+    private boolean mShowClock = false;
 
     // Activity Launcher
     private final ActivityLauncherUtils mActivityLauncherUtils;
@@ -194,6 +208,10 @@ public class NowBarMusic extends LinearLayout {
                 null
         );
 
+        mClockContainer = (FrameLayout) ViewHelper.findViewWithTag(v, "clock_container");
+        mHours = (TextView) ViewHelper.findViewWithTag(v, "clock_hours_text");
+        mTicker = (TextClock) ViewHelper.findViewWithTag(v, "clock_hours_tick");
+        TimeUtils.setCurrentTimeTextClockRed(mTicker, mHours, Color.parseColor("#FFF50514"));
         // Setup album art big as 90% of the screen width
         mAlbumArtBig = (ImageView) ViewHelper.findViewWithTag(v, "album_art_big");
         Rect bounds = SystemUtils.WindowManager().getCurrentWindowMetrics().getBounds();
@@ -205,7 +223,11 @@ public class NowBarMusic extends LinearLayout {
         mAlbumArtBig.setLayoutParams(imageParams);
         mTitle = (TextView) ViewHelper.findViewWithTag(v, "title_big");
         mAuthor = (TextView) ViewHelper.findViewWithTag(v, "album_big");
+        mCompactTitle = (TextView) ViewHelper.findViewWithTag(v, "title_medium");
+        mCompactAuthor = (TextView) ViewHelper.findViewWithTag(v, "album_medium");
         // Big Media Player
+        mCompactInfos = (LinearLayout) ViewHelper.findViewWithTag(v, "compact_infos");
+        mAppInfos = (LinearLayout) ViewHelper.findViewWithTag(v, "app_infos");
         mAppIcon = (ImageView) ViewHelper.findViewWithTag(v, "app_icon");
         mAppName = (TextView) ViewHelper.findViewWithTag(v, "app_name");
         mCurrentTime = (TextView) ViewHelper.findViewWithTag(v, "current_position");
@@ -245,8 +267,16 @@ public class NowBarMusic extends LinearLayout {
         mNowBarLayout.addView(v);
         setBarBackground(Color.BLACK);
 
-        mAlbumArtBig.setOnClickListener(v1 -> triggerMediaPlayer()/*mActivityLauncherUtils.launchApp(getLastNonNullPackageName(), false)*/);
-        albumArt.setOnClickListener(v1 -> triggerMediaPlayer()/*mActivityLauncherUtils.launchApp(getLastNonNullPackageName(), false)*/);
+        mLittleMediaPlayer.setOnLongClickListener(v1 -> {
+            mActivityLauncherUtils.launchApp(getLastNonNullPackageName(), false);
+            return true;
+        });
+        mBigMediaPlayer.setOnLongClickListener(v1 -> {
+            mActivityLauncherUtils.launchApp(getLastNonNullPackageName(), false);
+            return true;
+        });
+        mAlbumArtBig.setOnClickListener(v1 -> triggerMediaPlayer());
+        albumArt.setOnClickListener(v1 -> triggerMediaPlayer());
         mPrevButton.setOnClickListener(v1 -> AudioDataProvider.instance.prevSong());
         mPlayPauseButton.setOnClickListener(v1 -> AudioDataProvider.instance.toggleMediaPlaybackState());
         mNextButton.setOnClickListener(v1 -> AudioDataProvider.instance.nextSong());
@@ -257,11 +287,8 @@ public class NowBarMusic extends LinearLayout {
         setDefaultIcon();
         trackTitle.setText(NO_MEDIA_STRING);
         mTitle.setText(NO_MEDIA_STRING);
+        mCompactTitle.setText(NO_MEDIA_STRING);
 
-        setOnLongClickListener(v1 -> {
-            mActivityLauncherUtils.launchApp(getLastNonNullPackageName(), false);
-            return true;
-        });
         addView(mNowBarLayout);
 
         AudioDataProvider.registerMediaMetadataListener(mMediaMetaDataListener);
@@ -310,7 +337,11 @@ public class NowBarMusic extends LinearLayout {
     private void triggerMediaPlayer() {
         if (!mExtendedPlayer) return;
         mExpanded = !mExpanded;
-        View[] viewToAnimate = new View[]{mAlbumArtBig, mTitle, mAuthor, mBigMediaPlayer};
+        List<View> views = new ArrayList<>(List.of(mAlbumArtBig, mBigMediaPlayer));
+        if (mExtendedPlayerMode == MODE_LARGE) {
+            views.addAll(List.of(mTitle, mAuthor));
+        }
+        if (mShowClock) views.add(mClockContainer);
         if (mExpanded) {
             mLittleMediaPlayer
                     .animate()
@@ -322,12 +353,12 @@ public class NowBarMusic extends LinearLayout {
                     .withEndAction(() -> {
                         mLittleMediaPlayer.setVisibility(View.GONE);
                         mExpansionListener.onExpandedStateChanged(mExpanded);
-                        animateOthers();
+                        animateOthers(views);
                         setBarBackground(mBackgroundColor);
                     })
                     .start();
         } else {
-            for (View v : viewToAnimate) {
+            for (View v : views) {
                 v
                         .animate()
                         .scaleX(0.4f)
@@ -357,9 +388,8 @@ public class NowBarMusic extends LinearLayout {
 
     }
 
-    private void animateOthers() {
-        View[] viewToAnimate = new View[]{mAlbumArtBig, mTitle, mAuthor, mBigMediaPlayer};
-        for (View v : viewToAnimate) {
+    private void animateOthers(List<View> views) {
+        for (View v : views) {
             // show
             v.setVisibility(View.VISIBLE);
             v.setScaleX(0.4f);
@@ -372,8 +402,9 @@ public class NowBarMusic extends LinearLayout {
                     .setDuration(300L)
                     .setInterpolator(new FastOutSlowInInterpolator())
                     .start();
-            mTitle.setSelected(true);
-            mAuthor.setSelected(true);
+            if (v instanceof TextView text) {
+                text.setSelected(true);
+            }
         }
     }
 
@@ -411,16 +442,22 @@ public class NowBarMusic extends LinearLayout {
                 mLastTitle = title;
                 trackTitle.setText(title);
                 mTitle.setText(title);
-                trackTitle.setSelected(true);
+                mCompactTitle.setText(title);
             } else if (TextUtils.isEmpty(title)) {
                 trackTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
                 mTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
+                mCompactTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
             }
+            trackTitle.setSelected(true);
+            mCompactTitle.setSelected(true);
             if (!TextUtils.isEmpty(artist) && !artist.equals(mLastAuthor) && !TextUtils.equals(artist, mAuthor.getText())) {
                 mLastAuthor = artist;
                 mAuthor.setText(artist);
+                mCompactAuthor.setText(artist);
+                mCompactAuthor.setSelected(true);
             } else if (TextUtils.isEmpty(artist)) {
                 mAuthor.setText(modRes.getString(R.string.omnijaws_city_unknown));
+                mCompactAuthor.setText(modRes.getString(R.string.omnijaws_city_unknown));
             }
 
             long currentMillis = AudioDataProvider.instance.getCurrentTime();
@@ -438,24 +475,16 @@ public class NowBarMusic extends LinearLayout {
             mAppIcon.setImageDrawable(getAppIcon(getLastNonNullPackageName()));
             mAppName.setText(getAppName(getLastNonNullPackageName()));
 
-            Drawable artWork = null;
-            try {
-                if (mediaData != null) {
-                    Icon art = (Icon) callMethod(mediaData, "getArtwork");
-                    artWork = art.loadDrawable(mContext);
-                }
-            } catch (Throwable ignored) {}
             Bitmap bitmap = getArt();
-            if (bitmap != null || artWork != null) {
+            if (bitmap != null) {
                 mAlbumArtBig.clearColorFilter();
-                Bitmap artWorkBitmap = bitmap != null ? bitmap : DrawableConverter.drawableToBitmap(artWork);
-                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), artWorkBitmap);
+                RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
                 roundedDrawable.setCornerRadius(32f);
                 roundedDrawable.setAntiAlias(true);
                 mAlbumArtBig.setImageDrawable(roundedDrawable);
                 mAlbumArtListener.onAlbumArtChanged(roundedDrawable);
                 int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
-                CircleFramedDrawable drawable = new CircleFramedDrawable(artWorkBitmap, roundSize);
+                CircleFramedDrawable drawable = new CircleFramedDrawable(bitmap, roundSize);
                 albumArt.setImageDrawable(drawable);
                 albumArt.clearColorFilter();
             } else {
@@ -497,14 +526,16 @@ public class NowBarMusic extends LinearLayout {
             mTotalTime.setText("0:00");
             mTrackSeekBar.setProgress(0);
             mTitle.setText(NO_MEDIA_STRING);
+            mCompactTitle.setText(NO_MEDIA_STRING);
             mLastTitle = "";
             mAuthor.setText("");
+            mCompactAuthor.setText("");
             mLastAuthor = "";
             trackTitle.setText(NO_MEDIA_STRING);
             trackTitle.setSelected(true);
             mAppIcon.setImageDrawable(null);
             mAppName.setText("");
-//            restoreActions();
+            restoreActions();
             setDefaultIcon();
             setBarBackground(Color.BLACK);
             updateViewsColors(Color.WHITE);
@@ -660,6 +691,18 @@ public class NowBarMusic extends LinearLayout {
             triggerMediaPlayer();
         }
         mExtendedPlayer = enabled;
+    }
+
+    public void setExtendedPlayerOptions(int playerMode, boolean showClock) {
+        mExtendedPlayerMode = playerMode;
+        mAppInfos.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.GONE);
+        mCompactInfos.setVisibility(playerMode == MODE_COMPACT ? View.VISIBLE : View.GONE);
+        mTitle.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.INVISIBLE);
+        mAuthor.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.INVISIBLE);
+        mShowClock = showClock;
+        if (mExpanded) {
+            triggerMediaPlayer();
+        }
     }
 
 }
