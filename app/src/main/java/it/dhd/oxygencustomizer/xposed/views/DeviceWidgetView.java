@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views;
 
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
@@ -34,6 +37,7 @@ public class DeviceWidgetView extends FrameLayout {
     public int DEVICE_WIDGET_CIRCULAR = 1;
 
     private int mDeviceWidgetStyle = DEVICE_WIDGET_CLASSIC;
+    private float mWidgetScaling = 1f;
     private TextView mBatteryLevelView;
     private ProgressBar mBatteryProgress;
     private int mBatteryPercentage = 1;
@@ -165,6 +169,34 @@ public class DeviceWidgetView extends FrameLayout {
     public void setDeviceWidgetStyle(int newStyle) {
         mDeviceWidgetStyle = newStyle;
         setupRows();
+    }
+
+    public void setDeviceWidgetScaling(float newScaling) {
+        mWidgetScaling = newScaling;
+        updateScaling();
+    }
+
+    private void updateScaling() {
+        int artContainerSize = dp2px(mContext, 60);
+        int batteryProgressContainerSize = dp2px(mContext, 120);
+
+        List<View> views = List.of(mVolumeLevelArcProgress, mRamUsageArcProgress, mBatteryPercentArc, mBatteryTempArc);
+        for (View v : views) {
+            ViewGroup parent = (ViewGroup) v.getParent();
+            int width = (int) (artContainerSize * mWidgetScaling);
+            int height = (int) (artContainerSize * mWidgetScaling);
+            ViewGroup.LayoutParams params = parent.getLayoutParams();
+            params.width = width;
+            params.height = height;
+            parent.setLayoutParams(params);
+            parent.requestLayout();
+        }
+
+        ViewGroup batteryProgressParent = (ViewGroup) mBatteryProgress.getParent();
+        ViewGroup.LayoutParams params = batteryProgressParent.getLayoutParams();
+        params.width = (int) (batteryProgressContainerSize * mWidgetScaling);
+        batteryProgressParent.setLayoutParams(params);
+        batteryProgressParent.requestLayout();
     }
 
     private void initBatteryStatus() {

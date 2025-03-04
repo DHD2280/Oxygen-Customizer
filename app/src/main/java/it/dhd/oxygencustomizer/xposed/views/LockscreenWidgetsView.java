@@ -325,15 +325,17 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
-        mainWidgetsContainer.setGravity(Gravity.CENTER);
-        mainWidgetsContainer.setLayoutParams(new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams containerParams = new LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0,
+                1f);
+        containerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+        mainWidgetsContainer.setLayoutParams(containerParams);
 
         // Add FABs to the main widgets container
         mMainWidgetViews = new ExtendedFAB[]{
-                createFAB(context, 0),
-                createFAB(context, 1)
+                createFAB(context),
+                createFAB(context)
         };
 
         for (ExtendedFAB mMainWidgetView : mMainWidgetViews) {
@@ -343,24 +345,32 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         return mainWidgetsContainer;
     }
 
-    private ExtendedFAB createFAB(Context context, int position) {
+    private ExtendedFAB createFAB(Context context) {
         ExtendedFAB fab = new ExtendedFAB(context);
         fab.setId(View.generateViewId());
-        LayoutParams params = new LayoutParams(
-                (int)(mFabWidth*mWidgetsScale),
-                (int)(mFabHeight*mWidgetsScale));
-        params.setMargins(
-                Build.VERSION.SDK_INT >= 35 && position == 0 ? 0 : (int)(mFabMarginStart*mWidgetsScale),
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 0,
-                Build.VERSION.SDK_INT >= 35 && position == 1 ? 0 : (int)(mFabMarginEnd*mWidgetsScale),
-                0);
+                (int) (mFabHeight * mWidgetsScale),
+                1f
+        );
+
+        params.gravity = Gravity.CENTER;
+        params.setMargins(
+                (int) (mFabMarginStart * mWidgetsScale),
+                0,
+                (int) (mFabMarginEnd * mWidgetsScale),
+                0
+        );
+
         fab.setLayoutParams(params);
         fab.setPadding(
-                (int)(mFabPadding*mWidgetsScale),
-                (int)(mFabPadding*mWidgetsScale),
-                (int)(mFabPadding*mWidgetsScale),
-                (int)(mFabPadding*mWidgetsScale));
+                (int) (mFabPadding * mWidgetsScale),
+                (int) (mFabPadding * mWidgetsScale),
+                (int) (mFabPadding * mWidgetsScale),
+                (int) (mFabPadding * mWidgetsScale)
+        );
         fab.setGravity(Gravity.CENTER);
+        fab.setMaxLines(2);
         return fab;
     }
 
@@ -384,10 +394,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         // Add ImageViews to the secondary widgets container
         mSecondaryWidgetViews = new ImageView[]{
-                createImageView(context, 0),
-                createImageView(context, 1),
-                createImageView(context, 2),
-                createImageView(context, 3)
+                createImageView(context),
+                createImageView(context),
+                createImageView(context),
+                createImageView(context)
         };
 
         for (ImageView mSecondaryWidgetView : mSecondaryWidgetViews) {
@@ -397,7 +407,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         return secondaryWidgetsContainer;
     }
 
-    private ImageView createImageView(Context context, int position) {
+    private ImageView createImageView(Context context) {
         ImageView imageView;
         try {
             imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(context);
@@ -411,9 +421,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 (int)(mWidgetCircleSize*mWidgetsScale),
                 (int)(mWidgetCircleSize*mWidgetsScale));
         params.setMargins(
-                Build.VERSION.SDK_INT >= 35 && position == 0 ? 0 : (int)(mWidgetMarginHorizontal*mWidgetsScale),
+                (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0,
-                Build.VERSION.SDK_INT >= 35 && position == 3 ? 0 : (int)(mWidgetMarginHorizontal*mWidgetsScale),
+                (int)(mWidgetMarginHorizontal*mWidgetsScale),
                 0);
         imageView.setLayoutParams(params);
         imageView.setPadding(
@@ -754,6 +764,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             }
             efab.setLayoutParams(layoutParams);
         }
+        efab.setMaxWidth((int)(mFabWidth*mWidgetsScale));
     }
 
     private void updateWidgetsResources(ImageView iv) {
@@ -972,6 +983,11 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             efab.setOnClickListener(cl);
             if (icon != null) efab.setIcon(icon);
             efab.setText(text);
+            int iconSize =
+                    (int) ((mWidgetCircleSize * mWidgetsScale) - (mWidgetIconPadding * 2 * mWidgetsScale));
+            float textSize = (14f * mWidgetsScale);
+            efab.setIconSize(iconSize);
+            efab.setTextSize(textSize);
             if (mediaButtonFab == efab) {
                 attachSwipeGesture(efab);
             }
@@ -1622,6 +1638,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);
+        instance.mDeviceWidgetView.setDeviceWidgetScaling(instance.mWidgetsScale);
     }
 
     public void setCustomColors(
@@ -1644,6 +1661,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     public void setScale(float scale) {
         instance.mWidgetsScale = scale;
+        instance.mDeviceWidgetView.setDeviceWidgetScaling(scale);
         instance.removeAllViews();
         instance.drawUI();
         instance.updateWidgetViews();
