@@ -198,7 +198,7 @@ public class NowBarNotification extends RelativeLayout {
 
     public void updateNotifications(List<StatusBarNotification> notificationList) {
         StatusBarNotification usefulNotification = NotificationUtils.getFirstUsefulNotification(notificationList, currentRankingMap);
-        if (usefulNotification != currentDisplayedNotification && mLastNotificationTime < usefulNotification.getPostTime()) {
+        if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime()) {
             mLastNotificationTime = System.currentTimeMillis();
             currentDisplayedNotification = usefulNotification;
             mOnUsefulNotificationListener.onUsefulNotification();
