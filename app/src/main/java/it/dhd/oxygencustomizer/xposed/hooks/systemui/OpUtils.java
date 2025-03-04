@@ -105,7 +105,7 @@ public class OpUtils extends XposedMods {
             String left = (String) callMethod(affordance, "queryStartSelection", context);
             isLeftHidden = !TextUtils.isEmpty(left) && left.equals("none");
         } catch (Throwable ignored) {
-            isLeftHidden = placeHolder;
+            return placeHolder;
         }
         return isLeftHidden;
     }
@@ -143,7 +143,7 @@ public class OpUtils extends XposedMods {
                 Object LunarHelperCompanion = getStaticObjectField(LunarHelperClass, "Companion");
                 ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper", lpparam.classLoader);
                 StatusBarHelper
-                        .beforeConstruction()
+                        .afterConstruction()
                         .run(param -> {
                             mSysuiAppContext = (Context) param.args[0];
                             LunarHelper = callMethod(LunarHelperCompanion, "getInstance", mSysuiAppContext);

@@ -506,6 +506,8 @@ public final class Constants {
             // Music
             public static final String NOW_BAR_MUSIC_EXTENDED_PLAYER = "lockscreen_now_bar_music_extended_player";
             public static final String NOW_BAR_MUSIC_EXTENDED_BACKGROUND = "lockscreen_now_bar_music_extended_background_mode";
+            public static final String NOW_BAR_MUSIC_EXDENDED_MODE = "lockscreen_now_bar_music_extended_mode";
+            public static final String NOW_BAR_MUSIC_EXTENDED_CLOCK = "lockscreen_now_bar_music_extended_player_show_clock";
 
             // Battery
             public static final String NOW_BAR_BATTERY_CHARGING_ICON_SWITCH = "lockscreen_now_bar_battery_custom_icon_switch";

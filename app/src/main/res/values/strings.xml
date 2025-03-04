@@ -1358,6 +1358,11 @@
     <string name="lockscreen_now_bar_music_extended_player_background">Extended player background mode</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur">Gray blur</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Blurred album art</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode">Extended player mode</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_large">Large</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_compact">Compact</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock">Show clock</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Show clock in the top part of the extended player</string>
     <string name="lockscreen_now_bar_battery">Now bar battery</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Custom charging icon</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Custom colors</string>

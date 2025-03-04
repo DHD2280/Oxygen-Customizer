@@ -226,7 +226,7 @@ public class OpDrawableUtils extends XposedMods {
             Object blurConfig = newInstance(BlurConfig, (int) 0, (int) 0, (float) 0.0f, (float) 0.0f, (float) 0.0f, (float) 0.0f, (Float) null, false, false, false, (Object) null, (Object) null, (Object) null, (int) 8191, (Object) null);
             callMethod(blurConfig, "setBlurRadius", blurRadius); //800);
             callMethod(blurConfig, "setCornerRadius", cornerRadius);
-            callMethod(blurConfig, "setMotionBlurMixConfig", newInstance(BlurMixSingle, newInstance(MixColor, SystemUtils.isDarkMode() ? 4 : 5, foregroundColor, foregroundColor)));
+            callMethod(blurConfig, "setMotionBlurMixConfig", newInstance(BlurMixSingle, newInstance(MixColor, SystemUtils.isDarkMode() ? 4 : 5, backgroundColor, foregroundColor)));
             Object viewBlurProxy = newInstance(ViewBlurProxy, view, blurConfig, null);
             callMethod(viewBlurProxy, "setBlurType", BlurTypeMotionInstance);
             return (Drawable) newInstance(AutoBlurDrawable, viewBlurProxy, fallbackDrawable);
