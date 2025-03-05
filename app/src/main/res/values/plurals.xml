@@ -2,8 +2,8 @@
 <resources>
 
     <plurals name="notification_summary">
-        <item quantity="one">%1d notification</item>
-        <item quantity="other">%1d notifications</item>
+        <item quantity="one">%1$d notification</item>
+        <item quantity="other">%1$d notifications</item>
     </plurals>
 
 </resources>
