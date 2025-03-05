@@ -1253,7 +1253,7 @@
     <string name="lockscreen_now_bar_enabled_title">Engedélyezi a \'Most sáv\'-ot a záróképernyőn</string>
     <string name="lockscreen_now_bar_weather">Időjárás-megjelenítés</string>
     <string name="lockscreen_now_bar_weather_summary">Megjeleníti az időjárást a \'Most sáv\'-on</string>
-    <string name="lockscreen_now_bar_footer">A \'Most sáv\' egy kis sáv, amely a két záróképernyő-gomb között helyezkedik el.\nMegjelenítheti a médialejátszót, az akkuállapotot és opcionálisan az időjárást.\nHa nem szeretné látni a gyári médialejátszót, egyszerűen rejtse el a beállításokban.\nMegjegyzés: ha elrejti mindkét gombot, a \'Most sáv\' elfoglalja a teljes helyet.</string>
+    <!-- Now Bar Notifications string -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Alkalmazások laggolás-javítása</string>
     <string name="fix_lag_summary">Laggolás javítása, mikor az Előzményekből nyílik meg</string>

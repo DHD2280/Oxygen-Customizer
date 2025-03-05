@@ -1138,6 +1138,7 @@
     <string name="wallet">錢包</string>
     <string name="hotspot">熱點</string>
     <!-- Lockscreen Now Bar -->
+    <!-- Now Bar Notifications string -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">應用延遲修復</string>
     <string name="fix_lag_summary">修復從最近打開的應用程式時出現的延遲</string>
