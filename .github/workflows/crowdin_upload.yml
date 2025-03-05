@@ -5,6 +5,7 @@ on:
     branches: [ "beta" ]
     paths:
       - 'app/src/main/res/values/strings.xml'
+      - 'app/src/main/res/values/plurals.xml'
   workflow_dispatch:
 
 jobs:
