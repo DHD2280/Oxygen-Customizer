@@ -1123,6 +1123,7 @@
     <string name="wallet">Carteira</string>
     <string name="hotspot">Ponto de acesso</string>
     <!-- Lockscreen Now Bar -->
+    <!-- Now Bar Notifications string -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correção de atraso do aplicativo</string>
     <string name="fix_lag_summary">Corrigir lag ao abrir o aplicativo a partir dos recentes</string>
