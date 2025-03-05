@@ -134,6 +134,7 @@
     <string name="white_color">Bianco</string>
     <string name="black_color">Nero</string>
     <string name="custom_color">Colore Personalizzato</string>
+    <string name="background_color">Colore sfondo</string>
     <string name="battery_info_button_title">Info batteria…</string>
     <string name="general_enabled">Abilitato</string>
     <string name="general_disabled">Disabilitato</string>
@@ -1022,6 +1023,7 @@
     <string name="support_group_title">Gruppo di supporto</string>
     <string name="translate_title">Traduci nella tua lingua</string>
     <string name="translate_summary">Aiutaci a tradurre Oxygen Customizer nella tua lingua</string>
+    <string name="check_updates">Controlla\naggiornamenti</string>
     <string name="check_updates_summary">Versione corrente: %s</string>
     <string name="check_auto_updates">Controlla automaticamente gli aggiornamenti</string>
     <string name="check_auto_updates_summary">Controlla nuovi aggiornamenti </string>
@@ -1252,7 +1254,33 @@
     <string name="lockscreen_now_bar_enabled_title">Abilita now bar</string>
     <string name="lockscreen_now_bar_weather">Mostra meteo</string>
     <string name="lockscreen_now_bar_weather_summary">Mostra meteo nella now bar</string>
-    <string name="lockscreen_now_bar_footer">La barra Now è una piccola barra posizionata tra i due pulsanti affordance nella schermata di blocco.\nPuò mostrare il lettore multimediale, lo stato della batteria e, facoltativamente, il meteo.\nSe non vuoi vedere il lettore multimediale di serie, nascondilo nelle impostazioni di serie.\nNota: se nascondi entrambi i pulsanti affordance, la barra Now occuperà l\'intero spazio.</string>
+    <string name="lockscreen_now_bar_notifications">Mostra Notifiche</string>
+    <string name="lockscreen_now_bar_notifications_summary">Mostra l\'ultima notifica ricevuta nella Now Bar</string>
+    <string name="lockscreen_now_bar_bottom_margin">Margine inferiore Now Bar</string>
+    <string name="lockscreen_now_bar_music">Musica Now Bar</string>
+    <string name="lockscreen_now_bar_music_extended_player">Lettore esteso</string>
+    <string name="lockscreen_now_bar_music_extended_player_summary">Mostra il player esteso nella Now Bar toccando la copertina dell\'album</string>
+    <string name="lockscreen_now_bar_music_extended_player_background">Modalità sfondo lettore esteso</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur">Sfocatura grigia</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Copertina album sfocata</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode">Modalità lettore estesa</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_large">Grande</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_compact">Compatto</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock">Mostra orologio</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Mostra orologio nella parte superiore del lettore esteso</string>
+    <string name="lockscreen_now_bar_battery">Batteria Now Bar</string>
+    <string name="lockscreen_now_bar_battery_custom_icon">Icona ricarica personalizzata</string>
+    <string name="lockscreen_now_bar_battery_custom_colors">Colori Personalizzati</string>
+    <string name="lockscreen_now_bar_battery_custom_colors_summary">Personalizza colori Now Bar</string>
+    <string name="lockscreen_now_bar_weather_category">Meteo Now Bar</string>
+    <string name="lockscreen_now_bar_notifications_category">Now Bar di notifica</string>
+    <string name="lockscreen_now_bar_notifications_allow_private">Consenti notifiche private</string>
+    <string name="lockscreen_now_bar_notifications_allow_private_summary">Ignora le impostazioni di sistema e mostra sempre il contenuto delle notifiche</string>
+    <string name="lockscreen_now_bar_footer">La Now Bar è una piccola barra posizionata tra i due pulsanti affordance nella schermata di blocco.\nPuò mostrare il lettore multimediale, lo stato della batteria e, facoltativamente, altre informazioni.\nSe non vuoi vedere il lettore multimediale di serie, nascondilo nelle impostazioni di serie.\nNota: se nascondi entrambi i pulsanti affordance, la Now Bar occuperà l\'intero spazio.</string>
+    <!-- Now Bar Notifications string -->
+    <string name="lockscreen_now_bar_no_notifications">Nessuna nuova notifica</string>
+    <string name="lockscreen_now_bar_new_notification">Nuova notifica</string>
+    <string name="lockscreen_now_bar_new_notification_content">Contenuto nascosto</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correzione ritardo app</string>
     <string name="fix_lag_summary">Correggi il ritardo durante l\'apertura dell\'app dai recenti</string>

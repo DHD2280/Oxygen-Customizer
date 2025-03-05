@@ -329,10 +329,60 @@
     <string name="battery_landscape_battery_f">Paysage batterie F</string>
     <string name="battery_landscape_battery_g">Paysage batterie G</string>
     <string name="battery_landscape_battery_h">Paysage batterie H</string>
+    <string name="battery_landscape_battery_i">Paysage batterie I</string>
+    <string name="battery_landscape_battery_j">Paysage batterie J</string>
+    <string name="battery_landscape_battery_k">Paysage batterie K</string>
+    <string name="battery_landscape_battery_l">Paysage batterie L</string>
+    <string name="battery_landscape_battery_m">Paysage batterie M</string>
+    <string name="battery_landscape_battery_n">Paysage batterie N</string>
+    <string name="battery_landscape_battery_o">Paysage batterie O</string>
+    <string name="battery_circle">Batterie circulaire</string>
+    <string name="battery_dotted_circle">Batterie circulaire en pointillés</string>
+    <string name="battery_filled_circle">Cercle plein</string>
+    <string name="battery_landscape_kim">Kim Paysage</string>
     <!-- Statusbar Icons Strings -->
+    <string name="statusbar_icons_bluetooth_hide">Masquer l\'icône Bluetooth</string>
+    <string name="statusbar_icons_bluetooth_hide_summary">Masquer l\'icône Bluetooth lorsqu\'il n\'est pas connecté.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">Masquer le Wifi entrant</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">Désactiver/Activer le WiFi pour afficher les changements.</string>
+    <string name="statusbar_icons_inout_mobile_hide_title">Cacher le mobile</string>
+    <string name="statusbar_icons_inout_mobile_hide_summary">Désactiver/Activer les données mobiles pour afficher les modifications.</string>
     <!-- Quick Settings Mods -->
+    <string name="quick_pulldown">Menu déroulant rapide</string>
+    <string name="quick_pulldown_length">Longueur du tiroir rapide</string>
+    <string name="quick_settings_side">Aperçu rapide du côté déroulant</string>
+    <string name="quick_pulldown_side_left">Gauche</string>
+    <string name="quick_pulldown_side_right">Droite</string>
+    <string name="quick_collapse">Fermeture rapide</string>
+    <string name="my_device">Mes appareils</string>
+    <string name="my_device_title">Forcer mes appareils</string>
+    <string name="my_device_summary">Forcer mes appareils à apparaître dans le centre de contrôle.\nREMARQUE : vous avez besoin du nouveau centre de contrôle et de l\'application « Mes appareils » pour utiliser correctement cette fonctionnalité. Forcer.</string>
     <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_title">Tuiles des paramètres rapide</string>
+    <string name="quick_settings_tiles_number">Réglages rapides du nombre de tuiles</string>
+    <string name="quick_settings_tiles_main">Personnaliser les tuiles des paramètres rapides</string>
+    <string name="quick_settings_widgets">Tuiles des paramètres rapide</string>
+    <string name="qs_transparency">Transparence des réglages rapides &amp; Flou</string>
+    <string name="qs_transparency_title">Personnaliser la transparence des réglages rapides</string>
+    <string name="qs_transparency_value">Transparence des réglages rapides</string>
+    <string name="qs_transparency_blur_title">Niveau de Flou de la fenêtre</string>
+    <string name="qs_blur_intentisy">Intensité de Flou</string>
+    <string name="quick_settings_tiles_qqs">Tuiles rapides des réglages rapides</string>
+    <string name="quick_settings_tiles_portrait">En mode portrait</string>
+    <string name="quick_settings_tiles_horizontal_rows">Tuiles des paramètres rapide</string>
+    <string name="quick_settings_tiles_horizontal_columns">Colonnes des paramètres rapides</string>
+    <string name="quick_settings_tiles_landscape">En mode paysage</string>
+    <string name="quick_settings_tiles_vertical_rows">Lignes des réglages rapides (paysage)</string>
+    <string name="quick_settings_tiles_vertical_columns">Colonnes des paramètres rapides (paysage)</string>
     <!-- Quick Settings Widgets -->
+    <string name="quick_settings_widgets_summary">Afficher les widgets des paramètres rapides</string>
+    <string name="add_widget">Ajouter un Widget</string>
+    <string name="qs_widget_photo">Vitrine photo</string>
+    <string name="qs_widget_weather">Prévisions Météo</string>
+    <string name="qs_widget_mini_weather">Mini Météo</string>
+    <string name="qs_widget_custom_app">Applications personnalisées</string>
+    <string name="qs_widget_media_player">Lecteur multimédia</string>
+    <string name="qs_media_alert">Impossible de supprimer le lecteur multimédia !</string>
     <string name="qs_widget_set_radius">Régler le rayon de l\'image</string>
     <string name="qs_widget_set_custom_photo">Définir une image personnalisée</string>
     <!-- Quick Settings Tiles Customizations -->
@@ -463,8 +513,26 @@
     <string name="qs_header_clock_custom_color_separator_color">Séparateur de couleur personnalisé</string>
     <!-- QS Header Clock Margins -->
     <string name="qs_header_clock_custom_margins">Marges de l\'horloge</string>
+    <string name="qs_header_clock_top_margin">Marge supérieure</string>
+    <string name="qs_header_clock_left_margin">Marge de gauche</string>
     <!-- QS Header Misc -->
+    <string name="qs_header_misc">Horloge de l\'en-tête des réglages rapides</string>
+    <string name="qs_header_system_icons_chip">Puce d\'icônes système</string>
+    <string name="qs_header_system_icons_chip_style">Style de la puce des icônes système</string>
     <!-- Chip Styles Strings -->
+    <string name="chip_filled">Remplissage</string>
+    <string name="chip_outlined">Contour</string>
+    <string name="chip_mixed">Mixte</string>
+    <string name="chip_gradient_props">Propriétés du Dégradé</string>
+    <string name="chip_gradient_orientation">Orientation du Dégradé</string>
+    <string name="chip_use_accent">Utiliser la couleur d\'accentuation</string>
+    <string name="chip_use_gradient">Utiliser le dégradé</string>
+    <string name="chip_color_accent">Utiliser l\'accentuation</string>
+    <string name="chip_color_color">Couleur de la puce</string>
+    <string name="chip_stroke_color">Couleur de contour</string>
+    <string name="chip_gradient_color_1">Premier couleur du dégradé</string>
+    <string name="chip_gradient_color_2">Seconde couleur du dégradé</string>
+    <string name="chip_standard_color">Couleur de la puce</string>
     <!-- Launcher Mods -->
     <string name="hide_scroller_summary">Masquer le défileur dans le tiroir d\'applications</string>
     <!-- NavBar Strings -->
@@ -543,6 +611,7 @@
     <!-- Lockscreen Widgets Styles -->
     <!-- LS Widgets Actions -->
     <!-- Lockscreen Now Bar -->
+    <!-- Now Bar Notifications string -->
     <!-- Lag Fix Strings -->
     <!-- Caffeine -->
     <!-- Colors Fragment -->

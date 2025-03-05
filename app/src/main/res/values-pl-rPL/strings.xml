@@ -544,6 +544,7 @@
     <string name="wallet">Portfel</string>
     <string name="hotspot">Hotspot</string>
     <!-- Lockscreen Now Bar -->
+    <!-- Now Bar Notifications string -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Opóźnienie aplikacji</string>
     <string name="fix_lag_summary">Napraw opóźnienie podczas otwierania aplikacji z ostatnich aplikacji</string>
