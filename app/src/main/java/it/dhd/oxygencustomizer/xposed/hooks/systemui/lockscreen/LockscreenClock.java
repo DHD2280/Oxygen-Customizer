@@ -93,6 +93,8 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -645,7 +647,7 @@ public class LockscreenClock extends XposedMods {
 
         ImageView profilePicture = (ImageView) findViewWithTag(clockView, "profile_picture");
         if (useCustomUserImage && profilePicture != null) {
-            profilePicture.post(() -> profilePicture.setImageDrawable(getCustomUserImage()));
+            profilePicture.post(() -> profilePicture.setImageDrawable(getCustomUserImage(profilePicture)));
         }
 
         ImageView customImage = (ImageView) findViewWithTag(clockView, "custom_image");
@@ -691,7 +693,7 @@ public class LockscreenClock extends XposedMods {
             case 7 -> {
                 ImageView imageView = (ImageView) findViewWithTag(clockView, "user_profile_image");
                 imageView.post(() ->
-                        imageView.setImageDrawable(useCustomUserImage ? getCustomUserImage() : getUserImage()));
+                        imageView.setImageDrawable(useCustomUserImage ? getCustomUserImage(imageView) : getUserImage()));
             }
             case 19 -> {
                 mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
@@ -821,8 +823,9 @@ public class LockscreenClock extends XposedMods {
         }
     }
 
-    private Drawable getCustomUserImage() {
-        return getImageFromFile("lockscreen_user_image.png", R.drawable.default_avatar);
+    private Drawable getCustomUserImage(View view) {
+        Drawable customUserImage = getImageFromFile("lockscreen_user_image.png", R.drawable.default_avatar);
+        return new CircleFramedDrawable(DrawableConverter.drawableToBitmap(customUserImage), view.getWidth());
     }
 
     private Drawable getCustomImage() {

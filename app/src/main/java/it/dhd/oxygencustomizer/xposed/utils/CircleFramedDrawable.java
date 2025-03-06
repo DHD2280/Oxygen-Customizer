@@ -65,7 +65,8 @@ public class CircleFramedDrawable extends Drawable {
 
         // mask in the icon where the bitmap is opaque
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(icon, cropRect, circleRect, paint);
+        Bitmap copy = icon.copy(Bitmap.Config.ARGB_8888, false);
+        canvas.drawBitmap(copy, cropRect, circleRect, paint);
 
         // prepare paint for frame drawing
         paint.setXfermode(null);
