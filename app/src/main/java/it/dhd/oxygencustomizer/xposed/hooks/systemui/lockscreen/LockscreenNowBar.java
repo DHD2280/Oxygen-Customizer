@@ -186,7 +186,9 @@ public class LockscreenNowBar extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        Class<?> NotificationPanelViewController = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+        Class<?> NotificationPanelViewController = findClassInArray(lpparam,
+                "com.android.systemui.shade.NotificationPanelViewController", /* OOS15-14 */
+                "com.android.systemui.statusbar.phone.NotificationPanelViewController" /* OOS13 */);
         hookAllMethods(NotificationPanelViewController, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -219,6 +221,7 @@ public class LockscreenNowBar extends XposedMods {
         });
 
         Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
+        // Or handlePrimaryBouncerChanged(int, int)
         hookAllMethods(KeyguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
