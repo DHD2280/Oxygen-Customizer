@@ -94,18 +94,18 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusEditTextPreference
-            android:defaultValue="User"
+            android:defaultValue=""
             android:key="aod_clock_custom_user"
             android:title="@string/aod_clock_custom_user_title"
             app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
+            android:summary="@string/lockscreen_clock_custom_user_summary" />
 
         <it.dhd.oneplusui.preference.OplusEditTextPreference
             android:defaultValue="User"
             android:key="aod_clock_custom_device"
-            android:title="@string/aod_clock_custom_user_title"
+            android:title="@string/custom_device_name"
             app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
+            android:summary="@string/custom_device_name_summary"/>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:key="aod_clock_custom_user_image"
