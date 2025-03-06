@@ -52,6 +52,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:textAllCaps="true"
+            android:tag="accent1"
             android:textColor="@android:color/system_accent1_200"
             android:textSize="40sp" />
 
