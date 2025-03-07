@@ -699,6 +699,7 @@ public class NowBarMusic extends LinearLayout {
         mCompactInfos.setVisibility(playerMode == MODE_COMPACT ? View.VISIBLE : View.GONE);
         mTitle.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.INVISIBLE);
         mAuthor.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.INVISIBLE);
+        mClockContainer.setVisibility(showClock ? View.VISIBLE : View.GONE);
         mShowClock = showClock;
         if (mExpanded) {
             triggerMediaPlayer();
