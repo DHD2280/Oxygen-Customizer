@@ -193,12 +193,10 @@ public class QsWidgets extends XposedMods {
                     if (!mQsWidgetsEnabled) return;
 
                     mOplusQsMediaView = (ViewGroup) param.thisObject;
-                    if (Build.VERSION.SDK_INT >= 35) { // OOS 15
-                        mDefaultMediaBg = getOOS15Background(param.thisObject);
-                    } else { // OOS 13-14
+                    if (Build.VERSION.SDK_INT < 35) { // OOS 15
                         mDefaultMediaBg = mOplusQsMediaView.getBackground();
+                        mOplusQsMediaView.setBackground(null);
                     }
-                    mOplusQsMediaView.setBackground(null);
                     mOplusQsMediaView.removeAllViews();
 
                     placeWidgets();
@@ -206,7 +204,7 @@ public class QsWidgets extends XposedMods {
 
         if (Build.VERSION.SDK_INT >= 35) {
 
-            OpDrawableUtils.registerBackgroundUpdatedListener(mTileBackgroundListener);
+//            OpDrawableUtils.registerBackgroundUpdatedListener(mTileBackgroundListener);
 
 //            OplusQsMediaPanelView
 //                    .after("onAttachedToWindow")
@@ -226,26 +224,6 @@ public class QsWidgets extends XposedMods {
 //                        view.postDelayed(() -> view.setBackground(null), 100L);
 //                    });
 //
-            OplusQsMediaPanelView
-                    .after("onShapeChanged")
-                    .run(param -> {
-                        if (!mQsWidgetsEnabled) return;
-                        new Handler().postDelayed(() -> {
-                            XposedBridge.log("QsWidgets: onShapeChanged");
-                            Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
-                            Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-                            XposedBridge.log("onShapeChanged backgroundProxy null? " + (backgroundProxy == null));
-                            XposedBridge.log("onShapeChanged panelInfo null? " + (panelInfo == null));
-                            Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-                            XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (bg == null));
-                            Object getBackgroundDrawable = callMethod(param.thisObject, "getBackgroundDrawable");
-                            XposedBridge.log("onShapeChanged getBackgroundDrawable null? " + (getBackgroundDrawable == null));
-                            mDefaultMediaBg = bg;
-                            updateControlsBg(QsControlsView.getInstance(), true);
-                            View view = (View) callMethod(panelInfo, "getBackgroundView");
-                            view.postDelayed(() -> view.setBackground(null), 250L);
-                        }, 250L);
-                    });
 
 //            ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
 //            OplusPanelViewPagerController
@@ -283,139 +261,8 @@ public class QsWidgets extends XposedMods {
             }
                      */
 
-            ReflectedClass QsViewBackgroundProxyCompanion = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy$Companion");
-            QsViewBackgroundProxyCompanion
-                    .after("getMediaPanelBackgroundProxy")
-                    .run(param -> { // the background proxy QsOnePlusStaticBackgroundProxy or QsStaticBackgroundProxy
-                        QsMediaPanelViewBackgroundProxy = param.getResult();
-                        });
-//                        XposedBridge.log("QsWidgets: QsMediaPanelViewBackgroundProxy class: " + QsMediaPanelViewBackgroundProxy.getClass().getName());
-//                        XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy null? " + (QsMediaPanelViewBackgroundProxy == null));
-//                        ReflectedClass.of(QsMediaPanelViewBackgroundProxy.getClass())
-//                                        .afterConstruction()
-//                                                .run(param1 -> {
-//                                                    Object pInfo = getObjectField(param1.thisObject, "panelInfo");
-//                                                    XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy panelInfo null? " + (pInfo == null));
-//                                                    ReflectedClass.of(pInfo.getClass())
-//                                                            .before("updateBackground")
-//                                                            .run(param2 -> {
-//                                                                if (pInfo == param2.thisObject) {
-//                                                                    XposedBridge.log("QsWidgets: getMediaPanelBackgroundProxy updateBackground drawable null? " + (param2.args[0] == null));
-//                                                                }
-//                                                            });
-//                                                });
-////                        ReflectedClass.of(QsMediaPanelViewBackgroundProxy.getClass())
-////                                .after("getTargetQsViewBackground")
-////                                .run(param1 -> { // t
-////                                    ReflectedClass.of(param1.getResult().getClass())
-////                                                    .afterConstruction()
-////                                                            .run(param2 -> {
-////                                                                XposedBridge.log(param2.thisObject.getClass().getName() + " afterConstruction");
-////                                                                panelInfo = getObjectField(param2.thisObject, "panelInfo");
-////                                                                ReflectedClass.of(panelInfo.getClass())
-////                                                                        .before("updateBackground")
-////                                                                        .run(param3 -> {
-////                                                                            if (panelInfo == param.thisObject) {
-////                                                                                XposedBridge.log("panelInfo updateBackground drawable null?" + (param3.args[0] == null));
-////                                                                            }
-////                                                                        });
-////                                                            });
-//////                                    ReflectedClass.of(param1.getResult().getClass())
-//////                                            .after("onBackgroundAttach")
-//////                                            .run(param2 -> {
-//////                                                Object panelInfo = getObjectField(param1.thisObject, "panelInfo");
-//////                                                View view = (View) callMethod(panelInfo, "getBackgroundView");
-//////                                                XposedBridge.log("getTargetQsViewBackground background null? " + (view.getBackground() == null));
-//////                                                mDefaultMediaBg = view.getBackground();
-//////                                                updateControlsBg(QsControlsView.getInstance(), true);
-//////                                                view.postDelayed(() -> view.setBackground(null), 100L);
-//////                                            });
-////                                });
-//                    });
-
-//            ReflectedClass QsOnePlusStaticBackgroundProxy = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsOnePlusStaticBackgroundProxy");
-//            ReflectedClass QsStaticBackgroundProxy = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsStaticBackgroundProxy");
-//
-//            XC_MethodHook QsMediaPanelViewBackgroundProxyHook = new XC_MethodHook() {
-//                @Override
-//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                    if (param.thisObject != QsMediaPanelViewBackgroundProxy) return;
-//                    panelInfo = getObjectField(param.thisObject, "panelInfo");
-//                    XposedBridge.log("panelInfo class " + (panelInfo == null ? "null" : panelInfo.getClass().getName()));
-//                    View view = (View) callMethod(panelInfo, "getBackgroundView");
-//                    XposedBridge.log("getTargetQsViewBackground background null? " + (view.getBackground() == null));
-//                    XposedBridge.log("getTargetQsViewBackground view.getBackground() null? " + (view.getBackground() == null));
-//                    mDefaultMediaBg = view.getBackground();
-//                    updateControlsBg(QsControlsView.getInstance(), true);
-//                    view.postDelayed(() -> view.setBackground(null), 250L);
-//                }
-//            };
-//
-//            hookAllMethods(QsOnePlusStaticBackgroundProxy.getClazz(), "getTargetQsViewBackground", QsMediaPanelViewBackgroundProxyHook);
-//            hookAllMethods(QsStaticBackgroundProxy.getClazz(), "getTargetQsViewBackground", QsMediaPanelViewBackgroundProxyHook);
-//
-//            ReflectedClass QsViewInfoProvider = ReflectedClass.of("com.oplus.systemui.qs.base.widget.QsViewInfoProvider");
-//            QsViewInfoProvider
-//                    .before("updateBackground")
-//                    .run(param -> {
-//                        XposedBridge.log("QsWidgets: updateBackground " + (param.thisObject == panelInfo));
-//                        if (param.thisObject != panelInfo) return;
-//                        XposedBridge.log("QsWidgets: updateBackground panelInfo is my object");
-//                        XposedBridge.log("QsWidgets: updateBackground drawable null? " + (param.args[0] == null));
-//                    });
-
-//            XC_MethodHook panelInfoHook = new XC_MethodHook() {
-//                @Override
-//                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-//                    if (param.thisObject != panelInfo) return;
-//                    XposedBridge.log("QsWidgets: updateBackground panelInfo is my object");
-//                    XposedBridge.log("QsWidgets: updateBackground drawable null? " + (param.args[0] == null));
-//                }
-//            };
-//
-//            hookAllMethods(QsViewInfoProvider.getClazz(), "updateBackground", panelInfoHook);
-
         }
 
-    }
-
-    private final OpDrawableUtils.OnBackgroundUpdated mTileBackgroundListener = new OpDrawableUtils.OnBackgroundUpdated() {
-
-        @Override
-        public void onMediaTileBackgroundUpdated(View view, Drawable drawable) {
-            if (!mQsWidgetsEnabled) return;
-            XposedBridge.log("QsWidgets: onMediaTileBackgroundUpdated: " + drawable);
-            mDefaultMediaBg = drawable;
-            updateControlsBg(QsControlsView.getInstance(), true);
-            view.postDelayed(() -> view.setBackground(null), 100L);
-        }
-
-        @Override
-        public void onHighlightTileBackgroundUpdated(Drawable drawable) {
-
-        }
-
-        @Override
-        public void onTileBackgroundUpdated(Drawable drawable) {
-
-        }
-    };
-
-    private Drawable getOOS15Background(Object mediaPanelView) {
-        try {
-            Object backgroundProxy = getObjectField(mediaPanelView, "backgroundProxy");
-            Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-            Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-            return bg;
-        } catch (Throwable t) {
-            XposedBridge.log(t);
-        }
-        try {
-            return (Drawable) callMethod(mediaPanelView, "getGlobalThemeBackgroundDrawable");
-        } catch (Throwable t) {
-            XposedBridge.log(t);
-        }
-        return null;
     }
 
     private void forceMediaPanelA13() {

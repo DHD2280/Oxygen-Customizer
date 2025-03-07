@@ -1602,39 +1602,38 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      */
     private void reloadBackground() {
         XposedBridge.log(TAG + "reloadBackground - mDefaultBackground null? " + (mDefaultBackground == null));
-        if (mDefaultBackground == null || mPages.isEmpty()) return;
+        if (mPages.isEmpty()) return;
         for (View v : mPages) {
             if (v.getTag() != null && v.getTag().equals("widgetsContainer")) {
                 v.setBackground(null);
             } else {
-                Drawable back = mDefaultBackground.getConstantState() != null
-                        ? mDefaultBackground.getConstantState().newDrawable().mutate()
-                        : mDefaultBackground.mutate();
+                Drawable back = new GradientDrawable();
+                ((GradientDrawable) back).setColor(Color.TRANSPARENT);
+                if (mDefaultBackground != null) {
+                    back = mDefaultBackground.getConstantState() != null
+                            ? mDefaultBackground.getConstantState().newDrawable().mutate()
+                            : mDefaultBackground.mutate();
+                }
                 if (v instanceof QsMediaTile && v == mMediaPlayer) {
                     mMediaPlayer.updateDefaultBackground(back);
                     continue;
                 }
                 if (v instanceof QsWeatherWidget) {
-                    if (back instanceof GradientDrawable) {
-                        ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
-                    } else if (back instanceof ShapeDrawable) {
-                        ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
-                    } else if (back.getClass().getName().contains("AutoBlurDrawable")) {
+                    if (Build.VERSION.SDK_INT == 35) {
                         back = new GradientDrawable();
                         ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
                         ((GradientDrawable) back).setCornerRadius(getMediaPanelRadius(mContext));
+                    } else if (back instanceof GradientDrawable) {
+                        ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
+                    } else if (back instanceof ShapeDrawable) {
+                        ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
                     }
-                } else {
+                } else if (Build.VERSION.SDK_INT != 35) {
                     int color = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
                     if (back instanceof GradientDrawable) {
                         ((GradientDrawable) back).setColors(new int[]{color, color});
                     } else if (back instanceof ShapeDrawable) {
                         ((ShapeDrawable) back).getPaint().setColor(color);
-                    } else if (back.getClass().getName().contains("AutoBlurDrawable")) {
-                        // OOS15 AutoBlurDrawable
-                        if (mCustomActive) {
-                            applyAutoBlurTint(mContext, back, color);
-                        }
                     }
                 }
                 back.invalidateSelf();

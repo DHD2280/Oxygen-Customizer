@@ -475,31 +475,18 @@ public class QsTileCustomization extends XposedMods {
                         .run(param -> {
                             mOplusQsMediaView = (View) param.thisObject;
                             if (mQsWidgetsEnabled) return;
-                            if (Build.VERSION.SDK_INT >= 35) { // OOS 15
-                                mOplusQsMediaDefaultBackground = getOOS15Background(param.thisObject);
-                                mOplusQsMediaView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                                    @Override
-                                    public void onViewAttachedToWindow(@NonNull View v) {
-                                        mOplusQsMediaDefaultBackground = getOOS15Background(param.thisObject);
-                                    }
-
-                                    @Override
-                                    public void onViewDetachedFromWindow(@NonNull View v) {
-
-                                    }
-                                });
-                            } else { // OOS 13-14
-                                mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                            }
+                            mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
                             if (mOplusQsMediaDefaultBackground != null) {
                                 mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
                             }
-                            if (qsInactiveColorEnabled) {
-                                mOplusQsMediaDrawable.setTint(qsInactiveColor);
-                                mOplusQsMediaDrawable.invalidateSelf();
-                                mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
-                            } else {
-                                if (Build.VERSION.SDK_INT < 35) mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+                            if (Build.VERSION.SDK_INT < 35) {
+                                if (qsInactiveColorEnabled) {
+                                    mOplusQsMediaDrawable.setTint(qsInactiveColor);
+                                    mOplusQsMediaDrawable.invalidateSelf();
+                                    mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
+                                } else {
+                                    mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+                                }
                             }
 
                             // Get OOS15 cover
@@ -612,7 +599,9 @@ public class QsTileCustomization extends XposedMods {
     private void hideMediaQsBackground() {
         if (mOplusQsMediaView == null) return;
         if (mQsWidgetsEnabled) return;
-        mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
+        if (!(Build.VERSION.SDK_INT >= 35)) {
+            mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
+        }
         setupOtherViews(mOplusQsMediaView, SystemUtils.isDarkMode() ? Color.WHITE : Color.BLACK);
     }
 
