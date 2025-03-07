@@ -47,6 +47,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isNeedSeparateDarkThemeColor;
+import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
@@ -77,11 +78,14 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
@@ -149,6 +153,7 @@ public class QsTileCustomization extends XposedMods {
     private final int BLEND_LUMINOSITY_OVERLAY = 4;
 
     // QS Media Tile
+    private FrameLayout mMediaBackground = new FrameLayout(mContext);
     private ImageView mCoverImg = null;
     private View mOplusQsMediaView = null;
     private Drawable mOplusQsMediaDefaultBackground = null;
@@ -487,6 +492,22 @@ public class QsTileCustomization extends XposedMods {
                                 } else {
                                     mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
                                 }
+                            } else {
+                                XposedBridge.log("Oxygen Customizer - QsTileCustomization: Media Panel Background not found");
+                                mMediaBackground.setId(View.generateViewId());
+                                ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                                params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+                                params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+                                params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+                                params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+
+                                mMediaBackground.setLayoutParams(params);
+                                mMediaBackground.setElevation(0f);
+                                try {
+                                    ((ViewGroup)mMediaBackground.getParent()).removeView(mMediaBackground);
+                                } catch (Throwable ignored) {}
+                                ((ViewGroup)param.thisObject).addView(mMediaBackground, 0);
+                                XposedBridge.log("Oxygen Customizer - QsTileCustomization: Media Panel Background added");
                             }
 
                             // Get OOS15 cover
@@ -504,42 +525,9 @@ public class QsTileCustomization extends XposedMods {
                         });
 
         OplusQsMediaPanelView
-                .after("onShapeChanged")
-                .run(param -> {
-                    if (mQsWidgetsEnabled) return;
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
-                        Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-                        mOplusQsMediaDefaultBackground = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-                        View view = (View) callMethod(panelInfo, "getBackgroundView");
-                        view.postDelayed(() -> view.setBackground(null), 250L);
-                    }, 250L);
-                });
-
-        OplusQsMediaPanelView
                 .after("bindTitleAndText")
                         .run(param -> updateMediaQsBackground());
 
-    }
-
-    private Drawable getOOS15Background(Object mediaPanelView) {
-        Drawable global = null;
-        try {
-            global = (Drawable) callMethod(mediaPanelView, "getGlobalThemeBackgroundDrawable");
-        } catch (Throwable t) {
-            XposedBridge.log(t);
-        }
-        try {
-            Object backgroundProxy = getObjectField(mediaPanelView, "backgroundProxy");
-            Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-            Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-            if (bg != null) return bg;
-            else return global;
-        } catch (Throwable t) {
-            XposedBridge.log(t);
-        }
-        
-        return null;
     }
 
     private void setSliderProgressColor(Object mSlider, ColorStateList colorStateList) {
@@ -568,6 +556,7 @@ public class QsTileCustomization extends XposedMods {
             hideMediaQsBackground();
             return;
         }
+        mMediaBackground.setVisibility(View.VISIBLE);
         mArt = getFilteredArt(tempArt);
         float radius = 0f;
         try {
@@ -575,6 +564,9 @@ public class QsTileCustomization extends XposedMods {
             radius = defBg.getCornerRadius();
         } catch (Throwable t) {
             log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
+        }
+        if (Build.VERSION.SDK_INT >= 35) {
+            radius = getMediaPanelRadius(mContext);
         }
         Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
         Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
@@ -588,19 +580,26 @@ public class QsTileCustomization extends XposedMods {
             mOplusQsMediaView.post(() -> setupOtherViews(mOplusQsMediaView, mColorOnAlbum));
         });
 
-        mOplusQsMediaView.post(() -> {
-            Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), oldArtRounded), new BitmapDrawable(mContext.getResources(), artRounded)};
-            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-            mOplusQsMediaView.setBackground(transitionDrawable);
+        Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), oldArtRounded), new BitmapDrawable(mContext.getResources(), artRounded)};
+        TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+        if (Build.VERSION.SDK_INT >= 35) {
+            mMediaBackground.setBackground(transitionDrawable);
             transitionDrawable.startTransition(250);
-        });
+        } else {
+            mOplusQsMediaView.post(() -> {
+                mOplusQsMediaView.setBackground(transitionDrawable);
+                transitionDrawable.startTransition(250);
+            });
+        }
     }
 
     private void hideMediaQsBackground() {
         if (mOplusQsMediaView == null) return;
         if (mQsWidgetsEnabled) return;
-        if (!(Build.VERSION.SDK_INT >= 35)) {
+        if (Build.VERSION.SDK_INT < 35) {
             mOplusQsMediaView.setBackground(qsInactiveColorEnabled ? mOplusQsMediaDrawable : mOplusQsMediaDefaultBackground);
+        } else {
+            mMediaBackground.setVisibility(View.GONE);
         }
         setupOtherViews(mOplusQsMediaView, SystemUtils.isDarkMode() ? Color.WHITE : Color.BLACK);
     }
