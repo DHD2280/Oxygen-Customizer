@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -303,6 +304,12 @@ public class LockscreenClock extends XposedMods {
                 mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
                 if (view instanceof ViewGroup viewGroup) {
                     viewGroup.addView(mLockscreenView);
+                }
+                if (customLockscreenClock) {
+                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.width = MATCH_PARENT;
+                    view.setLayoutParams(layoutParams);
+                    view.requestLayout();
                 }
             };
             OplusKeyguardStyleBaseClock
