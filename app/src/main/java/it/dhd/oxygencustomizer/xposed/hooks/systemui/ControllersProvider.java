@@ -12,6 +12,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnHotspotChanged> mHotspotChangedListeners = new ArrayList<>();
     private final ArrayList<OnDozingChanged> mDozingChangedListeners = new ArrayList<>();
     private final ArrayList<OnKeyguardShowing> mKeyguardShowingListeners = new ArrayList<>();
+    private final ArrayList<OnStatusBarStateChanged> mStatusBarStateListeners = new ArrayList<>();
 
     private Object mBluetoothController = null;
     private Object mDataController = null;
@@ -140,8 +142,22 @@ public class ControllersProvider extends XposedMods {
         instance.mKeyguardShowingListeners.add(callback);
     }
 
+    /**
+     * @noinspection unused
+     */
     public static void unRegisterKeyguardShowingCallback(ControllersProvider.OnKeyguardShowing callback) {
         instance.mKeyguardShowingListeners.remove(callback);
+    }
+
+    public static void registerStatusBarStateChangedCallback(OnStatusBarStateChanged callback) {
+        instance.mStatusBarStateListeners.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterStatusBarStateChangedCallback(OnStatusBarStateChanged callback) {
+        instance.mStatusBarStateListeners.remove(callback);
     }
 
     public static Object getBluetoothController() {
@@ -257,12 +273,21 @@ public class ControllersProvider extends XposedMods {
                 });
 
         // Keyguard Showing Callback
-        ReflectedClass KeyguardUpdateMonitor = ReflectedClass.of("com.android.keyguard.KeyguardUpdateMonitor");
-        KeyguardUpdateMonitor
-                .after("setKeyguardShowing")
+        ReflectedClass QSImpl = ReflectedClass.of(
+                "com.android.systemui.qs.QSImpl", //OOS15
+                "com.android.systemui.qs.QSFragment" //OOS14
+        );
+        QSImpl
+                .before("setKeyguardShowing")
                 .run(param -> {
-                    boolean keyguardShowing = (boolean) param.args[1];
+                    boolean keyguardShowing = (boolean) param.args[0];
                     onKeyguardShowing(keyguardShowing);
+                });
+        QSImpl
+                .before("onStateChanged")
+                .run(param -> {
+                    int state = (int) param.args[0];
+                    onStateChanged(state);
                 });
 
         try {
@@ -423,7 +448,8 @@ public class ControllersProvider extends XposedMods {
         try {
             ReflectedClass OplusQsMediaTileController = ReflectedClass.of(
                     "com.oplus.systemui.qs.media.OplusQsMediaPanelViewController" /* OOS15 */,
-                    "com.oplus.systemui.qs.media.OplusQsMediaTileController" /* OOS14 */);
+                    "com.oplus.systemui.qs.media.OplusQsMediaTileController" /* OOS14 */,
+                    "com.oplus.systemui.qs.media.OplusQsMediaPanelViewController");
             if (Build.VERSION.SDK_INT < 35) {
                 OplusQsMediaTileController
                         .after("bindMediaCarouselController")
@@ -635,6 +661,16 @@ public class ControllersProvider extends XposedMods {
         for (ControllersProvider.OnKeyguardShowing callback : mKeyguardShowingListeners) {
             try {
                 callback.onKeyguardShowing(keyguardShowing);
+            } catch (Throwable t) {
+                XposedBridge.log("ControllersProvider - error " + Log.getStackTraceString(t));
+            }
+        }
+    }
+
+    private void onStateChanged(int state) {
+        for (ControllersProvider.OnStatusBarStateChanged callback : mStatusBarStateListeners) {
+            try {
+                callback.onStatusBarStateChanged(state);
             } catch (Throwable ignored) {
             }
         }
@@ -691,6 +727,13 @@ public class ControllersProvider extends XposedMods {
      */
     public interface OnKeyguardShowing {
         void onKeyguardShowing(boolean showing);
+    }
+
+    /**
+     * Callback for status bar state changed
+     */
+    public interface OnStatusBarStateChanged {
+        void onStatusBarStateChanged(int state);
     }
 
 }
