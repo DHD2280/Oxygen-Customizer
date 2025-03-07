@@ -452,6 +452,7 @@ public final class Constants {
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT1,
                     LOCKSCREEN_CLOCK_COLOR_CODE_TEXT2,
                     LOCKSCREEN_CLOCK_CUSTOM_IMAGE,
+                    LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE,
                     LOCKSCREEN_CLOCK_DATE_FORMAT
             };
         }
@@ -529,6 +530,12 @@ public final class Constants {
             public static final String NOW_BAR_WEATHER_TEXT_COLOR = "lockscreen_now_bar_weather_text_color";
 
             public static final String NOW_BAR_NOTIFICATION_IGNORE_SECURITY = "lockscreen_now_bar_notification_ignore_security";
+            public static final String NOW_BAR_NOTIFICATION_CUSTOM_COLORS = "lockscreen_now_bar_notifications_custom_color";
+            public static final String NOW_BAR_NOTIFICATION_USE_APP_ICON = "lockscreen_now_bar_notifications_use_app_icon";
+            public static final String NOW_BAR_NOTIFICATION_BG_COLOR = "lockscreen_now_bar_notifications_bg_color";
+            public static final String NOW_BAR_NOTIFICATION_1LINE_COLOR = "lockscreen_now_bar_notifications_1line_color";
+            public static final String NOW_BAR_NOTIFICATION_2LINE_COLOR = "lockscreen_now_bar_notifications_2line_color";
+            public static final String NOW_BAR_NOTIFICATION_ICON_COLOR = "lockscreen_now_bar_notification_icon_color";
 
             public static final String[] NOW_BAR_BATTERY_PREFS =  {
                     NOW_BAR_BATTERY_CHARGING_ICON_SWITCH,
@@ -543,6 +550,16 @@ public final class Constants {
                     NOW_BAR_BATTERY_FAST_COLOR,
                     NOW_BAR_BATTERY_POWERSAVE_COLOR,
                     NOW_BAR_BATTERY_TEXT_COLOR
+            };
+
+            public static final String[] NOW_BAR_NOTIFICATIONS_PREFS = {
+                NOW_BAR_NOTIFICATION_IGNORE_SECURITY,
+                NOW_BAR_NOTIFICATION_CUSTOM_COLORS,
+                NOW_BAR_NOTIFICATION_USE_APP_ICON,
+                NOW_BAR_NOTIFICATION_BG_COLOR,
+                NOW_BAR_NOTIFICATION_1LINE_COLOR,
+                NOW_BAR_NOTIFICATION_2LINE_COLOR,
+                NOW_BAR_NOTIFICATION_ICON_COLOR
             };
 
         }

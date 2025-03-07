@@ -17,6 +17,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.media.session.PlaybackState;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -137,7 +139,8 @@ public class NowBarHolder extends LinearLayout {
         parentExpandedListener = listener;
         try {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         init();
     }
 
@@ -169,10 +172,26 @@ public class NowBarHolder extends LinearLayout {
                 MATCH_PARENT,
                 MATCH_PARENT
         ));
-        mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener, albumArtListener);
-        mNowBarBattery = new NowBarBattery(mContext);
-        mNowBarWeather = new NowBarWeather(mContext);
-        mNowBarNotification = new NowBarNotification(mContext, notificationListener);
+        try {
+            mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener, albumArtListener);
+        } catch (Throwable t) {
+            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+        }
+        try {
+            mNowBarBattery = new NowBarBattery(mContext);
+        } catch (Throwable t) {
+            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+        }
+        try {
+            mNowBarWeather = new NowBarWeather(mContext);
+        } catch (Throwable t) {
+            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+        }
+        try {
+            mNowBarNotification = new NowBarNotification(mContext, notificationListener);
+        } catch (Throwable t) {
+            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+        }
         mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
         setupPager();
         mViewPager.setPageTransformer(false, new PageTransitionTransformer());
@@ -187,13 +206,6 @@ public class NowBarHolder extends LinearLayout {
         });
         mPagerContainer.addView(mViewPager);
         addView(view);
-        if (Build.VERSION.SDK_INT >= 35) {
-            GradientDrawable background = new GradientDrawable();
-            background.setColor(Color.parseColor("#6F161616"));
-            Drawable blurred = getNewAutoBlurDrawable(mBlurredBackground, background, 0);
-            mBlurredBackground.setBackground(blurred);
-        }
-        mBlurredBackground.setVisibility(View.GONE);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
@@ -245,6 +257,15 @@ public class NowBarHolder extends LinearLayout {
         mContext.registerReceiver(batteryReceiver, filter, Context.RECEIVER_EXPORTED);
         mController.setNowBarHolder(this);
         AudioDataProvider.registerInfoCallback(this::showMusicNowBarIfNeeded);
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(Color.parseColor("#6F161616"));
+        if (Build.VERSION.SDK_INT >= 35) {
+            Drawable blurred = getNewAutoBlurDrawable(mBlurredBackground, background, 0);
+            mBlurredBackground.setBackground(blurred);
+        } else {
+            mBlurredBackground.setBackground(background);
+        }
+        mBlurredBackground.setVisibility(View.GONE);
     }
 
     @Override
@@ -316,6 +337,7 @@ public class NowBarHolder extends LinearLayout {
 
     public void setNotificationEnabled(boolean enabled) {
         mNotificationEnabled = enabled;
+        mNowBarNotification.setNotificationEnabled(enabled);
         refreshViewPager();
     }
 
@@ -356,9 +378,15 @@ public class NowBarHolder extends LinearLayout {
         mBackgroundMode = backgroundMode;
     }
 
-    public void updateNotification(boolean ignoreSecurity) {
+    public void updateNotification(boolean ignoreSecurity,
+                                   boolean customColor, boolean useAppIcons,
+                                   int backgroundColor, int textColor1, int textColor2, int iconTintColor) {
         if (mNowBarNotification != null) {
             mNowBarNotification.setIgnoreSecurity(ignoreSecurity);
+            mNowBarNotification.setNotificationsOptions(
+                    customColor, useAppIcons,
+                    backgroundColor, textColor1, textColor2, iconTintColor
+            );
         }
     }
 

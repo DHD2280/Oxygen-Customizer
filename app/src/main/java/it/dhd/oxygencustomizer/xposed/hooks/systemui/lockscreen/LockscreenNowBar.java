@@ -28,7 +28,14 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_1LINE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_2LINE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_IGNORE_SECURITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_USE_APP_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
@@ -98,6 +105,11 @@ public class LockscreenNowBar extends XposedMods {
 
     // Notification
     private boolean mNowBarNotificationIgnoreSecurity = false;
+    private boolean mNowBarNotificationCustomColors = false, mNowBarNotificationUseAppIcon = false;
+    private int mNowBarNotificationBgColor = Color.BLACK,
+                mNowBarNotification1LineColor = Color.WHITE,
+                mNowBarNotification2LineColor = Color.WHITE,
+                mNowBarNotificationIconColor = Color.WHITE;
 
     private int mAffordanceWidth = 0;
 
@@ -150,6 +162,13 @@ public class LockscreenNowBar extends XposedMods {
 
         // Notification
         mNowBarNotificationIgnoreSecurity = Xprefs.getBoolean(NOW_BAR_NOTIFICATION_IGNORE_SECURITY, false);
+        mNowBarNotificationCustomColors = Xprefs.getBoolean(NOW_BAR_NOTIFICATION_CUSTOM_COLORS, false);
+        mNowBarNotificationUseAppIcon = Xprefs.getBoolean(NOW_BAR_NOTIFICATION_USE_APP_ICON, false);
+        mNowBarNotificationBgColor = Xprefs.getInt(NOW_BAR_NOTIFICATION_BG_COLOR, Color.BLACK);
+        mNowBarNotification1LineColor = Xprefs.getInt(NOW_BAR_NOTIFICATION_1LINE_COLOR, Color.WHITE);
+        mNowBarNotification2LineColor = Xprefs.getInt(NOW_BAR_NOTIFICATION_2LINE_COLOR, Color.WHITE);
+        mNowBarNotificationIconColor = Xprefs.getInt(NOW_BAR_NOTIFICATION_ICON_COLOR, Color.WHITE);
+
 
         if (Key.length > 0) {
             if (Key[0].equals(NOW_BAR_ENABLED) ||
@@ -177,8 +196,11 @@ public class LockscreenNowBar extends XposedMods {
                     Key[0].equals(NOW_BAR_WEATHER_CUSTOM_COLORS)) {
                 updateWeather();
             }
-            if (Key[0].equals(NOW_BAR_NOTIFICATION_IGNORE_SECURITY)) {
-                updateNotification();
+            for (String k : NOW_BAR_NOTIFICATIONS_PREFS) {
+                if (Key[0].equals(k)) {
+                    updateNotification();
+                    break;
+                }
             }
         }
     }
@@ -300,7 +322,7 @@ public class LockscreenNowBar extends XposedMods {
     }
 
     private void updateBarMargins() {
-        boolean isLeftHidden = isLeftAffordanceHidden(mContext, mHideLeftAfforfance);
+        boolean isLeftHidden = isLeftAffordanceHidden(mContext, mHideLeftAfforfance) || mHideLeftAfforfance;
         NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.updateMargins(
                 isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
@@ -337,7 +359,9 @@ public class LockscreenNowBar extends XposedMods {
     private void updateNotification() {
         NowBarController mNowBarController = NowBarController.getInstance();
         if (mNowBarController == null) return;
-        mNowBarController.updateNotification(mNowBarNotificationIgnoreSecurity);
+        mNowBarController.updateNotification(mNowBarNotificationIgnoreSecurity,
+                mNowBarNotificationCustomColors, mNowBarNotificationUseAppIcon,
+                mNowBarNotificationBgColor, mNowBarNotification1LineColor, mNowBarNotification2LineColor, mNowBarNotificationIconColor);
     }
 
     @Override

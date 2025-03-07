@@ -208,6 +208,37 @@
             android:summary="@string/lockscreen_now_bar_notifications_allow_private_summary"
             android:title="@string/lockscreen_now_bar_notifications_allow_private" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_notifications_custom_color"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:title="@string/custom_color" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFF000000"
+            app:cpv_showAlphaSlider="true"
+            android:key="lockscreen_now_bar_notifications_bg_color"
+            android:title="@string/background_color"/>
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            app:cpv_showAlphaSlider="true"
+            android:key="lockscreen_now_bar_notifications_1line_color"
+            android:title="@string/lockscreen_now_bar_notification_1line_color_title" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
+            app:cpv_showAlphaSlider="true"
+            android:key="lockscreen_now_bar_notifications_2line_color"
+            android:title="@string/lockscreen_now_bar_notification_2line_color_title"/>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_notifications_use_app_icon"
+            android:title="@string/lockscreen_now_bar_app_icon_title"
+            android:summary="@string/lockscreen_now_bar_app_icon_summary" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oxygencustomizer.ui.preferences.FooterPreference

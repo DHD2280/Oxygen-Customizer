@@ -139,9 +139,13 @@ public class NowBarController {
         }
     }
 
-    public void updateNotification(boolean ignoreSecurity) {
+    public void updateNotification(boolean ignoreSecurity,
+                                   boolean customColor, boolean useAppIcons,
+                                   int backgroundColor, int textColor1, int textColor2, int iconTintColor) {
         if (mView != null) {
-            mView.updateNotification(ignoreSecurity);
+            mView.updateNotification(ignoreSecurity,
+                    customColor, useAppIcons,
+                    backgroundColor, textColor1, textColor2, iconTintColor);
         }
     }
 

@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 
 import android.app.Notification;
 import android.app.Notification.MessagingStyle;
@@ -79,17 +80,17 @@ public class NotificationUtils {
             }
 
             if (iconObject instanceof Bitmap bitmap) {
-                return new BitmapDrawable(context.getResources(), (Bitmap) iconObject);
-            } else if (iconObject instanceof Icon) {
-                return ((Icon) iconObject).loadDrawable(context);
-            } else if (iconObject instanceof Drawable) {
-                return (Drawable) iconObject;
+                return new BitmapDrawable(context.getResources(), bitmap);
+            } else if (iconObject instanceof Icon icon) {
+                return icon.loadDrawable(context);
+            } else if (iconObject instanceof Drawable drawable) {
+                return drawable;
             } else {
-                return resolveAppIcon(sbn, context);
+                return resolveAppIcon(sbn);
             }
         } catch (Exception e) {
             Log.e(TAG, "Error resolving notification icon, using application icon instead", e);
-            return resolveAppIcon(sbn, context);
+            return resolveAppIcon(sbn);
         }
     }
 
@@ -125,17 +126,17 @@ public class NotificationUtils {
         return null;
     }
 
-    public static Drawable resolveAppIcon(StatusBarNotification sbn, Context context) {
+    public static Drawable resolveAppIcon(StatusBarNotification sbn) {
         try {
-            return context.getPackageManager().getApplicationIcon(getApplicationInfo(sbn, context));
+            return PackageManager().getApplicationIcon(getApplicationInfo(sbn));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public static ApplicationInfo getApplicationInfo(StatusBarNotification sbn, Context context) {
+    public static ApplicationInfo getApplicationInfo(StatusBarNotification sbn) {
         try {
-        return context.getPackageManager().getApplicationInfo(sbn.getPackageName(), 0);
+        return PackageManager().getApplicationInfo(sbn.getPackageName(), 0);
         } catch (Exception e) {
             return null;
         }
@@ -168,5 +169,34 @@ public class NotificationUtils {
             }
         }
         return usefulNotification;
+    }
+
+    public static List<StatusBarNotification> filterNotifications(List<StatusBarNotification> notificationList, NotificationListenerService.RankingMap currentRankingMap, boolean allowSecureNotifications) {
+        List<StatusBarNotification> sortedNotifications = new ArrayList<>(notificationList);
+        sortedNotifications.sort((o1, o2) -> Long.compare(o2.getPostTime(), o1.getPostTime()));
+
+        List<StatusBarNotification> filteredNotifications = new ArrayList<>();
+        for (StatusBarNotification sbn : sortedNotifications) {
+            NotificationListenerService.Ranking ranking = currentRankingMap != null ? (NotificationListenerService.Ranking) callMethod(currentRankingMap, "getRawRankingObject", sbn.getKey()) : null;
+            boolean hasSensitiveContent = ranking != null && (boolean) callMethod(ranking, "hasSensitiveContent");
+            boolean shouldFilterSensitiveNotifications = !allowSecureNotifications && (ranking != null && hasSensitiveContent);
+            Pair<String, String> notificationContent = NotificationUtils.resolveNotificationContent(sbn);
+            String title = notificationContent.first;
+            String content = notificationContent.second;
+            Notification notification = sbn.getNotification();
+            boolean isFgsOrUij = (boolean) callMethod(notification, "isFgsOrUij");
+            boolean isMediaNotification = (boolean) callMethod(notification, "isMediaNotification");
+            boolean isGroupSummary = (sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0;
+            if (!sbn.isOngoing() &&
+                    !isFgsOrUij &&
+                    !isMediaNotification &&
+                    !isGroupSummary &&
+                    (sbn.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == 0 &&
+                    !shouldFilterSensitiveNotifications &&
+                    (!title.isEmpty() || !content.isEmpty())) {
+                filteredNotifications.add(sbn);
+            }
+        }
+        return filteredNotifications;
     }
 }

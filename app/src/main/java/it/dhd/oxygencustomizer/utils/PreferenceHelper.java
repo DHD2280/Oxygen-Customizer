@@ -103,6 +103,18 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXDENDED_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_1LINE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_2LINE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_ICON_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_2_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_3_KEY;
@@ -160,17 +172,23 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
@@ -238,7 +256,7 @@ public class PreferenceHelper {
     }};
 
     private final List<Integer> LsClockUserVisible = new ArrayList<>() {{
-        addAll(Arrays.asList(7, 32, 35, 42, 48, 50, 53, 58, 59));
+        addAll(Arrays.asList(7, 32, 35, 36, 42, 48, 50, 53, 58, 59));
     }};
 
     private final List<Integer> LsClockDeviceVisible = new ArrayList<>() {{
@@ -411,14 +429,17 @@ public class PreferenceHelper {
             }
 
             // Qs Appearance
-            case "qs_tile_active_color" -> {
-                return instance.mPreferences.getBoolean("qs_tile_active_color_enabled", false);
+            case "qs_tiles_colors_cat" -> {
+                return Build.VERSION.SDK_INT < 35;
             }
-            case "qs_tile_inactive_color" -> {
-                return instance.mPreferences.getBoolean("qs_tile_inactive_color_enabled", false);
+            case QS_TILE_ACTIVE_COLOR -> {
+                return instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
-            case "qs_tile_disabled_color" -> {
-                return instance.mPreferences.getBoolean("qs_tile_disabled_color_enabled", false);
+            case QS_TILE_INACTIVE_COLOR -> {
+                return instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
+            }
+            case QS_TILE_DISABLED_COLOR -> {
+                return instance.mPreferences.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
             }
             case "brightness_slider_progress_color_mode" -> {
                 return instance.mPreferences.getBoolean("customize_brightness_slider", false);
@@ -725,6 +746,11 @@ public class PreferenceHelper {
             }
 
             // Lockscreen Now Bar
+            case NOW_BAR_MUSIC_EXDENDED_MODE,
+                 NOW_BAR_MUSIC_EXTENDED_BACKGROUND,
+                 NOW_BAR_MUSIC_EXTENDED_CLOCK -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_MUSIC_EXTENDED_PLAYER, false);
+            }
             case NOW_BAR_BATTERY_CHARGING_ICON_STYLE -> {
                 return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_CHARGING_ICON_SWITCH, false);
             }
@@ -739,6 +765,16 @@ public class PreferenceHelper {
             }
             case NOW_BAR_BATTERY_POWERSAVE_COLOR -> {
                 return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_INDICATE_POWERSAVE, false);
+            }
+            case NOW_BAR_WEATHER_BACKGROUND_COLOR,
+                 NOW_BAR_WEATHER_TEXT_COLOR -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_WEATHER_CUSTOM_COLORS, false);
+            }
+            case NOW_BAR_NOTIFICATION_BG_COLOR,
+                 NOW_BAR_NOTIFICATION_1LINE_COLOR,
+                 NOW_BAR_NOTIFICATION_2LINE_COLOR,
+                 NOW_BAR_NOTIFICATION_ICON_COLOR -> {
+                return instance.mPreferences.getBoolean(NOW_BAR_NOTIFICATION_CUSTOM_COLORS, false);
             }
 
             // Aod Clocks
