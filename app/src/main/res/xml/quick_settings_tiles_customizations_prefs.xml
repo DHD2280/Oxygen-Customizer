@@ -2,6 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_tiles_colors_cat"
         android:title="@string/quick_settings_tiles_customize_category_title"
         app:iconSpaceReserved="false">
         <it.dhd.oneplusui.preference.OplusSwitchPreference
