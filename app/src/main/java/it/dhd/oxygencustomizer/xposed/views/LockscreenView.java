@@ -4,35 +4,20 @@ import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.Gravity.START;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_LS;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_SHADE;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
 
 import androidx.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import de.robv.android.xposed.XposedBridge;
-import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class LockscreenView extends FrameLayout {
 
@@ -44,7 +29,6 @@ public class LockscreenView extends FrameLayout {
     private View mClockView;
     private CurrentWeatherView mWeatherView;
     private LockscreenWidgetsView mWidgetsView;
-    private int mStockClockHeight;
 
     private boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
 
@@ -57,9 +41,9 @@ public class LockscreenView extends FrameLayout {
         instance = this;
         mContext = context;
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
 
         createViews();
+        setVisibility(View.GONE);
     }
 
     private void createViews() {
@@ -103,7 +87,7 @@ public class LockscreenView extends FrameLayout {
 
     public void setLockscreeClockEnabled(boolean enabled) {
         mLockscreenClockEnabled = enabled;
-        post(() -> mClockContainer.setVisibility(enabled ? VISIBLE : GONE));
+        updateVisibility();
     }
 
     public void setClockView(View clockView) {
@@ -148,7 +132,7 @@ public class LockscreenView extends FrameLayout {
 
     public void setLockscreenWeatherEnabled(boolean enabled) {
         mLockscreenWeatherEnabled = enabled;
-        post(() -> mWeatherContainer.setVisibility(enabled ? VISIBLE : GONE));
+        updateVisibility();
     }
 
     public void updateWeatherMargins(int left, int top, int right, int bottom) {
@@ -169,7 +153,7 @@ public class LockscreenView extends FrameLayout {
 
     public void setLockscreenWidgetsEnabled(boolean enabled) {
         mLockscreenWidgetsEnabled = enabled;
-        post(() -> mWidgetsContainer.setVisibility(enabled ? VISIBLE : GONE));
+        updateVisibility();
     }
 
     public void updateWidgetsMargin(int topMargin) {
@@ -197,6 +181,20 @@ public class LockscreenView extends FrameLayout {
         if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
 
         return fullHeight;
+    }
+
+    private void updateVisibility() {
+        post(() -> {
+            mClockContainer.setVisibility(mLockscreenClockEnabled ? View.VISIBLE : View.GONE);
+            mWeatherContainer.setVisibility(mLockscreenWeatherEnabled ? View.VISIBLE : View.GONE);
+            mWidgetsContainer.setVisibility(mLockscreenWidgetsEnabled ? View.VISIBLE : View.GONE);
+
+            if (!mLockscreenClockEnabled && !mLockscreenWeatherEnabled && !mLockscreenWidgetsEnabled) {
+                setVisibility(View.GONE);
+            } else {
+                setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 }
