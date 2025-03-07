@@ -12,7 +12,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isMediaIconNeedUseLightColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,6 +47,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 
 public class QsMediaTile extends LinearLayout {
 
@@ -93,6 +93,8 @@ public class QsMediaTile extends LinearLayout {
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
 
+    private boolean mDefaultTip = true;
+
     public QsMediaTile(Context context) {
         super(context);
 
@@ -107,14 +109,14 @@ public class QsMediaTile extends LinearLayout {
 
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
 
-        mAppIconDrawable = getDrawable(APP_ICON, SYSTEM_UI);
-        mDeviceIconDrawable = getDrawable(DEVICE_ICON, SYSTEM_UI);
-        mSwitchDeviceIconDrawable = getDrawable(DEVICE_SWITCH_ICON, SYSTEM_UI);
-        mDefaultTipText = getString(DEFAULT_LABEL, SYSTEM_UI);
-        mPrevIconDrawable = getDrawable(PREV_ICON, SYSTEM_UI);
-        mPlayIconDrawable = getDrawable(PLAY_ICON, SYSTEM_UI);
-        mPauseIconDrawable = getDrawable(PAUSE_ICON, SYSTEM_UI);
-        mNextIconDrawable = getDrawable(NEXT_ICON, SYSTEM_UI);
+        mAppIconDrawable = WidgetUtils.getDrawable(mContext, APP_ICON, SYSTEM_UI);
+        mDeviceIconDrawable = WidgetUtils.getDrawable(mContext, DEVICE_ICON, SYSTEM_UI);
+        mSwitchDeviceIconDrawable = WidgetUtils.getDrawable(mContext, DEVICE_SWITCH_ICON, SYSTEM_UI);
+        mDefaultTipText = WidgetUtils.getString(mContext, DEFAULT_LABEL, SYSTEM_UI);
+        mPrevIconDrawable = WidgetUtils.getDrawable(mContext, PREV_ICON, SYSTEM_UI);
+        mPlayIconDrawable = WidgetUtils.getDrawable(mContext, PLAY_ICON, SYSTEM_UI);
+        mPauseIconDrawable = WidgetUtils.getDrawable(mContext, PAUSE_ICON, SYSTEM_UI);
+        mNextIconDrawable = WidgetUtils.getDrawable(mContext, NEXT_ICON, SYSTEM_UI);
 
         inflateView();
 
@@ -128,15 +130,16 @@ public class QsMediaTile extends LinearLayout {
         @Override
         public void onBindMediaData(Object mediaData) {
             mMediaData = mediaData;
-            updateBackground();
             if (mediaData == null) {
                 setDefaultTip();
+                hideMediaQsBackground();
                 return;
             }
             setAppIcon(mediaData);
             setDeviceIcon(mediaData);
             setTitleAndText(mediaData);
             bindMediaAction(mediaData);
+            updateBackground();
         }
 
         @Override
@@ -307,19 +310,20 @@ public class QsMediaTile extends LinearLayout {
     }
 
     private void setDefaultTip() {
+        mDefaultTip = true;
         post(() -> {
             // App Icon
             mAppIcon.setVisibility(GONE);
             mAppIcon.setOnClickListener(null);
             // Device Icon
             mDeviceIcon.setVisibility(VISIBLE);
-            mDeviceIcon.setImageDrawable(getDrawable(Build.VERSION.SDK_INT >= 35 ? DEVICE_SWITCH_ICON : DEVICE_ICON, SYSTEM_UI));
+            mDeviceIcon.setImageDrawable(WidgetUtils.getDrawable(mContext, Build.VERSION.SDK_INT >= 35 ? DEVICE_SWITCH_ICON : DEVICE_ICON, SYSTEM_UI));
             setupDeviceIconColor();
 
             mTitle.setText(mDefaultTipText);
             mText.setVisibility(GONE);
 
-            mPlayPause.setImageDrawable(getDrawable(PLAY_ICON, SYSTEM_UI));
+            mPlayPause.setImageDrawable(WidgetUtils.getDrawable(mContext, PLAY_ICON, SYSTEM_UI));
             mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 
             setupOtherViews(mTextColor.getDefaultColor());
@@ -381,30 +385,6 @@ public class QsMediaTile extends LinearLayout {
         });
     }
 
-    @SuppressLint("DiscouragedApi")
-    private Drawable getDrawable(String drawableRes, String pkg) {
-        try {
-            return ContextCompat.getDrawable(
-                    mContext,
-                    mContext.getResources().getIdentifier(drawableRes, "drawable", pkg));
-        } catch (Throwable t) {
-
-            log("QsMediaTile getDrawable " + drawableRes + " from " + pkg + " error " + t);
-            return null;
-        }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private String getString(String stringRes, String pkg) {
-        try {
-            return mContext.getResources().getString(
-                    mContext.getResources().getIdentifier(stringRes, "string", pkg));
-        } catch (Throwable t) {
-            log("QsMediaTile getString " + stringRes + " from " + pkg + " error " + t);
-            return "";
-        }
-    }
-
     private void updateBackground() {
         if (!showMediaArtMediaQs) {
             hideMediaQsBackground();
@@ -418,10 +398,10 @@ public class QsMediaTile extends LinearLayout {
         }
         mArt = getFilteredArt(tempArt);
         float radius = 0f;
-        if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
-                radius = gradientDrawable.getCornerRadius();
-        } else if (Build.VERSION.SDK_INT >= 35) {
+        if (Build.VERSION.SDK_INT >= 35) {
             radius = getMediaPanelRadius(mContext);
+        } else if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
+                radius = gradientDrawable.getCornerRadius();
         }
         Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
         Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
@@ -432,9 +412,7 @@ public class QsMediaTile extends LinearLayout {
                     isColorDark(dominantColor) ?
                             DrawableConverter.findContrastColorAgainstDark(Color.WHITE, dominantColor, true, 2) :
                             DrawableConverter.findContrastColor(Color.BLACK, dominantColor, true, 2);
-            post(() -> {
-                setupOtherViews(mColorOnAlbum);
-            });
+            post(() -> setupOtherViews(mColorOnAlbum));
         });
 
         post(() -> {
@@ -478,14 +456,17 @@ public class QsMediaTile extends LinearLayout {
     }
 
     private void hideMediaQsBackground() {
+        if (Build.VERSION.SDK_INT == 35) {
+            setBackground(null);
+            return;
+        }
         if (qsInactiveColorEnabled) {
             if (mOplusQsMediaDrawable == null) return;
-            if (Build.VERSION.SDK_INT < 35) {
-                mOplusQsMediaDrawable.setTint(qsInactiveColor);
-            }
             mOplusQsMediaDrawable.invalidateSelf();
             setBackground(mOplusQsMediaDrawable);
         } else {
+            if (mOplusQsMediaDefaultBackground == null) return;
+            mOplusQsMediaDefaultBackground.invalidateSelf();
             setBackground(mOplusQsMediaDefaultBackground);
         }
     }
@@ -518,7 +499,6 @@ public class QsMediaTile extends LinearLayout {
     }
 
     public void updateDefaultBackground(Drawable defDrawable) {
-        XposedBridge.log("QsMediaTile updateDefaultBackground defDrawable != null? " + (defDrawable != null));
         if (defDrawable == null) return;
         try {
             mOplusQsMediaDefaultBackground = defDrawable.getConstantState().newDrawable().mutate();
