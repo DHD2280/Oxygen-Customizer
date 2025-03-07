@@ -6,7 +6,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="38dp"
+        android:visibility="gone"
         android:tag="clock_container">
 
         <TextClock
@@ -51,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="26dp"
         android:layout_marginBottom="12dp"
         android:gravity="bottom"
         android:orientation="vertical"
@@ -61,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/kg_widget_main_width"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="22dp"
             android:tag="album_art_big"
             android:visibility="visible" />
 
