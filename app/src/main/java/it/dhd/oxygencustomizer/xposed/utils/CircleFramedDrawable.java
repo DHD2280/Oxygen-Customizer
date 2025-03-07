@@ -39,6 +39,12 @@ public class CircleFramedDrawable extends Drawable {
 
     public CircleFramedDrawable(Bitmap icon, int size) {
         super();
+        if (icon == null) {
+            throw new IllegalArgumentException("Bitmap cannot be null");
+        }
+        if (size <= 0) {
+            size = icon.getWidth();
+        }
         mSize = size;
 
         mBitmap = Bitmap.createBitmap(mSize, mSize, Bitmap.Config.ARGB_8888);

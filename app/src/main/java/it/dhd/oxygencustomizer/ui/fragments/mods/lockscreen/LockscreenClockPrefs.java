@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
@@ -31,6 +32,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 
 public class LockscreenClockPrefs extends ControlledPreferenceFragmentCompat {
 
@@ -93,6 +95,12 @@ public class LockscreenClockPrefs extends ControlledPreferenceFragmentCompat {
                 .setFragmentResultListener(DATA_CROP_KEY, this, (requestKey, result) -> {
                     String resultString = result.getString(DATA_FILE_URI);
                     String path = getRealPath(Uri.parse(resultString));
+                    OCPreferences.getPrefs().edit().putBoolean(
+                            LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, false
+                    ).apply();
+                    OCPreferences.getPrefs().edit().putBoolean(
+                            LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE, true
+                    ).apply();
                     if (path != null && moveToOCHiddenDir(path, LOCKSCREEN_USER_IMAGE)) {
                         Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
                     } else {
