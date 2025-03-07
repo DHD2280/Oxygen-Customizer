@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:tag="clock_hours_tick"
-            android:format12Hour="HH:mm"
-            android:format24Hour="hh:mm"
+            android:format24Hour="HH:mm"
+            android:format12Hour="hh:mm"
             android:textColor="#00000000"
             android:textSize="60dp" />
 
