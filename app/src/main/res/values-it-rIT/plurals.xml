@@ -1,8 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <plurals name="notification_summary">
-        <item quantity="one">%1$d notifica</item>
-        <item quantity="many">%1$d notifiche</item>
-        <item quantity="other">%1$d notifiche</item>
-    </plurals>
-</resources>
+<resources></resources>
