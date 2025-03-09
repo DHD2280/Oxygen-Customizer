@@ -879,4 +879,28 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="themed_icons_entries">
+        <item>@string/themed_icons_workspace</item>
+        <item>@string/themed_icons_drawer</item>
+        <item>@string/themed_icons_folder</item>
+        <item>@string/themed_icons_search</item>
+        <item>@string/themed_icons_taskbar</item>
+    </string-array>
+
+    <string-array name="themed_icons_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="themed_icons_default">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 </resources>

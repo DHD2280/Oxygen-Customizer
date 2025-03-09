@@ -653,8 +653,15 @@
     <string name="launcher_app_details_title">Open App Details</string>
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
+    <string name="launcher_themed_icons">Themed icons</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
+    <string name="themed_icons_where_title">Select where to apply themed icons</string>
+    <string name="themed_icons_workspace">Workspace</string>
+    <string name="themed_icons_drawer">Drawer</string>
+    <string name="themed_icons_folder">Folder</string>
+    <string name="themed_icons_search">Search result</string>
+    <string name="themed_icons_taskbar">Taskbar</string>
     <string name="hide_scroller">Hide scroller</string>
     <string name="hide_scroller_summary">Hide scroller in app drawer</string>
 

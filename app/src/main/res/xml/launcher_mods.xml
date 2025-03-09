@@ -139,6 +139,26 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/launcher_themed_icons">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="force_themed_launcher_icons"
+            android:summary="@string/force_themed_launcher_icons_summary"
+            android:title="@string/force_themed_launcher_icons"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusMultiSelectListPreference
+            android:defaultValue="@array/themed_icons_default"
+            android:entries="@array/themed_icons_entries"
+            android:entryValues="@array/themed_icons_values"
+            android:key="themed_icons_where"
+            android:title="@string/themed_icons_where_title"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
@@ -148,13 +168,6 @@
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/remove_home_pagination"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="force_themed_launcher_icons"
-            android:summary="@string/force_themed_launcher_icons_summary"
-            android:title="@string/force_themed_launcher_icons"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
