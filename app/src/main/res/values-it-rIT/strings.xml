@@ -1263,7 +1263,6 @@
     <string name="lockscreen_now_bar_music_extended_player_background">Modalità sfondo lettore esteso</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur">Sfocatura grigia</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Copertina album sfocata</string>
-    <string name="lockscreen_now_bar_music_extended_player_mode">Modalità lettore estesa</string>
     <string name="lockscreen_now_bar_music_extended_player_mode_large">Grande</string>
     <string name="lockscreen_now_bar_music_extended_player_mode_compact">Compatto</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock">Mostra orologio</string>

@@ -134,6 +134,7 @@
     <string name="white_color">Fehér</string>
     <string name="black_color">Fekete</string>
     <string name="custom_color">Egyéni szín</string>
+    <string name="background_color">Háttérszín</string>
     <string name="battery_info_button_title">Akkumulátor infó…</string>
     <string name="general_enabled">Engedélyezve</string>
     <string name="general_disabled">Letiltva</string>
@@ -1253,7 +1254,33 @@
     <string name="lockscreen_now_bar_enabled_title">Engedélyezi a \'Most sáv\'-ot a záróképernyőn</string>
     <string name="lockscreen_now_bar_weather">Időjárás-megjelenítés</string>
     <string name="lockscreen_now_bar_weather_summary">Megjeleníti az időjárást a \'Most sáv\'-on</string>
+    <string name="lockscreen_now_bar_notifications">Értesítések megjelenítése</string>
+    <string name="lockscreen_now_bar_notifications_summary">A \'Most sáv\'-ban megjelenik a legfrissebb értesítés</string>
+    <string name="lockscreen_now_bar_bottom_margin">A \'Most sáv\' alsó margója</string>
+    <string name="lockscreen_now_bar_music">Zene a \'Most sáv\'-on</string>
+    <string name="lockscreen_now_bar_music_extended_player">Kibővített lejátszó</string>
+    <string name="lockscreen_now_bar_music_extended_player_summary">Érintse meg a lemezborítót a \'Most sáv\' kibővített lejátszójához</string>
+    <string name="lockscreen_now_bar_music_extended_player_background">A kibővített lejátszó háttérmódja</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur">Szürke elmosás</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Elmosott lemezborító</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode">Kibővített lejátszási mód</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_large">Nagy</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_compact">Kompakt</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock">Az óra megjelenítése</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">A kibővített lejátszó felső részén az óra is látszik</string>
+    <string name="lockscreen_now_bar_battery">Akkumulátor a \'Most sáv\'-on</string>
+    <string name="lockscreen_now_bar_battery_custom_icon">Egyedi töltésikon</string>
+    <string name="lockscreen_now_bar_battery_custom_colors">Egyedi színek</string>
+    <string name="lockscreen_now_bar_battery_custom_colors_summary">A \'Most sáv\' színei testreszabhatók</string>
+    <string name="lockscreen_now_bar_weather_category">Időjárás a \'Most sáv\'-on</string>
+    <string name="lockscreen_now_bar_notifications_category">Értesítés a \'Most sáv\'-on</string>
+    <string name="lockscreen_now_bar_notifications_allow_private">Privát értesítések engedélyezése</string>
+    <string name="lockscreen_now_bar_notifications_allow_private_summary">Kikapcsolja a rendszerbeállításokat, és mindig megjeleníti az értesítések tartalmát</string>
+    <string name="lockscreen_now_bar_footer">A \'Most sáv\' egy kis sáv, amely a két záróképernyő-gomb között helyezkedik el.\nMegjelenítheti a médialejátszót, az akkuállapotot és opcionálisan más infókat.\nHa nem szeretné látni a gyári médialejátszót, egyszerűen rejtse el a beállításokban.\nMegjegyzés: ha elrejti mindkét gombot, a \'Most sáv\' elfoglalja a teljes helyet.</string>
     <!-- Now Bar Notifications string -->
+    <string name="lockscreen_now_bar_no_notifications">Nincs új értesítés</string>
+    <string name="lockscreen_now_bar_new_notification">Van új értesítés</string>
+    <string name="lockscreen_now_bar_new_notification_content">Rejtett tartalom</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Alkalmazások laggolás-javítása</string>
     <string name="fix_lag_summary">Laggolás javítása, mikor az Előzményekből nyílik meg</string>

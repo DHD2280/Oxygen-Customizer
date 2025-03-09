@@ -134,6 +134,7 @@
     <string name="white_color">Blanc</string>
     <string name="black_color">Noir</string>
     <string name="custom_color">Couleur personnalisée</string>
+    <string name="background_color">Couleur d\'arrière-plan</string>
     <string name="battery_info_button_title">Infos batterie…</string>
     <string name="general_enabled">Activé</string>
     <string name="general_disabled">Désactivé</string>
@@ -455,8 +456,57 @@
     <string name="qs_transitions_background_to_foreground">Arrière-plan vers l\'avant-plan</string>
     <string name="qs_transitions_depth_page">Profondeur de la page</string>
     <string name="qs_transitions_fade">Fondu</string>
+    <string name="qs_transitions_foreground_to_background">Premier plan vers l\'arrière plan</string>
+    <string name="qs_transitions_rotate_down">Rotation vers le bas</string>
+    <string name="qs_transitions_rotate_up">Rotation vers le haut</string>
+    <string name="qs_transitions_stack">Empiler</string>
+    <string name="qs_transitions_tablet">Tablette</string>
+    <string name="qs_transitions_zoom_in">Zoom avant</string>
+    <string name="qs_transitions_zoom_out">Dézoomer</string>
+    <string name="qs_transitions_zoom_out_slide">Zoom arrière coulissant</string>
+    <string name="qs_transitions_raise_from_center">Soulever du centre</string>
+    <string name="qs_transitions_rotate_about_bottom">Faire pivoter en bas</string>
+    <string name="qs_transitions_translate_y_ttb">Traduire Y de haut en bas</string>
+    <string name="qs_transitions_translate_y_btt">Traduire Y de haut en bas</string>
     <!-- QS Header Image Strings -->
+    <string name="qs_header_image_title">Image principale</string>
+    <string name="qs_header_image_summary">Sélectionner l\'image d\'arrière-plan des réglages rapides</string>
+    <string name="qs_header_image_enabled_title">Personnalisation de l\'image d\'en-tête des réglages rapides</string>
+    <string name="qs_header_image_enabled_summary">Activer la personnalisation de l\'image d\'en-tête des réglages rapides</string>
     <!-- Omni Provider" -->
+    <string name="qs_header_provider_title">Préférence d\'en-tête</string>
+    <string name="qs_header_daylight_pack_title">Collection des images d\'entête</string>
+    <string name="qs_header_browse_title">Parcourir les en-têtes installés</string>
+    <string name="qs_header_browse_summary">Parcourir toutes les collections d\'images disponibles</string>
+    <string name="qs_header_static_provider_title">Image fixe</string>
+    <string name="qs_header_daylight_provider_title">Collection d’images</string>
+    <string name="qs_header_file_provider_title">Personnaliser l\'image</string>
+    <string name="header_creator_label">Créateur\u003a </string>
+    <string name="download_wallpaper_list_failed_notice">Échec du chargement du répertoire des fonds d\'écran</string>
+    <string name="download_header_notice">Téléchargement de l\'entête</string>
+    <string name="download_header_failed_notice">Échec du téléchargement de l\'entête</string>
+    <string name="custom_header_image_notice">Image principale appliqué</string>
+    <string name="header_location_online">Connecté</string>
+    <string name="header_location_local">Local</string>
+    <string name="no_network_message">Aucune connexion réseau</string>
+    <string name="qs_header_image_landscape_enabled_title">Afficher en mode paysage</string>
+    <string name="qs_header_image_landscape_enabled_summary">Afficher l\'image d\'en-tête des réglages rapides en mode paysage</string>
+    <string name="qs_header_image_tint_title">Teinte</string>
+    <string name="qs_header_image_tint_none">Aucune teinte</string>
+    <string name="qs_header_image_tint_accent">Couleur d\'accentuation</string>
+    <string name="qs_header_image_tint_primary">Couleur principale</string>
+    <string name="qs_header_image_tint_primary_inverse">Inverse de la couleur principale</string>
+    <string name="qs_header_image_tint_custom">Couleur personnalisée</string>
+    <string name="qs_header_image_tint_custom_title">Couleur de teinte personnalisée</string>
+    <string name="qs_header_image_tint_intensity_title">Intensité de la teinte</string>
+    <string name="qs_header_image_height_portrait_title">Hauteur</string>
+    <string name="qs_header_image_alpha_title">Transparence</string>
+    <string name="qs_header_image_bottom_fade_title">Fondu du bas</string>
+    <string name="qs_header_image_padding_side_title">Marge latérale</string>
+    <string name="qs_header_image_padding_top_title">Marge supérieure</string>
+    <string name="file_header_select_title">Choisir une image locale</string>
+    <string name="file_header_select_summary">Sélectionner une image depuis le stockage</string>
+    <string name="qs_header_image_zoomtofit_title">Zoomer pour ajuster</string>
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">Horloge de l\'en-tête des réglages rapides</string>
     <string name="qs_header_clock_intro_title">Activer et désactiver l\'horloge personnalisée nécessite le redémarrage de SystemUI.\nAppuyez sur le menu pour redémarrer.</string>
@@ -569,7 +619,53 @@
     <string name="gesture_nav_pill_width_title">Largeur par rapport à la taille standard</string>
     <!-- Custom Gestures -->
     <!-- Buttons Title -->
+    <string name="torch_long_press_volbtn_torch_enable_timeout_title">Activer le délai d\'attente</string>
+    <string name="torch_long_press_volbtn_torch_timeout_title">Délai dépassé</string>
+    <string name="torch_long_press_volbtn_torch_use_proximity">Utiliser le capteur de proximité</string>
+    <string name="volume_buttons_category_title">Boutons de volume</string>
+    <string name="volbtn_music_controls_title">ntrôle de la musique par les boutons de volume</string>
+    <string name="volbtn_music_controls_summary">Contrôler la lecture de la musique avec les boutons de volume</string>
     <!-- Lockscreen Strings -->
+    <string name="lockscreen_title">Ecran de vérouillage</string>
+    <string name="lockscreen_hide_carrier">Masquer l\'opérateur</string>
+    <string name="lockscreen_hide_carrier_summary">Masquer le nom de l\'opérateur sur l\'écran de verrouillage</string>
+    <string name="lockscreen_carrier_replacement">Remplacement opérateur sur l\'écran de verrouillage</string>
+    <string name="lockscreen_carrier_replacement_summary">Remplacer le nom de l\'opérateur sur l\'écran de verrouillage.\nGardez vide pour désactiver</string>
+    <string name="lockscreen_hide_statusbar">Masquer la barre d\'état</string>
+    <string name="lockscreen_hide_statusbar_summary">Masquer la barre d\'état sur l\'écran de verrouillage</string>
+    <string name="lockscreen_hide_capsule">Masquer la capsule</string>
+    <string name="lockscreen_hide_capsule_summary">Masquer la capsule sur l\'écran de verrouillage (Call/Hotspot/etc)</string>
+    <string name="lockscreen_hide_power_menu">Masquer le menu d\'alimentation</string>
+    <string name="lockscreen_hide_power_menu_summary">Masquer le menu d\'alimentation sur l\'écran de verrouillage sécurisé</string>
+    <string name="lockscreen_remove_sos_title">Cacher le bouton SOS</string>
+    <string name="lockscreen_remove_sos_summary">Masquer le bouton SOS du bas de l\'écran de verrouillage</string>
+    <string name="lockscreen_fingerprint">Icône d\'empreinte digitale</string>
+    <string name="lockscreen_fp_remove_icon">Supprimer l\'icône d\'empreinte digitale</string>
+    <string name="lockscreen_fp_custom_icon">Icône personnalisée d\'empreinte digitale</string>
+    <string name="lockscreen_fp_style">Empreinte digitale %d</string>
+    <string name="lockscreen_fp_icon_title">Préréglages des icônes d\'empreintes digitales</string>
+    <string name="lockscreen_fp_icon_picker_title">Choisir une icône personnalisée</string>
+    <string name="lockscreen_fp_icon_picker_summary">Choisissez votre icône personnalisée.\nLa résolution d\'image recommandée est d\'environ 216 x 216.</string>
+    <string name="lockscreen_fp_icon_scale">Mise à l\'échelle de l\'icône d\'empreinte digitale</string>
+    <string name="lockscreen_affordance">Écran de verrouillage Affordance</string>
+    <string name="lockscreen_affordance_remove_left">Supprimer l\'Affordance gauche</string>
+    <string name="lockscreen_affordance_remove_right">Supprimer l\'Affordance gauche</string>
+    <string name="lockscreen_hide_lock_icon">Cacher l\'icône de verrouillage</string>
+    <string name="lockscreen_weather">Météo de l\'écran de verrouillage</string>
+    <string name="depth_wallpaper_category">Fond d\'écran avec profondeur</string>
+    <string name="depth_wallpaper_title">Effet de profondeur du fond d\'écran</string>
+    <string name="depth_wallpaper_summary">Intégration dynamique du fond d\'écran avec l\'horloge</string>
+    <string name="depth_wallpaper_mode_title">Fond d\'écran avec profondeur</string>
+    <string name="depth_wallpaper_ai_status">AI Status</string>
+    <string name="depth_wallpaper_plugin_installed">Plugin AI installé</string>
+    <string name="depth_wallpaper_plugin_not_installed">Le plugin AI n\'est pas installé.\nCliquez ici pour le télécharger.</string>
+    <string name="depth_wallpaper_mode_ai">IA</string>
+    <string name="depth_wallpaper_mode_custom_images">Images personnalisées</string>
+    <string name="depth_wallpaper_mode_ai_plugin">IA (local)</string>
+    <string name="depth_wallpaper_opacity_title">Opacité du fond d\'écran au premier plan</string>
+    <string name="depth_wallpaper_aod_title">Également en AOD</string>
+    <string name="depth_wallpaper_aod_summary">Afficher le sujet sur Always On Display</string>
+    <string name="depth_wallpaper_aod_opacity_title">Opacité du sujet AOD</string>
     <!-- Media art -->
     <!-- Album art filter -->
     <!-- Depth Effect Alert -->
