@@ -6,11 +6,13 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_WEATHER_INFLATED;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_WEATHER_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_FONT_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP;
@@ -33,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +66,7 @@ public class LockscreenWeather extends XposedMods {
     private int mWeatherLeftMargin = 0, mWeatherTopMargin = 0;
     private int mWeatherBackground = 0;
     private boolean mWeatherCentered = false;
+    private boolean mWeatherCustomFont = false;
 
     public LockscreenWeather(Context context) {
         super(context);
@@ -93,6 +97,7 @@ public class LockscreenWeather extends XposedMods {
         mWeatherLeftMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT, 0);
         mWeatherTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP, 0);
         mWeatherBackground = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WEATHER_BACKGROUND, "0"));
+        mWeatherCustomFont = Xprefs.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_FONT_SWITCH, false);
 
         for (String LCWeatherPref : LOCKSCREEN_WEATHER_PREFS) {
             if (Key[0].equals(LCWeatherPref)) updateWeatherView();
@@ -204,6 +209,7 @@ public class LockscreenWeather extends XposedMods {
         currentWeatherView.updateColors(mWeatherCustomColor ? mWeatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateWeatherSettings(mWeatherShowLocation, mWeatherShowCondition, mWeatherShowHumidity, mWeatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        currentWeatherView.setCustomFont(mWeatherCustomFont, LOCKSCREEN_WEATHER_CUSTOM_FONT, LOCKSCREEN_WEATHER);
         updateMargins();
         if (mWeatherContainer != null) mWeatherContainer.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
     }

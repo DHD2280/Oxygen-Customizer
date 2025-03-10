@@ -27,12 +27,14 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setTextRecursively
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -62,6 +65,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     private LinearLayout mHumLayout, mWindLayout;
     private Drawable mHumDrawable, mWindDrawable;
     private int mWeatherBgSelection = 0;
+    private boolean mWeatherCustomFont = false;
+    private String mFontPath = "";
 
     private boolean mShowWeatherLocation;
     private boolean mShowWeatherText;
@@ -289,6 +294,27 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                     instance.mWeatherBgSelection = selection;
                     instance.updateWeatherBg();
                 });
+    }
+
+    public void setCustomFont(boolean useCustomFont, String fontPath, String name) {
+        if (instances.isEmpty()) return;
+        instances
+                .stream()
+                .filter(obj -> obj[1].equals(name))
+                .forEach(obj -> {
+                    CurrentWeatherView instance = (CurrentWeatherView) obj[0];
+                    instance.mWeatherCustomFont = useCustomFont;
+                    instance.mFontPath = fontPath;
+                    instance.updateTypeface();
+                });
+    }
+
+    private void updateTypeface() {
+        Typeface typeface = null;
+        if (mWeatherCustomFont && (new File(mFontPath).exists())) {
+            typeface = Typeface.createFromFile(new File(mFontPath));
+        }
+        ViewHelper.applyFontRecursively(this, typeface);
     }
 
     public void reloadWeatherBg() {

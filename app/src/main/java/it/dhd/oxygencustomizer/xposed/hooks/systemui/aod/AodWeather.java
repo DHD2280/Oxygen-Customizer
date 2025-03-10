@@ -7,11 +7,13 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.AOD_WEATHER_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_FONT_SWITH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGINS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGIN_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_MARGIN_TOP;
@@ -51,6 +53,7 @@ public class AodWeather extends XposedMods {
     private int mLeftMargin = 0, mTopMargin = 0;
     private LinearLayout mWeatherContainer = null;
     private boolean mWeatherCentered = false;
+    private boolean mWeatherCustomFont = false;
 
     private ViewGroup mAodRootLayout = null;
 
@@ -74,6 +77,7 @@ public class AodWeather extends XposedMods {
         mLeftMargin = Xprefs.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_LEFT, 0);
         mTopMargin = Xprefs.getSliderInt(AOD_WEATHER_CUSTOM_MARGIN_TOP, 0);
         mWeatherCentered = Xprefs.getBoolean(AOD_WEATHER_CENTERED, false);
+        mWeatherCustomFont = Xprefs.getBoolean(AOD_WEATHER_CUSTOM_FONT_SWITH, false);
     }
 
     @Override
@@ -147,6 +151,7 @@ public class AodWeather extends XposedMods {
         currentWeatherView.updateColors(weatherCustomColor ? weatherColor : Color.WHITE, AOD_WEATHER);
         currentWeatherView.updateWeatherSettings(weatherShowLocation, weatherShowCondition, weatherShowHumidity, weatherShowWind, AOD_WEATHER);
         currentWeatherView.setVisibility(weatherEnabled ? View.VISIBLE : View.GONE);
+        currentWeatherView.setCustomFont(mWeatherCustomFont, AOD_WEATHER_CUSTOM_FONT, AOD_WEATHER);
         updateMargins();
     }
 

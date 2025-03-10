@@ -615,6 +615,7 @@ public final class Constants {
             public static final String AOD_WEATHER_CUSTOM_MARGINS = "aod_weather_custom_margins";
             public static final String AOD_WEATHER_CUSTOM_MARGIN_LEFT = "aod_weather_margin_left";
             public static final String AOD_WEATHER_CUSTOM_MARGIN_TOP = "aod_weather_margin_top";
+            public static final String AOD_WEATHER_CUSTOM_FONT_SWITH = "aod_weather_custom_font_enabled";
 
         }
 
@@ -686,6 +687,7 @@ public final class Constants {
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT = "weather_margin_left";
         public static final String LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP = "weather_margin_top";
         public static final String LOCKSCREEN_WEATHER_BACKGROUND = "weather_background";
+        public static final String LOCKSCREEN_WEATHER_CUSTOM_FONT_SWITCH = "ls_weather_custom_font_enabled";
 
         public static final String[] LOCKSCREEN_WEATHER_PREFS = {
                 LOCKSCREEN_WEATHER_SWITCH,
@@ -703,7 +705,8 @@ public final class Constants {
                 LOCKSCREEN_WEATHER_SHOW_CONDITION,
                 LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
                 LOCKSCREEN_WEATHER_CUSTOM_COLOR,
-                LOCKSCREEN_WEATHER_BACKGROUND
+                LOCKSCREEN_WEATHER_BACKGROUND,
+                LOCKSCREEN_WEATHER_CUSTOM_FONT_SWITCH
         };
 
         public static final String[] LOCKSCREEN_WEATHER_MARGINS = {
@@ -809,6 +812,8 @@ public final class Constants {
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";
     public static final String LOCKSCREEN_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_custom_image.png";
+    public static final String LOCKSCREEN_WEATHER_CUSTOM_FONT = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_weather_custom_font.ttf";
+    public static final String AOD_WEATHER_CUSTOM_FONT = XPOSED_RESOURCE_TEMP_DIR + "/aod_weather_custom_font.ttf";
     public static final String AOD_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_user_image.png";
     public static final String AOD_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/aod_custom_image.png";
     public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";

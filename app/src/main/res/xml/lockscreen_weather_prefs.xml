@@ -232,4 +232,18 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:title="@string/lockscreen_clock_font_custom_enabled"
+            android:key="ls_weather_custom_font_enabled"/>
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:dependency="ls_weather_custom_font_enabled"
+            android:title="@string/pick_font_title"
+            android:summary="@string/pick_font_summary"
+            android:key="font_picker" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>
