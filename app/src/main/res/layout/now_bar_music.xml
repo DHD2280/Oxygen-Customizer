@@ -7,16 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
-        android:visibility="gone"
-        android:tag="clock_container">
+        android:tag="clock_container"
+        android:visibility="gone">
 
         <TextClock
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:format12Hour="hh:mm"
+            android:format24Hour="HH:mm"
             android:gravity="center_horizontal"
             android:tag="clock_hours_tick"
-            android:format24Hour="HH:mm"
-            android:format12Hour="hh:mm"
             android:textColor="#00000000"
             android:textSize="60dp" />
 
@@ -26,22 +26,22 @@
             android:orientation="vertical">
 
             <TextView
-                android:textColor="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/slateforoneplus"
                 android:gravity="center_horizontal"
                 android:tag="clock_hours_text"
+                android:textColor="#FFFFFF"
                 android:textSize="60sp" />
 
             <TextClock
-                android:textColor="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/slateforoneplus"
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:textColor="#FFFFFF"
                 android:textSize="40sp" />
 
         </LinearLayout>
@@ -120,8 +120,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginVertical="8dp"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -138,6 +138,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
