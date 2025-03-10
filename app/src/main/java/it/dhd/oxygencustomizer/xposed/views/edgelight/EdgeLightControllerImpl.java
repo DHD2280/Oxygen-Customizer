@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeAnimator;
 
 public class EdgeLightControllerImpl {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     private static final String TAG = EdgeLightControllerImpl.class.getSimpleName();
 
     private final Context mContext;
