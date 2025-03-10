@@ -70,10 +70,10 @@ public class AudioDataProvider extends XposedMods {
             try {
                 mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
             } catch (Throwable ignored) {}
+            setArtWork();
             if (mMediaMetadata != metadata) {
                 mMediaMetadata = metadata;
                 onMediaMetadataChanged();
-                updateMediaColors();
             }
         }
 
@@ -241,19 +241,12 @@ public class AudioDataProvider extends XposedMods {
             }
         }
         instance.mArt = art;
+        updateMediaColors();
     }
 
     public void updateMediaColors() {
-        MediaMetadata metadata = getMediaMetadata();
-        Bitmap bitmap = (metadata != null) ?
-                (metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null ?
-                        metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) :
-                        (metadata.getBitmap(MediaMetadata.METADATA_KEY_ART) != null ?
-                                metadata.getBitmap(MediaMetadata.METADATA_KEY_ART) :
-                                metadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON))) :
-                null;
 
-        WallpaperColors wallpaperColors = (bitmap != null) ? WallpaperColors.fromBitmap(bitmap) : null;
+        WallpaperColors wallpaperColors = (instance.mArt != null) ? WallpaperColors.fromBitmap(instance.mArt) : null;
         if (wallpaperColors == null || wallpaperColors.equals(mWallpaperColors)) return;
 
         Configuration config = mContext.getResources().getConfiguration();
