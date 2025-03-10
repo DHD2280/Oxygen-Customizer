@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
@@ -24,7 +25,6 @@ import androidx.core.view.MenuProvider;
 import androidx.core.view.WindowCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.OplusPreferenceFragment;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +48,7 @@ public abstract class ControlledPreferenceFragmentCompat extends OplusPreference
     public abstract boolean hasMenu();
     public abstract String[] getScopes();
 
+    @CallSuper
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setStorageDeviceProtected();
