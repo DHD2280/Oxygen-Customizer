@@ -33,7 +33,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_YANDEX_KEY;
-import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.Manifest;
 import android.content.Context;
