@@ -39,7 +39,7 @@
             android:key="lockscreen_now_bar_bottom_margin"
             android:title="@string/lockscreen_now_bar_bottom_margin"
             app:defaultValue="12"
-            app:maxVal="100"
+            app:maxVal="200"
             app:minVal="0"
             app:tickInterval="1" />
 
