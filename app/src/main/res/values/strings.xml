@@ -1370,6 +1370,8 @@
     <string name="lockscreen_now_bar_music_extended_player_mode_compact">Compact</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock">Show clock</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Show clock in the top part of the extended player</string>
+    <string name="lockscreen_now_bar_music_extended_player_clock_options">Clock preferences</string>
+    <string name="lockscreen_now_bar_music_clock_date_position">Date position</string>
     <string name="lockscreen_now_bar_battery">Now bar battery</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Custom charging icon</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Custom colors</string>
@@ -1445,5 +1447,9 @@
     <string name="sleep_on_flat_screen_tile_title">Sleep on surface</string>
     <string name="flat_screen_timeout_title">Screen timeout on flat surface</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Respect wake locks</string>
+
+    <!-- Allow music players in AOD -->
+    <string name="aod_music_allow_title">Allow players AOD</string>
+    <string name="aod_music_allow_summary">Allow ant music player to show in AOD.\nNote: not all music players could be supported.</string>
 
 </resources>

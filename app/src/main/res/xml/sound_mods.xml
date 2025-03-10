@@ -74,4 +74,15 @@
             app:valueFormat="s" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/aod_title">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:title="@string/aod_music_allow_title"
+            android:summary="@string/aod_music_allow_summary"
+            android:key="allow_aod_music" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>
