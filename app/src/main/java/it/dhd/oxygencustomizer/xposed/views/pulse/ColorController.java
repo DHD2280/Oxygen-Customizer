@@ -25,6 +25,8 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  * tile produced for Cyanogenmod
  *
  */
+import static de.robv.android.xposed.XposedHelpers.callMethod;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -32,7 +34,9 @@ import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class ColorController
         implements ColorAnimator.ColorAnimationListener {
@@ -53,6 +57,25 @@ public class ColorController
     private int mColor;
     private int mAlbumColor;
 
+    private final AudioDataProvider.MediaMetadataListener mListener = new AudioDataProvider.MediaMetadataListener() {
+        @Override
+        public void onMediaMetadataChanged() {}
+
+        @Override
+        public void onPlaybackStateChanged() {}
+
+        @Override
+        public void onMediaColorsChanged() {
+            Object mColorScheme = AudioDataProvider.getColorScheme();
+            if (mColorScheme != null) {
+                boolean isDark = SystemUtils.isDarkMode();
+                setMediaNotificationColor((int) ((!isDark) ?
+                        callMethod(callMethod(mColorScheme, "getAccent1"), "getS100") :
+                        callMethod(callMethod(mColorScheme, "getAccent1"), "getS700")));
+            }
+        }
+    };
+
     public ColorController(
             Context context) {
         mContext = context;
@@ -61,6 +84,7 @@ public class ColorController
         mLavaLamp.setColorAnimatorListener(this);
         mAccentColor = getAccentColor();
         mAlbumColor = mAccentColor;
+        AudioDataProvider.registerMediaMetadataListener(mListener);
     }
 
     public static boolean hasInstance() {
@@ -144,9 +168,9 @@ public class ColorController
         Log.d("ColorController", "setMediaNotificationColor: " + color);
         if (color != 0) {
             // be sure the color has an acceptable contrast against black navbar
-            mAlbumColor = DrawableConverter.findContrastColorAgainstDark(color, 0x000000, true, 2);
+            mAlbumColor = DrawableConverter.findContrastColorAgainstDark(color, 0xFF000000, true, 2);
             // now be sure the color also has an acceptable contrast against white navbar
-            mAlbumColor = DrawableConverter.findContrastColor(mAlbumColor, 0xffffff, true, 2);
+            mAlbumColor = DrawableConverter.findContrastColor(mAlbumColor, 0xFFFFFFFF, true, 2);
         } else {
             // fallback to accent color if the media notification isn't colorized
             mAlbumColor = mAccentColor;
