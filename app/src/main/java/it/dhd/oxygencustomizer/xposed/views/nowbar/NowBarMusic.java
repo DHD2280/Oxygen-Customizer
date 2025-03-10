@@ -69,7 +69,6 @@ import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
-import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 
 @SuppressLint("ViewConstructor")
 public class NowBarMusic extends LinearLayout {
@@ -642,12 +641,7 @@ public class NowBarMusic extends LinearLayout {
             if (resetMediaIfNeeded()) {
                 return;
             }
-            Object colorScheme = getColorScheme();
-            if (colorScheme == null) {
-                mCurrentColorScheme = null;
-            } else if (mCurrentColorScheme != colorScheme) {
-                mCurrentColorScheme = colorScheme;
-            }
+            mCurrentColorScheme = getColorScheme();
             setBarBackground(getColorContainer());
             updateViewsColors(getColorOnContainer());
         }
@@ -684,6 +678,8 @@ public class NowBarMusic extends LinearLayout {
         trackTitle.setTextColor(color);
         mCurrentTime.setTextColor(color);
         mTotalTime.setTextColor(color);
+        mCompactTitle.setTextColor(color);
+        mCompactAuthor.setTextColor(color);
     }
 
     public void setExtendedPlayerEnabled(boolean enabled) {
