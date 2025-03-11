@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,7 +73,8 @@ public class Lockscreen extends XposedMods {
     private boolean removeLockIcon = false;
     private View mStartAnimatable = null, mEndAnimatable = null;
     private View mStartButton = null, mEndButton = null;
-    private ImageView mLockIcon = null;
+    private FrameLayout mLockIcon = null;
+    private View mLockIconContaier = null, mLockIconView = null;
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
@@ -83,6 +85,9 @@ public class Lockscreen extends XposedMods {
         public void onReceive(Context context, Intent intent) {
             boolean isExpanded = intent.getBooleanExtra("isExpanded", false);
             animateButtons(isExpanded);
+            if (isExpanded) {
+                hideLockIcon();
+            }
         }
     };
 
@@ -120,8 +125,7 @@ public class Lockscreen extends XposedMods {
                 hideLockscreenStuff();
             }
             if (Key[0].equals(LOCKSCREEN_REMOVE_LOCK)) {
-                if (mLockIcon != null)
-                    mLockIcon.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
+                hideLockIcon();
             }
         }
 
@@ -373,13 +377,30 @@ public class Lockscreen extends XposedMods {
             LockIconView
                     .after("onFinishInflate")
                     .run(param -> {
-                        mLockIcon = (ImageView) getObjectField(param.thisObject, "mLockIcon");
+                        mLockIcon = (FrameLayout) param.thisObject;
                         if (removeLockIcon) {
                             mLockIcon.setVisibility(View.GONE);
                         }
                     });
         } catch (Throwable t) {
             log("LockIconViewController not found");
+        }
+
+        try {
+            ReflectedClass OplusLockIconViewControllerExImpl = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusLockIconViewExImpl");
+            OplusLockIconViewControllerExImpl
+                    .after("addOplusIconView")
+                    .run(param -> {
+                        XposedBridge.log("OplusLockIconViewControllerExImpl init");
+                        mLockIconContaier = (View) getObjectField(param.thisObject, "mLockIconContainer");
+                        mLockIconView = (View) getObjectField(param.thisObject, "mLockIcon");
+                        if (removeLockIcon) {
+                            mLockIconContaier.setVisibility(View.GONE);
+                            mLockIconView.setVisibility(View.GONE);
+                        }
+                    });
+        } catch (Throwable t) {
+            log(t);
         }
     }
 
@@ -521,6 +542,15 @@ public class Lockscreen extends XposedMods {
                         .start();
             }
         }
+    }
+
+    private void hideLockIcon() {
+        if (mLockIcon != null)
+            mLockIcon.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
+        if (mLockIconContaier != null)
+            mLockIconContaier.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
+        if (mLockIconView != null)
+            mLockIconView.setVisibility(removeLockIcon ? View.GONE : View.VISIBLE);
     }
 
     @Override
