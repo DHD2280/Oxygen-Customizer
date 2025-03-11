@@ -81,6 +81,8 @@ import android.widget.TextView;
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -657,9 +659,10 @@ public class LockscreenClock extends XposedMods {
             profilePicture.post(() -> profilePicture.setImageDrawable(getCustomUserImage(profilePicture)));
         }
 
-        ImageView customImage = (ImageView) findViewWithTag(clockView, "custom_image");
+        View customImage = findViewWithTag(clockView, "custom_image");
         if (useCustomImage && customImage != null) {
-            customImage.post(() -> customImage.setImageDrawable(getCustomImage()));
+            boolean isRound = lockscreenClockStyle == 39;
+            setCustomImage(customImage, getCustomImage(customImage, isRound));
         }
 
         if (mVolumeLevelArcProgress != null) {
@@ -835,8 +838,20 @@ public class LockscreenClock extends XposedMods {
         return new CircleFramedDrawable(DrawableConverter.drawableToBitmap(customUserImage), view.getWidth());
     }
 
-    private Drawable getCustomImage() {
-        return getImageFromFile("lockscreen_custom_image.png", R.drawable.relax);
+    private Drawable getCustomImage(View view, boolean isRound) {
+        Drawable customUserImage = getImageFromFile("lockscreen_custom_image.png", R.drawable.relax);
+        CircleFramedDrawable circled = new CircleFramedDrawable(DrawableConverter.drawableToBitmap(customUserImage), view.getWidth());
+        RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), DrawableConverter.drawableToBitmap(customUserImage));
+        roundedDrawable.setCornerRadius(32f);
+        return isRound ? circled : roundedDrawable;
+    }
+
+    private void setCustomImage(View view, Drawable image) {
+        if (view instanceof ImageView iv) {
+            iv.post(() -> iv.setImageDrawable(image));
+        } else {
+            view.post(() -> view.setBackground(image));
+        }
     }
 
     private void updateStockClock() {

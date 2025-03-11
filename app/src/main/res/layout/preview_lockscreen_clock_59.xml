@@ -65,6 +65,7 @@
             android:layout_height="160dp"
             android:background="@drawable/lockscreen_clock_59_container_bg"
             android:gravity="center"
+            android:tag="custom_image"
             android:orientation="horizontal">
 
             <LinearLayout

@@ -122,6 +122,7 @@
                 android:layout_width="220dp"
                 android:layout_height="80dp"
                 android:layout_gravity="start|center"
+                android:tag="custom_image"
                 android:background="@drawable/lockscreen_clock_30_content_bg"
                 android:gravity="start|center"
                 android:orientation="vertical"

@@ -58,6 +58,8 @@ import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -68,6 +70,8 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -298,12 +302,13 @@ public class AodClock extends XposedMods {
 
         ImageView profilePicture = (ImageView) findViewWithTag(clockView, "profile_picture");
         if (mCustomUserImage && profilePicture != null) {
-            profilePicture.post(() -> profilePicture.setImageDrawable(getCustomUserImage()));
+            profilePicture.post(() -> profilePicture.setImageDrawable(getCustomUserImage(profilePicture)));
         }
 
-        ImageView customImage = (ImageView) findViewWithTag(clockView, "custom_image");
+        View customImage = findViewWithTag(clockView, "custom_image");
         if (mCustomImage && customImage != null) {
-            customImage.post(() -> customImage.setImageDrawable(getCustomImage()));
+            boolean isRound = mAodClockStyle == 35;
+            setCustomImage(customImage, getCustomImage(customImage, isRound));
         }
 
         mBatteryStatusView = null;
@@ -331,7 +336,7 @@ public class AodClock extends XposedMods {
             case 7 -> {
                 ImageView imageView = (ImageView) findViewWithTag(clockView, "user_profile_image");
                 imageView.post(() ->
-                        imageView.setImageDrawable(mCustomUserImage ? getCustomUserImage() : getUserImage()));
+                        imageView.setImageDrawable(mCustomUserImage ? getCustomUserImage(imageView) : getUserImage()));
             }
             case 19 -> {
                 mBatteryLevelView = (TextView) findViewWithTag(clockView, "battery_percentage");
@@ -358,7 +363,7 @@ public class AodClock extends XposedMods {
             case 25 -> {
                 ImageView imageView = (ImageView) findViewWithTag(clockView, "custom_image");
                 if (mCustomImage) {
-                    imageView.setImageDrawable(getCustomImage());
+                    imageView.setImageDrawable(getCustomImage(imageView, false));
                 }
             }
             case 27 -> {
@@ -492,12 +497,25 @@ public class AodClock extends XposedMods {
         }
     }
 
-    private Drawable getCustomUserImage() {
-        return getImageFromFile("aod_user_image.png", R.drawable.default_avatar);
+    private Drawable getCustomUserImage(View view) {
+        Drawable customUserImage = getImageFromFile("aod_user_image.png", R.drawable.default_avatar);
+        return new CircleFramedDrawable(DrawableConverter.drawableToBitmap(customUserImage), view.getWidth());
     }
 
-    private Drawable getCustomImage() {
-        return getImageFromFile("aod_custom_image.png", R.drawable.relax);
+    private Drawable getCustomImage(View view, boolean isRound) {
+        Drawable customUserImage = getImageFromFile("aod_custom_image.png", R.drawable.relax);
+        CircleFramedDrawable circled = new CircleFramedDrawable(DrawableConverter.drawableToBitmap(customUserImage), view.getWidth());
+        RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), DrawableConverter.drawableToBitmap(customUserImage));
+        roundedDrawable.setCornerRadius(32f);
+        return isRound ? circled : roundedDrawable;
+    }
+
+    private void setCustomImage(View view, Drawable image) {
+        if (view instanceof ImageView iv) {
+            iv.post(() -> iv.setImageDrawable(image));
+        } else {
+            view.post(() -> view.setBackground(image));
+        }
     }
 
     private void initResources(Context context) {

@@ -252,7 +252,7 @@ public class PreferenceHelper {
     }};
 
     private final List<Integer> LsClockCustomImageVisible = new ArrayList<>() {{
-        addAll(Arrays.asList(25, 39, 40));
+        addAll(Arrays.asList(25, 30, 39, 40, 53, 58, 59));
     }};
 
     private final List<Integer> LsClockUserVisible = new ArrayList<>() {{
