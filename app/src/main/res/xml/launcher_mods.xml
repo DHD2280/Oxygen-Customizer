@@ -148,6 +148,13 @@
             android:title="@string/force_themed_launcher_icons"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="alternative_monochrome"
+            android:summary="@string/alternative_themed_icons_summary"
+            android:title="@string/alternative_themed_icons_title"
+            app:iconSpaceReserved="false" />
+
         <it.dhd.oneplusui.preference.OplusMultiSelectListPreference
             android:defaultValue="@array/themed_icons_default"
             android:entries="@array/themed_icons_entries"

@@ -13,11 +13,16 @@ import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageItemInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -27,6 +32,7 @@ import java.util.Set;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.GoogleMonochromeIconFactory;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -54,6 +60,7 @@ public class ThemedIcons extends XposedMods {
     private Object mIconObserver = null;
 
     private static boolean ForceThemedLauncherIcons = false;
+    private static boolean mAlternative = false;
     private int mIconBitmapSize;
 
     public ThemedIcons(Context context) {
@@ -63,6 +70,7 @@ public class ThemedIcons extends XposedMods {
     @Override
     public void updatePrefs(String... Key) {
         ForceThemedLauncherIcons = Xprefs.getBoolean("force_themed_launcher_icons", false);
+        mAlternative = Xprefs.getBoolean("alternative_monochrome", false);
         mAllowedMonochrome = Xprefs.getStringSet("themed_icons_where", defaultValues);
         mDrawerMonochrome = mAllowedMonochrome.contains("1");
         mWorkspaceMonochrome = mAllowedMonochrome.contains("0");
@@ -71,7 +79,9 @@ public class ThemedIcons extends XposedMods {
         mTaskbarMonochrome = mAllowedMonochrome.contains("4");
 
         if (Key.length > 0 &&
-                (Key[0].equals("force_themed_launcher_icons") || Key[0].equals("themed_icons_where"))) {
+                (Key[0].equals("force_themed_launcher_icons") ||
+                        Key[0].equals("themed_icons_where") ||
+                        Key[0].equals("alternative_monochrome"))) {
             updateIcons();
         }
 
@@ -89,11 +99,26 @@ public class ThemedIcons extends XposedMods {
                 }
             });
 
+
+            ReflectedClass UxIconLoaderHelper = ReflectedClass.of("com.oplus.uxicon.ui.util.UxIconLoaderHelper");
+            UxIconLoaderHelper
+                    .after("getIconThemeDrawable")
+                    .run(param -> {
+                        if (!ForceThemedLauncherIcons) return;
+                        PackageItemInfo info = (PackageItemInfo) param.args[1];
+                        if (mAlternative && param.getResult() == null) {
+                            if (BuildConfig.DEBUG) XposedBridge.log("ThemedIcons: getIconThemeDrawable is null for " + info.packageName);
+                            Drawable icon = info.loadIcon(PackageManager());
+                            GoogleMonochromeIconFactory monochrome = new GoogleMonochromeIconFactory(icon, mIconBitmapSize);
+                            param.setResult(monochrome);
+                        }
+                    });
+
             hookAllMethods(AdaptiveIconDrawable.class, "getMonochrome", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     try {
-                        if (param.getResult() == null && ForceThemedLauncherIcons) {
+                        if (param.getResult() == null && ForceThemedLauncherIcons && !mAlternative) {
 
                             if (new Throwable().getStackTrace()[4].getMethodName().toLowerCase().contains("override")) //It's from com.android.launcher3.icons.IconProvider.getIconWithOverrides. Monochrome is included
                             {
@@ -115,26 +140,6 @@ public class ThemedIcons extends XposedMods {
             log(t.getMessage());
         }
 
-//        ReflectedClass BitmapInfo = ReflectedClass.of("com.android.launcher3.icons.BitmapInfo");
-//        BitmapInfo
-//                .before("newIcon")
-//                .run(param -> {
-//                    if (!ForceThemedLauncherIcons) return;
-//                    Context context = (Context) param.args[0];
-//                    int flags = (int) param.args[1];
-//                    if ((flags & 1) == 0) return;
-//                    boolean isLowRes = (boolean) callMethod(param.thisObject, "isLowRes");
-//                    Bitmap mMono = (Bitmap) getObjectField(param.thisObject, "mMono");
-//                    Object FastDrawable;
-//                    GoogleMonochromeIconFactory mono = null;
-//                    if (mMono == null) {
-//                        mono = new GoogleMonochromeIconFactory((AdaptiveIconDrawable) param.thisObject, mIconBitmapSize);
-//                    }
-//                    param.setResult(mono);
-//
-//                });
-
-
         ReflectedClass LauncherAppState = ReflectedClass.of("com.android.launcher3.LauncherAppState");
         LauncherAppState
                 .afterConstruction()
@@ -155,7 +160,6 @@ public class ThemedIcons extends XposedMods {
                     int mDisplay = getIntField(param.thisObject, "mDisplay");
                     boolean isIconThemed = getBooleanField(itemInfoWithIcon, "mIsIconEdited");
                     if (isIconThemed) return;
-                    XposedBridge.log("ThemedIcons itemType = " + getIntField(itemInfoWithIcon, "itemType"));
                     // ((mContext,
                     // (Themes.isThemedIconEnabled(getContext())
                     // && (i9 == 0 || i9 == 2 || i9 == 5 || i9 == 8 || i9 == 1 || i9 == 9)
