@@ -346,6 +346,9 @@ public class PreferenceHelper {
             case "launcher_max_columns", "launcher_max_rows" -> {
                 return instance.mPreferences.getBoolean("rearrange_home", false);
             }
+            case "disable_previous_recents" -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
 
             // Statusbar Prefs
             case "statusbarPaddings", "statusbar_top_padding" -> {

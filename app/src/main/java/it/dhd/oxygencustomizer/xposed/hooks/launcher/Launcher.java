@@ -4,12 +4,15 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.newInstance;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.View;
@@ -28,6 +31,7 @@ public class Launcher extends XposedMods {
     private int mMaxRows = 6, mMaxColumns = 4;
     private boolean mHideScroller = false;
     private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
+    private boolean mDisablePreviousRecents = false;
 
     private View OplusFastScroll;
 
@@ -54,6 +58,7 @@ public class Launcher extends XposedMods {
         mHideScroller = Xprefs.getBoolean("hide_scroller", false);
         mHideDesktopLabels = Xprefs.getBoolean("desktop_hide_app_labels", false);
         mHideDrawerLabels = Xprefs.getBoolean("drawer_hide_app_labels", false);
+        mDisablePreviousRecents = Xprefs.getBoolean("disable_previous_recents", false);
 
         if (Key.length > 0 && Key[0].equals("hide_scroller")) {
             updateFastScroll();
@@ -230,6 +235,15 @@ public class Launcher extends XposedMods {
                         if (mHideDesktopLabels) {
                             param.setResult(null);
                         }
+                    }
+                });
+
+        ReflectedClass AppFeatureUtils = ReflectedClass.of("com.android.common.util.AppFeatureUtils");
+        AppFeatureUtils
+                .before("isSupportAutoFocusToNextPageInOverviewState")
+                .run(param -> {
+                    if (mDisablePreviousRecents) {
+                        param.setResult(false);
                     }
                 });
 
