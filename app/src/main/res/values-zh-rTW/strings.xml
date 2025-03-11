@@ -286,7 +286,6 @@
     <string name="inside_percentage_desc">移動電池百分比到圖示裡面</string>
     <string name="battery_icon_color">電池圖示顏色</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">默認電池設定</string>
     <string name="battery_edit_percentage_size_title">自定義百分比大小</string>
     <string name="battery_percentage_size">百分比大小</string>
     <!-- Battery Icon Styles -->

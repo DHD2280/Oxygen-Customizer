@@ -63,6 +63,13 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_KIM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_ATTACH_TO_BB;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_CHARGING_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_FAST_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_CHARGING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_FAST;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_POWERSAVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
@@ -72,6 +79,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HEIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_CUSTOMIZE_PERCENTAGE_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_PERCENTAGE_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AI_STATUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD_OPACITY;
@@ -224,6 +233,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
@@ -399,15 +409,21 @@ public class PreferenceHelper {
                  "battery_powersave_fill_color",
                  "battery_powersave_icon_color",
                  "category_battery_margins",
-                 "category_battery_charging_icon" -> {
+                 "category_battery_charging_icon",
+                 "battery_text" -> {
                 return isVisibleBattery(key);
             }
-            case "category_battery_stock_prefs" -> {
-                return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false);
+            case BATTERY_TEXT_CHARGING_COLOR -> {
+                return instance.mPreferences.getBoolean(BATTERY_TEXT_INDICATE_CHARGING, false);
             }
-            case "stock_percentage_size" -> {
-                return !instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false) &&
-                        instance.mPreferences.getBoolean("customize_stock_percentage_size", false);
+            case BATTERY_TEXT_FAST_COLOR -> {
+                return instance.mPreferences.getBoolean(BATTERY_TEXT_INDICATE_FAST, false);
+            }
+            case BATTERY_TEXT_POWERSAVE_COLOR -> {
+                return instance.mPreferences.getBoolean(BATTERY_TEXT_INDICATE_POWERSAVE, false);
+            }
+            case STOCK_PERCENTAGE_SIZE -> {
+                return instance.mPreferences.getBoolean(STOCK_CUSTOMIZE_PERCENTAGE_SIZE, false);
             }
 
             // QuickSettings Prefs
@@ -961,7 +977,7 @@ public class PreferenceHelper {
                  "battery_powersave_fill_color",
                  "battery_powersave_icon_color" ->
                     (showAdvancedCustomizations || circleBattery) && showColorPickers;
-            case "battery_hide_percentage" -> showPercentage;
+            case "battery_hide_percentage", "battery_text" -> showPercentage;
             case "category_battery_colors" ->
                     showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
             default -> false;
@@ -1025,6 +1041,17 @@ public class PreferenceHelper {
                             !instance.mPreferences.getBoolean("fix_lag_force_all_apps", false);
 
             case "moreLogging" -> !BuildConfig.VERSION_NAME.contains("nightly");
+
+            // Battery Text
+            case BATTERY_TEXT_ATTACH_TO_BB ->
+                instance.mPreferences.getBoolean("BBarEnabled", false);
+
+            case BATTERY_TEXT_INDICATE_POWERSAVE,
+                 BATTERY_TEXT_INDICATE_CHARGING,
+                 BATTERY_TEXT_INDICATE_FAST,
+                 BATTERY_TEXT_CHARGING_COLOR,
+                 BATTERY_TEXT_FAST_COLOR,
+                 BATTERY_TEXT_POWERSAVE_COLOR -> instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
 
             default -> true;
         };
@@ -1326,12 +1353,16 @@ public class PreferenceHelper {
                 }
             }
 
-            if (preference instanceof OplusSliderPreference) {
-                ((OplusSliderPreference) preference).slider.setLabelFormatter(value -> {
-                    if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
-                        return getAppContext().getString(R.string.default_value);
-                    else return String.valueOf(Math.round(value));
-                });
+            if (preference instanceof OplusSliderPreference sliderPreference) {
+                if (Objects.equals(sliderPreference.getKey(), "batteryWarningRange")) {
+                    sliderPreference.slider.setLabelFormatter(value -> (int) value + "%");
+                } else {
+                    sliderPreference.slider.setLabelFormatter(value -> {
+                        if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
+                            return getAppContext().getString(R.string.default_value);
+                        else return String.valueOf(Math.round(value));
+                    });
+                }
             }
 
             //Other special cases
@@ -1352,6 +1383,12 @@ public class PreferenceHelper {
                 case QS_BRIGHTNESS_SLIDER_CUSTOMIZE -> {
                     if (Build.VERSION.SDK_INT >= 35) {
                         preference.setTitle(preference.getContext().getString(R.string.customize_qs_sliders_title));
+                    }
+                }
+                case BATTERY_TEXT_ATTACH_TO_BB -> {
+                    if (!instance.mPreferences.getBoolean("BBarEnabled", false)) {
+                        preference.setEnabled(false);
+                        preference.setSummary(preference.getContext().getString(R.string.battery_text_enable_bb_first));
                     }
                 }
 

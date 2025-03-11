@@ -296,7 +296,6 @@
     <string name="inside_percentage_desc">Переместить процентное соотношение на внутренний значок батареи</string>
     <string name="battery_icon_color">Цвета значков батареи</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Настройки батареи по умолчанию</string>
     <string name="battery_edit_percentage_size_title">Настройка размера процентов</string>
     <string name="battery_percentage_size">Размер процентов</string>
     <!-- Battery Icon Styles -->

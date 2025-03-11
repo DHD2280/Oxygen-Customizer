@@ -298,7 +298,6 @@
     <string name="inside_percentage_desc">Áthelyezi a százalékértéklet az akkuikonon belülre</string>
     <string name="battery_icon_color">Az akkuikon színei</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Alapértelmezett akkubeállítások</string>
     <string name="battery_edit_percentage_size_title">A százalék-kijelző nagysága</string>
     <string name="battery_percentage_size">A százalékjel nagysága</string>
     <!-- Battery Icon Styles -->

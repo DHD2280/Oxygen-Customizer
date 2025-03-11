@@ -321,9 +321,12 @@
     <string name="battery_icon_color">Battery Icon Colors</string>
 
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Default Battery Settings</string>
+    <string name="battery_text_category">Battery text</string>
     <string name="battery_edit_percentage_size_title">Customize Percentage Size</string>
     <string name="battery_percentage_size">Percentage Size</string>
+    <string name="battery_text_attach_to_batterybar">Attach to Battery Bar</string>
+    <string name="battery_text_attach_to_batterybar_summary">Attach text color to Battery Bar colors</string>
+    <string name="battery_text_enable_bb_first">Enable Battery Bar first</string>
 
     <!-- Battery Icon Styles -->
     <string name="battery_default">Default</string>
@@ -656,6 +659,8 @@
     <string name="launcher_themed_icons">Themed icons</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
+    <string name="alternative_themed_icons_title">Alternative themed icons</string>
+    <string name="alternative_themed_icons_summary">Use alternative method to theme icons.\nNote: this method won\'t override Oplus icons, but could be slower.</string>
     <string name="themed_icons_where_title">Select where to apply themed icons</string>
     <string name="themed_icons_workspace">Workspace</string>
     <string name="themed_icons_drawer">Drawer</string>

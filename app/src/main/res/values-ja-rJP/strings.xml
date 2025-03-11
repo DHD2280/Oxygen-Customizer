@@ -288,7 +288,6 @@
     <string name="inside_percentage_desc">パーセンテージをバッテリーアイコン内に移動します</string>
     <string name="battery_icon_color">バッテリーアイコンの色</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">デフォルトバッテリーアイコンの設定</string>
     <string name="battery_edit_percentage_size_title">パーセンテージの大きさをカスタマイズ</string>
     <string name="battery_percentage_size">パーセンテージの大きさ</string>
     <!-- Battery Icon Styles -->

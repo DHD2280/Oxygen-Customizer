@@ -295,7 +295,6 @@
     <string name="inside_percentage_desc">نقل النسبة إلى داخل رمز البطارية</string>
     <string name="battery_icon_color">ألوان رمز البطارية</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">إعدادات البطارية الافتراضية</string>
     <string name="battery_edit_percentage_size_title">تخصيص حجم النسبة</string>
     <string name="battery_percentage_size">حجم النسبة</string>
     <!-- Battery Icon Styles -->

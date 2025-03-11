@@ -298,7 +298,6 @@
     <string name="inside_percentage_desc">Yüzdeyi pil simgesinin içine taşı</string>
     <string name="battery_icon_color">Pil Simgesi Renkleri</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Varsayılan Pil Ayarları</string>
     <string name="battery_edit_percentage_size_title">Yüzde Boyutunu Özelleştir</string>
     <string name="battery_percentage_size">Yüzde Boyutu</string>
     <!-- Battery Icon Styles -->

@@ -296,7 +296,6 @@
     <string name="inside_percentage_desc">Pokaż procent naładowania baterii w środku ikony</string>
     <string name="battery_icon_color">Kolor ikony baterii</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Domyślne ustawienia baterii</string>
     <string name="battery_edit_percentage_size_title">Dostosuj rozmiar procentu naładowania baterii</string>
     <string name="battery_percentage_size">Rozmiar procentu baterii</string>
     <!-- Battery Icon Styles -->

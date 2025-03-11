@@ -298,7 +298,6 @@
     <string name="inside_percentage_desc">Déplacer le pourcentage à l\'intérieur de la batterie</string>
     <string name="battery_icon_color">Couleur de l\'icône de la batterie</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">Paramètres de la batterie par défaut</string>
     <string name="battery_edit_percentage_size_title">Personnaliser la taille du pourcentage</string>
     <string name="battery_percentage_size">Taille du pourcentage</string>
     <!-- Battery Icon Styles -->

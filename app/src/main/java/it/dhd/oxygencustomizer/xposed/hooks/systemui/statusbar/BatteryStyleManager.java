@@ -48,6 +48,13 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_RLANDSCAPE_COLOROS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_RLANDSCAPE_STYLE_A;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_RLANDSCAPE_STYLE_B;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_ATTACH_TO_BB;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_CHARGING_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_FAST_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_CHARGING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_FAST;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_POWERSAVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_COLOR;
@@ -106,6 +113,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -147,6 +155,8 @@ import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryColorOS;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.RLandscapeBatteryStyleB;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.views.BatteryBarView;
 
 public class BatteryStyleManager extends XposedMods {
 
@@ -191,14 +201,29 @@ public class BatteryStyleManager extends XposedMods {
     private final ImageView mStockChargingIcon = null;
     private ImageView mBatteryIcon = null;
     private final boolean updating = false;
-    private boolean customizePercSize = false;
-    private int mBatteryPercSize = 12;
     private Class<?> DarkIconDispatcher = null;
     private Class<?> DualToneHandler = null;
     private final List<String> batteryCharging = new ArrayList<>() {{
         add("battery_dash_charge_view");
         add("battery_charge_icon");
     }};
+
+    // Battery Text
+    private TextView mBatteryText;
+    private boolean customizePercSize = false;
+    private int mBatteryPercSize = 12;
+    private boolean mIndicateCharging = false,
+                    mIndicateFast = false,
+                    mIndicatePowerSave = false;
+    private int mTextChargingColor = Color.WHITE,
+                mTextFastColor = Color.WHITE,
+                mTextPowerSaveColor = Color.WHITE;
+    private boolean mTextAttachBatteryBar = false;
+    private int mBatteryBarColor;
+
+    private BatteryBarView.BatteryBarColorListener mColorListener = color -> {
+        mBatteryBarColor = color;
+    };
 
     public BatteryStyleManager(Context context) {
         super(context);
@@ -255,9 +280,16 @@ public class BatteryStyleManager extends XposedMods {
         mChargingIconMR = Xprefs.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 0);
         mChargingIconWH = Xprefs.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_WIDTH_HEIGHT, 14);
 
-        // Stock Style
+        // Battery text
         customizePercSize = Xprefs.getBoolean(STOCK_CUSTOMIZE_PERCENTAGE_SIZE, false);
         mBatteryPercSize = Xprefs.getSliderInt(STOCK_PERCENTAGE_SIZE, 12);
+        mIndicateCharging = Xprefs.getBoolean(BATTERY_TEXT_INDICATE_CHARGING, false);
+        mTextChargingColor = Xprefs.getInt(BATTERY_TEXT_CHARGING_COLOR, Color.WHITE);
+        mIndicateFast = Xprefs.getBoolean(BATTERY_TEXT_INDICATE_FAST, false);
+        mTextFastColor = Xprefs.getInt(BATTERY_TEXT_FAST_COLOR, Color.WHITE);
+        mIndicatePowerSave = Xprefs.getBoolean(BATTERY_TEXT_INDICATE_POWERSAVE, false);
+        mTextPowerSaveColor = Xprefs.getInt(BATTERY_TEXT_POWERSAVE_COLOR, Color.WHITE);
+        mTextAttachBatteryBar = Xprefs.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
 
         if (mBatteryStyle != BatteryStyle && !oos13) {
             mBatteryStyle = BatteryStyle;
@@ -281,6 +313,24 @@ public class BatteryStyleManager extends XposedMods {
             }
         }
 
+        if (Key.length > 0 &&
+                (Key[0].equals(BATTERY_TEXT_ATTACH_TO_BB) ||
+                        Key[0].equals(BATTERY_TEXT_INDICATE_CHARGING) ||
+                        Key[0].equals(BATTERY_TEXT_INDICATE_FAST) ||
+                        Key[0].equals(BATTERY_TEXT_INDICATE_POWERSAVE) ||
+                        Key[0].equals(BATTERY_TEXT_CHARGING_COLOR) ||
+                        Key[0].equals(BATTERY_TEXT_FAST_COLOR) ||
+                        Key[0].equals(BATTERY_TEXT_POWERSAVE_COLOR))) {
+            if (!mTextAttachBatteryBar) {
+                try {
+                    BatteryBarView.unRegisterListener(mColorListener);
+                } catch (Throwable ignored) {}
+            } else {
+                BatteryBarView.registerListener(mColorListener);
+            }
+            SystemUtils.doubleToggleDarkMode();
+        }
+
         if (!oos13) refreshAllBatteryIcons();
     }
 
@@ -288,26 +338,8 @@ public class BatteryStyleManager extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listensTo(lpparam.packageName)) return;
 
-        Class<?> QuickStatusBarHeader;
-        try {
-            QuickStatusBarHeader = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
-        } catch (Throwable t) {
-            QuickStatusBarHeader = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
-        }
-
-//        hookAllMethods(QuickStatusBarHeader, "onFinishInflate", new XC_MethodHook() {
-//            @Override
-//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                try {
-//                    mQsBattery = (View) getObjectField(param.thisObject, "mBatteryView");
-//                } catch (Throwable t) {
-//                    mQsBattery = null;
-//                }
-//            }
-//        });
-
         if (Build.VERSION.SDK_INT >= 34) {
-            hookBattery(lpparam); // OOS 14
+            hookBattery(lpparam); // OOS 14 - 15
         } else {
             hookBattery13(lpparam); // OOS 13
         }
@@ -504,8 +536,20 @@ public class BatteryStyleManager extends XposedMods {
         } catch (Throwable ignored) {
             log("battery_percentage_view not found");
         }
-        if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE && !CustomBatteryEnabled) {
+        if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE) {
+            mBatteryText = batteryOutPercentage;
             batteryOutPercentage.setTextSize(TypedValue.COMPLEX_UNIT_SP, customizePercSize ? mBatteryPercSize : 12);
+            if (!mTextAttachBatteryBar) {
+                if (mIndicateFast && isFastCharging()) {
+                    batteryOutPercentage.setTextColor(mTextFastColor);
+                } else if (mIndicateCharging && mIsCharging) {
+                    batteryOutPercentage.setTextColor(mTextChargingColor);
+                } else if (mIndicatePowerSave && isPowerSaving()) {
+                    batteryOutPercentage.setTextColor(mTextPowerSaveColor);
+                }
+            } else {
+                batteryOutPercentage.setTextColor(mBatteryBarColor);
+            }
         }
         if (!CustomBatteryEnabled) return;
         //setPercentViewColor(view, forcePercentageColor);
@@ -603,6 +647,11 @@ public class BatteryStyleManager extends XposedMods {
     private void updateIconsColor() {
         if (batteryViews.isEmpty()) return;
         for (View v : batteryViews) {
+            if (v instanceof TextView) {
+                if (!isCharging() && !isPowerSaving() && !isFastCharging()) {
+                    ((TextView) v).setTextColor(frameColor);
+                }
+            }
             if (v instanceof ImageView) {
                 Drawable drawable = ((ImageView) v).getDrawable();
                 if (drawable instanceof BatteryDrawable) {
@@ -743,11 +792,10 @@ public class BatteryStyleManager extends XposedMods {
                                 mBatteryIcon.setImageDrawable(mBatteryDrawable);
                             }
 
-                        } else {
-                            if (customizePercSize) {
-                                if (batteryPercentOutView != null && batteryPercentOutView.getVisibility() == View.VISIBLE)
-                                    batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
-                            }
+                        }
+                        if (customizePercSize) {
+                            if (batteryPercentOutView != null && batteryPercentOutView.getVisibility() == View.VISIBLE)
+                                batteryPercentOutView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mBatteryPercSize);
                         }
 
                         if (mChargingIconSwitch && batteryCharge != null) {
@@ -938,6 +986,14 @@ public class BatteryStyleManager extends XposedMods {
     @Override
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
+    }
+
+    public BatteryBarView.BatteryBarColorListener getmColorListener() {
+        return mColorListener;
+    }
+
+    public void setmColorListener(BatteryBarView.BatteryBarColorListener mColorListener) {
+        this.mColorListener = mColorListener;
     }
 }
 

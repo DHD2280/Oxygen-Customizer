@@ -61,8 +61,15 @@ public final class Constants {
             public static final String CUSTOM_BATTERY_STYLE = "battery_icon_style";
             public static final String CUSTOM_BATTERY_WIDTH = "battery_width";
             public static final String CUSTOM_BATTERY_HEIGHT = "battery_height";
-            public static final String STOCK_CUSTOMIZE_PERCENTAGE_SIZE = "customize_stock_percentage_size";
+            public static final String STOCK_CUSTOMIZE_PERCENTAGE_SIZE = "battery_text_size_switch";
             public static final String STOCK_PERCENTAGE_SIZE = "stock_percentage_size";
+            public static final String BATTERY_TEXT_INDICATE_CHARGING = "battery_text_indicate_charging";
+            public static final String BATTERY_TEXT_CHARGING_COLOR = "battery_text_color_charging";
+            public static final String BATTERY_TEXT_INDICATE_FAST = "battery_text_indicate_fastcharging";
+            public static final String BATTERY_TEXT_FAST_COLOR = "battery_text_color_fastcharging";
+            public static final String BATTERY_TEXT_INDICATE_POWERSAVE = "battery_text_indicate_powersave";
+            public static final String BATTERY_TEXT_POWERSAVE_COLOR = "battery_text_color_powersave";
+            public static final String BATTERY_TEXT_ATTACH_TO_BB = "battery_text_color_batterybar";
 
             public static final String[] BatteryPrefs = {
                     CUSTOMIZE_BATTERY_ICON,
@@ -510,6 +517,10 @@ public final class Constants {
             public static final String NOW_BAR_MUSIC_EXDENDED_MODE = "lockscreen_now_bar_music_extended_mode";
             public static final String NOW_BAR_MUSIC_EXTENDED_CLOCK = "lockscreen_now_bar_music_extended_player_show_clock";
 
+            public static final String NOW_BAR_MUSIC_CLOCK_POSITION = "now_bar_music_clock_date_position";
+            public static final String NOW_BAR_MUSIC_CLOCK_FORMAT = "now_bar_music_clock_date_format";
+            public static final String NOW_BAR_CLOCK_CUSTOM_FONT = "now_bar_music_clock_font_custom_enabled";
+
             // Battery
             public static final String NOW_BAR_BATTERY_CHARGING_ICON_SWITCH = "lockscreen_now_bar_battery_custom_icon_switch";
             public static final String NOW_BAR_BATTERY_CHARGING_ICON_STYLE = "lockscreen_now_bar_battery_custom_style";
@@ -820,6 +831,7 @@ public final class Constants {
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
     public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
     public static final String SETTINGS_OTA_CARD_DIR = XPOSED_RESOURCE_TEMP_DIR + "/settings_ota_card.png";
+    public static final String NOW_BAR_CLOCK_FONT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/now_bar_music_clock_font.ttf";
 
     public static final String OPLUS_FEATURE_XML = "\t<oplus-feature name=\"%s\" />";
 

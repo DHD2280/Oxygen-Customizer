@@ -26,14 +26,18 @@ import android.view.animation.BaseInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.graphics.ColorUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryBar;
 
 public class BatteryBarView extends FrameLayout {
     private static int[] shadeColors;
@@ -69,6 +73,8 @@ public class BatteryBarView extends FrameLayout {
     private static final int ANIM_DELAY = 2000; // 5 seconds
     private final Handler animationHandler = new Handler(Looper.getMainLooper());;
     private Runnable chargingAnimationRunnable;
+
+    private List<BatteryBarColorListener> mListeners = new ArrayList<>();
 
     public static void setStaticColor(List<Float> batteryLevels, int[] batteryColors, boolean indicateCharging,
                                       int chargingColor, boolean indicateFastCharging, int fastChargingColor,
@@ -284,13 +290,16 @@ public class BatteryBarView extends FrameLayout {
             chargingIndicatorView.setBackgroundColor(fastChargingColor);
             chargingIndicatorViewForCenter.setBackgroundColor(fastChargingColor);
             mPaint.setColor(fastChargingColor);
+            updateTextColor(fastChargingColor);
         } else if (isCharging() && indicateCharging) //normal charging color
         {
             chargingIndicatorView.setBackgroundColor(chargingColor);
             chargingIndicatorViewForCenter.setBackgroundColor(chargingColor);
             mPaint.setColor(chargingColor);
+            updateTextColor(chargingColor);
         } else if (isPowerSaving() && indicatePowerSave) { //power save color
             mPaint.setColor(powerSaveColor);
+            updateTextColor(powerSaveColor);
         } else if (!colorful || shadeColors == null) {                    //not charging color
             for (int i = 0; i < batteryLevels.size(); i++) {
                 if (getCurrentLevel() <= batteryLevels.get(i)) {
@@ -299,13 +308,16 @@ public class BatteryBarView extends FrameLayout {
                         float currentPos = getCurrentLevel() - batteryLevels.get(i - 1);
                         float ratio = currentPos / range;
                         mPaint.setColor(ColorUtils.blendARGB(batteryColors[i - 1], batteryColors[i], ratio));
+                        updateTextColor(ColorUtils.blendARGB(batteryColors[i - 1], batteryColors[i], ratio));
                     } else {
                         mPaint.setColor(batteryColors[i]);
+                        updateTextColor(batteryColors[i]);
                     }
                     return;
                 }
             }
             mPaint.setColor(singleColorTone);
+            updateTextColor(singleColorTone);
         } else                                    //it's colorful
         {
             float cX = isCenterBased ? lenX / 2f : ((RTL) ? lenX : 0);
@@ -314,6 +326,7 @@ public class BatteryBarView extends FrameLayout {
 
             RadialGradient colorfulShader = new RadialGradient(cX, cY, radius, shadeColors, shadeLevels, Shader.TileMode.CLAMP);
             mPaint.setShader(colorfulShader);
+            updateTextColor(shadeColors[shadeColors.length - 1]);
         }
     }
 
@@ -392,6 +405,28 @@ public class BatteryBarView extends FrameLayout {
 
     public void setCenterBased(boolean bbSetCentered) {
         isCenterBased = bbSetCentered;
+    }
+
+    public static void registerListener(BatteryBarColorListener listener) {
+        if (instance == null) return;
+        if (instance.mListeners.contains(listener)) return;
+        instance.mListeners.add(listener);
+    }
+
+    public static void unRegisterListener(BatteryBarColorListener listener) {
+        if (instance == null) return;
+        if (!instance.mListeners.contains(listener)) return;
+        instance.mListeners.remove(listener);
+    }
+
+    public void updateTextColor(int color) {
+        for (BatteryBarColorListener listener : mListeners) {
+            listener.onColorChange(color);
+        }
+    }
+
+    public interface BatteryBarColorListener {
+        void onColorChange(int color);
     }
 
 }

@@ -291,7 +291,6 @@
     <string name="inside_percentage_desc">移动百分比到电池图标内</string>
     <string name="battery_icon_color">电池图标颜色</string>
     <!-- Battery Stock Prefs -->
-    <string name="battery_stock_prefs">默认电池设置</string>
     <string name="battery_edit_percentage_size_title">自定义百分比大小</string>
     <string name="battery_percentage_size">百分比大小</string>
     <!-- Battery Icon Styles -->
