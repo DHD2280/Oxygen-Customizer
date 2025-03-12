@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
@@ -8,28 +8,35 @@
     android:background="@drawable/preference_background_center"
     android:clickable="true"
     android:paddingStart="@dimen/preference_title_padding_start"
-    android:paddingEnd="@dimen/preference_title_padding_end">
+    android:paddingEnd="@dimen/preference_title_padding_end"
+    android:paddingBottom="4dp">
 
     <ImageView
         android:id="@+id/icon"
+        style="@style/PreferenceIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        style="@style/PreferenceIcon"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:importantForAccessibility="no"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/text_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_container" />
 
     <LinearLayout
         android:id="@+id/text_container"
+        style="@style/PreferenceContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        style="@style/PreferenceContent"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@id/color_widget"
         android:layout_toEndOf="@id/icon"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/color_widget"
+        app:layout_constraintStart_toEndOf="@+id/icon"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/title"
@@ -56,8 +63,38 @@
         android:layout_height="@dimen/cpv_color_preference_normal"
         app:cpv_borderColor="@color/text_color_primary"
         app:cpv_colorShape="circle"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"/>
+        app:layout_constraintBottom_toBottomOf="@+id/text_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_container" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_container">
 
-</RelativeLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enable_button"
+            style="@style/Widget.MaterialButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/btn_apply"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/disable_button"
+            style="@style/Widget.MaterialButton.Red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/btn_disable"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

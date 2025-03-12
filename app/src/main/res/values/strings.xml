@@ -1255,6 +1255,10 @@
     <string name="theme_customization_navbar_summary">Set custom navigation bar style</string>
     <string name="theme_customization_toast_frame_title">Toast Frame</string>
     <string name="theme_customization_toast_frame_summary">Change toast notification style</string>
+    <string name="dark_shadow_title">Dark Shadow Theme</string>
+
+    <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_footer">Dark Shadow Theme is a substratum theme for OxygenOS.\nWe are working together with the developer of the Theme to bring the theme in Oxygen Customizer.</string>
 
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>

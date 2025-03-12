@@ -275,11 +275,11 @@ public class FooterPreference extends Preference {
     /**
      * A {@link URLSpan} that opens a support page when clicked
      */
-    static class FooterLearnMoreSpan extends URLSpan {
+    public static class FooterLearnMoreSpan extends URLSpan {
 
         private final View.OnClickListener mClickListener;
 
-        FooterLearnMoreSpan(View.OnClickListener clickListener) {
+        public FooterLearnMoreSpan(View.OnClickListener clickListener) {
             // sets the url to empty string so we can prevent any other span processing from
             // clearing things we need in this string.
             super("");

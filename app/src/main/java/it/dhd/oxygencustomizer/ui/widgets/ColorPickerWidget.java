@@ -13,24 +13,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.databinding.ViewWidgetColorpickerBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.events.ColorDismissedEvent;
 import it.dhd.oxygencustomizer.ui.events.ColorSelectedEvent;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
-public class ColorPickerWidget extends RelativeLayout {
+public class ColorPickerWidget extends ConstraintLayout {
 
-    private RelativeLayout container;
+    private ConstraintLayout container;
     private TextView titleTextView;
     private TextView summaryTextView;
     private View colorView;
+    private MaterialButton mEnableBtn, mDisableBtn;
     private @ColorInt int selectedColor = Color.WHITE;
     private int colorPickerDialogId;
     private BeforeColorPickerListener beforeColorPickerListener;
@@ -186,17 +191,21 @@ public class ColorPickerWidget extends RelativeLayout {
         titleTextView = findViewById(R.id.title);
         summaryTextView = findViewById(R.id.summary);
         colorView = findViewById(R.id.color_widget);
+        mEnableBtn = findViewById(R.id.enable_button);
+        mDisableBtn = findViewById(R.id.disable_button);
 
         container.setId(View.generateViewId());
         titleTextView.setId(View.generateViewId());
         summaryTextView.setId(View.generateViewId());
         colorView.setId(View.generateViewId());
+        mEnableBtn.setId(View.generateViewId());
+        mDisableBtn.setId(View.generateViewId());
 
         colorPickerDialogId = colorView.getId();
 
-        RelativeLayout.LayoutParams layoutParams = (LayoutParams) findViewById(R.id.text_container).getLayoutParams();
-        layoutParams.addRule(RelativeLayout.START_OF, colorView.getId());
-        findViewById(R.id.text_container).setLayoutParams(layoutParams);
+//        RelativeLayout.LayoutParams layoutParams = (LayoutParams) findViewById(R.id.text_container).getLayoutParams();
+//        layoutParams.addRule(RelativeLayout.START_OF, colorView.getId());
+//        findViewById(R.id.text_container).setLayoutParams(layoutParams);
     }
 
     public void setBeforeColorPickerListener(BeforeColorPickerListener listener) {
@@ -209,6 +218,14 @@ public class ColorPickerWidget extends RelativeLayout {
 
     public void setAfterColorPickerListener(AfterColorPickerListener listener) {
         afterColorPickerListener = listener;
+    }
+
+    public void setOnEnableClickListener(View.OnClickListener listener) {
+        mEnableBtn.setOnClickListener(listener);
+    }
+
+    public void setOnDisableClickListener(View.OnClickListener listener) {
+        mDisableBtn.setOnClickListener(listener);
     }
 
     @SuppressWarnings("unused")
@@ -255,6 +272,18 @@ public class ColorPickerWidget extends RelativeLayout {
 
     public interface AfterColorPickerListener {
         void onColorPickerDismissed();
+    }
+
+    public View getTitleView() {
+        return titleTextView;
+    }
+
+    public void setEnableButtonEnabled(boolean enabled) {
+        mEnableBtn.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    }
+
+    public void setDisableButtonEnabled(boolean enabled) {
+        mDisableBtn.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     @Override

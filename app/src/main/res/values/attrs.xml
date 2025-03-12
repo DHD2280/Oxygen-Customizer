@@ -83,6 +83,10 @@
         <attr name="entryValues" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="FooterWidget">
+        <attr name="titleText" />
+    </declare-styleable>
+
     <declare-styleable name="SearchPreference">
         <attr name="textHint" format="string" />
         <attr name="textNoResults" format="string" />

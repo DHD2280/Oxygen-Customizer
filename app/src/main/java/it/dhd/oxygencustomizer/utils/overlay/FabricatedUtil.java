@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils.overlay;
 
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 
 import com.topjohnwu.superuser.Shell;
@@ -129,6 +130,8 @@ public class FabricatedUtil {
         List<String> commands = new ArrayList<>();
         commands.add("cmd overlay fabricate --target " + target + " --name OxygenCustomizerComponent" + name + " " + target + ":" + type + "/" + resourceName + " " + resourceType + " " + val);
         commands.add("cmd overlay enable --user current com.android.shell:OxygenCustomizerComponent" + name);
+
+        Log.w("FabricatedUtil", "Commands: " + commands.toString());
 
         return commands;
     }

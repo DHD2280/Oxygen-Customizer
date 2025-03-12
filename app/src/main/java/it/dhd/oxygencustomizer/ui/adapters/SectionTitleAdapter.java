@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.OplusRecyclerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import it.dhd.oxygencustomizer.R;
@@ -35,7 +36,7 @@ public class SectionTitleAdapter extends RecyclerView.Adapter<SectionTitleAdapte
         return 1;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements OplusRecyclerView.IOplusDividerDecorationInterface {
 
         private TextView mTitle;
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="colors_category">
+
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
+        android:key="dark_shadow_footer"
+        android:title="@string/dark_shadow_footer" />
+
+</PreferenceScreen>
