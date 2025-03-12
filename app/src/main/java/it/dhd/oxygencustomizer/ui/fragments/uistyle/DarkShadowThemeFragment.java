@@ -107,9 +107,9 @@ public class DarkShadowThemeFragment extends BaseFragment {
 
     private RecyclerView.Adapter<RecyclerView.ViewHolder> initDarkShadowColors() {
 
-        SectionTitleAdapter titleAdapter = new SectionTitleAdapter("Colors");
+        SectionTitleAdapter titleAdapter = new SectionTitleAdapter(getString(R.string.colors));
         DarkShadowColorsAdapter colors = new DarkShadowColorsAdapter((MainActivity) requireActivity(), mDarkShadowColors, mListener);
-        FooterWidgetAdapter footerAdapter = new FooterWidgetAdapter("Dark Shadow", v -> openDarkShadow());
+        FooterWidgetAdapter footerAdapter = new FooterWidgetAdapter(getString(R.string.dark_shadow_footer), v -> openDarkShadow());
 
         return new ConcatAdapter(titleAdapter, colors, footerAdapter);
     }
