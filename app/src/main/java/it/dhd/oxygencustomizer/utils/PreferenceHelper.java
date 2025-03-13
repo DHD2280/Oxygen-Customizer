@@ -112,6 +112,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXDENDED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
@@ -1254,6 +1255,8 @@ public class PreferenceHelper {
             // Now Bar
             case NOW_BAR_BOTTOM_MARGIN ->
                     instance.mPreferences.getSliderInt(NOW_BAR_BOTTOM_MARGIN, 0) + "dp";
+            case NOW_BAR_CLOCK_TOP_MARGIN ->
+                    instance.mPreferences.getSliderInt(NOW_BAR_CLOCK_TOP_MARGIN, 38) + "dp";
 
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->

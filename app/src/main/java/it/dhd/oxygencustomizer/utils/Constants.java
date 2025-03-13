@@ -520,6 +520,7 @@ public final class Constants {
             public static final String NOW_BAR_MUSIC_CLOCK_POSITION = "now_bar_music_clock_date_position";
             public static final String NOW_BAR_MUSIC_CLOCK_FORMAT = "now_bar_music_clock_date_format";
             public static final String NOW_BAR_CLOCK_CUSTOM_FONT = "now_bar_music_clock_font_custom_enabled";
+            public static final String NOW_BAR_CLOCK_TOP_MARGIN = "now_bar_music_clock_top_margin";
 
             // Battery
             public static final String NOW_BAR_BATTERY_CHARGING_ICON_SWITCH = "lockscreen_now_bar_battery_custom_icon_switch";
@@ -547,6 +548,17 @@ public final class Constants {
             public static final String NOW_BAR_NOTIFICATION_1LINE_COLOR = "lockscreen_now_bar_notifications_1line_color";
             public static final String NOW_BAR_NOTIFICATION_2LINE_COLOR = "lockscreen_now_bar_notifications_2line_color";
             public static final String NOW_BAR_NOTIFICATION_ICON_COLOR = "lockscreen_now_bar_notification_icon_color";
+
+            public static final String[] NOW_BAR_MUSIC_PREFS = {
+                    NOW_BAR_MUSIC_EXTENDED_PLAYER,
+                    NOW_BAR_MUSIC_EXTENDED_BACKGROUND,
+                    NOW_BAR_MUSIC_EXDENDED_MODE,
+                    NOW_BAR_MUSIC_EXTENDED_CLOCK,
+                    NOW_BAR_MUSIC_CLOCK_POSITION,
+                    NOW_BAR_MUSIC_CLOCK_FORMAT,
+                    NOW_BAR_CLOCK_CUSTOM_FONT,
+                    NOW_BAR_CLOCK_TOP_MARGIN
+            };
 
             public static final String[] NOW_BAR_BATTERY_PREFS =  {
                     NOW_BAR_BATTERY_CHARGING_ICON_SWITCH,

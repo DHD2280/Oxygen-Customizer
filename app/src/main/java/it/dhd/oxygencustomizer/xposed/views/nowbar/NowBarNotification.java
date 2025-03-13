@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -150,12 +151,16 @@ public class NowBarNotification extends RelativeLayout {
         mNotificationEnabled = enabled;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setNotificationsOptions(
             boolean customColors, boolean useAppIcon,
             int backgroundColor, int textColor1, int textColor2, int iconTintColor
     ) {
         mCustomColors = customColors;
-        mUseAppIcon = useAppIcon;
+        if (mUseAppIcon != useAppIcon) {
+            mUseAppIcon = useAppIcon;
+            mNotificationAdapter.notifyDataSetChanged();
+        }
         mBackgroundColor = backgroundColor;
         mTextColor1 = textColor1;
         mTextColor2 = textColor2;
@@ -199,6 +204,7 @@ public class NowBarNotification extends RelativeLayout {
         public void onNotificationPosted(StatusBarNotification notification, NotificationListenerService.RankingMap rankingMap) {
             if (mNotificationListener == null) return;
             StatusBarNotification[] activeNotifications = (StatusBarNotification[]) callMethod(mNotificationListener, "getActiveNotifications");
+            XposedBridge.log("NowBarNotification.onNotificationPosted " + activeNotifications[0]);
             updateNotifications(List.of(activeNotifications));
         }
 
@@ -346,13 +352,15 @@ public class NowBarNotification extends RelativeLayout {
         }
         mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
         StatusBarNotification usefulNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
-        if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime()) {
+        boolean isAlertOnce = usefulNotification == null ? false : (usefulNotification.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == Notification.FLAG_FOREGROUND_SERVICE;
+        if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime() && !isAlertOnce) {
             mLastNotificationTime = usefulNotification.getPostTime();
             currentDisplayedNotification = usefulNotification;
             mOnUsefulNotificationListener.onUsefulNotification();
         } else {
             currentDisplayedNotification = null;
         }
+        if (isAlertOnce) return;
         if (currentDisplayedNotification == null) {
             mNotificationTitleText = modRes.getString(R.string.lockscreen_now_bar_no_notifications);
             mNotificationContentText = "";

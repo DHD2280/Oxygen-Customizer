@@ -25,6 +25,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextClock
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
+                android:gravity="center_horizontal"
+                android:tag="top_date"
+                android:textColor="#FFFFFF"
+                android:textSize="40sp"
+                android:visibility="gone" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +53,7 @@
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:tag="bottom_date"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp" />
 

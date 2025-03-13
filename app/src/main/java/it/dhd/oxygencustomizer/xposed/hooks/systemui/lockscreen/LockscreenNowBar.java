@@ -22,11 +22,16 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_CUSTOM_FONT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_FORMAT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_POSITION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXDENDED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_PLAYER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATIONS_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_1LINE_COLOR;
@@ -85,6 +90,10 @@ public class LockscreenNowBar extends XposedMods {
     private int mBackgroundMode = 0;
     private int mExtendedPlayerMode = 0;
     private boolean mExtendedPlayerShowClock = false;
+    private int mExtendedPlayerClockPosition = 1;
+    private boolean mExtendedPlayerClockCustomFont = false;
+    private String mExtendedPlayerClockDateFormat = "";
+    private int mExtendedPlayerClockTopMargin = 38;
 
     // Battery
     private boolean mNowBarBatteryCustomColors = false;
@@ -140,6 +149,10 @@ public class LockscreenNowBar extends XposedMods {
         mBackgroundMode = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_EXTENDED_BACKGROUND, "0"));
         mExtendedPlayerMode = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_EXDENDED_MODE, "0"));
         mExtendedPlayerShowClock = Xprefs.getBoolean(NOW_BAR_MUSIC_EXTENDED_CLOCK, false);
+        mExtendedPlayerClockPosition = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_CLOCK_POSITION, "1"));
+        mExtendedPlayerClockCustomFont = Xprefs.getBoolean(NOW_BAR_CLOCK_CUSTOM_FONT, false);
+        mExtendedPlayerClockDateFormat = Xprefs.getString(NOW_BAR_MUSIC_CLOCK_FORMAT, "");
+        mExtendedPlayerClockTopMargin = Xprefs.getSliderInt(NOW_BAR_CLOCK_TOP_MARGIN, 38);
 
         // Battery
         mNowBarBatteryCustomColors = Xprefs.getBoolean(NOW_BAR_BATTERY_CUSTOM_COLORS, false);
@@ -179,11 +192,11 @@ public class LockscreenNowBar extends XposedMods {
                     Key[0].equals(NOW_BAR_NOTIFICATIONS)) {
                 updateNowBar();
             }
-            if (Key[0].equals(NOW_BAR_MUSIC_EXTENDED_PLAYER) ||
-                    Key[0].equals(NOW_BAR_MUSIC_EXTENDED_BACKGROUND) ||
-                    Key[0].equals(NOW_BAR_MUSIC_EXDENDED_MODE) ||
-                    Key[0].equals(NOW_BAR_MUSIC_EXTENDED_CLOCK)) {
-                updateMusic();
+            for (String k : NOW_BAR_MUSIC_PREFS) {
+                if (Key[0].equals(k)) {
+                    updateMusic();
+                    break;
+                }
             }
             for (String k : NOW_BAR_BATTERY_PREFS) {
                 if (Key[0].equals(k)) {
@@ -334,7 +347,8 @@ public class LockscreenNowBar extends XposedMods {
     private void updateMusic() {
         NowBarController mNowBarController = NowBarController.getInstance();
         if (mNowBarController == null) return;
-        mNowBarController.updateMusic(mShowExtendedPlayer, mBackgroundMode, mExtendedPlayerMode, mExtendedPlayerShowClock);
+        mNowBarController.updateMusic(mShowExtendedPlayer, mBackgroundMode, mExtendedPlayerMode, mExtendedPlayerShowClock,
+                mExtendedPlayerClockPosition, mExtendedPlayerClockDateFormat, mExtendedPlayerClockCustomFont, mExtendedPlayerClockTopMargin);
     }
 
     private void updateBattery() {

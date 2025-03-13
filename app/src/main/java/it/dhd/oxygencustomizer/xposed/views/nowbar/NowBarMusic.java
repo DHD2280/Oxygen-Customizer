@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.views.nowbar;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.NOW_BAR_CLOCK_FONT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
@@ -13,6 +14,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBarListener;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -23,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.Icon;
@@ -52,6 +55,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
+import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -100,6 +104,8 @@ public class NowBarMusic extends LinearLayout {
     private LinearLayout mAppInfos, mCompactInfos;
 
     // Clock
+    private TextClock mTopDate;
+    private TextClock mBottomDate;
     private TextView mHours;
     private TextClock mTicker;
 
@@ -129,6 +135,10 @@ public class NowBarMusic extends LinearLayout {
     private final int MODE_LARGE = 0;
     private final int MODE_COMPACT = 1;
     private boolean mShowClock = false;
+    private int mDatePosition = 1;
+    private String mDateFormat = "";
+    private boolean mCustomFont = false;
+    private int mClockTopMargin = 38;
 
     // Activity Launcher
     private final ActivityLauncherUtils mActivityLauncherUtils;
@@ -208,7 +218,9 @@ public class NowBarMusic extends LinearLayout {
         );
 
         mClockContainer = (FrameLayout) ViewHelper.findViewWithTag(v, "clock_container");
+        mTopDate = (TextClock) ViewHelper.findViewWithTag(v, "top_date");
         mHours = (TextView) ViewHelper.findViewWithTag(v, "clock_hours_text");
+        mBottomDate = (TextClock) ViewHelper.findViewWithTag(v, "bottom_date");
         mTicker = (TextClock) ViewHelper.findViewWithTag(v, "clock_hours_tick");
         TimeUtils.setCurrentTimeTextClockRed(mTicker, mHours, Color.parseColor("#FFF50514"));
         // Setup album art big as 90% of the screen width
@@ -689,7 +701,9 @@ public class NowBarMusic extends LinearLayout {
         mExtendedPlayer = enabled;
     }
 
-    public void setExtendedPlayerOptions(int playerMode, boolean showClock) {
+    public void setExtendedPlayerOptions(
+            int playerMode, boolean showClock,
+            int datePosition, String dateFormat, boolean customFont, int clockTopMargin) {
         mExtendedPlayerMode = playerMode;
         mAppInfos.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.GONE);
         mCompactInfos.setVisibility(playerMode == MODE_COMPACT ? View.VISIBLE : View.GONE);
@@ -697,9 +711,36 @@ public class NowBarMusic extends LinearLayout {
         mAuthor.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.INVISIBLE);
         mClockContainer.setVisibility(showClock ? View.VISIBLE : View.GONE);
         mShowClock = showClock;
+        mDatePosition = datePosition;
+        mDateFormat = dateFormat;
+        mCustomFont = customFont;
+        mClockTopMargin = clockTopMargin;
+        setupClock();
         if (mExpanded) {
             triggerMediaPlayer();
         }
+    }
+
+    private void setupClock() {
+        mTopDate.setFormat12Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
+        mTopDate.setFormat24Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
+        mBottomDate.setFormat12Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
+        mBottomDate.setFormat24Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
+        setupFont(mTopDate);
+        setupFont(mBottomDate);
+        mTopDate.setVisibility(mDatePosition == 0 ? View.VISIBLE : View.GONE);
+        mBottomDate.setVisibility(mDatePosition == 1 ? View.VISIBLE : View.GONE);
+        setMargins(mClockContainer, mContext, 0, mClockTopMargin, 0, 0);
+    }
+
+    private void setupFont(TextView tv) {
+        Typeface typeface = null;
+        if (mCustomFont && new File(NOW_BAR_CLOCK_FONT_FILE).exists()) {
+            typeface = Typeface.createFromFile(new File(NOW_BAR_CLOCK_FONT_FILE));
+        } else {
+            typeface = ResourcesCompat.getFont(appContext, R.font.slateforoneplus);
+        }
+        tv.setTypeface(typeface);
     }
 
 }

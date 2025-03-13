@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:tag="clock_container"
+        android:visibility="visible">
+
+        <TextClock
+            android:id="@+id/clock_tick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:format12Hour="hh:mm"
+            android:format24Hour="HH:mm"
+            android:gravity="center_horizontal"
+            android:textColor="#00000000"
+            android:textSize="60dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextClock
+                android:id="@+id/top_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFF"
+                android:textSize="40sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/clock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFF"
+                android:textSize="60sp" />
+
+            <TextClock
+                android:id="@+id/bottom_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/slateforoneplus"
+                android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFF"
+                android:textSize="40sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

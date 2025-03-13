@@ -75,6 +75,10 @@
             android:summary="@string/lockscreen_now_bar_music_extended_player_show_clock_summary"
             android:title="@string/lockscreen_now_bar_music_extended_player_show_clock" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/lockscreen_now_bar_music_extended_player_clock_options"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.NowBarClockPreview" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
