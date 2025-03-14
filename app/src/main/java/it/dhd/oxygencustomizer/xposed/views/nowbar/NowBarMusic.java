@@ -727,6 +727,7 @@ public class NowBarMusic extends LinearLayout {
         mBottomDate.setFormat12Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
         mBottomDate.setFormat24Hour(TextUtils.isEmpty(mDateFormat) ? "EEEE" : mDateFormat);
         setupFont(mTopDate);
+        setupFont(mHours);
         setupFont(mBottomDate);
         mTopDate.setVisibility(mDatePosition == 0 ? View.VISIBLE : View.GONE);
         mBottomDate.setVisibility(mDatePosition == 1 ? View.VISIBLE : View.GONE);
