@@ -104,7 +104,7 @@ public class NowBarClockPreview extends BaseFragment {
         binding.clock.setTypeface(typeface);
     }
 
-    static class NowBarClockPrefs extends ControlledPreferenceFragmentCompat {
+    public static class NowBarClockPrefs extends ControlledPreferenceFragmentCompat {
 
         private NowBarClockPrefsListener listener;
 
