@@ -35,7 +35,7 @@
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_color_primary"
                 android:textSize="40sp"
                 android:visibility="gone" />
 
@@ -46,7 +46,7 @@
                 android:fontFamily="@font/slateforoneplus"
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_color_primary"
                 android:textSize="60sp" />
 
             <TextClock
@@ -58,7 +58,7 @@
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_color_primary"
                 android:textSize="40sp" />
 
         </LinearLayout>
