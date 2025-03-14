@@ -34,6 +34,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,6 +105,7 @@ public class NowBarMusic extends LinearLayout {
     private LinearLayout mAppInfos, mCompactInfos;
 
     // Clock
+    private float mDateSize, mClockSize;
     private TextClock mTopDate;
     private TextClock mBottomDate;
     private TextView mHours;
@@ -222,6 +224,8 @@ public class NowBarMusic extends LinearLayout {
         mTopDate = (TextClock) ViewHelper.findViewWithTag(v, "top_date");
         mHours = (TextView) ViewHelper.findViewWithTag(v, "clock_hours_text");
         mBottomDate = (TextClock) ViewHelper.findViewWithTag(v, "bottom_date");
+        mDateSize = mTopDate.getTextSize();
+        mClockSize = mHours.getTextSize();
         mTicker = (TextClock) ViewHelper.findViewWithTag(v, "clock_hours_tick");
         TimeUtils.setCurrentTimeTextClockRed(mTicker, mHours, Color.parseColor("#FFF50514"));
         // Setup album art big as 90% of the screen width
@@ -255,11 +259,15 @@ public class NowBarMusic extends LinearLayout {
         mTrackSeekBar.setMin(0);
         mTrackSeekBar.setMax(100);
         // create a new proxy for the seekbar listener
-        callMethod(mTrackSeekBar, "setOnSeekBarChangeListener", Proxy.newProxyInstance(
-                COUISeekBarListener.getClassLoader(),
-                new Class[]{COUISeekBarListener},
-                new SeekbarListener()
-        ));
+        try {
+            callMethod(mTrackSeekBar, "setOnSeekBarChangeListener", Proxy.newProxyInstance(
+                    COUISeekBarListener.getClassLoader(),
+                    new Class[]{COUISeekBarListener},
+                    new SeekbarListener()
+            ));
+        } catch (Throwable throwable) {
+            XposedBridge.log("NowBarMusic init: " + Log.getStackTraceString(throwable));
+        }
         mSeekBarContainer.addView(mTrackSeekBar);
         mLocalFavoriteSpace = (Space) ViewHelper.findViewWithTag(v, "space_action_1");
         mLocalFavoriteButton = (ImageButton) ViewHelper.findViewWithTag(v, "action1");
@@ -745,6 +753,11 @@ public class NowBarMusic extends LinearLayout {
             typeface = ResourcesCompat.getFont(appContext, R.font.slateforoneplus);
         }
         tv.setTypeface(typeface);
+        if (tv == mHours) {
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mClockSize * mClockTextScaling);
+        } else {
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mDateSize * mClockTextScaling);
+        }
     }
 
 }
