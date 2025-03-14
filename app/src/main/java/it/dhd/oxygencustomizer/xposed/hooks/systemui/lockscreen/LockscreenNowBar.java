@@ -27,6 +27,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_POSITION;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_TEXT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXDENDED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
@@ -91,6 +92,7 @@ public class LockscreenNowBar extends XposedMods {
     private int mExtendedPlayerMode = 0;
     private boolean mExtendedPlayerShowClock = false;
     private int mExtendedPlayerClockPosition = 1;
+    private float mExtendedPlayerClockTextScaling = 1.0f;
     private boolean mExtendedPlayerClockCustomFont = false;
     private String mExtendedPlayerClockDateFormat = "";
     private int mExtendedPlayerClockTopMargin = 38;
@@ -150,6 +152,7 @@ public class LockscreenNowBar extends XposedMods {
         mExtendedPlayerMode = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_EXDENDED_MODE, "0"));
         mExtendedPlayerShowClock = Xprefs.getBoolean(NOW_BAR_MUSIC_EXTENDED_CLOCK, false);
         mExtendedPlayerClockPosition = Integer.parseInt(Xprefs.getString(NOW_BAR_MUSIC_CLOCK_POSITION, "1"));
+        mExtendedPlayerClockTextScaling = Xprefs.getSliderFloat(NOW_BAR_MUSIC_CLOCK_TEXT_SCALING, 1.0f);
         mExtendedPlayerClockCustomFont = Xprefs.getBoolean(NOW_BAR_CLOCK_CUSTOM_FONT, false);
         mExtendedPlayerClockDateFormat = Xprefs.getString(NOW_BAR_MUSIC_CLOCK_FORMAT, "");
         mExtendedPlayerClockTopMargin = Xprefs.getSliderInt(NOW_BAR_CLOCK_TOP_MARGIN, 38);
@@ -348,7 +351,7 @@ public class LockscreenNowBar extends XposedMods {
         NowBarController mNowBarController = NowBarController.getInstance();
         if (mNowBarController == null) return;
         mNowBarController.updateMusic(mShowExtendedPlayer, mBackgroundMode, mExtendedPlayerMode, mExtendedPlayerShowClock,
-                mExtendedPlayerClockPosition, mExtendedPlayerClockDateFormat, mExtendedPlayerClockCustomFont, mExtendedPlayerClockTopMargin);
+                mExtendedPlayerClockPosition, mExtendedPlayerClockDateFormat, mExtendedPlayerClockTextScaling, mExtendedPlayerClockCustomFont, mExtendedPlayerClockTopMargin);
     }
 
     private void updateBattery() {

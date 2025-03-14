@@ -6,9 +6,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
+        android:layout_alignParentTop="true"
         android:tag="clock_container"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextClock
             android:layout_width="match_parent"
@@ -23,7 +23,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="38dp"
+            android:orientation="vertical"
+            android:tag="linear_clocks_container">
 
             <TextClock
                 android:layout_width="match_parent"
@@ -32,6 +34,7 @@
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:tag="top_date"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp"
@@ -42,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/slateforoneplus"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:tag="clock_hours_text"
                 android:textColor="#FFFFFF"
                 android:textSize="60sp" />
@@ -53,6 +57,7 @@
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:tag="bottom_date"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp" />

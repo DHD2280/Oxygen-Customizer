@@ -137,6 +137,7 @@ public class NowBarMusic extends LinearLayout {
     private boolean mShowClock = false;
     private int mDatePosition = 1;
     private String mDateFormat = "";
+    private float mClockTextScaling = 1.0f;
     private boolean mCustomFont = false;
     private int mClockTopMargin = 38;
 
@@ -703,7 +704,7 @@ public class NowBarMusic extends LinearLayout {
 
     public void setExtendedPlayerOptions(
             int playerMode, boolean showClock,
-            int datePosition, String dateFormat, boolean customFont, int clockTopMargin) {
+            int datePosition, String dateFormat, float textScaling, boolean customFont, int clockTopMargin) {
         mExtendedPlayerMode = playerMode;
         mAppInfos.setVisibility(playerMode == MODE_LARGE ? View.VISIBLE : View.GONE);
         mCompactInfos.setVisibility(playerMode == MODE_COMPACT ? View.VISIBLE : View.GONE);
@@ -715,6 +716,7 @@ public class NowBarMusic extends LinearLayout {
         mDateFormat = dateFormat;
         mCustomFont = customFont;
         mClockTopMargin = clockTopMargin;
+        mClockTextScaling = textScaling;
         setupClock();
         if (mExpanded) {
             triggerMediaPlayer();
@@ -731,7 +733,8 @@ public class NowBarMusic extends LinearLayout {
         setupFont(mBottomDate);
         mTopDate.setVisibility(mDatePosition == 0 ? View.VISIBLE : View.GONE);
         mBottomDate.setVisibility(mDatePosition == 1 ? View.VISIBLE : View.GONE);
-        setMargins(mClockContainer, mContext, 0, mClockTopMargin, 0, 0);
+        setMargins(mHours.getParent(), mContext, 0, mClockTopMargin, 0, 0);
+        ViewHelper.applyTextScalingRecursively(mClockContainer, mClockTextScaling);
     }
 
     private void setupFont(TextView tv) {

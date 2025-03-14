@@ -371,12 +371,12 @@ public class NowBarHolder extends LinearLayout {
     public void updateMusic(
             boolean extendedPlayer, int backgroundMode,
             int playerMode, boolean showClock,
-            int datePosition, String dateFormat, boolean customFont, int topMargin) {
+            int datePosition, String dateFormat, float textScaling, boolean customFont, int topMargin) {
         if (mNowBarMusic != null) {
             mNowBarMusic.setExtendedPlayerEnabled(extendedPlayer);
             mNowBarMusic.setExtendedPlayerOptions(
                     playerMode, showClock,
-                    datePosition, dateFormat, customFont, topMargin
+                    datePosition, dateFormat, textScaling, customFont, topMargin
                     );
         }
         mBackgroundMode = backgroundMode;
