@@ -35,6 +35,7 @@
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp"
                 android:visibility="gone" />
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/slateforoneplus"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:textColor="#FFFFFF"
                 android:textSize="60sp" />
 
@@ -56,6 +58,7 @@
                 android:format12Hour="EEEE"
                 android:format24Hour="EEEE"
                 android:gravity="center_horizontal"
+                android:includeFontPadding="false"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp" />
 
