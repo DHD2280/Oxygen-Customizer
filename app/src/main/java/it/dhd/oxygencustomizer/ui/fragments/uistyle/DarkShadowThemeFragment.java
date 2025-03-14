@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.BACKGROUND;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.OplusRecyclerView;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.databinding.FragmentAppListBinding;
 import it.dhd.oxygencustomizer.databinding.FragmentRecyclerBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.adapters.DarkShadowColorsAdapter;
@@ -31,15 +34,17 @@ import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
 public class DarkShadowThemeFragment extends BaseFragment {
 
+    String[] overlays = new String[]{"DST", "DSTSUI", "DSTSTG"};
     private List<DarkShadowItem> mDarkShadowColors = new ArrayList<>() {{
         add(ACCENT);
         add(BACKGROUND);
     }};
 
-    private FragmentRecyclerBinding binding;
+    private FragmentAppListBinding binding;
     private LoadingDialog loadingDialog;
 
     @Override
@@ -54,16 +59,28 @@ public class DarkShadowThemeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentRecyclerBinding.inflate(inflater, container, false);
-        binding.recyclerViewFragment.addItemDecoration(new OplusRecyclerView.OplusRecyclerViewItemDecoration(requireContext()));
+        binding = FragmentAppListBinding.inflate(inflater, container, false);
+        binding.recyclerView.addItemDecoration(new OplusRecyclerView.OplusRecyclerViewItemDecoration(requireContext()));
 
         // Loading dialog while enabling or disabling pack
         loadingDialog = new LoadingDialog(requireContext());
 
+        binding.progress.setVisibility(View.GONE);
+        binding.searchViewLayout.setVisibility(View.GONE);
+
+        binding.appFunctionSwitch.setTitle(getString(R.string.dark_shadow_enable_theme));
+        binding.appFunctionSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                enableShadowTheme();
+            } else {
+                disableShadowTheme();
+            }
+        });
+
         // RecyclerView
-        binding.recyclerViewFragment.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.recyclerViewFragment.setAdapter(initDarkShadowColors());
-        binding.recyclerViewFragment.setHasFixedSize(true);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerView.setAdapter(initDarkShadowColors());
+        binding.recyclerView.setHasFixedSize(true);
 
         return binding.getRoot();
     }
@@ -77,6 +94,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
         @Override
         public void onEnabledClicked(DarkShadowItem darkShadowItem) {
             Log.w("DarkShadowThemeFragment", "onEnabledClicked: " + darkShadowItem.toString());
+            enableShadowTheme();
             int i = 0;
             for (String resName : darkShadowItem.getResourceNames()) {
                 FabricatedUtil
@@ -104,6 +122,18 @@ public class DarkShadowThemeFragment extends BaseFragment {
             }
         }
     };
+
+    private void enableShadowTheme() {
+        for (String overlay : overlays) {
+            OverlayUtil.enableOverlay("OxygenCustomizerComponent" + overlay + Build.VERSION.SDK_INT + ".overlay");
+        }
+    }
+
+    private void disableShadowTheme() {
+        for (String overlay : overlays) {
+            OverlayUtil.disableOverlay("OxygenCustomizerComponent" + overlay + Build.VERSION.SDK_INT + ".overlay");
+        }
+    }
 
     private RecyclerView.Adapter<RecyclerView.ViewHolder> initDarkShadowColors() {
 
