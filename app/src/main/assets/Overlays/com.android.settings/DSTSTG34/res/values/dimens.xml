@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="coui_search_view_min_height">50.0dip</dimen>
-    <dimen name="coui_search_view_height">50.0dip</dimen>
-    <dimen name="coui_search_view_text_hint_size">16.0sp</dimen>
-</resources>
