@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,8 @@ public final class DarkShadowUtils {
                     }},
                     new ArrayList<>() {{
                         add("android");
-                    }}
+                    }},
+                    Color.BLACK
             );
 
     public static final DarkShadowItem BACKGROUND =
@@ -26,7 +29,16 @@ public final class DarkShadowUtils {
                     }},
                     new ArrayList<>() {{
                         add("android");
-                    }}
+                    }},
+                    Color.BLACK
             );
+
+    public static int getColor(DarkShadowItem darkShadowItem) {
+        return OCPreferences.getInt("DST" + darkShadowItem.getOverlayName(), darkShadowItem.getColor());
+    }
+
+    public static void saveColor(DarkShadowItem darkShadowItem) {
+        OCPreferences.putInt("DST" + darkShadowItem.getOverlayName(), darkShadowItem.getColor());
+    }
 
 }

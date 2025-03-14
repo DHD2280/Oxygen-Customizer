@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.ui.adapters;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.getColor;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class DarkShadowColorsAdapter extends RecyclerView.Adapter<DarkShadowColo
         if (FabricatedUtil.isOverlayEnabled(model.getOverlayName() + "_0")) {
             holder.binding.colorPicker.setDisableButtonEnabled(true);
         }
+        holder.binding.colorPicker.setPreviewColor(getColor(model));
         holder.binding.colorPicker.setOnEnableClickListener(v -> mListener.onEnabledClicked(model));
         holder.binding.colorPicker.setOnDisableClickListener(v -> mListener.onDisabledClicked(model));
         holder.binding.colorPicker.setColorPickerListener(

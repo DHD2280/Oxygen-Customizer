@@ -33,6 +33,7 @@ import it.dhd.oxygencustomizer.ui.adapters.SectionTitleAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
+import it.dhd.oxygencustomizer.utils.DarkShadowUtils;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
@@ -94,6 +95,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
         @Override
         public void onEnabledClicked(DarkShadowItem darkShadowItem) {
             Log.w("DarkShadowThemeFragment", "onEnabledClicked: " + darkShadowItem.toString());
+            DarkShadowUtils.saveColor(darkShadowItem);
             enableShadowTheme();
             int i = 0;
             for (String resName : darkShadowItem.getResourceNames()) {
