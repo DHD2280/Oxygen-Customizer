@@ -74,6 +74,7 @@ public class Settings extends ControlledPreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.own_settings, rootKey);
 
         appIconThemed = findPreference("themed_icon");
