@@ -506,6 +506,7 @@
     <string name="file_header_select_title">Choisir une image locale</string>
     <string name="file_header_select_summary">Sélectionner une image depuis le stockage</string>
     <string name="qs_header_image_zoomtofit_title">Zoomer pour ajuster</string>
+    <string name="qs_header_image_zoomtofit_summary">L\'image est étirée pour correspondre par défaut</string>
     <!-- QS Header Clock Strings -->
     <string name="qs_header_clock">Horloge de l\'en-tête des réglages rapides</string>
     <string name="qs_header_clock_intro_title">Activer et désactiver l\'horloge personnalisée nécessite le redémarrage de SystemUI.\nAppuyez sur le menu pour redémarrer.</string>
@@ -582,7 +583,25 @@
     <string name="chip_gradient_color_1">Premier couleur du dégradé</string>
     <string name="chip_gradient_color_2">Seconde couleur du dégradé</string>
     <string name="chip_standard_color">Couleur de la puce</string>
+    <string name="chip_stroke">Propriété du trait</string>
+    <string name="chip_stroke_width">Largeur du trait</string>
+    <string name="chip_round_corners_props">Propriétés des coins</string>
+    <string name="chip_round_corners">Coins arrondis</string>
+    <string name="chip_round_corners_top_sx_radius">Rayon en haut à gauche</string>
+    <string name="chip_round_corners_top_dx_radius">Rayon en haut à droite</string>
+    <string name="chip_round_corners_bottom_sx_radius">Rayon en haut à gauche</string>
+    <string name="chip_round_corners_bottom_dx_radius">Rayon en haut à droite</string>
     <!-- Launcher Mods -->
+    <string name="launcher_intro_title">Les options du lanceur nécessitent le redémarrage du lanceur.\nAppuyez sur le menu pour redémarrer.</string>
+    <string name="launcher_layout">Mise en page de la page d’accueil</string>
+    <string name="launcher_edit_layout">Modifier la disposition de la page d\'accueil</string>
+    <string name="launcher_columns">Colonnes d\'accueil</string>
+    <string name="launcher_rows">Lignes d\'Accueil</string>
+    <string name="hide_app_labels">Masquer les libellés des applications</string>
+    <string name="hide_app_labels_desktop">Masquer le libellé des applications sur l\'écran d\'accueil</string>
+    <string name="hide_app_labels_drawer">Masquer le libellé des applications dans le tiroir</string>
+    <string name="launcher_folder_layout">Mise en page du dossier</string>
+    <string name="launcher_folder_edit_layout">Modifier la mise en page</string>
     <string name="hide_scroller_summary">Masquer le défileur dans le tiroir d\'applications</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barre de navigation</string>
@@ -696,6 +715,7 @@
     <!-- UI Strings -->
     <!-- UI styles -->
     <!-- Icon pack -->
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <!-- Notification -->
     <!-- Notification Corner Radius -->
@@ -714,4 +734,5 @@
     <!-- OTA Card -->
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

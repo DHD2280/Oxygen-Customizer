@@ -1038,6 +1038,7 @@
     <string name="theme_customization_navbar_summary">Defina um estilo personalizado da barra de navegação.</string>
     <string name="theme_customization_toast_frame_title">Moldura da notificação</string>
     <string name="theme_customization_toast_frame_summary">Alterar o estilo da notificação</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Estoque personalizado</string>
@@ -1139,4 +1140,5 @@
     <!-- OTA Card -->
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

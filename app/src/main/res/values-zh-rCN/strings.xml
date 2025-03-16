@@ -1066,6 +1066,7 @@
     <string name="theme_customization_navbar_summary">设置自定义导航栏样式</string>
     <string name="theme_customization_toast_frame_title">吐司样式</string>
     <string name="theme_customization_toast_frame_summary">更改吐司消息样式</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">自定义库存</string>
@@ -1185,4 +1186,5 @@
     <string name="custom_memc_configuration_summary">为每个应用或活动配置MEMC</string>
     <string name="memc_footer">如果你的设备未配备视觉处理器或不支持MEMC，请不要修改这些设置</string>
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

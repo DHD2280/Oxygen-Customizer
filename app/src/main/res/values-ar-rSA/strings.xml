@@ -1072,6 +1072,7 @@
     <string name="theme_customization_navbar_summary">حدد نمط شريط التنقل المخصص</string>
     <string name="theme_customization_toast_frame_title">إطار الإشعارات</string>
     <string name="theme_customization_toast_frame_summary">قم بتغيير نمط إشعار التوست</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">مخصص افتراضي</string>
@@ -1200,4 +1201,5 @@
     <string name="refresh_rate_error">تحديث المعدل فارغ!</string>
     <string name="memc_footer">إذا لم يكن جهازك يحتوي على رقاقة Pixelwork أو لا يدعم Memc، لا تلمس تقترب من تلك الإعدادات.</string>
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>
