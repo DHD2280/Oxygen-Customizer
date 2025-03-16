@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.jaredrummler.android.colorpicker.ColorPanelView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +35,7 @@ public class ColorPickerWidget extends ConstraintLayout {
     private ConstraintLayout container;
     private TextView titleTextView;
     private TextView summaryTextView;
-    private View colorView;
+    private ColorPanelView colorView;
     private MaterialButton mEnableBtn, mDisableBtn;
     private @ColorInt int selectedColor = Color.WHITE;
     private int colorPickerDialogId;
@@ -141,13 +142,7 @@ public class ColorPickerWidget extends ConstraintLayout {
                 color = Color.LTGRAY;
             }
         }
-
-        GradientDrawable drawable = new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{color, color}
-        );
-        drawable.setCornerRadius(120 * getResources().getDisplayMetrics().density);
-        colorView.setBackground(drawable);
+        colorView.setColor(color);
     }
 
     public int getColorPickerDialogId() {
