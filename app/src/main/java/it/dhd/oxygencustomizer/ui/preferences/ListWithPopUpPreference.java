@@ -26,6 +26,7 @@ public class ListWithPopUpPreference extends OplusListPreference {
     private int[] mEntryIcons;
     private Drawable[] mEntryDrawables;
     private boolean mHasImages = false;
+    private boolean mTint = false;
     private ListPreferenceAdapter mAdapter;
     private BottomSheetDialog bottomSheetDialog;
     private RecyclerView recyclerView;
@@ -48,6 +49,12 @@ public class ListWithPopUpPreference extends OplusListPreference {
 
     public void setDrawables(@DrawableRes int[] drawables) {
         mHasImages = true;
+        mEntryIcons = drawables;
+    }
+
+    public void setDrawables(@DrawableRes int[] drawables, boolean tint) {
+        mHasImages = true;
+        mTint = tint;
         mEntryIcons = drawables;
     }
 
@@ -104,6 +111,7 @@ public class ListWithPopUpPreference extends OplusListPreference {
                     mEntryIcons,
                     getKey(),
                     mHasImages,
+                    mTint,
                     (view1, position) -> {
                         if (callChangeListener(getEntryValues()[position].toString())) {
                             setValueIndex(position);
@@ -130,6 +138,7 @@ public class ListWithPopUpPreference extends OplusListPreference {
                 mEntryIcons,
                 getKey(),
                 mHasImages,
+                mTint,
                 (view1, position) -> {
                     if (callChangeListener(getEntryValues()[position].toString())) {
                         setValueIndex(position);
@@ -145,6 +154,7 @@ public class ListWithPopUpPreference extends OplusListPreference {
                 drawables,
                 getKey(),
                 mHasImages,
+                mTint,
                 (view1, position) -> {
                     if (callChangeListener(getEntryValues()[position].toString())) {
                         setValueIndex(position);
@@ -160,6 +170,7 @@ public class ListWithPopUpPreference extends OplusListPreference {
                 drawables,
                 getKey(),
                 mHasImages,
+                mTint,
                 (view1, position) -> {
                     if (callChangeListener(getEntryValues()[position].toString())) {
                         setValueIndex(position);

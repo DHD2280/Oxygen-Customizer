@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.ui.preferences.dialogadapter;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.BatteryIconOptionsBinding;
 import it.dhd.oxygencustomizer.databinding.PreferenceListItemBinding;
 import it.dhd.oxygencustomizer.databinding.QsHeaderImageOptionsBinding;
@@ -42,6 +45,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final Drawable[] mEntryDrawables;
     private final String mKey;
     private final boolean mHasImage;
+    private final boolean mTint;
     private onItemClickListener onItemClickListener;
     private String mValue;
     private int mType = DEFAULT_TYPE;
@@ -54,6 +58,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                  int[] entryIcons,
                                  String key,
                                  boolean hasImage,
+                                 boolean tint,
                                  onItemClickListener onItemClickListener) {
         this.mEntries = entries;
         this.mEntryValues = entryValues;
@@ -61,6 +66,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mEntryDrawables = null;
         this.mKey = key;
         this.mHasImage = hasImage;
+        this.mTint = tint;
         this.onItemClickListener = onItemClickListener;
         this.mType = DEFAULT_TYPE;
         mHeaderNum = getCurrentHeaderNumber();
@@ -71,6 +77,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                  Drawable[] entryDrawables,
                                  String key,
                                  boolean hasImage,
+                                 boolean tint,
                                  onItemClickListener onItemClickListener) {
         this.mEntries = entries;
         this.mEntryValues = entryValues;
@@ -78,6 +85,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mEntryIcons = null;
         this.mKey = key;
         this.mHasImage = hasImage;
+        this.mTint = tint;
         this.onItemClickListener = onItemClickListener;
         this.mType = DEFAULT_TYPE;
         mHeaderNum = getCurrentHeaderNumber();
@@ -154,9 +162,12 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         } else {
             ((ViewHolder)holder).binding.text.setText(mEntries[position]);
             if (mHasImage) {
-                if (mEntryIcons != null && mEntryIcons.length > 0)
-                    ((ViewHolder)holder).binding.image.setImageDrawable(ContextCompat.getDrawable(((ViewHolder)holder).binding.getRoot().getContext(), mEntryIcons[position]));
-                else if (mEntryDrawables != null && mEntryDrawables.length > 0)
+                if (mEntryIcons != null && mEntryIcons.length > 0) {
+                    ((ViewHolder) holder).binding.image.setImageDrawable(ContextCompat.getDrawable(((ViewHolder) holder).binding.getRoot().getContext(), mEntryIcons[position]));
+                    if (mTint) {
+                        ((ViewHolder) holder).binding.image.setImageTintList(ColorStateList.valueOf(ResourcesCompat.getColor(getAppContext().getResources(), R.color.text_color_primary, getAppContext().getTheme())));
+                    }
+                } else if (mEntryDrawables != null && mEntryDrawables.length > 0)
                     ((ViewHolder)holder).binding.image.setImageDrawable(mEntryDrawables[position]);
             } else
                 ((ViewHolder)holder).binding.image.setVisibility(View.GONE);
