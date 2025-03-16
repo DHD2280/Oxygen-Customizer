@@ -371,7 +371,9 @@ public class GestureNavbarManager extends XposedMods {
                     appIcon,
                     0.2f);
         } catch (Throwable ignored) {
-            return null;
+            return ResourcesCompat.getDrawable(ResourceManager.modRes,
+                    R.drawable.ic_custom_app,
+                    mContext.getTheme());
         }
     }
 
