@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +31,16 @@ public final class DarkShadowUtils {
                     new ArrayList<>() {{
                         add("android");
                     }},
-                    Color.BLACK
+                    Color.RED
             );
 
     public static int getColor(DarkShadowItem darkShadowItem) {
+        Log.w("DarkShadowUtils", "getColor: " + darkShadowItem.toString());
         return OCPreferences.getInt("DST" + darkShadowItem.getOverlayName(), darkShadowItem.getColor());
     }
 
     public static void saveColor(DarkShadowItem darkShadowItem) {
+        Log.w("DarkShadowUtils", "saveColor: " + darkShadowItem.toString());
         OCPreferences.putInt("DST" + darkShadowItem.getOverlayName(), darkShadowItem.getColor());
     }
 

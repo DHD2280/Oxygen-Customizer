@@ -2,7 +2,10 @@ package it.dhd.oxygencustomizer.ui.adapters;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.getColor;
+import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.saveColor;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,20 +64,20 @@ public class DarkShadowColorsAdapter extends RecyclerView.Adapter<DarkShadowColo
         if (FabricatedUtil.isOverlayEnabled(model.getOverlayName() + "_0")) {
             holder.binding.colorPicker.setDisableButtonEnabled(true);
         }
-        holder.binding.colorPicker.setPreviewColor(getColor(model));
         holder.binding.colorPicker.setOnEnableClickListener(v -> mListener.onEnabledClicked(model));
         holder.binding.colorPicker.setOnDisableClickListener(v -> mListener.onDisabledClicked(model));
         holder.binding.colorPicker.setColorPickerListener(
                 mActivity,
-                model.getColor(),
+                getColor(model),
                 true,
                 true,
                 true
         );
+        holder.binding.colorPicker.setPreviewColor(getColor(model));
         holder.binding.colorPicker.setOnColorSelectedListener(color -> {
+            Log.w("DarkShadowColorsAdapter", "onColorSelected: " + model.getTitle() + " " + color);
             model.setColor(color);
             mListener.onColorChanged(model);
-            holder.binding.colorPicker.setPreviewColor(color);
             holder.binding.colorPicker.setDisableButtonEnabled(false);
             holder.binding.colorPicker.setEnableButtonEnabled(true);
         });

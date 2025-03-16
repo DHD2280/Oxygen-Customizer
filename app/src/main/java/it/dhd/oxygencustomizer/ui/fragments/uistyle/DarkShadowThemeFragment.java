@@ -77,6 +77,9 @@ public class DarkShadowThemeFragment extends BaseFragment {
                 disableShadowTheme();
             }
         });
+        binding.appFunctionSwitch.setSwitchChecked(
+                OverlayUtil.isOverlayDisabled("OxygenCustomizerComponent" + overlays[0] + Build.VERSION.SDK_INT + ".overlay")
+        );
 
         // RecyclerView
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -94,6 +97,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
 
         @Override
         public void onEnabledClicked(DarkShadowItem darkShadowItem) {
+            loadingDialog.show(getString(R.string.loading_dialog_wait));
             Log.w("DarkShadowThemeFragment", "onEnabledClicked: " + darkShadowItem.toString());
             DarkShadowUtils.saveColor(darkShadowItem);
             enableShadowTheme();
@@ -109,10 +113,12 @@ public class DarkShadowThemeFragment extends BaseFragment {
                         );
                 i++;
             }
+            loadingDialog.dismiss();
         }
 
         @Override
         public void onDisabledClicked(DarkShadowItem darkShadowItem) {
+            loadingDialog.show(getString(R.string.loading_dialog_wait));
             Log.w("DarkShadowThemeFragment", "onDisabledClicked: " + darkShadowItem.toString());
             int i = 0;
             for (String resName : darkShadowItem.getResourceNames()) {
@@ -122,19 +128,24 @@ public class DarkShadowThemeFragment extends BaseFragment {
                         );
                 i++;
             }
+            loadingDialog.dismiss();
         }
     };
 
     private void enableShadowTheme() {
+        loadingDialog.show(getString(R.string.loading_dialog_wait));
         for (String overlay : overlays) {
             OverlayUtil.enableOverlay("OxygenCustomizerComponent" + overlay + Build.VERSION.SDK_INT + ".overlay");
         }
+        loadingDialog.dismiss();
     }
 
     private void disableShadowTheme() {
+        loadingDialog.show(getString(R.string.loading_dialog_wait));
         for (String overlay : overlays) {
             OverlayUtil.disableOverlay("OxygenCustomizerComponent" + overlay + Build.VERSION.SDK_INT + ".overlay");
         }
+        loadingDialog.dismiss();
     }
 
     private RecyclerView.Adapter<RecyclerView.ViewHolder> initDarkShadowColors() {
