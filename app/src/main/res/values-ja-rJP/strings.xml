@@ -1033,6 +1033,7 @@
     <string name="theme_customization_navbar_summary">カスタムナビゲーションバーを設定します</string>
     <string name="theme_customization_toast_frame_title">トーストのフレーム</string>
     <string name="theme_customization_toast_frame_summary">トースト通知のスタイルを変更します</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">カスタマイズされたストック</string>
@@ -1139,4 +1140,5 @@
     <string name="ota_card_title">OTA カード画像をカスタマイズする</string>
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

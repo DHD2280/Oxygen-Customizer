@@ -298,8 +298,12 @@
     <string name="inside_percentage_desc">Yüzdeyi pil simgesinin içine taşı</string>
     <string name="battery_icon_color">Pil Simgesi Renkleri</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_text_category">Pil metni</string>
     <string name="battery_edit_percentage_size_title">Yüzde Boyutunu Özelleştir</string>
     <string name="battery_percentage_size">Yüzde Boyutu</string>
+    <string name="battery_text_attach_to_batterybar">Pil Çubuğuna Bağla</string>
+    <string name="battery_text_attach_to_batterybar_summary">Pil Çubuğu renklerine Metin rengini bağla</string>
+    <string name="battery_text_enable_bb_first">Öncelikle Pil Çubuğunu etkinleştir</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">Varsayılan</string>
     <string name="battery_landscape_r_default">Yatay R Varsayılan</string>
@@ -612,9 +616,20 @@
     <string name="launcher_recents">Son Kullanılanlar</string>
     <string name="launcher_app_details_title">Uygulama Detaylarını Aç</string>
     <string name="launcher_app_details_summary">Uygulama simgesine dokunarak Ayarlar\'da uygulama detaylarını açın.</string>
+    <string name="launcher_disable_recents_previous_page_title">Önceki görevi devre dışı bırak</string>
+    <string name="launcher_disable_recents_previous_page_summary">Sonraki görevlerde önceki göreve otomatik geçişi devre dışı bırak.</string>
     <string name="remove_home_pagination">Ana Sayfalamayı Kaldır</string>
+    <string name="launcher_themed_icons">Temalı simgeler</string>
     <string name="force_themed_launcher_icons">Temalı Başlatıcı Simgelerini Zorla</string>
     <string name="force_themed_launcher_icons_summary">BETA ÖZELLİĞİ: Tüm uygulamalar için temalı simgeleri zorla.\nUygulamak için başlatıcıda temalı simgeleri yeniden etkinleştirin.</string>
+    <string name="alternative_themed_icons_title">Alternatif temalı simgeler</string>
+    <string name="alternative_themed_icons_summary">Simgeleri tema yapmak için alternatif yöntemi kullanın.\nNot: Bu yöntem Oplus simgelerini geçersiz kılmaz, ancak daha yavaş olabilir.</string>
+    <string name="themed_icons_where_title">Temalı simgelerin uygulanacağı yeri seç</string>
+    <string name="themed_icons_workspace">Çalışma Alanı</string>
+    <string name="themed_icons_drawer">Uygulama çekmecesi</string>
+    <string name="themed_icons_folder">Klasör</string>
+    <string name="themed_icons_search">Arama sonucu</string>
+    <string name="themed_icons_taskbar">Görev Çubuğu</string>
     <string name="hide_scroller">Kaydırıcıyı gizle</string>
     <string name="hide_scroller_summary">Uygulama çekmecesinde kaydırıcıyı gizle</string>
     <!-- NavBar Strings -->
@@ -1155,6 +1170,9 @@
     <string name="theme_customization_navbar_summary">Özel navigasyon çubuğu stilini ayarla</string>
     <string name="theme_customization_toast_frame_title">Toast Çerçevesi</string>
     <string name="theme_customization_toast_frame_summary">Toast bildirim stilini değiştir</string>
+    <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_enable_theme">Temayı etkinleştir</string>
+    <string name="dark_shadow_footer">Dark Shadow Teması, OxygenOS için bir substratum temasıdır.\nBu temayı Oxygen Customizer\'a getirmek için tema geliştiricisiyle birlikte çalışıyoruz.</string>
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Stok Özelleştirilmiş</string>
@@ -1267,6 +1285,8 @@
     <string name="lockscreen_now_bar_music_extended_player_mode_compact">Kompakt</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock">Saati göster</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Genişletilmiş oynatıcının üst kısmında saati göster</string>
+    <string name="lockscreen_now_bar_music_extended_player_clock_options">Saat tercihlerİ</string>
+    <string name="lockscreen_now_bar_music_clock_date_position">Tarih konumu</string>
     <string name="lockscreen_now_bar_battery">Şimdi çubuğu pil</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Özel şarj simgesi</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Özel renkler</string>
@@ -1333,4 +1353,7 @@
     <string name="sleep_on_flat_screen_tile_title">Yüzeyde uyku</string>
     <string name="flat_screen_timeout_title">Düz yüzeyde ekran zaman aşımı</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Uyanık kilitlere saygı duy</string>
+    <!-- Allow music players in AOD -->
+    <string name="aod_music_allow_title">Oynatıcılara AOD\'yi etkinleştir</string>
+    <string name="aod_music_allow_summary">Ant müzik çalarını AOD\'de gösterilmesine izin ver.\nNot: Tüm müzik çalarlar desteklenmeyebilir.</string>
 </resources>

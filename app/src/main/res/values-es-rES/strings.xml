@@ -1027,6 +1027,7 @@
     <string name="theme_customization_navbar_summary">Establecer estilo personalizado de barra de navegación</string>
     <string name="theme_customization_toast_frame_title">Marco de mensajes emergentes</string>
     <string name="theme_customization_toast_frame_summary">Cambiar estilo de notificación de mensajes emergentes</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_pui">PUI</string>
     <string name="settings_icons_pui_v2">PUI v2</string>
@@ -1092,4 +1093,5 @@
     <string name="select_app">Seleccionar aplicación</string>
     <string name="memc_footer">Si tu dispositivo no tiene el chip Pixelwork o no soporta Memc, no toques esos ajustes.</string>
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>
