@@ -33,6 +33,7 @@ import it.dhd.oxygencustomizer.ui.adapters.SectionTitleAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
+import it.dhd.oxygencustomizer.utils.ColorUtils;
 import it.dhd.oxygencustomizer.utils.DarkShadowUtils;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
@@ -113,6 +114,20 @@ public class DarkShadowThemeFragment extends BaseFragment {
                         );
                 i++;
             }
+            int j = i;
+            if (!darkShadowItem.getAdjustColors().isEmpty()) {
+                for (String resName : darkShadowItem.getAdjustColors().keySet()) {
+                    FabricatedUtil
+                            .buildAndEnableOverlay(
+                                    darkShadowItem.getPackages().get(0),
+                                    darkShadowItem.getOverlayName() + "_" + j,
+                                    "color",
+                                    resName,
+                                    String.format("0x%08X", (0xFFFFFFFF & ColorUtils.adjustColor(darkShadowItem.getColor(), darkShadowItem.getAdjustColors().get(resName))))
+                            );
+                    j++;
+                }
+            }
             loadingDialog.dismiss();
         }
 
@@ -127,6 +142,16 @@ public class DarkShadowThemeFragment extends BaseFragment {
                                 darkShadowItem.getOverlayName() + "_" + i
                         );
                 i++;
+            }
+            int j = i;
+            if (!darkShadowItem.getAdjustColors().isEmpty()) {
+                for (String resName : darkShadowItem.getAdjustColors().keySet()) {
+                    FabricatedUtil
+                            .disableOverlay(
+                                    darkShadowItem.getOverlayName() + "_" + j
+                            );
+                    j++;
+                }
             }
             loadingDialog.dismiss();
         }

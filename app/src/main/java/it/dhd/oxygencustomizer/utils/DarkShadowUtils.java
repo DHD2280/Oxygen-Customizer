@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
 
@@ -28,6 +29,16 @@ public final class DarkShadowUtils {
                                 "legacy_primary_dark",
                                 "primary_dark_material_dark", "primary_material_dark"));
                     }},
+                    Map.of(
+                            "background_floating_material_dark", 10,
+                            "background_holo_dark", 25,
+                            "background_leanback_dark", 30,
+                            "button_material_dark", -5,
+                            "button_material_light", -15,
+                            "holo_light_primary_dark", -10,
+                            "holo_primary", -15,
+                            "holo_primary_dark", -5
+                    ),
                     new ArrayList<>() {{
                         add("android");
                     }},

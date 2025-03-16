@@ -24,4 +24,18 @@ public class ColorUtils {
         hsv[2] *= factor;
         return Color.HSVToColor(hsv);
     }
+
+    // Dark Shadow Theme Util
+    public static int adjustColor(int color, float percent) {
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        r = (int) Math.min(255, Math.max(0, r + (r * percent / 100)));
+        g = (int) Math.min(255, Math.max(0, g + (g * percent / 100)));
+        b = (int) Math.min(255, Math.max(0, b + (b * percent / 100)));
+
+        return Color.rgb(r, g, b);
+    }
+
 }

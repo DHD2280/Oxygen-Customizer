@@ -5,7 +5,9 @@ import android.graphics.Color;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DarkShadowItem {
 
@@ -14,6 +16,7 @@ public class DarkShadowItem {
     private String mSummary;
     private List<String> mResourceName;
     private List<String> mPackages = new ArrayList<>();
+    private Map<String, Integer> mAdjustColors = new HashMap<>();
     private int mColor;
 
     public DarkShadowItem(String overlayName, String title, String summary, List<String> resourceNames, List<String> packages) {
@@ -31,6 +34,16 @@ public class DarkShadowItem {
         this.mSummary = summary;
         this.mPackages.addAll(packages);
         this.mResourceName = resourceNames;
+        this.mColor = color;
+    }
+
+    public DarkShadowItem(String overlayName, String title, String summary, List<String> resourceNames, Map<String, Integer> ajustColors, List<String> packages, int color) {
+        this.mOverlayName = overlayName;
+        this.mTitle = title;
+        this.mSummary = summary;
+        this.mPackages.addAll(packages);
+        this.mResourceName = resourceNames;
+        this.mAdjustColors = ajustColors;
         this.mColor = color;
     }
 
@@ -64,6 +77,10 @@ public class DarkShadowItem {
 
     public void setColor(int color) {
         mColor = color;
+    }
+
+    public Map<String, Integer> getAdjustColors() {
+        return mAdjustColors;
     }
 
     @Override
