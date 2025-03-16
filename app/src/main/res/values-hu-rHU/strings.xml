@@ -298,8 +298,12 @@
     <string name="inside_percentage_desc">Áthelyezi a százalékértéklet az akkuikonon belülre</string>
     <string name="battery_icon_color">Az akkuikon színei</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_text_category">Az akkukijelzés szövege</string>
     <string name="battery_edit_percentage_size_title">A százalék-kijelző nagysága</string>
     <string name="battery_percentage_size">A százalékjel nagysága</string>
+    <string name="battery_text_attach_to_batterybar">Akkusávhoz kötve</string>
+    <string name="battery_text_attach_to_batterybar_summary">Szövegszín közzákötése az Akkusáv színeihez</string>
+    <string name="battery_text_enable_bb_first">Először is kapcsolja be az Akkusávot</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">Alapértelmezett</string>
     <string name="battery_landscape_r_default">Fekvő Jobb alapértelmezett</string>
@@ -612,9 +616,20 @@
     <string name="launcher_recents">Előzmények</string>
     <string name="launcher_app_details_title">Az alkalmazás-részletek megnyitása</string>
     <string name="launcher_app_details_summary">Érintse meg az alkalmazás ikonját az alkalmazás részleteinek megnyitásához a Beállításokban.</string>
+    <string name="launcher_disable_recents_previous_page_title">Az előző feladat letiltása</string>
+    <string name="launcher_disable_recents_previous_page_summary">Kikapcsolja az automatikus váltást az előző feladatra az Előzményekben.</string>
     <string name="remove_home_pagination">Képernyőlapozás eltávolítása</string>
+    <string name="launcher_themed_icons">Témázott ikonok</string>
     <string name="force_themed_launcher_icons">Témázott alkalmazásikon kényszerítve</string>
     <string name="force_themed_launcher_icons_summary">BETA FUNKCIÓ: Kényszerítés minden alkalmazáshoz.\nAz alkalmazáshoz engedélyezze újra a témázott ikonokat a launcherben.</string>
+    <string name="alternative_themed_icons_title">Alternatív témázott ikonok</string>
+    <string name="alternative_themed_icons_summary">Alternatív módszer használata a témaikonok helyett.\nMegjegyzés: ez a módszer nem írja felül az Oplus-ikonokat, de lehet, hogy lassabb.</string>
+    <string name="themed_icons_where_title">Válassza ki, hol szeretné alkalmazni a témázott ikonokat</string>
+    <string name="themed_icons_workspace">A munkaterületen</string>
+    <string name="themed_icons_drawer">Az alkalmazásfiókban</string>
+    <string name="themed_icons_folder">A mappákban</string>
+    <string name="themed_icons_search">A keresési eredményekben</string>
+    <string name="themed_icons_taskbar">A tálcán</string>
     <string name="hide_scroller">Rejtett görgetősáv</string>
     <string name="hide_scroller_summary">Görgetősáv elrejtése az alkalmazásfiókban</string>
     <!-- NavBar Strings -->
@@ -1029,7 +1044,6 @@
     <string name="notification_channel_update">Frissítések</string>
     <string name="notification_channel_update_desc">Ez a csatorna értesítéseket jelenít meg a legújabb frissítésekről.</string>
     <string name="new_update_title">Frissítés érhető el</string>
-    <string name="new_update_desc">Az \'Oxygen-módosítások\' új verziója érhető el</string>
     <string name="usage_title">Használat</string>
     <string name="usage_summary">Wiki-oldal megnyitása</string>
     <string name="credits_title">Közreműködők</string>
@@ -1155,6 +1169,7 @@
     <string name="theme_customization_navbar_summary">Egyéni navigációssáv-stílus állítható be</string>
     <string name="theme_customization_toast_frame_title">Buborékkeret</string>
     <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Megvariált gyári</string>
@@ -1267,6 +1282,8 @@
     <string name="lockscreen_now_bar_music_extended_player_mode_compact">Kompakt</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock">Az óra megjelenítése</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">A kibővített lejátszó felső részén az óra is látszik</string>
+    <string name="lockscreen_now_bar_music_extended_player_clock_options">Az Óra beállításai</string>
+    <string name="lockscreen_now_bar_music_clock_date_position">A Dátum pozíciója</string>
     <string name="lockscreen_now_bar_battery">Akkumulátor a \'Most sáv\'-on</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Egyedi töltésikon</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Egyedi színek</string>
@@ -1275,6 +1292,10 @@
     <string name="lockscreen_now_bar_notifications_category">Értesítés a \'Most sáv\'-on</string>
     <string name="lockscreen_now_bar_notifications_allow_private">Privát értesítések engedélyezése</string>
     <string name="lockscreen_now_bar_notifications_allow_private_summary">Kikapcsolja a rendszerbeállításokat, és mindig megjeleníti az értesítések tartalmát</string>
+    <string name="lockscreen_now_bar_notification_1line_color_title">Az első sor színe</string>
+    <string name="lockscreen_now_bar_notification_2line_color_title">A második sor színe</string>
+    <string name="lockscreen_now_bar_app_icon_title">Alkalmazásikonok</string>
+    <string name="lockscreen_now_bar_app_icon_summary">Alkalmazásikonok az értesítési ikonok helyett</string>
     <string name="lockscreen_now_bar_footer">A \'Most sáv\' egy kis sáv, amely a két záróképernyő-gomb között helyezkedik el.\nMegjelenítheti a médialejátszót, az akkuállapotot és opcionálisan más infókat.\nHa nem szeretné látni a gyári médialejátszót, egyszerűen rejtse el a beállításokban.\nMegjegyzés: ha elrejti mindkét gombot, a \'Most sáv\' elfoglalja a teljes helyet.</string>
     <!-- Now Bar Notifications string -->
     <string name="lockscreen_now_bar_no_notifications">Nincs új értesítés</string>
@@ -1329,4 +1350,7 @@
     <string name="sleep_on_flat_screen_tile_title">Készülék alvó állapot, ha a készüléket lerakja</string>
     <string name="flat_screen_timeout_title">Képernyő-időtúllépés sík felületen</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Ébresztések elfogadása</string>
+    <!-- Allow music players in AOD -->
+    <string name="aod_music_allow_title">Lejátszó a \'Mindig látható\'-ban</string>
+    <string name="aod_music_allow_summary">Az ANT-zenelejátszó megjelenhet a \'Mindig látható\' funkcióban.\nMegjegyzés: nem minden zenelejátszó támogatott.</string>
 </resources>

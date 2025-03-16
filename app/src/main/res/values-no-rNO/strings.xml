@@ -82,6 +82,7 @@
     <!-- UI Strings -->
     <!-- UI styles -->
     <!-- Icon pack -->
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <!-- Notification -->
     <!-- Notification Corner Radius -->
@@ -100,4 +101,5 @@
     <!-- OTA Card -->
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

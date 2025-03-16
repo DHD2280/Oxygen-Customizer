@@ -1053,6 +1053,7 @@
     <string name="theme_customization_navbar_summary">設定自定義導航列圖示</string>
     <string name="theme_customization_toast_frame_title">Toast樣式</string>
     <string name="theme_customization_toast_frame_summary">更改Toast消息樣式</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">庫存客製</string>
@@ -1154,4 +1155,5 @@
     <!-- OTA Card -->
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>

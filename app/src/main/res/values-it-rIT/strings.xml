@@ -298,8 +298,12 @@
     <string name="inside_percentage_desc">Muovi la percentuale dentro l\'icona della batteria</string>
     <string name="battery_icon_color">Colori dell\'icona batteria</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_text_category">Testo batteria</string>
     <string name="battery_edit_percentage_size_title">Personalizza la dimensione della percentuale</string>
     <string name="battery_percentage_size">Dimensione percentuale</string>
+    <string name="battery_text_attach_to_batterybar">Collega alla barra della batteria</string>
+    <string name="battery_text_attach_to_batterybar_summary">Allega il colore del testo ai colori della barra batteria</string>
+    <string name="battery_text_enable_bb_first">Abilita prima la barra della batteria</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">Predefinito</string>
     <string name="battery_landscape_r_default">Orizzontale a destra</string>
@@ -555,7 +559,7 @@
     <string name="qs_header_clock_custom_color_time_mode_default">Predefinito</string>
     <string name="qs_header_clock_custom_color_time_mode_accent">Colore Accento</string>
     <string name="qs_header_clock_custom_color_time_mode_custom">Colore Personalizzato</string>
-    <string name="qs_header_clock_custom_color_time_color">Colore personalizzato Orologio</string>
+    <string name="qs_header_clock_custom_color_time_color">Colore personalizzato Orario</string>
     <!-- Separator Color, Only for first clock -->
     <string name="qs_header_clock_custom_color_separator_mode">Modalità colore separatore</string>
     <string name="qs_header_clock_custom_color_separator_mode_accent">Colore Accento</string>
@@ -612,9 +616,20 @@
     <string name="launcher_recents">Recenti</string>
     <string name="launcher_app_details_title">Apri dettagli app</string>
     <string name="launcher_app_details_summary">Tocca l\'icona dell\'app per aprire i dettagli in Impostazioni.</string>
+    <string name="launcher_disable_recents_previous_page_title">Disabilita l\'attività precedente</string>
+    <string name="launcher_disable_recents_previous_page_summary">Disattiva il passaggio automatico all\'attività precedente nelle attività recenti.</string>
     <string name="remove_home_pagination">Rimuovi impaginazione Home</string>
+    <string name="launcher_themed_icons">Icone a tema</string>
     <string name="force_themed_launcher_icons">Forza icone delle app a tema</string>
     <string name="force_themed_launcher_icons_summary">FUNZIONE BETA: forza le icone a tema per tutte le app.\nRiattiva le icone a tema nel launcher per applicarle.</string>
+    <string name="alternative_themed_icons_title">Icone a tema alternative</string>
+    <string name="alternative_themed_icons_summary">Utilizzare un metodo alternativo per applicare temi alle icone.\nNota: questo metodo non sovrascrive le icone Oneplus, ma potrebbe essere più lento.</string>
+    <string name="themed_icons_where_title">Seleziona dove applicare le icone a tema</string>
+    <string name="themed_icons_workspace">Spazio di lavoro</string>
+    <string name="themed_icons_drawer">Drawer</string>
+    <string name="themed_icons_folder">Cartella</string>
+    <string name="themed_icons_search">Risultato ricerca</string>
+    <string name="themed_icons_taskbar">Barra delle applicazioni</string>
     <string name="hide_scroller">Nascondi scroller</string>
     <string name="hide_scroller_summary">Nascondi scroller nel drawer delle app</string>
     <!-- NavBar Strings -->
@@ -1155,6 +1170,7 @@
     <string name="theme_customization_navbar_summary">Imposta lo stile personalizzato della barra di navigazione</string>
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Stock Personalizzato</string>
@@ -1262,18 +1278,25 @@
     <string name="lockscreen_now_bar_music_extended_player_background">Modalità sfondo lettore esteso</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur">Sfocatura grigia</string>
     <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Copertina album sfocata</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode">Modalità lettore esteso</string>
     <string name="lockscreen_now_bar_music_extended_player_mode_large">Grande</string>
     <string name="lockscreen_now_bar_music_extended_player_mode_compact">Compatto</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock">Mostra orologio</string>
     <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Mostra orologio nella parte superiore del lettore esteso</string>
+    <string name="lockscreen_now_bar_music_extended_player_clock_options">Preferenze orologio</string>
+    <string name="lockscreen_now_bar_music_clock_date_position">Posizione data</string>
     <string name="lockscreen_now_bar_battery">Batteria Now Bar</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Icona ricarica personalizzata</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Colori Personalizzati</string>
-    <string name="lockscreen_now_bar_battery_custom_colors_summary">Personalizza colori Now Bar</string>
+    <string name="lockscreen_now_bar_battery_custom_colors_summary">Personalizza colori batteria Now Bar</string>
     <string name="lockscreen_now_bar_weather_category">Meteo Now Bar</string>
     <string name="lockscreen_now_bar_notifications_category">Now Bar di notifica</string>
     <string name="lockscreen_now_bar_notifications_allow_private">Consenti notifiche private</string>
     <string name="lockscreen_now_bar_notifications_allow_private_summary">Ignora le impostazioni di sistema e mostra sempre il contenuto delle notifiche</string>
+    <string name="lockscreen_now_bar_notification_1line_color_title">Colore della prima linea</string>
+    <string name="lockscreen_now_bar_notification_2line_color_title">Colore della seconda linea</string>
+    <string name="lockscreen_now_bar_app_icon_title">Utilizza le icone delle app</string>
+    <string name="lockscreen_now_bar_app_icon_summary">Utilizza le icone delle app anziché le icone delle notifiche</string>
     <string name="lockscreen_now_bar_footer">La Now Bar è una piccola barra posizionata tra i due pulsanti affordance nella schermata di blocco.\nPuò mostrare il lettore multimediale, lo stato della batteria e, facoltativamente, altre informazioni.\nSe non vuoi vedere il lettore multimediale di serie, nascondilo nelle impostazioni di serie.\nNota: se nascondi entrambi i pulsanti affordance, la Now Bar occuperà l\'intero spazio.</string>
     <!-- Now Bar Notifications string -->
     <string name="lockscreen_now_bar_no_notifications">Nessuna nuova notifica</string>
@@ -1328,4 +1351,7 @@
     <string name="sleep_on_flat_screen_tile_title">Spegni lo schermo</string>
     <string name="flat_screen_timeout_title">Timeout spegni schermo</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Rispetta i wakelock</string>
+    <!-- Allow music players in AOD -->
+    <string name="aod_music_allow_title">Consenti lettore AOD</string>
+    <string name="aod_music_allow_summary">Consenti al lettore musicale Ant di essere visualizzato in AOD.\nNota: non tutti i lettori musicali potrebbero essere supportati.</string>
 </resources>

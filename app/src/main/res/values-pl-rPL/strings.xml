@@ -517,6 +517,7 @@
     <string name="theme_customization_navbar_title">Styl paska nawigacyjnego</string>
     <string name="theme_customization_navbar_summary">Zmień styl paska nawigacji</string>
     <string name="theme_customization_toast_frame_summary">Zmień styl powiadomienia pokazującego się na dole ekranu</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_pui">PUI</string>
@@ -591,4 +592,5 @@
     <string name="sleep_on_flat_screen_tile_title">Uspanie ekranu na płaskiej powierzchni</string>
     <string name="flat_screen_timeout_title">Czas wygaszania ekranu podczas ułożenia telefonu na płaskiej powierzchni</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Respektuj blokadę wybudzania</string>
+    <!-- Allow music players in AOD -->
 </resources>

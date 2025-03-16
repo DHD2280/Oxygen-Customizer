@@ -1082,6 +1082,7 @@
     <string name="theme_customization_navbar_summary">Смена стиля панели навигации</string>
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
     <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
+    <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
     <string name="settings_icons_customized">Stock индивидуальный</string>
     <string name="settings_bg_color">Цвет фона</string>
@@ -1208,4 +1209,5 @@
     <string name="refresh_rate_error">Частота обновления пуста!</string>
     <string name="memc_footer">Если ваше устройство не оснащено чипом Pixelwork или не поддерживает Memc, не трогайте эти настройки.</string>
     <!-- Screen Off On Flat -->
+    <!-- Allow music players in AOD -->
 </resources>
