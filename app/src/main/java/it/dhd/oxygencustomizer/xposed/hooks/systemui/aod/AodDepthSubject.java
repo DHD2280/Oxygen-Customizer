@@ -20,10 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Random;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -46,7 +48,7 @@ public class AodDepthSubject extends XposedMods {
     private boolean mSubjectCacheValid = false;
     private boolean mReceiverRegistered = false;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
-    private int direction = 0; // 0: right, 1: up, 2: left, 3: down
+    private float mOrignalX, mOriginalY;
     private static final int MOVE_DISTANCE = 2;
     private static final long DELAY_MILLIS = 60000; // 1 minute
 
@@ -62,7 +64,7 @@ public class AodDepthSubject extends XposedMods {
         @Override
         public void run() {
             if (!mDepthWallpaper || !mLayersCreated) return;
-            moveFrameLayout();
+            moveViewSlightly();
             mHandler.postDelayed(this, DELAY_MILLIS);
         }
     };
@@ -73,28 +75,24 @@ public class AodDepthSubject extends XposedMods {
 
     public void stopMoving() {
         mHandler.removeCallbacks(mBurnInProtection);
+        resetPosition();
     }
 
-    private void moveFrameLayout() {
-        int x = (int) mLockScreenSubject.getX();
-        int y = (int) mLockScreenSubject.getY();
+    private void moveViewSlightly() {
+        Random random = new Random();
+        float offsetX = (random.nextInt(5) + 6) * (random.nextBoolean() ? 1 : -1);
+        float offsetY = (random.nextInt(5) + 6) * (random.nextBoolean() ? 1 : -1);
 
-        switch (direction) {
-            case 0:
-                mLockScreenSubject.setX(x + MOVE_DISTANCE);
-                break;
-            case 1:
-                mLockScreenSubject.setY(y - MOVE_DISTANCE);
-                break;
-            case 2:
-                mLockScreenSubject.setX(x - MOVE_DISTANCE);
-                break;
-            case 3:
-                mLockScreenSubject.setY(y + MOVE_DISTANCE);
-                break;
-        }
+        TranslateAnimation animation = new TranslateAnimation(mLockScreenSubject.getX(), offsetX, mLockScreenSubject.getY(), offsetY);
+        animation.setDuration(1000); // 1 second duration for the movement
+        animation.setFillAfter(true); // Keep the final position after the animation finishes
 
-        direction = (direction + 1) % 4;
+        mLockScreenSubject.startAnimation(animation);
+    }
+
+    private void resetPosition() {
+        mLockScreenSubject.setX(mOrignalX);
+        mLockScreenSubject.setY(mOriginalY);
     }
 
     public AodDepthSubject(Context context) {
@@ -199,6 +197,8 @@ public class AodDepthSubject extends XposedMods {
             v.removeView(mLockScreenSubject);
         } catch (Throwable ignored) {}
         mAodRootLayout.addView(mLockScreenSubject, 0);
+        mOrignalX = mLockScreenSubject.getX();
+        mOriginalY = mLockScreenSubject.getY();
     }
 
     private void createLayers() {
