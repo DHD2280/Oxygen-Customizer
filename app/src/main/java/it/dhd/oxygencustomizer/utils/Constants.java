@@ -30,11 +30,13 @@ public final class Constants {
     }
 
     public static class Preferences {
+
         public static class General {
             public static final List<String> PREF_UPDATE_EXCLUSIONS = Arrays.asList(BootLoopProtector.LOAD_TIME_KEY_KEY, BootLoopProtector.PACKAGE_STRIKE_KEY_KEY);
             public static final String PREF_MORE_LOGGING = "moreLogging";
             public static final String APP_LANGUAGE = "appLanguage";
         }
+
         public static class BatteryPrefs {
             public static final String CUSTOMIZE_BATTERY_ICON = "battery_icon_customize";
             public static final String CUSTOM_BATTERY_LAYOUT_REVERSE = "battery_rotate_layout";
@@ -140,6 +142,7 @@ public final class Constants {
             public static final int BATTERY_STYLE_LANDSCAPE_KIM = 38;
 
         }
+
         public static class QsHeaderImage {
             public static final String QS_HEADER_IMAGE_ENABLED =
                     "qs_header_image_enabled";
@@ -184,12 +187,14 @@ public final class Constants {
                     QS_HEADER_IMAGE_ZOOM_TO_FIT
             };
         }
+
         public static class QuickSettings {
             public static final String QS_TRANSPARENCY_SWITCH = "qs_transparency_switch";
             public static final String QS_TRANSPARENCY_VAL = "qs_transparency_value";
             public static final String QSPANEL_BLUR_SWITCH = "qs_transparency_blur_switch";
             public static final String BLUR_RADIUS_VALUE = "qs_transparency_blur_radius";
         }
+
         public static class QsTiles {
             public static final String QS_CUSTOMIZE_TILES = "quick_settings_tiles_customize";
             public static final String QS_QUICK_TILES = "quick_settings_quick_tiles";
@@ -205,6 +210,7 @@ public final class Constants {
                     QS_COLUMNS_LANDSCAPE
             };
         }
+
         public static class QsTilesCustomization {
             public static final String QS_TILE_ACTIVE_COLOR_ENABLED = "qs_tile_active_color_enabled";
             public static final String QS_TILE_ACTIVE_COLOR = "qs_tile_active_color";
@@ -275,31 +281,24 @@ public final class Constants {
             };
 
         }
+
         public static class QsWidgetsPrefs {
             public static final String QS_WIDGETS_SWITCH = "qs_widgets_switch";
             public static final String QS_WIDGETS_LIST = "qs_widgets_widgets";
             public static final String QS_PHOTO_RADIUS = "qs_widgets_photo_radius";
         }
-        public static class QsHeaderSystemIcons {
 
-            public static final String QS_SYSTEM_ICON_CHIP_SWITCH = "qs_header_system_icons_chip_switch";
-            public static final String QS_SYSTEM_ICON_CHIP = "qs_header_system_icons_chip";
+        public static class GesturesPrefs {
 
-            public static final String[] QS_HEADER_SYSTEM_ICON_CHIP = {
-                    QS_SYSTEM_ICON_CHIP_SWITCH,
-                    getStyle(QS_SYSTEM_ICON_CHIP),
-                    getUseGradient(QS_SYSTEM_ICON_CHIP),
-                    getGradientNum(QS_SYSTEM_ICON_CHIP, 1),
-                    getGradientNum(QS_SYSTEM_ICON_CHIP, 2),
-                    getGradientOrientation(QS_SYSTEM_ICON_CHIP),
-                    getStrokeWidth(QS_SYSTEM_ICON_CHIP),
-                    getRoundedCorners(QS_SYSTEM_ICON_CHIP),
-                    getTopSxR(QS_SYSTEM_ICON_CHIP),
-                    getTopDxR(QS_SYSTEM_ICON_CHIP),
-                    getBottomSxR(QS_SYSTEM_ICON_CHIP),
-                    getBottomDxR(QS_SYSTEM_ICON_CHIP)
-            };
+            public static final String GESTURE_OVERRIDE_HOLDBACK = "gesture_override_holdback";
+            public static final String GESTURE_OVERRIDE_HOLDBACK_MODE = "gesture_override_holdback_mode";
+            public static final String GESTURE_OVERRIDE_HOLDBACK_LEFT = "gesture_override_holdback_left";
+            public static final String GESTURE_OVERRIDE_HOLDBACK_RIGHT = "gesture_override_holdback_right";
+            public static final String GESTURE_HOLD_BACK_LEFT_APP = "gesture_override_holdback_left_app";
+            public static final String GESTURE_HOLD_BACK_RIGHT_APP = "gesture_override_holdback_right_app";
+
         }
+
         public static class QsHeaderClock {
             // Custom Switch
             public static final String QS_HEADER_CLOCK_CUSTOM_ENABLED = "qs_header_clock_custom_enabled";
@@ -397,12 +396,14 @@ public final class Constants {
                     getBottomDxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP)
             };
         }
+
         public static class Buttons {
             public static final String BUTTONS_POWER_LONGPRESS_TORCH = "torch_long_press_power_gesture";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT_SWITCH = "torch_long_press_power_gesture_enable_timeout";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT = "torch_long_press_power_timeout";
             public static final String BUTTONS_VOLUME_MUSIC = "volbtn_music_controls";
         }
+
         public static class Lockscreen {
             public static final String DISABLE_POWER = "disable_power_on_lockscreen";
             public static final String LOCKSCREEN_REMOVE_SOS = "hide_sos_lockscreen";
@@ -418,6 +419,7 @@ public final class Constants {
             public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
         }
+
         public static class LockscreenClock {
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";
@@ -463,6 +465,7 @@ public final class Constants {
                     LOCKSCREEN_CLOCK_DATE_FORMAT
             };
         }
+
         public static class LockscreenWidgets {
             // UI
             public static final String MAIN_WIDGET_1_KEY = "main_custom_widgets1";

@@ -216,6 +216,7 @@
         <item>@string/gesture_override_back_hold_command_notification_panel</item> <!-- 6 -->
         <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 7 -->
         <item>@string/gesture_override_back_hold_command_circle_to_search</item> <!-- 10 -->
+        <item>@string/qs_widget_custom_app</item>
     </string-array>
     <string-array name="gesture_holdback_commands_values">
         <item>0</item>
@@ -229,6 +230,7 @@
         <item>6</item>
         <item>7</item>
         <item>10</item>
+        <item>11</item>
     </string-array>
 
     <string-array name="custom_action_titles">
@@ -243,6 +245,7 @@
         <item>@string/gesture_override_back_hold_command_screen_off</item> <!-- 6 -->
 <!--        <item>@string/gesture_override_back_hold_command_switch_app</item> &lt;!&ndash; 7 &ndash;&gt;-->
         <item>@string/gesture_override_back_hold_command_circle_to_search</item> <!-- 10 -->
+<!--        <item>@string/qs_widget_custom_app</item>-->
     </string-array>
 
     <string-array name="custom_action_codes">
@@ -257,6 +260,7 @@
         <item>6</item>
 <!--        <item>7</item>-->
         <item>10</item>
+<!--        <item>11</item>-->
     </string-array>
 
     <!-- Statusbar Clock -->

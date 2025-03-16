@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.utils;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.AppUtils.doesClassExist;
+import static it.dhd.oxygencustomizer.utils.AppUtils.getAppName;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CENTERED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_COLOR;
@@ -90,6 +91,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_OPACITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_SUBJECT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
@@ -224,6 +231,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -521,12 +529,20 @@ public class PreferenceHelper {
             case "gesture_right_height_double" -> {
                 return instance.mPreferences.getBoolean("gesture_right", false);
             }
-            case "gesture_override_holdback_left", "gesture_override_holdback_mode" -> {
-                return instance.mPreferences.getBoolean("gesture_override_holdback", false);
+            case GESTURE_OVERRIDE_HOLDBACK_LEFT, GESTURE_OVERRIDE_HOLDBACK_MODE -> {
+                return instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
             }
-            case "gesture_override_holdback_right" -> {
-                String mode = instance.mPreferences.getString("gesture_override_holdback_mode", "0");
-                return mode.equals("1") && instance.mPreferences.getBoolean("gesture_override_holdback", false);
+            case GESTURE_OVERRIDE_HOLDBACK_RIGHT -> {
+                String mode = instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_MODE, "0");
+                return mode.equals("1") && instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
+            }
+            case GESTURE_HOLD_BACK_LEFT_APP -> {
+                return instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_LEFT, "0").equals("11");
+            }
+
+            case GESTURE_HOLD_BACK_RIGHT_APP -> {
+                String action = instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_RIGHT, "0");
+                return action.equals("11") && isVisible(GESTURE_OVERRIDE_HOLDBACK_RIGHT);
             }
 
             case "leftSwipeUpPercentage" -> {
@@ -1190,6 +1206,11 @@ public class PreferenceHelper {
 
             case "swipeUpPercentage"  ->
                 instance.mPreferences.getSliderInt("swipeUpPercentage", 5) + "%";
+            case GESTURE_HOLD_BACK_LEFT_APP,
+                 GESTURE_HOLD_BACK_RIGHT_APP ->
+                    TextUtils.isEmpty(instance.mPreferences.getString(key, "")) ?
+                            fragmentCompat.getString(R.string.select_app) :
+                    getAppName(fragmentCompat, instance.mPreferences.getString(key, ""));
 
             // Launcher Prefs
             case "folder_columns" ->

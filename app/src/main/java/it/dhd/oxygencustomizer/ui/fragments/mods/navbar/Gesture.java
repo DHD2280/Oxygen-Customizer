@@ -1,5 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.navbar;
 
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
+
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -9,10 +12,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
+import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.adapters.AppAdapter;
+import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -23,6 +32,7 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
     FrameLayout leftBackGestureIndicator, rightBackGestureIndicator;
     private ListWithPopUpPreference mOverrideBackLeft, mOverrideBackRight;
     int navigationBarHeight = 0;
+    private PackageListAdapter mPackageListAdapter;
 
     @Override
     public String getTitle() {
@@ -54,6 +64,22 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
+        new Thread(() -> mPackageListAdapter = new PackageListAdapter(requireActivity())).start();
+
+        OplusJumpPreference mLeftApp, mRightApp;
+        mLeftApp = findPreference(GESTURE_HOLD_BACK_LEFT_APP);
+        mRightApp = findPreference(GESTURE_HOLD_BACK_RIGHT_APP);
+        Preference.OnPreferenceClickListener listener = preference -> {
+            pickApp(preference.getKey());
+            return true;
+        };
+        if (mLeftApp != null) {
+            mLeftApp.setOnPreferenceClickListener(listener);
+        }
+        if (mRightApp != null) {
+            mRightApp.setOnPreferenceClickListener(listener);
+        }
+
         int[] backDrawables = new int[]{
                 R.drawable.ic_switch_app, // Switch App
                 R.drawable.ic_kill, // Kill App
@@ -64,20 +90,32 @@ public class Gesture extends ControlledPreferenceFragmentCompat {
                 R.drawable.ic_one_hand, // Toggle One Handed
                 R.drawable.ic_notifications, // Notification Panel
                 R.drawable.ic_screen_off, // Screen Off
-                R.drawable.ic_circle_search
+                R.drawable.ic_circle_search,
+                R.drawable.ic_custom_app
         };
 
         mOverrideBackLeft = findPreference("gesture_override_holdback_left");
         if (mOverrideBackLeft != null)
-            mOverrideBackLeft.setDrawables(backDrawables);
+            mOverrideBackLeft.setDrawables(backDrawables, true);
 
         mOverrideBackRight = findPreference("gesture_override_holdback_right");
         if (mOverrideBackRight != null)
-            mOverrideBackRight.setDrawables(backDrawables);
+            mOverrideBackRight.setDrawables(backDrawables, true);
 
 
         rightBackGestureIndicator = prepareBackGestureView(Gravity.RIGHT);
         leftBackGestureIndicator = prepareBackGestureView(Gravity.LEFT);
+    }
+
+    private void pickApp(String preferenceKey) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
+        builder.setAdapter(mPackageListAdapter, (dialog, which) -> {
+            PackageListAdapter.PackageItem info = mPackageListAdapter.getItem(which);
+            mPreferences.putString(preferenceKey, info.packageName);
+        });
+        builder.setCancelable(false);
+        builder.setTitle(R.string.qs_widget_custom_app);
+        builder.show();
     }
 
     @SuppressLint("RtlHardcoded")

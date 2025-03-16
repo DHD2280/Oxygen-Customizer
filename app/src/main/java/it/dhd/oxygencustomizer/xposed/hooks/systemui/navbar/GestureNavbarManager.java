@@ -18,7 +18,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -52,6 +55,7 @@ import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -75,6 +79,8 @@ public class GestureNavbarManager extends XposedMods {
     private int overrideMode = 0;
     private int overrideLeft = 0;
     private int overrideRight = 0;
+    private String leftCustomApp, rightCustomApp;
+    private ActivityLauncherUtils mActivityLauncherUtils;
     //endregion
     private int mDirection;
     private Object mNavigationBarInflaterView = null;
@@ -111,6 +117,8 @@ public class GestureNavbarManager extends XposedMods {
         overrideMode = Integer.parseInt(Xprefs.getString("gesture_override_holdback_mode", "0"));
         overrideLeft = Integer.parseInt(Xprefs.getString("gesture_override_holdback_left", "0"));
         overrideRight = Integer.parseInt(Xprefs.getString("gesture_override_holdback_right", "0"));
+        leftCustomApp = Xprefs.getString(GESTURE_HOLD_BACK_LEFT_APP, "");
+        rightCustomApp = Xprefs.getString(GESTURE_HOLD_BACK_RIGHT_APP, "");
         //endregion
 
         //region pill size
@@ -161,6 +169,7 @@ public class GestureNavbarManager extends XposedMods {
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
                     mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
+                    mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
                 }
             });
 
@@ -226,14 +235,14 @@ public class GestureNavbarManager extends XposedMods {
                     Drawable icon;
                     if (overrideMode == 0) {
                         if (overrideLeft == 0) return;
-                        icon = getActionIcon(overrideLeft);
+                        icon = getActionIcon(overrideLeft, leftCustomApp);
                     } else {
                         if (mPosition == 0) {
                             if (overrideLeft == 0) return;
-                            icon = getActionIcon(overrideLeft);
+                            icon = getActionIcon(overrideLeft, leftCustomApp);
                         } else {
                             if (overrideRight == 0) return;
-                            icon = getActionIcon(overrideRight);
+                            icon = getActionIcon(overrideRight, rightCustomApp);
                         }
                     }
                     param.args[0] = DrawableConverter.drawableToBitmap(icon);
@@ -248,14 +257,14 @@ public class GestureNavbarManager extends XposedMods {
                 if (overrideBack) {
                     if (overrideMode == 0) {
                         if (overrideLeft == 0) return;
-                        runAction(overrideLeft);
+                        runAction(overrideLeft, leftCustomApp);
                     } else {
                         if (side == 0) {
                             if (overrideLeft == 0) return;
-                            runAction(overrideLeft);
+                            runAction(overrideLeft, leftCustomApp);
                         } else {
                             if (overrideRight == 0) return;
-                            runAction(overrideRight);
+                            runAction(overrideRight, rightCustomApp);
                         }
                     }
                     param.setResult(null);
@@ -332,7 +341,10 @@ public class GestureNavbarManager extends XposedMods {
 
     }
 
-    private Drawable getActionIcon(int action) {
+    private Drawable getActionIcon(int action, String app) {
+        if (action == 11) {
+            return getAppIcon(app);
+        }
         int resId = switch (action) {
             case 0 -> R.drawable.ic_switch_app;
             case 1 -> R.drawable.ic_clear_all;
@@ -352,7 +364,18 @@ public class GestureNavbarManager extends XposedMods {
                 mContext.getTheme());
     }
 
-    private void runAction(int action) {
+    private Drawable getAppIcon(String pkg) {
+        try {
+            Drawable appIcon = SystemUtils.PackageManager().getApplicationIcon(pkg);
+            return DrawableConverter.scaleDrawable(mContext,
+                    appIcon,
+                    0.2f);
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private void runAction(int action, String app) {
         switch (action) {
             case 2 -> killForegroundApp();
             case 3 -> takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
@@ -364,6 +387,7 @@ public class GestureNavbarManager extends XposedMods {
             case 7 ->
                     callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
             case 10 -> runCircleToSearch();
+            case 11 -> mActivityLauncherUtils.launchApp(app);
         }
     }
 

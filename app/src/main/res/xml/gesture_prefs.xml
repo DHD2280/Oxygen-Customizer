@@ -70,6 +70,10 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/qs_widget_custom_app"
+            android:key="gesture_override_holdback_left_app" />
+
         <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
             android:defaultValue="0"
             android:key="gesture_override_holdback_right"
@@ -78,6 +82,10 @@
             app:entryValues="@array/gesture_holdback_commands_values"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/qs_widget_custom_app"
+            android:key="gesture_override_holdback_right_app" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
