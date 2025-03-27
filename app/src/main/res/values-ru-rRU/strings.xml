@@ -1055,7 +1055,7 @@
     <!-- Weather -->
     <string name="weather_condition_clouds">Пасмурно</string>
     <string name="weather_condition_rain">Дождливый</string>
-    <string name="weather_condition_clear">Солнечный</string>
+    <string name="weather_condition_clear">Солнечно</string>
     <string name="weather_condition_storm">Штормовой</string>
     <string name="weather_condition_snow">Снег</string>
     <string name="weather_condition_wind">Ветер</string>
