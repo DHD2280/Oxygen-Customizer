@@ -18,8 +18,6 @@ package it.dhd.oxygencustomizer.weather;
  *
  */
 
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -87,7 +85,7 @@ public class OmniJawsClient {
             "forecast_hour_condition_code"
     };
 
-    public static final String[] SETTINGS_PROJECTION = new String[] {
+    public static final String[] SETTINGS_PROJECTION = new String[]{
             "enabled",
             "units",
             "provider",
@@ -118,7 +116,7 @@ public class OmniJawsClient {
         public String iconPack;
 
         public String toString() {
-            return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" +conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + hourlyForecasts + ": " + dayForecasts + ": " + iconPack;
+            return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" + conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + hourlyForecasts + ": " + dayForecasts + ": " + iconPack;
         }
 
         public String getLastUpdateTime() {
@@ -136,7 +134,7 @@ public class OmniJawsClient {
 
         @NonNull
         public String toString() {
-            return "[" + low + ":" + high + ":" +conditionCode + ":" + condition + ":" + date + "]";
+            return "[" + low + ":" + high + ":" + conditionCode + ":" + condition + ":" + date + "]";
         }
     }
 
@@ -148,14 +146,16 @@ public class OmniJawsClient {
 
         @NonNull
         public String toString() {
-            return "[" + temperature + ":" +conditionCode + ":" + condition + ":" + time + "]";
+            return "[" + temperature + ":" + conditionCode + ":" + condition + ":" + time + "]";
         }
     }
 
     public interface OmniJawsObserver {
         void weatherUpdated();
+
         void weatherError(int errorReason);
-        default void updateSettings() {};
+
+        default void updateSettings() {}
     }
 
     private class WeatherUpdateReceiver extends BroadcastReceiver {
@@ -293,7 +293,8 @@ public class OmniJawsClient {
         mPackageName = ICON_PACKAGE_DEFAULT;
         mIconPrefix = ICON_PREFIX_DEFAULT;
         mSettingIconPackage = mPackageName + "." + mIconPrefix;
-        if (DEBUG) Log.d(TAG, "Load default icon pack " + mSettingIconPackage + " " + mPackageName + " " + mIconPrefix);
+        if (DEBUG)
+            Log.d(TAG, "Load default icon pack " + mSettingIconPackage + " " + mPackageName + " " + mIconPrefix);
         try {
             PackageManager packageManager = mContext.getPackageManager();
             mRes = packageManager.getResourcesForApplication(mPackageName);
@@ -312,18 +313,11 @@ public class OmniJawsClient {
         try {
             PackageManager packageManager = mContext.getPackageManager();
             Resources res = packageManager.getResourcesForApplication(packageName);
-            if (res != null) {
-                int resId = res.getIdentifier(iconPrefix + "_na", "drawable", packageName);
-                Drawable d = ResourcesCompat.getDrawable(mRes, resId, mContext.getTheme());
-                if (d != null) {
-                    return d;
-                }
-            } else {
-                int resId = modRes.getIdentifier(iconPrefix + "_na", "drawable", packageName);
-                Drawable d = ResourcesCompat.getDrawable(modRes, resId, mContext.getTheme());
-                if (d != null) {
-                    return d;
-                }
+            int resId = res.getIdentifier(iconPrefix + "_na", "drawable", packageName);
+            Drawable d = ResourcesCompat.getDrawable(mRes, resId, mContext.getTheme());
+            if (d != null) {
+                d.mutate();
+                return d;
             }
         } catch (Exception ignored) {
         }
@@ -355,15 +349,18 @@ public class OmniJawsClient {
             int resId = mRes.getIdentifier(mIconPrefix + "_" + conditionCode, "drawable", mPackageName);
             Drawable d = ResourcesCompat.getDrawable(mRes, resId, mContext.getTheme());
             if (d != null) {
+                d.getConstantState().newDrawable().mutate();
+                d.setTintList(null);
                 return d;
             }
             Log.w(TAG, "Failed to get condition image for " + conditionCode + " use default");
             resId = mRes.getIdentifier(mIconPrefix + "_na", "drawable", mPackageName);
             d = ResourcesCompat.getDrawable(mRes, resId, mContext.getTheme());
             if (d != null) {
+                d.mutate();
                 return d;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "getWeatherConditionImage", e);
         }
         Log.w(TAG, "Failed to get condition image for " + conditionCode);
@@ -379,7 +376,7 @@ public class OmniJawsClient {
     }
 
     private String getWindUnit() {
-        return mMetric ? "km/h":"mph";
+        return mMetric ? "km/h" : "mph";
     }
 
     private void updateSettings() {
