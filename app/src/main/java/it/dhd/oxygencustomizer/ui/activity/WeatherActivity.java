@@ -159,6 +159,11 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
     }
 
     @Override
+    public void updateSettings() {
+        queryAndUpdateWeather();
+    }
+
+    @Override
     public void weatherError(int errorReason) {
         if (DEBUG) Log.d(TAG, "weatherError " + errorReason);
     }

@@ -313,6 +313,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         queryAndUpdateWeather();
     }
 
+    @Override
+    public void updateSettings() {
+        queryAndUpdateWeather();
+    }
+
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
         try {

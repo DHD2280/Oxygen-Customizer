@@ -166,6 +166,11 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
     }
 
     @Override
+    public void updateSettings() {
+        queryAndUpdateWeather();
+    }
+
+    @Override
     public void weatherError(int errorReason) {
         if (errorReason == OmniJawsClient.EXTRA_ERROR_DISABLED) {
             mWeatherInfo = null;

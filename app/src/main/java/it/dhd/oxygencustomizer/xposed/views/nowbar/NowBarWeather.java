@@ -150,6 +150,11 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
     }
 
     @Override
+    public void updateSettings() {
+        queryAndUpdateWeather();
+    }
+
+    @Override
     public void weatherError(int errorReason) {
         setErrorView(errorReason);
     }
