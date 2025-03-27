@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static android.app.Activity.RESULT_OK;
-import static it.dhd.oxygencustomizer.utils.Constants.AOD_WEATHER_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.NOW_BAR_CLOCK_FONT_FILE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_CUSTOM_FONT_SWITH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_POSITION;
@@ -35,6 +33,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.NowBarMusicClockPreviewBinding;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
+import it.dhd.oxygencustomizer.ui.interfaces.PreferenceListener;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
@@ -43,7 +42,7 @@ public class NowBarClockPreview extends BaseFragment {
 
     NowBarMusicClockPreviewBinding binding;
 
-    private NowBarClockPrefs.NowBarClockPrefsListener mListener;
+    private PreferenceListener mListener;
     private int mDatePosition = 0;
     private String mDateFormat = "";
     private boolean mCustomFont = false;
@@ -106,11 +105,7 @@ public class NowBarClockPreview extends BaseFragment {
 
     public static class NowBarClockPrefs extends ControlledPreferenceFragmentCompat {
 
-        private NowBarClockPrefsListener listener;
-
-        public interface NowBarClockPrefsListener {
-            void onClockPrefsChanged();
-        }
+        private PreferenceListener listener;
 
         ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -123,7 +118,7 @@ public class NowBarClockPreview extends BaseFragment {
                             mPreferences.edit().putBoolean(NOW_BAR_CLOCK_CUSTOM_FONT, false).apply();
                             mPreferences.edit().putBoolean(NOW_BAR_CLOCK_CUSTOM_FONT, true).apply();
                             Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
-                            listener.onClockPrefsChanged();
+                            listener.onPreferenceChanged();
                         } else {
                             Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
                         }
@@ -150,7 +145,7 @@ public class NowBarClockPreview extends BaseFragment {
             }
         }
 
-        public NowBarClockPrefs(NowBarClockPrefsListener listener) {
+        public NowBarClockPrefs(PreferenceListener listener) {
             this.listener = listener;
         }
 
@@ -183,7 +178,7 @@ public class NowBarClockPreview extends BaseFragment {
         public void updateScreen(String key) {
             super.updateScreen(key);
 
-            if (key != null) listener.onClockPrefsChanged();
+            if (key != null) listener.onPreferenceChanged();
 
         }
 
