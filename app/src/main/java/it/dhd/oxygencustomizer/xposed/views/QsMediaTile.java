@@ -34,9 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.palette.graphics.Palette;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
@@ -93,7 +94,7 @@ public class QsMediaTile extends LinearLayout {
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
 
-    private boolean mDefaultTip = true;
+    private boolean mBound = false;
 
     public QsMediaTile(Context context) {
         super(context);
@@ -133,8 +134,10 @@ public class QsMediaTile extends LinearLayout {
             if (mediaData == null) {
                 setDefaultTip();
                 hideMediaQsBackground();
+                mBound = false;
                 return;
             }
+            mBound = true;
             setAppIcon(mediaData);
             setDeviceIcon(mediaData);
             setTitleAndText(mediaData);
@@ -310,7 +313,7 @@ public class QsMediaTile extends LinearLayout {
     }
 
     private void setDefaultTip() {
-        mDefaultTip = true;
+        mBound = false;
         post(() -> {
             // App Icon
             mAppIcon.setVisibility(GONE);
@@ -386,7 +389,7 @@ public class QsMediaTile extends LinearLayout {
     }
 
     private void updateBackground() {
-        if (!showMediaArtMediaQs) {
+        if (!showMediaArtMediaQs || !mBound) {
             hideMediaQsBackground();
             return;
         }
@@ -403,9 +406,13 @@ public class QsMediaTile extends LinearLayout {
         } else if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
                 radius = gradientDrawable.getCornerRadius();
         }
-        Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
-        Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
-        Palette.Builder builder = new Palette.Builder(artRounded);
+        RoundedBitmapDrawable artRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), mArt);
+        artRounded.setCornerRadius(radius);
+        artRounded.setAntiAlias(true);
+        RoundedBitmapDrawable oldArtRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), oldArt);
+        oldArtRounded.setCornerRadius(radius);
+        oldArtRounded.setAntiAlias(true);
+        Palette.Builder builder = new Palette.Builder(mArt);
         builder.generate(palette -> {
             int dominantColor = palette.getDominantColor(Color.WHITE);
             mColorOnAlbum =
@@ -416,7 +423,7 @@ public class QsMediaTile extends LinearLayout {
         });
 
         post(() -> {
-            Drawable[] layers = new Drawable[]{new BitmapDrawable(mContext.getResources(), oldArtRounded), new BitmapDrawable(mContext.getResources(), artRounded)};
+            Drawable[] layers = new Drawable[]{oldArtRounded, artRounded};
             TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
             setBackground(transitionDrawable);
             transitionDrawable.startTransition(250);
