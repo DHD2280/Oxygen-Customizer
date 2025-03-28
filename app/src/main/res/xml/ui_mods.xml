@@ -98,13 +98,13 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-<!--    <it.dhd.oneplusui.preference.OplusPreferenceCategory-->
-<!--        android:key="dark_shadow">-->
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="dark_shadow">
 
-<!--        <it.dhd.oneplusui.preference.OplusJumpPreference-->
-<!--            android:title="@string/dark_shadow_title"-->
-<!--            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.DarkShadowThemeFragment" />-->
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/dark_shadow_title"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.DarkShadowThemeFragment" />
 
-<!--    </it.dhd.oneplusui.preference.OplusPreferenceCategory>-->
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

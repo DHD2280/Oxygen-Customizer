@@ -11,15 +11,37 @@ import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
 
 public final class DarkShadowUtils {
 
-    public static final DarkShadowItem ACCENT =
-            new DarkShadowItem("ACCENT1", "Accent 1", "",
+    public static final DarkShadowItem ACCENT1 =
+            new DarkShadowItem("ACCENT1", "Main Accent Dark", "",
                     new ArrayList<>() {{
                         add("accent_material_dark");
                     }},
                     new ArrayList<>() {{
                         add("android");
                     }},
-                    Color.BLACK
+                    Color.RED
+            );
+
+    public static final DarkShadowItem ACCENT2 =
+            new DarkShadowItem("ACCENT2", "Main Accent Light", "",
+                    new ArrayList<>() {{
+                        add("accent_material_light");
+                    }},
+                    new ArrayList<>() {{
+                        add("android");
+                    }},
+                    Color.GREEN
+            );
+
+    public static final DarkShadowItem ACCENT3 =
+            new DarkShadowItem("ACCENT3", "Ripple Material Accent", "",
+                    new ArrayList<>() {{
+                        add("ripple_material_dark");
+                    }},
+                    new ArrayList<>() {{
+                        add("android");
+                    }},
+                    Color.CYAN
             );
 
     public static final DarkShadowItem BACKGROUND =
@@ -42,7 +64,7 @@ public final class DarkShadowUtils {
                     new ArrayList<>() {{
                         add("android");
                     }},
-                    Color.RED
+                    Color.DKGRAY
             );
 
     public static int getColor(DarkShadowItem darkShadowItem) {
