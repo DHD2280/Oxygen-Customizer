@@ -36,7 +36,7 @@ public final class DarkShadowUtils {
     public static final DarkShadowItem ACCENT3 =
             new DarkShadowItem("ACCENT3", "Ripple Material Accent", "",
                     new ArrayList<>() {{
-                        add("ripple_material_dark");
+                       addAll(List.of("ripple_material_dark", "ripple_material_light"));
                     }},
                     new ArrayList<>() {{
                         add("android");
