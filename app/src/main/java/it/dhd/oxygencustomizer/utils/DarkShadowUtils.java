@@ -48,7 +48,7 @@ public final class DarkShadowUtils {
             new DarkShadowItem("BACKGROUND", "Background", "",
                     new ArrayList<>() {{
                         addAll(List.of("background_dark", "background_device_default_dark", "legacy_primary",
-                                "legacy_primary_dark",
+                                "legacy_primary_dark", "black",
                                 "primary_dark_material_dark", "primary_material_dark"));
                     }},
                     Map.of(
