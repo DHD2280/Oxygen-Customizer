@@ -83,7 +83,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
             }
         });
         binding.appFunctionSwitch.setSwitchChecked(
-                OverlayUtil.isOverlayDisabled("OxygenCustomizerComponent" + overlays[0] + Build.VERSION.SDK_INT + ".overlay")
+                OverlayUtil.isOverlayEnabled("OxygenCustomizerComponent" + overlays[0] + Build.VERSION.SDK_INT + ".overlay")
         );
 
         // RecyclerView
