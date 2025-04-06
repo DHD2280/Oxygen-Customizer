@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
     <!-- Weather Updater -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -29,18 +30,21 @@
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+    <!-- Calendar Widget -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
         android:name=".OxygenCustomizer"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OxygenCustomizer" >
+        android:theme="@style/Theme.OxygenCustomizer">
 
         <meta-data
             android:name="xposedmodule"
@@ -62,8 +66,8 @@
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
             android:enabled="true"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/Theme.OxygenCustomizer.SplashScreen">
@@ -100,20 +104,20 @@
         </activity>
         <activity
             android:name=".ui.activity.AuthActivity"
-            android:exported="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.Material3.Translucent"/>
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Translucent" />
 
         <activity
             android:name=".ui.activity.LocationBrowseActivity"
             android:exported="true"
-            android:theme="@style/Theme.OxygenCustomizer"/>
+            android:theme="@style/Theme.OxygenCustomizer" />
 
         <activity
             android:name=".ui.activity.WeatherActivity"
-            android:exported="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.OxygenCustomizer"/>
+            android:exported="true"
+            android:theme="@style/Theme.OxygenCustomizer" />
 
         <provider
             android:name=".provider.RemotePrefProvider"
@@ -167,6 +171,12 @@
             android:name=".weather.WeatherContentProvider"
             android:authorities="it.dhd.oxygencustomizer.weatherprovider"
             android:exported="true" />
+
+        <provider
+            android:name=".xposed.utils.CalendarProvider"
+            android:authorities="it.dhd.oxygencustomizer.calendarprovider"
+            android:exported="true"
+            android:grantUriPermissions="true"/>
 
         <receiver
             android:name=".receivers.SystemReceiver"
@@ -231,7 +241,7 @@
         <activity
             android:name=".weatherclient"
             android:exported="false"
-            android:label="Weather Client" >
+            android:label="Weather Client">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -239,38 +249,38 @@
         </activity>
 
         <activity
-            android:label="Stickers"
             android:name=".stickers"
-            android:exported="false">
+            android:exported="false"
+            android:label="Stickers">
             <intent-filter>
-                <action android:name="org.omnirom.WeatherIconPack"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:label="Marshmallow"
             android:name=".marshmallow"
-            android:exported="false">
+            android:exported="false"
+            android:label="Marshmallow">
             <intent-filter>
-                <action android:name="org.omnirom.WeatherIconPack"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:label="Color Hand"
             android:name=".icons8_color_hand"
-            android:exported="false">
+            android:exported="false"
+            android:label="Color Hand">
             <intent-filter>
-                <action android:name="org.omnirom.WeatherIconPack"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.omnirom.WeatherIconPack" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".weather_faded"
-            android:label="Faded"
-            android:exported="false">
+            android:exported="false"
+            android:label="Faded">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -279,8 +289,8 @@
 
         <activity
             android:name=".weather_weezle"
-            android:label="Weezle"
-            android:exported="false">
+            android:exported="false"
+            android:label="Weezle">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -289,8 +299,8 @@
 
         <activity
             android:name=".weather_gs6"
-            android:label="Galaxy S6"
-            android:exported="false">
+            android:exported="false"
+            android:label="Galaxy S6">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -299,8 +309,8 @@
 
         <activity
             android:name=".weather_miui"
-            android:label="MIUI"
-            android:exported="false">
+            android:exported="false"
+            android:label="MIUI">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -309,8 +319,8 @@
 
         <activity
             android:name=".weather_sthul"
-            android:label="Sthul"
-            android:exported="false">
+            android:exported="false"
+            android:label="Sthul">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -319,8 +329,8 @@
 
         <activity
             android:name=".weather_tapas"
-            android:label="Tapas"
-            android:exported="false">
+            android:exported="false"
+            android:label="Tapas">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -329,8 +339,8 @@
 
         <activity
             android:name=".weather_magical"
-            android:label="Magical"
-            android:exported="false">
+            android:exported="false"
+            android:label="Magical">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -339,8 +349,8 @@
 
         <activity
             android:name=".weather_vclouds"
-            android:label="VClouds"
-            android:exported="false">
+            android:exported="false"
+            android:label="VClouds">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -349,8 +359,8 @@
 
         <activity
             android:name=".nothing"
-            android:label="Nothing"
-            android:exported="false">
+            android:exported="false"
+            android:label="Nothing">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />

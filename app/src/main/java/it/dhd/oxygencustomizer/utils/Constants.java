@@ -488,6 +488,7 @@ public final class Constants {
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR = "lockscreen_device_widget_circular_progress_color";
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR = "lockscreen_device_widget_text_color";
             public static final String LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE = "lockscreen_device_widget_device_name";
+            public static final String LOCKSCREEN_WIDGETS_CUSTOM_DEVICE = "lockscreen_device_widgets_list";
 
             // Custom Widgets Colors
             public static final String LOCKSCREEN_WIDGETS_CUSTOM_COLOR = "lockscreen_widgets_custom_color";

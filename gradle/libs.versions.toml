@@ -44,6 +44,7 @@ image-cropper = "4.6.0"
 commons-text = "1.12.0"
 oneplus-ui = "1.3.11"
 lsposed-hiddenapi = "4.3"
+gson = "2.11.0"
 
 [libraries]
 
@@ -94,6 +95,9 @@ apache-commons-text = { module = "org.apache.commons:commons-text", version.ref 
 
 # Lsposed Hidden Api
 lsposed-hiddenapi = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "lsposed-hiddenapi" }
+
+# Gson
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

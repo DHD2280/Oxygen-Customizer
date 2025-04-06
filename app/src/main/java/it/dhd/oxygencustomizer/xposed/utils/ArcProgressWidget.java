@@ -19,15 +19,34 @@ import androidx.annotation.Nullable;
 public class ArcProgressWidget {
 
     public static Bitmap generateBitmap(Context context, int percentage, String textInside, int textInsideSizePx, @Nullable String textBottom, int textBottomSizePx, @Nullable String tf) {
-        return generateBitmap(context, percentage, textInside, textInsideSizePx, null, 28, textBottom, textBottomSizePx, tf, Color.WHITE, Color.WHITE);
+        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, null, 28, textBottom, textBottomSizePx, tf, Color.WHITE, Color.WHITE);
+    }
+
+    /**
+     * Generate a bitmap with a circular progress bar.
+     * @param context The context to use for resources.
+     * @param percentage The percentage of the progress (0-100).
+     * @param maxPercentage The maximum percentage (default is 100).
+     * @param textInside The text to display inside the circle.
+     * @param textInsideSizePx The text size in pixels.
+     * @param iconDrawable The drawable icon to display inside the circle (optional).
+     * @param iconSizePx The icon size in pixels.
+     * @param tf The typeface to use for the text (optional).
+     * @param progressColor The color of the progress arc.
+     * @param textColor The color of the text.
+     * @return A bitmap with the circular progress bar.
+     */
+    public static Bitmap generateBitmap(Context context, int percentage, int maxPercentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
+        return generateBitmap(context, percentage, maxPercentage, textInside, textInsideSizePx, iconDrawable, iconSizePx, "Usage", 28, tf, progressColor, textColor);
     }
 
     public static Bitmap generateBitmap(Context context, int percentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
-        return generateBitmap(context, percentage, textInside, textInsideSizePx, iconDrawable, iconSizePx, "Usage", 28, tf, progressColor, textColor);
+        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, iconDrawable, iconSizePx, "Usage", 28, tf, progressColor, textColor);
     }
 
     public static Bitmap generateBitmap(Context context,
                                         int percentage,
+                                        int maxPercentage,
                                         String textInside,
                                         int textInsideSizePx,
                                         @Nullable Drawable iconDrawable,
@@ -58,7 +77,7 @@ public class ArcProgressWidget {
         paint.setColor(Color.argb(75, 255, 255, 255));
         canvas.drawArc(arc, minAngle, maxAngle, false, paint);
         paint.setColor(progressColor);
-        canvas.drawArc(arc, minAngle, ((float) maxAngle / 100) * percentage, false, paint);
+        canvas.drawArc(arc, minAngle, ((float) maxAngle / maxPercentage) * percentage, false, paint);
         if (tf != null) {
             mTextPaint.setTypeface(Typeface.create(tf, Typeface.BOLD));
         } else {

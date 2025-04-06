@@ -76,16 +76,16 @@
             android:layout_marginHorizontal="24dp"
             android:adjustViewBounds="true"
             android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
-            android:tag="volume_progress" />
+            android:tag="volume_progress"
+            tools:background="@drawable/arc_progress" />
 
         <LinearLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
-            android:tag="ram_usage_info" />
+            android:tag="ram_usage_info"
+            tools:background="@drawable/arc_progress" />
 
     </LinearLayout>
 
@@ -103,41 +103,60 @@
             android:layout_marginEnd="12dp"
             android:adjustViewBounds="true"
             android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
             android:orientation="horizontal"
-            android:tag="battery_progress_arc" />
+            android:tag="battery_progress_arc"
+            tools:background="@drawable/arc_progress" />
 
         <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.9"
+            android:orientation="horizontal"
             android:tag="memory_progress"
+            tools:background="@drawable/arc_progress" />
+
+        <LinearLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:adjustViewBounds="true"
             android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
-            android:orientation="horizontal" />
-
-        <LinearLayout
+            android:orientation="horizontal"
             android:tag="temperature_progress"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:adjustViewBounds="true"
-            android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
-            android:orientation="horizontal" />
+            tools:background="@drawable/arc_progress" />
 
         <LinearLayout
-            android:tag="volume_progress_2"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="12dp"
             android:adjustViewBounds="true"
             android:alpha="0.9"
-            tools:background="@drawable/arc_progress"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:tag="volume_progress_2"
+            tools:background="@drawable/arc_progress" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:tag="device_widget_custom"
+        android:visibility="visible">
+
+        <TextView
+            android:tag="add_widget_text"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:drawableStart="@drawable/ic_add"
+            android:gravity="center"
+            android:text="Tap to add widgets" />
 
     </LinearLayout>
 

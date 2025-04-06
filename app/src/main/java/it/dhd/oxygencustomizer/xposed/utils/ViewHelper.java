@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
@@ -16,6 +19,7 @@ import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.text.TextPaint;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,22 +34,18 @@ import android.widget.TextView;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieComposition;
-import com.airbnb.lottie.LottieCompositionFactory;
 import com.airbnb.lottie.LottieDrawable;
-import com.airbnb.lottie.LottieTask;
 import com.airbnb.lottie.RenderMode;
-
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Scanner;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.xposed.ResourceManager;
+import it.dhd.oxygencustomizer.R;
 
 public class ViewHelper {
 
@@ -435,6 +435,56 @@ public class ViewHelper {
         }
 
         return new LayerDrawable(new Drawable[]{gradient});
+    }
+
+    public static Bitmap getHumidityProgress(
+            Context context,
+            Context appContext,
+            int percentage,
+            @Nullable String text,
+            int textSizePx,
+            @Nullable String tf,
+            @ColorInt int progressColor,
+            @ColorInt int textColor
+    ) {
+
+        Drawable baseDrawable = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.ic_humidity_percentage, context.getTheme()).mutate();
+        Drawable backgroundDrawable = baseDrawable.getConstantState().newDrawable().mutate();
+        backgroundDrawable.setTint(0xFFB0B0B0);
+        Drawable foregroundDrawable = baseDrawable.getConstantState().newDrawable().mutate();
+        foregroundDrawable.setTint(progressColor);
+        ClipDrawable clipDrawable = new ClipDrawable(foregroundDrawable, android.view.Gravity.BOTTOM, ClipDrawable.VERTICAL);
+        Drawable[] layers = new Drawable[]{backgroundDrawable, clipDrawable};
+        LayerDrawable layerDrawable = new LayerDrawable(layers);
+        int level = (percentage * 100);
+        clipDrawable.setLevel(level);
+
+        int width = 400;
+        int height = 400;
+        int padding = dp2px(10, context);
+        TextPaint mTextPaint = new TextPaint();
+        mTextPaint.setTextSize(dp2px(context, textSizePx));
+        mTextPaint.setColor(textColor);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        if (tf != null) {
+            mTextPaint.setTypeface(Typeface.create(tf, Typeface.BOLD));
+        } else {
+            mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        }
+        int size = (int) (bitmap.getWidth() * 0.6);
+        int left = (bitmap.getWidth() - size) / 2;
+        int right = left + size;
+        int bottom = padding + size;
+        layerDrawable.setBounds(left, padding, right, bottom);
+        layerDrawable.draw(canvas);
+
+        mTextPaint.setTextSize(dp2px(context, textSizePx));
+        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+        float textY = padding + size + (Math.abs(fontMetrics.ascent) / 2);
+        canvas.drawText(text, (float) bitmap.getWidth() / 2, textY, mTextPaint);
+        return bitmap;
     }
 
 }
