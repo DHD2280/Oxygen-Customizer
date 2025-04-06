@@ -17,6 +17,8 @@ import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -77,6 +79,8 @@ public class NowBarNotification extends RelativeLayout {
     // Containers
     private LinearLayout mLastContainer, mListContainer;
 
+    private ColorMatrixColorFilter mColorMatrixColorFilter;
+
     // Notification Layout
     private TextView mTitle;
     private TextView mMessage;
@@ -113,6 +117,10 @@ public class NowBarNotification extends RelativeLayout {
         }
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
         mNotificationDrawable = ResourcesCompat.getDrawable(modRes, R.drawable.notifications_24px, appContext.getTheme());
+
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(0.0f);
+        mColorMatrixColorFilter = new ColorMatrixColorFilter(colorMatrix);
 
         inflateViews();
         mNotificationListener = getNotificationListenerExternal();
@@ -169,7 +177,7 @@ public class NowBarNotification extends RelativeLayout {
         mTitle.setTextColor(mCustomColors ? mTextColor1 : Color.WHITE);
         mMessage.setTextColor(mCustomColors ? mTextColor2 : Color.WHITE);
         mNumText.setTextColor(mCustomColors ? mTextColor2 : Color.WHITE);
-        mIcon.setColorFilter(mCustomColors ? mIconTintColor : Color.WHITE);
+        mIcon.setColorFilter(mColorMatrixColorFilter);
     }
 
     private void launchNotificationIntent() {
@@ -353,6 +361,7 @@ public class NowBarNotification extends RelativeLayout {
         mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
         StatusBarNotification usefulNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
         boolean isAlertOnce = usefulNotification == null ? false : (usefulNotification.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == Notification.FLAG_FOREGROUND_SERVICE;
+        XposedBridge.log("NowBarNotification.updateNotifications " + usefulNotification + "\n isAlertOnce:" + isAlertOnce);
         if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime() && !isAlertOnce) {
             mLastNotificationTime = usefulNotification.getPostTime();
             currentDisplayedNotification = usefulNotification;
@@ -398,6 +407,7 @@ public class NowBarNotification extends RelativeLayout {
     }
 
     private void toggleNotificationDetails(StatusBarNotification sbn) {
+        if (sbn == null) return;
         Pair<String, String> notificationContent = NotificationUtils.resolveNotificationContent(sbn);
         if (TextUtils.isEmpty(notificationContent.first) && TextUtils.isEmpty(notificationContent.second)) {
             mNumText.setText(String.valueOf(lastFilteredNotifications.size()));
@@ -451,6 +461,7 @@ public class NowBarNotification extends RelativeLayout {
             if (previousSelectedPosition != RecyclerView.NO_POSITION) {
                 notifyItemChanged(previousSelectedPosition);
             }
+            mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
         }
 
         @NonNull
