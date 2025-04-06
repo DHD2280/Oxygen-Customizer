@@ -287,7 +287,7 @@ public class QsTileCustomization extends XposedMods {
 
         // Qs Labels
         ReflectedClass OplusQSTileView = ReflectedClass.of(
-                "com.oplus.systemui.plugins.qs.tile.OplusQSTileView" /* OOS15 */,
+                "com.oplus.systemui.qs.tileimpl.OplusQSTileViewImpl" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileView" /* OOS13 */);
         if (OplusQSTileView == null) {
