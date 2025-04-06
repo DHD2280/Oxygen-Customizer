@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets;
 
 
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
@@ -109,6 +109,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.WidgetFactory;
 
 @SuppressLint("ViewConstructor")
 public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
@@ -326,7 +327,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
         mainWidgetsContainer.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams containerParams = new LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LayoutParams.MATCH_PARENT,
                 0,
                 1f);
         containerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -1631,14 +1632,16 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
      * @param circularColor         color for circular progressbar
      * @param textColor             color for text
      * @param devName               device name, keep blank for default Build.MODEL
+     * @param customWidgets         custom widgets string from preference, it must be a json
      */
-    public void setDeviceWidgetOptions(int deviceWidgetStyle, boolean customColor, int linearColor, int circularColor, int textColor, String devName) {
+    public void setDeviceWidgetOptions(int deviceWidgetStyle, boolean customColor, int linearColor, int circularColor, int textColor, String devName, String customWidgets) {
         if (instance.mDeviceWidgetView == null) return;
         instance.mDeviceWidgetView.setDeviceWidgetStyle(deviceWidgetStyle);
         instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);
         instance.mDeviceWidgetView.setDeviceWidgetScaling(instance.mWidgetsScale);
+        instance.mDeviceWidgetView.setWidgets(WidgetFactory.fromJson(customWidgets, mContext, false));
     }
 
     public void setCustomColors(
