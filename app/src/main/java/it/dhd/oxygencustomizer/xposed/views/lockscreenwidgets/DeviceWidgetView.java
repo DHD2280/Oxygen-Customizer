@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
@@ -88,6 +90,7 @@ public class DeviceWidgetView extends FrameLayout {
 
     public DeviceWidgetView(Context context, boolean settignsInterface) {
         super(context);
+        setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         mSettingsInterface = settignsInterface;
         mContext = context;
         try {
@@ -125,6 +128,7 @@ public class DeviceWidgetView extends FrameLayout {
                         ),
                 null
         );
+        view.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         addView(view);
         setupViews();
     }
@@ -444,12 +448,12 @@ public class DeviceWidgetView extends FrameLayout {
         int childCount = mCustomRow.getChildCount();
         for (int i = 0; i < childCount; i++) {
             BaseDeviceWidget widget = (BaseDeviceWidget) mCustomRow.getChildAt(i);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    widget.getMode() == WidgetMode.SMALL ? dp2px(mContext, 60) : 0,
-                    widget.getMode() == WidgetMode.SMALL ? dp2px(mContext, 60) : WRAP_CONTENT
-            );
-            if (widget.getMode() == WidgetMode.BIG) {
-                params.weight = 1f;
+            LinearLayout.LayoutParams params;
+            if (widget.getMode() == WidgetMode.SMALL) {
+                int size = dp2px(mContext, 60);
+                params = new LinearLayout.LayoutParams(size, size);
+            } else {
+                params = new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f);
             }
 
             if (i == 0) {
