@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.util.Log;
@@ -69,6 +68,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
         public void onReceive(Context context, Intent intent) {
             batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             batteryLevel = Math.max(0, Math.min(batteryLevel, 100));
+            updateBatteries(BluetoothManager().getAdapter().isEnabled());
         }
     };
 
@@ -252,7 +252,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
         } catch (Exception e) {
             Log.e("BluetoothBattery", "Battery level not available for " + device.getName(), e);
         }
-        return -1; // Indica che il livello di batteria non è disponibile
+        return -1;
     }
 
     public BluetoothWidget(Context context, boolean settingsInterface) {
@@ -281,8 +281,6 @@ public class BluetoothWidget extends BaseDeviceWidget {
 
     private void animateImageChange() {
         if (mProgresses.isEmpty()) return;
-
-        // Calcola il prossimo drawable in ordine circolare
         currentIndex = (currentIndex + 1) % mProgresses.size();
         Bitmap newProgress = mProgresses.get(currentIndex);
 
@@ -298,10 +296,8 @@ public class BluetoothWidget extends BaseDeviceWidget {
         hideAnim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationEnd(@NonNull Animator animation) {
-                // Cambia l'immagine
                 mBatteryProgress.setImageBitmap(newProgress);
 
-                // Animazione di entrata (fade-in + traslazione dal basso)
                 ObjectAnimator moveDown = ObjectAnimator.ofFloat(mBatteryProgress, "translationY", translationHeight, 0);
                 ObjectAnimator fadeIn = ObjectAnimator.ofFloat(mBatteryProgress, "alpha", 0f, 1f);
                 moveDown.setDuration(300);
@@ -408,7 +404,6 @@ public class BluetoothWidget extends BaseDeviceWidget {
 
     @Override
     public void applySettings(Map<String, Object> settings) {
-
     }
 
     @Override
