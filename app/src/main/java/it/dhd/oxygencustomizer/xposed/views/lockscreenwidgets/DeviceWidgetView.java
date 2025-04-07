@@ -373,6 +373,7 @@ public class DeviceWidgetView extends FrameLayout {
         }
         Arrays.fill(slots, false);
         for (BaseDeviceWidget widget : widgets) {
+            widget.setCustomColors(mProgressColor, mTextColor);
             if (mSettingsInterface) {
                 widget.setWidgetClickListener(new BaseDeviceWidget.OnWidgetClick() {
                     @Override
