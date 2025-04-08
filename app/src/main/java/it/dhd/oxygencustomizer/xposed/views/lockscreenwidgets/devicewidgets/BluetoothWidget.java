@@ -66,6 +66,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (mSettingsInterface) return;
             batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             batteryLevel = Math.max(0, Math.min(batteryLevel, 100));
             updateBatteries(BluetoothManager().getAdapter().isEnabled());
