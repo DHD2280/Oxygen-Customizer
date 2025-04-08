@@ -213,6 +213,9 @@ dependencies {
     // Hidden API
     implementation(libs.lsposed.hiddenapi)
 
+    //Gson
+    implementation(libs.gson)
+
 }
 
 tasks.register("printVersionName") {

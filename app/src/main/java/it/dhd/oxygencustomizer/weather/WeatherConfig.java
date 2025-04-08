@@ -39,11 +39,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Objects;
+
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
+import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 import it.dhd.oxygencustomizer.weather.providers.YandexProvider;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
 
 public class WeatherConfig {
     public static final String PREF_KEY_LOCATION_LAT = "location_lat";
@@ -152,8 +162,22 @@ public class WeatherConfig {
         boolean weatherWidget = bigWidgets.contains("weather") || miniWidgets.contains("weather");
         boolean qsWeather = qsWidgets.contains("weather");
         boolean weatherInBar = nowBar && weathrNowBar;
+        boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget();
 
-        return lsWeather || aodWeather || weatherWidget || qsWeather ||weatherInBar;
+        return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget;
+    }
+
+    private static boolean checkWeatherDeviceWidget() {
+        String savedWidgets = OCPreferences.getString("", "[]");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<WidgetConfig>>() {}.getType();
+        List<WidgetConfig> configList = gson.fromJson(savedWidgets, listType);
+        for (WidgetConfig conf : configList) {
+            if (Objects.equals(conf.getWidgetType(), WeatherWidget.class.getSimpleName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void setEnabled(Context context, boolean value, String key) {

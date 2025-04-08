@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets;
 
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -25,20 +25,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.BatteryManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.ThemeUtils;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
@@ -46,6 +52,7 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 public class ProgressImageView extends ImageView {
 
     private final Context mContext;
+    private Context appContext;
     private ProgressType progressType;
     private int progressPercent = -1;
     private int batteryLevel = -1;
@@ -54,7 +61,7 @@ public class ProgressImageView extends ImageView {
     private ScheduledFuture<?> updateTask;
     private boolean receiverRegistered = false;
     private String typeface = null;
-    private int mProgressColor, mTextColor;
+    private int mProgressColor = Color.RED, mTextColor = Color.WHITE;
 
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
@@ -88,7 +95,11 @@ public class ProgressImageView extends ImageView {
     public ProgressImageView(Context context) {
         super(context);
         mContext = context;
+        try {
+            appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
+        } catch (Throwable ignored) {}
         progressType = ProgressType.UNKNOWN;
+        mProgressColor = getPrimaryColor(mContext);
     }
 
     public void setProgressType(ProgressType progressType) {
@@ -178,7 +189,8 @@ public class ProgressImageView extends ImageView {
                 progressText = progressPercent + "%";
             }
         }
-        Drawable icon = ResourcesCompat.getDrawable(modRes, progressType.iconRes, mContext.getTheme());
+        Drawable icon =
+                ResourcesCompat.getDrawable(appContext.getResources(), progressType.iconRes, appContext.getTheme());
         Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
                 mContext,
                 progressPercent == -1 ? 0 : progressPercent,
@@ -203,7 +215,13 @@ public class ProgressImageView extends ImageView {
     }
 
     private int getVolumeLevel() {
-        AudioManager audioManager = SystemUtils.AudioManager();
+        AudioManager audioManager;
+        Log.w("ProgressImageView", "mContext packageName: " + mContext.getPackageName());
+        if (Objects.equals(mContext.getPackageName(), BuildConfig.APPLICATION_ID)) {
+            audioManager = mContext.getSystemService(AudioManager.class);
+        } else {
+            audioManager = SystemUtils.AudioManager();
+        }
         int maxVolume = audioManager != null ? audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) : 1;
         int currentVolume = audioManager != null ? audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) : 0;
         return Math.max(0, Math.min((currentVolume * 100) / maxVolume, 100));

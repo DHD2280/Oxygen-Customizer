@@ -22,48 +22,11 @@
             android:title="@string/lockscreen_display_widgets_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oneplusui.preference.OplusMenuPreference
-            android:defaultValue="0"
+        <it.dhd.oneplusui.preference.OplusJumpPreference
             android:dependency="lockscreen_device_widget"
-            android:entries="@array/lockscreen_device_widget_entries"
-            android:entryValues="@array/lockscreen_device_widget_values"
-            android:key="lockscreen_device_widget_style"
-            android:title="@string/lockscreen_device_widget_style_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="lockscreen_device_widget_custom_color"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/custom_color"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="0xFFFFFFFF"
-            android:key="lockscreen_device_widget_linear_progress_color"
-            android:title="@string/linear_progress_color"
-            app:cpv_showAlphaSlider="true"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="0xFFFFFFFF"
-            android:key="lockscreen_device_widget_circular_progress_color"
-            android:title="@string/circular_progress_color"
-            app:cpv_showAlphaSlider="true"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="0xFFFFFFFF"
-            android:key="lockscreen_device_widget_text_color"
-            android:title="@string/text_color"
-            app:cpv_showAlphaSlider="true"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusEditTextPreference
-            android:key="lockscreen_device_widget_device_name"
-            android:summary="@string/custom_device_name_summary"
-            android:title="@string/custom_device_name"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.widgets.DeviceWidgetFragment"
+            android:key="device_widget_settings"
+            android:title="@string/lockscreen_device_widget_settings"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>

@@ -76,7 +76,7 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
-import it.dhd.oxygencustomizer.xposed.views.ProgressImageView;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.ProgressImageView;
 
 public class AodClock extends XposedMods {
 

@@ -9,7 +9,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConver
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextClock;
 
 import androidx.annotation.NonNull;
+
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.LockscreenWidgetsView;
 
 public class LockscreenView extends FrameLayout {
 

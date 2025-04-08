@@ -12,9 +12,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -33,7 +31,7 @@ import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.weather.WeatherConfig;
 
-public class LockscreenWidgets extends ControlledPreferenceFragmentCompat{
+public class LockscreenWidgetsPrefs extends ControlledPreferenceFragmentCompat{
 
     private OmniJawsClient mWeatherClient;
     private PackageListAdapter mPackageAdapter;

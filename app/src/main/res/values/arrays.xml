@@ -761,10 +761,12 @@
     <string-array name="lockscreen_device_widget_entries">
         <item>@string/lockscreen_device_widget_style_classic</item>
         <item>@string/lockscreen_device_widget_style_arcs</item>
+        <item>@string/pulse_color_custom</item>
     </string-array>
     <string-array name="lockscreen_device_widget_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <!-- Lockscreen widget style  -->
@@ -918,6 +920,31 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+    </string-array>
+
+    <!-- Peek Notifications -->
+    <!-- Peek display style  -->
+    <string-array name="peek_display_style_entries">
+        <item>@string/default_value</item>
+        <item>@string/peek_display_minimalist</item>
+        <item>@string/peek_display_custom_style</item>
+    </string-array>
+
+    <string-array name="peek_display_style_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Peek display location  -->
+    <string-array name="peek_display_location_entries">
+        <item>@string/top</item>
+        <item>@string/bottom</item>
+    </string-array>
+
+    <string-array name="peek_display_location_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
 </resources>

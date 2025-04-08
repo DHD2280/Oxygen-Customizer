@@ -16,6 +16,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_BIG_ICON_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_BIG_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_CUSTOM_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
@@ -33,7 +34,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -41,7 +41,6 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -51,13 +50,13 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
-import it.dhd.oxygencustomizer.xposed.views.LockscreenWidgetsView;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.LockscreenWidgetsView;
 
 public class LockscreenWidgets extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     public static final String OC_WIDGETS_TAG = "oxygencustomizer_lockscreen_widgets";
-    private final String TAG = "LockscreenWidgets-->";
+    private final String TAG = "LockscreenWidgetsPrefs-->";
 
     private ViewGroup mStatusViewContainer = null;
 
@@ -84,6 +83,7 @@ public class LockscreenWidgets extends XposedMods {
     private String mDeviceName = "";
     private String mMainWidgets;
     private String mExtraWidgets;
+    private String mCustomWidgets = "[]";
     private float mWidgetsScale = 1f;
     private int mWidgetsStyle = 0;
     private int mTopMargin = 0;
@@ -130,6 +130,7 @@ public class LockscreenWidgets extends XposedMods {
         mSmallIconInactiveColor = Xprefs.getInt(LOCKSCREEN_WIDGETS_SMALL_ICON_INACTIVE, Color.WHITE);
         mWidgetsScale = Xprefs.getSliderFloat(LOCKSCREEN_WIDGETS_SCALE, 1.0f);
         mWidgetsStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_WIDGETS_STYLE, "0"));
+        mCustomWidgets = Xprefs.getString(LOCKSCREEN_WIDGETS_CUSTOM_DEVICE, "[]");
         mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_WIDGETS_TOP_MARGIN, 0);
 
         if (Key[0].equals(LOCKSCREEN_WIDGETS_ENABLED) ||
@@ -143,7 +144,8 @@ public class LockscreenWidgets extends XposedMods {
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR) ||
                 Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE) ||
-                Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE)) {
+                Key[0].equals(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE) ||
+                Key[0].equals(LOCKSCREEN_WIDGETS_CUSTOM_DEVICE)) {
             updateLsDeviceWidget();
         }
         if (Key[0].equals(LOCKSCREEN_WIDGETS_CUSTOM_COLOR) ||
@@ -281,7 +283,7 @@ public class LockscreenWidgets extends XposedMods {
     private void updateLsDeviceWidget() {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
         if (lsWidgets == null) return;
-        lsWidgets.setDeviceWidgetOptions(mDeviceWidgetStyle, mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName);
+        lsWidgets.setDeviceWidgetOptions(mDeviceWidgetStyle, mDeviceCustomColor, mDeviceLinearColor, mDeviceCircularColor, mDeviceTextColor, mDeviceName, mCustomWidgets);
     }
 
     private void updateLockscreenWidgetsColors() {
