@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="drawable" name="screen_background_dark">@*android:color/background_dark</item>
+    <item type="drawable" name="screen_background_light">#ffffffff</item>
+    <item type="drawable" name="screen_background_dark_transparent">#80000000</item>
+    <item type="drawable" name="screen_background_light_transparent">#80ffffff</item>
+    <item type="drawable" name="input_method_fullscreen_background">#fff9f9f9</item>
+    <item type="drawable" name="notification_template_divider">#00000000</item>
+    <item type="drawable" name="notification_template_divider_media">#00000000</item>
+    <item type="drawable" name="notification_template_icon_bg">@*android:color/group_button_dialog_focused_holo_light</item>
+    <item type="drawable" name="notification_template_icon_low_bg">#0cffffff</item>
+    <item type="drawable" name="safe_mode_background">#60000000</item>
+    <item type="drawable" name="screen_background_holo_dark">@*android:color/background_dark</item>
+    <item type="drawable" name="screen_background_holo_light">#fff3f3f3</item>
+    <item type="drawable" name="search_bar_default_color">@*android:color/background_dark</item>
+    <item type="drawable" name="selected_day_background">@*android:color/accent_material_dark</item>
+    <item type="drawable" name="status_bar_closed_default_background">@*android:color/background_dark</item>
+    <item type="drawable" name="status_bar_opened_default_background">@*android:color/background_dark</item>
+</resources>
