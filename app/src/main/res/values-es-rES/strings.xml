@@ -1073,8 +1073,12 @@
     <string name="ringer">Timbre</string>
     <string name="bt">Bluetooth</string>
     <string name="wallet">Cartera</string>
+    <!-- Device Widgets -->
+    <!-- Battery Widget -->
+    <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
+    <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_force_all_apps_title">Forzar todas aplicaciones</string>
     <!-- Caffeine -->
