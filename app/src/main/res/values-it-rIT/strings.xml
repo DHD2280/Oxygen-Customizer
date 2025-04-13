@@ -97,6 +97,7 @@
     <string name="lang_follow_system">Segui Il Sistema</string>
     <string name="pick_font_title">Seleziona Carattere</string>
     <string name="pick_font_summary">Scegli il tuo carattere.\nNon selezionare il file da Recenti.</string>
+    <string name="general_style">Stile</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">Scegli Immagine</string>
     <string name="pick_image_summary">Fai clic per selezionare un\'immagine</string>
@@ -1171,6 +1172,8 @@
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_enable_theme">Abilita tema</string>
+    <string name="dark_shadow_footer">Dark Shadow Theme è un tema Substratum per OxygenOS.\nStiamo lavorando con lo sviluppatore del tema per includerlo in Oxygen Customizer.</string>
     <!-- Settings Icons -->
     <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Stock Personalizzato</string>
@@ -1215,6 +1218,7 @@
     <string name="lockscreen_widgets_enabled_summary">Aggiungi Widget alla schermata di blocco</string>
     <string name="lockscreen_display_widgets_title">Widget informazioni dispositivo</string>
     <string name="lockscreen_display_widgets_summary">Mostra il widget delle informazioni sul dispositivo nella schermata di blocco</string>
+    <string name="lockscreen_device_widget_settings">Impostazioni widget dispositivo</string>
     <string name="lockscreen_device_widget_style_title">Stile Widget Dispositivo</string>
     <string name="lockscreen_device_widget_style_classic">1 barra + 2 archi</string>
     <string name="lockscreen_device_widget_style_arcs">4 archi</string>
@@ -1264,6 +1268,16 @@
     <string name="home_controls">Controlli domotici</string>
     <string name="wallet">Portafoglio</string>
     <string name="hotspot">Hotspot</string>
+    <!-- Device Widgets -->
+    <string name="widget_string">Widget %s</string>
+    <string name="battery_widget">Batteria</string>
+    <string name="progress_type">Tipo progresso</string>
+    <!-- Battery Widget -->
+    <string name="battery_widget_percentage">Percentuale</string>
+    <string name="battery_widget_temperature">Temperatura</string>
+    <!-- Weather Widget -->
+    <string name="weather_widget_temperature">Temperatura attuale</string>
+    <string name="weather_widget_humidity">Umidità</string>
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Now bar</string>
     <string name="lockscreen_now_bar_enabled_title">Abilita now bar</string>
@@ -1302,6 +1316,19 @@
     <string name="lockscreen_now_bar_no_notifications">Nessuna nuova notifica</string>
     <string name="lockscreen_now_bar_new_notification">Nuova notifica</string>
     <string name="lockscreen_now_bar_new_notification_content">Contenuto nascosto</string>
+    <!-- Lockscreen Peek Notifications Strings -->
+    <string name="lockscreen_peek_notifications_title">Notifiche Peek schermata di blocco</string>
+    <string name="lockscreen_peek_notifications_summary">Sostituisci le notifiche della schermata di blocco stock con uno stile minimale</string>
+    <string name="peek_display_location_title">Posizione visualizzazione Peek</string>
+    <string name="peek_display_bottom_margin_title">Visualizzazione Peek (in basso) margine superiore</string>
+    <string name="peek_display_style_title">Stile di visualizzazione Peek</string>
+    <string name="peek_display_minimalist">Minimalista</string>
+    <string name="peek_display_custom_style">Personalizza</string>
+    <string name="peek_icon_background_color">Colore di sfondo icona</string>
+    <string name="peek_card_background_color">Colore sfondo scheda notifica</string>
+    <string name="peek_buttons_color">Colore dei pulsanti</string>
+    <string name="peek_title_color">Colore titolo</string>
+    <string name="peek_content_color">Colore contenuto</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correzione ritardo app</string>
     <string name="fix_lag_summary">Correggi il ritardo durante l\'apertura dell\'app dai recenti</string>
