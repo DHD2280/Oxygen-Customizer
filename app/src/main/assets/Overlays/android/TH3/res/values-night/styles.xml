@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.DeviceDefault.Resolver" parent="@*android:style/Theme.DeviceDefault.ResolverCommon">
+        <item name="android:textColorPrimary">#ffffffff</item>
+        <item name="android:textColorSecondary">#7affffff</item>
+        <item name="android:colorControlActivated">#1fffffff</item>
+        <item name="android:navigationBarColor">@*android:color/background_dark</item>
+        <item name="android:colorBackgroundFloating">@*android:color/background_dark</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

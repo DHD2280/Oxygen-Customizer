@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:paddingMode="stack"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@*android:color/background_dark" />
+        </shape>
+    </item>
+    <item>
+        <nine-patch android:src="@*android:drawable/cab_background_top_mtrl_alpha" android:tint="?android:colorControlActivated" />
+    </item>
+</layer-list>

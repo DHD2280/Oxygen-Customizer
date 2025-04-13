@@ -37,7 +37,7 @@
     <color name="conversation_incomming_bubble_bg_tint">#33f5f5f7</color>
     <color name="couiBlueFifthLightNormal">@*android:color/keyguard_avatar_frame_pressed_color</color>
     <color name="couiBlueFifthNormal">@*android:color/accent_material_dark</color>
-    <color name="couiBlueFifthOnPopupNormal">#ff3eb25d</color>
+    <color name="couiBlueFifthOnPopupNormal">@*android:color/accent_material_dark</color>
     <color name="couiBlueFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiBlueFirstLightNormal">@*android:color/ripple_material_dark</color>
     <color name="couiBlueFirstNormal">@*android:color/accent_material_dark</color>
@@ -72,9 +72,9 @@
     <color name="couiGreenTintLightNormal">#4d2ad181</color>
     <color name="couiGreenTintLightPressed">#4d26bc74</color>
     <color name="couiOrangeFifthLightNormal">#40fe7848</color>
-    <color name="couiOrangeFifthNormal">#fffe7848</color>
-    <color name="couiOrangeFifthOnPopupNormal">#fffe7f51</color>
-    <color name="couiOrangeFifthTextNormal">#fffe7848</color>
+    <color name="couiOrangeFifthNormal">@*android:color/accent_material_dark</color>
+    <color name="couiOrangeFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiOrangeFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiOrangeFirstLightNormal">#4ded6825</color>
     <color name="couiOrangeFirstNormal">#ffed6825</color>
     <color name="couiOrangeFourthLightNormal">#4d99725c</color>
@@ -84,7 +84,7 @@
     <color name="couiRedFifthLightNormal">#40ea3939</color>
     <color name="couiRedFifthNormal">@*android:color/accent_material_dark</color>
     <color name="couiRedFifthOnPopupNormal">@*android:color/accent_material_dark</color>
-    <color name="couiRedFifthTextNormal">#fff04848</color>
+    <color name="couiRedFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiRedFirstLightNormal">#4df23d5b</color>
     <color name="couiRedFourthLightNormal">#4d9a706c</color>
     <color name="couiRedSecondLightNormal">#4db85b57</color>
@@ -105,9 +105,9 @@
     <color name="couiSingleTenthLightNormal">#4d63e5a7</color>
     <color name="couiSingleThirdLightNormal">#4d38d7d5</color>
     <color name="couiSkyBlueFifthLightNormal">#40a539ff</color>
-    <color name="couiSkyBlueFifthNormal">#ffa539ff</color>
-    <color name="couiSkyBlueFifthOnPopupNormal">#ffa539ff</color>
-    <color name="couiSkyBlueFifthTextNormal">#ffa539ff</color>
+    <color name="couiSkyBlueFifthNormal">@*android:color/accent_material_dark</color>
+    <color name="couiSkyBlueFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiSkyBlueFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyBlueFirstLightNormal">#4d4696b4</color>
     <color name="couiSkyBlueFourthLightNormal">#4dd7c9af</color>
     <color name="couiSkyBlueSecondLightNormal">@*android:color/accent_material_dark</color>
@@ -118,8 +118,8 @@
     <color name="couiTextGreenHighlight">#4c4f67d2</color>
     <color name="couiYellowFifthLightNormal"> @*android:color/keyguard_avatar_frame_pressed_color</color>
     <color name="couiYellowFifthNormal">@*android:color/accent_material_dark</color>
-    <color name="couiYellowFifthOnPopupNormal">#fffacb4b</color>
-    <color name="couiYellowFifthTextNormal">#fff2bf30</color>
+    <color name="couiYellowFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiYellowFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiYellowFirstLightNormal">#4df2bf41</color>
     <color name="couiYellowFirstNormal">#fff2bf41</color>
     <color name="couiYellowFourthLightNormal">#4d99856b</color>
@@ -179,7 +179,7 @@
     <color name="coui_color_disabled_neutral">#4dffffff</color>
     <color name="coui_color_divider">#33ffffff</color>
     <color name="coui_color_error">@*android:color/accent_material_dark</color>
-    <color name="coui_color_error_text_bg">#ffea3939</color>
+    <color name="coui_color_error_text_bg">@*android:color/accent_material_dark</color>
     <color name="coui_color_hint_neutral">#66ffffff</color>
     <color name="coui_color_link">@*android:color/accent_material_dark</color>
     <color name="coui_color_mask">#99000000</color>
@@ -189,11 +189,11 @@
     <color name="coui_color_primary_neutral">#e6ffffff</color>
     <color name="coui_color_primary_on_popup_blue">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_on_popup_green">#ff32bd5e</color>
-    <color name="coui_color_primary_on_popup_orange">#fffe7f51</color>
+    <color name="coui_color_primary_on_popup_orange">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_on_popup_red">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_on_popup_yellow">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_orange">@*android:color/accent_material_dark</color>
-    <color name="coui_color_primary_purple">#ffa539ff</color>
+    <color name="coui_color_primary_purple">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_red">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_text_blue">@*android:color/accent_material_dark</color>
     <color name="coui_color_primary_text_green">@*android:color/accent_material_dark</color>

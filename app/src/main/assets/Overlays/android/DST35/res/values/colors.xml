@@ -473,6 +473,8 @@
     <color name="profile_badge_3_dark">@*android:color/accent_material_dark</color>
     <color name="red">@*android:color/accent_material_dark</color>
     <color name="resolver_text_color_secondary_dark">#ffc4c6c6</color>
+    <color name="resolver_empty_state_icon">#ffffffff</color>
+    <color name="resolver_empty_state_text">#ffffffff</color>	
     <color name="safe_mode_text">#80ffffff</color>
     <color name="search_url_text_normal">@*android:color/accent_material_dark</color>
     <color name="secondary_text_default_material_dark">#b3ffffff</color>

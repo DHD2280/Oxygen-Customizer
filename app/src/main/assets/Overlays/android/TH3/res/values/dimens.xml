@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toast_y_offset">120.0dip</dimen>	
+    <dimen name="config_dialogCornerRadius">14.0dip</dimen>
+    <dimen name="control_corner_material">14.0dip</dimen>
+    <dimen name="dialog_corner_radius">14.0dip</dimen>
+    <item type="dimen" name="config_buttonCornerRadius">24.0dip</item>
+    <dimen name="config_bottomDialogCornerRadius">14.0dip</dimen>
+</resources>
