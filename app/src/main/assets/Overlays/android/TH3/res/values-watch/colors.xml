@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="system_error_light">#ffb3261e</color>
+    <color name="system_error_container_light">#fff7dcda</color>
+    <color name="system_on_error_container_light">#ff410e0b</color>
+    <color name="system_surface_dark">@*android:color/white</color>
+    <color name="system_surface_container_low_dark">#ff252626</color>
+    <color name="system_surface_container_lowest_dark">#ff252626</color>
+    <color name="system_surface_container_dark">@*android:color/background_dark</color>
+    <color name="system_surface_container_high_dark">#ff474747</color>
+    <color name="system_surface_container_highest_dark">#ff474747</color>
+    <color name="system_surface_bright_dark">@*android:color/background_dark</color>
+    <color name="system_surface_dim_dark">@*android:color/background_dark</color>
+    <color name="system_surface_variant_dark">@*android:color/background_dark</color>
+    <color name="system_error_dark">#fff2b8b5</color>
+    <color name="system_on_error_dark">#ff601410</color>
+    <color name="system_error_container_dark">#ffff8986</color>
+    <color name="system_on_error_container_dark">#ff410e0b</color>
+    <color name="accent_device_default_dark">@*android:color/accent_material_dark</color>
+    <color name="background_device_default_dark">@*android:color/background_dark</color>
+    <color name="background_floating_device_default_dark">@*android:color/background_floating_material_dark</color>
+    <color name="error_color_device_default_dark">#ffff746e</color>
+    <color name="foreground_device_default_dark">@*android:color/white</color>
+    <color name="primary_device_default_dark">@*android:color/background_dark</color>
+</resources>
