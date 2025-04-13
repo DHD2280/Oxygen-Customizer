@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<resources>
+    <!--Trasparenze e background-->
+    <color name="background_dark">#202026</color>
+    <color name="background_floating_material_dark">#25252b</color>
+    <color name="background_holo_dark">#3d3d44</color>
+    <color name="background_leanback_dark">#414248</color>
+    <color name="background_material_dark">@*android:color/background_dark</color>
+    <color name="black">@*android:color/background_dark</color>
+    <color name="button_material_dark">#27272d</color>
+    <color name="button_material_light">#34343b</color>
+    <color name="holo_light_primary_dark">#303036</color>
+    <color name="holo_primary">#2b2c32</color>
+    <color name="holo_primary_dark">#38393f</color>
+    <color name="keyguard_avatar_frame_shadow_color">@*android:color/background_dark</color>
+    <color name="legacy_primary">@*android:color/background_dark</color>
+    <color name="legacy_primary_dark">@*android:color/background_dark</color>
+    <color name="primary_dark_material_dark">@*android:color/background_dark</color>
+    <color name="primary_material_dark">@*android:color/background_dark</color>
+    <color name="transparent">#00202026</color>
+
+    <!--Trasparenze background-->
+    <color name="group_button_dialog_focused_holo_dark">#e6202026</color>	<!-- 10% -->
+    <color name="group_button_dialog_focused_holo_light">#cc202026</color>	<!-- 20% -->
+    <color name="group_button_dialog_pressed_holo_dark">#a6202026</color>	<!-- 40% -->
+    <color name="group_button_dialog_pressed_holo_light">#80202026</color>	<!-- 50% -->
+    <color name="car_blue_grey_800">#33202026</color>						<!-- 80% -->
+    <color name="car_blue_grey_900">#1a202026</color>						<!-- 90% -->
+
+    <color name="system_neutral1_0">#ffffff</color>
+    <color name="system_neutral1_10">#ffffff</color>
+    <color name="system_neutral1_50">#eaeafc</color>
+    <color name="system_neutral1_100">#eaeafc</color>
+    <color name="system_neutral1_200">#babac9</color>
+    <color name="system_neutral1_300">#babac9</color>
+    <color name="system_neutral1_400">@*android:color/system_neutral1_300</color>
+    <color name="system_neutral1_500">@*android:color/holo_light_primary_dark</color>
+    <color name="system_neutral1_600">@*android:color/holo_primary</color>
+    <color name="system_neutral1_700">@*android:color/button_material_dark</color>
+    <color name="system_neutral1_800">@*android:color/background_dark</color>
+    <color name="system_neutral1_900">@*android:color/background_dark</color>
+    <color name="system_neutral1_1000">@*android:color/background_dark</color>
+
+    <color name="system_neutral2_0">#ffffff</color>
+    <color name="system_neutral2_10">#ffffff</color>
+    <color name="system_neutral2_50">#eaeafc</color>
+    <color name="system_neutral2_100">#eaeafc</color>
+    <color name="system_neutral2_200">#babac9</color>
+    <color name="system_neutral2_300">#babac9</color>
+    <color name="system_neutral2_400">@*android:color/system_neutral2_300</color>
+    <color name="system_neutral2_500">@*android:color/holo_light_primary_dark</color>
+    <color name="system_neutral2_600">@*android:color/holo_primary</color>
+    <color name="system_neutral2_700">@*android:color/button_material_dark</color>
+    <color name="system_neutral2_800">@*android:color/background_dark</color>
+    <color name="system_neutral2_900">@*android:color/background_dark</color>
+    <color name="system_neutral2_1000">@*android:color/background_dark</color>
+
+    <!-- Changes for background theme, the system_neutral method
+        doesn't work for transparency -->
+    <color name="background_device_default_light">#b1f7f7fe</color>
+    <color name="background_device_default_dark">#ae1b2029</color>
+    <color name="primary_device_default_light">@*android:color/background_device_default_light</color>
+    <color name="primary_device_default_dark">@*android:color/background_device_default_dark</color>
+    <color name="primary_device_default_settings">@*android:color/background_device_default_light</color>
+    <color name="surface_dark">@*android:color/background_device_default_dark</color>
+    <color name="surface_light">@*android:color/background_device_default_light</color>
+
+    <!-- This is a lazy change, dwai -->
+    <color name="bootleg_accent_gradient_end_color">@*android:color/system_accent1_400</color>
+</resources>

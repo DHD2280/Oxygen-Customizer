@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view android:orientation="horizontal" android:background="?android:selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" class="android.widget.AppSecurityPermissions$PermissionItemView"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@*android:id/perm_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:scaleType="fitCenter" android:tint="@*android:color/accent_material_dark" android:layout_marginStart="16.0dip" android:layout_marginEnd="8.0dip" />
+    <ImageView android:background="?android:dividerVertical" android:layout_width="wrap_content" android:layout_height="fill_parent" />
+    <TextView android:textAppearance="?android:textAppearanceSmall" android:textSize="16.0sp" android:layout_gravity="center|left|top" android:id="@*android:id/perm_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8.0dip" />
+</view>

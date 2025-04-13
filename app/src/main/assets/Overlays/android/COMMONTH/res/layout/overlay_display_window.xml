@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@*android:color/background_dark" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextureView android:id="@*android:id/overlay_display_window_texture" android:layout_width="0.0px" android:layout_height="0.0px" />
+    <TextView android:layout_gravity="center|top" android:id="@*android:id/overlay_display_window_title" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+</FrameLayout>

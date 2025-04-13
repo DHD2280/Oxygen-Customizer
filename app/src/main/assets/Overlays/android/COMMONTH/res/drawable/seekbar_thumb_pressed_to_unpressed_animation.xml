@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:drawable="@*android:drawable/seekbar_thumb_pressed_to_unpressed" android:alpha="@*android:color/transparent" />
+    <item android:state_pressed="true" android:id="@*android:id/pressed" android:drawable="@*android:drawable/seekbar_thumb_pressed_to_unpressed" />
+    <item android:id="@*android:id/unpressed" android:drawable="@*android:drawable/seekbar_thumb_pressed_to_unpressed" />
+</selector>

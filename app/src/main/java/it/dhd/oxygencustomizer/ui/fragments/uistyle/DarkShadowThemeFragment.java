@@ -1,7 +1,9 @@
 package it.dhd.oxygencustomizer.ui.fragments.uistyle;
 
 import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.ACCENT;
-import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.ACCENT1;
+import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.ACCENT2;
+//import static it.dhd.oxygencustomizer.utils.DarkShadowUtils.BACKGROUND;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -43,7 +45,9 @@ public class DarkShadowThemeFragment extends BaseFragment {
     String[] overlays = new String[]{"DST", "DSTSUI", "DSTSTG"};
     private List<DarkShadowItem> mDarkShadowColors = new ArrayList<>() {{
         add(ACCENT);
-        add(BACKGROUND);
+        add(ACCENT1);
+        add(ACCENT2);
+//        add(BACKGROUND);
     }};
 
     private FragmentAppListBinding binding;
