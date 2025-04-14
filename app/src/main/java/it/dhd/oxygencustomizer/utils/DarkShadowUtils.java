@@ -29,7 +29,7 @@ public final class DarkShadowUtils {
                     new ArrayList<>() {{
                         add("android");
                     }},
-                    Color.CYAN
+                    Color.BLUE
             );
     public static final DarkShadowItem ACCENT2 =
             new DarkShadowItem("ACCENT2", "Main Ripple Accent", "",
@@ -42,28 +42,28 @@ public final class DarkShadowUtils {
                     Color.YELLOW
             );
 
-//    public static final DarkShadowItem BACKGROUND =
-//            new DarkShadowItem("BACKGROUND", "Background", "",
-//                    new ArrayList<>() {{
-//                        addAll(List.of("background_dark", "background_device_default_dark", "legacy_primary",
-//                                "legacy_primary_dark",
-//                                "primary_dark_material_dark", "primary_material_dark"));
-//                    }},
-//                    Map.of(
-//                            "background_floating_material_dark", 25,
-//                            "button_material_dark", 30,
-//                            "holo_primary", 35,
-//                            "holo_light_primary_dark", 40,
-//                            "button_material_light", 45,
-//                            "holo_primary_dark", 50,
-//                            "background_holo_dark", 55,
-//                            "background_leanback_dark", 60
-//                    ),
-//                    new ArrayList<>() {{
-//                        add("android");
-//                    }},
-//                    Color.DKGRAY
-//            );
+    public static final DarkShadowItem BACKGROUND =
+            new DarkShadowItem("BACKGROUND", "Background", "",
+                    new ArrayList<>() {{
+                        addAll(List.of("background_dark", "background_device_default_dark",
+                                "legacy_primary", "legacy_primary_dark", "black",
+                                "primary_dark_material_dark", "primary_material_dark"));
+                    }},
+                    Map.of(
+                            "background_floating_material_dark", 25,
+                            "button_material_dark", 30,
+                            "holo_primary", 35,
+                            "holo_light_primary_dark", 40,
+                            "button_material_light", 45,
+                            "holo_primary_dark", 50,
+                            "background_holo_dark", 55,
+                            "background_leanback_dark", 60
+                    ),
+                    new ArrayList<>() {{
+                        add("android");
+                    }},
+                    Color.DKGRAY
+            );
 
     public static int getColor(DarkShadowItem darkShadowItem) {
         Log.w("DarkShadowUtils", "getColor: " + darkShadowItem.toString());
