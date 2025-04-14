@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:drawable="@*android:drawable/btn_checkbox_checked_mtrl" android:alpha="@*android:color/transparent" />
+    <item android:state_pressed="true" android:id="@*android:id/pressed" android:drawable="@*android:drawable/btn_checkbox_checked_mtrl" />
+    <item android:id="@*android:id/unpressed" android:drawable="@*android:drawable/btn_checkbox_checked_mtrl" />
+</selector>

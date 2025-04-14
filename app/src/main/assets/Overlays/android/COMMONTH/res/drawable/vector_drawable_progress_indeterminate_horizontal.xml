@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="10.0dip" android:width="360.0dip" android:viewportWidth="360.0" android:viewportHeight="10.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:name="progress_group" android:translateX="180.0" android:translateY="5.0">
+        <path android:name="background_track" android:fillColor="@*android:color/transparent" android:pathData="M -180.0
+            -1.0 l 360.0
+            0 l 0
+            2.0 l -360.0
+            0 Z" android:fillAlpha="?android:disabledAlpha" />
+        <group android:name="rect2_grp" android:scaleX="0.1" android:translateX="-197.6">
+            <path android:name="rect2" android:fillColor="?android:colorControlActivated" android:pathData="M -144.0
+            -1.0 l 288.0
+            0 l 0
+            2.0 l -288.0
+            0 Z" />
+        </group>
+        <group android:name="rect1_grp" android:scaleX="0.1" android:translateX="-522.6">
+            <path android:name="rect1" android:fillColor="?android:colorControlActivated" android:pathData="M -144.0
+            -1.0 l 288.0
+            0 l 0
+            2.0 l -288.0
+            0 Z" />
+        </group>
+    </group>
+</vector>
