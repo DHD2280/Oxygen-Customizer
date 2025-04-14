@@ -19,6 +19,7 @@
          android:key="dark_shadow"> 
 
          <it.dhd.oneplusui.preference.OplusJumpPreference 
+             android:icon="@drawable/ic_ui_styles"
              android:title="@string/dark_shadow_title" 
              android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.DarkShadowThemeFragment" /> 
 
