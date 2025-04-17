@@ -26,14 +26,6 @@
             android:summary="@string/theme_customization_ui_style_summary"
             android:title="@string/theme_customization_ui_style_title" />
 
-     <!-- Dark Shadow Theme --> 
-         <it.dhd.oneplusui.preference.OplusJumpPreference 
-            android:icon="@drawable/ic_ui_styles"
-			android:key="dark_shadow"
-			android:title="@string/dark_shadow_title"
-			android:summary="@string/dark_shadow_ui_style_summary"
-			android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.DarkShadowThemeFragment" /> 
-			 
         <!-- Notification Style -->
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.uistyle.NotificationStyle"
