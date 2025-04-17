@@ -1,27 +1,18 @@
 package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets;
 
-import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
-import android.content.ContentProvider;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -127,6 +118,7 @@ public class CalendarWidget extends BaseDeviceWidget {
                 null
         );
         mCalendarImage = (ImageView) ViewHelper.findViewWithTag(view, "condition_image");
+        mCalendarImage.setVisibility(View.GONE);
         mEventTime = (TextView) ViewHelper.findViewWithTag(view, "current_location");
         mEventTitle = (TextView) ViewHelper.findViewWithTag(view, "current_condition");
         mEventLocation = (TextView) ViewHelper.findViewWithTag(view, "high_low");
