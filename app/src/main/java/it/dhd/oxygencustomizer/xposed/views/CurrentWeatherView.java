@@ -47,6 +47,7 @@ import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -136,6 +137,12 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         addView(v);
     }
 
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        enableUpdates();
+    }
+
     public void updateSizes(int weatherTextSize, int weatherImageSize, String name) {
         if (instances.isEmpty()) return;
         updateIconsSize(weatherImageSize, name);
@@ -180,7 +187,6 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         log(TAG + "enableUpdates");
         if (mWeatherClient != null) {
             mWeatherClient.addObserver(this);
-            //WeatherScheduler.scheduleUpdateNow(mContext);
             queryAndUpdateWeather();
         }
     }
