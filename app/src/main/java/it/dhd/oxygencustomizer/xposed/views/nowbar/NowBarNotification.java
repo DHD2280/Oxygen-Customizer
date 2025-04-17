@@ -272,7 +272,7 @@ public class NowBarNotification extends RelativeLayout {
         // Num Layout
         mNumText = (TextView) ViewHelper.findViewWithTag(v, "notification_num");
         mIconsContainer = (LinearLayout) ViewHelper.findViewWithTag(v, "icons_container");
-        mIconsRecycler = new RecyclerView(mContext);
+        mIconsRecycler = new RecyclerView(appContext);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 dp2px(mContext, 72/2.2f));
