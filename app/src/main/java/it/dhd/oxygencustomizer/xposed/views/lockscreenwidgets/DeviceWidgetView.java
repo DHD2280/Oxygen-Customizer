@@ -63,6 +63,7 @@ public class DeviceWidgetView extends FrameLayout {
     private int mLinearProgressColor = 0;
     private int mTextColor = 0;
     private DeviceWidgetListener mSettingsWidgetListener = null;
+    private String mDeviceName = Build.MODEL;
 
     private boolean mSettingsInterface = false;
 
@@ -314,14 +315,13 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     public void setDeviceName(String devName) {
-        String deviceName;
         if (!TextUtils.isEmpty(devName)) {
-            deviceName = devName;
+            mDeviceName = devName;
         } else {
-            deviceName = Build.MODEL;
+            mDeviceName = Build.MODEL;
         }
 
-        post(() -> ((TextView) ViewHelper.findViewWithTag(this, "device_name")).setText(deviceName));
+        post(() -> ((TextView) ViewHelper.findViewWithTag(this, "device_name")).setText(mDeviceName));
 
     }
 
@@ -374,6 +374,7 @@ public class DeviceWidgetView extends FrameLayout {
         Arrays.fill(slots, false);
         for (BaseDeviceWidget widget : widgets) {
             widget.setCustomColors(mProgressColor, mTextColor);
+            widget.setCustomDeviceName(mDeviceName);
             if (mSettingsInterface) {
                 widget.setWidgetClickListener(new BaseDeviceWidget.OnWidgetClick() {
                     @Override

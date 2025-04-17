@@ -33,7 +33,7 @@ public abstract class BaseDeviceWidget extends LinearLayout {
     protected WidgetMode mCurrentMode = WidgetMode.BIG;
 
     protected int mProgressColor, mTextColor = Color.WHITE;
-    protected String mDeviceName = Build.DEVICE;
+    protected String mDeviceName = Build.MODEL;
 
     public interface OnWidgetClick {
         void onWidgetClick(BaseDeviceWidget widget);
@@ -110,7 +110,7 @@ public abstract class BaseDeviceWidget extends LinearLayout {
         WidgetConfig config = new WidgetConfig(
                 getWidgetReference(), // Widget Name internal
                 this.getMode(), // Widget Mode
-                getCustomSettings() // Metodo che ogni widget dovrà implementare
+                getCustomSettings()
         );
         return gson.toJson(config);
     }
