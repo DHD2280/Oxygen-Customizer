@@ -1172,6 +1172,7 @@
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">Il tema comprende colori di Background e Accent separatamente selezionabili.</string>
     <string name="dark_shadow_enable_theme">Abilita tema</string>
     <string name="dark_shadow_footer">Dark Shadow Theme è un tema Substratum per OxygenOS.\nStiamo lavorando con lo sviluppatore del tema per includerlo in Oxygen Customizer.</string>
     <!-- Settings Icons -->

@@ -1259,6 +1259,7 @@
     <string name="dark_shadow_title" translatable="false">Dark Shadow Theme</string>
 
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">The theme includes separately selectable Background and Accent colors.</string>
     <string name="dark_shadow_enable_theme">Enable theme</string>
     <string name="dark_shadow_footer">Dark Shadow Theme is a substratum theme for OxygenOS.\nWe are working together with the developer of the Theme to bring the theme in Oxygen Customizer.</string>
 
