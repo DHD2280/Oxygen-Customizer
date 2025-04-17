@@ -232,6 +232,7 @@ public class CalendarWidget extends BaseDeviceWidget {
         if (!mSettingsInterface) {
             registerCalendarObserver(appContext);
         }
+        getNextCalendarEvent();
     }
 
     @Override
