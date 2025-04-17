@@ -2,17 +2,33 @@ package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AppOpsManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
+import androidx.work.Configuration;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -20,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -33,6 +50,7 @@ public class CalendarWidget extends BaseDeviceWidget {
     private ImageView mCalendarImage;
     private TextView mEventTitle, mEventTime, mEventLocation;
     private ImageView mCoundDownImage;
+    private static ContentObserver mCalendarObserver;
 
     private final int CALENDAR_NEXT_EVENT = 0;
     private final int CALENDAR_TODAY_EVENT = 1;
@@ -41,6 +59,13 @@ public class CalendarWidget extends BaseDeviceWidget {
     // Settings
     private String mDateFormat = "dd MMM yyyy";
     private int calendarMode = CALENDAR_NEXT_EVENT;
+
+    private final BroadcastReceiver mEventTick = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getNextCalendarEvent();
+        }
+    };
 
     public boolean hasPermission(String packageName, String permission) {
         try {
@@ -54,6 +79,7 @@ public class CalendarWidget extends BaseDeviceWidget {
         }
     }
 
+    @SuppressLint("Range")
     public void getNextCalendarEvent() {
 
         if (mSettingsInterface && !AppUtils.hasPermission(appContext, Manifest.permission.READ_CALENDAR)) {
@@ -66,23 +92,30 @@ public class CalendarWidget extends BaseDeviceWidget {
         }
 
         ContentResolver cr = appContext.getContentResolver();
-        Uri uri = CalendarProvider.CONTENT_URI;
 
-        String selection = CalendarContract.Events.DTSTART + " >= ?";
-        String[] selectionArgs = new String[]{String.valueOf(System.currentTimeMillis())};
-
-        String sortOrder = CalendarContract.Events.DTSTART + " ASC LIMIT 1";
-
-        Cursor cursor = cr.query(uri, new String[]{
-                CalendarContract.Events.TITLE,
-                CalendarContract.Events.DTSTART,
-                CalendarContract.Events.CALENDAR_DISPLAY_NAME
-        }, selection, selectionArgs, sortOrder);
+        Cursor cursor = cr.query(
+                CalendarProvider.CONTENT_URI_EVENTS,
+                new String[]{
+                        CalendarContract.Events._ID,
+                        CalendarContract.Events.TITLE,
+                        CalendarContract.Events.DTSTART,
+                        CalendarContract.Events.CALENDAR_DISPLAY_NAME,
+                        CalendarContract.Events.DTEND
+                },
+                CalendarContract.Events.DTSTART + " >= ?",
+                new String[]{String.valueOf(System.currentTimeMillis())},
+                CalendarContract.Events.DTSTART + " ASC LIMIT 1"
+        );
 
         if (cursor != null && cursor.moveToFirst()) {
-            String title = cursor.getString(0);
-            long startTime = cursor.getLong(1);
-            String calendarName = cursor.getString(2);
+            String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
+            long startTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART));
+            String calendarName = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.CALENDAR_DISPLAY_NAME));
+            long eventEndTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND));
+            SimpleDateFormat sdf2 = new SimpleDateFormat(mDateFormat, Locale.getDefault());
+            String evendEnd = sdf2.format(new Date(startTime));
+            Log.i("CalendarWidget", "Event end time: " + evendEnd);
+            scheduleWidgetUpdate(eventEndTime);
 
             SimpleDateFormat sdf = new SimpleDateFormat(mDateFormat, Locale.getDefault());
             String eventTime = sdf.format(new Date(startTime));
@@ -98,6 +131,26 @@ public class CalendarWidget extends BaseDeviceWidget {
         if (cursor != null) {
             cursor.close();
         }
+    }
+
+    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
+    private void scheduleWidgetUpdate(long eventEndTime) {
+        Log.d("CalendarWidget", "Scheduling widget update for event end time: " + eventEndTime + " appContext " + (appContext == null));
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
+        intent.setAction("UPDATE_WIDGET_AFTER_EVENT");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                mContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                eventEndTime,
+                pendingIntent
+        );
     }
 
     public CalendarWidget(Context context, boolean settingsInterface) {
@@ -172,6 +225,63 @@ public class CalendarWidget extends BaseDeviceWidget {
             if (v instanceof TextView tv) {
                 tv.setTextColor(textColor);
             }
+        }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (!mSettingsInterface) {
+            registerCalendarObserver(appContext);
+        }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (!mSettingsInterface) {
+            unregisterCalendarObserver(appContext);
+        }
+    }
+
+    private void registerCalendarObserver(Context context) {
+        if (mCalendarObserver == null) {
+            mCalendarObserver = new ContentObserver(new Handler()) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    getNextCalendarEvent();
+                }
+            };
+
+            context.getContentResolver().registerContentObserver(
+                    CalendarProvider.CONTENT_URI_EVENTS,
+                    true,
+                    mCalendarObserver
+            );
+        }
+        IntentFilter filter = new IntentFilter(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
+        context.registerReceiver(mEventTick, filter, Context.RECEIVER_EXPORTED);
+    }
+
+    private void unregisterCalendarObserver(Context context) {
+        if (mCalendarObserver != null) {
+            context.getContentResolver().unregisterContentObserver(mCalendarObserver);
+            mCalendarObserver = null;
+        }
+    }
+
+    public class WidgetUpdateWorker extends Worker {
+
+        public WidgetUpdateWorker(@NonNull Context context, @NonNull WorkerParameters params) {
+            super(context, params);
+        }
+
+        @NonNull
+        @Override
+        public Result doWork() {
+            Intent intent = new Intent(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
+            getContext().sendBroadcast(intent);
+            return Result.success();
         }
     }
 

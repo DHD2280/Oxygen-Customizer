@@ -17,7 +17,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 public class CalendarProvider extends ContentProvider {
 
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".calendarprovider";
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/events");
+    public static final Uri CONTENT_URI_EVENTS = Uri.parse("content://" + AUTHORITY + "/events");
 
     @Override
     public boolean onCreate() {
@@ -27,13 +27,12 @@ public class CalendarProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         if (getContext().checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            throw new SecurityException("L'app non ha il permesso READ_CALENDAR");
+            throw new SecurityException("Permission READ_CALENDAR not granted");
         }
         ContentResolver resolver = getContext().getContentResolver();
-        Uri realUri = CalendarContract.Events.CONTENT_URI;
 
         return resolver.query(
-                realUri,
+                CalendarContract.Events.CONTENT_URI,
                 projection,
                 selection,
                 selectionArgs,
