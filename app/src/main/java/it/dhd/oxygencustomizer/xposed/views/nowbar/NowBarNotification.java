@@ -212,7 +212,6 @@ public class NowBarNotification extends RelativeLayout {
         public void onNotificationPosted(StatusBarNotification notification, NotificationListenerService.RankingMap rankingMap) {
             if (mNotificationListener == null) return;
             StatusBarNotification[] activeNotifications = (StatusBarNotification[]) callMethod(mNotificationListener, "getActiveNotifications");
-            XposedBridge.log("NowBarNotification.onNotificationPosted " + activeNotifications[0]);
             updateNotifications(List.of(activeNotifications));
         }
 
