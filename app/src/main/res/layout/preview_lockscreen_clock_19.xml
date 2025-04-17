@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center"
                     android:alpha="0.9"
-                    android:drawableStart="@drawable/ic_ios_device_scaled"
+                    android:drawableStart="@drawable/ic_device"
                     android:drawablePadding="3dp"
                     android:drawableTint="@android:color/white"
                     android:ellipsize="end"
