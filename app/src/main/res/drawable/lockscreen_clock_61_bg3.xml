@@ -5,5 +5,5 @@
 
     <corners android:radius="999sp"/>
 
-    <solid android:color="@color/colorSecondaryContainerDark"/>
+    <solid android:color="@android:color/system_accent2_400"/>
 </shape>
