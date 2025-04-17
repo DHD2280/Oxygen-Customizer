@@ -4,6 +4,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ public abstract class BaseDeviceWidget extends LinearLayout {
     protected WidgetMode mCurrentMode = WidgetMode.BIG;
 
     protected int mProgressColor, mTextColor = Color.WHITE;
+    protected String mDeviceName = Build.DEVICE;
 
     public interface OnWidgetClick {
         void onWidgetClick(BaseDeviceWidget widget);
@@ -139,6 +141,13 @@ public abstract class BaseDeviceWidget extends LinearLayout {
         onSetCustomColors(mProgressColor, mTextColor);
     }
 
+    public void setCustomDeviceName(String deviceName) {
+        mDeviceName = deviceName;
+        onSetDeviceName(mDeviceName);
+    }
+
     abstract public void onSetCustomColors(int progressColor, int textColor);
+
+    abstract public void onSetDeviceName(String deviceName);
 
 }

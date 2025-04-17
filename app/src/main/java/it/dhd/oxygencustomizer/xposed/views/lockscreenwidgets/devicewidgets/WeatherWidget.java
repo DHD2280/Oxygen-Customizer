@@ -271,6 +271,9 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
     }
 
     @Override
+    public void onSetDeviceName(String deviceName) {}
+
+    @Override
     public void weatherUpdated() {
         queryAndUpdateWeather();
     }

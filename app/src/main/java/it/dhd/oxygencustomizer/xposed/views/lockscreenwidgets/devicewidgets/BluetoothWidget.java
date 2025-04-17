@@ -52,7 +52,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
     private ImageView mBatteryProgress;
     private final String mRowLayout = "view_icon_label_row";
     private final String DEVICE_ICON = "status_bar_qs_bt_cellphone_ic";
-    private int batteryLevel = -1;
+    private int mBatteryLevel = -1;
     private final List<Bitmap> mProgresses = new ArrayList<>();
     private int currentIndex = 0;
 
@@ -67,8 +67,8 @@ public class BluetoothWidget extends BaseDeviceWidget {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mSettingsInterface) return;
-            batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            batteryLevel = Math.max(0, Math.min(batteryLevel, 100));
+            mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            mBatteryLevel = Math.max(0, Math.min(mBatteryLevel, 100));
             updateBatteries(BluetoothManager().getAdapter().isEnabled());
         }
     };
@@ -77,14 +77,14 @@ public class BluetoothWidget extends BaseDeviceWidget {
 
     private void updateBatteries(boolean enabled) {
         removeAllViews();
-        Drawable deviceIcon = getDrawable(DEVICE_ICON, SYSTEM_UI);
+        Drawable deviceIcon = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.ic_device, appContext.getTheme());
         if (mSettingsInterface) {
             addView(getFakeView());
-            addView(getPercentageRow(deviceIcon, batteryLevel + "%"));
+            addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
             return;
         }
         if (!enabled) {
-            addView(getPercentageRow(deviceIcon, batteryLevel + "%"));
+            addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
             return;
         }
 
@@ -118,8 +118,8 @@ public class BluetoothWidget extends BaseDeviceWidget {
 
         Bitmap widgetBitmap = ArcProgressWidget.generateBitmap(
                 mContext,
-                batteryLevel == -1 ? 0 : batteryLevel,
-                batteryLevel + "%",
+                mBatteryLevel == -1 ? 0 : mBatteryLevel,
+                mBatteryLevel + "%",
                 40,
                 deviceIcon,
                 36,
@@ -131,7 +131,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
         currentIndex = 0;
         mBatteryProgress.setImageBitmap(mProgresses.get(currentIndex));
         if (getMode() == WidgetMode.BIG) {
-            addView(getPercentageRow(deviceIcon, batteryLevel + "%"));
+            addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
         } else {
             addView(mBatteryProgress);
         }
@@ -386,7 +386,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
     public View getBigPreview() {
         LinearLayout layout = (LinearLayout) getFakeView();
         Drawable deviceIcon = getDrawable(DEVICE_ICON, SYSTEM_UI);
-        layout.addView(getPercentageRow(deviceIcon, batteryLevel + "%"));
+        layout.addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
         return layout;
     }
 
@@ -409,6 +409,11 @@ public class BluetoothWidget extends BaseDeviceWidget {
 
     @Override
     public void onSetCustomColors(int progressColor, int textColor) {
+        updateBatteries(mSettingsInterface ? true : BluetoothManager().getAdapter().isEnabled());
+    }
+
+    @Override
+    public void onSetDeviceName(String deviceName) {
         updateBatteries(mSettingsInterface ? true : BluetoothManager().getAdapter().isEnabled());
     }
 

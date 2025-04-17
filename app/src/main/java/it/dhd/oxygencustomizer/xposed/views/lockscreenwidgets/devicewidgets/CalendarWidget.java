@@ -13,7 +13,6 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Handler;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -24,9 +23,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
-import androidx.work.Configuration;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -36,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -227,6 +222,9 @@ public class CalendarWidget extends BaseDeviceWidget {
             }
         }
     }
+
+    @Override
+    public void onSetDeviceName(String deviceName) {}
 
     @Override
     public void onAttachedToWindow() {

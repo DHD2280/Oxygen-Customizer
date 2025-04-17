@@ -70,4 +70,7 @@ public class SoundWidget extends BaseDeviceWidget {
     public void onSetCustomColors(int progressColor, int textColor) {
         mSoundProgress.setColors(mProgressColor, mTextColor);
     }
+
+    @Override
+    public void onSetDeviceName(String deviceName) {}
 }

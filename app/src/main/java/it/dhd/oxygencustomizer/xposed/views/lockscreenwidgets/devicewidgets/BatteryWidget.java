@@ -90,7 +90,9 @@ public class BatteryWidget extends BaseDeviceWidget {
     @Override
     public void onSetCustomColors(int progressColor, int textColor) {
         mCurrentProgress.setColors(progressColor, textColor);
-
     }
+
+    @Override
+    public void onSetDeviceName(String deviceName) {}
 
 }
