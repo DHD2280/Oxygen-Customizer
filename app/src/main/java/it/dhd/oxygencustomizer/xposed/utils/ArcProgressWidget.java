@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -66,10 +67,11 @@ public class ArcProgressWidget {
         paint.setStrokeWidth(stroke);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        TextPaint mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(dp2px(context, textInsideSizePx));
         mTextPaint.setColor(textColor);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.density = context.getResources().getDisplayMetrics().density;
         final RectF arc = new RectF();
         arc.set(((float) stroke / 2) + padding, ((float) stroke / 2) + padding, width - padding - ((float) stroke / 2), height - padding - ((float) stroke / 2));
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
