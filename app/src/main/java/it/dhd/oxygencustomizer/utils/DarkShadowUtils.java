@@ -12,7 +12,7 @@ import it.dhd.oxygencustomizer.ui.models.DarkShadowItem;
 public final class DarkShadowUtils {
 
     public static final DarkShadowItem ACCENT1 =
-            new DarkShadowItem("ACCENT1", "Main Accent Dark", "",
+            new DarkShadowItem("ACCENT1", "Main Accent Dark", "xx",
                     new ArrayList<>() {{
                         add("accent_material_dark");
                     }},
@@ -21,6 +21,8 @@ public final class DarkShadowUtils {
                     }},
                     Color.RED
             );
+
+
     public static final DarkShadowItem ACCENT2 =
             new DarkShadowItem("ACCENT2", "Main Accent Light", "",
                     new ArrayList<>() {{
@@ -31,6 +33,8 @@ public final class DarkShadowUtils {
                     }},
                     Color.YELLOW
             );
+
+
     public static final DarkShadowItem ACCENT3 =
             new DarkShadowItem("ACCENT3", "Main Ripple Accent", "",
                     new ArrayList<>() {{
@@ -65,6 +69,7 @@ public final class DarkShadowUtils {
                     }},
                     Color.DKGRAY
             );
+
 
     public static int getColor(DarkShadowItem darkShadowItem) {
         Log.w("DarkShadowUtils", "getColor: " + darkShadowItem.toString());
