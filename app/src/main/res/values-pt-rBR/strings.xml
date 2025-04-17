@@ -1122,8 +1122,12 @@
     <string name="home_controls">Controles da tela inicial</string>
     <string name="wallet">Carteira</string>
     <string name="hotspot">Ponto de acesso</string>
+    <!-- Device Widgets -->
+    <!-- Battery Widget -->
+    <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
+    <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correção de atraso do aplicativo</string>
     <string name="fix_lag_summary">Corrigir lag ao abrir o aplicativo a partir dos recentes</string>

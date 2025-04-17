@@ -1159,8 +1159,12 @@
     <string name="home_controls">تحكمات المنزل</string>
     <string name="wallet">محفظة</string>
     <string name="hotspot">نقطة اتصال</string>
+    <!-- Device Widgets -->
+    <!-- Battery Widget -->
+    <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
+    <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">إصلاح تأخر التطبيق</string>
     <string name="fix_lag_summary">إصلاح التأخر عند فتح التطبيق من التطبيقات الحديثة</string>

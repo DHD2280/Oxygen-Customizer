@@ -1163,8 +1163,12 @@
     <string name="home_controls">Домашнее управление</string>
     <string name="wallet">Кошелек</string>
     <string name="hotspot">Точка доступа</string>
+    <!-- Device Widgets -->
+    <!-- Battery Widget -->
+    <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
+    <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Исправление задержки приложения</string>
     <string name="fix_lag_summary">Исправить ​​задержку при открытии приложения из последних</string>
