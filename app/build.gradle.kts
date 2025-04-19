@@ -208,7 +208,7 @@ dependencies {
 
     // Oneplus UI
     implementation(libs.oneplus.ui)
-//    implementation("it.dhd:oneplusui:1.3.6")
+//    implementation("it.dhd:oneplusui:1.4.0")
 
     // Hidden API
     implementation(libs.lsposed.hiddenapi)
