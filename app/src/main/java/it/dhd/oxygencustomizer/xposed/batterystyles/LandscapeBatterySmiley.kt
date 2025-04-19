@@ -16,6 +16,7 @@ import android.graphics.Typeface
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
+import androidx.core.graphics.withClip
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatterySmiley(private val context: Context, frameColor: Int) :
@@ -222,10 +223,9 @@ open class LandscapeBatterySmiley(private val context: Context, frameColor: Int)
 
         // Show colorError below this level
         if (batteryLevel <= CRITICAL_LEVEL && !charging) {
-            c.save()
-            c.clipPath(scaledFill)
-            c.drawPath(levelPath, fillPaint)
-            c.restore()
+            c.withClip(scaledFill) {
+                drawPath(levelPath, fillPaint)
+            }
         }
 
         if (charging || batteryLevel >= 75) c.drawPath(scaledSmileyHigh, fillPaint)
@@ -259,15 +259,14 @@ open class LandscapeBatterySmiley(private val context: Context, frameColor: Int)
             c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
 
             textPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
-            c.save()
-            c.clipRect(
+            c.withClip(
                 fillRect.left,
                 fillRect.top,
                 fillRect.right - (fillRect.width() * (1 - fillFraction)),
                 fillRect.bottom
-            )
-            c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
-            c.restore()
+            ) {
+                drawText(batteryLevel.toString(), pctX, pctY, textPaint)
+            }
         }
     }
 
@@ -382,6 +381,7 @@ open class LandscapeBatterySmiley(private val context: Context, frameColor: Int)
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -410,7 +410,7 @@ open class LandscapeBatterySmiley(private val context: Context, frameColor: Int)
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeterSmiley)

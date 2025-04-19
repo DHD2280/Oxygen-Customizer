@@ -17,6 +17,7 @@ import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_B
 import it.dhd.oxygencustomizer.utils.Prefs.getBoolean
 import it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 @Suppress("UNUSED_PARAMETER")
 open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
@@ -63,7 +64,7 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
 
         val basePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         basePaint.color = mBGColor
-        basePaint.alpha = Math.round(80f * (mAlpha / 255f))
+        basePaint.alpha = (80f * (mAlpha / 255f)).roundToInt()
 
         val levelPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -76,7 +77,7 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
 
         try {
             setLevelBasedColor(levelPaint, centerX, centerY, baseRadius)
-        } catch (t: Throwable) {
+        } catch (ignored: Throwable) {
             levelPaint.color = Color.BLACK
         }
 
@@ -85,13 +86,11 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
                 mLevelAlphaAnimator.start()
             }
 
-            levelPaint.alpha = Math.round(
-                if (mChargingAnimationEnabled) {
-                    mLevelAlphaAnimator.animatedValue as Int
-                } else {
-                    255
-                } * mAlpha / 255f
-            )
+            levelPaint.alpha = (if (mChargingAnimationEnabled) {
+                mLevelAlphaAnimator.animatedValue as Int
+            } else {
+                255
+            } * mAlpha / 255f).roundToInt()
         } else {
             if (mLevelAlphaAnimator.isStarted) {
                 mLevelAlphaAnimator.end()

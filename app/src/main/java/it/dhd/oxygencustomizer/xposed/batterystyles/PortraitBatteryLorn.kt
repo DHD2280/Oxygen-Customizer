@@ -30,6 +30,7 @@ import android.graphics.Typeface
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
+import androidx.core.graphics.withClip
 
 @SuppressLint("DiscouragedApi")
 open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
@@ -224,15 +225,14 @@ open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
         if (dualTone) {
             // Dual tone means we draw the shape again, clipped to the charge level
             c.drawPath(unifiedPath, dualToneBackgroundFill)
-            c.save()
-            c.clipRect(
+            c.withClip(
                 0f,
                 bounds.bottom - bounds.height() * fillFraction,
                 bounds.right.toFloat(),
                 bounds.bottom.toFloat()
-            )
-            c.drawPath(unifiedPath, fillPaint)
-            c.restore()
+            ) {
+                drawPath(unifiedPath, fillPaint)
+            }
         } else {
             // Non dual-tone means we draw the perimeter (with the level fill), and potentially
             // draw the fill again with a critical color
@@ -242,10 +242,9 @@ open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
 
             // Show colorError below this level
             if (batteryLevel <= CRITICAL_LEVEL && !charging) {
-                c.save()
-                c.clipPath(scaledFill)
-                c.drawPath(levelPath, fillPaint)
-                c.restore()
+                c.withClip(scaledFill) {
+                    drawPath(levelPath, fillPaint)
+                }
             }
         }
 
@@ -276,15 +275,14 @@ open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
             c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
 
             textPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
-            c.save()
-            c.clipRect(
+            c.withClip(
                 fillRect.left,
                 fillRect.top + (fillRect.height() * (1 - fillFraction)),
                 fillRect.right,
                 fillRect.bottom
-            )
-            c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
-            c.restore()
+            ) {
+                drawText(batteryLevel.toString(), pctX, pctY, textPaint)
+            }
         }
     }
 
@@ -399,6 +397,7 @@ open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -423,7 +422,7 @@ open class PortraitBatteryLorn(private val context: Context, frameColor: Int) :
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi", "DiscouragedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_portraitBatteryPerimeterLorn)

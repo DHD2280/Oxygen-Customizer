@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.batterystyles
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.Canvas
@@ -142,6 +141,7 @@ open class LandscapeBatteryiOS15(private val context: Context, frameColor: Int) 
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
@@ -160,6 +160,7 @@ open class LandscapeBatteryiOS15(private val context: Context, frameColor: Int) 
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         p.textAlign = Paint.Align.CENTER
@@ -341,6 +342,7 @@ open class LandscapeBatteryiOS15(private val context: Context, frameColor: Int) 
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -365,7 +367,7 @@ open class LandscapeBatteryiOS15(private val context: Context, frameColor: Int) 
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeteriOS15)

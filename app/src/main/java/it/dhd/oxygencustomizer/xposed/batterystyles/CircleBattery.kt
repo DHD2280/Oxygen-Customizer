@@ -27,6 +27,7 @@ import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_B
 import it.dhd.oxygencustomizer.utils.Prefs.getBoolean
 import it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs
 import it.dhd.oxygencustomizer.xposed.utils.AlphaRefreshedPaint
+import kotlin.math.roundToInt
 
 @Suppress("UNUSED_PARAMETER")
 open class CircleBattery(private val mContext: Context, frameColor: Int) : BatteryDrawable() {
@@ -183,7 +184,7 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
             if (!mBoltAlphaAnimator.isStarted) {
                 mBoltAlphaAnimator.start()
             }
-            mBoltPaint.setAlpha(Math.round(mBoltAlphaAnimator.getAnimatedValue() as Int * mAlphaPct))
+            mBoltPaint.setAlpha((mBoltAlphaAnimator.getAnimatedValue() as Int * mAlphaPct).roundToInt())
             canvas.drawPath(mBoltPath!!, mBoltPaint)
         } else if (mBoltAlphaAnimator.isStarted) {
             mBoltAlphaAnimator.end()
@@ -251,12 +252,13 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
 
     override fun setAlpha(alpha: Int) {
         mAlphaPct = alpha / 255f
-        mFramePaint.setAlpha(Math.round(70 * alpha / 255f))
+        mFramePaint.setAlpha((70 * alpha / 255f).roundToInt())
         mTextPaint.setAlpha(alpha)
         mBatteryPaint.setAlpha(alpha)
     }
 
-    @SuppressLint("DiscouragedApi", "RestrictedApi")
+    @Suppress("DEPRECATION")
+    @SuppressLint("DiscouragedApi")
     private fun updateSize() {
         val res = mContext.resources
         mDiameter = getBounds().bottom - getBounds().top
@@ -267,7 +269,7 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
         mTextPaint.textSize = mDiameter * 0.48f
         mFrame[strokeWidth / 2.0f, strokeWidth / 2.0f, mDiameter - strokeWidth / 2.0f] =
             mDiameter - strokeWidth / 2.0f
-        @SuppressLint("DiscouragedApi") val unscaledBoltPath = Path()
+        val unscaledBoltPath = Path()
         unscaledBoltPath.set(
             PathParser.createPathFromPathData(
                 res.getString(
