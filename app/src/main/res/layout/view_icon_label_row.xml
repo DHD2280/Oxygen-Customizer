@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
+    android:layout_marginVertical="8dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -10,7 +10,7 @@
         android:layout_height="22dp"
         android:layout_gravity="center"
         android:layout_marginHorizontal="8dp"
-        android:src="@drawable/ic_kill"
+        android:src="@drawable/ic_device"
         android:tag="icon" />
 
     <TextView
