@@ -171,6 +171,7 @@ public class QsTileCustomization extends XposedMods {
     private float mMediaQsArtBlurAmount = 7.5f;
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
+    private boolean canShow = false;
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -517,10 +518,16 @@ public class QsTileCustomization extends XposedMods {
 
         OplusQsMediaPanelView
                 .after("bindTitleAndText")
-                .run(param -> updateMediaQsBackground());
+                .run(param -> {
+                    canShow = true;
+                    updateMediaQsBackground();
+                });
         OplusQsMediaPanelView
                 .after("unBindMediaData")
-                .run(param -> hideMediaQsBackground());
+                .run(param -> {
+                    canShow = false;
+                    hideMediaQsBackground();
+                });
 
     }
 
@@ -546,7 +553,7 @@ public class QsTileCustomization extends XposedMods {
         if (mCoverImg != null) mCoverImg.setVisibility(View.GONE);
         Bitmap oldArt = mArt;
         Bitmap tempArt = getArt();
-        if (tempArt == null) {
+        if (tempArt == null || !canShow) {
             hideMediaQsBackground();
             return;
         }
