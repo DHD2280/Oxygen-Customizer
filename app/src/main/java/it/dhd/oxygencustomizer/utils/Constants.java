@@ -593,6 +593,41 @@ public final class Constants {
 
         }
 
+        public static class LockscreenPeekNotifications {
+
+            public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED = "lockscreen_peek_notifications";
+            public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION = "peek_display_location";
+            public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE = "peek_display_style";
+            public static final String LOCKSCREEN_PEEK_ICON_BG_COLOR = "peek_image_background_color";
+            public static final String LOCKSCREEN_PEEK_CARD_BG_COLOR = "peek_card_background_color";
+            public static final String LOCKSCREEN_PEEK_CARD_TITLE_COLOR = "peek_title_color";
+            public static final String LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR = "peek_summary_color";
+            public static final String LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR = "peek_buttons_color";
+            public static final String LOCKSCREEN_PEEK_ICON_RADIUS = "peek_icon_radius";
+            public static final String LOCKSCREEN_PEEK_CARD_TSX = "peek_top_sx_radius";
+            public static final String LOCKSCREEN_PEEK_CARD_TDX = "peek_top_dx_radius";
+            public static final String LOCKSCREEN_PEEK_CARD_BSX = "peek_bottom_sx_radius";
+            public static final String LOCKSCREEN_PEEK_CARD_BDX = "peek_bottom_dx_radius";
+            public static final String LOCKSCREEN_PEEK_TOP_MARGIN = "peek_top_margin";
+
+            public static final String[] LOCKSCREEN_PEEK_PREFS = {
+                    LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
+                    LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION,
+                    LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE,
+                    LOCKSCREEN_PEEK_ICON_BG_COLOR,
+                    LOCKSCREEN_PEEK_CARD_BG_COLOR,
+                    LOCKSCREEN_PEEK_CARD_TITLE_COLOR,
+                    LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR,
+                    LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR,
+                    LOCKSCREEN_PEEK_ICON_RADIUS,
+                    LOCKSCREEN_PEEK_CARD_TSX,
+                    LOCKSCREEN_PEEK_CARD_TDX,
+                    LOCKSCREEN_PEEK_CARD_BSX,
+                    LOCKSCREEN_PEEK_CARD_BDX
+            };
+
+        }
+
         public static class DepthWallpaper {
             public static final String DEPTH_WALLPAPER_CATEGORY = "DWCategory";
             public static final String DEPTH_WALLPAPER_ENABLED = "DWallpaperEnabled";
