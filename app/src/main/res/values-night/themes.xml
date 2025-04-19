@@ -37,10 +37,10 @@
         <item name="android:enforceNavigationBarContrast">false</item>
 
         <!-- Fragment Animations -->
-        <item name="enterAnim">@anim/fragment_enter</item>
-        <item name="exitAnim">@anim/fragment_exit</item>
-        <item name="popEnterAnim">@anim/fragment_enter_pop</item>
-        <item name="popExitAnim">@anim/fragment_exit_pop</item>
+        <item name="enterAnim">@anim/oplus_open_slide_enter</item>
+        <item name="exitAnim">@anim/oplus_close_slide_exit</item>
+        <item name="popEnterAnim">@anim/oplus_open_slide_enter</item>
+        <item name="popExitAnim">@anim/oplus_close_slide_exit</item>
 
     </style>
 
