@@ -204,7 +204,7 @@ public class AudioDataProvider extends XposedMods {
                     try {
                         mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
                     } catch (Throwable ignored) {}
-                    setArtWork();
+                    mArt = null;
                 });
 
     }
