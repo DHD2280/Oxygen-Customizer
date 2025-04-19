@@ -98,6 +98,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
@@ -133,6 +134,16 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_TEXT_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BDX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BSX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TDX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TITLE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TSX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_2_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_3_KEY;
@@ -814,6 +825,16 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean(NOW_BAR_NOTIFICATION_CUSTOM_COLORS, false);
             }
 
+            // Peek notifications
+            case "peek_card_radius_cat",
+                 LOCKSCREEN_PEEK_ICON_BG_COLOR,
+                 LOCKSCREEN_PEEK_CARD_BG_COLOR,
+                 LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR,
+                 LOCKSCREEN_PEEK_CARD_TITLE_COLOR,
+                 LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR -> {
+                return instance.mPreferences.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE, "0").equals("2");
+            }
+
             // Aod Clocks
             case "aod_clock_custom",
                  "aod_clock_font_prefs",
@@ -1247,6 +1268,8 @@ public class PreferenceHelper {
             case DEPTH_WALLPAPER_AOD_OPACITY -> instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_AOD_OPACITY, 192) + "dp";
             case "lockscreen_media_blur" ->
                     instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
+            case LOCKSCREEN_FINGERPRINT_STYLE ->
+                    String.format(fragmentCompat.getString(R.string.lockscreen_fp_style), Integer.parseInt(instance.mPreferences.getString(LOCKSCREEN_FINGERPRINT_STYLE, "0")));
 
             // Lockscreen Clock
             case LOCKSCREEN_CLOCK_LINE_HEIGHT ->
@@ -1281,6 +1304,16 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderFloat(NOW_BAR_MUSIC_CLOCK_TEXT_SCALING, 1.0f) + "%";
             case NOW_BAR_CLOCK_TOP_MARGIN ->
                     instance.mPreferences.getSliderInt(NOW_BAR_CLOCK_TOP_MARGIN, 38) + "dp";
+
+            // Peek Notifications
+            case LOCKSCREEN_PEEK_CARD_TSX ->
+                instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_TSX, 26) + "dp";
+            case LOCKSCREEN_PEEK_CARD_TDX ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_TDX, 26) + "dp";
+            case LOCKSCREEN_PEEK_CARD_BSX ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_BSX, 26) + "dp";
+            case LOCKSCREEN_PEEK_CARD_BDX ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_BDX, 26) + "dp";
 
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->
@@ -1385,9 +1418,9 @@ public class PreferenceHelper {
 
             if (preference instanceof OplusSliderPreference sliderPreference) {
                 if (Objects.equals(sliderPreference.getKey(), "batteryWarningRange")) {
-                    sliderPreference.slider.setLabelFormatter(value -> (int) value + "%");
+                    sliderPreference.mOplusSlider.setLabelFormatter(value -> (int) value + "%");
                 } else {
-                    sliderPreference.slider.setLabelFormatter(value -> {
+                    sliderPreference.mOplusSlider.setLabelFormatter(value -> {
                         if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
                             return getAppContext().getString(R.string.default_value);
                         else return String.valueOf(Math.round(value));
@@ -1399,7 +1432,7 @@ public class PreferenceHelper {
             switch (key) {
                 // Quick Settings
                 case "QSLabelScaleFactor", "QSSecondaryLabelScaleFactor" ->
-                        ((OplusSliderPreference) preference).slider.setLabelFormatter(value -> (value + 100) + "%");
+                        ((OplusSliderPreference) preference).mOplusSlider.setLabelFormatter(value -> (value + 100) + "%");
                 case "moreLogging" -> {
                     if (BuildConfig.VERSION_NAME.contains("nightly")) {
                         ((OplusSwitchPreference) preference).setChecked(true);
