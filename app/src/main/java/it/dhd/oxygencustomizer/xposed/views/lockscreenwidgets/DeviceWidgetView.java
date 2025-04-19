@@ -16,6 +16,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -358,10 +359,12 @@ public class DeviceWidgetView extends FrameLayout {
 
         if (widgets.isEmpty()) {
             if (mAddWidgetText.getParent() == null) {
+                mCustomRow.setGravity(Gravity.CENTER);
                 mCustomRow.addView(mAddWidgetText);
             }
             return;
         }
+        mCustomRow.setGravity(Gravity.NO_GRAVITY);
         for (BaseDeviceWidget wid : widgets) {
             if (!mSettingsInterface)
                 XposedBridge.log("DeviceWidgetView - add: " + wid.toJson());
