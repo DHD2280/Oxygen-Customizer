@@ -143,6 +143,7 @@ open class LandscapeBatteryMIUIPill(private val context: Context, frameColor: In
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
@@ -161,6 +162,7 @@ open class LandscapeBatteryMIUIPill(private val context: Context, frameColor: In
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         p.textAlign = Paint.Align.CENTER
@@ -348,6 +350,7 @@ open class LandscapeBatteryMIUIPill(private val context: Context, frameColor: In
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -372,7 +375,7 @@ open class LandscapeBatteryMIUIPill(private val context: Context, frameColor: In
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeterMiuiPill)

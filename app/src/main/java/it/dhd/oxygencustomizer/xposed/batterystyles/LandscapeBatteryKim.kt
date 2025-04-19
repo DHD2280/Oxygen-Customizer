@@ -153,6 +153,7 @@ open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.color = getColorAttrDefaultColor(context, R.attr.colorError)
         p.alpha = 255
@@ -171,6 +172,7 @@ open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.typeface = Typeface.createFromAsset(
             getResources(context).assets,
@@ -264,6 +266,7 @@ open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :
      * Battery percentage color should be fillColor when in charging state or in low battery state,
      * otherwise it should be transparent.
      */
+    @Suppress("unused")
     private fun shouldChangePercentageColor(): Boolean {
         return charging || (!powerSaveEnabled && batteryLevel <= CRITICAL_LEVEL)
     }
@@ -385,6 +388,7 @@ open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -411,7 +415,6 @@ open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :
     }
 
     @Suppress("DEPRECATION")
-    @SuppressLint("RestrictedApi")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeterLandscapeKim)

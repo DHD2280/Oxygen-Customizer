@@ -16,7 +16,6 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.util.TypedValue
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
@@ -153,6 +152,7 @@ open class LandscapeBatteryiOS16(private val context: Context, frameColor: Int) 
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
@@ -182,32 +182,6 @@ open class LandscapeBatteryiOS16(private val context: Context, frameColor: Int) 
         val density = context.resources.displayMetrics.density
         intrinsicHeight = (HEIGHT * density).toInt()
         intrinsicWidth = (WIDTH * density).toInt()
-
-        val res = context.resources
-        val levels = res.obtainTypedArray(
-            res.getIdentifier(
-                "batterymeter_color_levels", "array", context.packageName
-            )
-        )
-        val colors = res.obtainTypedArray(
-            res.getIdentifier(
-                "batterymeter_color_values", "array", context.packageName
-            )
-        )
-        val n = levels.length()
-        colorForLevels = IntArray(2 * n)
-        for (i in 0 until n) {
-            colorForLevels[2 * i] = levels.getInt(i, 0)
-            if (colors.getType(i) == TypedValue.TYPE_ATTRIBUTE) {
-                colorForLevels[2 * i + 1] = getColorAttrDefaultColor(
-                            colors.getResourceId(i, 0), context
-                        )
-            } else {
-                colorForLevels[2 * i + 1] = colors.getColor(i, 0)
-            }
-        }
-        levels.recycle()
-        colors.recycle()
 
         loadPaths()
     }
@@ -419,6 +393,7 @@ open class LandscapeBatteryiOS16(private val context: Context, frameColor: Int) 
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -444,7 +419,7 @@ open class LandscapeBatteryiOS16(private val context: Context, frameColor: Int) 
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeteriOS16)

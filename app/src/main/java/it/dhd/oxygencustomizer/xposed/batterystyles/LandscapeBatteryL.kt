@@ -34,6 +34,8 @@ import android.graphics.Typeface
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
+import androidx.core.graphics.withClip
+import androidx.core.graphics.withSave
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
@@ -346,15 +348,14 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
         if (dualTone) {
             // Dual tone means we draw the shape again, clipped to the charge level
             c.drawPath(unifiedPath, dualToneBackgroundFill)
-            c.save()
-            c.clipRect(
+            c.withClip(
                 bounds.left.toFloat(),
                 0f,
                 bounds.right + bounds.width() * fillFraction,
                 bounds.left.toFloat()
-            )
-            c.drawPath(unifiedPath, fillPaint)
-            c.restore()
+            ) {
+                drawPath(unifiedPath, fillPaint)
+            }
         } else {
             // Non dual-tone means we draw the perimeter (with the level fill), and potentially
             // draw the fill again with a critical color
@@ -391,10 +392,9 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
 
             // Show colorError below this level
             if (batteryLevel <= CRITICAL_LEVEL && !charging) {
-                c.save()
-                c.clipPath(scaledFill)
-                c.drawPath(levelPath, fillPaint)
-                c.restore()
+                c.withClip(scaledFill) {
+                    drawPath(levelPath, fillPaint)
+                }
             }
         }
 
@@ -420,9 +420,9 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
             if (isRotation) {
                 c.rotate(180f, pctX, pctY * if (customChargingIcon) 0.63f else 0.66f)
             }
-            c.save()
-            c.drawText(batteryLevel.toString(), pctX, pctY, textChargingPaint)
-            c.restore()
+            c.withSave {
+                drawText(batteryLevel.toString(), pctX, pctY, textChargingPaint)
+            }
         } else {
             textPaint.textSize = bounds.width() * 0.42f
             textQsPaint.textSize = textPaint.textSize
@@ -450,14 +450,14 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
                                 context,
                                 android.R.attr.textColorPrimaryInverse
                             )
-            c.save()
-            c.drawText(
-                batteryLevel.toString(),
-                pctX,
-                pctY,
-                if (isQsPercent) textQsPaint else textPaint
-            )
-            c.restore()
+            c.withSave {
+                drawText(
+                    batteryLevel.toString(),
+                    pctX,
+                    pctY,
+                    if (isQsPercent) textQsPaint else textPaint
+                )
+            }
         }
     }
 
@@ -575,6 +575,7 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -600,7 +601,7 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeterPathL)

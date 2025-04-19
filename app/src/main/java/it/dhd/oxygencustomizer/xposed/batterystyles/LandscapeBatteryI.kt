@@ -32,6 +32,7 @@ import android.graphics.Typeface
 import androidx.core.graphics.PathParser
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
+import androidx.core.graphics.withClip
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
@@ -193,6 +194,7 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         p.style = Paint.Style.FILL_AND_STROKE
     }
 
+    @Suppress("unused")
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
         p.color = getColorAttrDefaultColor(context, android.R.attr.colorError)
         p.alpha = 255
@@ -423,15 +425,14 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         if (dualTone) {
             // Dual tone means we draw the shape again, clipped to the charge level
             c.drawPath(unifiedPath, dualToneBackgroundFill)
-            c.save()
-            c.clipRect(
+            c.withClip(
                 bounds.left.toFloat(),
                 0f,
                 bounds.right + bounds.width() * fillFraction,
                 bounds.left.toFloat()
-            )
-            c.drawPath(unifiedPath, fillPaint)
-            c.restore()
+            ) {
+                drawPath(unifiedPath, fillPaint)
+            }
         } else {
             // Non dual-tone means we draw the perimeter (with the level fill), and potentially
             // draw the fill again with a critical color
@@ -727,10 +728,9 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
 
             // Show colorError below this level
             if (batteryLevel <= CRITICAL_LEVEL && !charging && !customFillRainbow) {
-                c.save()
-                c.clipPath(scaledFill)
-                c.drawPath(levelPath, fillPaint)
-                c.restore()
+                c.withClip(scaledFill) {
+                    drawPath(levelPath, fillPaint)
+                }
             }
         }
 
@@ -883,6 +883,7 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         scheduleSelf(invalidateRunnable, 0)
     }
 
+    @Suppress("DEPRECATION")
     private fun updateSize() {
         val b = bounds
         if (b.isEmpty) {
@@ -921,7 +922,7 @@ open class LandscapeBatteryI(private val context: Context, frameColor: Int) :
         fillColorStrokeProtection.strokeWidth = scaledStrokeWidth
     }
 
-    @SuppressLint("RestrictedApi")
+    @Suppress("DEPRECATION")
     private fun loadPaths() {
         val pathString =
             getResources(context).getString(R.string.config_landscapeBatteryPerimeterPathI)

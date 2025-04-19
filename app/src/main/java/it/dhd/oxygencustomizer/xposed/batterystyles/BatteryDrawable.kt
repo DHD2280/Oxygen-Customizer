@@ -71,7 +71,7 @@ abstract class BatteryDrawable : Drawable() {
 
     fun getColorAttrDefaultColor(context: Context, attr: Int, defValue: Int): Int {
         return try {
-            SettingsLibUtilsProvider.getColorAttrDefaultColor(attr, context, defValue);
+            SettingsLibUtilsProvider.getColorAttrDefaultColor(attr, context, defValue)
         } catch (ignored: Throwable) {
             val obtainStyledAttributes: TypedArray =
                 context.obtainStyledAttributes(intArrayOf(attr))
