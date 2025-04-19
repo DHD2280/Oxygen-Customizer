@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.ui.models;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
+
 public class AppModel {
 
     private String appName;
@@ -58,6 +60,19 @@ public class AppModel {
 
     public boolean isSystemApp() {
         return isSystem;
+    }
+
+    @Override
+    @NonNull
+    public String toString() {
+        return "AppModel{" +
+                "appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", appIcon=" + appIcon +
+                ", isEnabled=" + isEnabled +
+                ", darkModeValue=" + darkModeValue +
+                ", isSystem=" + isSystem +
+                '}';
     }
 
 }

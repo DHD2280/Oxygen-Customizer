@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <it.dhd.oxygencustomizer.ui.widgets.SliderWidget
+    <it.dhd.oxygencustomizer.ui.widgets.SectionSeekBarWidget
         android:id="@+id/app_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

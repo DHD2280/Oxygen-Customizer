@@ -4,6 +4,7 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import it.dhd.oneplusui.appcompat.seekbar.OplusSectionSeekBar;
+import it.dhd.oneplusui.appcompat.seekbar.OplusSeekBar;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.AppItemBinding;
 import it.dhd.oxygencustomizer.ui.models.AppModel;
@@ -30,6 +33,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private String filterText = "";
     private boolean showSystem = false;
     private boolean hasSlider = false;
+    private boolean tracking = false;
 
     public interface OnSwitchChange {
         void onSwitchChange(AppModel model, boolean isChecked);
@@ -97,17 +101,53 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             model.setEnabled(isChecked);
         });
         holder.binding.appSwitch.setSwitchChecked(model.isEnabled());
-        holder.binding.appSlider.setOnSliderChangeListener((slider, progress, fromUser) -> {
-            if (!fromUser) return;
-            model.setDarkModeValue((int) progress);
-            if (sliderChangeListener != null) {
-                sliderChangeListener.onSliderChange(model, (int) progress);
+        holder.binding.appSlider.setSliderValue(model.getDarkModeValue());
+        holder.binding.appSlider.setOnSliderTouchListener(new OplusSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSeekBar oplusSeekbar, int progress, boolean fromUser) {
+                Log.d("AppAdapter", "onProgressChanged: " + progress + " fromUser: " + fromUser + " tracking: " + tracking + " model: " + model.toString());
+                if (!fromUser) return;
+                model.setDarkModeValue(progress);
+                if (sliderChangeListener != null) {
+                    sliderChangeListener.onSliderChange(model, progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(OplusSeekBar oplusSeekbar) {
+                tracking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(OplusSeekBar oplusSeekbar) {
+                tracking = false;
+                Log.d("AppAdapter", "onStopTrackingTouch: " + " tracking: " + tracking + " model: " + model.toString());
+                model.setDarkModeValue(oplusSeekbar.getProgress());
+                if (sliderChangeListener != null) {
+                    sliderChangeListener.onSliderChange(model, oplusSeekbar.getProgress());
+                }
             }
         });
 
         holder.binding.appSlider.setTitle(getAppContext().getString(R.string.dark_mode_intensity));
-        holder.binding.appSlider.setSliderValue(model.getDarkModeValue());
     }
+
+    OplusSeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new OplusSeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(OplusSeekBar oplusSeekbar, int progress, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(OplusSeekBar oplusSeekbar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(OplusSeekBar oplusSeekbar) {
+
+        }
+    };
 
     public void showSystem(boolean show) {
         showSystem = show;
