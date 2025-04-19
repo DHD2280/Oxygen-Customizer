@@ -65,8 +65,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,9 +81,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
@@ -117,7 +113,6 @@ import it.dhd.oxygencustomizer.xposed.utils.viewpager.TranslationYTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomInTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutSlideTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutTransformer;
-import it.dhd.oxygencustomizer.xposed.views.QsControlsView;
 
 public class QsTileCustomization extends XposedMods {
 
@@ -272,7 +267,7 @@ public class QsTileCustomization extends XposedMods {
         if (PersonalityManager != null) {
             PersonalityManager
                     .afterConstruction()
-                            .run(param -> mPersonalityManager = param.thisObject);
+                    .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
         // Color Hooker
@@ -305,7 +300,8 @@ public class QsTileCustomization extends XposedMods {
         };
 
         OplusQSTileView.after("createLabel").run(labelHook);
-        if (OplusQSTileViewPlugin.getClazz() != null) OplusQSTileViewPlugin.after("createLabel").run(labelHook);
+        if (OplusQSTileViewPlugin.getClazz() != null)
+            OplusQSTileViewPlugin.after("createLabel").run(labelHook);
         OplusQSTileView.after("updateTextColor").run(labelHook);
         OplusQSTileView.after("handleStateChanged").run(labelHook);
 
@@ -315,52 +311,52 @@ public class QsTileCustomization extends XposedMods {
 
         OplusToggleSliderView
                 .after("onShapeChanged")
-                        .run(param -> {
-                            if (!qsBrightnessSliderCustomize) return;
+                .run(param -> {
+                    if (!qsBrightnessSliderCustomize) return;
 
-                            if (qsBrightnessSliderColorMode == 1) {
-                                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(getPrimaryColor(mContext)));
-                            } else if (qsBrightnessSliderColorMode == 2) {
-                                setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessSliderColor));
-                            }
+                    if (qsBrightnessSliderColorMode == 1) {
+                        setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(getPrimaryColor(mContext)));
+                    } else if (qsBrightnessSliderColorMode == 2) {
+                        setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessSliderColor));
+                    }
 
-                            if (qsBrightnessBackgroundCustomize) {
-                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                            } else {
-                                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                                if (color != 0x0) {
-                                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
-                                }
-                            }
-                        });
+                    if (qsBrightnessBackgroundCustomize) {
+                        setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                    } else {
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        if (color != 0x0) {
+                            setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                        }
+                    }
+                });
 
         OplusToggleSliderView
                 .after("setupSliderProgressDrawable")
-                        .run(param -> {
-                            if (!qsBrightnessSliderCustomize) return;
+                .run(param -> {
+                    if (!qsBrightnessSliderCustomize) return;
 
-                            int colorToApply = getPrimaryColor(mContext);
-                            if (qsBrightnessSliderColorMode == 2) {
-                                colorToApply = qsBrightnessSliderColor;
-                            }
+                    int colorToApply = getPrimaryColor(mContext);
+                    if (qsBrightnessSliderColorMode == 2) {
+                        colorToApply = qsBrightnessSliderColor;
+                    }
 
-                            setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(colorToApply));
-                            if (getBooleanField(param.thisObject, "mIsMirror")) {
-                                try {
-                                    callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
-                                } catch (Throwable ignored) {
-                                    callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbTintList", ColorStateList.valueOf(colorToApply));
-                                }
-                            }
-                            if (qsBrightnessBackgroundCustomize) {
-                                setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
-                            } else {
-                                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
-                                if (color != 0x0) {
-                                    setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
-                                }
-                            }
-                        });
+                    setSliderProgressColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(colorToApply));
+                    if (getBooleanField(param.thisObject, "mIsMirror")) {
+                        try {
+                            callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbColor", ColorStateList.valueOf(colorToApply));
+                        } catch (Throwable ignored) {
+                            callMethod(getObjectField(param.thisObject, "mSlider"), "setThumbTintList", ColorStateList.valueOf(colorToApply));
+                        }
+                    }
+                    if (qsBrightnessBackgroundCustomize) {
+                        setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
+                    } else {
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        if (color != 0x0) {
+                            setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
+                        }
+                    }
+                });
 
         final ReflectedClass.ReflectionConsumer newUiHook = param -> {
             if (!qsBrightnessSliderCustomize) return;
@@ -407,25 +403,25 @@ public class QsTileCustomization extends XposedMods {
             ReflectedClass PagedTileLayout = ReflectedClass.of("com.android.systemui.qs.PagedTileLayout");
             PagedTileLayout
                     .afterConstruction()
-                            .run(param -> {
-                                Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
-                                Object vPager = param.thisObject;
-                                hookAllMethods(VPagerListener.getClass(),
-                                        "onPageScrolled", new XC_MethodHook() {
-                                            @Override
-                                            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                                if (!mTrasformationsEnabled) return;
-                                                final int childCount = (int) callMethod(vPager, "getChildCount");
-                                                for (int i = 0; i < childCount; i++) {
-                                                    final View child = (View) callMethod(vPager, "getChildAt", i);
-                                                    final Object lp = callMethod(child, "getLayoutParams");
-                                                    if (getBooleanField(lp, "isDecor")) continue;
-                                                    final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
-                                                    getCustomTransitions().transformPage(child, transformPos);
-                                                }
-                                            }
-                                        });
-                            });
+                    .run(param -> {
+                        Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
+                        Object vPager = param.thisObject;
+                        hookAllMethods(VPagerListener.getClass(),
+                                "onPageScrolled", new XC_MethodHook() {
+                                    @Override
+                                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                        if (!mTrasformationsEnabled) return;
+                                        final int childCount = (int) callMethod(vPager, "getChildCount");
+                                        for (int i = 0; i < childCount; i++) {
+                                            final View child = (View) callMethod(vPager, "getChildAt", i);
+                                            final Object lp = callMethod(child, "getLayoutParams");
+                                            if (getBooleanField(lp, "isDecor")) continue;
+                                            final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
+                                            getCustomTransitions().transformPage(child, transformPos);
+                                        }
+                                    }
+                                });
+                    });
         } catch (Throwable t) {
             log(t);
         }
@@ -477,56 +473,54 @@ public class QsTileCustomization extends XposedMods {
         ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
         OplusQsMediaPanelView
                 .after("onFinishInflate")
-                        .run(param -> {
-                            mOplusQsMediaView = (View) param.thisObject;
-                            if (mQsWidgetsEnabled) return;
-                            mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
-                            if (mOplusQsMediaDefaultBackground != null) {
-                                mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
-                            }
-                            if (Build.VERSION.SDK_INT < 35) {
-                                if (qsInactiveColorEnabled) {
-                                    mOplusQsMediaDrawable.setTint(qsInactiveColor);
-                                    mOplusQsMediaDrawable.invalidateSelf();
-                                    mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
-                                } else {
-                                    mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
-                                }
-                            } else {
-                                XposedBridge.log("Oxygen Customizer - QsTileCustomization: Media Panel Background not found");
-                                mMediaBackground.setId(View.generateViewId());
-                                ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                                params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
-                                params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-                                params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
-                                params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+                .run(param -> {
+                    mOplusQsMediaView = (View) param.thisObject;
+                    if (mQsWidgetsEnabled) return;
+                    mOplusQsMediaDefaultBackground = mOplusQsMediaView.getBackground();
+                    if (mOplusQsMediaDefaultBackground != null) {
+                        mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
+                    }
+                    if (Build.VERSION.SDK_INT < 35) {
+                        if (qsInactiveColorEnabled) {
+                            mOplusQsMediaDrawable.setTint(qsInactiveColor);
+                            mOplusQsMediaDrawable.invalidateSelf();
+                            mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
+                        } else {
+                            mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
+                        }
+                    } else {
+                        mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
+                        mMediaBackground.setId(View.generateViewId());
+                        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+                        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+                        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+                        params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
 
-                                mMediaBackground.setLayoutParams(params);
-                                mMediaBackground.setElevation(0f);
-                                try {
-                                    ((ViewGroup)mMediaBackground.getParent()).removeView(mMediaBackground);
-                                } catch (Throwable ignored) {}
-                                ((ViewGroup)param.thisObject).addView(mMediaBackground, 0);
-                                XposedBridge.log("Oxygen Customizer - QsTileCustomization: Media Panel Background added");
-                            }
+                        mMediaBackground.setLayoutParams(params);
+                        mMediaBackground.setElevation(0f);
+                        try {
+                            ((ViewGroup) mMediaBackground.getParent()).removeView(mMediaBackground);
+                        } catch (Throwable ignored) {
+                        }
+                        ((ViewGroup) param.thisObject).addView(mMediaBackground, 0);
+                    }
 
-                            // Get OOS15 cover
-                            if (Build.VERSION.SDK_INT >= 35) {
-                                mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
-                            }
-
-                            // Listen for default tip change
-                            View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
-                            mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                                if (v.getVisibility() == View.VISIBLE) {
-                                    hideMediaQsBackground();
-                                }
-                            });
-                        });
+                    // Listen for default tip change
+                    View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
+                    mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                        if (v.getVisibility() == View.VISIBLE) {
+                            hideMediaQsBackground();
+                        }
+                    });
+                });
 
         OplusQsMediaPanelView
                 .after("bindTitleAndText")
-                        .run(param -> updateMediaQsBackground());
+                .run(param -> updateMediaQsBackground());
+        OplusQsMediaPanelView
+                .after("unBindMediaData")
+                .run(param -> hideMediaQsBackground());
 
     }
 
@@ -706,7 +700,8 @@ public class QsTileCustomization extends XposedMods {
             case 1 -> BLEND_COLOR_DODGE_LUMINOSITY;
             case 2 -> BLEND_OVERLAY_LUMINOSITY;
             case 3 -> BLEND_LUMINOSITY_OVERLAY;
-            default -> SystemUtils.isDarkMode() ? BLEND_LUMINOSITY_OVERLAY : BLEND_LUMINOSITY_COLOR_DODGE;
+            default ->
+                    SystemUtils.isDarkMode() ? BLEND_LUMINOSITY_OVERLAY : BLEND_LUMINOSITY_COLOR_DODGE;
         };
     }
 
