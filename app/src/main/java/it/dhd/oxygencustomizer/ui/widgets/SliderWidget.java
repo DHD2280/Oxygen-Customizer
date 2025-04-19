@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 import it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout;
+import it.dhd.oneplusui.appcompat.seekbar.OplusSlider;
 import it.dhd.oxygencustomizer.R;
 
 public class SliderWidget extends CardListSelectedItemLayout {
@@ -25,7 +26,7 @@ public class SliderWidget extends CardListSelectedItemLayout {
     private CardListSelectedItemLayout container;
     private TextView titleTextView;
     private TextView summaryTextView;
-    private Slider materialSlider;
+    private OplusSlider oplusSlider;
     private MaterialButton resetButton;
     private String valueFormat;
     private int defaultValue;
@@ -34,7 +35,7 @@ public class SliderWidget extends CardListSelectedItemLayout {
     private boolean isDecimalFormat = false;
     private String decimalFormat = "#.#";
     private OnLongClickListener resetClickListener;
-    private Slider.OnSliderTouchListener onSliderTouchListener;
+    private OplusSlider.OnSliderChangeListener onSliderTouchListener;
     private String mForcePosition = null;
 
     public SliderWidget(Context context) {
@@ -105,16 +106,16 @@ public class SliderWidget extends CardListSelectedItemLayout {
                 (valueFormat.isBlank() || valueFormat.isEmpty() ?
                         String.valueOf(
                                 !isDecimalFormat ?
-                                        (int) (materialSlider.getValue() / outputScale) :
+                                        (int) (oplusSlider.getValues().get(0) / outputScale) :
                                         new DecimalFormat(decimalFormat)
-                                                .format(materialSlider.getValue() / outputScale)
+                                                .format(oplusSlider.getValues().get(0) / outputScale)
                         ) :
                         getContext().getString(
                                 R.string.opt_selected2,
                                 !isDecimalFormat ?
-                                        String.valueOf((int) materialSlider.getValue()) :
+                                        String.valueOf(oplusSlider.getValues().get(0)) :
                                         new DecimalFormat(decimalFormat)
-                                                .format(materialSlider.getValue() / outputScale),
+                                                .format(oplusSlider.getValues().get(0) / outputScale),
                                 valueFormat
                         )
                 )
@@ -122,24 +123,24 @@ public class SliderWidget extends CardListSelectedItemLayout {
     }
 
     public void setSliderStepSize(int value) {
-        materialSlider.setStepSize(value);
+        oplusSlider.setStepSize(value);
     }
 
     public int getSliderValue() {
-        return (int) materialSlider.getValue();
+        return oplusSlider.getValues().get(0).intValue();
     }
 
     public void setSliderValue(int value) {
-        materialSlider.setValue(value);
+        oplusSlider.setValues((float) value);
         setSelectedText();
     }
 
     public void setSliderValueFrom(int value) {
-        materialSlider.setValueFrom(value);
+        oplusSlider.setValueFrom(value);
     }
 
     public void setSliderValueTo(int value) {
-        materialSlider.setValueTo(value);
+        oplusSlider.setValueTo(value);
     }
 
     public void setIsDecimalFormat(boolean isDecimalFormat) {
@@ -157,36 +158,41 @@ public class SliderWidget extends CardListSelectedItemLayout {
         setSelectedText();
     }
 
-    public void setOnSliderTouchListener(Slider.OnSliderTouchListener listener) {
+    public void setOnSliderTouchListener(OplusSlider.OnSliderChangeListener listener) {
         onSliderTouchListener = listener;
 
-        materialSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+        oplusSlider.addOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
             @Override
-            public void onStartTrackingTouch(@NonNull Slider slider) {
-                notifyOnSliderTouchStarted(slider);
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {
+
             }
 
             @Override
-            public void onStopTrackingTouch(@NonNull Slider slider) {
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {
+                notifyOnSliderTouchStarted(oplusSlider);
+            }
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
                 setSelectedText();
-                notifyOnSliderTouchStopped(slider);
+                notifyOnSliderTouchStopped(oplusSlider);
             }
         });
 
-        materialSlider.setLabelFormatter(value -> (valueFormat.isBlank() || valueFormat.isEmpty() ?
+        oplusSlider.setLabelFormatter(value -> (valueFormat.isBlank() || valueFormat.isEmpty() ?
                 (!isDecimalFormat ?
-                        (int) (materialSlider.getValue() / outputScale) :
+                        (int) (oplusSlider.getValues().get(0) / outputScale) :
                         new DecimalFormat(decimalFormat)
-                                .format(materialSlider.getValue() / outputScale)) + valueFormat :
+                                .format(oplusSlider.getValues().get(0) / outputScale)) + valueFormat :
                 (!isDecimalFormat ?
-                        String.valueOf((int) materialSlider.getValue()) :
+                        String.valueOf(oplusSlider.getValues().get(0)) :
                         new DecimalFormat(decimalFormat)
-                                .format(materialSlider.getValue() / outputScale)) + valueFormat
+                                .format(oplusSlider.getValues().get(0) / outputScale)) + valueFormat
         ));
     }
 
-    public void setOnSliderChangeListener(Slider.OnChangeListener listener) {
-        materialSlider.addOnChangeListener(listener);
+    public void setOnSliderChangeListener(OplusSlider.OnSliderChangeListener listener) {
+        oplusSlider.addOnSliderChangeListener(listener);
     }
 
     public void setResetClickListener(OnLongClickListener listener) {
@@ -212,15 +218,15 @@ public class SliderWidget extends CardListSelectedItemLayout {
         resetButton.performLongClick();
     }
 
-    private void notifyOnSliderTouchStarted(@NonNull Slider slider) {
+    private void notifyOnSliderTouchStarted(@NonNull OplusSlider oplusSlider) {
         if (onSliderTouchListener != null) {
-            onSliderTouchListener.onStartTrackingTouch(slider);
+            onSliderTouchListener.onStartTrackingTouch(oplusSlider);
         }
     }
 
-    private void notifyOnSliderTouchStopped(@NonNull Slider slider) {
+    private void notifyOnSliderTouchStopped(@NonNull OplusSlider oplusSlider) {
         if (onSliderTouchListener != null) {
-            onSliderTouchListener.onStopTrackingTouch(slider);
+            onSliderTouchListener.onStopTrackingTouch(oplusSlider);
         }
     }
 
@@ -256,7 +262,7 @@ public class SliderWidget extends CardListSelectedItemLayout {
         titleTextView.setEnabled(enabled);
         summaryTextView.setEnabled(enabled);
         resetButton.setEnabled(enabled);
-        materialSlider.setEnabled(enabled);
+        oplusSlider.setEnabled(enabled);
     }
 
     // to avoid listener bug, we need to re-generate unique id for each view
@@ -264,13 +270,13 @@ public class SliderWidget extends CardListSelectedItemLayout {
         container = findViewById(R.id.container);
         titleTextView = findViewById(R.id.title);
         summaryTextView = findViewById(R.id.summary);
-        materialSlider = findViewById(R.id.slider_widget);
+        oplusSlider = findViewById(R.id.slider_widget);
         resetButton = findViewById(R.id.reset_button);
 
         container.setId(View.generateViewId());
         titleTextView.setId(View.generateViewId());
         summaryTextView.setId(View.generateViewId());
-        materialSlider.setId(View.generateViewId());
+        oplusSlider.setId(View.generateViewId());
         resetButton.setId(View.generateViewId());
     }
 
@@ -279,7 +285,7 @@ public class SliderWidget extends CardListSelectedItemLayout {
         Parcelable superState = super.onSaveInstanceState();
 
         SavedState ss = new SavedState(superState);
-        ss.sliderValue = materialSlider.getValue();
+        ss.sliderValue = oplusSlider.getValues().get(0);
 
         return ss;
     }
@@ -293,7 +299,7 @@ public class SliderWidget extends CardListSelectedItemLayout {
 
         super.onRestoreInstanceState(ss.getSuperState());
 
-        materialSlider.setValue(ss.sliderValue);
+        oplusSlider.setValues(ss.sliderValue);
         setSelectedText();
     }
 
