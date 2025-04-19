@@ -42,6 +42,7 @@ import androidx.preference.PreferenceViewHolder;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import it.dhd.oneplusui.appcompat.cardlist.CardListHelper;
+import it.dhd.oneplusui.appcompat.seekbar.OplusSlider;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.QsChipLayoutBinding;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
@@ -247,11 +248,19 @@ public class BackgroundChipPreference extends DialogPreference {
             setupWidgets();
             setupGradient();
         });
-        binding.strokeWidth.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getStrokeWidth(getKey()), (int) value).apply();
-            strokeWidth = (int) value;
+        binding.strokeWidth.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
 
-            setupGradient();
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getStrokeWidth(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                strokeWidth = (int) oplusSlider.getValues().get(0).intValue();
+                setupGradient();
+            }
         });
         binding.roundCornersSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(getRoundedCorners(getKey()), isChecked).apply();
@@ -261,65 +270,185 @@ public class BackgroundChipPreference extends DialogPreference {
             setupWidgets();
             setupGradient();
         });
-        binding.topSxCorner.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getTopSxR(getKey()), (int) value).apply();
-            topSxR = (int) value;
+        binding.topSxCorner.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {
+                topSxR = oplusSlider.getValues().get(0).intValue();
+                setupGradient();
+            }
 
-            setupGradient();
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getTopSxR(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                topSxR = oplusSlider.getValues().get(0).intValue();
+
+                setupGradient();
+            }
         });
-        binding.topDxCorner.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getTopDxR(getKey()), (int) value).apply();
-            topDxR = (int) value;
+        binding.topDxCorner.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {
+                topDxR = oplusSlider.getValues().get(0).intValue();
+                setupGradient();
+            }
 
-            setupGradient();
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getTopDxR(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                topDxR = oplusSlider.getValues().get(0).intValue();
+
+                setupGradient();
+            }
         });
-        binding.bottomSxCorner.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getBottomSxR(getKey()), (int) value).apply();
-            bottomSxR = (int) value;
+        binding.bottomSxCorner.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {
+                bottomSxR = oplusSlider.getValues().get(0).intValue();
+                setupGradient();
+            }
 
-            setupGradient();
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getBottomSxR(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                bottomSxR = oplusSlider.getValues().get(0).intValue();
+
+                setupGradient();
+            }
         });
-        binding.bottomDxCorner.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getBottomDxR(getKey()), (int) value).apply();
-            bottomDxR = (int) value;
+        binding.bottomDxCorner.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {
+                bottomDxR = oplusSlider.getValues().get(0).intValue();
+                setupGradient();
+            }
 
-            setupGradient();
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getBottomDxR(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                bottomDxR = oplusSlider.getValues().get(0).intValue();
+
+                setupGradient();
+            }
         });
 
         // Margin
-        binding.chipMarginLeft.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginSx(getKey()), (int) value).apply();
-            marginSx = (int) value;
+        binding.chipMarginLeft.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getMarginSx(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                marginSx = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipMarginRight.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginDx(getKey()), (int) value).apply();
-            marginDx = (int) value;
+        binding.chipMarginRight.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getMarginDx(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                marginDx = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipMarginTop.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginTop(getKey()), (int) value).apply();
-            marginTop = (int) value;
+        binding.chipMarginTop.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getMarginTop(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                marginTop = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipMarginBottom.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getMarginBottom(getKey()), (int) value).apply();
-            marginBottom = (int) value;
+        binding.chipMarginBottom.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getMarginBottom(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                marginBottom = oplusSlider.getValues().get(0).intValue();
+            }
         });
 
         // Padding
-        binding.chipPaddingLeft.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getPaddingSx(getKey()), (int) value).apply();
-            paddingSx = (int) value;
+        binding.chipPaddingLeft.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getPaddingSx(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                paddingSx = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipPaddingRight.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getPaddingDx(getKey()), (int) value).apply();
-            paddingDx = (int) value;
+        binding.chipPaddingRight.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getPaddingDx(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                paddingDx = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipPaddingTop.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getPaddingTop(getKey()), (int) value).apply();
-            paddingTop = (int) value;
+        binding.chipPaddingTop.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getPaddingTop(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                paddingTop = oplusSlider.getValues().get(0).intValue();
+            }
         });
-        binding.chipPaddingBottom.setOnSliderChangeListener((slider, value, fromUser) -> {
-            prefs.edit().putInt(getPaddingBottom(getKey()), (int) value).apply();
-            paddingBottom = (int) value;
+        binding.chipPaddingBottom.setOnSliderChangeListener(new OplusSlider.OnSliderChangeListener() {
+            @Override
+            public void onProgressChanged(OplusSlider oplusSlider, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(OplusSlider oplusSlider) {}
+
+            @Override
+            public void onStopTrackingTouch(OplusSlider oplusSlider) {
+                prefs.edit().putInt(getPaddingBottom(getKey()), oplusSlider.getValues().get(0).intValue()).apply();
+                paddingBottom = oplusSlider.getValues().get(0).intValue();
+            }
         });
 
         // Set Widgets
