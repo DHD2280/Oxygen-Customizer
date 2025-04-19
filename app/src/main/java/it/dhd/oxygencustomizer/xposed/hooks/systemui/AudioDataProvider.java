@@ -83,6 +83,9 @@ public class AudioDataProvider extends XposedMods {
                 mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
             } catch (Throwable ignored) {}
             instance.onPlaybackStateChanged();
+            if (mPlaybackState == PlaybackState.STATE_NONE) {
+                instance.mArt = null;
+            }
         }
     };
 
@@ -196,11 +199,12 @@ public class AudioDataProvider extends XposedMods {
                     setArtWork();
                 });
         OplusMediaControllerImpl
-                .after("dispatchMediaDataOnRemov")
+                .after("dispatchMediaDataOnRemove")
                 .run(param -> {
                     try {
                         mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
                     } catch (Throwable ignored) {}
+                    setArtWork();
                 });
 
     }
