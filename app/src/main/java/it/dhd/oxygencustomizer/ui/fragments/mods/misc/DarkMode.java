@@ -99,7 +99,7 @@ public class DarkMode extends AppFragmentBase {
         binding.appFunctionSwitch.setSwitchChecked(mPreferences.getBoolean("custom_dark_mode_switch", false));
 
         new LoadAppsTask(getAppContext(), mEnabledApps, true, () -> {
-            binding.searchViewLayout.setEnabled(false);
+            binding.searchView.setEnabled(false);
             binding.progress.setVisibility(View.VISIBLE);
         }, appList -> {
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getAppContext()));
@@ -107,7 +107,7 @@ public class DarkMode extends AppFragmentBase {
                     this::onSwitchChange,
                     this::onSliderChange));
             binding.recyclerView.setHasFixedSize(true);
-            binding.searchViewLayout.setEnabled(true);
+            binding.searchView.setEnabled(true);
             binding.progress.setVisibility(View.GONE);
             ((AppAdapter) binding.recyclerView.getAdapter()).showSystem(showSystem);
             binding.searchView.addTextChangedListener(new TextWatcher() {

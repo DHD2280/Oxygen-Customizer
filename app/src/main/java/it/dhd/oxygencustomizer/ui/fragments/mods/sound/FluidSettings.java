@@ -74,14 +74,14 @@ public class FluidSettings extends AppFragmentBase {
         binding.appFunctionSwitch.setSwitchChecked(mPreferences.getBoolean("fluid_music_custom_switch", false));
 
         new LoadAppsTask(getAppContext(), mEnabledApps, false, () -> {
-            binding.searchViewLayout.setEnabled(false);
+            binding.searchView.setEnabled(false);
             binding.progress.setVisibility(View.VISIBLE);
         }, appList -> {
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getAppContext()));
             binding.recyclerView.setAdapter(new AppAdapter(appList,
                     this::onSwitchChange));
             binding.recyclerView.setHasFixedSize(true);
-            binding.searchViewLayout.setEnabled(true);
+            binding.searchView.setEnabled(true);
             binding.progress.setVisibility(View.GONE);
             ((AppAdapter) binding.recyclerView.getAdapter()).showSystem(showSystem);
             binding.searchView.addTextChangedListener(new TextWatcher() {

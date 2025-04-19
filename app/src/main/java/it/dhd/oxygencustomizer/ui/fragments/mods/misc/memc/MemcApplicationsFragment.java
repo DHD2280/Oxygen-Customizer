@@ -111,7 +111,7 @@ public class MemcApplicationsFragment extends Fragment {
         new LoadAppsTask(
                 mPackageManager,
                 mEnabledApps, () -> {
-            binding.searchViewLayout.setEnabled(false);
+            binding.searchView.setEnabled(false);
             binding.progress.setVisibility(View.VISIBLE);
         }, appList -> {
             binding.recyclerView.addItemDecoration(new OplusRecyclerView.OplusRecyclerViewItemDecoration(requireContext()));
@@ -119,7 +119,7 @@ public class MemcApplicationsFragment extends Fragment {
             binding.recyclerView.setAdapter(new MemcAppAdapter(appList,
                     this::onItemClick));
             binding.recyclerView.setHasFixedSize(true);
-            binding.searchViewLayout.setEnabled(true);
+            binding.searchView.setEnabled(true);
             binding.progress.setVisibility(View.GONE);
             binding.searchView.addTextChangedListener(new TextWatcher() {
                 @Override
