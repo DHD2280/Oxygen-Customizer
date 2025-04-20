@@ -74,6 +74,13 @@ Thanks to those contributors, this project exists:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/tugaia56">
+                    <img src="https://avatars.githubusercontent.com/u/46009615?v=4" width="32;" alt="tugaia56"/>
+                    <br />
+                    <sub><b>Tullio</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/jeanrivera">
                     <img src="https://avatars.githubusercontent.com/u/24832354?v=4" width="32;" alt="jeanrivera"/>
                     <br />
