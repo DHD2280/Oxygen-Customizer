@@ -72,6 +72,7 @@
     <string name="battery_full">満充電</string>
     <string name="battery_level_percentage">バッテリーレベル</string>
     <string name="seconds">秒</string>
+    <string name="duration_seconds">%d 秒</string>
     <string name="milliseconds">ミリ秒</string>
     <string name="steps">ステップ</string>
     <string name="general_color_accent1">アクセント 1</string>
@@ -96,6 +97,7 @@
     <string name="lang_follow_system">システムに従う</string>
     <string name="pick_font_title">フォントを選択</string>
     <string name="pick_font_summary">フォントを選択します。\n最近のファイルからフォントを選択しないでください。</string>
+    <string name="general_style">スタイル</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">画像を選択</string>
     <string name="pick_image_summary">タップで画像を選択します。</string>
@@ -133,7 +135,11 @@
     <string name="white_color">ホワイト</string>
     <string name="black_color">ブラック</string>
     <string name="custom_color">カスタムカラー</string>
+    <string name="background_color">背景色</string>
     <string name="battery_info_button_title">バッテリー情報…</string>
+    <string name="general_enabled">有効</string>
+    <string name="general_disabled">無効</string>
+    <string name="requires_reboot">再起動が必要です</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">ステータスバーのオプション</string>
     <string name="statusbar_double_tap_sleep">ダブルタップでスリープ</string>
@@ -198,6 +204,7 @@
     <string name="status_bar_date_style_lowercase">小文字</string>
     <string name="status_bar_date_style_uppercase">大文字</string>
     <string name="status_bar_date_format_custom">カスタム Java フォーマット</string>
+    <string name="string_formatter_manual_body">通常のテキストに加えて、日付や温度などの動的変数も使用できます：\n\n$G\&lt;format\&gt; : グレゴリオ暦、format*に基づく\n$P\&lt;format\&gt; : ペルシャ暦、format*に基づく\n$L ：太陰暦\n$I\&lt;calendar\&gt;&lt;format\&gt; : イスラム暦。カレンダーはオプションで、デフォルトはイスラム暦です。C、Islamic-Civil、U、Islamic Umalquraも使用できます。\n$T\&lt;format\&gt;[interval] : 温度；\nformatは、b（バッテリー）、c（CPU）、g（GPU）、s（表面）のいずれかです。\n最後に、更新間隔をオプションで指定します（デフォルト：60 秒）\n\n*フォーマットのドキュメントについては、「Java Date Format」を検索してください</string>
     <string name="preview">プレビュー</string>
     <string name="clock_date_position">日付の位置</string>
     <string name="clock_date_right">時間の右側</string>
@@ -211,6 +218,8 @@
     <string name="status_bar_clock_background_chip_title">背景チップ</string>
     <string name="status_bar_clock_background_chip_style_title">背景チップのスタイル</string>
     <string name="status_bar_clock_advanced_formatting">高度 (上記の設定よりも優先されます!)</string>
+    <string name="status_bar_clock_before_clock">時計の前のカスタムテキスト</string>
+    <string name="status_bar_clock_after_clock">時計の後のカスタムテキスト</string>
     <string name="status_bar_clock_smaller">最小 (70%)</string>
     <!-- Status bar padding -->
     <string name="statusbar_padding">ステータスバーの余白</string>

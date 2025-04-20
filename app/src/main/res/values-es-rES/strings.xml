@@ -72,6 +72,7 @@
     <string name="battery_full">Batería llena</string>
     <string name="battery_level_percentage">Nivel de batería</string>
     <string name="seconds">Segundos</string>
+    <string name="duration_seconds">%d segundos</string>
     <string name="milliseconds">Milisegundos</string>
     <string name="steps">Pasos</string>
     <string name="general_color_accent1">Acento 1</string>
@@ -568,6 +569,7 @@
     <string name="launcher_app_details_title">Abrir detalles de la aplicación</string>
     <string name="launcher_app_details_summary">Toca el ícono de la aplicación para abrir los detalles de la aplicación en Ajustes.</string>
     <string name="remove_home_pagination">Eliminar paginación de inicio</string>
+    <string name="themed_icons_workspace">Espacio de trabajo</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra de navegación</string>
     <string name="gesture_navigation_title">Navegación con gestos</string>
@@ -718,6 +720,11 @@
     <!-- Aod Weather -->
     <!-- Aod Pulse -->
     <!-- Edge light -->
+    <string name="edge_light_30_sec">30 segundos</string>
+    <string name="edge_light_1_min">1 minuto</string>
+    <string name="edge_light_2_min">2 minutos</string>
+    <string name="edge_light_5_min">5 minutos</string>
+    <string name="edge_light_10_min">10 minutos</string>
     <!-- Sound Mods -->
     <string name="misc_category">Misceláneo</string>
     <!-- Pulse music visualizer -->
