@@ -139,6 +139,7 @@ public class XPLauncher implements ServiceConnection {
                     instance.updatePrefs();
                 } catch (Throwable ignored) {
                 }
+                instance.initResources();
                 instance.handleLoadPackageInternal(lpparam);
                 runningMods.add(instance);
             } catch (Throwable T) {
