@@ -1172,6 +1172,7 @@
     <string name="theme_customization_toast_frame_title">Toast Çerçevesi</string>
     <string name="theme_customization_toast_frame_summary">Toast bildirim stilini değiştir</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">Tema, ayrı ayrı seçilebilen Arka Plan ve Vurgu renklerini içerir.</string>
     <string name="dark_shadow_enable_theme">Temayı etkinleştir</string>
     <string name="dark_shadow_footer">Dark Shadow Teması, OxygenOS için bir substratum temasıdır.\nBu temayı Oxygen Customizer\'a getirmek için tema geliştiricisiyle birlikte çalışıyoruz.</string>
     <!-- Settings Icons -->
