@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.startup.HybridClassLoader;
-import it.dhd.oxygencustomizer.xposed.startup.StartupHook;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public abstract class XposedMods {
