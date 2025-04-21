@@ -378,6 +378,10 @@ public class PreferenceHelper {
             case "status_bar_clock_color" -> {
                 return instance.mPreferences.getBoolean("status_bar_custom_clock_color", false);
             }
+            // Notification
+            case "statusbar_notification_app_icon_scale" -> {
+                return instance.mPreferences.getBoolean("statusbar_notification_app_icon", false);
+            }
 
             // Clock & date
             case "status_bar_clock_auto_hide_hduration", "status_bar_clock_auto_hide_sduration" -> {
@@ -1192,6 +1196,8 @@ public class PreferenceHelper {
                                     instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_sduration", 5));
             case NOTIF_TRANSPARENCY_VALUE ->
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
+            case "statusbar_notification_app_icon_scale" ->
+                String.valueOf(instance.mPreferences.getSliderFloat("statusbar_notification_app_icon_scale", 1.0f)) + "%";
 
             // Header Clock
             case "qs_header_clock_text_scaling" ->

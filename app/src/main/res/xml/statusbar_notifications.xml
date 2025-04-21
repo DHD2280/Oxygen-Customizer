@@ -15,8 +15,17 @@
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
             android:title="@string/statusbar_use_app_icon"
-            app:forcePosition="full"
             app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="statusbar_notification_app_icon_scale"
+            android:title="@string/statusbar_app_icon_scale"
+            app:decimalFormat="#.##"
+            app:defaultValue="1"
+            app:forcePosition="bottom"
+            app:maxVal="2.0"
+            app:minVal="0.5"
+            app:tickInterval="0.05" />
 
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:selectable="false"
