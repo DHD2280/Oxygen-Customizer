@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
         google()
+        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        mavenLocal()
         mavenCentral()
         maven { setUrl("https://jitpack.io")  }
     }
@@ -17,4 +19,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Oxygen Customizer"
 include(":app")
- 
+include(":oos_launcher")

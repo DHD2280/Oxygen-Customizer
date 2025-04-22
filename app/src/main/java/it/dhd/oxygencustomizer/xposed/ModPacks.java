@@ -14,6 +14,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.framework.PackageManager;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.SleepOnFlat;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.CustomNavGestures;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
+import it.dhd.oxygencustomizer.xposed.hooks.launcher.RecentsMenu;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
@@ -135,6 +136,7 @@ public class ModPacks {
                     modPacks.add(StatusbarNotification.class);
                     modPacks.add(StatusbarClock.class);
                     modPacks.add(StatusbarIcons.class);
+                    modPacks.add(BatteryBar.class);
                     modPacks.add(BatteryStyleManager.class);
 //                    modPacks.add(NotificationTransparency.class);
                     // QS
@@ -162,7 +164,6 @@ public class ModPacks {
                     modPacks.add(VolumePanel.class);
 
                     modPacks.add(GestureNavbarManager.class);
-                    modPacks.add(BatteryBar.class);
                     modPacks.add(AdaptivePlayback.class);
 
                     // Fluid Music Settings
@@ -181,6 +182,7 @@ public class ModPacks {
                 modPacks.add(Launcher.class);
                 modPacks.add(ThemedIcons.class);
                 modPacks.add(CustomNavGestures.class);
+                modPacks.add(RecentsMenu.class);
             }
         }
 

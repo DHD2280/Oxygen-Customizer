@@ -122,6 +122,7 @@ public class StatusbarMods extends XposedMods {
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
+    private float mNewIconScale = 1f;
     private boolean oos13 = false;
     private boolean mBroadcastRegistered = false;
 
@@ -154,6 +155,7 @@ public class StatusbarMods extends XposedMods {
 
         // Notifications
         mNewIconStyle = Xprefs.getBoolean("statusbar_notification_app_icon", false);
+        mNewIconScale = Xprefs.getSliderFloat("statusbar_notification_app_icon_scale", 1f);
 
         List<Float> paddings = Xprefs.getSliderValues("statusbarPaddings", 0);
         if (paddings.size() > 1) {
@@ -532,7 +534,7 @@ public class StatusbarMods extends XposedMods {
 
                         if (icon != null) {
                             if (DrawableSize != null) {
-                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", sysuiContext.getResources(), icon, dimen, dimen);
+                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", sysuiContext.getResources(), icon, dimen*mNewIconScale, dimen*mNewIconScale);
                             }
                             if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);

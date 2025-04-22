@@ -20,34 +20,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        app:forcePosition="top"
         app:iconSpaceReserved="false" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_view_layout"
+    <LinearLayout
+        android:id="@+id/edittext_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/searchpreference_search"
-        android:layout_marginHorizontal="12dp"
-        app:boxCornerRadiusBottomEnd="10dp"
-        app:boxCornerRadiusBottomStart="10dp"
-        app:boxCornerRadiusTopEnd="10dp"
-        app:boxCornerRadiusTopStart="10dp"
-        app:endIconMode="clear_text"
-        app:startIconDrawable="@drawable/ic_search">
+        android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+        android:background="@drawable/preference_background_bottom"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/preference_title_padding_start"
+        android:paddingEnd="@dimen/preference_title_padding_end">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <View
+            style="@style/HorizontalDivider"
+            android:layout_width="match_parent" />
+
+        <it.dhd.oneplusui.appcompat.edittext.OplusEditText
             android:id="@+id/search_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="@dimen/oplus_input_button_layout_margin_start"
+            android:layout_marginEnd="@dimen/oplus_input_button_layout_margin_start"
+            android:focusable="true"
+            android:hint="@string/searchpreference_search"
+            android:singleLine="true"
+            app:hintEnabled="true"
+            app:quickDelete="true" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:dividerColor="@color/colorDivider"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp" />
+        android:layout_marginVertical="8dp"
+        app:dividerColor="@color/colorDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

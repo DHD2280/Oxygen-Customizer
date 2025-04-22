@@ -58,6 +58,7 @@ class ScreenPreviewClickView(
     }
 
     companion object {
+        @Suppress("DEPRECATION")
         private fun isClick(event: MotionEvent, downX: Float, downY: Float): Boolean {
             return when {
                 // It's not a click if the event is not an UP action (though it may become one

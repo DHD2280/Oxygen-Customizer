@@ -271,7 +271,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
     public static void replaceFragment(Fragment fragment) {
         String tag = fragment.getClass().getSimpleName();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out, R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+        fragmentTransaction.setCustomAnimations(R.anim.oplus_open_slide_enter, R.anim.oplus_open_slide_exit, R.anim.oplus_close_slide_enter, R.anim.oplus_close_slide_exit);
         fragmentTransaction.replace(R.id.frame_layout, fragment, tag);
         if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

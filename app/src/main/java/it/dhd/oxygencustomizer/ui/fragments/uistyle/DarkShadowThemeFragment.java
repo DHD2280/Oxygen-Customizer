@@ -72,7 +72,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
         loadingDialog = new LoadingDialog(requireContext());
 
         binding.progress.setVisibility(View.GONE);
-        binding.searchViewLayout.setVisibility(View.GONE);
+        binding.searchView.setVisibility(View.GONE);
 
         binding.appFunctionSwitch.setTitle(getString(R.string.dark_shadow_enable_theme));
         binding.appFunctionSwitch.setSwitchChangeListener((buttonView, isChecked) -> {
@@ -105,7 +105,7 @@ public class DarkShadowThemeFragment extends BaseFragment {
             loadingDialog.show(getString(R.string.loading_dialog_wait));
             Log.w("DarkShadowThemeFragment", "onEnabledClicked: " + darkShadowItem.toString());
             DarkShadowUtils.saveColor(darkShadowItem);
-            enableShadowTheme();
+//            enableShadowTheme();
             int i = 0;
             for (String resName : darkShadowItem.getResourceNames()) {
                 FabricatedUtil
@@ -185,13 +185,6 @@ public class DarkShadowThemeFragment extends BaseFragment {
 
         return new ConcatAdapter(titleAdapter, colors, footerAdapter);
     }
-
-//    private void setupPrefs() {
-//        FooterPreference darkShadowFooter = findPreference("dark_shadow_footer");
-//        darkShadowFooter.setLearnMoreAction(v -> openDarkShadow());
-//
-//        OplusPreferenceCategory mColorsCategory = findPreference("colors_category");
-//    }
 
     private void openDarkShadow() {
         requireActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://mythemedarkandmore.altervista.org/")));

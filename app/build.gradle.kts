@@ -216,6 +216,9 @@ dependencies {
     //Gson
     implementation(libs.gson)
 
+    // Stub classes
+    compileOnly(project(":oos_launcher"))
+
 }
 
 tasks.register("printVersionName") {

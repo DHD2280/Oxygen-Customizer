@@ -171,6 +171,7 @@
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
     <string name="statusbar_notifications_cat">Statusbar Notifications</string>
     <string name="statusbar_use_app_icon">Use app icon for notifications</string>
+    <string name="statusbar_app_icon_scale">Icon scale</string>
     <string name="statusbar_notifications_transparency">Notifications Transparency</string>
     <string name="statusbar_notification_transparency">Notification transparency</string>
     <string name="statusbar_notification_transparency_value">Transparency amount</string>
