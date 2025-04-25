@@ -91,7 +91,7 @@ jobs:
           push-branch: 'nightly-versioning'
           commit-message: 'Update nightly version'
           force-add: 'true'
-          rebase: 'true'
+          rebase: 'false'
           files: ./nightly/latestNightly.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
