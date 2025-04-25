@@ -69,6 +69,36 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
+      - name: Get Commit Messages
+        id: get_commit_message
+        run: |
+          COMMIT_MESSAGE_HEADER=""
+          COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
+          
+          if [[ "$COMMIT_MESSAGE_HEADER" == *".md"* || "$COMMIT_MESSAGE_HEADER" == *".yml"* ]]; then
+            echo "Skipping build upload."
+            echo "SKIP_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_BUILD=false" >> $GITHUB_ENV
+          fi
+          
+          if [[ "$COMMIT_MESSAGE_HEADER" =~ ^Merge\ remote-tracking\ branch ]]; then
+            COMMIT_MESSAGE_HEADER="Synced with the latest changes"
+          fi
+          
+          if [[ "$COMMIT_MESSAGE_HEADER" =~ DHD2280/beta-localization$ ]]; then
+            COMMIT_MESSAGE_HEADER="Updated translations"
+          fi
+          
+          if [[ -z "$COMMIT_MESSAGE_HEADER" ]]; then
+            echo "No valid changelog found!"
+            COMMIT_MESSAGE_HEADER="No valid changelog found!"
+            echo "SKIP_BUILD=true" >> $GITHUB_ENV
+          fi
+          
+          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
+          echo "COMMIT_MESSAGE_HEADER=${ESCAPED_MESSAGE}" >> $GITHUB_ENV
+
       # now everything fine, let's update nightly version
       - name: Reset and checkout
         run: |
@@ -99,36 +129,6 @@ jobs:
           files: latestNightly.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
-
-      - name: Get Commit Messages
-        id: get_commit_message
-        run: |
-            COMMIT_MESSAGE_HEADER=""
-            COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-            
-            if [[ "$COMMIT_MESSAGE_HEADER" == *".md"* || "$COMMIT_MESSAGE_HEADER" == *".yml"* ]]; then
-              echo "Skipping build upload."
-              echo "SKIP_BUILD=true" >> $GITHUB_ENV
-            else
-              echo "SKIP_BUILD=false" >> $GITHUB_ENV
-            fi
-            
-            if [[ "$COMMIT_MESSAGE_HEADER" =~ ^Merge\ remote-tracking\ branch ]]; then
-              COMMIT_MESSAGE_HEADER="Synced with the latest changes"
-            fi
-            
-            if [[ "$COMMIT_MESSAGE_HEADER" =~ DHD2280/beta-localization$ ]]; then
-              COMMIT_MESSAGE_HEADER="Updated translations"
-            fi
-            
-            if [[ -z "$COMMIT_MESSAGE_HEADER" ]]; then
-              echo "No valid changelog found!"
-              COMMIT_MESSAGE_HEADER="No valid changelog found!"
-              echo "SKIP_BUILD=true" >> $GITHUB_ENV
-            fi
-            
-            ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
-            echo "COMMIT_MESSAGE_HEADER=${ESCAPED_MESSAGE}" >> $GITHUB_ENV
       
 
       - name: Telegram File Message
@@ -148,5 +148,5 @@ jobs:
           -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
           -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
           -d text="🛠 ${{ env.COMMIT_MESSAGE }}" \
-          -d reply_markup='{
+          -d reply_markup={
           "inline_keyboard": [[{"text": "⬇️ Download (required login)","url": "https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}"}]]}
