@@ -105,6 +105,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
                 bundle.putString("filePath", intent.getStringExtra("filePath"));
+                bundle.putBoolean("isNightly", intent.getBooleanExtra("isNightly", false));
                 UpdateFragment updateFragment = new UpdateFragment();
                 updateFragment.setArguments(bundle);
                 replaceFragment(updateFragment);
