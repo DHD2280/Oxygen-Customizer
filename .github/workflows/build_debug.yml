@@ -23,7 +23,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Get application version name
-        run: echo "VERSION_NAME=nightly-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
+        run: |
+          echo "VERSION_NAME=nightly-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
+          echo "VERSION_CODE=$(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')" >> $GITHUB_ENV
+          echo "NIGHTLY_VERSION="${{ env.VERSION_NAME }} (#${{github.run_number}})" >> $GITHUB_ENV
 
       - name: Bump application version code
         uses: chkfung/android-version-actions@v1.2.3
@@ -65,6 +68,33 @@ jobs:
           name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}}) Debug"
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+      # now everything fine, let's update nightly version
+      - name: Checkout nightly-versioning
+        uses: actions/checkout@v4
+        with:
+          ref: nightly-versioning
+          path: nightly
+
+      - name: Aggiorna latestNightly.json
+        working-directory: ./nightly
+        run: |
+          sed -i 's/"version":.*/"version": "'${{env.NIGHTLY_VERSION}}'",/' latestNightly.json
+          sed -i 's/"versionCode":.*/"versionCode": '${{env.VERSION_CODE}}',/' latestNightly.json
+          sed -i 's/"devBuild":.*/"devBuild": '${{github.run_number}}',/' latestNightly.json
+          sed -i 's/"actionRun":.*/"actionRun": '${{github.run_id}}',/' latestNightly.json
+
+      - name: Commit
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'nightly-versioning'
+          commit-message: 'Update nightly version'
+          force-add: 'true'
+          rebase: 'true'
+          files: ./nightly/latestNightly.json
+          name: GitHub
+          email: OxygenCustomizer@dhd.it
 
       - name: Get commit message header
         id: get_commit_message
