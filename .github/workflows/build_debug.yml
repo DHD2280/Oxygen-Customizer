@@ -146,15 +146,7 @@ jobs:
           
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
           -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
-          -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }}
+          -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
           -d text="🛠 ${{ env.COMMIT_MESSAGE }}" \
           -d reply_markup='{
-          "inline_keyboard": [
-              [
-                {
-                  "text": "⬇️ Download (required login)",
-                  "url": "https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}"
-                }
-              ]
-              ]
-            }
+          "inline_keyboard": [[{"text": "⬇️ Download (required login)","url": "https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}"}]]}
