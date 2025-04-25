@@ -70,11 +70,11 @@ jobs:
 #          if-no-files-found: error
 
       # now everything fine, let's update nightly version
-      - name: Checkout nightly-versioning
-        uses: actions/checkout@v4
-        with:
-          ref: nightly-versioning
-          path: nightly
+      - name: Reset and checkout
+        run: |
+          git reset --hard
+          git clean -fdx
+          git checkout nightly-versioning
 
       - name: Update latestNightly.json
         working-directory: ./nightly
