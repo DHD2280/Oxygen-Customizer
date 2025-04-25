@@ -85,12 +85,16 @@ jobs:
           sed -i 's/"actionRun":.*/"actionRun": '${{github.run_id}}',/' latestNightly.json
 
       - name: Commit
-        uses: EndBug/add-and-commit@v9
+        uses: github-actions-x/commit@v2.9
         with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: "Update nightly version"
-          add: './nightly/latestNightly.json --force'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'nightly-versioning'
+          commit-message: 'Update nightly version'
+          force-add: 'true'
+          rebase: 'true'
+          files: ./nightly/latestNightly.json
+          name: GitHub
+          email: OxygenCustomizer@dhd.it
 
       - name: Get commit message header
         id: get_commit_message
