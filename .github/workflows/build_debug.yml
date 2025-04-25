@@ -90,7 +90,6 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: "Update nightly version"
-          branch: nightly-versioning
           force: true
           add: './nightly/latestNightly.json'
           token: ${{ secrets.GITHUB_TOKEN }}
