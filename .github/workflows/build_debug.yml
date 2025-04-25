@@ -90,9 +90,7 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: "Update nightly version"
-          force: true
-          add: './nightly/latestNightly.json'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          add: './nightly/latestNightly.json --force'
 
       - name: Get commit message header
         id: get_commit_message
