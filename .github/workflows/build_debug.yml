@@ -74,7 +74,12 @@ jobs:
         run: |
           git reset --hard
           git clean -fdx
-          git checkout nightly-versioning
+
+      - name: Checkout nightly-versioning
+        uses: actions/checkout@v4
+        with:
+          ref: nightly-versioning
+          path: nightly
 
       - name: Update latestNightly.json
         working-directory: ./nightly
