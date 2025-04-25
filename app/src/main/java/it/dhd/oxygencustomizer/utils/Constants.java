@@ -212,20 +212,43 @@ public final class Constants {
         }
 
         public static class QsTilesCustomization {
+            // Tile Colors
+            // Highlight
+            public static final String QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH = "qs_custom_highlight_tiles_colors";
+            public static final String QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED = "qs_tile_active_color_enabled_highlight";
+            public static final String QS_TILE_ACTIVE_COLOR_HIGHLIGHT = "qs_tile_active_color_highlight";
+            public static final String QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED = "qs_tile_inactive_color_enabled_highlight";
+            public static final String QS_TILE_INACTIVE_COLOR_HIGHLIGHT = "qs_tile_inactive_color_highlight";
+            public static final String QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED = "qs_tile_disabled_color_enabled_highlight";
+            public static final String QS_TILE_DISABLED_COLOR_HIGHLIGHT = "qs_tile_disabled_color_highlight";
+            // Icon for separate qs
+            public static final String QS_TILE_HIGHLIGHT_CUSTOM_ICON_BG_CAT = "qs_tiles_icon_background_colors";
+            public static final String QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON = "qs_tile_active_color_enabled_highlight_icon";
+            public static final String QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON = "qs_tile_active_color_highlight_icon";
+            public static final String QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON = "qs_tile_inactive_color_highlight_icon";
+            public static final String QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON = "qs_tile_disabled_color_highlight_icon";
+            // Base
+            public static final String QS_TILE_CUSTOM_COLORS_SWITCH = "qs_custom_tiles_colors";
             public static final String QS_TILE_ACTIVE_COLOR_ENABLED = "qs_tile_active_color_enabled";
             public static final String QS_TILE_ACTIVE_COLOR = "qs_tile_active_color";
             public static final String QS_TILE_INACTIVE_COLOR_ENABLED = "qs_tile_inactive_color_enabled";
             public static final String QS_TILE_INACTIVE_COLOR = "qs_tile_inactive_color";
             public static final String QS_TILE_DISABLED_COLOR_ENABLED = "qs_tile_disabled_color_enabled";
             public static final String QS_TILE_DISABLED_COLOR = "qs_tile_disabled_color";
+
+            // Media Tile
             public static final String QS_MEDIA_SHOW_ALBUM_ART = "qs_media_show_album_art";
             public static final String QS_MEDIA_ART_FILTER = "qs_media_art_filter";
             public static final String QS_MEDIA_ART_BLUR_AMOUNT = "qs_media_blur_amount";
             public static final String QS_MEDIA_ART_TINT_COLOR = "qs_media_art_tint_color";
             public static final String QS_MEDIA_ART_TINT_AMOUNT = "qs_media_art_tint_amount";
+
+            // Labels
             public static final String QS_TILE_HIDE_LABELS = "qs_hide_labels";
             public static final String QS_TILE_LABELS_CUSTOM_COLOR_ENABLED = "qs_tile_label_enabled";
             public static final String QS_TILE_LABELS_CUSTOM_COLOR = "qs_tile_label";
+
+            // Sliders
             public static final String QS_BRIGHTNESS_SLIDER_CUSTOMIZE = "customize_brightness_slider";
             public static final String QS_BRIGHTNESS_SLIDER_COLOR_MODE = "brightness_slider_progress_color_mode";
             public static final String QS_BRIGHTNESS_SLIDER_COLOR = "brightness_slider_color";
@@ -233,6 +256,8 @@ public final class Constants {
             public static final String QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR = "brightness_slider_background_color";
             public static final String QS_SLIDERS_REMOVE_BLUR = "qs_sliders_remove_blur";
             public static final String QS_SLIDERS_BLEND_COLOR = "qs_slider_blend_color";
+
+            // Tile Animations
             public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";
             public static final String QS_TILE_ANIMATION_INTERPOLATOR = "qs_tile_animation_interpolator";
             public static final String QS_TILE_ANIMATION_DURATION = "qs_tile_animation_duration";
@@ -240,11 +265,13 @@ public final class Constants {
             public static final String QS_TILE_ANIMATION_TRANSFORMATIONS = "qs_tile_transformations";
 
             // Qs Radius
+            // Highlight
             public static final String QS_TILE_HIGHTLIGHT_RADIUS = "qs_tile_highlight_custom_radius_enabled";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT = "qs_tile_highlight_custom_radius_top_left";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT = "qs_tile_highlight_custom_radius_top_right";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT = "qs_tile_highlight_custom_radius_bottom_left";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT = "qs_tile_highlight_custom_radius_bottom_right";
+            // Base
             public static final String QS_TILE_RADIUS = "qs_tile_custom_radius_enabled";
             public static final String QS_TILE_RADIUS_TOP_LEFT = "qs_tile_custom_radius_top_left";
             public static final String QS_TILE_RADIUS_TOP_RIGHT = "qs_tile_custom_radius_top_right";
@@ -252,6 +279,17 @@ public final class Constants {
             public static final String QS_TILE_RADIUS_BOTTOM_RIGHT = "qs_tile_custom_radius_bottom_right";
 
             public static final String[] QS_UPDATE_PREFS = {
+                    QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH,
+                    QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED,
+                    QS_TILE_ACTIVE_COLOR_HIGHLIGHT,
+                    QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED,
+                    QS_TILE_INACTIVE_COLOR_HIGHLIGHT,
+                    QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED,
+                    QS_TILE_DISABLED_COLOR_HIGHLIGHT,
+                    QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON,
+                    QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON,
+                    QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON,
+                    QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON,
                     QS_TILE_ACTIVE_COLOR_ENABLED,
                     QS_TILE_ACTIVE_COLOR,
                     QS_TILE_INACTIVE_COLOR_ENABLED,
@@ -609,6 +647,7 @@ public final class Constants {
             public static final String LOCKSCREEN_PEEK_CARD_BSX = "peek_bottom_sx_radius";
             public static final String LOCKSCREEN_PEEK_CARD_BDX = "peek_bottom_dx_radius";
             public static final String LOCKSCREEN_PEEK_TOP_MARGIN = "peek_top_margin";
+            public static final String LOCKSCREEN_PEEK_USE_APP_ICON = "peek_use_app_icons";
 
             public static final String[] LOCKSCREEN_PEEK_PREFS = {
                     LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
@@ -623,7 +662,8 @@ public final class Constants {
                     LOCKSCREEN_PEEK_CARD_TSX,
                     LOCKSCREEN_PEEK_CARD_TDX,
                     LOCKSCREEN_PEEK_CARD_BSX,
-                    LOCKSCREEN_PEEK_CARD_BDX
+                    LOCKSCREEN_PEEK_CARD_BDX,
+                    LOCKSCREEN_PEEK_USE_APP_ICON
             };
 
         }

@@ -3,45 +3,9 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR_MODE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_CUSTOMIZE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_UPDATE_PREFS;
+import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.*;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
@@ -55,8 +19,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -86,15 +48,32 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
 
+import com.oplus.posteffect.BlurDrawable;
+import com.oplus.posteffect.BlurParam;
+import com.oplus.posteffect.ForegroundBlurParam;
+import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
+import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
+
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.neonorbit.dexplore.DexFactory;
+import io.github.neonorbit.dexplore.Dexplore;
+import io.github.neonorbit.dexplore.filter.ClassFilter;
+import io.github.neonorbit.dexplore.filter.DexFilter;
+import io.github.neonorbit.dexplore.filter.ReferenceTypes;
+import io.github.neonorbit.dexplore.result.ClassData;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.QsHighlightTileViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.QsTileViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
@@ -121,7 +100,17 @@ public class QsTileCustomization extends XposedMods {
     private final int STATE_INACTIVE = 1;
     private static Object mPersonalityManager = null;
 
-    // Qs Tile Colors
+    private String MyDeviceBaseClass = null;
+    // Qs Tile Colors Highlight
+    private boolean qsCustomHighlightTileColors = false; // Main Switch OOS15
+    private int qsInactiveColorHighlight, qsActiveColorHighlight, qsDisabledColorHighlight;
+    private boolean qsInactiveColorEnabledHighlight = false, qsActiveColorEnabledHighlight = false, qsDisabledColorEnabledHighlight = false;
+    // Qs Highlight icon background - separate qs
+    private boolean qsCustomHighlightIconTileColors = false;
+    private int qsInactiveColorHighlightIcon, qsActiveColorHighlightIcon, qsDisabledColorHighlightIcon;
+
+    // Qs Tile Colors Base
+    private boolean qsCustomTileColors = false; // Main Switch OOS15
     private int qsInactiveColor, qsActiveColor, qsDisabledColor;
     private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false, qsDisabledColorEnabled = false;
 
@@ -173,6 +162,11 @@ public class QsTileCustomization extends XposedMods {
     private int mColorOnAlbum = Color.WHITE;
     private boolean canShow = false;
 
+    // Qs Tile Colors OOS15
+    private QsTileViewBackgroundProxyImplOC mTileViewBackgroundProxy = null;
+    private QsHighlightTileViewBackgroundProxyImplOC mHighlightTileViewBackgroundProxy = null;
+    private QsHighlightTileViewBackgroundProxyImplOC mHighlightPluginTileViewBackgroundProxy = null;
+
     public QsTileCustomization(Context context) {
         super(context);
     }
@@ -182,6 +176,21 @@ public class QsTileCustomization extends XposedMods {
         if (Xprefs == null) return;
 
         // Qs Colors
+        // Highlight
+        qsCustomHighlightTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH, false);
+        qsActiveColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED, false);
+        qsActiveColorHighlight = Xprefs.getInt(QS_TILE_ACTIVE_COLOR_HIGHLIGHT, Color.RED);
+        qsInactiveColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED, false);
+        qsInactiveColorHighlight = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT, Color.GRAY);
+        qsDisabledColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED, false);
+        qsDisabledColorHighlight = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT, Color.DKGRAY);
+        // Icon for separate qs
+        qsCustomHighlightIconTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, true);
+        qsActiveColorHighlightIcon = Xprefs.getInt(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON, Color.RED);
+        qsInactiveColorHighlightIcon = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON, Color.GRAY);
+        qsDisabledColorHighlightIcon = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON, Color.DKGRAY);
+        // Base
+        qsCustomTileColors = Xprefs.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false);
         qsActiveColorEnabled = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
         qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, Color.RED);
         qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
@@ -236,14 +245,26 @@ public class QsTileCustomization extends XposedMods {
                     if (Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) || Key[0].equals(QS_TILE_INACTIVE_COLOR)) {
                         updateMediaQs();
                     }
-                    if (Build.VERSION.SDK_INT >= 35) {
-                        if (Key[0].equals(QS_TILE_HIDE_LABELS) ||
-                                Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR) ||
-                                Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED)) {
-                            SystemUtils.doubleToggleDarkMode();
-                        }
-                    }
                     notifyQsUpdate();
+                }
+            }
+            if (Build.VERSION.SDK_INT >= 35) {
+                if (Key[0].equals(QS_TILE_HIDE_LABELS) ||
+                        Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR) ||
+                        Key[0].equals(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED) ||
+                        Key[0].equals(QS_TILE_CUSTOM_COLORS_SWITCH) ||
+                        Key[0].equals(QS_TILE_ACTIVE_COLOR) ||
+                        Key[0].equals(QS_TILE_DISABLED_COLOR) ||
+                        Key[0].equals(QS_TILE_INACTIVE_COLOR) ||
+                        Key[0].equals(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH) ||
+                        Key[0].equals(QS_TILE_ACTIVE_COLOR_HIGHLIGHT) ||
+                        Key[0].equals(QS_TILE_DISABLED_COLOR_HIGHLIGHT) ||
+                        Key[0].equals(QS_TILE_INACTIVE_COLOR_HIGHLIGHT) ||
+                        Key[0].equals(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON) ||
+                        Key[0].equals(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON) ||
+                        Key[0].equals(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON) ||
+                        Key[0].equals(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON)) {
+                    updateTileColors();
                 }
             }
             if (Key[0].equals(QS_MEDIA_SHOW_ALBUM_ART) ||
@@ -271,6 +292,7 @@ public class QsTileCustomization extends XposedMods {
                     .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
+        findMyDevices(lpparam);
         // Color Hooker
         hookQsColors();
 
@@ -430,7 +452,30 @@ public class QsTileCustomization extends XposedMods {
     }
 
 
+    private void findMyDevices(XC_LoadPackage.LoadPackageParam lpParam) {
+        ClassFilter classFilter = new ClassFilter.Builder()
+                .setReferenceTypes(ReferenceTypes.STRINGS_ONLY)
+                .setReferenceFilter(pool ->
+                        pool.contains("com.oplus.mydevices.ACTION_DEVICE_CARD_HOME_ACTIVITY")
+                )
+                .setModifiers(Modifier.PUBLIC | Modifier.ABSTRACT)
+                .build();
+
+        Dexplore dexplore = DexFactory.load(lpParam.appInfo.sourceDir);
+
+        ClassData result = dexplore.findClass(DexFilter.MATCH_ALL, classFilter);
+        MyDeviceBaseClass = result.clazz;
+        List<ClassData> results = dexplore.findClasses(DexFilter.MATCH_ALL, classFilter, -1);  // find all
+        Log.d("QsTileCustomization", "findMyDevices: " + Arrays.toString(results.toArray()));
+    }
+
     public void hookQsColors() {
+
+        if (Build.VERSION.SDK_INT >= 35) {
+            hookQsColors15();
+            return;
+        }
+
         ReflectedClass OplusQSTileBaseView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS14 */,
@@ -445,12 +490,99 @@ public class QsTileCustomization extends XposedMods {
 
     }
 
+    private void hookQsColors15() {
+
+        // Highlight Classic
+        ReflectedClass OplusQSHighlightTileView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView");
+        OplusQSHighlightTileView
+                .afterConstruction()
+                .run(param -> {
+                    if (qsCustomHighlightTileColors) {
+                        mHighlightTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                        QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "mBackgroundProxy");
+                        mHighlightTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
+                        mBackgroundProxy = mHighlightTileViewBackgroundProxy;
+                        setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
+                    }
+                });
+
+        // Base Classic
+        ReflectedClass OplusQSTileBaseView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSTileBaseView");
+        OplusQSTileBaseView
+                .afterConstruction()
+                .run(param -> {
+                    if (qsCustomTileColors) {
+                        mTileViewBackgroundProxy = new QsTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                        QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "mBackgroundProxy");
+                        mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
+                        mBackgroundProxy = mTileViewBackgroundProxy;
+                        setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
+                    }
+                });
+
+        // Highlight separated
+        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        OplusQSHighlightPluginTileView
+                .afterConstruction()
+                .run(param -> {
+                    if (qsCustomHighlightTileColors) {
+                        mHighlightPluginTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                        QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "mBackgroundProxy");
+                        mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
+                        mBackgroundProxy = mHighlightPluginTileViewBackgroundProxy;
+                        setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
+                    }
+                });
+
+        // Highlight icon background
+        ReflectedClass OplusQSIconView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSIconView");
+        OplusQSIconView
+                .after("tintBgColor")
+                .run(param -> {
+                    int state = (int) param.args[1];
+                    if (!qsCustomHighlightTileColors) return;
+                    int color = switch (state) {
+                        case STATE_ACTIVE -> qsActiveColorHighlightIcon;
+                        case STATE_INACTIVE -> qsInactiveColorHighlightIcon;
+                        default -> qsDisabledColorHighlightIcon;
+                    };
+                    callMethod(param.thisObject, "setIconBackgroundColor", color);
+                });
+
+        // My device tile
+        if (MyDeviceBaseClass != null) {
+            ReflectedClass MyDeviceTileView = ReflectedClass.of(MyDeviceBaseClass);
+            MyDeviceTileView
+                    .after("setColorBackground")
+                    .run(param -> {
+                        Drawable bg = (Drawable) ((View)param.thisObject).getBackground();
+                        Log.d("QsTileCustomization", "setColorBackground: " + bg.getClass().getName());
+                        if (bg instanceof BlurDrawable blurDrawable) {
+                            blurDrawable.setBlurParams(
+                                    ((BlurDrawable) bg).getBlurParams(),
+                                    new ForegroundBlurParam(0, qsInactiveColorHighlight, qsInactiveColorHighlight)
+                            );
+                            blurDrawable.invalidateSelf();
+                        } else {
+                            if (bg instanceof ShapeDrawable) {
+                                ((ShapeDrawable) bg).getPaint().setColor(qsInactiveColorHighlight);
+                            } else if (bg instanceof GradientDrawable) {
+                                ((GradientDrawable) bg).setColor(qsInactiveColorHighlight);
+                            }
+                            bg.invalidateSelf();
+                        }
+                        ((View) param.thisObject).setBackground(bg);
+                    });
+        }
+
+    }
+
     public void hookQsTileAnimation() {
         ReflectedClass OplusQSTileBaseView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSTileBaseView" /* OOS13 */);
-        if (OplusQSTileBaseView == null) {
+        if (OplusQSTileBaseView.getClazz() == null) {
             log(new Throwable("OplusQSTileBaseView not found"));
         }
         final ReflectedClass.ReflectionConsumer animationHook = param -> {
@@ -464,10 +596,15 @@ public class QsTileCustomization extends XposedMods {
                 "com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView" /* OOS15 */,
                 "com.oplus.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS14 */,
                 "com.oplusos.systemui.qs.qstileimpl.OplusQSHighlightTileView" /* OOS13 */);
-        if (OplusQSHighlightTileView == null) {
+        if (OplusQSHighlightTileView.getClazz() == null) {
             log(new Throwable("OplusQSHighlightTileView not found"));
         }
         OplusQSHighlightTileView.after("performClick").run(animationHook);
+
+        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        if (OplusQSHighlightPluginTileView.getClazz() != null) {
+            OplusQSHighlightPluginTileView.after("performViewClick").run(animationHook);
+        }
     }
 
     public void hookMediaPanel() {
@@ -839,7 +976,7 @@ public class QsTileCustomization extends XposedMods {
         return listenerPackage.equals(packageName);
     }
 
-    public static void notifyQsUpdate() {
+    public void notifyQsUpdate() {
         if (mPersonalityManager == null) return;
 
         int currentShape = 0;
@@ -848,6 +985,7 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable t) {
             XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + Log.getStackTraceString(t));
         }
+        callMethod(mPersonalityManager, "notifyListener", 0);
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }
 
@@ -896,6 +1034,7 @@ public class QsTileCustomization extends XposedMods {
     private ReflectedClass.ReflectionConsumer getColorHook(boolean isHighlight) {
         return param -> {
             int state = (int) param.args[0];
+            boolean needUpdate = false;
             Shape mCustomShape = null;
             if (customHighlightTileRadius && isHighlight) {
                 mCustomShape = getTileShape(true);
@@ -903,47 +1042,35 @@ public class QsTileCustomization extends XposedMods {
                 mCustomShape = getTileShape(false);
             }
             ShapeDrawable mPersonalityDrawable = (ShapeDrawable) param.getResult();
-            if (mCustomShape != null)
+            if (mCustomShape != null) {
+                needUpdate = true;
                 mPersonalityDrawable.setShape(mCustomShape);
-            if (state == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
-            {
-                mPersonalityDrawable.getPaint().setColor(qsInactiveColor);
-            } else if (state == STATE_ACTIVE && qsActiveColorEnabled) // Active State
-            {
-                mPersonalityDrawable.getPaint().setColor(qsActiveColor);
-            } else if (qsDisabledColorEnabled && state != STATE_INACTIVE && state != STATE_ACTIVE) // Disabled State
-            {
-                mPersonalityDrawable.getPaint().setColor(qsDisabledColor);
             }
-            if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius)
+            if (state == STATE_INACTIVE) { // Inactive State
+                if (isHighlight ? qsInactiveColorEnabledHighlight : qsInactiveColorEnabled) {
+                    needUpdate = true;
+                    mPersonalityDrawable.getPaint().setColor(
+                            isHighlight ? qsInactiveColorHighlight : qsInactiveColor
+                    );
+                }
+            } else if (state == STATE_ACTIVE) { // Active State
+                if (isHighlight ? qsActiveColorEnabledHighlight : qsActiveColorEnabled) {
+                    needUpdate = true;
+                    mPersonalityDrawable.getPaint().setColor(
+                            isHighlight ? qsActiveColorHighlight : qsActiveColor
+                    );
+                }
+            } else { // Disabled State
+                if (isHighlight ? qsDisabledColorEnabledHighlight : qsDisabledColorEnabled) {
+                    needUpdate = true;
+                    mPersonalityDrawable.getPaint().setColor(
+                            isHighlight ? qsDisabledColorHighlight : qsDisabledColor
+                    );
+                }
+            }
+            if (needUpdate)
                 mPersonalityDrawable.invalidateSelf();
         };
-    }
-
-    // TODO: Custom qs tile shape for OOS15
-    private Drawable getCustomizedTile(Object tile, Object state, boolean isHighlight) {
-        if (tile == null || state == null) return null;
-        int intState = getIntField(state, "state");
-        Shape mCustomShape = null;
-        if (customHighlightTileRadius && isHighlight) {
-            mCustomShape = getTileShape(true);
-        } else if (customTileRadius && !isHighlight) {
-            mCustomShape = getTileShape(false);
-        }
-        Drawable mPersonalityDrawable = (Drawable) callMethod(tile, "getBackgroundDrawable");
-        if (intState == STATE_INACTIVE && qsInactiveColorEnabled) // Inactive State
-        {
-            mPersonalityDrawable.setColorFilter(new PorterDuffColorFilter(qsInactiveColor, PorterDuff.Mode.SRC_IN));
-        } else if (intState == STATE_ACTIVE && qsActiveColorEnabled) // Active State
-        {
-            mPersonalityDrawable.setColorFilter(new PorterDuffColorFilter(qsActiveColor, PorterDuff.Mode.SRC_IN));
-        } else if (qsDisabledColorEnabled && intState != STATE_INACTIVE && intState != STATE_ACTIVE) // Disabled State
-        {
-            mPersonalityDrawable.setColorFilter(new PorterDuffColorFilter(qsDisabledColor, PorterDuff.Mode.SRC_IN));
-        }
-        if (qsInactiveColorEnabled || qsActiveColorEnabled || qsDisabledColorEnabled || customHighlightTileRadius || customTileRadius)
-            mPersonalityDrawable.invalidateSelf();
-        return mPersonalityDrawable;
     }
 
     private Shape getTileShape(boolean isHighlight) {
@@ -973,6 +1100,20 @@ public class QsTileCustomization extends XposedMods {
                             .newInstance(getBlendMode(), qsBrightnessBackgroundColor, qsBrightnessBackgroundColor);
             default -> null;
         };
+    }
+
+    private void updateTileColors() {
+        if (mTileViewBackgroundProxy != null) {
+            mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
+        }
+        if (mHighlightTileViewBackgroundProxy != null) {
+            mHighlightTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
+        }
+        if (mHighlightPluginTileViewBackgroundProxy != null) {
+            mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlightIcon, qsInactiveColorHighlightIcon, qsDisabledColorHighlightIcon);
+        }
+        notifyQsUpdate();
+        SystemUtils.doubleToggleDarkMode();
     }
 
 }

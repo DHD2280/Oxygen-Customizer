@@ -203,14 +203,24 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLORS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_ICON_BG_CAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
@@ -218,6 +228,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
@@ -473,17 +486,60 @@ public class PreferenceHelper {
             }
 
             // Qs Appearance
-            case "qs_tiles_colors_cat" -> {
+            // Tile colors
+            // Common
+            case QS_TILE_ACTIVE_COLOR_ENABLED,
+                 QS_TILE_INACTIVE_COLOR_ENABLED,
+                 QS_TILE_DISABLED_COLOR_ENABLED,
+                 QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED,
+                 QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED,
+                 QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED -> {
                 return Build.VERSION.SDK_INT < 35;
             }
+            // Highlight
+            case QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
+            case QS_TILE_ACTIVE_COLOR_HIGHLIGHT -> {
+                return instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED, false) ||
+                        instance.mPreferences.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH, false);
+            }
+            case QS_TILE_INACTIVE_COLOR_HIGHLIGHT -> {
+                return instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED, false) ||
+                        instance.mPreferences.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH, false);
+            }
+            case QS_TILE_DISABLED_COLOR_HIGHLIGHT -> {
+                return instance.mPreferences.getBoolean(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED, false) ||
+                        instance.mPreferences.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH, false);
+            }
+            // Icon BG
+            case QS_TILE_HIGHLIGHT_CUSTOM_ICON_BG_CAT -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
+            case QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON,
+                 QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON,
+                 QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON -> {
+                return Build.VERSION.SDK_INT >= 35 &&
+                        instance.mPreferences.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, false);
+            }
+            // Base
+            case QS_TILE_CUSTOM_COLORS_SWITCH -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
             case QS_TILE_ACTIVE_COLOR -> {
-                return instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
+                return Build.VERSION.SDK_INT >= 35 ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                        instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_INACTIVE_COLOR -> {
-                return instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
+                return Build.VERSION.SDK_INT >= 35 ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                        instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_DISABLED_COLOR -> {
-                return instance.mPreferences.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
+                return Build.VERSION.SDK_INT >= 35 ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                        instance.mPreferences.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
             }
             case "brightness_slider_progress_color_mode" -> {
                 return instance.mPreferences.getBoolean("customize_brightness_slider", false);
@@ -808,8 +864,8 @@ public class PreferenceHelper {
             }
             case NOW_BAR_BATTERY_COLOR_1,
                  NOW_BAR_BATTERY_COLOR_2,
-                    NOW_BAR_BATTERY_COLOR_3,
-                    NOW_BAR_BATTERY_COLOR_4 -> {
+                 NOW_BAR_BATTERY_COLOR_3,
+                 NOW_BAR_BATTERY_COLOR_4 -> {
                 return instance.mPreferences.getBoolean(NOW_BAR_BATTERY_CUSTOM_COLORS, false);
             }
             case NOW_BAR_BATTERY_FAST_COLOR -> {
@@ -1046,7 +1102,8 @@ public class PreferenceHelper {
                     !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
             case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED ->
                     !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
-            case QS_SLIDERS_BLEND_COLOR-> !instance.mPreferences.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
+            case QS_SLIDERS_BLEND_COLOR ->
+                    !instance.mPreferences.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
             // Lockscreen Widgets
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
@@ -1074,11 +1131,12 @@ public class PreferenceHelper {
                  DEPTH_WALLPAPER_OPACITY,
                  DEPTH_WALLPAPER_AOD,
                  DEPTH_WALLPAPER_BACKGROUND,
-                 DEPTH_WALLPAPER_SUBJECT -> instance.mPreferences.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
+                 DEPTH_WALLPAPER_SUBJECT ->
+                    instance.mPreferences.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
 
             case EDGE_LIGHT_RETICK_DURATION ->
-                instance.mPreferences.getBoolean(EDGE_LIGHT_ENABLED, false) &&
-                        instance.mPreferences.getBoolean(EDGE_LIGHT_RETICK, false);
+                    instance.mPreferences.getBoolean(EDGE_LIGHT_ENABLED, false) &&
+                            instance.mPreferences.getBoolean(EDGE_LIGHT_RETICK, false);
 
             case "fix_lag_force_all_apps" ->
                     instance.mPreferences.getBoolean("fix_lag_switch", false);
@@ -1090,14 +1148,15 @@ public class PreferenceHelper {
 
             // Battery Text
             case BATTERY_TEXT_ATTACH_TO_BB ->
-                instance.mPreferences.getBoolean("BBarEnabled", false);
+                    instance.mPreferences.getBoolean("BBarEnabled", false);
 
             case BATTERY_TEXT_INDICATE_POWERSAVE,
                  BATTERY_TEXT_INDICATE_CHARGING,
                  BATTERY_TEXT_INDICATE_FAST,
                  BATTERY_TEXT_CHARGING_COLOR,
                  BATTERY_TEXT_FAST_COLOR,
-                 BATTERY_TEXT_POWERSAVE_COLOR -> instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
+                 BATTERY_TEXT_POWERSAVE_COLOR ->
+                    instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
 
             default -> true;
         };
@@ -1197,7 +1256,7 @@ public class PreferenceHelper {
             case NOTIF_TRANSPARENCY_VALUE ->
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
             case "statusbar_notification_app_icon_scale" ->
-                String.valueOf(instance.mPreferences.getSliderFloat("statusbar_notification_app_icon_scale", 1.0f)) + "%";
+                    String.valueOf(instance.mPreferences.getSliderFloat("statusbar_notification_app_icon_scale", 1.0f)) + "%";
 
             // Header Clock
             case "qs_header_clock_text_scaling" ->
@@ -1229,15 +1288,15 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt("leftSwipeUpPercentage", 25) + "%";
 
             case "rightSwipeUpPercentage" ->
-                instance.mPreferences.getSliderInt("rightSwipeUpPercentage", 25) + "%";
+                    instance.mPreferences.getSliderInt("rightSwipeUpPercentage", 25) + "%";
 
-            case "swipeUpPercentage"  ->
-                instance.mPreferences.getSliderInt("swipeUpPercentage", 5) + "%";
+            case "swipeUpPercentage" ->
+                    instance.mPreferences.getSliderInt("swipeUpPercentage", 5) + "%";
             case GESTURE_HOLD_BACK_LEFT_APP,
                  GESTURE_HOLD_BACK_RIGHT_APP ->
                     TextUtils.isEmpty(instance.mPreferences.getString(key, "")) ?
                             fragmentCompat.getString(R.string.select_app) :
-                    getAppName(fragmentCompat, instance.mPreferences.getString(key, ""));
+                            getAppName(fragmentCompat, instance.mPreferences.getString(key, ""));
 
             // Launcher Prefs
             case "folder_columns" ->
@@ -1270,8 +1329,10 @@ public class PreferenceHelper {
             // Lockscreen
             case LOCKSCREEN_FINGERPRINT_SCALING ->
                     instance.mPreferences.getSliderFloat(LOCKSCREEN_FINGERPRINT_SCALING, 1.0f) + "%";
-            case DEPTH_WALLPAPER_OPACITY -> instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192) + "dp";
-            case DEPTH_WALLPAPER_AOD_OPACITY -> instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_AOD_OPACITY, 192) + "dp";
+            case DEPTH_WALLPAPER_OPACITY ->
+                    instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192) + "dp";
+            case DEPTH_WALLPAPER_AOD_OPACITY ->
+                    instance.mPreferences.getSliderInt(DEPTH_WALLPAPER_AOD_OPACITY, 192) + "dp";
             case "lockscreen_media_blur" ->
                     instance.mPreferences.getSliderInt("lockscreen_media_blur", 35) + "%";
             case LOCKSCREEN_FINGERPRINT_STYLE ->
@@ -1313,7 +1374,7 @@ public class PreferenceHelper {
 
             // Peek Notifications
             case LOCKSCREEN_PEEK_CARD_TSX ->
-                instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_TSX, 26) + "dp";
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_TSX, 26) + "dp";
             case LOCKSCREEN_PEEK_CARD_TDX ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_TDX, 26) + "dp";
             case LOCKSCREEN_PEEK_CARD_BSX ->
@@ -1339,8 +1400,8 @@ public class PreferenceHelper {
 
             // Edge Light
             case EDGE_LIGHT_WIDTH ->
-                fragmentCompat.getString(R.string.edge_light_stroke_width_summary) + "\n" +
-                        instance.mPreferences.getSliderFloat(EDGE_LIGHT_WIDTH, 20f) + " dp";
+                    fragmentCompat.getString(R.string.edge_light_stroke_width_summary) + "\n" +
+                            instance.mPreferences.getSliderFloat(EDGE_LIGHT_WIDTH, 20f) + " dp";
 
             // Sound Prefs
             case "volume_dialog_timeout" ->
@@ -1446,7 +1507,7 @@ public class PreferenceHelper {
                 }
                 case "qs_sliders_cat" -> {
                     if (Build.VERSION.SDK_INT >= 35) {
-                    preference.setTitle(preference.getContext().getString(R.string.qs_sliders));
+                        preference.setTitle(preference.getContext().getString(R.string.qs_sliders));
                     }
                 }
                 case QS_BRIGHTNESS_SLIDER_CUSTOMIZE -> {
