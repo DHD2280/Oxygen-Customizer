@@ -47,6 +47,8 @@ oneplus-ui = "1.4.1"
 lsposed-hiddenapi = "4.3"
 gson = "2.11.0"
 core-ktx = "1.16.0"
+dexplore = "1.4.5"
+guava = "32.1.3-android"
 
 [libraries]
 
@@ -101,8 +103,14 @@ lsposed-hiddenapi = { group = "org.lsposed.hiddenapibypass", name = "hiddenapiby
 
 # Gson
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 
+# Dexplore
+dexplore = { module = "io.github.neonorbit:dexplore", version.ref = "dexplore" }
+
+# Guava - for Dexplore
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

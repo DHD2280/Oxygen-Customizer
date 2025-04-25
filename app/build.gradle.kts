@@ -216,10 +216,10 @@ dependencies {
     //Gson
     implementation(libs.gson)
 
-    implementation("io.github.neonorbit:dexplore:1.4.5") {
+    implementation(libs.dexplore) {
         exclude(group = "com.google.guava")
     }
-    implementation("com.google.guava:guava:32.1.3-android")
+    implementation(libs.guava)
 
     // Stub classes
     compileOnly(project(":oos_launcher"))
