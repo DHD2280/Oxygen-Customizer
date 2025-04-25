@@ -113,7 +113,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -158,6 +157,9 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.BatteryBarView;
 
+/**
+ * @noinspection RedundantThrows
+ */
 public class BatteryStyleManager extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
@@ -221,10 +223,9 @@ public class BatteryStyleManager extends XposedMods {
     private boolean mTextAttachBatteryBar = false;
     private int mBatteryBarColor;
 
-    private BatteryBarView.BatteryBarColorListener mColorListener = color -> {
-        mBatteryBarColor = color;
-    };
+    private BatteryBarView.BatteryBarColorListener mColorListener = color -> mBatteryBarColor = color;
 
+    @SuppressWarnings("DiscouragedApi")
     public BatteryStyleManager(Context context) {
         super(context);
 
@@ -232,6 +233,7 @@ public class BatteryStyleManager extends XposedMods {
         mBatteryStockMarginRight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("op_status_bar_battery_icon_margin_right", "dimen", mContext.getPackageName()));
     }
 
+    @SuppressWarnings("DiscouragedApi")
     @Override
     public void updatePrefs(String... Key) {
 
@@ -394,7 +396,7 @@ public class BatteryStyleManager extends XposedMods {
 
                 LinearLayout batteryMeterView = (LinearLayout) param.thisObject;
 
-                ImageView mBatteryIconView = batteryMeterView.findViewById(mContext.getResources().getIdentifier("battery_icon_view", "id", mContext.getPackageName()));
+                @SuppressWarnings("DiscouragedApi") ImageView mBatteryIconView = batteryMeterView.findViewById(mContext.getResources().getIdentifier("battery_icon_view", "id", mContext.getPackageName()));
 
                 BatteryDrawable mBatteryDrawable = getNewBatteryDrawable(mContext);
                 setAdditionalInstanceField(param.thisObject, "mBatteryDrawable", mBatteryDrawable);
@@ -529,6 +531,7 @@ public class BatteryStyleManager extends XposedMods {
         }
     }
 
+    @SuppressWarnings("DiscouragedApi")
     private void updateBatteryViewValues(View view) {
         TextView batteryOutPercentage = null;
         try {
