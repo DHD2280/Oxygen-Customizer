@@ -57,7 +57,7 @@ public class UpdateWorker extends ListenableWorker {
     }
 
     private void checkForUpdates() {
-        new UpdateFragment.updateChecker(onCheckedCallback).start();
+        new UpdateFragment.updateChecker(onCheckedCallback, UpdateFragment.Flavor.ALL).start();
     }
 
     private void showUpdateNotification() {
