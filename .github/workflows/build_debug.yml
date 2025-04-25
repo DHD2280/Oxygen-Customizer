@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "VERSION_NAME=nightly-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')))" >> $GITHUB_ENV
           echo "VERSION_CODE=$(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r')" >> $GITHUB_ENV
-          echo "NIGHTLY_VERSION=${{ env.VERSION_NAME }} (#${{github.run_number}})" >> $GITHUB_ENV
+          echo "NIGHTLY_VERSION=nightly-$(($(cat app/build.gradle.kts | grep versionCode | tr -s ' ' | cut -d " " -f 4 | tr -d '\r'))) Dev (#${{github.run_number}})" >> $GITHUB_ENV
 
       - name: Bump application version code
         uses: chkfung/android-version-actions@v1.2.3
@@ -76,10 +76,10 @@ jobs:
           ref: nightly-versioning
           path: nightly
 
-      - name: Aggiorna latestNightly.json
+      - name: Update latestNightly.json
         working-directory: ./nightly
         run: |
-          sed -i 's/"version":.*/"version": "'${{env.NIGHTLY_VERSION}}'",/' latestNightly.json
+          sed -i "s/\"version\":.*/\"version\": \"$(sed 's/[\/&]/\\&/g' <<< "$NIGHTLY_VERSION")\",/" latestNightly.json
           sed -i 's/"versionCode":.*/"versionCode": '${{env.VERSION_CODE}}',/' latestNightly.json
           sed -i 's/"devBuild":.*/"devBuild": '${{github.run_number}}',/' latestNightly.json
           sed -i 's/"actionRun":.*/"actionRun": '${{github.run_id}}',/' latestNightly.json
