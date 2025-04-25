@@ -12,7 +12,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.ge
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaData;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
+//import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBarListener;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
@@ -55,6 +55,8 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+
+import com.coui.appcompat.seekbar.COUISeekBar;
 
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
@@ -122,7 +124,7 @@ public class NowBarMusic extends LinearLayout {
     private ImageView mAppIcon;
 
     // SeekBar
-    private AbsSeekBar mTrackSeekBar;
+    private COUISeekBar mTrackSeekBar;
 
     // Vars
     private boolean mExtendedPlayer = true;
@@ -249,25 +251,11 @@ public class NowBarMusic extends LinearLayout {
         mCurrentTime = (TextView) ViewHelper.findViewWithTag(v, "current_position");
         mTotalTime = (TextView) ViewHelper.findViewWithTag(v, "total_duration");
         mSeekBarContainer = (LinearLayout) ViewHelper.findViewWithTag(v, "seek_bar_container");
-        try {
-            mTrackSeekBar = (AbsSeekBar) COUISeekBar.getConstructor(Context.class).newInstance(mContext);
-            // use seekbar from oplus
-        } catch (Throwable ignored) {
-            mTrackSeekBar = new SeekBar(mContext);
-        }
+        mTrackSeekBar = new COUISeekBar(mContext);
         mTrackSeekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         mTrackSeekBar.setMin(0);
         mTrackSeekBar.setMax(100);
-        // create a new proxy for the seekbar listener
-        try {
-            callMethod(mTrackSeekBar, "setOnSeekBarChangeListener", Proxy.newProxyInstance(
-                    COUISeekBarListener.getClassLoader(),
-                    new Class[]{COUISeekBarListener},
-                    new SeekbarListener()
-            ));
-        } catch (Throwable throwable) {
-            XposedBridge.log("NowBarMusic init: " + Log.getStackTraceString(throwable));
-        }
+        mTrackSeekBar.setOnSeekBarChangeListener(mSeekbarListener);
         mSeekBarContainer.addView(mTrackSeekBar);
         mLocalFavoriteSpace = (Space) ViewHelper.findViewWithTag(v, "space_action_1");
         mLocalFavoriteButton = (ImageButton) ViewHelper.findViewWithTag(v, "action1");
@@ -314,45 +302,30 @@ public class NowBarMusic extends LinearLayout {
         AudioDataProvider.registerMediaMetadataListener(mMediaMetaDataListener);
     }
 
-    // Our custom Seekbar listener
-    static class SeekbarListener implements InvocationHandler {
-        /**
-         * @noinspection SuspiciousInvocationHandlerImplementation
-         */
+    static COUISeekBar.OnSeekBarChangeListener mSeekbarListener = new COUISeekBar.OnSeekBarChangeListener() {
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            String methodName = method.getName();
-
-            switch (methodName) {
-                case "onProgressChanged" -> {
-                    AbsSeekBar seekBar = (AbsSeekBar) args[0];
-                    int progress = (int) args[1];
-                    boolean fromUser = (boolean) args[2];
-                    if (fromUser) {
-                        instance.mIsSeeking = true;
-                        instance.mSeekingProgress = progress;
-                        instance.mCurrentTime.setText(instance.formatTime((long) ((instance.mSeekingProgress / 100f) * AudioDataProvider.getTotalDuration())));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                case "onStartTrackingTouch" -> {
-                    instance.mIsSeeking = true;
-                    return true;
-                }
-                case "onStopTrackingTouch" -> {
-                    if (instance.mIsSeeking) {
-                        instance.mIsSeeking = false;
-                        long time = (long) ((instance.mSeekingProgress / 100f) * AudioDataProvider.getTotalDuration());
-                        AudioDataProvider.instance.seekTo(time);
-                    }
-                    return true;
-                }
+        public void onProgressChanged(COUISeekBar cOUISeekBar, int progress, boolean fromUser) {
+            if (fromUser) {
+                instance.mIsSeeking = true;
+                instance.mSeekingProgress = progress;
+                instance.mCurrentTime.setText(instance.formatTime((long) ((instance.mSeekingProgress / 100f) * AudioDataProvider.getTotalDuration())));
             }
-            return false;
         }
-    }
+
+        @Override
+        public void onStartTrackingTouch(COUISeekBar cOUISeekBar) {
+            instance.mIsSeeking = true;
+        }
+
+        @Override
+        public void onStopTrackingTouch(COUISeekBar cOUISeekBar) {
+            if (instance.mIsSeeking) {
+                instance.mIsSeeking = false;
+                long time = (long) ((instance.mSeekingProgress / 100f) * AudioDataProvider.getTotalDuration());
+                AudioDataProvider.instance.seekTo(time);
+            }
+        }
+    };
 
     private void triggerMediaPlayer() {
         if (!mExtendedPlayer) return;
@@ -693,8 +666,8 @@ public class NowBarMusic extends LinearLayout {
         mPlayPauseButtonBig.setBackgroundTintList(ColorStateList.valueOf(color));
         mLocalLyricBtn.setImageTintList(ColorStateList.valueOf(color));
         mLocalFavoriteButton.setImageTintList(ColorStateList.valueOf(color));
-        callMethod(mTrackSeekBar, "setProgressColor", ColorStateList.valueOf(color));
-        callMethod(mTrackSeekBar, "setThumbColor", ColorStateList.valueOf(color));
+        mTrackSeekBar.setProgressColor(ColorStateList.valueOf(color));
+        mTrackSeekBar.setThumbColor(ColorStateList.valueOf(color));
         mAppName.setTextColor(color);
         trackTitle.setTextColor(color);
         mCurrentTime.setTextColor(color);

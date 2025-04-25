@@ -422,13 +422,21 @@
 
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Customization</string>
+    <string name="qs_highlight_tile">Highlight tiles</string>
+    <string name="qs_base_tile">Base tiles</string>
     <string name="quick_settings_tiles_customize_category_title">Quick Settings Tiles Background</string>
+    <string name="quick_settings_tile_custom_color">Customize tile colors</string>
     <string name="qs_tile_active_color_title">Customize active tile color</string>
     <string name="quick_settings_tiles_customize_active_color">QS Active Color</string>
     <string name="qs_tile_inactive_color_title">Customize inactive tile color</string>
     <string name="quick_settings_tiles_customize_inactive_color">QS Inactive Color</string>
     <string name="qs_tile_disabled_color_title">Customize disabled tile color</string>
     <string name="quick_settings_tiles_customize_disabled_color">QS Disabled Color</string>
+    <string name="quick_settings_tile_custom_color_icon">Customize icon background color</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">This colors refer to separate qs style</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">Icon Active Color</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">Icon Inactive Color</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">Icon Disabled Color</string>
     <string name="quick_settings_tiles_customize_labels">QS Labels</string>
     <string name="quick_settings_tiles_customize_hide_labels">Hide QS Labels</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Customize QS Text Color</string>
