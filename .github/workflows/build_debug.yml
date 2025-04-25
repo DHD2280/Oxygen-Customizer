@@ -82,7 +82,6 @@ jobs:
           fetch-depth: 0
 
       - name: Update latestNightly.json
-        working-directory: ./nightly
         run: |
           sed -i "s/\"version\":.*/\"version\": \"$(sed 's/[\/&]/\\&/g' <<< "$NIGHTLY_VERSION")\",/" latestNightly.json
           sed -i 's/"versionCode":.*/"versionCode": '${{env.VERSION_CODE}}',/' latestNightly.json
