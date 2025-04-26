@@ -137,18 +137,17 @@ jobs:
         if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
         env:
           COMMIT_MESSAGE: |+
-            New push to github\\!
-            `\`\`
+            New push to github\!
+            ```
             ${{ env.COMMIT_MESSAGE_HEADER }}
-            `\`\`
+            ```
             Nightly version: ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})
             See commit detail [here](${{ github.event.head_commit.url }})
           COMMIT_URL: ${{ github.event.head_commit.url }}
         run: |
           set -e
-          ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
           -d chat_id=${{ secrets.CHAT_LG }} \
-          -d text="${ESCAPED}" \
+          -d text="${{env.COMMIT_MESSAGE}}" \
           -d parse_mode=MarkdownV2 \
           -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"
