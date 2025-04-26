@@ -147,7 +147,7 @@ jobs:
         run: |
           set -e
           ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
           -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
           -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
           -d text="${ESCAPED}" \
