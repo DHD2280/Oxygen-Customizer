@@ -98,7 +98,8 @@ jobs:
             echo "SKIP_BUILD=true" >> $GITHUB_ENV
           fi
           
-          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
+          #ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
+          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | sed "s/'//g" | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "COMMIT_MESSAGE_HEADER=${ESCAPED_MESSAGE}" >> $GITHUB_ENV
 
       # now everything fine, let's update nightly version
@@ -137,17 +138,19 @@ jobs:
         if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
         env:
           COMMIT_MESSAGE: |+
-            New push to github\!
-            ```
+            New push to github!
+            \`\`\`
             ${{ env.COMMIT_MESSAGE_HEADER }}
-            ```
+            \`\`\`
             Nightly version: ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})
             See commit detail [here](${{ github.event.head_commit.url }})
+          COMMIT_URL: ${{ github.event.head_commit.url }}
         run: |
           set -e
-          
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
           -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
           -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
-          -d text="🛠 ${{ env.COMMIT_MESSAGE }}" \
-          -d reply_markup="{inline_keyboard": [[{"text": "⬇️ Download (required login)","url": "https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}"}]]}
+          -d text="${{env.COMMIT_MESSAGE}}" \
+          -d parse_mode=Markdown \
+          -d disable_web_page_preview=true \
+          -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"

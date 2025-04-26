@@ -250,6 +250,9 @@
     <string name="statusbar_right_padding">Right padding</string>
     <string name="sb_padding_title">Status bar Left and Right Padding</string>
     <string name="sb_padding_summary">Setting the values to min/max is equivalent to device Default</string>
+    <string name="statusbar_logo">Status bar logo</string>
+    <string name="statusbar_logo_summary">Display a custom logo on the status bar</string>
+    <string name="statusbar_logo_position">Logo position</string>
 
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Enable Battery Bar</string>
@@ -1073,6 +1076,8 @@
     <string name="update_flavor_title">Update channel</string>
     <string name="stable_flavor">Stable</string>
     <string name="beta_flavor" translatable="false">Beta</string>
+    <string name="nightly_flavor" translatable="false">Nightly</string>
+    <string name="nightly_github_login">Login and manual download</string>
     <string name="update_type_title">Package Type</string>
     <string name="full_type">Full</string>
     <string name="xposed_type">Xposed Only</string>
