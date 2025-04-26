@@ -13,66 +13,65 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/preference_card_margin_horizontal"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:paddingTop="@dimen/preference_card_margin_horizontal">
 
         <LinearLayout
+            android:id="@+id/textContainers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textContainers"
-            android:background="@drawable/preference_background_center"
-            android:padding="@dimen/preference_text_content_padding_top"
-            android:orientation="vertical"
             android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/preference_background_center"
+            android:orientation="vertical"
+            android:padding="@dimen/preference_text_content_padding_top"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:paddingVertical="@dimen/preference_item_margin_top"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/preference_item_margin_top">
 
-            <TextView
-                android:id="@+id/currentVersionID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/currentVersionTitle"
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/currentVersionID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currentVersionTitle"
+                    android:textColor="@color/text_color_primary"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/currentVersionValueID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="..."
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/currentVersionValueID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="..."
+                    android:textColor="@color/text_color_primary"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-            <View
-                style="@style/HorizontalDivider"/>
+            <View style="@style/HorizontalDivider" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:paddingTop="@dimen/preference_item_margin_top"
                 android:text="@string/update_flavor_title"
                 android:textColor="@color/text_color_primary"
-                android:layout_gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/updateChannelRadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/preference_icon_margin_top"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
                 android:paddingBottom="@dimen/preference_item_margin_top">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -80,17 +79,23 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/stable_flavor"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:text="@string/stable_flavor" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/betaID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="@dimen/preference_padding_start"
-                    android:text="@string/beta_flavor"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:layout_weight="1"
+                    android:text="@string/beta_flavor" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/nightlyID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/preference_padding_start"
+                    android:layout_weight="1"
+                    android:text="@string/nightly_flavor" />
             </RadioGroup>
 
             <View
@@ -100,25 +105,25 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/preference_item_margin_top"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/preference_item_margin_top">
 
-            <TextView
-                android:id="@+id/latestVersionTitleID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lastestVersionTitle"
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/latestVersionTitleID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lastestVersionTitle"
+                    android:textColor="@color/text_color_primary"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/latestVersionValueID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="..."
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/latestVersionValueID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="..."
+                    android:textColor="@color/text_color_primary"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -138,13 +143,13 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
             android:elevation="0dp"
             android:outlineAmbientShadowColor="@android:color/transparent"
             android:outlineSpotShadowColor="@android:color/transparent"
             app:cardBackgroundColor="?preferenceBackgroundColor"
-            android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
             app:cardCornerRadius="@dimen/ui_container_radius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -177,12 +182,25 @@ PixelXper https://github.com/siavash79/PixelXpert/blob/stable/app/src/main/res/l
                     android:isScrollContainer="true"
                     android:scrollbars="vertical">
 
-                    <br.tiagohm.markdownview.MarkdownView
-                        android:id="@+id/changelogView"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="40dp"
-                        app:escapeHtml="false" />
+                        android:layout_height="match_parent">
+
+                        <br.tiagohm.markdownview.MarkdownView
+                            android:id="@+id/changelogView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            app:escapeHtml="false" />
+
+                        <WebView
+                            android:id="@+id/webView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
 
                 </androidx.core.widget.NestedScrollView>
             </LinearLayout>
