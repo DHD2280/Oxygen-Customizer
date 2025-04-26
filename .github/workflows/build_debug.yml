@@ -137,10 +137,10 @@ jobs:
         if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
         env:
           COMMIT_MESSAGE: |+
-            New push to github\!
-            ```
+            New push to github\\!
+            `\`\`
             ${{ env.COMMIT_MESSAGE_HEADER }}
-            ```
+            `\`\`
             Nightly version: ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})
             See commit detail [here](${{ github.event.head_commit.url }})
           COMMIT_URL: ${{ github.event.head_commit.url }}
