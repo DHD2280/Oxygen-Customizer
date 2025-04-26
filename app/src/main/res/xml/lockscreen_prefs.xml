@@ -36,7 +36,6 @@
             android:title="@string/lockscreen_now_bar_title" />
 
 
-
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
@@ -158,6 +157,14 @@
         android:key="lockscreen_misc_category"
         android:title="@string/misc"
         app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="shufflePinEnabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_shuffle_pin"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
