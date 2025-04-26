@@ -98,7 +98,8 @@ jobs:
             echo "SKIP_BUILD=true" >> $GITHUB_ENV
           fi
           
-          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
+          #ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | jq -Rsa . | sed 's/^"\(.*\)"$/\1/' | sed "s/'//g")
+          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | sed "s/'//g" | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "COMMIT_MESSAGE_HEADER=${ESCAPED_MESSAGE}" >> $GITHUB_ENV
 
       # now everything fine, let's update nightly version
