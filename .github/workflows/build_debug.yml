@@ -149,5 +149,5 @@ jobs:
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
           -d chat_id=${{ secrets.CHAT_LG }} \
           -d text="${{env.COMMIT_MESSAGE}}" \
-          -d parse_mode=MarkdownV2 \
+          -d parse_mode=Markdown \
           -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"
