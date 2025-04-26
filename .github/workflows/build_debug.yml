@@ -138,9 +138,9 @@ jobs:
         env:
           COMMIT_MESSAGE: |+
             New push to github!
-            ```
+            \`\`\`
             ${{ env.COMMIT_MESSAGE_HEADER }}
-            ```
+            \`\`\`
             Nightly version: ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})
             See commit detail [here](${{ github.event.head_commit.url }})
           COMMIT_URL: ${{ github.event.head_commit.url }}
@@ -150,4 +150,5 @@ jobs:
           -d chat_id=${{ secrets.CHAT_LG }} \
           -d text="${{env.COMMIT_MESSAGE}}" \
           -d parse_mode=Markdown \
+          -d disable_web_page_preview=true \
           -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"
