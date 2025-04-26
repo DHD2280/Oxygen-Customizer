@@ -45,29 +45,29 @@ jobs:
             echo ${{ secrets.KEYSTORE }} | base64 --decode > ${{ github.workspace }}/key.jks
           fi
 
-#      - name: Build release with Gradle
-#        if: github.repository == 'DHD2280/Oxygen-Customizer'
-#        run: ./gradlew assembleRelease
-#
-#      - name: Build debug with Gradle
-#        if: github.repository == 'DHD2280/Oxygen-Customizer'
-#        run: ./gradlew assembleDebug
-#
-#      - name: Upload release Build Artifact
-#        if: github.repository == 'DHD2280/Oxygen-Customizer'
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
-#          path: app/build/outputs/apk/release/*.apk
-#          if-no-files-found: error
-#
-#      - name: Upload debug Build Artifact
-#        if: github.repository == 'DHD2280/Oxygen-Customizer'
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}}) Debug"
-#          path: app/build/outputs/apk/debug/*.apk
-#          if-no-files-found: error
+      - name: Build release with Gradle
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        run: ./gradlew assembleRelease
+
+      - name: Build debug with Gradle
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        run: ./gradlew assembleDebug
+
+      - name: Upload release Build Artifact
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})"
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload debug Build Artifact
+        if: github.repository == 'DHD2280/Oxygen-Customizer'
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Oxygen Customizer ${{ env.VERSION_NAME }} Dev (#${{github.run_number}}) Debug"
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
 
       - name: Get Commit Messages
         id: get_commit_message
@@ -148,7 +148,8 @@ jobs:
         run: |
           set -e
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
-          -d chat_id=${{ secrets.CHAT_LG }} \
+          -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
+          -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
           -d text="${{env.COMMIT_MESSAGE}}" \
           -d parse_mode=Markdown \
           -d disable_web_page_preview=true \
