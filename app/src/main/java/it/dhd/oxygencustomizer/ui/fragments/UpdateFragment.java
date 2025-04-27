@@ -317,6 +317,9 @@ public class UpdateFragment extends BaseFragment {
                                     } else if (latestNightlyCode > currentNightlyCode) {
                                         enable = true;
                                     }
+                                } else {
+                                    BtnText = R.string.switch_branches;
+                                    enable = true;
                                 }
                             } else if (!betaUpdate) //stable selected
                             {
