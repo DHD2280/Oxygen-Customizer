@@ -1508,4 +1508,9 @@
     <string name="aod_music_allow_title">Allow players AOD</string>
     <string name="aod_music_allow_summary">Allow ant music player to show in AOD.\nNote: not all music players could be supported.</string>
 
+    <!-- Shortcut string -->
+    <string name="lsposed">LSposed</string>
+    <string name="open_lsposed">Open LSposed</string>
+    <string name="shortcut_disabled">Shortcut disabled</string>
+
 </resources>
