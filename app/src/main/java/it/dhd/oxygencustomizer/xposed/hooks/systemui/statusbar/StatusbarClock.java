@@ -9,6 +9,10 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -162,10 +166,10 @@ public class StatusbarClock extends XposedMods {
         mCustomAfterClock = Xprefs.getString("sbc_after_clock_format", "");
         mCustomBeforeSmall = Xprefs.getBoolean("sbc_before_small", false);
         mCustomAfterSmall = Xprefs.getBoolean("sbc_after_small", false);
-        mClockPosition = Integer.parseInt(Xprefs.getString("status_bar_clock", String.valueOf(POSITION_LEFT)));
-        mClockCustomColor = Xprefs.getBoolean("status_bar_custom_clock_color", false);
-        mClockColor = Xprefs.getInt("status_bar_clock_color", Color.WHITE);
-        mClockSize = Xprefs.getSliderInt("status_bar_clock_size", 12);
+        mClockPosition = Integer.parseInt(Xprefs.getString(STATUSBAR_CLOCK_STYLE, String.valueOf(POSITION_LEFT)));
+        mClockCustomColor = Xprefs.getBoolean(STATUSBAR_CLOCK_COLOR_SWITCH, false);
+        mClockColor = Xprefs.getInt(STATUSBAR_CLOCK_COLOR, Color.WHITE);
+        mClockSize = Xprefs.getSliderInt(STATUSBAR_CLOCK_SIZE, 12);
 
         // gradients prefs
         clockChip = Xprefs.getBoolean("status_bar_clock_background_chip_switch", false);
@@ -233,11 +237,11 @@ public class StatusbarClock extends XposedMods {
                      "status_bar_custom_clock_format",
                      "sbc_before_clock_format", "sbc_before_small", "sbc_after_clock_format",
                      "sbc_after_small" -> updateClock();
-                case "status_bar_clock_size" -> setClockSize();
-                case "status_bar_clock",
+                case STATUSBAR_CLOCK_SIZE -> setClockSize();
+                case STATUSBAR_CLOCK_STYLE,
                      "status_bar_clock_seconds",
-                     "status_bar_custom_clock_color",
-                     "status_bar_clock_color" -> {
+                     STATUSBAR_CLOCK_COLOR_SWITCH,
+                     STATUSBAR_CLOCK_COLOR -> {
                     placeClock();
                     updateClock();
                 }
