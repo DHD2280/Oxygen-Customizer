@@ -153,6 +153,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Durum Çubuğu Bildirimleri</string>
     <string name="statusbar_use_app_icon">Bildirimler için uygulama simgesini kullan</string>
+    <string name="statusbar_app_icon_scale">Simge boyutu</string>
     <string name="statusbar_notifications_transparency">Bildirim Şeffaflığı</string>
     <string name="statusbar_notification_transparency">Bildirim şeffaflığı</string>
     <string name="statusbar_notification_transparency_value">Şeffaflık miktarı</string>
@@ -229,6 +230,9 @@
     <string name="statusbar_right_padding">Sağ dolgu</string>
     <string name="sb_padding_title">Durum Çubuğu Sol ve Sağ Dolgu</string>
     <string name="sb_padding_summary">Değerleri minimum/maksimum yapmak cihaz varsayılınına eşdeğerdir</string>
+    <string name="statusbar_logo">Durum çubuğu logosu</string>
+    <string name="statusbar_logo_summary">Durum çubuğunda özel bir logo göster</string>
+    <string name="statusbar_logo_position">Logo konumu</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Pil Çubuğunu Etkinleştir</string>
     <string name="BB_onlycharging_title">Sadece şarj sırasında</string>
@@ -392,13 +396,21 @@
     <string name="qs_widget_set_custom_photo">Özel Görüntü Ayarla</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Özelleştirme</string>
+    <string name="qs_highlight_tile">Kutucukları vurgula</string>
+    <string name="qs_base_tile">Temel kutucuklar</string>
     <string name="quick_settings_tiles_customize_category_title">Hızlı Ayar Kutucukları Arka Planı</string>
+    <string name="quick_settings_tile_custom_color">Kutucuk renklerini özelleştir</string>
     <string name="qs_tile_active_color_title">Etkin kutucuk rengini özelleştir</string>
     <string name="quick_settings_tiles_customize_active_color">QS Etkin Renk</string>
     <string name="qs_tile_inactive_color_title">Etkin olmayan kutucuk rengini özelleştir</string>
     <string name="quick_settings_tiles_customize_inactive_color">QS Etkin Olmayan Renk</string>
     <string name="qs_tile_disabled_color_title">Devre dışı kutucuk rengini özelleştir</string>
     <string name="quick_settings_tiles_customize_disabled_color">QS Devre Dışı Renk</string>
+    <string name="quick_settings_tile_custom_color_icon">Simge arka plan rengini özelleştir</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">Bu renkler, ayrı hızlı ayar stilini ifade eder</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">Simgenin Etkin Rengi</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">Simgenin Pasif Rengi</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">Simgenin Devre Dışı Rengi</string>
     <string name="quick_settings_tiles_customize_labels">QS Etiketleri</string>
     <string name="quick_settings_tiles_customize_hide_labels">QS Etiketlerini Gizle</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">QS Metin Rengini Özelleştir</string>
@@ -715,6 +727,7 @@
     <string name="lockscreen_affordance">Kilit Ekranı Kolaylığı</string>
     <string name="lockscreen_affordance_remove_left">Sol Kolaylığı Kaldır</string>
     <string name="lockscreen_affordance_remove_right">Sağ Kolaylığı Kaldır</string>
+    <string name="lockscreen_shuffle_pin">Pin Rakamlarını Karıştır</string>
     <string name="lockscreen_hide_lock_icon">Kilit simgesini gizle</string>
     <string name="lockscreen_weather">Kilit Ekranı Hava Durumu</string>
     <string name="depth_wallpaper_category">Derinlik Duvar Kağıdı</string>
@@ -994,6 +1007,7 @@
     <string name="try_again_later">Lütfen daha sonra tekrar deneyin</string>
     <string name="update_flavor_title">Güncelleme kanalı</string>
     <string name="stable_flavor">Kararlı</string>
+    <string name="nightly_github_login">Giriş yap ve manuel indir</string>
     <string name="update_type_title">Paket Türü</string>
     <string name="full_type">Tam</string>
     <string name="xposed_type">Yalnızca Xposed</string>
