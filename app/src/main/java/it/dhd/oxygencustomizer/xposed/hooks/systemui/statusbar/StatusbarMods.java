@@ -10,11 +10,14 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setBooleanField;
+import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
+import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -30,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -537,7 +541,9 @@ public class StatusbarMods extends XposedMods {
                         float scaleFactor = typedValue.getFloat();
 
                         if (icon != null) {
-                            icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, (int) (dimen * mNewIconScale), (int) (dimen * mNewIconScale));
+                            Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
+                            icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
+                            setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
                             if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);
                             } else { // Scale Factor != 1f so return a scaled icon
@@ -546,7 +552,6 @@ public class StatusbarMods extends XposedMods {
                         }
                     }
                 });
-
 
     }
 
