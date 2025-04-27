@@ -49,6 +49,14 @@ public class FeatureOption extends XposedMods {
                 .run(param -> {
                     if (showMyDevice) param.setResult(true);
                 });
+        ReflectedClass QSFeatureOption = ReflectedClass.of("com.oplusos.systemui.common.feature.QSFeatureOption");
+        if (QSFeatureOption.getClazz() != null) {
+            QSFeatureOption
+                    .before("isSupportMyDevice")
+                    .run(param -> {
+                        if (showMyDevice) param.setResult(true);
+                    });
+        }
 
         ReflectedClass AodMediaDataListener = ReflectedClass.of("com.oplusos.systemui.aod.mediapanel.AodMediaDataListener$Companion");
         ReflectedClass.ReflectionConsumer musicHooker = param -> {

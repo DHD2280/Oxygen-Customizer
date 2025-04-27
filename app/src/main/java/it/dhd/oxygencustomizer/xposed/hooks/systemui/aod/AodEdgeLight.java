@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
@@ -111,13 +112,19 @@ public class AodEdgeLight extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
         ReflectedClass QuickSettingsControllerImpl = ReflectedClass.of("com.android.systemui.shade.QuickSettingsControllerImpl");
-        QuickSettingsControllerImpl
-                .after("loadDimens")
-                .run(param -> {
-                    mScreenCornerRadius = getIntField(param.thisObject, "mScreenCornerRadius");
-                    EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
-                    XposedBridge.log("AodEdgeLight: mScreenCornerRadius = " + mScreenCornerRadius);
-                });
+        if (QuickSettingsControllerImpl.getClazz() != null) {
+            QuickSettingsControllerImpl
+                    .after("loadDimens")
+                    .run(param -> {
+                        mScreenCornerRadius = getIntField(param.thisObject, "mScreenCornerRadius");
+                        EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
+                        XposedBridge.log("AodEdgeLight: mScreenCornerRadius = " + mScreenCornerRadius);
+                    });
+        } else {
+            ReflectedClass QuickStepContract = ReflectedClass.of("com.android.systemui.shared.system.QuickStepContract");
+            mScreenCornerRadius = (int) callStaticMethod(QuickStepContract.getClazz(), "getWindowCornerRadius", mContext);
+            EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
+        }
 
         ReflectedClass DozeParameters = ReflectedClass.of("com.android.systemui.statusbar.phone.DozeParameters");
         DozeParameters

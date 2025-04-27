@@ -115,37 +115,33 @@ public class BatteryDataProvider extends XposedMods {
 
         BatteryControllerImplClass
                 .after("fireBatteryLevelChanged")
-                        .run(batteryDataRefreshHook);
+                .run(batteryDataRefreshHook);
         BatteryControllerImplClass
                 .after("firePowerSaveChanged")
                 .run(batteryDataRefreshHook);
 
         BatteryStatusClass
                 .afterConstruction()
-                        .run(param -> {
-                            mIsFastCharging = callMethod(param.thisObject, "getChargingSpeed", mContext).equals(CHARGING_FAST);
-                            if (param.args[0] instanceof Intent) {
-                                try {
-                                    onBatteryStatusChanged((int) getObjectField(param.thisObject, "status"), (Intent) param.args[0]);
-                                } catch (Throwable ignored) {
-                                }
-                            } else if (param.args[0] instanceof Integer) {
-                                try {
-                                    onBatteryStatusChanged((int) param.args[0], null);
-                                } catch (Throwable ignored) {
-                                }
-                            }
-                        });
+                .run(param -> {
+                    mIsFastCharging = callMethod(param.thisObject, "getChargingSpeed", mContext).equals(CHARGING_FAST);
+                    if (param.args[0] instanceof Intent) {
+                        try {
+                            onBatteryStatusChanged((int) getObjectField(param.thisObject, "status"), (Intent) param.args[0]);
+                        } catch (Throwable ignored) {
+                        }
+                    } else if (param.args[0] instanceof Integer) {
+                        try {
+                            onBatteryStatusChanged((int) param.args[0], null);
+                        } catch (Throwable ignored) {
+                        }
+                    }
+                });
 
         ReflectedClass.ReflectionConsumer additionalBatteryHook = param -> {
-            XposedBridge.log("fireAdditionalBatteryStateChanged");
+            if (!(param.args.length > 0)) return;
             OplusBatteryStatus batteryStatus = new OplusBatteryStatus(param.args[0]);
             onOplusBatteryChanged(batteryStatus);
         };
-
-        OplusBatteryController
-                .after("fireAdditionalBatteryStateChanged")
-                .run(additionalBatteryHook);
 
         OplusBatteryController
                 .after("fireAdditionalBatteryStateChanged")
@@ -180,7 +176,8 @@ public class BatteryDataProvider extends XposedMods {
         for (OplusBatteryStatusCallback callback : mOplusBatteryCallbacks) {
             try {
                 callback.onOplusBatteryStatusChanged(oplusBatteryStatus);
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
     }
 

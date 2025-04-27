@@ -153,6 +153,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Notifiche barra di stato</string>
     <string name="statusbar_use_app_icon">Usa icone app per notifiche</string>
+    <string name="statusbar_app_icon_scale">Scala icone</string>
     <string name="statusbar_notifications_transparency">Trasparenza Notifiche</string>
     <string name="statusbar_notification_transparency">Trasparenza notifica</string>
     <string name="statusbar_notification_transparency_value">Valore della trasparenza</string>
@@ -229,6 +230,9 @@
     <string name="statusbar_right_padding">Padding destro</string>
     <string name="sb_padding_title">Paddin sinistro e destro</string>
     <string name="sb_padding_summary">Impostare i valori al min/max equivale a impostare quelli di default</string>
+    <string name="statusbar_logo">Logo barra di stato</string>
+    <string name="statusbar_logo_summary">Visualizza un logo personalizzato sulla barra di stato</string>
+    <string name="statusbar_logo_position">Posizione del logo</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Abilita barra batteria</string>
     <string name="BB_onlycharging_title">Solo durante la ricarica</string>
@@ -392,13 +396,21 @@
     <string name="qs_widget_set_custom_photo">Imposta Immagine personalizzata</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalizzazione QS</string>
+    <string name="qs_highlight_tile">Tile in evidenza</string>
+    <string name="qs_base_tile">Tile base</string>
     <string name="quick_settings_tiles_customize_category_title">Impostazioni rapide Sfondo dei Tile</string>
+    <string name="quick_settings_tile_custom_color">Personalizza i colori dei tile</string>
     <string name="qs_tile_active_color_title">Personalizza il colore del Tile attivo</string>
     <string name="quick_settings_tiles_customize_active_color">Colore QS attivo</string>
     <string name="qs_tile_inactive_color_title">Personalizza il colore dei Tile inattivi</string>
     <string name="quick_settings_tiles_customize_inactive_color">Colore QS inattivo</string>
     <string name="qs_tile_disabled_color_title">Personalizza il colore dei Tile disabilitati</string>
     <string name="quick_settings_tiles_customize_disabled_color">Colore QS disabilitato</string>
+    <string name="quick_settings_tile_custom_color_icon">Personalizza colore sfondo icona</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">Questi colori si riferiscono allo stile qs separato</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">Colore Attivo Icona</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">Colore inattivo icona</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">Colore Icona Disabilitata</string>
     <string name="quick_settings_tiles_customize_labels">Etichette QS</string>
     <string name="quick_settings_tiles_customize_hide_labels">Nascondi etichette QS</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Personalizza il colore testo dei QS</string>
@@ -994,6 +1006,7 @@
     <string name="try_again_later">Riprova più tardi</string>
     <string name="update_flavor_title">Aggiorna canale</string>
     <string name="stable_flavor">Stabile</string>
+    <string name="nightly_github_login">Accesso e download manuale</string>
     <string name="update_type_title">Tipo Pacchetto</string>
     <string name="full_type">Completo</string>
     <string name="xposed_type">Solo Xposed</string>
@@ -1172,6 +1185,7 @@
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">Il tema include colori di sfondo e di accento selezionabili separatamente.</string>
     <string name="dark_shadow_enable_theme">Abilita tema</string>
     <string name="dark_shadow_footer">Dark Shadow Theme è un tema Substratum per OxygenOS.\nStiamo lavorando con lo sviluppatore del tema per includerlo in Oxygen Customizer.</string>
     <!-- Settings Icons -->

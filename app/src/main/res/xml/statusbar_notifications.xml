@@ -22,11 +22,13 @@
             android:title="@string/statusbar_app_icon_scale"
             app:decimalFormat="#.##"
             app:defaultValue="1"
-            app:forcePosition="bottom"
             app:maxVal="2.0"
             app:minVal="0.5"
             app:tickInterval="0.05" />
 
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
         <it.dhd.oxygencustomizer.ui.preferences.FooterPreference
             android:selectable="false"
             android:title="@string/requires_sysui_restart" />

@@ -46,7 +46,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodEdgeLight;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodWeather;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.DepthWallpaper;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.KeyguardPinSrambler;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.KeyguardPinScrambler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenNowBar;
@@ -154,7 +154,7 @@ public class ModPacks {
                     modPacks.add(PulseViewHook.class);
 
                     // Lockscreen
-                    modPacks.add(KeyguardPinSrambler.class);
+                    modPacks.add(KeyguardPinScrambler.class);
                     modPacks.add(Lockscreen.class);
                     modPacks.add(LockscreenClock.class);
                     modPacks.add(LockscreenWidgets.class);
