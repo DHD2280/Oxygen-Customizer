@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,6 +51,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableSize;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 /**
@@ -118,13 +120,19 @@ public class StatusbarMods extends XposedMods {
     private float mTopPad;
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
-    private Class<?> DrawableSize = null, ScalingDrawableWrapper = null;
+    private Class<?> ScalingDrawableWrapper = null;
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private float mNewIconScale = 1f;
     private boolean oos13 = false;
     private boolean mBroadcastRegistered = false;
+
+    // Statusbar Logo
+    private ImageView mStatusbarLogoImage;
+    private boolean mStatusbarLogo;
+    private int mStatusbarLogoStyle;
+    private int mStatusbarLogoSize;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -485,10 +493,6 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
-            DrawableSize = findClassIfExists("com.android.systemui.util.drawable.DrawableSize", lpparam.classLoader);
-        } catch (Throwable ignored) {
-        }
-        try {
             ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
         } catch (Throwable ignored) {
         }
@@ -533,9 +537,7 @@ public class StatusbarMods extends XposedMods {
                         float scaleFactor = typedValue.getFloat();
 
                         if (icon != null) {
-                            if (DrawableSize != null) {
-                                icon = (Drawable) callStaticMethod(DrawableSize, "downscaleToSize", sysuiContext.getResources(), icon, dimen*mNewIconScale, dimen*mNewIconScale);
-                            }
+                            icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, (int) (dimen * mNewIconScale), (int) (dimen * mNewIconScale));
                             if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);
                             } else { // Scale Factor != 1f so return a scaled icon
