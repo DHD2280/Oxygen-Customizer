@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
+import android.text.TextUtils;
 import android.util.JsonReader;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,19 +35,14 @@ import androidx.core.content.FileProvider;
 
 import com.topjohnwu.superuser.Shell;
 
-import net.lingala.zip4j.util.UnzipUtil;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import javax.security.auth.callback.Callback;
 
@@ -310,6 +306,18 @@ public class UpdateFragment extends BaseFragment {
                             if (rebootPending) {
                                 enable = true;
                                 BtnText = R.string.reboot_word;
+                            } else if (nightlyUpdate) {
+                                if (!TextUtils.isEmpty(currentNightlyVersion)) {
+                                    int currentNightlyCode = Integer.parseInt(currentNightlyVersion);
+                                    String latestNightly = String.valueOf(result.get("devBuild"));
+                                    int latestNightlyCode = Integer.parseInt(latestNightly);
+                                    if (currentNightlyCode == latestNightlyCode) {
+                                        enable = true;
+                                        BtnText = R.string.reinstall_word;
+                                    } else if (latestNightlyCode > currentNightlyCode) {
+                                        enable = true;
+                                    }
+                                }
                             } else if (!betaUpdate) //stable selected
                             {
                                 if (currentVersionName.contains("-")) //currently beta installed
@@ -320,8 +328,16 @@ public class UpdateFragment extends BaseFragment {
                                     BtnText = R.string.reinstall_word;
                                 }
                                 enable = true; //stable version is ALWAYS flashable, so that user can revert from beta or repair installation
-                            } else {
-                                if (latestCode > currentVersionCode || (currentVersionType == 1)) {
+                            } else { // beta
+                                if (!currentVersionName.contains("beta")) //if not beta
+                                {
+                                    BtnText = R.string.switch_branches;
+                                    enable = true;
+                                } else if (latestCode == currentVersionCode) //already up to date
+                                {
+                                    BtnText = R.string.reinstall_word;
+                                    enable = true;
+                                } else if (latestCode > currentVersionCode || (currentVersionType == 1)) {
                                     enable = true;
                                 }
                             }
