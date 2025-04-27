@@ -68,6 +68,7 @@ import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceR
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.ShortcutUtils;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 
@@ -169,7 +170,8 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             Shell.cmd("mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR).exec();
         }
 
-//        showDonateDialog();
+        ShortcutUtils shortcutUtils = new ShortcutUtils(this);
+        shortcutUtils.setupShortcut();
 
     }
 
