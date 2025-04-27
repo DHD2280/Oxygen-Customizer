@@ -22,12 +22,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
-public class KeyguardPinSrambler extends XposedMods {
+public class KeyguardPinScrambler extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     private boolean shufflePinEnabled = false;
 
-    public KeyguardPinSrambler(Context context) {
+    public KeyguardPinScrambler(Context context) {
         super(context);
     }
 
@@ -100,13 +100,8 @@ public class KeyguardPinSrambler extends XposedMods {
                             int correctNumber = mKeyboardNumbers[clickedIndex];
                             COUINumericKeyboard.OnClickItemListener listener = (COUINumericKeyboard.OnClickItemListener) getObjectField(param.thisObject, "mOnClickItemListener");
                             if (listener != null) {
-                                if (clickedIndex >= 0 && clickedIndex <= 8) {
-                                    listener.onClickNumber(correctNumber);
-                                    param.setResult(null);
-                                } else if (clickedIndex == 10) {
-                                    listener.onClickNumber(0);
-                                    param.setResult(null);
-                                }
+                                listener.onClickNumber(correctNumber);
+                                param.setResult(null);
                             }
                         });
 
