@@ -326,7 +326,24 @@ public class BatteryBarView extends FrameLayout {
 
             RadialGradient colorfulShader = new RadialGradient(cX, cY, radius, shadeColors, shadeLevels, Shader.TileMode.CLAMP);
             mPaint.setShader(colorfulShader);
-            updateTextColor(shadeColors[shadeColors.length - 1]);
+
+            float currentLevelFraction = getCurrentLevel() / 100f;
+            int selectedColor = shadeColors[shadeColors.length - 1];
+
+            for (int i = 0; i < shadeLevels.length; i++) {
+                if (currentLevelFraction <= shadeLevels[i]) {
+                    if (transitColors && i > 0) {
+                        float range = shadeLevels[i] - shadeLevels[i - 1];
+                        float currentPos = currentLevelFraction - shadeLevels[i - 1];
+                        float ratio = currentPos / range;
+                        selectedColor = ColorUtils.blendARGB(shadeColors[i - 1], shadeColors[i], ratio);
+                    } else {
+                        selectedColor = shadeColors[i];
+                    }
+                    break;
+                }
+            }
+            updateTextColor(selectedColor);
         }
     }
 
