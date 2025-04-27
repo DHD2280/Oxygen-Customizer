@@ -40,19 +40,7 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean showAuth = false;
-
-        if (getIntent() != null) {
-            if (getIntent().getBooleanExtra("showAuth", false)) {
-                showAuth = true;
-            }
-        }
-
-        if (showAuth) {
-            showAuth();
-        } else {
-            showAdvancedReboot();
-        }
+        showAuth();
 
     }
 
@@ -63,7 +51,6 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode,
                                               @NonNull CharSequence errString) {
-                Log.e("BiometricPrompt", "onAuthenticationError: " + errString + " (" + errorCode + ")");
                 if (errorCode == ERROR_CANCELED || errorCode == BiometricPrompt.ERROR_USER_CANCELED && shown < 2) {
                     biometricPrompt.cancelAuthentication();
                     runOnUiThread(() -> {
@@ -83,8 +70,11 @@ public class AuthActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-
-                showAdvancedReboot();
+                Intent broadcast = new Intent(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT);
+                broadcast.putExtra("packageName", SYSTEM_UI);
+                broadcast.setPackage(SYSTEM_UI);
+                AuthActivity.this.sendBroadcast(broadcast);
+                finishAndRemoveTask();
             }
 
             @Override
