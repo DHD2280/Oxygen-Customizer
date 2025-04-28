@@ -11,7 +11,7 @@ TH -> Android Theme
 10 - Solarized Dark Theme
 11 - Android Black
 
-DSTBG -> Android Background
+DSTBG -> Android Theme Background
 1 - Theme Black Amoled
 2 - Theme Blue Gray
 3 - Theme Blue Gray Dark
@@ -34,3 +34,21 @@ DSTBG -> Android Background
 20 - Theme Transparency Higher
 21 - Theme Transparency Lower
 22 - Theme Transparency Medium
+
+DSTWD -> Window Dialog
+1 - Window Dialog Higher Transparency
+2 - Window Dialog Medium Transparency
+3 - Window Dialog Lower Transparency
+4 - Window Dialog Higher Transparency Outlined
+5 - Window Dialog Medium Transparency Outlined
+6 - Window Dialog Lower Transparency Outlined
+7 - Window Dialog Solid
+8 - Window Dialog Solid Outlined
+
+DSTSP -> Circular Progress Bar
+1 - Circular Progress Bar Arrow
+2 - Circular Progress Bar Radioactive
+3 - Circular Progress Bar Sprite Theme
+4 - Circular Progress Bar Stars
+5 - Circular Progress Bar Stock Accent
+6 - Circular Progress Bar Aurora Theme
