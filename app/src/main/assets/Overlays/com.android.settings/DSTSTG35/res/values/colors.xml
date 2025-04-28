@@ -40,6 +40,7 @@
     <color name="badge_tint_instant">@*android:color/black</color>
     <color name="banner_accent_attention_high">@*android:color/accent_material_dark</color>
     <color name="barchart_background_normal">@*android:color/accent_material_dark</color>
+    <color name="barchart_background_protect">@*android:color/accent_material_dark</color>
     <color name="biometric_enroll_intro_color_icon">@*android:color/accent_material_dark</color>
     <color name="black">@*android:color/background_dark</color>
     <color name="blue">@*android:color/accent_material_dark</color>
@@ -47,6 +48,7 @@
     <color name="breath_light_background">@*android:color/background_dark</color>
     <color name="breath_light_color_background">@*android:color/background_dark</color>
     <color name="breath_light_color_bg">@*android:color/background_dark</color>
+    <color name="breath_light_color_recover">@*android:color/accent_material_dark</color>
     <color name="breath_light_multi_led_background">@*android:color/background_dark</color>
     <color name="breath_light_multi_led_bg">@*android:color/background_dark</color>
     <color name="breath_light_multi_led_ringtone_bg">@*android:color/background_leanback_dark</color>
@@ -85,6 +87,9 @@
     <color name="couiGreenTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiGreenTintControlPressed">@*android:color/accent_material_dark</color>
     <color name="couiLoadingViewMediumColor">@*android:color/background_dark</color>
+    <color name="couiOrangeFifthNormal">@*android:color/accent_material_dark</color>
+    <color name="couiOrangeFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiOrangeFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiOrangeTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiOrangeTintControlPressed">@*android:color/accent_material_dark</color>
     <color name="couiRedDarkTintLightNormal">@*android:color/car_blue_grey_800</color>
@@ -103,11 +108,17 @@
     <color name="couiSingleSecondTextHighLight">@*android:color/accent_material_dark</color>
     <color name="couiSingleSeventhNormal">@*android:color/accent_material_dark</color>
     <color name="couiSingleThirdNormal">@*android:color/accent_material_dark</color>
+    <color name="couiSkyBlueFifthNormal">@*android:color/accent_material_dark</color>
+    <color name="couiSkyBlueFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiSkyBlueFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyBlueSecondBarDisabledColor">@*android:color/accent_material_dark</color>
     <color name="couiSkyBlueSecondColorDisableNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyBlueSecondNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyblueTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyblueTintControlPressed">@*android:color/accent_material_dark</color>
+    <color name="couiYellowFifthNormal">@*android:color/accent_material_dark</color>
+    <color name="couiYellowFifthOnPopupNormal">@*android:color/accent_material_dark</color>
+    <color name="couiYellowFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiYellowTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiYellowTintControlPressed">@*android:color/accent_material_dark</color>
     <color name="coui_alert_dialog_background_tint">@*android:color/background_dark</color>
@@ -214,6 +225,7 @@
     <color name="coui_color_error">@*android:color/accent_material_dark</color>
     <color name="coui_color_error_dark">@*android:color/accent_material_dark</color>
     <color name="coui_color_error_light">@*android:color/accent_material_dark</color>
+    <color name="coui_color_error_text_bg_dark">@*android:color/accent_material_dark</color>
     <color name="coui_color_fill_solid_dark">@*android:color/background_leanback_dark</color>
     <color name="coui_color_green_dark">@*android:color/accent_material_dark</color>
     <color name="coui_color_label_theme_blue">@*android:color/accent_material_dark</color>
@@ -357,6 +369,7 @@
     <color name="coui_panel_drag_view_color_light">@*android:color/accent_material_dark</color>
     <color name="coui_panel_layout_tint_dark">@*android:color/background_dark</color>
     <color name="coui_panel_layout_with_shadow_tint_dark">@*android:color/background_dark</color>
+
     <color name="coui_panel_navigation_bar_color_dark">@*android:color/background_dark</color>
     <color name="coui_popup_list_background_color_above_blur">@*android:color/transparent</color>
     <color name="coui_popup_list_window_text_color_normal">@*android:color/background_dark</color>
@@ -582,6 +595,7 @@
     <color name="settings_dialog_colorError">@*android:color/accent_material_dark</color>
     <color name="settings_face_unlock_tint_color">@*android:color/background_dark</color>
     <color name="settings_search_breeno_ic_color">@*android:color/background_dark</color>
+    <color name="settings_storage_category_apk">@*android:color/accent_material_dark</color>
     <color name="settings_sync_icon_error_tint_color">@*android:color/accent_material_dark</color>
     <color name="settings_sync_icon_syncing_tint_color">@*android:color/background_dark</color>
     <color name="settings_user_operation_color">@*android:color/background_dark</color>
