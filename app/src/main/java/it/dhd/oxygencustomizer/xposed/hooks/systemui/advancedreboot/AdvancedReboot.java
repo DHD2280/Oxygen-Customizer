@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricManager;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,10 +66,12 @@ public class AdvancedReboot extends XposedMods {
     private int radius;
     private Object mNearbyManager = null;
     private boolean isFinderActive = false;
-    private OplusQSDetailDialogProvider oplusQSDetailDialogProvider;
     private OplusRebootDetailAdapter oplusScreenshotDetailAdapter;
-    public final OplusRebootDetailAdapter detailAdapter;
+    private OplusRebootDetailAdapter14 oplusScreenshotDetailAdapter14;
+    public OplusRebootDetailAdapter detailAdapter;
+    public OplusRebootDetailAdapter14 detailAdapter14;
     public OplusQSDetailDialogProvider mQsDialog;
+    private OplusQSDetailDialogProvider mQsDialog14;
     public static final List<Integer> itemTitles = new ArrayList<>();
     public static final List<Integer> itemIcons = new ArrayList<>();
 
@@ -92,7 +95,11 @@ public class AdvancedReboot extends XposedMods {
     public AdvancedReboot(Context context) {
         super(context);
         mAdvancedRebootDrawable = ResourcesCompat.getDrawable(mContext.getResources(), mContext.getResources().getIdentifier("oplus_reboot", "drawable", listenPackage), mContext.getTheme());
-        this.detailAdapter = new OplusRebootDetailAdapter(this.mContext);
+        if (Build.VERSION.SDK_INT >= 35) {
+            this.detailAdapter = new OplusRebootDetailAdapter(this.mContext);
+        } else {
+            this.detailAdapter14 = new OplusRebootDetailAdapter14(this.mContext);
+        }
     }
 
     @Override
@@ -325,6 +332,79 @@ public class AdvancedReboot extends XposedMods {
         }
     }
 
+    public final class OplusRebootDetailAdapter14 implements com.oplus.systemui.qs.detail.DetailAdapter, AdapterView.OnItemClickListener {
+        public final Context mainContext;
+
+        @Override
+        public int getMetricsCategory() {
+            return 119;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return null;
+        }
+
+        @Override
+        public void setToggleState(boolean z) {
+        }
+
+        public OplusRebootDetailAdapter14(Context context) {
+            this.mainContext = context;
+        }
+
+        @Override
+        public CharSequence getTitle() {
+            return this.mainContext.getString(AdvancedRebootResources.getFakeIdDialogTitle());
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return null;
+        }
+
+        @Override
+        public View createDetailView(Context context, View view, ViewGroup viewGroup) {
+            View inflate;
+//            COUIThemeOverlay.getInstance().applyThemeOverlays(this.mainContext);
+            inflate = LayoutInflater.from(this.mainContext).inflate(mContext.getResources().getIdentifier("oplus_qs_screenshot_detail", "layout", SYSTEM_UI), viewGroup, false);
+            COUIListView cOUIListView = inflate != null ? (COUIListView) inflate.findViewById(mContext.getResources().getIdentifier("screen_shot_option_list", "id", SYSTEM_UI)) : null;
+            ItemAdapter itemAdapter = new ItemAdapter(this.mainContext);
+            itemAdapter.setOnItemClickListener(i2 -> OplusRebootDetailAdapter14.this.onItemClick(null, null, i2, 0L));
+            if (cOUIListView != null) {
+                cOUIListView.setAdapter(itemAdapter);
+            }
+            return inflate;
+        }
+
+        @Override
+        public void onItemClick(AdapterView adapterView, View view, int i2, long j2) {
+            int i3 = itemTitles.get(i2);
+            String cmd;
+            if (i3 == itemTitles.get(0)) {
+                cmd = "reboot recovery";
+            } else if (i3 == itemTitles.get(1)) {
+                cmd = "reboot bootloader";
+            } else if (i3 == itemTitles.get(2)) {
+                cmd = "reboot safemode";
+            } else if (i3 == itemTitles.get(3)) {
+                cmd = "killall zygote; killall zygote64";
+            } else if (i3 == itemTitles.get(4)) {
+                cmd = "killall " + SYSTEM_UI;
+            } else {
+                cmd = "";
+            }
+            String finalCmd = cmd;
+            XPLauncher.enqueueProxyCommand(proxy -> {
+                try {
+                    proxy.runCommand(finalCmd);
+                } catch (Exception e) {
+                    XposedBridge.log("Error executing command: " + e.getMessage());
+                }
+            });
+        }
+    }
+
     public final class ItemAdapter extends BaseAdapter {
         public final Context context;
         public OnItemClickListener mItemClickListener;
@@ -452,10 +532,14 @@ public class AdvancedReboot extends XposedMods {
     }
 
     private void showDialog() {
-        if (oplusQSDetailDialogProvider == null || !oplusQSDetailDialogProvider.isShowing()) {
+        if (Build.VERSION.SDK_INT >= 35) {
             oplusScreenshotDetailAdapter = detailAdapter;
             mQsDialog = new OplusQSDetailDialogProvider(mContext, oplusScreenshotDetailAdapter);
             mQsDialog.showDetail(null, true, null, OplusQSDetailDialogProvider.DialogHeight.CHANGE);
+        } else { // OOS14
+            oplusScreenshotDetailAdapter14 = detailAdapter14;
+            mQsDialog14 = new OplusQSDetailDialogProvider(mContext, oplusScreenshotDetailAdapter14);
+            mQsDialog14.showDetail(null, true, null);
         }
     }
 

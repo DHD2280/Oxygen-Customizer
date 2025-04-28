@@ -208,7 +208,7 @@ dependencies {
 
     // Oneplus UI
     implementation(libs.oneplus.ui)
-//    implementation("it.dhd:oneplusui:1.4.0")
+//    implementation("it.dhd:oneplusui:1.4.1")
 
     // Hidden API
     implementation(libs.lsposed.hiddenapi)
@@ -224,6 +224,7 @@ dependencies {
     // Stub classes
     compileOnly(project(":oos_launcher"))
     compileOnly(project(":oos_systemui"))
+    compileOnly(project(":oos_systemui_14"))
 
 }
 
