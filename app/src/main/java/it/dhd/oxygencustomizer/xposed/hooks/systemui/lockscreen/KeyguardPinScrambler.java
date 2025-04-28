@@ -95,10 +95,18 @@ public class KeyguardPinScrambler extends XposedMods {
                         .run(param -> {
                             if (!shufflePinEnabled) return;
                             int[] mKeyboardNumbers = (int[]) getObjectField(param.thisObject, "mKeyboardNumbers");
-
                             int clickedIndex = (int) param.args[0];
-                            int correctNumber = mKeyboardNumbers[clickedIndex];
+                            if (clickedIndex < 0 || clickedIndex >= mKeyboardNumbers.length) {
+                                param.setResult(null);
+                                return;
+                            }
                             COUINumericKeyboard.OnClickItemListener listener = (COUINumericKeyboard.OnClickItemListener) getObjectField(param.thisObject, "mOnClickItemListener");
+                            if (clickedIndex == 11) {
+                                if (listener != null) {
+                                    listener.onClickRight();
+                                }
+                            }
+                            int correctNumber = mKeyboardNumbers[clickedIndex];
                             if (listener != null) {
                                 listener.onClickNumber(correctNumber);
                                 param.setResult(null);
