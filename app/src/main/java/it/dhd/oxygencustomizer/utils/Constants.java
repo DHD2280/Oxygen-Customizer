@@ -754,6 +754,20 @@ public final class Constants {
             };
         }
 
+        public static class Statusbar {
+
+            public static final String STATUSBAR_CLOCK_STYLE = "status_bar_clock";
+            public static final String STATUSBAR_CLOCK_SIZE = "status_bar_clock_size";
+            public static final String STATUSBAR_CLOCK_COLOR_SWITCH = "status_bar_custom_clock_color";
+            public static final String STATUSBAR_CLOCK_COLOR = "status_bar_clock_color";
+            public static final String STATUSBAR_DT_SLEEP = "double_tap_sleep_statusbar";
+            public static final String STATUSBAR_BRIGHTNESS = "brightness_control";
+            public static final String STATUSBAR_PADDING_ENABLED = "statusbar_padding_enabled";
+            public static final String STATUSBAR_PADDING_TOP = "statusbar_top_padding";
+            public static final String STATUSBAR_PADDING_SIDE = "statusbarPaddings";
+
+        }
+
         public static final String ADAPTIVE_PLAYBACK_ENABLED = "sound_adaptive_playback_main_switch";
         public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
 

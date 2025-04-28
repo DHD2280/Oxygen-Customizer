@@ -15,9 +15,9 @@ import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.*;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
-import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -153,17 +153,17 @@ public class StatusbarMods extends XposedMods {
         statusbarPortion = Xprefs.getSliderFloat("quick_pulldown_length", 25f) / 100f;
 
         // Double Tap to Sleep
-        doubleTapToSleepStatusbarEnabled = Xprefs.getBoolean("double_tap_sleep_statusbar", false);
+        doubleTapToSleepStatusbarEnabled = Xprefs.getBoolean(STATUSBAR_DT_SLEEP, false);
 
         // Brightness Control
-        mBrightnessControl = Xprefs.getBoolean("brightness_control", false);
+        mBrightnessControl = Xprefs.getBoolean(STATUSBAR_BRIGHTNESS, false);
 
         // Padding
         mTopPad = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
-                Xprefs.getSliderFloat("statusbar_top_padding", 0f),
+                Xprefs.getSliderFloat(STATUSBAR_PADDING_TOP, 0f),
                 mContext.getResources().getDisplayMetrics());
-        statusBarPadding = Xprefs.getBoolean("statusbar_padding_enabled", false);
+        statusBarPadding = Xprefs.getBoolean(STATUSBAR_PADDING_ENABLED, false);
 
         // Notifications
         mNewIconStyle = Xprefs.getBoolean("statusbar_notification_app_icon", false);
@@ -177,9 +177,9 @@ public class StatusbarMods extends XposedMods {
 
         if (Key.length > 0) {
             switch (Key[0]) {
-                case "statusbarPaddings",
-                     "statusbar_top_padding" -> updateStatusbarHeight();
-                case "statusbar_padding_enabled" -> updateResources();
+                case STATUSBAR_PADDING_SIDE,
+                     STATUSBAR_PADDING_TOP -> updateStatusbarHeight();
+                case STATUSBAR_PADDING_ENABLED -> updateResources();
                 case "statusbar_notification_app_icon" -> updateNotificationIcons();
             }
         }
