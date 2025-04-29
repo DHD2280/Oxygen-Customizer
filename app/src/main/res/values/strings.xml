@@ -773,6 +773,8 @@
     <string name="lockscreen_affordance_remove_left">Remove Left Affordance</string>
     <string name="lockscreen_affordance_remove_right">Remove Right Affordance</string>
     <string name="lockscreen_shuffle_pin">Shuffle Pin</string>
+    <string name="lockscreen_keep_shuffling_title">Keep shuffling</string>
+    <string name="lockscreen_keep_shuffling_summary">Shuffle again on any key press</string>
     <string name="lockscreen_hide_lock_icon">Hide lock icon</string>
     <string name="lockscreen_weather">Lockscreen Weather</string>
     <string name="depth_wallpaper_category">Depth Wallpaper</string>

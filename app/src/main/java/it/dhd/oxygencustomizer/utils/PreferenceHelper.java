@@ -99,6 +99,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SHUFFLING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_SHUFFLE_PIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
@@ -749,6 +751,9 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("lockscreen_album_art", false) &&
                         (instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("3") ||
                                 instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("4"));
+            }
+            case LOCKSCREEN_KEEP_SHUFFLING -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_SHUFFLE_PIN, false);
             }
 
             // Lockscreen Clock

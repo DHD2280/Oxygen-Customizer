@@ -456,6 +456,8 @@ public final class Constants {
             public static final String LOCKSCREEN_HIDE_STATUSBAR = "lockscreen_hide_statusbar";
             public static final String LOCKSCREEN_HIDE_CAPSULE = "lockscreen_hide_capsule";
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
+            public static final String LOCKSCREEN_SHUFFLE_PIN = "shufflePinEnabled";
+            public static final String LOCKSCREEN_KEEP_SHUFFLING = "keepShuffling";
         }
 
         public static class LockscreenClock {
@@ -765,6 +767,9 @@ public final class Constants {
             public static final String STATUSBAR_PADDING_ENABLED = "statusbar_padding_enabled";
             public static final String STATUSBAR_PADDING_TOP = "statusbar_top_padding";
             public static final String STATUSBAR_PADDING_SIDE = "statusbarPaddings";
+            public static final String STATUSBAR_LOGO_SWITCH = "statusbar_logo";
+            public static final String STATUSBAR_LOGO_STYLE = "statusbar_logo_style";
+            public static final String STATUSBAR_LOGO_POSITION = "statusbar_logo_position";
 
         }
 
@@ -939,6 +944,7 @@ public final class Constants {
     public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
     public static final String SETTINGS_OTA_CARD_DIR = XPOSED_RESOURCE_TEMP_DIR + "/settings_ota_card.png";
     public static final String NOW_BAR_CLOCK_FONT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/now_bar_music_clock_font.ttf";
+    public static final String STATUSBAR_LOGO_FILE = XPOSED_RESOURCE_TEMP_DIR + "/statusbar_logo_file.png";
 
     public static final String OPLUS_FEATURE_XML = "\t<oplus-feature name=\"%s\" />";
 
