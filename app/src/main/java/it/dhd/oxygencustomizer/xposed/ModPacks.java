@@ -64,6 +64,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomizati
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarLogo;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarNotification;
 
@@ -138,6 +139,7 @@ public class ModPacks {
                     modPacks.add(StatusbarIcons.class);
                     modPacks.add(BatteryBar.class);
                     modPacks.add(BatteryStyleManager.class);
+                    modPacks.add(StatusbarLogo.class);
 //                    modPacks.add(NotificationTransparency.class);
                     // QS
                     modPacks.add(HeaderImage.class); // Load first QS Header Image since we have to check ScrimView Alpha before set by QS Transparency

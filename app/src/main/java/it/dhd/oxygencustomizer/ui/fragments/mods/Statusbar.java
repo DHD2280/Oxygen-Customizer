@@ -4,6 +4,7 @@ import static android.content.Context.BATTERY_SERVICE;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_SWITCH;
 
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
@@ -14,6 +15,7 @@ import androidx.preference.Preference;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
@@ -21,6 +23,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleFilledBattery;
@@ -77,6 +80,19 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
     @Override
     public boolean hasMenu() {
         return true;
+    }
+
+    @Override
+    public void updateScreen(String key) {
+        super.updateScreen(key);
+        OplusJumpPreference mStatusbarLogo = findPreference("statusbar_logo_jump");
+        if (mStatusbarLogo != null) {
+            mStatusbarLogo.setJumpText(
+                    OCPreferences.getBoolean(STATUSBAR_LOGO_SWITCH, false) ?
+                            getString(R.string.general_on) :
+                            getString(R.string.general_off)
+            );
+        }
     }
 
     @Override

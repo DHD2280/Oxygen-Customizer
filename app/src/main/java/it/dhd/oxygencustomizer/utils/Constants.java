@@ -770,6 +770,8 @@ public final class Constants {
             public static final String STATUSBAR_LOGO_SWITCH = "statusbar_logo";
             public static final String STATUSBAR_LOGO_STYLE = "statusbar_logo_style";
             public static final String STATUSBAR_LOGO_POSITION = "statusbar_logo_position";
+            public static final String STATUSBAR_LOGO_SIZE = "statusbar_logo_size";
+            public static final String STATUSBAR_LOGO_APPLY_TINT = "statusbar_logo_tint";
 
         }
 
