@@ -121,7 +121,7 @@ public class StatusbarClock extends XposedMods {
     private View mCenteredIconArea = null;
     private LinearLayout mSystemIconArea = null;
     private int mClockPosition = POSITION_LEFT;
-    private int leftClockPadding = 0, rightClockPadding = 0;
+    private int rightClockPadding = 0;
     private boolean mClockCustomColor;
     private int mClockColor = Color.WHITE;
     // Clock Chip
@@ -145,7 +145,6 @@ public class StatusbarClock extends XposedMods {
         if (!listensTo(context.getPackageName())) return;
 
         rightClockPadding = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("status_bar_clock_starting_padding", "dimen", mContext.getPackageName()));
-        leftClockPadding = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("status_bar_left_clock_starting_padding", "dimen", mContext.getPackageName()));
     }
 
     @Override
@@ -567,7 +566,7 @@ public class StatusbarClock extends XposedMods {
             case POSITION_LEFT -> {
                 targetArea = mStatusbarStartSide;
                 index = 1;
-                mClockView.setPadding(leftClockPadding, 0, leftClockPadding, 0);
+                mClockView.setPadding(rightClockPadding, 0, rightClockPadding, 0);
             }
             case POSITION_CENTER -> {
                 targetArea = (ViewGroup) mCenteredIconArea;
