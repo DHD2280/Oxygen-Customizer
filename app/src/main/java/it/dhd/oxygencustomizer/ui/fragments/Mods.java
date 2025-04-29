@@ -1,65 +1,35 @@
 package it.dhd.oxygencustomizer.ui.fragments;
 
 
-import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.prefsList;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
-import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
-import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
 import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_10_MIN;
 import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_1_MIN;
 import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_2_MIN;
 import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS;
 import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_5_MIN;
-import static it.dhd.oxygencustomizer.ui.fragments.mods.sound.AdaptivePlaybackSoundSettings.ADAPTIVE_PLAYBACK_TIMEOUT_NONE;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
-import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
-import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.canhub.cropper.CropImage;
-import com.canhub.cropper.CropImageOptions;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.topjohnwu.superuser.Shell;
-
 import it.dhd.oneplusui.preference.OplusJumpPreference;
-import it.dhd.oneplusui.preference.OplusSwitchPreference;
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ClockPickerFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
-import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.ui.fragments.mods.misc.DarkMode;
-import it.dhd.oxygencustomizer.ui.fragments.mods.misc.LagFixAppChooser;
-import it.dhd.oxygencustomizer.ui.fragments.mods.sound.FluidSettings;
 import it.dhd.oxygencustomizer.ui.models.SearchPreferenceItem;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchConfiguration;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreference;
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResult;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
-import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Mods extends ControlledPreferenceFragmentCompat {
 
