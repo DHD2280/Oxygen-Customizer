@@ -111,7 +111,7 @@ public class AodEdgeLight extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        ReflectedClass QuickSettingsControllerImpl = ReflectedClass.of("com.android.systemui.shade.QuickSettingsControllerImpl");
+        ReflectedClass QuickSettingsControllerImpl = ReflectedClass.ofIfPossible("com.android.systemui.shade.QuickSettingsControllerImpl");
         if (QuickSettingsControllerImpl.getClazz() != null) {
             QuickSettingsControllerImpl
                     .after("loadDimens")
