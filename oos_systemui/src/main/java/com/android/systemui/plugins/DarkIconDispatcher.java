@@ -35,6 +35,13 @@ public interface DarkIconDispatcher {
         throw new UnsupportedOperationException("Stub!");
     }
 
+    /**
+     * Stub where Collection not available!!!
+     */
+    static int getTint(ArrayList<Rect> arrayList, View view, int i2) {
+        throw new UnsupportedOperationException("Stub!");
+    }
+
     static int getInverseTint(Collection<Rect> collection, View view, int i2) {
         throw new UnsupportedOperationException("Stub!");
     }
