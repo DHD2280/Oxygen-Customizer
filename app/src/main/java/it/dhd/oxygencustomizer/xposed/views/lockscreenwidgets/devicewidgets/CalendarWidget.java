@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -33,10 +31,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.xposed.utils.CalendarProvider;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 @SuppressLint("ViewConstructor")
@@ -110,7 +110,13 @@ public class CalendarWidget extends BaseDeviceWidget {
             SimpleDateFormat sdf2 = new SimpleDateFormat(mDateFormat, Locale.getDefault());
             String evendEnd = sdf2.format(new Date(startTime));
             Log.i("CalendarWidget", "Event end time: " + evendEnd);
-            scheduleWidgetUpdate(eventEndTime);
+            if (!mSettingsInterface) {
+                try {
+                    scheduleWidgetUpdate(eventEndTime);
+                } catch (Throwable t) {
+                    XposedBridge.log("CalendarWidget - error scheduling update");
+                }
+            }
 
             SimpleDateFormat sdf = new SimpleDateFormat(mDateFormat, Locale.getDefault());
             String eventTime = sdf.format(new Date(startTime));
@@ -128,24 +134,14 @@ public class CalendarWidget extends BaseDeviceWidget {
         }
     }
 
-    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
     private void scheduleWidgetUpdate(long eventEndTime) {
         Log.d("CalendarWidget", "Scheduling widget update for event end time: " + eventEndTime + " appContext " + (appContext == null));
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
-        intent.setAction("UPDATE_WIDGET_AFTER_EVENT");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                mContext,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
+        AlarmManager alarmManager = SystemUtils.AlarmManager();
+        alarmManager.set(AlarmManager.RTC,
                 eventEndTime,
-                pendingIntent
-        );
+                "",
+                this::getNextCalendarEvent,
+                null);
     }
 
     public CalendarWidget(Context context, boolean settingsInterface) {
