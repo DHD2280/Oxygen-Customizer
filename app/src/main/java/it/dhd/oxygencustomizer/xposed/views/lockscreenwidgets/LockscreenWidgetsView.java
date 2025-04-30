@@ -4,12 +4,10 @@ package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets;
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
@@ -1194,17 +1192,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object controlsTile = getControlsTile();
         if (controlsTile == null) return;
         View finalView;
-        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-        else {
-            expandable = null;
-        }
-        post(() -> callMethod(controlsTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+        post(() -> callMethod(controlsTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         vibrate(1);
     }
 
@@ -1212,17 +1205,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         Object WalletTile = getWalletTile();
         if (WalletTile != null) {
             View finalView;
-            Object expandable;
             if (view instanceof ExtendedFAB) {
                 finalView = (View) view.getParent();
             } else {
                 finalView = view;
             }
-            if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-            else {
-                expandable = null;
-            }
-            post(() -> callMethod(WalletTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+            post(() -> callMethod(WalletTile, "handleClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         } else {
             mActivityLauncherUtils.launchWallet();
         }
@@ -1306,17 +1294,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             return;
         }
         View finalView;
-        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-        else {
-            expandable = null;
-        }
-        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+        post(() -> callMethod(getOplusWifiTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         vibrate(0);
     }
 
@@ -1328,17 +1311,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
         if (getCellularTile() == null) return;
         View finalView;
-        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-        else {
-            expandable = null;
-        }
-        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         vibrate(0);
     }
 
@@ -1349,17 +1327,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             return;
         }
         View finalView;
-        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-        else {
-            expandable = null;
-        }
-        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         vibrate(0);
     }
 
@@ -1371,17 +1344,12 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         }
         if (getHotspotTile() == null) return;
         View finalView;
-        Object expandable;
         if (view instanceof ExtendedFAB) {
             finalView = (View) view.getParent();
         } else {
             finalView = view;
         }
-        if (Build.VERSION.SDK_INT >= 35) expandable = callStaticMethod(Expandable, "fromView", view);
-        else {
-            expandable = null;
-        }
-        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
+        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? null : finalView));
         vibrate(0);
     }
 
