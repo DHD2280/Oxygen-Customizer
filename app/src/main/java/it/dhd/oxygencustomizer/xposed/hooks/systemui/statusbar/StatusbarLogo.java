@@ -33,6 +33,7 @@ import java.util.List;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.statusbar.LogoView;
 
@@ -113,7 +114,17 @@ public class StatusbarLogo extends XposedMods {
                     placeLogo();
                 });
 
+        ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing);
+
     }
+
+    private final ControllersProvider.OnKeyguardShowing mKeyguardShowing = showing -> {
+        if (showing) {
+            mStatusbarLogoView.setVisibility(View.GONE);
+        } else {
+            mStatusbarLogoView.setVisibility(mStatusbarLogo ? View.VISIBLE : View.GONE);
+        }
+    };
 
     @Override
     public boolean listensTo(String packageName) {
