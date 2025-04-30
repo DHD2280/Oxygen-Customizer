@@ -23,6 +23,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class CustomShortcut extends XposedMods {
 
@@ -30,6 +31,7 @@ public class CustomShortcut extends XposedMods {
     private boolean showInSettings = true;
     private Context c;
     private Class<?> ThemeUtils = null;
+    private ReflectedClass OOSUtils, COUITintUtil;
 
     public CustomShortcut(Context context) {
         super(context);
@@ -75,6 +77,8 @@ public class CustomShortcut extends XposedMods {
             ThemeUtils = findClass("com.oplus.settings.utils.ThemeUtils", lpparam.classLoader);
         } catch (Throwable ignored) {
         }
+        OOSUtils = ReflectedClass.ofIfPossible("com.oplus.settings.utils.OOSUtils");
+        COUITintUtil = ReflectedClass.ofIfPossible("com.coui.appcompat.tintimageview.COUITintUtil");
         hookAllMethods(TopLevelSettingsClass, "onCreateAdapter", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -99,7 +103,19 @@ public class CustomShortcut extends XposedMods {
                     tinted = OCIcon;
                 } else {
                     try {
-                        tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
+                        if (Build.VERSION.SDK_INT >= 35 && OOSUtils.getClazz() != null) {
+                            // Check two tone
+                            boolean isTwoTone = (boolean) callStaticMethod(OOSUtils.getClazz(), "isTwoToneTheme", mContext);
+                            if (isTwoTone) {
+                                int resId = mContext.getResources().getIdentifier("oos_vector_stroke_color", "color", SETTINGS);
+                                int color = ResourcesCompat.getColor(c.getResources(), resId, c.getTheme());
+                                tinted = (Drawable) callStaticMethod(COUITintUtil.getClazz(), "tintDrawable", OCIcon, color);
+                            } else {
+                                tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
+                            }
+                        } else {
+                            tinted = (Drawable) callStaticMethod(ThemeUtils, "getApplyCOUITintDrawable", c, OCIcon, true);
+                        }
                     } catch (Throwable t) {
                         tinted = OCIcon;
                     }
