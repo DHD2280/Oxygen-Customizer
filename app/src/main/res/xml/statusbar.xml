@@ -139,4 +139,15 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.statusbar.StatusbarLogoFragment"
+            android:key="statusbar_logo_jump"
+            android:title="@string/statusbar_logo"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+
 </PreferenceScreen>

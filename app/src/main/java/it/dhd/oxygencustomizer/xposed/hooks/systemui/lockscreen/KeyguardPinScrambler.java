@@ -4,6 +4,8 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SHUFFLING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_SHUFFLE_PIN;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
@@ -26,6 +28,7 @@ public class KeyguardPinScrambler extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     private boolean shufflePinEnabled = false;
+    private boolean keepShuffling = false;
 
     public KeyguardPinScrambler(Context context) {
         super(context);
@@ -33,7 +36,8 @@ public class KeyguardPinScrambler extends XposedMods {
 
     @Override
     public void updatePrefs(String... Key) {
-        shufflePinEnabled = Xprefs.getBoolean("shufflePinEnabled", false);
+        shufflePinEnabled = Xprefs.getBoolean(LOCKSCREEN_SHUFFLE_PIN, false);
+        keepShuffling = Xprefs.getBoolean(LOCKSCREEN_KEEP_SHUFFLING, false);
     }
 
     final List<Integer> digits = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, -1, 0, -1);
@@ -104,11 +108,18 @@ public class KeyguardPinScrambler extends XposedMods {
                             if (clickedIndex == 11) {
                                 if (listener != null) {
                                     listener.onClickRight();
+                                    if (keepShuffling) {
+                                        pinShuffleHook.run(param);
+                                    }
+                                    return;
                                 }
                             }
                             int correctNumber = mKeyboardNumbers[clickedIndex];
                             if (listener != null) {
                                 listener.onClickNumber(correctNumber);
+                                if (keepShuffling) {
+                                    pinShuffleHook.run(param);
+                                }
                                 param.setResult(null);
                             }
                         });

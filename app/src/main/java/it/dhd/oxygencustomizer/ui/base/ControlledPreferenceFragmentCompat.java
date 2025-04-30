@@ -131,6 +131,7 @@ public abstract class ControlledPreferenceFragmentCompat extends OplusPreference
         super.onDestroy();
     }
 
+    @CallSuper
     public void updateScreen(String key) {
         PreferenceHelper.setupAllPreferences(this.getPreferenceScreen());
     }

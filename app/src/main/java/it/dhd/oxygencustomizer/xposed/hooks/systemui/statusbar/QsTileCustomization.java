@@ -292,7 +292,7 @@ public class QsTileCustomization extends XposedMods {
                     .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
-        findMyDevices(lpparam);
+        if (Build.VERSION.SDK_INT >= 35) findMyDevices(lpparam);
         // Color Hooker
         hookQsColors();
 
@@ -464,9 +464,12 @@ public class QsTileCustomization extends XposedMods {
         Dexplore dexplore = DexFactory.load(lpParam.appInfo.sourceDir);
 
         ClassData result = dexplore.findClass(DexFilter.MATCH_ALL, classFilter);
+        if (result == null) {
+            log("findMyDevices: MyDeviceBaseClass not found");
+            return;
+        }
         MyDeviceBaseClass = result.clazz;
-        List<ClassData> results = dexplore.findClasses(DexFilter.MATCH_ALL, classFilter, -1);  // find all
-        Log.d("QsTileCustomization", "findMyDevices: " + Arrays.toString(results.toArray()));
+        log("findMyDevices: " + result);
     }
 
     public void hookQsColors() {

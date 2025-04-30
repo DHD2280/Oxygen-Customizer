@@ -168,6 +168,13 @@
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
+            android:key="keepShuffling"
+            android:summary="@string/lockscreen_keep_shuffling_summary"
+            android:title="@string/lockscreen_keep_shuffling_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
             android:key="lockscreen_hide_lock_icon"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"

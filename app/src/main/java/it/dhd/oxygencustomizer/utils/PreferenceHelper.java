@@ -99,6 +99,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_OVERRIDE_HOLDBACK_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_SCALING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SHUFFLING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_SHUFFLE_PIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
@@ -241,6 +243,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_APPLY_TINT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
@@ -394,6 +399,10 @@ public class PreferenceHelper {
             // Notification
             case "statusbar_notification_app_icon_scale" -> {
                 return instance.mPreferences.getBoolean("statusbar_notification_app_icon", false);
+            }
+            // Statusbar Logo
+            case STATUSBAR_LOGO_APPLY_TINT -> {
+                return instance.mPreferences.getString(STATUSBAR_LOGO_STYLE, "0").equals("-1");
             }
 
             // Clock & date
@@ -749,6 +758,9 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 34 && instance.mPreferences.getBoolean("lockscreen_album_art", false) &&
                         (instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("3") ||
                                 instance.mPreferences.getString("lockscreen_album_art_filter", "0").equals("4"));
+            }
+            case LOCKSCREEN_KEEP_SHUFFLING -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_SHUFFLE_PIN, false);
             }
 
             // Lockscreen Clock
@@ -1257,6 +1269,10 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
             case "statusbar_notification_app_icon_scale" ->
                     String.valueOf(instance.mPreferences.getSliderFloat("statusbar_notification_app_icon_scale", 1.0f)) + "%";
+            // Statusbar Logo
+            case STATUSBAR_LOGO_SIZE ->
+                    instance.mPreferences.getSliderInt(STATUSBAR_LOGO_SIZE, 18) + "dp";
+
 
             // Header Clock
             case "qs_header_clock_text_scaling" ->

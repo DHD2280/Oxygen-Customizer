@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusSwitchPreference
+        android:key="statusbar_logo"
+        android:summary="@string/statusbar_logo_summary"
+        android:title="@string/statusbar_logo" />
+
+    <it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference
+        android:defaultValue="0"
+        android:dependency="statusbar_logo"
+        android:entries="@array/status_bar_logo_style_entries"
+        android:entryValues="@array/status_bar_logo_style_values"
+        android:key="statusbar_logo_style"
+        android:title="@string/statusbar_logo_style"
+        app:useSimpleSummaryProvider="true" />
+
+    <it.dhd.oneplusui.preference.OplusMenuPreference
+        android:defaultValue="0"
+        android:dependency="statusbar_logo"
+        android:entries="@array/statusbar_logo_position_entries"
+        android:entryValues="@array/statusbar_logo_position_values"
+        android:key="statusbar_logo_position"
+        android:title="@string/statusbar_logo_position"
+        app:useSimpleSummaryProvider="true" />
+
+    <it.dhd.oneplusui.preference.OplusSliderPreference
+        android:dependency="statusbar_logo"
+        android:key="statusbar_logo_size"
+        android:title="@string/statusbar_logo_size"
+        app:defaultValue="18"
+        app:maxVal="40"
+        app:minVal="12"
+        app:tickInterval="1" />
+
+    <it.dhd.oneplusui.preference.OplusSwitchPreference
+        android:defaultValue="false"
+        android:key="statusbar_logo_tint"
+        android:summaryOff="@string/general_off"
+        android:summaryOn="@string/general_on"
+        android:title="@string/statusbar_logo_force_tint" />
+
+</PreferenceScreen>

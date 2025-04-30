@@ -184,4 +184,9 @@ public class ListWithPopUpPreference extends OplusListPreference {
     public interface onItemClick {
         void onItemClick(int position);
     }
+
+    public BottomSheetDialog getBottomSheet() {
+        return bottomSheetDialog;
+    }
+
 }

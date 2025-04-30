@@ -101,6 +101,7 @@ public class AdaptivePlaybackSoundSettings extends ControlledPreferenceFragmentC
 
     @Override
     public void updateScreen(String key) {
+        super.updateScreen(key);
         mAdaptivePlaybackEnabled = mPreferences.getBoolean("sound_adaptive_playback_main_switch", false);
         mAdaptivePlaybackTimeout = mPreferences.getInt("adaptive_playback_timeout", ADAPTIVE_PLAYBACK_TIMEOUT_30_SECS);
         final boolean isTimeoutNone = mAdaptivePlaybackEnabled
