@@ -88,12 +88,29 @@ public class UpdateWorker extends ListenableWorker {
 
     UpdateFragment.TaskDoneCallback onCheckedCallback = result -> {
         try {
-            Integer latestVersionCode = (Integer) result.get("versionCode");
+            String versionName = BuildConfig.VERSION_NAME;
             int currentVersionCode = BuildConfig.VERSION_CODE;
+            boolean isBeta = versionName.contains("beta");
+            boolean isNightly = versionName.contains("nightly");
+            boolean isStable = !isBeta && !isNightly;
+
+            int currentNightly = isNightly ?
+                    Integer.parseInt(versionName.substring(versionName.indexOf("#") + 1, versionName.lastIndexOf(")"))) :
+                    -1;
+
+            Integer latestVersionCode = (Integer) result.get("versionCode");
+
             Shell.cmd(String.format("pm grant %s android.permission.POST_NOTIFICATIONS", BuildConfig.APPLICATION_ID)).exec();
 
             if (latestVersionCode != null && latestVersionCode > currentVersionCode) {
                 showUpdateNotification();
+            } else if (isNightly) {
+                if (result.get("versionType").equals(UpdateFragment.NIGHTLY)) {
+                    int devBuild = (int) result.get("devBuild");
+                    if (devBuild > currentNightly) {
+                        showUpdateNotification();
+                    }
+                }
             }
         } catch (Exception e) {
             Log.e("OxygenCustomizer", "Error while checking for updates", e);

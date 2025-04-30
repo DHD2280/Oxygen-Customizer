@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.systemui.plugins.DarkIconDispatcher;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.android.systemui.Dependency;
 
@@ -28,7 +30,12 @@ public class LogoView extends ImageView implements DarkIconDispatcher.DarkReceiv
             clearColorFilter();
             return;
         }
-        int mTint = DarkIconDispatcher.getTint(arrayList, this, i2);
+        int mTint;
+        if (Build.VERSION.SDK_INT >= 35) {
+            mTint = DarkIconDispatcher.getTint(((Collection<Rect>) arrayList), this, i2);
+        } else {
+            mTint = DarkIconDispatcher.getTint(arrayList, this, i2);
+        }
         clearColorFilter();
         setColorFilter(mTint);
     }

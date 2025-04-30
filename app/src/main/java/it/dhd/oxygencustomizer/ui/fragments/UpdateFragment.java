@@ -78,6 +78,11 @@ public class UpdateFragment extends BaseFragment {
         ALL
     }
 
+    // Version Type
+    public static final int STABLE = 0;
+    public static final int BETA = 1;
+    public static final int NIGHTLY = 2;
+
     private Flavor mCurrentFlavor = Flavor.ALL;
     private boolean mNightlyDownloaded = false;
     DownloadManager downloadManager;
@@ -523,6 +528,17 @@ public class UpdateFragment extends BaseFragment {
                 JsonReader jsonReader = new JsonReader(r);
 
                 HashMap<String, Object> versionInfo = new HashMap<>();
+                switch (urlString) {
+                    case stableUpdatesURL:
+                        versionInfo.put("versionType", STABLE);
+                        break;
+                    case betaUpdatesURL:
+                        versionInfo.put("versionType", BETA);
+                        break;
+                    case nightlyUpdatesURL:
+                        versionInfo.put("versionType", NIGHTLY);
+                        break;
+                }
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     String name = jsonReader.nextName();
