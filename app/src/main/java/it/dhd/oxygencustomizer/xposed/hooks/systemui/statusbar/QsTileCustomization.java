@@ -49,15 +49,12 @@ import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
 
 import com.oplus.posteffect.BlurDrawable;
-import com.oplus.posteffect.BlurParam;
 import com.oplus.posteffect.ForegroundBlurParam;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -145,6 +142,7 @@ public class QsTileCustomization extends XposedMods {
     private ViewGroup mLabelContainer = null;
     private TextView mTitle = null, mSubtitle = null;
     private ImageView mExpandIndicator = null;
+    private ImageView mPadLock = null;
 
     // Qs Tile Animation
     private int mAnimStyle = 0;
@@ -318,7 +316,12 @@ public class QsTileCustomization extends XposedMods {
             mLabelContainer = (ViewGroup) getObjectField(param.thisObject, "mLabelContainer");
             mTitle = (TextView) getObjectField(param.thisObject, "mLabel");
             mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
-            mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
+            try {
+                mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
+            } catch (Throwable ignored) {}
+            try {
+                mPadLock = (ImageView) getObjectField(param.thisObject, "mPadLock");
+            } catch (Throwable ignored) {}
             setupLabels();
         };
 
@@ -1020,6 +1023,8 @@ public class QsTileCustomization extends XposedMods {
                 mSubtitle.setVisibility(View.GONE);
             if (mExpandIndicator != null && mExpandIndicator.getVisibility() != View.GONE)
                 mExpandIndicator.setVisibility(View.GONE);
+            if (mPadLock != null && mPadLock.getVisibility() != View.GONE)
+                mPadLock.setVisibility(View.GONE);
             return;
         }
 
