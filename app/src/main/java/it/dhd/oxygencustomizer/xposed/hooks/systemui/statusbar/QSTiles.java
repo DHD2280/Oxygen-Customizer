@@ -12,6 +12,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -45,10 +46,10 @@ public class QSTiles extends XposedMods {
         if (Xprefs == null) return;
 
         mCustomizeQSTiles = Xprefs.getBoolean(QS_CUSTOMIZE_TILES, false);
-        QQSTileQty = Xprefs.getSliderInt(QS_QUICK_TILES, QQS_NOT_SET);
-        QSRowQty = Xprefs.getSliderInt(QS_ROWS, QS_ROW_NOT_SET);
-        QSColQty = Xprefs.getSliderInt(QS_COLUMNS, QS_COL_NOT_SET);
-        QSColQtyL = Xprefs.getSliderInt(QS_COLUMNS_LANDSCAPE, QS_COL_NOT_SET);
+        QQSTileQty = Xprefs.getInt(QS_QUICK_TILES, QQS_NOT_SET);
+        QSRowQty = Xprefs.getInt(QS_ROWS, QS_ROW_NOT_SET);
+        QSColQty = Xprefs.getInt(QS_COLUMNS, QS_COL_NOT_SET);
+        QSColQtyL = Xprefs.getInt(QS_COLUMNS_LANDSCAPE, QS_COL_NOT_SET);
 
         if (Key.length > 0) {
             for (String qsTilePref : QS_TILES_PREFS) {
@@ -98,6 +99,28 @@ public class QSTiles extends XposedMods {
                     param.setResult(mColumns != newColumns);
 
                 });
+
+        if (Build.VERSION.SDK_INT >= 35) {
+            // Columns and Rows for separate qs
+//            ReflectedClass OplusTileContainerView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusTileContainerView");
+//            OplusTileContainerView
+//                    .before("updateCell")
+//                    .run(param -> {
+//                        if (!mCustomizeQSTiles) return;
+//                        setIntField(param.thisObject, "mRows", QSRowQty);
+//                        setIntField(param.thisObject, "mColumns", QSColQty);
+//                        param.setResult(null);
+//                    });
+
+//            ReflectedClass DeviceProfile = ReflectedClass.of("com.oplus.systemui.plugins.qs.DeviceProfile$DefaultCellCalculator");
+//            DeviceProfile
+//                    .before("getMaxItemNum")
+//                    .run(param1 -> {
+//                        if (!mCustomizeQSTiles) return;
+//                        param1.setResult(QSRowQty * QSColQty);
+//                    });
+
+        }
 
     }
 
