@@ -48,7 +48,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener;
@@ -108,7 +107,6 @@ public class NowBarNotification extends RelativeLayout {
 
     public NowBarNotification(Context context, OnUsefulNotificationListener listener) throws Throwable {
         super(context);
-        XposedBridge.log("NowBarNotification constructor");
         mContext = context;
         mOnUsefulNotificationListener = listener;
         try {
@@ -181,7 +179,6 @@ public class NowBarNotification extends RelativeLayout {
     }
 
     private void launchNotificationIntent() {
-        XposedBridge.log("NowBarNotification.launchNotificationIntent");
         StatusBarNotification currentNotification = mListContainer.getVisibility() == View.VISIBLE ?
                 currentOpenedNotification :
                 currentDisplayedNotification;
@@ -360,7 +357,6 @@ public class NowBarNotification extends RelativeLayout {
         mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
         StatusBarNotification usefulNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
         boolean isAlertOnce = usefulNotification == null ? false : (usefulNotification.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == Notification.FLAG_FOREGROUND_SERVICE;
-        XposedBridge.log("NowBarNotification.updateNotifications " + usefulNotification + "\n isAlertOnce:" + isAlertOnce);
         if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime() && !isAlertOnce) {
             mLastNotificationTime = usefulNotification.getPostTime();
             currentDisplayedNotification = usefulNotification;
