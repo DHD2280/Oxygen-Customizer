@@ -197,10 +197,10 @@ public final class Constants {
 
         public static class QsTiles {
             public static final String QS_CUSTOMIZE_TILES = "quick_settings_tiles_customize";
-            public static final String QS_QUICK_TILES = "quick_settings_quick_tiles";
-            public static final String QS_ROWS = "quick_settings_tiles_rows";
-            public static final String QS_COLUMNS = "quick_settings_tiles_horizontal_columns";
-            public static final String QS_COLUMNS_LANDSCAPE = "quick_settings_tiles_vertical_columns";
+            public static final String QS_QUICK_TILES = "quick_settings_quick_tiles_seek";
+            public static final String QS_ROWS = "quick_settings_tiles_rows_seek";
+            public static final String QS_COLUMNS = "quick_settings_tiles_horizontal_columns_seek";
+            public static final String QS_COLUMNS_LANDSCAPE = "quick_settings_tiles_vertical_columns_seek";
 
             public static final String[] QS_TILES_PREFS = {
                     QS_CUSTOMIZE_TILES,

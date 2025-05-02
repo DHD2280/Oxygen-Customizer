@@ -10,7 +10,6 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
@@ -131,12 +130,6 @@ public class StatusbarMods extends XposedMods {
     private float mNewIconScale = 1f;
     private boolean oos13 = false;
     private boolean mBroadcastRegistered = false;
-
-    // Statusbar Logo
-    private ImageView mStatusbarLogoImage;
-    private boolean mStatusbarLogo;
-    private int mStatusbarLogoStyle;
-    private int mStatusbarLogoSize;
 
     public StatusbarMods(Context context) {
         super(context);
@@ -543,7 +536,11 @@ public class StatusbarMods extends XposedMods {
                         if (icon != null) {
                             Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
                             icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
-                            setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
+                            if (Build.VERSION.SDK_INT >= 35) {
+                                setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
+                            } else {
+                                setFloatField(param.thisObject, "mIconAppearAmount", mNewIconScale);
+                            }
                             if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);
                             } else { // Scale Factor != 1f so return a scaled icon
