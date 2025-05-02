@@ -186,7 +186,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
-            mDateFormatDialog = new DateFormatDialog(requireContext());
+            mDateFormatDialog = new DateFormatDialog(requireActivity());
 
             Preference mCustomFormat, mBeforeClock, mAfterClock;
 
