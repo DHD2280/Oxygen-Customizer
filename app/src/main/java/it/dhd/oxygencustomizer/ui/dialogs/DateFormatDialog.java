@@ -1,7 +1,9 @@
 package it.dhd.oxygencustomizer.ui.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
@@ -18,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
+import it.dhd.oneplusui.appcompat.edittext.OplusEditText;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 
@@ -47,7 +50,8 @@ public class DateFormatDialog extends AppCompatActivity {
         mCancel = dialog.findViewById(R.id.cancel);
         TextView mPreview = dialog.findViewById(R.id.preview);
 
-        TextInputEditText formatText = dialog.findViewById(R.id.edit_text);
+        OplusEditText formatText = dialog.findViewById(R.id.edit_text);
+        formatText.setHint("$Gdd/$GMM/$Gyyyy");
         formatText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,6 +106,14 @@ public class DateFormatDialog extends AppCompatActivity {
 
     public interface OnApplyListener {
         void onApplyText(CharSequence value);
+    }
+
+    private Activity getActivityFromContext(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) return (Activity) context;
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 
 }
