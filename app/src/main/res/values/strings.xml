@@ -65,6 +65,7 @@
     <!-- Dialogs -->
     <string name="installing">Installing</string>
     <string name="loading_dialog_wait">Please Wait</string>
+    <string name="optimizing">Optimizing</string>
 
     <!-- Main Activity -->
     <!-- App kill Alert -->
@@ -1108,6 +1109,7 @@
     <string name="package_not_launchable">Package is not launch-able</string>
     <string name="menu_launch_app">Launch app</string>
     <string name="menu_restart_app">Restart app</string>
+    <string name="menu_reoptimize">Re-optimize</string>
 
     <!-- Update Fragment -->
     <string name="update_channel_name">Updates</string>

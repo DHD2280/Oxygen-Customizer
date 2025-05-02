@@ -57,6 +57,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentHooksBinding;
 import it.dhd.oxygencustomizer.services.RootProvider;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
+import it.dhd.oxygencustomizer.ui.dialogs.ReoptimizeDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
@@ -239,6 +240,8 @@ public class Hooks extends BaseFragment {
                     }
                 } else if (itemId == R.id.restart_app) {
                     handleApplicationRestart(pack.get(finalI));
+                } else if (itemId == R.id.reoptimize_app) {
+                    handleReoptimizeApp(pack.get(finalI));
                 }
 
                 return true;
@@ -270,6 +273,11 @@ public class Hooks extends BaseFragment {
                 startActivity(intent);
             }
         }
+    }
+
+    private void handleReoptimizeApp(String pkgName) {
+        ReoptimizeDialog reoptimizeDialog = new ReoptimizeDialog(requireContext(), pkgName);
+        reoptimizeDialog.show();
     }
 
     private void refreshListItem() {
