@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Peek Display -->
+    <dimen name="peek_display_notification_icon_size_minimal">24dp</dimen>
+    <dimen name="peek_display_notification_icon_size">52dp</dimen>
+    <dimen name="peek_display_notification_icon_margin_end">16dp</dimen>
+    <dimen name="peek_notification_icon_corner_radius">100dp</dimen>
+    <dimen name="peek_notification_icon_padding">16dp</dimen>
+    <dimen name="peek_notification_icon_padding_app_icons">8dp</dimen>
+    <dimen name="peek_display_area_margin_top">64dp</dimen>
+    <dimen name="peek_notification_card_height">132dp</dimen>
+
+</resources>

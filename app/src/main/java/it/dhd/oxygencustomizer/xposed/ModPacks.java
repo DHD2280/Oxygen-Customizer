@@ -50,6 +50,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.KeyguardPinScram
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenNowBar;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenPeekDisplay;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWeather;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenWidgets;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.navbar.GestureNavbarManager;
@@ -57,6 +58,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryBar;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryStyleManager;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.HeaderImage;
+//import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.NotificationTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTiles;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsMenuItems;
@@ -162,6 +164,7 @@ public class ModPacks {
                     modPacks.add(LockscreenWeather.class);
                     modPacks.add(AlbumArtLockscreen.class);
                     modPacks.add(LockscreenNowBar.class);
+                    modPacks.add(LockscreenPeekDisplay.class);
 
                     // Volume Panel
                     modPacks.add(VolumePanel.class);

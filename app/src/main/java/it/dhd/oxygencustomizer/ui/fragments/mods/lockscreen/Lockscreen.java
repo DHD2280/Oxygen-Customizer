@@ -12,6 +12,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
@@ -42,6 +43,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.DateFormatDialog;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 
 public class Lockscreen extends ControlledPreferenceFragmentCompat {
 
@@ -76,7 +78,7 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
-        mDateFormatDialog = new DateFormatDialog(requireContext());
+        mDateFormatDialog = new DateFormatDialog(requireActivity());
 
         ListWithPopUpPreference mLockscreenFpIcons = findPreference(LOCKSCREEN_FINGERPRINT_STYLE);
         int maxIndex = 0;
@@ -164,28 +166,33 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
         OplusJumpPreference mLockscreenWeather = findPreference("lockscreen_weather");
         OplusJumpPreference mLockscreenWidgets = findPreference("lockscreen_widgets");
         OplusJumpPreference mLockscreenNowBar = findPreference("lockscreen_nowbar_jump");
+        OplusJumpPreference mLockscreenPeek = findPreference("lockscreen_peeknotifications_jump");
         OplusJumpPreference mLsCarrierText = findPreference("ls_carrier_replacement");
 
         if (mLockscreenClock != null) {
-            mLockscreenClock.setJumpText(mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) ?
-                    mPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0) == 0 ? getString(R.string.clock_none) : String.format(getString(R.string.clock_style_name), mPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0)) :
+            mLockscreenClock.setJumpText(OCPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) ?
+                    OCPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0) == 0 ? getString(R.string.clock_none) : String.format(getString(R.string.clock_style_name), mPreferences.getInt(LOCKSCREEN_CLOCK_STYLE, 0)) :
                     getString(R.string.general_off));
         }
 
         if (mLockscreenWeather != null) {
-            mLockscreenWeather.setJumpText(mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+            mLockscreenWeather.setJumpText(OCPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) ? getString(R.string.general_on) : getString(R.string.general_off));
         }
 
         if (mLockscreenWidgets != null) {
-            mLockscreenWidgets.setJumpText(mPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+            mLockscreenWidgets.setJumpText(OCPreferences.getBoolean(LOCKSCREEN_WIDGETS_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
         }
 
         if (mLockscreenNowBar != null) {
-            mLockscreenNowBar.setJumpText(mPreferences.getBoolean(NOW_BAR_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+            mLockscreenNowBar.setJumpText(OCPreferences.getBoolean(NOW_BAR_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
+        }
+
+        if (mLockscreenPeek != null) {
+            mLockscreenPeek.setJumpText(OCPreferences.getBoolean(LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED, false) ? getString(R.string.general_on) : getString(R.string.general_off));
         }
 
         if (mLsCarrierText != null) {
-            mLsCarrierText.setJumpText(mPreferences.getString(LOCKSCREEN_CARRIER_REPLACEMENT, "").isEmpty() ?
+            mLsCarrierText.setJumpText(OCPreferences.getString(LOCKSCREEN_CARRIER_REPLACEMENT, "").isEmpty() ?
                     getString(R.string.general_off) : getString(R.string.general_on));
         }
     }
@@ -210,11 +217,9 @@ public class Lockscreen extends ControlledPreferenceFragmentCompat {
     public void updateScreen(String key) {
         super.updateScreen(key);
 
-        if (key == null) {
-            setJumps();
-            return;
-        }
+        setJumps();
 
+        if (key == null) return;
         switch (key) {
             case "DWallpaperEnabled":
                 try {
