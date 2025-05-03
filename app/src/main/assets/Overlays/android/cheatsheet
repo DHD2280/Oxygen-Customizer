@@ -10,3 +10,45 @@ TH -> Android Theme
 9 - Shishu Theme
 10 - Solarized Dark Theme
 11 - Android Black
+
+DSTBG -> Android Theme Background
+1 - Theme Black Amoled
+2 - Theme Blue Gray
+3 - Theme Blue Gray Dark
+4 - Theme Dark Blue
+5 - Theme Dark Gray
+6 - Theme Dark Green
+7 - Theme Dark Pink
+8 - Theme Dark Purple
+9 - Theme Dark Steel
+10 - Theme Deep Purple
+11 - Theme Eerie
+12 - Theme Green
+13 - Theme Grey
+14 - Theme Grey Night
+15 - Theme Light Grey
+16 - Theme Night
+17 - Theme Onyx
+18 - Theme Taupe
+19 - Theme Transparency Crazy Full
+20 - Theme Transparency Higher
+21 - Theme Transparency Lower
+22 - Theme Transparency Medium
+
+DSTWD -> Window Dialog
+1 - Window Dialog Higher Transparency
+2 - Window Dialog Medium Transparency
+3 - Window Dialog Lower Transparency
+4 - Window Dialog Higher Transparency Outlined
+5 - Window Dialog Medium Transparency Outlined
+6 - Window Dialog Lower Transparency Outlined
+7 - Window Dialog Solid
+8 - Window Dialog Solid Outlined
+
+DSTSP -> Circular Progress Bar
+1 - Circular Progress Bar Stock Accent
+2 - Circular Progress Bar Stars
+3 - Circular Progress Bar Radioactive
+4 - Circular Progress Bar Sprite Theme
+5 - Circular Progress Bar Arrow
+6 - Circular Progress Bar Aurora Theme

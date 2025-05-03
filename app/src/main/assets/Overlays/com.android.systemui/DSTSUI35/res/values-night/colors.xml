@@ -15,10 +15,12 @@
     <color name="couiGreenFifthOnPopupNormal">@*android:color/accent_material_dark</color>
     <color name="couiGreenFifthTextNormal">@*android:color/accent_material_dark</color>
     <color name="couiGreenTintControlNormal">@*android:color/accent_material_dark</color>
+    <color name="couiOrangeFifthNormal">@*android:color/accent_material_dark</color>
     <color name="couiOrangeTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiRedFifthNormal">@*android:color/accent_material_dark</color>
     <color name="couiRedTintControlNormal">@*android:color/accent_material_dark</color>
     <color name="couiSingleSecondLightNormal">@*android:color/button_material_dark</color>
+    <color name="couiSkyBlueFifthNormal">@*android:color/accent_material_dark</color>
     <color name="couiSkyBlueSecondLightNormal">@*android:color/accent_material_dark</color>
     <color name="couiYellowFifthLightNormal"> @*android:color/keyguard_avatar_frame_pressed_color</color>
     <color name="couiYellowFifthNormal">@*android:color/accent_material_dark</color>

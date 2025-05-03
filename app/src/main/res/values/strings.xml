@@ -1458,6 +1458,8 @@
     <string name="lockscreen_now_bar_music_extended_player_clock_options">Clock preferences</string>
     <string name="lockscreen_now_bar_music_clock_date_position">Date position</string>
     <string name="lockscreen_now_bar_battery">Now bar battery</string>
+    <string name="lockscreen_now_bar_battery_category">Show battery</string>
+    <string name="lockscreen_now_bar_battery_summary">Show battery on now bar</string>
     <string name="lockscreen_now_bar_battery_custom_icon">Custom charging icon</string>
     <string name="lockscreen_now_bar_battery_custom_colors">Custom colors</string>
     <string name="lockscreen_now_bar_battery_custom_colors_summary">Customize now bar colors</string>
