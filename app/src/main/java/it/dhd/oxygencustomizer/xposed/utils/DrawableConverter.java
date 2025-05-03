@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -13,8 +14,11 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
+import android.graphics.drawable.VectorDrawable;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -299,5 +303,59 @@ public class DrawableConverter {
         return new BitmapDrawable(context.getResources(), scaledBitmap);
     }
 
+    /**
+     * Checks whether a Drawable is a small grayscale icon.
+     * Grayscale here means "very close to a perfect gray"; icon means "no larger than 64dp".
+     *
+     * @param d The drawable to test.
+     * @return True if the bitmap is grayscale; false if it is color or too large to examine.
+     */
+    public static boolean isGrayscaleIcon(Drawable d) {
+        if (d == null) {
+            return false;
+        } else if (d instanceof AnimationDrawable ad) {
+            int count = ad.getNumberOfFrames();
+            return count > 0 && isGrayscaleIcon(ad.getFrame(0));
+        } else if (d instanceof VectorDrawable) {
+            // We just assume you're doing the right thing if using vectors
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+//    public boolean isGrayscaleIcon(Context context, Icon icon) {
+//        if (icon == null) {
+//            return false;
+//        }
+//        switch (icon.getType()) {
+//            case Icon.TYPE_BITMAP:
+//                return isGrayscaleIcon(icon.getBitmap());
+//            case Icon.TYPE_RESOURCE:
+//                return isGrayscaleIcon(context, icon.getResId());
+//            default:
+//                return false;
+//        }
+//    }
+
+    /**
+     * Checks whether a drawable with a resoure id is a small grayscale icon.
+     * Grayscale here means "very close to a perfect gray"; icon means "no larger than 64dp".
+     *
+     * @param context The context to load the drawable from.
+     * @return True if the bitmap is grayscale; false if it is color or too large to examine.
+     */
+    public boolean isGrayscaleIcon(Context context, int drawableResId) {
+        if (drawableResId != 0) {
+            try {
+                return isGrayscaleIcon(context.getDrawable(drawableResId));
+            } catch (Resources.NotFoundException ex) {
+                Log.e("DrawableConverter", "Drawable not found: " + drawableResId);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }

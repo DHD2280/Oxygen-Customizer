@@ -145,4 +145,12 @@
     <color name="wallpaper_preview_scrim_color">#99000000</color>
 
 
+    <!-- Peek display -->
+    <color name="peek_accent_color_dark">@android:color/system_accent1_100</color>
+    <color name="peek_accent_color_light">@android:color/system_accent1_600</color>
+    <color name="peek_title_text_color_light">#d8000000</color>
+    <color name="peek_title_text_color_dark">#ffffffff</color>
+    <color name="peek_summary_text_color_light">#66000000</color>
+    <color name="peek_summary_text_color_dark">#89ffffff</color>
+
 </resources>

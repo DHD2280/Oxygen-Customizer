@@ -650,6 +650,7 @@ public final class Constants {
             public static final String LOCKSCREEN_PEEK_CARD_BDX = "peek_bottom_dx_radius";
             public static final String LOCKSCREEN_PEEK_TOP_MARGIN = "peek_top_margin";
             public static final String LOCKSCREEN_PEEK_USE_APP_ICON = "peek_use_app_icons";
+            public static final String LOCKSCREEN_PEEK_IGNORE_SECURITY = "peek_ignore_security";
 
             public static final String[] LOCKSCREEN_PEEK_PREFS = {
                     LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
@@ -665,7 +666,8 @@ public final class Constants {
                     LOCKSCREEN_PEEK_CARD_TDX,
                     LOCKSCREEN_PEEK_CARD_BSX,
                     LOCKSCREEN_PEEK_CARD_BDX,
-                    LOCKSCREEN_PEEK_USE_APP_ICON
+                    LOCKSCREEN_PEEK_USE_APP_ICON,
+                    LOCKSCREEN_PEEK_IGNORE_SECURITY,
             };
 
         }

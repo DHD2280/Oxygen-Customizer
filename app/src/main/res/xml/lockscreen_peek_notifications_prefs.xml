@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_peek_notifications"
+            android:summary="@string/lockscreen_peek_notifications_summary"
+            android:title="@string/lockscreen_peek_notifications_title" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="lockscreen_peek_notifications"
+            android:entries="@array/peek_display_location_entries"
+            android:entryValues="@array/peek_display_location_values"
+            android:key="peek_display_location"
+            android:title="@string/peek_display_location_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/general_style">
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:dependency="lockscreen_peek_notifications"
+            android:entries="@array/peek_display_style_entries"
+            android:entryValues="@array/peek_display_style_values"
+            android:key="peek_display_style"
+            android:title="@string/peek_display_style_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="peek_image_background_color"
+            android:title="@string/peek_icon_background_color"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="peek_card_background_color"
+            android:title="@string/peek_card_background_color"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="peek_buttons_color"
+            android:title="@string/peek_buttons_color"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="peek_title_color"
+            android:title="@string/peek_title_color"
+            app:cpv_showAlphaSlider="true" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:key="peek_summary_color"
+            android:title="@string/peek_content_color"
+            app:cpv_showAlphaSlider="true" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="peek_card_radius_cat"
+        android:title="@string/chip_round_corners_props">
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="peek_top_sx_radius"
+            android:title="@string/chip_round_corners_top_sx_radius"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="peek_top_dx_radius"
+            android:title="@string/chip_round_corners_top_dx_radius"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="peek_bottom_sx_radius"
+            android:title="@string/chip_round_corners_bottom_sx_radius"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="peek_bottom_dx_radius"
+            android:title="@string/chip_round_corners_bottom_dx_radius"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="peek_top_margin"
+            android:title="@string/weather_margin_top"
+            app:defaultValue="0"
+            app:maxVal="200"
+            app:minVal="-100"
+            app:valueCount="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="peek_use_app_icons"
+            android:title="@string/lockscreen_now_bar_app_icon_title"
+            android:summary="@string/lockscreen_now_bar_app_icon_summary"
+            android:defaultValue="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="peek_ignore_security"
+            android:summary="@string/lockscreen_now_bar_notifications_allow_private_summary"
+            android:title="@string/lockscreen_now_bar_notifications_allow_private" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

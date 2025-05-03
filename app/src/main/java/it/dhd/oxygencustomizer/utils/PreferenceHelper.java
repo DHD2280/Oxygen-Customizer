@@ -146,6 +146,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeek
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TSX;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_2_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_3_KEY;
@@ -1397,6 +1398,8 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_BSX, 26) + "dp";
             case LOCKSCREEN_PEEK_CARD_BDX ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_CARD_BDX, 26) + "dp";
+            case LOCKSCREEN_PEEK_TOP_MARGIN ->
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_PEEK_TOP_MARGIN, 0) + "dp";
 
             // Aod Clock
             case AOD_CLOCK_LINE_HEIGHT ->

@@ -9,6 +9,7 @@ import android.app.Person;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
@@ -115,9 +116,17 @@ public class NotificationUtils {
 
     public static Drawable resolveSmallIcon(StatusBarNotification sbn, Context context) {
         try {
+            Context pkgContext = context.createPackageContext(
+                    sbn.getPackageName(),
+                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE
+            );
             Icon icon = sbn.getNotification().getSmallIcon();
             if (icon != null) {
-                return icon.loadDrawable(context);
+                try {
+                    return (Drawable) callMethod(icon, "loadDrawableAsUser", pkgContext, (int) callMethod(sbn.getUser(), "getIdentifier"));
+                } catch (Throwable ignored) {
+                    return icon.loadDrawable(pkgContext);
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Error resolving small icon", e);
@@ -125,6 +134,15 @@ public class NotificationUtils {
         }
         return null;
     }
+
+    public static int interpolateColors(int i2, int i3, float f2) {
+        return Color.argb((int) interpolate(Color.alpha(i2), Color.alpha(i3), f2), (int) interpolate(Color.red(i2), Color.red(i3), f2), (int) interpolate(Color.green(i2), Color.green(i3), f2), (int) interpolate(Color.blue(i2), Color.blue(i3), f2));
+    }
+
+    public static float interpolate(float f2, float f3, float f4) {
+        return (f2 * (1.0f - f4)) + (f3 * f4);
+    }
+
 
     public static Drawable resolveAppIcon(StatusBarNotification sbn) {
         try {

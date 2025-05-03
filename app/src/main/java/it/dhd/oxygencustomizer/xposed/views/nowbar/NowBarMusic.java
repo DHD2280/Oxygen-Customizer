@@ -12,8 +12,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.ge
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaData;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
-//import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBar;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.COUISeekBarListener;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
@@ -40,12 +38,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.AbsSeekBar;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.Space;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -59,9 +55,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.coui.appcompat.seekbar.COUISeekBar;
 
 import java.io.File;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
