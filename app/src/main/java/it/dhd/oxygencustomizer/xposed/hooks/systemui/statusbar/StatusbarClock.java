@@ -350,30 +350,30 @@ public class StatusbarClock extends XposedMods {
                     setClockSize();
                 });
 
-        if (StatClock != null) {
-            try {
-                StatClock
-                        .after("updateMinWidth")
-                        .run(param -> {
-                            // StatClock has a method to update the minimum width of the clock
-                            // we can use it to update the clock width
-                            // Based on our custom formats
-                            TextView tv = (TextView) param.thisObject;
-                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                            if (!mShowSeconds) {
-                                float totalWidth = measureTextWithSpans();
-                                totalWidth += mClockView.getPaddingStart();
-                                totalWidth += mClockView.getPaddingEnd();
-                                int calculatedMinWidth = (int) totalWidth;
-                                if (tv.getMinimumWidth() != calculatedMinWidth) {
-                                    tv.setMinimumWidth(calculatedMinWidth);
-                                }
-                            }
-                        });
-            } catch (Throwable ignored) {
-                log("updateMinWidth in StatClock not found");
-            }
-        }
+//        if (StatClock != null) {
+//            try {
+////                StatClock
+////                        .after("updateMinWidth")
+////                        .run(param -> {
+////                            // StatClock has a method to update the minimum width of the clock
+////                            // we can use it to update the clock width
+////                            // Based on our custom formats
+////                            TextView tv = (TextView) param.thisObject;
+////                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+////                            if (!mShowSeconds) {
+////                                float totalWidth = measureTextWithSpans();
+////                                totalWidth += mClockView.getPaddingStart();
+////                                totalWidth += mClockView.getPaddingEnd();
+////                                int calculatedMinWidth = (int) totalWidth;
+////                                if (tv.getMinimumWidth() != calculatedMinWidth) {
+////                                    tv.setMinimumWidth(calculatedMinWidth);
+////                                }
+////                            }
+////                        });
+//            } catch (Throwable ignored) {
+//                log("updateMinWidth in StatClock not found");
+//            }
+//        }
 
         CollapsedStatusBarFragmentClass
                 .after("animateShow")
