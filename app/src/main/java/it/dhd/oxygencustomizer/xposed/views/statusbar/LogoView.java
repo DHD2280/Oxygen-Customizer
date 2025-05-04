@@ -2,10 +2,8 @@ package it.dhd.oxygencustomizer.xposed.views.statusbar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Build;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.systemui.plugins.DarkIconDispatcher;
@@ -42,6 +40,7 @@ public class LogoView extends ImageView implements DarkIconDispatcher.DarkReceiv
 
     public void setForceTint(boolean forceTint) {
         mForceTint = forceTint;
+        if (!mForceTint) clearColorFilter();
     }
 
     @Override
