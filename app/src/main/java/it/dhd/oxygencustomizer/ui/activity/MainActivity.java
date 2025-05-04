@@ -75,6 +75,8 @@ import it.dhd.oxygencustomizer.xposed.utils.ExtendedSharedPreferences;
 public class MainActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, ColorPickerDialogListener, SearchPreferenceResultListener {
 
     private Integer selectedFragment = null;
+    private static int selectedIndex = 0;
+    private static int newIndex = selectedIndex;
     private ActivityMainBinding binding;
     private static FragmentManager fragmentManager;
     private static final String TITLE_TAG = "mainActivityTitle";
@@ -207,6 +209,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
 
             switch (item.getItemId()) {
                 case R.id.ui -> {
+                    newIndex = 0;
                     if (!Objects.equals(tag, UserInterface.class.getSimpleName())) {
                         selectedFragment = R.id.ui;
                         replaceFragment(new UserInterface());
@@ -214,6 +217,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                     return true;
                 }
                 case R.id.mods -> {
+                    newIndex = 1;
                     if (!Objects.equals(tag, Mods.class.getSimpleName())) {
                         selectedFragment = R.id.mods;
                         replaceFragment(new Mods());
@@ -221,6 +225,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                     return true;
                 }
                 case R.id.updates -> {
+                    newIndex = 2;
                     if (!Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
                         selectedFragment = R.id.updates;
                         replaceFragment(new UpdateFragment());
@@ -228,6 +233,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                     return true;
                 }
                 case R.id.hooks -> {
+                    newIndex = 3;
                     if (!Objects.equals(tag, Hooks.class.getSimpleName())) {
                         selectedFragment = R.id.hooks;
                         replaceFragment(new Hooks());
@@ -235,6 +241,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                     return true;
                 }
                 case R.id.settings -> {
+                    newIndex = 4;
                     if (!Objects.equals(tag, Settings.class.getSimpleName())) {
                         selectedFragment = R.id.settings;
                         replaceFragment(new Settings());
@@ -275,6 +282,10 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         String tag = fragment.getClass().getSimpleName();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.oplus_open_slide_enter, R.anim.oplus_open_slide_exit, R.anim.oplus_close_slide_enter, R.anim.oplus_close_slide_exit);
+        if (newIndex < selectedIndex) {
+            fragmentTransaction.setCustomAnimations(R.anim.oplus_close_slide_exit, R.anim.oplus_close_slide_enter, R.anim.oplus_close_slide_enter, R.anim.oplus_close_slide_exit);
+        }
+        selectedIndex = newIndex;
         fragmentTransaction.replace(R.id.frame_layout, fragment, tag);
         if (Objects.equals(tag, UserInterface.class.getSimpleName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
