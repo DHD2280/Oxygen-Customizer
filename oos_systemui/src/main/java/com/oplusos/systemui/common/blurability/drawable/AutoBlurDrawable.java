@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.oplusos.systemui.common.blurability.ViewBlurProxy;
+
 public final class AutoBlurDrawable extends Drawable implements Drawable.Callback {
 
     public int blurColor;

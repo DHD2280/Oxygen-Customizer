@@ -3,11 +3,8 @@ package com.oplus.systemui.qs.base.widget
 import android.content.Context
 import android.view.View
 import com.oplusos.systemui.common.blurability.BlurConfig
-import com.oplusos.systemui.common.blurability.BlurMixConfig
 import com.oplusos.systemui.common.blurability.MixColor
 import com.oplusos.systemui.common.blurability.drawable.AutoBlurDrawable
-import com.oplusos.systemui.common.blurability.drawable.ViewBlurProxy
-import kotlin.jvm.internal.Intrinsics
 
 
 class QsViewBackgroundKt {
