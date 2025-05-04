@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -99,7 +100,7 @@ public class OnboardingView extends FrameLayout {
 
         setUpSlider();
         initButtonsClickListeners();
-        setLottieColorFilter(getButtonTextColor());
+        setLottieColorFilter(ContextCompat.getColor(getContext(), R.color.text_color_primary));
 
         progressDialog = new InstallationDialog(getContext());
 
@@ -353,8 +354,9 @@ public class OnboardingView extends FrameLayout {
                             for (File overlay : Objects.requireNonNull(pkg.listFiles())) {
                                 if (overlay.isDirectory()) {
                                     String overlay_name = overlay.toString().replace(pkg.toString() + '/', "");
-
-                                    if (OnboardingCompiler.createManifest(overlay_name, pkg.toString().replace(ModuleConstants.DATA_DIR + "/Overlays/", ""), overlay.getAbsolutePath())) {
+                                    String targer = pkg.toString().replace(ModuleConstants.DATA_DIR + "/Overlays/", "");
+                                    OnboardingCompiler.checkOverlay(overlay_name, targer, overlay.getAbsolutePath());
+                                    if (OnboardingCompiler.createManifest(overlay_name, targer, overlay.getAbsolutePath())) {
                                         hasErroredOut = true;
                                     }
 
