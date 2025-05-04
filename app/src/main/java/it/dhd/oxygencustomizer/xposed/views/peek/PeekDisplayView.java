@@ -62,7 +62,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 @SuppressLint("ViewConstructor")
 
-public class PeekDisplayView extends LinearLayout{
+public class PeekDisplayView extends LinearLayout {
 
     private final Context mContext;
     private Context appContext;
@@ -103,7 +103,9 @@ public class PeekDisplayView extends LinearLayout{
 
     // Styles
     private PeekStyle PEEK_STYLE_DEFAULT, PEEK_STYLE_MINIMAL, PEEK_STYLE_CUSTOM;
+    private PeekIconStyle PEEK_STYLE_ICON_DEFAULT, PEEK_STYLE_ICON_MINIMAL, PEEK_STYLE_ICON_CUSTOM;
     private PeekStyle mCurrentPeekStyle;
+    private PeekIconStyle mCurrentIconStyle;
 
     // Private Content
     private boolean mUnlocked = false;
@@ -125,7 +127,9 @@ public class PeekDisplayView extends LinearLayout{
         mContext = context;
         try {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
+        createIconStyles();
         createStyles();
         setTag(tag);
         mTag = tag;
@@ -156,6 +160,50 @@ public class PeekDisplayView extends LinearLayout{
         }
     };
 
+    private void createIconStyles() {
+        PEEK_STYLE_ICON_DEFAULT = new PeekIconStyle(
+                "default", /* Style Name */
+                0, /* Style int according to pref */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
+                getSurfaceColor(), /* Background Color */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_padding) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
+        );
+        PEEK_STYLE_ICON_MINIMAL = new PeekIconStyle(
+                "minimal",
+                1, /* Style int according to pref */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal), /* Background Size */
+                Color.TRANSPARENT, /* Background Color */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                0 /* Icon Padding */
+        );
+        PEEK_STYLE_ICON_CUSTOM = new PeekIconStyle(
+                "user", /* Style Name */
+                2, /* Style int according to pref */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
+                getSurfaceColor(), /* Background Color */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                mIsSettingsInterface ?
+                        getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_padding) :
+                        modRes.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
+        );
+        mCurrentIconStyle = PEEK_STYLE_ICON_DEFAULT;
+    }
+
     private void createStyles() {
         float[] corners = new float[]{26f, 26f, 26f, 26f, 26f, 26f, 26f, 26f};
         // Default Style
@@ -163,62 +211,35 @@ public class PeekDisplayView extends LinearLayout{
                 new PeekStyle(
                         "default", /* Style Name */
                         0, /* Style int according to pref */
-                        getSurfaceColor(), /* Background Color */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius) :
-                                modRes.getDimension(R.dimen.peek_notification_icon_corner_radius), /* Background Corner Radius */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                         getPrimaryColor(), /* Title Color */
                         getSecondaryColor(), /* Summary Color */
                         getSurfaceColor(), /* Card Background Color */
                         corners, /* Card Background Radius */
                         getPrimaryColor(), /* Buttons Color */
-                        false /* Use App Icons */);
+                        false, /* Use App Icons */
+                        PEEK_STYLE_ICON_DEFAULT /* Icon Style */);
         // Minimal Style
         PEEK_STYLE_MINIMAL =
                 new PeekStyle("minimal", /* Style Name */
                         1, /* Style int according to pref */
-                        Color.TRANSPARENT, /* Background Color */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal), /* Background Size */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius) :
-                                modRes.getDimension(R.dimen.peek_notification_icon_corner_radius), /* Background Corner Radius */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                         getPrimaryColor(), /* Title Color */
                         getSecondaryColor(), /* Summary Color */
                         getSurfaceColor(), /* Card Background Color */
                         corners, /* Card Background Radius */
                         getPrimaryColor(), /* Buttons Color */
-                        false /* Use App Icons */);
+                        false, /* Use App Icons */
+                        PEEK_STYLE_ICON_MINIMAL /* Icon Style */);
         // User Style
         PEEK_STYLE_CUSTOM =
                 new PeekStyle("custom", /* Style Name */
                         2, /* Style int according to pref */
-                        getSurfaceColor(), /* Background Color */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                                modRes.getDimension(R.dimen.peek_notification_icon_corner_radius), /* Background Corner Radius */
-                        mIsSettingsInterface ?
-                                getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                                modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                         getPrimaryColor(), /* Title Color */
                         getSecondaryColor(), /* Summary Color */
                         getSurfaceColor(), /* Card Background Color */
                         corners, /* Card Background Radius */
                         getPrimaryColor(), /* Buttons Color */
-                        false /* Use App Icons */);
+                        false, /* Use App Icons */
+                        PEEK_STYLE_ICON_CUSTOM /* Icon Style */);
         mCurrentPeekStyle = PEEK_STYLE_DEFAULT;
     }
 
@@ -228,7 +249,8 @@ public class PeekDisplayView extends LinearLayout{
 
     public void setUnlocked(boolean unlocked) {
         mUnlocked = unlocked;
-        if (currentDisplayedNotification != null && mUnlocked) notificationSummary.setText(NotificationUtils.resolveNotificationContent(currentDisplayedNotification).second);
+        if (currentDisplayedNotification != null && mUnlocked)
+            notificationSummary.setText(NotificationUtils.resolveNotificationContent(currentDisplayedNotification).second);
     }
 
     @NonNull
@@ -249,6 +271,7 @@ public class PeekDisplayView extends LinearLayout{
 
     /**
      * Sets if shot private content or not
+     *
      * @param ignoreSecurity true if private content should be shown
      */
     public void setIgnoreSecurity(boolean ignoreSecurity) {
@@ -258,17 +281,29 @@ public class PeekDisplayView extends LinearLayout{
 
     public void updatePeekStyle(
             int newStyle,
-            int backgroundColor, int imageViewSize, float backgroundRadius, int backgroundPadding,
+            int newIconStyle,
+            int backgroundColor, int iconSize, int iconMarginEnd, int iconPadding,
             int titleColor, int summaryColor, int cardBackgroundColor, float[] cardBackgroundRadius,
             int buttonsColor,
             boolean useAppIcons) {
-        boolean requireUpdate = newStyle != mCurrentPeekStyle.getStyle() ||
-                                useAppIcons != mCurrentPeekStyle.useAppIcons();
+        Log.d("PeekDisplayView", "updatePeekStyle: " + newStyle + " " + newIconStyle + "\n" +
+                "backgroundColor: " + backgroundColor + "\n" +
+                "iconSize: " + iconSize + "\n" +
+                "iconMarginEnd: " + iconMarginEnd + "\n" +
+                "iconPadding: " + iconPadding + "\n" +
+                "titleColor: " + titleColor + "\n" +
+                "summaryColor: " + summaryColor + "\n" +
+                "cardBackgroundColor: " + cardBackgroundColor + "\n" +
+                "cardBackgroundRadius: " + Arrays.toString(cardBackgroundRadius) + "\n" +
+                "buttonsColor: " + buttonsColor + "\n" +
+                "useAppIcons: " + useAppIcons);
+        boolean requireUpdate = checkChange(newIconStyle, iconSize, backgroundColor, iconMarginEnd, iconPadding) ||
+                newIconStyle != mCurrentPeekStyle.getPeekIconStyle().getStyle() ||
+                useAppIcons != mCurrentPeekStyle.useAppIcons();
         PEEK_STYLE_CUSTOM = new PeekStyle(
                 "custom", 2,
-                backgroundColor, imageViewSize, backgroundRadius, backgroundPadding,
                 titleColor, summaryColor, cardBackgroundColor, cardBackgroundRadius,
-                buttonsColor, useAppIcons
+                buttonsColor, useAppIcons, mCurrentIconStyle
         );
         PEEK_STYLE_DEFAULT.setUseAppIcons(useAppIcons);
         PEEK_STYLE_MINIMAL.setUseAppIcons(useAppIcons);
@@ -290,6 +325,41 @@ public class PeekDisplayView extends LinearLayout{
             notificationAdapter.submitList(notif);
         }
         updateViewColors();
+    }
+
+    private boolean checkChange(int newIconStyle, int iconSize, int backgroundColor, int iconMarginEnd, int iconPadding) {
+        boolean requireUpdate = false;
+        PeekIconStyle iconStyle = mCurrentPeekStyle.getPeekIconStyle();
+        if (newIconStyle == 2) { // Custom icon selected
+            if (iconStyle.getStyle() == 2) { //old
+                // Custom old and before
+                boolean shouldUpdate = PEEK_STYLE_ICON_CUSTOM.getIconBackgroundColor() != iconStyle.getIconBackgroundColor() ||
+                        (PEEK_STYLE_ICON_CUSTOM.getIconSize() != iconStyle.getIconSize()) ||
+                        (PEEK_STYLE_ICON_CUSTOM.getIconSpacing() != iconStyle.getIconSpacing()) ||
+                        (PEEK_STYLE_ICON_CUSTOM.getIconPadding() != iconStyle.getIconPadding());
+                if (shouldUpdate) {
+                    PEEK_STYLE_ICON_CUSTOM = new PeekIconStyle(
+                            PEEK_STYLE_ICON_CUSTOM.getName(),
+                            PEEK_STYLE_ICON_CUSTOM.getStyle(),
+                            iconSize,
+                            backgroundColor,
+                            iconMarginEnd,
+                            iconPadding
+                    );
+                    mCurrentIconStyle = PEEK_STYLE_ICON_CUSTOM;
+                    return true;
+                }
+            }
+        }
+        if (iconStyle.getStyle() != newIconStyle) {
+            requireUpdate = true;
+            if (newIconStyle == 0) {
+                mCurrentIconStyle = PEEK_STYLE_ICON_DEFAULT;
+            } else if (newIconStyle == 1) {
+                mCurrentIconStyle = PEEK_STYLE_ICON_MINIMAL;
+            }
+        }
+        return requireUpdate;
     }
 
     @SuppressLint("DiscouragedApi")
@@ -325,7 +395,7 @@ public class PeekDisplayView extends LinearLayout{
         dismissButton = (ImageView) ViewHelper.findViewWithTag(view, "dismissButton");
         overflowText = (TextView) ViewHelper.findViewWithTag(view, "overflowText");
         clearAllButton = (ImageButton) ViewHelper.findViewWithTag(view, "clearAllButton");
-        
+
         notificationShelf.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
         notificationShelf.setAdapter(notificationAdapter);
         notificationShelf.setOnClickListener(v -> {
@@ -333,7 +403,7 @@ public class PeekDisplayView extends LinearLayout{
                 hideNotificationCard();
             }
         });
-        
+
         minimizeButton.setOnClickListener(v -> hideNotificationCard());
         dismissButton.setOnClickListener(v -> removeCurrentNotification());
         overflowText.setOnClickListener(v -> showClearAllButton());
@@ -354,7 +424,7 @@ public class PeekDisplayView extends LinearLayout{
     private void updateClearAllButtonSize() {
         clearAllButton.setLayoutParams(new LinearLayout.LayoutParams(getIconSize(), getIconSize()));
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(ColorStateList.valueOf(mCurrentPeekStyle.getBackgroundColor()));
+        drawable.setColor(ColorStateList.valueOf(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
         RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), DrawableConverter.drawableToBitmap(drawable));
         roundedDrawable.setCornerRadius(getIconSize());
         clearAllButton.setBackground(roundedDrawable);
@@ -379,7 +449,8 @@ public class PeekDisplayView extends LinearLayout{
     private void clearAllNotifications() {
         try {
             callMethod(mNotificationListener, "cancelAllNotifications");
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         List<StatusBarNotification> emptyList = new ArrayList<>();
         updateNotificationShelf(emptyList);
         overflowText.setVisibility(View.GONE);
@@ -442,7 +513,7 @@ public class PeekDisplayView extends LinearLayout{
             notificationShelf.setVisibility(View.GONE);
         }
 
-        int iconMarginEnd = mCurrentPeekStyle.getBackgroundPadding();
+        int iconMarginEnd = mCurrentPeekStyle.getPeekIconStyle().getIconSpacing();
         int newWidth = filteredNotifications.size() <= 4 ? ViewGroup.LayoutParams.WRAP_CONTENT : (4 * getIconSize()) + (4 * iconMarginEnd);
 
         if (newWidth != lastLayoutWidth) {
@@ -458,7 +529,7 @@ public class PeekDisplayView extends LinearLayout{
     }
 
     private int getIconSize() {
-        return mCurrentPeekStyle.getImageViewSize();
+        return mCurrentPeekStyle.getPeekIconStyle().getIconSize();
     }
 
     private void toggleNotificationDetails(StatusBarNotification sbn) {
@@ -478,8 +549,8 @@ public class PeekDisplayView extends LinearLayout{
             try {
                 appLabel =
                         mIsSettingsInterface ?
-                            AppUtils.getAppName(appContext, packageName) :
-                        PackageManager().getApplicationLabel(NotificationUtils.getApplicationInfo(sbn)).toString();
+                                AppUtils.getAppName(appContext, packageName) :
+                                PackageManager().getApplicationLabel(NotificationUtils.getApplicationInfo(sbn)).toString();
             } catch (Throwable ignored) {
                 appLabel = packageName;
             }
@@ -494,7 +565,7 @@ public class PeekDisplayView extends LinearLayout{
 
             String headerText;
             if (TextUtils.isEmpty(subHeaderText)) {
-                headerText = subHeaderText +  " • " + appLabelHeaderText + " • " + timeSinceArrival;
+                headerText = subHeaderText + " • " + appLabelHeaderText + " • " + timeSinceArrival;
             } else {
                 headerText = appLabelHeaderText + " • " + timeSinceArrival;
             }
@@ -520,12 +591,12 @@ public class PeekDisplayView extends LinearLayout{
             notificationCard.setScaleY(0.8f);
             notificationCard.setAlpha(0f);
             notificationCard.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .alpha(1f)
-                            .setDuration(300L)
-                            .setInterpolator(new AccelerateDecelerateInterpolator())
-                            .start();
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .alpha(1f)
+                    .setDuration(300L)
+                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .start();
         }
     }
 
@@ -571,9 +642,9 @@ public class PeekDisplayView extends LinearLayout{
                     notificationCard.setVisibility(
                             mIsSettingsInterface ?
                                     View.INVISIBLE :
-                            peekDisplayLocation == PEEK_DISPLAY_LOCATION_TOP ?
-                                    View.GONE :
-                                    View.INVISIBLE);
+                                    peekDisplayLocation == PEEK_DISPLAY_LOCATION_TOP ?
+                                            View.GONE :
+                                            View.INVISIBLE);
                     currentDisplayedNotification = null;
                 })
                 .start();
@@ -614,7 +685,7 @@ public class PeekDisplayView extends LinearLayout{
         int surfaceColor = mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? Color.TRANSPARENT : getSurfaceColor();
         updateClearAllButtonSize();
         notificationCard.setBackground(getNotificationBackground(mCurrentPeekStyle.getCardBackgroundColor()));
-        clearAllButton.setBackgroundTintList(ColorStateList.valueOf(mCurrentPeekStyle.getBackgroundColor()));
+        clearAllButton.setBackgroundTintList(ColorStateList.valueOf(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
         notificationTitle.setTextColor(mCurrentPeekStyle.getTitleColor());
         notificationSummary.setTextColor(mCurrentPeekStyle.getSummaryColor());
         notificationHeader.setTextColor(mCurrentPeekStyle.getTitleColor());
@@ -634,13 +705,13 @@ public class PeekDisplayView extends LinearLayout{
         return drawable;
     }
 
-    private void setClickListener(OnClickListener listener, View...views) {
+    private void setClickListener(OnClickListener listener, View... views) {
         for (View view : views) {
             view.setOnClickListener(listener);
         }
     }
 
-    public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>{
+    public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
         private List<StatusBarNotification> notifications = new ArrayList<>();
         private int selectedPosition = -1;
@@ -669,45 +740,57 @@ public class PeekDisplayView extends LinearLayout{
         public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
             ImageView iconView = new ImageView(mContext);
+            Log.d("PeekDisplayView", "onCreateViewHolder: icon size= " + mCurrentPeekStyle.getPeekIconStyle().getIconSize() + " icon padding= " + getIconPadding());
             RecyclerView.LayoutParams imageParams = new RecyclerView.LayoutParams(getIconSize(), getIconSize());
-            imageParams.setMarginEnd(mCurrentPeekStyle.getBackgroundPadding());
             iconView.setLayoutParams(imageParams);
-            iconView.setBackground(createBackgroundDrawable(mCurrentPeekStyle.getBackgroundColor()));
-            int resId = R.dimen.peek_notification_icon_padding;
-            if (mCurrentPeekStyle.useAppIcons()) {
-                resId = R.dimen.peek_notification_icon_padding_app_icons;
-            }
-            int padding = mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? 0 :
-                    mIsSettingsInterface ?
-                    appContext.getResources().getDimensionPixelSize(resId) :
-                    modRes.getDimensionPixelSize(resId);
+            iconView.setBackground(createBackgroundDrawable(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
+            int padding = getIconPadding();
             iconView.setPadding(padding, padding, padding, padding);
             iconView.setClickable(true);
             return new NotificationViewHolder(iconView);
         }
 
+        private int getIconPadding() {
+            int resId = R.dimen.peek_notification_icon_padding;
+            if (mCurrentPeekStyle.useAppIcons()) {
+                resId = R.dimen.peek_notification_icon_padding_app_icons;
+            }
+            Log.d("PeekDisplayView", "getIconPadding: " + mCurrentPeekStyle.toString());
+            if (mCurrentPeekStyle == PEEK_STYLE_CUSTOM) {
+                return mCurrentPeekStyle.getPeekIconStyle().getIconPadding();
+            }
+            return mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? 0 :
+                    mIsSettingsInterface ?
+                            appContext.getResources().getDimensionPixelSize(resId) :
+                            modRes.getDimensionPixelSize(resId);
+        }
+
         @Override
         public void onBindViewHolder(@NonNull NotificationViewHolder holder, @SuppressLint("RecyclerView") int position) {
             StatusBarNotification notification = notifications.get(position);
+            RecyclerView.LayoutParams imageParams = (RecyclerView.LayoutParams) holder.iconView.getLayoutParams();
+            imageParams.setMarginEnd(position != notifications.size() - 1 ? mCurrentPeekStyle.getPeekIconStyle().getIconSpacing() : 0);
+            holder.iconView.setLayoutParams(imageParams);
             Drawable iconDrawable =
-                mCurrentPeekStyle.useAppIcons() ?
-                        mIsSettingsInterface ?
-                                AppUtils.getAppIcon(appContext, notification.getPackageName()) :
-                                NotificationUtils.resolveAppIcon(notification) :
-                        NotificationUtils.resolveSmallIcon(notification, mContext);
+                    mCurrentPeekStyle.useAppIcons() ?
+                            mIsSettingsInterface ?
+                                    AppUtils.getAppIcon(appContext, notification.getPackageName()) :
+                                    NotificationUtils.resolveAppIcon(notification) :
+                            NotificationUtils.resolveSmallIcon(notification, mContext);
             holder.iconView.setImageDrawable(iconDrawable);
             float[] matrix = getTintMatrix(NotificationUtils.interpolateColors(isNightMode() ? Color.WHITE : Color.BLACK, -1, 1f), 1f * 0.67f);
             ColorMatrixColorFilter matrixFilter = new ColorMatrixColorFilter(matrix);
             holder.iconView.clearColorFilter();
             if (mCurrentPeekStyle.useAppIcons()) {
-                if (mCurrentPeekStyle == PEEK_STYLE_DEFAULT) holder.iconView.setColorFilter(mColorMatrixColorFilter);
+                if (mCurrentPeekStyle == PEEK_STYLE_DEFAULT)
+                    holder.iconView.setColorFilter(mColorMatrixColorFilter);
             } else {
                 if (DrawableConverter.isGrayscaleIcon(iconDrawable)) {
                     holder.iconView.setColorFilter(matrixFilter);
                 }
             }
             boolean isSelected = selectedPosition == position;
-            int color = mCurrentPeekStyle.getBackgroundColor();
+            int color = mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor();
             int newColor = isSelected ? ColorUtils.adjustColorForPressed(color, 0.7f) : color;
             holder.iconView.setBackground(createBackgroundDrawable(newColor));
             holder.iconView.setOnClickListener(v -> {
@@ -749,7 +832,9 @@ public class PeekDisplayView extends LinearLayout{
             GradientDrawable drawable = new GradientDrawable();
             drawable.setShape(GradientDrawable.OVAL);
             drawable.setColor(color);
-            drawable.setCornerRadius(mCurrentPeekStyle.getBackgroundRadius());
+            drawable.setCornerRadius(mIsSettingsInterface ?
+                    getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius) :
+                    modRes.getDimension(R.dimen.peek_notification_icon_corner_radius));
             return drawable;
         }
 

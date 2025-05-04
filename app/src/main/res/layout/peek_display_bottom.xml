@@ -1,30 +1,28 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
-        android:tag="notificationCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/peek_notification_card_height"
         android:layout_margin="16dp"
-        android:visibility="invisible"
         android:clickable="true"
-        android:elevation="8dp">
+        android:elevation="8dp"
+        android:tag="notificationCard"
+        android:visibility="invisible">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="300dp"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:maxHeight="300dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:padding="16dp">
 
                 <RelativeLayout
@@ -33,78 +31,77 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:tag="notificationHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:tag="notificationHeader"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="11sp"
-                        android:ellipsize="end"
-                        android:maxLines="1"/>
+                        android:textSize="11sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_alignParentEnd="true">
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:tag="minimizeButton"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:clickable="true"
-                            android:src="@drawable/ic_minimize_24px"/>
+                            android:src="@drawable/ic_minimize_24px"
+                            android:tag="minimizeButton" />
 
                         <ImageView
-                            android:tag="dismissButton"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:clickable="true"
-                            android:src="@drawable/ic_kill"/>
+                            android:src="@drawable/ic_kill"
+                            android:tag="dismissButton" />
                     </LinearLayout>
                 </RelativeLayout>
 
-                <!-- Contenuto della notifica -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:tag="notificationIcon"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:layout_marginEnd="16dp"
                         android:clickable="true"
                         android:scaleType="centerInside"
-                        android:layout_marginEnd="16dp"/>
+                        android:tag="notificationIcon" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="start">
+                        android:gravity="start"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:tag="notificationTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
                             android:clickable="true"
+                            android:ellipsize="end"
                             android:maxLines="1"
-                            android:ellipsize="end"/>
+                            android:tag="notificationTitle"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:tag="notificationSummary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="true"
-                            android:textSize="11sp"
+                            android:ellipsize="end"
                             android:maxLines="3"
-                            android:ellipsize="end"/>
+                            android:tag="notificationSummary"
+                            android:textSize="11sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -112,42 +109,42 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Shelf delle notifiche -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:paddingVertical="12dp"
-        android:layout_marginHorizontal="12dp">
+        android:layout_marginHorizontal="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp">
 
         <LinearLayout
-            android:tag="recycler_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:tag="recycler_container">
 
         </LinearLayout>
 
 
         <TextView
-            android:tag="overflowText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:tag="overflowText"
             android:text="•"
             android:textSize="28sp"
-            android:visibility="gone"
             android:textStyle="bold"
-            android:layout_marginEnd="8dp"/>
+            android:visibility="gone" />
 
         <ImageButton
-            android:tag="clearAllButton"
             android:layout_width="@dimen/peek_display_notification_icon_size"
             android:layout_height="@dimen/peek_display_notification_icon_size"
+            android:layout_marginStart="@dimen/peek_display_notification_icon_margin_end"
+            android:background="@drawable/rounded_bg_full"
             android:padding="@dimen/peek_notification_icon_padding"
             android:src="@drawable/ic_clear_all_24px"
-            android:background="@drawable/rounded_bg_full"
-            android:visibility="gone"/>
+            android:tag="clearAllButton"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

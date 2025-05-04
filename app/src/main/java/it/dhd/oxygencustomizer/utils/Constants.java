@@ -19,8 +19,6 @@ import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
 
 public final class Constants {
 
-    public static final int DEFAULT_DARK_MODE_STYLE = 0;
-
     public static class Packages {
         public static final String FRAMEWORK = "android";
         public static final String SYSTEM_UI = "com.android.systemui";
@@ -638,12 +636,15 @@ public final class Constants {
             public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED = "lockscreen_peek_notifications";
             public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION = "peek_display_location";
             public static final String LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE = "peek_display_style";
+            public static final String LOCKSCREEN_PEEK_ICON_STYLE = "peek_display_icon_style";
             public static final String LOCKSCREEN_PEEK_ICON_BG_COLOR = "peek_image_background_color";
+            public static final String LOCKSCREEN_PEEK_ICON_SIZE = "peek_display_icon_size";
+            public static final String LOCKSCREEN_PEEK_ICON_MARGIN = "peek_display_icon_margin";
+            public static final String LOCKSCREEN_PEEK_ICON_PADDING = "peek_display_icon_padding";
             public static final String LOCKSCREEN_PEEK_CARD_BG_COLOR = "peek_card_background_color";
             public static final String LOCKSCREEN_PEEK_CARD_TITLE_COLOR = "peek_title_color";
             public static final String LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR = "peek_summary_color";
             public static final String LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR = "peek_buttons_color";
-            public static final String LOCKSCREEN_PEEK_ICON_RADIUS = "peek_icon_radius";
             public static final String LOCKSCREEN_PEEK_CARD_TSX = "peek_top_sx_radius";
             public static final String LOCKSCREEN_PEEK_CARD_TDX = "peek_top_dx_radius";
             public static final String LOCKSCREEN_PEEK_CARD_BSX = "peek_bottom_sx_radius";
@@ -656,18 +657,22 @@ public final class Constants {
                     LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
                     LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION,
                     LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE,
-                    LOCKSCREEN_PEEK_ICON_BG_COLOR,
                     LOCKSCREEN_PEEK_CARD_BG_COLOR,
                     LOCKSCREEN_PEEK_CARD_TITLE_COLOR,
                     LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR,
                     LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR,
-                    LOCKSCREEN_PEEK_ICON_RADIUS,
                     LOCKSCREEN_PEEK_CARD_TSX,
                     LOCKSCREEN_PEEK_CARD_TDX,
                     LOCKSCREEN_PEEK_CARD_BSX,
                     LOCKSCREEN_PEEK_CARD_BDX,
                     LOCKSCREEN_PEEK_USE_APP_ICON,
                     LOCKSCREEN_PEEK_IGNORE_SECURITY,
+                    // Icon Style
+                    LOCKSCREEN_PEEK_ICON_BG_COLOR,
+                    LOCKSCREEN_PEEK_ICON_STYLE,
+                    LOCKSCREEN_PEEK_ICON_SIZE,
+                    LOCKSCREEN_PEEK_ICON_MARGIN,
+                    LOCKSCREEN_PEEK_ICON_PADDING
             };
 
         }

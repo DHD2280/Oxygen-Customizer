@@ -59,7 +59,7 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
         mPeekView = new PeekDisplayView(requireContext(), "TOP", true);
         List<StatusBarNotification> notifications = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
-            notifications.add(createFakeSbn(BuildConfig.APPLICATION_ID, i, BuildConfig.APPLICATION_ID + " #" + i, "Messaggio di prova " + i));
+            notifications.add(createFakeSbn(BuildConfig.APPLICATION_ID, i, BuildConfig.APPLICATION_ID + " #" + i, "Test message " + i));
         }
         mPeekView.updateNotificationShelf(
                 notifications
@@ -96,10 +96,9 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
             notification.writeToParcel(parcel, 0);
 
             parcel.writeLong(postTime); // postTime
-            parcel.writeInt(0); // overrideGroupKey presente? (0 = no, 1 = sì)
-            parcel.writeInt(0); // mInstanceId presente? (0 = no, 1 = sì)
+            parcel.writeInt(0);
+            parcel.writeInt(0);
 
-            // Tornare all'inizio del Parcel per leggerlo
             parcel.setDataPosition(0);
 
             return new StatusBarNotification(parcel);
@@ -121,10 +120,11 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
         };
         mPeekView.updatePeekStyle(
                 Integer.parseInt(OCPreferences.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE, "0")),
+                Integer.parseInt(OCPreferences.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0")),
                 OCPreferences.getInt(LOCKSCREEN_PEEK_ICON_BG_COLOR, mPeekView.getSurfaceColor()),
-                requireContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size),
-                requireContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius),
-                requireContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end),
+                OCPreferences.getInt(LOCKSCREEN_PEEK_ICON_SIZE, requireContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size)),
+                OCPreferences.getInt(LOCKSCREEN_PEEK_ICON_MARGIN, requireContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end)),
+                OCPreferences.getInt(LOCKSCREEN_PEEK_ICON_PADDING, requireContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_padding)),
                 OCPreferences.getInt(LOCKSCREEN_PEEK_CARD_TITLE_COLOR, mPeekView.getPrimaryColor()),
                 OCPreferences.getInt(LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR, mPeekView.getSecondaryColor()),
                 OCPreferences.getInt(LOCKSCREEN_PEEK_CARD_BG_COLOR, mPeekView.getSurfaceColor()),
@@ -137,6 +137,8 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
     public static class LockscreenPeekNotificationsPrefs extends ControlledPreferenceFragmentCompat {
 
         private PreferenceListener listener;
+
+        public LockscreenPeekNotificationsPrefs() {}
 
         public LockscreenPeekNotificationsPrefs(PreferenceListener listener) {
             this.listener = listener;

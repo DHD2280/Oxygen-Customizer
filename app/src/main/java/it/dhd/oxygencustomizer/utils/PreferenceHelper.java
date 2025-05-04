@@ -145,6 +145,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeek
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TITLE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TSX;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_PADDING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.EXTRA_WIDGET_1_KEY;
@@ -900,12 +904,19 @@ public class PreferenceHelper {
 
             // Peek notifications
             case "peek_card_radius_cat",
-                 LOCKSCREEN_PEEK_ICON_BG_COLOR,
                  LOCKSCREEN_PEEK_CARD_BG_COLOR,
                  LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR,
                  LOCKSCREEN_PEEK_CARD_TITLE_COLOR,
-                 LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR -> {
+                 LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR,
+                 "peek_icon_style_cat" -> {
                 return instance.mPreferences.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE, "0").equals("2");
+            }
+            // Peek Icon Style
+            case LOCKSCREEN_PEEK_ICON_BG_COLOR,
+                 LOCKSCREEN_PEEK_ICON_SIZE,
+                 LOCKSCREEN_PEEK_ICON_MARGIN,
+                 LOCKSCREEN_PEEK_ICON_PADDING -> {
+                return instance.mPreferences.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0").equals("2");
             }
 
             // Aod Clocks

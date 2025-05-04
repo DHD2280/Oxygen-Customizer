@@ -52,10 +52,6 @@ public class LockscreenPeekDisplay extends XposedMods {
 
     // Style
     private int mPeekStyle = 0;
-    private int mPeekIconBgColor;
-    private int mPeekNotificationIconSize;
-    private int mPeekNotificationIconCornerRadius;
-    private int mPeekNotificationIconMarginEnd;
     private int mPeekCardTitleColor;
     private int mPeekCardSummaryColor;
     private int mPeekCardBgColor;
@@ -63,6 +59,11 @@ public class LockscreenPeekDisplay extends XposedMods {
     private float[] mPeekCardRadius = new float[8];
     private boolean mPeekAppIcons = false;
     private boolean mPeekIgnoreSecurity = false;
+
+    // Icon Style
+    private int mPeekIconStyle = 0;
+    private int mPeekIconBgColor;
+    private int mPeekIconSize, mPeekIconMargin, mPeekIconPadding;
 
     public LockscreenPeekDisplay(Context context) {
         super(context);
@@ -74,16 +75,18 @@ public class LockscreenPeekDisplay extends XposedMods {
         mPeekEnabled = Xprefs.getBoolean(LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED, false);
         mPeekLocation = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION, "0"));
         mPeekStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE, "0"));
-        mPeekIconBgColor = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_BG_COLOR, PeekDisplayView.getSurfaceColor(mContext));
-        mPeekNotificationIconSize = modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size);
-        mPeekNotificationIconCornerRadius = modRes.getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius);
-        mPeekNotificationIconMarginEnd = modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end);
         mPeekCardTitleColor = Xprefs.getInt(LOCKSCREEN_PEEK_CARD_TITLE_COLOR, PeekDisplayView.getPrimaryColor(mContext));
         mPeekCardSummaryColor = Xprefs.getInt(LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR, PeekDisplayView.getSecondaryColor(mContext));
         mPeekCardBgColor = Xprefs.getInt(LOCKSCREEN_PEEK_CARD_BG_COLOR, PeekDisplayView.getSurfaceColor(mContext));
         mPeekAppIcons = Xprefs.getBoolean(LOCKSCREEN_PEEK_USE_APP_ICON, false);
         mTopMargin = Xprefs.getSliderInt(LOCKSCREEN_PEEK_TOP_MARGIN, 0);
         mPeekIgnoreSecurity = Xprefs.getBoolean(LOCKSCREEN_PEEK_IGNORE_SECURITY, false);
+        // Icon Style
+        mPeekIconBgColor = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_BG_COLOR, PeekDisplayView.getSurfaceColor(mContext));
+        mPeekIconStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0"));
+        mPeekIconSize = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_SIZE, modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size));
+        mPeekIconMargin = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_MARGIN, modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end));
+        mPeekIconPadding = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_PADDING, 0);
 
         mPeekCardRadius = new float[]{
                 dp2px(mContext, Xprefs.getSliderFloat(LOCKSCREEN_PEEK_CARD_TSX, 26f)), dp2px(mContext, Xprefs.getSliderFloat(LOCKSCREEN_PEEK_CARD_TSX, 26f)),
@@ -109,7 +112,6 @@ public class LockscreenPeekDisplay extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
         ControllersProvider.registerStatusBarStateChangedCallback(mStatusBarState -> {
-            XposedBridge.log("LockscreenPeekDisplay, StatusBarStateChangedCallback " + mStatusBarState);
             this.mStatusBarState = mStatusBarState;
             updateVisibility();
         });
@@ -157,16 +159,6 @@ public class LockscreenPeekDisplay extends XposedMods {
                     if (mPeekEnabled) param.setResult(false);
                 });
 
-//        ReflectedClass KeyguardStyleClockControllerImpl = ReflectedClass.of("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl");
-//        KeyguardStyleClockControllerImpl
-//                .after("getKeyguardStyleClockHeight")
-//                .run(param -> {
-//                    XposedBridge.log("getKeyguardStyleClockHeight " + (int) param.getResult());
-//                    int height = (int) param.getResult();
-//                    if (mPeekContainer == null) return;
-//                    ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int) height, 0, 0);
-//                });
-
         ReflectedClass NotificationPanelViewControllerExImp = ReflectedClass.of("com.oplus.systemui.shade.NotificationPanelViewControllerExImp");
         NotificationPanelViewControllerExImp
                 .before("setNotificationsConstraints")
@@ -176,7 +168,6 @@ public class LockscreenPeekDisplay extends XposedMods {
                     ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, top + dp2px(mContext, mTopMargin), 0, 0);
                     XposedBridge.log("setNotificationsConstraints " + top);
                 });
-        //
 
         ReflectedClass KeyguardStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardStatusBarView");
         KeyguardStatusBarView
@@ -186,6 +177,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                     notificationController = param.args[0];
                 });
 
+
         ReflectedClass NotificationStackScrollLayoutExtImpl = ReflectedClass.of("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl");
         NotificationStackScrollLayoutExtImpl
                 .after("getEndTopPosition")
@@ -194,7 +186,17 @@ public class LockscreenPeekDisplay extends XposedMods {
                     if (mPeekContainer == null) return;
                     float position = (float) param.getResult();
                     ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int) position + dp2px(mContext, mTopMargin), 0, 0);
-                    mMarginSet = true;
+                });
+
+        ReflectedClass NotificationStackScrollLayout = ReflectedClass.of("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout");
+        NotificationStackScrollLayout
+                .before("updateStackEndHeight")
+                .run(param -> {
+                    // float f2, float f3, float f4
+                    float f2, f3;
+                    f2 = (float) param.args[0];
+                    f3 = (float) param.args[1];
+                    ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int)f2 - (int)f3 + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
         ReflectedClass NotificationListener = ReflectedClass.of("com.android.systemui.statusbar.NotificationListener");
@@ -204,21 +206,6 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .run(param -> {
                     PeekDisplayViewController.getInstance().setNotificationListener(param.thisObject);
                 });
-
-//        ReflectedClass AodRecord = ReflectedClass.of("com.oplus.systemui.aod.AodRecord");
-//        AodRecord
-//                .before("onNearStateChange")
-//                .run(param -> {
-//                    PeekDisplayViewController mPeekController = PeekDisplayViewController.getInstance();
-//                    int state = (int) param.args[0];
-//                    Log.d("LockscreenPeekDisplay", "onNearStateChange: state " + state);
-//                    if (state == 4) {
-//                        mPeekController.registerAodCallback();
-//                    } else {
-//                        mPeekController.unRegisterAodCallback();
-//                    }
-//                });
-
 
     }
 
@@ -263,10 +250,11 @@ public class LockscreenPeekDisplay extends XposedMods {
         mPeekView.setIgnoreSecurity(mPeekIgnoreSecurity);
         mPeekView.updatePeekStyle(
                 mPeekStyle,
+                mPeekIconStyle,
                 mPeekIconBgColor,
-                mPeekNotificationIconSize,
-                mPeekNotificationIconCornerRadius,
-                mPeekNotificationIconMarginEnd,
+                mPeekIconSize,
+                mPeekIconMargin,
+                mPeekIconPadding,
                 mPeekCardTitleColor,
                 mPeekCardSummaryColor,
                 mPeekCardBgColor,
