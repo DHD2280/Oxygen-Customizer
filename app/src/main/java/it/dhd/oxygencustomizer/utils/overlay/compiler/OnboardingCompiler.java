@@ -8,6 +8,7 @@ import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readCertificat
 import static it.dhd.oxygencustomizer.utils.apksigner.CryptoUtils.readPrivateKey;
 import static it.dhd.oxygencustomizer.utils.helper.Logger.writeLog;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ public class OnboardingCompiler {
 
 
     public static void checkOverlay(String name, String target, String source) {
+        if (Build.VERSION.SDK_INT < 35) return;
         Log.i(TAG, "Checking overlay for " + name);
         if (name.contains("IPSUI")) {
             Shell.cmd(
