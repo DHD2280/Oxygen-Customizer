@@ -227,6 +227,7 @@
     <string name="statusbar_right_padding">Rechter Abstand</string>
     <string name="sb_padding_title">Statusleiste links und rechter Abstand</string>
     <string name="sb_padding_summary">Das Festlegen der Werte auf Min/Max entspricht den Standardeinstellungen</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Aktiviere Akkuleiste</string>
     <string name="BB_onlycharging_title">Nur beim Laden</string>
@@ -394,4 +395,5 @@
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

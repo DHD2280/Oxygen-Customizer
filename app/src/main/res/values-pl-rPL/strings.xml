@@ -227,6 +227,7 @@
     <string name="statusbar_right_padding">Odległość od prawej krawędzi</string>
     <string name="sb_padding_title">Odległość paska stanu od lewej i prawej strony</string>
     <string name="sb_padding_summary">Ustawienie wartości na min/max jest równoznaczne z ustawieniem domyślnym urządzenia</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Włącz pasek baterii</string>
     <string name="BB_onlycharging_title">Tylko podczas ładowania</string>
@@ -597,4 +598,5 @@
     <string name="flat_screen_timeout_title">Czas wygaszania ekranu podczas ułożenia telefonu na płaskiej powierzchni</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Respektuj blokadę wybudzania</string>
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

@@ -153,6 +153,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Állapotsor-értesítések</string>
     <string name="statusbar_use_app_icon">Az alkalmazásikon legyen használva az értesítéshez</string>
+    <string name="statusbar_app_icon_scale">Ikonméretezés</string>
     <string name="statusbar_notifications_transparency">Az Értesítések átlátszósága</string>
     <string name="statusbar_notification_transparency">Az Értesítés átlátszósága</string>
     <string name="statusbar_notification_transparency_value">Az átlátszóság mértéke</string>
@@ -229,6 +230,10 @@
     <string name="statusbar_right_padding">Jobboldali kitöltés</string>
     <string name="sb_padding_title">Bal és Jobb kitöltés</string>
     <string name="sb_padding_summary">Az értékek min/max beállításai megegyeznek a készülék alapértelmezett értékeivel</string>
+    <!-- Statusbar logo -->
+    <string name="statusbar_logo">Állapotsori logó</string>
+    <string name="statusbar_logo_summary">Egyéni logót jeleníthet meg az állapotsoron</string>
+    <string name="statusbar_logo_position">A logó pozíciója</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>
@@ -392,13 +397,21 @@
     <string name="qs_widget_set_custom_photo">Egyéni kép beállítása</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Testreszabások</string>
+    <string name="qs_highlight_tile">Kiemelt csempék</string>
+    <string name="qs_base_tile">Alap csempék</string>
     <string name="quick_settings_tiles_customize_category_title">A csempék háttere</string>
+    <string name="quick_settings_tile_custom_color">Egyedi csempeszínek</string>
     <string name="qs_tile_active_color_title">Beállítható, hogy milyen színű az épp aktív csempe</string>
     <string name="quick_settings_tiles_customize_active_color">Az aktív csempe színe</string>
     <string name="qs_tile_inactive_color_title">Beállítható, hogy milyen színű az épp nem aktív csempe</string>
     <string name="quick_settings_tiles_customize_inactive_color">A nem aktív csempe színe</string>
     <string name="qs_tile_disabled_color_title">Beállítható, hogy milyen színű az épp kikapcsolt csempe</string>
     <string name="quick_settings_tiles_customize_disabled_color">A kikapcsolt csempe színe</string>
+    <string name="quick_settings_tile_custom_color_icon">Módosítható az ikonok háttérszíne</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">Ezek a színek különálló gyorsbeállítási stílusokra hivatkoznak</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">Az aktív ikon színe</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">A nem aktív ikon színe</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">A kikapcsolt ikon színe</string>
     <string name="quick_settings_tiles_customize_labels">QS Cimkék</string>
     <string name="quick_settings_tiles_customize_hide_labels">A cimkék elrejtése</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Beállítható, hogy milyen színűek a szövegek</string>
@@ -994,6 +1007,7 @@
     <string name="try_again_later">Kérjük, próbálja meg később.</string>
     <string name="update_flavor_title">Frissítési csatorna</string>
     <string name="stable_flavor">Stabil</string>
+    <string name="nightly_github_login">Belépés és manuális letöltés</string>
     <string name="update_type_title">Csomagtípus</string>
     <string name="full_type">Teljes</string>
     <string name="xposed_type">Csak Xposed</string>
@@ -1172,6 +1186,7 @@
     <string name="theme_customization_toast_frame_title">Buborékkeret</string>
     <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">A téma elkülönítetten választható Háttér- és Kiemelőszíneket tartalmaz.</string>
     <string name="dark_shadow_enable_theme">Témaengedélyezés</string>
     <string name="dark_shadow_footer">A Sötét árnyék téma az OxygenOS alaptémája.\nEgyütt dolgozunk a téma fejlesztőjével, hogy a téma belekerüljön az \'Oxygen Módosítások\'-ba.</string>
     <!-- Settings Icons -->
@@ -1381,4 +1396,5 @@
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Lejátszó a \'Mindig látható\'-ban</string>
     <string name="aod_music_allow_summary">Az ANT-zenelejátszó megjelenhet a \'Mindig látható\' funkcióban.\nMegjegyzés: nem minden zenelejátszó támogatott.</string>
+    <!-- Shortcut string -->
 </resources>

@@ -225,6 +225,7 @@
     <string name="statusbar_right_padding">حشو اليمين</string>
     <string name="sb_padding_title">حشو شريط الحالة من اليسار واليمين</string>
     <string name="sb_padding_summary">تعيين القيم إلى الحد الأدنى/الحد الأقصى يعادل الإعداد الافتراضي للجهاز</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">تفعيل شريط البطارية</string>
     <string name="BB_onlycharging_title">فقط أثناء الشحن</string>
@@ -1206,4 +1207,5 @@
     <string name="memc_footer">إذا لم يكن جهازك يحتوي على رقاقة Pixelwork أو لا يدعم Memc، لا تلمس تقترب من تلك الإعدادات.</string>
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

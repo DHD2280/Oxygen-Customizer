@@ -21,6 +21,7 @@
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
     <!-- Status bar padding -->
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <!-- Battery Icon Strings -->
     <!-- Battery Stock Prefs -->
@@ -106,4 +107,5 @@
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

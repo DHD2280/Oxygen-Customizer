@@ -226,6 +226,7 @@
     <string name="statusbar_right_padding">Правильное заполнение</string>
     <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
     <string name="sb_padding_summary">Настройка значений в мин/макс эквивалентна по умолчанию</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Включить индикатор заряда батареи</string>
     <string name="BB_onlycharging_title">Только во время зарядки</string>
@@ -1214,4 +1215,5 @@
     <string name="memc_footer">Если ваше устройство не оснащено чипом Pixelwork или не поддерживает Memc, не трогайте эти настройки.</string>
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>
