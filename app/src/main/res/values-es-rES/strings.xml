@@ -217,6 +217,7 @@
     <string name="statusbar_left_padding">Margen izquierdo</string>
     <string name="statusbar_right_padding">Margen derecho</string>
     <string name="sb_padding_title">Margen izquierdo y derecho de la barra de estado</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Habilitar barra de batería</string>
     <string name="BB_onlycharging_title">Solo durante la carga</string>
@@ -1105,4 +1106,5 @@
     <string name="memc_footer">Si tu dispositivo no tiene el chip Pixelwork o no soporta Memc, no toques esos ajustes.</string>
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

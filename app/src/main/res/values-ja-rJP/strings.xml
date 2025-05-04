@@ -227,6 +227,7 @@
     <string name="statusbar_left_padding">左の余白</string>
     <string name="statusbar_right_padding">右の余白</string>
     <string name="sb_padding_title">ステータスバー左右の余白</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">バッテリーバーを有効化する</string>
     <string name="BB_onlycharging_title">充電時のみ</string>
@@ -1154,4 +1155,5 @@
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

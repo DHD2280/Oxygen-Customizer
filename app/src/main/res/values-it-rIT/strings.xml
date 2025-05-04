@@ -230,9 +230,47 @@
     <string name="statusbar_right_padding">Padding destro</string>
     <string name="sb_padding_title">Paddin sinistro e destro</string>
     <string name="sb_padding_summary">Impostare i valori al min/max equivale a impostare quelli di default</string>
+    <!-- Statusbar logo -->
     <string name="statusbar_logo">Logo barra di stato</string>
     <string name="statusbar_logo_summary">Visualizza un logo personalizzato sulla barra di stato</string>
     <string name="statusbar_logo_position">Posizione del logo</string>
+    <string name="statusbar_logo_style">Stile logo</string>
+    <string name="status_bar_logo_style_android">Android</string>
+    <string name="status_bar_logo_style_adidas">Adidas</string>
+    <string name="status_bar_logo_style_alien">Alien</string>
+    <string name="status_bar_logo_style_apple">Apple</string>
+    <string name="status_bar_logo_style_avengers">Avengers</string>
+    <string name="status_bar_logo_style_batman">Batman</string>
+    <string name="status_bar_logo_style_batman_tdk">Batman Il Cavaliere Oscuro</string>
+    <string name="status_bar_logo_style_beats">Beats</string>
+    <string name="status_bar_logo_style_biohazard">Biohazard</string>
+    <string name="status_bar_logo_style_blackberry">BlackBerry</string>
+    <string name="status_bar_logo_style_cannabis">Cannabis</string>
+    <string name="status_bar_logo_style_emoticon_cool">Emoticon cool</string>
+    <string name="status_bar_logo_style_emoticon_devil">Emoticon devil</string>
+    <string name="status_bar_logo_style_fire">Fire</string>
+    <string name="status_bar_logo_style_heart">Heart</string>
+    <string name="status_bar_logo_style_nike">Nike</string>
+    <string name="status_bar_logo_style_pacman">Pac-man</string>
+    <string name="status_bar_logo_style_puma">Puma</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">Spider-Man</string>
+    <string name="status_bar_logo_style_superman">Superman</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Ghost</string>
+    <string name="status_bar_logo_style_ninja">Ninja</string>
+    <string name="status_bar_logo_style_robot">Robot</string>
+    <string name="status_bar_logo_style_ironman">Iron Man</string>
+    <string name="status_bar_logo_style_captain_america">Captain America</string>
+    <string name="status_bar_logo_style_flash">Flash</string>
+    <string name="status_bar_logo_style_tux">Tux</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Amogus</string>
+    <string name="status_bar_logo_style_custom">Immagine personalizzata</string>
+    <string name="statusbar_logo_size">Dimensione logo</string>
+    <string name="statusbar_logo_force_tint">Segui tinta barra di stato</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Abilita barra batteria</string>
     <string name="BB_onlycharging_title">Solo durante la ricarica</string>
@@ -727,6 +765,9 @@
     <string name="lockscreen_affordance">Pulsanti inferiori Schermata di blocco</string>
     <string name="lockscreen_affordance_remove_left">Rimuovi Pulsante Sinistro</string>
     <string name="lockscreen_affordance_remove_right">Rimuovi Pulsante Destro</string>
+    <string name="lockscreen_shuffle_pin">Numeri pin casuali</string>
+    <string name="lockscreen_keep_shuffling_title">Continua a mescolare</string>
+    <string name="lockscreen_keep_shuffling_summary">Mischia di nuovo alla pressione di un tasto qualsiasi</string>
     <string name="lockscreen_hide_lock_icon">Nascondi icona lucchetto</string>
     <string name="lockscreen_weather">Meteo schermata di blocco</string>
     <string name="depth_wallpaper_category">Profondità Sfondo</string>
@@ -1395,4 +1436,8 @@
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Consenti lettore AOD</string>
     <string name="aod_music_allow_summary">Consenti al lettore musicale Ant di essere visualizzato in AOD.\nNota: non tutti i lettori musicali potrebbero essere supportati.</string>
+    <!-- Shortcut string -->
+    <string name="lsposed">LSposed</string>
+    <string name="open_lsposed">Apri LSPosed</string>
+    <string name="shortcut_disabled">Scorciatoia disabilitata</string>
 </resources>

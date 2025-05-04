@@ -228,6 +228,7 @@
     <string name="statusbar_right_padding">Marge de droite</string>
     <string name="sb_padding_title">Marge de la barre d\'état Gauche et Droite</string>
     <string name="sb_padding_summary">Les valeurs minimum et maximum sont celles par défaut de l’appareil</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Active la barre de batterie</string>
     <string name="BB_onlycharging_title">Seulement durant la charge</string>
@@ -739,4 +740,5 @@
     <!-- MEMC Strings -->
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

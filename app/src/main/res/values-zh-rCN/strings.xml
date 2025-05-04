@@ -221,6 +221,7 @@
     <string name="statusbar_right_padding">右侧填充</string>
     <string name="sb_padding_title">状态栏左侧和右侧填充</string>
     <string name="sb_padding_summary">将最大/最小值设置为系统默认值</string>
+    <!-- Statusbar logo -->
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">启用电池条</string>
     <string name="BB_onlycharging_title">仅充电时</string>
@@ -1191,4 +1192,5 @@
     <string name="memc_footer">如果你的设备未配备视觉处理器或不支持MEMC，请不要修改这些设置</string>
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
+    <!-- Shortcut string -->
 </resources>

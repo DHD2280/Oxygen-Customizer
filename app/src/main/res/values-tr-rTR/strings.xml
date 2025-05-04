@@ -59,6 +59,7 @@
     <!-- Dialogs -->
     <string name="installing">Yükleniyor</string>
     <string name="loading_dialog_wait">Lütfen Bekleyin</string>
+    <string name="optimizing">Optimize ediliyor</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Uyarı</string>
@@ -230,9 +231,47 @@
     <string name="statusbar_right_padding">Sağ dolgu</string>
     <string name="sb_padding_title">Durum Çubuğu Sol ve Sağ Dolgu</string>
     <string name="sb_padding_summary">Değerleri minimum/maksimum yapmak cihaz varsayılınına eşdeğerdir</string>
+    <!-- Statusbar logo -->
     <string name="statusbar_logo">Durum çubuğu logosu</string>
     <string name="statusbar_logo_summary">Durum çubuğunda özel bir logo göster</string>
     <string name="statusbar_logo_position">Logo konumu</string>
+    <string name="statusbar_logo_style">Logo stili</string>
+    <string name="status_bar_logo_style_android">Android</string>
+    <string name="status_bar_logo_style_adidas">Adidas</string>
+    <string name="status_bar_logo_style_alien">Uzaylı</string>
+    <string name="status_bar_logo_style_apple">Elma</string>
+    <string name="status_bar_logo_style_avengers">Avengers</string>
+    <string name="status_bar_logo_style_batman">Batman</string>
+    <string name="status_bar_logo_style_batman_tdk">Batman The Dark Knight</string>
+    <string name="status_bar_logo_style_beats">Ritim</string>
+    <string name="status_bar_logo_style_biohazard">Biohazard</string>
+    <string name="status_bar_logo_style_blackberry">BlackBerry</string>
+    <string name="status_bar_logo_style_cannabis">Kenevir</string>
+    <string name="status_bar_logo_style_emoticon_cool">Havalı ifade</string>
+    <string name="status_bar_logo_style_emoticon_devil">Şeytan ifadesi</string>
+    <string name="status_bar_logo_style_fire">Alev</string>
+    <string name="status_bar_logo_style_heart">Kalp</string>
+    <string name="status_bar_logo_style_nike">Nike</string>
+    <string name="status_bar_logo_style_pacman">Pac-man</string>
+    <string name="status_bar_logo_style_puma">Puma</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">Örümcek Adam</string>
+    <string name="status_bar_logo_style_superman">Süpermen</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Hayalet</string>
+    <string name="status_bar_logo_style_ninja">Ninja</string>
+    <string name="status_bar_logo_style_robot">Robot</string>
+    <string name="status_bar_logo_style_ironman">Demir Adam</string>
+    <string name="status_bar_logo_style_captain_america">Kaptan Amerika</string>
+    <string name="status_bar_logo_style_flash">Flash</string>
+    <string name="status_bar_logo_style_tux">Tux</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Amogus</string>
+    <string name="status_bar_logo_style_custom">Özel resim</string>
+    <string name="statusbar_logo_size">Logo boyutu</string>
+    <string name="statusbar_logo_force_tint">Durum çubuğu rengini takip et</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Pil Çubuğunu Etkinleştir</string>
     <string name="BB_onlycharging_title">Sadece şarj sırasında</string>
@@ -728,6 +767,8 @@
     <string name="lockscreen_affordance_remove_left">Sol Kolaylığı Kaldır</string>
     <string name="lockscreen_affordance_remove_right">Sağ Kolaylığı Kaldır</string>
     <string name="lockscreen_shuffle_pin">Pin Rakamlarını Karıştır</string>
+    <string name="lockscreen_keep_shuffling_title">Karıştırmayı sürdür</string>
+    <string name="lockscreen_keep_shuffling_summary">Herhangi bir tuşa basıldığında tekrar karıştır</string>
     <string name="lockscreen_hide_lock_icon">Kilit simgesini gizle</string>
     <string name="lockscreen_weather">Kilit Ekranı Hava Durumu</string>
     <string name="depth_wallpaper_category">Derinlik Duvar Kağıdı</string>
@@ -999,6 +1040,7 @@
     <string name="package_not_launchable">Paket başlatılamaz</string>
     <string name="menu_launch_app">Uygulamayı başlat</string>
     <string name="menu_restart_app">Uygulamayı yeniden başlat</string>
+    <string name="menu_reoptimize">Yeniden optimize et</string>
     <!-- Update Fragment -->
     <string name="update_channel_name">Güncellemeler</string>
     <string name="update_notification_title">Güncelleme indirildi</string>
@@ -1396,4 +1438,8 @@
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Oynatıcılara AOD\'yi etkinleştir</string>
     <string name="aod_music_allow_summary">Ant müzik çalarını AOD\'de gösterilmesine izin ver.\nNot: Tüm müzik çalarlar desteklenmeyebilir.</string>
+    <!-- Shortcut string -->
+    <string name="lsposed">LSposed</string>
+    <string name="open_lsposed">LSposed\'i aç</string>
+    <string name="shortcut_disabled">Kısayol devre dışı</string>
 </resources>
