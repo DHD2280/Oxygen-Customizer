@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
+import android.os.Build;
 
 import java.util.Arrays;
 
@@ -17,6 +18,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.ThermalServiceOC;
 
 public class ThermalProvider extends XposedMods {
     public static final int CPU = 0;
@@ -96,6 +98,13 @@ public class ThermalProvider extends XposedMods {
     }
 
     private static Object[] getTemperatures() {
+        if (Build.VERSION.SDK_INT >= 35) {
+            try {
+            return ThermalServiceOC.getCurrentTemperatures();
+            } catch (Throwable ignored) {
+                return new Object[0];
+            }
+        }
         try {
 
             Object[] temps = (Object[]) callStaticMethod(ThermalServiceNative, "getCurrentTemperatures");
