@@ -126,6 +126,7 @@
     <string name="restart_module">Restart scoped processes</string>
     <string name="restart_page_scope">Restart only this page scope</string>
     <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
+    <string name="add_notification">Add notification</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_ui">UI</string>
@@ -1493,6 +1494,12 @@
     <string name="peek_buttons_color">Buttons color</string>
     <string name="peek_title_color">Title color</string>
     <string name="peek_content_color">Content color</string>
+    <string name="peek_clear_all_cat">Clear all button</string>
+    <string name="peek_clear_all_mode">Clear all mode</string>
+    <string name="peek_clear_all_mode_always_hidden">Always hidden</string>
+    <string name="peek_clear_all_mode_count">Based on notification count</string>
+    <string name="peek_clear_all_count_title">Notification count</string>
+    <string name="peek_clear_all_count_summary">The clear all button will show only if notifications are more than selected number</string>
 
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">App Lag Fix</string>

@@ -144,6 +144,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeek
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TDX;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TITLE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TSX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CLEAR_ALL_COUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CLEAR_ALL_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_PADDING;
@@ -917,6 +919,9 @@ public class PreferenceHelper {
                  LOCKSCREEN_PEEK_ICON_MARGIN,
                  LOCKSCREEN_PEEK_ICON_PADDING -> {
                 return instance.mPreferences.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0").equals("2");
+            }
+            case LOCKSCREEN_PEEK_CLEAR_ALL_COUNT -> {
+                return instance.mPreferences.getString(LOCKSCREEN_PEEK_CLEAR_ALL_MODE, "1").equals("0");
             }
 
             // Aod Clocks

@@ -65,6 +65,10 @@ public class LockscreenPeekDisplay extends XposedMods {
     private int mPeekIconBgColor;
     private int mPeekIconSize, mPeekIconMargin, mPeekIconPadding;
 
+    // Clear all button
+    private int mClearAllMode = 1;
+    private int mClearAllCount = 4;
+
     public LockscreenPeekDisplay(Context context) {
         super(context);
     }
@@ -96,6 +100,9 @@ public class LockscreenPeekDisplay extends XposedMods {
         };
 
         mPeekCardButtonsColor = Xprefs.getInt(LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR, PeekDisplayView.getPrimaryColor(mContext));
+
+        mClearAllMode = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_CLEAR_ALL_MODE, "1"));
+        mClearAllCount = Xprefs.getInt(LOCKSCREEN_PEEK_CLEAR_ALL_COUNT, 4);
 
         if (Key.length > 0) {
             for (String peekPref : LOCKSCREEN_PEEK_PREFS) {
@@ -152,11 +159,13 @@ public class LockscreenPeekDisplay extends XposedMods {
                     placePeek();
                 });
 
-        ReflectedClass NotificationKeyguardHelper = ReflectedClass.of("com.oplus.systemui.statusbar.notification.helper.NotificationKeyguardHelper");
-        NotificationKeyguardHelper
-                .before("shouldShowOnKeyguard")
+        ReflectedClass NotificationLockscreenUserManagerImpl = ReflectedClass.of("com.android.systemui.statusbar.NotificationLockscreenUserManagerImpl");
+        NotificationLockscreenUserManagerImpl
+                .before("shouldShowLockscreenNotifications")
                 .run(param -> {
-                    if (mPeekEnabled) param.setResult(false);
+                    if (mPeekEnabled) {
+                        param.setResult(false);
+                    }
                 });
 
         ReflectedClass NotificationPanelViewControllerExImp = ReflectedClass.of("com.oplus.systemui.shade.NotificationPanelViewControllerExImp");
@@ -260,7 +269,9 @@ public class LockscreenPeekDisplay extends XposedMods {
                 mPeekCardBgColor,
                 mPeekCardRadius,
                 mPeekCardButtonsColor,
-                mPeekAppIcons
+                mPeekAppIcons,
+                mClearAllMode,
+                mClearAllCount
         );
 
     }

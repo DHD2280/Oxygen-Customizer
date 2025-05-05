@@ -652,6 +652,8 @@ public final class Constants {
             public static final String LOCKSCREEN_PEEK_TOP_MARGIN = "peek_top_margin";
             public static final String LOCKSCREEN_PEEK_USE_APP_ICON = "peek_use_app_icons";
             public static final String LOCKSCREEN_PEEK_IGNORE_SECURITY = "peek_ignore_security";
+            public static final String LOCKSCREEN_PEEK_CLEAR_ALL_MODE = "peek_clear_all_mode";
+            public static final String LOCKSCREEN_PEEK_CLEAR_ALL_COUNT = "peek_clear_all_count";
 
             public static final String[] LOCKSCREEN_PEEK_PREFS = {
                     LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
@@ -672,7 +674,10 @@ public final class Constants {
                     LOCKSCREEN_PEEK_ICON_STYLE,
                     LOCKSCREEN_PEEK_ICON_SIZE,
                     LOCKSCREEN_PEEK_ICON_MARGIN,
-                    LOCKSCREEN_PEEK_ICON_PADDING
+                    LOCKSCREEN_PEEK_ICON_PADDING,
+                    // Clear all mode
+                    LOCKSCREEN_PEEK_CLEAR_ALL_MODE,
+                    LOCKSCREEN_PEEK_CLEAR_ALL_COUNT
             };
 
         }

@@ -1029,4 +1029,14 @@
         <item>1</item>
     </string-array>
 
+    <!-- Peek clear all mode -->
+    <string-array name="peek_clear_all_mode_entries" translatable="false">
+        <item>@string/peek_clear_all_mode_always_hidden</item>
+        <item>@string/peek_clear_all_mode_count</item>
+    </string-array>
+    <string-array name="peek_clear_all_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

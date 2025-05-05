@@ -5,17 +5,25 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeek
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.app.Notification;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.service.notification.StatusBarNotification;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +34,7 @@ import it.dhd.oxygencustomizer.databinding.FragmentPeekNotificationsBinding;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.interfaces.PreferenceListener;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayView;
 
@@ -34,6 +43,8 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
     private FragmentPeekNotificationsBinding binding;
     private PeekDisplayView mPeekView;
     private PreferenceListener mListener;
+    private List<StatusBarNotification> mNotifications = new ArrayList<>();
+    private int mLastNot = 1;
 
     @Override
     public String getTitle() {
@@ -55,14 +66,41 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        MenuHost menuHost = requireActivity();
+        // Add menu items without using the Fragment Menu APIs
+        // Note how we can tie the MenuProvider to the viewLifecycleOwner
+        // and an optional Lifecycle.State (here, RESUMED) to indicate when
+        // the menu should be visible
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Add menu items here
+                menu.add(1, 2, 0, R.string.add_notification)
+                        .setIcon(R.drawable.ic_add)
+                        .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                // Handle the menu selection
+                if (menuItem.getGroupId() == 1 && menuItem.getItemId() == 2) {
+                    addNewNotification();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
         mListener = this::updatePrefs;
         mPeekView = new PeekDisplayView(requireContext(), "TOP", true);
-        List<StatusBarNotification> notifications = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
-            notifications.add(createFakeSbn(BuildConfig.APPLICATION_ID, i, BuildConfig.APPLICATION_ID + " #" + i, "Test message " + i));
+            mNotifications.add(createFakeSbn(BuildConfig.APPLICATION_ID, i, BuildConfig.APPLICATION_ID + " #" + i, "Test message " + i));
+            mLastNot++;
         }
         mPeekView.updateNotificationShelf(
-                notifications
+                mNotifications
         );
         binding.peekContainer.addView(mPeekView);
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -71,6 +109,12 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
                 .commit();
 
         updatePrefs();
+    }
+
+    private void addNewNotification() {
+        mNotifications.add(createFakeSbn(BuildConfig.APPLICATION_ID, mLastNot, BuildConfig.APPLICATION_ID + " #" + mLastNot, "Test message " + mLastNot));
+        mLastNot++;
+        mPeekView.updateNotificationShelf(mNotifications);
     }
 
     private StatusBarNotification createFakeSbn(String pkg, int id, String title, String text) {
@@ -130,7 +174,9 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
                 OCPreferences.getInt(LOCKSCREEN_PEEK_CARD_BG_COLOR, mPeekView.getSurfaceColor()),
                 radius,
                 OCPreferences.getInt(LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR, mPeekView.getPrimaryColor()),
-                false
+                false,
+                Integer.parseInt(OCPreferences.getString(LOCKSCREEN_PEEK_CLEAR_ALL_MODE, "1")),
+                OCPreferences.getInt(LOCKSCREEN_PEEK_CLEAR_ALL_COUNT, 4)
         );
     }
 

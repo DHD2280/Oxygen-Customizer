@@ -114,6 +114,11 @@ public class PeekDisplayView extends LinearLayout {
 
     private boolean mIsSettingsInterface = false;
 
+    private static final int CLEAR_ALL_MODE_NONE = 0;
+    private static final int CLEAR_ALL_MODE_COUNT = 1;
+    private int mClearAllMode = CLEAR_ALL_MODE_COUNT;
+    private int mClearAllCount = 4;
+
     public PeekDisplayView(Context context, String tag, boolean settingsInterface) {
         super(context);
         Log.d("PeekDisplayView", "PeekDisplayView: Constructor");
@@ -285,7 +290,8 @@ public class PeekDisplayView extends LinearLayout {
             int backgroundColor, int iconSize, int iconMarginEnd, int iconPadding,
             int titleColor, int summaryColor, int cardBackgroundColor, float[] cardBackgroundRadius,
             int buttonsColor,
-            boolean useAppIcons) {
+            boolean useAppIcons,
+            int clearAllMode, int clearAllCount) {
         Log.d("PeekDisplayView", "updatePeekStyle: " + newStyle + " " + newIconStyle + "\n" +
                 "backgroundColor: " + backgroundColor + "\n" +
                 "iconSize: " + iconSize + "\n" +
@@ -299,7 +305,9 @@ public class PeekDisplayView extends LinearLayout {
                 "useAppIcons: " + useAppIcons);
         boolean requireUpdate = checkChange(newIconStyle, iconSize, backgroundColor, iconMarginEnd, iconPadding) ||
                 newIconStyle != mCurrentPeekStyle.getPeekIconStyle().getStyle() ||
-                useAppIcons != mCurrentPeekStyle.useAppIcons();
+                useAppIcons != mCurrentPeekStyle.useAppIcons() ||
+                clearAllCount != mClearAllCount ||
+                clearAllMode != mClearAllMode;
         PEEK_STYLE_CUSTOM = new PeekStyle(
                 "custom", 2,
                 titleColor, summaryColor, cardBackgroundColor, cardBackgroundRadius,
@@ -318,6 +326,8 @@ public class PeekDisplayView extends LinearLayout {
                 mCurrentPeekStyle = PEEK_STYLE_CUSTOM;
                 break;
         }
+        mClearAllMode = clearAllMode;
+        mClearAllCount = clearAllCount;
         if (requireUpdate) {
             List<StatusBarNotification> notif = notificationAdapter.getNotifications();
             notificationAdapter = new NotificationAdapter();
@@ -412,7 +422,7 @@ public class PeekDisplayView extends LinearLayout {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                showClearAllButton();
+                if (mClearAllMode == CLEAR_ALL_MODE_COUNT) showClearAllButton();
             }
         });
         addView(view);
@@ -460,7 +470,10 @@ public class PeekDisplayView extends LinearLayout {
     private void removeCurrentNotification() {
         if (currentDisplayedNotification != null) {
             if (mIsSettingsInterface) {
-                post(() -> Toast.makeText(appContext, "Remove current notification", Toast.LENGTH_SHORT).show());
+                List<StatusBarNotification> newNotif = new ArrayList<>(lastFilteredNotifications);
+                newNotif.remove(currentDisplayedNotification);
+                updateNotificationShelf(newNotif);
+                hideNotificationCard();
                 return;
             }
             StatusBarNotification sbn = currentDisplayedNotification;
@@ -515,6 +528,9 @@ public class PeekDisplayView extends LinearLayout {
 
         int iconMarginEnd = mCurrentPeekStyle.getPeekIconStyle().getIconSpacing();
         int newWidth = filteredNotifications.size() <= 4 ? ViewGroup.LayoutParams.WRAP_CONTENT : (4 * getIconSize()) + (4 * iconMarginEnd);
+        if (mClearAllMode == CLEAR_ALL_MODE_NONE) {
+            newWidth = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
 
         if (newWidth != lastLayoutWidth) {
             ViewGroup.LayoutParams layoutParams = notificationShelf.getLayoutParams();
@@ -523,7 +539,9 @@ public class PeekDisplayView extends LinearLayout {
             lastLayoutWidth = newWidth;
         }
 
-        showOverflow = filteredNotifications.size() > 4;
+        showOverflow = mClearAllMode == CLEAR_ALL_MODE_COUNT ?
+                filteredNotifications.size() > mClearAllCount :
+                false;
         overflowText.setVisibility(showOverflow ? View.VISIBLE : View.GONE);
         clearAllButton.setVisibility(View.GONE);
     }
@@ -769,7 +787,14 @@ public class PeekDisplayView extends LinearLayout {
         public void onBindViewHolder(@NonNull NotificationViewHolder holder, @SuppressLint("RecyclerView") int position) {
             StatusBarNotification notification = notifications.get(position);
             RecyclerView.LayoutParams imageParams = (RecyclerView.LayoutParams) holder.iconView.getLayoutParams();
-            imageParams.setMarginEnd(position != notifications.size() - 1 ? mCurrentPeekStyle.getPeekIconStyle().getIconSpacing() : 0);
+            int marginEnd = 0;
+            if (position != notifications.size() - 1) {
+                marginEnd = mCurrentPeekStyle.getPeekIconStyle().getIconSpacing();
+            }
+            if (getItemCount() > mClearAllCount && mClearAllMode == CLEAR_ALL_MODE_COUNT) {
+                marginEnd = mCurrentPeekStyle.getPeekIconStyle().getIconSpacing();
+            }
+            imageParams.setMarginEnd(marginEnd);
             holder.iconView.setLayoutParams(imageParams);
             Drawable iconDrawable =
                     mCurrentPeekStyle.useAppIcons() ?

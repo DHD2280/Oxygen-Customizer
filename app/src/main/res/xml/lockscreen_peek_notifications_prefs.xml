@@ -148,6 +148,27 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/peek_clear_all_cat">
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:title="@string/peek_clear_all_mode"
+            android:key="peek_clear_all_mode"
+            android:defaultValue="1"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/peek_clear_all_mode_entries"
+            android:entryValues="@array/peek_clear_all_mode_values" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:title="@string/peek_clear_all_count_title"
+            android:summary="@string/peek_clear_all_count_summary"
+            app:defaultValue="4"
+            android:key="peek_clear_all_count"
+            android:min="4"
+            android:max="8" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
