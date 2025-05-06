@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="preferenceBackgroundColor" format="reference|color" />
-    <attr name="preferenceBackgroundColorPressed" format="reference|color" />
-
-    <declare-styleable name="OplusPreference">
-        <attr name="clickStyle" format="integer"/>
-        <attr name="forcePosition" format="string"/>
-        <attr name="tintTitle" format="boolean"/>
-        <attr name="centerTitle" format="boolean"/>
-    </declare-styleable>
-
-    <declare-styleable name="OplusSwitchPreference">
-        <attr name="forcePosition" />
-    </declare-styleable>
-
-    <declare-styleable name="OplusEditTextPreference">
-        <attr name="forcePosition" />
-    </declare-styleable>
-
-    <declare-styleable name="OplusListPreference">
-        <attr name="forcePosition" />
+    <declare-styleable name="IllustrationPreference">
+        <attr name="scaleX" format="reference|float" />
+        <attr name="scaleY" format="reference|float" />
     </declare-styleable>
 
     <declare-styleable name="footerPreferenceStyle">
@@ -35,7 +18,7 @@
         <attr name="sliderValueFrom" format="integer" />
         <attr name="sliderValueTo" format="integer" />
         <attr name="valueFormat" />
-        <attr name="forcePosition" />
+        <attr name="forcePosition" format="string"/>
         <attr name="sliderDefaultValue" format="integer" />
         <attr name="isDecimalFormat" />
         <attr name="decimalFormat" />
@@ -100,6 +83,11 @@
     <declare-styleable name="ImageIllustrationPreference">
         <attr name="backgroundResource" format="reference" />
         <attr name="imageResource" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="TileContainerView">
+        <attr name="colCount" format="integer" />
+        <attr name="rowCount" format="integer" />
     </declare-styleable>
 
 </resources>

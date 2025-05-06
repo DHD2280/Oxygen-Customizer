@@ -44,6 +44,7 @@ public class IllustrationPreference extends Preference {
     private int mImageResId;
     private boolean mCacheComposition = true;
     private boolean mIsAutoScale;
+    private float mScaleX = 1f, mScaleY = 1f;
     private Uri mImageUri;
     private Drawable mImageDrawable;
     private View mMiddleGroundView;
@@ -125,6 +126,10 @@ public class IllustrationPreference extends Preference {
         illustrationFrame.setLayoutParams(lp);
 
         illustrationView.setCacheComposition(mCacheComposition);
+        if (mScaleX != 1f || mScaleY != 1f) {
+            illustrationView.setScaleX(mScaleX);
+            illustrationView.setScaleY(mScaleY);
+        }
         handleImageWithAnimation(illustrationFrame, illustrationView);
         handleImageFrameMaxHeight(backgroundView, illustrationView);
 
@@ -423,10 +428,12 @@ public class IllustrationPreference extends Preference {
             mCacheComposition = a.getBoolean(
                     com.airbnb.lottie.R.styleable.LottieAnimationView_lottie_cacheComposition, true);
 
-            /*a = context.obtainStyledAttributes(attrs,
+            a = context.obtainStyledAttributes(attrs,
                     R.styleable.IllustrationPreference, 0, 0);
-            mLottieDynamicColor = a.getBoolean(R.styleable.IllustrationPreference_dynamicColor,
-                    false); */
+            mScaleX = a.getFloat(
+                    R.styleable.IllustrationPreference_scaleX, 1f);
+            mScaleY = a.getFloat(
+                    R.styleable.IllustrationPreference_scaleY, 1f);
 
             a.recycle();
         }
