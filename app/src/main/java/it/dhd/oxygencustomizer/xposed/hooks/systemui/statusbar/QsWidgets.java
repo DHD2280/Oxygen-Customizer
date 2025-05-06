@@ -39,7 +39,7 @@ import android.widget.LinearLayout;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
-import it.dhd.oxygencustomizer.xposed.views.QsControlsView;
+import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
 
 public class QsWidgets extends XposedMods {
 

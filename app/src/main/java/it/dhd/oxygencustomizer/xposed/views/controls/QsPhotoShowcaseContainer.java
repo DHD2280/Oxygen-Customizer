@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.controls;
 
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 

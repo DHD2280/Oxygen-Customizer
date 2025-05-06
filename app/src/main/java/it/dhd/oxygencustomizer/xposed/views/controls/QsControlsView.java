@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.controls;
 
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
 import static de.robv.android.xposed.XposedBridge.log;

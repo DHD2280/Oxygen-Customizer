@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.controls;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;

@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views;
+package it.dhd.oxygencustomizer.xposed.views.controls;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
@@ -52,14 +52,14 @@ import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 
 public class QsMediaTile extends LinearLayout {
 
-    private final String DEFAULT_LABEL = "oplus_qs_media_panel_title_default";
-    private final String APP_ICON = "ic_music_note";
-    private final String DEVICE_ICON = "status_bar_qs_bt_cellphone_ic";
-    private final String DEVICE_SWITCH_ICON = "status_bar_qs_bt_device_switch";
-    private final String PREV_ICON = "ic_oplus_media_panel_action_pre";
-    private final String PLAY_ICON = "ic_oplus_media_panel_action_play";
-    private final String PAUSE_ICON = "ic_oplus_media_panel_action_pause";
-    private final String NEXT_ICON = "ic_oplus_media_panel_action_next";
+    public static final String DEFAULT_LABEL = "oplus_qs_media_panel_title_default";
+    public static final String APP_ICON = "ic_music_note";
+    public static final String DEVICE_ICON = "status_bar_qs_bt_cellphone_ic";
+    public static final String DEVICE_SWITCH_ICON = "status_bar_qs_bt_device_switch";
+    public static final String PREV_ICON = "ic_oplus_media_panel_action_pre";
+    public static final String PLAY_ICON = "ic_oplus_media_panel_action_play";
+    public static final String PAUSE_ICON = "ic_oplus_media_panel_action_pause";
+    public static final String NEXT_ICON = "ic_oplus_media_panel_action_next";
 
     private final Context mContext;
     private Context appContext;
