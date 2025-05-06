@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 
@@ -25,6 +26,7 @@ import it.dhd.oneplusui.appcompat.app.OplusActivity;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.LocaleHelper;
+import it.dhd.oxygencustomizer.utils.TextUtil;
 
 public class BaseActivity extends OplusActivity {
 
@@ -43,6 +45,7 @@ public class BaseActivity extends OplusActivity {
     }
 
     public static void setHeader(Context context, CharSequence title) {
+        if (TextUtils.isEmpty(title)) return;
         Toolbar toolbar = ((AppCompatActivity) context).findViewById(R.id.toolbar);
         ((AppCompatActivity) context).setSupportActionBar(toolbar);
         toolbar.setTitle(title);
