@@ -921,7 +921,7 @@ public class PreferenceHelper {
                 return instance.mPreferences.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0").equals("2");
             }
             case LOCKSCREEN_PEEK_CLEAR_ALL_COUNT -> {
-                return instance.mPreferences.getString(LOCKSCREEN_PEEK_CLEAR_ALL_MODE, "1").equals("0");
+                return instance.mPreferences.getString(LOCKSCREEN_PEEK_CLEAR_ALL_MODE, "1").equals("1");
             }
 
             // Aod Clocks
