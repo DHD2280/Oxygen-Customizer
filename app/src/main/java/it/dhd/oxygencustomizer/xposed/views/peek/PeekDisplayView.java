@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -341,24 +342,21 @@ public class PeekDisplayView extends LinearLayout {
         boolean requireUpdate = false;
         PeekIconStyle iconStyle = mCurrentPeekStyle.getPeekIconStyle();
         if (newIconStyle == 2) { // Custom icon selected
-            if (iconStyle.getStyle() == 2) { //old
-                // Custom old and before
-                boolean shouldUpdate = PEEK_STYLE_ICON_CUSTOM.getIconBackgroundColor() != iconStyle.getIconBackgroundColor() ||
-                        (PEEK_STYLE_ICON_CUSTOM.getIconSize() != iconStyle.getIconSize()) ||
-                        (PEEK_STYLE_ICON_CUSTOM.getIconSpacing() != iconStyle.getIconSpacing()) ||
-                        (PEEK_STYLE_ICON_CUSTOM.getIconPadding() != iconStyle.getIconPadding());
-                if (shouldUpdate) {
-                    PEEK_STYLE_ICON_CUSTOM = new PeekIconStyle(
-                            PEEK_STYLE_ICON_CUSTOM.getName(),
-                            PEEK_STYLE_ICON_CUSTOM.getStyle(),
-                            iconSize,
-                            backgroundColor,
-                            iconMarginEnd,
-                            iconPadding
-                    );
-                    mCurrentIconStyle = PEEK_STYLE_ICON_CUSTOM;
-                    return true;
-                }
+            boolean shouldUpdate = PEEK_STYLE_ICON_CUSTOM.getIconBackgroundColor() != backgroundColor ||
+                    (PEEK_STYLE_ICON_CUSTOM.getIconSize() != iconSize) ||
+                    (PEEK_STYLE_ICON_CUSTOM.getIconSpacing() != iconMarginEnd) ||
+                    (PEEK_STYLE_ICON_CUSTOM.getIconPadding() != iconPadding);
+            if (shouldUpdate) {
+                PEEK_STYLE_ICON_CUSTOM = new PeekIconStyle(
+                        PEEK_STYLE_ICON_CUSTOM.getName(),
+                        PEEK_STYLE_ICON_CUSTOM.getStyle(),
+                        dp2px(mContext, iconSize),
+                        backgroundColor,
+                        dp2px(mContext, iconMarginEnd),
+                        dp2px(mContext, iconPadding)
+                );
+                mCurrentIconStyle = PEEK_STYLE_ICON_CUSTOM;
+                return true;
             }
         }
         if (iconStyle.getStyle() != newIconStyle) {
