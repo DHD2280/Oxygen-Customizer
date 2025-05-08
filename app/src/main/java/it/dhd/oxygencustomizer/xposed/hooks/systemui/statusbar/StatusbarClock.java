@@ -363,6 +363,9 @@ public class StatusbarClock extends XposedMods {
                             if (!mShowSeconds) {
                                 float totalWidth = measureTextWithSpans();
                                 totalWidth += rightClockPadding*2;
+                                if (clockChip) {
+                                    totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
+                                }
                                 int calculatedMinWidth = (int) totalWidth;
                                 if (tv.getMinimumWidth() != calculatedMinWidth) {
                                     tv.setMinimumWidth(calculatedMinWidth);
