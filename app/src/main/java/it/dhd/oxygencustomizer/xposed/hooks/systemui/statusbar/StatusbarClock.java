@@ -695,10 +695,10 @@ public class StatusbarClock extends XposedMods {
     @SuppressLint("RtlHardcoded")
     private void setupChip() {
         if (clockChip) {
-            mClockView.setPadding(dp2px(mContext, chipPaddingSx), dp2px(mContext, chipPaddingTop), dp2px(mContext, chipPaddingDx), dp2px(mContext, chipPaddingBottom));
+            mClockView.setPadding(rightClockPadding + dp2px(mContext, chipPaddingSx), dp2px(mContext, chipPaddingTop), mClockPosition == POSITION_RIGHT ? 0 : rightClockPadding + dp2px(mContext, chipPaddingDx), dp2px(mContext, chipPaddingBottom));
             setMargins(mClockView, mContext, chipMarginSx, chipMarginTop, chipMarginDx, chipMarginBottom);
         } else {
-            mClockView.setPadding(0, 0, 0, 0);
+            mClockView.setPadding(rightClockPadding, 0, mClockPosition == POSITION_RIGHT ? 0 : rightClockPadding, 0);
             setMargins(mClockView, mContext, 0, 0, 0, 0);
             mClockView.post(() -> mClockView.setBackground(null));
         }
