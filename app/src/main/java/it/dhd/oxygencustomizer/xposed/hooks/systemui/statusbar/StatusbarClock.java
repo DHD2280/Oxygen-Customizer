@@ -362,7 +362,6 @@ public class StatusbarClock extends XposedMods {
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
                             if (!mShowSeconds) {
                                 float totalWidth = measureTextWithSpans();
-                                totalWidth += rightClockPadding;
                                 totalWidth += rightClockPadding*2;
                                 int calculatedMinWidth = (int) totalWidth;
                                 if (tv.getMinimumWidth() != calculatedMinWidth) {
@@ -495,40 +494,52 @@ public class StatusbarClock extends XposedMods {
 
     private float measureTextWithSpans() {
         TextPaint textPaint = new TextPaint();
-        textPaint.setTextSize(mClockSize);
+        float textSizePx = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP,
+                mClockSize,
+                mContext.getResources().getDisplayMetrics()
+        );
+        textPaint.setTextSize(textSizePx);
         textPaint.setTypeface(mClockView.getTypeface());
 
         float totalWidth = 0f;
 
         CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-        float beforeClockWidth = textPaint.measureText(beforeClock.toString());
-
         if (mCustomBeforeSmall) {
-            beforeClockWidth *= 0.7f;
+            float originalSize = textPaint.getTextSize();
+            textPaint.setTextSize(originalSize * 0.7f);
+            totalWidth += textPaint.measureText(beforeClock.toString());
+            textPaint.setTextSize(originalSize);
+        } else {
+            totalWidth += textPaint.measureText(beforeClock.toString());
         }
-        totalWidth += beforeClockWidth;
 
         String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
         totalWidth += textPaint.measureText(timeText);
 
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
             CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null);
-            float amPmWidth = textPaint.measureText(amPmText.toString());
             if (mAmPmStyle == AM_PM_STYLE_SMALL) {
-                amPmWidth *= 0.7f;
+                float originalSize = textPaint.getTextSize();
+                textPaint.setTextSize(originalSize * 0.7f);
+                totalWidth += textPaint.measureText(amPmText.toString());
+                textPaint.setTextSize(originalSize);
+            } else {
+                totalWidth += textPaint.measureText(amPmText.toString());
             }
-            totalWidth += amPmWidth;
         }
 
         CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-        float afterClockWidth = textPaint.measureText(afterClock.toString());
-
         if (mCustomAfterSmall) {
-            afterClockWidth *= 0.7f;
+            float originalSize = textPaint.getTextSize();
+            textPaint.setTextSize(originalSize * 0.7f);
+            totalWidth += textPaint.measureText(afterClock.toString());
+            textPaint.setTextSize(originalSize);
+        } else {
+            totalWidth += textPaint.measureText(afterClock.toString());
         }
-        totalWidth += afterClockWidth;
 
-        return dp2px(mContext, totalWidth);
+        return totalWidth;
     }
 
     private void autoHideClock(Object clock) {
