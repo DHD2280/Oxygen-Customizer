@@ -5,9 +5,11 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getLunarDate
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.util.IslamicCalendar;
 import android.icu.util.ULocale;
+import android.os.BatteryManager;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
@@ -27,7 +29,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
+import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class StringFormatter {
@@ -36,9 +40,19 @@ public class StringFormatter {
     private static final ArrayList<StringFormatter> instances = new ArrayList<>();
     private final ArrayList<FormattedStringCallback> callbacks = new ArrayList<>();
     private boolean hasDate = false;
+    private static Intent mBatteryIntent = null;
+
+    private static final BatteryDataProvider.BatteryStatusCallback mBatteryStatusCallback = (batteryStatus, batteryStatusIntent) -> {
+        if (batteryStatusIntent == null) return;
+        mBatteryIntent = batteryStatusIntent;
+        refreshAll();
+    };
 
     public StringFormatter() {
         instances.add(this);
+        try {
+            BatteryDataProvider.registerStatusCallback(mBatteryStatusCallback);
+        } catch (Throwable ignored) {}
         scheduleNextDateUpdate();
     }
 
@@ -178,6 +192,21 @@ public class StringFormatter {
         }
     }
 
+    private CharSequence batteryInfoOf(String format) {
+        String result = "Err";
+        Log.d("StringFormatter", mBatteryIntent == null ? "BatteryIntent is null" : "BatteryIntent is not null");
+        if (mBatteryIntent == null) return result;
+        result = switch (format) {
+            case "v" -> mBatteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) + "mV";
+            case "l" -> mBatteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) + "%";
+            default -> "Err";
+        };
+        if (result.equals("-1")) {
+            result = "Err";
+        }
+        return result;
+    }
+
     private CharSequence lunarDate() {
         try {
             return getLunarDate();
@@ -231,6 +260,7 @@ public class StringFormatter {
             case "P" -> persianDateOf(match.substring(1));
             case "T" -> temperatureOf(match.substring(1));
             case "L" -> lunarDate();
+            case "B" -> batteryInfoOf(match.substring(1));
             default -> "$" + match;
         };
     }

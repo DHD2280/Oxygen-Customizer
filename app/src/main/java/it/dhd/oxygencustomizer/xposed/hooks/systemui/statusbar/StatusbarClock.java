@@ -27,19 +27,26 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.LineHeightSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.ReplacementSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -49,6 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
@@ -56,6 +64,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -66,21 +75,29 @@ import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
  */
 public class StatusbarClock extends XposedMods {
 
+    private static final String listenPackage = SYSTEM_UI;
+
+    // Position
     public static final int POSITION_LEFT = 2;
     public static final int POSITION_CENTER = 1;
     public static final int POSITION_RIGHT = 0;
-    private static final String listenPackage = SYSTEM_UI;
+
+    // Am/Pm Style
     private static final int AM_PM_STYLE_SMALL = 1;
     private static final int AM_PM_STYLE_GONE = 2;
+
+    // Date Display
     private static final int CLOCK_DATE_DISPLAY_GONE = 0;
     private static final int CLOCK_DATE_DISPLAY_SMALL = 1;
     private static final int CLOCK_DATE_STYLE_REGULAR = 0;
     private static final int CLOCK_DATE_STYLE_LOWERCASE = 1;
     private static final int CLOCK_DATE_STYLE_UPPERCASE = 2;
+    private static final int STYLE_DATE_LEFT = 0;
+
+    // Auto Hide
     private static final int HIDE_DURATION = 60; // 1 minute
     private static final int SHOW_DURATION = 5; // 5 seconds
-    private static final int STYLE_DATE_LEFT = 0;
-    private final String TAG = "Oxygen Customizer - Statusbar Clock: ";
+
     private final Handler autoHideHandler = new Handler(Looper.getMainLooper());
     private final StringFormatter stringFormatter = new StringFormatter();
     private boolean mClockAutoHideLauncher = false;
@@ -97,7 +114,10 @@ public class StatusbarClock extends XposedMods {
     private String mCustomClockDateFormat = "$GEEE";
     private String mCustomBeforeClock = "", mCustomAfterClock = "";
     private boolean mCustomBeforeSmall = false, mCustomAfterSmall = false;
+    private boolean mClockDoubleRow = false;
     private Object Clock = null;
+    private float mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier;
+
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -217,13 +237,14 @@ public class StatusbarClock extends XposedMods {
             }
         } else {
             if (!TextUtils.isEmpty(mCustomBeforeClock)) {
-                mCustomBeforeClock = mCustomBeforeClock + " ";
+                if (!mCustomBeforeClock.endsWith("\\n")) mCustomBeforeClock = mCustomBeforeClock + " ";
             }
             if (!TextUtils.isEmpty(mCustomAfterClock)) {
-                mCustomAfterClock = " " + mCustomAfterClock;
+                if (!mCustomAfterClock.startsWith("\\n")) mCustomAfterClock = " " + mCustomAfterClock;
             }
             mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
         }
+        mClockDoubleRow = mCustomBeforeClock.contains("\\n") || mCustomAfterClock.contains("\\n");
 
         if (Key.length > 0) {
             switch (Key[0]) {
@@ -318,6 +339,8 @@ public class StatusbarClock extends XposedMods {
                     } catch (Throwable ignored) {
                         log("mClockView not found");
                     }
+                    mClockDefaultLineSpacingExtra = mClockView.getLineSpacingExtra();
+                    mClockDefaultLineSpacingMultiplier = mClockView.getLineSpacingMultiplier();
 
                     ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
                     try {
@@ -360,6 +383,13 @@ public class StatusbarClock extends XposedMods {
                             // Based on our custom formats
                             TextView tv = (TextView) param.thisObject;
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                            XposedBridge.log("StatClock updateMinWidth: " + mClockDoubleRow);
+                            if (mClockDoubleRow) {
+                                tv.setSingleLine(false);
+                                tv.setLineSpacing(0f, 0.8f);
+                            } else {
+                                tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
+                            }
                             if (!mShowSeconds) {
                                 float totalWidth = measureTextWithSpans();
                                 totalWidth += rightClockPadding*2;
@@ -438,6 +468,14 @@ public class StatusbarClock extends XposedMods {
                     if (param.thisObject != mClockView)
                         return; //We don't want custom format in QS header. do we?
 
+                    XposedBridge.log("getSmallTime: " + mClockDoubleRow);
+                    TextView tv = (TextView) param.thisObject;
+                    if (mClockDoubleRow) {
+                        tv.setSingleLine(false);
+                        tv.setLineSpacing(0f, 0.8f);
+                    } else {
+                        tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
+                    }
 
                     SpannableStringBuilder result = new SpannableStringBuilder();
 
@@ -495,6 +533,56 @@ public class StatusbarClock extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
+//    private float measureTextWithSpans() {
+//        TextPaint textPaint = new TextPaint();
+//        float textSizePx = TypedValue.applyDimension(
+//                TypedValue.COMPLEX_UNIT_SP,
+//                mClockSize,
+//                mContext.getResources().getDisplayMetrics()
+//        );
+//        textPaint.setTextSize(textSizePx);
+//        textPaint.setTypeface(mClockView.getTypeface());
+//
+//        float totalWidth = 0f;
+//
+//        CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
+//        if (mCustomBeforeSmall) {
+//            float originalSize = textPaint.getTextSize();
+//            textPaint.setTextSize(originalSize * 0.7f);
+//            totalWidth += textPaint.measureText(beforeClock.toString());
+//            textPaint.setTextSize(originalSize);
+//        } else {
+//            totalWidth += textPaint.measureText(beforeClock.toString());
+//        }
+//
+//        String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+//        totalWidth += textPaint.measureText(timeText);
+//
+//        if (mAmPmStyle != AM_PM_STYLE_GONE) {
+//            CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null);
+//            if (mAmPmStyle == AM_PM_STYLE_SMALL) {
+//                float originalSize = textPaint.getTextSize();
+//                textPaint.setTextSize(originalSize * 0.7f);
+//                totalWidth += textPaint.measureText(amPmText.toString());
+//                textPaint.setTextSize(originalSize);
+//            } else {
+//                totalWidth += textPaint.measureText(amPmText.toString());
+//            }
+//        }
+//
+//        CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
+//        if (mCustomAfterSmall) {
+//            float originalSize = textPaint.getTextSize();
+//            textPaint.setTextSize(originalSize * 0.7f);
+//            totalWidth += textPaint.measureText(afterClock.toString());
+//            textPaint.setTextSize(originalSize);
+//        } else {
+//            totalWidth += textPaint.measureText(afterClock.toString());
+//        }
+//
+//        return totalWidth;
+//    }
+
     private float measureTextWithSpans() {
         TextPaint textPaint = new TextPaint();
         float textSizePx = TypedValue.applyDimension(
@@ -505,44 +593,68 @@ public class StatusbarClock extends XposedMods {
         textPaint.setTextSize(textSizePx);
         textPaint.setTypeface(mClockView.getTypeface());
 
-        float totalWidth = 0f;
+        // 1. Costruisci il testo completo
+        SpannableStringBuilder fullText = new SpannableStringBuilder();
 
-        CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-        if (mCustomBeforeSmall) {
-            float originalSize = textPaint.getTextSize();
-            textPaint.setTextSize(originalSize * 0.7f);
-            totalWidth += textPaint.measureText(beforeClock.toString());
-            textPaint.setTextSize(originalSize);
-        } else {
-            totalWidth += textPaint.measureText(beforeClock.toString());
+        // Aggiungi before text
+        fullText.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
+
+        // Aggiungi orologio principale
+        fullText.append(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+
+        // Aggiungi AM/PM se necessario
+        if (mAmPmStyle != AM_PM_STYLE_GONE) {
+            fullText.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
         }
 
-        String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        totalWidth += textPaint.measureText(timeText);
+        // Aggiungi after text
+        fullText.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
 
-        if (mAmPmStyle != AM_PM_STYLE_GONE) {
-            CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null);
-            if (mAmPmStyle == AM_PM_STYLE_SMALL) {
-                float originalSize = textPaint.getTextSize();
-                textPaint.setTextSize(originalSize * 0.7f);
-                totalWidth += textPaint.measureText(amPmText.toString());
-                textPaint.setTextSize(originalSize);
-            } else {
-                totalWidth += textPaint.measureText(amPmText.toString());
+        // 2. Dividi in righe e misura
+        return calculateMaxLineWidth(fullText, textPaint);
+    }
+
+    private float calculateMaxLineWidth(CharSequence text, TextPaint paint) {
+        if (TextUtils.isEmpty(text)) return 0f;
+
+        // Converti eventuali \n simbolici in newline reali
+        String processedText = text.toString().replace("\\n", "\n");
+        SpannableStringBuilder ssb = new SpannableStringBuilder(processedText);
+
+        // Mantieni tutti gli spans originali
+        copySpans(text, ssb);
+
+        // Crea il layout per la misurazione
+        StaticLayout layout = new StaticLayout(
+                ssb,
+                paint,
+                Integer.MAX_VALUE,
+                Layout.Alignment.ALIGN_NORMAL,
+                1.0f,
+                0.0f,
+                false
+        );
+
+        // Trova la larghezza massima tra tutte le righe
+        float maxWidth = 0f;
+        for (int i = 0; i < layout.getLineCount(); i++) {
+            maxWidth = Math.max(maxWidth, layout.getLineWidth(i));
+        }
+
+        return maxWidth;
+    }
+
+    private void copySpans(CharSequence source, SpannableStringBuilder dest) {
+        if (source instanceof Spanned) {
+            Spanned spanned = (Spanned) source;
+            Object[] spans = spanned.getSpans(0, source.length(), Object.class);
+            for (Object span : spans) {
+                dest.setSpan(span,
+                        spanned.getSpanStart(span),
+                        spanned.getSpanEnd(span),
+                        spanned.getSpanFlags(span));
             }
         }
-
-        CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-        if (mCustomAfterSmall) {
-            float originalSize = textPaint.getTextSize();
-            textPaint.setTextSize(originalSize * 0.7f);
-            totalWidth += textPaint.measureText(afterClock.toString());
-            textPaint.setTextSize(originalSize);
-        } else {
-            totalWidth += textPaint.measureText(afterClock.toString());
-        }
-
-        return totalWidth;
     }
 
     private void autoHideClock(Object clock) {
@@ -605,7 +717,7 @@ public class StatusbarClock extends XposedMods {
 
     private CharSequence getFormattedString(String dateFormat, boolean small, int caseStyle, @Nullable @ColorInt Integer textColor) {
         if (dateFormat.isEmpty()) return "";
-
+        dateFormat = dateFormat.replace("\\n", "\n");
         //There's some format to work on
         CharSequence format = stringFormatter.formatString(dateFormat);
         String form = format.toString();
@@ -615,7 +727,9 @@ public class StatusbarClock extends XposedMods {
             form = form.toLowerCase();
         }
         SpannableStringBuilder formatted = new SpannableStringBuilder(form);
-
+        if (form.contains("\n")) {
+            formatted.setSpan((LineHeightSpan) (text, start, end, spanstartv, v, fm) -> fm.descent += (int) (fm.descent * 0.2f), 0, formatted.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         if (small) {
             //small size requested
             CharacterStyle style = new RelativeSizeSpan(0.7f);
@@ -629,6 +743,35 @@ public class StatusbarClock extends XposedMods {
         }
 
         return formatted;
+    }
+
+    public static class MultilineSupportSpan extends ReplacementSpan {
+        private final float lineSpacingMult;
+        private final float lineSpacingAdd;
+
+        public MultilineSupportSpan(float mult, float add) {
+            this.lineSpacingMult = mult;
+            this.lineSpacingAdd = add;
+        }
+
+        @Override
+        public int getSize(@NonNull Paint paint, CharSequence text,
+                           int start, int end, @Nullable Paint.FontMetricsInt fm) {
+            return (int) paint.measureText(text, start, end);
+        }
+
+        @Override
+        public void draw(@NonNull Canvas canvas, CharSequence text,
+                         int start, int end, float x, int top, int y,
+                         int bottom, @NonNull Paint paint) {
+            String[] lines = text.toString().split("\n");
+            float currentY = y;
+
+            for (String line : lines) {
+                canvas.drawText(line, x, currentY, paint);
+                currentY += paint.getTextSize() * lineSpacingMult + lineSpacingAdd;
+            }
+        }
     }
 
     @SuppressLint("RtlHardcoded")

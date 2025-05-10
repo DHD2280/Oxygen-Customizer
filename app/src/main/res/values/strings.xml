@@ -226,7 +226,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Custom java format</string>
-    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P\&lt;format\&gt; : Persian date, based on format*\n$L for Lunar Date\n$I\&lt;calendar\&gt;&lt;format\&gt; : Islamic calendar. Calendar is optional, default is islamic, you can also use C for Islamic-Civil and U for Islamic Umalqura.\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
+    <string name="string_formatter_manual_body">In addition to the normal text, dynamic variables are also available, like Date and Temperature:\n\n$G\&lt;format\&gt; : Gregorian date, based on format*\n$P\&lt;format\&gt; : Persian date, based on format*\n$L for Lunar Date\n$I\&lt;calendar\&gt;&lt;format\&gt; : Islamic calendar. Calendar is optional, default is islamic, you can also use C for Islamic-Civil and U for Islamic Umalqura.\n$T\&lt;format\&gt;[interval] : Temperature; \nformat can be b (for battery), c (for CPU), g (for GPU) and s (for skin).\n$B\&lt;format\&gt; : Battery; \nformat can be v (for voltage in mV), l (for level) \nLastly, there is OPTIONAL number of update interval in seconds (default: 60 seconds)\n\n*for format documentation, search for "Java Date Format"</string>
     <string name="preview">Preview</string>
     <string name="clock_date_position">Date position</string>
     <string name="clock_date_right">Right of time</string>
@@ -506,6 +506,7 @@
     <string name="qs_tiles_custom_radius">Custom QS Tile Radius</string>
     <string name="qs_tile_custom_highlight">Custom QS Highlight Tiles Radius</string>
     <string name="qs_tile_custom_radius">Custom QS Tiles Radius</string>
+    <string name="qs_tile_radius">Radius</string>
 
     <!-- Media Tile -->
     <string name="media_tile">Media Tile</string>
@@ -1566,5 +1567,18 @@
     <string name="lsposed">LSposed</string>
     <string name="open_lsposed">Open LSposed</string>
     <string name="shortcut_disabled">Shortcut disabled</string>
+
+    <!-- Separate qs tweaks -->
+    <string name="qs_separate_mods">Separate QS</string>
+
+    <!-- Separate qs layout -->
+    <string name="tap_to_configure">Tap on an item to configure its layout</string>
+    <string name="media_panel">Media panel</string>
+    <string name="highlight_tile_1">Highlight tile 1</string>
+    <string name="highlight_tile_2">Highlight tile 2</string>
+    <string name="volume_slider">Volume slider</string>
+    <string name="qs_separate_rows">Rows</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
 
 </resources>
