@@ -1,9 +1,12 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.*;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
@@ -15,7 +18,10 @@ import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRad
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -50,11 +56,22 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.oplus.posteffect.BlurDrawable;
 import com.oplus.posteffect.ForegroundBlurParam;
+import com.oplus.systemui.plugins.qs.DeviceProfile;
+import com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView;
+import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
+import com.oplus.systemui.qs.base.widget.QsViewOutlineProvider;
+import com.oplus.systemui.qs.widget.QsViewOutlineProviderKt;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -65,12 +82,15 @@ import io.github.neonorbit.dexplore.filter.ClassFilter;
 import io.github.neonorbit.dexplore.filter.DexFilter;
 import io.github.neonorbit.dexplore.filter.ReferenceTypes;
 import io.github.neonorbit.dexplore.result.ClassData;
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsHighlightTileViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsTileViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
@@ -89,6 +109,7 @@ import it.dhd.oxygencustomizer.xposed.utils.viewpager.TranslationYTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomInTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutSlideTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutTransformer;
+import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather;
 
 public class QsTileCustomization extends XposedMods {
 
@@ -98,6 +119,7 @@ public class QsTileCustomization extends XposedMods {
     private static Object mPersonalityManager = null;
 
     private String MyDeviceBaseClass = null;
+
     // Qs Tile Colors Highlight
     private boolean qsCustomHighlightTileColors = false; // Main Switch OOS15
     private int qsInactiveColorHighlight, qsActiveColorHighlight, qsDisabledColorHighlight;
@@ -113,8 +135,12 @@ public class QsTileCustomization extends XposedMods {
 
     // Qs Tile Radius
     private boolean customHighlightTileRadius = false, customTileRadius = false;
+    private int highlightTileRadius;
     private int highlightTSRadius, highlightTDRadius, highlightBSRadius, highlightBDRadius;
+    private int tileRadius;
     private int tileTSRadius, tileTDRadius, tileBSRadius, tileBDRadius;
+    private boolean customMediaTileRadius = false;
+    private int mediaTileRadius;
 
     // Qs Tile Label Utils
     private boolean qsLabelsHide, qsLabelsColorEnabled;
@@ -134,6 +160,8 @@ public class QsTileCustomization extends XposedMods {
     private final int BLEND_LUMINOSITY_OVERLAY = 4;
 
     // QS Media Tile
+    private boolean qsCustomMediaTileColor = false;
+    private int qsMediaTileColor = Color.WHITE;
     private FrameLayout mMediaBackground = new FrameLayout(mContext);
     private ImageView mCoverImg = null;
     private View mOplusQsMediaView = null;
@@ -164,6 +192,26 @@ public class QsTileCustomization extends XposedMods {
     private QsTileViewBackgroundProxyImplOC mTileViewBackgroundProxy = null;
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightTileViewBackgroundProxy = null;
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightPluginTileViewBackgroundProxy = null;
+    private StaticViewBackgroundProxyImplOC mStaticViewBackgroundProxy = null;
+
+    // Separate Qs
+    private Object mDeviceProfile;
+
+    private BroadcastReceiver mDeviceProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int cellSize = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellSize();
+            int marginHorizontal = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellMarginHorizontal();
+            int marginVertical = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellMarginVertical();
+            Intent i = new Intent();
+            i.setAction(BuildConfig.APPLICATION_ID + ".QS_TILE_CUSTOMIZATION");
+            i.putExtra("cellSize", cellSize);
+            i.putExtra("marginHorizontal", marginHorizontal);
+            i.putExtra("marginVertical", marginVertical);
+            i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+            mContext.sendBroadcast(i);
+        }
+    };
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -195,18 +243,25 @@ public class QsTileCustomization extends XposedMods {
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
         qsDisabledColorEnabled = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
         qsDisabledColor = Xprefs.getInt(QS_TILE_DISABLED_COLOR, Color.DKGRAY);
+        // Media
+        qsCustomMediaTileColor = Xprefs.getBoolean(QS_MEDIA_TILE_CUSTOM_COLOR, false);
+        qsMediaTileColor = Xprefs.getInt(QS_MEDIA_TILE_COLOR, Color.WHITE);
 
         // Qs Radius
         customHighlightTileRadius = Xprefs.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
+        highlightTileRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOTAL, 0);
         highlightTSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT, 0);
         highlightTDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT, 0);
         highlightBSRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0);
         highlightBDRadius = Xprefs.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0);
         customTileRadius = Xprefs.getBoolean(QS_TILE_RADIUS, false);
+        tileRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOTAL, 0);
         tileTSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0);
         tileTDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_TOP_RIGHT, 0);
         tileBSRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0);
         tileBDRadius = Xprefs.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0);
+        customMediaTileRadius = Xprefs.getBoolean(QS_MEDIA_TILE_RADIUS, false);
+        mediaTileRadius = Xprefs.getSliderInt(QS_MEDIA_TILE_RADIUS_TOTAL, 0);
 
         // Media QS
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
@@ -240,7 +295,7 @@ public class QsTileCustomization extends XposedMods {
         if (Key.length > 0) {
             for (String k : QS_UPDATE_PREFS) {
                 if (Key[0].equals(k)) {
-                    if (Key[0].equals(QS_TILE_INACTIVE_COLOR_ENABLED) || Key[0].equals(QS_TILE_INACTIVE_COLOR)) {
+                    if (Key[0].equals(QS_MEDIA_TILE_COLOR) || Key[0].equals(QS_MEDIA_TILE_CUSTOM_COLOR)) {
                         updateMediaQs();
                     }
                     notifyQsUpdate();
@@ -261,8 +316,15 @@ public class QsTileCustomization extends XposedMods {
                         Key[0].equals(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON) ||
                         Key[0].equals(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON) ||
                         Key[0].equals(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON) ||
-                        Key[0].equals(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON)) {
+                        Key[0].equals(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON) ||
+                        Key[0].equals(QS_MEDIA_TILE_CUSTOM_COLOR) ||
+                        Key[0].equals(QS_MEDIA_TILE_COLOR)) {
                     updateTileColors();
+                }
+                if (Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_TOTAL) ||
+                    Key[0].equals(QS_TILE_RADIUS_TOTAL) ||
+                    Key[0].equals(QS_MEDIA_TILE_RADIUS_TOTAL)) {
+                    notifyQsUpdate();
                 }
             }
             if (Key[0].equals(QS_MEDIA_SHOW_ALBUM_ART) ||
@@ -452,6 +514,8 @@ public class QsTileCustomization extends XposedMods {
             log(t);
         }
 
+//        hookSeparateQs();
+
     }
 
 
@@ -498,6 +562,8 @@ public class QsTileCustomization extends XposedMods {
 
     private void hookQsColors15() {
 
+        ReflectedClass QsViewOutlineProviderKtClz = ReflectedClass.of(QsViewOutlineProviderKt.class.getName());
+
         // Highlight Classic
         ReflectedClass OplusQSHighlightTileView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView");
         OplusQSHighlightTileView
@@ -510,6 +576,30 @@ public class QsTileCustomization extends XposedMods {
                         mBackgroundProxy = mHighlightTileViewBackgroundProxy;
                         setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
                     }
+                });
+        OplusQSHighlightTileView
+                .before("getBgOutlineProvider")
+                .run(param -> {
+                     if (!customHighlightTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
+                });
+        ReflectedClass OplusQSHighlightTileViewImpl = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        OplusQSHighlightTileViewImpl
+                .before("getOutlineProviderForHighlightTile")
+                .run(param -> {
+                    if (!qsCustomHighlightTileColors) return;
+                    param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
+                });
+        QsViewOutlineProviderKtClz
+                .before("getOutlineProviderForHighlightTile")
+                        .run(param -> {
+                            if (!qsCustomHighlightTileColors) return;
+                            param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
+                        });
+        OplusQSHighlightTileView
+                .after("onShapeChanged")
+                .run(param -> {
+                    callMethod(getObjectField(param.thisObject, "getBgOutlineProvider"), "invalidateOutline");
                 });
 
         // Base Classic
@@ -525,19 +615,38 @@ public class QsTileCustomization extends XposedMods {
                         setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
                     }
                 });
+        OplusQSTileBaseView
+                .before("getBgOutlineProvider")
+                .run(param -> {
+                    if (!customTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, tileRadius)));
+                });
+        QsViewOutlineProviderKtClz
+                .before("getTileViewOutlineProvider")
+                .run(param -> {
+                    if (!customTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, tileRadius)));
+                });
+
 
         // Highlight separated
         ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         OplusQSHighlightPluginTileView
                 .afterConstruction()
                 .run(param -> {
-                    if (qsCustomHighlightTileColors) {
+                    if (qsCustomHighlightIconTileColors) {
                         mHighlightPluginTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
                         QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "mBackgroundProxy");
                         mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
                         mBackgroundProxy = mHighlightPluginTileViewBackgroundProxy;
                         setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
                     }
+                });
+        OplusQSHighlightPluginTileView
+                .before("getBgOutlineProvider")
+                .run(param -> {
+                    if (!customHighlightTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
                 });
 
         // Highlight icon background
@@ -553,6 +662,26 @@ public class QsTileCustomization extends XposedMods {
                         default -> qsDisabledColorHighlightIcon;
                     };
                     callMethod(param.thisObject, "setIconBackgroundColor", color);
+                });
+
+        // Media Panel
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        OplusQsMediaPanelView
+                .afterConstruction()
+                .run(param -> {
+                    if (qsCustomMediaTileColor) {
+                        mStaticViewBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
+                        QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
+                        mStaticViewBackgroundProxy.setColors(qsMediaTileColor);
+                        mBackgroundProxy = mStaticViewBackgroundProxy;
+                        setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                    }
+                });
+        OplusQsMediaPanelView
+                .before("getBgOutlineProvider")
+                .run(param -> {
+                    if (!customMediaTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, mediaTileRadius)));
                 });
 
         // My device tile
@@ -583,6 +712,82 @@ public class QsTileCustomization extends XposedMods {
 
     }
 
+    private Object getTileOutlineTest(View v, int radius) {
+        ReflectedClass clazz = ReflectedClass.of(QsViewOutlineProvider.Companion.getClass());
+
+        Method targetMethod = null;
+        int maxParams = 0;
+        List<Method> methods = new ArrayList<>();
+        methods.addAll(Arrays.asList(clazz.getClazz().getDeclaredMethods()));
+        methods.addAll(Arrays.asList(clazz.getClazz().getMethods()));
+        for (Method method : methods) {
+            if (method.getName().contains("$default")) {
+                Log.d("QsTileCustomization", "getTileOutlineTest: " + method.getName());
+                int paramCount = method.getParameterTypes().length;
+                if (paramCount > maxParams) {
+                    targetMethod = method;
+                    maxParams = paramCount;
+                }
+            }
+        }
+
+        if (targetMethod != null) {
+            XposedBridge.log("QsTileCustomization getTileOutlineTest method found: " + targetMethod.getName() + " " + Arrays.toString(targetMethod.getParameterTypes()));
+            targetMethod.setAccessible(true);
+
+            // Step 2: Crea i parametri in base ai tipi richiesti
+            Class<?>[] paramTypes = targetMethod.getParameterTypes();
+            Object[] args = new Object[maxParams];
+
+            for (int i = 0; i < maxParams; i++) {
+                Class<?> type = paramTypes[i];
+                if (type == QsViewOutlineProvider.Companion.getClass()) {
+                    args[i] = QsViewOutlineProvider.Companion;
+                } else if (type == View.class) {
+                    args[i] = v;
+                } else if (type == boolean.class || type == Boolean.class) {
+                    args[i] = true;
+                } else if (Function.class.isAssignableFrom(type)) {
+                    args[i] = (Function<Context, Float>) Context -> Float.valueOf(radius); // tua funzione
+                } else if (type == int.class) {
+                    args[i] = 6; // maschera dei parametri opzionali
+                } else if (type == Object.class) {
+                    args[i] = null; // Kotlin mette questo a fine per default-call
+                } else {
+                    args[i] = null; // fallback
+                }
+            }
+
+            // Step 3: chiama il metodo
+            try {
+                return callStaticMethod(clazz.getClazz(), targetMethod.getName(), args); // metodo statico
+            } catch (Throwable t) {
+                XposedBridge.log("QsTileCustomization - getTileOutlineTest: " + t.getMessage());
+            }
+
+        } else {
+            XposedBridge.log("❌ Nessun metodo $default trovato.");
+        }
+        return null;
+    }
+
+    private Object getTileOutline(View v, int radius) {
+        try {
+            return QsViewOutlineProvider.Companion.getQsViewRoundRectOutlineProvider$default(QsViewOutlineProvider.Companion, v, false,
+                    o -> Float.valueOf(radius), 2, null);
+        } catch (Throwable ignored) {
+            try {
+                return QsViewOutlineProvider.Companion.getQsViewRoundRectOutlineProvider$default(QsViewOutlineProvider.Companion, v, false, false,
+                        o -> Float.valueOf(radius), 2, null);
+            } catch (Throwable ignored2) {
+//                try {
+//
+//                }
+            }
+        }
+        return null;
+    }
+
     public void hookQsTileAnimation() {
         ReflectedClass OplusQSTileBaseView = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView" /* OOS15 */,
@@ -607,7 +812,7 @@ public class QsTileCustomization extends XposedMods {
         }
         OplusQSHighlightTileView.after("performClick").run(animationHook);
 
-        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         if (OplusQSHighlightPluginTileView.getClazz() != null) {
             OplusQSHighlightPluginTileView.after("performViewClick").run(animationHook);
         }
@@ -625,8 +830,11 @@ public class QsTileCustomization extends XposedMods {
                         mOplusQsMediaDrawable = mOplusQsMediaDefaultBackground.getConstantState().newDrawable().mutate();
                     }
                     if (Build.VERSION.SDK_INT < 35) {
-                        if (qsInactiveColorEnabled) {
-                            mOplusQsMediaDrawable.setTint(qsInactiveColor);
+                        if (qsCustomMediaTileColor) {
+                            mOplusQsMediaDrawable.setTint(qsMediaTileColor);
+                            if (mOplusQsMediaDrawable instanceof GradientDrawable gradient) {
+                                gradient.setGradientRadius(dp2px(mContext, mediaTileRadius));
+                            }
                             mOplusQsMediaDrawable.invalidateSelf();
                             mOplusQsMediaView.setBackground(mOplusQsMediaDrawable);
                         } else {
@@ -705,12 +913,15 @@ public class QsTileCustomization extends XposedMods {
         float radius = 0f;
         try {
             GradientDrawable defBg = (GradientDrawable) mOplusQsMediaDefaultBackground;
-            radius = defBg.getCornerRadius();
+            radius = customMediaTileRadius ?
+                    dp2px(mContext, mediaTileRadius) : defBg.getCornerRadius();
         } catch (Throwable t) {
             log("Oxygen Customizer - QsTileCustomization error: " + t.getMessage());
         }
         if (Build.VERSION.SDK_INT >= 35) {
-            radius = getMediaPanelRadius(mContext);
+            radius = customMediaTileRadius ?
+                    dp2px(mContext, mediaTileRadius) :
+                    getMediaPanelRadius(mContext);
         }
         Bitmap artRounded = DrawableConverter.getRoundedCornerBitmap(mArt, radius);
         Bitmap oldArtRounded = DrawableConverter.getRoundedCornerBitmap(oldArt, radius);
@@ -991,6 +1202,7 @@ public class QsTileCustomization extends XposedMods {
         } catch (Throwable t) {
             XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + Log.getStackTraceString(t));
         }
+        XposedBridge.log("QsTileCustomization notifyQsUpdate: 0 " + currentShape);
         callMethod(mPersonalityManager, "notifyListener", 0);
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }
@@ -1122,6 +1334,105 @@ public class QsTileCustomization extends XposedMods {
         }
         notifyQsUpdate();
         SystemUtils.doubleToggleDarkMode();
+    }
+
+    private void hookSeparateQs() {
+        if (Build.VERSION.SDK_INT < 35) return;
+
+        mContext.registerReceiver(mDeviceProfileReceiver, new IntentFilter(BuildConfig.APPLICATION_ID+".qsupdate"), RECEIVER_EXPORTED);
+
+        ReflectedClass DeviceProfile = ReflectedClass.of("com.oplus.systemui.plugins.qs.DeviceProfile");
+        DeviceProfile
+                .afterConstruction()
+                .run(param -> mDeviceProfile = param.thisObject);
+
+        ReflectedClass OplusLargeTileContainerViewClz = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView");
+
+        OplusLargeTileContainerViewClz
+                .before("onMeasure")
+                        .run(param -> {
+                            setIntField(param.thisObject, "mRows", 4);
+                                });
+
+        OplusLargeTileContainerViewClz
+                .after("onFinishInflate")
+                .run(param -> {
+                    ArrayList mViewCells = (ArrayList) getObjectField(param.thisObject, "mViewCells");
+                    ViewGroup mMediaPanelContainer = (ViewGroup) getObjectField(param.thisObject, "mMediaPanelContainer");
+                    ViewGroup mBrightnessTileContainer = (ViewGroup) getObjectField(param.thisObject, "mBrightnessTileContainer");
+                    ViewGroup mVolumeTileContainer = (ViewGroup) getObjectField(param.thisObject, "mVolumeTileContainer");
+                    ViewGroup mFirstTileContainer = (ViewGroup) getObjectField(param.thisObject, "mFirstTileContainer");
+                    ViewGroup mSecondTileContainer = (ViewGroup) getObjectField(param.thisObject, "mSecondTileContainer");
+                    ReflectedClass ViewCellInfoClz = ReflectedClass.of(mViewCells.get(0).getClass());
+                    for (int i = 0; i < mViewCells.size(); i++) {
+                        OplusLargeTileContainerView.ViewCellInfo cell = (OplusLargeTileContainerView.ViewCellInfo) mViewCells.get(i);
+                        Field viewField = null;
+                        Field xField = null;
+                        Field yField = null;
+                        Field spanXField = null;
+                        Field spanYField = null;
+
+                        for (Field field : cell.getClass().getDeclaredFields()) {
+                            field.setAccessible(true);
+                            if (field.getType() == View.class) {
+                                viewField = field;
+                            } else if (field.getType() == int.class) {
+                                if (xField == null) xField = field;
+                                else if (yField == null) yField = field;
+                                else if (spanXField == null) spanXField = field;
+                                else if (spanYField == null) spanYField = field;
+                            }
+                        }
+
+                        if (viewField == null || xField == null || yField == null || spanXField == null || spanYField == null) {
+                            continue;
+                        }
+
+                        View v = (View) viewField.get(cell);
+
+                        if (v == mMediaPanelContainer) {
+                            xField.setInt(cell, 2);
+                            yField.setInt(cell, 2);
+                            spanXField.setInt(cell, 0);
+                            spanYField.setInt(cell, 0);
+                        } else if (v == mFirstTileContainer) {
+                            xField.setInt(cell, 2);
+                            yField.setInt(cell, 1);
+                            spanXField.setInt(cell, 0);
+                            spanYField.setInt(cell, 2);
+                        } else if (v == mSecondTileContainer) {
+                            xField.setInt(cell, 2);
+                            yField.setInt(cell, 1);
+                            spanXField.setInt(cell, 0);
+                            spanYField.setInt(cell, 3);
+                        } else if (v == mBrightnessTileContainer) {
+                            xField.setInt(cell, 1);
+                            yField.setInt(cell, 2);
+                            spanXField.setInt(cell, 2);
+                            spanYField.setInt(cell, 2);
+                        } else if (v == mVolumeTileContainer) {
+                            xField.setInt(cell, 1);
+                            yField.setInt(cell, 2);
+                            spanXField.setInt(cell, 3);
+                            spanYField.setInt(cell, 2);
+                        }
+                    }
+                    ViewGroup qsTil = (ViewGroup) param.thisObject;
+                    Context c = qsTil.getContext();
+                    QsViewWeather qsView = new QsViewWeather(mContext);
+                    qsTil.addView(qsView);
+                    ReflectionTools.dumpClass(ViewCellInfoClz.getClazz());
+                    Object qsViewCell = ViewCellInfoClz.getClazz().getConstructor(
+                            OplusLargeTileContainerView.class, View.class, int.class, int.class, int.class, int.class
+                    ).newInstance(
+                            param.thisObject, qsView, 2, 0, 2, 2
+                    );
+                    mViewCells.add(qsViewCell);
+                    setObjectField(param.thisObject, "mViewCells", mViewCells);
+                    qsTil.requestLayout();
+                    qsTil.postInvalidate();
+                    XposedBridge.log("Oxygen Customizer - QsTileCustomization: QsWeatherWidget added");
+                });
     }
 
 }

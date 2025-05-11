@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/quick_settings_tiles_customize_category_title">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_custom_media_tiles_color"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/quick_settings_tile_custom_color"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_media_tile_color"
+            android:title="@string/background_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/qs_tiles_custom_radius"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="off"
+            android:key="qs_media_tile_custom_radius_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_custom_radius"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="qs_media_tile_custom_radius_total"
+            android:title="@string/qs_tile_radius"
+            app:defaultValue="0"
+            app:maxVal="30"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="dp" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/media_art_title"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_media_show_album_art"
+            android:summary="@string/media_art_title_qs_summary"
+            android:title="@string/media_art_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusMenuPreference
+            android:defaultValue="0"
+            android:entries="@array/qs_media_art_filter_entries"
+            android:entryValues="@array/qs_media_art_filter_values"
+            android:key="qs_media_art_filter"
+            android:title="@string/albumart_filter_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="qs_media_blur_amount"
+            android:title="@string/albumart_blur_title"
+            app:defaultValue="30"
+            app:maxVal="100"
+            app:minVal="10"
+            app:tickInterval="5"
+            app:valueFormat="%" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_media_art_tint_color"
+            android:title="@string/custom_color"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="qs_media_art_tint_amount"
+            android:title="@string/albumart_tint_intensity_title"
+            app:defaultValue="30"
+            app:maxVal="70"
+            app:minVal="20"
+            app:tickInterval="5"
+            app:valueFormat="%" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

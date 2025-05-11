@@ -208,6 +208,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
@@ -235,6 +239,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
@@ -246,6 +251,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
@@ -557,6 +563,10 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
                         instance.mPreferences.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
             }
+            // Media
+            case QS_MEDIA_TILE_COLOR -> {
+                return instance.mPreferences.getBoolean(QS_MEDIA_TILE_CUSTOM_COLOR, false);
+            }
             case "brightness_slider_progress_color_mode" -> {
                 return instance.mPreferences.getBoolean("customize_brightness_slider", false);
             }
@@ -600,13 +610,22 @@ public class PreferenceHelper {
                  QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
                  QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
                  QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT -> {
-                return instance.mPreferences.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
+                return instance.mPreferences.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false) && Build.VERSION.SDK_INT < 35;
+            }
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOTAL -> {
+                return instance.mPreferences.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false) && Build.VERSION.SDK_INT >= 35;
             }
             case QS_TILE_RADIUS_TOP_LEFT,
                  QS_TILE_RADIUS_TOP_RIGHT,
                  QS_TILE_RADIUS_BOTTOM_LEFT,
                  QS_TILE_RADIUS_BOTTOM_RIGHT -> {
-                return instance.mPreferences.getBoolean(QS_TILE_RADIUS, false);
+                return instance.mPreferences.getBoolean(QS_TILE_RADIUS, false) && Build.VERSION.SDK_INT < 35;
+            }
+            case QS_TILE_RADIUS_TOTAL -> {
+                return instance.mPreferences.getBoolean(QS_TILE_RADIUS, false) && Build.VERSION.SDK_INT >= 35;
+            }
+            case QS_MEDIA_TILE_RADIUS_TOTAL -> {
+                return instance.mPreferences.getBoolean(QS_MEDIA_TILE_RADIUS, false);
             }
 
             // Gesture Prefs
@@ -1251,6 +1270,8 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT, 0) + "dp";
             case QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT ->
                     instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT, 0) + "dp";
+            case QS_TILE_HIGHTLIGHT_RADIUS_TOTAL ->
+                    instance.mPreferences.getSliderInt(QS_TILE_HIGHTLIGHT_RADIUS_TOTAL, 0) + "dp";
             case QS_TILE_RADIUS_TOP_LEFT ->
                     instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOP_LEFT, 0) + "dp";
             case QS_TILE_RADIUS_TOP_RIGHT ->
@@ -1259,6 +1280,11 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_LEFT, 0) + "dp";
             case QS_TILE_RADIUS_BOTTOM_RIGHT ->
                     instance.mPreferences.getSliderInt(QS_TILE_RADIUS_BOTTOM_RIGHT, 0) + "dp";
+            case QS_TILE_RADIUS_TOTAL ->
+                    instance.mPreferences.getSliderInt(QS_TILE_RADIUS_TOTAL, 0) + "dp";
+            case QS_MEDIA_TILE_RADIUS_TOTAL ->
+                    instance.mPreferences.getSliderInt(QS_MEDIA_TILE_RADIUS_TOTAL, 0) + "dp";
+
 
             case QS_TILE_ANIMATION_DURATION ->
                     instance.mPreferences.getSliderInt(QS_TILE_ANIMATION_DURATION, 1) + "s";

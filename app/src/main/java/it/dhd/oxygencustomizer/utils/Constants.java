@@ -235,6 +235,8 @@ public final class Constants {
             public static final String QS_TILE_DISABLED_COLOR = "qs_tile_disabled_color";
 
             // Media Tile
+            public static final String QS_MEDIA_TILE_CUSTOM_COLOR = "qs_custom_media_tiles_color";
+            public static final String QS_MEDIA_TILE_COLOR = "qs_media_tile_color";
             public static final String QS_MEDIA_SHOW_ALBUM_ART = "qs_media_show_album_art";
             public static final String QS_MEDIA_ART_FILTER = "qs_media_art_filter";
             public static final String QS_MEDIA_ART_BLUR_AMOUNT = "qs_media_blur_amount";
@@ -265,16 +267,21 @@ public final class Constants {
             // Qs Radius
             // Highlight
             public static final String QS_TILE_HIGHTLIGHT_RADIUS = "qs_tile_highlight_custom_radius_enabled";
+            public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOTAL = "qs_tile_highlight_custom_radius_total";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT = "qs_tile_highlight_custom_radius_top_left";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT = "qs_tile_highlight_custom_radius_top_right";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT = "qs_tile_highlight_custom_radius_bottom_left";
             public static final String QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT = "qs_tile_highlight_custom_radius_bottom_right";
             // Base
             public static final String QS_TILE_RADIUS = "qs_tile_custom_radius_enabled";
+            public static final String QS_TILE_RADIUS_TOTAL = "qs_tile_custom_radius_total";
             public static final String QS_TILE_RADIUS_TOP_LEFT = "qs_tile_custom_radius_top_left";
             public static final String QS_TILE_RADIUS_TOP_RIGHT = "qs_tile_custom_radius_top_right";
             public static final String QS_TILE_RADIUS_BOTTOM_LEFT = "qs_tile_custom_radius_bottom_left";
             public static final String QS_TILE_RADIUS_BOTTOM_RIGHT = "qs_tile_custom_radius_bottom_right";
+            // Media
+            public static final String QS_MEDIA_TILE_RADIUS = "qs_media_tile_custom_radius_enabled";
+            public static final String QS_MEDIA_TILE_RADIUS_TOTAL = "qs_media_tile_custom_radius_total";
 
             public static final String[] QS_UPDATE_PREFS = {
                     QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH,
@@ -305,15 +312,21 @@ public final class Constants {
                     QS_SLIDERS_REMOVE_BLUR,
                     QS_SLIDERS_BLEND_COLOR,
                     QS_TILE_HIGHTLIGHT_RADIUS,
+                    QS_TILE_HIGHTLIGHT_RADIUS_TOTAL,
                     QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT,
                     QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT,
                     QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT,
                     QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT,
                     QS_TILE_RADIUS,
+                    QS_TILE_RADIUS_TOTAL,
                     QS_TILE_RADIUS_TOP_LEFT,
                     QS_TILE_RADIUS_TOP_RIGHT,
                     QS_TILE_RADIUS_BOTTOM_LEFT,
-                    QS_TILE_RADIUS_BOTTOM_RIGHT
+                    QS_TILE_RADIUS_BOTTOM_RIGHT,
+                    QS_MEDIA_TILE_COLOR,
+                    QS_MEDIA_TILE_CUSTOM_COLOR,
+                    QS_MEDIA_TILE_RADIUS,
+                    QS_MEDIA_TILE_RADIUS_TOTAL
             };
 
         }
@@ -431,6 +444,14 @@ public final class Constants {
                     getBottomSxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP),
                     getBottomDxR(QS_HEADER_CLOCK_STOCK_DATE_BACKGROUND_CHIP)
             };
+        }
+
+        public static class SeparateQsPrefs {
+            public static final String SEPARATE_HIDE_MENU = "separate_qs_hide_menu";
+            public static final String SEPARATE_HIDE_EDIT = "separate_qs_hide_edit";
+            public static final String SEPARATE_QS_ROWS = "separate_qs_rows";
+            public static final String SEPARATE_QS_LAYOUT = "layout_cells";
+            public static final String SEPARATE_QS_WIDGETS = "separate_widgets";
         }
 
         public static class Buttons {

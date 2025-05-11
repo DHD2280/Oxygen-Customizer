@@ -66,6 +66,15 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="qs_tile_custom_radius_total"
+            android:title="@string/qs_tile_radius"
+            app:defaultValue="0"
+            app:maxVal="30"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="dp" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
             android:key="qs_tile_custom_radius_top_left"
             android:title="@string/chip_round_corners_top_sx_radius"
             app:defaultValue="0"
