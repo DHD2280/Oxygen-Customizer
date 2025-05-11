@@ -1,12 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.*;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
@@ -21,7 +19,6 @@ import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -57,14 +54,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.oplus.posteffect.BlurDrawable;
 import com.oplus.posteffect.ForegroundBlurParam;
 import com.oplus.systemui.plugins.qs.DeviceProfile;
-import com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 import com.oplus.systemui.qs.base.widget.QsViewOutlineProvider;
 import com.oplus.systemui.qs.widget.QsViewOutlineProviderKt;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -86,7 +81,6 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsHighlightTileViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsTileViewBackgroundProxyImplOC;
@@ -109,7 +103,6 @@ import it.dhd.oxygencustomizer.xposed.utils.viewpager.TranslationYTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomInTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutSlideTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.ZoomOutTransformer;
-import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather;
 
 public class QsTileCustomization extends XposedMods {
 
@@ -193,25 +186,6 @@ public class QsTileCustomization extends XposedMods {
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightTileViewBackgroundProxy = null;
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightPluginTileViewBackgroundProxy = null;
     private StaticViewBackgroundProxyImplOC mStaticViewBackgroundProxy = null;
-
-    // Separate Qs
-    private Object mDeviceProfile;
-
-    private BroadcastReceiver mDeviceProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int cellSize = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellSize();
-            int marginHorizontal = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellMarginHorizontal();
-            int marginVertical = ((DeviceProfile)mDeviceProfile).getCellCalculator().getCellMarginVertical();
-            Intent i = new Intent();
-            i.setAction(BuildConfig.APPLICATION_ID + ".QS_TILE_CUSTOMIZATION");
-            i.putExtra("cellSize", cellSize);
-            i.putExtra("marginHorizontal", marginHorizontal);
-            i.putExtra("marginVertical", marginVertical);
-            i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-            mContext.sendBroadcast(i);
-        }
-    };
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -1334,105 +1308,6 @@ public class QsTileCustomization extends XposedMods {
         }
         notifyQsUpdate();
         SystemUtils.doubleToggleDarkMode();
-    }
-
-    private void hookSeparateQs() {
-        if (Build.VERSION.SDK_INT < 35) return;
-
-        mContext.registerReceiver(mDeviceProfileReceiver, new IntentFilter(BuildConfig.APPLICATION_ID+".qsupdate"), RECEIVER_EXPORTED);
-
-        ReflectedClass DeviceProfile = ReflectedClass.of("com.oplus.systemui.plugins.qs.DeviceProfile");
-        DeviceProfile
-                .afterConstruction()
-                .run(param -> mDeviceProfile = param.thisObject);
-
-        ReflectedClass OplusLargeTileContainerViewClz = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView");
-
-        OplusLargeTileContainerViewClz
-                .before("onMeasure")
-                        .run(param -> {
-                            setIntField(param.thisObject, "mRows", 4);
-                                });
-
-        OplusLargeTileContainerViewClz
-                .after("onFinishInflate")
-                .run(param -> {
-                    ArrayList mViewCells = (ArrayList) getObjectField(param.thisObject, "mViewCells");
-                    ViewGroup mMediaPanelContainer = (ViewGroup) getObjectField(param.thisObject, "mMediaPanelContainer");
-                    ViewGroup mBrightnessTileContainer = (ViewGroup) getObjectField(param.thisObject, "mBrightnessTileContainer");
-                    ViewGroup mVolumeTileContainer = (ViewGroup) getObjectField(param.thisObject, "mVolumeTileContainer");
-                    ViewGroup mFirstTileContainer = (ViewGroup) getObjectField(param.thisObject, "mFirstTileContainer");
-                    ViewGroup mSecondTileContainer = (ViewGroup) getObjectField(param.thisObject, "mSecondTileContainer");
-                    ReflectedClass ViewCellInfoClz = ReflectedClass.of(mViewCells.get(0).getClass());
-                    for (int i = 0; i < mViewCells.size(); i++) {
-                        OplusLargeTileContainerView.ViewCellInfo cell = (OplusLargeTileContainerView.ViewCellInfo) mViewCells.get(i);
-                        Field viewField = null;
-                        Field xField = null;
-                        Field yField = null;
-                        Field spanXField = null;
-                        Field spanYField = null;
-
-                        for (Field field : cell.getClass().getDeclaredFields()) {
-                            field.setAccessible(true);
-                            if (field.getType() == View.class) {
-                                viewField = field;
-                            } else if (field.getType() == int.class) {
-                                if (xField == null) xField = field;
-                                else if (yField == null) yField = field;
-                                else if (spanXField == null) spanXField = field;
-                                else if (spanYField == null) spanYField = field;
-                            }
-                        }
-
-                        if (viewField == null || xField == null || yField == null || spanXField == null || spanYField == null) {
-                            continue;
-                        }
-
-                        View v = (View) viewField.get(cell);
-
-                        if (v == mMediaPanelContainer) {
-                            xField.setInt(cell, 2);
-                            yField.setInt(cell, 2);
-                            spanXField.setInt(cell, 0);
-                            spanYField.setInt(cell, 0);
-                        } else if (v == mFirstTileContainer) {
-                            xField.setInt(cell, 2);
-                            yField.setInt(cell, 1);
-                            spanXField.setInt(cell, 0);
-                            spanYField.setInt(cell, 2);
-                        } else if (v == mSecondTileContainer) {
-                            xField.setInt(cell, 2);
-                            yField.setInt(cell, 1);
-                            spanXField.setInt(cell, 0);
-                            spanYField.setInt(cell, 3);
-                        } else if (v == mBrightnessTileContainer) {
-                            xField.setInt(cell, 1);
-                            yField.setInt(cell, 2);
-                            spanXField.setInt(cell, 2);
-                            spanYField.setInt(cell, 2);
-                        } else if (v == mVolumeTileContainer) {
-                            xField.setInt(cell, 1);
-                            yField.setInt(cell, 2);
-                            spanXField.setInt(cell, 3);
-                            spanYField.setInt(cell, 2);
-                        }
-                    }
-                    ViewGroup qsTil = (ViewGroup) param.thisObject;
-                    Context c = qsTil.getContext();
-                    QsViewWeather qsView = new QsViewWeather(mContext);
-                    qsTil.addView(qsView);
-                    ReflectionTools.dumpClass(ViewCellInfoClz.getClazz());
-                    Object qsViewCell = ViewCellInfoClz.getClazz().getConstructor(
-                            OplusLargeTileContainerView.class, View.class, int.class, int.class, int.class, int.class
-                    ).newInstance(
-                            param.thisObject, qsView, 2, 0, 2, 2
-                    );
-                    mViewCells.add(qsViewCell);
-                    setObjectField(param.thisObject, "mViewCells", mViewCells);
-                    qsTil.requestLayout();
-                    qsTil.postInvalidate();
-                    XposedBridge.log("Oxygen Customizer - QsTileCustomization: QsWeatherWidget added");
-                });
     }
 
 }
