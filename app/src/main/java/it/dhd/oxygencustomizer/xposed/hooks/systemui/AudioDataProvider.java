@@ -14,6 +14,7 @@ import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -264,7 +265,13 @@ public class AudioDataProvider extends XposedMods {
             XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
         }
         if (colorScheme == null) return;
-        int newMediaArtColor = (int) (isDarkThemeOn ? callMethod(callMethod(colorScheme, "getAccent1"), "getS100") : callMethod(callMethod(colorScheme, "getAccent1"), "getS800"));
+        int newMediaArtColor;
+        if (Build.VERSION.SDK_INT == 33) {
+            List<Integer> accent1 = (List<Integer>) callMethod(colorScheme, "getAccent1");
+            newMediaArtColor = (int) (isDarkThemeOn ? accent1.get(0) : accent1.get(accent1.size()-2));
+        } else {
+            newMediaArtColor = (int) (isDarkThemeOn ? callMethod(callMethod(colorScheme, "getAccent1"), "getS100") : callMethod(callMethod(colorScheme, "getAccent1"), "getS800"));
+        }
 
 
         if (mCurrentMediaArtColor != newMediaArtColor) {
