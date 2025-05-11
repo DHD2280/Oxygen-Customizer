@@ -1,55 +1,68 @@
-package com.oplus.systemui.qs.base.widget;
+package com.oplus.systemui.qs.base.widget
 
-import com.android.systemui.plugins.qs.QSTile;
+import com.android.systemui.plugins.qs.QSTile
+import java.util.concurrent.atomic.AtomicReference
 
-import java.util.concurrent.atomic.AtomicReference;
-
-public abstract class QsViewBackgroundProxy implements QsViewBackground {
-
-    public final AtomicReference backgroundReference;
-    public QsViewOutlineProvider mBgOutlineProvider;
-    public final QsViewInfoProvider qsView;
+abstract class QsViewBackgroundProxy(val qsView: QsViewInfoProvider?) : QsViewBackground {
+    val backgroundReference: AtomicReference<*>
+    var mBgOutlineProvider: QsViewOutlineProvider? = null
 
 
-    public QsViewBackgroundProxy(QsViewInfoProvider qsViewInfoProvider) {
-        this.qsView = qsViewInfoProvider;
-        this.backgroundReference = new AtomicReference();
+    init {
+        this.backgroundReference = AtomicReference<Any?>()
     }
 
-    public final QsViewOutlineProvider ensureBgOutlineProvider() {
-        throw new UnsupportedOperationException("Stub!");
-    }
-
-    public abstract QsViewBackground getTargetQsViewBackground();
-
-    @Override // com.oplus.systemui.p127qs.base.widget.QsViewBackground
-    public void onBackgroundAttach() {
-        switchBackgroundTo(getTargetQsViewBackground());
-    }
-
-    @Override // com.oplus.systemui.p127qs.base.widget.QsViewBackground
-    public void refreshViewBackground() {
-        switchBackgroundTo(getTargetQsViewBackground()).refreshViewBackground();
-    }
-
-    @Override // com.oplus.systemui.p127qs.base.widget.QsViewBackground
-    public void handleStateChanged(QSTile.State state) {
-        switchBackgroundTo(getTargetQsViewBackground()).handleStateChanged(state);
-    }
-
-    public synchronized QsViewBackground switchBackgroundTo(QsViewBackground qsViewBackground) {
-        throw new UnsupportedOperationException("Stub!");
-    }
-
-    @Override // com.oplus.systemui.p127qs.base.widget.QsViewBackground
-    public void onBackgroundDetach() {
-        throw new UnsupportedOperationException("Stub!");
-    }
-
-    @Override // com.oplus.systemui.p127qs.base.widget.QsViewBackground
-    public void onClick() {
-        throw new UnsupportedOperationException("Stub!");
+    fun getQsTileViewBackgroundProxy(qsTileViewInfoProvider: QsTileViewInfoProvider?): QsViewBackgroundProxy {
+        throw UnsupportedOperationException("Stub!")
     }
 
 
+    fun ensureBgOutlineProvider(): QsViewOutlineProvider? {
+        throw UnsupportedOperationException("Stub!")
+    }
+
+    abstract val targetQsViewBackground: QsViewBackground?
+
+    // com.oplus.systemui.p127qs.base.widget.QsViewBackground
+    override fun onBackgroundAttach() {
+        switchBackgroundTo(this.targetQsViewBackground)
+    }
+
+    // com.oplus.systemui.p127qs.base.widget.QsViewBackground
+    override fun refreshViewBackground() {
+        switchBackgroundTo(this.targetQsViewBackground)!!.refreshViewBackground()
+    }
+
+    // com.oplus.systemui.p127qs.base.widget.QsViewBackground
+    override fun handleStateChanged(state: QSTile.State?) {
+        switchBackgroundTo(this.targetQsViewBackground)!!.handleStateChanged(state)
+    }
+
+    @Synchronized
+    fun switchBackgroundTo(qsViewBackground: QsViewBackground?): QsViewBackground? {
+        throw UnsupportedOperationException("Stub!")
+    }
+
+    // com.oplus.systemui.p127qs.base.widget.QsViewBackground
+    override fun onBackgroundDetach() {
+        throw UnsupportedOperationException("Stub!")
+    }
+
+    // com.oplus.systemui.p127qs.base.widget.QsViewBackground
+    override fun onClick() {
+        throw UnsupportedOperationException("Stub!")
+    }
+
+
+    companion object {
+        fun getMediaPanelBackgroundProxy(qsStaticViewInfoProvider: QsStaticViewInfoProvider?): QsViewBackgroundProxy? {
+            throw UnsupportedOperationException("Stub!")
+        }
+
+        fun getQsTileViewBackgroundProxy(qsTileViewInfoProvider: QsTileViewInfoProvider?): QsViewBackgroundProxy {
+            throw UnsupportedOperationException("Stub!")
+        }
+
+
+    }
 }

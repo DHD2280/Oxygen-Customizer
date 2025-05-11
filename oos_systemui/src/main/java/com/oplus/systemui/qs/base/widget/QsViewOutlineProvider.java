@@ -14,6 +14,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
+
 public abstract class QsViewOutlineProvider extends ViewOutlineProvider {
 
     public final View hostView;
@@ -104,6 +107,34 @@ public abstract class QsViewOutlineProvider extends ViewOutlineProvider {
         }
     }
 
+    public static final Companion Companion = new Companion();
+
+    public static class Companion {
+
+        public QsViewOutlineProvider getQsViewRoundRectOutlineProvider(View view, Function<View, ?> function) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+
+        public QsViewOutlineProvider getQsViewRoundRectOutlineProvider(View view, boolean roundBackground, Function<View, ?> function) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+
+        public static /* synthetic */ QsViewOutlineProvider getQsViewRoundRectOutlineProvider$default(Companion companion, View view, boolean z, Function function, int i2, Object obj) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+
+        public static /* synthetic */ QsViewOutlineProvider getQsViewRoundRectOutlineProvider$default(Companion companion, View view, boolean z, Function function, int i2) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+
+        public static /* synthetic */ QsViewOutlineProvider getQsViewRoundRectOutlineProvider$default(Companion companion, View view, boolean z, boolean z2, Function function, int i2, Object obj) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+
+        public QsViewOutlineProvider getQsViewPathOutlineProvider(View view, Function0<?> f0, Function1<?, ?> f1, Function<View, ?> f) {
+            throw new UnsupportedOperationException("Stub!");
+        }
+    }
 
 
 }

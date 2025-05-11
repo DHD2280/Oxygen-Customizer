@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.android.systemui.plugins.qs.QSIconView;
+import com.oplus.systemui.qs.base.util.QsLottieUtils;
 
 public interface QsTileViewInfoProvider extends QsViewInfoProvider {
 
@@ -33,7 +34,7 @@ public interface QsTileViewInfoProvider extends QsViewInfoProvider {
         return QsViewInfoProvider.super.getLogTag();
     }
 
-//    QsLottieUtils getQsLottieController();
+    QsLottieUtils getQsLottieController();
 
     default boolean getTileCanTips() {
         return false;
