@@ -46,7 +46,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.LineHeightSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.ReplacementSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -383,7 +382,6 @@ public class StatusbarClock extends XposedMods {
                             // Based on our custom formats
                             TextView tv = (TextView) param.thisObject;
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                            XposedBridge.log("StatClock updateMinWidth: " + mClockDoubleRow);
                             if (mClockDoubleRow) {
                                 tv.setSingleLine(false);
                                 tv.setLineSpacing(0f, 0.8f);
@@ -468,7 +466,6 @@ public class StatusbarClock extends XposedMods {
                     if (param.thisObject != mClockView)
                         return; //We don't want custom format in QS header. do we?
 
-                    XposedBridge.log("getSmallTime: " + mClockDoubleRow);
                     TextView tv = (TextView) param.thisObject;
                     if (mClockDoubleRow) {
                         tv.setSingleLine(false);
