@@ -49,7 +49,7 @@ public class FeatureOption extends XposedMods {
                 .run(param -> {
                     if (showMyDevice) param.setResult(true);
                 });
-        ReflectedClass QSFeatureOption = ReflectedClass.of("com.oplusos.systemui.common.feature.QSFeatureOption");
+        ReflectedClass QSFeatureOption = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.feature.QSFeatureOption");
         if (QSFeatureOption.getClazz() != null) {
             QSFeatureOption
                     .before("isSupportMyDevice")
