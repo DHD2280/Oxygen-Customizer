@@ -202,7 +202,6 @@
     <string name="status_bar_date_style_lowercase">Kleinbuchstaben</string>
     <string name="status_bar_date_style_uppercase">Großbuchstaben</string>
     <string name="status_bar_date_format_custom">Benutzerdefiniertes Java-Format</string>
-    <string name="string_formatter_manual_body">Zusätzlich zum normalen Text sind auch dynamische Variablen verfügbar wie Datum und Temperatur:\n\n$G\&lt;format\&gt; : Gregorianisches Datum basierend auf Format*\n$P\&lt;format\&gt; : Persisches Datum basierend auf Format*\n$L für das Monddatum\n$I\&lt;calendar\&gt;&lt;format\&gt; : Islamischer Kalender. Kalender ist optional, Standard ist islamisch, Sie können auch C für islamisch-zivile und U für islamische Umalqura.\n$T\&lt;format\&gt;[interval] : Temperatur; \nFormat kann b (für Batterie), c (für CPU), g (für GPU) und s (für Skin) sein \nLetztlich gibt es eine OPTIONALE Anzahl der Aktualisierungsintervalle in Sekunden (Standard: 60 Sekunden)\n\n*nach Formatdokumentation, suche nach \"Java Datumsformat\"</string>
     <string name="preview">Vorschau</string>
     <string name="clock_date_position">Position des Datums</string>
     <string name="clock_date_right">Rechts neben der Uhrzeit</string>
@@ -396,4 +395,6 @@
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>

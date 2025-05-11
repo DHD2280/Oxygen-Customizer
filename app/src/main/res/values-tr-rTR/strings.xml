@@ -114,6 +114,7 @@
     <string name="restart_module">Kapsamlı işlemleri yeniden başlat</string>
     <string name="restart_page_scope">Sadece bu sayfa kapsamını yeniden başlat</string>
     <string name="restart_scope_message">Sistem çerçevesi hariç tüm kapsamlı işlemleri yeniden başlatmak istediğinizden emin misiniz?\nModül çalışmıyorsa bunu kullanın!\nİlgili tüm kapsamların işaretli olduğundan emin olun!</string>
+    <string name="add_notification">Bildirim ekle</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">Kullanıcı Arayüzü</string>
     <string name="navbar_mods">Modifikasyonlar</string>
@@ -206,7 +207,6 @@
     <string name="status_bar_date_style_lowercase">Küçük harf</string>
     <string name="status_bar_date_style_uppercase">Büyük harf</string>
     <string name="status_bar_date_format_custom">Özel Java biçimi</string>
-    <string name="string_formatter_manual_body">Normal metne ek olarak, Tarih ve Sıcaklık gibi dinamik değişkenler de kullanılabilir:\n\n$G&lt;biçim&gt; : Gregoryen tarih, biçime bağlı*\n$P&lt;biçim&gt; : Pers tarihi, biçime bağlı*\n$L Lunar Tarih için\n$I&lt;takvim&gt;&lt;biçim&gt; : İslami takvim. Takvim isteğe bağlıdır, varsayılan islamic\'tir, C ile İslam-Medeni ve U ile İslam Ummulkura da kullanılabilir.\n$T&lt;biçim&gt;[aralık] : Sıcaklık; \nbiçim b (pil için), c (CPU için), g (GPU için) ve s (deri için) olabilir\nSon olarak, İSTEĞE BAĞLI güncelleme aralığı saniye cinsinden (varsayılan: 60 saniye)\n\n*biçim belgeleri için \"Java Tarih Biçimi\" araması yapın</string>
     <string name="preview">Önizleme</string>
     <string name="clock_date_position">Tarih konumu</string>
     <string name="clock_date_right">Saatin sağında</string>
@@ -1381,11 +1381,21 @@
     <string name="peek_display_style_title">Önizleme ekranı stili</string>
     <string name="peek_display_minimalist">Minimalist</string>
     <string name="peek_display_custom_style">Özel</string>
+    <string name="peek_display_icon_style_title">Göz atma simge stili</string>
     <string name="peek_icon_background_color">Simge arka plan rengi</string>
+    <string name="peek_icon_size">Simge boyutu</string>
+    <string name="peek_icon_margin">Simge kenar boşluğu</string>
+    <string name="peek_icon_padding">Simge iç dolgu boşluğu</string>
     <string name="peek_card_background_color">Bildirim kartı arka plan rengi</string>
     <string name="peek_buttons_color">Butonların rengi</string>
     <string name="peek_title_color">Başlık rengi</string>
     <string name="peek_content_color">İçerik rengi</string>
+    <string name="peek_clear_all_cat">Tümünü temizleme tuşu</string>
+    <string name="peek_clear_all_mode">Tümünü temizleme modu</string>
+    <string name="peek_clear_all_mode_always_hidden">Her zaman gizli</string>
+    <string name="peek_clear_all_mode_count">Bildirim sayısına göre</string>
+    <string name="peek_clear_all_count_title">Bildirim sayısı</string>
+    <string name="peek_clear_all_count_summary">Temizleme düğmesi yalnızca bildirim sayısı seçilen sayıdan fazla olduğunda gösterilecektir</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Uygulama Gecikme Düzeltmesi</string>
     <string name="fix_lag_summary">Son kullanılanlardan uygulama açıldığında gecikmeyi düzelt</string>
@@ -1442,4 +1452,6 @@
     <string name="lsposed">LSposed</string>
     <string name="open_lsposed">LSposed\'i aç</string>
     <string name="shortcut_disabled">Kısayol devre dışı</string>
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>
