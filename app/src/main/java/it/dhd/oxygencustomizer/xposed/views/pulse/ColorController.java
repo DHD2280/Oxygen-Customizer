@@ -25,14 +25,18 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  * tile produced for Cyanogenmod
  *
  */
+
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
+
+import java.util.List;
 
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -59,16 +63,25 @@ public class ColorController
 
     private final AudioDataProvider.MediaMetadataListener mListener = new AudioDataProvider.MediaMetadataListener() {
         @Override
-        public void onMediaMetadataChanged() {}
+        public void onMediaMetadataChanged() {
+        }
 
         @Override
-        public void onPlaybackStateChanged() {}
+        public void onPlaybackStateChanged() {
+        }
 
         @Override
         public void onMediaColorsChanged() {
             Object mColorScheme = AudioDataProvider.getColorScheme();
             if (mColorScheme != null) {
                 boolean isDark = SystemUtils.isDarkMode();
+                if (Build.VERSION.SDK_INT == 33) {
+                    List<Integer> accent1 = (List<Integer>) callMethod(mColorScheme, "getAccent1");
+                    setMediaNotificationColor(isDark ?
+                            accent1.get(0) :
+                            accent1.get(accent1.size() - 2));
+                    return;
+                }
                 setMediaNotificationColor((int) ((!isDark) ?
                         callMethod(callMethod(mColorScheme, "getAccent1"), "getS100") :
                         callMethod(callMethod(mColorScheme, "getAccent1"), "getS700")));
