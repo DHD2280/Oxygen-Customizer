@@ -122,7 +122,14 @@ public class AodEdgeLight extends XposedMods {
                     });
         } else {
             ReflectedClass QuickStepContract = ReflectedClass.of("com.android.systemui.shared.system.QuickStepContract");
-            mScreenCornerRadius = (int) callStaticMethod(QuickStepContract.getClazz(), "getWindowCornerRadius", mContext);
+            Object radius = callStaticMethod(QuickStepContract.getClazz(), "getWindowCornerRadius", mContext);
+            if (radius instanceof Float) {
+                mScreenCornerRadius = (int) radius;
+            } else if (radius instanceof Integer) {
+                mScreenCornerRadius = (int) radius;
+            } else {
+                mScreenCornerRadius = 0;
+            }
             EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
         }
 
