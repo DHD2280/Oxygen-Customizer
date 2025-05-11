@@ -21,9 +21,6 @@ public final class QsTileViewBackgroundProxyImplOC extends QsViewBackgroundProxy
 
     @Override
     public QsViewBackground getTargetQsViewBackground() {
-//        if (QsViewBackgroundKt.isMixColorSupport(qsView)) {
-//            return getMixTileViewBackground();
-//        }
         return getNormalTileViewBackground();
     }
 

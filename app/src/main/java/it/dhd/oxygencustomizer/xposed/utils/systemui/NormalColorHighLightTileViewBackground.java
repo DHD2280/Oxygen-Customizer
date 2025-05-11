@@ -53,7 +53,7 @@ public abstract class NormalColorHighLightTileViewBackground extends BaseTileVie
         return createOrUpdateGradientDrawable;
     }
 
-    @Override // com.oplus.systemui.p127qs.base.widget.BaseTileViewBackground
+    @Override
     public void updateBackground(int state, boolean z, boolean z2) {
         int tileColor;
         if (iconBgAnimator != null) {
@@ -86,22 +86,18 @@ public abstract class NormalColorHighLightTileViewBackground extends BaseTileVie
     }
 
     public int obtainColorForActive() {
-//        return this.qsTileView.getActiveColorWithDarkMode(context);
         return mActiveColor;
     }
 
     public int obtainColorForInactive() {
-//        return QsColorUtil.obtainColorForQsPanelBackground(context);
         return mInactiveColor;
     }
 
     public int obtainColorForUnavailable() {
-//        return QsColorUtil.obtainColorForTileUnavailable(context);
         return unavailableColor;
     }
 
     public int obtainColorForInoperable() {
-//        return BaseTileViewBackground.Companion.setColorAlpha(obtainColorForActive(context, z), 0.3f);
         return inoperableColor;
     }
 
