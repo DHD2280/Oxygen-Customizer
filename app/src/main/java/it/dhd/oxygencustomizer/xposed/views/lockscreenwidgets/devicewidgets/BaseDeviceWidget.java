@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
 
@@ -71,9 +72,9 @@ public abstract class BaseDeviceWidget extends LinearLayout {
 
     private void setupMenuInternal() {
         popup = new PopupMenu(getContext(), this, Gravity.END);
-        popup.getMenu().add(0, -1, 0, "Remove");
+        popup.getMenu().add(0, -1, 0, appContext.getString(R.string.remove_widget));
         if (!getCustomSettings().isEmpty()) {
-            popup.getMenu().add(0, 0, 1, "Settings");
+            popup.getMenu().add(0, 0, 1, appContext.getString(R.string.settings_label));
         }
 
         popup.setOnMenuItemClickListener(item -> {

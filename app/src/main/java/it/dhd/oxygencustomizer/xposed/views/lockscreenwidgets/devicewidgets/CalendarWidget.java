@@ -33,6 +33,7 @@ import java.util.Map;
 
 import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.xposed.utils.CalendarProvider;
@@ -178,7 +179,7 @@ public class CalendarWidget extends BaseDeviceWidget {
 
     @Override
     public String getWidgetName() {
-        return "Calendar";
+        return appContext.getString(R.string.calendar_widget);
     }
 
     @Override

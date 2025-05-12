@@ -108,7 +108,7 @@ public class DeviceWidgetsAdapter extends RecyclerView.Adapter<DeviceWidgetsAdap
             });
 
             if (!deviceWidgetView.addWidget(dw)) {
-                Toast.makeText(binding.getRoot().getContext(), "Please remove one widget", Toast.LENGTH_LONG).show();
+                Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.remove_one_widget), Toast.LENGTH_LONG).show();
             }
         }
 

@@ -1429,6 +1429,9 @@
     <!-- Device Widgets -->
     <string name="widget_string">%s widget</string>
     <string name="battery_widget">Battery</string>
+    <string name="calendar_widget">Calendar</string>
+    <string name="remove_widget">Remove</string>
+    <string name="remove_one_widget">Please remove one widget</string>
 
     <string name="progress_type">Progress type</string>
     <!-- Battery Widget -->
@@ -1570,6 +1573,9 @@
 
     <!-- Separate qs tweaks -->
     <string name="qs_separate_mods">Separate QS</string>
+    <string name="qs_separate_hide_menu">Hide menu button</string>
+    <string name="qs_separate_hide_edit">Hide edit button</string>
+    <string name="qs_separate_layout">Qs layout</string>
 
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Tap on an item to configure its layout</string>
