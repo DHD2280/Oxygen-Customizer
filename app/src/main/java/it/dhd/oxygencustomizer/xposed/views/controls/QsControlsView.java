@@ -24,7 +24,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils.applyAutoBlurTint;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.QsColorUtil;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getTileActiveColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getHighlightRadius;
@@ -114,6 +113,12 @@ import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileHelper;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTile;
+import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileView;
+import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainer;
+import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainerView;
+import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather;
+import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsWeatherWidget;
 
 @SuppressLint("ViewConstructor")
 public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
@@ -159,6 +164,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private Drawable mDefaultBackground = null;
 
     // Colors
+    private boolean mCustomHighlight = false; // OOS 15 switch
+    private boolean mCustomHighlightActive = false;
+    private boolean mCustomHighlightInactive = false;
+    private int mCustomHighlightActiveColor;
+    private int mCustomHighlightInactiveColor;
+    private boolean mCustomTile = false;
     private boolean mCustomInactive = false;
     private int mCustomInactiveColor;
     private boolean mCustomActive = false;
@@ -175,7 +186,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private float[] mTileRadius = new float[8];
 
     // Our Views
-    private QsMediaTile mMediaPlayer; // Use own media player
+    private QsMediaTile mMediaPlayer = null; // Use own media player
+    private QsMediaTileView mMediaPlayerView = null; // OOS15 player
 
     public QsControlsView(@NonNull Context context) {
         super(context);
@@ -224,11 +236,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         mContainer.addView(mViewPager);
         addView(mContainer);
 
-        if (mMediaPlayer == null) {
-            mMediaPlayer = new QsMediaTile(mContext);
+        if (Build.VERSION.SDK_INT >= 35) {
+            if (mMediaPlayerView == null) {
+                mMediaPlayerView = new QsMediaTileView(mContext);
+            }
+        } else {
+            if (mMediaPlayer == null) {
+                mMediaPlayer = new QsMediaTile(mContext);
+            }
         }
 
-        collectViews(mPages, mMediaPlayer);
+        collectViews(mPages, Build.VERSION.SDK_INT >= 35 ? mMediaPlayerView : mMediaPlayer);
         setupViewPager();
 
         ControllersProvider.registerMobileDataCallback(mMobileDataCallback);
@@ -368,14 +386,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             } catch (Throwable ignored) {
             }
             if (view != null && !viewList.contains(view)) {
-                if (view == mMediaPlayer) {
+                if (view == mMediaPlayer || view == mMediaPlayerView) {
                     view.setOnLongClickListener(v -> {
                         showMediaDialog(mContainer);
                         return true;
                     });
                 }
-                if (view instanceof QsPhotoShowcaseContainer) {
-                    ((QsPhotoShowcaseContainer) view).setRadius(mPhotoRadius);
+                if (view instanceof QsPhotoShowcaseContainer showcase) {
+                    showcase.setRadius(mPhotoRadius);
+                } else if (view instanceof QsPhotoShowcaseContainerView showcase) {
+                    showcase.setRadius(mPhotoRadius);
                 } else if (view instanceof QsWeatherWidget weatherWidget) {
                     weatherWidget.setOnLongClickListener(v -> {
                         mActivityLauncherUtils.launchWeatherActivity(true);
@@ -440,7 +460,33 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             viewPager.setAdapter(pagerAdapter);
             if (mPages.size() >= 2) viewPager.setCurrentItem(1);
             viewPager.setCurrentItem(0);
-            viewPager.addOnPageChangeListener(listener);
+            viewPager.setPageTransformer(false, new PageTransitionTransformer());
+        }
+    }
+
+    private static class PageTransitionTransformer implements ViewPager.PageTransformer {
+
+        private static final float SCALE_FACTOR = 0.75f;
+        private static final float TRANSLATION_Y_FACTOR = 40f;
+        private static final float ALPHA_FACTOR = 0.7f;
+
+        @Override
+        public void transformPage(@NonNull View page, float position) {
+            if (position < -1 || position > 1) {
+                page.setAlpha(0f);
+            } else if (position <= 0) {
+                page.setScaleX(1f);
+                page.setScaleY(1f);
+                page.setTranslationY(0f);
+                page.setAlpha(1f);
+            } else if (position <= 1) {
+                float scale = SCALE_FACTOR + (1 - SCALE_FACTOR) * (1 - position);
+                float translationY = position * TRANSLATION_Y_FACTOR;
+                page.setScaleX(scale);
+                page.setScaleY(scale);
+                page.setTranslationY(translationY);
+                page.setAlpha(ALPHA_FACTOR + (1 - ALPHA_FACTOR) * (1 - position));
+            }
         }
     }
 
@@ -527,9 +573,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             if (group.size() == 1 && !group.get(0).contains(":")) {
                 String s = group.get(0);
                 switch (s) {
-                    case "media" -> views.add(mMediaPlayer);
-                    case "weather" -> views.add(new QsWeatherWidget(mContext));
-                    case "photo" -> views.add(new QsPhotoShowcaseContainer(mContext));
+                    case "media" -> views.add(Build.VERSION.SDK_INT >= 35 ? mMediaPlayerView : mMediaPlayer);
+                    case "weather" -> views.add(Build.VERSION.SDK_INT >= 35 ? new QsViewWeather(mContext) : new QsWeatherWidget(mContext));
+                    case "photo" -> views.add(Build.VERSION.SDK_INT >= 35 ? new QsPhotoShowcaseContainerView(mContext) : new QsPhotoShowcaseContainer(mContext));
                 }
             } else {
                 try {
@@ -822,15 +868,21 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void setButtonActiveState(ImageView iv, ExtendedFAB efab, boolean active) {
+        int bgTintFab;
+        int tintColorFab;
         int bgTint;
         int tintColor;
 
         if (active) {
             bgTint = mCustomActive ? mCustomActiveColor : mActiveColor;
             tintColor = mIconActiveColor;
+            bgTintFab = mCustomHighlightActive ? mCustomHighlightActiveColor : mActiveColor;
+            tintColorFab = mIconActiveColor;
         } else {
             bgTint = mCustomInactive ? mCustomInactiveColor : mInactiveColor;
             tintColor = mIconInactiveColor;
+            bgTintFab = mCustomHighlightInactive ? mCustomHighlightInactiveColor : mInactiveColor;
+            tintColorFab = mIconInactiveColor;
         }
         if (iv != null) {
             iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
@@ -845,13 +897,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             }
         }
         if (efab != null) {
-            efab.setBackgroundTintList(ColorStateList.valueOf(bgTint));
+            efab.setBackgroundTintList(ColorStateList.valueOf(bgTintFab));
             efab.setBackgroundTintMode(PorterDuff.Mode.SRC_IN);
             if (efab.getTag() != null && efab.getTag().equals("app")) {
                 efab.setIconTint(null);
             } else {
                 if (efab != weatherButtonFab) {
-                    efab.setIconTint(ColorStateList.valueOf(tintColor));
+                    efab.setIconTint(ColorStateList.valueOf(tintColorFab));
                 } else {
                     efab.setIconTint(null);
                 }
@@ -1509,6 +1561,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         return instance;
     }
 
+    public ViewPager getPager() {
+        return mViewPager;
+    }
+
     /**
      * Update the widgets shown in the QS view
      *
@@ -1533,7 +1589,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     public void updateMediaPlayerPrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor,
                                        int mediaQsTintAmount, float mediaQsArtBlurAmount) {
         if (instance == null) return;
-        instance.mMediaPlayer.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
+        if (instance.mMediaPlayer != null)
+            instance.mMediaPlayer.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
+        if (instance.mMediaPlayerView != null)
+            instance.mMediaPlayerView.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
     }
 
     /**
@@ -1558,21 +1617,42 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     /**
      * Set custom tile colors
      * this will match qs tile customizations
-     *
-     * @param customInactive Use custom color for inactive state
-     * @param inactiveColor  Inactive color state
-     * @param customActive   Use custom color for active state
-     * @param activeColor    Active color state
-     * @param force          Force update
      */
-    public void updateQsTileColors(boolean customInactive, int inactiveColor, boolean customActive, int activeColor, boolean force) {
+    public void updateQsTileColors(
+            // Media
+            boolean customMedia,
+            int mediaColor,
+            // Highlight
+            boolean customHighlightColor, //OOS15 switch
+            boolean customHighlightActive,
+            boolean customHighlightInactive,
+            int highlightActiveColor,
+            int highlightInactiveColor,
+            // Base
+            boolean customTileColor,
+            boolean customActive,
+            boolean customInactive,
+            int activeColor,
+            int inactiveColor,
+            boolean force) {
         if (instance == null) return;
-        mCustomInactive = customInactive;
+        // Highlight
+        mCustomHighlight = customHighlightColor;
+        mCustomHighlightActive = Build.VERSION.SDK_INT >= 35 ? mCustomHighlight : customHighlightActive;
+        mCustomHighlightInactive = Build.VERSION.SDK_INT >= 35 ? mCustomHighlight : customHighlightInactive;
+        mCustomHighlightActiveColor = highlightActiveColor;
+        mCustomHighlightInactiveColor = highlightInactiveColor;
+        // Base
+        mCustomTile = customTileColor;
+        mCustomInactive = Build.VERSION.SDK_INT >= 35 ? mCustomTile : customInactive;
         mCustomInactiveColor = inactiveColor;
-        mCustomActive = customActive;
+        mCustomActive = Build.VERSION.SDK_INT >= 35 ? mCustomTile : customActive;
         mCustomActiveColor = activeColor;
         if (mMediaPlayer != null) {
-            mMediaPlayer.updateColors(mDefaultBackground, customInactive, inactiveColor);
+            mMediaPlayer.updateColors(mDefaultBackground, customMedia, mediaColor);
+        }
+        if (mMediaPlayerView != null) {
+            mMediaPlayerView.updateColors(customMedia, mediaColor);
         }
         if (force) {
             reloadBackground();
@@ -1623,6 +1703,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     mMediaPlayer.updateDefaultBackground(back);
                     continue;
                 }
+                if (v instanceof QsMediaTileView mediaTileView) {
+                    mediaTileView.refreshViewBackground();
+                    continue;
+                }
                 if (v instanceof QsWeatherWidget) {
                     if (Build.VERSION.SDK_INT == 35) {
                         back = new GradientDrawable();
@@ -1659,8 +1743,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         instance.mPhotoRadius = radius;
         if (!instance.mPages.isEmpty()) {
             for (View v : instance.mPages) {
-                if (v instanceof QsPhotoShowcaseContainer) {
-                    ((QsPhotoShowcaseContainer) v).setRadius(radius);
+                if (v instanceof QsPhotoShowcaseContainer showcase) {
+                    showcase.setRadius(radius);
+                } else if (v instanceof QsPhotoShowcaseContainerView showcase) {
+                    showcase.setRadius(radius);
                 }
             }
         }

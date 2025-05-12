@@ -1,15 +1,27 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
+import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLORS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
@@ -17,6 +29,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
@@ -31,13 +45,21 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
+import com.android.systemui.DependencyEx;
+import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
+import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
+import com.oplus.systemui.separate.OplusSeparateNotificationAndQSState;
+
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
 
@@ -46,26 +68,36 @@ public class QsWidgets extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     public static Object mActivityStarter = null;
     private ViewGroup mOplusQsMediaView = null;
+    private Object mOplusPanelPagerController = null; // separate view pager controller
     private boolean mQsWidgetsEnabled = false;
     private String mQsWidgetsList = "media";
     // Photo Showcase
     private int mQsPhotoRadius = 22;
-    // Qs Media Tile colors
+
+    // Qs Colors
+    // Media
+    private boolean qsCustomMediaTileColor = false;
     private Drawable mDefaultMediaBg = null;
-    private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false;
-    private int qsInactiveColor = Color.GRAY, qsActiveColor = getPrimaryColor(mContext);
+    private int qsMediaTileColor = Color.WHITE;
+    // Qs Tile Colors Highlight
+    private boolean qsCustomHighlightTileColors = false; // Main Switch OOS15
+    private int qsInactiveColorHighlight, qsActiveColorHighlight, qsDisabledColorHighlight;
+    private boolean qsInactiveColorEnabledHighlight = false, qsActiveColorEnabledHighlight = false, qsDisabledColorEnabledHighlight = false;
+    // Base
+    // Qs Tile Colors Base
+    private boolean qsCustomTileColors = false; // Main Switch OOS15
+    private int qsInactiveColor, qsActiveColor, qsDisabledColor;
+    private boolean qsInactiveColorEnabled = false, qsActiveColorEnabled = false, qsDisabledColorEnabled = false;
+
     // Qs Tile Radius
     private boolean customHighlightTileRadius = false, customTileRadius = false;
     private int highlightTSRadius, highlightTDRadius, highlightBSRadius, highlightBDRadius;
     private int tileTSRadius, tileTDRadius, tileBSRadius, tileBDRadius;
+
     // Qs Media Tile Album Art
     private boolean showMediaArtMediaQs = false;
     private int mMediaQsArtFilter = 0, mMediaQsTintColor = Color.WHITE, mMediaQsTintAmount = 20;
     private float mMediaQsArtBlurAmount = 7.5f;
-    private LinearLayout mWidgetsContainer;
-    Object panelInfo;
-
-    private static Object QsMediaPanelViewBackgroundProxy = null;
 
     public QsWidgets(Context context) {
         super(context);
@@ -87,10 +119,24 @@ public class QsWidgets extends XposedMods {
         mMediaQsTintAmount = Xprefs.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 20);
 
         // Tile Colors
+        qsCustomMediaTileColor = Xprefs.getBoolean(QS_MEDIA_TILE_CUSTOM_COLOR, false);
+        qsMediaTileColor = Xprefs.getInt(QS_MEDIA_TILE_COLOR, Color.WHITE);
+        // Highlight
+        qsCustomHighlightTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH, false);
+        qsActiveColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED, false);
+        qsActiveColorHighlight = Xprefs.getInt(QS_TILE_ACTIVE_COLOR_HIGHLIGHT, Color.RED);
+        qsInactiveColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED, false);
+        qsInactiveColorHighlight = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT, Color.GRAY);
+        qsDisabledColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED, false);
+        qsDisabledColorHighlight = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT, Color.DKGRAY);
+        // Base
+        qsCustomTileColors = Xprefs.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false);
         qsActiveColorEnabled = Xprefs.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
-        qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, getPrimaryColor(mContext));
+        qsActiveColor = Xprefs.getInt(QS_TILE_ACTIVE_COLOR, Color.RED);
         qsInactiveColorEnabled = Xprefs.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
         qsInactiveColor = Xprefs.getInt(QS_TILE_INACTIVE_COLOR, Color.GRAY);
+        qsDisabledColorEnabled = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_ENABLED, false);
+        qsDisabledColor = Xprefs.getInt(QS_TILE_DISABLED_COLOR, Color.DKGRAY);
 
         // Qs Radius
         customHighlightTileRadius = Xprefs.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
@@ -172,6 +218,17 @@ public class QsWidgets extends XposedMods {
                         .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
 
         ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        if (Build.VERSION.SDK_INT >= 35) {
+        OplusQsMediaPanelView
+                .afterConstruction()
+                        .run(param -> {
+                            if (!mQsWidgetsEnabled) return;
+                            QsViewBackgroundProxy TransparentBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
+                            QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
+                            mBackgroundProxy = TransparentBackgroundProxy;
+                            setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                        });
+        }
         OplusQsMediaPanelView
                 .after("onFinishInflate")
                 .run(param -> {
@@ -188,66 +245,74 @@ public class QsWidgets extends XposedMods {
                 });
 
         if (Build.VERSION.SDK_INT >= 35) {
-
-//            OpDrawableUtils.registerBackgroundUpdatedListener(mTileBackgroundListener);
-
-//            OplusQsMediaPanelView
-//                    .after("onAttachedToWindow")
-//                    .run(param -> {
-//                        if (!mQsWidgetsEnabled) return;
-//                        XposedBridge.log("QsWidgets: onAttachedToWindow");
-//                        Object backgroundProxy = getObjectField(param.thisObject, "backgroundProxy");
-//                        Object panelInfo = getObjectField(backgroundProxy, "panelInfo");
-//                        XposedBridge.log("onAttachedToWindow backgroundProxy null? " + (backgroundProxy == null));
-//                        XposedBridge.log("onAttachedToWindow panelInfo null? " + (panelInfo == null));
-//                        Drawable bg = (Drawable) callMethod(panelInfo, "getBackgroundDrawable");
-//                        XposedBridge.log("onAttachedToWindow getBackgroundDrawable null? " + (bg == null));
-//                        XposedBridge.log("onAttachedToWindow mDefaultMediaBg == bg? " + bg.equals(mDefaultMediaBg));
-//                        mDefaultMediaBg = bg;
-//                        updateControlsBg(QsControlsView.getInstance(), true);
-//                        View view = (View) callMethod(panelInfo, "getBackgroundView");
-//                        view.postDelayed(() -> view.setBackground(null), 100L);
-//                    });
-//
-
-//            ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
-//            OplusPanelViewPagerController
-//                    .before("loadQSPanelView")
-//                    .run(param -> {
-//                        boolean shouldLoad = (boolean) param.args[0];
-//                        if (!shouldLoad || !mQsWidgetsEnabled) return;
-//                        Object mView = getObjectField(param.thisObject, "mView");
-//                        Object separateQSManager = getObjectField(param.thisObject, "separateQSManager");
-//                        View onCreateQSPanelView = (View) callMethod(separateQSManager, "onCreateQSPanelView", (ViewGroup) mView);
-//                        XposedBridge.log("QsWidgets: onCreateQSPanelView null? " + (onCreateQSPanelView == null));
-//                        Object CentralSurfaces = getObjectField(param.thisObject, "centralSurfaces");
-//                        if (CentralSurfaces != null) {
-//                            callMethod(CentralSurfaces, "initBrightnessMirrorController");
-//                        }
-//                        QsControlsView qsControlsView = QsControlsView.getInstance(mContext);
-//                        try {
-//                            ((ViewGroup) qsControlsView.getParent()).removeView(qsControlsView);
-//                        } catch (Throwable ignored) {
-//                        }
-//                        qsControlsView.setQsView(onCreateQSPanelView);
-////                        qsControlsView.updateWidgets(mQsWidgetsList);
-//                        ((ViewGroup) mView).addView(qsControlsView);
-//
-//                        setObjectField(param.thisObject, "qsPanelView", qsControlsView);
-//
-//                        param.setResult(null);
-//
-//                    });
-                    /*
-                    QsControlsView qsControlsView = QsControlsView.getInstance(mContext);
-            try {
-                ((ViewGroup) qsControlsView.getParent()).removeView(qsControlsView);
-            } catch (Throwable ignored) {
-            }
-                     */
+            // Hook oplus view pager in split mode
+            ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
+            OplusPanelViewPagerController
+                    .afterConstruction()
+                            .run(param -> mOplusPanelPagerController = param.thisObject);
+            OplusPanelViewPagerController
+                    .before("onScrollX")
+                    .run(param -> {
+                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
+                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
+                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
+                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!isQsFullyExpanded) return;
+                        MotionEvent event = (MotionEvent) param.args[1];
+                        hookTouchHandler(param, event, "onScrollX");
+                    });
+            ReflectedClass TouchHandler = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController$TouchHandler");
+            TouchHandler
+                    .before("onTouchEvent")
+                    .run(param -> {
+                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
+                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
+                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
+                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!isQsFullyExpanded) return;
+                        MotionEvent event = (MotionEvent) param.args[0];
+                        hookTouchHandler(param, event, "onTouchEvent");
+                    });
+            TouchHandler
+                    .before("onInterceptTouchEvent")
+                    .run(param -> {
+                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
+                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
+                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
+                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!isQsFullyExpanded) return;
+                        MotionEvent event = (MotionEvent) param.args[0];
+                        hookTouchHandler(param, event, "onInterceptTouchEvent");
+                    });
 
         }
 
+    }
+
+    private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
+        if (!mQsWidgetsEnabled) return;
+        boolean isKeyguardVisible = (boolean) callMethod(mOplusPanelPagerController, "isKeyguardVisible");
+        if (isKeyguardVisible) return;
+        int[] location = new int[2];
+        mOplusQsMediaView.getLocationOnScreen(location);
+        Rect panelView = new Rect(location[0], location[1],
+                location[0] + mOplusQsMediaView.getWidth(),
+                location[1] + mOplusQsMediaView.getHeight());
+
+        float x = event.getRawX();
+        float y = event.getRawY();
+
+        if (panelView.contains((int) x, (int) y)) {
+            ViewGroup parent = (ViewGroup) mOplusQsMediaView.getParent();
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                parent.requestDisallowInterceptTouchEvent(true);
+            }
+
+            QsControlsView.getInstance().getPager().dispatchTouchEvent(event);
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                param.setResult(true);
+            }
+        }
     }
 
     private void forceMediaPanelA13() {
@@ -327,7 +392,23 @@ public class QsWidgets extends XposedMods {
     private void updateTileColors(boolean force) {
         QsControlsView qsControlsView = QsControlsView.getInstance();
         if (qsControlsView != null) {
-            qsControlsView.updateQsTileColors(qsInactiveColorEnabled, qsInactiveColor, qsActiveColorEnabled, qsActiveColor, force);
+            qsControlsView.updateQsTileColors(
+                    // Media
+                    qsCustomMediaTileColor,
+                    qsMediaTileColor,
+                    // Highlight
+                    qsCustomHighlightTileColors,
+                    qsActiveColorEnabledHighlight,
+                    qsInactiveColorEnabledHighlight,
+                    qsActiveColorHighlight,
+                    qsInactiveColorHighlight,
+                    // Base
+                    qsCustomTileColors,
+                    qsActiveColorEnabled,
+                    qsInactiveColorEnabled,
+                    qsActiveColor,
+                    qsInactiveColor,
+                    force);
         }
     }
 

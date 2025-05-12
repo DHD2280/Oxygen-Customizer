@@ -1,16 +1,18 @@
-package it.dhd.oxygencustomizer.xposed.views.controls;
+package it.dhd.oxygencustomizer.xposed.views.controls.weather;
 
-import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,12 +20,14 @@ import android.widget.TextView;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
-@SuppressWarnings("viewConstructor")
-public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.OmniJawsObserver {
+public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
-    private final static String TAG = "QsWeatherWidget: ";
+    private final String TAG = "WeatherBinder (%s): ";
+    private final String VIEW_TAG;
 
     private final Context mContext;
     private Context appContext;
@@ -34,10 +38,17 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherInfo;
 
-    public QsWeatherWidget(Context context) {
-        super(context);
+    private ActivityLauncherUtils mActivityLauncherUtils;
+    private boolean mSettingsInterface;
 
+    public WeatherBinder(Context context, String vTag) {
+        this(context, vTag, false);
+    }
+
+    public WeatherBinder(Context context, String vTag, boolean settingsInterface) {
         mContext = context;
+        VIEW_TAG = vTag;
+        mSettingsInterface = settingsInterface;
         try {
             appContext = context.createPackageContext(
                     BuildConfig.APPLICATION_ID,
@@ -45,15 +56,12 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
             );
         } catch (PackageManager.NameNotFoundException ignored) {
         }
-
         if (mWeatherClient == null) {
             mWeatherClient = new OmniJawsClient(context);
         }
-        inflateView();
-
     }
 
-    private void inflateView() {
+    public void inflateViews(ViewGroup parentView) {
         LayoutInflater inflater = LayoutInflater.from(appContext);
         View v = inflater.inflate(
                 appContext
@@ -81,11 +89,11 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 dp2px(mContext, 8)
         );
         v.setLayoutParams(layoutParams);
-        addView(v);
-        setupViews();
+        parentView.addView(v);
+        setupViews(parentView);
     }
 
-    private void setupViews() {
+    private void setupViews(ViewGroup parentView) {
 
         queryAndUpdateWeather();
 
@@ -94,36 +102,20 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
         mCity.setTextColor(Color.WHITE);
         mTemp.setTextColor(Color.WHITE);
         mCondition.setTextColor(Color.WHITE);
-    }
 
-    public void enableWeatherUpdates() {
-        if (mWeatherClient != null) {
-            mWeatherClient.addObserver(this);
-            queryAndUpdateWeather();
+        if (!mSettingsInterface) {
+            mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
+            parentView.setOnLongClickListener(v -> {
+                mActivityLauncherUtils.launchWeatherActivity(true);
+                return true;
+            });
         }
-    }
-
-    public void disableWeatherUpdates() {
-        if (mWeatherClient != null) {
-            mWeatherClient.removeObserver(this);
-        }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        enableWeatherUpdates();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        disableWeatherUpdates();
     }
 
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
-        log(TAG + "Querying weather");
+        Resources res = mSettingsInterface ? mContext.getResources() : modRes;
+        Log.v(String.format(TAG, VIEW_TAG), "Querying weather");
         try {
             if (mWeatherClient == null) {
                 return;
@@ -134,19 +126,19 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 // OpenWeatherMap
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                    formattedCondition = res.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                    formattedCondition = res.getString(R.string.weather_condition_rain);
                 } else if (formattedCondition.toLowerCase().contains("clear")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                    formattedCondition = res.getString(R.string.weather_condition_clear);
                 } else if (formattedCondition.toLowerCase().contains("storm")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                    formattedCondition = res.getString(R.string.weather_condition_storm);
                 } else if (formattedCondition.toLowerCase().contains("snow")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                    formattedCondition = res.getString(R.string.weather_condition_snow);
                 } else if (formattedCondition.toLowerCase().contains("wind")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                    formattedCondition = res.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                    formattedCondition = res.getString(R.string.weather_condition_mist);
                 }
 
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
@@ -156,7 +148,7 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
                 mWeatherIcon.setImageDrawable(d);
             }
         } catch (Exception e) {
-            log(TAG + "Error updating weather: " + e.getMessage());
+            Log.e(String.format(TAG, VIEW_TAG), "Error updating weather: " + e.getMessage());
         }
     }
 
@@ -176,4 +168,18 @@ public class QsWeatherWidget extends LinearLayout implements OmniJawsClient.Omni
             mWeatherInfo = null;
         }
     }
+
+    public void enableWeatherUpdates() {
+        if (mWeatherClient != null) {
+            mWeatherClient.addObserver(this);
+            queryAndUpdateWeather();
+        }
+    }
+
+    public void disableWeatherUpdates() {
+        if (mWeatherClient != null) {
+            mWeatherClient.removeObserver(this);
+        }
+    }
+
 }

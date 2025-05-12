@@ -1,5 +1,7 @@
-package it.dhd.oxygencustomizer.xposed.views.controls;
+package it.dhd.oxygencustomizer.xposed.views.controls.media;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -14,7 +16,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRad
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -28,7 +29,9 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,17 +43,17 @@ import androidx.palette.graphics.Palette;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 
-public class QsMediaTile extends LinearLayout {
+public class MediaBinder {
 
     public static final String DEFAULT_LABEL = "oplus_qs_media_panel_title_default";
     public static final String APP_ICON = "ic_music_note";
@@ -61,26 +64,31 @@ public class QsMediaTile extends LinearLayout {
     public static final String PAUSE_ICON = "ic_oplus_media_panel_action_pause";
     public static final String NEXT_ICON = "ic_oplus_media_panel_action_next";
 
+    private static final String TAG = "MediaBinder (%s): ";
+    private final String VIEW_TAG;
     private final Context mContext;
+    private final ActivityLauncherUtils mActivityLauncherUtils;
     private Context appContext;
+    private ViewGroup mParentView;
 
     private Object mMediaData = null;
 
-    private Drawable mAppIconDrawable;
-    private Drawable mDeviceIconDrawable;
-    private Drawable mSwitchDeviceIconDrawable;
-    private String mDefaultTipText;
-    private Drawable mPrevIconDrawable, mPlayIconDrawable, mPauseIconDrawable, mNextIconDrawable;
-
-    private Drawable mOplusQsMediaDefaultBackground = null;
+    // Icons
+    private final Drawable mAppIconDrawable;
+    private final Drawable mDeviceIconDrawable;
+    private final Drawable mSwitchDeviceIconDrawable;
+    private final String mDefaultTipText;
+    private final Drawable mPrevIconDrawable, mPlayIconDrawable, mPauseIconDrawable, mNextIconDrawable;
 
     private ColorStateList mTextColor = ColorStateList.valueOf(Color.WHITE);
+    private Drawable mOplusQsMediaDefaultBackground = null;
+    private boolean mBound = false;
 
+    // Views
+    private LinearLayout mContainer;
     private ImageView mAppIcon, mDeviceIcon;
     private ImageView mPrev, mPlayPause, mNext;
     private TextView mTitle, mText;
-
-    private final ActivityLauncherUtils mActivityLauncherUtils;
 
     // Qs Bg to match tiles
     private boolean qsInactiveColorEnabled = false;
@@ -94,22 +102,19 @@ public class QsMediaTile extends LinearLayout {
     private Bitmap mArt = null;
     private int mColorOnAlbum = Color.WHITE;
 
-    private boolean mBound = false;
-
-    public QsMediaTile(Context context) {
-        super(context);
-
+    public MediaBinder(Context context, String vTag) {
         mContext = context;
+        VIEW_TAG = vTag;
+        mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
+
         try {
-            appContext = context.createPackageContext(
+            appContext = mContext.createPackageContext(
                     BuildConfig.APPLICATION_ID,
                     Context.CONTEXT_IGNORE_SECURITY
             );
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
+        } catch (Throwable ignored) {}
 
-        mActivityLauncherUtils = new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
-
+        // load icons
         mAppIconDrawable = WidgetUtils.getDrawable(mContext, APP_ICON, SYSTEM_UI);
         mDeviceIconDrawable = WidgetUtils.getDrawable(mContext, DEVICE_ICON, SYSTEM_UI);
         mSwitchDeviceIconDrawable = WidgetUtils.getDrawable(mContext, DEVICE_SWITCH_ICON, SYSTEM_UI);
@@ -118,13 +123,68 @@ public class QsMediaTile extends LinearLayout {
         mPlayIconDrawable = WidgetUtils.getDrawable(mContext, PLAY_ICON, SYSTEM_UI);
         mPauseIconDrawable = WidgetUtils.getDrawable(mContext, PAUSE_ICON, SYSTEM_UI);
         mNextIconDrawable = WidgetUtils.getDrawable(mContext, NEXT_ICON, SYSTEM_UI);
+    }
 
-        inflateView();
+    public void inflateView(ViewGroup parentView) {
+        mParentView = parentView;
+        LayoutInflater.from(appContext).inflate(R.layout.view_qs_media_tile, mParentView);
+        setupViews();
 
         MediaPlayerObserver.registerMediaData(mMediaDataObserver);
 
         ThemeEnabler.registerThemeChangedListener(this::setupColors);
+    }
 
+    private void setupViews() {
+        mContainer = (LinearLayout) ViewHelper.findViewWithTag(mParentView, "media_panel_container");
+
+        mAppIcon = (ImageView) ViewHelper.findViewWithTag(mParentView, "app_icon");
+
+        LinearLayout mDeviceParent = (LinearLayout) ViewHelper.findViewWithTag(mParentView, "media_output_switch_btn_parent");
+        try {
+            mDeviceIcon = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(mContext);
+        } catch (Throwable t) {
+            mDeviceIcon = new ImageView(mContext);
+            log("QsMediaTile LaunchableImageView error " + t);
+        }
+        mDeviceIcon.setLayoutParams(mDeviceParent.getLayoutParams());
+        mDeviceIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        mDeviceParent.addView(mDeviceIcon);
+
+        mTitle = (TextView) ViewHelper.findViewWithTag(mParentView, "media_panel_title");
+        mText = (TextView) ViewHelper.findViewWithTag(mParentView, "media_panel_text");
+
+        mPrev = (ImageView) ViewHelper.findViewWithTag(mParentView, "media_panel_action_pre");
+        mPlayPause = (ImageView) ViewHelper.findViewWithTag(mParentView, "media_panel_action_play_or_pause");
+        mNext = (ImageView) ViewHelper.findViewWithTag(mParentView, "media_panel_action_next");
+
+        mDeviceIcon.setOnClickListener(v -> showDeviceDialog());
+        mPrev.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+        mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+        mNext.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT));
+
+        mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
+
+        mParentView.post(() -> {
+            if (mTextColor != null) {
+                mDeviceIcon.setImageTintList(mTextColor);
+                mTitle.setTextColor(mTextColor);
+                mText.setTextColor(mTextColor);
+                mPrev.setImageTintList(mTextColor);
+                mPlayPause.setImageTintList(mTextColor);
+                mNext.setImageTintList(mTextColor);
+            }
+            mAppIcon.setImageDrawable(mAppIconDrawable);
+            mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
+
+            mTitle.setText(mDefaultTipText);
+            mText.setVisibility(GONE);
+
+            mPrev.setImageDrawable(mPrevIconDrawable);
+            mPlayPause.setImageDrawable(mPlayIconDrawable);
+            mNext.setImageDrawable(mNextIconDrawable);
+
+        });
     }
 
     private final MediaPlayerObserver.OnBindMediaData mMediaDataObserver = new MediaPlayerObserver.OnBindMediaData() {
@@ -152,10 +212,150 @@ public class QsMediaTile extends LinearLayout {
         }
     };
 
+    private void updateBackground() {
+        if (!showMediaArtMediaQs || !mBound) {
+            hideMediaQsBackground();
+            return;
+        }
+        Bitmap oldArt = mArt;
+        Bitmap tempArt = getArt();
+        if (tempArt == null) {
+            hideMediaQsBackground();
+            return;
+        }
+        mArt = getFilteredArt(tempArt);
+        float radius = 0f;
+        if (Build.VERSION.SDK_INT >= 35) {
+            radius = getMediaPanelRadius(mContext);
+        } else if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
+            radius = gradientDrawable.getCornerRadius();
+        }
+        RoundedBitmapDrawable artRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), mArt);
+        artRounded.setCornerRadius(radius);
+        artRounded.setAntiAlias(true);
+        RoundedBitmapDrawable oldArtRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), oldArt);
+        oldArtRounded.setCornerRadius(radius);
+        oldArtRounded.setAntiAlias(true);
+        Palette.Builder builder = new Palette.Builder(mArt);
+        builder.generate(palette -> {
+            int dominantColor = palette.getDominantColor(Color.WHITE);
+            mColorOnAlbum =
+                    isColorDark(dominantColor) ?
+                            DrawableConverter.findContrastColorAgainstDark(Color.WHITE, dominantColor, true, 2) :
+                            DrawableConverter.findContrastColor(Color.BLACK, dominantColor, true, 2);
+            mParentView.post(() -> setupOtherViews(mColorOnAlbum));
+        });
+
+        mParentView.post(() -> {
+            Drawable[] layers = new Drawable[]{oldArtRounded, artRounded};
+            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+            setBackground(transitionDrawable);
+            transitionDrawable.startTransition(250);
+        });
+    }
+
+    private void setBackground(Drawable drawable) {
+        if (mParentView instanceof QsMediaTileView) {
+            mContainer.setBackground(drawable);
+            return;
+        }
+        mParentView.setBackground(drawable);
+    }
+
+    private void setupOtherViews(int color) {
+        mDeviceIcon.clearColorFilter();
+        mDeviceIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        mTitle.setTextColor(color);
+        mText.setTextColor(color);
+        mPrev.setImageTintList(ColorStateList.valueOf(color));
+        mPlayPause.setImageTintList(ColorStateList.valueOf(color));
+        mNext.setImageTintList(ColorStateList.valueOf(color));
+    }
+
+    private Bitmap getFilteredArt(Bitmap art) {
+        if (art == null) {
+            return null;
+        }
+        Bitmap finalArt;
+        switch (mMediaQsArtFilter) {
+            case 1 -> finalArt = DrawableConverter.toGrayscale(art);
+            case 2 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            getPrimaryColor(mContext));
+            case 3 ->
+                    finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 4 ->
+                    finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
+            case 5 ->
+                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
+                            mMediaQsTintColor, mMediaQsTintAmount);
+            default -> finalArt = art;
+        }
+        return finalArt;
+    }
+
+    private void hideMediaQsBackground() {
+        if (Build.VERSION.SDK_INT >= 35) {
+            mContainer.setBackground(null);
+            return;
+        }
+        if (qsInactiveColorEnabled) {
+            if (mOplusQsMediaDrawable == null) return;
+            mOplusQsMediaDrawable.invalidateSelf();
+            setBackground(mOplusQsMediaDrawable);
+        } else {
+            if (mOplusQsMediaDefaultBackground == null) return;
+            mOplusQsMediaDefaultBackground.invalidateSelf();
+            setBackground(mOplusQsMediaDefaultBackground);
+        }
+    }
+
+    private boolean isColorDark(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness >= 0.5;
+    }
+
+    /**
+     * Vibrate the device
+     *
+     * @param type 0 = Long Press, 1 = Click
+     */
+    private void vibrate(int type) {
+        if (type == 0) {
+            mParentView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        } else if (type == 1) {
+            mParentView.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
+        }
+    }
+
+    public void updatePrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor, int mediaQsTintAmount, float mediaQsArtBlurAmount) {
+        showMediaArtMediaQs = showAlbumArt;
+        mMediaQsArtFilter = mediaQsArtFilter;
+        mMediaQsTintColor = mediaQsTintColor;
+        mMediaQsTintAmount = mediaQsTintAmount;
+        mMediaQsArtBlurAmount = mediaQsArtBlurAmount;
+        updateBackground();
+    }
+
+    public void updateDefaultBackground(Drawable defDrawable) {
+        if (defDrawable == null) return;
+        try {
+            mOplusQsMediaDefaultBackground = defDrawable.getConstantState().newDrawable().mutate();
+        } catch (Throwable ignored) {
+            mOplusQsMediaDefaultBackground = defDrawable.mutate();
+        }
+        try {
+            mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable().mutate();
+        } catch (Throwable ignored) {
+            mOplusQsMediaDrawable = defDrawable.mutate();
+        }
+        updateBackground();
+    }
+
     private void setupColors() {
 
         mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
-        post(() -> {
+        mParentView.post(() -> {
             if (mTextColor != null) {
                 mDeviceIcon.setImageTintList(mTextColor);
                 mTitle.setTextColor(mTextColor);
@@ -314,7 +514,7 @@ public class QsMediaTile extends LinearLayout {
 
     private void setDefaultTip() {
         mBound = false;
-        post(() -> {
+        mParentView.post(() -> {
             // App Icon
             mAppIcon.setVisibility(GONE);
             mAppIcon.setOnClickListener(null);
@@ -333,200 +533,6 @@ public class QsMediaTile extends LinearLayout {
         });
     }
 
-    private void inflateView() {
-        inflate(appContext, R.layout.view_qs_media_tile, this);
-        setupViews();
-    }
-
-    private void setupViews() {
-        mAppIcon = (ImageView) ViewHelper.findViewWithTag(this, "app_icon");
-
-        LinearLayout mDeviceParent = (LinearLayout) ViewHelper.findViewWithTag(this, "media_output_switch_btn_parent");
-        try {
-            mDeviceIcon = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(mContext);
-        } catch (Throwable t) {
-            mDeviceIcon = new ImageView(mContext);
-            log("QsMediaTile LaunchableImageView error " + t);
-        }
-        mDeviceIcon.setLayoutParams(mDeviceParent.getLayoutParams());
-        mDeviceIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mDeviceParent.addView(mDeviceIcon);
-
-        mTitle = (TextView) ViewHelper.findViewWithTag(this, "media_panel_title");
-        mText = (TextView) ViewHelper.findViewWithTag(this, "media_panel_text");
-
-        mPrev = (ImageView) ViewHelper.findViewWithTag(this, "media_panel_action_pre");
-        mPlayPause = (ImageView) ViewHelper.findViewWithTag(this, "media_panel_action_play_or_pause");
-        mNext = (ImageView) ViewHelper.findViewWithTag(this, "media_panel_action_next");
-
-        mDeviceIcon.setOnClickListener(v -> showDeviceDialog());
-        mPrev.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-        mPlayPause.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-        mNext.setOnClickListener(v -> dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT));
-
-        mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
-
-        post(() -> {
-            if (mTextColor != null) {
-                mDeviceIcon.setImageTintList(mTextColor);
-                mTitle.setTextColor(mTextColor);
-                mText.setTextColor(mTextColor);
-                mPrev.setImageTintList(mTextColor);
-                mPlayPause.setImageTintList(mTextColor);
-                mNext.setImageTintList(mTextColor);
-            }
-            mAppIcon.setImageDrawable(mAppIconDrawable);
-            mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
-
-            mTitle.setText(mDefaultTipText);
-            mText.setVisibility(GONE);
-
-            mPrev.setImageDrawable(mPrevIconDrawable);
-            mPlayPause.setImageDrawable(mPlayIconDrawable);
-            mNext.setImageDrawable(mNextIconDrawable);
-
-        });
-    }
-
-    private void updateBackground() {
-        if (!showMediaArtMediaQs || !mBound) {
-            hideMediaQsBackground();
-            return;
-        }
-        Bitmap oldArt = mArt;
-        Bitmap tempArt = getArt();
-        if (tempArt == null) {
-            hideMediaQsBackground();
-            return;
-        }
-        mArt = getFilteredArt(tempArt);
-        float radius = 0f;
-        if (Build.VERSION.SDK_INT >= 35) {
-            radius = getMediaPanelRadius(mContext);
-        } else if (mOplusQsMediaDefaultBackground != null && mOplusQsMediaDefaultBackground instanceof GradientDrawable gradientDrawable) {
-                radius = gradientDrawable.getCornerRadius();
-        }
-        RoundedBitmapDrawable artRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), mArt);
-        artRounded.setCornerRadius(radius);
-        artRounded.setAntiAlias(true);
-        RoundedBitmapDrawable oldArtRounded = RoundedBitmapDrawableFactory.create(mContext.getResources(), oldArt);
-        oldArtRounded.setCornerRadius(radius);
-        oldArtRounded.setAntiAlias(true);
-        Palette.Builder builder = new Palette.Builder(mArt);
-        builder.generate(palette -> {
-            int dominantColor = palette.getDominantColor(Color.WHITE);
-            mColorOnAlbum =
-                    isColorDark(dominantColor) ?
-                            DrawableConverter.findContrastColorAgainstDark(Color.WHITE, dominantColor, true, 2) :
-                            DrawableConverter.findContrastColor(Color.BLACK, dominantColor, true, 2);
-            post(() -> setupOtherViews(mColorOnAlbum));
-        });
-
-        post(() -> {
-            Drawable[] layers = new Drawable[]{oldArtRounded, artRounded};
-            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-            setBackground(transitionDrawable);
-            transitionDrawable.startTransition(250);
-        });
-    }
-
-    private void setupOtherViews(int color) {
-        mDeviceIcon.clearColorFilter();
-        mDeviceIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        mTitle.setTextColor(color);
-        mText.setTextColor(color);
-        mPrev.setImageTintList(ColorStateList.valueOf(color));
-        mPlayPause.setImageTintList(ColorStateList.valueOf(color));
-        mNext.setImageTintList(ColorStateList.valueOf(color));
-    }
-
-    private Bitmap getFilteredArt(Bitmap art) {
-        if (art == null) {
-            return null;
-        }
-        Bitmap finalArt;
-        switch (mMediaQsArtFilter) {
-            case 1 -> finalArt = DrawableConverter.toGrayscale(art);
-            case 2 ->
-                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                            getPrimaryColor(mContext));
-            case 3 ->
-                    finalArt = DrawableConverter.getBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 4 ->
-                    finalArt = DrawableConverter.getGrayscaleBlurredImage(mContext, art, mMediaQsArtBlurAmount);
-            case 5 ->
-                    finalArt = DrawableConverter.getColoredBitmap(new BitmapDrawable(mContext.getResources(), art),
-                            mMediaQsTintColor, mMediaQsTintAmount);
-            default -> finalArt = art;
-        }
-        return finalArt;
-    }
-
-    private void hideMediaQsBackground() {
-        if (Build.VERSION.SDK_INT == 35) {
-            setBackground(null);
-            return;
-        }
-        if (qsInactiveColorEnabled) {
-            if (mOplusQsMediaDrawable == null) return;
-            mOplusQsMediaDrawable.invalidateSelf();
-            setBackground(mOplusQsMediaDrawable);
-        } else {
-            if (mOplusQsMediaDefaultBackground == null) return;
-            mOplusQsMediaDefaultBackground.invalidateSelf();
-            setBackground(mOplusQsMediaDefaultBackground);
-        }
-    }
-
-    private boolean isColorDark(int color) {
-        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
-        return darkness >= 0.5;
-    }
-
-    /**
-     * Vibrate the device
-     *
-     * @param type 0 = Long Press, 1 = Click
-     */
-    private void vibrate(int type) {
-        if (type == 0) {
-            this.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-        } else if (type == 1) {
-            this.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
-        }
-    }
-
-    public void updatePrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor, int mediaQsTintAmount, float mediaQsArtBlurAmount) {
-        showMediaArtMediaQs = showAlbumArt;
-        mMediaQsArtFilter = mediaQsArtFilter;
-        mMediaQsTintColor = mediaQsTintColor;
-        mMediaQsTintAmount = mediaQsTintAmount;
-        mMediaQsArtBlurAmount = mediaQsArtBlurAmount;
-        updateBackground();
-    }
-
-    public void updateDefaultBackground(Drawable defDrawable) {
-        if (defDrawable == null) return;
-        try {
-            mOplusQsMediaDefaultBackground = defDrawable.getConstantState().newDrawable().mutate();
-        } catch (Throwable ignored) {
-            mOplusQsMediaDefaultBackground = defDrawable.mutate();
-        }
-        try {
-            mOplusQsMediaDrawable = defDrawable.getConstantState().newDrawable().mutate();
-        } catch (Throwable ignored) {
-            mOplusQsMediaDrawable = defDrawable.mutate();
-        }
-        updateBackground();
-    }
-
-    public void updateColors(Drawable defDrawable, boolean customColor, int color) {
-        qsInactiveColorEnabled = customColor;
-        qsInactiveColor = color;
-        updateDefaultBackground(defDrawable);
-        updateBackground();
-    }
-
     private void showDeviceDialog() {
         try {
             if (Build.VERSION.SDK_INT >= 35) {
@@ -537,7 +543,15 @@ public class QsMediaTile extends LinearLayout {
                 callMethod(mediaOutput, "create", mMediaData != null ? callMethod(mMediaData, "getPackageName") : null, true, ((View) mDeviceIcon), true);
             }
         } catch (Throwable t) {
-            log("QsMediaTile showDeviceDialog error " + t);
+            log(String.format(TAG, VIEW_TAG) + "showDeviceDialog error " + t);
         }
     }
+
+    public void updateColors(Drawable defDrawable, boolean customColor, int color) {
+        qsInactiveColorEnabled = customColor;
+        qsInactiveColor = color;
+        updateDefaultBackground(defDrawable);
+        updateBackground();
+    }
+
 }

@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.xposed.views.controls;
+package it.dhd.oxygencustomizer.xposed.views.controls.photo;
 
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
@@ -22,6 +22,8 @@ import android.widget.ImageView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
+
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,7 +36,8 @@ import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
 public class QsPhotoShowcaseView extends ImageView {
 
-    private Context mContext;
+    private final boolean mSettingsInterface;
+    private final Context mContext;
     private final ActivityLauncherUtils mActivityLauncherUtils;
 
     private float radius;
@@ -49,8 +52,13 @@ public class QsPhotoShowcaseView extends ImageView {
     };
 
     public QsPhotoShowcaseView(Context context) {
+        this(context, false);
+    }
+
+    public QsPhotoShowcaseView(Context context, boolean settingsInterface) {
         super(context);
         mContext = context;
+        mSettingsInterface = settingsInterface;
 
         mContext.registerReceiver(mReceiver, new IntentFilter(ACTIONS_QS_PHOTO_CHANGED), Context.RECEIVER_EXPORTED);
 
@@ -60,11 +68,16 @@ public class QsPhotoShowcaseView extends ImageView {
         ));
         setScaleType(ScaleType.CENTER_CROP);
 
-        radius = modRes.getDimension(R.dimen.qs_controls_container_radius);
+        if (mSettingsInterface) {
+            radius = getContext().getResources().getDimension(R.dimen.qs_controls_container_radius);
+        } else {
+            radius = modRes.getDimension(R.dimen.qs_controls_container_radius);
+        }
         path = new Path();
-        mContext = context;
-        mActivityLauncherUtils = new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
-        setOnClickListener(v -> launchGalleryApp());
+        mActivityLauncherUtils = mSettingsInterface ? null : new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
+        if (!mSettingsInterface) {
+            setOnClickListener(v -> launchGalleryApp());
+        }
         updateImage();
     }
 
@@ -72,9 +85,11 @@ public class QsPhotoShowcaseView extends ImageView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateImage();
+        if (!mSettingsInterface) PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
     private void launchGalleryApp() {
+        if (mActivityLauncherUtils == null) return;
         Intent galleryIntent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mActivityLauncherUtils.launchAppIfAvailable(galleryIntent, R.string.gallery, true);
     }
@@ -137,4 +152,9 @@ public class QsPhotoShowcaseView extends ImageView {
         radius = dp2px(mContext, mRadius);
         post(this::invalidate);
     }
+
+    public interface OnShowcaseClick {
+        void onClick();
+    }
+
 }
