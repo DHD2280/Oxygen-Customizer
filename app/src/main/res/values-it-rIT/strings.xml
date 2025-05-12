@@ -59,6 +59,7 @@
     <!-- Dialogs -->
     <string name="installing">Installazione</string>
     <string name="loading_dialog_wait">Attendere</string>
+    <string name="optimizing">Ottimizzazione</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Avviso</string>
@@ -113,6 +114,7 @@
     <string name="restart_module">Riavvia i processi</string>
     <string name="restart_page_scope">Riavvia solo lo scopo di questa pagina</string>
     <string name="restart_scope_message">Are you sure you want to restart all scoped processes except the system framework?\nUse this if the module isn\'t working!\nMake sure all the relevant scopes are checked!</string>
+    <string name="add_notification">Aggiungi notifica</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">UI</string>
     <string name="navbar_mods">Mod</string>
@@ -205,7 +207,6 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
-    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data Gregoriana, basata su formato*\n$P\&lt;format\&gt; : Data Persiana: basata sul formato*\n$L per Data Lunare\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per la batteria), c (per CPU), g (per GPU) e s (per dispositivo) \nInfine, è disponibile un numero FACOLTATIVO di intervallo di aggiornamento in secondi (impostazione predefinita: 60 secondi)\n\n*per la documentazione sul formato, cerca \"Java Date Format\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -1039,6 +1040,7 @@
     <string name="package_not_launchable">Il pacchetto non è avviabile</string>
     <string name="menu_launch_app">Avvia app</string>
     <string name="menu_restart_app">Riavvia app</string>
+    <string name="menu_reoptimize">Riottimizza</string>
     <!-- Update Fragment -->
     <string name="update_channel_name">Aggiornamenti</string>
     <string name="update_notification_title">Aggiornamento scaricato</string>
@@ -1379,11 +1381,21 @@
     <string name="peek_display_style_title">Stile di visualizzazione Peek</string>
     <string name="peek_display_minimalist">Minimalista</string>
     <string name="peek_display_custom_style">Personalizza</string>
+    <string name="peek_display_icon_style_title">Stile icona peek</string>
     <string name="peek_icon_background_color">Colore di sfondo icona</string>
+    <string name="peek_icon_size">Dimensione icona</string>
+    <string name="peek_icon_margin">Margine icona</string>
+    <string name="peek_icon_padding">Padding icone</string>
     <string name="peek_card_background_color">Colore sfondo scheda notifica</string>
     <string name="peek_buttons_color">Colore dei pulsanti</string>
     <string name="peek_title_color">Colore titolo</string>
     <string name="peek_content_color">Colore contenuto</string>
+    <string name="peek_clear_all_cat">Pulsante cancella tutto</string>
+    <string name="peek_clear_all_mode">Pulisci tutte le modalità</string>
+    <string name="peek_clear_all_mode_always_hidden">Sempre nascosto</string>
+    <string name="peek_clear_all_mode_count">In base al conteggio delle notifiche</string>
+    <string name="peek_clear_all_count_title">Conteggio notifiche</string>
+    <string name="peek_clear_all_count_summary">Il pulsante cancella tutto verrà visualizzato solo se le notifiche sono superiori al numero selezionato</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Correzione ritardo app</string>
     <string name="fix_lag_summary">Correggi il ritardo durante l\'apertura dell\'app dai recenti</string>
@@ -1440,4 +1452,6 @@
     <string name="lsposed">LSposed</string>
     <string name="open_lsposed">Apri LSPosed</string>
     <string name="shortcut_disabled">Scorciatoia disabilitata</string>
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>

@@ -60,6 +60,7 @@
     <!-- Dialogs -->
     <string name="installing">Установка</string>
     <string name="loading_dialog_wait">Пожалуйста Подождите</string>
+    <string name="optimizing">Оптимизация</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Уведомление</string>
@@ -73,6 +74,7 @@
     <string name="battery_full">Батарея полностью заряжена</string>
     <string name="battery_level_percentage">Уровень заряда батареи</string>
     <string name="seconds">Секунды</string>
+    <string name="duration_seconds">%d секунд</string>
     <string name="milliseconds">Миллисекунды</string>
     <string name="steps">Шаги</string>
     <string name="general_color_accent1">Акцент 1</string>
@@ -97,6 +99,7 @@
     <string name="lang_follow_system">Как в системе</string>
     <string name="pick_font_title">Выбрать шрифт</string>
     <string name="pick_font_summary">Выберите свой шрифт.\nНе выбирайте файл из списка «Недавние».</string>
+    <string name="general_style">Стиль</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">Выбрать изображение</string>
     <string name="pick_image_summary">Нажмите, чтобы выбрать изображение</string>
@@ -134,6 +137,7 @@
     <string name="white_color">Белый</string>
     <string name="black_color">Чёрный</string>
     <string name="custom_color">Пользовательский цвет</string>
+    <string name="background_color">Фоновый цвет</string>
     <string name="battery_info_button_title">Информация о батарее…</string>
     <string name="general_enabled">Включено</string>
     <string name="general_disabled">Выключено</string>
@@ -151,6 +155,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Уведомления в строке состояния</string>
     <string name="statusbar_use_app_icon">Используйте значок приложения для уведомлений</string>
+    <string name="statusbar_app_icon_scale">Масштаб иконки</string>
     <string name="statusbar_notifications_transparency">Прозрачность уведомлений</string>
     <string name="statusbar_notification_transparency">Прозрачность уведомлений</string>
     <string name="statusbar_notification_transparency_value">Степень прозрачности</string>
@@ -227,6 +232,46 @@
     <string name="sb_padding_title">Левое и правое заполнение строки состояния</string>
     <string name="sb_padding_summary">Настройка значений в мин/макс эквивалентна по умолчанию</string>
     <!-- Statusbar logo -->
+    <string name="statusbar_logo">Лого в строке состояния</string>
+    <string name="statusbar_logo_summary">Показать кастомное лого в строке состояния</string>
+    <string name="statusbar_logo_position">Расположение лого</string>
+    <string name="statusbar_logo_style">Стиль лого</string>
+    <string name="status_bar_logo_style_android">Android</string>
+    <string name="status_bar_logo_style_adidas">Adidas</string>
+    <string name="status_bar_logo_style_alien">Пришелец</string>
+    <string name="status_bar_logo_style_apple">Apple</string>
+    <string name="status_bar_logo_style_avengers">Мстители</string>
+    <string name="status_bar_logo_style_batman">Бэтмэн</string>
+    <string name="status_bar_logo_style_batman_tdk">Бэтмэн: Тёмный Рыцарь</string>
+    <string name="status_bar_logo_style_beats">Beats</string>
+    <string name="status_bar_logo_style_biohazard">Биологическая опасность</string>
+    <string name="status_bar_logo_style_blackberry">BlackBerry</string>
+    <string name="status_bar_logo_style_cannabis">Конопля</string>
+    <string name="status_bar_logo_style_emoticon_cool">Крутой смайлик</string>
+    <string name="status_bar_logo_style_emoticon_devil">Смайлик-дьявол</string>
+    <string name="status_bar_logo_style_fire">Огонь</string>
+    <string name="status_bar_logo_style_heart">Сердце</string>
+    <string name="status_bar_logo_style_nike">Nike</string>
+    <string name="status_bar_logo_style_pacman">Пакман</string>
+    <string name="status_bar_logo_style_puma">Puma</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">Человек-Паук</string>
+    <string name="status_bar_logo_style_superman">Супермен</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Призрак</string>
+    <string name="status_bar_logo_style_ninja">Ниндзя</string>
+    <string name="status_bar_logo_style_robot">Робот</string>
+    <string name="status_bar_logo_style_ironman">Железный человек</string>
+    <string name="status_bar_logo_style_captain_america">Капитан Америка</string>
+    <string name="status_bar_logo_style_flash">Флэш</string>
+    <string name="status_bar_logo_style_tux">Пингвин Tux</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Амогус</string>
+    <string name="status_bar_logo_style_custom">Собственное изображение</string>
+    <string name="statusbar_logo_size">Размер лого</string>
+    <string name="statusbar_logo_force_tint">Следить за оттенком строки состояния</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Включить индикатор заряда батареи</string>
     <string name="BB_onlycharging_title">Только во время зарядки</string>
@@ -297,8 +342,12 @@
     <string name="inside_percentage_desc">Переместить процентное соотношение на внутренний значок батареи</string>
     <string name="battery_icon_color">Цвета значков батареи</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_text_category">Текст батареи</string>
     <string name="battery_edit_percentage_size_title">Настройка размера процентов</string>
     <string name="battery_percentage_size">Размер процентов</string>
+    <string name="battery_text_attach_to_batterybar">Прикрепить к полосе батареи</string>
+    <string name="battery_text_attach_to_batterybar_summary">Прикрепить цвет текста к цветам полосы батареи</string>
+    <string name="battery_text_enable_bb_first">Включить сначала полосу батареи</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">По умолчанию</string>
     <string name="battery_landscape_r_default">Пейзаж R По умолчанию</string>
@@ -385,13 +434,21 @@
     <string name="qs_widget_set_custom_photo">Установить собственное изображение</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Настройка QS</string>
+    <string name="qs_highlight_tile">Подсвечивать плитки</string>
+    <string name="qs_base_tile">Базовые плитки</string>
     <string name="quick_settings_tiles_customize_category_title">Быстрые настройки фона плиток</string>
+    <string name="quick_settings_tile_custom_color">Кастомизировать цвета плиток</string>
     <string name="qs_tile_active_color_title">Настройка цвета активной плитки</string>
     <string name="quick_settings_tiles_customize_active_color">Активный цвет QS</string>
     <string name="qs_tile_inactive_color_title">Настройка цвета неактивной плитки</string>
     <string name="quick_settings_tiles_customize_inactive_color">QS Неактивный цвет</string>
     <string name="qs_tile_disabled_color_title">Настройка цвета отключенной плитки</string>
     <string name="quick_settings_tiles_customize_disabled_color">Цвет QS отключен</string>
+    <string name="quick_settings_tile_custom_color_icon">Кастомизировать</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">Эти цвета относятся к отдельному стилю быстрых настроек</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">Цвет активного значка</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">Цвет неактивного значка</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">Цвет выключенного значка</string>
     <string name="quick_settings_tiles_customize_labels">Ярлыки QS</string>
     <string name="quick_settings_tiles_customize_hide_labels">Скрыть метки QS</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Настройка цвета текста QS</string>
@@ -401,7 +458,9 @@
     <string name="quick_settings_tiles_customize_labels_subtitle">Настройка цвета субтитров</string>
     <string name="quick_settings_tiles_customize_labels_subtitle_color">Цвет субтитров QS</string>
     <string name="brightness_slider">Ползунок яркости</string>
+    <string name="qs_sliders">Ползунок быстрых настроек</string>
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
+    <string name="customize_qs_sliders_title">Настроить ползунки быстрых настроек</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Пользовательский радиус быстрых настроек</string>
@@ -1216,4 +1275,6 @@
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>

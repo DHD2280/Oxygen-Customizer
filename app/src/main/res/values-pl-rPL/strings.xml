@@ -202,7 +202,6 @@
     <string name="status_bar_date_style_lowercase">Małe litery</string>
     <string name="status_bar_date_style_uppercase">Duże litery</string>
     <string name="status_bar_date_format_custom">Niestandardowy format Java</string>
-    <string name="string_formatter_manual_body">Oprócz zwykłego tekstu dostępne są również zmienne dynamiczne, takie jak data i temperatura:\n\n$G\&lt;format\&gt; : Kalendarz Gregoriański, na podstawie formatu*\n$P\&lt;format\&gt; : Kalendarz Perski, na podstawie formatu*\n$L Fazy Księżyca \n$I\&lt;calendar\&gt;&lt;format\&gt; : Kalendarz islamski. Kalendarz jest opcjonalny, domyślnie jest islamski, możesz również użyć C dla islamskiego i U dla Islamskiego Umalqury.\n$T\&lt;format\&gt;[interval] : Temperatura; Format \nmoże być b (dla baterii), c (dla CPU), g (dla GPU) i s (dla skóry) \nNa koniec istnieje OPCJONALNY interwał aktualizacji w sekundach (domyślnie: 60 sekund)\n\n*Aby uzyskać dokumentację formatu, wyszukaj „Niestandardowy format Java\"</string>
     <string name="preview">Podgląd</string>
     <string name="clock_date_position">Pozycja daty</string>
     <string name="clock_date_right">Po prawej stronie zegara</string>
@@ -599,4 +598,6 @@
     <string name="flat_screen_timeout_respect_wakelock_title">Respektuj blokadę wybudzania</string>
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>

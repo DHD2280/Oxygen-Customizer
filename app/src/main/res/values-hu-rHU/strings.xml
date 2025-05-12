@@ -59,6 +59,7 @@
     <!-- Dialogs -->
     <string name="installing">Telepítés</string>
     <string name="loading_dialog_wait">Kérjük, várjon</string>
+    <string name="optimizing">Optimalizálás</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">Megjegyzés</string>
@@ -113,6 +114,7 @@
     <string name="restart_module">Hatókörbe tartozó folyamatok újraindítása</string>
     <string name="restart_page_scope">Csak az oldal ezen részét töltse be újra</string>
     <string name="restart_scope_message">Biztos benne, hogy újra akarja indítani az összes hatókör-folyamatot, kivéve a rendszerkeretet?\nHasználja ezt, ha a modul nem működik!\nLegyen biztos benne, hogy az összes vonatkozó hatókört ellenőrizte!</string>
+    <string name="add_notification">Új hozzáadása</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">Felhasználói felület</string>
     <string name="navbar_mods">Módosítások</string>
@@ -205,7 +207,6 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
-    <string name="string_formatter_manual_body">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátumformátum alapján*\n$P\&lt;format\&gt; : Perzsa-dátumformátum alapján*\n$L Holddátumhoz\n$I\&lt;calendar\&gt;&lt;format\&gt; : Iszlám naptár. A naptár választható, alapértelmezetten iszlám, használhatja a C-t is a polgárihoz és az U-t az Um al-Qura-hoz.\n$T\&lt;format\&gt;[intervallum] : Hőmérsékletformátumnál; \n - b (akku), c (CPU), g (GPU) és s (bőr) \nVégül, van OPCIONÁLIS számú frissítési időköz másodpercben (alapértelmezetten: 60 másodperc)\n\n*a formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre</string>
     <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
@@ -234,6 +235,43 @@
     <string name="statusbar_logo">Állapotsori logó</string>
     <string name="statusbar_logo_summary">Egyéni logót jeleníthet meg az állapotsoron</string>
     <string name="statusbar_logo_position">A logó pozíciója</string>
+    <string name="statusbar_logo_style">A logó stílusa</string>
+    <string name="status_bar_logo_style_android">Android</string>
+    <string name="status_bar_logo_style_adidas">Adidas</string>
+    <string name="status_bar_logo_style_alien">Földönkívüli</string>
+    <string name="status_bar_logo_style_apple">Apple</string>
+    <string name="status_bar_logo_style_avengers">Bosszúállók</string>
+    <string name="status_bar_logo_style_batman">Batman</string>
+    <string name="status_bar_logo_style_batman_tdk">Batman a Sötét Lovag</string>
+    <string name="status_bar_logo_style_beats">Dobok</string>
+    <string name="status_bar_logo_style_biohazard">Bioveszély</string>
+    <string name="status_bar_logo_style_blackberry">Blackberry</string>
+    <string name="status_bar_logo_style_cannabis">Kender</string>
+    <string name="status_bar_logo_style_emoticon_cool">Menő emoji</string>
+    <string name="status_bar_logo_style_emoticon_devil">Ördög emoji</string>
+    <string name="status_bar_logo_style_fire">Tűz</string>
+    <string name="status_bar_logo_style_heart">Szív</string>
+    <string name="status_bar_logo_style_nike">Nike</string>
+    <string name="status_bar_logo_style_pacman">Pac-Man</string>
+    <string name="status_bar_logo_style_puma">Puma</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">Pókember</string>
+    <string name="status_bar_logo_style_superman">Superman</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Szellem</string>
+    <string name="status_bar_logo_style_ninja">Nindzsa</string>
+    <string name="status_bar_logo_style_robot">Robot</string>
+    <string name="status_bar_logo_style_ironman">Vasember</string>
+    <string name="status_bar_logo_style_captain_america">Amerika Kapitány</string>
+    <string name="status_bar_logo_style_flash">Villám</string>
+    <string name="status_bar_logo_style_tux">TUX</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Amogus</string>
+    <string name="status_bar_logo_style_custom">Egyéni kép</string>
+    <string name="statusbar_logo_size">A logó stílusa</string>
+    <string name="statusbar_logo_force_tint">Az Állapotsor követése</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Akkusáv bekapcsolása</string>
     <string name="BB_onlycharging_title">...csak töltéskor</string>
@@ -728,6 +766,9 @@
     <string name="lockscreen_affordance">Záróképernyő affordancia</string>
     <string name="lockscreen_affordance_remove_left">A bal affordancia kikapcsolása</string>
     <string name="lockscreen_affordance_remove_right">A jobb affordancia kikapcsolása</string>
+    <string name="lockscreen_shuffle_pin">Kevert PIN</string>
+    <string name="lockscreen_keep_shuffling_title">Össze-vissza keverés</string>
+    <string name="lockscreen_keep_shuffling_summary">Minden gombnyomásra megkeveri</string>
     <string name="lockscreen_hide_lock_icon">A Lakat-ikon elrejtése</string>
     <string name="lockscreen_weather">Időjárás a záróképernyőn</string>
     <string name="depth_wallpaper_category">Térhatású Háttérkép</string>
@@ -999,6 +1040,7 @@
     <string name="package_not_launchable">A csomag nem indítható</string>
     <string name="menu_launch_app">Az alkalmazás elindítása</string>
     <string name="menu_restart_app">Az alkalmazás újraindítása</string>
+    <string name="menu_reoptimize">Újraoptimalizálás</string>
     <!-- Update Fragment -->
     <string name="update_channel_name">Frissítések</string>
     <string name="update_notification_title">A frissítés letöltve</string>
@@ -1339,11 +1381,21 @@
     <string name="peek_display_style_title">A betekintési kép stílusa</string>
     <string name="peek_display_minimalist">Minimalista</string>
     <string name="peek_display_custom_style">Egyéni</string>
+    <string name="peek_display_icon_style_title">A betekintőikon stílusa</string>
     <string name="peek_icon_background_color">Az ikon háttérszíne</string>
+    <string name="peek_icon_size">Ikonméret</string>
+    <string name="peek_icon_margin">Ikonmargó</string>
+    <string name="peek_icon_padding">Ikonkitöltés</string>
     <string name="peek_card_background_color">Az értesítési kártya háttérszíne</string>
     <string name="peek_buttons_color">A gombok színe</string>
     <string name="peek_title_color">A cimek színe</string>
     <string name="peek_content_color">A tertalom színe</string>
+    <string name="peek_clear_all_cat">\'Az Összes törlése\' gomb</string>
+    <string name="peek_clear_all_mode">Az \"Összes törlése\" módja</string>
+    <string name="peek_clear_all_mode_always_hidden">Mindig rejtett</string>
+    <string name="peek_clear_all_mode_count">Az értesítésszám-kijelzésen alapuló</string>
+    <string name="peek_clear_all_count_title">Értesítés-számláló</string>
+    <string name="peek_clear_all_count_summary">Az „Összes törlése” gomb csak akkor jelenik meg, ha az értesítések száma meghaladja a kiválasztott értéket.</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Alkalmazások laggolás-javítása</string>
     <string name="fix_lag_summary">Laggolás javítása, mikor az Előzményekből nyílik meg</string>
@@ -1397,4 +1449,9 @@
     <string name="aod_music_allow_title">Lejátszó a \'Mindig látható\'-ban</string>
     <string name="aod_music_allow_summary">Az ANT-zenelejátszó megjelenhet a \'Mindig látható\' funkcióban.\nMegjegyzés: nem minden zenelejátszó támogatott.</string>
     <!-- Shortcut string -->
+    <string name="lsposed">LSposed</string>
+    <string name="open_lsposed">Az \'LSposed\' megnyitása</string>
+    <string name="shortcut_disabled">Letiltott parancsikon</string>
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>

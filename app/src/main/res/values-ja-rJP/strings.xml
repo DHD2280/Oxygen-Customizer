@@ -204,7 +204,6 @@
     <string name="status_bar_date_style_lowercase">小文字</string>
     <string name="status_bar_date_style_uppercase">大文字</string>
     <string name="status_bar_date_format_custom">カスタム Java フォーマット</string>
-    <string name="string_formatter_manual_body">通常のテキストに加えて、日付や温度などの動的変数も使用できます：\n\n$G\&lt;format\&gt; : グレゴリオ暦、format*に基づく\n$P\&lt;format\&gt; : ペルシャ暦、format*に基づく\n$L ：太陰暦\n$I\&lt;calendar\&gt;&lt;format\&gt; : イスラム暦。カレンダーはオプションで、デフォルトはイスラム暦です。C、Islamic-Civil、U、Islamic Umalquraも使用できます。\n$T\&lt;format\&gt;[interval] : 温度；\nformatは、b（バッテリー）、c（CPU）、g（GPU）、s（表面）のいずれかです。\n最後に、更新間隔をオプションで指定します（デフォルト：60 秒）\n\n*フォーマットのドキュメントについては、「Java Date Format」を検索してください</string>
     <string name="preview">プレビュー</string>
     <string name="clock_date_position">日付の位置</string>
     <string name="clock_date_right">時間の右側</string>
@@ -1156,4 +1155,6 @@
     <!-- Screen Off On Flat -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
+    <!-- Separate qs tweaks -->
+    <!-- Separate qs layout -->
 </resources>
