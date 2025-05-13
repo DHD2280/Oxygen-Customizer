@@ -46,14 +46,24 @@ public class LogoView extends ImageView implements DarkIconDispatcher.DarkReceiv
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        DarkIconDispatcher darkIconDispatcher = (DarkIconDispatcher) Dependency.get(DarkIconDispatcher.class);
+        DarkIconDispatcher darkIconDispatcher;
+        try {
+            darkIconDispatcher = (DarkIconDispatcher) Dependency.get(DarkIconDispatcher.class);
+        } catch (Throwable ignored) {
+            darkIconDispatcher = (DarkIconDispatcher) Dependency.sDependency.getDependencyInner(DarkIconDispatcher.class);
+        }
         darkIconDispatcher.addDarkReceiver(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        DarkIconDispatcher darkIconDispatcher = (DarkIconDispatcher) Dependency.get(DarkIconDispatcher.class);
+        DarkIconDispatcher darkIconDispatcher;
+        try {
+            darkIconDispatcher = (DarkIconDispatcher) Dependency.get(DarkIconDispatcher.class);
+        } catch (Throwable ignored) {
+            darkIconDispatcher = (DarkIconDispatcher) Dependency.sDependency.getDependencyInner(DarkIconDispatcher.class);
+        }
         darkIconDispatcher.removeDarkReceiver(this);
     }
 
