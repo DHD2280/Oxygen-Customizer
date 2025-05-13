@@ -153,7 +153,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -170,7 +170,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -187,7 +187,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -217,7 +217,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -234,7 +234,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -251,7 +251,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log(param.method.getName() + " called");
+                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }

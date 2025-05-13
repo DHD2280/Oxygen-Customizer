@@ -31,6 +31,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Environment;
 import android.util.TypedValue;
 import android.view.View;
@@ -45,20 +46,24 @@ import androidx.core.graphics.ColorUtils;
 import com.bosphere.fadingedgelayout.FadingEdgeLayout;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsSeparateMods;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderImage extends XposedMods {
 
@@ -68,8 +73,8 @@ public class HeaderImage extends XposedMods {
     private final int MAX_TINT_OPACITY = 250;
     ValueAnimator alphaAnimator;
     // QS Header Image
-    private FadingEdgeLayout mQsHeaderLayout = null;
-    private ImageView mQsHeaderImageView = null;
+    private List<FadingEdgeLayout> mQsHeaderLayouts = new ArrayList<>();
+    private List<ImageView> mQsHeaderImageViews = new ArrayList<>();
     private int qshiValue;
     private boolean qshiEnabled;
     private boolean qshiLandscapeEnabled;
@@ -96,7 +101,6 @@ public class HeaderImage extends XposedMods {
     public HeaderImage(Context context) {
         super(context);
     }
-
 
     @Override
     public void updatePrefs(String... Key) {
@@ -146,7 +150,6 @@ public class HeaderImage extends XposedMods {
         }
 
         try {
-            log("Hooking");
             hookAllMethods(OplusQSContainerImpl, "onFinishInflate", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
@@ -154,7 +157,7 @@ public class HeaderImage extends XposedMods {
 
                     FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
 
-                    mQsHeaderLayout = new FadingEdgeLayout(mContext);
+                    FadingEdgeLayout mQsHeaderLayout = new FadingEdgeLayout(mContext);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
                     layoutParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
                     layoutParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
@@ -163,11 +166,14 @@ public class HeaderImage extends XposedMods {
                     mQsHeaderLayout.setLayoutParams(layoutParams);
                     mQsHeaderLayout.setVisibility(View.GONE);
 
-                    mQsHeaderImageView = new ImageView(mContext);
+                    ImageView mQsHeaderImageView = new ImageView(mContext);
                     mQsHeaderImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     mQsHeaderLayout.addView(mQsHeaderImageView);
 
                     mQuickStatusBarHeader.addView(mQsHeaderLayout, 0);
+
+                    mQsHeaderLayouts.add(mQsHeaderLayout);
+                    mQsHeaderImageViews.add(mQsHeaderImageView);
 
                     updateQSHeaderImage();
 
@@ -194,41 +200,13 @@ public class HeaderImage extends XposedMods {
 
         if (newControlCenter) {
             try {
-
-                /*Class<?> NotificationsQuickSettingsContainer = findClass("com.android.systemui.shade.NotificationsQuickSettingsContainer", lpparam.classLoader);
-                hookAllMethods(NotificationsQuickSettingsContainer,
-                        "applyBackScaling",
-                        new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.args[0] instanceof Float) {
-                            float f = (float) param.args[0];
-                            log("applyBackScaling: " + f);
-                        }
-                    }
-                });
-
-                Class<?> NotificationStackScrollLayout = findClass("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout", lpparam.classLoader);
-                hookAllMethods(NotificationStackScrollLayout,
-                        "setFractionToShade",
-                        new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.args[0] instanceof Float) {
-                            float height = (float) param.args[0];
-                            log("setFractionToShade: " + height);
-                        }
-                    }
-                });*/
-
-
                 Class<?> NotificationPanelViewControllerExImp = findClass("com.oplus.systemui.shade.NotificationPanelViewControllerExImp", lpparam.classLoader);
 
                 hookAllMethods(NotificationPanelViewControllerExImp, "canScaleFadePanelAtExpandFraction",
                         new XC_MethodHook() {
                             @Override
                             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                if (!qshiEnabled || mQsHeaderLayout == null) return;
+                                if (!qshiEnabled || mQsHeaderLayouts.isEmpty()) return;
                                 if (isLandscape && !qshiLandscapeEnabled) return;
                                 if (param.args[0] instanceof Float) {
                                     float expansion = (float) param.args[0];
@@ -242,8 +220,12 @@ public class HeaderImage extends XposedMods {
                                             isResetNeeded = true;
                                         }
                                         if (expansion >= .20f) {
-                                            mQsHeaderLayout.setAlpha(1f);
-                                            mQsHeaderLayout.setVisibility(View.VISIBLE);
+                                            if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                                for (View v : mQsHeaderLayouts) {
+                                                    v.setAlpha(1f);
+                                                    v.setVisibility(View.VISIBLE);
+                                                }
+                                            }
                                         }
                                         return;
                                     }
@@ -253,60 +235,104 @@ public class HeaderImage extends XposedMods {
                                         isFirstExpansionIgnored = true;
                                         isResetNeeded = false;
                                     }
-
-                                    if (mQsHeaderLayout != null) {
-                                        if (expansion <= .900f) {
-                                            mQsHeaderLayout.animate()
-                                                    .alpha(0f)
-                                                    .setDuration(750)
-                                                    .setListener(new AnimatorListenerAdapter() {
-                                                        @Override
-                                                        public void onAnimationEnd(Animator animation) {
-                                                            mQsHeaderLayout.setVisibility(View.GONE);
-                                                        }
-                                                    });
-                                        } else {
-                                            mQsHeaderLayout.animate()
-                                                    .alpha(1f)
-                                                    .setDuration(150)
-                                                    .setListener(new AnimatorListenerAdapter() {
-                                                        @Override
-                                                        public void onAnimationEnd(Animator animation) {
-                                                            mQsHeaderLayout.setVisibility(View.VISIBLE);
-                                                        }
-                                                    });
+                                    if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                        for (View v : mQsHeaderLayouts) {
+                                            if (v != null) {
+                                                if (expansion <= .900f) {
+                                                    v.animate()
+                                                            .alpha(0f)
+                                                            .setDuration(750)
+                                                            .setListener(new AnimatorListenerAdapter() {
+                                                                @Override
+                                                                public void onAnimationEnd(Animator animation) {
+                                                                    v.setVisibility(View.GONE);
+                                                                }
+                                                            });
+                                                } else {
+                                                    v.animate()
+                                                            .alpha(1f)
+                                                            .setDuration(150)
+                                                            .setListener(new AnimatorListenerAdapter() {
+                                                                @Override
+                                                                public void onAnimationEnd(Animator animation) {
+                                                                    v.setVisibility(View.VISIBLE);
+                                                                }
+                                                            });
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                         });
 
-                /*final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", lpparam.classLoader);
-
-                hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if(!qshiEnabled) return;
-                        if (mQsHeaderLayout == null) return;
-
-                        int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
-                        if (findField(ScrimControllerClass, "mScrimBehind").get(param.thisObject).equals(param.args[0])) {
-                            float qsAlpha = (float) param.args[alphaIndex];
-                            boolean nightMode = (mQsHeaderLayout.getContext().getResources().getConfiguration().uiMode
-                                    & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-                            if (nightMode && qsAlpha < .18f // Dark Mode Alpha
-                                    || !nightMode && qsAlpha < 0.09f // Light Mode Different Alpha
-                                ) {
-                                mQsHeaderLayout.setAlpha(0f);
-                            } else {
-                                mQsHeaderLayout.setAlpha(1f);
-                            }
-                        }
-                    }
-                });*/
-
             } catch (Throwable t) {
                 log("Error hooking new Control Center " + t.getMessage());
             }
+        }
+
+        ReflectedClass OplusQSRootView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.OplusQSRootView");
+        if (OplusQSRootView.getClazz() != null) {
+            OplusQSRootView
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        FrameLayout mOplusQsSplitView = (FrameLayout) param.thisObject;
+
+                        FadingEdgeLayout mQsHeaderSplitLayout = new FadingEdgeLayout(mContext);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
+                        layoutParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+                        layoutParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+                        layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingTop, mContext.getResources().getDisplayMetrics());
+
+                        mQsHeaderSplitLayout.setLayoutParams(layoutParams);
+                        mQsHeaderSplitLayout.setVisibility(View.GONE);
+
+                        ImageView mQsHeaderSplitImageView = new ImageView(mContext);
+                        mQsHeaderSplitImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        mQsHeaderSplitLayout.addView(mQsHeaderSplitImageView);
+
+                        mOplusQsSplitView.addView(mQsHeaderSplitLayout, 0);
+
+                        mQsHeaderLayouts.add(mQsHeaderSplitLayout);
+                        mQsHeaderImageViews.add(mQsHeaderSplitImageView);
+
+                        updateQSHeaderImage();
+                    });
+        }
+
+        ReflectedClass OplusLargeTileContainerView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView");
+        if (OplusLargeTileContainerView.getClazz() != null) {
+            OplusLargeTileContainerView
+                    .before("updateViewState")
+                    .run(param -> {
+                        // float f2, float f3, int i2
+                        float f2 = (float) param.args[0];
+                        float f3 = (float) param.args[1];
+                        int i2 = (int) param.args[2];
+                        if (i2 == 1) {
+                            for (View v : mQsHeaderLayouts) {
+                                v.setTransitionAlpha(f2);
+                                v.setScaleX(f3);
+                                v.setScaleY(f3);
+
+                            }
+                        }
+                    });
+
+            OplusLargeTileContainerView
+                    .before("setCusTranslationY")
+                    .run(param -> {
+                        // int i2, int i3, float f2
+                        View v = (View) param.thisObject;
+                        int i2 = (int) param.args[0];
+                        int i3 = (int) param.args[1];
+                        float f2 = (float) param.args[2];
+                        if (i3 == 1) {
+                            for (View qsImage : mQsHeaderLayouts) {
+                                qsImage.setTranslationY(f2 - v.getTranslationY());
+                            }
+                        }
+                    });
         }
 
     }
@@ -317,19 +343,21 @@ public class HeaderImage extends XposedMods {
     }
 
     private void updateQSHeaderImage() {
-        if (mQsHeaderLayout == null || mQsHeaderImageView == null) {
+        if (mQsHeaderLayouts.isEmpty() || mQsHeaderImageViews.isEmpty()) {
             return;
         }
 
         if (!qshiEnabled) {
-            mQsHeaderLayout.setVisibility(View.GONE);
+            setVisibility(View.GONE);
             return;
         }
 
-        loadImageOrGif(mQsHeaderImageView);
+        for (ImageView iv : mQsHeaderImageViews) {
+            loadImageOrGif(iv);
+        }
 
         // Alpha
-        mQsHeaderImageView.setImageAlpha(qshiAlpha);
+        setAlpha(qshiAlpha);
 
         // Tint
         mColorAccent = getPrimaryColor(mContext);
@@ -339,25 +367,51 @@ public class HeaderImage extends XposedMods {
                 mContext, android.R.attr.textColorPrimaryInverse);
 
 
-        ViewGroup.MarginLayoutParams qshiParams = (ViewGroup.MarginLayoutParams) mQsHeaderLayout.getLayoutParams();
-        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
-        qshiParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
-        qshiParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
-        qshiParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingTop, mContext.getResources().getDisplayMetrics());
-        qshiParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics());
-        mQsHeaderLayout.setLayoutParams(qshiParams);
-        mQsHeaderLayout.requestLayout();
+        setParams();
 
         Configuration config = mContext.getResources().getConfiguration();
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE && !qshiLandscapeEnabled) {
-            mQsHeaderLayout.setVisibility(View.GONE);
+            setVisibility(View.GONE);
         } else {
-            mQsHeaderLayout.setVisibility(View.VISIBLE);
+            setVisibility(View.VISIBLE);
         }
 
-        mQsHeaderLayout.setFadeEdges(false, false, bottomFadeAmount != 0, false);
-        mQsHeaderLayout.setFadeSizes(0, 0, bottomFadeAmount, 0);
+        setFade();
 
+    }
+
+    private void setParams() {
+        for (View v : mQsHeaderLayouts) {
+            ViewGroup.MarginLayoutParams qshiParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
+            qshiParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+            qshiParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+            qshiParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingTop, mContext.getResources().getDisplayMetrics());
+            qshiParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics());
+            v.setLayoutParams(qshiParams);
+            v.requestLayout();
+        }
+    }
+
+    private void setAlpha(int alpha) {
+        for (ImageView iv : mQsHeaderImageViews) {
+            iv.setImageAlpha(alpha);
+        }
+    }
+
+    private void setVisibility(int visibility) {
+        for (View v : mQsHeaderLayouts) {
+            if (v != null) {
+                v.setVisibility(visibility);
+            }
+        }
+    }
+
+    private void setFade() {
+        for (FadingEdgeLayout fadingEdgeLayout : mQsHeaderLayouts) {
+            fadingEdgeLayout.setFadeEdges(false, false, bottomFadeAmount != 0, false);
+            fadingEdgeLayout.setFadeSizes(0, 0, bottomFadeAmount, 0);
+        }
     }
 
     private void loadImageOrGif(ImageView iv) {
@@ -365,7 +419,7 @@ public class HeaderImage extends XposedMods {
         int tintColor;
         if (qshiTint == 0) {
             tintColor = -1;
-            mQsHeaderImageView.setColorFilter(null);
+            iv.setColorFilter(null);
         } else if (qshiTint == 1) {
             tintColor = mColorAccent;
         } else if (qshiTint == 2) {
@@ -425,10 +479,10 @@ public class HeaderImage extends XposedMods {
             if (applyTint.get()) {
                 if (tintColor != -1) {
                     int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, tintColor, qshiTintIntensity / 100f);
-                    mQsHeaderImageView.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
+                    iv.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
                 }
             } else {
-                mQsHeaderImageView.setColorFilter(null);
+                iv.setColorFilter(null);
             }
         }
         if (!qshiZoomToFit) {
