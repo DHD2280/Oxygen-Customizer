@@ -392,11 +392,15 @@ public class Lockscreen extends XposedMods {
                     .after("addOplusIconView")
                     .run(param -> {
                         XposedBridge.log("OplusLockIconViewControllerExImpl init");
-                        mLockIconContaier = (View) getObjectField(param.thisObject, "mLockIconContainer");
-                        mLockIconView = (View) getObjectField(param.thisObject, "mLockIcon");
-                        if (removeLockIcon) {
-                            mLockIconContaier.setVisibility(View.GONE);
-                            mLockIconView.setVisibility(View.GONE);
+                        try {
+                            mLockIconContaier = (View) getObjectField(param.thisObject, "mLockIconContainer");
+                            mLockIconView = (View) getObjectField(param.thisObject, "mLockIcon");
+                            if (removeLockIcon) {
+                                mLockIconContaier.setVisibility(View.GONE);
+                                mLockIconView.setVisibility(View.GONE);
+                            }
+                        } catch (Throwable ignored) {
+                            mLockIconContaier = (View) getObjectField(param.thisObject, "lockIcon");
                         }
                     });
         } catch (Throwable t) {
