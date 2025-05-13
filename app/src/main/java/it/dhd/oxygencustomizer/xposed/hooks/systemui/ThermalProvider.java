@@ -101,7 +101,8 @@ public class ThermalProvider extends XposedMods {
         if (Build.VERSION.SDK_INT >= 35) {
             try {
             return ThermalServiceOC.getCurrentTemperatures();
-            } catch (Throwable ignored) {
+            } catch (Throwable t) {
+                log(t);
                 return new Object[0];
             }
         }
@@ -118,7 +119,8 @@ public class ThermalProvider extends XposedMods {
                 }
             }
             return temps;
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            log(t);
             return new Object[0];
         }
     }
