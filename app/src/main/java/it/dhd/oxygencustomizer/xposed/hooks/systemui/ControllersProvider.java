@@ -273,18 +273,27 @@ public class ControllersProvider extends XposedMods {
                 });
 
         // Keyguard Showing Callback
-        ReflectedClass QSImpl = ReflectedClass.of(
-                "com.android.systemui.qs.QSImpl", //OOS15
-                "com.android.systemui.qs.QSFragment" //OOS14
-        );
-        QSImpl
-                .before("setKeyguardShowing")
+        ReflectedClass KeyguardUpdateMonitor = ReflectedClass.of(
+                "com.android.keyguard.KeyguardUpdateMonitor");
+        KeyguardUpdateMonitor
+                .after("setKeyguardShowing")
                 .run(param -> {
                     boolean keyguardShowing = (boolean) param.args[0];
                     onKeyguardShowing(keyguardShowing);
                 });
-        QSImpl
-                .before("onStateChanged")
+        ReflectedClass QSFragmentHelper = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.helper.QSFragmentHelper");
+        if (QSFragmentHelper.getClazz() != null) {
+            QSFragmentHelper
+                    .after("setKeyguardShowing")
+                    .run(param -> {
+                        boolean keyguardShowing = (boolean) param.args[0];
+                        onKeyguardShowing(keyguardShowing);
+                    });
+        }
+        ReflectedClass StatusBarStateListener = ReflectedClass.of(
+                "com.android.systemui.shade.NotificationPanelViewController$StatusBarStateListener");
+        StatusBarStateListener
+                .after("onStateChanged")
                 .run(param -> {
                     int state = (int) param.args[0];
                     onStateChanged(state);
