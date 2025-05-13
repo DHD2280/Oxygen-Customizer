@@ -386,8 +386,13 @@ public class ControllersProvider extends XposedMods {
                                 } catch (Throwable t) {
                                     bluetoothController = getObjectField(param.thisObject, "mBluetooth");
                                 }
-                                boolean enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
-                                boolean connected = (boolean) callMethod(bluetoothController, "isBluetoothConnected");
+                                boolean enabled;
+                                try {
+                                    enabled = (boolean) callMethod(bluetoothController, "isBluetoothEnabled");
+                                } catch (Throwable ignored) {
+                                    // No method 15.0.1
+                                    enabled = getBooleanField(bluetoothController, "mEnabled");
+                                }
                                 onBluetoothChanged(enabled);
                             }
                     );
