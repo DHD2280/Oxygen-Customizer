@@ -10,6 +10,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.Arrays;
 
@@ -102,7 +103,7 @@ public class ThermalProvider extends XposedMods {
             try {
             return ThermalServiceOC.getCurrentTemperatures();
             } catch (Throwable t) {
-                XposedBridge.log("ThermalProvider error: " + t);
+                Log.e("ThermalProvider", "getTemperatures error", t);
                 return new Object[0];
             }
         }
@@ -120,7 +121,7 @@ public class ThermalProvider extends XposedMods {
             }
             return temps;
         } catch (Throwable t) {
-            XposedBridge.log("ThermalProvider error: " + t);
+            Log.e("ThermalProvider", "getTemperatures error", t);
             return new Object[0];
         }
     }

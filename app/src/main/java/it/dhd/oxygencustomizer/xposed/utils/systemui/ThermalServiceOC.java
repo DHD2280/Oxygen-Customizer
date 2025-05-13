@@ -27,7 +27,7 @@ public class ThermalServiceOC {
             }
             Response execute = Epona.newCall(request).execute();
             int i2 = 0;
-            if (execute.isSuccessful()) {
+            try {
                 Map<String, Float> map = (Map) execute.getBundle().getSerializable("result");
                 TemperatureNative[] temperatureNativeArr = new TemperatureNative[map.size()];
                 for (Map.Entry<String, Float> entry : map.entrySet()) {
@@ -35,8 +35,10 @@ public class ThermalServiceOC {
                     i2++;
                 }
                 return temperatureNativeArr;
+            } catch (Throwable t) {
+                Log.e(TAG, "getPowerSaveState: " + execute.getMessage());
             }
-            Log.e(TAG, "getPowerSaveState: " + execute.getMessage());
+
             return new TemperatureNative[0];
     }
 }
