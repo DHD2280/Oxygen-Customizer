@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.utils.systemui;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.oplus.epona.Epona;
@@ -17,7 +18,14 @@ public class ThermalServiceOC {
     }
 
     public static Object[] getCurrentTemperatures() {
-            Response execute = Epona.newCall(new Request.Builder().setComponentName(COMPONENT_NAME).setActionName("getCurrentTemperatures").build()).execute();
+            Request request;
+            try {
+                request = new Request.Builder().setComponentName(COMPONENT_NAME).setActionName("getCurrentTemperatures").build();
+            } catch (Throwable ignored) {
+                // Method build not available - 15.0.1
+                request = new Request(new Bundle(), COMPONENT_NAME, "getCurrentTemperatures");
+            }
+            Response execute = Epona.newCall(request).execute();
             int i2 = 0;
             if (execute.isSuccessful()) {
                 Map<String, Float> map = (Map) execute.getBundle().getSerializable("result");

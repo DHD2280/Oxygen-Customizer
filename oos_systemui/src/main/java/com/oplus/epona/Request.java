@@ -14,6 +14,14 @@ public class Request implements Parcelable {
         throw new UnsupportedOperationException("Stub!");
     }
 
+    /**
+     * OOS15.0.1 constructor
+     */
+    public Request(Bundle bundle, String componentName, String actionName) {
+        throw new UnsupportedOperationException("Stub!");
+    }
+
+
     public Request(Parcel parcel) {
         throw new UnsupportedOperationException("Stub!");
     }
