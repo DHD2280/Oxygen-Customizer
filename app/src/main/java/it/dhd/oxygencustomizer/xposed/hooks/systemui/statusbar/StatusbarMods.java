@@ -494,62 +494,116 @@ public class StatusbarMods extends XposedMods {
         } catch (Throwable ignored) {
         }
         Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
-        findAndHookMethod(StatusBarIconView,
-                "getIcon",
-                Context.class,
-                Context.class,
-                "com.android.internal.statusbar.StatusBarIcon",
-                new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!mNewIconStyle) return;
-                        Context sysuiContext = (Context) param.args[0];
-                        Context context = (Context) param.args[1];
-                        Drawable icon = null;
-                        Object statusBarIcon = param.args[2];
+        try {
+            findAndHookMethod(StatusBarIconView,
+                    "getIcon",
+                    Context.class,
+                    Context.class,
+                    "com.android.internal.statusbar.StatusBarIcon",
+                    new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            if (!mNewIconStyle) return;
+                            Context sysuiContext = (Context) param.args[0];
+                            Context context = (Context) param.args[1];
+                            Drawable icon = null;
+                            Object statusBarIcon = param.args[2];
 
-                        String pkgName = (String) getObjectField(statusBarIcon, "pkg");
-                        if (pkgName.contains("com.android") || pkgName.contains("systemui")) return;
-                        try {
-                            if (!pkgName.contains("systemui")) {
-                                icon = context.getPackageManager().getApplicationIcon(pkgName);
+                            String pkgName = (String) getObjectField(statusBarIcon, "pkg");
+                            if (pkgName.contains("com.android") || pkgName.contains("systemui"))
+                                return;
+                            try {
+                                if (!pkgName.contains("systemui")) {
+                                    icon = context.getPackageManager().getApplicationIcon(pkgName);
+                                }
+                            } catch (Throwable e) {
+                                return;
                             }
-                        } catch (Throwable e) {
-                            return;
-                        }
-                        int dimen = 0;
-                        try {
-                            boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
-                            dimen = mContext.getResources().getDimensionPixelSize(
-                                    mContext.getResources().getIdentifier(
-                                            isLowRam ?
-                                                    "notification_small_icon_size" :
-                                                    "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
-                        } catch (Throwable ignored) {
-                        }
-                        TypedValue typedValue = new TypedValue();
-                        sysuiContext.getResources().getValue(
-                                sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
-                                typedValue, true);
-                        float scaleFactor = typedValue.getFloat();
+                            int dimen = 0;
+                            try {
+                                boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
+                                dimen = mContext.getResources().getDimensionPixelSize(
+                                        mContext.getResources().getIdentifier(
+                                                isLowRam ?
+                                                        "notification_small_icon_size" :
+                                                        "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
+                            } catch (Throwable ignored) {
+                            }
+                            TypedValue typedValue = new TypedValue();
+                            sysuiContext.getResources().getValue(
+                                    sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
+                                    typedValue, true);
+                            float scaleFactor = typedValue.getFloat();
 
-                        if (icon != null) {
-                            Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
-                            icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
-                            if (Build.VERSION.SDK_INT >= 35) {
+                            if (icon != null) {
+                                Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
+                                icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
+                                if (Build.VERSION.SDK_INT >= 35) {
+                                    setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
+                                } else {
+                                    setFloatField(param.thisObject, "mIconAppearAmount", mNewIconScale);
+                                }
+                                if (scaleFactor == 1f) { // No need to scale icon
+                                    param.setResult(icon);
+                                } else { // Scale Factor != 1f so return a scaled icon
+                                    param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
+                                }
+                            }
+                        }
+                    });
+        } catch (Throwable ignored) {
+            // Method not found in OOS 15.0.1
+            findAndHookMethod(StatusBarIconView,
+                    "getIcon",
+                    "com.android.internal.statusbar.StatusBarIcon",
+                    new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            if (!mNewIconStyle) return;
+                            View v = (View) param.thisObject;
+                            Context context = v.getContext();
+                            Drawable icon = null;
+                            Object statusBarIcon = param.args[0];
+
+                            String pkgName = (String) getObjectField(statusBarIcon, "pkg");
+                            if (pkgName.contains("com.android") || pkgName.contains("systemui"))
+                                return;
+                            try {
+                                if (!pkgName.contains("systemui")) {
+                                    icon = context.getPackageManager().getApplicationIcon(pkgName);
+                                }
+                            } catch (Throwable e) {
+                                return;
+                            }
+                            int dimen = 0;
+                            try {
+                                boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
+                                dimen = mContext.getResources().getDimensionPixelSize(
+                                        mContext.getResources().getIdentifier(
+                                                isLowRam ?
+                                                        "notification_small_icon_size" :
+                                                        "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
+                            } catch (Throwable ignored) {
+                            }
+                            TypedValue typedValue = new TypedValue();
+                            context.getResources().getValue(
+                                    context.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
+                                    typedValue, true);
+                            float scaleFactor = typedValue.getFloat();
+
+                            if (icon != null) {
+                                Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
+                                icon = DrawableSize.downscaleToSize(context.getResources(), icon, dimen, dimen);
                                 setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
-                            } else {
-                                setFloatField(param.thisObject, "mIconAppearAmount", mNewIconScale);
-                            }
-                            if (scaleFactor == 1f) { // No need to scale icon
-                                param.setResult(icon);
-                            } else { // Scale Factor != 1f so return a scaled icon
-                                param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
+                                if (scaleFactor == 1f) { // No need to scale icon
+                                    param.setResult(icon);
+                                } else { // Scale Factor != 1f so return a scaled icon
+                                    param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
+                                }
                             }
                         }
-                    }
-                });
-
+                    });
+        }
     }
 
     private void openOxygenCustomizer() {
