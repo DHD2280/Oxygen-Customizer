@@ -59,6 +59,7 @@ import com.oplus.systemui.separate.OplusSeparateNotificationAndQSState;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
@@ -255,8 +256,7 @@ public class QsWidgets extends XposedMods {
                     .run(param -> {
                         Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
                         boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
-                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!QsStyleObserver.isSeparateStyle()) return;
                         if (!isQsFullyExpanded) return;
                         MotionEvent event = (MotionEvent) param.args[1];
                         hookTouchHandler(param, event, "onScrollX");
@@ -267,8 +267,7 @@ public class QsWidgets extends XposedMods {
                     .run(param -> {
                         Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
                         boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
-                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!QsStyleObserver.isSeparateStyle()) return;
                         if (!isQsFullyExpanded) return;
                         MotionEvent event = (MotionEvent) param.args[0];
                         hookTouchHandler(param, event, "onTouchEvent");
@@ -278,8 +277,7 @@ public class QsWidgets extends XposedMods {
                     .run(param -> {
                         Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
                         boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        OplusSeparateNotificationAndQSState oplusSeparateNotificationAndQSState = (OplusSeparateNotificationAndQSState) DependencyEx.get(OplusSeparateNotificationAndQSState.class);
-                        if (!(Boolean)oplusSeparateNotificationAndQSState.getEnableSeparateNotificationAndQS().getValue()) return;
+                        if (!QsStyleObserver.isSeparateStyle()) return;
                         if (!isQsFullyExpanded) return;
                         MotionEvent event = (MotionEvent) param.args[0];
                         hookTouchHandler(param, event, "onInterceptTouchEvent");
