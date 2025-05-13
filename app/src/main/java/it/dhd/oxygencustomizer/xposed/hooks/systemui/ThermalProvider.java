@@ -102,7 +102,7 @@ public class ThermalProvider extends XposedMods {
             try {
             return ThermalServiceOC.getCurrentTemperatures();
             } catch (Throwable t) {
-                log(t);
+                XposedBridge.log("ThermalProvider error: " + t);
                 return new Object[0];
             }
         }
@@ -120,7 +120,7 @@ public class ThermalProvider extends XposedMods {
             }
             return temps;
         } catch (Throwable t) {
-            log(t);
+            XposedBridge.log("ThermalProvider error: " + t);
             return new Object[0];
         }
     }
