@@ -258,14 +258,10 @@ public class LockscreenNowBar extends XposedMods {
             }
         });
 
-        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
         // Or handlePrimaryBouncerChanged(int, int)
-        hookAllMethods(KeyguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (NowBarController.hasInstance()) {
-                    NowBarController.getInstance().setKeyguardShowing((boolean) param.args[0]);
-                }
+        ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing -> {
+            if (NowBarController.hasInstance()) {
+                NowBarController.getInstance().setKeyguardShowing(mKeyguardShowing);
             }
         });
 

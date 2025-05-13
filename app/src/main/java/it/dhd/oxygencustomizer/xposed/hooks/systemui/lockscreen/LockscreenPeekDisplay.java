@@ -23,6 +23,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayHolder;
@@ -122,13 +123,9 @@ public class LockscreenPeekDisplay extends XposedMods {
             this.mStatusBarState = mStatusBarState;
             updateVisibility();
         });
-        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
-        hookAllMethods(KeyguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mKeyguardShowing = (boolean) param.args[0];
-                updateVisibility();
-            }
+        ControllersProvider.registerKeyguardShowingCallback(showing -> {
+            mKeyguardShowing = showing;
+            updateVisibility();
         });
 
         ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
@@ -193,6 +190,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .run(param -> {
                     if (!mKeyguardShowing || mStatusBarState != 1) return;
                     if (mPeekContainer == null) return;
+                    if (QsStyleObserver.isSeparateStyle()) return;
                     float position = (float) param.getResult();
                     ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int) position + dp2px(mContext, mTopMargin), 0, 0);
                 });
@@ -205,6 +203,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                     float f2, f3;
                     f2 = (float) param.args[0];
                     f3 = (float) param.args[1];
+                    if (!QsStyleObserver.isSeparateStyle()) return;
                     ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int)f2 - (int)f3 + dp2px(mContext, mTopMargin), 0, 0);
                 });
 

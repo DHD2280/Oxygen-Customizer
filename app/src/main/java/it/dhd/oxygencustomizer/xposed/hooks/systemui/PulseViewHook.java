@@ -221,19 +221,7 @@ public class PulseViewHook extends XposedMods {
         });
 
         // Stole Keyguard is showing
-        Class<?> KayguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
-        hookAllMethods(KayguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (PulseControllerImpl.hasInstance()) {
-                    //log("Keyguard is showing: " + param.args[0]);
-                    PulseControllerImpl.getInstance().setKeyguardShowing((boolean) param.args[0]);
-                    VisualizerView.getInstance().bringToFront();
-                    VisualizerView.getInstance().requestLayout();
-                    updateLockscreenIcons();
-                }
-            }
-        });
+        ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing);
 
         // Stole Screen Pinning
         try {
@@ -250,6 +238,15 @@ public class PulseViewHook extends XposedMods {
         }
 
     }
+
+    private final ControllersProvider.OnKeyguardShowing mKeyguardShowing = showing -> {
+        if (PulseControllerImpl.hasInstance()) {
+            PulseControllerImpl.getInstance().setKeyguardShowing(showing);
+            VisualizerView.getInstance().bringToFront();
+            VisualizerView.getInstance().requestLayout();
+            updateLockscreenIcons();
+        }
+    };
 
     private void updateLockscreenIcons() {
         if (!mPulseEnabled || !mLockScreenPulse) return;

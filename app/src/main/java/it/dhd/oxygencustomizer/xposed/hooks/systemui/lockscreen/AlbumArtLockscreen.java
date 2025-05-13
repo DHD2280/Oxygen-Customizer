@@ -27,6 +27,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
@@ -106,13 +107,9 @@ public class AlbumArtLockscreen extends XposedMods {
         });
 
         // Stole Keyguard is showing
-        Class<?> KayguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
-        hookAllMethods(KayguardUpdateMonitor, "setKeyguardShowing", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                shouldShowArt = (boolean) param.args[0];
-                updateAlbumArt();
-            }
+        ControllersProvider.registerKeyguardShowingCallback(showing -> {
+            shouldShowArt = showing;
+            updateAlbumArt();
         });
 
         hookAllMethods(CentralSurfacesImplClass, "onKeyguardGoingAway", new XC_MethodHook() {
