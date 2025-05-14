@@ -23,8 +23,11 @@ public class SettingsLibUtilsProvider extends XposedMods {
 
     public static ColorStateList getColorAttr(int resID, Context context) {
         if (UtilsClass == null) return null;
-
-        return (ColorStateList) callStaticMethod(UtilsClass, "getColorAttr", context, resID);
+        try {
+            return (ColorStateList) callStaticMethod(UtilsClass, "getColorAttr", context, resID);
+        } catch (Throwable ignored) {
+            return (ColorStateList) callStaticMethod(UtilsClass, "getColorAttr", resID, context);
+        }
     }
 
     public static int getColorStateListDefaultColor(Context context, int resID) {
