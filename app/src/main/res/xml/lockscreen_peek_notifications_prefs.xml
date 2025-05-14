@@ -122,7 +122,7 @@
             app:cpv_showAlphaSlider="true" />
 
         <it.dhd.oneplusui.preference.OplusSeekbarPreference
-            app:defaultValue="52"
+            android:defaultValue="52"
             android:dependency="lockscreen_peek_notifications"
             android:key="peek_display_icon_size"
             android:title="@string/peek_icon_size"
@@ -131,7 +131,7 @@
             app:tickInterval="1" />
 
         <it.dhd.oneplusui.preference.OplusSeekbarPreference
-            app:defaultValue="16"
+            android:defaultValue="16"
             android:dependency="lockscreen_peek_notifications"
             android:key="peek_display_icon_padding"
             android:title="@string/peek_icon_padding"
@@ -139,7 +139,7 @@
             android:max="40" />
 
         <it.dhd.oneplusui.preference.OplusSeekbarPreference
-            app:defaultValue="16"
+            android:defaultValue="16"
             android:dependency="lockscreen_peek_notifications"
             android:key="peek_display_icon_margin"
             android:title="@string/peek_icon_margin"
@@ -162,7 +162,7 @@
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:title="@string/peek_clear_all_count_title"
             android:summary="@string/peek_clear_all_count_summary"
-            app:defaultValue="4"
+            android:defaultValue="4"
             android:key="peek_clear_all_count"
             android:min="4"
             android:max="8" />

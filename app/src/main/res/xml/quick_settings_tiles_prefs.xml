@@ -4,7 +4,7 @@
     xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
 
     <it.dhd.oneplusui.preference.OplusSwitchPreference
-        app:defaultValue="false"
+        android:defaultValue="false"
         android:key="quick_settings_tiles_customize"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
@@ -14,7 +14,7 @@
     <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
         android:key="quick_settings_quick_tiles_seek"
         android:title="@string/quick_settings_tiles_qqs"
-        app:defaultValue="5"
+        android:defaultValue="5"
         app:forcePosition="bottom"
         app:iconSpaceReserved="false"
         android:max="6"
@@ -29,7 +29,7 @@
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:key="quick_settings_tiles_rows_seek"
             android:title="@string/quick_settings_tiles_horizontal_rows"
-            app:defaultValue="3"
+            android:defaultValue="3"
             app:iconSpaceReserved="false"
             android:max="6"
             android:min="1" />
@@ -37,7 +37,7 @@
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:key="quick_settings_tiles_horizontal_columns_seek"
             android:title="@string/quick_settings_tiles_horizontal_columns"
-            app:defaultValue="4"
+            android:defaultValue="4"
             app:iconSpaceReserved="false"
             android:max="7"
             android:min="1"/>
@@ -53,7 +53,7 @@
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:key="quick_settings_tiles_vertical_columns_seek"
             android:title="@string/quick_settings_tiles_vertical_columns"
-            app:defaultValue="4"
+            android:defaultValue="4"
             app:iconSpaceReserved="false"
             android:max="6"
             android:min="1"/>
@@ -61,7 +61,7 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <!-- <it.dhd.oneplusui.preference.OplusSwitchPreference
-        app:defaultValue="false"
+        android:defaultValue="false"
         android:key="quick_settings_disable_lockscreen"
         android:title="@string/quick_settings_tiles_disable_qs_title"
         android:summary="@string/quick_settings_tiles_disable_qs_summary"
