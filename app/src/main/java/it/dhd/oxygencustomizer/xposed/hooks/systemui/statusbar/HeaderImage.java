@@ -57,7 +57,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsSeparateMods;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
