@@ -16,9 +16,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRad
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -53,7 +51,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.oplus.posteffect.BlurDrawable;
 import com.oplus.posteffect.ForegroundBlurParam;
-import com.oplus.systemui.plugins.qs.DeviceProfile;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
@@ -77,7 +74,6 @@ import io.github.neonorbit.dexplore.filter.ClassFilter;
 import io.github.neonorbit.dexplore.filter.DexFilter;
 import io.github.neonorbit.dexplore.filter.ReferenceTypes;
 import io.github.neonorbit.dexplore.result.ClassData;
-import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -140,6 +136,7 @@ public class QsTileCustomization extends XposedMods {
     private int qsLabelsColor;
 
     // Brightness Slider
+    private Object mOplusQsVerticalSeekbar = null;
     private Class<?> ForegroundBlurParam = null;
     private boolean qsBrightnessSliderCustomize, qsBrightnessBackgroundCustomize;
     private int qsBrightnessSliderColorMode, qsBrightnessSliderColor, qsBrightnessBackgroundColor;
@@ -561,13 +558,13 @@ public class QsTileCustomization extends XposedMods {
         OplusQSHighlightTileViewImpl
                 .before("getOutlineProviderForHighlightTile")
                 .run(param -> {
-                    if (!qsCustomHighlightTileColors) return;
+                    if (!customHighlightTileRadius) return;
                     param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
                 });
         QsViewOutlineProviderKtClz
                 .before("getOutlineProviderForHighlightTile")
                         .run(param -> {
-                            if (!qsCustomHighlightTileColors) return;
+                            if (!customHighlightTileRadius) return;
                             param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
                         });
         OplusQSHighlightTileView
@@ -962,40 +959,36 @@ public class QsTileCustomization extends XposedMods {
         OplusQsVerticalSeekBar
                 .before("createActiveTrackBlurParams")
                 .run(param -> {
+                    XposedBridge.log("QsTileCustomization: createActiveTrackBlurParams");
                     if (!qsBrightnessSliderCustomize) return;
-
                     Object ForegroundParams = getForegroundBlur(SLIDER_PROGRESS);
-
                     param.setResult(ForegroundParams);
                 });
 
         OplusQsVerticalSeekBar
                 .before("createInactiveTrackBlurParams")
                 .run(param -> {
+                    XposedBridge.log("QsTileCustomization: createInactiveTrackBlurParams");
                     if (!qsBrightnessBackgroundCustomize) return;
                     Object ForegroundParams = getForegroundBlur(SLIDER_BACKGROUND);
-
                     param.setResult(ForegroundParams);
-//                    param.setResult(
-//                            callMethod(
-//                                    param.thisObject,
-//                                    "createForegroundBlurParams",
-//                                    isNeedSeparateDarkThemeColor(mContext),
-//                                    qsBrightnessBackgroundColor,
-//                                    qsBrightnessBackgroundColor
-//                            )
-//                    );
                 });
 
         // now hook when update colors
         // public final void drawForegroundBlur(Canvas canvas, Paint paint, ForegroundBlurParam foregroundBlurParam, Path path) {
+//        OplusQsVerticalSeekBar
+//                .before("onDraw")
+//                        .run(param -> {
+//                            Canvas canvas = (Canvas) param.args[0];
+//                            setAdditionalInstanceField(canvas, "mOplusQsVerticalSeekbar", mOplusQsVerticalSeekbar);
+//                        });
         OplusQsVerticalSeekBar
                 .before("drawForegroundBlur")
                 .run(param -> {
+                    XposedBridge.log("QsTileCustomization: drawForegroundBlur");
                     Object foregroundBlurParam = param.args[2];
                     Object activeTrackParam = getObjectField(param.thisObject, "activeTrackParam");
-                    Object inactiveTrackParam = getObjectField(param.thisObject, "inactiveTrackParam");
-
+                    XposedBridge.log("QsTileCustomization: drawForegroundBlur - foregroundBlurParam: " + (foregroundBlurParam == null) + " activeTrackParam: " + (activeTrackParam == null));
                     if (foregroundBlurParam == activeTrackParam) { // draw active color
                         // TODO: check if we need to draw active color
                         Object newForeground;
@@ -1282,7 +1275,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private Object getForegroundBlur(int type) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-
+        XposedBridge.log("QsTileCustomization: getForegroundBlur " + ForegroundBlurParam.class.getName());
         return switch (type) {
             case SLIDER_PROGRESS ->
                     ForegroundBlurParam.getConstructor(int.class, int.class, int.class)
