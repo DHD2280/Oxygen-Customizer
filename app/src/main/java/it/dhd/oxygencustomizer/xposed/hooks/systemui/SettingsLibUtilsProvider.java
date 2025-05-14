@@ -45,26 +45,43 @@ public class SettingsLibUtilsProvider extends XposedMods {
     public static int getColorAttrDefaultColor(Context context, int resID) {
         if (UtilsClass == null) return 0;
 
-        try {
-            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, 0);
-        } catch (Throwable ignored) { //OOS 13
-            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID);
+        Object[][] argsList = {
+                {resID, 0, context},                  // OOS15.0.1
+                {context, resID, 0},                  // OOS13+
+                {context, resID}                      // fallback
+        };
+
+        for (Object[] args : argsList) {
+            try {
+                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", args);
+            } catch (Throwable ignored) {
+                // try next
+            }
         }
+
+        return 0;
     }
 
     public static int getColorAttrDefaultColor(int resID, Context context, int defValue) {
         if (UtilsClass == null) {
             return defValue;
         }
-        try {
-            return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID, defValue);
-        } catch (Throwable throwable) {
+
+        Object[][] argsList = {
+                {context, resID, defValue},     // OOS15.0.1
+                {context, resID},               // OOS13+
+                {resID, context}                // fallback
+        };
+
+        for (Object[] args : argsList) {
             try {
-                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", context, resID);
-            } catch (Throwable throwable1) {
-                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", resID, context);
+                return (int) callStaticMethod(UtilsClass, "getColorAttrDefaultColor", args);
+            } catch (Throwable ignored) {
+                // try next
             }
         }
+
+        return 0;
     }
 
     public static int getColorAttrDefaultColor(int resID, Context context) {
