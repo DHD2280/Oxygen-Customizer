@@ -61,7 +61,18 @@ public class NotificationRoundness extends BaseFragment {
         gradientDrawable.setColor(ContextCompat.getColor(OxygenCustomizer.getAppContext(), R.color.offStateColor));
         binding.notifRoundPreview.notificationChild.setBackground(gradientDrawable);
         binding.notifRoundPreview.notifDesc.setText(getString(R.string.notif_roundness_preview_desc));
-        binding.disableRadius.setVisibility(OverlayUtil.isOverlayEnabled("CRN1") ? View.VISIBLE : View.GONE);
+        binding.disableRadius.setVisibility(OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCRN1.overlay") || OverlayUtil.isOverlayEnabled("OxygenCustomizerComponentCR1.overlay") ? View.VISIBLE : View.GONE);
+        binding.disableRadius.setOnClickListener(v -> {
+            loadingDialog.show(getResources().getString(R.string.loading_dialog_wait));
+
+            new Thread(() -> {
+                OverlayUtil.disableOverlays("OxygenCustomizerComponentCRN1.overlay", "OxygenCustomizerComponentCR1.overlay");
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    // Hide loading dialog
+                    loadingDialog.hide();
+                }, 1500);
+            }).start();
+        });
 
         final int[] finalUiCornerRadius = {Prefs.getInt(NOTIFICATION_CORNER_RADIUS, 28)};
 
