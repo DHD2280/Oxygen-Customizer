@@ -2,31 +2,45 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_ALL_BUTTON_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATIONS_SHOW_BUTTONS;
+import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
+
+import com.android.systemui.statusbar.AlphaOptimizedImageView;
 
 import java.util.Collection;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class StatusbarNotification extends XposedMods {
 
-    private static final String listenPackage = Constants.Packages.SYSTEM_UI;
+    private static final String listenPackage = SYSTEM_UI;
     // Notification Expander
     private static final int DEFAULT = 0;
     private static final int EXPAND_ALWAYS = 1;
@@ -47,6 +61,10 @@ public class StatusbarNotification extends XposedMods {
     private boolean customizeClearButton = false, linkBackgroundAccent = true, linkIconAccent = false;
     private int clearButtonBgColor = Color.GRAY, clearButtonIconColor = Color.WHITE;
 
+    // Expand and Collapse Buttons
+    private boolean mShowButtons = false;
+    private LinearLayout mNotificationButtonsContainer = new LinearLayout(mContext);
+
     public StatusbarNotification(Context context) {
         super(context);
     }
@@ -58,6 +76,7 @@ public class StatusbarNotification extends XposedMods {
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
         notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
+        mShowButtons = Xprefs.getBoolean(NOTIFICATIONS_SHOW_BUTTONS, false);
         customizeClearButton = Xprefs.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
         linkBackgroundAccent = Xprefs.getBoolean(CLEAR_BUTTON_BG_LINK_ACCENT, true);
         linkIconAccent = Xprefs.getBoolean(CLEAR_BUTTON_ICON_LINK_ACCENT, false);
@@ -69,6 +88,9 @@ public class StatusbarNotification extends XposedMods {
                 if (k.equals(Key[0])) {
                     updateButton();
                 }
+            if (Key[0].equals(NOTIFICATIONS_SHOW_BUTTONS)) {
+                setupButtons();
+            }
         }
     }
 
@@ -86,7 +108,7 @@ public class StatusbarNotification extends XposedMods {
             CollapsedStatusBarFragmentClass
                     .after("onViewCreated")
                     .run(param -> mStatusBar = (View) getObjectField(mCollapsedStatusBarFragment, "mStatusBar"));
-            
+
         }
 
         //ReflectedClass OplusGutsContent = ReflectedClass.of("com.oplus.systemui.statusbar.notification.row.OpNotificationGuts.OplusGutsContent");
@@ -98,17 +120,17 @@ public class StatusbarNotification extends XposedMods {
         );
         OplusPowerNotificationWarnings
                 .before("showChargeErrorDialog")
-                        .run(param -> {
-                            if (removeChargingCompleteNotification && (int) param.args[0] == 7) {
-                                param.setResult(null);
-                            }
-                        });
+                .run(param -> {
+                    if (removeChargingCompleteNotification && (int) param.args[0] == 7) {
+                        param.setResult(null);
+                    }
+                });
 
         OplusPowerNotificationWarnings
                 .before("showLowBatteryDialog")
-                        .run(param -> {
-                            if (removeLowBattery) param.setResult(null);
-                        });
+                .run(param -> {
+                    if (removeLowBattery) param.setResult(null);
+                });
 
         ReflectedClass FlashlightNotification = ReflectedClass.of(
                 "com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", /* OOS 15-14 */
@@ -116,9 +138,9 @@ public class StatusbarNotification extends XposedMods {
         );
         FlashlightNotification
                 .before("sendNotification")
-                        .run(param -> {
-                            if (removeFlashlightNotification) param.setResult(null);
-                        });
+                .run(param -> {
+                    if (removeFlashlightNotification) param.setResult(null);
+                });
 
         ReflectedClass SystemPromptController = ReflectedClass.of(
                 "com.oplus.systemui.statusbar.controller.SystemPromptController", /* OOS 15-14 */
@@ -126,9 +148,9 @@ public class StatusbarNotification extends XposedMods {
         );
         SystemPromptController
                 .before("updateDeveloperMode")
-                        .run(param -> {
-                            if (removeDevMode) param.setResult(null);
-                        });
+                .run(param -> {
+                    if (removeDevMode) param.setResult(null);
+                });
 
         ReflectedClass NotificationStackScrollLayoutClass = ReflectedClass.of("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout");
         ReflectedClass NotifCollectionClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.notification.collection.NotifCollection");
@@ -140,9 +162,10 @@ public class StatusbarNotification extends XposedMods {
         //region default notification state
         NotificationPanelViewControllerClass
                 .before("notifyExpandingStarted")
-                        .run(param -> {
-                            if (notificationDefaultExpansion != DEFAULT) expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
-                        });
+                .run(param -> {
+                    if (notificationDefaultExpansion != DEFAULT)
+                        expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
+                });
         //endregion
 
         //grab notification container manager
@@ -160,23 +183,25 @@ public class StatusbarNotification extends XposedMods {
                 "com.oplusos.systemui.notification.view.OplusClearAllButton" // OOS 13
         );
 
+        addNotificationButtons();
+
         final View.OnLayoutChangeListener listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (v.getVisibility() == View.VISIBLE) updateButton();
         };
 
         OplusClearAllButton
                 .afterConstruction()
-                        .run(param -> {
-                            mClearAllButton = (ImageView) param.thisObject;
-                            if (defaultClearAllIcon == null && mClearAllButton != null) {
-                                defaultClearAllIcon = mClearAllButton.getDrawable();
-                            }
-                            if (defaultClearAllBg == null && mClearAllButton != null) {
-                                defaultClearAllBg = mClearAllButton.getBackground();
-                            }
-                            updateButton();
-                            mClearAllButton.addOnLayoutChangeListener(listener);
-                        });
+                .run(param -> {
+                    mClearAllButton = (ImageView) param.thisObject;
+                    if (defaultClearAllIcon == null && mClearAllButton != null) {
+                        defaultClearAllIcon = mClearAllButton.getDrawable();
+                    }
+                    if (defaultClearAllBg == null && mClearAllButton != null) {
+                        defaultClearAllBg = mClearAllButton.getBackground();
+                    }
+                    updateButton();
+                    mClearAllButton.addOnLayoutChangeListener(listener);
+                });
     }
 
     public void expandAll(boolean expand) {
@@ -204,6 +229,68 @@ public class StatusbarNotification extends XposedMods {
 
     private void setRowExpansion(Object row, boolean expand) {
         callMethod(row, "setUserExpanded", expand, true);
+    }
+
+    private void addNotificationButtons() {
+        ReflectedClass OplusQSSimpleHeader = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusQSSimpleHeader");
+
+        if (OplusQSSimpleHeader.getClazz() == null) return;
+
+        OplusQSSimpleHeader
+                .after("onInit")
+                .run(param -> {
+                    FrameLayout view = (FrameLayout) param.thisObject;
+
+                    LinearLayout clockContainer = view.findViewById(
+                            mContext.getResources().getIdentifier(
+                                    "button_container_parent",
+                                    "id",
+                                    mContext.getPackageName()
+                            )
+                    );
+                    mNotificationButtonsContainer.setLayoutParams(
+                            new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                            )
+                    );
+                    mNotificationButtonsContainer.setOrientation(LinearLayout.HORIZONTAL);
+                    mNotificationButtonsContainer.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                    clockContainer.addView(mNotificationButtonsContainer, clockContainer.getChildCount() - 1);
+
+                    AlphaOptimizedImageView mExpand, mCollapse;
+                    int resIdWidth = mContext.getResources().getIdentifier("simple_qs_header_button_width", "dimen", SYSTEM_UI);
+                    int resIdHeight = mContext.getResources().getIdentifier("qs_footer_settings_button_size", "dimen", SYSTEM_UI);
+
+                    mExpand = new AlphaOptimizedImageView(mContext);
+                    mCollapse = new AlphaOptimizedImageView(mContext);
+
+                    mExpand.setLayoutParams(new LinearLayout.LayoutParams(
+                            (int) mContext.getResources().getDimension(resIdWidth),
+                            (int) mContext.getResources().getDimension(resIdHeight)
+                    ));
+                    mExpand.setPadding(dp2px(mContext, 4), 0, dp2px(mContext, 4), 0);
+                    mCollapse.setLayoutParams(new LinearLayout.LayoutParams(
+                            (int) mContext.getResources().getDimension(resIdWidth),
+                            (int) mContext.getResources().getDimension(resIdHeight)
+                    ));
+
+                    mNotificationButtonsContainer.addView(mExpand);
+                    mNotificationButtonsContainer.addView(mCollapse);
+
+                    mExpand.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_expand, mContext.getTheme()));
+                    mCollapse.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_collapse, mContext.getTheme()));
+
+                    mExpand.setOnClickListener(v -> expandAll(true));
+
+                    mCollapse.setOnClickListener(v -> expandAll(false));
+
+                    setupButtons();
+                });
+    }
+
+    private void setupButtons() {
+        mNotificationButtonsContainer.setVisibility(mShowButtons ? View.VISIBLE : View.GONE);
     }
 
     @Override

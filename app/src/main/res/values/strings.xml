@@ -186,6 +186,8 @@
     <string name="notif_default_expansion_title">Notification default expansion</string>
     <string name="notif_always_expand">Always expand</string>
     <string name="notif_always_collapse">Always collapse</string>
+    <string name="notif_show_buttons">Show expand and collapse button</string>
+    <string name="notif_show_buttons_summary">Show expand and collapse button in notification panel.\nOnly compatible with split qs style.</string>
     <string name="customize_clear_all_button">Customize Clear All Button</string>
     <string name="clear_all_link_bg_accent">Link Background to Accent</string>
     <string name="clear_all_bg_color">Custom Background Color</string>
