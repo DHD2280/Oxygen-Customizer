@@ -1213,7 +1213,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", finalView));
+        Object expandable;
+        if (Build.VERSION.SDK_INT >= 35) {
+            expandable = callStaticMethod(Expandable, "fromView", view);
+        } else {
+            expandable = null;
+        }
+        post(() -> callMethod(getCellularTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1229,7 +1235,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", finalView));
+        Object expandable;
+        if (Build.VERSION.SDK_INT >= 35) {
+            expandable = callStaticMethod(Expandable, "fromView", view);
+        } else {
+            expandable = null;
+        }
+        post(() -> callMethod(getOplusBluetoothTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
@@ -1246,7 +1258,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         } else {
             finalView = view;
         }
-        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", finalView));
+        Object expandable;
+        if (Build.VERSION.SDK_INT >= 35) {
+            expandable = callStaticMethod(Expandable, "fromView", view);
+        } else {
+            expandable = null;
+        }
+        post(() -> callMethod(getHotspotTile(), "handleSecondaryClick", (Build.VERSION.SDK_INT >= 35) ? expandable : finalView));
         vibrate(0);
     }
 
