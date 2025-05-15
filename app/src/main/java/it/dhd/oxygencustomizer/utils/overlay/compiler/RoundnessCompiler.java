@@ -21,7 +21,7 @@ public class RoundnessCompiler {
 
     private static final String TAG = RoundnessCompiler.class.getSimpleName();
     private static final String[] mPackages = {FRAMEWORK, SYSTEM_UI};
-    private static final String[] mOverlayName = {"CRN1"};//, "CR1"};
+    private static final String[] mOverlayName = {"CRN1", "CR1"};
     private static boolean mForce = false;
 
     public static boolean buildOverlay(String[] resources, boolean force) throws IOException {
