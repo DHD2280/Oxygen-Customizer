@@ -3,12 +3,71 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
+import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.*;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_DARK_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_COLOR_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_CUSTOMIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_AMOUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_TINT_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_SHOW_ALBUM_ART;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS_TOTAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_DURATION;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_INTERPOLATOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLORS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIDE_LABELS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_LABELS_CUSTOM_COLOR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_BOTTOM_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOTAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_UPDATE_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
@@ -139,7 +198,7 @@ public class QsTileCustomization extends XposedMods {
     private int qsLabelsColor;
 
     // Brightness Slider
-    private Object mOplusQsVerticalSeekbar = null;
+    private static final List<Object> seekBarInstances = new ArrayList<>();
     private Class<?> ForegroundBlurParam = null;
     private boolean qsBrightnessSliderCustomize, qsBrightnessBackgroundCustomize;
     private int qsBrightnessSliderColorMode, qsBrightnessSliderColor, qsBrightnessBackgroundColor;
@@ -152,6 +211,10 @@ public class QsTileCustomization extends XposedMods {
     private final int BLEND_OVERLAY_LUMINOSITY = 3;
     private final int BLEND_LUMINOSITY_OVERLAY = 4;
     private boolean qsBrightnessSliderDark = false;
+
+    // Qs Sliders roundness
+    private boolean qsSlidersRoundness = false;
+    private float qsSlidersRoundnessValue = 0;
 
     // QS Media Tile
     private boolean qsCustomMediaTileColor = false;
@@ -255,6 +318,8 @@ public class QsTileCustomization extends XposedMods {
         sliderRemoveBlur = Xprefs.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
         sliderBlendColor = Integer.parseInt(Xprefs.getString(QS_SLIDERS_BLEND_COLOR, "0"));
         qsBrightnessSliderDark = Xprefs.getBoolean(QS_BRIGHTNESS_DARK_ICON, false);
+        qsSlidersRoundness = Xprefs.getBoolean(QS_SLIDERS_RADIUS_SWITCH, false);
+        qsSlidersRoundnessValue = Xprefs.getSliderFloat(QS_SLIDERS_RADIUS, 40f);
 
         // Labels
         qsLabelsHide = Xprefs.getBoolean(QS_TILE_HIDE_LABELS, false);
@@ -298,8 +363,10 @@ public class QsTileCustomization extends XposedMods {
                     updateTileColors();
                 }
                 if (Key[0].equals(QS_TILE_HIGHTLIGHT_RADIUS_TOTAL) ||
-                    Key[0].equals(QS_TILE_RADIUS_TOTAL) ||
-                    Key[0].equals(QS_MEDIA_TILE_RADIUS_TOTAL)) {
+                        Key[0].equals(QS_TILE_RADIUS_TOTAL) ||
+                        Key[0].equals(QS_MEDIA_TILE_RADIUS_TOTAL) ||
+                        Key[0].equals(QS_SLIDERS_RADIUS_SWITCH) ||
+                        Key[0].equals(QS_SLIDERS_RADIUS)) {
                     notifyQsUpdate();
                 }
             }
@@ -356,10 +423,12 @@ public class QsTileCustomization extends XposedMods {
             mSubtitle = (TextView) getObjectField(param.thisObject, "mSecondLine");
             try {
                 mExpandIndicator = (ImageView) getObjectField(param.thisObject, "mExpandIndicator");
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
             try {
                 mPadLock = (ImageView) getObjectField(param.thisObject, "mPadLock");
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
             setupLabels();
         };
 
@@ -557,7 +626,7 @@ public class QsTileCustomization extends XposedMods {
         OplusQSHighlightTileView
                 .before("getBgOutlineProvider")
                 .run(param -> {
-                     if (!customHighlightTileRadius) return;
+                    if (!customHighlightTileRadius) return;
                     param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
                 });
         ReflectedClass OplusQSHighlightTileViewImpl = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
@@ -569,10 +638,10 @@ public class QsTileCustomization extends XposedMods {
                 });
         QsViewOutlineProviderKtClz
                 .before("getOutlineProviderForHighlightTile")
-                        .run(param -> {
-                            if (!customHighlightTileRadius) return;
-                            param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
-                        });
+                .run(param -> {
+                    if (!customHighlightTileRadius) return;
+                    param.setResult(getTileOutlineTest((View) param.args[0], dp2px(mContext, highlightTileRadius)));
+                });
         OplusQSHighlightTileView
                 .after("onShapeChanged")
                 .run(param -> {
@@ -663,28 +732,30 @@ public class QsTileCustomization extends XposedMods {
 
         // My device tile
         if (MyDeviceBaseClass != null) {
-            ReflectedClass MyDeviceTileView = ReflectedClass.of(MyDeviceBaseClass);
-            MyDeviceTileView
-                    .after("setColorBackground")
-                    .run(param -> {
-                        Drawable bg = (Drawable) ((View)param.thisObject).getBackground();
-                        Log.d("QsTileCustomization", "setColorBackground: " + bg.getClass().getName());
-                        if (bg instanceof BlurDrawable blurDrawable) {
-                            blurDrawable.setBlurParams(
-                                    ((BlurDrawable) bg).getBlurParams(),
-                                    new ForegroundBlurParam(0, qsInactiveColorHighlight, qsInactiveColorHighlight)
-                            );
-                            blurDrawable.invalidateSelf();
-                        } else {
-                            if (bg instanceof ShapeDrawable) {
-                                ((ShapeDrawable) bg).getPaint().setColor(qsInactiveColorHighlight);
-                            } else if (bg instanceof GradientDrawable) {
-                                ((GradientDrawable) bg).setColor(qsInactiveColorHighlight);
+            ReflectedClass MyDeviceTileView = ReflectedClass.ofIfPossible(MyDeviceBaseClass);
+            if (MyDeviceTileView.getClazz() != null) {
+                MyDeviceTileView
+                        .after("setColorBackground")
+                        .run(param -> {
+                            Drawable bg = (Drawable) ((View) param.thisObject).getBackground();
+                            Log.d("QsTileCustomization", "setColorBackground: " + bg.getClass().getName());
+                            if (bg instanceof BlurDrawable blurDrawable) {
+                                blurDrawable.setBlurParams(
+                                        ((BlurDrawable) bg).getBlurParams(),
+                                        new ForegroundBlurParam(0, qsInactiveColorHighlight, qsInactiveColorHighlight)
+                                );
+                                blurDrawable.invalidateSelf();
+                            } else {
+                                if (bg instanceof ShapeDrawable) {
+                                    ((ShapeDrawable) bg).getPaint().setColor(qsInactiveColorHighlight);
+                                } else if (bg instanceof GradientDrawable) {
+                                    ((GradientDrawable) bg).setColor(qsInactiveColorHighlight);
+                                }
+                                bg.invalidateSelf();
                             }
-                            bg.invalidateSelf();
-                        }
-                        ((View) param.thisObject).setBackground(bg);
-                    });
+                            ((View) param.thisObject).setBackground(bg);
+                        });
+            }
         }
 
     }
@@ -712,7 +783,6 @@ public class QsTileCustomization extends XposedMods {
             XposedBridge.log("QsTileCustomization getTileOutlineTest method found: " + targetMethod.getName() + " " + Arrays.toString(targetMethod.getParameterTypes()));
             targetMethod.setAccessible(true);
 
-            // Step 2: Crea i parametri in base ai tipi richiesti
             Class<?>[] paramTypes = targetMethod.getParameterTypes();
             Object[] args = new Object[maxParams];
 
@@ -725,42 +795,24 @@ public class QsTileCustomization extends XposedMods {
                 } else if (type == boolean.class || type == Boolean.class) {
                     args[i] = true;
                 } else if (Function.class.isAssignableFrom(type)) {
-                    args[i] = (Function<Context, Float>) Context -> Float.valueOf(radius); // tua funzione
+                    args[i] = (Function<Context, Float>) Context -> Float.valueOf(radius);
                 } else if (type == int.class) {
-                    args[i] = 6; // maschera dei parametri opzionali
+                    args[i] = 6;
                 } else if (type == Object.class) {
-                    args[i] = null; // Kotlin mette questo a fine per default-call
+                    args[i] = null;
                 } else {
                     args[i] = null; // fallback
                 }
             }
 
-            // Step 3: chiama il metodo
             try {
-                return callStaticMethod(clazz.getClazz(), targetMethod.getName(), args); // metodo statico
+                return callStaticMethod(clazz.getClazz(), targetMethod.getName(), args);
             } catch (Throwable t) {
                 XposedBridge.log("QsTileCustomization - getTileOutlineTest: " + t.getMessage());
             }
 
         } else {
-            XposedBridge.log("❌ Nessun metodo $default trovato.");
-        }
-        return null;
-    }
-
-    private Object getTileOutline(View v, int radius) {
-        try {
-            return QsViewOutlineProvider.Companion.getQsViewRoundRectOutlineProvider$default(QsViewOutlineProvider.Companion, v, false,
-                    o -> Float.valueOf(radius), 2, null);
-        } catch (Throwable ignored) {
-            try {
-                return QsViewOutlineProvider.Companion.getQsViewRoundRectOutlineProvider$default(QsViewOutlineProvider.Companion, v, false, false,
-                        o -> Float.valueOf(radius), 2, null);
-            } catch (Throwable ignored2) {
-//                try {
-//
-//                }
-            }
+            XposedBridge.log("QsTileCustomization - getTileOutlineTest No method found.");
         }
         return null;
     }
@@ -1045,6 +1097,13 @@ public class QsTileCustomization extends XposedMods {
             }
         });
 
+        ReflectedClass OplusQsBaseToggleSliderLayout = ReflectedClass.of("com.oplus.systemui.qs.base.seek.OplusQsBaseToggleSliderLayout");
+        OplusQsBaseToggleSliderLayout
+                .before("updateRadius")
+                .run(param -> {
+                    if (!qsSlidersRoundness) return;
+                    param.args[1] = dp2px(mContext, qsSlidersRoundnessValue);
+                });
 
     }
 

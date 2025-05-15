@@ -257,6 +257,8 @@ public final class Constants {
             public static final String QS_SLIDERS_REMOVE_BLUR = "qs_sliders_remove_blur";
             public static final String QS_SLIDERS_BLEND_COLOR = "qs_slider_blend_color";
             public static final String QS_BRIGHTNESS_DARK_ICON = "qs_brightness_dark_icon";
+            public static final String QS_SLIDERS_RADIUS_SWITCH = "qs_sliders_radius_switch";
+            public static final String QS_SLIDERS_RADIUS = "qs_sliders_radius";
 
             // Tile Animations
             public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";

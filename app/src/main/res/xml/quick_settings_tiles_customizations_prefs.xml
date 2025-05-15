@@ -172,5 +172,22 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_sliders_radius_switch"
+            android:title="@string/sliders_custom_radius"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="qs_sliders_radius"
+            android:title="@string/qs_tile_radius"
+            app:defaultValue="20"
+            app:iconSpaceReserved="false"
+            app:maxVal="40"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="dp" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 </PreferenceScreen>

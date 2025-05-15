@@ -214,6 +214,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_TILE_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_BLEND_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
@@ -584,8 +586,13 @@ public class PreferenceHelper {
             }
             case QS_SLIDERS_REMOVE_BLUR,
                  QS_SLIDERS_BLEND_COLOR,
-                 QS_BRIGHTNESS_DARK_ICON -> {
+                 QS_BRIGHTNESS_DARK_ICON,
+                 QS_SLIDERS_RADIUS_SWITCH -> {
                 return Build.VERSION.SDK_INT >= 35;
+            }
+            case QS_SLIDERS_RADIUS -> {
+                return Build.VERSION.SDK_INT >= 35 &&
+                        instance.mPreferences.getBoolean(QS_SLIDERS_RADIUS_SWITCH, false);
             }
             case QS_TILE_ANIMATION_INTERPOLATOR,
                  QS_TILE_ANIMATION_DURATION -> {
@@ -1303,6 +1310,10 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_MEDIA_ART_BLUR_AMOUNT, 35) + "%";
             case QS_MEDIA_ART_TINT_AMOUNT ->
                     instance.mPreferences.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 30) + "%";
+
+            case QS_SLIDERS_RADIUS ->
+                instance.mPreferences.getSliderInt(QS_SLIDERS_RADIUS, 20) + "dp";
+
             // Statusbar
             case "status_bar_clock_size" ->
                     instance.mPreferences.getSliderInt("status_bar_clock_size", 12) + "sp";

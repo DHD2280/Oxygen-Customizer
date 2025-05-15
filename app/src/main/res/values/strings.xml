@@ -504,7 +504,7 @@
     <string name="blur_overlay_luminosity">Overlay - Luminosity</string>
     <string name="blur_luminosity_overlay">Luminosity - Overlay</string>
     <string name="brightness_dark_icon">Remove auto brightness color tint</string>
-    <string name="brightness_dark_icon_summary">Toggle auto brightness to apply</string>
+    <string name="sliders_custom_radius">Custom sliders radius</string>
 
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Custom QS Tile Radius</string>
