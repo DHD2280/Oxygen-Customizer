@@ -281,9 +281,9 @@ public class ControllersProvider extends XposedMods {
                     boolean keyguardShowing = (boolean) param.args[0];
                     onKeyguardShowing(keyguardShowing);
                 });
-        ReflectedClass QSFragmentHelper = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.helper.QSFragmentHelper");
-        if (QSFragmentHelper.getClazz() != null) {
-            QSFragmentHelper
+        ReflectedClass NotificationShadeWindowControllerImpl = ReflectedClass.ofIfPossible("com.android.systemui.shade.NotificationShadeWindowControllerImpl");
+        if (NotificationShadeWindowControllerImpl.getClazz() != null) {
+            NotificationShadeWindowControllerImpl
                     .after("setKeyguardShowing")
                     .run(param -> {
                         boolean keyguardShowing = (boolean) param.args[0];
