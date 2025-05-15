@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
+import android.view.animation.Interpolator;
+import android.view.animation.PathInterpolator;
 
 import androidx.annotation.NonNull;
 
@@ -15,6 +17,8 @@ import com.oplusos.systemui.common.blurability.drawable.AutoBlurDrawable;
 
 
 public abstract class MixColorTileViewBackgroundOC extends MixColorTileViewBackground {
+
+    public static final Interpolator ICON_COLOR_TRANSITION_INTERPOLATOR = new PathInterpolator(0.33f, 0.0f, 0.67f, 1.0f);
 
     public AutoBlurDrawable autoBlurDrawable;
     public ValueAnimator iconBgAnimator;

@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.utils.systemui;
 
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.QsColorUtil;
-
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -9,11 +7,15 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.view.animation.Interpolator;
+import android.view.animation.PathInterpolator;
 
 import com.oplus.systemui.qs.base.widget.BaseTileViewBackground;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 
 public abstract class NormalColorTileViewBackground extends BaseTileViewBackground {
+
+    public static final Interpolator ICON_COLOR_TRANSITION_INTERPOLATOR = new PathInterpolator(0.33f, 0.0f, 0.67f, 1.0f);
 
     public GradientDrawable gradientDrawable;
     public ValueAnimator iconBgAnimator;

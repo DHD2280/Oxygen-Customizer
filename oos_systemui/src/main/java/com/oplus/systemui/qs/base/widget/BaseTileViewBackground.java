@@ -1,13 +1,8 @@
 package com.oplus.systemui.qs.base.widget;
 
-import android.view.animation.Interpolator;
-import android.view.animation.PathInterpolator;
-
 import com.android.systemui.plugins.qs.QSTile;
 
 public abstract class BaseTileViewBackground extends BaseQsViewBackground {
-
-    public static final Interpolator ICON_COLOR_TRANSITION_INTERPOLATOR = new PathInterpolator(0.33f, 0.0f, 0.67f, 1.0f);
 
     public final QsTileViewInfoProvider qsTileView;
     public final String logTag;
