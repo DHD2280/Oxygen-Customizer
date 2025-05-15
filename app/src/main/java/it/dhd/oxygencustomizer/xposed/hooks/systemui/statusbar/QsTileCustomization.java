@@ -51,6 +51,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.oplus.posteffect.BlurDrawable;
 import com.oplus.posteffect.ForegroundBlurParam;
+import com.oplus.systemui.qs.base.util.QsColorUtil;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
@@ -148,6 +149,7 @@ public class QsTileCustomization extends XposedMods {
     private final int BLEND_COLOR_DODGE_LUMINOSITY = 2;
     private final int BLEND_OVERLAY_LUMINOSITY = 3;
     private final int BLEND_LUMINOSITY_OVERLAY = 4;
+    private boolean qsBrightnessSliderDark = false;
 
     // QS Media Tile
     private boolean qsCustomMediaTileColor = false;
@@ -250,6 +252,7 @@ public class QsTileCustomization extends XposedMods {
         qsBrightnessBackgroundColor = Xprefs.getInt(QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR, Color.TRANSPARENT);
         sliderRemoveBlur = Xprefs.getBoolean(QS_SLIDERS_REMOVE_BLUR, false);
         sliderBlendColor = Integer.parseInt(Xprefs.getString(QS_SLIDERS_BLEND_COLOR, "0"));
+        qsBrightnessSliderDark = Xprefs.getBoolean(QS_BRIGHTNESS_DARK_ICON, false);
 
         // Labels
         qsLabelsHide = Xprefs.getBoolean(QS_TILE_HIDE_LABELS, false);
@@ -456,6 +459,7 @@ public class QsTileCustomization extends XposedMods {
 
         if (Build.VERSION.SDK_INT >= 35) {
             hookSliders();
+            hookBrightnessIcon();
         }
 
         try {
@@ -1031,6 +1035,28 @@ public class QsTileCustomization extends XposedMods {
             default ->
                     SystemUtils.isDarkMode() ? BLEND_LUMINOSITY_OVERLAY : BLEND_LUMINOSITY_COLOR_DODGE;
         };
+    }
+
+    private void hookBrightnessIcon() {
+
+        ReflectedClass ClipBrightnessView = ReflectedClass.of("com.oplus.systemui.qs.base.seek.ClipBrightnessView");
+
+        if (ClipBrightnessView.getClazz() == null) return;
+
+        ReflectedClass.ReflectionConsumer colorHook = param -> {
+            if (!qsBrightnessSliderDark) return;
+            int color = getStaticIntField(QsColorUtil.class, "BRIGHTNESS_ICON_BG_LIGHT_COLOR");
+            callMethod(param.thisObject, "setIconColorFilter", color);
+        };
+
+        ClipBrightnessView
+                .after("updateIconColor")
+                .run(colorHook);
+
+        ClipBrightnessView
+                .after("setIconDrawable")
+                .run(colorHook);
+
     }
 
     private void setupOtherViews(View parent, int color) {

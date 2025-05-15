@@ -202,6 +202,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ZOOM_TO_FIT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_DARK_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_CUSTOMIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
@@ -582,7 +583,8 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("brightness_slider_background_color_enabled", false);
             }
             case QS_SLIDERS_REMOVE_BLUR,
-                 QS_SLIDERS_BLEND_COLOR -> {
+                 QS_SLIDERS_BLEND_COLOR,
+                 QS_BRIGHTNESS_DARK_ICON -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
             case QS_TILE_ANIMATION_INTERPOLATOR,

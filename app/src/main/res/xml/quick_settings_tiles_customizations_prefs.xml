@@ -111,6 +111,14 @@
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
+            android:key="qs_brightness_dark_icon"
+            android:title="@string/brightness_dark_icon"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
             android:key="customize_brightness_slider"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
