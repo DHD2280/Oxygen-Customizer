@@ -982,48 +982,69 @@ public class QsTileCustomization extends XposedMods {
 
         // now hook when update colors
         // public final void drawForegroundBlur(Canvas canvas, Paint paint, ForegroundBlurParam foregroundBlurParam, Path path) {
-//        OplusQsVerticalSeekBar
-//                .before("onDraw")
-//                        .run(param -> {
-//                            Canvas canvas = (Canvas) param.args[0];
-//                            setAdditionalInstanceField(canvas, "mOplusQsVerticalSeekbar", mOplusQsVerticalSeekbar);
-//                        });
         OplusQsVerticalSeekBar
-                .before("drawForegroundBlur")
+                .afterConstruction()
                 .run(param -> {
-                    XposedBridge.log("QsTileCustomization: drawForegroundBlur");
-                    Object foregroundBlurParam = param.args[2];
-                    Object activeTrackParam = getObjectField(param.thisObject, "activeTrackParam");
-                    XposedBridge.log("QsTileCustomization: drawForegroundBlur - foregroundBlurParam: " + (foregroundBlurParam == null) + " activeTrackParam: " + (activeTrackParam == null));
-                    if (foregroundBlurParam == activeTrackParam) { // draw active color
-                        // TODO: check if we need to draw active color
-                        Object newForeground;
-                        if (!qsBrightnessSliderCustomize || qsBrightnessSliderColorMode == 0) {
-                            newForeground = callMethod(param.thisObject, "createActiveTrackBlurParams");
-                            param.args[2] = newForeground;
-                        } else {
-                            newForeground = callMethod(param.thisObject, "createForegroundBlurParams",
-                                    isNeedSeparateDarkThemeColor(mContext),
-                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
-                                    qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext)
-                            );
-                        }
-                        param.args[2] = newForeground;
-                    } else { // only remains inactive color
-                        Object newForeground;
-                        if (qsBrightnessBackgroundCustomize) {
-                            newForeground = callMethod(param.thisObject, "createForegroundBlurParams",
-                                    isNeedSeparateDarkThemeColor(mContext),
-                                    qsBrightnessBackgroundColor,
-                                    qsBrightnessBackgroundColor
-                            );
-                        } else {
-                            newForeground = callMethod(param.thisObject, "createInactiveTrackBlurParams");
-                        }
-                        param.args[2] = newForeground;
+                    synchronized (seekBarInstances) {
+                        seekBarInstances.add(param.thisObject);
                     }
-
                 });
+        OplusQsVerticalSeekBar.before("drawForegroundBlur").run(param -> {
+            try {
+                Object foregroundBlurParam = param.args[2];
+                Object activeInstance = null;
+                Object activeTrackParam = null;
+
+                synchronized (seekBarInstances) {
+                    for (Object instance : seekBarInstances) {
+                        Object currentTrackParam = getObjectField(instance, "activeTrackParam");
+                        if (currentTrackParam == foregroundBlurParam) {
+                            activeInstance = instance;
+                            activeTrackParam = currentTrackParam;
+                            break;
+                        }
+                    }
+                }
+
+                if (activeInstance == null && !seekBarInstances.isEmpty()) {
+                    activeInstance = seekBarInstances.get(seekBarInstances.size() - 1);
+                    activeTrackParam = getObjectField(activeInstance, "activeTrackParam");
+                }
+
+                boolean isActive = (foregroundBlurParam == activeTrackParam);
+
+                log("QsTileCustomization: Instance: " + activeInstance +
+                        " | FG Param: " + foregroundBlurParam +
+                        " | Active Param: " + activeTrackParam +
+                        " | IsActive: " + isActive);
+
+                Object newForeground;
+                if (isActive) {
+                    if (!qsBrightnessSliderCustomize || qsBrightnessSliderColorMode == 0) {
+                        newForeground = callMethod(activeInstance, "createActiveTrackBlurParams");
+                    } else {
+                        newForeground = callMethod(activeInstance, "createForegroundBlurParams",
+                                isNeedSeparateDarkThemeColor(mContext),
+                                qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
+                                qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext));
+                    }
+                } else {
+                    if (qsBrightnessBackgroundCustomize) {
+                        newForeground = callMethod(activeInstance, "createForegroundBlurParams",
+                                isNeedSeparateDarkThemeColor(mContext),
+                                qsBrightnessBackgroundColor,
+                                qsBrightnessBackgroundColor);
+                    } else {
+                        newForeground = callMethod(activeInstance, "createInactiveTrackBlurParams");
+                    }
+                }
+                param.args[2] = newForeground;
+
+            } catch (Throwable t) {
+                XposedBridge.log("Error in drawForegroundBlur hook: " + t);
+            }
+        });
+
 
     }
 
