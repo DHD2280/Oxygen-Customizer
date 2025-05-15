@@ -264,6 +264,9 @@ public class HeaderClock extends XposedMods {
             }
             for (String k : QS_HEADER_PREFS) {
                 if (Key[0].equals(k)) {
+                    if (showHeaderClock) {
+                        callMethod(OQC, "updateClock");
+                    }
                     updateStockPrefs();
                     updateClockView();
                 }
@@ -514,7 +517,7 @@ public class HeaderClock extends XposedMods {
                                     mContext.getPackageName()
                             )
                     );
-
+                    clockContainer.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout customClockContainer = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
                     mClockContainers.add(customClockContainer);
 
@@ -619,7 +622,7 @@ public class HeaderClock extends XposedMods {
                 }
             }
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, tag.equals(QS_CLOCK_NOTIF_CONTAINER) ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout qsClockContainer = new LinearLayout(mContext);
         qsClockContainer.setLayoutParams(layoutParams);
         qsClockContainer.setPaddingRelative(0, -10, 0, 0);
@@ -784,6 +787,7 @@ public class HeaderClock extends XposedMods {
     private void updateStockPrefs() {
         // Custom clock visible so hide stock clock
         if (showHeaderClock) {
+
             hideView(mOplusDate);
             hideView(mOplusClock);
             hideView(mOplusCarrier);
