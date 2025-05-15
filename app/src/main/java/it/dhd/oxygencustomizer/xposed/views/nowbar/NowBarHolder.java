@@ -30,6 +30,9 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.oplus.systemui.qs.base.widget.QsViewBackgroundKt;
+import com.oplusos.systemui.common.blurability.MixColor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +59,7 @@ public class NowBarHolder extends LinearLayout {
 
     // Backgrounds
     private FrameLayout mBlurredBackground;
+    private FrameLayout mAutoBlurredBackground;
     private ImageView mBlurredAlbumArt;
     private int mBackgroundMode = 0;
 
@@ -165,6 +169,12 @@ public class NowBarHolder extends LinearLayout {
         );
         mController = NowBarController.getInstance(mContext);
         mBlurredBackground = (FrameLayout) ViewHelper.findViewWithTag(view, "nowBarBlurredBackground");
+        mAutoBlurredBackground = new FrameLayout(mContext);
+        mAutoBlurredBackground.setLayoutParams(new FrameLayout.LayoutParams(
+                MATCH_PARENT,
+                MATCH_PARENT
+        ));
+        mBlurredBackground.addView(mAutoBlurredBackground);
         mBlurredAlbumArt = (ImageView) ViewHelper.findViewWithTag(view, "nowBarBlurredAlbumArt");
         mPagerContainer = (LinearLayout) ViewHelper.findViewWithTag(view, "nowBarViewPagerContainer");
         mViewPager = new ExtendedViewPager(mContext);
@@ -260,8 +270,12 @@ public class NowBarHolder extends LinearLayout {
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
         if (Build.VERSION.SDK_INT >= 35) {
-            Drawable blurred = getNewAutoBlurDrawable(mBlurredBackground, background, 0);
-            mBlurredBackground.setBackground(blurred);
+            Drawable blurred = QsViewBackgroundKt.createMixColorDrawableForQsView(
+                    mAutoBlurredBackground,
+                    new MixColor(4, Color.parseColor("#1a525252"), Color.parseColor("#40262626"))
+            );
+            mAutoBlurredBackground.setBackground(blurred);
+            mBlurredBackground.setBackground(null);
         } else {
             mBlurredBackground.setBackground(background);
         }
