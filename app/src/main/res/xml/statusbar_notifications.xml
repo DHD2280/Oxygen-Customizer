@@ -96,6 +96,13 @@
             android:summary="%s"
             android:title="@string/notif_default_expansion_title"
             app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="statusbar_notification_buttons"
+            android:summary="@string/notif_show_buttons_summary"
+            android:title="@string/notif_show_buttons" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>

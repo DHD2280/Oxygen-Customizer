@@ -264,6 +264,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATIONS_SHOW_BUTTONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
@@ -412,6 +413,9 @@ public class PreferenceHelper {
             // Notification
             case "statusbar_notification_app_icon_scale" -> {
                 return instance.mPreferences.getBoolean("statusbar_notification_app_icon", false);
+            }
+            case NOTIFICATIONS_SHOW_BUTTONS -> {
+                return Build.VERSION.SDK_INT >= 35;
             }
             // Statusbar Logo
             case STATUSBAR_LOGO_APPLY_TINT -> {
