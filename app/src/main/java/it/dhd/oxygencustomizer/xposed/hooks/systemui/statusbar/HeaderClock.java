@@ -525,7 +525,8 @@ public class HeaderClock extends XposedMods {
                         ((ViewGroup) customClockContainer.getParent()).removeView(customClockContainer);
                     }
 
-                    if (clockContainer.findViewWithTag(QS_CLOCK_NOTIF_CONTAINER) == null) clockContainer.addView(customClockContainer, 0);
+                    if (clockContainer.findViewWithTag(QS_CLOCK_NOTIF_CONTAINER) == null)
+                        clockContainer.post(() -> clockContainer.addView(customClockContainer, 0));
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
@@ -538,6 +539,7 @@ public class HeaderClock extends XposedMods {
                     } catch (Throwable ignored) {}
 
                     updateClockView();
+                    updateStockPrefs();
                 });
 
         OplusQSSimpleHeader
@@ -555,6 +557,8 @@ public class HeaderClock extends XposedMods {
                         TextView dateView = (TextView) getObjectField(param.thisObject, "dateView");
                         hideView(dateView);
                     } catch (Throwable ignored) {}
+
+                    updateStockPrefs();
 
                 });
     }
@@ -580,6 +584,13 @@ public class HeaderClock extends XposedMods {
                         ((ViewGroup) clockContaier.getParent()).removeView(clockContaier);
                     }
 
+                    // Set main container height WRAP_CONTENT
+                    // for better custom clock handling
+                    ViewGroup.LayoutParams containerParams = (ViewGroup.LayoutParams) view.getLayoutParams();
+                    containerParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    view.setLayoutParams(containerParams);
+                    view.requestLayout();
+
                     if (viewGroup.findViewWithTag(QS_CLOCK_PLUGIN) == null) viewGroup.addView(clockContaier, 0);
 
                     try {
@@ -593,6 +604,7 @@ public class HeaderClock extends XposedMods {
                     } catch (Throwable ignored) {}
 
                     updateClockView();
+                    updateStockPrefs();
                 });
 
         OplusQSQuickEntranceContainerViewController
@@ -610,6 +622,8 @@ public class HeaderClock extends XposedMods {
                         hideView(dateView);
                     } catch (Throwable ignored) {}
 
+                    updateStockPrefs();
+
                 });
 
     }
@@ -622,7 +636,10 @@ public class HeaderClock extends XposedMods {
                 }
             }
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, tag.equals(QS_CLOCK_NOTIF_CONTAINER) ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout qsClockContainer = new LinearLayout(mContext);
         qsClockContainer.setLayoutParams(layoutParams);
         qsClockContainer.setPaddingRelative(0, -10, 0, 0);
