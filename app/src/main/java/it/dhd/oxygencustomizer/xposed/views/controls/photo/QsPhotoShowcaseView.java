@@ -30,7 +30,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
@@ -74,7 +74,7 @@ public class QsPhotoShowcaseView extends ImageView {
             radius = modRes.getDimension(R.dimen.qs_controls_container_radius);
         }
         path = new Path();
-        mActivityLauncherUtils = mSettingsInterface ? null : new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
+        mActivityLauncherUtils = mSettingsInterface ? null : new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
         if (!mSettingsInterface) {
             setOnClickListener(v -> launchGalleryApp());
         }
