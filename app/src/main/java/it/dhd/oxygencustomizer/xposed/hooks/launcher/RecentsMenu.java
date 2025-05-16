@@ -53,19 +53,21 @@ public class RecentsMenu extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        Log.d("OXYGEN_CUSTOMIZER", "SystemShortcut " + SystemShortcut.class);
-        Log.d("OXYGEN_CUSTOMIZER", "SystemShortcut's classloader " + SystemShortcut.class.getClassLoader());
-        Log.d("OXYGEN_CUSTOMIZER", "KillShortcut " + KillShortcut.class);
-        Log.d("OXYGEN_CUSTOMIZER", "KillShortcut's classloader " + KillShortcut.class.getClassLoader());
-        Log.d("OXYGEN_CUSTOMIZER", "moduleClassLoader " + XPLauncher.class.getClassLoader());
-
 
         ReflectedClass OplusTaskOverlayFactoryKt = ReflectedClass.of("com.oplus.quickstep.shortcuts.OplusTaskOverlayFactoryKt");
         Object[] MENU_OPTIONS = (Object[]) getStaticObjectField(OplusTaskOverlayFactoryKt.getClazz(), "MENU_OPTIONS");
 
         ArrayList<Object> taskShortcutFactories = new ArrayList<>(Arrays.asList(MENU_OPTIONS));
-        taskShortcutFactories.add(DIVIDER);
-        taskShortcutFactories.add(KILL_SHORTCUT);
+        try {
+            taskShortcutFactories.add(DIVIDER);
+        } catch (Throwable t) {
+            log("Failed to add divider shortcut: " + Log.getStackTraceString(t));
+        }
+        try {
+            taskShortcutFactories.add(KILL_SHORTCUT);
+        } catch (Throwable t) {
+            log("Failed to add kill shortcut: " + Log.getStackTraceString(t));
+        }
         setStaticObjectField(OplusTaskOverlayFactoryKt.getClazz(), "MENU_OPTIONS", taskShortcutFactories.toArray(new TaskShortcutFactory[0]));
     }
 
