@@ -59,6 +59,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class GestureNavbarManager extends XposedMods {
 
@@ -150,127 +151,115 @@ public class GestureNavbarManager extends XposedMods {
             mBroadcastRegistered = true;
         }
 
-        Class<?> SideGestureDetector;
-        try {
-            SideGestureDetector = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader);
-        } catch (Throwable t) {
-            SideGestureDetector = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureDetector", lpparam.classLoader); // OOS 13
-        }
-        Class<?> SideGestureNavView;
-        try {
-            SideGestureNavView = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader);
-        } catch (Throwable t) {
-            SideGestureNavView = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView", lpparam.classLoader); // OOS 13
-        }
+        ReflectedClass SideGestureDetector = ReflectedClass.of(
+                "com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureDetector",
+                "com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureDetector" //OOS13
+        );
+        ReflectedClass SideGestureNavView = ReflectedClass.of(
+                "com.oplus.systemui.navigationbar.gesture.sidegesture.SideGestureNavView",
+                "com.oplusos.systemui.navigationbar.gesture.sidegesture.SideGestureNavView" //OOS13
+        );
 
         if (Build.VERSION.SDK_INT >= 34) {
-            hookAllConstructors(SideGestureDetector, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
-                    mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
-                    mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
-                }
-            });
-
-            hookAllMethods(SideGestureDetector, "onMotionEventImpl", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    MotionEvent ev = (MotionEvent) param.args[0];
-
-                    if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
-
-                    Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
-                    boolean isLeftSide = ev.getX() < (mDisplaySize.x / 3f);
-                    mDirection = isLeftSide ? 0 : 1;
-                    if (ev.getActionMasked() == ACTION_DOWN) //down action is enough. once gesture is refused it won't accept further actions
-                    {
-                        int mBottomGestureHeight = (int) callMethod(SideGestureConfigurationEx, "getBottomGestureAreaHeight");
-                        int rotation = (int) getFloatField(param.thisObject, "mRotation");
-                        if (notWithinInsets(ev.getX(),
-                                ev.getY(),
-                                mDisplaySize,
-                                mBottomGestureHeight, rotation)) {
-                            setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
-                            param.setResult(null); //and stop the current method too
-                        }
-                    }
-                }
-            });
-        } else {
-            findAndHookMethod(SideGestureDetector, "isWithinInsets",
-                    int.class,
-                    int.class,
-                    new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            int x = (int) param.args[0];
-                            int y = (int) param.args[1];
-
-
-                            if (getForegroundApp()[0].equals(getDefaultLauncherPackageName()))
-                                return;
-
-                            Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
-                            boolean isLeftSide = x < (mDisplaySize.x / 3f);
-                            mDirection = isLeftSide ? 0 : 1;
-                            int mBottomGestureHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("bottom_gesture_area_height", "dimen", listenPackage));
-                            int rotation = (int) getFloatField(param.thisObject, "mRotation");
-                            if (notWithinInsets(x,
-                                    y,
-                                    mDisplaySize,
-                                    mBottomGestureHeight, rotation)) {
-                                setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
-                                param.setResult(false); //and stop the current method too
-                            }
-                        }
+            SideGestureDetector
+                    .afterConstruction()
+                    .run(param -> {
+                        SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
+                        mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
+                        mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
                     });
+            SideGestureDetector
+                    .before("onMotionEventImpl")
+                            .run(param -> {
+                                MotionEvent ev = (MotionEvent) param.args[0];
+
+                                if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
+
+                                Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
+                                boolean isLeftSide = ev.getX() < (mDisplaySize.x / 3f);
+                                mDirection = isLeftSide ? 0 : 1;
+                                if (ev.getActionMasked() == ACTION_DOWN) //down action is enough. once gesture is refused it won't accept further actions
+                                {
+                                    int mBottomGestureHeight = (int) callMethod(SideGestureConfigurationEx, "getBottomGestureAreaHeight");
+                                    int rotation = (int) getFloatField(param.thisObject, "mRotation");
+                                    if (notWithinInsets(ev.getX(),
+                                            ev.getY(),
+                                            mDisplaySize,
+                                            mBottomGestureHeight, rotation)) {
+                                        setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
+                                        param.setResult(null); //and stop the current method too
+                                    }
+                                }
+                            });
+        } else {
+            SideGestureDetector
+                    .before("isWithinInsets")
+                            .run(param -> {
+                                int x = (int) param.args[0];
+                                int y = (int) param.args[1];
+
+
+                                if (getForegroundApp()[0].equals(getDefaultLauncherPackageName()))
+                                    return;
+
+                                Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
+                                boolean isLeftSide = x < (mDisplaySize.x / 3f);
+                                mDirection = isLeftSide ? 0 : 1;
+                                int mBottomGestureHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("bottom_gesture_area_height", "dimen", listenPackage));
+                                int rotation = (int) getFloatField(param.thisObject, "mRotation");
+                                if (notWithinInsets(x,
+                                        y,
+                                        mDisplaySize,
+                                        mBottomGestureHeight, rotation)) {
+                                    setObjectField(param.thisObject, "mAllowGesture", false); //act like the gesture was not good enough
+                                    param.setResult(false); //and stop the current method too
+                                }
+                            });
         }
 
-        hookAllMethods(SideGestureNavView, "setAppIcon", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                int mPosition = getIntField(param.thisObject, "mPosition");
-                if (overrideBack) {
-                    Drawable icon;
-                    if (overrideMode == 0) {
-                        if (overrideLeft == 0) return;
-                        icon = getActionIcon(overrideLeft, leftCustomApp);
-                    } else {
-                        if (mPosition == 0) {
-                            if (overrideLeft == 0) return;
-                            icon = getActionIcon(overrideLeft, leftCustomApp);
-                        } else {
-                            if (overrideRight == 0) return;
-                            icon = getActionIcon(overrideRight, rightCustomApp);
-                        }
-                    }
-                    param.args[0] = DrawableConverter.drawableToBitmap(icon);
-                }
-            }
-        });
+        SideGestureNavView
+                .before("setAppIcon")
+                        .run(param -> {
+                            int mPosition = getIntField(param.thisObject, "mPosition");
+                            if (overrideBack) {
+                                Drawable icon;
+                                if (overrideMode == 0) {
+                                    if (overrideLeft == 0) return;
+                                    icon = getActionIcon(overrideLeft, leftCustomApp);
+                                } else {
+                                    if (mPosition == 0) {
+                                        if (overrideLeft == 0) return;
+                                        icon = getActionIcon(overrideLeft, leftCustomApp);
+                                    } else {
+                                        if (overrideRight == 0) return;
+                                        icon = getActionIcon(overrideRight, rightCustomApp);
+                                    }
+                                }
+                                param.args[0] = DrawableConverter.drawableToBitmap(icon);
+                            }
+                        });
 
-        findAndHookMethod(SideGestureDetector, "switchApp", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                int side = (int) callMethod(param.thisObject, "getSide");
-                if (overrideBack) {
-                    if (overrideMode == 0) {
-                        if (overrideLeft == 0) return;
-                        runAction(overrideLeft, leftCustomApp);
-                    } else {
-                        if (side == 0) {
-                            if (overrideLeft == 0) return;
-                            runAction(overrideLeft, leftCustomApp);
-                        } else {
-                            if (overrideRight == 0) return;
-                            runAction(overrideRight, rightCustomApp);
-                        }
-                    }
-                    param.setResult(null);
-                }
-            }
-        });
+        SideGestureDetector
+                .before("switchApp")
+                        .run(param -> {
+                            int side = (int) callMethod(param.thisObject, "getSide");
+                            if (overrideBack) {
+                                if (overrideMode == 0) {
+                                    if (overrideLeft == 0) return;
+                                    runAction(overrideLeft, leftCustomApp);
+                                } else {
+                                    if (side == 0) {
+                                        if (overrideLeft == 0) return;
+                                        runAction(overrideLeft, leftCustomApp);
+                                    } else {
+                                        if (overrideRight == 0) return;
+                                        runAction(overrideRight, rightCustomApp);
+                                    }
+                                }
+                                param.setResult(null);
+                            }
+                        });
+
 
         Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
 
