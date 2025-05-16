@@ -8,7 +8,10 @@ import android.view.View;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
+import com.android.systemui.DependencyEx;
 import com.android.systemui.animation.view.LaunchableLinearLayout;
+import com.android.systemui.qs.OplusQuickSettingsEx;
+import com.android.systemui.qs.personality.PersonalityManagerEx;
 import com.oplus.systemui.blur.GaussBlurUtils;
 import com.oplus.systemui.qs.base.util.QsColorUtil;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
@@ -62,7 +65,17 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
 
     @Override
     public QsViewOutlineProvider getBgOutlineProvider() {
-        return QsViewOutlineProviderKt.getMediaPanelViewOutlineProvider$default(this, null, 2, null);
+        PersonalityManagerEx personalityManagerEx;
+        try {
+            personalityManagerEx = ((OplusQuickSettingsEx) DependencyEx.get(OplusQuickSettingsEx.class)).getPersonalityManagerEx();
+        } catch (Throwable ignored) {
+            personalityManagerEx = ((OplusQuickSettingsEx) DependencyEx.sDependency.getDependency(OplusQuickSettingsEx.class)).getPersonalityManagerEx();
+        }
+        return QsViewOutlineProviderKt.getMediaPanelViewOutlineProvider(this, personalityManagerEx);
+    }
+
+    public void reloadBackground() {
+        this.backgroundProxy.refreshViewBackground();
     }
 
 }
