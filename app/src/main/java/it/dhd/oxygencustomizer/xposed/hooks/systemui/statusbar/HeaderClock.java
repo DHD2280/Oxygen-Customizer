@@ -918,7 +918,7 @@ public class HeaderClock extends XposedMods {
             mClockContainer.setAlpha(1.0f);
         }
 
-        //hideView(mOplusCarrier);
+        hideView(mOplusClock);
     }
 
     private void setOnClickListener(View view) {
