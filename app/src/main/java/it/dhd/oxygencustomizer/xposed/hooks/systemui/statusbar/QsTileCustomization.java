@@ -3,12 +3,9 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_DARK_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
@@ -72,7 +69,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isNeedSeparateDarkThemeColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -1079,17 +1075,11 @@ public class QsTileCustomization extends XposedMods {
                     if (!qsBrightnessSliderCustomize || qsBrightnessSliderColorMode == 0) {
                         newForeground = callMethod(activeInstance, "createActiveTrackBlurParams");
                     } else {
-                        newForeground = callMethod(activeInstance, "createForegroundBlurParams",
-                                isNeedSeparateDarkThemeColor(mContext),
-                                qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext),
-                                qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext));
+                        newForeground = getForegroundBlur(SLIDER_PROGRESS);
                     }
                 } else {
                     if (qsBrightnessBackgroundCustomize) {
-                        newForeground = callMethod(activeInstance, "createForegroundBlurParams",
-                                isNeedSeparateDarkThemeColor(mContext),
-                                qsBrightnessBackgroundColor,
-                                qsBrightnessBackgroundColor);
+                        newForeground = getForegroundBlur(SLIDER_BACKGROUND);
                     } else {
                         newForeground = callMethod(activeInstance, "createInactiveTrackBlurParams");
                     }
