@@ -641,6 +641,11 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean(QS_MEDIA_TILE_RADIUS, false);
             }
 
+            // Separate QS
+            case "qs_separate_jump" -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
+
             // Gesture Prefs
             case "gesture_left_height_double" -> {
                 return instance.mPreferences.getBoolean("gesture_left", false);
