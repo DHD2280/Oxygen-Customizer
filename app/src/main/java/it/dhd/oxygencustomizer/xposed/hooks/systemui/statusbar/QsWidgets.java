@@ -40,7 +40,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
@@ -50,18 +49,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.systemui.DependencyEx;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
-import com.oplus.systemui.separate.OplusSeparateNotificationAndQSState;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplExOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
@@ -197,17 +194,17 @@ public class QsWidgets extends XposedMods {
 
         OplusQSTileMediaContainer
                 .afterConstruction()
-                        .run(param -> {
-                            if (!mQsWidgetsEnabled) return;
-                            setBooleanField(param.thisObject, "mIsMediaMode", true);
-                        });
+                .run(param -> {
+                    if (!mQsWidgetsEnabled) return;
+                    setBooleanField(param.thisObject, "mIsMediaMode", true);
+                });
 
         OplusQSTileMediaContainer
                 .before("setMediaMode")
-                        .run(param -> {
-                            if (!mQsWidgetsEnabled) return;
-                            param.args[0] = true;
-                        });
+                .run(param -> {
+                    if (!mQsWidgetsEnabled) return;
+                    param.args[0] = true;
+                });
         if (Build.VERSION.SDK_INT == 33) {
             forceMediaPanelA13();
         }
@@ -218,25 +215,29 @@ public class QsWidgets extends XposedMods {
         );
         QSSecurityFooterUtilsClass
                 .afterConstruction()
-                        .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
+                .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
 
         ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
         if (Build.VERSION.SDK_INT >= 35) {
-        OplusQsMediaPanelView
-                .afterConstruction()
-                        .run(param -> {
-                            if (!mQsWidgetsEnabled) return;
-                            try {
-                                QsViewBackgroundProxy TransparentBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
-                                QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
-                                mBackgroundProxy = TransparentBackgroundProxy;
-                                setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
-                            } catch (Throwable t) {
-                                log("Error setting background proxy: " + Log.getStackTraceString(t));
-                                View v = (View) param.thisObject;
-                                v.setBackground(null);
+            ReflectedClass BaseQsViewBackgroundClz = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.widget.BaseQsViewBackground");
+            OplusQsMediaPanelView
+                    .afterConstruction()
+                    .run(param -> {
+                        if (!mQsWidgetsEnabled) return;
+                        try {
+                            QsViewBackgroundProxy TransparentBackgroundProxy;
+                            if (BaseQsViewBackgroundClz.getClazz() != null) {
+                                TransparentBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
+                            } else {
+                                TransparentBackgroundProxy = new StaticViewBackgroundProxyImplExOC((QsStaticViewInfoProvider) param.thisObject);
                             }
-                        });
+                            QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
+                            mBackgroundProxy = TransparentBackgroundProxy;
+                            setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+                    });
         }
         OplusQsMediaPanelView
                 .after("onFinishInflate")
@@ -258,7 +259,7 @@ public class QsWidgets extends XposedMods {
             ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
             OplusPanelViewPagerController
                     .afterConstruction()
-                            .run(param -> mOplusPanelPagerController = param.thisObject);
+                    .run(param -> mOplusPanelPagerController = param.thisObject);
             OplusPanelViewPagerController
                     .before("onScrollX")
                     .run(param -> {
@@ -371,7 +372,7 @@ public class QsWidgets extends XposedMods {
             updateMediaPlayerPrefs();
             updatePhotoRadius();
         } catch (Throwable t) {
-            log(t);
+            log("Error while placing widgets: " + Log.getStackTraceString(t));
         }
     }
 
