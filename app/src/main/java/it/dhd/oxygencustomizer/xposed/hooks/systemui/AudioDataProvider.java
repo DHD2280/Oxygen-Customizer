@@ -175,7 +175,7 @@ public class AudioDataProvider extends XposedMods {
         // Stole method from KeyguardSliceProvider
         ReflectedClass KeyguardSliceProvider = ReflectedClass.of("com.android.systemui.keyguard.KeyguardSliceProvider");
         KeyguardSliceProvider
-                .after("onPrimaryMetadataOrStateChanged")
+                .before("onPrimaryMetadataOrStateChanged")
                         .run(param -> {
                             MediaMetadata metaData = (MediaMetadata) param.args[0];
                             if (mMediaMetadata != metaData) {
