@@ -50,6 +50,16 @@ public class MediaPlayerObserver extends XposedMods {
                     .run(param -> {
                         bindMediaData(param.args[0]);
                     });
+            OplusQsMediaPanelView
+                    .after("bindMediaData")
+                    .run(param -> {
+                        Object mediaData = param.args[0];
+                        if (mediaData == null) {
+                            unBindMediaData();
+                            return;
+                        }
+                        bindMediaData(param.args[0]);
+                    });
 
             OplusQsMediaPanelView
                     .after("unBindMediaData")
