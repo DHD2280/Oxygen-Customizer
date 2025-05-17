@@ -6,7 +6,6 @@ import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_RECEIVED;
-import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_MEMC_FEATURES;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
@@ -26,9 +25,15 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MemcEnhancer extends XposedMods {
+
+    private static final Set<String> OPLUS_MEMC_FEATURES = new HashSet<>(Arrays.asList(
+            "oplus.software.display.pixelworks_enable",
+            "oplus.software.display.iris_enable",
+            "oplus.software.display.memc_enable",
+            "oplus.software.display.game.memc_enable"
+    ));
 
     private static final String listenPackage = FRAMEWORK;
     private static final ArrayList<String> sConfigPackage = new ArrayList<>();
