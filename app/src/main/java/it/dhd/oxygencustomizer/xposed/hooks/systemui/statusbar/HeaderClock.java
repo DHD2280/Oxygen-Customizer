@@ -91,6 +91,8 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock;
 import it.dhd.oxygencustomizer.utils.TextUtil;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -1008,9 +1010,14 @@ public class HeaderClock extends XposedMods {
         switch (clockStyle) {
             case 6 -> {
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                imageView.setImageDrawable(mClockCustomUserImage ? getCustomUserImage() : getUserImage());
+                applyRoundedImage(imageView, mClockCustomUserImage ? getCustomUserImage() : getUserImage());
             }
         }
+    }
+
+    private void applyRoundedImage(ImageView iv, Drawable drawable) {
+        CircleFramedDrawable circled = new CircleFramedDrawable(DrawableConverter.drawableToBitmap(drawable), iv.getWidth());
+        iv.setImageDrawable(circled);
     }
 
     @SuppressWarnings("all")
