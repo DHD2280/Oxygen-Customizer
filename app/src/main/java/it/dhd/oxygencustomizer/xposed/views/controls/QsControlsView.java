@@ -1724,13 +1724,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 if (v instanceof QsMediaTileView mediaTileView) {
                     mediaTileView.refreshViewBackground();
                     continue;
-                }
-                if (v instanceof QsWeatherWidget) {
-                    if (Build.VERSION.SDK_INT == 35) {
-                        back = new GradientDrawable();
-                        ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
-                        ((GradientDrawable) back).setCornerRadius(getMediaPanelRadius(mContext));
-                    } else if (back instanceof GradientDrawable) {
+                } else if (v instanceof QsViewWeather qsViewWeather) {
+                    qsViewWeather.reloadBackground();
+                    continue;
+                } else if (v instanceof QsWeatherWidget) {
+                    if (back instanceof GradientDrawable) {
                         ((GradientDrawable) back).setColors(new int[]{Color.parseColor("#0D47A1"), Color.parseColor("#0D47A1")});
                     } else if (back instanceof ShapeDrawable) {
                         ((ShapeDrawable) back).getPaint().setColor(Color.parseColor("#0D47A1"));
