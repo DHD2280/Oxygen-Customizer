@@ -32,6 +32,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
 import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
+import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -1016,14 +1017,20 @@ public class HeaderClock extends XposedMods {
     }
 
     private void applyRoundedImage(ImageView iv, Drawable drawable) {
-        CircleFramedDrawable circled = new CircleFramedDrawable(DrawableConverter.drawableToBitmap(drawable), iv.getWidth());
-        iv.setImageDrawable(circled);
+        if (iv == null || drawable == null) return;
+        try {
+            CircleFramedDrawable circled = new CircleFramedDrawable(DrawableConverter.drawableToBitmap(drawable), iv.getWidth());
+            iv.setImageDrawable(circled);
+        } catch (Throwable t) {
+            log("applyRoundedImage: " + t.getMessage());
+            iv.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme()));
+        }
     }
 
     @SuppressWarnings("all")
     private Drawable getUserImage() {
         if (mUserManager == null) {
-            return appContext.getResources().getDrawable(R.drawable.default_avatar);
+            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
         }
 
         try {
@@ -1033,7 +1040,7 @@ public class HeaderClock extends XposedMods {
             return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
         } catch (Throwable throwable) {
             log(throwable);
-            return appContext.getResources().getDrawable(R.drawable.default_avatar);
+            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
         }
     }
 
@@ -1050,7 +1057,7 @@ public class HeaderClock extends XposedMods {
 
             return drawable;
         } catch (Throwable ignored) {
-            return ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.default_avatar, appContext.getTheme());
+            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
         }
     }
 
