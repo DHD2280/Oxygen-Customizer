@@ -7,6 +7,7 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -62,7 +63,10 @@ public class WidgetUtils {
             else if (drawableRes.equals(HOME_CONTROLS))
                 return getDrawable(mContext, "controls_icon", SYSTEM_UI);
 
-            log("LockscreenWidgetsView getDrawable " + drawableRes + " from " + pkg + " error " + t);
+            try {
+                log("WidgetUtils getDrawable " + drawableRes + " from " + pkg + " error " + t);
+            } catch (Throwable ignored) {}
+            Log.e(WidgetUtils.class.getSimpleName(), "getDrawable " + drawableRes + " from " + pkg + " error " + t);
             return null;
         }
     }
@@ -86,7 +90,10 @@ public class WidgetUtils {
                     return modRes.getString(R.string.wallet);
                 }
             }
-            log("LockscreenWidgetsView getString " + stringRes + " from " + pkg + " error " + t);
+            try {
+                log("WidgetUtils getString " + stringRes + " from " + pkg + " error " + t);
+            } catch (Throwable ignored) {}
+            Log.e(WidgetUtils.class.getSimpleName(), "getString " + stringRes + " from " + pkg + " error " + t);
             return "";
         }
     }
