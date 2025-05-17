@@ -23,11 +23,17 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.E
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.StaticLayout;
 import android.widget.FrameLayout;
 
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -123,8 +129,8 @@ public class AodEdgeLight extends XposedMods {
         } else {
             ReflectedClass QuickStepContract = ReflectedClass.of("com.android.systemui.shared.system.QuickStepContract");
             Object radius = callStaticMethod(QuickStepContract.getClazz(), "getWindowCornerRadius", mContext);
-            if (radius instanceof Float) {
-                mScreenCornerRadius = (int) radius;
+            if (radius instanceof Float rad) {
+                mScreenCornerRadius = rad.intValue();
             } else if (radius instanceof Integer) {
                 mScreenCornerRadius = (int) radius;
             } else {
@@ -169,7 +175,12 @@ public class AodEdgeLight extends XposedMods {
                     boolean isSettingInterface = getBooleanField(param.thisObject, "isSettingInterface");
                     Object mIncomingNotiPaint = getObjectField(param.thisObject, "mIncomingNotiPaint");
                     if (!isSettingInterface && mIncomingNotiPaint != null) {
-                        callMethod(mIncomingNotiPaint, "draw", param.args[0]);
+                        try {
+                            callMethod(mIncomingNotiPaint, "draw", param.args[0]);
+                        } catch (Throwable ignored) {
+                            // Method removed in OOS15.0.1
+                            drawIncomingPaint(param, mIncomingNotiPaint);
+                        }
                     }
                     param.setResult(null);
                 });
@@ -291,6 +302,53 @@ public class AodEdgeLight extends XposedMods {
 
     private void refreshEdgeLight() {
         EdgeLightControllerImpl.getInstance(mContext).setOptions(mEdgeLightEnabled, mEdgeLightStyle, mEdgeLightWidth, mEdgeLightColorMode, mAlwaysTriggerOnPulse, mRetick, mEdgeLightCustomColor, mEdgeDrawBlur, mEdgeBlurMode, mEdgeBlurType);
+    }
+
+    private void drawIncomingPaint(XC_MethodHook.MethodHookParam param, Object mIncomingNotiPaint) {
+        Canvas canvas = (Canvas) param.args[0];
+        // Drawable
+        Drawable mDrawable = (Drawable) getObjectField(mIncomingNotiPaint, "mDrawable");
+        // Header
+        StaticLayout mHeaderLayout = (StaticLayout) getObjectField(mIncomingNotiPaint, "mHeaderLayout");
+        Point mHeaderPoint = (Point) getObjectField(mIncomingNotiPaint, "mHeaderPoint");
+        // Title
+        StaticLayout mTitleLayout = (StaticLayout) getObjectField(mIncomingNotiPaint, "mTitleLayout");
+        Point mTitlePoint = (Point) getObjectField(mIncomingNotiPaint, "mTitlePoint");
+        // Message
+        StaticLayout mMessageLayout = (StaticLayout) getObjectField(mIncomingNotiPaint, "mMessageLayout");
+        Point mMessagePoint = (Point) getObjectField(mIncomingNotiPaint, "mMessagePoint");
+
+        // OpIncomingNotificationPaint
+        int mLayoutHeight = getIntField(mIncomingNotiPaint, "mLayoutHeight");
+        int height = (canvas.getHeight() - mLayoutHeight) / 2;
+        Paint mPaint = (Paint) getObjectField(mIncomingNotiPaint, "mPaint");
+        int mMainColor = getIntField(mIncomingNotiPaint, "mMainColor");
+        if (mDrawable != null) {
+            canvas.save();
+            canvas.translate(0.0f, height);
+            mDrawable.draw(canvas);
+            canvas.restore();
+        }
+        if (mHeaderLayout != null) {
+            canvas.save();
+            canvas.translate(mHeaderPoint.x, mHeaderPoint.y + height);
+            mPaint.setColor(mMainColor);
+            mHeaderLayout.draw(canvas);
+            canvas.restore();
+        }
+        mPaint.setColor(-1);
+        if (mTitleLayout != null) {
+            canvas.save();
+            canvas.translate(mTitlePoint.x, mTitlePoint.y + height);
+            mTitleLayout.draw(canvas);
+            canvas.restore();
+        }
+        if (mMessageLayout != null) {
+            canvas.save();
+            canvas.translate(mMessagePoint.x, height + mMessagePoint.y);
+            mMessageLayout.draw(canvas);
+            canvas.restore();
+        }
     }
 
     @Override
