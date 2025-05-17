@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -172,7 +173,6 @@ public class GestureNavbarManager extends XposedMods {
                     .before("onMotionEventImpl")
                             .run(param -> {
                                 MotionEvent ev = (MotionEvent) param.args[0];
-
                                 if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
 
                                 Point mDisplaySize = (Point) getObjectField(param.thisObject, "mDisplaySize");
@@ -384,6 +384,10 @@ public class GestureNavbarManager extends XposedMods {
 
     //region Back gesture
     private boolean notWithinInsets(float x, float y, Point mDisplaySize, float mBottomGestureHeight, int rotation) {
+        if (y >= (mDisplaySize.y - mBottomGestureHeight)) {
+            // Touch are in bottom gesture area
+            return false;
+        }
         boolean isLeftSide = x < (mDisplaySize.x / 3f);
         if (!onRotationToo &&
                 (rotation == 1 ||
