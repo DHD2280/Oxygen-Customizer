@@ -400,6 +400,12 @@ public class StatusbarClock extends XposedMods {
                                 }
                             }
                         });
+                StatClock
+                        .after("updateConfigurationChanged")
+                        .run(param -> {
+                            TextView tv = (TextView) param.thisObject;
+                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                        });
             } catch (Throwable ignored) {
                 log("updateMinWidth in StatClock not found");
             }
@@ -473,6 +479,7 @@ public class StatusbarClock extends XposedMods {
                     } else {
                         tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
                     }
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
 
                     SpannableStringBuilder result = new SpannableStringBuilder();
 
@@ -530,56 +537,6 @@ public class StatusbarClock extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
-//    private float measureTextWithSpans() {
-//        TextPaint textPaint = new TextPaint();
-//        float textSizePx = TypedValue.applyDimension(
-//                TypedValue.COMPLEX_UNIT_SP,
-//                mClockSize,
-//                mContext.getResources().getDisplayMetrics()
-//        );
-//        textPaint.setTextSize(textSizePx);
-//        textPaint.setTypeface(mClockView.getTypeface());
-//
-//        float totalWidth = 0f;
-//
-//        CharSequence beforeClock = getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-//        if (mCustomBeforeSmall) {
-//            float originalSize = textPaint.getTextSize();
-//            textPaint.setTextSize(originalSize * 0.7f);
-//            totalWidth += textPaint.measureText(beforeClock.toString());
-//            textPaint.setTextSize(originalSize);
-//        } else {
-//            totalWidth += textPaint.measureText(beforeClock.toString());
-//        }
-//
-//        String timeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-//        totalWidth += textPaint.measureText(timeText);
-//
-//        if (mAmPmStyle != AM_PM_STYLE_GONE) {
-//            CharSequence amPmText = getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null);
-//            if (mAmPmStyle == AM_PM_STYLE_SMALL) {
-//                float originalSize = textPaint.getTextSize();
-//                textPaint.setTextSize(originalSize * 0.7f);
-//                totalWidth += textPaint.measureText(amPmText.toString());
-//                textPaint.setTextSize(originalSize);
-//            } else {
-//                totalWidth += textPaint.measureText(amPmText.toString());
-//            }
-//        }
-//
-//        CharSequence afterClock = getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null);
-//        if (mCustomAfterSmall) {
-//            float originalSize = textPaint.getTextSize();
-//            textPaint.setTextSize(originalSize * 0.7f);
-//            totalWidth += textPaint.measureText(afterClock.toString());
-//            textPaint.setTextSize(originalSize);
-//        } else {
-//            totalWidth += textPaint.measureText(afterClock.toString());
-//        }
-//
-//        return totalWidth;
-//    }
-
     private float measureTextWithSpans() {
         TextPaint textPaint = new TextPaint();
         float textSizePx = TypedValue.applyDimension(
@@ -590,38 +547,29 @@ public class StatusbarClock extends XposedMods {
         textPaint.setTextSize(textSizePx);
         textPaint.setTypeface(mClockView.getTypeface());
 
-        // 1. Costruisci il testo completo
         SpannableStringBuilder fullText = new SpannableStringBuilder();
 
-        // Aggiungi before text
         fullText.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
 
-        // Aggiungi orologio principale
         fullText.append(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
 
-        // Aggiungi AM/PM se necessario
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
             fullText.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
         }
 
-        // Aggiungi after text
         fullText.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
 
-        // 2. Dividi in righe e misura
         return calculateMaxLineWidth(fullText, textPaint);
     }
 
     private float calculateMaxLineWidth(CharSequence text, TextPaint paint) {
         if (TextUtils.isEmpty(text)) return 0f;
 
-        // Converti eventuali \n simbolici in newline reali
         String processedText = text.toString().replace("\\n", "\n");
         SpannableStringBuilder ssb = new SpannableStringBuilder(processedText);
 
-        // Mantieni tutti gli spans originali
         copySpans(text, ssb);
 
-        // Crea il layout per la misurazione
         StaticLayout layout = new StaticLayout(
                 ssb,
                 paint,
@@ -632,7 +580,6 @@ public class StatusbarClock extends XposedMods {
                 false
         );
 
-        // Trova la larghezza massima tra tutte le righe
         float maxWidth = 0f;
         for (int i = 0; i < layout.getLineCount(); i++) {
             maxWidth = Math.max(maxWidth, layout.getLineWidth(i));
@@ -740,35 +687,6 @@ public class StatusbarClock extends XposedMods {
         }
 
         return formatted;
-    }
-
-    public static class MultilineSupportSpan extends ReplacementSpan {
-        private final float lineSpacingMult;
-        private final float lineSpacingAdd;
-
-        public MultilineSupportSpan(float mult, float add) {
-            this.lineSpacingMult = mult;
-            this.lineSpacingAdd = add;
-        }
-
-        @Override
-        public int getSize(@NonNull Paint paint, CharSequence text,
-                           int start, int end, @Nullable Paint.FontMetricsInt fm) {
-            return (int) paint.measureText(text, start, end);
-        }
-
-        @Override
-        public void draw(@NonNull Canvas canvas, CharSequence text,
-                         int start, int end, float x, int top, int y,
-                         int bottom, @NonNull Paint paint) {
-            String[] lines = text.toString().split("\n");
-            float currentY = y;
-
-            for (String line : lines) {
-                canvas.drawText(line, x, currentY, paint);
-                currentY += paint.getTextSize() * lineSpacingMult + lineSpacingAdd;
-            }
-        }
     }
 
     @SuppressLint("RtlHardcoded")
