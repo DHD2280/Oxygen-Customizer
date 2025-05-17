@@ -48,7 +48,9 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.systemui.DependencyEx;
@@ -224,10 +226,16 @@ public class QsWidgets extends XposedMods {
                 .afterConstruction()
                         .run(param -> {
                             if (!mQsWidgetsEnabled) return;
-                            QsViewBackgroundProxy TransparentBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
-                            QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
-                            mBackgroundProxy = TransparentBackgroundProxy;
-                            setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                            try {
+                                QsViewBackgroundProxy TransparentBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
+                                QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
+                                mBackgroundProxy = TransparentBackgroundProxy;
+                                setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                            } catch (Throwable t) {
+                                log("Error setting background proxy: " + Log.getStackTraceString(t));
+                                View v = (View) param.thisObject;
+                                v.setBackground(null);
+                            }
                         });
         }
         OplusQsMediaPanelView
