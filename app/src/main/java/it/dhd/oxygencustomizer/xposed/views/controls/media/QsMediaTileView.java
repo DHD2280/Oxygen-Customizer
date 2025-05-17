@@ -9,6 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
 
+/**
+ * OOS 15 custom Media Tile
+ * This implements {@link BaseQsStaticView} to gain the background proxy
+ */
 public class QsMediaTileView extends BaseQsStaticView {
 
     private static final String TAG = "QsMediaTileView";

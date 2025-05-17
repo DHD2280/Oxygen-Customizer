@@ -27,6 +27,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -130,6 +131,7 @@ public class MediaBinder {
         LayoutInflater.from(appContext).inflate(R.layout.view_qs_media_tile, mParentView);
         setupViews();
 
+        logD("registerMediaData");
         MediaPlayerObserver.registerMediaData(mMediaDataObserver);
 
         ThemeEnabler.registerThemeChangedListener(this::setupColors);
@@ -190,6 +192,7 @@ public class MediaBinder {
     private final MediaPlayerObserver.OnBindMediaData mMediaDataObserver = new MediaPlayerObserver.OnBindMediaData() {
         @Override
         public void onBindMediaData(Object mediaData) {
+            logD("QsMediaTile onBindMediaData mediaData: " + (mediaData == null));
             mMediaData = mediaData;
             if (mediaData == null) {
                 setDefaultTip();
@@ -207,6 +210,7 @@ public class MediaBinder {
 
         @Override
         public void onUnBindMediaData() {
+            logD("onUnBindMediaData");
             setDefaultTip();
             hideMediaQsBackground();
         }
@@ -255,7 +259,9 @@ public class MediaBinder {
     }
 
     private void setBackground(Drawable drawable) {
+        logD("setBackground: " + mParentView.getClass().getName());
         if (mParentView instanceof QsMediaTileView) {
+            logD("setBackground: QsMediaTileView");
             mContainer.setBackground(drawable);
             return;
         }
@@ -513,6 +519,7 @@ public class MediaBinder {
     }
 
     private void setDefaultTip() {
+        logD("setDefaultTip");
         mBound = false;
         mParentView.post(() -> {
             // App Icon
@@ -552,6 +559,10 @@ public class MediaBinder {
         qsInactiveColor = color;
         updateDefaultBackground(defDrawable);
         updateBackground();
+    }
+
+    private void logD(String message) {
+        Log.d(String.format(TAG, VIEW_TAG), message);
     }
 
 }
