@@ -48,7 +48,6 @@ import com.bosphere.fadingedgelayout.FadingEdgeLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -141,129 +140,119 @@ public class HeaderImage extends XposedMods {
         } catch (Throwable ignored) {
         }
 
-        Class<?> OplusQSContainerImpl;
-        try {
-            OplusQSContainerImpl = findClass("com.oplus.systemui.qs.OplusQSContainerImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusQSContainerImpl = findClass("com.oplusos.systemui.qs.OplusQSContainerImpl", lpparam.classLoader); // OOS 13
-        }
+        ReflectedClass OplusQSContainerImpl = ReflectedClass.of(
+                "com.oplus.systemui.qs.OplusQSContainerImpl", // OOS 15-14
+                "com.oplusos.systemui.qs.OplusQSContainerImpl"
+        );
 
         try {
-            hookAllMethods(OplusQSContainerImpl, "onFinishInflate", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    log("onFinishInflate");
+            OplusQSContainerImpl
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
 
-                    FrameLayout mQuickStatusBarHeader = (FrameLayout) param.thisObject;
+                        FadingEdgeLayout mQsHeaderLayout = new FadingEdgeLayout(mContext);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
+                        layoutParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+                        layoutParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
+                        layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingTop, mContext.getResources().getDisplayMetrics());
 
-                    FadingEdgeLayout mQsHeaderLayout = new FadingEdgeLayout(mContext);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiHeightPortrait, mContext.getResources().getDisplayMetrics()));
-                    layoutParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
-                    layoutParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingSide, mContext.getResources().getDisplayMetrics());
-                    layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, qshiPaddingTop, mContext.getResources().getDisplayMetrics());
+                        mQsHeaderLayout.setLayoutParams(layoutParams);
+                        mQsHeaderLayout.setVisibility(View.GONE);
 
-                    mQsHeaderLayout.setLayoutParams(layoutParams);
-                    mQsHeaderLayout.setVisibility(View.GONE);
+                        ImageView mQsHeaderImageView = new ImageView(mContext);
+                        mQsHeaderImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        mQsHeaderLayout.addView(mQsHeaderImageView);
 
-                    ImageView mQsHeaderImageView = new ImageView(mContext);
-                    mQsHeaderImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    mQsHeaderLayout.addView(mQsHeaderImageView);
+                        mQuickStatusBarHeader.addView(mQsHeaderLayout, 0);
 
-                    mQuickStatusBarHeader.addView(mQsHeaderLayout, 0);
+                        mQsHeaderLayouts.add(mQsHeaderLayout);
+                        mQsHeaderImageViews.add(mQsHeaderImageView);
 
-                    mQsHeaderLayouts.add(mQsHeaderLayout);
-                    mQsHeaderImageViews.add(mQsHeaderImageView);
+                        updateQSHeaderImage();
+                    });
 
-                    updateQSHeaderImage();
+            OplusQSContainerImpl
+                    .after("onConfigurationChanged")
+                    .run(param -> {
+                        Configuration config = (Configuration) param.args[0];
+                        isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE;
+                    });
 
-                }
-            });
-
-            hookAllMethods(OplusQSContainerImpl, "onConfigurationChanged", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    Configuration config = (Configuration) param.args[0];
-                    isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE;
-                }
-            });
-
-            hookAllMethods(OplusQSContainerImpl, "updateResources", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    updateQSHeaderImage();
-                }
-            });
+            OplusQSContainerImpl
+                    .after("updateResources")
+                    .run(param -> {
+                        updateQSHeaderImage();
+                    });
 
         } catch (Throwable ignored) {
         }
 
         if (newControlCenter) {
             try {
-                Class<?> NotificationPanelViewControllerExImp = findClass("com.oplus.systemui.shade.NotificationPanelViewControllerExImp", lpparam.classLoader);
+                ReflectedClass NotificationPanelViewControllerExImp = ReflectedClass.of("com.oplus.systemui.shade.NotificationPanelViewControllerExImp");
 
-                hookAllMethods(NotificationPanelViewControllerExImp, "canScaleFadePanelAtExpandFraction",
-                        new XC_MethodHook() {
-                            @Override
-                            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                if (!qshiEnabled || mQsHeaderLayouts.isEmpty()) return;
-                                if (isLandscape && !qshiLandscapeEnabled) return;
-                                if (param.args[0] instanceof Float) {
-                                    float expansion = (float) param.args[0];
-                                    //log("canScaleFadePanelAtExpandFraction: " + expansion);
+                NotificationPanelViewControllerExImp
+                        .after("canScaleFadePanelAtExpandFraction")
+                                .run(param -> {
+                                    if (!qshiEnabled || mQsHeaderLayouts.isEmpty()) return;
+                                    if (isLandscape && !qshiLandscapeEnabled) return;
+                                    if (param.args[0] instanceof Float) {
+                                        float expansion = (float) param.args[0];
+                                        //log("canScaleFadePanelAtExpandFraction: " + expansion);
 
-                                    if (isFirstExpansionIgnored) {
-                                        //log("Ignoring first expansion");
-                                        if (expansion >= 0.9f) {
-                                            //log("First expansion ignored f>=0.9");
-                                            isFirstExpansionIgnored = false;
-                                            isResetNeeded = true;
+                                        if (isFirstExpansionIgnored) {
+                                            //log("Ignoring first expansion");
+                                            if (expansion >= 0.9f) {
+                                                //log("First expansion ignored f>=0.9");
+                                                isFirstExpansionIgnored = false;
+                                                isResetNeeded = true;
+                                            }
+                                            if (expansion >= .20f) {
+                                                if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                                    for (View v : mQsHeaderLayouts) {
+                                                        v.setAlpha(1f);
+                                                        v.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+                                            }
+                                            return;
                                         }
-                                        if (expansion >= .20f) {
-                                            if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
-                                                for (View v : mQsHeaderLayouts) {
-                                                    v.setAlpha(1f);
-                                                    v.setVisibility(View.VISIBLE);
+
+                                        if (expansion <= .2f) {
+                                            //log("Resetting");
+                                            isFirstExpansionIgnored = true;
+                                            isResetNeeded = false;
+                                        }
+                                        if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                            for (View v : mQsHeaderLayouts) {
+                                                if (v != null) {
+                                                    if (expansion <= .900f) {
+                                                        v.animate()
+                                                                .alpha(0f)
+                                                                .setDuration(750)
+                                                                .setListener(new AnimatorListenerAdapter() {
+                                                                    @Override
+                                                                    public void onAnimationEnd(Animator animation) {
+                                                                        v.setVisibility(View.GONE);
+                                                                    }
+                                                                });
+                                                    } else {
+                                                        v.animate()
+                                                                .alpha(1f)
+                                                                .setDuration(150)
+                                                                .setListener(new AnimatorListenerAdapter() {
+                                                                    @Override
+                                                                    public void onAnimationEnd(Animator animation) {
+                                                                        v.setVisibility(View.VISIBLE);
+                                                                    }
+                                                                });
+                                                    }
                                                 }
                                             }
                                         }
-                                        return;
                                     }
-
-                                    if (expansion <= .2f) {
-                                        //log("Resetting");
-                                        isFirstExpansionIgnored = true;
-                                        isResetNeeded = false;
-                                    }
-                                    if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
-                                        for (View v : mQsHeaderLayouts) {
-                                            if (v != null) {
-                                                if (expansion <= .900f) {
-                                                    v.animate()
-                                                            .alpha(0f)
-                                                            .setDuration(750)
-                                                            .setListener(new AnimatorListenerAdapter() {
-                                                                @Override
-                                                                public void onAnimationEnd(Animator animation) {
-                                                                    v.setVisibility(View.GONE);
-                                                                }
-                                                            });
-                                                } else {
-                                                    v.animate()
-                                                            .alpha(1f)
-                                                            .setDuration(150)
-                                                            .setListener(new AnimatorListenerAdapter() {
-                                                                @Override
-                                                                public void onAnimationEnd(Animator animation) {
-                                                                    v.setVisibility(View.VISIBLE);
-                                                                }
-                                                            });
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
+                                });
 
             } catch (Throwable t) {
                 log("Error hooking new Control Center " + t.getMessage());
