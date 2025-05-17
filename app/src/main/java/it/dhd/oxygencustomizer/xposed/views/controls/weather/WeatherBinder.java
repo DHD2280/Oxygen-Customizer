@@ -192,12 +192,12 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
     @Override
     public void weatherError(int errorReason) {
-        mCity.setText("");
-        mCondition.setText("");
+        if (mCity != null) mCity.setText("");
+        if (mCondition != null) mCondition.setText("");
         if (errorReason == OmniJawsClient.EXTRA_ERROR_DISABLED) {
             mWeatherInfo = null;
         } else if (errorReason == OmniJawsClient.EXTRA_ERROR_NETWORK) {
-            mTemp.setText("Location disabled");
+            if (mTemp != null) mTemp.setText("Location disabled");
         }
     }
 
