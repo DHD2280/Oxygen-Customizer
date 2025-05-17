@@ -138,6 +138,7 @@ import io.github.neonorbit.dexplore.filter.ReferenceTypes;
 import io.github.neonorbit.dexplore.result.ClassData;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsHighlightTileViewBackgroundProxyImplOC;
@@ -250,6 +251,20 @@ public class QsTileCustomization extends XposedMods {
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightTileViewBackgroundProxy = null;
     private QsHighlightTileViewBackgroundProxyImplOC mHighlightPluginTileViewBackgroundProxy = null;
     private StaticViewBackgroundProxyImplOC mStaticViewBackgroundProxy = null;
+
+    private final MediaPlayerObserver.OnBindMediaData mMediaDataObserver = new MediaPlayerObserver.OnBindMediaData() {
+        @Override
+        public void onBindMediaData(Object mediaData) {
+            canShow = true;
+            updateMediaQsBackground();
+        }
+
+        @Override
+        public void onUnBindMediaData() {
+            canShow = false;
+            hideMediaQsBackground();
+        }
+    };
 
     public QsTileCustomization(Context context) {
         super(context);
@@ -896,18 +911,7 @@ public class QsTileCustomization extends XposedMods {
                     });
                 });
 
-        OplusQsMediaPanelView
-                .after("bindTitleAndText")
-                .run(param -> {
-                    canShow = true;
-                    updateMediaQsBackground();
-                });
-        OplusQsMediaPanelView
-                .after("unBindMediaData")
-                .run(param -> {
-                    canShow = false;
-                    hideMediaQsBackground();
-                });
+        MediaPlayerObserver.registerMediaData(mMediaDataObserver);
 
     }
 
