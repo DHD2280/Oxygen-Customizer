@@ -8,6 +8,7 @@ import android.view.ContextThemeWrapper;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 
@@ -22,7 +23,7 @@ public class ExtendedFAB extends ExtendedFloatingActionButton {
     }
 
     public ExtendedFAB(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(new ContextThemeWrapper(new ContextWrapper(context) {
+        super(context.getPackageName().equals(BuildConfig.APPLICATION_ID) ? context : new ContextThemeWrapper(new ContextWrapper(context) {
             @Override
             public Resources getResources() {
                 return ResourceManager.modRes;
