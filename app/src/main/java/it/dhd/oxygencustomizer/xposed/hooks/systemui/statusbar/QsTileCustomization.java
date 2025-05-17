@@ -795,7 +795,7 @@ public class QsTileCustomization extends XposedMods {
         }
 
         if (targetMethod != null) {
-            XposedBridge.log("QsTileCustomization getTileOutlineTest method found: " + targetMethod.getName() + " " + Arrays.toString(targetMethod.getParameterTypes()));
+            log("QsTileCustomization getTileOutlineTest method found: " + targetMethod.getName() + " " + Arrays.toString(targetMethod.getParameterTypes()));
             targetMethod.setAccessible(true);
 
             Class<?>[] paramTypes = targetMethod.getParameterTypes();
@@ -1387,7 +1387,6 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private Object getForegroundBlur(int type) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        XposedBridge.log("QsTileCustomization: getForegroundBlur " + ForegroundBlurParam.class.getName());
         return switch (type) {
             case SLIDER_PROGRESS ->
                     ForegroundBlurParam.getConstructor(int.class, int.class, int.class)
