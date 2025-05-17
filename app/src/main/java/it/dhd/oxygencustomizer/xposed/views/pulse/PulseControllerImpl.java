@@ -268,6 +268,17 @@ public class PulseControllerImpl {
         }
     }
 
+    private void attachPulseTo(FrameLayout parent, int child) {
+        log("attachPulseTo() " + parent + " " + mAttached);
+        if (parent == null) return;
+        View v = parent.findViewWithTag(PulseView.TAG);
+        if (v == null) {
+            parent.addView(mPulseView, child);
+            mAttached = true;
+            doLinkage();
+        }
+    }
+
     private void detachPulseFrom(FrameLayout parent, boolean keepLinked) {
         if (parent == null) return;
         View v = parent.findViewWithTag(PulseView.TAG);

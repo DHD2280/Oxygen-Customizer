@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oxygencustomizer.ui.preferences.IllustrationPreference
+        android:key="separate_qs_illustration"
+        app:lottie_rawRes="@raw/qs_separate_mode"
+        app:scaleX="0.8"
+        app:scaleY="0.8"/>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="separate_qs_hide_edit"
+            android:title="@string/qs_separate_hide_edit"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:defaultValue="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="separate_qs_hide_menu"
+            android:title="@string/qs_separate_hide_menu"
+            android:summaryOn="@string/general_on"
+            android:summaryOff="@string/general_off"
+            android:defaultValue="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:title="@string/qs_separate_layout"
+            android:key="qs_layout"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.separate.SeparateQsPreview" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

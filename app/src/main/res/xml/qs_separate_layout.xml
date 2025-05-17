@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/qs_separate_rows"
+            android:key="qs_separate_rows"
+            android:defaultValue="3"
+            android:max="4"
+            android:min="3" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_media_cat"
+        android:title="@string/media_panel">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:persistent="false"
+            android:title="@string/general_enabled"
+            android:key="qs_separate_media_enabled" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="X"
+            android:key="qs_separate_media_x"
+            android:defaultValue="0"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="Y"
+            android:key="qs_separate_media_y"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/width"
+            android:key="qs_separate_media_span_x"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/height"
+            android:key="qs_separate_media_span_y"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_ht_cat"
+        android:title="@string/highlight_tile_1">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:persistent="false"
+            android:title="@string/general_enabled"
+            android:key="qs_separate_h1_enabled" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="X"
+            android:key="qs_separate_ht1_x"
+            android:defaultValue="0"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="Y"
+            android:key="qs_separate_ht1_y"
+            android:defaultValue="0"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/width"
+            android:key="qs_separate_ht1_span_x"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/height"
+            android:key="qs_separate_ht1_span_y"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_ht2_cat"
+        android:title="@string/highlight_tile_2">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:persistent="false"
+            android:title="@string/general_enabled"
+            android:key="qs_separate_h2_enabled" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="X"
+            android:key="qs_separate_ht2_x"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="Y"
+            android:key="qs_separate_ht2_y"
+            android:defaultValue="0"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/width"
+            android:key="qs_separate_ht2_span_x"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/height"
+            android:key="qs_separate_ht2_span_y"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_brightness_cat"
+        android:title="@string/brightness_slider">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:persistent="false"
+            android:title="@string/general_enabled"
+            android:key="qs_separate_brightness_enabled" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="X"
+            android:key="qs_separate_brightness_x"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="Y"
+            android:key="qs_separate_brightness_y"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/width"
+            android:key="qs_separate_brightness_span_x"
+            android:summary="Width"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="1" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/height"
+            android:key="qs_separate_brightness_span_y"
+            android:summary="Height"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_volume_cat"
+        android:title="@string/volume_slider">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:persistent="false"
+            android:title="@string/general_enabled"
+            android:key="qs_separate_volume_enabled" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="X"
+            android:key="qs_separate_volume_x"
+            android:defaultValue="3"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="Y"
+            android:key="qs_separate_volume_y"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="0" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/width"
+            android:key="qs_separate_volume_span_x"
+            android:defaultValue="1"
+            android:max="4"
+            android:min="1" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:persistent="false"
+            app:updatesContinuously="true"
+            android:title="@string/height"
+            android:key="qs_separate_volume_span_y"
+            android:defaultValue="2"
+            android:max="4"
+            android:min="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

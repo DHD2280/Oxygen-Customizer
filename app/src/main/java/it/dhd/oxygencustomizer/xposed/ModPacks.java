@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.xposed;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
+import android.os.Build;
+
 import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -64,6 +66,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QSTransparency;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsMenuItems;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsTileCustomization;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.SeparateQsCustomization;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarIcons;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarLogo;
@@ -150,6 +153,7 @@ public class ModPacks {
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
+                    modPacks.add(SeparateQsCustomization.class);
                     modPacks.add(QsWidgets.class);
                     modPacks.add(QsMenuItems.class);
 

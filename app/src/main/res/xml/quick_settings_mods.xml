@@ -31,6 +31,12 @@
             android:title="@string/quick_settings_widgets"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsSeparateMods"
+            android:key="qs_separate_jump"
+            android:title="@string/qs_separate_mods"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

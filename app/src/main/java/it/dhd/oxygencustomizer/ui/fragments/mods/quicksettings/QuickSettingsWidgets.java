@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
+import static it.dhd.oxygencustomizer.utils.AppUtils.showPhotoShowcaseRadiusDialog;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
@@ -54,6 +55,7 @@ import it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
 import it.dhd.oxygencustomizer.ui.widgets.SliderWidget;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
@@ -326,7 +328,7 @@ public class QuickSettingsWidgets extends BaseFragment {
                     inflater.inflate(R.menu.qs_widget_photo_menu, popup.getMenu());
                     popup.setOnMenuItemClickListener(item1 -> {
                         if (item1.getItemId() == R.id.set_photo_radius) {
-                            showRadiusDialog();
+                            showPhotoShowcaseRadiusDialog(requireContext());
                         } else if (item1.getItemId() == R.id.set_photo) {
                             pickImage();
                         }
@@ -366,26 +368,6 @@ public class QuickSettingsWidgets extends BaseFragment {
             fragmentCropImage.setArguments(bundle);
             replaceFragment(fragmentCropImage);
         }
-    }
-
-    public void showRadiusDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        SliderWidget sliderWidget = new SliderWidget(requireContext());
-        sliderWidget.setTitle(R.string.qs_widget_set_radius);
-        sliderWidget.setSliderValue(PreferenceHelper.getModulePrefs().getInt(QS_PHOTO_RADIUS, 22));
-        sliderWidget.setSliderValueFrom(0);
-        sliderWidget.setSliderValueTo(50);
-        builder.setView(sliderWidget);
-        builder.setTitle(R.string.qs_widget_set_radius);
-        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            int radius = sliderWidget.getSliderValue();
-            PreferenceHelper.getModulePrefs().edit().putInt(QS_PHOTO_RADIUS, radius).apply();
-        });
-        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-            dialog.dismiss();
-        });
-        builder.setCancelable(false);
-        builder.show();
     }
 
     private String getWidgetType(String widget) {

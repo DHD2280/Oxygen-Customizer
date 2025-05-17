@@ -102,5 +102,7 @@
     <dimen name="image_illustration_margin_top">16dp</dimen>
     <dimen name="image_illustration_margin_bottom">16dp</dimen>
     <dimen name="image_illustration_text_bottom_margin">16dp</dimen>
+    <dimen name="qs_center_show_guid_height">215dp</dimen>
+    <dimen name="qs_center_show_guid_width">102dp</dimen>
 
 </resources>

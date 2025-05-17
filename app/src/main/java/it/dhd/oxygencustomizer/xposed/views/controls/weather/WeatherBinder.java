@@ -22,6 +22,8 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
+import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
+import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
@@ -40,6 +42,8 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
     private ActivityLauncherUtils mActivityLauncherUtils;
     private boolean mSettingsInterface;
+    private ImageView mImageView;
+    private ExtendedFAB mFab;
 
     public WeatherBinder(Context context, String vTag) {
         this(context, vTag, false);
@@ -59,6 +63,13 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
         if (mWeatherClient == null) {
             mWeatherClient = new OmniJawsClient(context);
         }
+        mImageView = SeparateQsWidgetsFactory.createImageView(mContext, settingsInterface);
+        mFab = SeparateQsWidgetsFactory.createFAB(mContext, settingsInterface);
+    }
+
+    public void onSizeChanged(int newWidth) {
+        mImageView.setVisibility(newWidth >= 2 ? View.GONE : View.VISIBLE);
+        mFab.setVisibility(newWidth >= 2 ? View.VISIBLE : View.GONE);
     }
 
     public void inflateViews(ViewGroup parentView) {
@@ -93,6 +104,18 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
         setupViews(parentView);
     }
 
+    public void inflateSmall(ViewGroup parentView) {
+        parentView.addView(mImageView);
+        parentView.addView(mFab);
+        mFab.setVisibility(View.GONE);
+        if (!mSettingsInterface) {
+            mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
+            parentView.setOnClickListener(v -> {
+                mActivityLauncherUtils.launchWeatherActivity(true);
+            });
+        }
+    }
+
     private void setupViews(ViewGroup parentView) {
 
         queryAndUpdateWeather();
@@ -105,9 +128,8 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
         if (!mSettingsInterface) {
             mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
-            parentView.setOnLongClickListener(v -> {
+            parentView.setOnClickListener(v -> {
                 mActivityLauncherUtils.launchWeatherActivity(true);
-                return true;
             });
         }
     }
@@ -142,10 +164,16 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
                 }
 
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
-                mCity.setText(mWeatherInfo.city);
-                mTemp.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits);
-                mCondition.setText(formattedCondition);
-                mWeatherIcon.setImageDrawable(d);
+                if (mCity != null) mCity.setText(mWeatherInfo.city);
+                if (mTemp != null) mTemp.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits);
+                if (mCondition != null) mCondition.setText(formattedCondition);
+                if (mWeatherIcon != null) mWeatherIcon.setImageDrawable(d);
+                mImageView.setImageTintList(null);
+                mImageView.clearColorFilter();
+                mImageView.setImageDrawable(d);
+                mFab.setIconTint(null);
+                mFab.setIcon(d);
+                mFab.setText(mWeatherInfo.temp + mWeatherInfo.tempUnits + " • " + formattedCondition);
             }
         } catch (Exception e) {
             Log.e(String.format(TAG, VIEW_TAG), "Error updating weather: " + e.getMessage());
@@ -164,8 +192,12 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
     @Override
     public void weatherError(int errorReason) {
+        mCity.setText("");
+        mCondition.setText("");
         if (errorReason == OmniJawsClient.EXTRA_ERROR_DISABLED) {
             mWeatherInfo = null;
+        } else if (errorReason == OmniJawsClient.EXTRA_ERROR_NETWORK) {
+            mTemp.setText("Location disabled");
         }
     }
 

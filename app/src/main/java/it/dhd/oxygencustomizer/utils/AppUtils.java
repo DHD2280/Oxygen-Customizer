@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.utils;
 
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.LOAD_TIME_KEY_KEY;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.PACKAGE_STRIKE_KEY_KEY;
 
@@ -39,6 +40,7 @@ import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.widgets.SliderWidget;
 import it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector;
 
 public class AppUtils {
@@ -257,6 +259,26 @@ public class AppUtils {
             String errMsg = "triggerCircleToSearch failed: " + e.getStackTrace();
             Log.e("MiCTS", errMsg);
         };
+    }
+
+    public static void showPhotoShowcaseRadiusDialog(Context context) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        SliderWidget sliderWidget = new SliderWidget(context);
+        sliderWidget.setTitle(R.string.qs_widget_set_radius);
+        sliderWidget.setSliderValue(OCPreferences.getInt(QS_PHOTO_RADIUS, 22));
+        sliderWidget.setSliderValueFrom(0);
+        sliderWidget.setSliderValueTo(50);
+        builder.setView(sliderWidget);
+        builder.setTitle(R.string.qs_widget_set_radius);
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            int radius = sliderWidget.getSliderValue();
+            OCPreferences.putInt(QS_PHOTO_RADIUS, radius);
+        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+            dialog.dismiss();
+        });
+        builder.setCancelable(false);
+        builder.show();
     }
 
 }
