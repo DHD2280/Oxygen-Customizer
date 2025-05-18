@@ -240,11 +240,11 @@ public class SeparateQsPreview extends BaseFragment {
         };
         mH1Cell = new int[]{
                 h1Cell.getInt(0), h1Cell.getInt(1),
-                h1Cell.getInt(2), h1Cell.getInt(3)
+                h1Cell.getInt(2), 1
         };
         mH2Cell = new int[]{
                 h2Cell.getInt(0), h2Cell.getInt(1),
-                h2Cell.getInt(2), h2Cell.getInt(3)
+                h2Cell.getInt(2), 1
         };
         mBrightnessCell = new int[]{
                 brightnessCell.getInt(0), brightnessCell.getInt(1),
@@ -694,9 +694,9 @@ public class SeparateQsPreview extends BaseFragment {
         // Media
         OplusSectionSeekbarPreference mMediaX, mMediaY, mMediaSpanX, mMediaSpanY;
         // H1
-        OplusSectionSeekbarPreference mH1X, mH1Y, mH1SpanX, mH1SpanY;
+        OplusSectionSeekbarPreference mH1X, mH1Y, mH1SpanX;
         // H2
-        OplusSectionSeekbarPreference mH2X, mH2Y, mH2SpanX, mH2SpanY;
+        OplusSectionSeekbarPreference mH2X, mH2Y, mH2SpanX;
         // Brightness
         OplusSectionSeekbarPreference mBrightnessX, mBrightnessY, mBrightnessSpanX, mBrightnessSpanY;
         // Volume
@@ -834,14 +834,12 @@ public class SeparateQsPreview extends BaseFragment {
             mH1X = findPreference("qs_separate_ht1_x");
             mH1Y = findPreference("qs_separate_ht1_y");
             mH1SpanX = findPreference("qs_separate_ht1_span_x");
-            mH1SpanY = findPreference("qs_separate_ht1_span_y");
             // H2 tile
             mH2Cat = findPreference("qs_separate_ht2_cat");
             mH2Visible = findPreference("qs_separate_h2_enabled");
             mH2X = findPreference("qs_separate_ht2_x");
             mH2Y = findPreference("qs_separate_ht2_y");
             mH2SpanX = findPreference("qs_separate_ht2_span_x");
-            mH2SpanY = findPreference("qs_separate_ht2_span_y");
             // Brightness
             mBrightnessCat = findPreference("qs_separate_brightness_cat");
             mBrightnessVisible = findPreference("qs_separate_brightness_enabled");
@@ -869,13 +867,11 @@ public class SeparateQsPreview extends BaseFragment {
             mH1X.setValue(mH1Cell[0]);
             mH1Y.setValue(mH1Cell[1]);
             mH1SpanX.setValue(mH1Cell[2]);
-            mH1SpanY.setValue(mH1Cell[3]);
 
             mH2Visible.setChecked(mH2Enabled);
             mH2X.setValue(mH2Cell[0]);
             mH2Y.setValue(mH2Cell[1]);
             mH2SpanX.setValue(mH2Cell[2]);
-            mH2SpanY.setValue(mH2Cell[3]);
 
             mBrightnessVisible.setChecked(mBrightnessEnabled);
             mBrightnessX.setValue(mBrightnessCell[0]);
@@ -892,8 +888,8 @@ public class SeparateQsPreview extends BaseFragment {
             List<OplusSectionSeekbarPreference> seekbarPreferences = new ArrayList<>();
             seekbarPreferences.addAll(
                     Arrays.asList(mRowsPref, mMediaX, mMediaY, mMediaSpanX, mMediaSpanY,
-                            mH1X, mH1Y, mH1SpanX, mH1SpanY,
-                            mH2X, mH2Y, mH2SpanX, mH2SpanY,
+                            mH1X, mH1Y, mH1SpanX,
+                            mH2X, mH2Y, mH2SpanX,
                             mBrightnessX, mBrightnessY, mBrightnessSpanX, mBrightnessSpanY,
                             mVolumeX, mVolumeY, mVolumeSpanX, mVolumeSpanY)
             );
@@ -925,12 +921,10 @@ public class SeparateQsPreview extends BaseFragment {
             prefMap.put(mH1X, CellType.H1_X);
             prefMap.put(mH1Y, CellType.H1_Y);
             prefMap.put(mH1SpanX, CellType.H1_SPAN_X);
-            prefMap.put(mH1SpanY, CellType.H1_SPAN_Y);
 
             prefMap.put(mH2X, CellType.H2_X);
             prefMap.put(mH2Y, CellType.H2_Y);
             prefMap.put(mH2SpanX, CellType.H2_SPAN_X);
-            prefMap.put(mH2SpanY, CellType.H2_SPAN_Y);
 
             prefMap.put(mBrightnessX, CellType.BRIGHTNESS_X);
             prefMap.put(mBrightnessY, CellType.BRIGHTNESS_Y);
@@ -957,11 +951,11 @@ public class SeparateQsPreview extends BaseFragment {
             };
             int[] h1 = {
                     mH1X.getValue(), mH1Y.getValue(),
-                    mH1SpanX.getValue(), mH1SpanY.getValue()
+                    mH1SpanX.getValue(), 1
             };
             int[] h2 = {
                     mH2X.getValue(), mH2Y.getValue(),
-                    mH2SpanX.getValue(), mH2SpanY.getValue()
+                    mH2SpanX.getValue(), 1
             };
             int[] brightness = {
                     mBrightnessX.getValue(), mBrightnessY.getValue(),
@@ -991,12 +985,10 @@ public class SeparateQsPreview extends BaseFragment {
                     case H1_X: h1[0] = (int) newValue; break;
                     case H1_Y: h1[1] = (int) newValue; break;
                     case H1_SPAN_X: h1[2] = (int) newValue; break;
-                    case H1_SPAN_Y: h1[3] = (int) newValue; break;
 
                     case H2_X: h2[0] = (int) newValue; break;
                     case H2_Y: h2[1] = (int) newValue; break;
                     case H2_SPAN_X: h2[2] = (int) newValue; break;
-                    case H2_SPAN_Y: h2[3] = (int) newValue; break;
 
                     case BRIGHTNESS_X: brightness[0] = (int) newValue; break;
                     case BRIGHTNESS_Y: brightness[1] = (int) newValue; break;
@@ -1072,8 +1064,8 @@ public class SeparateQsPreview extends BaseFragment {
             ROWS,
             MEDIA_ENABLED, H1_ENABLED, H2_ENABLED, BRIGHTNESS_ENABLED, VOLUME_ENABLED,
             MEDIA_X, MEDIA_Y, MEDIA_SPAN_X, MEDIA_SPAN_Y,
-            H1_X, H1_Y, H1_SPAN_X, H1_SPAN_Y,
-            H2_X, H2_Y, H2_SPAN_X, H2_SPAN_Y,
+            H1_X, H1_Y, H1_SPAN_X,
+            H2_X, H2_Y, H2_SPAN_X,
             BRIGHTNESS_X, BRIGHTNESS_Y, BRIGHTNESS_SPAN_X, BRIGHTNESS_SPAN_Y,
             VOLUME_X, VOLUME_Y, VOLUME_SPAN_X, VOLUME_SPAN_Y
         }

@@ -99,15 +99,6 @@
             android:max="4"
             android:min="1" />
 
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:persistent="false"
-            app:updatesContinuously="true"
-            android:title="@string/height"
-            android:key="qs_separate_ht1_span_y"
-            android:defaultValue="1"
-            android:max="4"
-            android:min="1" />
-
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
@@ -143,15 +134,6 @@
             android:title="@string/width"
             android:key="qs_separate_ht2_span_x"
             android:defaultValue="2"
-            android:max="4"
-            android:min="1" />
-
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:persistent="false"
-            app:updatesContinuously="true"
-            android:title="@string/height"
-            android:key="qs_separate_ht2_span_y"
-            android:defaultValue="1"
             android:max="4"
             android:min="1" />
 
