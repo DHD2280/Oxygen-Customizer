@@ -1,9 +1,11 @@
 package it.dhd.oxygencustomizer.ui.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -33,8 +35,6 @@ public class ReoptimizeDialog extends AppCompatActivity {
     private final Context context;
     private Dialog dialog;
     private final String mPkgName;
-    private final ObservableArrayList<String> list = new ObservableArrayList<>();
-    private Shell.Result shellResult;
 
     public ReoptimizeDialog(Context context, String pkgName) {
         this.context = context;
@@ -61,17 +61,18 @@ public class ReoptimizeDialog extends AppCompatActivity {
         mRestart = dialog.findViewById(R.id.restart);
         mOk.setOnClickListener(v -> dismiss());
         mRestart.setOnClickListener(v -> AppUtils.restartAllScope(new String[]{mPkgName}));
-        Shell.Job job = Shell.cmd("pm compile -r bg-dexopt " + mPkgName);
-        list.addOnListChangedCallback(new MyCallback(logs, job, () -> {
+        String[] commands = {
+                "pm compile -r bg-dexopt " + mPkgName,
+                "cmd package compile -m speed -f " + mPkgName
+        };
+        new DexOptTask(commands, logs, () -> {
             progress.setIndeterminate(false);
             progress.setMin(0);
             progress.setMax(100);
             progress.setProgress(100, true);
             mOk.setEnabled(true);
             mRestart.setEnabled(true);
-        }));
-        list.add("pm compile -r bg-dexopt " + mPkgName);
-        Shell.cmd("pm compile -r bg-dexopt " + mPkgName).to(list, null).exec();
+        }).execute();
         dialog.create();
         dialog.show();
 
@@ -109,49 +110,53 @@ public class ReoptimizeDialog extends AppCompatActivity {
         void onSuccess();
     }
 
-    public class MyCallback extends ObservableList.OnListChangedCallback<ObservableList<?>> {
+    @SuppressLint("StaticFieldLeak")
+    private class DexOptTask extends AsyncTask<Void, String, Boolean> {
 
-        private final TextView mTextView;
-        private final OnSuccessListener mOnSuccessListener;
-        private final Shell.Job mShellJob;
-        private final Shell.Result mShellResult;
+        private final String[] commands;
+        private final TextView logView;
+        private final OnSuccessListener mSuccessListener;
 
-        public MyCallback(TextView tv, Shell.Job shellJob, OnSuccessListener onSuccessListener) {
-            this.mTextView = tv;
-            this.mOnSuccessListener = onSuccessListener;
-            this.mShellJob = shellJob;
-            this.mShellResult = shellJob.exec();
+        public DexOptTask(String[] commands, TextView logView, OnSuccessListener successListener) {
+            this.commands = commands;
+            this.logView = logView;
+            this.mSuccessListener = successListener;
         }
 
-        public void onChanged(ObservableList sender) {}
-
-        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
-        }
-
-        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-            Log.d("MyCallback", "onItemRangeInserted: " + sender);
-            StringBuilder textBuilder = new StringBuilder();
-            for (String s : ((List<String>) sender)) {
-                textBuilder.append("<br>").append(s);
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            for (String command : commands) {
+                Shell.Result result = Shell.cmd(command).exec();
+                publishProgress(command);
+                if (result.getOut() != null) {
+                    for (String outLine : result.getOut()) {
+                        publishProgress(outLine);
+                    }
+                }
+                if (result.getCode() != 0) {
+                    publishProgress("Error " + result.getCode());
+                    return false;
+                }
             }
-            if (mShellResult.getCode() == 0 && mOnSuccessListener != null) {
-                mOnSuccessListener.onSuccess();
-            } else {
-                Toast.makeText(ReoptimizeDialog.this.context, "Error: " + mShellResult.getCode(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            for (String line : values) {
+                if (logView != null) {
+                    logView.append(HtmlCompat.fromHtml("<br>" + line, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                }
             }
-            if (mTextView == null) return;
-            mTextView.setText(
-                    HtmlCompat.fromHtml(
-                            textBuilder.toString(),
-                            HtmlCompat.FROM_HTML_MODE_LEGACY
-                    )
-            );
         }
 
-        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount)  {
-        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            mSuccessListener.onSuccess();
 
-        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount)  {
+            if (!success) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
