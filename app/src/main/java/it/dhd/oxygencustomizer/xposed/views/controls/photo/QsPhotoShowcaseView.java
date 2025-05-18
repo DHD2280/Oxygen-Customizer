@@ -22,8 +22,6 @@ import android.widget.ImageView;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -116,7 +114,9 @@ public class QsPhotoShowcaseView extends ImageView {
                             }
                         } else {
                             post(() ->setImageDrawable(ResourcesCompat.getDrawable(
-                                    modRes,
+                                    mSettingsInterface ?
+                                            mContext.getResources() :
+                                            modRes,
                                     R.mipmap.ic_launcher,
                                     mContext.getTheme()
                             )));

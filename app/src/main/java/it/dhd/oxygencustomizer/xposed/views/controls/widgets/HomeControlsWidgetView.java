@@ -7,8 +7,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS_LABEL;
-import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WALLET_ICON;
-import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WALLET_LABEL;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -55,7 +53,7 @@ public class HomeControlsWidgetView extends BaseQsWidgetView {
     @Override
     public Drawable getWidgetImage() {
         Context sysuiContext = mContext;
-        if (mSettingsInterface) {
+        if (!mSettingsInterface) {
             sysuiContext = mContext;
         } else {
             try {
@@ -71,7 +69,7 @@ public class HomeControlsWidgetView extends BaseQsWidgetView {
     @Override
     public String getWidgetName() {
         Context sysuiContext = mContext;
-        if (mSettingsInterface) {
+        if (!mSettingsInterface) {
             sysuiContext = mContext;
         } else {
             try {

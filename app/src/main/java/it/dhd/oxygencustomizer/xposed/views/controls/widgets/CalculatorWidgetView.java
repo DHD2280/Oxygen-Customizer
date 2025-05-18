@@ -1,24 +1,15 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.widgets;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.CALCULATOR_ICON;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.CALCULATOR_LABEL;
-import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS;
-import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS_LABEL;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
 import it.dhd.oxygencustomizer.xposed.views.controls.widgets.base.BaseQsWidgetView;
 
@@ -37,7 +28,7 @@ public class CalculatorWidgetView extends BaseQsWidgetView {
     @Override
     public Drawable getWidgetImage() {
         Context sysuiContext = mContext;
-        if (mSettingsInterface) {
+        if (!mSettingsInterface) {
             sysuiContext = mContext;
         } else {
             try {

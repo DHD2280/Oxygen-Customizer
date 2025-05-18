@@ -31,6 +31,10 @@ import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsMiniWeather;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsMiniWeatherView;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsWeatherWidget;
+import it.dhd.oxygencustomizer.xposed.views.controls.widgets.CalculatorWidget;
+import it.dhd.oxygencustomizer.xposed.views.controls.widgets.CalculatorWidgetView;
+import it.dhd.oxygencustomizer.xposed.views.controls.widgets.HomeControlsWidget;
+import it.dhd.oxygencustomizer.xposed.views.controls.widgets.HomeControlsWidgetView;
 import it.dhd.oxygencustomizer.xposed.views.controls.widgets.WalletWidget;
 import it.dhd.oxygencustomizer.xposed.views.controls.widgets.WalletWidgetView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetMode;
@@ -54,6 +58,8 @@ public class SeparateQsWidgetsFactory {
             case "weather" -> settingsInterface ? new QsWeatherWidget(context, settingsInterface) : new QsViewWeather(context, settingsInterface);
             case "w:weather" -> settingsInterface ? new QsMiniWeather(context, settingsInterface) : new QsMiniWeatherView(context, settingsInterface);
             case "w:wallet" -> settingsInterface ? new WalletWidget(context, settingsInterface) : new WalletWidgetView(context, settingsInterface);
+            case "w:homecontrols" -> settingsInterface ? new HomeControlsWidget(context, settingsInterface) : new HomeControlsWidgetView(context, settingsInterface);
+            case "w:calculator" -> settingsInterface? new CalculatorWidget(context, settingsInterface) : new CalculatorWidgetView(context, settingsInterface);
             default -> {
                 Log.d("SeparateQsWidgetsFactory", "getWidget: default");
                 if (widgetId.contains("device")) {
