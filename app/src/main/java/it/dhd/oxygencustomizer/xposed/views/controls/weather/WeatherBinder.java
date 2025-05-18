@@ -41,9 +41,9 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
     private OmniJawsClient.WeatherInfo mWeatherInfo;
 
     private ActivityLauncherUtils mActivityLauncherUtils;
-    private boolean mSettingsInterface;
-    private ImageView mImageView;
-    private ExtendedFAB mFab;
+    private final boolean mSettingsInterface;
+    private final ImageView mImageView;
+    private final ExtendedFAB mFab;
 
     public WeatherBinder(Context context, String vTag) {
         this(context, vTag, false);

@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.media;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
 
@@ -13,7 +14,7 @@ import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyIm
  * OOS 15 custom Media Tile
  * This implements {@link BaseQsStaticView} to gain the background proxy
  */
-public class QsMediaTileView extends BaseQsStaticView {
+public class QsMediaTileView extends BaseQsStaticView implements QsMediaTileI {
 
     private static final String TAG = "QsMediaTileView";
     private final Context mContext;
@@ -43,13 +44,18 @@ public class QsMediaTileView extends BaseQsStaticView {
         this.backgroundProxy.refreshViewBackground();
     }
 
+    @Override
     public void updatePrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor, int mediaQsTintAmount, float mediaQsArtBlurAmount) {
         mMediaBinder.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
     }
 
-    public void updateColors(boolean custom, int color) {
+    @Override
+    public void updateDefaultBackground(Drawable defDrawable) {}
+
+    @Override
+    public void updateColors(Drawable defDrawable, boolean customColor, int color) {
         if (backgroundProxy instanceof StaticViewBackgroundProxyImplOC staticViewBackgroundProxyImplOC) {
-            staticViewBackgroundProxyImplOC.setColors(custom ? color : super.getNormalBackGroundColor());
+            staticViewBackgroundProxyImplOC.setColors(customColor ? color : super.getNormalBackGroundColor());
             refreshViewBackground();
         }
     }

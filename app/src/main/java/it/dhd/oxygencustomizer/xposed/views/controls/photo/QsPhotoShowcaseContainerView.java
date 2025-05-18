@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
+
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 
 /**
@@ -59,6 +61,7 @@ public class QsPhotoShowcaseContainerView extends BaseQsStaticView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        PressFeedbackHelper.attachPressFeedback(this, this);
         this.backgroundProxy.onBackgroundAttach();
     }
 

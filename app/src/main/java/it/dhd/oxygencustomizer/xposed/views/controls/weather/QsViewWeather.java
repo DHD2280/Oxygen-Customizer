@@ -49,4 +49,9 @@ public class QsViewWeather extends BaseQsStaticView {
         this.backgroundProxy.onBackgroundDetach();
         mWeatherBinder.disableWeatherUpdates();
     }
+
+    public void refreshViewBackground() {
+        this.backgroundProxy.refreshViewBackground();
+    }
+
 }

@@ -260,7 +260,7 @@ public class MediaBinder {
 
     private void setBackground(Drawable drawable) {
         logD("setBackground: " + mParentView.getClass().getName());
-        if (mParentView instanceof QsMediaTileView) {
+        if (mParentView.getClass().getSimpleName().equals("QsMediaTileView")) {
             logD("setBackground: QsMediaTileView");
             mContainer.setBackground(drawable);
             return;

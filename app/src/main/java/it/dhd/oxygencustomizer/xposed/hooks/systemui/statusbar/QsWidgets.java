@@ -66,7 +66,7 @@ import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
 public class QsWidgets extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
-    public static Object mActivityStarter = null;
+    public Object mActivityStarter = null;
     private ViewGroup mOplusQsMediaView = null;
     private Object mOplusPanelPagerController = null; // separate view pager controller
     private boolean mQsWidgetsEnabled = false;

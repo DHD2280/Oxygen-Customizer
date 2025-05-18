@@ -28,7 +28,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.QsColorUtil;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getTileActiveColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getHighlightRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getLastShape;
-import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getShapeForHighlightTile;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.BT_ACTIVE;
@@ -114,10 +113,8 @@ import it.dhd.oxygencustomizer.xposed.utils.QsTileHelper;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTile;
-import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileView;
+import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileI;
 import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainer;
-import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainerView;
-import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsWeatherWidget;
 
 @SuppressLint("ViewConstructor")
@@ -186,8 +183,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private float[] mTileRadius = new float[8];
 
     // Our Views
-    private QsMediaTile mMediaPlayer = null; // Use own media player
-    private QsMediaTileView mMediaPlayerView = null; // OOS15 player
+    private View mMediaPlayer = null; // Use own media player
 
     public QsControlsView(@NonNull Context context) {
         super(context);
@@ -215,7 +211,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 ViewGroup.LayoutParams.MATCH_PARENT
         ));
 
-        instance.mActivityLauncherUtils = new ActivityLauncherUtils(mContext, QsWidgets.mActivityStarter);
+        instance.mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
 
         try {
             mContainer = (LinearLayout) LaunchableLinearLayout.getConstructor(Context.class).newInstance(context);
@@ -236,17 +232,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         mContainer.addView(mViewPager);
         addView(mContainer);
 
-        if (Build.VERSION.SDK_INT >= 35) {
-            if (mMediaPlayerView == null) {
-                mMediaPlayerView = new QsMediaTileView(mContext);
-            }
-        } else {
-            if (mMediaPlayer == null) {
-                mMediaPlayer = new QsMediaTile(mContext);
-            }
-        }
+        mMediaPlayer = getMediaPlayerView(mContext);
 
-        collectViews(mPages, Build.VERSION.SDK_INT >= 35 ? mMediaPlayerView : mMediaPlayer);
+        collectViews(mPages, mMediaPlayer);
         setupViewPager();
 
         ControllersProvider.registerMobileDataCallback(mMobileDataCallback);
@@ -386,7 +374,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             } catch (Throwable ignored) {
             }
             if (view != null && !viewList.contains(view)) {
-                if (view == mMediaPlayer || view == mMediaPlayerView) {
+                if (view == mMediaPlayer) {
                     view.setOnLongClickListener(v -> {
                         showMediaDialog(mContainer);
                         return true;
@@ -394,8 +382,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
                 if (view instanceof QsPhotoShowcaseContainer showcase) {
                     showcase.setRadius(mPhotoRadius);
-                } else if (view instanceof QsPhotoShowcaseContainerView showcase) {
-                    showcase.setRadius(mPhotoRadius);
+                } else if (view.getClass().getSimpleName().equals("QsPhotoShowcaseContainerView")) {
+                    callMethod(view, "setRadius", mPhotoRadius);
                 } else if (view instanceof QsWeatherWidget weatherWidget) {
                     weatherWidget.setOnLongClickListener(v -> {
                         mActivityLauncherUtils.launchWeatherActivity(true);
@@ -573,9 +561,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             if (group.size() == 1 && !group.get(0).contains(":")) {
                 String s = group.get(0);
                 switch (s) {
-                    case "media" -> views.add(Build.VERSION.SDK_INT >= 35 ? mMediaPlayerView : mMediaPlayer);
-                    case "weather" -> views.add(Build.VERSION.SDK_INT >= 35 ? new QsViewWeather(mContext) : new QsWeatherWidget(mContext));
-                    case "photo" -> views.add(Build.VERSION.SDK_INT >= 35 ? new QsPhotoShowcaseContainerView(mContext) : new QsPhotoShowcaseContainer(mContext));
+                    case "media" -> views.add(mMediaPlayer);
+                    case "weather" -> views.add(getWeatherView(mContext));
+                    case "photo" -> views.add(getPhotoShowcaseView(mContext));
                 }
             } else {
                 try {
@@ -1607,10 +1595,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     public void updateMediaPlayerPrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor,
                                        int mediaQsTintAmount, float mediaQsArtBlurAmount) {
         if (instance == null) return;
-        if (instance.mMediaPlayer != null)
-            instance.mMediaPlayer.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
-        if (instance.mMediaPlayerView != null)
-            instance.mMediaPlayerView.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
+        if (instance.mMediaPlayer != null && instance.mMediaPlayer instanceof QsMediaTileI mediaTile)
+            mediaTile.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
     }
 
     /**
@@ -1666,11 +1652,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         mCustomInactiveColor = inactiveColor;
         mCustomActive = Build.VERSION.SDK_INT >= 35 ? mCustomTile : customActive;
         mCustomActiveColor = activeColor;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.updateColors(mDefaultBackground, customMedia, mediaColor);
-        }
-        if (mMediaPlayerView != null) {
-            mMediaPlayerView.updateColors(customMedia, mediaColor);
+        if (mMediaPlayer != null && mMediaPlayer instanceof QsMediaTileI mediaTile) {
+            mediaTile.updateColors(mDefaultBackground, customMedia, mediaColor);
         }
         if (force) {
             reloadBackground();
@@ -1717,15 +1700,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                             ? mDefaultBackground.getConstantState().newDrawable().mutate()
                             : mDefaultBackground.mutate();
                 }
-                if (v instanceof QsMediaTile && v == mMediaPlayer) {
-                    mMediaPlayer.updateDefaultBackground(back);
+                if (v instanceof QsMediaTileI mediaTile) {
+                    mediaTile.updateDefaultBackground(back);
                     continue;
                 }
-                if (v instanceof QsMediaTileView mediaTileView) {
-                    mediaTileView.refreshViewBackground();
+                XposedBridge.log("QsControlsView - reloadBackground - " + v.getClass().getName());
+                if (v.getClass().getSimpleName().equals("QsMediaTileView")) {
+                    callMethod(v, "refreshViewBackground");
                     continue;
-                } else if (v instanceof QsViewWeather qsViewWeather) {
-                    qsViewWeather.reloadBackground();
+                } else if (v.getClass().getSimpleName().equals("QsViewWeather")) {
+                    callMethod(v, "refreshViewBackground");
                     continue;
                 } else if (v instanceof QsWeatherWidget) {
                     if (back instanceof GradientDrawable) {
@@ -1761,11 +1745,41 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             for (View v : instance.mPages) {
                 if (v instanceof QsPhotoShowcaseContainer showcase) {
                     showcase.setRadius(radius);
-                } else if (v instanceof QsPhotoShowcaseContainerView showcase) {
-                    showcase.setRadius(radius);
+                } else if (v.getClass().getSimpleName().equals("QsPhotoShowcaseContainerView")) {
+                    callMethod(v, "setRadius", radius);
                 }
             }
         }
+    }
+
+    private View getMediaPlayerView(Context context) {
+        if (Build.VERSION.SDK_INT < 35) return new QsMediaTile(mContext);
+        try {
+            return (View) Class.forName("it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileView")
+                    .getConstructor(Context.class)
+                    .newInstance(context);
+        } catch (Throwable ignored) {}
+        return null;
+    }
+
+    private View getWeatherView(Context context) {
+        if (Build.VERSION.SDK_INT < 35) return new QsWeatherWidget(mContext);
+        try {
+            return (View) Class.forName("it.dhd.oxygencustomizer.xposed.views.controls.weather.QsViewWeather")
+                    .getConstructor(Context.class)
+                    .newInstance(context);
+        } catch (Throwable ignored) {}
+        return null;
+    }
+
+    private View getPhotoShowcaseView(Context context) {
+        if (Build.VERSION.SDK_INT < 35) return new QsPhotoShowcaseContainer(mContext);
+        try {
+            return (View) Class.forName("it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainerView")
+                    .getConstructor(Context.class)
+                    .newInstance(context);
+        } catch (Throwable ignored) {}
+        return null;
     }
 
     /**

@@ -85,7 +85,6 @@ public class QsPhotoShowcaseView extends ImageView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateImage();
-        if (!mSettingsInterface) PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
     private void launchGalleryApp() {

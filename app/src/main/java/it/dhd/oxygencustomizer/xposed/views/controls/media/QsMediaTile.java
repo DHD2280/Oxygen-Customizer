@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.LinearLayout;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
-public class QsMediaTile extends LinearLayout {
+public class QsMediaTile extends LinearLayout implements QsMediaTileI {
 
     private final Context mContext;
     private final MediaBinder mMediaBinder;
@@ -22,9 +20,9 @@ public class QsMediaTile extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
+    @Override
     public void updatePrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor, int mediaQsTintAmount, float mediaQsArtBlurAmount) {
         mMediaBinder.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
     }
