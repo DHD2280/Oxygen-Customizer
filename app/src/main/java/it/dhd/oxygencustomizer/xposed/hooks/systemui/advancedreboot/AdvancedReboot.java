@@ -11,6 +11,7 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.resparams;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,13 +32,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.android.systemui.plugins.qs.DetailAdapter;
+import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.coui.appcompat.cardlist.COUICardListHelper;
 import com.coui.appcompat.list.COUIListView;
 import com.oplus.systemui.common.dialog.OplusQSDetailDialogProvider;
@@ -67,11 +72,8 @@ public class AdvancedReboot extends XposedMods {
     private Object mNearbyManager = null;
     private boolean isFinderActive = false;
     private OplusRebootDetailAdapter oplusScreenshotDetailAdapter;
-    private OplusRebootDetailAdapter14 oplusScreenshotDetailAdapter14;
     public OplusRebootDetailAdapter detailAdapter;
-    public OplusRebootDetailAdapter14 detailAdapter14;
     public OplusQSDetailDialogProvider mQsDialog;
-    private OplusQSDetailDialogProvider mQsDialog14;
     public static final List<Integer> itemTitles = new ArrayList<>();
     public static final List<Integer> itemIcons = new ArrayList<>();
 
@@ -97,8 +99,6 @@ public class AdvancedReboot extends XposedMods {
         mAdvancedRebootDrawable = ResourcesCompat.getDrawable(mContext.getResources(), mContext.getResources().getIdentifier("oplus_reboot", "drawable", listenPackage), mContext.getTheme());
         if (Build.VERSION.SDK_INT >= 35) {
             this.detailAdapter = new OplusRebootDetailAdapter(this.mContext);
-        } else {
-            this.detailAdapter14 = new OplusRebootDetailAdapter14(this.mContext);
         }
     }
 
@@ -139,7 +139,6 @@ public class AdvancedReboot extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;
@@ -158,12 +157,13 @@ public class AdvancedReboot extends XposedMods {
                             mNearbyManager = getObjectField(param.thisObject, "mNearbyManager");
                             int powerOffFindingMode = (int) callMethod(mNearbyManager, "getPoweredOffFindingMode");
                             isFinderActive = powerOffFindingMode == 2;
-                            XposedBridge.log("mNearbyManager != null? " + (mNearbyManager != null) + " powerOffFindingMode = " + powerOffFindingMode +  " isFinderActive: " + isFinderActive);
+                            XposedBridge.log("mNearbyManager != null? " + (mNearbyManager != null) + " powerOffFindingMode = " + powerOffFindingMode + " isFinderActive: " + isFinderActive);
                         } catch (Throwable t) {
                             log(t);
                         }
                     });
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
@@ -171,44 +171,44 @@ public class AdvancedReboot extends XposedMods {
 
         ShutdownView
                 .after("onDraw")
-                        .run(param -> {
-                            if (showAdvancedReboot) {
-                                drawAdvancedReboot((Canvas) param.args[0], param.thisObject);
-                            }
-                        });
+                .run(param -> {
+                    if (showAdvancedReboot) {
+                        drawAdvancedReboot((Canvas) param.args[0], param.thisObject);
+                    }
+                });
 
         ShutdownView
                 .after("onTouchEvent")
-                        .run(param -> {
-                            if (!showAdvancedReboot) return;
+                .run(param -> {
+                    if (!showAdvancedReboot) return;
+                    log(AdvancedReboot.class.getSimpleName() + " - onTouchEvent");
+                    MotionEvent event = (MotionEvent) param.args[0];
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        float distanceX = event.getX() - centerX;
+                        float distanceY = event.getY() - centerY;
+                        double distanceFromCenter = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-                            MotionEvent event = (MotionEvent) param.args[0];
-                            if (event.getAction() == MotionEvent.ACTION_UP) {
-                                float distanceX = event.getX() - centerX;
-                                float distanceY = event.getY() - centerY;
-                                double distanceFromCenter = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                        if (distanceFromCenter <= radius) {
 
-                                if (distanceFromCenter <= radius) {
-
-                                    if (useAuthForAdvancedReboot && mContext.getSystemService(BiometricManager.class).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
-                                        showAuth();
-                                    } else {
-                                        try {
-                                            showDialog();
-                                        } catch (Throwable t) {
-                                            log("Oxygen Customizer - Advanced Reboot Error: " + t.getMessage());
-                                        }
-                                    }
+                            if (useAuthForAdvancedReboot && mContext.getSystemService(BiometricManager.class).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
+                                showAuth();
+                            } else {
+                                try {
+                                    showDialog();
+                                } catch (Throwable t) {
+                                    log("Oxygen Customizer - Advanced Reboot Error: " + t.getMessage());
                                 }
                             }
-                        });
+                        }
+                    }
+                });
 
         ShutdownView
                 .before("isShowEmergency")
-                        .run(param -> {
-                            if (hideSosPowerMenu)
-                                param.setResult(false);
-                        });
+                .run(param -> {
+                    if (hideSosPowerMenu)
+                        param.setResult(false);
+                });
 
     }
 
@@ -298,79 +298,6 @@ public class AdvancedReboot extends XposedMods {
             COUIListView cOUIListView = inflate != null ? (COUIListView) inflate.findViewById(mContext.getResources().getIdentifier("screen_shot_option_list", "id", SYSTEM_UI)) : null;
             ItemAdapter itemAdapter = new ItemAdapter(this.mainContext);
             itemAdapter.setOnItemClickListener(i2 -> OplusRebootDetailAdapter.this.onItemClick(null, null, i2, 0L));
-            if (cOUIListView != null) {
-                cOUIListView.setAdapter(itemAdapter);
-            }
-            return inflate;
-        }
-
-        @Override
-        public void onItemClick(AdapterView adapterView, View view, int i2, long j2) {
-            int i3 = itemTitles.get(i2);
-            String cmd;
-            if (i3 == itemTitles.get(0)) {
-                cmd = "reboot recovery";
-            } else if (i3 == itemTitles.get(1)) {
-                cmd = "reboot bootloader";
-            } else if (i3 == itemTitles.get(2)) {
-                cmd = "reboot safemode";
-            } else if (i3 == itemTitles.get(3)) {
-                cmd = "killall zygote; killall zygote64";
-            } else if (i3 == itemTitles.get(4)) {
-                cmd = "killall " + SYSTEM_UI;
-            } else {
-                cmd = "";
-            }
-            String finalCmd = cmd;
-            XPLauncher.enqueueProxyCommand(proxy -> {
-                try {
-                    proxy.runCommand(finalCmd);
-                } catch (Exception e) {
-                    XposedBridge.log("Error executing command: " + e.getMessage());
-                }
-            });
-        }
-    }
-
-    public final class OplusRebootDetailAdapter14 implements com.oplus.systemui.qs.detail.DetailAdapter, AdapterView.OnItemClickListener {
-        public final Context mainContext;
-
-        @Override
-        public int getMetricsCategory() {
-            return 119;
-        }
-
-        @Override
-        public Boolean getToggleState() {
-            return null;
-        }
-
-        @Override
-        public void setToggleState(boolean z) {
-        }
-
-        public OplusRebootDetailAdapter14(Context context) {
-            this.mainContext = context;
-        }
-
-        @Override
-        public CharSequence getTitle() {
-            return this.mainContext.getString(AdvancedRebootResources.getFakeIdDialogTitle());
-        }
-
-        @Override
-        public Intent getSettingsIntent() {
-            return null;
-        }
-
-        @Override
-        public View createDetailView(Context context, View view, ViewGroup viewGroup) {
-            View inflate;
-//            COUIThemeOverlay.getInstance().applyThemeOverlays(this.mainContext);
-            inflate = LayoutInflater.from(this.mainContext).inflate(mContext.getResources().getIdentifier("oplus_qs_screenshot_detail", "layout", SYSTEM_UI), viewGroup, false);
-            COUIListView cOUIListView = inflate != null ? (COUIListView) inflate.findViewById(mContext.getResources().getIdentifier("screen_shot_option_list", "id", SYSTEM_UI)) : null;
-            ItemAdapter itemAdapter = new ItemAdapter(this.mainContext);
-            itemAdapter.setOnItemClickListener(i2 -> OplusRebootDetailAdapter14.this.onItemClick(null, null, i2, 0L));
             if (cOUIListView != null) {
                 cOUIListView.setAdapter(itemAdapter);
             }
@@ -532,15 +459,52 @@ public class AdvancedReboot extends XposedMods {
     }
 
     private void showDialog() {
-        if (Build.VERSION.SDK_INT >= 35) {
-            oplusScreenshotDetailAdapter = detailAdapter;
-            mQsDialog = new OplusQSDetailDialogProvider(mContext, oplusScreenshotDetailAdapter);
-            mQsDialog.showDetail(null, true, null, OplusQSDetailDialogProvider.DialogHeight.CHANGE);
-        } else { // OOS14
-            oplusScreenshotDetailAdapter14 = detailAdapter14;
-            mQsDialog14 = new OplusQSDetailDialogProvider(mContext, oplusScreenshotDetailAdapter14);
-            mQsDialog14.showDetail(null, true, null);
+        if (Build.VERSION.SDK_INT < 35) {
+            try {
+                showDialog14();
+            } catch (Throwable t) {
+                log("Oxygen Customizer - Advanced Reboot Error: " + t.getMessage());
+            }
+            return;
         }
+        oplusScreenshotDetailAdapter = detailAdapter;
+        mQsDialog = new OplusQSDetailDialogProvider(mContext, oplusScreenshotDetailAdapter);
+        mQsDialog.showDetail(null, true, null, OplusQSDetailDialogProvider.DialogHeight.CHANGE);
+    }
+
+    private void showDialog14() throws Exception {
+        log("Oxygen Customizer - Advanced Reboot Dialog");
+        final AlertDialog dialog = (AlertDialog) SystemUIDialog.class.getConstructor(Context.class).newInstance(mContext);
+        dialog.setTitle(modRes.getString(R.string.advanced_reboot_title));
+        ListView listView = new ListView(mContext);
+        listView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
+        adapter.add(modRes.getString(R.string.advanced_reboot_recovery));
+        adapter.add(modRes.getString(R.string.advanced_reboot_bootloader));
+        adapter.add(modRes.getString(R.string.advanced_reboot_safe_mode));
+        adapter.add(modRes.getString(R.string.advanced_reboot_fast_reboot));
+        adapter.add(modRes.getString(R.string.advanced_reboot_systemui));
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot recovery"));
+                case 1 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot bootloader"));
+                case 2 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("reboot safemode"));
+                case 3 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall zygote"));
+                case 4 ->
+                        XPLauncher.enqueueProxyCommand(proxy -> proxy.runCommand("killall " + SYSTEM_UI));
+            }
+        });
+
+        dialog.setView(listView);
+
+        dialog.show();
     }
 
     private void showAuth() {
