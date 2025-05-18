@@ -248,14 +248,16 @@ public class StatusbarNotification extends XposedMods {
                                     mContext.getPackageName()
                             )
                     );
+                    mNotificationButtonsContainer.setTag("notification_buttons_container");
                     mNotificationButtonsContainer.setLayoutParams(
                             new LinearLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
                                     ViewGroup.LayoutParams.MATCH_PARENT
                             )
                     );
                     mNotificationButtonsContainer.setOrientation(LinearLayout.HORIZONTAL);
-                    mNotificationButtonsContainer.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                    mNotificationButtonsContainer.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                    if (clockContainer.findViewWithTag("notification_buttons_container") != null) return;
                     clockContainer.addView(mNotificationButtonsContainer, clockContainer.getChildCount() - 1);
 
                     AlphaOptimizedImageView mExpand, mCollapse;
