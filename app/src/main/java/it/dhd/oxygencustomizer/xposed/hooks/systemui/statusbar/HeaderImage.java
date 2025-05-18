@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
@@ -53,7 +52,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -302,7 +300,6 @@ public class HeaderImage extends XposedMods {
                                 v.setTransitionAlpha(f2);
                                 v.setScaleX(f3);
                                 v.setScaleY(f3);
-
                             }
                         }
                     });
@@ -319,6 +316,41 @@ public class HeaderImage extends XposedMods {
                             for (View qsImage : mQsHeaderLayouts) {
                                 qsImage.setTranslationY(f2 - v.getTranslationY());
                             }
+                        }
+                    });
+        }
+
+        // OOS 15.0.1
+        // Seems that #setCusTranslationY not in OplusLargeTileContainerView anymore
+        // They have an interface for those methods
+        // So now we hook the page view controller for #setCusTranslationY
+        ReflectedClass OplusQSPageViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
+        if (OplusQSPageViewController.getClazz() != null) {
+            OplusQSPageViewController
+                    .before("setCusTranslationY")
+                    .run(param -> {
+                        // float f2, int i2, int i3
+                        float f2 = (float) param.args[0];
+                        for (View v : mQsHeaderLayouts) {
+                            v.setTranslationY(f2);
+                        }
+                    });
+        }
+
+        // OOS 15.0.1
+        // OplusQSFooterViewController for #updateViewState
+        ReflectedClass OplusQSFooterViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.footer.OplusQSFooterViewController");
+        if (OplusQSFooterViewController.getClazz() != null) {
+            OplusQSFooterViewController
+                    .before("updateViewState")
+                    .run(param -> {
+                        // float f2, float f3
+                        float f2 = (float) param.args[0];
+                        float f3 = (float) param.args[1];
+                        for (View v : mQsHeaderLayouts) {
+                            v.setTransitionAlpha(f2);
+                            v.setScaleX(f3);
+                            v.setScaleY(f3);
                         }
                     });
         }
