@@ -243,6 +243,12 @@ public final class Constants {
             public static final String QS_MEDIA_ART_TINT_COLOR = "qs_media_art_tint_color";
             public static final String QS_MEDIA_ART_TINT_AMOUNT = "qs_media_art_tint_amount";
 
+            // Icons
+            public static final String QS_TILE_ICON_CUSTOM_COLOR = "qs_custom_icon_colors";
+            public static final String QS_TILE_ICON_CUSTOM_COLOR_ACTIVE = "qs_custom_icon_active_color";
+            public static final String QS_TILE_ICON_CUSTOM_COLOR_INACTIVE = "qs_custom_icon_inactive_color";
+            public static final String QS_TILE_ICON_CUSTOM_COLOR_DISABLED = "qs_custom_icon_disabled_color";
+
             // Labels
             public static final String QS_TILE_HIDE_LABELS = "qs_hide_labels";
             public static final String QS_TILE_LABELS_CUSTOM_COLOR_ENABLED = "qs_tile_label_enabled";

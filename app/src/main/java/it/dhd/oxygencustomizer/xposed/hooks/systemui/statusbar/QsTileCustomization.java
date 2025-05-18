@@ -4,6 +4,7 @@ import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -51,6 +52,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_DISABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
@@ -176,6 +181,10 @@ public class QsTileCustomization extends XposedMods {
     private boolean qsCustomHighlightIconTileColors = false;
     private int qsInactiveColorHighlightIcon, qsActiveColorHighlightIcon, qsDisabledColorHighlightIcon;
 
+    // Qs Tile Icons
+    private boolean qsCustomIconColors = false;
+    private int qsInactiveColorIcon, qsActiveColorIcon, qsDisabledColorIcon;
+
     // Qs Tile Colors Base
     private boolean qsCustomTileColors = false; // Main Switch OOS15
     private int qsInactiveColor, qsActiveColor, qsDisabledColor;
@@ -279,7 +288,7 @@ public class QsTileCustomization extends XposedMods {
         qsInactiveColorHighlight = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT, Color.GRAY);
         qsDisabledColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED, false);
         qsDisabledColorHighlight = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT, Color.DKGRAY);
-        // Icon for separate qs
+        // Icon background for separate qs
         qsCustomHighlightIconTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, true);
         qsActiveColorHighlightIcon = Xprefs.getInt(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON, Color.RED);
         qsInactiveColorHighlightIcon = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON, Color.GRAY);
@@ -295,6 +304,11 @@ public class QsTileCustomization extends XposedMods {
         // Media
         qsCustomMediaTileColor = Xprefs.getBoolean(QS_MEDIA_TILE_CUSTOM_COLOR, false);
         qsMediaTileColor = Xprefs.getInt(QS_MEDIA_TILE_COLOR, Color.WHITE);
+        // Qs Tiles ICONS colors
+        qsCustomIconColors = Xprefs.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
+        qsActiveColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE, Color.WHITE);
+        qsInactiveColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_INACTIVE, Color.WHITE);
+        qsDisabledColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_DISABLED, Color.WHITE);
 
         // Qs Radius
         customHighlightTileRadius = Xprefs.getBoolean(QS_TILE_HIGHTLIGHT_RADIUS, false);
@@ -571,8 +585,6 @@ public class QsTileCustomization extends XposedMods {
             log(t);
         }
 
-//        hookSeparateQs();
-
     }
 
 
@@ -618,7 +630,6 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void hookQsColors15() {
-
         ReflectedClass QsViewOutlineProviderKtClz = ReflectedClass.of(QsViewOutlineProviderKt.class.getName());
 
         // Highlight Classic
@@ -719,6 +730,20 @@ public class QsTileCustomization extends XposedMods {
                         default -> qsDisabledColorHighlightIcon;
                     };
                     callMethod(param.thisObject, "setIconBackgroundColor", color);
+                });
+        OplusQSIconView
+                .after("tintColor")
+                .run(param -> {
+                    if (!qsCustomIconColors) return;
+                    int tileState = getIntField(param.thisObject, "tileState");
+                    int color = switch (tileState) {
+                        case STATE_ACTIVE -> qsActiveColorIcon;
+                        case STATE_INACTIVE -> qsInactiveColorIcon;
+                        default -> qsDisabledColorIcon;
+                    };
+                    ImageView iconView = (ImageView) getObjectField(param.thisObject, "iconView");
+                    iconView.setImageTintList(ColorStateList.valueOf(color));
+
                 });
 
         // Media Panel

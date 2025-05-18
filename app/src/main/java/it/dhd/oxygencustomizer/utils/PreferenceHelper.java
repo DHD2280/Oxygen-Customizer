@@ -243,6 +243,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_DISABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR_HIGHLIGHT;
@@ -551,6 +555,16 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 35 &&
                         instance.mPreferences.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, false);
             }
+            // Icon color
+            case QS_TILE_ICON_CUSTOM_COLOR -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
+            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE,
+                 QS_TILE_ICON_CUSTOM_COLOR_INACTIVE,
+                 QS_TILE_ICON_CUSTOM_COLOR_DISABLED -> {
+                return isVisible(QS_TILE_ICON_CUSTOM_COLOR) &&
+                        instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
+            }
             // Base
             case QS_TILE_CUSTOM_COLORS_SWITCH -> {
                 return Build.VERSION.SDK_INT >= 35;
@@ -574,6 +588,7 @@ public class PreferenceHelper {
             case QS_MEDIA_TILE_COLOR -> {
                 return instance.mPreferences.getBoolean(QS_MEDIA_TILE_CUSTOM_COLOR, false);
             }
+            // Sliders
             case "brightness_slider_progress_color_mode" -> {
                 return instance.mPreferences.getBoolean("customize_brightness_slider", false);
             }
