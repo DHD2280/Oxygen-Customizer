@@ -9,6 +9,8 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
@@ -327,24 +329,28 @@ public class BatteryBarView extends FrameLayout {
             RadialGradient colorfulShader = new RadialGradient(cX, cY, radius, shadeColors, shadeLevels, Shader.TileMode.CLAMP);
             mPaint.setShader(colorfulShader);
 
-            float currentLevelFraction = getCurrentLevel() / 100f;
-            int selectedColor = shadeColors[shadeColors.length - 1];
-
-            for (int i = 0; i < shadeLevels.length; i++) {
-                if (currentLevelFraction <= shadeLevels[i]) {
-                    if (transitColors && i > 0) {
-                        float range = shadeLevels[i] - shadeLevels[i - 1];
-                        float currentPos = currentLevelFraction - shadeLevels[i - 1];
-                        float ratio = currentPos / range;
-                        selectedColor = ColorUtils.blendARGB(shadeColors[i - 1], shadeColors[i], ratio);
-                    } else {
-                        selectedColor = shadeColors[i];
-                    }
-                    break;
-                }
-            }
-            updateTextColor(selectedColor);
+            int colorAtLevel = getColorFromGradient(cX, cY, radius, shadeColors, shadeLevels, lenX, lenY);
+            updateTextColor(colorAtLevel);
         }
+    }
+
+    private int getColorFromGradient(float x, float y, float radius, int[] colors, float[] positions, int lenX, int lenY) {
+        Bitmap gradientBitmap = Bitmap.createBitmap(lenX, lenY, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(gradientBitmap);
+
+        Paint paint = new Paint();
+        Shader shader = new RadialGradient(x, y, radius, colors, positions, Shader.TileMode.CLAMP);
+        paint.setShader(shader);
+
+        canvas.drawRect(0, 0, lenX, lenY, paint);
+
+        int targetX = Math.min((int)(getCurrentLevel() / 100f * lenX), lenX - 1);
+        int centerY = lenY / 2;
+
+        int colorAtLevel = gradientBitmap.getPixel(targetX, centerY);
+        gradientBitmap.recycle(); // cleanup
+
+        return colorAtLevel;
     }
 
     private static void refreshShadeColors() {
