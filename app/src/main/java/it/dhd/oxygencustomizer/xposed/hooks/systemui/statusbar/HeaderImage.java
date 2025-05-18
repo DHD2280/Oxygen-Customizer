@@ -324,7 +324,7 @@ public class HeaderImage extends XposedMods {
         // Seems that #setCusTranslationY not in OplusLargeTileContainerView anymore
         // They have an interface for those methods
         // So now we hook the page view controller for #setCusTranslationY
-        ReflectedClass OplusQSPageViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
+        ReflectedClass OplusQSPageViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.page.OplusQSPageViewController");
         if (OplusQSPageViewController.getClazz() != null) {
             OplusQSPageViewController
                     .before("setCusTranslationY")
@@ -339,7 +339,7 @@ public class HeaderImage extends XposedMods {
 
         // OOS 15.0.1
         // OplusQSFooterViewController for #updateViewState
-        ReflectedClass OplusQSFooterViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.footer.OplusQSFooterViewController");
+        ReflectedClass OplusQSFooterViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.footer.OplusQSFooterViewController");
         if (OplusQSFooterViewController.getClazz() != null) {
             OplusQSFooterViewController
                     .before("updateViewState")
