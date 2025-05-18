@@ -207,6 +207,7 @@
     <string name="status_bar_date_style_lowercase">Lowercase</string>
     <string name="status_bar_date_style_uppercase">Uppercase</string>
     <string name="status_bar_date_format_custom">Formato java personalizzato</string>
+    <string name="string_formatter_manual_body">Oltre al testo normale, sono disponibili anche variabili dinamiche, come Data e Temperatura:\n\n$G\&lt;formato\&gt; : Data gregoriana, basato su formato*\n$P\&lt;formato\&gt; : Data persiana, basato su formato*\n$L per Data Lunare\n$I\&lt;calendario\&gt;&lt;formato\&gt; : calendario Islamico. Il calendario è opzionale, il valore predefinito è islamico, puoi anche usare C per Islamico-Civile e U per Islamico-Umalqura.\n$T\&lt;formato\&gt;[intervallo] : Temperatura; \nil formato può essere b (per batteria), c (per CPU), g (per la GPU) e s (per la pelle).\n$B\&lt;format\&gt; : Batteria; \nil formato può essere v (per tensione in mV), l (per livello) \nInfine, c\'è il numero OPZIONALE di intervallo di aggiornamento in secondi (predefinito: 60 secondi)\n\n*per la documentazione del formato data, cerca \"Formato data Java\"</string>
     <string name="preview">Anteprima</string>
     <string name="clock_date_position">Posizione data</string>
     <string name="clock_date_right">A destra dell\'ora</string>
@@ -474,6 +475,7 @@
     <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
     <string name="qs_tile_custom_highlight">Raggio personalizzato dei Tile QS in evidenza</string>
     <string name="qs_tile_custom_radius">Raggio Tile QS Personalizzato</string>
+    <string name="qs_tile_radius">Raggio</string>
     <!-- Media Tile -->
     <string name="media_tile">Tile Media</string>
     <!-- QS Tiles animation -->
@@ -1328,6 +1330,9 @@
     <!-- Device Widgets -->
     <string name="widget_string">Widget %s</string>
     <string name="battery_widget">Batteria</string>
+    <string name="calendar_widget">Calendario</string>
+    <string name="remove_widget">Rimuovi</string>
+    <string name="remove_one_widget">Si prega di rimuovere un widget</string>
     <string name="progress_type">Tipo progresso</string>
     <!-- Battery Widget -->
     <string name="battery_widget_percentage">Percentuale</string>
@@ -1453,5 +1458,17 @@
     <string name="open_lsposed">Apri LSPosed</string>
     <string name="shortcut_disabled">Scorciatoia disabilitata</string>
     <!-- Separate qs tweaks -->
+    <string name="qs_separate_mods">QS Separato</string>
+    <string name="qs_separate_hide_menu">Nascondi il pulsante menù</string>
+    <string name="qs_separate_hide_edit">Nascondi il pulsante di modifica</string>
+    <string name="qs_separate_layout">Layout Qs</string>
     <!-- Separate qs layout -->
+    <string name="tap_to_configure">Tocca un elemento per configurare il suo layout</string>
+    <string name="media_panel">Pannello multimediale</string>
+    <string name="highlight_tile_1">Tile in evidenza 1</string>
+    <string name="highlight_tile_2">Tile in evidenza 2</string>
+    <string name="volume_slider">Cursore volume</string>
+    <string name="qs_separate_rows">Righe</string>
+    <string name="width">Larghezza</string>
+    <string name="height">Altezza</string>
 </resources>

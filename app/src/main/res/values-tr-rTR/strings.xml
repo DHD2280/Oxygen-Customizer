@@ -168,6 +168,8 @@
     <string name="notif_default_expansion_title">Bildirim varsayılan genişletme</string>
     <string name="notif_always_expand">Her zaman genişlet</string>
     <string name="notif_always_collapse">Her zaman daralt</string>
+    <string name="notif_show_buttons">Genişletme ve daraltma düğmesini göster</string>
+    <string name="notif_show_buttons_summary">Bildirim panelinde genişletme ve daraltma düğmesini göster.\nYalnızca bölünmüş hızlı ayarlar stiliyle uyumludur.</string>
     <string name="customize_clear_all_button">Tümünü Temizle Düğmesini Özelleştir</string>
     <string name="clear_all_link_bg_accent">Arka Planı Vurgu Rengine Bağla</string>
     <string name="clear_all_bg_color">Özel Arka Plan Rengi</string>
@@ -207,6 +209,7 @@
     <string name="status_bar_date_style_lowercase">Küçük harf</string>
     <string name="status_bar_date_style_uppercase">Büyük harf</string>
     <string name="status_bar_date_format_custom">Özel Java biçimi</string>
+    <string name="string_formatter_manual_body">Normal metne ek olarak, Tarih ve Sıcaklık gibi dinamik değişkenler de mevcuttur:\n\n$G\&lt;format\&gt; : Miladi tarih, biçime göre*\n$P\&lt;format\&gt; : Farsça tarih, Ay Tarihi için biçim*\n$L temel alınarak\n$I\&lt;calendar\&gt;&lt;format\&gt; : İslami takvim. Takvim isteğe bağlıdır, varsayılanı İslami\'dir, ayrıca İslami-Medeni için C\'yi ve İslami Umalqura için U\'yu da kullanabilirsiniz.\n$T\&lt;format\&gt;[aralık] : Sıcaklık; \nformat b (pil için), c (CPU için), g (GPU için) ve s (skin için) olabilir.\n$B\&lt;format\&gt; : Pil; \nformat v (mV cinsinden voltaj için), l (seviye için) olabilir \nSon olarak, saniye cinsinden İSTEĞE BAĞLI güncelleme aralığı sayısı vardır (varsayılan: 60 saniye)\n\n*format dokümantasyonu için \"Java Tarih Formatı\"nı arayın</string>
     <string name="preview">Önizleme</string>
     <string name="clock_date_position">Tarih konumu</string>
     <string name="clock_date_right">Saatin sağında</string>
@@ -470,10 +473,13 @@
     <string name="blur_color_dodge_luminosity">Renk Soldurma - Parlaklık</string>
     <string name="blur_overlay_luminosity">Kaplama - Parlaklık</string>
     <string name="blur_luminosity_overlay">Parlaklık - Kaplama</string>
+    <string name="brightness_dark_icon">Otomatik parlaklık renk tonunu kaldır</string>
+    <string name="sliders_custom_radius">Özel kaydırıcı yarıçapı</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Özel QS Kutucuk Yarıçapı</string>
     <string name="qs_tile_custom_highlight">Özel QS Vurgu Kutucukları Yarıçapı</string>
     <string name="qs_tile_custom_radius">Özel QS Kutucuk Yarıçapı</string>
+    <string name="qs_tile_radius">Alan</string>
     <!-- Media Tile -->
     <string name="media_tile">Medya Kutucuğu</string>
     <!-- QS Tiles animation -->
@@ -1328,6 +1334,9 @@
     <!-- Device Widgets -->
     <string name="widget_string">%s widget</string>
     <string name="battery_widget">Pil</string>
+    <string name="calendar_widget">Takvim</string>
+    <string name="remove_widget">Kaldır</string>
+    <string name="remove_one_widget">Lütfen bir widget kaldırın</string>
     <string name="progress_type">İlerleme tipi</string>
     <!-- Battery Widget -->
     <string name="battery_widget_percentage">Yüzde</string>
@@ -1453,5 +1462,17 @@
     <string name="open_lsposed">LSposed\'i aç</string>
     <string name="shortcut_disabled">Kısayol devre dışı</string>
     <!-- Separate qs tweaks -->
+    <string name="qs_separate_mods">Ayrılmış QS</string>
+    <string name="qs_separate_hide_menu">Menü düğmesini gizle</string>
+    <string name="qs_separate_hide_edit">Düzenleme düğmesini gizle</string>
+    <string name="qs_separate_layout">Hızlı Ayarlar Düzeni</string>
     <!-- Separate qs layout -->
+    <string name="tap_to_configure">Bir öğeye dokunarak düzenini yapılandırın</string>
+    <string name="media_panel">Medya paneli</string>
+    <string name="highlight_tile_1">1. kutucuğu vurgula</string>
+    <string name="highlight_tile_2">2. kutucuğu vurgula</string>
+    <string name="volume_slider">Ses çubuğu</string>
+    <string name="qs_separate_rows">Satır</string>
+    <string name="width">Genişlik</string>
+    <string name="height">Yükseklik</string>
 </resources>
