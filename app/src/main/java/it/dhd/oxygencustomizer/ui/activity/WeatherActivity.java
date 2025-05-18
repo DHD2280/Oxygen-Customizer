@@ -98,6 +98,11 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
 
     private void updateViews() {
 
+        if (mWeatherClient.getWeatherInfo() == null) {
+            binding.currentLocation.setText("Weather disabled");
+            return;
+        }
+
         // Title
         binding.currentLocation.setText(mWeatherClient.getWeatherInfo().city);
 
