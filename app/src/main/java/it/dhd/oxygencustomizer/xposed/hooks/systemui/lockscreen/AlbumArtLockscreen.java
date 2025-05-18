@@ -122,7 +122,7 @@ public class AlbumArtLockscreen extends XposedMods {
 
     private void updateAlbumArt() {
         if (albumArtContainer == null) {
-            log(new Throwable("AlbumArtContainer is null"));
+            log("AlbumArtContainer is null");
             return;
         }
         if (showAlbumArt && shouldShowArt && canShowArt) {
