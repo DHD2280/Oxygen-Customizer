@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class BatteryDataProvider extends XposedMods {
+
     public static final int CHARGING_FAST = 2;
     public static final int BATTERY_STATUS_DISCHARGING = 3;
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
@@ -140,7 +142,11 @@ public class BatteryDataProvider extends XposedMods {
         ReflectedClass.ReflectionConsumer additionalBatteryHook = param -> {
             if (!(param.args.length > 0)) return;
             OplusBatteryStatus batteryStatus = new OplusBatteryStatus(param.args[0]);
-            onOplusBatteryChanged(batteryStatus);
+            try {
+                onOplusBatteryChanged(batteryStatus);
+            } catch (Throwable t) {
+                XposedBridge.log("BatteryDataProvider - additionalBatteryHook: " + Log.getStackTraceString(t));
+            }
         };
 
         OplusBatteryController
