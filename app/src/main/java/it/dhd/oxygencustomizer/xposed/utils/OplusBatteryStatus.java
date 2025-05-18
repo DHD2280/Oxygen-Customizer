@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Context;
@@ -54,11 +55,23 @@ public class OplusBatteryStatus {
     }
 
     public final boolean isFastCharge() {
-        return (boolean) callMethod(mOplusAddBatteryStatus, "isFastCharge");
+        try {
+            return (boolean) callMethod(mOplusAddBatteryStatus, "isFastCharge");
+        } catch (Throwable ignored) {
+            // Method not exists, check something else
+            int chargerTechnology = getIntField(mOplusAddBatteryStatus, "chargerTechnology");
+            return chargerTechnology == 1;
+        }
     }
 
     public final boolean isVoocCharge() {
-        return (boolean) callMethod(mOplusAddBatteryStatus, "isVoocCharge");
+        try {
+            return (boolean) callMethod(mOplusAddBatteryStatus, "isVoocCharge");
+        } catch (Throwable ignored) {
+            // Method not exists, check something else
+            int chargerTechnology = getIntField(mOplusAddBatteryStatus, "chargerTechnology");
+            return chargerTechnology == 2;
+        }
     }
 
     public final boolean isSuperVoocCharge() {
@@ -130,11 +143,11 @@ public class OplusBatteryStatus {
 
         int level = getLevel();
         if (!isChargingForKeyguardNotLowBattery()) {
-            boolean  mBatteryIsLow = level < 20;
+            boolean mBatteryIsLow = level < 20;
             return (!mBatteryIsLow || isHighOrLowTmpFull() || isChargingTimeout() || isPluggin()) ? "" :
-                            getSystemUiString(
-                                    context,
-                                    "keyguard_low_battery");
+                    getSystemUiString(
+                            context,
+                            "keyguard_low_battery");
         }
         if (isClockFullCharge()) {
             return getSystemUiString(context, "keyguard_charge_full");
