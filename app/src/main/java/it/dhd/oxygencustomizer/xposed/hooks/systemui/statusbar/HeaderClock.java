@@ -520,7 +520,6 @@ public class HeaderClock extends XposedMods {
                                     mContext.getPackageName()
                             )
                     );
-                    clockContainer.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout customClockContainer = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
                     mClockContainers.add(customClockContainer);
 
