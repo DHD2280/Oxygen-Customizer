@@ -106,7 +106,6 @@ public class AlbumArtLockscreen extends XposedMods {
             }
         });
 
-        // Stole Keyguard is showing
         ControllersProvider.registerKeyguardShowingCallback(showing -> {
             shouldShowArt = showing;
             updateAlbumArt();
@@ -122,6 +121,10 @@ public class AlbumArtLockscreen extends XposedMods {
     }
 
     private void updateAlbumArt() {
+        if (albumArtContainer == null) {
+            log(new Throwable("AlbumArtContainer is null"));
+            return;
+        }
         if (showAlbumArt && shouldShowArt && canShowArt) {
             // Keyguard so we can show album art
             albumArtContainer.post(() -> albumArtContainer.setVisibility(View.VISIBLE));
