@@ -207,6 +207,7 @@
     <string name="status_bar_date_style_lowercase">Kisbetűs</string>
     <string name="status_bar_date_style_uppercase">Nagybetűs</string>
     <string name="status_bar_date_format_custom">Egyéni Java-formátum</string>
+    <string name="string_formatter_manual_body">A normál szöveg mellett dinamikus változók is rendelkezésre állnak, mint például a dátum és a hőmérséklet:\n\n$G\&lt;format\&gt; : Gergely-dátumformátum alapján*\n$P\&lt;format\&gt; : Perzsa-dátumformátum alapján*\n$L Holddátumhoz\n$I\&lt;calendar\&gt;&lt;format\&gt; : Iszlám naptár. A naptár választható, alapértelmezetten iszlám, használhatja a C-t is a polgárihoz és az U-t az Um al-Qura-hoz.\n$T\&lt;format\&gt;[intervallum] : Hőmérsékletformátumnál; \n - b (akku), c (CPU), g (GPU) és s (bőr).\n$B\&lt;format\&gt; : Akkumulátor; \na formátum lehet v (feszültség mV-ban), l (áramerősség) \nVégül, van OPCIONÁLIS számú frissítési időköz másodpercben (alapértelmezetten: 60 másodperc)\n\n*a formátumdokumentációhoz keressen rá a \"Java Date Format\" kifejezésre</string>
     <string name="preview">Előnézet</string>
     <string name="clock_date_position">A Dátum pozíciója</string>
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
@@ -474,6 +475,7 @@
     <string name="qs_tiles_custom_radius">Egyéni lekerekítés</string>
     <string name="qs_tile_custom_highlight">Egyedi lekerekítés</string>
     <string name="qs_tile_custom_radius">Egyéni lekerekítés a csempékhez</string>
+    <string name="qs_tile_radius">Lekerekített</string>
     <!-- Media Tile -->
     <string name="media_tile">Média-csempe</string>
     <!-- QS Tiles animation -->
@@ -1328,6 +1330,9 @@
     <!-- Device Widgets -->
     <string name="widget_string">%s-kisalkalmazás</string>
     <string name="battery_widget">Akkumulátor</string>
+    <string name="calendar_widget">Naptár</string>
+    <string name="remove_widget">Eltávolítás</string>
+    <string name="remove_one_widget">Egy kisalkalmazást távolítson el</string>
     <string name="progress_type">Folyamattípusok</string>
     <!-- Battery Widget -->
     <string name="battery_widget_percentage">Százalék</string>
@@ -1453,5 +1458,17 @@
     <string name="open_lsposed">Az \'LSposed\' megnyitása</string>
     <string name="shortcut_disabled">Letiltott parancsikon</string>
     <!-- Separate qs tweaks -->
+    <string name="qs_separate_mods">Különálló Gyorsbeállítások</string>
+    <string name="qs_separate_hide_menu">A Menügomb elrejtése</string>
+    <string name="qs_separate_hide_edit">A Szerkesztőgomb elrejtése</string>
+    <string name="qs_separate_layout">A Gyorsbeállítások elrendezése</string>
     <!-- Separate qs layout -->
+    <string name="tap_to_configure">Nyomjon egy elemre az elrendezés szerkesztéséhez</string>
+    <string name="media_panel">Médiapanel</string>
+    <string name="highlight_tile_1">Kiemelt csempe 1</string>
+    <string name="highlight_tile_2">Kiemelt csempe 2</string>
+    <string name="volume_slider">Hangerőszabályzó</string>
+    <string name="qs_separate_rows">Sorok</string>
+    <string name="width">Szélesség</string>
+    <string name="height">Magasság</string>
 </resources>
