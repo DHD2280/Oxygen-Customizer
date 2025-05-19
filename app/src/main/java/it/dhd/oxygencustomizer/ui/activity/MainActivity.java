@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -102,7 +101,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
             setHeader(this, savedInstanceState.getCharSequence(TITLE_TAG));
         }
 
-        boolean shouldInstall = false;
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra("updateTapped", false)) {
                 Intent intent = getIntent();
@@ -110,7 +108,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 bundle.putBoolean("updateTapped", intent.getBooleanExtra("updateTapped", false));
                 bundle.putString("filePath", intent.getStringExtra("filePath"));
                 bundle.putBoolean("isNightly", intent.getBooleanExtra("isNightly", false));
-                shouldInstall = true;
                 UpdateFragment updateFragment = new UpdateFragment();
                 updateFragment.setArguments(bundle);
                 replaceFragment(updateFragment);
@@ -176,25 +173,6 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
 
         ShortcutUtils shortcutUtils = new ShortcutUtils(this);
         shortcutUtils.setupShortcut();
-
-        if (!shouldInstall) {
-            clearApkCache();
-        }
-    }
-
-    private void clearApkCache() {
-        File cacheDir = getCacheDir();
-        File[] files = cacheDir.listFiles();
-
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName().toLowerCase();
-                if (name.endsWith("apk") || name.endsWith("zip")) {
-                    boolean deleted = file.delete();
-                    Log.d("CacheCleanup", "Deleted " + file.getName() + ": " + deleted);
-                }
-            }
-        }
     }
 
     @SuppressLint("NonConstantResourceId")
