@@ -69,7 +69,7 @@ public class UpdateFragment extends BaseFragment {
     private static final String betaUpdatesURL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/beta/latestBeta.json";
     private static final String nightlyUpdatesURL = "https://raw.githubusercontent.com/DHD2280/Oxygen-Customizer/nightly-versioning/latestNightly.json";
     private static final String NIGHTLY_LINK = "https://nightly.link/DHD2280/Oxygen-Customizer/actions/runs/%s";
-    private static final String NIGHTLY_DOWNLOAD = "https://nightly.link/DHD2280/Oxygen-Customizer/actions/runs/%s/Oxygen%%20Customizer%%20nightly-202%%20Dev%%20(%%23%s).zip";
+    private static final String NIGHTLY_DOWNLOAD = "https://nightly.link/DHD2280/Oxygen-Customizer/actions/runs/%s/Oxygen%%20Customizer%%20nightly-%s%%20Dev%%20(%%23%s).zip";
 
     // Flavor
     public static enum Flavor {
@@ -372,6 +372,7 @@ public class UpdateFragment extends BaseFragment {
                     zipURL = String.format(
                             NIGHTLY_DOWNLOAD,
                             latestVersion.get("actionRun"),
+                            latestVersion.get("versionCode"),
                             latestVersion.get("devBuild"));
                 }
 
