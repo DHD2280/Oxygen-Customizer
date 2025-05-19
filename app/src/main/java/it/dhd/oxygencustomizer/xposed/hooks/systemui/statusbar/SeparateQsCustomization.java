@@ -2,10 +2,12 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_EDIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_MENU;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT;
@@ -22,7 +24,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.oplus.systemui.plugins.qs.DeviceProfile;
 import com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView;
@@ -30,6 +34,7 @@ import com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,10 +46,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 import it.dhd.oxygencustomizer.xposed.views.controls.customapp.QsCustomAppWidgetView;
+import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainerView;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsMiniWeatherView;
 
 public class SeparateQsCustomization extends XposedMods {
@@ -68,6 +75,7 @@ public class SeparateQsCustomization extends XposedMods {
     private int[] mBrightnessCell = {2, 1, 1, 2};
     private boolean mVolumeEnabled = true;
     private int[] mVolumeCell = {3, 1, 1, 2};
+    private int mPhotoRadius;
 
     // Custom Views
     private String mCustomWidgets = "";
@@ -98,6 +106,7 @@ public class SeparateQsCustomization extends XposedMods {
     @Override
     public void updatePrefs(String... Key) {
 
+        mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
         mSavedCells = Xprefs.getString(SEPARATE_QS_LAYOUT, "");
         mCustomWidgets = Xprefs.getString(SEPARATE_QS_WIDGETS, "");
@@ -108,6 +117,9 @@ public class SeparateQsCustomization extends XposedMods {
         mHideEdit = Xprefs.getBoolean(SEPARATE_HIDE_EDIT, false);
 
         if (Key.length > 0) {
+            if (Key[0].equals(QS_PHOTO_RADIUS)) {
+                if (mCustomWidgets.contains("photo")) updateLayout();
+            }
             if (Key[0].equals(SEPARATE_QS_LAYOUT) ||
                     Key[0].equals(SEPARATE_QS_WIDGETS) ||
                     Key[0].equals(SEPARATE_QS_ROWS)) {
@@ -205,12 +217,22 @@ public class SeparateQsCustomization extends XposedMods {
                 setIntField(cell, "spanY", mMediaCell[3]);
                 v.setVisibility(mMediaEnabled ? View.VISIBLE : View.GONE);
             } else if (v == mFirstTileContainer) {
+                if (mH1Cell[3] > 1) {
+                    ViewGroup.LayoutParams params = v.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    v.setLayoutParams(params);
+                }
                 setIntField(cell, "x", mH1Cell[0]);
                 setIntField(cell, "y", mH1Cell[1]);
                 setIntField(cell, "spanX", mH1Cell[2]);
                 setIntField(cell, "spanY", mH1Cell[3]);
                 v.setVisibility(mH1Enabled ? View.VISIBLE : View.GONE);
             } else if (v == mSecondTileContainer) {
+                if (mH2Cell[3] > 1) {
+                    ViewGroup.LayoutParams params = v.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    v.setLayoutParams(params);
+                }
                 setIntField(cell, "x", mH2Cell[0]);
                 setIntField(cell, "y", mH2Cell[1]);
                 setIntField(cell, "spanX", mH2Cell[2]);
@@ -232,7 +254,6 @@ public class SeparateQsCustomization extends XposedMods {
         }
         Set<View> validViews = mWidgets.keySet();
 
-        // 2. Rimuovi View non valide
         Iterator it = mViewCells.iterator();
         while (it.hasNext()) {
             Object cell = it.next();
@@ -273,15 +294,34 @@ public class SeparateQsCustomization extends XposedMods {
                     miniWeather.onSizeChanged(specs[2]);
                 } else if (widget instanceof QsCustomAppWidgetView customApp) {
                     customApp.onSizeChanged(specs[2]);
+                } else if (widget instanceof QsPhotoShowcaseContainerView photoShowcaseContainerView) {
+                    photoShowcaseContainerView.setRadius(mPhotoRadius);
                 }
                 if (widget instanceof BaseQsStaticView staticView) {
                     staticView.reloadBackground();
                 }
                 mOplusLargeTileContainerView.addView(widget);
-                Object newCell = ViewCellInfoClz.getClazz().getConstructor(
-                                OplusLargeTileContainerView.class, View.class, int.class, int.class, int.class, int.class)
-                        .newInstance(obj, widget, specs[0], specs[1], specs[2], specs[3]);
-                mViewCells.add(newCell);
+                Class<?> clazz = ViewCellInfoClz.getClazz();
+                Constructor<?> constructor = null;
+
+                for (Constructor<?> c : clazz.getDeclaredConstructors()) {
+                    if (c.getParameterCount() == 6) {
+                        constructor = c;
+                        break;
+                    }
+                }
+
+                if (constructor != null) {
+                    constructor.setAccessible(true);
+                    Object viewCellInfo = constructor.newInstance(
+                            mOplusLargeTileContainerView,  // outer class instance
+                            widget,                        // View
+                            specs[0], specs[1], specs[2], specs[3]  // int, int, int, int
+                    );
+                    mViewCells.add(viewCellInfo);
+                } else {
+                    log("Constructor ViewCellInfo not found!");
+                }
             }
         }
         setObjectField(obj, "mViewCells", mViewCells);
