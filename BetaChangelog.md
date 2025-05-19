@@ -1,3 +1,46 @@
+**beta-203**  
+- Allow qs icons colors customization  
+- Added new customizations for Split QS Style  
+- Fixed stock CTS not working when OC enabled  
+- Added qs sliders radius (OOS15)  
+- Added the ability to remove tint from brightness icon in qs slider (OOS15)  
+- Added expand and collapse buttons in split qs style  
+- Fixed qs header image on split qs style (OOS15)  
+- Fixed qs widgets with split qs style  
+- Added statusbar clock double row  
+- Fixed icon packs for qs icons in OOS15  
+- Fixed statusbar temperature for OOS15  
+- Added lockscreen peek notifications  
+- Added statusbar logo * Logo style - 33 styles available * Custom image available * Logo position - left or right * Logo size * Force tint for custom icon  
+- Added keyguard pin scrambler  
+- Added nightly updater  
+- Fixed OOS15 tile colors  
+- Added kill shortcut in recents  
+- Introduce custom lockscreen device widgets  
+- Added custom app to hold back gestures  
+- Added Nothing weather icon pack  
+- Added Lockscreen Now Bar  
+- Fixed Launcher Pagination for OOS15  
+- Fixed QS Media Tile Background on OOS15  
+- Added Nothing Dot V2 signal icon  
+- Added new QS Tiles animations  
+- Added Hide home/drawer labels  
+- Added AOD Edge Light  
+- Fixed Launcher Drawer columns  
+- Added Device Widget Style (LS Widgets)  
+- Added QS Header Clock in new QS Style  
+- Added Islamic Calendar custom format  
+- Fixed Lockscreen Clock/Weather/Widgets for OOS15  
+- Added Battery Landscape Kim  
+- Improved AOD Clock on OOS15  
+- Fixed Settings OTA Card aspect ratio for OOS15  
+- Added qs sliders blur options for OOS15  
+- Fix in-out wifi/mobile for OOS15  
+- Fix QS Tile labels customizations for OOS15  
+- Fix Caffeine Tile with separate QS Style (OOS15)  
+- Fixed QS Sliders colors for OOS15  
+- Fix Lockscreen Widgets dialogs for OOS15  
+  
 **beta-202**  
 - Introduce Lockscreen Widgets styles  
 - Added extra navigation bar gestures  
