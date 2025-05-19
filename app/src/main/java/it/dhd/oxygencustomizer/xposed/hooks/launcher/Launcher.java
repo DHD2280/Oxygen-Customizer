@@ -15,8 +15,10 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -83,6 +85,37 @@ public class Launcher extends XposedMods {
                     if (mDrawerRearrange)
                         setIntField(param.thisObject, "numAllAppsColumns", mDrawerColumns);
                 });
+
+        ReflectedClass FolderInfo = ReflectedClass.ofIfPossible("com.android.launcher3.model.data.FolderInfo");
+        if (FolderInfo.getClazz() != null) {
+            FolderInfo
+                    .before("getPreviewRow")
+                    .run(param -> {
+                        try {
+                            int spanX = getIntField(param.thisObject, "spanX");
+                            int spanY = getIntField(param.thisObject, "spanY");
+                            if (spanX == 1 && spanY == 1 && mFolderPreview) {
+                                param.setResult(mFolderRows);
+                            }
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+                    });
+
+            FolderInfo
+                    .before("getPreviewColumn")
+                    .run(param -> {
+                        try {
+                            int spanX = getIntField(param.thisObject, "spanX");
+                            int spanY = getIntField(param.thisObject, "spanY");
+                            if (spanX == 1 && spanY == 1 && mFolderPreview) {
+                                param.setResult(mFolderColumns);
+                            }
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+                    });
+        }
 
         try {
             ReflectedClass AllAppsParam = ReflectedClass.of("com.android.launcher.layoutparam.AllAppsParam");
