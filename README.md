@@ -4,10 +4,11 @@
   <img src=".github/resources/banner.png" width="90%" alt="banner" />
 </div>
 <p align="center">
-  <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases" alt="Release"></a>
-  <a href="https://github.com/DHD2280/Oxygen-Customizer/releases/tag/beta_builds"><img src="https://img.shields.io/badge/Download%20Latest-Beta-blue?style=for-the-badge" alt="Beta"></a>
+  <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&label=STABLE" alt="Stable"></a>
+  <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases&label=BETA" alt="Beta"></a>
+  <a href="https://github.com/DHD2280/Oxygen-Customizer/actions/workflows/build_debug.yml"><img src="https://img.shields.io/github/actions/workflow/status/DHD2280/Oxygen-Customizer/build_debug.yml?branch=beta&label=Nightliy&style=for-the-badge" alt="Nightly Build"></a>
   <a href="https://github.com/DHD2280/Oxygen-Customizer"><img alt="Repo Size" src="https://img.shields.io/github/repo-size/DHD2280/Oxygen-Customizer?style=for-the-badge"></a>
-  <a href="https://github.com/DHD2280/Oxygen-Customizer/actions"><img src="https://img.shields.io/github/actions/workflow/status/DHD2280/Oxygen-Customizer/build_debug.yml?branch=beta&label=Nightliy%20Build&style=for-the-badge" alt="Nightly Build"></a>
+  <br>
   <a href="https://t.me/OxygenCustomizerGroup"><img src="https://img.shields.io/badge/Support%20Group-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Support Group"></a>
   <a href="https://t.me/OxygenCustomizer"><img src="https://img.shields.io/badge/Update%20Channel-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Update Channel"></a>
 </p>
@@ -24,7 +25,9 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 
 ## Table of Contents
 
+- [Compatibility](#-compatibility)
 - [Requirements](#-requirements)
+- [Release Variants](#-release-variants)
 - [Installation](#-installation)
 - [Permissions](#-permissions)
 - [Contribution](#-contribution)
@@ -38,13 +41,40 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 > 
 > This app requires Magisk, KernelSU & APatch for root access and XPosed/LSPosed framework. Any alternative methods won't work.
 
+# 🧩 Compatibility
+
+Oxygen Customizer is compatible with OxygenOS/ColorOS/RUI 15, 14 and 13.
+
+> [!WARNING]
+> If you are using OOS15 based rom, please use at least beta versions.
+
 # 🛠 Requirements
 
-- Oxygen OS 14
+- Oxygen OS 15, 14 or 13 (check compatibility above)
 
 - [Magisk](https://github.com/topjohnwu/Magisk) (Recommended) or [KernelSU](https://github.com/tiann/KernelSU) or [APatch](https://github.com/bmax121/APatch)
 
 - [LSPosed](https://github.com/LSPosed/LSPosed)
+
+# 📦 Release Variants
+
+This mod is released in three different variants:
+
+### 🟢 **Stable**
+If you are running OOS14 or OOS13 based rom.
+<br>
+<a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&label=STABLE" alt="Stable"></a>
+    
+### 🟡 **Beta**
+More updated with fixes and new features , if you are using OOS15 based rom.
+<br>
+<a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases&label=BETA" alt="Beta"></a>
+  
+### 🌒 **Nightly**
+This variant is released on every push on this repo.
+It can include varius fixes or new feature that will came in beta and stable.
+<br>
+<a href="https://github.com/DHD2280/Oxygen-Customizer/actions/workflows/build_debug.yml"><img src="https://img.shields.io/github/actions/workflow/status/DHD2280/Oxygen-Customizer/build_debug.yml?branch=beta&label=Nightliy&style=for-the-badge" alt="Nightly Build"></a>
 
 # 👨‍💻 Installation
 
@@ -141,6 +171,7 @@ We highly appreciate and welcome all forms of contributions, ranging from code, 
 <details>
   <summary>I found a bug. How do I report it?</summary>
 
+- Ensure that you are running latest nightly before creating a new Issue!
 - To report a bug, please navigate to the [Issues](https://github.com/DHD2280/Oxygen-Customizer/issues/new/choose) section. Create a new issue and ensure you select the `Bug Report` template. Provide as much detailed information as possible, including steps to reproduce the bug and any relevant error messages or screenshots.
 </details>
 
