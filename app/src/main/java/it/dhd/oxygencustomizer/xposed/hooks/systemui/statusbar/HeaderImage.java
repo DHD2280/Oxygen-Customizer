@@ -329,11 +329,14 @@ public class HeaderImage extends XposedMods {
             OplusQSPageViewController
                     .before("setCusTranslationY")
                     .run(param -> {
-                        // float f2, int i2, int i3
-                        float f2 = (float) param.args[0];
-                        for (View v : mQsHeaderLayouts) {
-                            v.setTranslationY(f2);
-                        }
+                        // float f2, int i2, int i3 for 15.0.1
+                        if (!(param.args[0] instanceof Float)) return;
+                        try {
+                            float f2 = (float) param.args[0];
+                            for (View v : mQsHeaderLayouts) {
+                                v.setTranslationY(f2);
+                            }
+                        } catch (Throwable ignored) {}
                     });
         }
 
@@ -345,6 +348,8 @@ public class HeaderImage extends XposedMods {
                     .before("updateViewState")
                     .run(param -> {
                         // float f2, float f3
+                        if (!(param.args[0] instanceof Float)) return;
+                        if (!(param.args[1] instanceof Float)) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
                         for (View v : mQsHeaderLayouts) {
