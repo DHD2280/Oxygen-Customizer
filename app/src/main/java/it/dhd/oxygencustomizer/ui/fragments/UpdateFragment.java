@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -198,20 +199,20 @@ public class UpdateFragment extends BaseFragment {
     public void unzip(String fileName, UnZipCallback callback) {
         File unzippedFile = null;
         File fileToUnzip = new File(fileName);
-        try {
-
-            //unzip once, IF double zipped
-            ZipFile unzipper = new ZipFile(fileToUnzip);
-            File parentDirectory = fileToUnzip.getParentFile();
+        try (ZipFile unzipper = new ZipFile(fileToUnzip)) {
             String fileNameWithoutExtension = fileToUnzip.getName().substring(0, fileToUnzip.getName().lastIndexOf('.'));
-            unzippedFile = new File(parentDirectory, fileNameWithoutExtension + ".apk");
+            unzippedFile = new File(requireContext().getCacheDir(), fileNameWithoutExtension + ".apk");
 
             if (unzipper.stream().count() == 1) {
                 try (FileOutputStream unzipOutputStream = new FileOutputStream(unzippedFile)) {
                     FileUtils.copy(unzipper.getInputStream(unzipper.entries().nextElement()), unzipOutputStream);
                 }
+                if (!fileToUnzip.delete()) {
+                    Toast.makeText(requireContext(), "Failed to delete zip file", Toast.LENGTH_LONG).show();
+                    Log.w("UpdateFragment", "Failed to delete zip file: " + fileToUnzip.getAbsolutePath());
+                }
             } else {
-                unzippedFile = new File(fileName);
+                unzippedFile = new File(fileName); // fallback
             }
         } catch (Exception e) {
             Log.e("UpdateFragment", "zip install error: ", e);
