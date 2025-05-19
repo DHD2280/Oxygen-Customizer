@@ -43,6 +43,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.security.auth.callback.Callback;
@@ -182,6 +183,11 @@ public class UpdateFragment extends BaseFragment {
 
     private void installNightly(String downloadPath) {
         unzip(downloadPath, apkFile -> {
+            File fileToUnzip = new File(downloadPath);
+//            if (!fileToUnzip.delete()) {
+//                Toast.makeText(requireContext(), "Failed to delete zip file", Toast.LENGTH_LONG).show();
+//                Log.w("UpdateFragment", "Failed to delete zip file: " + fileToUnzip.getAbsolutePath());
+//            }
             requireActivity().runOnUiThread(() -> mLoadingDialog.dismiss());
             installApk(apkFile.getPath());
         });
@@ -189,7 +195,7 @@ public class UpdateFragment extends BaseFragment {
 
     private void installApk(String downloadPath) {
         Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(
-                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(downloadPath)),
+                FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(downloadPath)),
                 "application/vnd.android.package-archive");
         promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -199,24 +205,33 @@ public class UpdateFragment extends BaseFragment {
     public void unzip(String fileName, UnZipCallback callback) {
         File unzippedFile = null;
         File fileToUnzip = new File(fileName);
+        boolean extractionSuccess = false;
+
         try (ZipFile unzipper = new ZipFile(fileToUnzip)) {
             String fileNameWithoutExtension = fileToUnzip.getName().substring(0, fileToUnzip.getName().lastIndexOf('.'));
             unzippedFile = new File(requireContext().getCacheDir(), fileNameWithoutExtension + ".apk");
 
-            if (unzipper.stream().count() == 1) {
-                try (FileOutputStream unzipOutputStream = new FileOutputStream(unzippedFile)) {
-                    FileUtils.copy(unzipper.getInputStream(unzipper.entries().nextElement()), unzipOutputStream);
-                }
-                if (!fileToUnzip.delete()) {
-                    Toast.makeText(requireContext(), "Failed to delete zip file", Toast.LENGTH_LONG).show();
-                    Log.w("UpdateFragment", "Failed to delete zip file: " + fileToUnzip.getAbsolutePath());
+            if (unzipper.size() == 1) {
+                ZipEntry entry = unzipper.entries().nextElement();
+
+                try (InputStream is = unzipper.getInputStream(entry);
+                     FileOutputStream fos = new FileOutputStream(unzippedFile)) {
+                    FileUtils.copy(is, fos);
+                    extractionSuccess = true;
                 }
             } else {
-                unzippedFile = new File(fileName); // fallback
+                unzippedFile = new File(fileName);
             }
         } catch (Exception e) {
-            Log.e("UpdateFragment", "zip install error: ", e);
+            Log.e("UpdateFragment", "Zip extraction failed", e);
+        } finally {
+            if (extractionSuccess && fileToUnzip.exists()) {
+                if (!fileToUnzip.delete()) {
+                    Toast.makeText(requireContext(), "Zip file deletion failed", Toast.LENGTH_LONG).show();
+                }
+            }
         }
+
         callback.onFinished(unzippedFile);
     }
 
