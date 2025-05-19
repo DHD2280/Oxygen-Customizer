@@ -1,4 +1,4 @@
-package it.dhd.oxygencustomizer.ui.fragments.mods;
+package it.dhd.oxygencustomizer.ui.fragments.mods.launcher;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;

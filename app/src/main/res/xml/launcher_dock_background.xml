@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="dockBackground"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/dock_background" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="dockBackgroundMaterial"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/dock_background_material" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:dependency="dockBackgroundMaterial"
+            android:defaultValue="0"
+            android:key="dockBackgroundMaterialAmount"
+            android:max="4"
+            android:min="0"
+            android:title="@string/dock_background_amount" />
+
+        <it.dhd.oneplusui.preference.OplusSeekbarPreference
+            android:dependency="dockBackgroundMaterial"
+            android:defaultValue="30"
+            android:key="dockBackgroundRadius"
+            android:max="100"
+            android:min="0"
+            android:title="@string/dock_background_radius" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

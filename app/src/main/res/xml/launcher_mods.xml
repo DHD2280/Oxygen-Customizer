@@ -126,6 +126,16 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:key="dock_background_jump"
+            android:title="@string/dock_background"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDockBackground"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:title="@string/launcher_recents"
         app:iconSpaceReserved="false">

@@ -50,7 +50,7 @@
             android:icon="@drawable/ic_navbar_home"
             android:key="launcher"
             android:title="@string/launcher_title"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Launcher"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.Launcher"
             search:ignore="true" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference

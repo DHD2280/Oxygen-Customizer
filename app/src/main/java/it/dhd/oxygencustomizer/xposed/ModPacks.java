@@ -15,6 +15,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager
 import it.dhd.oxygencustomizer.xposed.hooks.framework.PackageManager;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.SleepOnFlat;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.CustomNavGestures;
+import it.dhd.oxygencustomizer.xposed.hooks.launcher.DockBackground;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.RecentsMenu;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
@@ -192,7 +193,9 @@ public class ModPacks {
                 modPacks.add(Launcher.class);
                 modPacks.add(ThemedIcons.class);
                 modPacks.add(CustomNavGestures.class);
+                modPacks.add(DockBackground.class);
                 modPacks.add(RecentsMenu.class);
+
             }
         }
 

@@ -406,7 +406,8 @@ public class PreferenceHelper {
             case "launcher_max_columns", "launcher_max_rows" -> {
                 return instance.mPreferences.getBoolean("rearrange_home", false);
             }
-            case "disable_previous_recents" -> {
+            case "disable_previous_recents",
+                 "dock_background_jump" -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
 
@@ -1238,6 +1239,11 @@ public class PreferenceHelper {
                  BATTERY_TEXT_FAST_COLOR,
                  BATTERY_TEXT_POWERSAVE_COLOR ->
                     instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
+
+            case "dockBackground" ->
+                    !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
+            case "dockBackgroundMaterial" ->
+                    !instance.mPreferences.getBoolean("dockBackground", false);
 
             default -> true;
         };

@@ -730,6 +730,10 @@
     <string name="themed_icons_taskbar">Taskbar</string>
     <string name="hide_scroller">Hide scroller</string>
     <string name="hide_scroller_summary">Hide scroller in app drawer</string>
+    <string name="dock_background">Dock background</string>
+    <string name="dock_background_material">Material dock background</string>
+    <string name="dock_background_radius">Background radius</string>
+    <string name="dock_background_amount">Blur amount</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
