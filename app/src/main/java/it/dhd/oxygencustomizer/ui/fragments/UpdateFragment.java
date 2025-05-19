@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -43,7 +42,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.security.auth.callback.Callback;
@@ -183,11 +181,6 @@ public class UpdateFragment extends BaseFragment {
 
     private void installNightly(String downloadPath) {
         unzip(downloadPath, apkFile -> {
-            File fileToUnzip = new File(downloadPath);
-//            if (!fileToUnzip.delete()) {
-//                Toast.makeText(requireContext(), "Failed to delete zip file", Toast.LENGTH_LONG).show();
-//                Log.w("UpdateFragment", "Failed to delete zip file: " + fileToUnzip.getAbsolutePath());
-//            }
             requireActivity().runOnUiThread(() -> mLoadingDialog.dismiss());
             installApk(apkFile.getPath());
         });
@@ -205,33 +198,24 @@ public class UpdateFragment extends BaseFragment {
     public void unzip(String fileName, UnZipCallback callback) {
         File unzippedFile = null;
         File fileToUnzip = new File(fileName);
-        boolean extractionSuccess = false;
+        try {
 
-        try (ZipFile unzipper = new ZipFile(fileToUnzip)) {
+            //unzip once, IF double zipped
+            ZipFile unzipper = new ZipFile(fileToUnzip);
+            File parentDirectory = fileToUnzip.getParentFile();
             String fileNameWithoutExtension = fileToUnzip.getName().substring(0, fileToUnzip.getName().lastIndexOf('.'));
-            unzippedFile = new File(requireContext().getCacheDir(), fileNameWithoutExtension + ".apk");
+            unzippedFile = new File(parentDirectory, fileNameWithoutExtension + ".apk");
 
-            if (unzipper.size() == 1) {
-                ZipEntry entry = unzipper.entries().nextElement();
-
-                try (InputStream is = unzipper.getInputStream(entry);
-                     FileOutputStream fos = new FileOutputStream(unzippedFile)) {
-                    FileUtils.copy(is, fos);
-                    extractionSuccess = true;
+            if (unzipper.stream().count() == 1) {
+                try (FileOutputStream unzipOutputStream = new FileOutputStream(unzippedFile)) {
+                    FileUtils.copy(unzipper.getInputStream(unzipper.entries().nextElement()), unzipOutputStream);
                 }
             } else {
                 unzippedFile = new File(fileName);
             }
         } catch (Exception e) {
-            Log.e("UpdateFragment", "Zip extraction failed", e);
-        } finally {
-            if (extractionSuccess && fileToUnzip.exists()) {
-                if (!fileToUnzip.delete()) {
-                    Toast.makeText(requireContext(), "Zip file deletion failed", Toast.LENGTH_LONG).show();
-                }
-            }
+            Log.e("UpdateFragment", "zip install error: ", e);
         }
-
         callback.onFinished(unzippedFile);
     }
 
