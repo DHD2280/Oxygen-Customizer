@@ -85,19 +85,19 @@
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:key="battery_bar"
             android:title="@string/statusbar_batterybar_title"
-            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryBar"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryBar"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:key="battery_icon"
             android:title="@string/statusbar_battery_icon_options"
-            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:key="statusbar_icons"
             android:title="@string/statusbar_icons"
-            app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>

@@ -12,7 +12,7 @@
         android:key="gesturenav_header"
         android:title="@string/gesture_navigation_title"
         app:forcePosition="full"
-        app:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture"
+        android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture"
         app:iconSpaceReserved="false"
         search:ignore="true" />
 
