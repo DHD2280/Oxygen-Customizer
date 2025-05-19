@@ -170,6 +170,7 @@ public class BatteryDataProvider extends XposedMods {
     }
 
     private void onBatteryInfoChanged() {
+        if (mInfoCallbacks.isEmpty()) return;
         for (BatteryInfoCallback callback : mInfoCallbacks) {
             try {
                 callback.onBatteryInfoChanged();
@@ -179,6 +180,7 @@ public class BatteryDataProvider extends XposedMods {
     }
 
     private void onOplusBatteryChanged(OplusBatteryStatus oplusBatteryStatus) {
+        if (mOplusBatteryCallbacks.isEmpty()) return;
         for (OplusBatteryStatusCallback callback : mOplusBatteryCallbacks) {
             try {
                 callback.onOplusBatteryStatusChanged(oplusBatteryStatus);
@@ -190,7 +192,6 @@ public class BatteryDataProvider extends XposedMods {
     public interface BatteryInfoCallback {
         void onBatteryInfoChanged();
     }
-
 
     public interface BatteryStatusCallback {
         void onBatteryStatusChanged(int batteryStatus, Intent batteryStatusIntent);
