@@ -79,6 +79,11 @@ public class Lockscreen extends XposedMods {
     private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
 
+    private String mFpIconField;
+    private String mImMobileDrawableField;
+    private String mFadeInAnimDrawableField;
+    private String mFadeOutAnimDrawableField;
+
     private boolean mReceiverRegistered = false;
     private final BroadcastReceiver mNowBarReceiver = new BroadcastReceiver() {
         @Override
@@ -186,6 +191,10 @@ public class Lockscreen extends XposedMods {
                 "com.oplus.systemui.biometrics.finger.udfps.OnScreenFingerprintUiMach", /* OOS14 */
                 "com.oplus.systemui.keyguard.finger.onscreenfingerprint.OnScreenFingerprintUiMech" /* OOS13 */);
 
+        OnScreenFingerprint
+                .afterConstruction()
+                .run(param -> resolveFieldNames(param.thisObject));
+
         try {
             OnScreenFingerprint
                     .after("loadAnimDrawables")
@@ -252,15 +261,16 @@ public class Lockscreen extends XposedMods {
 
     private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
         Object mFpIcon;
-        mFpIcon = getObjectField(param.thisObject, Build.VERSION.SDK_INT == 35 ? "fpIcon" : "mFpIcon");
+
+        mFpIcon = getObjectField(param.thisObject, mFpIconField);
 
         log("updateFingerprintIcon");
 
         if (mFpDrawable == null) {
-            setObjectField(param.thisObject, "mFadeInAnimDrawable", null);
-            setObjectField(param.thisObject, "mFadeOutAnimDrawable", null);
+            setObjectField(param.thisObject, mFadeInAnimDrawableField, null);
+            setObjectField(param.thisObject, mFadeOutAnimDrawableField, null);
         }
-        setObjectField(param.thisObject, Build.VERSION.SDK_INT == 35 ? "imMobileDrawable" : "mImMobileDrawable", mFpDrawable);
+        setObjectField(param.thisObject, mImMobileDrawableField, mFpDrawable);
         if (mFpIcon != null) {
             callMethod(mFpIcon, "setImageDrawable", mFpDrawable == null ? null : mFpDrawable);
         }
@@ -268,6 +278,23 @@ public class Lockscreen extends XposedMods {
             param.setResult(null);
         }
         if (!isStartMethod) callMethod(param.thisObject, "updateFpIconColor");
+    }
+
+    private void resolveFieldNames(Object target) {
+        mFpIconField = resolveField(target, "fpIcon", "mFpIcon");
+        mImMobileDrawableField = resolveField(target, "imMobileDrawable", "mImMobileDrawable");
+        mFadeInAnimDrawableField = resolveField(target, "fadeInAnimDrawable", "mFadeInAnimDrawable");
+        mFadeOutAnimDrawableField = resolveField(target, "fadeOutAnimDrawable", "mFadeOutAnimDrawable");
+    }
+
+    private String resolveField(Object target, String... candidates) {
+        for (String name : candidates) {
+            try {
+                Object val = getObjectField(target, name);
+                return name;
+            } catch (Throwable ignored) { }
+        }
+        return null;
     }
 
     private void updateDrawable() {
