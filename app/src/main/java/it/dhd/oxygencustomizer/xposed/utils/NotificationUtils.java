@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 
 import android.app.Notification;
@@ -116,13 +117,17 @@ public class NotificationUtils {
 
     public static Drawable resolveSmallIcon(StatusBarNotification sbn, Context context) {
         try {
+            String pkgName = sbn.getPackageName();
             Context pkgContext = context.createPackageContext(
-                    sbn.getPackageName(),
+                    pkgName,
                     Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE
             );
             Icon icon = sbn.getNotification().getSmallIcon();
             if (icon != null) {
                 try {
+                    if (pkgName.equals(SYSTEM_UI)) {
+                        return icon.loadDrawable(pkgContext);
+                    }
                     return (Drawable) callMethod(icon, "loadDrawableAsUser", pkgContext, (int) callMethod(sbn.getUser(), "getIdentifier"));
                 } catch (Throwable ignored) {
                     return icon.loadDrawable(pkgContext);
