@@ -409,7 +409,11 @@ public class AdvancedReboot extends XposedMods {
             if (itemTitle != null) {
                 itemTitle.setText(itemTitles.get(i2));
             }
-            COUICardListHelper.setItemCardBackground(view2, COUICardListHelper.getPositionInGroup(getCount(), i2));
+            try {
+                COUICardListHelper.setItemCardBackground(view2, COUICardListHelper.getPositionInGroup(getCount(), i2));
+            } catch (Throwable ignored) {
+                COUICardListHelper.setItemCardBackground(COUICardListHelper.getPositionInGroup(getCount(), i2), view2);
+            }
             int dimensionPixelSize = this.context.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("qs_detail_item_list_padding_horizontal", "dimen", SYSTEM_UI));
             int paddingTop = view2 != null ? view2.getPaddingTop() : 0;
             int paddingBottom = view2 != null ? view2.getPaddingBottom() : 0;

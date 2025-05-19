@@ -9,6 +9,10 @@ public abstract class COUICardListHelper {
         throw new UnsupportedOperationException("Stub!");
     }
 
+    public static void setItemCardBackground(int i2, View view) {
+        throw new UnsupportedOperationException("Stub!");
+    }
+
     public static int getPositionInGroup(int i2, int i3) {
         throw new UnsupportedOperationException("Stub!");
     }
