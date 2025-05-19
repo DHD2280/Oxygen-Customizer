@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "8.7.3"
+agp = "8.10.0"
 desugar_jdk_libs = "2.1.5"
 kotlin = "2.0.21"
 kapt = "2.0.0"
@@ -43,7 +43,7 @@ persian-date-time = "4.2.1"
 okhttp = "4.12.0"
 image-cropper = "4.6.0"
 commons-text = "1.12.0"
-oneplus-ui = "1.4.7"
+oneplus-ui = "1.4.8"
 lsposed-hiddenapi = "4.3"
 gson = "2.11.0"
 core-ktx = "1.16.0"
