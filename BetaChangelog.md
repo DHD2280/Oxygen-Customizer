@@ -1,3 +1,7 @@
+**beta-204**  
+- Improved nightly updater  
+- Unzip nightly in cache and remove files after work done  
+  
 **beta-203**  
 - Allow qs icons colors customization  
 - Added new customizations for Split QS Style  
