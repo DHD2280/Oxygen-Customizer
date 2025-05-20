@@ -31,7 +31,6 @@
                 android:background="@android:color/system_accent1_400" />
 
             <TextClock
-                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="hh:mm"
@@ -71,7 +70,6 @@
                 android:background="@android:color/system_accent2_400" />
 
             <TextClock
-                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:format12Hour="dd MMM"

@@ -14,7 +14,6 @@
         android:orientation="vertical">
 
     <TextClock
-        android:id="@+id/day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:format12Hour="EEEE"
@@ -30,7 +29,6 @@
         android:background="@android:color/system_accent1_400" />
 
     <TextClock
-        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -41,7 +39,6 @@
         android:textSize="28sp" />
 
     <TextClock
-        android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:format12Hour="hh:mm"

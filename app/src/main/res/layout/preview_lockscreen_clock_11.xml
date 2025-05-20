@@ -6,7 +6,6 @@
     android:gravity="center_horizontal|top">
 
     <LinearLayout
-        android:id="@+id/clock_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -14,14 +13,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextClock
-                android:id="@+id/time_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -39,7 +36,6 @@
                 android:textStyle="bold" />
 
             <TextClock
-                android:id="@+id/seconds_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -58,14 +54,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
             <TextClock
-                android:id="@+id/clock_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -77,7 +71,6 @@
                 android:textSize="16dp" />
 
             <TextClock
-                android:id="@+id/clock_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -90,7 +83,6 @@
                 android:textStyle="bold" />
 
             <TextClock
-                android:id="@+id/clock_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

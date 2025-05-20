@@ -8,7 +8,6 @@
 
     <!-- Overlapping Text Modules -->
     <LinearLayout
-        android:id="@+id/overlap_layer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -17,7 +16,6 @@
 
         <!-- Text for Date -->
         <TextClock
-            android:id="@+id/text_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,7 +28,6 @@
 
         <!-- Text for Day -->
         <TextClock
-            android:id="@+id/text_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -54,7 +51,6 @@
 
             <!-- Text for Time -->
             <TextClock
-                android:id="@+id/text_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

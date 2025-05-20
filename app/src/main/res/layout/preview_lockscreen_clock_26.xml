@@ -49,7 +49,6 @@
         android:orientation="horizontal">
 
         <TextClock
-            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:format12Hour="dd MMM"
@@ -68,7 +67,6 @@
             android:textSize="28sp" />
 
         <TextClock
-            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:format12Hour="hh:mm"

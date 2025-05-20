@@ -21,7 +21,6 @@
 
         <!-- Hour TextClock -->
         <TextClock
-            android:id="@+id/clockHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,7 +34,6 @@
 
         <!-- Minute TextClock -->
         <TextClock
-            android:id="@+id/clockMinute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

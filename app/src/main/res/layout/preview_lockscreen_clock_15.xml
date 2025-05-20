@@ -21,7 +21,6 @@
 
         <!-- Time Section -->
         <LinearLayout
-            android:id="@+id/timeTextSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -29,7 +28,6 @@
             android:paddingVertical="6dp">
 
             <TextView
-                android:id="@+id/timeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -42,7 +40,6 @@
                 android:textSize="12sp" />
 
             <TextClock
-                android:id="@+id/timeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/futurist_fixed_width_bold"
@@ -70,7 +67,6 @@
 
         <!-- Calendar Section -->
         <LinearLayout
-            android:id="@+id/calendarSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -78,7 +74,6 @@
             android:paddingVertical="6dp">
 
             <TextView
-                android:id="@+id/calendarLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -91,7 +86,6 @@
                 android:textSize="12sp" />
 
             <TextClock
-                android:id="@+id/calendarValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/futurist_fixed_width_bold"
@@ -120,7 +114,6 @@
 
         <!-- Today Section -->
         <LinearLayout
-            android:id="@+id/todaySection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -128,7 +121,6 @@
             android:paddingVertical="6dp">
 
             <TextView
-                android:id="@+id/todayLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -141,7 +133,6 @@
                 android:textSize="12sp" />
 
             <TextClock
-                android:id="@+id/todayValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/futurist_fixed_width_bold"

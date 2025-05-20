@@ -8,7 +8,6 @@
     android:orientation="vertical">
 
     <TextClock
-        android:id="@+id/curvedText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bebasneue_bold"
@@ -19,7 +18,6 @@
         android:textSize="35sp" />
 
     <TextClock
-        android:id="@+id/monthNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -31,7 +29,6 @@
         android:textSize="35sp" />
 
     <TextClock
-        android:id="@+id/curvedText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -43,7 +40,6 @@
         android:textSize="35sp" />
 
     <TextClock
-        android:id="@+id/curvedText4_12hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
