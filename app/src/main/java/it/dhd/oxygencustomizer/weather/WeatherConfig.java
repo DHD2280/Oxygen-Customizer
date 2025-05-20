@@ -26,6 +26,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_EXTRAS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_CUSTOM_LOCATION;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_ICON_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_OWM_KEY;
@@ -156,6 +157,7 @@ public class WeatherConfig {
         String bigWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS, "");
         String miniWidgets = getPrefs(context).getString(LOCKSCREEN_WIDGETS_EXTRAS, "");
         String qsWidgets = getPrefs(context).getString(QS_WIDGETS_LIST, "media");
+        String separateWidgets = getPrefs(context).getString(SEPARATE_QS_WIDGETS, "");
         boolean nowBar = getPrefs(context).getBoolean(NOW_BAR_ENABLED, false);
         boolean weathrNowBar = getPrefs(context).getBoolean(NOW_BAR_WEATHER, false);
 
@@ -163,8 +165,9 @@ public class WeatherConfig {
         boolean qsWeather = qsWidgets.contains("weather");
         boolean weatherInBar = nowBar && weathrNowBar;
         boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget();
+        boolean weatherSeparateQs = separateWidgets.contains("weather");
 
-        return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget;
+        return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget || weatherSeparateQs;
     }
 
     private static boolean checkWeatherDeviceWidget() {

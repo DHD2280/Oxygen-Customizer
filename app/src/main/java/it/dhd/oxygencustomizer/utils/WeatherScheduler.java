@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.work.BackoffPolicy;
 import androidx.work.Configuration;
+import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
@@ -60,14 +61,22 @@ public class WeatherScheduler {
     public static void scheduleUpdateNow(Context context) {
         Log.d("WeatherScheduler", "Check update now");
 
+        scheduleUpdateNow(context, false);
+    }
+
+    public static void scheduleUpdateNow(Context context, boolean force) {
+        Log.d("WeatherScheduler", "Check update now - force: " + force);
+
         if (!WorkManager.isInitialized()) {
             WorkManager.initialize(context, new Configuration.Builder().build());
         }
-
+        Data inputData = new Data.Builder()
+                .putBoolean("force_update", force)
+                .build();
         WorkManager workManager = WorkManager.getInstance(context);
 
         OneTimeWorkRequest.Builder builder = new OneTimeWorkRequest.Builder(WeatherWork.class);
-
-        workManager.enqueue(builder.build());
+        workManager.enqueue(builder.setInputData(inputData).build());
     }
+
 }

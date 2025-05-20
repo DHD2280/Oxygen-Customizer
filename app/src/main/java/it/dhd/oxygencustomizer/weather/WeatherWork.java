@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class WeatherWork extends ListenableWorker {
     final Context mContext;
     private static final String TAG = "WeatherWork";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String ACTION_BROADCAST = "it.dhd.oxygencustomizer.WEATHER_UPDATE";
     private static final String ACTION_ERROR = "it.dhd.oxygencustomizer.WEATHER_ERROR";
 
@@ -65,8 +65,11 @@ public class WeatherWork extends ListenableWorker {
     public ListenableFuture<Result> startWork() {
         if (DEBUG) Log.d(TAG, "startWork");
 
+        boolean forceUpdate = getInputData().getBoolean("force_update", false);
+
         return CallbackToFutureAdapter.getFuture(completer -> {
-            if (!WeatherConfig.isEnabled(mContext)) {
+            Log.d("WeatherWork", "startWork: " + forceUpdate);
+            if (!forceUpdate && !WeatherConfig.isEnabled(mContext)) {
                 handleError(completer, EXTRA_ERROR_DISABLED, "Service started, but not enabled ... stopping");
                 return completer;
             }

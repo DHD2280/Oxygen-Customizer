@@ -71,9 +71,11 @@ import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 import it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
+import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.utils.json.SeparateQsWidgetInfo;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
+import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.controls.customapp.QsCustomAppWidget;
@@ -361,6 +363,7 @@ public class SeparateQsPreview extends BaseFragment {
                 pickApp(widget);
                 return;
             }
+            if (widget.contains("weather")) checkWeather();
             View widgetToAdd = SeparateQsWidgetsFactory.getWidget(widget, requireContext(), true);
             widgetToAdd.setOnClickListener(this::showMenu);
             int[] specs =
@@ -437,6 +440,11 @@ public class SeparateQsPreview extends BaseFragment {
         builder.show();
     }
 
+    private void checkWeather() {
+        if (!WeatherConfig.isEnabled(requireContext())) {
+            WeatherScheduler.scheduleUpdateNow(requireContext(), true);
+        }
+    }
 
     private void removeWidget(String tag, boolean removeCat) {
         Log.d("SeparateQsPreview", "Removing widget: " + tag);
