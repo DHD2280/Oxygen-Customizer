@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -113,7 +114,8 @@ public class MediaBinder {
                     BuildConfig.APPLICATION_ID,
                     Context.CONTEXT_IGNORE_SECURITY
             );
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         // load icons
         mAppIconDrawable = WidgetUtils.getDrawable(mContext, APP_ICON, SYSTEM_UI);
@@ -128,13 +130,21 @@ public class MediaBinder {
 
     public void inflateView(ViewGroup parentView) {
         mParentView = parentView;
-        LayoutInflater.from(appContext).inflate(R.layout.view_qs_media_tile, mParentView);
-        setupViews();
+        mParentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View v) {
+                LayoutInflater.from(appContext).inflate(R.layout.view_qs_media_tile, mParentView);
+                setupViews();
+                MediaPlayerObserver.registerMediaData(mMediaDataObserver);
+                ThemeEnabler.registerThemeChangedListener(MediaBinder.this::setupColors);
+            }
 
-        logD("registerMediaData");
-        MediaPlayerObserver.registerMediaData(mMediaDataObserver);
-
-        ThemeEnabler.registerThemeChangedListener(this::setupColors);
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View v) {
+                MediaPlayerObserver.unRegisterregisterMediaData(mMediaDataObserver);
+                ThemeEnabler.unRegisterThemeChangedListener(MediaBinder.this::setupColors);
+            }
+        });
     }
 
     private void setupViews() {
@@ -167,26 +177,23 @@ public class MediaBinder {
 
         mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
 
-        mParentView.post(() -> {
-            if (mTextColor != null) {
-                mDeviceIcon.setImageTintList(mTextColor);
-                mTitle.setTextColor(mTextColor);
-                mText.setTextColor(mTextColor);
-                mPrev.setImageTintList(mTextColor);
-                mPlayPause.setImageTintList(mTextColor);
-                mNext.setImageTintList(mTextColor);
-            }
-            mAppIcon.setImageDrawable(mAppIconDrawable);
-            mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
+        if (mTextColor != null) {
+            mDeviceIcon.setImageTintList(mTextColor);
+            mTitle.setTextColor(mTextColor);
+            mText.setTextColor(mTextColor);
+            mPrev.setImageTintList(mTextColor);
+            mPlayPause.setImageTintList(mTextColor);
+            mNext.setImageTintList(mTextColor);
+        }
+        mAppIcon.setImageDrawable(mAppIconDrawable);
+        mDeviceIcon.setImageDrawable(Build.VERSION.SDK_INT >= 35 ? mSwitchDeviceIconDrawable : mDeviceIconDrawable);
 
-            mTitle.setText(mDefaultTipText);
-            mText.setVisibility(GONE);
+        mTitle.setText(mDefaultTipText);
+        mText.setVisibility(GONE);
 
-            mPrev.setImageDrawable(mPrevIconDrawable);
-            mPlayPause.setImageDrawable(mPlayIconDrawable);
-            mNext.setImageDrawable(mNextIconDrawable);
-
-        });
+        mPrev.setImageDrawable(mPrevIconDrawable);
+        mPlayPause.setImageDrawable(mPlayIconDrawable);
+        mNext.setImageDrawable(mNextIconDrawable);
     }
 
     private final MediaPlayerObserver.OnBindMediaData mMediaDataObserver = new MediaPlayerObserver.OnBindMediaData() {
@@ -250,12 +257,10 @@ public class MediaBinder {
             mParentView.post(() -> setupOtherViews(mColorOnAlbum));
         });
 
-        mParentView.post(() -> {
-            Drawable[] layers = new Drawable[]{oldArtRounded, artRounded};
-            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-            setBackground(transitionDrawable);
-            transitionDrawable.startTransition(250);
-        });
+        Drawable[] layers = new Drawable[]{oldArtRounded, artRounded};
+        TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+        setBackground(transitionDrawable);
+        transitionDrawable.startTransition(250);
     }
 
     private void setBackground(Drawable drawable) {
@@ -361,17 +366,15 @@ public class MediaBinder {
     private void setupColors() {
 
         mTextColor = SettingsLibUtilsProvider.getColorAttr(mContext.getResources().getIdentifier("couiColorPrimaryNeutral", "attr", SYSTEM_UI), mContext);
-        mParentView.post(() -> {
-            if (mTextColor != null) {
-                mDeviceIcon.setImageTintList(mTextColor);
-                mTitle.setTextColor(mTextColor);
-                mText.setTextColor(mTextColor);
-                mPrev.setImageTintList(mTextColor);
-                mPlayPause.setImageTintList(mTextColor);
-                mNext.setImageTintList(mTextColor);
-            }
-            updateBackground();
-        });
+        if (mTextColor != null) {
+            mDeviceIcon.setImageTintList(mTextColor);
+            mTitle.setTextColor(mTextColor);
+            mText.setTextColor(mTextColor);
+            mPrev.setImageTintList(mTextColor);
+            mPlayPause.setImageTintList(mTextColor);
+            mNext.setImageTintList(mTextColor);
+        }
+        updateBackground();
     }
 
     public void bindMediaAction(Object mediaData) {
@@ -507,13 +510,11 @@ public class MediaBinder {
         String song = (String) callMethod(mediaData, "getSong");
         String artist = (String) callMethod(mediaData, "getArtist");
         if (!TextUtils.isEmpty(song)) {
-            mTitle.post(() -> mTitle.setText(song));
+            mTitle.setText(song);
         }
         if (!TextUtils.isEmpty(artist)) {
-            mText.post(() -> {
-                mText.setVisibility(VISIBLE);
-                mText.setText(artist);
-            });
+            mText.setVisibility(VISIBLE);
+            mText.setText(artist);
         }
 
     }
