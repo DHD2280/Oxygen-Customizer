@@ -245,6 +245,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_DISABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
@@ -560,7 +561,8 @@ public class PreferenceHelper {
             case QS_TILE_ICON_CUSTOM_COLOR -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
-            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE,
+            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT,
+                 QS_TILE_ICON_CUSTOM_COLOR_ACTIVE,
                  QS_TILE_ICON_CUSTOM_COLOR_INACTIVE,
                  QS_TILE_ICON_CUSTOM_COLOR_DISABLED -> {
                 return isVisible(QS_TILE_ICON_CUSTOM_COLOR) &&
@@ -1240,6 +1242,8 @@ public class PreferenceHelper {
                  BATTERY_TEXT_POWERSAVE_COLOR ->
                     instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
 
+            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE ->
+                !instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
             case "dockBackground" ->
                     !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
             case "dockBackgroundMaterial" ->

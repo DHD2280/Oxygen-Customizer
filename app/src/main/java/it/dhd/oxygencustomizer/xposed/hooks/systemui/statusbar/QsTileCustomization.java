@@ -54,6 +54,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_HIGHTLIGHT_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_DISABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ICON_CUSTOM_COLOR_INACTIVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_INACTIVE_COLOR;
@@ -182,7 +183,7 @@ public class QsTileCustomization extends XposedMods {
     private int qsInactiveColorHighlightIcon, qsActiveColorHighlightIcon, qsDisabledColorHighlightIcon;
 
     // Qs Tile Icons
-    private boolean qsCustomIconColors = false;
+    private boolean qsCustomIconColors = false, qsActiveColorIconAccent = false;
     private int qsInactiveColorIcon, qsActiveColorIcon, qsDisabledColorIcon;
 
     // Qs Tile Colors Base
@@ -306,6 +307,7 @@ public class QsTileCustomization extends XposedMods {
         qsMediaTileColor = Xprefs.getInt(QS_MEDIA_TILE_COLOR, Color.WHITE);
         // Qs Tiles ICONS colors
         qsCustomIconColors = Xprefs.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
+        qsActiveColorIconAccent = Xprefs.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
         qsActiveColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE, Color.WHITE);
         qsInactiveColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_INACTIVE, Color.WHITE);
         qsDisabledColorIcon = Xprefs.getInt(QS_TILE_ICON_CUSTOM_COLOR_DISABLED, Color.WHITE);
@@ -737,7 +739,7 @@ public class QsTileCustomization extends XposedMods {
                     if (!qsCustomIconColors) return;
                     int tileState = getIntField(param.thisObject, "tileState");
                     int color = switch (tileState) {
-                        case STATE_ACTIVE -> qsActiveColorIcon;
+                        case STATE_ACTIVE -> qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColorIcon;
                         case STATE_INACTIVE -> qsInactiveColorIcon;
                         default -> qsDisabledColorIcon;
                     };

@@ -29,6 +29,14 @@
             android:title="@string/quick_settings_tile_custom_color"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_custom_icon_active_accent_color"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/volume_panel_icon_accent"
+            app:iconSpaceReserved="false" />
+
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
             android:defaultValue="-1"
             android:key="qs_custom_icon_active_color"

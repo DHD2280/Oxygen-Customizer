@@ -245,6 +245,7 @@ public final class Constants {
 
             // Icons
             public static final String QS_TILE_ICON_CUSTOM_COLOR = "qs_custom_icon_colors";
+            public static final String QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT = "qs_custom_icon_active_accent_color";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_ACTIVE = "qs_custom_icon_active_color";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_INACTIVE = "qs_custom_icon_inactive_color";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_DISABLED = "qs_custom_icon_disabled_color";
@@ -953,6 +954,7 @@ public final class Constants {
     public static final String ACTION_TILE_REMOVED = BuildConfig.APPLICATION_ID + ".ACTION_TILE_REMOVED_OC";
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
     public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";
+    public static final String ACTIONS_QS_PHOTO_RADIUS_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_RADIUS_CHANGED";
     public static final String ACTION_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
     public static final String ACTION_DEPTH_BACKGROUND_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_BACKGROUND_CHANGED_OC";
     public static final String ACTION_DEPTH_SUBJECT_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_SUBJECT_CHANGED_OC";
