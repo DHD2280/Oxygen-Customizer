@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.views.controls.weather;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,12 @@ public class QsMiniWeatherView extends BaseQsStaticView {
 
     public void onSizeChanged(int newWidth) {
         mWeatherBinder.onSizeChanged(newWidth);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mWeatherBinder.onConfigurationChanged();
     }
 
     @Override

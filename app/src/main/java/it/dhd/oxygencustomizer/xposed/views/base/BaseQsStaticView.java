@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.views.base;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -76,6 +77,12 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
 
     public void reloadBackground() {
         this.backgroundProxy.refreshViewBackground();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        reloadBackground();
     }
 
 }

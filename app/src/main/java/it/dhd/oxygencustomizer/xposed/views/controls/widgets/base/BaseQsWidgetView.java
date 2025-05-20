@@ -1,6 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.widgets.base;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -62,5 +65,20 @@ public abstract class BaseQsWidgetView extends BaseQsStaticView implements BaseL
         mImageView.setVisibility(newWidth >= 2 ? View.GONE : View.VISIBLE);
         mFab.setVisibility(newWidth >= 2 ? View.VISIBLE : View.GONE);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mImageView.setImageTintList(ColorStateList.valueOf(isNightMode() ? Color.WHITE : Color.BLACK));
+        mFab.setIconTint(ColorStateList.valueOf(isNightMode() ? Color.WHITE : Color.BLACK));
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
+    }
+
+    private boolean isNightMode() {
+        final Configuration config = mContext.getResources().getConfiguration();
+        return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+    }
+
 }
 

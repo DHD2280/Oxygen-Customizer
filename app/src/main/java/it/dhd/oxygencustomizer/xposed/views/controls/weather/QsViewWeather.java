@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.weather;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.ViewGroup;
 
 import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
@@ -52,6 +53,12 @@ public class QsViewWeather extends BaseQsStaticView {
 
     public void refreshViewBackground() {
         this.backgroundProxy.refreshViewBackground();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mWeatherBinder.onConfigurationChanged();
     }
 
 }

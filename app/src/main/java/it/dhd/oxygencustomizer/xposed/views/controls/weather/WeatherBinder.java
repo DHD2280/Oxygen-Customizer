@@ -6,6 +6,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -120,11 +121,9 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
         queryAndUpdateWeather();
 
-        // Use White Color
-        // as we have blue background
-        mCity.setTextColor(Color.WHITE);
-        mTemp.setTextColor(Color.WHITE);
-        mCondition.setTextColor(Color.WHITE);
+        mCity.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
+        mTemp.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
+        mCondition.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
 
         if (!mSettingsInterface) {
             mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
@@ -214,4 +213,18 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
         }
     }
 
+    private boolean isNightMode() {
+        final Configuration config = mContext.getResources().getConfiguration();
+        return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public void onConfigurationChanged() {
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
+        if (isNightMode()) {
+            if (mTemp != null) mTemp.setTextColor(Color.WHITE);
+            if (mCity != null) mCity.setTextColor(Color.WHITE);
+            if (mCondition != null) mCondition.setTextColor(Color.WHITE);
+        }
+    }
 }

@@ -518,6 +518,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         );
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        reloadBackground();
+    }
+
     private boolean isNightMode() {
         final Configuration config = mContext.getResources().getConfiguration();
         return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
