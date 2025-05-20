@@ -2,10 +2,16 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.separate;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
+import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
+import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_ROWS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
+import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
+import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +21,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,6 +82,7 @@ import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.utils.json.SeparateQsWidgetInfo;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
+import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.weather.WeatherConfig;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -138,6 +146,19 @@ public class SeparateQsPreview extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new Thread(() -> mPackageAdapter = new PackageListAdapter(requireActivity())).start();
+
+        requireActivity().getSupportFragmentManager()
+                .setFragmentResultListener(DATA_CROP_KEY, this, (requestKey, result) -> {
+                    String resultString = result.getString(DATA_FILE_URI);
+                    String path = getRealPath(Uri.parse(resultString));
+                    if (path != null && moveToOCHiddenDir(path, QS_PHOTO_DIR)) {
+                        Intent updateImage = new Intent(ACTIONS_QS_PHOTO_CHANGED);
+                        requireContext().sendBroadcast(updateImage);
+                        Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), requireContext().getResources().getString(R.string.toast_rename_file), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
