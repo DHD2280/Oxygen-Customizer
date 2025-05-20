@@ -77,7 +77,9 @@ public class KeyguardPinScrambler extends XposedMods {
                     COUINumericKeyboard.Cell cell = sCells[i5][i6];
                     int i7 = (i5 * 3) + i6;
                     setAdditionalInstanceField(cell, "actualNumber", result.get(i7));
-                    cell.cellLettersStr = stringArray[i7];
+                    try {
+                        setObjectField(cell, "cellLettersStr", stringArray[i7]);
+                    } catch (Throwable ignored) {} // field not exists in 15.0.1
                     int i8 = result.get(i7);
                     if (i8 > -1) {
                         cell.cellNumberStr = String.format(Locale.getDefault(), "%d", Integer.valueOf(i8));
