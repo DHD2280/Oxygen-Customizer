@@ -346,7 +346,8 @@ public class LockscreenClock extends XposedMods {
                         if (!isPluginLoaded) {
                             try {
                                 createCustomClockView();
-                            } catch (Throwable ignored) {
+                            } catch (Throwable t) {
+                                log(t);
                             }
                         }
                     });
@@ -359,7 +360,9 @@ public class LockscreenClock extends XposedMods {
                         try {
                             int marginTop = dp2px(mContext, topMargin);
                             setIntField(param.thisObject, "mAodWorkShopClockHeight", (mLockscreenView.getClockHeight() + marginTop));
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable t) {
+                            log(t);
+                        }
                     });
             ReflectedClass AodData = ReflectedClass.of("com.oplus.systemui.aod.aodclock.constant.AodData");
             AodData
@@ -369,7 +372,9 @@ public class LockscreenClock extends XposedMods {
                         try {
                             int marginTop = dp2px(mContext, topMargin);
                             param.args[1] = (mLockscreenView.getClockHeight() + marginTop);
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable t) {
+                            log(t);
+                        }
                     });
 
             ReflectedClass OplusKeyguardStyleClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleClock");
