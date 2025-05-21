@@ -65,6 +65,7 @@ public class ControllersProvider extends XposedMods {
     private Object mOplusQsMediaTile = null;
     private Class<?> SystemUIDialog = null;
     private Object mActivityStarterImpl = null;
+    private Object mSystemPropertiesHelper = null;
     private Object mBatteryInfo = null;
 
     public ControllersProvider(Context context) {
@@ -237,6 +238,12 @@ public class ControllersProvider extends XposedMods {
 
         try {
             getActivityStarter();
+        } catch (Throwable t) {
+            log(t);
+        }
+
+        try {
+            getSystemPropertiesHelper();
         } catch (Throwable t) {
             log(t);
         }
@@ -577,6 +584,13 @@ public class ControllersProvider extends XposedMods {
                 .run(param -> mActivityStarterImpl = getObjectField(param.thisObject, "activityStarter"));
     }
 
+    private void getSystemPropertiesHelper() {
+        ReflectedClass BouncerMessageInteractor = ReflectedClass.of("com.android.systemui.bouncer.domain.interactor.BouncerMessageInteractor");
+        BouncerMessageInteractor
+                .afterConstruction()
+                .run(param -> mSystemPropertiesHelper = getObjectField(param.thisObject, "systemPropertiesHelper"));
+    }
+
     private void getBatteryInfo() {
         ReflectedClass KeyguardIndicationController = ReflectedClass.of("com.android.systemui.statusbar.KeyguardIndicationController");
         KeyguardIndicationController
@@ -588,6 +602,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getActivityStarterExternal() {
         return instance.mActivityStarterImpl;
+    }
+
+    public static Object getSystemPropertiesHelperExternal() {
+        return instance.mSystemPropertiesHelper;
     }
 
     public static Object getBatteryInfoExternal() {
