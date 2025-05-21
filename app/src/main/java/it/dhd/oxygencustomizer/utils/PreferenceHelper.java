@@ -448,6 +448,9 @@ public class PreferenceHelper {
             }
 
             // Notification
+            case "notif_transparency_cat" -> {
+                return Build.VERSION.SDK_INT < 35;
+            }
             case "statusbar_notification_transparency_value" -> {
                 return instance.mPreferences.getBoolean("statusbar_notification_transparency", false);
             }
@@ -1355,6 +1358,7 @@ public class PreferenceHelper {
                     fragmentCompat.getString(R.string.status_bar_clock_auto_hide_sdur_summary) + "\n" +
                             String.format(fragmentCompat.getString(R.string.duration_seconds),
                                     instance.mPreferences.getSliderInt("status_bar_clock_auto_hide_sduration", 5));
+
             case NOTIF_TRANSPARENCY_VALUE ->
                     String.valueOf(instance.mPreferences.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25));
             case "statusbar_notification_app_icon_scale" ->
