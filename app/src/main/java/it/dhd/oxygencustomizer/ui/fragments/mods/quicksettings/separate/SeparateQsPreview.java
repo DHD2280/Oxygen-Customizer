@@ -214,7 +214,9 @@ public class SeparateQsPreview extends BaseFragment {
         mRows = OCPreferences.getInt(SEPARATE_QS_ROWS, 3);
         qsTilePrefs = new QsTilePrefs();
         qsTilePrefs.setPreferenceListener(mSectionListener);
-        getChildFragmentManager().beginTransaction().add(binding.fragmentContainer.getId(), qsTilePrefs).commit();
+        getChildFragmentManager().beginTransaction()
+                .replace(binding.fragmentContainer.getId(), qsTilePrefs)
+                .commit();
         try {
             loadPrefs();
             loadCustomWidgets();
