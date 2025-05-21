@@ -46,8 +46,6 @@ public class NotificationTransparency extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        if (Build.VERSION.SDK_INT >= 35) return;
-
         Class<?> NotificationBackgroundView = findClass("com.android.systemui.statusbar.notification.row.NotificationBackgroundView", lpparam.classLoader);
         Class<?> ExpandableNotificationRow = findClass("com.android.systemui.statusbar.notification.row.ExpandableNotificationRow", lpparam.classLoader);
 
@@ -58,6 +56,7 @@ public class NotificationTransparency extends XposedMods {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (Build.VERSION.SDK_INT >= 35) return;
                         Drawable d = (Drawable) param.args[1];
                         if (d != null && notificationTransparency && !hasOverlays) {
                             d.setAlpha(notificationTransparencyValue);
@@ -68,6 +67,7 @@ public class NotificationTransparency extends XposedMods {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 // blurColor
+                if (Build.VERSION.SDK_INT >= 35) return;
                 if (notificationTransparency && !hasOverlays) {
                     setBooleanField(param.thisObject, "mShowGroupBackgroundWhenExpanded", true);
                 }

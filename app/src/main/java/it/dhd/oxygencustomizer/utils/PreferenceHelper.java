@@ -1176,7 +1176,6 @@ public class PreferenceHelper {
 
     public static boolean isEnabled(String key) {
         return switch (key) {
-            case "android.theme.customization.notifications" -> Build.VERSION.SDK_INT < 35;
             case "BBarTransitColors" -> !instance.mPreferences.getBoolean("BBarColorful", false);
             case "BBarColorful" -> !instance.mPreferences.getBoolean("BBarTransitColors", false);
             case "BIconColorful" -> !instance.mPreferences.getBoolean("BIconTransitColors", false);

@@ -7,6 +7,11 @@
         </shape>
     </item>
     <item>
+        <shape>
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+    <item>
         <shape android:shape="rectangle">
             <gradient
                 android:angle="270.0"

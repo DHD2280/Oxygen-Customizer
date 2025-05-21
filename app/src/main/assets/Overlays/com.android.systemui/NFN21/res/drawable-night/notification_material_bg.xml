@@ -6,6 +6,11 @@
             <solid android:color="#00000000" />
         </shape>
     </item>
+    <item>
+        <shape>
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
     <item
         android:end="24dp"
         android:start="24dp">

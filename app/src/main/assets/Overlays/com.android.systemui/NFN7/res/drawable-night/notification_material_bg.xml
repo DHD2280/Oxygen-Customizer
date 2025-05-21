@@ -6,6 +6,11 @@
             <solid android:color="#00000000" />
         </shape>
     </item>
+    <item>
+        <shape>
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
     <item
         android:start="4.0dip"
         android:top="4.0dip">
