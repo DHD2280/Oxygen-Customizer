@@ -771,7 +771,11 @@ public class StatusbarClock extends XposedMods {
             case POSITION_RIGHT -> mClockView.setGravity(Gravity.RIGHT | Gravity.CENTER);
         }
         mClockView.setIncludeFontPadding(false);
-        mClockView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        if (mClockDoubleRow) {
+            mClockView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        } else {
+            mClockView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        }
         mClockView.post(() -> {
             mClockView.invalidate();
             mClockView.requestLayout();
