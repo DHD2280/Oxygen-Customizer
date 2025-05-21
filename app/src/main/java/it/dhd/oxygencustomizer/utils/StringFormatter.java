@@ -28,6 +28,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
@@ -52,7 +53,12 @@ public class StringFormatter {
         instances.add(this);
         try {
             BatteryDataProvider.registerStatusCallback(mBatteryStatusCallback);
-        } catch (Throwable ignored) {}
+        } catch (Throwable t) {
+            try {
+                XposedBridge.log("StringFormatter - Error registering battery status callback" + Log.getStackTraceString(t));
+            } catch (Throwable ignored) {} // executed outside xposed
+            Log.e(StringFormatter.class.getSimpleName(), "Error registering battery status callback", t);
+        }
         scheduleNextDateUpdate();
     }
 

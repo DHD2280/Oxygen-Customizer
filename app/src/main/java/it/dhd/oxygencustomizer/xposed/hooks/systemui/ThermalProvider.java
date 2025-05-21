@@ -103,6 +103,9 @@ public class ThermalProvider extends XposedMods {
             try {
             return ThermalServiceOC.getCurrentTemperatures();
             } catch (Throwable t) {
+                try {
+                    XposedBridge.log("ThermalProvider - error getting temperature from ThermalServiceOC " + Log.getStackTraceString(t));
+                } catch (Throwable ignored) {} // executed outside xposed
                 Log.e("ThermalProvider", "getTemperatures error", t);
                 return new Object[0];
             }
