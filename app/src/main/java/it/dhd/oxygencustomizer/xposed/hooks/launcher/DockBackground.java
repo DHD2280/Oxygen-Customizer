@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.android.launcher3.uioverrides.states.blurdrawable.LayerBlurDrawable;
 import com.android.launcher3.uioverrides.states.blurdrawable.OplusBlurProperties;
@@ -61,17 +62,39 @@ public class DockBackground extends XposedMods {
                 });
 
         OplusHotseatCls
+                .after("onAttachedToWindow")
+                        .run(param -> {
+                            ViewGroup oplusHotseat = (ViewGroup) param.thisObject;
+                            oplusHotseat.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    oplusHotseat.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    if (mDockBackgroundMaterial) {
+                                        initBlurBackground(oplusHotseat);
+                                    }
+                                    return true;
+                                }
+                            });
+                        });
+
+        OplusHotseatCls
                 .after("onDraw")
                         .run(param -> {
-                            if (mDockBackgroundMaterial) {
-                                initBlurBackground(param.thisObject);
-                            } else {
+                            if (mDockBackground) {
+                                try {
+                                    callMethod(param.thisObject, "setDockerBackground");
+                                } catch (Throwable t) {
+                                    log(t);
+                                }
+                            } else if (!mDockBackgroundMaterial) {
                                 try {
                                     View mShortcutsAndWidgets = (View) getObjectField(param.thisObject, "mShortcutsAndWidgets");
                                     if (mShortcutsAndWidgets.getBackground() != null) {
                                         mShortcutsAndWidgets.setBackground(null);
                                     }
-                                } catch (Throwable ignored) {}
+                                } catch (Throwable t) {
+                                    log(t);
+                                }
                             }
                         });
 
