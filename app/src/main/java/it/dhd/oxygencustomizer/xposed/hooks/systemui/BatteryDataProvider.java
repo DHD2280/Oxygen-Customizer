@@ -29,7 +29,7 @@ public class BatteryDataProvider extends XposedMods {
     @SuppressLint("StaticFieldLeak")
     private static BatteryDataProvider instance = null;
     private final ArrayList<BatteryInfoCallback> mInfoCallbacks = new ArrayList<>();
-    List<BatteryStatusCallback> mStatusCallbacks = new ArrayList<>();
+    private final List<BatteryStatusCallback> mStatusCallbacks = new ArrayList<>();
     private final ArrayList<OplusBatteryStatusCallback> mOplusBatteryCallbacks = new ArrayList<>();
     private boolean mCharging;
     private int mCurrentLevel = 0;
@@ -156,6 +156,7 @@ public class BatteryDataProvider extends XposedMods {
     }
 
     private void onBatteryStatusChanged(int status, Intent intent) {
+        if (mStatusCallbacks.isEmpty()) return;
         for (BatteryStatusCallback callback : mStatusCallbacks) {
             try {
                 callback.onBatteryStatusChanged(status, intent);
