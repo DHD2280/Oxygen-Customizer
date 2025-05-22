@@ -373,8 +373,23 @@ public class SeparateQsCustomization extends XposedMods {
         OplusLargeTileContainerViewClz
                 .after("onFinishInflate")
                 .run(param -> {
+                    XposedBridge.log("Oxygen Customizer - SeparateQsCustomization - onFinishInflate");
                     mOplusLargeTileContainerView = (OplusLargeTileContainerView) param.thisObject;
                     updateCellsHook(param.thisObject);
+                    mOplusLargeTileContainerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                        @Override
+                        public void onViewAttachedToWindow(@NonNull View v) {
+                            XposedBridge.log("Oxygen Customizer - SeparateQsCustomization - onViewAttachedToWindow");
+                            try {
+                                updateCellsHook(v);
+                            } catch (Throwable e) {
+                                log(e);
+                            }
+                        }
+
+                        @Override
+                        public void onViewDetachedFromWindow(@NonNull View v) {}
+                    });
                 });
 
         OplusLargeTileContainerViewClz
