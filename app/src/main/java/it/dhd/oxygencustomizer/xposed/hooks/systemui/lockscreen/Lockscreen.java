@@ -377,6 +377,23 @@ public class Lockscreen extends XposedMods {
                             }
                         }
                     });
+            KeyguardBottomAreaView
+                    .after("access$updateButton")
+                    .run(param -> { // OOS 15.0.1
+                        if (!(removeLeftAffordance || removeRightAffordance)) return;
+                        ImageView view = (ImageView) param.args[1];
+                        if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                            mStartButton = view;
+                            if (removeLeftAffordance) {
+                                view.setVisibility(View.GONE);
+                            }
+                        } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
+                            mEndButton = view;
+                            if (removeRightAffordance) {
+                                view.setVisibility(View.GONE);
+                            }
+                        }
+                    });
         } else {
             ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardBottomAreaView");
             KeyguardBottomAreaView
