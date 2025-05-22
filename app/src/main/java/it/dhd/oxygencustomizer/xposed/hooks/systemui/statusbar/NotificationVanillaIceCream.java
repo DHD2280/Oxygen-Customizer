@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 
 import android.content.Context;
 import android.os.Build;
@@ -44,9 +45,12 @@ public class NotificationVanillaIceCream extends XposedMods {
         ViewBlurManager
                 .before("headsupCardMotionMixConfig")
                 .run(nullReturner);
-        ViewBlurManager
-                .before("requireBlurProxyForView")
-                .run(nullReturner);
+
+        if (!isOOS1501()) {
+            ViewBlurManager
+                    .before("requireBlurProxyForView")
+                    .run(nullReturner);
+        }
 
     }
 
