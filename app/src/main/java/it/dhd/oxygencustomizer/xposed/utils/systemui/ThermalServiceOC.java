@@ -21,8 +21,9 @@ public class ThermalServiceOC {
             Request request;
             try {
                 request = new Request.Builder().setComponentName(COMPONENT_NAME).setActionName("getCurrentTemperatures").build();
-            } catch (Throwable ignored) {
+            } catch (Throwable t) {
                 // Method build not available - 15.0.1
+                Log.e("ThermalServiceOC", "error getting temperatures with Request.Builder", t);
                 request = new Request(new Bundle(), COMPONENT_NAME, "getCurrentTemperatures");
             }
             Response execute = Epona.newCall(request).execute();
