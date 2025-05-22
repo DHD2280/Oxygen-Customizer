@@ -64,6 +64,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_KIM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_ONE_UI7;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_ATTACH_TO_BB;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_CHARGING_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_FAST_COLOR;
@@ -1140,7 +1141,8 @@ public class PreferenceHelper {
                 batteryStyle != BATTERY_STYLE_DEFAULT_RLANDSCAPE &&
                 batteryStyle != BATTERY_STYLE_LANDSCAPE_IOS_16 &&
                 batteryStyle != BATTERY_STYLE_LANDSCAPE_BATTERYL &&
-                batteryStyle != BATTERY_STYLE_LANDSCAPE_BATTERYM;
+                batteryStyle != BATTERY_STYLE_LANDSCAPE_BATTERYM &&
+                batteryStyle != BATTERY_STYLE_LANDSCAPE_ONE_UI7;
         boolean showInsidePercentage = showPercentage && !isKim && !instance.mPreferences.getBoolean(CUSTOM_BATTERY_HIDE_PERCENTAGE, false);
         boolean showChargingIconCustomization = instance.mPreferences.getBoolean(CUSTOM_BATTERY_CHARGING_ICON_SWITCH, false);
         boolean circleBattery = batteryStyle == BATTERY_STYLE_CIRCLE ||

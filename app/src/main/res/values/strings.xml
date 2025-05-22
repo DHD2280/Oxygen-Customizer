@@ -416,6 +416,7 @@
     <string name="battery_dotted_circle">Dotted Circle Battery</string>
     <string name="battery_filled_circle">Filled Circle</string>
     <string name="battery_landscape_kim">Landscape Kim</string>
+    <string name="battery_landscape_one_ui">Landscape One UI 7</string>
 
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Hide Bluetooth icon</string>

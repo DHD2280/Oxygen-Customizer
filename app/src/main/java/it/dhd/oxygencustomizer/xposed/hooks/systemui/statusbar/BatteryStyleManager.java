@@ -37,6 +37,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_IOS_16;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_KIM;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_MIUI_PILL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_ONE_UI7;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_SMILEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_STYLE_A;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_STYLE_B;
@@ -139,6 +140,7 @@ import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryM;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryMIUIPill;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryN;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryO;
+import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryOneUI7;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatterySmiley;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryStyleA;
 import it.dhd.oxygencustomizer.xposed.batterystyles.LandscapeBatteryStyleB;
@@ -864,6 +866,7 @@ public class BatteryStyleManager extends XposedMods {
                     new CircleBattery(context, frameColor);
             case BATTERY_STYLE_FILLED_CIRCLE -> new CircleFilledBattery(context, frameColor);
             case BATTERY_STYLE_LANDSCAPE_KIM -> new LandscapeBatteryKim(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_ONE_UI7  -> new LandscapeBatteryOneUI7(context, frameColor);
             default -> null;
         };
 
