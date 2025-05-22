@@ -12,6 +12,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -606,6 +607,12 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getSystemPropertiesHelperExternal() {
         return instance.mSystemPropertiesHelper;
+    }
+
+    public static boolean isOOS1501() {
+        Object sysPropHelper = instance.mSystemPropertiesHelper;
+        String getprop = (String) callMethod(sysPropHelper, "get", "ro.build.version.oplusrom");
+        return !TextUtils.isEmpty(getprop) && getprop.contains("15.0.1");
     }
 
     public static Object getBatteryInfoExternal() {

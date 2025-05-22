@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -14,6 +15,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getSystemPropertiesHelperExternal;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
@@ -400,6 +403,29 @@ public class StatusbarClock extends XposedMods {
                                 }
                             }
                         });
+                StatClock
+                        .after("onMeasure")
+                                .run(param -> {
+                                    if (!isOOS1501()) return;
+                                    TextView tv = (TextView) param.thisObject;
+                                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                                    if (mClockDoubleRow) {
+                                        tv.setSingleLine(false);
+                                        tv.setLineSpacing(0f, 0.8f);
+                                    } else {
+                                        tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
+                                    }
+                                    float totalWidth = measureTextWithSpans();
+                                    totalWidth += rightClockPadding*2;
+                                    if (clockChip) {
+                                        totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
+                                    }
+                                    int calculatedMinWidth = (int) totalWidth;
+                                    if (tv.getMinimumWidth() != calculatedMinWidth) {
+                                        tv.setMinimumWidth(calculatedMinWidth);
+                                    }
+                                    callMethod(param.thisObject, "setMeasuredDimension", calculatedMinWidth, param.args[1]);
+                                });
                 StatClock
                         .after("updateConfigurationChanged")
                         .run(param -> {
