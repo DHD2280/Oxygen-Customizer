@@ -592,12 +592,12 @@ public class SeparateQsPreview extends BaseFragment {
         ImageView mPlayPause = (ImageView) ViewHelper.findViewWithTag(mediaPanel, "media_panel_action_play_or_pause");
         ImageView mNext = (ImageView) ViewHelper.findViewWithTag(mediaPanel, "media_panel_action_next");
 
-        mAppIcon.setImageDrawable(getDrawable(MediaBinder.APP_ICON, SYSTEM_UI));
-        mDeviceIcon.setImageDrawable(getDrawable(MediaBinder.DEVICE_ICON, SYSTEM_UI));
-        mTitle.setText(getString(MediaBinder.DEFAULT_LABEL, SYSTEM_UI));
-        mPrev.setImageDrawable(getDrawable(MediaBinder.PREV_ICON, SYSTEM_UI));
-        mPlayPause.setImageDrawable(getDrawable(MediaBinder.PLAY_ICON, SYSTEM_UI));
-        mNext.setImageDrawable(getDrawable(MediaBinder.NEXT_ICON, SYSTEM_UI));
+        mAppIcon.setImageDrawable(getDrawable(QsMediaTile.APP_ICON, SYSTEM_UI));
+        mDeviceIcon.setImageDrawable(getDrawable(QsMediaTile.DEVICE_ICON, SYSTEM_UI));
+        mTitle.setText(getString(QsMediaTile.DEFAULT_LABEL, SYSTEM_UI));
+        mPrev.setImageDrawable(getDrawable(QsMediaTile.PREV_ICON, SYSTEM_UI));
+        mPlayPause.setImageDrawable(getDrawable(QsMediaTile.PLAY_ICON, SYSTEM_UI));
+        mNext.setImageDrawable(getDrawable(QsMediaTile.NEXT_ICON, SYSTEM_UI));
         mDeviceIcon.setImageTintList(ColorStateList.valueOf(Color.WHITE));
         mPrev.setImageTintList(ColorStateList.valueOf(Color.WHITE));
         mPlayPause.setImageTintList(ColorStateList.valueOf(Color.WHITE));

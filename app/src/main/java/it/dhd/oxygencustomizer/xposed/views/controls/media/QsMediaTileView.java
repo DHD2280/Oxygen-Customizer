@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.views.controls.media;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.ViewGroup;
 
 import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
 
@@ -18,13 +19,14 @@ public class QsMediaTileView extends BaseQsStaticView implements QsMediaTileI {
 
     private static final String TAG = "QsMediaTileView";
     private final Context mContext;
-    private final MediaBinder mMediaBinder;
+    private final QsMediaTile mMediaTile;
 
     public QsMediaTileView(@Nullable Context context) {
         super(context);
         mContext = context;
-        mMediaBinder = new MediaBinder(mContext, TAG);
-        mMediaBinder.inflateView(this);
+        mMediaTile = new QsMediaTile(context);
+        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(mMediaTile);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class QsMediaTileView extends BaseQsStaticView implements QsMediaTileI {
 
     @Override
     public void updatePrefs(boolean showAlbumArt, int mediaQsArtFilter, int mediaQsTintColor, int mediaQsTintAmount, float mediaQsArtBlurAmount) {
-        mMediaBinder.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
+        mMediaTile.updatePrefs(showAlbumArt, mediaQsArtFilter, mediaQsTintColor, mediaQsTintAmount, mediaQsArtBlurAmount);
     }
 
     @Override

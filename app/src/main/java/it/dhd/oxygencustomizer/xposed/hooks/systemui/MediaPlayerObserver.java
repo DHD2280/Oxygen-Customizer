@@ -66,6 +66,12 @@ public class MediaPlayerObserver extends XposedMods {
                     .run(param -> {
                         unBindMediaData();
                     });
+            // OOS15.0.1 method
+            OplusQsMediaPanelView
+                    .after("resetButtonEnableState")
+                    .run(param -> {
+                        unBindMediaData();
+                    });
         } catch (Throwable t) {
             log(t);
         }
