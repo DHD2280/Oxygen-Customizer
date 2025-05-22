@@ -290,7 +290,7 @@ public class QsTileCustomization extends XposedMods {
         qsDisabledColorEnabledHighlight = Xprefs.getBoolean(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED, false);
         qsDisabledColorHighlight = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT, Color.DKGRAY);
         // Icon background for separate qs
-        qsCustomHighlightIconTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, true);
+        qsCustomHighlightIconTileColors = Xprefs.getBoolean(QS_TILE_HIGHLIGHT_CUSTOM_COLORS_SWITCH_ICON, false);
         qsActiveColorHighlightIcon = Xprefs.getInt(QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ICON, Color.RED);
         qsInactiveColorHighlightIcon = Xprefs.getInt(QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ICON, Color.GRAY);
         qsDisabledColorHighlightIcon = Xprefs.getInt(QS_TILE_DISABLED_COLOR_HIGHLIGHT_ICON, Color.DKGRAY);
