@@ -88,7 +88,7 @@ import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.views.controls.customapp.QsCustomAppWidget;
 import it.dhd.oxygencustomizer.xposed.views.controls.devicewidget.DeviceWidgetInterface;
-import it.dhd.oxygencustomizer.xposed.views.controls.media.MediaBinder;
+import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTile;
 import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainer;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsMiniWeather;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsWeatherWidget;
