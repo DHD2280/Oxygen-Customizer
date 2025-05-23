@@ -55,27 +55,23 @@ public class Request implements Parcelable {
         public String mComponentName;
 
         public Builder setComponentName(String str) {
-            this.mComponentName = str;
-            return this;
+            throw new UnsupportedOperationException("Stub!");
         }
 
         public Builder setActionName(String str) {
-            this.mActionName = str;
-            return this;
+            throw new UnsupportedOperationException("Stub!");
         }
 
         public Builder withParcelable(String str, Parcelable parcelable) {
-            this.mBundle.putParcelable(str, parcelable);
-            return this;
+            throw new UnsupportedOperationException("Stub!");
         }
 
         public Builder withBundle(String str, Bundle bundle) {
-            this.mBundle.putBundle(str, bundle);
-            return this;
+            throw new UnsupportedOperationException("Stub!");
         }
 
         public Request build() {
-            return new Request(this.mComponentName, this.mActionName, this.mBundle, null);
+            throw new UnsupportedOperationException("Stub!");
         }
     }
 
