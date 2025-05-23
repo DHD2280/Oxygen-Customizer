@@ -45,27 +45,32 @@ public class ThermalServiceOC {
                 logE("getCurrentTemperatures error", tr);
             }
         }
-            Response execute = Epona.newCall(request).execute();
-            int i2 = 0;
-            try {
-                Map<String, Float> map = (Map) execute.getBundle().getSerializable("result");
-                TemperatureNative[] temperatureNativeArr = new TemperatureNative[map.size()];
-                for (Map.Entry<String, Float> entry : map.entrySet()) {
-                    temperatureNativeArr[i2] = new TemperatureNative((String) entry.getKey(), ((Float) entry.getValue()).floatValue());
-                    i2++;
-                }
-                return temperatureNativeArr;
-            } catch (Throwable t) {
-                logE("getPowerSaveState: " + execute.getMessage(), t);
+        if (request == null) {
+            logE("getCurrentTemperatures: No request factory available!", new Throwable("No request factory available!"));
+            return new Object[0];
+        }
+        Response execute = Epona.newCall(request).execute();
+        int i2 = 0;
+        try {
+            Map<String, Float> map = (Map) execute.getBundle().getSerializable("result");
+            TemperatureNative[] temperatureNativeArr = new TemperatureNative[map.size()];
+            for (Map.Entry<String, Float> entry : map.entrySet()) {
+                temperatureNativeArr[i2] = new TemperatureNative((String) entry.getKey(), ((Float) entry.getValue()).floatValue());
+                i2++;
             }
+            return temperatureNativeArr;
+        } catch (Throwable t) {
+            logE("getPowerSaveState: " + execute.getMessage(), t);
+        }
 
-            return new TemperatureNative[0];
+        return new TemperatureNative[0];
     }
 
     private static void logE(String message, Throwable throwable) {
         try {
             XposedBridge.log(TAG + " " + message + ": " + Log.getStackTraceString(throwable));
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         Log.e(TAG, message, throwable);
     }
 
