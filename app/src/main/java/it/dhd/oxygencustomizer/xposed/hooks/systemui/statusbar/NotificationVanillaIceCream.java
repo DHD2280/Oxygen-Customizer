@@ -46,11 +46,13 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .before("headsupCardMotionMixConfig")
                 .run(nullReturner);
 
-        if (!isOOS1501()) {
-            ViewBlurManager
-                    .before("requireBlurProxyForView")
-                    .run(nullReturner);
-        }
+        ViewBlurManager
+                .before("requireBlurProxyForView")
+                .run(param -> {
+                    if (!isOOS1501()) {
+                        param.setResult(null);
+                    }
+                });
 
     }
 
