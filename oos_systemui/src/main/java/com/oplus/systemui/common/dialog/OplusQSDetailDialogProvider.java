@@ -1,9 +1,7 @@
 package com.oplus.systemui.common.dialog;
 
 import android.content.Context;
-import android.view.View;
 
-import com.android.systemui.animation.DialogLaunchAnimator;
 import com.android.systemui.animation.DialogTransitionAnimator;
 import com.android.systemui.animation.Expandable;
 import com.android.systemui.plugins.qs.DetailAdapter;
