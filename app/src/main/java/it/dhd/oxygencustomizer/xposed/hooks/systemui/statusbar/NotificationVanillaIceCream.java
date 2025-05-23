@@ -49,7 +49,7 @@ public class NotificationVanillaIceCream extends XposedMods {
         ViewBlurManager
                 .before("requireBlurProxyForView")
                 .run(param -> {
-                    if (!isOOS1501()) {
+                    if (!isOOS1501() && hasOverlays) {
                         param.setResult(null);
                     }
                 });
