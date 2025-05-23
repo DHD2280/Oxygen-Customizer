@@ -35,6 +35,7 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="notif_transparency_cat"
         android:title="@string/statusbar_notifications_transparency"
         app:iconSpaceReserved="false">
 
