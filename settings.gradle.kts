@@ -21,4 +21,3 @@ rootProject.name = "Oxygen Customizer"
 include(":app")
 include(":oos_launcher")
 include(":oos_systemui")
-include(":oos_systemui_14")

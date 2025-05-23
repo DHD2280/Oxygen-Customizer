@@ -13,8 +13,4 @@ public abstract class NotifiAndQsPlatformBlurEx {
         }
     }
 
-
-
-
-
 }

@@ -36,5 +36,4 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.core.ktx)
-    compileOnly(project(":oos_systemui_14"))
 }

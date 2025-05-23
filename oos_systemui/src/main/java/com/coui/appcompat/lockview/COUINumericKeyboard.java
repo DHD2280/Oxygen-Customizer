@@ -21,7 +21,6 @@ public class COUINumericKeyboard extends View {
 
     public class Cell {
 
-        public String cellLettersStr;
         public String cellNumberStr;
         public int column;
         public int row;

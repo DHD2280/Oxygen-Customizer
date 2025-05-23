@@ -14,13 +14,6 @@ public final class OplusQSDetailDialogProvider implements OplusThemeSystemUiDial
         throw new UnsupportedOperationException("Stub!");
     }
 
-    /**
-     * OOS14 constructor!!!
-     */
-    public OplusQSDetailDialogProvider(Context context, com.oplus.systemui.qs.detail.DetailAdapter detailAdapter) {
-        throw new UnsupportedOperationException("Stub!");
-    }
-
     @Override
     public void onStop() {
         throw new UnsupportedOperationException("Stub!");
@@ -31,13 +24,6 @@ public final class OplusQSDetailDialogProvider implements OplusThemeSystemUiDial
     }
 
     public final void showDetail(Expandable expandable, boolean z, DialogTransitionAnimator dialogTransitionAnimator, DialogHeight dialogHeight) {
-        throw new UnsupportedOperationException("Stub!");
-    }
-
-    /**
-     * OOS14 method!!!
-     */
-    public final void showDetail(View view, boolean z, DialogLaunchAnimator dialogLaunchAnimator) {
         throw new UnsupportedOperationException("Stub!");
     }
 
