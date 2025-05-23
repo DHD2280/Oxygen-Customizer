@@ -460,6 +460,7 @@ public final class Constants {
         public static class SeparateQsPrefs {
             public static final String SEPARATE_HIDE_MENU = "separate_qs_hide_menu";
             public static final String SEPARATE_HIDE_EDIT = "separate_qs_hide_edit";
+            public static final String SEPARATE_QS_LAYOUT_SWITCH = "qs_custom_layout";
             public static final String SEPARATE_QS_ROWS = "separate_qs_rows";
             public static final String SEPARATE_QS_LAYOUT = "layout_cells";
             public static final String SEPARATE_QS_WIDGETS = "separate_widgets";

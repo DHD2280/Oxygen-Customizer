@@ -29,9 +29,10 @@
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-        <it.dhd.oneplusui.preference.OplusJumpPreference
+        <it.dhd.oxygencustomizer.ui.preferences.OplusPrimarySwitchPreference
             android:title="@string/qs_separate_layout"
-            android:key="qs_layout"
+            android:summary="@string/qs_separate_layout_summary"
+            android:key="qs_custom_layout"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.separate.SeparateQsPreview" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>

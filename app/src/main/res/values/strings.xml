@@ -1584,7 +1584,8 @@
     <string name="qs_separate_mods">Separate QS</string>
     <string name="qs_separate_hide_menu">Hide menu button</string>
     <string name="qs_separate_hide_edit">Hide edit button</string>
-    <string name="qs_separate_layout">Qs layout</string>
+    <string name="qs_separate_layout">Custom qs layout</string>
+    <string name="qs_separate_layout_summary">Customize the upper layout of the quick settings panel</string>
 
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Tap on an item to configure its layout</string>

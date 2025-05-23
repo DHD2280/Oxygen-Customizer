@@ -11,6 +11,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_EDIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_MENU;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_ROWS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -62,6 +63,7 @@ public class SeparateQsCustomization extends XposedMods {
     private OplusLargeTileContainerView mOplusLargeTileContainerView;
     private boolean mHideEdit = false, mHideMenu = false;
     private View mEditButton, mMenuButton;
+    private boolean mCustomLayout = false;
     private int mRows = 3;
     // Stock Layout
     private String mSavedCells = "";
@@ -108,6 +110,7 @@ public class SeparateQsCustomization extends XposedMods {
 
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
+        mCustomLayout = Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false);
         mSavedCells = Xprefs.getString(SEPARATE_QS_LAYOUT, "");
         mCustomWidgets = Xprefs.getString(SEPARATE_QS_WIDGETS, "");
         parseCell();
@@ -120,7 +123,8 @@ public class SeparateQsCustomization extends XposedMods {
             if (Key[0].equals(QS_PHOTO_RADIUS)) {
                 if (mCustomWidgets.contains("photo")) updateLayout();
             }
-            if (Key[0].equals(SEPARATE_QS_LAYOUT) ||
+            if (Key[0].equals(SEPARATE_QS_LAYOUT_SWITCH) ||
+                    Key[0].equals(SEPARATE_QS_LAYOUT) ||
                     Key[0].equals(SEPARATE_QS_WIDGETS) ||
                     Key[0].equals(SEPARATE_QS_ROWS)) {
                 updateLayout();
@@ -200,6 +204,10 @@ public class SeparateQsCustomization extends XposedMods {
     }
     
     private void updateCellsHook(Object obj) throws Throwable {
+        if (!mCustomLayout) return;
+        try {
+            setIntField(obj, "mRows", mRows);
+        } catch (Throwable ignored) {}
         ArrayList mViewCells = (ArrayList) getObjectField(obj, "mViewCells");
         ViewGroup mMediaPanelContainer = (ViewGroup) getObjectField(obj, "mMediaPanelContainer");
         ViewGroup mBrightnessTileContainer = (ViewGroup) getObjectField(obj, "mBrightnessTileContainer");
@@ -367,6 +375,7 @@ public class SeparateQsCustomization extends XposedMods {
         OplusLargeTileContainerViewClz
                 .before("onMeasure")
                 .run(param -> {
+                    if (!mCustomLayout) return;
                     setIntField(param.thisObject, "mRows", mRows);
                 });
 
