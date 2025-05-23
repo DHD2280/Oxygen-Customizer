@@ -7,25 +7,44 @@ import com.oplus.epona.Epona;
 import com.oplus.epona.Request;
 import com.oplus.epona.Response;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import de.robv.android.xposed.XposedBridge;
+
 public class ThermalServiceOC {
+
     private static final String COMPONENT_NAME = "android.os.IThermalService";
+    private static final String ACTION_NAME = "getCurrentTemperatures";
     private static final String RESULT = "result";
-    private static final String TAG = "ThermalServiceNative";
+    private static final String TAG = "ThermalServiceOC";
+    private static final List<RequestFactory> factories = Arrays.asList(
+            () -> new Request.Builder()
+                    .setComponentName(COMPONENT_NAME)
+                    .setActionName(ACTION_NAME)
+                    .build(),
+            () -> new Request(new Bundle(), COMPONENT_NAME, ACTION_NAME),
+            () -> new Request(COMPONENT_NAME, ACTION_NAME, new Bundle(), null)
+    );
 
     private ThermalServiceOC() {
     }
 
+    interface RequestFactory {
+        Request create() throws Throwable;
+    }
+
     public static Object[] getCurrentTemperatures() {
-            Request request;
+        Request request = null;
+        for (RequestFactory factory : factories) {
             try {
-                request = new Request.Builder().setComponentName(COMPONENT_NAME).setActionName("getCurrentTemperatures").build();
-            } catch (Throwable t) {
-                // Method build not available - 15.0.1
-                Log.e("ThermalServiceOC", "error getting temperatures with Request.Builder", t);
-                request = new Request(new Bundle(), COMPONENT_NAME, "getCurrentTemperatures");
+                request = factory.create();
+                break; // Everything is fine
+            } catch (Throwable tr) {
+                logE("getCurrentTemperatures error", tr);
             }
+        }
             Response execute = Epona.newCall(request).execute();
             int i2 = 0;
             try {
@@ -37,9 +56,17 @@ public class ThermalServiceOC {
                 }
                 return temperatureNativeArr;
             } catch (Throwable t) {
-                Log.e(TAG, "getPowerSaveState: " + execute.getMessage());
+                logE("getPowerSaveState: " + execute.getMessage(), t);
             }
 
             return new TemperatureNative[0];
     }
+
+    private static void logE(String message, Throwable throwable) {
+        try {
+            XposedBridge.log(TAG + " " + message + ": " + Log.getStackTraceString(throwable));
+        } catch (Throwable ignored) {}
+        Log.e(TAG, message, throwable);
+    }
+
 }
