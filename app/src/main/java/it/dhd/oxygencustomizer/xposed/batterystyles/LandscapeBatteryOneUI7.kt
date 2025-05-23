@@ -431,6 +431,8 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
                 // Calculate glow alpha based on sine wave for pulsing effect (100-255)
                 val glowAlpha = ((sin(animationTime.toDouble()) + 1) / 2 * 155 + 100).toInt()
                 animationPaint.alpha = glowAlpha
+                animationPaint.color = if (fastCharging) 0xFF0066FF.toInt() // Blue color for fast charging
+                else 0xFF34C759.toInt() // Green color for charging
 
                 // Draw the battery shape with the animated glow
                 c.drawPath(unifiedPath, animationPaint)
@@ -458,7 +460,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
 
     private fun batteryColorForLevel(level: Int): Int {
         return when {
-            fastCharging -> 0x0066FF.toInt() // Blue color for fast charging as Oplus VOOC
+            fastCharging -> 0xFF0066FF.toInt() // Blue color for fast charging as Oplus VOOC
             charging -> 0xFF34C759.toInt() // Keep the green color for charging state
             powerSaveEnabled -> 0xFFFFCC0A.toInt() // Yellow color for power save mode
             level > Companion.CRITICAL_LEVEL -> fillColor
