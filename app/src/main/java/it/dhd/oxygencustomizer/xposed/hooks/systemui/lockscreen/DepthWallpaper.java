@@ -64,6 +64,7 @@ import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
  * @noinspection RedundantThrows
@@ -118,6 +119,7 @@ public class DepthWallpaper extends XposedMods {
     private boolean superPowerSave = false;
     private boolean mBroadcastRegistered = false;
     private boolean mPluginBroadcastRegistered = false;
+    private int mLastUiState = -1;
 
     public DepthWallpaper(Context context) {
         super(context);
@@ -339,6 +341,7 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(ScrimControllerClass, "applyAndDispatchState", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (Build.VERSION.SDK_INT >= 35) return;
                 setDepthWallpaper();
             }
         });
@@ -351,6 +354,16 @@ public class DepthWallpaper extends XposedMods {
                 }
             }
         });
+
+        ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
+        if (OplusKeyguardStyleClock.getClazz() != null) {
+            OplusKeyguardStyleClock
+                    .after("onUiStateChanged")
+                    .run(param -> {
+                        mLastUiState = (int) param.args[0];
+                        setDepthWallpaper(mLastUiState);
+                    });
+        }
     }
 
     private float calculateAlpha(float alpha) {
@@ -430,8 +443,9 @@ public class DepthWallpaper extends XposedMods {
         log("Layers Created");
     }
 
-    private void setDepthWallpaper() {
+    private void setDepthWallpaper(int uiState) {
         String state = getObjectField(getScrimController(), "mState").toString();
+        XposedBridge.log("DepthWallpaper - setDepthWallpaper: " + state);
         boolean canShow = true;
         if (showAlbumArt && !canShowArt) {
             canShow = true;
@@ -441,10 +455,68 @@ public class DepthWallpaper extends XposedMods {
         boolean showSubject = DWallpaperEnabled
                 &&
                 (
-                        state.contains("KEYGUARD") // OOS 13
+                        uiState == LockscreenClock.CLOCK_UI_STATE_LS
                 )
                 && canShow;
-        
+
+        if (showSubject) {
+            if (!lockScreenSubjectCacheValid && new File(getLockScreenSubjectCachePath()).exists()) {
+                log("lockScreenSubjectCacheValid false");
+                try (FileInputStream inputStream = new FileInputStream(getLockScreenSubjectCachePath())) {
+                    log("Loading Lock Screen Subject Cache file exists");
+                    Drawable bitmapDrawable = BitmapDrawable.createFromStream(inputStream, "");
+                    bitmapDrawable.setAlpha(255);
+
+                    mSubjectDimmingOverlay = bitmapDrawable.getConstantState().newDrawable().mutate();
+                    mSubjectDimmingOverlay.setTint(Color.BLACK);
+
+                    mLockScreenSubject.setBackground(new LayerDrawable(new Drawable[]{bitmapDrawable, mSubjectDimmingOverlay}));
+                    lockScreenSubjectCacheValid = true;
+                    log("Lock Screen Subject Cache Loaded " + lockScreenSubjectCacheValid);
+                } catch (Throwable t) {
+                    log("Error loading lockscreen subject cache: " + t.getMessage());
+                }
+            }
+
+            if (lockScreenSubjectCacheValid) {
+                mLockScreenSubject.getBackground().setAlpha(DWOpacity);
+
+                if (uiState != LockscreenClock.CLOCK_UI_STATE_LS) {
+                    mSubjectDimmingOverlay.setAlpha(192 /*Math.round(192 * (DWOpacity / 255f))*/);
+                } else {
+                    //this is the dimmed wallpaper coverage
+                    mSubjectDimmingOverlay.setAlpha(Math.round(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard") * 240)); //A tad bit lower than max. show it a bit lighter than other stuff
+                    mWallpaperDimmingOverlay.setAlpha(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard"));
+
+                }
+                mWallpaperBackground.setVisibility(VISIBLE);
+                mLockScreenSubject.setVisibility(VISIBLE);
+            }
+        } else if (mLayersCreated) {
+            mLockScreenSubject.setVisibility(GONE);
+
+            if (mLastUiState == LockscreenClock.CLOCK_UI_STATE_SHADE) {
+                mWallpaperBackground.setVisibility(GONE);
+            }
+        }
+    }
+
+    private void setDepthWallpaper() {
+        String state = getObjectField(getScrimController(), "mState").toString();
+        XposedBridge.log("DepthWallpaper - setDepthWallpaper: " + state);
+        boolean canShow = true;
+        if (showAlbumArt && !canShowArt) {
+            canShow = true;
+        } else if (showAlbumArt && canShowArt) {
+            canShow = false;
+        }
+        boolean showSubject = DWallpaperEnabled
+                &&
+                (
+                        state.contains("KEYGUARD")
+                )
+                && canShow;
+
         if (showSubject) {
            log("Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(getLockScreenSubjectCachePath()).exists());
             if (!lockScreenSubjectCacheValid && new File(getLockScreenSubjectCachePath()).exists()) {
