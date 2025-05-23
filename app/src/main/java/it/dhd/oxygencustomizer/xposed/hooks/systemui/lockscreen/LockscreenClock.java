@@ -376,6 +376,17 @@ public class LockscreenClock extends XposedMods {
                             log(t);
                         }
                     });
+            AodData
+                    .before("getWorkShopAodClockHeight")
+                    .run(param -> {
+                        if (!customLockscreenClock) return;
+                        try {
+                            int marginTop = dp2px(mContext, topMargin);
+                            param.setResult((mLockscreenView.getClockHeight() + marginTop));
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+                    });
 
             ReflectedClass OplusKeyguardStyleClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleClock");
             OplusKeyguardStyleClock
