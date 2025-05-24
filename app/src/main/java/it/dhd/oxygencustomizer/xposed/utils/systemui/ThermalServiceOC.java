@@ -41,9 +41,7 @@ public class ThermalServiceOC {
             try {
                 request = factory.create();
                 break; // Everything is fine
-            } catch (Throwable tr) {
-                logE("getCurrentTemperatures error", tr);
-            }
+            } catch (Throwable ignored) {}
         }
         if (request == null) {
             logE("getCurrentTemperatures: No request factory available!", new Throwable("No request factory available!"));
