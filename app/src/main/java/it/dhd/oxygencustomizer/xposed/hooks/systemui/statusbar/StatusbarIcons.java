@@ -4,10 +4,12 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -18,6 +20,7 @@ public class StatusbarIcons extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
     private boolean hideBluetooth, mHideWifiActivity = false, mHideMobileActivity = false;
+    private boolean mIosSignal = false;
 
     public StatusbarIcons(Context context) {
         super(context);
@@ -28,6 +31,8 @@ public class StatusbarIcons extends XposedMods {
         hideBluetooth = Xprefs.getBoolean("hide_bluetooth_when_disconnected", false);
         mHideWifiActivity = Xprefs.getBoolean("hide_inout_wifi", false);
         mHideMobileActivity = Xprefs.getBoolean("hide_inout_mobile", false);
+        mIosSignal = Xprefs.getBoolean("OxygenCustomizerComponentSGIC40.overlay", false);
+
     }
 
     @Override
@@ -91,6 +96,30 @@ public class StatusbarIcons extends XposedMods {
                     "com.oplus.systemui.statusbar.phone.signal.OplusStatusBarMobileViewExImpl" /* OOS14-13 */);
 
             if (Build.VERSION.SDK_INT >= 35) {
+                OplusStatusBarMobileViewExImpl
+                        .after("bindCustEx$updateSignalIcon")
+                                .run(param -> {
+                                    if (!mIosSignal) return;
+                                    try {
+                                        ImageView mMobileSignal = (ImageView) param.args[0];
+                                        ViewGroup.LayoutParams originalParams = mMobileSignal.getLayoutParams();
+                                        if (originalParams instanceof ViewGroup.MarginLayoutParams) {
+                                            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) originalParams;
+                                            marginParams.width = dp2px(32, mContext);
+                                            marginParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                                            mMobileSignal.setLayoutParams(marginParams);
+                                        } else {
+                                            // fallback
+                                            mMobileSignal.setLayoutParams(new ViewGroup.MarginLayoutParams(
+                                                    dp2px(32, mContext),
+                                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                            ));
+                                        }
+                                        mMobileSignal.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    } catch (Throwable t) {
+                                        log(t);
+                                    }
+                                });
                 OplusStatusBarMobileViewExImpl
                         .before("bindCustEx$updateDataActivity")
                         .run(param -> {
