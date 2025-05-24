@@ -1260,10 +1260,10 @@ public class PreferenceHelper {
 
             case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE ->
                 !instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
-//            case "dockBackground" ->
-//                    !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
-//            case "dockBackgroundMaterial" ->
-//                    !instance.mPreferences.getBoolean("dockBackground", false);
+            case "dockBackground" ->
+                    !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
+            case "dockBackgroundMaterial" ->
+                    !instance.mPreferences.getBoolean("dockBackground", false);
 
             default -> true;
         };
