@@ -47,7 +47,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
@@ -112,16 +111,26 @@ public class SeparateQsCustomization extends XposedMods {
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
         mCustomLayout = Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false);
         mSavedCells = Xprefs.getString(SEPARATE_QS_LAYOUT, "");
-        mCustomWidgets = Xprefs.getString(SEPARATE_QS_WIDGETS, "");
+        String customWidgets = Xprefs.getString(SEPARATE_QS_WIDGETS, "");
         parseCell();
-        parseCustomWidgets();
+
+        if (!TextUtils.equals(customWidgets, mCustomWidgets)) {
+            mCustomWidgets = customWidgets;
+            parseCustomWidgets();
+        }
 
         mHideMenu = Xprefs.getBoolean(SEPARATE_HIDE_MENU, false);
         mHideEdit = Xprefs.getBoolean(SEPARATE_HIDE_EDIT, false);
 
         if (Key.length > 0) {
             if (Key[0].equals(QS_PHOTO_RADIUS)) {
-                if (mCustomWidgets.contains("photo")) updateLayout();
+                if (mCustomWidgets.contains("photo")) {
+                    for (View widget : mWidgets.keySet()) {
+                        if (widget instanceof QsPhotoShowcaseContainerView photoShowcaseContainerView) {
+                            photoShowcaseContainerView.setRadius(mPhotoRadius);
+                        }
+                    }
+                }
             }
             if (Key[0].equals(SEPARATE_QS_LAYOUT_SWITCH) ||
                     Key[0].equals(SEPARATE_QS_LAYOUT) ||
