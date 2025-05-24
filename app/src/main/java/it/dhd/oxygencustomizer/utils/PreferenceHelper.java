@@ -264,6 +264,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_CUSTOM_BACKGROUND;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_CUSTOM_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_MAX_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
@@ -524,8 +526,13 @@ public class PreferenceHelper {
             case BLUR_RADIUS_VALUE -> {
                 return instance.mPreferences.getBoolean(QSPANEL_BLUR_SWITCH, false) && Build.VERSION.SDK_INT < 35;
             }
-            case QSPANEL_MAX_BLUR_AMOUNT -> {
+            case QSPANEL_MAX_BLUR_AMOUNT,
+                 QSPANEL_CUSTOM_BACKGROUND -> {
                 return Build.VERSION.SDK_INT >= 35;
+            }
+            case QSPANEL_CUSTOM_BACKGROUND_COLOR -> {
+                return instance.mPreferences.getBoolean(QSPANEL_CUSTOM_BACKGROUND, false) &&
+                        Build.VERSION.SDK_INT >= 35;
             }
 
             // Qs Tiles

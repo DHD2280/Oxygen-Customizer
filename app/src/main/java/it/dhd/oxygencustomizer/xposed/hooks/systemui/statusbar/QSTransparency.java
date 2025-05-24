@@ -114,13 +114,18 @@ public class QSTransparency extends XposedMods {
                     // float f2, String str
                     if (mScrimControllerExImp == null) return;
                     float blurAmount = (float) param.args[0];
-                    String str = (String) param.args[1];
-                    Object scrimView = callMethod(param.thisObject, "getScrimView");
-                    String scrimName = (String) getObjectField(scrimView, "mScrimName");
-                    boolean isBehind = (boolean) callMethod(param.thisObject, "isBehind");
-                    boolean isQsVisible = (boolean) callMethod(mScrimControllerExImp, "isQsVisible");
-                    Object scrimState = callMethod(param.thisObject, "getScrimState");
-                    XposedBridge.log("ScrimViewExImp.setBlurAmount scrimState: " + scrimState.toString());
+                    boolean isBehind = false;
+                    try {
+                        isBehind = (boolean) callMethod(param.thisObject, "isBehind");
+                    } catch (Throwable ignored) {
+                        isBehind = getBooleanField(param.thisObject, "isBehind");
+                    }
+                    boolean isQsVisible = false;
+                    try {
+                        isQsVisible = (boolean) callMethod(mScrimControllerExImp, "isQsVisible");
+                    } catch (Throwable ignored) {
+                        isQsVisible = getBooleanField(mScrimControllerExImp, "isQsVisible");
+                    }
                     if (isBehind && isQsVisible) {
                         param.args[0] = constrain(blurAmount, 0.0f, maxBlurRadius);
                     }

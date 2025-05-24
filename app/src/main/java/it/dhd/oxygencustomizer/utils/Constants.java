@@ -194,6 +194,8 @@ public final class Constants {
             public static final String QSPANEL_BLUR_SWITCH = "qs_transparency_blur_switch";
             public static final String BLUR_RADIUS_VALUE = "qs_transparency_blur_radius";
             public static final String QSPANEL_MAX_BLUR_AMOUNT = "qs_transparency_max_blur_amount";
+            public static final String QSPANEL_CUSTOM_BACKGROUND = "qs_custom_background";
+            public static final String QSPANEL_CUSTOM_BACKGROUND_COLOR = "qs_custom_background_color";
         }
 
         public static class QsTiles {

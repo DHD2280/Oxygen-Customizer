@@ -82,11 +82,23 @@
 
         <it.dhd.oneplusui.preference.OplusSeekbarPreference
             android:key="qs_transparency_max_blur_amount"
-            android:title="@string/qs_blur_max_amount"
-            android:summary="@string/qs_blur_max_amount_summary"
-            app:defaultValue="100"
             android:max="100"
-            android:min="0" />
+            android:min="0"
+            android:summary="@string/qs_blur_max_amount_summary"
+            android:title="@string/qs_blur_max_amount"
+            app:defaultValue="100" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_custom_background"
+            android:summary="@string/qs_custom_background_summary"
+            android:title="@string/qs_custom_background_title" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="-12303292"
+            app:cpv_showAlphaSlider="true"
+            android:key="qs_custom_background_color"
+            android:title="@string/custom_color" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
