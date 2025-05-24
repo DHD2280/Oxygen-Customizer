@@ -1,12 +1,14 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_MAX_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -14,10 +16,13 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class QSTransparency extends XposedMods {
 
@@ -27,6 +32,8 @@ public class QSTransparency extends XposedMods {
     private float alpha = 40;
     private boolean blurEnabled = false;
     private int blurRadius = 60;
+    private Object mScrimControllerExImp = null;
+    private float maxBlurRadius = 1f;
 
     public QSTransparency(Context context) {
         super(context);
@@ -41,6 +48,7 @@ public class QSTransparency extends XposedMods {
 
         blurEnabled = Xprefs.getBoolean(QSPANEL_BLUR_SWITCH, false);
         blurRadius = Xprefs.getSliderInt(BLUR_RADIUS_VALUE, 60);
+        maxBlurRadius = Xprefs.getInt(QSPANEL_MAX_BLUR_AMOUNT, 100) / 100f;
 
     }
 
@@ -60,6 +68,7 @@ public class QSTransparency extends XposedMods {
         hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (!qsTransparencyActive) return;
+                if (Build.VERSION.SDK_INT >= 35) return;
 
                 int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
                 String scrimState = getObjectField(param.thisObject, "mState").toString();
@@ -84,6 +93,43 @@ public class QSTransparency extends XposedMods {
             }
         });
 
+        if (Build.VERSION.SDK_INT >= 35) {
+            hookQs();
+        }
+
+    }
+
+    private void hookQs() {
+        ReflectedClass ScrimControllerExImp = ReflectedClass.of("com.oplus.systemui.statusbar.phone.ScrimControllerExImp");
+        ScrimControllerExImp
+                .afterConstruction()
+                .run(param -> {
+                    mScrimControllerExImp = param.thisObject;
+                });
+
+        ReflectedClass ScrimViewExImp = ReflectedClass.of("com.oplus.systemui.scrim.ScrimViewExImp");
+        ScrimViewExImp
+                .before("setBlurAmount")
+                .run(param -> {
+                    // float f2, String str
+                    if (mScrimControllerExImp == null) return;
+                    float blurAmount = (float) param.args[0];
+                    String str = (String) param.args[1];
+                    Object scrimView = callMethod(param.thisObject, "getScrimView");
+                    String scrimName = (String) getObjectField(scrimView, "mScrimName");
+                    boolean isBehind = (boolean) callMethod(param.thisObject, "isBehind");
+                    boolean isQsVisible = (boolean) callMethod(mScrimControllerExImp, "isQsVisible");
+                    Object scrimState = callMethod(param.thisObject, "getScrimState");
+                    XposedBridge.log("ScrimViewExImp.setBlurAmount scrimState: " + scrimState.toString());
+                    if (isBehind && isQsVisible) {
+                        param.args[0] = constrain(blurAmount, 0.0f, maxBlurRadius);
+                    }
+                    XposedBridge.log("ScrimViewExImp.setBlurAmount: " + blurAmount + ", " + str + ", " + scrimName);
+                });
+    }
+
+    private float constrain(float amount, float low, float high) {
+        return amount < low ? low : (amount > high ? high : amount);
     }
 
     private void setBlurRadius() {
@@ -91,6 +137,7 @@ public class QSTransparency extends XposedMods {
             @Override
             protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) {
                 if (!blurEnabled) return;
+                if (Build.VERSION.SDK_INT >= 35) return;
 
                 try {
                     @SuppressLint("DiscouragedApi") int resId = mContext.getResources()

@@ -193,6 +193,7 @@ public final class Constants {
             public static final String QS_TRANSPARENCY_VAL = "qs_transparency_value";
             public static final String QSPANEL_BLUR_SWITCH = "qs_transparency_blur_switch";
             public static final String BLUR_RADIUS_VALUE = "qs_transparency_blur_radius";
+            public static final String QSPANEL_MAX_BLUR_AMOUNT = "qs_transparency_max_blur_amount";
         }
 
         public static class QsTiles {

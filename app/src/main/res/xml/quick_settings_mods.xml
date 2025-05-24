@@ -80,6 +80,14 @@
             app:tickInterval="1"
             app:valueFormat="%" />
 
+        <it.dhd.oneplusui.preference.OplusSeekbarPreference
+            android:key="qs_transparency_max_blur_amount"
+            android:title="@string/qs_blur_max_amount"
+            android:summary="@string/qs_blur_max_amount_summary"
+            app:defaultValue="100"
+            android:max="100"
+            android:min="0" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 

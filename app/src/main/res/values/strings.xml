@@ -455,6 +455,8 @@
     <string name="quick_settings_tiles_landscape">In landscape orientation</string>
     <string name="quick_settings_tiles_vertical_rows">Quick Settings Rows (Landscape)</string>
     <string name="quick_settings_tiles_vertical_columns">Quick Settings Columns (Landscape)</string>
+    <string name="qs_blur_max_amount">Max blur amount</string>
+    <string name="qs_blur_max_amount_summary">Set maximum blur amount for Quick Settings.</string>
 
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">Show Quick Settings Widgets</string>

@@ -264,6 +264,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOTAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_MAX_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_APPLY_TINT;
@@ -298,6 +299,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import it.dhd.oneplusui.appcompat.seekbar.LabelFormatter;
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -512,11 +514,18 @@ public class PreferenceHelper {
             case "quick_pulldown_side", "quick_pulldown_length" -> {
                 return instance.mPreferences.getBoolean("quick_pulldown", false);
             }
+            case QS_TRANSPARENCY_SWITCH,
+                 QSPANEL_BLUR_SWITCH -> {
+                return Build.VERSION.SDK_INT < 35;
+            }
             case QS_TRANSPARENCY_VAL -> {
-                return instance.mPreferences.getBoolean(QS_TRANSPARENCY_SWITCH, false);
+                return instance.mPreferences.getBoolean(QS_TRANSPARENCY_SWITCH, false) && Build.VERSION.SDK_INT < 35;
             }
             case BLUR_RADIUS_VALUE -> {
-                return instance.mPreferences.getBoolean(QSPANEL_BLUR_SWITCH, false);
+                return instance.mPreferences.getBoolean(QSPANEL_BLUR_SWITCH, false) && Build.VERSION.SDK_INT < 35;
+            }
+            case QSPANEL_MAX_BLUR_AMOUNT -> {
+                return Build.VERSION.SDK_INT >= 35;
             }
 
             // Qs Tiles
@@ -1251,10 +1260,10 @@ public class PreferenceHelper {
 
             case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE ->
                 !instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
-            case "dockBackground" ->
-                    !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
-            case "dockBackgroundMaterial" ->
-                    !instance.mPreferences.getBoolean("dockBackground", false);
+//            case "dockBackground" ->
+//                    !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
+//            case "dockBackgroundMaterial" ->
+//                    !instance.mPreferences.getBoolean("dockBackground", false);
 
             default -> true;
         };
