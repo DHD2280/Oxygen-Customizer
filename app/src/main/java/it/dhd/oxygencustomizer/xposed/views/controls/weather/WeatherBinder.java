@@ -66,6 +66,7 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
         }
         mImageView = SeparateQsWidgetsFactory.createImageView(mContext, settingsInterface);
         mFab = SeparateQsWidgetsFactory.createFAB(mContext, settingsInterface);
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
     }
 
     public void onSizeChanged(int newWidth) {

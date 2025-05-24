@@ -34,7 +34,10 @@ public abstract class BaseQsWidgetView extends BaseQsStaticView implements BaseL
 
     private void initBaseWidget() {
         mImageView = SeparateQsWidgetsFactory.createImageView(mContext, mSettingsInterface);
+        mImageView.setImageTintList(ColorStateList.valueOf(isNightMode() ? Color.WHITE : Color.BLACK));
+        mFab.setIconTint(ColorStateList.valueOf(isNightMode() ? Color.WHITE : Color.BLACK));
         mFab = SeparateQsWidgetsFactory.createFAB(mContext, mSettingsInterface);
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
 
         configureViews();
         setupQsSpecifics();

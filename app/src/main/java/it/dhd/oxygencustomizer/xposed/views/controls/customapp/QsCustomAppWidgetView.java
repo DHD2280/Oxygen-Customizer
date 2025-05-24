@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.views.controls.customapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,12 @@ public class QsCustomAppWidgetView extends BaseQsStaticView {
 
     public void onSizeChanged(int newWidth) {
         mCustomAppBinder.onSizeChanged(newWidth);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mCustomAppBinder.onConfigurationChanged();
     }
 
 }

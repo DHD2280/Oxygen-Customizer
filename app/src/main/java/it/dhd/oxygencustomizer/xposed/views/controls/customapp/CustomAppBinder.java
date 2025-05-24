@@ -2,6 +2,8 @@ package it.dhd.oxygencustomizer.xposed.views.controls.customapp;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,7 @@ public class CustomAppBinder {
         mSettingsInterface = settingsInterface;
         mImageView = SeparateQsWidgetsFactory.createImageView(mContext, settingsInterface);
         mFab = SeparateQsWidgetsFactory.createFAB(mContext, settingsInterface);
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
         try {
             setupImage();
         } catch (Throwable t) {
@@ -67,6 +70,16 @@ public class CustomAppBinder {
     private void openApp() {
         ActivityLauncherUtils mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
         mActivityLauncherUtils.launchApp(mPackageName, true);
+    }
+
+    private boolean isNightMode() {
+        final Configuration config = mContext.getResources().getConfiguration();
+        return (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public void onConfigurationChanged() {
+        mFab.setTextColor(isNightMode() ? Color.WHITE : Color.BLACK);
     }
 
 }
