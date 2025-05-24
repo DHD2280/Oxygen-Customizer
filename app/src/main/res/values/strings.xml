@@ -367,6 +367,7 @@
     <string name="inside_percentage_title">Inside Percentage</string>
     <string name="inside_percentage_desc">Move percentage to inside battery icon</string>
     <string name="battery_icon_color">Battery Icon Colors</string>
+    <string name="battery_icon_animate_charging">Animate charging</string>
 
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Battery text</string>

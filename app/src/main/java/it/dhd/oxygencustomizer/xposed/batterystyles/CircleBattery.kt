@@ -181,10 +181,14 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
         setLevelBasedColors(mBatteryPaint, mFrame.centerX(), mFrame.centerY())
 
         if (charging && batteryLevel < 100) {
-            if (!mBoltAlphaAnimator.isStarted) {
+            if (!mBoltAlphaAnimator.isStarted && mAnimationEnabled) {
                 mBoltAlphaAnimator.start()
             }
-            mBoltPaint.setAlpha((mBoltAlphaAnimator.getAnimatedValue() as Int * mAlphaPct).roundToInt())
+            mBoltPaint.setAlpha(
+                if (mAnimationEnabled)
+                    (mBoltAlphaAnimator.getAnimatedValue() as Int * mAlphaPct).roundToInt()
+                else
+                    (255 * mAlphaPct).roundToInt())
             canvas.drawPath(mBoltPath!!, mBoltPaint)
         } else if (mBoltAlphaAnimator.isStarted) {
             mBoltAlphaAnimator.end()

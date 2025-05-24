@@ -73,6 +73,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_ANIM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT;
@@ -490,7 +491,8 @@ public class PreferenceHelper {
                  "battery_powersave_icon_color",
                  "category_battery_margins",
                  "category_battery_charging_icon",
-                 "battery_text" -> {
+                 "battery_text",
+                 CUSTOM_BATTERY_ANIM_ENABLED -> {
                 return isVisibleBattery(key);
             }
             case BATTERY_TEXT_CHARGING_COLOR -> {
@@ -1171,6 +1173,7 @@ public class PreferenceHelper {
             case "battery_hide_percentage", "battery_text" -> showPercentage;
             case "category_battery_colors" ->
                     showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
+            case CUSTOM_BATTERY_ANIM_ENABLED -> showCommonCustomizations && circleBattery;
             default -> false;
         };
 

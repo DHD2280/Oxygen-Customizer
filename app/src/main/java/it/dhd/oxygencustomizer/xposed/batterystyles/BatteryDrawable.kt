@@ -10,6 +10,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider
 
 abstract class BatteryDrawable : Drawable() {
 
+    protected var mAnimationEnabled = true
     protected var isRotation = false
     protected var scaledFillAlpha = false
     protected var scaledPerimeterAlpha = false
@@ -52,6 +53,11 @@ abstract class BatteryDrawable : Drawable() {
         this.powerSaveFillColor = powerSaveFillColor
         this.customChargingIcon = customChargingIcon
 
+        invalidateSelf()
+    }
+
+    open fun setAnimationEnbled(enabled: Boolean) {
+        mAnimationEnabled = enabled
         invalidateSelf()
     }
 

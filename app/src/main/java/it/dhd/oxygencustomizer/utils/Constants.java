@@ -70,6 +70,7 @@ public final class Constants {
             public static final String BATTERY_TEXT_INDICATE_POWERSAVE = "battery_text_indicate_powersave";
             public static final String BATTERY_TEXT_POWERSAVE_COLOR = "battery_text_color_powersave";
             public static final String BATTERY_TEXT_ATTACH_TO_BB = "battery_text_color_batterybar";
+            public static final String CUSTOM_BATTERY_ANIM_ENABLED = "battery_icon_animation_enabled";
 
             public static final String[] BatteryPrefs = {
                     CUSTOMIZE_BATTERY_ICON,

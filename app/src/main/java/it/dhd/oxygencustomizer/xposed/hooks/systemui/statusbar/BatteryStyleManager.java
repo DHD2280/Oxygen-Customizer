@@ -57,6 +57,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.B
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_TEXT_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOMIZE_BATTERY_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_ANIM_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT;
@@ -202,6 +203,7 @@ public class BatteryStyleManager extends XposedMods {
     private int mChargingIconML = 1;
     private int mChargingIconMR = 0;
     private int mChargingIconWH = 14;
+    private boolean mAnimationEnabled = true;
     private final ImageView mStockChargingIcon = null;
     private ImageView mBatteryIcon = null;
     private final boolean updating = false;
@@ -250,6 +252,7 @@ public class BatteryStyleManager extends XposedMods {
         DefaultLandscapeBatteryEnabled = BatteryStyle == BATTERY_STYLE_DEFAULT_LANDSCAPE ||
                 BatteryStyle == BATTERY_STYLE_DEFAULT_RLANDSCAPE;
         CustomBatteryEnabled = Xprefs.getBoolean(CUSTOMIZE_BATTERY_ICON, false);
+        mAnimationEnabled = Xprefs.getBoolean(CUSTOM_BATTERY_ANIM_ENABLED, true);
 
         if (DefaultLandscapeBatteryEnabled) {
             if (BatteryStyle == BATTERY_STYLE_DEFAULT_RLANDSCAPE) {
@@ -611,6 +614,7 @@ public class BatteryStyleManager extends XposedMods {
             }
             try {
                 BatteryDrawable drawable = (BatteryDrawable) getAdditionalInstanceField(view, "mBatteryDrawable");
+                drawable.setAnimationEnbled(mAnimationEnabled);
                 drawable.setChargingEnabled(mIsCharging, isFastCharging());
                 drawable.setPowerSavingEnabled(isPowerSaving());
                 drawable.setShowPercentEnabled(mShowPercentInside);
@@ -771,6 +775,7 @@ public class BatteryStyleManager extends XposedMods {
                             if (mBatteryDrawable == null) return;
                             if (mBatteryDrawable != null) {
                                 mBatteryDrawable.setBatteryLevel(batteryLevel);
+                                mBatteryDrawable.setAnimationEnbled(mAnimationEnabled);
                                 mBatteryDrawable.setChargingEnabled(mIsCharging, isFastCharging());
                                 mBatteryDrawable.setPowerSavingEnabled(isPowerSaving());
                                 mBatteryDrawable.setShowPercentEnabled(mShowPercentInside);

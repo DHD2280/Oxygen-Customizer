@@ -22,10 +22,10 @@
     <it.dhd.oneplusui.preference.OplusSwitchPreference
         android:defaultValue="false"
         android:key="battery_icon_change_charging_icon"
-        app:forcePosition="bottom"
         android:summaryOff="@string/general_off"
         android:summaryOn="@string/general_on"
         android:title="@string/battery_icon_change_charging_icon_title"
+        app:forcePosition="bottom"
         app:iconSpaceReserved="false" />
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
@@ -78,6 +78,13 @@
             android:summary="@string/rotate_layout_desc"
             android:title="@string/rotate_layout_title"
             app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="true"
+            android:key="battery_icon_animation_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/battery_icon_animate_charging" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
@@ -217,40 +224,40 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:title="@string/BB_indicate_charging"
+            android:defaultValue="false"
             android:key="battery_text_indicate_charging"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_charging" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
             android:key="battery_text_color_charging"
-            android:title="@string/BB_batteryChargingColor"
-            android:defaultValue="0xFFFFFFFF" />
+            android:title="@string/BB_batteryChargingColor" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:title="@string/BB_indicate_fast_charging"
+            android:defaultValue="false"
             android:key="battery_text_indicate_fastcharging"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_fast_charging" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
             android:key="battery_text_color_fastcharging"
-            android:title="@string/BB_batteryFastChargingColor"
-            android:defaultValue="0xFFFFFFFF" />
+            android:title="@string/BB_batteryFastChargingColor" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:title="@string/BB_indicate_power_save"
+            android:defaultValue="false"
             android:key="battery_text_indicate_powersave"
-            android:summaryOn="@string/general_on"
             android:summaryOff="@string/general_off"
-            android:defaultValue="false" />
+            android:summaryOn="@string/general_on"
+            android:title="@string/BB_indicate_power_save" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xFFFFFFFF"
             android:key="battery_text_color_powersave"
-            android:title="@string/BB_batteryPowerSaveColor"
-            android:defaultValue="0xFFFFFFFF" />
+            android:title="@string/BB_batteryPowerSaveColor" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 

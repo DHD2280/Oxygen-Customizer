@@ -24,7 +24,6 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
     BatteryDrawable() {
 
     private val mLevelAlphaAnimator: ValueAnimator = ValueAnimator.ofInt(255, 255, 255, 45)
-    private var mChargingAnimationEnabled = true
     private var mDimension = INTRINSIC_DIMENSION
     private val mPadding = Rect()
     private var mFGColor = Color.WHITE
@@ -82,11 +81,11 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
         }
 
         if (charging && batteryLevel < 100) {
-            if (!mLevelAlphaAnimator.isStarted && mChargingAnimationEnabled) {
+            if (!mLevelAlphaAnimator.isStarted && mAnimationEnabled) {
                 mLevelAlphaAnimator.start()
             }
 
-            levelPaint.alpha = (if (mChargingAnimationEnabled) {
+            levelPaint.alpha = (if (mAnimationEnabled) {
                 mLevelAlphaAnimator.animatedValue as Int
             } else {
                 255
@@ -282,10 +281,6 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
     override fun setPowerSavingEnabled(powerSaveEnabled: Boolean) {
         this.powerSaveEnabled = powerSaveEnabled
         postInvalidate()
-    }
-
-    fun setChargingAnimationEnabled(enabled: Boolean) {
-        mChargingAnimationEnabled = enabled
     }
 
     private fun postInvalidate() {
