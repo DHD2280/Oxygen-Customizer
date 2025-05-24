@@ -20,7 +20,6 @@ import android.content.res.Resources;
 import android.os.Build;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -130,7 +129,6 @@ public class QSTransparency extends XposedMods {
                     if (isBehind && isQsVisible) {
                         param.args[0] = constrain(blurAmount, 0.0f, maxBlurRadius);
                     }
-                    XposedBridge.log("ScrimViewExImp.setBlurAmount: " + blurAmount + ", " + str + ", " + scrimName);
                 });
     }
 
