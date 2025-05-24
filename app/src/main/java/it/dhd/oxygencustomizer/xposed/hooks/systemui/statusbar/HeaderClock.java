@@ -523,12 +523,15 @@ public class HeaderClock extends XposedMods {
                     LinearLayout customClockContainer = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
                     mClockContainers.add(customClockContainer);
 
-                    try {
-                        ((ViewGroup)customClockContainer.getParent()).removeView(customClockContainer);
-                    } catch (Throwable ignored) {}
-
-                    if (clockContainer.findViewWithTag(QS_CLOCK_NOTIF_CONTAINER) == null)
-                        clockContainer.post(() -> clockContainer.addView(customClockContainer, 0));
+                    clockContainer.post(() -> {
+                        if (customClockContainer.getParent() != clockContainer) {
+                            ViewGroup parent = (ViewGroup) customClockContainer.getParent();
+                            if (parent != null) {
+                                parent.removeView(customClockContainer);
+                            }
+                            clockContainer.addView(customClockContainer, 0);
+                        }
+                    });
 
                     try {
                         TextView clockView = (TextView) getObjectField(param.thisObject, "clockView");
