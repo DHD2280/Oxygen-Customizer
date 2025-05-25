@@ -1041,10 +1041,7 @@
     <string name="theme_customization_toast_frame_summary">Alterar o estilo da notificação</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Estoque personalizado</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
     <string name="settings_bg_color">Cor de Fundo</string>
     <string name="settings_bg_use_solid">Fundo sólido</string>
     <string name="settings_bg_shape">Formato do fundo</string>

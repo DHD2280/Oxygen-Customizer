@@ -1044,11 +1044,7 @@
     <string name="theme_customization_toast_frame_summary">トースト通知のスタイルを変更します</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">カスタマイズされたストック</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">背景の色</string>
     <string name="settings_bg_use_solid">塗りつぶしの背景</string>
     <string name="settings_bg_shape">背景の形状</string>

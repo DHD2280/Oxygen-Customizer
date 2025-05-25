@@ -1069,11 +1069,7 @@
     <string name="theme_customization_toast_frame_summary">更改吐司消息样式</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">自定义库存</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">背景颜色</string>
     <string name="settings_bg_use_solid">纯色背景</string>
     <string name="settings_bg_shape">背景形状</string>

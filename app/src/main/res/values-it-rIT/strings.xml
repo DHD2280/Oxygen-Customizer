@@ -168,6 +168,8 @@
     <string name="notif_default_expansion_title">Espansione predefinita notifiche</string>
     <string name="notif_always_expand">Espandi sempre</string>
     <string name="notif_always_collapse">Comprimi sempre</string>
+    <string name="notif_show_buttons">Mostra il pulsante espandi e comprimi</string>
+    <string name="notif_show_buttons_summary">Mostra il pulsante espandi e comprimi nel pannello di notifica.\nCompatibile solo con lo stile qs diviso.</string>
     <string name="customize_clear_all_button">Personalizza il pulsante Cancella tutto</string>
     <string name="clear_all_link_bg_accent">Collega sfondo all\'accento</string>
     <string name="clear_all_bg_color">Colore sfondo personalizzato</string>
@@ -342,6 +344,7 @@
     <string name="inside_percentage_title">Percentuale all\'interno</string>
     <string name="inside_percentage_desc">Muovi la percentuale dentro l\'icona della batteria</string>
     <string name="battery_icon_color">Colori dell\'icona batteria</string>
+    <string name="battery_icon_animate_charging">Anima carica</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Testo batteria</string>
     <string name="battery_edit_percentage_size_title">Personalizza la dimensione della percentuale</string>
@@ -389,6 +392,7 @@
     <string name="battery_dotted_circle">Rotonda a trattini</string>
     <string name="battery_filled_circle">Cerchio pieno</string>
     <string name="battery_landscape_kim">Kim Orizzontale</string>
+    <string name="battery_landscape_one_ui">One UI 7 orizzontale</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Nascondi icona Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Nascondi l\'icona Bluetooth quando non è connesso.</string>
@@ -423,6 +427,8 @@
     <string name="quick_settings_tiles_landscape">In orientamento orizzontale</string>
     <string name="quick_settings_tiles_vertical_rows">Righe Impostazioni rapide (orizzontale)</string>
     <string name="quick_settings_tiles_vertical_columns">Colonne Impostazioni rapide (orizzontale)</string>
+    <string name="qs_blur_max_amount">Valore massimo di sfocatura</string>
+    <string name="qs_blur_max_amount_summary">Imposta il valore massimo di sfocatura per le Impostazioni Rapide.</string>
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">Mostra Widget delle Impostazioni Rapide</string>
     <string name="add_widget">Aggiungi Widget</string>
@@ -471,6 +477,8 @@
     <string name="blur_color_dodge_luminosity">Colore schiarito - Luminosità</string>
     <string name="blur_overlay_luminosity">Sovrapposizione - Luminosità</string>
     <string name="blur_luminosity_overlay">Luminosità - Sovrapposizione</string>
+    <string name="brightness_dark_icon">Rimuovi colore luminosità automatica</string>
+    <string name="sliders_custom_radius">Personalizza raggio dei cursori</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
     <string name="qs_tile_custom_highlight">Raggio personalizzato dei Tile QS in evidenza</string>
@@ -686,6 +694,10 @@
     <string name="themed_icons_taskbar">Barra delle applicazioni</string>
     <string name="hide_scroller">Nascondi scroller</string>
     <string name="hide_scroller_summary">Nascondi scroller nel drawer delle app</string>
+    <string name="dock_background">Sfondo dock</string>
+    <string name="dock_background_material">Sfondo dock materiale avanzato</string>
+    <string name="dock_background_radius">Raggio sfondo</string>
+    <string name="dock_background_amount">Livello sfocatura</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -1234,11 +1246,7 @@
     <string name="dark_shadow_enable_theme">Abilita tema</string>
     <string name="dark_shadow_footer">Dark Shadow Theme è un tema Substratum per OxygenOS.\nStiamo lavorando con lo sviluppatore del tema per includerlo in Oxygen Customizer.</string>
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Stock Personalizzato</string>
-    <string name="settings_icons_pui">PUI v1</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Colore sfondo</string>
     <string name="settings_bg_use_solid">Fondo Solido</string>
     <string name="settings_bg_shape">Forma Sfondo</string>
@@ -1396,7 +1404,7 @@
     <string name="peek_title_color">Colore titolo</string>
     <string name="peek_content_color">Colore contenuto</string>
     <string name="peek_clear_all_cat">Pulsante cancella tutto</string>
-    <string name="peek_clear_all_mode">Pulisci tutte le modalità</string>
+    <string name="peek_clear_all_mode">Modalità Cancella Notifiche</string>
     <string name="peek_clear_all_mode_always_hidden">Sempre nascosto</string>
     <string name="peek_clear_all_mode_count">In base al conteggio delle notifiche</string>
     <string name="peek_clear_all_count_title">Conteggio notifiche</string>
@@ -1461,7 +1469,8 @@
     <string name="qs_separate_mods">QS Separato</string>
     <string name="qs_separate_hide_menu">Nascondi il pulsante menù</string>
     <string name="qs_separate_hide_edit">Nascondi il pulsante di modifica</string>
-    <string name="qs_separate_layout">Layout Qs</string>
+    <string name="qs_separate_layout">Disposizione qs personalizzata</string>
+    <string name="qs_separate_layout_summary">Personalizza la disposizione superiore del pannello delle Impostazioni Rapide</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Tocca un elemento per configurare il suo layout</string>
     <string name="media_panel">Pannello multimediale</string>

@@ -96,6 +96,7 @@
     <string name="lang_follow_system">اتبع النظام</string>
     <string name="pick_font_title">اختر خطاً</string>
     <string name="pick_font_summary">اختر الخط الخاص بك.\nلا تحدد ملفًا من الملفات الحديثة.</string>
+    <string name="general_style">الأسلوب</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">اختر صورة</string>
     <string name="pick_image_summary">اضغط لاختيار صورة</string>
@@ -133,6 +134,7 @@
     <string name="white_color">أبيض</string>
     <string name="black_color">أسود</string>
     <string name="custom_color">لون مخصص</string>
+    <string name="background_color">لون الخلفية</string>
     <string name="battery_info_button_title">معلومات البطارية…</string>
     <string name="general_enabled">مفعل</string>
     <string name="general_disabled">معطل</string>
@@ -1075,11 +1077,7 @@
     <string name="theme_customization_toast_frame_summary">قم بتغيير نمط إشعار التوست</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">مخصص افتراضي</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">لون الخلفية</string>
     <string name="settings_bg_use_solid">خلفية صلبة</string>
     <string name="settings_bg_shape">شكل الخلفية</string>
@@ -1165,7 +1163,9 @@
     <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
+    <string name="lockscreen_now_bar_new_notification_content">المحتوى المخفي</string>
     <!-- Lockscreen Peek Notifications Strings -->
+    <string name="lockscreen_peek_notifications_title">إشعارات شاشة القفل</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">إصلاح تأخر التطبيق</string>
     <string name="fix_lag_summary">إصلاح التأخر عند فتح التطبيق من التطبيقات الحديثة</string>
@@ -1189,6 +1189,7 @@
     <string name="ota_card_category">بطاقة OTA</string>
     <string name="ota_card_title">صورة بطاقة OTA مخصصة</string>
     <!-- MEMC Strings -->
+    <string name="memc_feature_on">ميزة MEMC قيد التشغيل</string>
     <string name="pwx7_enabled">PWX7 مفعل</string>
     <string name="memc_enabled">MEMC مفعل</string>
     <string name="memc_mode">وضع MEMC</string>
