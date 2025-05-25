@@ -1330,6 +1330,8 @@
     <string name="theme_customization_navbar_summary">Set custom navigation bar style</string>
     <string name="theme_customization_toast_frame_title">Toast Frame</string>
     <string name="theme_customization_toast_frame_summary">Change toast notification style</string>
+    <string name="theme_customization_spinner_style_title">Spinner style</string>
+    <string name="theme_customization_spinner_style_summary">Set custom spinner style</string>
     <string name="dark_shadow_title" translatable="false">Dark Shadow Theme</string>
 
     <!-- Dark Shadow Theme Strings -->
@@ -1338,11 +1340,11 @@
     <string name="dark_shadow_footer">Dark Shadow Theme is a substratum theme for OxygenOS.\nWe are working together with the developer of the Theme to bring the theme in Oxygen Customizer.</string>
 
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
+    <string name="settings_icons_hos" translatable="false">HOS</string>
     <string name="settings_icons_customized">Stock Customized</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
+    <string name="settings_icons_pui" translatable="false">PUI</string>
+    <string name="settings_icons_pui_v2" translatable="false">PUI v2</string>
+    <string name="settings_icons_pui_v3" translatable="false">PUI v3</string>
     <string name="settings_bg_color">Background Color</string>
     <string name="settings_bg_use_solid">Solid Background</string>
     <string name="settings_bg_shape">Background Shape</string>
