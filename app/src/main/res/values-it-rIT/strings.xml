@@ -168,6 +168,8 @@
     <string name="notif_default_expansion_title">Espansione predefinita notifiche</string>
     <string name="notif_always_expand">Espandi sempre</string>
     <string name="notif_always_collapse">Comprimi sempre</string>
+    <string name="notif_show_buttons">Mostra il pulsante espandi e comprimi</string>
+    <string name="notif_show_buttons_summary">Mostra il pulsante espandi e comprimi nel pannello di notifica.\nCompatibile solo con lo stile qs diviso.</string>
     <string name="customize_clear_all_button">Personalizza il pulsante Cancella tutto</string>
     <string name="clear_all_link_bg_accent">Collega sfondo all\'accento</string>
     <string name="clear_all_bg_color">Colore sfondo personalizzato</string>
@@ -243,7 +245,6 @@
     <string name="status_bar_logo_style_apple">Apple</string>
     <string name="status_bar_logo_style_avengers">Avengers</string>
     <string name="status_bar_logo_style_batman">Batman</string>
-    <string name="status_bar_logo_style_batman_tdk">Batman Il Cavaliere Oscuro</string>
     <string name="status_bar_logo_style_beats">Beats</string>
     <string name="status_bar_logo_style_biohazard">Biohazard</string>
     <string name="status_bar_logo_style_blackberry">BlackBerry</string>
@@ -471,6 +472,8 @@
     <string name="blur_color_dodge_luminosity">Colore schiarito - Luminosità</string>
     <string name="blur_overlay_luminosity">Sovrapposizione - Luminosità</string>
     <string name="blur_luminosity_overlay">Luminosità - Sovrapposizione</string>
+    <string name="brightness_dark_icon">Rimuovi colore luminosità automatica</string>
+    <string name="sliders_custom_radius">Personalizza raggio dei cursori</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Raggio Tile QS Personalizzato</string>
     <string name="qs_tile_custom_highlight">Raggio personalizzato dei Tile QS in evidenza</string>
@@ -1396,7 +1399,7 @@
     <string name="peek_title_color">Colore titolo</string>
     <string name="peek_content_color">Colore contenuto</string>
     <string name="peek_clear_all_cat">Pulsante cancella tutto</string>
-    <string name="peek_clear_all_mode">Pulisci tutte le modalità</string>
+    <string name="peek_clear_all_mode">Modalità Cancella Notifiche</string>
     <string name="peek_clear_all_mode_always_hidden">Sempre nascosto</string>
     <string name="peek_clear_all_mode_count">In base al conteggio delle notifiche</string>
     <string name="peek_clear_all_count_title">Conteggio notifiche</string>
@@ -1461,7 +1464,6 @@
     <string name="qs_separate_mods">QS Separato</string>
     <string name="qs_separate_hide_menu">Nascondi il pulsante menù</string>
     <string name="qs_separate_hide_edit">Nascondi il pulsante di modifica</string>
-    <string name="qs_separate_layout">Layout Qs</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Tocca un elemento per configurare il suo layout</string>
     <string name="media_panel">Pannello multimediale</string>

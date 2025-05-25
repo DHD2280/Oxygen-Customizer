@@ -1461,7 +1461,6 @@
     <string name="qs_separate_mods">Különálló Gyorsbeállítások</string>
     <string name="qs_separate_hide_menu">A Menügomb elrejtése</string>
     <string name="qs_separate_hide_edit">A Szerkesztőgomb elrejtése</string>
-    <string name="qs_separate_layout">A Gyorsbeállítások elrendezése</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Nyomjon egy elemre az elrendezés szerkesztéséhez</string>
     <string name="media_panel">Médiapanel</string>

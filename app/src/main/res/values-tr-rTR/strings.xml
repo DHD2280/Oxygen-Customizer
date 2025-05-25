@@ -391,6 +391,7 @@
     <string name="battery_dotted_circle">Noktalı Daire Pil</string>
     <string name="battery_filled_circle">Dolu Daire</string>
     <string name="battery_landscape_kim">Yatay Kim</string>
+    <string name="battery_landscape_one_ui">Yatay One UI 7</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Bluetooth simgesini gizle</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Bağlı değilken Bluetooth simgesini gizle.</string>
@@ -690,6 +691,10 @@
     <string name="themed_icons_taskbar">Görev Çubuğu</string>
     <string name="hide_scroller">Kaydırıcıyı gizle</string>
     <string name="hide_scroller_summary">Uygulama çekmecesinde kaydırıcıyı gizle</string>
+    <string name="dock_background">Dock arka planı</string>
+    <string name="dock_background_material">Material dock arka planı</string>
+    <string name="dock_background_radius">Arka plan yarıçapı</string>
+    <string name="dock_background_amount">Bulanıklık miktarı</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigasyon Çubuğu</string>
     <string name="gesture_navigation_title">Hareket navigasyonu</string>
@@ -1465,7 +1470,8 @@
     <string name="qs_separate_mods">Ayrılmış QS</string>
     <string name="qs_separate_hide_menu">Menü düğmesini gizle</string>
     <string name="qs_separate_hide_edit">Düzenleme düğmesini gizle</string>
-    <string name="qs_separate_layout">Hızlı Ayarlar Düzeni</string>
+    <string name="qs_separate_layout">Özel qs düzeni</string>
+    <string name="qs_separate_layout_summary">Hızlı ayarlar panelinin üst düzenini özelleştir</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Bir öğeye dokunarak düzenini yapılandırın</string>
     <string name="media_panel">Medya paneli</string>
