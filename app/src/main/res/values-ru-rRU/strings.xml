@@ -115,6 +115,7 @@
     <string name="restart_module">Перезапуск модуля UI</string>
     <string name="restart_page_scope">Перезагрузка только этой области</string>
     <string name="restart_scope_message">Вы уверены, что хотите перезапустить все процессы с заданной областью, кроме системной платформы?\nИспользуйте это,\n если модуль не работает!\Убедитесь, что все соответствующие области проверены!</string>
+    <string name="add_notification">Добавить уведомление</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">UI</string>
     <string name="navbar_mods">Модов</string>
@@ -168,6 +169,8 @@
     <string name="notif_default_expansion_title">Раскрытие уведомлений по умолчанию</string>
     <string name="notif_always_expand">Всегда разворачивать</string>
     <string name="notif_always_collapse">Всегда сворачивать</string>
+    <string name="notif_show_buttons">Показать кнопку развернуть и свернуть</string>
+    <string name="notif_show_buttons_summary">Показать развернуть и свернуть в панели уведомлений.\nСовместим только с разделенным стилем QS.</string>
     <string name="customize_clear_all_button">Настроить кнопку Очистить все</string>
     <string name="clear_all_link_bg_accent">Связать фон с акцентом</string>
     <string name="clear_all_bg_color">Пользовательский цвет</string>
@@ -207,6 +210,7 @@
     <string name="status_bar_date_style_lowercase">Строчные буквы</string>
     <string name="status_bar_date_style_uppercase">Заглавные</string>
     <string name="status_bar_date_format_custom">Пользовательский формат Java</string>
+    <string name="string_formatter_manual_body">\nВ дополнение к обычному тексту доступны динамические переменные, такие как дата и температура:\n\n$G\&lt;format\&gt; : Грегорианская дата, основанная на формате*\n$P\&lt;format\&gt; : Персидская дата, основанная на формате*\n$L Лунной даты\n$I\&lt;calendar\&gt;&lt;format\&gt; : Исламский календарь. Календарь является необязательным, по умолчанию является исламский, вы также можете использовать C для исламского гражданского календаря и U для календаря Ум аль-Кура.\n$T\&lt;format\&gt;[interval] : Температура; \nформат может быть b (для батареи), c (для процессора), g (для GPU) и s (для корпуса).\n$B\&lt;format\&gt; : Аккумулятор; \nформат может быть v (для напряжения в мВ), l (для уровня)\nНаконец, есть ОПЦИОНАЛЬНЫЙ интервал обновления в секундах (по умолчанию: 60 секунд)\n\n*для документации формата, ищите \"Java Date Format\"</string>
     <string name="preview">Предпросмотр</string>
     <string name="clock_date_position">Положение даты</string>
     <string name="clock_date_right">Самое подходящее время</string>
@@ -387,6 +391,8 @@
     <string name="battery_circle">Круговая батарея</string>
     <string name="battery_dotted_circle">Батарея в виде пунктирного круга</string>
     <string name="battery_filled_circle">Заполненный круг</string>
+    <string name="battery_landscape_kim">Ландшафтная Kim</string>
+    <string name="battery_landscape_one_ui">Ландшафтный One UI 7</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Скрыть значок Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Скрывайте значок Bluetooth, когда он не подключен.</string>
@@ -461,11 +467,21 @@
     <string name="qs_sliders">Ползунок быстрых настроек</string>
     <string name="customize_brightness_slider_title">Настройка ползунка яркости</string>
     <string name="customize_qs_sliders_title">Настроить ползунки быстрых настроек</string>
+    <string name="brightness_slider_progress_color_title">Слайдер цветового режима</string>
     <string name="brightness_slider_background_color_title">Настройка цвета фона</string>
+    <string name="qs_sliders_remove_blur">Удалить размытие</string>
+    <string name="blur_mode">Режим размытия</string>
+    <string name="blur_luminosity_color_dodge">Яркость - Отклонение цвета</string>
+    <string name="blur_color_dodge_luminosity">Отклонение цвета - Яркость</string>
+    <string name="blur_overlay_luminosity">Наложение - Яркость</string>
+    <string name="blur_luminosity_overlay">Яркость - Наложение</string>
+    <string name="brightness_dark_icon">Удалить оттенок цвета авто-яркости</string>
+    <string name="sliders_custom_radius">Свой радиус слайдеров</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Пользовательский радиус быстрых настроек</string>
     <string name="qs_tile_custom_highlight">Пользовательский радиус выделенных плиток</string>
     <string name="qs_tile_custom_radius">Пользовательский радиус плиток</string>
+    <string name="qs_tile_radius">Радиус</string>
     <!-- Media Tile -->
     <string name="media_tile">Плитка медиа</string>
     <!-- QS Tiles animation -->
@@ -475,6 +491,14 @@
     <string name="qs_tile_animation_interpolator_title">Интерполяция анимации плиток</string>
     <string name="qs_tile_animation_style_off">Без анимации</string>
     <string name="qs_tile_animation_style_rotate">Поворот</string>
+    <string name="qs_tile_animation_style_flipx">Вращение по X</string>
+    <string name="qs_tile_animation_style_flipy">Вращение по Y</string>
+    <string name="qs_tile_animation_style_shake">Встряхнуть</string>
+    <string name="qs_tile_animation_style_fade_in">Затухание</string>
+    <string name="qs_tile_animation_style_bounce_x">Эффект отскока (шкала X)</string>
+    <string name="qs_tile_animation_style_bounce_y">Эффект отскока (шкала Y)</string>
+    <string name="qs_tile_animation_style_pulse_x">Эффект пульсации (шкала X)</string>
+    <string name="qs_tile_animation_style_pulse_y">Эффект пульсации (шкала Y)</string>
     <string name="qs_tile_animation_duration_low">Низко</string>
     <string name="qs_tile_animation_duration_default">По умолчанию</string>
     <string name="qs_tile_animation_duration_fast">Быстро</string>
@@ -639,6 +663,9 @@
     <string name="launcher_edit_layout">Редактировать макет</string>
     <string name="launcher_columns">Столбцы</string>
     <string name="launcher_rows">Строки</string>
+    <string name="hide_app_labels">Скрыть названия приложений</string>
+    <string name="hide_app_labels_desktop">Скрыть названия приложений на домашнем экране</string>
+    <string name="hide_app_labels_drawer">Скрыть названия приложений в меню</string>
     <string name="launcher_folder_layout">Расположение папок</string>
     <string name="launcher_folder_edit_layout">Редактировать макет</string>
     <string name="launcher_folder_columns">Столбцы</string>
@@ -651,9 +678,26 @@
     <string name="launcher_recents">Недавние</string>
     <string name="launcher_app_details_title">Откройте сведения о приложении</string>
     <string name="launcher_app_details_summary">Нажмите на значок приложения, чтобы открыть сведения о приложении в разделе \"Настройки\".</string>
+    <string name="launcher_disable_recents_previous_page_title">Отключить предыдущую задачу</string>
+    <string name="launcher_disable_recents_previous_page_summary">Отключить автопереключение на предыдущую задачу в недавних приложениях.</string>
     <string name="remove_home_pagination">Убрать нумерацию страниц</string>
+    <string name="launcher_themed_icons">Тематические значки</string>
     <string name="force_themed_launcher_icons">Принудительные тематические значки приложений</string>
     <string name="force_themed_launcher_icons_summary">БЕТА-ФУНКЦИЯ: принудительно использовать тематические значки для всех приложений.\nВновь включите тематические значки в панели запуска, чтобы они применялись.</string>
+    <string name="alternative_themed_icons_title">Альтернативные тематические значки</string>
+    <string name="alternative_themed_icons_summary">Используйте альтернативный метод для оформления значков.\nПримечание: этот метод не заменит значки Oplus, но может работать медленнее.</string>
+    <string name="themed_icons_where_title">Выберите, где применить тематические значки</string>
+    <string name="themed_icons_workspace">Рабочее пространство</string>
+    <string name="themed_icons_drawer">Панель</string>
+    <string name="themed_icons_folder">Папка</string>
+    <string name="themed_icons_search">Результат поиска</string>
+    <string name="themed_icons_taskbar">Панель задач</string>
+    <string name="hide_scroller">Скрыть прокрутку</string>
+    <string name="hide_scroller_summary">Скрыть прокрутку в меню приложений</string>
+    <string name="dock_background">Фон док-панели</string>
+    <string name="dock_background_material">Материал фона док-панели</string>
+    <string name="dock_background_radius">Радиус фона</string>
+    <string name="dock_background_amount">Степень размытия</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Панель навигации</string>
     <string name="gesture_navigation_title">Навигация с помощью жестов</string>
@@ -674,15 +718,21 @@
     <string name="gesture_override_back_hold_command_switch_app">Переход к предыдущему приложению</string>
     <string name="gesture_override_back_hold_command_close_recents">Очистить все последние записи</string>
     <string name="gesture_override_back_hold_command_kill_app">Закрыть активное приложение</string>
+    <string name="gesture_override_back_hold_command_screenshot">Скриншот</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">Прокрутка скриншота</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">Скриншот выбранной области</string>
     <string name="gesture_override_back_hold_command_quick_settings">Откройте быстрые настройки</string>
     <string name="gesture_override_back_hold_command_power_menu">Откройте меню питания</string>
     <string name="gesture_override_back_hold_command_notification_panel">Откройте панель уведомлений</string>
+    <string name="gesture_override_back_hold_command_toggle_one_handed">Включить режим управления одной рукой</string>
     <string name="gesture_override_back_hold_command_screen_off">Экран выключен</string>
+    <string name="gesture_override_back_hold_command_circle_to_search">Круг поиска</string>
     <!-- Gesture Pill Strings -->
     <string name="gesture_nav_pill_cat">Таблетка навигационной панели</string>
     <string name="gesture_nav_pill_width_title">Ширина по сравнению со стандартным размером</string>
     <string name="colorpill">Панель жестов с акцентом темы</string>
     <!-- Custom Gestures -->
+    <string name="gesture_nav_extra_cat">Дополнительные жесты навигации</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
     <string name="power_button_category_title">Кнопка питания</string>
@@ -956,6 +1006,7 @@
     <string name="package_not_launchable">Пакет не может быть запущен</string>
     <string name="menu_launch_app">Запустить приложение</string>
     <string name="menu_restart_app">Перезапустить приложение</string>
+    <string name="menu_reoptimize">Повторная оптимизация</string>
     <!-- Update Fragment -->
     <string name="update_channel_name">Обновления</string>
     <string name="update_notification_title">Обновление загружено</string>
@@ -964,6 +1015,7 @@
     <string name="try_again_later">Пожалуйста, повторите попытку позже</string>
     <string name="update_flavor_title">Источник обновлений</string>
     <string name="stable_flavor">Стабильный</string>
+    <string name="nightly_github_login">Вход и ручная загрузка</string>
     <string name="update_type_title">Тип Пакета</string>
     <string name="full_type">Полный</string>
     <string name="xposed_type">Только Xposed</string>
@@ -1020,6 +1072,7 @@
     <string name="usage_summary">Открыть вики-страницу</string>
     <string name="credits_title">Благодарности</string>
     <string name="credits_summary">Благодарю тех, кто сделал это возможным.</string>
+    <string name="none">Ничего</string>
     <!-- Omni Jaws Strings -->
     <string name="provider_title">Поставщик прогнозов погоды</string>
     <string name="units_title">Единица измерения</string>
@@ -1143,6 +1196,9 @@
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
     <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">Тема включает в себя отдельно выбираемый фон и акцентные цвета.</string>
+    <string name="dark_shadow_enable_theme">Включить тему</string>
+    <string name="dark_shadow_footer">Темная тема Shadow является темой substratum для OxygenOS.\nМы сотрудничаем с разработчиком темы для включения темы в Oxygen Customizer.</string>
     <!-- Settings Icons -->
     <string name="settings_icons_customized">Stock индивидуальный</string>
     <string name="settings_bg_color">Цвет фона</string>
@@ -1183,6 +1239,10 @@
     <string name="lockscreen_widgets_enabled_summary">Добавить виджеты на экран блокировки</string>
     <string name="lockscreen_display_widgets_title">Виджет информации об устройстве</string>
     <string name="lockscreen_display_widgets_summary">Показывать виджет информации об устройстве на экране блокировки</string>
+    <string name="lockscreen_device_widget_settings">Настройки виджета устройства</string>
+    <string name="lockscreen_device_widget_style_title">Стиль виджета устройства</string>
+    <string name="lockscreen_device_widget_style_classic">1 панель + 2 дуги</string>
+    <string name="lockscreen_device_widget_style_arcs">4 дуги</string>
     <string name="linear_progress_color">Линейный цвет прогресса</string>
     <string name="circular_progress_color">Круглый цвет прогресса</string>
     <string name="text_color">Цвет текста</string>
@@ -1209,6 +1269,10 @@
     <string name="weather_settings">Настройки погоды</string>
     <string name="widgets_scale">Масштаб виджетов</string>
     <!-- Lockscreen Widgets Styles -->
+    <string name="lockscreen_widgets_style_title">Стиль виджетов экрана блокировки</string>
+    <string name="lockscreen_widgets_style1">Скругленный Material</string>
+    <string name="lockscreen_widgets_style2">Квадратный Material</string>
+    <string name="lockscreen_widgets_style3">Полупрозрачный</string>
     <!-- LS Widgets Actions -->
     <string name="camera">Камера</string>
     <string name="clock_timer">Часы/Таймер</string>
@@ -1218,15 +1282,47 @@
     <string name="torch">Фонарик</string>
     <string name="controls_media_button_play">Играть</string>
     <string name="weather">Погода</string>
+    <string name="wifi">WiFi</string>
     <string name="data">Данные</string>
     <string name="ringer">Звонок</string>
+    <string name="bt">Bluetooth</string>
     <string name="home_controls">Домашнее управление</string>
     <string name="wallet">Кошелек</string>
     <string name="hotspot">Точка доступа</string>
     <!-- Device Widgets -->
+    <string name="widget_string">%s Виджет</string>
+    <string name="battery_widget">Батарея</string>
+    <string name="calendar_widget">Календарь</string>
+    <string name="remove_widget">Удалить</string>
+    <string name="remove_one_widget">Удалите один виджет</string>
+    <string name="progress_type">Тип прогресса</string>
     <!-- Battery Widget -->
+    <string name="battery_widget_percentage">Проценты</string>
+    <string name="battery_widget_temperature">Температура</string>
     <!-- Weather Widget -->
+    <string name="weather_widget_temperature">Текущая температура</string>
+    <string name="weather_widget_humidity">Влажность</string>
     <!-- Lockscreen Now Bar -->
+    <string name="lockscreen_now_bar_title">Now Bar на экране блокировки</string>
+    <string name="lockscreen_now_bar_enabled_title">Вкл. Now Bar на экране блокировки</string>
+    <string name="lockscreen_now_bar_weather">Показать погоду</string>
+    <string name="lockscreen_now_bar_weather_summary">Показать погоду на now bar</string>
+    <string name="lockscreen_now_bar_notifications">Показывать уведомления</string>
+    <string name="lockscreen_now_bar_notifications_summary">Показывать последнее полученное уведомление в now bar</string>
+    <string name="lockscreen_now_bar_bottom_margin">Now bar в нижней части</string>
+    <string name="lockscreen_now_bar_music">Музыка в now bar</string>
+    <string name="lockscreen_now_bar_music_extended_player">Расширенный плеер</string>
+    <string name="lockscreen_now_bar_music_extended_player_summary">Показывать расширенный плеер вnow bar, нажав на обложку альбома</string>
+    <string name="lockscreen_now_bar_music_extended_player_background">Расширенный плеер в режиме фона</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur">Серое размытие</string>
+    <string name="lockscreen_now_bar_music_extended_player_background_blur_art">Размытие обложки альбома</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode">Режим расширенного плеера</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_large">Большой</string>
+    <string name="lockscreen_now_bar_music_extended_player_mode_compact">Компактный</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock">Показывать часы</string>
+    <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Показывать часы в верхней части расширенного плеера</string>
+    <string name="lockscreen_now_bar_music_extended_player_clock_options">Настройки часов</string>
+    <string name="lockscreen_now_bar_music_clock_date_position">Расположение даты</string>
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
@@ -1276,5 +1372,14 @@
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
     <!-- Separate qs tweaks -->
+    <string name="qs_separate_hide_edit">Скрыть кнопку редактирования</string>
     <!-- Separate qs layout -->
+    <string name="tap_to_configure">Нажмите на элемент, чтобы настроить макет</string>
+    <string name="media_panel">Медиапанель</string>
+    <string name="highlight_tile_1">Подсветка плитки 1</string>
+    <string name="highlight_tile_2">Подсветка плитки 2</string>
+    <string name="volume_slider">Ползунок громкости</string>
+    <string name="qs_separate_rows">Строки</string>
+    <string name="width">Ширина</string>
+    <string name="height">Высота</string>
 </resources>

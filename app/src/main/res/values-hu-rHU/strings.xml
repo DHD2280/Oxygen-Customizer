@@ -1234,11 +1234,7 @@
     <string name="dark_shadow_enable_theme">Témaengedélyezés</string>
     <string name="dark_shadow_footer">A Sötét árnyék téma az OxygenOS alaptémája.\nEgyütt dolgozunk a téma fejlesztőjével, hogy a téma belekerüljön az \'Oxygen Módosítások\'-ba.</string>
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
     <string name="settings_icons_customized">Megvariált gyári</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="settings_bg_color">Háttérszín</string>
     <string name="settings_bg_use_solid">Telt háttér</string>
     <string name="settings_bg_shape">A háttér alakja</string>
@@ -1461,7 +1457,6 @@
     <string name="qs_separate_mods">Különálló Gyorsbeállítások</string>
     <string name="qs_separate_hide_menu">A Menügomb elrejtése</string>
     <string name="qs_separate_hide_edit">A Szerkesztőgomb elrejtése</string>
-    <string name="qs_separate_layout">A Gyorsbeállítások elrendezése</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Nyomjon egy elemre az elrendezés szerkesztéséhez</string>
     <string name="media_panel">Médiapanel</string>

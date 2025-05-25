@@ -519,10 +519,6 @@
     <string name="theme_customization_toast_frame_summary">Zmień styl powiadomienia pokazującego się na dole ekranu</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_hos">HOS</string>
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <!-- Notification -->
     <string name="notification_styles">Style powiadomień</string>
     <string name="notification_styles_desc">Ustaw jeden z niestandardowych stylów powiadomień</string>

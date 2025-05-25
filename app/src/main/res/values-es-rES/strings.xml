@@ -1037,9 +1037,6 @@
     <string name="theme_customization_toast_frame_summary">Cambiar estilo de notificación de mensajes emergentes</string>
     <!-- Dark Shadow Theme Strings -->
     <!-- Settings Icons -->
-    <string name="settings_icons_pui">PUI</string>
-    <string name="settings_icons_pui_v2">PUI v2</string>
-    <string name="settings_icons_pui_v3">PUI v3</string>
     <string name="circle">Círculo</string>
     <string name="settings_icon_color">Color Iconos</string>
     <!-- Notification -->
