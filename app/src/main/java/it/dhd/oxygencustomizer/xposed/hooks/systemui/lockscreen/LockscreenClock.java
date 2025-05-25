@@ -259,7 +259,7 @@ public class LockscreenClock extends XposedMods {
                         Object obj = callMethod(lockIconViewController, "get");
                         float height = (float) callMethod(obj, "getBottom");
                         if (mLockscreenView == null) return;
-                        int clockHeight = mLockscreenView.getFullHeight();
+                        int clockHeight = mLockscreenView.getFullHeight(customLockscreenClock);
                         int finalResult = (int) (height + clockHeight);
                         if (customLockscreenClock) {
                             finalResult += dp2px(mContext, topMargin);

@@ -171,8 +171,8 @@ public class LockscreenView extends FrameLayout {
 
     }
 
-    public int getFullHeight() {
-        int clockHeight = mClockContainer.getHeight();
+    public int getFullHeight(boolean includeMargins) {
+        int clockHeight = includeMargins ? mClockContainer.getHeight() : getViewHeightWithoutMargins(mClockContainer);
         int weatherHeight = mWeatherContainer.getHeight();
         int widgetsHeight = mWidgetsContainer.getHeight();
 
@@ -182,6 +182,20 @@ public class LockscreenView extends FrameLayout {
         if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
 
         return fullHeight;
+    }
+
+    private int getViewHeightWithoutMargins(View view) {
+        if (view == null) return 0;
+
+        int height = view.getHeight();
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+
+        if (lp instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
+            return height - mlp.topMargin - mlp.bottomMargin;
+        }
+
+        return height;
     }
 
     private void updateVisibility() {
