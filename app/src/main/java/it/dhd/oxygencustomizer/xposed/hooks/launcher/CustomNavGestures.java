@@ -10,6 +10,7 @@ import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
@@ -42,6 +43,7 @@ import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /** @noinspection ConstantValue*/
 @SuppressWarnings("RedundantThrows")
@@ -82,6 +84,7 @@ public class CustomNavGestures extends XposedMods {
 	private Object mSysUiProxy;
 	private Object currentFocusedTask = null;
 	private Class<?> OplusInputInterceptHelper = null;
+	private boolean mOverrideBack = false;
 
 	private static final long LONG_PRESS_THRESHOLD = 500;
 	private final int TOUCH_SLOP = ViewConfiguration.get(mContext).getScaledTouchSlop();
@@ -123,6 +126,7 @@ public class CustomNavGestures extends XposedMods {
 		rightSwipeUpPercentage = Xprefs.getSliderFloat( "rightSwipeUpPercentage", 25f) / 100f;
 		swipeUpPercentage = Xprefs.getSliderFloat( "swipeUpPercentage", 25f) / 100f;
 		mCircleToSearch = Xprefs.getBoolean("circleToSearchEnabled", false);
+		mOverrideBack = Xprefs.getBoolean("gesture_override_holdback", false);
 	}
 
 	private static int readAction(SharedPreferences xprefs, String prefName) {
@@ -186,6 +190,19 @@ public class CustomNavGestures extends XposedMods {
 				onMotionEvent(param, true);
 			}
 		});
+
+		ReflectedClass OplusAbsOverviewProxyImpl = ReflectedClass.of("com.oplus.quickstep.proxy.OplusAbsOverviewProxyImpl");
+		if (OplusAbsOverviewProxyImpl.getClazz() != null) {
+			OplusAbsOverviewProxyImpl
+				.before("switchPreApp")
+					.run(param -> {
+						if (!mOverrideBack) return;
+						int side = (int) param.args[0];
+						overrideBack(side);
+						param.setResult(null);
+					});
+		}
+
 	}
 
 	private void onMotionEvent(XC_MethodHook.MethodHookParam param, boolean isOverViewListener) {
@@ -385,6 +402,13 @@ public class CustomNavGestures extends XposedMods {
 	private void switchApp(boolean isOnLeftEdge) {
 		Intent intent = new Intent(ACTIONS_SWITCH_APP);
 		intent.putExtra("side", !isOnLeftEdge ? 1 : 0);
+		intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+		mContext.sendBroadcast(intent);
+	}
+
+	private void overrideBack(int side) {
+		Intent intent = new Intent(ACTIONS_OVERRIDE_BACK);
+		intent.putExtra("side", side);
 		intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 		mContext.sendBroadcast(intent);
 	}

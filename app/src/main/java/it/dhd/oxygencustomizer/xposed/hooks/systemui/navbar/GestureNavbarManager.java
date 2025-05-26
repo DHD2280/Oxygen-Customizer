@@ -13,6 +13,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
@@ -100,6 +101,25 @@ public class GestureNavbarManager extends XposedMods {
         }
     };
 
+    private final BroadcastReceiver mOverrideBackReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int side = intent.getIntExtra("side", 0);
+            if (overrideMode == 0) {
+                if (overrideLeft == 0) return;
+                runAction(overrideLeft, leftCustomApp);
+            } else {
+                if (side == 0) {
+                    if (overrideLeft == 0) return;
+                    runAction(overrideLeft, leftCustomApp);
+                } else {
+                    if (overrideRight == 0) return;
+                    runAction(overrideRight, rightCustomApp);
+                }
+            }
+        }
+    };
+
 
     public GestureNavbarManager(Context context) {
         super(context);
@@ -149,6 +169,8 @@ public class GestureNavbarManager extends XposedMods {
         if (!mBroadcastRegistered) {
             IntentFilter filter = new IntentFilter(ACTIONS_SWITCH_APP);
             mContext.registerReceiver(mSwitchAppReceiver, filter, Context.RECEIVER_EXPORTED);
+            IntentFilter overrideFilter = new IntentFilter(ACTIONS_OVERRIDE_BACK);
+            mContext.registerReceiver(mOverrideBackReceiver, overrideFilter, Context.RECEIVER_EXPORTED);
             mBroadcastRegistered = true;
         }
 
@@ -493,7 +515,12 @@ public class GestureNavbarManager extends XposedMods {
         try {
             Object proxy = callMethod(mOverviewProxyService, "getProxy");
             if (proxy != null) {
+                try {
                 callMethod(proxy, "switchApp", side);
+                } catch (Throwable t) {
+                    // Fallback for OOS15.0.1
+                    callMethod(proxy, "switchPreApp", side);
+                }
             }
         } catch (Throwable t) {
             log(t);

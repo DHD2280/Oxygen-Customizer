@@ -972,6 +972,7 @@ public final class Constants {
     public static final String ACTIONS_TOGGLE_ONE_HANDED = BuildConfig.APPLICATION_ID + ".ACTIONS_TOGGLE_ONE_HANDED";
     public static final String ACTIONS_OPEN_QUICK_SETTINGS = BuildConfig.APPLICATION_ID + ".ACTIONS_OPEN_QUICK_SETTINGS";
     public static final String ACTIONS_SWITCH_APP = BuildConfig.APPLICATION_ID + ".ACTIONS_SWITCH_APP";
+    public static final String ACTIONS_OVERRIDE_BACK = BuildConfig.APPLICATION_ID + ".ACTIONS_OVERRIDE_BACK";
     public static final String ACTIONS_NOW_BAR_EXPANDED_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_NOW_BAR_EXPANDED_CHANGED";
 
     // AI Plugin
