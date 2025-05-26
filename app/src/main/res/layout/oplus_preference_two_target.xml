@@ -21,6 +21,7 @@
 
     <RelativeLayout
         style="@style/PreferenceContent"
+        android:layout_marginEnd="@dimen/preference_item_margin_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1">
