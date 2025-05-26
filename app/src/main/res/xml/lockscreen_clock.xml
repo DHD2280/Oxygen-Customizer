@@ -158,6 +158,16 @@
             app:maxVal="600"
             app:minVal="-200"
             app:valueFormat="dp" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="lockscreen_bottom_margin_aod"
+            android:title="@string/lockscreen_clock_bottom_margin_title"
+            android:summary="@string/lockscreen_clock_bottom_margin_aod_summary"
+            app:defaultValue="40"
+            app:maxVal="600"
+            app:minVal="-200"
+            app:valueFormat="dp" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

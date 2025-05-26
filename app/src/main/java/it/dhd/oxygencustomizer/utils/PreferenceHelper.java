@@ -104,6 +104,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SHUFFLING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_SHUFFLE_PIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_DEVICE_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE;
@@ -845,6 +846,9 @@ public class PreferenceHelper {
                  "lockscreen_clock_custom_margins", "lockscreen_clock_font_prefs" -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
             }
+            case LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD -> {
+                return Build.VERSION.SDK_INT >= 35;
+            }
             case "lockscreen_clock_color_code_accent1",
                  "lockscreen_clock_color_code_accent2",
                  "lockscreen_clock_color_code_accent3",
@@ -1470,6 +1474,9 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 0) + "dp";
             case LOCKSCREEN_CLOCK_BOTTOM_MARGIN ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 0) + "dp";
+            case LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD ->
+                fragmentCompat.getString(R.string.lockscreen_clock_bottom_margin_aod_summary) + "\n" +
+                    instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD, 0) + "dp";
 
             // Lockscreen Weather
             case LOCKSCREEN_WEATHER_IMAGE_SIZE ->

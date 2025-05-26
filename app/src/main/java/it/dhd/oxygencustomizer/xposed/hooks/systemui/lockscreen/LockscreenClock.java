@@ -10,6 +10,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT2;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_COLOR_CODE_ACCENT3;
@@ -122,7 +123,7 @@ public class LockscreenClock extends XposedMods {
     // Lockscreen Clock Prefs
     private boolean customLockscreenClock = false;
     private int lockscreenClockStyle = 1;
-    private int topMargin, bottomMargin;
+    private int topMargin, bottomMargin, bottomAodMargin;
     private float clockScale;
     private int lineHeight;
     private boolean customFontEnabled;
@@ -214,6 +215,7 @@ public class LockscreenClock extends XposedMods {
         customColor = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH, false);
         topMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_TOP_MARGIN, 100);
         bottomMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 40);
+        bottomAodMargin = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD, 40);
         clockScale = Xprefs.getSliderFloat(LOCKSCREEN_CLOCK_TEXT_SCALING, 1.0f);
         lineHeight = Xprefs.getSliderInt(LOCKSCREEN_CLOCK_LINE_HEIGHT, 0);
         customFontEnabled = Xprefs.getBoolean(LOCKSCREEN_CLOCK_CUSTOM_FONT, false);
@@ -360,6 +362,8 @@ public class LockscreenClock extends XposedMods {
                         try {
                             int marginTop = dp2px(mContext, topMargin);
                             setIntField(param.thisObject, "mAodWorkShopClockHeight", (mLockscreenView.getClockHeight() + marginTop));
+                            int marginBottom = dp2px(mContext, bottomAodMargin);
+                            setIntField(param.thisObject, "mAodWorkShopClockHeight", (mLockscreenView.getClockHeight() + marginTop + marginBottom));
                         } catch (Throwable t) {
                             log(t);
                         }
@@ -372,6 +376,8 @@ public class LockscreenClock extends XposedMods {
                         try {
                             int marginTop = dp2px(mContext, topMargin);
                             param.args[1] = (mLockscreenView.getClockHeight() + marginTop);
+                            int marginBottom = dp2px(mContext, bottomAodMargin);
+                            param.args[1] = (mLockscreenView.getClockHeight() + marginTop + marginBottom);
                         } catch (Throwable t) {
                             log(t);
                         }
@@ -383,6 +389,8 @@ public class LockscreenClock extends XposedMods {
                         try {
                             int marginTop = dp2px(mContext, topMargin);
                             param.setResult((mLockscreenView.getClockHeight() + marginTop));
+                            int marginBottom = dp2px(mContext, bottomAodMargin);
+                            param.setResult((mLockscreenView.getClockHeight() + marginTop + marginBottom));
                         } catch (Throwable t) {
                             log(t);
                         }

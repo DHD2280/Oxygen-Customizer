@@ -901,6 +901,8 @@
     <string name="lockscreen_clock_custom_margins">Clock Margins</string>
     <string name="lockscreen_clock_top_margin_title">Top Margin</string>
     <string name="lockscreen_clock_bottom_margin_title">Bottom Margin</string>
+    <string name="lockscreen_clock_bottom_margin_aod_title">Bottom Margin (AOD)</string>
+    <string name="lockscreen_clock_bottom_margin_aod_summary">This will control the bottom margin of the clock when in AOD. This will only apply if AOD is set to seamless.</string>
     <string name="lockscreen_clock_stock_prefs">Stock Lockscreen Clock Prefs</string>
     <string name="lockscreen_stock_clock_red_one_title">Red One behavior</string>
     <string name="lockscreen_stock_clock_red_one_disable">Disable Red One</string>

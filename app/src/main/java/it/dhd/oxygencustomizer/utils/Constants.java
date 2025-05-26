@@ -503,6 +503,7 @@ public final class Constants {
             public static final String LOCKSCREEN_CLOCK_LINE_HEIGHT = "lockscreen_clock_line_height";
             public static final String LOCKSCREEN_CLOCK_TOP_MARGIN = "lockscreen_top_margin";
             public static final String LOCKSCREEN_CLOCK_BOTTOM_MARGIN = "lockscreen_bottom_margin";
+            public static final String LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD = "lockscreen_bottom_margin_aod";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_FONT = "lockscreen_custom_font";
             public static final String LOCKSCREEN_CLOCK_TEXT_SCALING = "lockscreen_text_scaling";
             public static final String LOCKSCREEN_STOCK_CLOCK_RED_ONE = "lockscreen_stock_clock_red_one_mode";
