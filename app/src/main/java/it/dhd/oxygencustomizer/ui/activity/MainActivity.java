@@ -54,6 +54,7 @@ import it.dhd.oxygencustomizer.ui.fragments.mods.navbar.Gesture;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeader;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderClock;
 import it.dhd.oxygencustomizer.ui.fragments.mods.qsheader.QsHeaderImage;
+import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsSeparateMods;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsCustomization;
 import it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QuickSettingsTiles;
@@ -117,9 +118,12 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 replaceFragment(new Mods());
                 if (getIntent().getStringExtra("launch").equals("qs_header_options")) {
                     replaceFragment(new QsHeader());
-                } else if (getIntent().getStringExtra("launch").equals("qs_widget_options")) {
+                } else if (getIntent().getStringExtra("launch").equals("qs_widget_options") ||
+                        getIntent().getStringExtra("launch").equals("qs_separate_layout")) {
                     replaceFragment(new QuickSettings());
-                    replaceFragment(new QuickSettingsWidgets());
+                    replaceFragment(getIntent().getStringExtra("launch").equals("qs_widget_options") ?
+                            new QuickSettingsWidgets() :
+                            new QsSeparateMods());
                 }
             }
         }
