@@ -52,14 +52,16 @@ public class RecentsMenu extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (Build.VERSION.SDK_INT < 35) return; // don't care about older versions
 
         ReflectedClass OplusTaskOverlayFactoryKt = ReflectedClass.of("com.oplus.quickstep.shortcuts.OplusTaskOverlayFactoryKt");
         Object[] MENU_OPTIONS = (Object[]) getStaticObjectField(OplusTaskOverlayFactoryKt.getClazz(), "MENU_OPTIONS");
 
         ArrayList<Object> taskShortcutFactories = new ArrayList<>(Arrays.asList(MENU_OPTIONS));
+        ReflectedClass OplusGroupDividerShortcutClz = ReflectedClass.of("com.oplus.quickstep.shortcuts.OplusGroupDividerShortcut");
         try {
-            taskShortcutFactories.add(DIVIDER);
+            if (OplusGroupDividerShortcutClz.getClazz() != null) {
+                taskShortcutFactories.add(DIVIDER);
+            }
         } catch (Throwable t) {
             log("Failed to add divider shortcut: " + Log.getStackTraceString(t));
         }
