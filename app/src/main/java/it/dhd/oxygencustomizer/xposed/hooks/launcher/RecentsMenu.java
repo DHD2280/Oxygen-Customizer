@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
+import android.os.Build;
 import android.util.Log;
 
 import com.android.launcher3.popup.SystemShortcut;
@@ -21,6 +22,7 @@ import com.oplus.quickstep.shortcuts.OplusGroupDividerShortcut;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
@@ -46,13 +48,11 @@ public class RecentsMenu extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
-
-    }
+    public void updatePrefs(String... Key) {}
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-
+        if (Build.VERSION.SDK_INT < 35) return; // don't care about older versions
 
         ReflectedClass OplusTaskOverlayFactoryKt = ReflectedClass.of("com.oplus.quickstep.shortcuts.OplusTaskOverlayFactoryKt");
         Object[] MENU_OPTIONS = (Object[]) getStaticObjectField(OplusTaskOverlayFactoryKt.getClazz(), "MENU_OPTIONS");
