@@ -48,6 +48,20 @@ public class QuickSettings extends ControlledPreferenceFragmentCompat {
         super.onDestroy();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        pullDownIndicator.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (pullDownIndicator != null) {
+            pullDownIndicator.setVisibility(View.VISIBLE);
+        }
+    }
+
     @SuppressLint("RtlHardcoded")
     @Override
     public void updateScreen(String key) {

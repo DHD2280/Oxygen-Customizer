@@ -10,10 +10,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_EDIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_MENU;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_CUSTOM_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_ROWS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDTH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.BroadcastReceiver;
@@ -77,6 +79,8 @@ public class SeparateQsCustomization extends XposedMods {
     private boolean mVolumeEnabled = true;
     private int[] mVolumeCell = {3, 1, 1, 2};
     private int mPhotoRadius;
+    private boolean mCustomQsArea = false;
+    private float mCustomQsWidth = 0.5f;
 
     // Custom Views
     private String mCustomWidgets = "";
@@ -110,17 +114,21 @@ public class SeparateQsCustomization extends XposedMods {
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
         mCustomLayout = Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false);
-        mSavedCells = Xprefs.getString(SEPARATE_QS_LAYOUT, "");
+        mHideMenu = Xprefs.getBoolean(SEPARATE_HIDE_MENU, false);
+        mHideEdit = Xprefs.getBoolean(SEPARATE_HIDE_EDIT, false);
+        mCustomQsArea = Xprefs.getBoolean(SEPARATE_QS_CUSTOM_WIDTH, false);
+        mCustomQsWidth = Xprefs.getSliderInt(SEPARATE_QS_WIDTH, 50) / 100f;
         String customWidgets = Xprefs.getString(SEPARATE_QS_WIDGETS, "");
-        parseCell();
+        String savedCells = Xprefs.getString(SEPARATE_QS_LAYOUT, "");
 
+        if (!TextUtils.equals(savedCells, mSavedCells)) {
+            mSavedCells = savedCells;
+            parseCell();
+        }
         if (!TextUtils.equals(customWidgets, mCustomWidgets)) {
             mCustomWidgets = customWidgets;
             parseCustomWidgets();
         }
-
-        mHideMenu = Xprefs.getBoolean(SEPARATE_HIDE_MENU, false);
-        mHideEdit = Xprefs.getBoolean(SEPARATE_HIDE_EDIT, false);
 
         if (Key.length > 0) {
             if (Key[0].equals(QS_PHOTO_RADIUS)) {
@@ -208,7 +216,7 @@ public class SeparateQsCustomization extends XposedMods {
                 mOldWidgets.putAll(mWidgets);
             }
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - QsTileCustomization: Error parsing custom_widgets\n" + Log.getStackTraceString(t));
+            XposedBridge.log("Oxygen Customizer - SeparateQsCustomization: Error parsing custom_widgets\n" + Log.getStackTraceString(t));
         }
     }
     
@@ -444,9 +452,20 @@ public class SeparateQsCustomization extends XposedMods {
                     }
                 });
 
+        ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
+        OplusPanelViewPagerController
+                .before("isRightArea")
+                .run(param -> {
+                    if (!mCustomQsArea) return;
+                    Object centralSurfaces = getObjectField(param.thisObject, "centralSurfaces");
+                    float f2 = (float) param.args[0];
+                    param.setResult(f2 >= (centralSurfaces != null ? (float) callMethod(centralSurfaces, "getDisplayWidth") : 1080.0f) * (1f - mCustomQsWidth));
+                }, true);
+
     }
     
     private void updateLayout() {
+        if (mOplusLargeTileContainerView == null) return;
         try {
             updateCellsHook(mOplusLargeTileContainerView);
         } catch (Throwable t) {

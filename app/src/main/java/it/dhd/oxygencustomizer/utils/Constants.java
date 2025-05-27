@@ -468,6 +468,8 @@ public final class Constants {
             public static final String SEPARATE_QS_ROWS = "separate_qs_rows";
             public static final String SEPARATE_QS_LAYOUT = "layout_cells";
             public static final String SEPARATE_QS_WIDGETS = "separate_widgets";
+            public static final String SEPARATE_QS_CUSTOM_WIDTH = "separate_qs_custom_pulldown";
+            public static final String SEPARATE_QS_WIDTH = "separate_qs_pulldown_area";
         }
 
         public static class Buttons {
@@ -894,6 +896,18 @@ public final class Constants {
     }
 
     public static final class SoundPrefs {
+
+        // Volume Panel
+        public static final String VOLUME_PANEL_TIMEOUT = "volume_dialog_timeout";
+        public static final String VOLUME_PANEL_DISABLE_WARNING = "volume_disable_volume_warning";
+        public static final String VOLUME_PANEL_CUSTOMIZE_PROGRESS = "volume_panel_seekbar_color_enabled";
+        public static final String VOLUME_PANEL_CUSTOMIZE_BG = "volume_panel_seekbar_bg_color_enabled";
+        public static final String VOLUME_PANEL_PROGRESS_LINK_PRIMARY = "volume_panel_seekbar_link_primary";
+        public static final String VOLUME_PANEL_PROGRESS_COLOR = "volume_panel_seekbar_color";
+        public static final String VOLUME_PANEL_BG_COLOR = "volume_panel_seekbar_bg_color";
+        public static final String VOLUME_PANEL_CUSTOM_RADIUS_ENABLED = "volume_panel_seekbar_custom_radius";
+        public static final String VOLUME_PANEL_CUSTOM_RADIUS = "volume_panel_seekbar_radius";
+
         public static final String PULSE_NAVBAR = "navbar_pulse_enabled";
         public static final String PULSE_LOCKSCREEN = "lockscreen_pulse_enabled";
         public static final String PULSE_AMBIENT = "ambient_pulse_enabled";

@@ -37,4 +37,25 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="separate_qs_custom_pulldown"
+            android:summary="@string/qs_separate_qs_area_summary"
+            android:title="@string/qs_separate_qs_area"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="separate_qs_pulldown_area"
+            android:title="@string/qs_separate_qs_area_width"
+            app:defaultValue="50"
+            app:iconSpaceReserved="false"
+            app:maxVal="85"
+            app:minVal="10"
+            app:tickInterval="1"
+            app:valueFormat="%" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>

@@ -268,6 +268,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_MAX_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_CUSTOM_WIDTH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_APPLY_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_STYLE;
@@ -527,6 +529,11 @@ public class PreferenceHelper {
             }
             case QSPANEL_MAX_BLUR_AMOUNT -> {
                 return Build.VERSION.SDK_INT >= 35;
+            }
+
+            // Separate Qs
+            case SEPARATE_QS_WIDTH -> {
+                return instance.mPreferences.getBoolean(SEPARATE_QS_CUSTOM_WIDTH, false);
             }
 
             // Qs Tiles
@@ -1323,6 +1330,10 @@ public class PreferenceHelper {
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_horizontal_columns", 4));
             case "quick_settings_tiles_vertical_columns" ->
                     String.valueOf(instance.mPreferences.getSliderInt("quick_settings_tiles_vertical_columns", 4));
+
+            // Separate Qs
+            case SEPARATE_QS_WIDTH ->
+                    (instance.mPreferences.getSliderInt(SEPARATE_QS_WIDTH, 50)) + "%";
 
             // Tile Radius
             case QS_TILE_HIGHTLIGHT_RADIUS_TOP_RIGHT ->
