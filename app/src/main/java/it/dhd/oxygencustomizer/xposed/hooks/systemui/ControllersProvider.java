@@ -611,6 +611,7 @@ public class ControllersProvider extends XposedMods {
 
     public static boolean isOOS1501() {
         Object sysPropHelper = instance.mSystemPropertiesHelper;
+        if (sysPropHelper == null) return false;
         String getprop = (String) callMethod(sysPropHelper, "get", "ro.build.version.oplusrom");
         return !TextUtils.isEmpty(getprop) && getprop.contains("15.0.1");
     }
