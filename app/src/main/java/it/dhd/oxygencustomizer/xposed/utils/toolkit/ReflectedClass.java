@@ -153,7 +153,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -170,7 +170,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -187,7 +187,7 @@ public class ReflectedClass {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("Before " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -197,7 +197,7 @@ public class ReflectedClass {
                     StackTraceElement element = Thread.currentThread().getStackTrace()[2];
                     String callingClassName = element.getClassName();
                     int lineNumber = element.getLineNumber();
-                    log(String.format("%s line %d: Hook to %s before method %s size = %d", callingClassName, lineNumber, clazz.getName(), method.getName(), unhooks.size()));
+                    log(String.format("%s line %d: Hook to %s before method %s size = %d", callingClassName, lineNumber, clazz != null ? clazz.getName() : "Null", method != null ? method.getName() : "Null", unhooks.size()));
                 }
             }
             return unhooks;
@@ -217,7 +217,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -234,7 +234,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
@@ -251,7 +251,7 @@ public class ReflectedClass {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         if (log) {
-                            log("After " + param.method.getName() + " called, from class " + clazz.getName());
+                            log(param.method.getName() + " called, from class " + clazz.getName());
                         }
                         consumer.run(param);
                     }
