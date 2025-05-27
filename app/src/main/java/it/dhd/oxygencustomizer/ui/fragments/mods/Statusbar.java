@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 
 import java.util.ArrayList;
@@ -310,6 +311,11 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                     R.drawable.ic_charging_usbcable, // USB Cable
                     R.drawable.ic_charging_xiaomi, // Xiaomi
             };
+            Drawable[] chargingIconsDrawables = new Drawable[chargingIcons.length];
+            for (int i = 0; i < chargingIcons.length; i++) {
+                chargingIconsDrawables[i] = ContextCompat.getDrawable(requireContext(), chargingIcons[i]);
+                chargingIconsDrawables[i].setTint(batteryColor);
+            }
 
             BatteryManager bm = (BatteryManager) requireContext().getSystemService(BATTERY_SERVICE);
             int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
@@ -335,8 +341,7 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
                     mValues.add(String.valueOf(i));
                 }
                 mChargingIcon.setEntryValues(mValues.toArray(new CharSequence[0]));
-                mChargingIcon.setDrawables(chargingIcons);
-                mChargingIcon.createDefaultAdapter();
+                mChargingIcon.createDefaultAdapter(chargingIconsDrawables);
                 mChargingIcon.setAdapterType(ListPreferenceAdapter.TYPE_BATTERY_ICONS);
             }
 
