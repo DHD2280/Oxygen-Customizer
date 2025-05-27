@@ -586,10 +586,12 @@ public class ControllersProvider extends XposedMods {
     }
 
     private void getSystemPropertiesHelper() {
-        ReflectedClass BouncerMessageInteractor = ReflectedClass.of("com.android.systemui.bouncer.domain.interactor.BouncerMessageInteractor");
-        BouncerMessageInteractor
-                .afterConstruction()
-                .run(param -> mSystemPropertiesHelper = getObjectField(param.thisObject, "systemPropertiesHelper"));
+        ReflectedClass BouncerMessageInteractor = ReflectedClass.ofIfPossible("com.android.systemui.bouncer.domain.interactor.BouncerMessageInteractor");
+        if (BouncerMessageInteractor.getClazz() != null) {
+            BouncerMessageInteractor
+                    .afterConstruction()
+                    .run(param -> mSystemPropertiesHelper = getObjectField(param.thisObject, "systemPropertiesHelper"));
+        }
     }
 
     private void getBatteryInfo() {
