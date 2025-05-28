@@ -460,7 +460,7 @@ public class SeparateQsCustomization extends XposedMods {
                     Object centralSurfaces = getObjectField(param.thisObject, "centralSurfaces");
                     float f2 = (float) param.args[0];
                     param.setResult(f2 >= (centralSurfaces != null ? (float) callMethod(centralSurfaces, "getDisplayWidth") : 1080.0f) * (1f - mCustomQsWidth));
-                }, true);
+                });
 
     }
     
