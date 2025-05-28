@@ -1190,7 +1190,8 @@ public class PreferenceHelper {
                  "battery_powersave_fill_color",
                  "battery_powersave_icon_color" ->
                     (showAdvancedCustomizations || circleBattery) && showColorPickers;
-            case "battery_hide_percentage", "battery_text" -> showPercentage;
+            case "battery_hide_percentage" -> showPercentage;
+            case "battery_text" -> showCommonCustomizations ? showPercentage : true;
             case "category_battery_colors" ->
                     showCommonCustomizations && (showAdvancedCustomizations || showRainbowBattery || showColorPickers || circleBattery);
             case CUSTOM_BATTERY_ANIM_ENABLED -> showCommonCustomizations && circleBattery;
