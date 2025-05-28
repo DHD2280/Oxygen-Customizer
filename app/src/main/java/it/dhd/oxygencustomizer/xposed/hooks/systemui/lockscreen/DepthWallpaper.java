@@ -252,9 +252,7 @@ public class DepthWallpaper extends XposedMods {
                                 try {
                                     wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, methodName);
                                     if (wallpaperDrawable != null) break;
-                                } catch (Throwable ignored) {
-                                    // Prova il prossimo metodo
-                                }
+                                } catch (Throwable ignored) {}
                             }
                             if (wallpaperDrawable == null) {
                                 log("Wallpaper Drawable is null");
@@ -349,7 +347,7 @@ public class DepthWallpaper extends XposedMods {
         hookAllMethods(QSImplClass, "setQsExpansion", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if ((boolean) callMethod(param.thisObject, "isKeyguardState")) {
+                if ((boolean) callMethod(param.thisObject, "isKeyguardState") && Build.VERSION.SDK_INT < 35) {
                     setDepthWallpaper();
                 }
             }
@@ -364,6 +362,50 @@ public class DepthWallpaper extends XposedMods {
                         setDepthWallpaper(mLastUiState);
                     });
         }
+
+        ReflectedClass OplusWallpaperAnimControllerImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl");
+        ReflectedClass OplusWallpaperAnimControllerImplCompanion = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl$Companion");
+        if(OplusWallpaperAnimControllerImplCompanion.getClazz() != null) {
+            OplusWallpaperAnimControllerImplCompanion
+                    .before("setRemoteWindowScale")
+                    .run(param -> {
+                        if (param.args[1] instanceof Float) {
+                            float scale = (float) param.args[1];
+                            if (mLayersCreated && DWallpaperEnabled && DWMode != 1) {
+                                mLockScreenSubject.post(() -> mLockScreenSubject.setScaleX(scale));
+                                mLockScreenSubject.post(() -> mLockScreenSubject.setScaleY(scale));
+                                mWallpaperBackground.post(() -> mWallpaperBackground.setScaleX(scale));
+                                mWallpaperBackground.post(() -> mWallpaperBackground.setScaleY(scale));
+                            }
+                        }
+                    });
+        }
+        if (OplusWallpaperAnimControllerImpl.getClazz() != null) {
+            OplusWallpaperAnimControllerImpl
+                    .before("updateWallpaperWindowZoomOut")
+                    .run(param -> {
+                        float scale = (float) param.args[0];
+                        float finalScale = convertZoomOutByScale(scale);
+                        if (mLayersCreated && DWallpaperEnabled && DWMode != 1) {
+                            mLockScreenSubject.post(() -> mLockScreenSubject.setScaleX(finalScale));
+                            mLockScreenSubject.post(() -> mLockScreenSubject.setScaleY(finalScale));
+                            mWallpaperBackground.post(() -> mWallpaperBackground.setScaleX(finalScale));
+                            mWallpaperBackground.post(() -> mWallpaperBackground.setScaleY(finalScale));
+                        }
+                    });
+        }
+    }
+
+    public final float convertZoomOutByScale(float f2) {
+        return constrain(lerp(0, 1, (1.1f - f2) * 10), 0.0f, 1.0f);
+    }
+
+    private float constrain(float amount, float low, float high) {
+        return amount < low ? low : (amount > high ? high : amount);
+    }
+
+    private float lerp(float start, float stop, float amount) {
+        return (1f - amount) * start + amount * stop;
     }
 
     private float calculateAlpha(float alpha) {
@@ -418,8 +460,6 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private void createLayers() {
-        log("Creating Layers");
-
         mWallpaperBackground = new FrameLayout(mContext);
         mWallpaperBackground.setTag(DEPTH_BG_TAG);
         mWallpaperDimmingOverlay = new FrameLayout(mContext);
@@ -440,12 +480,9 @@ public class DepthWallpaper extends XposedMods {
         mLockScreenSubject.setLayoutParams(lp);
 
         mLayersCreated = true;
-        log("Layers Created");
     }
 
     private void setDepthWallpaper(int uiState) {
-        String state = getObjectField(getScrimController(), "mState").toString();
-        XposedBridge.log("DepthWallpaper - setDepthWallpaper: " + state);
         boolean canShow = true;
         if (showAlbumArt && !canShowArt) {
             canShow = true;
@@ -487,15 +524,13 @@ public class DepthWallpaper extends XposedMods {
                     //this is the dimmed wallpaper coverage
                     mSubjectDimmingOverlay.setAlpha(Math.round(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard") * 240)); //A tad bit lower than max. show it a bit lighter than other stuff
                     mWallpaperDimmingOverlay.setAlpha(getFloatField(getScrimController(), "mScrimBehindAlphaKeyguard"));
-
                 }
                 mWallpaperBackground.setVisibility(VISIBLE);
                 mLockScreenSubject.setVisibility(VISIBLE);
             }
         } else if (mLayersCreated) {
             mLockScreenSubject.setVisibility(GONE);
-
-            if (mLastUiState == LockscreenClock.CLOCK_UI_STATE_SHADE) {
+            if (uiState != LockscreenClock.CLOCK_UI_STATE_LS) {
                 mWallpaperBackground.setVisibility(GONE);
             }
         }
@@ -584,6 +619,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private void setupViews() {
+        XposedBridge.log("DepthWallpaper - setupViews: DWallpaperEnabled = " + DWallpaperEnabled);
         if (mLayersCreated) {
             if (mWallpaperBackground != null) {
                 mWallpaperBackground.post(() -> {
