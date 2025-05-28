@@ -129,11 +129,11 @@
             android:key="statusbarPaddings"
             android:summary="@string/sb_padding_summary"
             android:title="@string/sb_padding_title"
-            app:defaultValue="-.5,100.5"
+            app:defaultValue="-1,101"
             app:iconSpaceReserved="false"
-            app:maxVal="100.5"
-            app:minVal="-.5"
-            app:tickInterval=".5"
+            app:maxVal="101"
+            app:minVal="-1"
+            app:tickInterval="1"
             app:valueCount="2"
             app:valueFormat="dp" />
 

@@ -289,6 +289,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -300,9 +301,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
-import it.dhd.oneplusui.appcompat.seekbar.LabelFormatter;
 import it.dhd.oneplusui.preference.OplusSliderPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -1271,7 +1272,7 @@ public class PreferenceHelper {
                     instance.mPreferences.getBoolean(BATTERY_TEXT_ATTACH_TO_BB, false);
 
             case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE ->
-                !instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
+                    !instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT, false);
             case "dockBackground" ->
                     !instance.mPreferences.getBoolean("dockBackgroundMaterial", false);
             case "dockBackgroundMaterial" ->
@@ -1308,6 +1309,22 @@ public class PreferenceHelper {
             case "statusbar_padding_start", "statusbar_padding_end" ->
                     fragmentCompat.getString(R.string.statusbar_padding_info) + "\n" +
                             instance.mPreferences.getSliderFloat(key, 0);
+            case "statusbar_top_padding" ->
+                instance.mPreferences.getSliderInt("statusbar_top_padding", 0) + "dp";
+            case "statusbarPaddings" -> {
+                List<Float> statusbarPaddings = instance.mPreferences.getSliderValues("statusbarPaddings", 0);
+                float start, end;
+                if (statusbarPaddings.isEmpty()) {
+                    start = -1;
+                    end = 101f;
+                } else {
+                    start = statusbarPaddings.get(0);
+                    end = statusbarPaddings.size() > 1 ? statusbarPaddings.get(1) : 101f;
+                }
+                yield fragmentCompat.getString(R.string.sb_padding_summary) + "\n" +
+                        String.format("%s - %s", start, end);
+            }
+
 
             // Statusbar Clock
             case "status_bar_java_custom" ->
@@ -1374,7 +1391,7 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(QS_MEDIA_ART_TINT_AMOUNT, 30) + "%";
 
             case QS_SLIDERS_RADIUS ->
-                instance.mPreferences.getSliderInt(QS_SLIDERS_RADIUS, 20) + "dp";
+                    instance.mPreferences.getSliderInt(QS_SLIDERS_RADIUS, 20) + "dp";
 
             // Statusbar
             case "status_bar_clock_size" ->
@@ -1416,6 +1433,8 @@ public class PreferenceHelper {
                     instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_LEFT, 1) + "dp";
             case CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT ->
                     instance.mPreferences.getSliderInt(CUSTOM_BATTERY_CHARGING_ICON_MARGIN_RIGHT, 1) + "dp";
+            case STOCK_PERCENTAGE_SIZE ->
+                    instance.mPreferences.getSliderInt(STOCK_PERCENTAGE_SIZE, 12) + "sp";
 
             // Gesture Prefs
             case "gesture_left_height_double" -> getGestureHeight(key);
@@ -1487,8 +1506,8 @@ public class PreferenceHelper {
             case LOCKSCREEN_CLOCK_BOTTOM_MARGIN ->
                     instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN, 0) + "dp";
             case LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD ->
-                fragmentCompat.getString(R.string.lockscreen_clock_bottom_margin_aod_summary) + "\n" +
-                    instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD, 0) + "dp";
+                    fragmentCompat.getString(R.string.lockscreen_clock_bottom_margin_aod_summary) + "\n" +
+                            instance.mPreferences.getSliderInt(LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD, 0) + "dp";
 
             // Lockscreen Weather
             case LOCKSCREEN_WEATHER_IMAGE_SIZE ->
@@ -1631,11 +1650,13 @@ public class PreferenceHelper {
                 if (Objects.equals(sliderPreference.getKey(), "batteryWarningRange")) {
                     sliderPreference.mOplusSlider.setLabelFormatter(value -> (int) value + "%");
                 } else {
-                    sliderPreference.mOplusSlider.setLabelFormatter(value -> {
-                        if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
-                            return getAppContext().getString(R.string.default_value);
-                        else return String.valueOf(Math.round(value));
-                    });
+                    if (sliderPreference.mOplusSlider.getValues().size() == 1) {
+                        sliderPreference.mOplusSlider.setLabelFormatter(value -> {
+                            if (value == ((OplusSliderPreference) preference).defaultValue.get(0))
+                                return getAppContext().getString(R.string.default_value);
+                            else return String.valueOf(Math.round(value));
+                        });
+                    }
                 }
             }
 
