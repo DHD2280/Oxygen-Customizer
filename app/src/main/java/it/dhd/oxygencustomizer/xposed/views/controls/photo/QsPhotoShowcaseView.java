@@ -18,9 +18,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.PowerManager;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 @SuppressLint({"ViewConstructor", "AppCompatCustomView"})
 public class QsPhotoShowcaseView extends ImageView {
@@ -50,8 +50,11 @@ public class QsPhotoShowcaseView extends ImageView {
     private int mCurrentDrawableIndex = 0;
     private long mLastRunTime = 0L;
     private final long mUpdateInterval = 1000L * 30; // 30 seconds
+    private boolean mScreenOn = true;
+    private boolean mPowerSaveModeEnabled = false;
+    private PowerManager mPowerManager;
 
-    private final Handler mImageHandler = new Handler(Looper.getMainLooper());
+    private final Handler mImageHandler = new Handler();
     private final Runnable mImageUpdateRunnable = new Runnable() {
         @Override
         public void run() {
@@ -72,6 +75,28 @@ public class QsPhotoShowcaseView extends ImageView {
         }
     };
 
+    private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenOn = false;
+                removeCallback();
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                mScreenOn = true;
+            } else if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGED.equals(intent.getAction())) {
+                mPowerSaveModeEnabled = mPowerManager.isPowerSaveMode();
+                removeCallback();
+            }
+        }
+    };
+
+    private void removeCallback() {
+        if (mImageHandler.hasCallbacks(mImageUpdateRunnable)) {
+            mImageHandler.removeCallbacks(mImageUpdateRunnable);
+        }
+    }
+
     public QsPhotoShowcaseView(Context context) {
         this(context, false);
     }
@@ -82,6 +107,10 @@ public class QsPhotoShowcaseView extends ImageView {
         mSettingsInterface = settingsInterface;
 
         mContext.registerReceiver(mReceiver, new IntentFilter(ACTIONS_QS_PHOTO_CHANGED), Context.RECEIVER_EXPORTED);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
+        mContext.registerReceiver(mScreenReceiver, filter, Context.RECEIVER_EXPORTED);
 
         setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -91,8 +120,13 @@ public class QsPhotoShowcaseView extends ImageView {
 
         if (mSettingsInterface) {
             radius = getContext().getResources().getDimension(R.dimen.qs_controls_container_radius);
+            mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         } else {
             radius = modRes.getDimension(R.dimen.qs_controls_container_radius);
+            mPowerManager = SystemUtils.PowerManager();
+        }
+        if (mPowerManager != null) {
+            mPowerSaveModeEnabled = mPowerManager.isPowerSaveMode();
         }
         path = new Path();
         mActivityLauncherUtils = mSettingsInterface ? null : new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
@@ -131,9 +165,7 @@ public class QsPhotoShowcaseView extends ImageView {
     private void updateImage() {
         if (mContext == null) return;
         mDrawables.clear();
-        if (mImageHandler.hasCallbacks(mImageUpdateRunnable)) {
-            mImageHandler.removeCallbacks(mImageUpdateRunnable);
-        }
+        removeCallback();
         String imagePath = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/qs_photo.png";
         try {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -148,9 +180,7 @@ public class QsPhotoShowcaseView extends ImageView {
                                 name.startsWith("qs_photo_") && name.endsWith(".png"));
                         if (filteredFiles != null) {
                             mDrawables.clear();
-                            Log.d("QsPhotoShowcaseView", "Found " + filteredFiles.length + " showcase images.");
                             for (File file : filteredFiles) {
-                                Log.d("QsPhotoShowcaseView", "Loading image: " + file.getAbsolutePath());
                                 ImageDecoder.Source source = ImageDecoder.createSource(file);
 
                                 Drawable drawable = ImageDecoder.decodeDrawable(source);
@@ -172,7 +202,6 @@ public class QsPhotoShowcaseView extends ImageView {
                         post(() -> {
                             if (mIsShowcase && !mDrawables.isEmpty()) {
                                 // Set the first drawable from the showcase images
-                                Log.d("QsPhotoShowcaseView", "Setting first showcase image.");
                                 setImageDrawable(mDrawables.get(0));
                                 mCurrentDrawableIndex = 0;
                             } else if (mLoadedDrawable != null) {
@@ -230,7 +259,7 @@ public class QsPhotoShowcaseView extends ImageView {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (visibility == View.VISIBLE && isShown()) {
+        if (visibility == View.VISIBLE && isShown() && mScreenOn && !mPowerSaveModeEnabled) {
             if (!mImageHandler.hasCallbacks(mImageUpdateRunnable)) {
                 long now = System.currentTimeMillis();
                 long timeSinceLastRun = now - mLastRunTime;
@@ -238,9 +267,7 @@ public class QsPhotoShowcaseView extends ImageView {
                 mImageHandler.postDelayed(mImageUpdateRunnable, delay);
             }
         } else {
-            if (mImageHandler.hasCallbacks(mImageUpdateRunnable)) {
-                mImageHandler.removeCallbacks(mImageUpdateRunnable);
-            }
+            removeCallback();
         }
     }
 
