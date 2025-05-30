@@ -8,6 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_EDIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_HIDE_MENU;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_CUSTOM_WIDTH;
@@ -79,6 +80,7 @@ public class SeparateQsCustomization extends XposedMods {
     private boolean mVolumeEnabled = true;
     private int[] mVolumeCell = {3, 1, 1, 2};
     private int mPhotoRadius;
+    private boolean mPhotoShowcase = false;
     private boolean mCustomQsArea = false;
     private float mCustomQsWidth = 0.5f;
 
@@ -112,6 +114,7 @@ public class SeparateQsCustomization extends XposedMods {
     public void updatePrefs(String... Key) {
 
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
+        mPhotoShowcase = Xprefs.getString(QS_PHOTO_SHOWCASE, "0").equals("1");
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
         mCustomLayout = Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false);
         mHideMenu = Xprefs.getBoolean(SEPARATE_HIDE_MENU, false);
@@ -136,6 +139,15 @@ public class SeparateQsCustomization extends XposedMods {
                     for (View widget : mWidgets.keySet()) {
                         if (widget instanceof QsPhotoShowcaseContainerView photoShowcaseContainerView) {
                             photoShowcaseContainerView.setRadius(mPhotoRadius);
+                        }
+                    }
+                }
+            }
+            if (Key[0].equals(QS_PHOTO_SHOWCASE)) {
+                if (mCustomWidgets.contains("photo")) {
+                    for (View widget : mWidgets.keySet()) {
+                        if (widget instanceof QsPhotoShowcaseContainerView photoShowcaseContainerView) {
+                            photoShowcaseContainerView.setPhotoMode(mPhotoShowcase);
                         }
                     }
                 }
@@ -321,6 +333,7 @@ public class SeparateQsCustomization extends XposedMods {
                     customApp.onSizeChanged(specs[2]);
                 } else if (widget instanceof QsPhotoShowcaseContainerView photoShowcaseContainerView) {
                     photoShowcaseContainerView.setRadius(mPhotoRadius);
+                    photoShowcaseContainerView.setPhotoMode(mPhotoShowcase);
                 }
                 if (widget instanceof BaseQsStaticView staticView) {
                     staticView.reloadBackground();

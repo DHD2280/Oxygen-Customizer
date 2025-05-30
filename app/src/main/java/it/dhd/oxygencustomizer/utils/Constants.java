@@ -350,6 +350,7 @@ public final class Constants {
             public static final String QS_WIDGETS_SWITCH = "qs_widgets_switch";
             public static final String QS_WIDGETS_LIST = "qs_widgets_widgets";
             public static final String QS_PHOTO_RADIUS = "qs_widgets_photo_radius";
+            public static final String QS_PHOTO_SHOWCASE = "photoMode";
         }
 
         public static class GesturesPrefs {
@@ -1011,6 +1012,7 @@ public final class Constants {
     public static final String AOD_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/aod_clock_font.ttf";
     public static final String LOCKSCREEN_FINGERPRINT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_fp_icon.png";
     public static final String QS_PHOTO_DIR = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo.png";
+    public static final String QS_PHOTO_SHOWCASE_FILES = XPOSED_RESOURCE_TEMP_DIR + "/qs_photo_%s.png";
     public static final String SETTINGS_OTA_CARD_DIR = XPOSED_RESOURCE_TEMP_DIR + "/settings_ota_card.png";
     public static final String NOW_BAR_CLOCK_FONT_FILE = XPOSED_RESOURCE_TEMP_DIR + "/now_bar_music_clock_font.ttf";
     public static final String STATUSBAR_LOGO_FILE = XPOSED_RESOURCE_TEMP_DIR + "/statusbar_logo_file.png";

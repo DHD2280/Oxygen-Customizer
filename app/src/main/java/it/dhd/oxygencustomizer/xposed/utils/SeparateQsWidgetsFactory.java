@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.utils;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getShapeForHighlightTile;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -70,6 +71,7 @@ public class SeparateQsWidgetsFactory {
         };
         if (v instanceof QsPhotoShowcaseContainer showcase) {
             showcase.setRadius(OCPreferences.getSliderInt(QS_PHOTO_RADIUS, 22));
+            showcase.setPhotoMode(OCPreferences.getString(QS_PHOTO_SHOWCASE, "0").equals("1"));
         }
         if (v instanceof DeviceWidgetInterface deviceWidget) {
             Log.d("SeparateQsWidgetsFactory", "getWidget: DeviceWidgetInterface");

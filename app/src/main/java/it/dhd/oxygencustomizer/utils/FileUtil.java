@@ -136,9 +136,14 @@ public class FileUtil {
     }
 
     public static void launchFilePicker(ActivityResultLauncher<Intent> launcher, String type) {
+        launchFilePicker(launcher, type, false);
+    }
+
+    public static void launchFilePicker(ActivityResultLauncher<Intent> launcher, String type, boolean allowMultiple) {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
         chooseFile.setType(type);
+        chooseFile.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultiple);
         launcher.launch(chooseFile);
     }
 }

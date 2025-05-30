@@ -58,6 +58,10 @@ public class QsPhotoShowcaseContainerView extends BaseQsStaticView {
         mQsPhotoShowcaseView.setRadius(mRadius);
     }
 
+    public void setPhotoMode(boolean showcase) {
+        mQsPhotoShowcaseView.setPhotoMode(showcase);
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

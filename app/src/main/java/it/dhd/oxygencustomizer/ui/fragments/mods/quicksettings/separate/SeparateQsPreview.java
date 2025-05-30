@@ -1,19 +1,24 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.separate;
 
+import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_ROWS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_SHOWCASE_FILES;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,6 +42,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -418,6 +425,8 @@ public class SeparateQsPreview extends BaseFragment {
                 replaceFragment(new WeatherSettings());
             } else if (item.getItemId() == R.id.set_photo_radius) {
                 AppUtils.showPhotoShowcaseRadiusDialog(requireContext());
+            } else if (item.getItemId() == R.id.set_photo_mode) {
+                AppUtils.showPhotoModeDialog(requireContext());
             } else if (item.getItemId() == R.id.set_photo) {
                 pickImage();
             }
@@ -426,9 +435,46 @@ public class SeparateQsPreview extends BaseFragment {
         popup.show();
     }
 
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data == null || data.getClipData() == null) {
+                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    List<String> pathList = new ArrayList<>();
+                    if (data.getClipData() != null) {
+                        ClipData clipData = data.getClipData();
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            Uri uri = clipData.getItemAt(i).getUri();
+                            String path = getRealPath(uri);
+                            if (path != null) {
+                                pathList.add(path);
+                            }
+                        }
+                    }
+
+                    int i = 0;
+                    for (String path : pathList) {
+                        String destination = String.format(QS_PHOTO_SHOWCASE_FILES, i);
+
+                        if (moveToOCHiddenDir(path, destination)) {
+                            i++;
+                        }
+                    }
+                    Intent updateImage = new Intent(ACTIONS_QS_PHOTO_CHANGED);
+                    requireContext().sendBroadcast(updateImage);
+                    Toast.makeText(requireContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                }
+            });
+
     public void pickImage() {
         if (!AppUtils.hasStoragePermission()) {
             AppUtils.requestStoragePermission(requireContext());
+        } else if (OCPreferences.getString(QS_PHOTO_SHOWCASE, "0").equals("1")) {
+            launchFilePicker(startActivityIntent, "image/*", true);
         } else {
             Bundle bundle = new Bundle();
             CropImageOptions options = new CropImageOptions();

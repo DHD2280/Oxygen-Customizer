@@ -3,10 +3,12 @@ package it.dhd.oxygencustomizer.utils;
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.LOAD_TIME_KEY_KEY;
 import static it.dhd.oxygencustomizer.xposed.utils.BootLoopProtector.PACKAGE_STRIKE_KEY_KEY;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,10 +22,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -36,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import it.dhd.oneplusui.appcompat.dialog.adapter.ChoiceListAdapter;
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
@@ -239,6 +245,7 @@ public class AppUtils {
         }, 600);
     }
 
+    @SuppressLint("PrivateApi")
     public static void circleToSearch() {
         try {
             Bundle bundle = new Bundle();
@@ -258,7 +265,7 @@ public class AppUtils {
         } catch (Exception e) {
             String errMsg = "triggerCircleToSearch failed: " + e.getStackTrace();
             Log.e("MiCTS", errMsg);
-        };
+        }
     }
 
     public static void showPhotoShowcaseRadiusDialog(Context context) {
@@ -274,11 +281,67 @@ public class AppUtils {
             int radius = sliderWidget.getSliderValue();
             OCPreferences.putInt(QS_PHOTO_RADIUS, radius);
         });
-        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-            dialog.dismiss();
-        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.setCancelable(false);
         builder.show();
+    }
+
+    public static void showPhotoModeDialog(Context context) {
+        CharSequence[] entries = context.getResources().getTextArray(R.array.photo_showcase_modes_entries);
+        CharSequence[] entryValues = context.getResources().getTextArray(R.array.photo_showcase_modes_entry_values);
+        CharSequence[] summaries = context.getResources().getTextArray(R.array.photo_showcase_modes_entries_summaries);
+        boolean[] checkedValue;
+        int item = findIndexOfValue(entryValues, OCPreferences.getString(QS_PHOTO_SHOWCASE, "0"));
+        if (item >= 0 && item < entries.length) {
+            boolean[] valueMap = new boolean[entries.length];
+            valueMap[item] = true;
+            checkedValue = valueMap;
+        } else {
+            checkedValue = null;
+        }
+
+        MaterialAlertDialogBuilder adapter = new MaterialAlertDialogBuilder(context)
+                .setTitle(context.getString(R.string.qs_widget_set_photo_mode))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setAdapter(new ChoiceListAdapter(context, R.layout.oplus_select_dialog_singlechoice, entries, summaries, checkedValue, false) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view3 = super.getView(position, convertView, parent);
+                        View findViewById = view3.findViewById(R.id.item_divider);
+                        int count = getCount();
+                        if (findViewById != null) {
+                            if (count != 1 && position != count - 1) {
+                                findViewById.setVisibility(View.VISIBLE);
+                            } else {
+                                findViewById.setVisibility(View.GONE);
+                            }
+                        }
+                        return view3;
+                    }
+                }, (dialogInterface, which) -> {
+                    OCPreferences.putString("photoMode", entryValues[which].toString());
+                    dialogInterface.dismiss();
+                });
+        AlertDialog dialog = adapter.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+        }
+        dialog.show();
+    }
+
+    public interface OnDialogItemClickListener {
+        void onItemClick(String value);
+    }
+
+    public static int findIndexOfValue(CharSequence[] entryValues, String value) {
+        if (value != null && entryValues != null) {
+            for (int i = entryValues.length - 1; i >= 0; i--) {
+                if (TextUtils.equals(entryValues[i].toString(), value)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
 }

@@ -1,18 +1,26 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 
+import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
+import static it.dhd.oxygencustomizer.utils.AppUtils.showPhotoModeDialog;
 import static it.dhd.oxygencustomizer.utils.AppUtils.showPhotoShowcaseRadiusDialog;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
+import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_SHOWCASE_FILES;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
+import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +38,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -41,6 +51,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
@@ -329,8 +340,10 @@ public class QuickSettingsWidgets extends BaseFragment {
                     popup.setOnMenuItemClickListener(item1 -> {
                         if (item1.getItemId() == R.id.set_photo_radius) {
                             showPhotoShowcaseRadiusDialog(requireContext());
+                        } else if (item1.getItemId() == R.id.set_photo_mode) {
+                            showPhotoModeDialog(requireContext());
                         } else if (item1.getItemId() == R.id.set_photo) {
-                            pickImage();
+                            pickImage(OCPreferences.getString("photoMode", "0").equals("1"));
                         }
                         return true;
                     });
@@ -354,9 +367,46 @@ public class QuickSettingsWidgets extends BaseFragment {
         }
     }
 
-    public void pickImage() {
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data == null || data.getClipData() == null) {
+                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    List<String> pathList = new ArrayList<>();
+                    if (data.getClipData() != null) {
+                        ClipData clipData = data.getClipData();
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            Uri uri = clipData.getItemAt(i).getUri();
+                            String path = getRealPath(uri);
+                            if (path != null) {
+                                pathList.add(path);
+                            }
+                        }
+                    }
+
+                    int i = 0;
+                    for (String path : pathList) {
+                        String destination = String.format(QS_PHOTO_SHOWCASE_FILES, i);
+
+                        if (moveToOCHiddenDir(path, destination)) {
+                            i++;
+                        }
+                    }
+                    Intent updateImage = new Intent(ACTIONS_QS_PHOTO_CHANGED);
+                    requireContext().sendBroadcast(updateImage);
+                    Toast.makeText(requireContext(), requireContext().getResources().getString(R.string.toast_applied), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    public void pickImage(boolean multiple) {
         if (!AppUtils.hasStoragePermission()) {
             AppUtils.requestStoragePermission(requireContext());
+        } else if (multiple) {
+            launchFilePicker(startActivityIntent, "image/*", true);
         } else {
             Bundle bundle = new Bundle();
             CropImageOptions options = new CropImageOptions();

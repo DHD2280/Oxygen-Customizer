@@ -37,6 +37,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_LEFT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_RADIUS_TOP_RIGHT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -73,6 +74,7 @@ public class QsWidgets extends XposedMods {
     private String mQsWidgetsList = "media";
     // Photo Showcase
     private int mQsPhotoRadius = 22;
+    private boolean mQsPhotoShowcase = false;
 
     // Qs Colors
     // Media
@@ -110,6 +112,7 @@ public class QsWidgets extends XposedMods {
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
         mQsWidgetsList = Xprefs.getString(QS_WIDGETS_LIST, "media");
         mQsPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
+        mQsPhotoShowcase = Xprefs.getString(QS_PHOTO_SHOWCASE, "0").equals("1");
 
         // Media QS
         showMediaArtMediaQs = Xprefs.getBoolean(QS_MEDIA_SHOW_ALBUM_ART, false);
@@ -156,6 +159,9 @@ public class QsWidgets extends XposedMods {
             }
             if (Key[0].equals(QS_PHOTO_RADIUS)) {
                 updatePhotoRadius();
+            }
+            if (Key[0].equals(QS_WIDGETS_SWITCH)) {
+                updateShowcaseMode();
             }
             if (Key[0].equals(QS_MEDIA_SHOW_ALBUM_ART) ||
                     Key[0].equals(QS_MEDIA_ART_FILTER) ||
@@ -371,6 +377,7 @@ public class QsWidgets extends XposedMods {
             updateWidgets();
             updateMediaPlayerPrefs();
             updatePhotoRadius();
+            updateShowcaseMode();
         } catch (Throwable t) {
             log("Error while placing widgets: " + Log.getStackTraceString(t));
         }
@@ -451,6 +458,13 @@ public class QsWidgets extends XposedMods {
         log("updatePhotoRadius: " + mQsPhotoRadius);
         if (qsControlsView != null) {
             qsControlsView.updatePhotoRadius(mQsPhotoRadius);
+        }
+    }
+
+    private void updateShowcaseMode() {
+        QsControlsView qsControlsView = QsControlsView.getInstance();
+        if (qsControlsView != null) {
+            qsControlsView.updateShowcase(mQsPhotoShowcase);
         }
     }
 

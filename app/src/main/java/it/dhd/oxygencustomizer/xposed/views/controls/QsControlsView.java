@@ -142,6 +142,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private final Handler mHandler;
 
     private int mPhotoRadius = 22;
+    private boolean mPhotoMode = false;
 
     private ActivityLauncherUtils mActivityLauncherUtils;
 
@@ -382,8 +383,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
                 if (view instanceof QsPhotoShowcaseContainer showcase) {
                     showcase.setRadius(mPhotoRadius);
+                    showcase.setPhotoMode(mPhotoMode);
                 } else if (view.getClass().getSimpleName().equals("QsPhotoShowcaseContainerView")) {
                     callMethod(view, "setRadius", mPhotoRadius);
+                    callMethod(view, "setPhotoMode", mPhotoMode);
                 } else if (view instanceof QsWeatherWidget weatherWidget) {
                     weatherWidget.setOnLongClickListener(v -> {
                         mActivityLauncherUtils.launchWeatherActivity(true);
@@ -1753,6 +1756,25 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     showcase.setRadius(radius);
                 } else if (v.getClass().getSimpleName().equals("QsPhotoShowcaseContainerView")) {
                     callMethod(v, "setRadius", radius);
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the showcase photo mode
+     *
+     * @param isShowcase if the photo showcase should show one photo or multiple photos
+     */
+    public void updateShowcase(boolean isShowcase) {
+        if (instance == null) return;
+        instance.mPhotoMode = isShowcase;
+        if (!instance.mPages.isEmpty()) {
+            for (View v : instance.mPages) {
+                if (v instanceof QsPhotoShowcaseContainer showcase) {
+                    showcase.setPhotoMode(isShowcase);
+                } else if (v.getClass().getSimpleName().equals("QsPhotoShowcaseContainerView")) {
+                    callMethod(v, "setPhotoMode", isShowcase);
                 }
             }
         }

@@ -468,7 +468,11 @@
     <string name="qs_widget_media_player">Media Player</string>
     <string name="qs_media_alert">Can\'t remove media player!</string>
     <string name="qs_widget_set_radius">Set Image Radius</string>
+    <string name="qs_widget_set_photo_mode">Set Photo Mode</string>
     <string name="qs_widget_set_custom_photo">Set Custom Image</string>
+    <string name="qs_widget_photo_showcase">Showcase</string>
+    <string name="qs_widget_photo_default_summary">Show a single photo.</string>
+    <string name="qs_widget_photo_random_summary">Show all photos you select in a loop. The image will change every 30 seconds, you can also tap on showcase to swap to next photo.</string>
 
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Customization</string>

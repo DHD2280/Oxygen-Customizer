@@ -56,4 +56,12 @@ public class QsPhotoShowcaseContainer extends LinearLayout {
         mQsPhotoShowcaseView.setRadius(mRadius);
     }
 
+    public void setPhotoMode(boolean showcase) {
+        mQsPhotoShowcaseView.setPhotoMode(showcase);
+    }
+
+    public void switchDrawable() {
+        mQsPhotoShowcaseView.switchDrawable();
+    }
+
 }
