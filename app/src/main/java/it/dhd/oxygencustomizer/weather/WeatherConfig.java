@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
@@ -171,7 +170,7 @@ public class WeatherConfig {
     }
 
     private static boolean checkWeatherDeviceWidget() {
-        String savedWidgets = OCPreferences.getString("", "[]");
+        String savedWidgets = getPrefs(context).getString("", "[]");
         Gson gson = new Gson();
         Type listType = new TypeToken<List<WidgetConfig>>() {}.getType();
         List<WidgetConfig> configList = gson.fromJson(savedWidgets, listType);
