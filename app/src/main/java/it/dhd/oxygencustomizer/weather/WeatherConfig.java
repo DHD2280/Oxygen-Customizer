@@ -163,13 +163,13 @@ public class WeatherConfig {
         boolean weatherWidget = bigWidgets.contains("weather") || miniWidgets.contains("weather");
         boolean qsWeather = qsWidgets.contains("weather");
         boolean weatherInBar = nowBar && weathrNowBar;
-        boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget();
+        boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget(context);
         boolean weatherSeparateQs = separateWidgets.contains("weather");
 
         return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget || weatherSeparateQs;
     }
 
-    private static boolean checkWeatherDeviceWidget() {
+    private static boolean checkWeatherDeviceWidget(Context context) {
         String savedWidgets = getPrefs(context).getString("", "[]");
         Gson gson = new Gson();
         Type listType = new TypeToken<List<WidgetConfig>>() {}.getType();
