@@ -344,6 +344,7 @@
     <string name="inside_percentage_title">İç Yüzde</string>
     <string name="inside_percentage_desc">Yüzdeyi pil simgesinin içine taşı</string>
     <string name="battery_icon_color">Pil Simgesi Renkleri</string>
+    <string name="battery_icon_animate_charging">Şarj animasyonu</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Pil metni</string>
     <string name="battery_edit_percentage_size_title">Yüzde Boyutunu Özelleştir</string>
@@ -426,6 +427,8 @@
     <string name="quick_settings_tiles_landscape">Yatay yönde</string>
     <string name="quick_settings_tiles_vertical_rows">Hızlı Ayar Satırları (Yatay)</string>
     <string name="quick_settings_tiles_vertical_columns">Hızlı Ayar Sütunları (Yatay)</string>
+    <string name="qs_blur_max_amount">Maksimum bulanıklık miktarı</string>
+    <string name="qs_blur_max_amount_summary">Hızlı Ayarlar için maksimum bulanıklık miktarını ayarlayın.</string>
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">Hızlı Ayar Widget\'larını Göster</string>
     <string name="add_widget">Widget Ekle</string>
@@ -436,7 +439,11 @@
     <string name="qs_widget_media_player">Medya Oynatıcı</string>
     <string name="qs_media_alert">Medya oynatıcı kaldırılamaz!</string>
     <string name="qs_widget_set_radius">Görüntü Yarıçapını Ayarla</string>
+    <string name="qs_widget_set_photo_mode">Fotoğraf Modu Ayarla</string>
     <string name="qs_widget_set_custom_photo">Özel Görüntü Ayarla</string>
+    <string name="qs_widget_photo_showcase">Vitrin</string>
+    <string name="qs_widget_photo_default_summary">Tek bir fotoğraf göster.</string>
+    <string name="qs_widget_photo_random_summary">Seçtiğiniz tüm fotoğrafları bir döngüde göster. Görüntü her 30 saniyede bir değişecek, ayrıca bir sonraki fotoğrafa geçmek için vitrine dokunabilirsiniz.</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Özelleştirme</string>
     <string name="qs_highlight_tile">Kutucukları vurgula</string>
@@ -846,6 +853,8 @@
     <string name="lockscreen_clock_custom_margins">Saat Kenar Boşlukları</string>
     <string name="lockscreen_clock_top_margin_title">Üst Kenar Boşluğu</string>
     <string name="lockscreen_clock_bottom_margin_title">Alt Kenar Boşluğu</string>
+    <string name="lockscreen_clock_bottom_margin_aod_title">Alt Kenar Boşluğu (AOD)</string>
+    <string name="lockscreen_clock_bottom_margin_aod_summary">Bu, AOD modunda saatin alt kenar boşluğunu kontrol edecek. Bu ayar, yalnızca AOD kesintisiz olarak ayarlanmışsa uygulanır.</string>
     <string name="lockscreen_clock_stock_prefs">Stok Kilit Ekranı Saati Tercihleri</string>
     <string name="lockscreen_stock_clock_red_one_title">Kırmızı Bir davranışı</string>
     <string name="lockscreen_stock_clock_red_one_disable">Kırmızı Biri Devre Dışı Bırak</string>
@@ -1238,6 +1247,8 @@
     <string name="theme_customization_navbar_summary">Özel navigasyon çubuğu stilini ayarla</string>
     <string name="theme_customization_toast_frame_title">Toast Çerçevesi</string>
     <string name="theme_customization_toast_frame_summary">Toast bildirim stilini değiştir</string>
+    <string name="theme_customization_spinner_style_title">Döner stili</string>
+    <string name="theme_customization_spinner_style_summary">Özel döner stili ayarla</string>
     <!-- Dark Shadow Theme Strings -->
     <string name="dark_shadow_ui_style_summary">Tema, ayrı ayrı seçilebilen Arka Plan ve Vurgu renklerini içerir.</string>
     <string name="dark_shadow_enable_theme">Temayı etkinleştir</string>
@@ -1468,6 +1479,9 @@
     <string name="qs_separate_hide_edit">Düzenleme düğmesini gizle</string>
     <string name="qs_separate_layout">Özel qs düzeni</string>
     <string name="qs_separate_layout_summary">Hızlı ayarlar panelinin üst düzenini özelleştir</string>
+    <string name="qs_separate_qs_area">Özel qs yan genişliği</string>
+    <string name="qs_separate_qs_area_summary">Açılır menünün genişliğini özelleştirin.</string>
+    <string name="qs_separate_qs_area_width">QS açılır menü genişliği</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Bir öğeye dokunarak düzenini yapılandırın</string>
     <string name="media_panel">Medya paneli</string>

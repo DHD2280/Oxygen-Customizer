@@ -168,6 +168,8 @@
     <string name="notif_default_expansion_title">Értesítések kibontása</string>
     <string name="notif_always_expand">Mindig kibontva</string>
     <string name="notif_always_collapse">Mindig összecsukva</string>
+    <string name="notif_show_buttons">Egy \'Kinyitás és becsukás\' gomb megjelenítése</string>
+    <string name="notif_show_buttons_summary">Az értesítési panelen láthatóvá válik a \'Kinyitás és becsukás\' gomb.\nCsak a felosztott stílussal kompatibilis.</string>
     <string name="customize_clear_all_button">Az \'Összes törlése\" gomb módosítása</string>
     <string name="clear_all_link_bg_accent">A háttér összekapcsolása a kiemelőszínnel</string>
     <string name="clear_all_bg_color">Egyéni háttérszín</string>
@@ -342,6 +344,7 @@
     <string name="inside_percentage_title">Belső százalék-kijelzés</string>
     <string name="inside_percentage_desc">Áthelyezi a százalékértéklet az akkuikonon belülre</string>
     <string name="battery_icon_color">Az akkuikon színei</string>
+    <string name="battery_icon_animate_charging">Töltésanimálás</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Az akkukijelzés szövege</string>
     <string name="battery_edit_percentage_size_title">A százalék-kijelző nagysága</string>
@@ -389,6 +392,7 @@
     <string name="battery_dotted_circle">Pontozott kör akku</string>
     <string name="battery_filled_circle">Telített kör</string>
     <string name="battery_landscape_kim">Fekvő Kim</string>
+    <string name="battery_landscape_one_ui">Fekvő One UI 7</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Bluetooth-ikon elrejtés</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Amikor nincs kapcsolat, elrejti a BT kijelzőjét.</string>
@@ -423,6 +427,8 @@
     <string name="quick_settings_tiles_landscape">Fekvő képernyő-tájolásban</string>
     <string name="quick_settings_tiles_vertical_rows">QS Sorok (Tájkép-mód)</string>
     <string name="quick_settings_tiles_vertical_columns">QS Oszlopok (Tájkép-mód)</string>
+    <string name="qs_blur_max_amount">A maximális elmosás értéke</string>
+    <string name="qs_blur_max_amount_summary">A Gyorsbeállításokhoz tartozó maximális elmosási érték beállítása</string>
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">Kisalkalmazások megjelenítése</string>
     <string name="add_widget">Kisalkalmazás hozzáadása</string>
@@ -471,6 +477,8 @@
     <string name="blur_color_dodge_luminosity">Színkeverés - Fényerő</string>
     <string name="blur_overlay_luminosity">Fedőrétegezés - Fényerő</string>
     <string name="blur_luminosity_overlay">Fényerő - Fedőrétegezés</string>
+    <string name="brightness_dark_icon">Az automatikus fényerő színnel való feltöltésének eltüntetése</string>
+    <string name="sliders_custom_radius">A csúszka egyéni lekerekítése</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Egyéni lekerekítés</string>
     <string name="qs_tile_custom_highlight">Egyedi lekerekítés</string>
@@ -686,6 +694,10 @@
     <string name="themed_icons_taskbar">A tálcán</string>
     <string name="hide_scroller">Rejtett görgetősáv</string>
     <string name="hide_scroller_summary">Görgetősáv elrejtése az alkalmazásfiókban</string>
+    <string name="dock_background">Dokkháttér</string>
+    <string name="dock_background_material">Materiális dokkháttér</string>
+    <string name="dock_background_radius">Háttér-lekerekítés</string>
+    <string name="dock_background_amount">Az elmosás mértéke</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigációs sáv</string>
     <string name="gesture_navigation_title">Navigáció kézmozdulatokkal</string>
@@ -837,6 +849,8 @@
     <string name="lockscreen_clock_custom_margins">Óramargók</string>
     <string name="lockscreen_clock_top_margin_title">Felső margó</string>
     <string name="lockscreen_clock_bottom_margin_title">Alsó margó</string>
+    <string name="lockscreen_clock_bottom_margin_aod_title">Alsó margó (AOD)</string>
+    <string name="lockscreen_clock_bottom_margin_aod_summary">Az óra alsó margóját vezérli \'Mindig bekapcsolva\' módban. Ez csak akkor érvényes, ha az AOD gördülékenyre van állítva.</string>
     <string name="lockscreen_clock_stock_prefs">Beállítások a gyári záróképernyő órájához</string>
     <string name="lockscreen_stock_clock_red_one_title">\'Red One\'-viselkedés</string>
     <string name="lockscreen_stock_clock_red_one_disable">A \'Red One\' letiltása</string>
@@ -1229,6 +1243,8 @@
     <string name="theme_customization_navbar_summary">Egyéni navigációssáv-stílus állítható be</string>
     <string name="theme_customization_toast_frame_title">Buborékkeret</string>
     <string name="theme_customization_toast_frame_summary">Egyéni üzenetbuborék-stílus állítható be</string>
+    <string name="theme_customization_spinner_style_title">A szpinner stílusa</string>
+    <string name="theme_customization_spinner_style_summary">Beállítható egyéni szpinner-stílus</string>
     <!-- Dark Shadow Theme Strings -->
     <string name="dark_shadow_ui_style_summary">A téma elkülönítetten választható Háttér- és Kiemelőszíneket tartalmaz.</string>
     <string name="dark_shadow_enable_theme">Témaengedélyezés</string>
@@ -1457,6 +1473,11 @@
     <string name="qs_separate_mods">Különálló Gyorsbeállítások</string>
     <string name="qs_separate_hide_menu">A Menügomb elrejtése</string>
     <string name="qs_separate_hide_edit">A Szerkesztőgomb elrejtése</string>
+    <string name="qs_separate_layout">Egyéni gyorsbeállítási elrendezés</string>
+    <string name="qs_separate_layout_summary">Személyre szabható a gyorsbeállítások-panel felső elrendezése</string>
+    <string name="qs_separate_qs_area">Egyéni oldalszélesség a gyorsbeállításokhoz</string>
+    <string name="qs_separate_qs_area_summary">Személyre szabható a megnyitás lehúzási szélessége.</string>
+    <string name="qs_separate_qs_area_width">A gyorsbeállítások lehúzási szélessége</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Nyomjon egy elemre az elrendezés szerkesztéséhez</string>
     <string name="media_panel">Médiapanel</string>

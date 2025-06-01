@@ -849,6 +849,8 @@
     <string name="lockscreen_clock_custom_margins">Margini Orologio</string>
     <string name="lockscreen_clock_top_margin_title">Margine superiore</string>
     <string name="lockscreen_clock_bottom_margin_title">Margine inferiore</string>
+    <string name="lockscreen_clock_bottom_margin_aod_title">Margine inferiore (AOD)</string>
+    <string name="lockscreen_clock_bottom_margin_aod_summary">Questo controllerà il margine inferiore dell\'orologio in modalità AOD. Si applica solo se AOD è impostato su \"senza interruzioni\".</string>
     <string name="lockscreen_clock_stock_prefs">Preferenze orologio schermata di blocco</string>
     <string name="lockscreen_stock_clock_red_one_title">Comportamento Uno rosso</string>
     <string name="lockscreen_stock_clock_red_one_disable">Disabilita Uno Rosso</string>
@@ -1241,6 +1243,8 @@
     <string name="theme_customization_navbar_summary">Imposta lo stile personalizzato della barra di navigazione</string>
     <string name="theme_customization_toast_frame_title">Cornici Notifiche Toast</string>
     <string name="theme_customization_toast_frame_summary">Cambia lo stile di notifica toast</string>
+    <string name="theme_customization_spinner_style_title">Stile barra di avanzamento circolare</string>
+    <string name="theme_customization_spinner_style_summary">Imposta barra di avanzamento circolare personalizzata</string>
     <!-- Dark Shadow Theme Strings -->
     <string name="dark_shadow_ui_style_summary">Il tema include colori di sfondo e di accento selezionabili separatamente.</string>
     <string name="dark_shadow_enable_theme">Abilita tema</string>
@@ -1471,6 +1475,9 @@
     <string name="qs_separate_hide_edit">Nascondi il pulsante di modifica</string>
     <string name="qs_separate_layout">Disposizione qs personalizzata</string>
     <string name="qs_separate_layout_summary">Personalizza la disposizione superiore del pannello delle Impostazioni Rapide</string>
+    <string name="qs_separate_qs_area">Personalizza larghezza laterale QS</string>
+    <string name="qs_separate_qs_area_summary">Personalizza la larghezza del menu a discesa per aprire QS</string>
+    <string name="qs_separate_qs_area_width">Larghezza tendina a discesa QS</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Tocca un elemento per configurare il suo layout</string>
     <string name="media_panel">Pannello multimediale</string>
