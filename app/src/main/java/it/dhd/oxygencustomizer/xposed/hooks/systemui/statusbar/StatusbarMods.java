@@ -41,6 +41,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -284,6 +286,15 @@ public class StatusbarMods extends XposedMods {
                         ? mContext.getResources().getIdentifier("status_bar_padding_end", "type/dimen", listenPackage)
                         : Math.round(SBPaddingEnd * screenWidth / 100f);
                 mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
+            }
+        });
+        hookAllMethods(PhoneStatusBarView, "onConfigurationChanged", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                FrameLayout frame = (FrameLayout) param.thisObject;
+                frame.postDelayed(() -> {
+                    updatePaddings(param.thisObject);
+                }, 1000L);
             }
         });
 
