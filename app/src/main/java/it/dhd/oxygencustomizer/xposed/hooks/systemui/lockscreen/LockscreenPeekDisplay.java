@@ -172,14 +172,12 @@ public class LockscreenPeekDisplay extends XposedMods {
                     int top = (int) param.args[3];
                     if (mPeekContainer == null) return;
                     ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, top + dp2px(mContext, mTopMargin), 0, 0);
-                    XposedBridge.log("setNotificationsConstraints " + top);
                 });
 
         ReflectedClass KeyguardStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardStatusBarView");
         KeyguardStatusBarView
                 .after("setNotificationPanelController")
                 .run(param -> {
-                    log("KeyguardStatusBarView setNotificationPanelController");
                     notificationController = param.args[0];
                 });
 
