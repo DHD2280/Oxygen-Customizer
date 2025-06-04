@@ -629,6 +629,7 @@ public class StatusbarMods extends XposedMods {
 
     @SuppressLint("DiscouragedApi")
     private void updatePaddings(Object thisObject) {
+        if (!statusBarPadding) return;
         if (mStatusBarContents == null) return;
 
         int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
