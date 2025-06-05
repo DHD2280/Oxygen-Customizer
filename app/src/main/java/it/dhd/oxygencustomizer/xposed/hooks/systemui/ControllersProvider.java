@@ -298,14 +298,16 @@ public class ControllersProvider extends XposedMods {
                         onKeyguardShowing(keyguardShowing);
                     });
         }
-        ReflectedClass StatusBarStateListener = ReflectedClass.of(
+        ReflectedClass StatusBarStateListener = ReflectedClass.ofIfPossible(
                 "com.android.systemui.shade.NotificationPanelViewController$StatusBarStateListener");
-        StatusBarStateListener
-                .after("onStateChanged")
-                .run(param -> {
-                    int state = (int) param.args[0];
-                    onStateChanged(state);
-                });
+        if (StatusBarStateListener.getClazz() != null) {
+            StatusBarStateListener
+                    .after("onStateChanged")
+                    .run(param -> {
+                        int state = (int) param.args[0];
+                        onStateChanged(state);
+                    });
+        }
 
         try {
             ReflectedClass OplusPersonalityManager = ReflectedClass.of("com.oplus.systemui.qs.personality.PersonalityManager");
