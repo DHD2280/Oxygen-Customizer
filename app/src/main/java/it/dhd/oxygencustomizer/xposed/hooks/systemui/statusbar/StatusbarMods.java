@@ -291,10 +291,7 @@ public class StatusbarMods extends XposedMods {
         hookAllMethods(PhoneStatusBarView, "onConfigurationChanged", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                FrameLayout frame = (FrameLayout) param.thisObject;
-                frame.postDelayed(() -> {
-                    updatePaddings(param.thisObject);
-                }, 1000L);
+                updateStatusbarHeight();
             }
         });
 
@@ -628,8 +625,7 @@ public class StatusbarMods extends XposedMods {
     //endregion
 
     @SuppressLint("DiscouragedApi")
-    private void updatePaddings(Object thisObject) {
-        if (!statusBarPadding) return;
+    private void updatePaddings() {
         if (mStatusBarContents == null) return;
 
         int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
