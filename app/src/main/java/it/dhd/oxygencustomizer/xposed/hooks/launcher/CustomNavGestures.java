@@ -85,6 +85,9 @@ public class CustomNavGestures extends XposedMods {
 	private Object currentFocusedTask = null;
 	private Class<?> OplusInputInterceptHelper = null;
 	private boolean mOverrideBack = false;
+	private int overrideMode = 0;
+	private int overrideLeft = 0;
+	private int overrideRight = 0;
 
 	private static final long LONG_PRESS_THRESHOLD = 500;
 	private final int TOUCH_SLOP = ViewConfiguration.get(mContext).getScaledTouchSlop();
@@ -127,6 +130,9 @@ public class CustomNavGestures extends XposedMods {
 		swipeUpPercentage = Xprefs.getSliderFloat( "swipeUpPercentage", 25f) / 100f;
 		mCircleToSearch = Xprefs.getBoolean("circleToSearchEnabled", false);
 		mOverrideBack = Xprefs.getBoolean("gesture_override_holdback", false);
+		overrideMode = Integer.parseInt(Xprefs.getString("gesture_override_holdback_mode", "0"));
+		overrideLeft = Integer.parseInt(Xprefs.getString("gesture_override_holdback_left", "0"));
+		overrideRight = Integer.parseInt(Xprefs.getString("gesture_override_holdback_right", "0"));
 	}
 
 	private static int readAction(SharedPreferences xprefs, String prefName) {
@@ -197,7 +203,13 @@ public class CustomNavGestures extends XposedMods {
 				.before("switchPreApp")
 					.run(param -> {
 						if (!mOverrideBack) return;
+
 						int side = (int) param.args[0];
+						if (overrideMode == 0 && overrideLeft == 0) return;
+						else if (overrideMode == 1) {
+							if (side == 0 && overrideLeft == 0) return;
+							else if (side == 1 && overrideRight == 0) return;
+						}
 						overrideBack(side);
 						param.setResult(null);
 					});
