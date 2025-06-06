@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -68,8 +69,9 @@ public class QsMenuItems extends XposedMods {
                     mMenuContext = (Context) param.args[0];
                 });
 
+
         MoreButtonPopupWindow
-                .before("initList")
+                .before(Pattern.compile("initList.*"))
                 .run(param -> {
                     List<Object> arrayList = new ArrayList<>();
                     Object ListBuilder = PopupListItemBuilder.getClazz().getConstructor().newInstance();
@@ -81,28 +83,32 @@ public class QsMenuItems extends XposedMods {
                     }
                     View view2 = (View) getObjectField(param.thisObject, "outSwitchButton");
                     if (view2 != null && view2.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view2);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view3 = (View) getObjectField(param.thisObject, "myDeviceLayout");//this.myDeviceLayout;
                     if (view3 != null && view3.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view3);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view4 = (View) getObjectField(param.thisObject, "settingsView");
                     if (view4 != null && view4.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view4);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view5 = (View) getObjectField(param.thisObject, "fgsButton");
                     if (view5 != null && view5.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view5);
                         arrayList.add(callMethod(builder, "build"));
@@ -116,7 +122,8 @@ public class QsMenuItems extends XposedMods {
                         v.setOnClickListener(clickListener);
                         v.setTag(menuOption[1]);
                         textView.setText(modRes.getString((Integer) menuOption[0]));
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", v);
                         arrayList.add(callMethod(builder, "build"));
@@ -152,28 +159,32 @@ public class QsMenuItems extends XposedMods {
                     }
                     View view2 = (View) getObjectField(param.thisObject, "fgsView");
                     if (view2 != null && view2.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view2);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view3 = (View) getObjectField(param.thisObject, "qsSettingsView");
                     if (view3 != null && view3.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view3);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view4 = (View) getObjectField(param.thisObject, "myDeviceView");
                     if (view4 != null && view4.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view4);
                         arrayList.add(callMethod(builder, "build"));
                     }
                     View view5 = (View) getObjectField(param.thisObject, "ccSettingView");
                     if (view5 != null && view5.getVisibility() == View.VISIBLE) {
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", view5);
                         arrayList.add(callMethod(builder, "build"));
@@ -187,7 +198,8 @@ public class QsMenuItems extends XposedMods {
                         v.setOnClickListener(clickListener);
                         v.setTag(menuOption[1]);
                         textView.setText(modRes.getString((Integer) menuOption[0]));
-                        Object builder = callMethod(ListBuilder, "reset");
+                        callMethod(ListBuilder, "reset");
+                        Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
                         builder = callMethod(builder, "setCustomItemView", v);
                         arrayList.add(callMethod(builder, "build"));
