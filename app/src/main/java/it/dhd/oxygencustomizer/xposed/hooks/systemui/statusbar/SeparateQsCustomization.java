@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
@@ -40,6 +39,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,6 +50,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
@@ -343,7 +344,7 @@ public class SeparateQsCustomization extends XposedMods {
                 Constructor<?> constructor = null;
 
                 for (Constructor<?> c : clazz.getDeclaredConstructors()) {
-                    if (c.getParameterCount() == 6) {
+                    if (c.getParameterCount() == 6 || c.getParameterCount() == 5) {
                         constructor = c;
                         break;
                     }
@@ -351,11 +352,19 @@ public class SeparateQsCustomization extends XposedMods {
 
                 if (constructor != null) {
                     constructor.setAccessible(true);
-                    Object viewCellInfo = constructor.newInstance(
-                            mOplusLargeTileContainerView,  // outer class instance
-                            widget,                        // View
-                            specs[0], specs[1], specs[2], specs[3]  // int, int, int, int
-                    );
+                    Object viewCellInfo;
+                    if (constructor.getParameterCount() == 6) {
+                        viewCellInfo = constructor.newInstance(
+                                mOplusLargeTileContainerView,  // outer class instance
+                                widget,                        // View
+                                specs[0], specs[1], specs[2], specs[3]  // int, int, int, int
+                        );
+                    } else {
+                        viewCellInfo = constructor.newInstance(
+                                widget,                        // View
+                                specs[0], specs[1], specs[2], specs[3]  // int, int, int, int
+                        );
+                    }
                     mViewCells.add(viewCellInfo);
                 } else {
                     log("Constructor ViewCellInfo not found!");
@@ -444,7 +453,6 @@ public class SeparateQsCustomization extends XposedMods {
                             widget.setTransitionAlpha(f2);
                             widget.setScaleX(f3);
                             widget.setScaleY(f3);
-
                         }
                     }
                 });
@@ -464,6 +472,43 @@ public class SeparateQsCustomization extends XposedMods {
                         }
                     }
                 });
+
+        // OOS 15.0.1
+        // OplusLargeTileContainerViewController for our views
+        ReflectedClass OplusLargeTileContainerViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerViewController");
+        if (OplusLargeTileContainerViewController.getClazz() != null) {
+            OplusLargeTileContainerViewController
+                    .before("setCusTranslationY")
+                    .run(param -> {
+                        // float f2, int i2, int i3
+                        XposedBridge.log("SeparateQsCustomization OplusQSFooterViewController updateViewState");
+                        View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
+                        int i3 = (int) param.args[2];
+                        float f2 = (float) param.args[1];
+                        if (i3 == 0) return;
+                        for (Map.Entry<View, int[]> entry : mWidgets.entrySet()) {
+                            View widget = entry.getKey();
+                            widget.setTranslationY(f2 - oplusLargeTileContainerView.getTranslationY());
+                        }
+                    });
+            OplusLargeTileContainerViewController
+                    .before("updateState")
+                    .run(param -> {
+                        // float f2, float f3, int i2
+                        XposedBridge.log("SeparateQsCustomization OplusQSFooterViewController updateViewState");
+                        float f2 = (float) param.args[0];
+                        float f3 = (float) param.args[1];
+                        int i2 = (int) param.args[2];
+                        if (i2 == 1) {
+                            for (Map.Entry<View, int[]> entry : mWidgets.entrySet()) {
+                                View widget = entry.getKey();
+                                widget.setTransitionAlpha(f2);
+                                widget.setScaleX(f3);
+                                widget.setScaleY(f3);
+                            }
+                        }
+                    });
+        }
 
         ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
         OplusPanelViewPagerController
