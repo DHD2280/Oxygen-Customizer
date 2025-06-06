@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
@@ -34,6 +35,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
 import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
@@ -83,6 +85,7 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -398,11 +401,17 @@ public class HeaderClock extends XposedMods {
                 "com.oplusos.systemui.ext.BaseClockExt");
 
         OplusClockExImpl
-                .before("setTextWithRedOneStyleInternal")
+                .before(Pattern.compile("setTextWithRedOneStyle.*"))
                         .run(param -> {
+                            boolean mIsDateTimePanel = false;
+                            if (isOOS1501()) {
+                                mIsDateTimePanel = getBooleanField(param.thisObject, "mIsDateTimePanel");
+                                if (!mIsDateTimePanel) return;
+                            }
                             TextView textView = (TextView) param.args[0];
                             if (showHeaderClock || stockClockRedStyle == 1) {
-                                param.setResult(null);
+                                if (isOOS1501()) param.setResult(mIsDateTimePanel ? true : false);
+                                else param.setResult(null);
                                 if (showHeaderClock) {
                                     textView.setText("");
                                     textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
@@ -431,7 +440,8 @@ public class HeaderClock extends XposedMods {
                                     }
                                 }
                                 textView.setText(spannableString, TextView.BufferType.SPANNABLE);
-                                param.setResult(null);
+                                if (isOOS1501()) param.setResult(mIsDateTimePanel ? true : false);
+                                else param.setResult(null);
                             }
                         });
 
