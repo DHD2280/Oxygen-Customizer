@@ -79,12 +79,20 @@ public class BluetoothWidget extends BaseDeviceWidget {
         removeAllViews();
         Drawable deviceIcon = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.ic_device, appContext.getTheme());
         if (mSettingsInterface) {
-            addView(getFakeView());
-            addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
+            if (mCurrentMode == WidgetMode.BIG) {
+                addView(getFakeView());
+                addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
+            } else {
+                addView(getSmallView(mBatteryLevel, deviceIcon));
+            }
             return;
         }
         if (!enabled) {
-            addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
+            if (mCurrentMode == WidgetMode.BIG) {
+                addView(getPercentageRow(deviceIcon, mDeviceName + " " + mBatteryLevel + "%"));
+            } else {
+                addView(getSmallView(mBatteryLevel, deviceIcon));
+            }
             return;
         }
 
@@ -265,6 +273,7 @@ public class BluetoothWidget extends BaseDeviceWidget {
         mContext.registerReceiver(bluetoothBatteryReceiver, new IntentFilter("android.bluetooth.device.action.BATTERY_LEVEL_CHANGED"));
 
         setupLayout();
+        onWidgetModeChanged();
     }
 
     private void setupLayout() {
@@ -395,6 +404,27 @@ public class BluetoothWidget extends BaseDeviceWidget {
         ImageView preview = new ImageView(mContext);
         preview.setLayoutParams(new LinearLayout.LayoutParams(dp2px(mContext, 60), dp2px(mContext, 60)));
         preview.setImageBitmap(mProgresses.get(0));
+        return preview;
+    }
+
+    private View getSmallView(int percentage, Drawable icon) {
+        ImageView preview = new ImageView(mContext);
+        preview.setLayoutParams(new LinearLayout.LayoutParams(dp2px(mContext, 60), dp2px(mContext, 60)));
+        preview.setImageBitmap(
+                ArcProgressWidget.generateBitmap(
+                        mContext,
+                        percentage,
+                        100,
+                        percentage + "%",
+                        40,
+                        icon,
+                        true,
+                        36,
+                        null,
+                        mProgressColor,
+                        mTextColor
+                )
+        );
         return preview;
     }
 

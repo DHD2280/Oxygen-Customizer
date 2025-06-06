@@ -43,7 +43,7 @@ public class ArcProgressWidget {
     }
 
     public static Bitmap generateBitmap(Context context, int percentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
-        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, iconDrawable, false, iconSizePx, "Usage", 28, tf, progressColor, textColor);
+        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, iconDrawable, true, iconSizePx, "Usage", 28, tf, progressColor, textColor);
     }
 
     public static Bitmap generateBitmap(Context context,

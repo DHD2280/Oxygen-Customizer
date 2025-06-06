@@ -360,7 +360,7 @@ public class DeviceWidgetView extends FrameLayout {
         if (widgets.isEmpty()) {
             if (mAddWidgetText.getParent() == null) {
                 mCustomRow.setGravity(Gravity.CENTER);
-                mCustomRow.addView(mAddWidgetText);
+                if (mSettingsInterface) mCustomRow.addView(mAddWidgetText);
             }
             return;
         }
@@ -376,7 +376,7 @@ public class DeviceWidgetView extends FrameLayout {
         }
         Arrays.fill(slots, false);
         for (BaseDeviceWidget widget : widgets) {
-            widget.setCustomColors(mProgressColor, mTextColor);
+            widget.setCustomColors(mCustomColor ? mProgressColor : getPrimaryColor(mContext), mTextColor);
             widget.setCustomDeviceName(mDeviceName);
             if (mSettingsInterface) {
                 widget.setWidgetClickListener(new BaseDeviceWidget.OnWidgetClick() {
@@ -461,13 +461,7 @@ public class DeviceWidgetView extends FrameLayout {
                 params = new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f);
             }
 
-            if (i == 0) {
-                params.setMargins(0, 0, dp2px(mContext, 12), 0);
-            } else if (i == childCount - 1) {
-                params.setMargins(dp2px(mContext, 12), 0, 0, 0);
-            } else {
-                params.setMargins(dp2px(mContext, 12), 0, dp2px(mContext, 12), 0);
-            }
+            params.setMargins(dp2px(mContext, 12), 0, dp2px(mContext, 12), 0);
             widget.setLayoutParams(params);
         }
     }
