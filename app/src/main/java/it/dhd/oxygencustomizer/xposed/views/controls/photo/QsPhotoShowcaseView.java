@@ -153,8 +153,17 @@ public class QsPhotoShowcaseView extends ImageView {
 
     public void switchDrawable() {
         if (mDrawables.isEmpty()) return;
+
         mCurrentDrawableIndex = (mCurrentDrawableIndex + 1) % mDrawables.size();
-        Drawable[] layers = new Drawable[]{getDrawable(), mDrawables.get(mCurrentDrawableIndex)};
+        Drawable currentDrawable = getDrawable();
+        Drawable nextDrawable = mDrawables.get(mCurrentDrawableIndex);
+
+        if (currentDrawable == null || nextDrawable == null || mDrawables.size() == 1) {
+            setImageDrawable(nextDrawable);
+            return;
+        }
+
+        Drawable[] layers = new Drawable[]{currentDrawable, nextDrawable};
         TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
         post(() -> {
             setImageDrawable(transitionDrawable);
