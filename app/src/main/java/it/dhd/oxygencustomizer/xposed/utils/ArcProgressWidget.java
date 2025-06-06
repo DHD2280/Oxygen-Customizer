@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
 public class ArcProgressWidget {
 
     public static Bitmap generateBitmap(Context context, int percentage, String textInside, int textInsideSizePx, @Nullable String textBottom, int textBottomSizePx, @Nullable String tf) {
-        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, null, 28, textBottom, textBottomSizePx, tf, Color.WHITE, Color.WHITE);
+        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, null, false, 28, textBottom, textBottomSizePx, tf, Color.WHITE, Color.WHITE);
     }
 
     /**
@@ -31,18 +31,19 @@ public class ArcProgressWidget {
      * @param textInside The text to display inside the circle.
      * @param textInsideSizePx The text size in pixels.
      * @param iconDrawable The drawable icon to display inside the circle (optional).
+     * @param colorFilter Whether to apply a color filter to the icon.
      * @param iconSizePx The icon size in pixels.
      * @param tf The typeface to use for the text (optional).
      * @param progressColor The color of the progress arc.
      * @param textColor The color of the text.
      * @return A bitmap with the circular progress bar.
      */
-    public static Bitmap generateBitmap(Context context, int percentage, int maxPercentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
-        return generateBitmap(context, percentage, maxPercentage, textInside, textInsideSizePx, iconDrawable, iconSizePx, "Usage", 28, tf, progressColor, textColor);
+    public static Bitmap generateBitmap(Context context, int percentage, int maxPercentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, boolean colorFilter, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
+        return generateBitmap(context, percentage, maxPercentage, textInside, textInsideSizePx, iconDrawable, colorFilter, iconSizePx, "Usage", 28, tf, progressColor, textColor);
     }
 
     public static Bitmap generateBitmap(Context context, int percentage, String textInside, int textInsideSizePx, @Nullable Drawable iconDrawable, int iconSizePx, @Nullable String tf, @ColorInt int progressColor, @ColorInt int textColor) {
-        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, iconDrawable, iconSizePx, "Usage", 28, tf, progressColor, textColor);
+        return generateBitmap(context, percentage, 100, textInside, textInsideSizePx, iconDrawable, false, iconSizePx, "Usage", 28, tf, progressColor, textColor);
     }
 
     public static Bitmap generateBitmap(Context context,
@@ -51,6 +52,7 @@ public class ArcProgressWidget {
                                         String textInside,
                                         int textInsideSizePx,
                                         @Nullable Drawable iconDrawable,
+                                        boolean colorFilter,
                                         int iconSizePx,
                                         @Nullable String textBottom,
                                         int textBottomSizePx,
@@ -93,7 +95,7 @@ public class ArcProgressWidget {
             int right = left + size;
             int bottom = top + size;
             iconDrawable.setBounds(left, top, right, bottom);
-            iconDrawable.setColorFilter(new BlendModeColorFilter(Color.WHITE, BlendMode.SRC_IN));
+            if (colorFilter) iconDrawable.setColorFilter(new BlendModeColorFilter(Color.WHITE, BlendMode.SRC_IN));
             iconDrawable.draw(canvas);
         } else if (textBottom != null) {
             mTextPaint.setTextSize(dp2px(context, textBottomSizePx));

@@ -111,7 +111,7 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 d.setTintList(null);
                 mConditionImage.setImageTintList(null);
-                mConditionImage.setImageDrawable(d);
+                mConditionImage.setImageDrawable(d.getConstantState().newDrawable().mutate());
                 mLocation.setText(mWeatherInfo.city.trim() + " " + mWeatherInfo.temp + " " + mWeatherInfo.tempUnits);
                 mLocation.setTextColor(mTextColor);
                 mCurrentCondition.setText(formattedCondition);
@@ -137,6 +137,7 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
                                             "20°C",
                                             40,
                                             ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.google_30, appContext.getTheme()),
+                                            false,
                                             36,
                                             null,
                                             mProgressColor,
@@ -150,7 +151,7 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
             Drawable d;
             String textInside;
             progress = Integer.parseInt(mWeatherInfo.temp);
-            d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
+            d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode).getConstantState().newDrawable().mutate();
             if (!mWeatherInfo.dayForecasts.isEmpty()) {
                 maxProgress = Integer.parseInt(mWeatherInfo.dayForecasts.get(0).high);
             }
@@ -165,6 +166,7 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
                                             textInside,
                                             40,
                                             d,
+                                            false,
                                             36,
                                             null,
                                             mProgressColor,
