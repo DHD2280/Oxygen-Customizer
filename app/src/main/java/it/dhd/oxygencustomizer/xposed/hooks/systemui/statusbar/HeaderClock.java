@@ -401,8 +401,47 @@ public class HeaderClock extends XposedMods {
                 "com.oplusos.systemui.ext.BaseClockExt");
 
         OplusClockExImpl
-                .before(Pattern.compile("setTextWithRedOneStyle.*"))
+                .before("setTextWithRedOneStyleInternal")
+                .run(param -> {
+                    TextView textView = (TextView) param.args[0];
+                    if (showHeaderClock || stockClockRedStyle == 1) {
+                        param.setResult(null);
+                        if (showHeaderClock) {
+                            textView.setText("");
+                            textView.setTextColor(Color.TRANSPARENT); // Force transparent if custom clock is enabled
+                        }
+                        return;
+                    }
+
+                    if (stockClockRedStyle == 2 || stockClockRedStyle == 3) {
+                        CharSequence charSequence = (CharSequence) param.args[1];
+                        StringBuilder sb = new StringBuilder(charSequence);
+                        int length = sb.length();
+                        for (int i = 0; i < length; i++) {
+                            char c = sb.charAt(i);
+                            if (c == ':') {
+                                sb.replace(i, i + 1, "\u200e∶");
+                                break;
+                            }
+                        }
+
+                        int mColorAccent = getPrimaryColor(mContext);
+                        int colorToApply = stockClockRedStyle == 2 ? mColorAccent : stockClockRedOverrideColor;
+                        SpannableString spannableString = new SpannableString(sb);
+                        for (int i = 0; i < 2 && i < length; i++) {
+                            if (sb.charAt(i) == '1') {
+                                spannableString.setSpan(new ForegroundColorSpan(colorToApply), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+                        }
+                        textView.setText(spannableString, TextView.BufferType.SPANNABLE);
+                        param.setResult(null);
+                    }
+                });
+
+        OplusClockExImpl
+                .before("setTextWithRedOneStyle")
                         .run(param -> {
+                            if (!isOOS1501()) return;
                             boolean mIsDateTimePanel = false;
                             if (isOOS1501()) {
                                 mIsDateTimePanel = getBooleanField(param.thisObject, "mIsDateTimePanel");
