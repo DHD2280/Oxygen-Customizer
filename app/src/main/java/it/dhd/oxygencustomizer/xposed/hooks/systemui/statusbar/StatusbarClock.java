@@ -385,7 +385,7 @@ public class StatusbarClock extends XposedMods {
                                 tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
                             }
                             if (!mShowSeconds) {
-                                float totalWidth = measureTextWithSpans();
+                                float totalWidth = measureTextWithSpans(false);
                                 totalWidth += rightClockPadding*2;
                                 if (clockChip) {
                                     totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
@@ -408,7 +408,7 @@ public class StatusbarClock extends XposedMods {
                                     } else {
                                         tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
                                     }
-                                    float totalWidth = measureTextWithSpans();
+                                    float totalWidth = measureTextWithSpans(true);
                                     totalWidth += rightClockPadding*2;
                                     if (clockChip) {
                                         totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
@@ -556,7 +556,7 @@ public class StatusbarClock extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
-    private float measureTextWithSpans() {
+    private float measureTextWithSpans(boolean countSeconds) {
         TextPaint textPaint = new TextPaint();
         float textSizePx = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP,
@@ -570,7 +570,7 @@ public class StatusbarClock extends XposedMods {
 
         fullText.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
 
-        fullText.append(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+        fullText.append(new SimpleDateFormat(countSeconds && mShowSeconds ? "HH:mm:ss" : "HH:mm", Locale.getDefault()).format(new Date()));
 
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
             fullText.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
