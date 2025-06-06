@@ -356,7 +356,7 @@ public class HeaderImage extends XposedMods {
                         if (!isSeparateStyle()) return;
                         View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
                         int i3 = (int) param.args[2];
-                        float f2 = (float) param.args[1];
+                        float f2 = (float) param.args[0];
                         if (i3 == 0) return;
                         for (View v : mQsHeaderLayouts) {
                             v.setTranslationY(f2 - oplusLargeTileContainerView.getTranslationY());
