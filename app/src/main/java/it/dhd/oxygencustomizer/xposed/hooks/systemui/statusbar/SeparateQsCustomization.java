@@ -481,10 +481,9 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("setCusTranslationY")
                     .run(param -> {
                         // float f2, int i2, int i3
-                        XposedBridge.log("SeparateQsCustomization OplusQSFooterViewController updateViewState");
                         View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
                         int i3 = (int) param.args[2];
-                        float f2 = (float) param.args[1];
+                        float f2 = (float) param.args[0];
                         if (i3 == 0) return;
                         for (Map.Entry<View, int[]> entry : mWidgets.entrySet()) {
                             View widget = entry.getKey();
@@ -495,7 +494,6 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("updateState")
                     .run(param -> {
                         // float f2, float f3, int i2
-                        XposedBridge.log("SeparateQsCustomization OplusQSFooterViewController updateViewState");
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
                         int i2 = (int) param.args[2];
