@@ -32,9 +32,9 @@ import com.android.systemui.statusbar.AlphaOptimizedImageView;
 
 import java.util.Collection;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -179,6 +179,7 @@ public class StatusbarNotification extends XposedMods {
                 .run(param -> Scroller = param.thisObject);
 
         ReflectedClass OplusClearAllButton = ReflectedClass.of(
+                "com.oplus.systemui.notification.clearall.OplusClearAllButton", /* OOS 15.0.1 */
                 "com.oplus.systemui.statusbar.notification.view.OplusClearAllButton", /* OOS 15-14 */
                 "com.oplusos.systemui.notification.view.OplusClearAllButton" // OOS 13
         );
@@ -202,6 +203,40 @@ public class StatusbarNotification extends XposedMods {
                     updateButton();
                     mClearAllButton.addOnLayoutChangeListener(listener);
                 });
+
+        ReflectedClass ClearAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.clearall.ClearAllController");
+        if (ClearAllController.getClazz() != null) {
+            ClearAllController
+                    .before("getPlatformBlurDrawable")
+                    .run(param -> {
+                        if (customizeClearButton) {
+                            Drawable customBg = (Drawable) param.args[0];
+                            if (linkBackgroundAccent) {
+                                customBg.setTint(getPrimaryColor(mContext));
+                            } else {
+                                customBg.setTint(clearButtonBgColor);
+                            }
+                            param.setResult(customBg);
+                        }
+                    });
+            ClearAllController
+                    .after("updateClearAllBackground")
+                    .run(param -> {
+                        XposedBridge.log("StatusbarNotification updateClearAllBackground" );
+                        if (customizeClearButton) {
+                            ImageView clearAllButton = (ImageView) getObjectField(param.thisObject, "clearAll");
+                            Drawable icon = clearAllButton.getDrawable();
+                            if (linkIconAccent)
+                                icon.setTint(getPrimaryColor(mContext));
+                            else
+                                icon.setTint(clearButtonIconColor);
+                            icon.invalidateSelf();
+                            clearAllButton.setImageDrawable(icon);
+                            XposedBridge.log(TAG + "updateClearAllBackground: icon color set to " + clearButtonIconColor);
+                        }
+                    });
+        }
+
     }
 
     public void expandAll(boolean expand) {
@@ -306,18 +341,20 @@ public class StatusbarNotification extends XposedMods {
     private void updateButton() {
         if (mClearAllButton == null) return;
         if (customizeClearButton) {
-            Drawable customBg = defaultClearAllBg;
-            if (linkBackgroundAccent) {
-                customBg.setTint(getPrimaryColor(mContext));
-            } else {
-                customBg.setTint(clearButtonBgColor);
+            if (defaultClearAllBg != null) {
+                Drawable customBg = defaultClearAllBg;
+                if (linkBackgroundAccent) {
+                    customBg.setTint(getPrimaryColor(mContext));
+                } else {
+                    customBg.setTint(clearButtonBgColor);
+                }
+                mClearAllButton.setBackground(customBg);
             }
             Drawable icon = defaultClearAllIcon;
             if (linkIconAccent)
                 icon.setTint(getPrimaryColor(mContext));
             else
                 icon.setTint(clearButtonIconColor);
-            mClearAllButton.setBackground(customBg);
             mClearAllButton.setImageDrawable(icon);
         } else {
             if (defaultClearAllIcon != null) {
