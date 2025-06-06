@@ -130,7 +130,6 @@ jobs:
       - name: Commit
         uses: github-actions-x/commit@v2.9
         with:
-          fetch-depth: 0
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: 'nightly-versioning'
           commit-message: 'Update nightly version'
