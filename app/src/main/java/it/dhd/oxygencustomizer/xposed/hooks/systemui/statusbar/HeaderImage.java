@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
@@ -16,6 +17,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_PREFS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -47,16 +49,19 @@ import com.bosphere.fadingedgelayout.FadingEdgeLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -207,7 +212,7 @@ public class HeaderImage extends XposedMods {
                                                 isResetNeeded = true;
                                             }
                                             if (expansion >= .20f) {
-                                                if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                                if (Build.VERSION.SDK_INT >= 35 && !isSeparateStyle()) {
                                                     for (View v : mQsHeaderLayouts) {
                                                         v.setAlpha(1f);
                                                         v.setVisibility(View.VISIBLE);
@@ -222,7 +227,7 @@ public class HeaderImage extends XposedMods {
                                             isFirstExpansionIgnored = true;
                                             isResetNeeded = false;
                                         }
-                                        if (Build.VERSION.SDK_INT >= 35 && !QsStyleObserver.isSeparateStyle()) {
+                                        if (Build.VERSION.SDK_INT >= 35 && !isSeparateStyle()) {
                                             for (View v : mQsHeaderLayouts) {
                                                 if (v != null) {
                                                     if (expansion <= .900f) {
@@ -341,21 +346,36 @@ public class HeaderImage extends XposedMods {
         }
 
         // OOS 15.0.1
-        // OplusQSFooterViewController for #updateViewState
-        ReflectedClass OplusQSFooterViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.footer.OplusQSFooterViewController");
-        if (OplusQSFooterViewController.getClazz() != null) {
-            OplusQSFooterViewController
-                    .before("updateViewState")
+        // OplusLargeTileContainerViewController for our views
+        ReflectedClass OplusLargeTileContainerViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerViewController");
+        if (OplusLargeTileContainerViewController.getClazz() != null) {
+            OplusLargeTileContainerViewController
+                    .before("setCusTranslationY")
                     .run(param -> {
-                        // float f2, float f3
-                        if (!(param.args[0] instanceof Float)) return;
-                        if (!(param.args[1] instanceof Float)) return;
+                        // float f2, int i2, int i3
+                        if (!isSeparateStyle()) return;
+                        View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
+                        int i3 = (int) param.args[2];
+                        float f2 = (float) param.args[1];
+                        if (i3 == 0) return;
+                        for (View v : mQsHeaderLayouts) {
+                            v.setTranslationY(f2 - oplusLargeTileContainerView.getTranslationY());
+                        }
+                    });
+            OplusLargeTileContainerViewController
+                    .before("updateState")
+                    .run(param -> {
+                        // float f2, float f3, int i2
+                        if (!isSeparateStyle()) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
-                        for (View v : mQsHeaderLayouts) {
-                            v.setTransitionAlpha(f2);
-                            v.setScaleX(f3);
-                            v.setScaleY(f3);
+                        int i2 = (int) param.args[2];
+                        if (i2 == 1) {
+                            for (View v : mQsHeaderLayouts) {
+                                v.setTransitionAlpha(f2);
+                                v.setScaleX(f3);
+                                v.setScaleY(f3);
+                            }
                         }
                     });
         }
