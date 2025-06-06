@@ -53,6 +53,17 @@ public class NotificationVanillaIceCream extends XposedMods {
                         param.setResult(null);
                     }
                 });
+        ViewBlurManager
+                .before("blurForHeadsUp")
+                .run(nullReturner);
+        ViewBlurManager
+                .before("cancelBlurForHeadsUp")
+                .run(nullReturner);
+
+        ReflectedClass NotificationChildrenContainerExtImp = ReflectedClass.of("com.oplus.systemui.statusbar.notification.stack.NotificationChildrenContainerExtImp");
+        NotificationChildrenContainerExtImp
+                .before("getHeaderBlurDrawable")
+                .run(nullReturner);
 
     }
 
