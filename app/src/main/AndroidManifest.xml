@@ -32,6 +32,8 @@
         tools:ignore="ScopedStorage" />
     <!-- Calendar Widget -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!-- Schedule Calendar update -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".OxygenCustomizer"
@@ -104,6 +106,12 @@
         </activity>
         <activity
             android:name=".ui.activity.AuthActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Translucent" />
+
+        <activity
+            android:name=".ui.activity.ShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:theme="@style/Theme.Material3.Translucent" />
@@ -191,7 +199,8 @@
         <activity
             android:name=".google"
             android:exported="false"
-            android:label="Google">
+            android:label="Google"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -201,7 +210,8 @@
         <activity
             android:name=".google_new_dark"
             android:exported="false"
-            android:label="Google Material Dark">
+            android:label="Google Material Dark"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -211,7 +221,8 @@
         <activity
             android:name=".google_new_light"
             android:exported="false"
-            android:label="Google Material Light">
+            android:label="Google Material Light"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -221,7 +232,8 @@
         <activity
             android:name=".outline"
             android:exported="false"
-            android:label="Outline">
+            android:label="Outline"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -231,7 +243,8 @@
         <activity
             android:name=".weather_color"
             android:exported="false"
-            android:label="LockClock">
+            android:label="LockClock"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -241,7 +254,8 @@
         <activity
             android:name=".weatherclient"
             android:exported="false"
-            android:label="Weather Client">
+            android:label="Weather Client"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -251,7 +265,8 @@
         <activity
             android:name=".stickers"
             android:exported="false"
-            android:label="Stickers">
+            android:label="Stickers"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -261,7 +276,8 @@
         <activity
             android:name=".marshmallow"
             android:exported="false"
-            android:label="Marshmallow">
+            android:label="Marshmallow"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -271,7 +287,8 @@
         <activity
             android:name=".icons8_color_hand"
             android:exported="false"
-            android:label="Color Hand">
+            android:label="Color Hand"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -280,7 +297,8 @@
         <activity
             android:name=".weather_faded"
             android:exported="false"
-            android:label="Faded">
+            android:label="Faded"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -290,7 +308,8 @@
         <activity
             android:name=".weather_weezle"
             android:exported="false"
-            android:label="Weezle">
+            android:label="Weezle"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -300,7 +319,8 @@
         <activity
             android:name=".weather_gs6"
             android:exported="false"
-            android:label="Galaxy S6">
+            android:label="Galaxy S6"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -310,7 +330,8 @@
         <activity
             android:name=".weather_miui"
             android:exported="false"
-            android:label="MIUI">
+            android:label="MIUI"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -320,7 +341,8 @@
         <activity
             android:name=".weather_sthul"
             android:exported="false"
-            android:label="Sthul">
+            android:label="Sthul"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -330,7 +352,8 @@
         <activity
             android:name=".weather_tapas"
             android:exported="false"
-            android:label="Tapas">
+            android:label="Tapas"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -340,7 +363,8 @@
         <activity
             android:name=".weather_magical"
             android:exported="false"
-            android:label="Magical">
+            android:label="Magical"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -350,7 +374,8 @@
         <activity
             android:name=".weather_vclouds"
             android:exported="false"
-            android:label="VClouds">
+            android:label="VClouds"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -360,7 +385,8 @@
         <activity
             android:name=".nothing"
             android:exported="false"
-            android:label="Nothing">
+            android:label="Nothing"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="org.omnirom.WeatherIconPack" />
                 <category android:name="android.intent.category.DEFAULT" />
