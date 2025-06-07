@@ -1155,7 +1155,6 @@ public class PreferenceHelper {
 
         boolean showAdvancedCustomizations = batteryStyle >= Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYA &&
                 batteryStyle <= Constants.Preferences.BatteryPrefs.BATTERY_STYLE_LANDSCAPE_BATTERYO;
-        boolean showColorPickers = instance.mPreferences.getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false);
         boolean showRainbowBattery = batteryStyle == BATTERY_STYLE_LANDSCAPE_BATTERYI ||
                 batteryStyle == BATTERY_STYLE_LANDSCAPE_BATTERYJ;
         boolean showCommonCustomizations = instance.mPreferences.getBoolean(CUSTOMIZE_BATTERY_ICON, false);
@@ -1171,6 +1170,7 @@ public class PreferenceHelper {
         boolean circleBattery = batteryStyle == BATTERY_STYLE_CIRCLE ||
                 batteryStyle == BATTERY_STYLE_DOTTED_CIRCLE ||
                 batteryStyle == BATTERY_STYLE_FILLED_CIRCLE;
+        boolean showColorPickers = (showAdvancedCustomizations || circleBattery) && instance.mPreferences.getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false);
 
         return switch (key) {
             case "category_battery_icon_settings",
