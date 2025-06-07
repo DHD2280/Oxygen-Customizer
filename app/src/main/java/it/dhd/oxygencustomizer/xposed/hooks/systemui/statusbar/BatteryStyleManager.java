@@ -219,11 +219,11 @@ public class BatteryStyleManager extends XposedMods {
     private boolean customizePercSize = false;
     private int mBatteryPercSize = 12;
     private boolean mIndicateCharging = false,
-                    mIndicateFast = false,
-                    mIndicatePowerSave = false;
+            mIndicateFast = false,
+            mIndicatePowerSave = false;
     private int mTextChargingColor = Color.WHITE,
-                mTextFastColor = Color.WHITE,
-                mTextPowerSaveColor = Color.WHITE;
+            mTextFastColor = Color.WHITE,
+            mTextPowerSaveColor = Color.WHITE;
     private boolean mTextAttachBatteryBar = false;
     private int mBatteryBarColor;
 
@@ -331,7 +331,8 @@ public class BatteryStyleManager extends XposedMods {
             if (!mTextAttachBatteryBar) {
                 try {
                     BatteryBarView.unRegisterListener(mColorListener);
-                } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {
+                }
             } else {
                 BatteryBarView.registerListener(mColorListener);
             }
@@ -460,6 +461,13 @@ public class BatteryStyleManager extends XposedMods {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 log("BatteryViewBinder bind called");
+                if (param.args[0] instanceof View v) updateBatteryViewValues(v);
+            }
+        });
+        hookAllMethods(BatteryViewBinder, "bind$updateBatteryContentView", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                log("bind$updateBatteryContentView called");
                 if (param.args[0] instanceof View v) updateBatteryViewValues(v);
             }
         });
@@ -871,7 +879,7 @@ public class BatteryStyleManager extends XposedMods {
                     new CircleBattery(context, frameColor);
             case BATTERY_STYLE_FILLED_CIRCLE -> new CircleFilledBattery(context, frameColor);
             case BATTERY_STYLE_LANDSCAPE_KIM -> new LandscapeBatteryKim(context, frameColor);
-            case BATTERY_STYLE_LANDSCAPE_ONE_UI7  -> new LandscapeBatteryOneUI7(context, frameColor);
+            case BATTERY_STYLE_LANDSCAPE_ONE_UI7 -> new LandscapeBatteryOneUI7(context, frameColor);
             default -> null;
         };
 
