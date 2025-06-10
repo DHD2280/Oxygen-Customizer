@@ -439,7 +439,11 @@
     <string name="qs_widget_media_player">Médialejátszó</string>
     <string name="qs_media_alert">A Médialejátszó nem távolítható el!</string>
     <string name="qs_widget_set_radius">A képlekerekítés beállítása</string>
+    <string name="qs_widget_set_photo_mode">Fotómód beállítása</string>
     <string name="qs_widget_set_custom_photo">Egyéni kép beállítása</string>
+    <string name="qs_widget_photo_showcase">Bemutató</string>
+    <string name="qs_widget_photo_default_summary">Egy fotó</string>
+    <string name="qs_widget_photo_random_summary">Az összes kiválasztott fotó közül a kép 30 másodpercenként változik, a bemutató ikonra koppintva pedig a következő fotóra ugrik.</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">QS Testreszabások</string>
     <string name="qs_highlight_tile">Kiemelt csempék</string>
