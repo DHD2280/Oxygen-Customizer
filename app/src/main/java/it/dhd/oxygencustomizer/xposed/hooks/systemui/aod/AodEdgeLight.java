@@ -21,6 +21,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.E
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_WIDTH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -38,8 +39,8 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightControllerImpl;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
 
 public class AodEdgeLight extends XposedMods {
 
@@ -94,7 +95,7 @@ public class AodEdgeLight extends XposedMods {
         mEdgeLightWidth = Xprefs.getSliderFloat(EDGE_LIGHT_WIDTH, 20f);
         mEdgeLightColorMode = getColorMode(Integer.parseInt(Xprefs.getString(EDGE_LIGHT_COLOR_MODE, "0")));
         mAlwaysTriggerOnPulse = Xprefs.getBoolean(EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE, false);
-        mRetick = Xprefs.getBoolean(EDGE_LIGHT_RETICK, true);
+        mRetick = Xprefs.getBoolean(EDGE_LIGHT_RETICK, false);
         mRetickDuration = getRetickerDuration(Integer.parseInt(Xprefs.getString(EDGE_LIGHT_RETICK_DURATION, "0")));
         mEdgeLightCustomColor = Xprefs.getInt(EDGE_LIGHT_CUSTOM_COLOR, Color.RED);
         mEdgeDrawBlur = Xprefs.getBoolean(EDGE_LIGHT_DRAW_BLUR, false);
@@ -124,7 +125,7 @@ public class AodEdgeLight extends XposedMods {
                     .run(param -> {
                         mScreenCornerRadius = getIntField(param.thisObject, "mScreenCornerRadius");
                         EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
-                        XposedBridge.log("AodEdgeLight: mScreenCornerRadius = " + mScreenCornerRadius);
+                        refreshEdgeLight();
                     });
         } else {
             ReflectedClass QuickStepContract = ReflectedClass.of("com.android.systemui.shared.system.QuickStepContract");
@@ -139,6 +140,16 @@ public class AodEdgeLight extends XposedMods {
             EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
         }
 
+        ReflectedClass NotificationPanelViewController = ReflectedClass.ofIfPossible("com.android.systemui.shade.NotificationPanelViewController");
+        if (NotificationPanelViewController.getClazz() != null) {
+            NotificationPanelViewController
+                    .after("loadDimens")
+                    .run(param -> {
+                        mScreenCornerRadius = getIntField(getObjectField(param.thisObject, "mQsController"), "mScreenCornerRadius");
+                        EdgeLightControllerImpl.getInstance(mContext).setScreenRadius(mScreenCornerRadius);
+                    });
+        }
+
         ReflectedClass DozeParameters = ReflectedClass.of("com.android.systemui.statusbar.phone.DozeParameters");
         DozeParameters
                 .afterConstruction()
@@ -150,24 +161,43 @@ public class AodEdgeLight extends XposedMods {
 
         ReflectedClass OplusAodCurvedDisplayView = ReflectedClass.of("com.oplus.systemui.aod.surface.OplusAodCurvedDisplayView");
         OplusAodCurvedDisplayView
+                .afterConstruction()
+                .run(param -> {
+                    if (!isOOS1501()) return;
+                    int maskDuration = getIntField(param.thisObject, "mNotificationMaskMoveDuration");
+                    int fadeInDuration = getIntField(param.thisObject, "AOD_NOTIFICATION_FADE_DURATION");
+                    int fadeOutDuration = getIntField(param.thisObject, "mNotificationFadeOutDuration");
+                    int repeatCount = getIntField(param.thisObject, "mAnimRepeatTotalCount");
+                    if (repeatCount == 0) {
+                        repeatCount = 1;
+                    }
+
+                    long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
+                    totalDuration *= repeatCount;
+
+                    XposedBridge.log("AodEdgeLight: totalDuration = " + totalDuration);
+                    mTotalDuration = totalDuration;
+                    EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
+                });
+        OplusAodCurvedDisplayView
                 .after("initAnimatorData")
-                        .run(param -> {
-                            XposedBridge.log("AodEdgeLight: initAnimatorData");
-                            int maskDuration = getIntField(param.thisObject, "mNotificationMaskMoveDuration");
-                            int fadeInDuration = getIntField(param.thisObject, "AOD_NOTIFICATION_FADE_DURATION");
-                            int fadeOutDuration = getIntField(param.thisObject, "mNotificationFadeOutDuration");
-                            int repeatCount = getIntField(param.thisObject, "mAnimRepeatTotalCount");
-                            if (repeatCount == 0) {
-                                repeatCount = 1;
-                            }
+                .run(param -> {
+                    XposedBridge.log("AodEdgeLight: initAnimatorData");
+                    int maskDuration = getIntField(param.thisObject, "mNotificationMaskMoveDuration");
+                    int fadeInDuration = getIntField(param.thisObject, "AOD_NOTIFICATION_FADE_DURATION");
+                    int fadeOutDuration = getIntField(param.thisObject, "mNotificationFadeOutDuration");
+                    int repeatCount = getIntField(param.thisObject, "mAnimRepeatTotalCount");
+                    if (repeatCount == 0) {
+                        repeatCount = 1;
+                    }
 
-                            long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
-                            totalDuration *= repeatCount;
+                    long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
+                    totalDuration *= repeatCount;
 
-                            XposedBridge.log("AodEdgeLight: totalDuration = " + totalDuration);
-                            mTotalDuration = totalDuration;
-                            EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
-                        });
+                    XposedBridge.log("AodEdgeLight: totalDuration = " + totalDuration);
+                    mTotalDuration = totalDuration;
+                    EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
+                });
         OplusAodCurvedDisplayView
                 .before("onDraw")
                 .run(param -> {
@@ -184,24 +214,40 @@ public class AodEdgeLight extends XposedMods {
                     }
                     param.setResult(null);
                 });
+        OplusAodCurvedDisplayView
+                .after("updateReceiveNotification")
+                .run(param -> {
+                    Object mIncomingNotiPaint = getObjectField(param.thisObject, "mIncomingNotiPaint");
+                    int mMainColor = getIntField(mIncomingNotiPaint, "mMainColor");
+                    EdgeLightControllerImpl.getInstance(mContext).setNotificationColor(mMainColor);
+                });
 
         ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
         CentralSurfacesImpl
                 .after("updateDozingState")
-                        .run(param -> {
-                            boolean dozing = getBooleanField(param.thisObject, "mDozing");
-                            if (!dozing) {
-                                XposedBridge.log("AodEdgeLight: dozing = false, removing reticker callbacks");
-                                mRetickerHandler.removeCallbacks(mTriggerShow);
-                            }
-                            if (EdgeLightControllerImpl.hasInstance()) {
-                                EdgeLightControllerImpl.getInstance().setDozing(dozing);
-                            }
-                        });
+                .run(param -> {
+                    boolean dozing = getBooleanField(param.thisObject, "mDozing");
+                    if (!dozing) {
+                        XposedBridge.log("AodEdgeLight: dozing = false, removing reticker callbacks");
+                        mRetickerHandler.removeCallbacks(mTriggerShow);
+                    }
+                    if (EdgeLightControllerImpl.hasInstance()) {
+                        EdgeLightControllerImpl.getInstance().setDozing(dozing);
+                    }
+                });
 
         ReflectedClass AodRecord = ReflectedClass.of(
                 "com.oplus.systemui.aod.AodRecord",
                 "com.oplusos.systemui.aod.AodRecord");
+        ReflectedClass AodData = ReflectedClass.of("com.oplus.systemui.aod.aodclock.constant.AodData");
+
+        AodRecord
+                .after("onCreate")
+                .run(param -> {
+                    EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
+                    FrameLayout mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
+                    edgeController.setBlockLayout(mAodBlackLayout);
+                });
 
         AodRecord
                 .after("addCurvedDisplayView")
@@ -223,6 +269,15 @@ public class AodEdgeLight extends XposedMods {
                     XposedBridge.log("AodEdgeLight: removeCurvedDisplayView - removing reticker callbacks & trigger again in " + mRetickDuration);
                     mRetickerHandler.removeCallbacks(mTriggerShow);
                     mRetickerHandler.postDelayed(mTriggerShow, mRetickDuration);
+                });
+
+        AodData
+                .before("setShowingCurvedDisplay")
+                .run(param -> {
+                    boolean showing = (boolean) param.args[0];
+                    EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
+                    edgeController.setCurved(showing);
+                    mRetickerHandler.removeCallbacks(mTriggerShow);
                 });
 
         ReflectedClass OpIncomingNotificationPaint = ReflectedClass.of("com.oplus.systemui.aod.surface.OpIncomingNotificationPaint");
@@ -249,11 +304,11 @@ public class AodEdgeLight extends XposedMods {
                 "com.oplusos.systemui.aod.aodclock.off.AodRootLayout");
         AodRootLayout
                 .afterConstruction()
-                        .run(param -> {
-                            FrameLayout mAodRootLayout = (FrameLayout) param.thisObject;
-                            EdgeLightControllerImpl edgeLightController = EdgeLightControllerImpl.getInstance(mContext);
-                            edgeLightController.setAodRootLayout(mAodRootLayout);
-                        });
+                .run(param -> {
+                    FrameLayout mAodRootLayout = (FrameLayout) param.thisObject;
+                    EdgeLightControllerImpl edgeLightController = EdgeLightControllerImpl.getInstance(mContext);
+                    edgeLightController.setAodRootLayout(mAodRootLayout);
+                });
 
         ReflectedClass AodTriggerSensor = ReflectedClass.of("com.oplus.systemui.aod.sensor.AodTriggerSensor");
         AodTriggerSensor
@@ -265,10 +320,10 @@ public class AodEdgeLight extends XposedMods {
         ReflectedClass AodSensorManager = ReflectedClass.of("com.oplus.systemui.aod.sensor.AodSensorManager");
         AodSensorManager
                 .afterConstruction()
-                        .run(param -> {
-                            setAdditionalInstanceField(param.thisObject, "mIsOC", false);
-                            mAodSensorManager = param.thisObject;
-                        });
+                .run(param -> {
+                    setAdditionalInstanceField(param.thisObject, "mIsOC", false);
+                    mAodSensorManager = param.thisObject;
+                });
         AodSensorManager
                 .after("triggerShow")
                 .run(param -> {

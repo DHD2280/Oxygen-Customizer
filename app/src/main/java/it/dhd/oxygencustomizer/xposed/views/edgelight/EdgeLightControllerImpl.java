@@ -107,10 +107,10 @@ public class EdgeLightControllerImpl {
     }
 
     public void setDozing(boolean dozing) {
-        logD("setDozing: " + dozing);
         if (mDozing != dozing) {
             mDozing = dozing;
         }
+        logD("setDozing: " + dozing);
     }
 
     public void setDozeParameters(Object dozeParameters) {

@@ -59,7 +59,12 @@ public abstract class EdgeAnimator {
 
     protected final Animator.AnimatorListener mAnimationListener = new Animator.AnimatorListener() {
         @Override
-        public void onAnimationStart(@NonNull Animator animation) {}
+        public void onAnimationStart(@NonNull Animator animation) {
+            try {
+                mEdgeLightView.removeCallbacks(hideRunnable);
+            } catch (Throwable ignored) {}
+            mEdgeLightView.setVisibility(EdgeLightView.VISIBLE);
+        }
 
         @Override
         public void onAnimationEnd(@NonNull Animator animation) {
@@ -128,6 +133,7 @@ public abstract class EdgeAnimator {
     }
 
     public void setScreenRadius(float radius) {
+        if (mScreenRadius == radius) return;
         mScreenRadius = radius;
     }
 
@@ -177,7 +183,13 @@ public abstract class EdgeAnimator {
     }
 
     protected final void log(String message) {
-        mEdgeLightView.logD(this.getClass().getSimpleName() + " - " + message);
+        mEdgeLightView.logD(this.getClass().getSimpleName() + " - " + message + "\n" +
+                "mAnimating = " + mAnimating + "\n" +
+                "mEdgeLightWidth = " + mEdgeLightWidth + "\n" +
+                "mScreenRadius = " + mScreenRadius + "\n" +
+                "mAnimationDuration = " + mAnimationDuration + "\n" +
+                "mPulsingDuration = " + mPulsingDuration + "\n" +
+                "mFinalAnimDuration = " + mFinalAnimDuration);
     }
 
     public boolean isAnimating() {
