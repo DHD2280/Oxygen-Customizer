@@ -439,7 +439,11 @@
     <string name="qs_widget_media_player">Lettore multimediale</string>
     <string name="qs_media_alert">Impossibile rimuovere il lettore multimediale!</string>
     <string name="qs_widget_set_radius">Imposta Raggio Immagine</string>
+    <string name="qs_widget_set_photo_mode">Imposta Modalità Foto</string>
     <string name="qs_widget_set_custom_photo">Imposta Immagine personalizzata</string>
+    <string name="qs_widget_photo_showcase">Galleria</string>
+    <string name="qs_widget_photo_default_summary">Mostra una singola foto.</string>
+    <string name="qs_widget_photo_random_summary">Mostra tutte le foto selezionate in ciclo. L\'immagine cambierà ogni 30 secondi; puoi anche toccare \"Galleria\" per passare alla foto successiva.</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Personalizzazione QS</string>
     <string name="qs_highlight_tile">Tile in evidenza</string>
