@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
+import com.android.systemui.animation.Expandable;
+
 import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -181,7 +183,11 @@ public class ActivityLauncherUtils {
         // we can use it to open the calculator
         Object calculatorTile = getCalculatorTile();
         if (calculatorTile != null) {
-            callMethod(calculatorTile, "openCalculator");
+            try {
+                callMethod(calculatorTile, "openCalculator");
+            } catch (Throwable ignored) {
+                callMethod(calculatorTile, "handleClick", (Expandable) null);
+            }
             return;
         }
 
