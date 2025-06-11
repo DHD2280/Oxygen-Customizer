@@ -29,7 +29,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.BatteryIconOptionsBinding;
 import it.dhd.oxygencustomizer.databinding.PreferenceListItemBinding;
 import it.dhd.oxygencustomizer.databinding.QsHeaderImageOptionsBinding;
-import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 
 public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -98,7 +98,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mValue = PreferenceHelper.instance.mPreferences.getString(mKey, "");
+        mValue = OCPreferences.getString(mKey, "");
         PreferenceListItemBinding binding = PreferenceListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         QsHeaderImageOptionsBinding qsHeaderImageOptionsBinding = QsHeaderImageOptionsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         BatteryIconOptionsBinding batteryIconOptionsBinding = BatteryIconOptionsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
@@ -129,7 +129,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
 
             holder.itemView.setOnClickListener(v -> {
-                PreferenceHelper.instance.mPreferences.edit().putInt("qs_header_image_number", (holder.getBindingAdapterPosition() + 1)).apply();
+                OCPreferences.putInt("qs_header_image_number", (holder.getBindingAdapterPosition() + 1));
                 onItemClickListener.onItemClick(v, holder.getBindingAdapterPosition());
                 notifyItemChanged(mHeaderNum);
                 notifyItemChanged(holder.getBindingAdapterPosition());
@@ -191,7 +191,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private int getCurrentHeaderNumber() {
-        return PreferenceHelper.instance.mPreferences.getInt("qs_header_image_number", -1);
+        return OCPreferences.getInt("qs_header_image_number", -1);
     }
 
     @Override
