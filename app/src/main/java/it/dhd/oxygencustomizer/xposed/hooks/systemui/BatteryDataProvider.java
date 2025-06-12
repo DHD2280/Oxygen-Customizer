@@ -121,6 +121,12 @@ public class BatteryDataProvider extends XposedMods {
         BatteryControllerImplClass
                 .after("firePowerSaveChanged")
                 .run(batteryDataRefreshHook);
+        BatteryControllerImplClass
+                .before("dispatchSafeChange")
+                .run(batteryDataRefreshHook);
+        BatteryControllerImplClass
+                .after("setPowerSave")
+                .run(batteryDataRefreshHook);
 
         BatteryStatusClass
                 .afterConstruction()
