@@ -216,6 +216,6 @@ Oxygen Customizer is licensed under GPLv3. Please see [`LICENSE`](./LICENSE.md) 
 
 [<img src=".github/resources/PayPal.svg"
 alt='Donate with PayPal'
-height="80">](https://www.paypal/luigifale) [<img src=".github/resources/BMC.svg"
+height="80">](https://www.paypal.me/luigifale) [<img src=".github/resources/BMC.svg"
 alt='Donate with BMC'
 height="80">](https://www.buymeacoffee.com/DHD2280)
