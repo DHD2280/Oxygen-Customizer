@@ -345,6 +345,7 @@
     <string name="inside_percentage_title">Проценты внутри</string>
     <string name="inside_percentage_desc">Переместить процентное соотношение на внутренний значок батареи</string>
     <string name="battery_icon_color">Цвета значков батареи</string>
+    <string name="battery_icon_animate_charging">Анимация зарядки</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Текст батареи</string>
     <string name="battery_edit_percentage_size_title">Настройка размера процентов</string>
@@ -427,6 +428,8 @@
     <string name="quick_settings_tiles_landscape">В альбомной ориентации</string>
     <string name="quick_settings_tiles_vertical_rows">Строки быстрой настройки (альбомная ориентация)</string>
     <string name="quick_settings_tiles_vertical_columns">Столбцов в QS (альбомная ориентация)</string>
+    <string name="qs_blur_max_amount">Макс. размытие</string>
+    <string name="qs_blur_max_amount_summary">Установить максимальное размытие для QS.</string>
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">Показать виджеты быстрых настроек</string>
     <string name="add_widget">Добавить виджет</string>
@@ -437,7 +440,11 @@
     <string name="qs_widget_media_player">Медиа плеер</string>
     <string name="qs_media_alert">Невозможно удалить медиаплеер!</string>
     <string name="qs_widget_set_radius">Установить радиус изображения</string>
+    <string name="qs_widget_set_photo_mode">Установить режим Фото</string>
     <string name="qs_widget_set_custom_photo">Установить собственное изображение</string>
+    <string name="qs_widget_photo_showcase">Пример</string>
+    <string name="qs_widget_photo_default_summary">Показать одно фото.</string>
+    <string name="qs_widget_photo_random_summary">Показать все фотографии, которые вы выбираете в цикле. Изображение будет меняться каждые 30 секунд, вы также можете нажать на пример для замены на следующую фотографию.</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">Настройка QS</string>
     <string name="qs_highlight_tile">Подсвечивать плитки</string>
@@ -733,6 +740,16 @@
     <string name="colorpill">Панель жестов с акцентом темы</string>
     <!-- Custom Gestures -->
     <string name="gesture_nav_extra_cat">Дополнительные жесты навигации</string>
+    <string name="gesture_nav_extra_title">Дополнительные жесты</string>
+    <string name="gesture_nav_long_swipe_fc_title">Проведите вверх, чтобы закрыть актив. приложение</string>
+    <string name="circle_to_search_title">Круг поиска</string>
+    <string name="circle_to_search_summary">Коснитесь и удерживайте панель руководства для начала поиска на экране.</string>
+    <string name="gesture_nav_left_swipe_up_title">Свайп вверх слева в панели жестов</string>
+    <string name="gesture_nav_right_swipe_up_title">Свайп вверх справа в панели жестов</string>
+    <string name="gesture_nav_left_swipe_up_percent">Ширина области свайпа слева (%)</string>
+    <string name="gesture_nav_right_swipe_up_percent">Ширина области свайпа справа (%)</string>
+    <string name="gesture_nav_two_finger_title">Свайп вверх двумя пальцами</string>
+    <string name="gesture_nav_swipe_up_height">Минимал. высота свайпа вверх</string>
     <!-- Buttons Title -->
     <string name="buttons_title">Кнопки</string>
     <string name="power_button_category_title">Кнопка питания</string>
@@ -771,6 +788,9 @@
     <string name="lockscreen_affordance">Тайлы на экране блокировки</string>
     <string name="lockscreen_affordance_remove_left">Удалить тайл слева</string>
     <string name="lockscreen_affordance_remove_right">Удалить тайл справа</string>
+    <string name="lockscreen_shuffle_pin">Смешать пин</string>
+    <string name="lockscreen_keep_shuffling_title">Продолжить смешивание</string>
+    <string name="lockscreen_keep_shuffling_summary">Смешать снова при любом нажатии клавиши</string>
     <string name="lockscreen_hide_lock_icon">Скрыть значок замка</string>
     <string name="lockscreen_weather">Погода на экране блокировки</string>
     <string name="depth_wallpaper_category">Глубина Обоев</string>
@@ -837,6 +857,8 @@
     <string name="lockscreen_clock_custom_margins">Временные рамки</string>
     <string name="lockscreen_clock_top_margin_title">Верхний предел</string>
     <string name="lockscreen_clock_bottom_margin_title">Нижнее поле</string>
+    <string name="lockscreen_clock_bottom_margin_aod_title">Нижнее поле (AOD)</string>
+    <string name="lockscreen_clock_bottom_margin_aod_summary">Контролирует нижнее поле часов в режиме AOD. Это применимо, только если AOD установлен в бесшовном режиме.</string>
     <string name="lockscreen_clock_stock_prefs">Стандартные настройки часов на экране блокировки</string>
     <string name="lockscreen_stock_clock_red_one_title">Настройки стиля 1+</string>
     <string name="lockscreen_stock_clock_red_one_disable">Отключение красного цвета</string>
@@ -852,6 +874,7 @@
     <!-- Aod Clock -->
     <string name="aod_clock">Часы на AOD</string>
     <string name="aod_clock_switch">Пользовательские часы AOD</string>
+    <string name="aod_clock_intro_oos15">Пользовательские часы AOD доступны только с классическим стилем.</string>
     <string name="aod_clock_custom">Стиль часов</string>
     <string name="aod_clock_custom_summary">Проведите пальцем, чтобы выбрать стиль.</string>
     <string name="aod_clock_font_prefs_title">Шрифт</string>
@@ -870,7 +893,34 @@
     <!-- Aod Weather -->
     <string name="aod_weather">Погода на AOD</string>
     <!-- Aod Pulse -->
+    <string name="aod_pulse_category_title">Пульс/Дремота</string>
     <!-- Edge light -->
+    <string name="edge_light_title">Подсветка краев экрана</string>
+    <string name="edge_light_summary">Подсвечивать края экрана при получении уведомления</string>
+    <string name="edge_light_always_trigger_on_pulse_title">Всегда запускать при пульсации</string>
+    <string name="edge_light_always_trigger_on_pulse_summary">Показывать анимацию даже когда AOD включён и не только для уведомлений</string>
+    <string name="edge_light_retick_title">Пульсировать для непрочитанных уведомлений</string>
+    <string name="edge_light_retick_summary">Показывать подсветку после определенного времени для непрочитанных уведомлений.\nЦвет света будет таким же, как последнее уведомление, если режим цвета установлен в качестве уведомления.</string>
+    <string name="edge_light_retick_time">Время пульсации</string>
+    <string name="edge_light_30_sec">30 секунд</string>
+    <string name="edge_light_1_min">1 минута</string>
+    <string name="edge_light_2_min">2 минуты</string>
+    <string name="edge_light_5_min">5 минут</string>
+    <string name="edge_light_10_min">10 минут</string>
+    <string name="edge_light_advice">Чтобы показать подсветку, вы должны установить цвет в стоковую подсветку AOD.</string>
+    <string name="edge_light_show_blur">Стиль размытия</string>
+    <string name="edge_light_blur_mode_title">Режим размытия</string>
+    <string name="edge_light_blur_mode_both">Линия и размытие</string>
+    <string name="edge_light_blur_mode_blur_only">Только размытие</string>
+    <string name="edge_light_blur_type_title">Тип размытия</string>
+    <string name="edge_light_blur_type_normal">Нормально</string>
+    <string name="edge_light_blur_type_solid">Сплошное</string>
+    <string name="edge_light_blur_type_inner">Внутреннее</string>
+    <string name="edge_light_blur_type_outer">Внешнее</string>
+    <string name="edge_light_color_mode_title">Режим цвета подсветки</string>
+    <string name="edge_light_enabled_title">Включить подсветку краев экрана</string>
+    <string name="edge_light_rainbow_gradient">Радужный градиент</string>
+    <string name="notification_color">Цвет уведомления</string>
     <!-- Sound Mods -->
     <string name="misc_category">Другое</string>
     <!-- Pulse music visualizer -->
@@ -1369,10 +1419,26 @@
     <string name="refresh_rate_error">Частота обновления пуста!</string>
     <string name="memc_footer">Если ваше устройство не оснащено чипом Pixelwork или не поддерживает Memc, не трогайте эти настройки.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_screen_title">Выключить экран на плоской поверхности</string>
+    <string name="sleep_on_flat_screen_tile_title">Сон на поверхности</string>
+    <string name="flat_screen_timeout_title">Тайм-аут экрана на плоской поверхности</string>
+    <string name="flat_screen_timeout_respect_wakelock_title">Соблюдение пробуждения</string>
     <!-- Allow music players in AOD -->
+    <string name="aod_music_allow_title">Разрешить плееры на AOD</string>
+    <string name="aod_music_allow_summary">Разрешить отображение любого музыкального плеера в AOD.\nпримечание: возможно, поддерживаются не все плееры.</string>
     <!-- Shortcut string -->
+    <string name="lsposed"></string>
+    <string name="open_lsposed">Открыть LSposed</string>
+    <string name="shortcut_disabled">Ярлык отключен</string>
     <!-- Separate qs tweaks -->
+    <string name="qs_separate_mods">Разделить QS</string>
+    <string name="qs_separate_hide_menu">Скрыть кнопку Меню</string>
     <string name="qs_separate_hide_edit">Скрыть кнопку редактирования</string>
+    <string name="qs_separate_layout">Пользовательский макет QS</string>
+    <string name="qs_separate_layout_summary">Настройка верхнего макета панели QS</string>
+    <string name="qs_separate_qs_area">Пользовательская ширина сторон QS</string>
+    <string name="qs_separate_qs_area_summary">Настройте ширину выпадающего меню открытого QS.</string>
+    <string name="qs_separate_qs_area_width">Ширина выпадающего меню</string>
     <!-- Separate qs layout -->
     <string name="tap_to_configure">Нажмите на элемент, чтобы настроить макет</string>
     <string name="media_panel">Медиапанель</string>
