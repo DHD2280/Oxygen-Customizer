@@ -1427,7 +1427,7 @@
     <string name="aod_music_allow_title">Разрешить плееры на AOD</string>
     <string name="aod_music_allow_summary">Разрешить отображение любого музыкального плеера в AOD.\nпримечание: возможно, поддерживаются не все плееры.</string>
     <!-- Shortcut string -->
-    <string name="lsposed"></string>
+    <string name="lsposed">LSposed</string>
     <string name="open_lsposed">Открыть LSposed</string>
     <string name="shortcut_disabled">Ярлык отключен</string>
     <!-- Separate qs tweaks -->
