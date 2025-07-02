@@ -153,6 +153,7 @@ public class QsPhotoShowcaseView extends ImageView {
 
     public void switchDrawable() {
         if (mDrawables.isEmpty()) return;
+        if (!mIsShowcase) return;
 
         mCurrentDrawableIndex = (mCurrentDrawableIndex + 1) % mDrawables.size();
         Drawable currentDrawable = getDrawable();
@@ -263,6 +264,7 @@ public class QsPhotoShowcaseView extends ImageView {
 
     public void setPhotoMode(boolean isShowcase) {
         mIsShowcase = isShowcase;
+        updateImage();
     }
 
     @Override
