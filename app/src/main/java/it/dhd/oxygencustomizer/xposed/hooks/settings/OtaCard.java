@@ -1,16 +1,17 @@
 package it.dhd.oxygencustomizer.xposed.hooks.settings;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.os.Environment;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -20,9 +21,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class OtaCard extends XposedMods {
 
@@ -44,18 +46,23 @@ public class OtaCard extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
 
-        Class<?> AboutDeviceOtaUpdatePreference = findClass("com.oplus.settings.widget.preference.AboutDeviceOtaUpdatePreference", lpparam.classLoader);
-        hookAllMethods(AboutDeviceOtaUpdatePreference, "onBindViewHolder", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mCustomStyle) return;
-                Object preferenceHolder = param.args[0];
-                View iView = (View) getObjectField(preferenceHolder, "itemView");
+        ReflectedClass AboutDeviceOtaUpdatePreference = ReflectedClass.of("com.oplus.settings.widget.preference.AboutDeviceOtaUpdatePreference");
+        AboutDeviceOtaUpdatePreference
+                .after("onBindViewHolder")
+                .run(param -> {
+                    if (!mCustomStyle) return;
+                    Object preferenceHolder = param.args[0];
+                    View iView = (View) getObjectField(preferenceHolder, "itemView");
 
-                mOtaCard = iView;
-                setCustomImage();
-            }
-        });
+                    mOtaCard = iView;
+                    try {
+                        ImageView iv = iView.findViewById(mContext.getResources().getIdentifier("about_device_top_bg", "id", SETTINGS));
+                        iv.setVisibility(View.GONE);
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                    setCustomImage();
+                });
     }
 
     private void setCustomImage() {
