@@ -6,6 +6,13 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_CUSTOMIZE_BG;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_CUSTOMIZE_PROGRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_DISABLE_WARNING;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_PROGRESS_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_PROGRESS_LINK_PRIMARY;
+import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_TIMEOUT;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
@@ -41,21 +48,21 @@ public class VolumePanel extends XposedMods {
     public void updatePrefs(String... Key) {
         if (Xprefs == null) return;
 
-        mDesiredTimeout = Xprefs.getSliderInt("volume_dialog_timeout", 3);
+        mDesiredTimeout = Xprefs.getSliderInt(VOLUME_PANEL_TIMEOUT, 3);
         mTimeOut = mDesiredTimeout * 1000;
-        mDisableVolumeWarning = Xprefs.getBoolean("volume_disable_volume_warning", false);
-        customizeVolumeProgress = Xprefs.getBoolean("volume_panel_seekbar_color_enabled", false);
-        customizeVolumeBg = Xprefs.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
-        volumeProgressPrimary = Xprefs.getBoolean("volume_panel_seekbar_link_primary", false);
-        volumeProgressColor = Xprefs.getInt("volume_panel_seekbar_color", 0);
-        volumeBgColor = Xprefs.getInt("volume_panel_seekbar_bg_color", Color.GRAY);
+        mDisableVolumeWarning = Xprefs.getBoolean(VOLUME_PANEL_DISABLE_WARNING, false);
+        customizeVolumeProgress = Xprefs.getBoolean(VOLUME_PANEL_CUSTOMIZE_PROGRESS, false);
+        customizeVolumeBg = Xprefs.getBoolean(VOLUME_PANEL_CUSTOMIZE_BG, false);
+        volumeProgressPrimary = Xprefs.getBoolean(VOLUME_PANEL_PROGRESS_LINK_PRIMARY, false);
+        volumeProgressColor = Xprefs.getInt(VOLUME_PANEL_PROGRESS_COLOR, 0);
+        volumeBgColor = Xprefs.getInt(VOLUME_PANEL_BG_COLOR, Color.GRAY);
 
         if (Key.length > 0) {
-            if (Key[0].equals("volume_panel_seekbar_color_enabled") ||
-                    Key[0].equals("volume_panel_seekbar_link_primary") ||
-                    Key[0].equals("volume_panel_seekbar_color") ||
-                    Key[0].equals("volume_panel_seekbar_bg_color_enabled") ||
-                    Key[0].equals("volume_panel_seekbar_bg_color")) {
+            if (Key[0].equals(VOLUME_PANEL_CUSTOMIZE_PROGRESS) ||
+                    Key[0].equals(VOLUME_PANEL_PROGRESS_LINK_PRIMARY) ||
+                    Key[0].equals(VOLUME_PANEL_PROGRESS_COLOR) ||
+                    Key[0].equals(VOLUME_PANEL_CUSTOMIZE_BG) ||
+                    Key[0].equals(VOLUME_PANEL_BG_COLOR)) {
                 updateVolumePanel();
             }
         }
@@ -189,7 +196,6 @@ public class VolumePanel extends XposedMods {
                 if (customizeVolumeBg) {
                     callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
                 }
-
             }
         });
 
