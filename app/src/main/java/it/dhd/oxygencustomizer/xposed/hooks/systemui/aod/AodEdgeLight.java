@@ -75,8 +75,13 @@ public class AodEdgeLight extends XposedMods {
             try {
                 mIsOc = true;
                 setAdditionalInstanceField(mAodSensorManager, "mIsOC", true);
-                setBooleanField(mAodTriggerSensor, "mIsMoving", true);
-                callMethod(mAodTriggerSensor, "notifyChanged");
+                if (mAodTriggerSensor != null) setBooleanField(mAodTriggerSensor, "mIsMoving", true);
+                try {
+                    callMethod(mAodTriggerSensor, "notifyChanged");
+                } catch (Throwable ignored) {}
+                try {
+                    callMethod(mAodSensorManager, "notifyChanged", true, false);
+                } catch (Throwable ignored) {}
             } catch (Throwable t) {
                 log(t);
             }
@@ -310,12 +315,14 @@ public class AodEdgeLight extends XposedMods {
                     edgeLightController.setAodRootLayout(mAodRootLayout);
                 });
 
-        ReflectedClass AodTriggerSensor = ReflectedClass.of("com.oplus.systemui.aod.sensor.AodTriggerSensor");
-        AodTriggerSensor
-                .afterConstruction()
-                .run(param -> {
-                    mAodTriggerSensor = param.thisObject;
-                });
+        ReflectedClass AodTriggerSensor = ReflectedClass.ofIfPossible("com.oplus.systemui.aod.sensor.AodTriggerSensor");
+        if (AodTriggerSensor.getClazz() != null) {
+            AodTriggerSensor
+                    .afterConstruction()
+                    .run(param -> {
+                        mAodTriggerSensor = param.thisObject;
+                    });
+        }
 
         ReflectedClass AodSensorManager = ReflectedClass.of("com.oplus.systemui.aod.sensor.AodSensorManager");
         AodSensorManager
