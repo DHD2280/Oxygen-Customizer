@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 
+import java.sql.Ref;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -27,6 +28,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class VolumePanel extends XposedMods {
 
@@ -73,131 +75,98 @@ public class VolumePanel extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        try {
-            Class<?> OplusVolumeSeekBar = findClass("com.oplus.systemui.volume.OplusVolumeSeekBar", lpparam.classLoader);
-            sliderCustomizable = true;
-        } catch (Throwable ignored) {
-            sliderCustomizable = false;
-        }
+        ReflectedClass OplusVolumeSeekBar = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusVolumeSeekBar");
+        sliderCustomizable = OplusVolumeSeekBar.getClazz() != null;
 
-        Class<?> OplusVolumeDialogImpl;
-        try {
-            OplusVolumeDialogImpl = findClass("com.oplus.systemui.volume.OplusVolumeDialogImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusVolumeDialogImpl = findClass("com.oplusos.systemui.volume.VolumeDialogImplEx", lpparam.classLoader); // OOS 13
-        }
-        hookAllMethods(OplusVolumeDialogImpl, "computeTimeoutH", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        ReflectedClass OplusVolumeDialogImpl = ReflectedClass.of(
+                "com.oplus.systemui.volume.OplusVolumeDialogImpl",
+                "com.oplusos.systemui.volume.VolumeDialogImplEx" // OOS 13
+        );
+        OplusVolumeDialogImpl
+                .before("computeTimeoutH")
+                .run(param -> {
+                    if (mDesiredTimeout == 3) return;
 
-                if (mDesiredTimeout == 3) return;
-
-                if (getBooleanField(param.thisObject, "mHovering")) {
-                    param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 16000, 4));
-                }
-                synchronized (getObjectField(param.thisObject, "mSafetyWarningLock")) {
-                    if (getBooleanField(param.thisObject, "mExpanded")) {
-                        param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 5000, 4));
-                    } else {
-                        param.setResult(mTimeOut);
+                    if (getBooleanField(param.thisObject, "mHovering")) {
+                        param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 16000, 4));
                     }
-                }
-            }
-        });
-
-        Class<?> VolumeDialogImpl = findClass("com.android.systemui.volume.VolumeDialogImpl", lpparam.classLoader);
-        hookAllMethods(VolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (mDisableVolumeWarning) {
-                    try {
-                        callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                    } catch (Throwable ignored) {
-                    }
-                    param.setResult(null);
-                }
-            }
-        });
-        hookAllMethods(VolumeDialogImpl, "onShowSafetyWarning", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (mDisableVolumeWarning) {
-                    try {
-                        callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                    } catch (Throwable ignored) {
-                    }
-                    param.setResult(null);
-                }
-            }
-        });
-
-        try {
-            hookAllMethods(OplusVolumeDialogImpl, "showSafetyWarningH", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (mDisableVolumeWarning) {
-                        try {
-                            callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
-                        } catch (Throwable ignored) {
+                    synchronized (getObjectField(param.thisObject, "mSafetyWarningLock")) {
+                        if (getBooleanField(param.thisObject, "mExpanded")) {
+                            param.setResult(callMethod(getObjectField(param.thisObject, "mAccessibilityMgr"), "getRecommendedTimeoutMillis", 5000, 4));
+                        } else {
+                            param.setResult(mTimeOut);
                         }
-                        param.setResult(null);
                     }
-                }
-            });
+                });
 
-        } catch (Throwable t) {
-            log("Error: " + t.getMessage());
-        }
+        ReflectedClass.ReflectionConsumer panelDisabled = param -> {
+            if (mDisableVolumeWarning) {
+                try {
+                    callMethod(SystemUtils.AudioManager(), "disableSafeMediaVolume");
+                } catch (Throwable ignored) {
+                }
+                param.setResult(null);
+            }
+        };
+
+        ReflectedClass VolumeDialogImpl = ReflectedClass.of("com.android.systemui.volume.VolumeDialogImpl");
+        VolumeDialogImpl
+                .before("showSafetyWarningH")
+                .run(panelDisabled);
+        VolumeDialogImpl
+                .before("onShowSafetyWarning")
+                .run(panelDisabled);
+        OplusVolumeDialogImpl
+                .before("showSafetyWarningH")
+                .run(panelDisabled);
+        OplusVolumeDialogImpl
+                .before("onShowSafetyWarning")
+                .run(panelDisabled);
 
         try {
-            Class<?> OplusQsVolumeController = findClass("com.oplus.systemui.qs.slider.OplusQsVolumeController", lpparam.classLoader);
-            hookAllConstructors(OplusQsVolumeController, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    try {
-                        Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
-                        hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
-                            @Override
-                            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                if (mDisableVolumeWarning) {
-                                    param.setResult(null);
+            ReflectedClass OplusQsVolumeController = ReflectedClass.of("com.oplus.systemui.qs.slider.OplusQsVolumeController");
+            OplusQsVolumeController
+                    .afterConstruction()
+                            .run(param -> {
+                                try {
+                                    Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
+                                    hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
+                                        @Override
+                                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                            if (mDisableVolumeWarning) {
+                                                param.setResult(null);
+                                            }
+                                        }
+                                    });
+                                } catch (Throwable t) {
+                                    log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
                                 }
-                            }
-                        });
-                    } catch (Throwable t) {
-                        log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
-                    }
-                }
-            });
+                            });
         } catch (Throwable t) {
             log("Error OplusQsVolumeController: " + t.getMessage());
         }
 
-        hookAllConstructors(OplusVolumeDialogImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                OVDI = param.thisObject;
-            }
-        });
+        OplusVolumeDialogImpl
+                .afterConstruction()
+                        .run(param -> OVDI = param.thisObject);
 
-        hookAllMethods(OplusVolumeDialogImpl, "initRow", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!sliderCustomizable) return;
+        OplusVolumeDialogImpl
+                .after("initRow")
+                        .run(param -> {
+                            if (!sliderCustomizable) return;
 
-                Object VolumeRow = param.args[0];
-                Object slider = getObjectField(VolumeRow, "slider");
-                if (customizeVolumeProgress) {
-                    if (volumeProgressPrimary)
-                        callMethod(slider, "setProgressColor", ColorStateList.valueOf(getPrimaryColor(mContext)));
-                    else
-                        callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
-                }
-                if (customizeVolumeBg) {
-                    callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
-                }
-            }
-        });
+                            Object VolumeRow = param.args[0];
+                            Object slider = getObjectField(VolumeRow, "slider");
+                            if (customizeVolumeProgress) {
+                                if (volumeProgressPrimary)
+                                    callMethod(slider, "setProgressColor", ColorStateList.valueOf(getPrimaryColor(mContext)));
+                                else
+                                    callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
+                            }
+                            if (customizeVolumeBg) {
+                                callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
+                            }
+                        });
 
     }
 
