@@ -921,6 +921,15 @@
     <string name="edge_light_enabled_title">Включить подсветку краев экрана</string>
     <string name="edge_light_rainbow_gradient">Радужный градиент</string>
     <string name="notification_color">Цвет уведомления</string>
+    <string name="wallpaper_color">Цвет обоев</string>
+    <string name="edge_light_style_title">Стиль подсветки по краям</string>
+    <string name="edge_light_stroke_width_title">Ширина подсветки по краям</string>
+    <string name="edge_light_stroke_width_summary">Настройка толщины подсветки по краям</string>
+    <string name="edge_light_line">Рисовать линию</string>
+    <string name="edge_light_blink">Мигание/Пульсация</string>
+    <string name="edge_light_side_lines">Боковые линии</string>
+    <string name="edge_light_snake">Змейка</string>
+    <string name="edge_light_echo">Эхо</string>
     <!-- Sound Mods -->
     <string name="misc_category">Другое</string>
     <!-- Pulse music visualizer -->
@@ -1245,6 +1254,8 @@
     <string name="theme_customization_navbar_summary">Смена стиля панели навигации</string>
     <string name="theme_customization_toast_frame_title">Стиль всплывающих уведомлений</string>
     <string name="theme_customization_toast_frame_summary">Смена стиля всплывающих уведомлений</string>
+    <string name="theme_customization_spinner_style_title">Стиль вращения</string>
+    <string name="theme_customization_spinner_style_summary">Установить свой стиль вращения</string>
     <!-- Dark Shadow Theme Strings -->
     <string name="dark_shadow_ui_style_summary">Тема включает в себя отдельно выбираемый фон и акцентные цвета.</string>
     <string name="dark_shadow_enable_theme">Включить тему</string>
@@ -1373,8 +1384,46 @@
     <string name="lockscreen_now_bar_music_extended_player_show_clock_summary">Показывать часы в верхней части расширенного плеера</string>
     <string name="lockscreen_now_bar_music_extended_player_clock_options">Настройки часов</string>
     <string name="lockscreen_now_bar_music_clock_date_position">Расположение даты</string>
+    <string name="lockscreen_now_bar_battery">Панель батареи</string>
+    <string name="lockscreen_now_bar_battery_custom_icon">Пользовательский значок зарядки</string>
+    <string name="lockscreen_now_bar_battery_custom_colors">Пользовательские цвета</string>
+    <string name="lockscreen_now_bar_battery_custom_colors_summary">Настроить цвета панели</string>
+    <string name="lockscreen_now_bar_weather_category">Погода в панели</string>
+    <string name="lockscreen_now_bar_notifications_category">Уведомления в панели</string>
+    <string name="lockscreen_now_bar_notifications_allow_private">Разрешить приватные уведомления</string>
+    <string name="lockscreen_now_bar_notifications_allow_private_summary">Игнорировать системные настройки и всегда показывать уведомления</string>
+    <string name="lockscreen_now_bar_notification_1line_color_title">Цвет первой линии</string>
+    <string name="lockscreen_now_bar_notification_2line_color_title">Цвет второй линии</string>
+    <string name="lockscreen_now_bar_app_icon_title">Иконки приложений</string>
+    <string name="lockscreen_now_bar_app_icon_summary">Использовать значки приложений вместо значков уведомлений</string>
+    <string name="lockscreen_now_bar_footer">Панель маленькая панель, расположенная между двумя кнопками доступности на экране блокировки.\nОна может показать медиа-плеер, статус батареи и опционально другую информацию.\nЕсли вы не хотите видеть мультимедийный проигрыватель, просто скройте его в настройках.\nПримечание: если вы скрываете обе кнопки доступности, то панель занимает все пространство.</string>
     <!-- Now Bar Notifications string -->
+    <string name="lockscreen_now_bar_no_notifications">Нет новых уведомлений</string>
+    <string name="lockscreen_now_bar_new_notification">Новое уведомление</string>
+    <string name="lockscreen_now_bar_new_notification_content">Содержимое скрыто</string>
     <!-- Lockscreen Peek Notifications Strings -->
+    <string name="lockscreen_peek_notifications_title">Уведомления на экране блокировки Peek</string>
+    <string name="lockscreen_peek_notifications_summary">Заменить обычные уведомления на минимальный стиль</string>
+    <string name="peek_display_location_title">Расположение Peek экрана</string>
+    <string name="peek_display_bottom_margin_title">Отступ Peek экрана (нижнего) верхнего поля</string>
+    <string name="peek_display_style_title">Стиль Peek экрана</string>
+    <string name="peek_display_minimalist">Минималистский</string>
+    <string name="peek_display_custom_style">Пользовательский</string>
+    <string name="peek_display_icon_style_title">Стиль иконки Peek</string>
+    <string name="peek_icon_background_color">Цвет фона значка</string>
+    <string name="peek_icon_size">Размер значка</string>
+    <string name="peek_icon_margin">Поле значка</string>
+    <string name="peek_icon_padding">Отступ значка</string>
+    <string name="peek_card_background_color">Цвет фона карты уведомления</string>
+    <string name="peek_buttons_color">Цвет кнопок</string>
+    <string name="peek_title_color">Цвет заголовка</string>
+    <string name="peek_content_color">Цвет содержимого</string>
+    <string name="peek_clear_all_cat">Кнопка Очистить все</string>
+    <string name="peek_clear_all_mode">Режим Очистить все</string>
+    <string name="peek_clear_all_mode_always_hidden">Всегда скрывать</string>
+    <string name="peek_clear_all_mode_count">Основано на количестве уведомлений</string>
+    <string name="peek_clear_all_count_title">Количество уведомлений</string>
+    <string name="peek_clear_all_count_summary">Кнопка Очистить все будет отображаться только в том случае, если уведомления будут больше, чем выбранное число</string>
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">Исправление задержки приложения</string>
     <string name="fix_lag_summary">Исправить ​​задержку при открытии приложения из последних</string>
@@ -1390,6 +1439,7 @@
     <string name="primary_color">Основной цвет</string>
     <string name="apply_color">Применить цвет</string>
     <!-- Pocket Studio -->
+    <string name="pocket_studio"></string>
     <string name="pocket_studio_title">Включить Pocket Studio</string>
     <string name="pocket_studio_summary">Включите Pocket Studio на вашем устройстве.\nТребуется перезагрузка.</string>
     <string name="pocket_studio_info">Pocket Studio позволяет одновременно открывать более двух приложений. Не гарантируется, что эта функция будет работать на ваших устройствах: она только принудительно включается.</string>
