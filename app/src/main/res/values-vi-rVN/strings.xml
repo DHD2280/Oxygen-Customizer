@@ -26,25 +26,127 @@
     <string name="onboarding_subtitle_1">Hãy tùy chỉnh mọi thứ theo sở thích của chúng ta.</string>
     <string name="onboarding_desc_1">Bỏ đi sự đơn điệu của giao diện người dùng – cá nhân hóa mọi chi tiết công nghệ để phù hợp với phong cách và sở thích của bạn.</string>
     <string name="onboarding_title_2">Thiết bị của tôi có được hỗ trợ không?</string>
+    <string name="onboarding_subtitle_2">Oxygen Customizer hỗ trợ các ROM dựa trên OOS.</string>
+    <string name="onboarding_desc_2">Tương thích với tất cả các ROM dựa trên OOS, đảm bảo hỗ trợ rộng rãi cho các thiết bị Android.</string>
+    <string name="onboarding_title_3">Chúng ta bắt đầu nhé?</string>
+    <string name="onboarding_subtitle_3">Đã đến lúc Oxygen Customizer thực hiện một số công việc nội bộ.</string>
+    <string name="onboarding_desc_3">Bắt đầu các tác vụ nội bộ, đánh dấu sự khởi đầu của công việc thiết yếu. Sẵn sàng để bắt đầu chưa?</string>
+    <string name="need_storage_perm_title">Cần quyền truy cập bộ nhớ</string>
+    <string name="need_storage_perm_desc">Cần quyền truy cập bộ nhớ để xây dựng các tệp cần thiết.</string>
+    <string name="compatible_root_not_found_title">Không tìm thấy phương pháp root tương thích</string>
+    <string name="compatible_root_not_found_desc">Sử dụng bất kỳ phương pháp root phổ biến nào để tiếp tục.</string>
+    <string name="root_not_found_title">Không thể truy cập Root</string>
+    <string name="root_not_found_desc">Hình như thiết bị của bạn chưa Root!</string>
+    <string name="need_reboot_title">Cần khởi động lại thiết bị</string>
+    <string name="need_reboot_desc">Khởi động lại thiết bị của bạn để thiết lập tất cả các tệp.</string>
+    <string name="installation_failed_title">Xin lỗi, chuyện này không nên xảy ra</string>
+    <string name="installation_failed_desc">Nhật ký đã được lưu vào thư mục tài liệu.</string>
+    <string name="logs">Nhật ký</string>
+    <string name="toast_skipped_installation">Đã bỏ qua cài đặt. Một số chức năng có thể không hoạt động bình thường.</string>
     <!-- Buttons -->
+    <string name="btn_select">Chọn</string>
+    <string name="btn_skip">Bỏ qua</string>
+    <string name="btn_next">Tiếp tục</string>
+    <string name="btn_back">Quay lại</string>
+    <string name="btn_lets_go">Đi thôi</string>
+    <string name="btn_close">Đóng</string>
+    <string name="btn_cancel">Huỷ</string>
+    <string name="btn_reboot_now">Khởi động lại ngay</string>
+    <string name="btn_reboot">Khởi động lại</string>
     <string name="btn_enable">Cho phép</string>
+    <string name="btn_disable">Tắt</string>
+    <string name="btn_apply">Áp dụng</string>
     <!-- Dialogs -->
+    <string name="installing">Đang cài</string>
+    <string name="loading_dialog_wait">Vui lòng chờ</string>
+    <string name="optimizing">Đang tối ưu</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
+    <string name="app_kill_alert_title">Thông báo</string>
+    <string name="app_kill_alert_body">Ứng dụng sẽ đóng ngay bây giờ. Bạn có thể mở lại bằng cách nhấp vào biểu tượng mới</string>
+    <string name="app_kill_ok_btn">OK</string>
     <!-- Reboot alert -->
+    <string name="reboot_alert_body">Cần khởi động lại hệ thống để áp dụng cài đặt</string>
     <!-- General Strings -->
+    <string name="battery_charging">Đang sạc pin</string>
+    <string name="battery_discharging">Pin chưa được sạc</string>
+    <string name="battery_full">Pin đầy</string>
+    <string name="battery_level_percentage">Mức pin</string>
+    <string name="seconds">Giây</string>
+    <string name="duration_seconds">%d giây</string>
+    <string name="milliseconds">Mili giây</string>
+    <string name="steps">Bước</string>
+    <string name="general_color_accent1">Màu nhấn 1</string>
+    <string name="general_color_accent2">Màu nhấn 2</string>
+    <string name="general_color_accent3">Màu nhấn 3</string>
+    <string name="general_color_text1">Văn bản 1</string>
+    <string name="general_color_text2">Văn bản 2</string>
+    <string name="sysui_restart_needed">Cần khởi động lại giao diện hệ thống để áp dụng</string>
+    <string name="one_time_reboot_needed">Khởi động lại thiết bị của bạn!</string>
+    <string name="gradient_left_right">Từ trái sang phải</string>
     <string name="gradient_top_bottom">Trên xuống dưới</string>
     <string name="gradient_tl_br">Ở trên bên trái &amp; Ở dưới bên phải</string>
+    <string name="gradient_tr_bl">Từ trên phải xuống dưới trái</string>
+    <string name="warning">Cảnh báo</string>
+    <string name="custom_margins">Tùy chỉnh lề</string>
+    <string name="custom_padding">Tùy chỉnh phần đệm</string>
+    <string name="left">Trái</string>
+    <string name="right">Phải</string>
+    <string name="top">Trên</string>
+    <string name="bottom">Dưới</string>
+    <string name="reset">Đặt lại</string>
+    <string name="lang_follow_system">Theo hệ thống</string>
+    <string name="pick_font_title">Chọn Font</string>
+    <string name="pick_font_summary">Chọn font chữ của bạn\nLưu ý: Không chọn tệp từ Gần đây.</string>
+    <string name="general_style">Chủ đề</string>
     <!-- Image Crop Strings -->
+    <string name="pick_image">Chọn ảnh</string>
+    <string name="pick_image_summary">Nhấn vào đây để chọn một ảnh</string>
     <!-- Search Preference -->
+    <string name="searchpreference_search">Tìm kiếm…</string>
+    <string name="searchpreference_clear">Xoá</string>
+    <string name="searchpreference_history_entry">Lịch sử ghi chép</string>
+    <string name="searchpreference_more">Thêm</string>
+    <string name="searchpreference_clear_history">Xóa lịch sử</string>
+    <string name="searchpreference_no_results">Không có kết quả</string>
     <!-- Menu Strings -->
+    <string name="restart_scopes">Phạm vi khởi động lại</string>
+    <string name="restart_module">Khởi động lại tiến trình phạm vi</string>
+    <string name="restart_page_scope">Chỉ khởi động lại trang này</string>
+    <string name="restart_scope_message">Bạn có chắc chắn muốn khởi động lại tất cả các tiến trình phạm vi ngoài khung hệ thống không?\nNếu mô-đun không hoạt động, vui lòng sử dụng chức năng này.\nHãy đảm bảo tất cả các phạm vi liên quan được chọn!</string>
+    <string name="add_notification">Thêm thông báo</string>
     <!-- NavBar Strings -->
+    <string name="navbar_ui">UI</string>
+    <string name="navbar_mods">Mods</string>
+    <string name="navbar_hooks">Hooks</string>
+    <string name="navbar_settings">Cài đặt</string>
     <!-- Mods Strings -->
+    <string name="mods_title">Mods</string>
+    <string name="statusbar_title">Thanh trạng thái</string>
+    <string name="launcher_title">Trình khởi chạy</string>
+    <string name="quick_settings_title">Cài đặt nhanh</string>
+    <string name="sound">Âm thanh</string>
+    <string name="misc">Khác</string>
+    <string name="colors">Màu sắc</string>
+    <string name="package_manager">Trình quản lý gói</string>
     <!-- General Strings -->
+    <string name="general_on">Bật</string>
+    <string name="general_off">Tắt</string>
+    <string name="accent_color">Màu nhấn</string>
+    <string name="white_color">Trắng</string>
+    <string name="black_color">Đen</string>
+    <string name="custom_color">Màu tuỳ chỉnh</string>
+    <string name="background_color">Màu nền</string>
+    <string name="battery_info_button_title">Thông tin pin…</string>
+    <string name="general_enabled">Đã bật</string>
+    <string name="general_disabled">Đã tắt</string>
+    <string name="requires_reboot">Cần khởi động lại</string>
     <!-- Statusbar Strings -->
+    <string name="statusbar_options">Tùy chọn thanh trạng thái</string>
     <string name="statusbar_double_tap_sleep">Chạm hai lần để tắt màn hình</string>
     <string name="status_bar_toggle_brightness_title">Điều khiển độ sáng</string>
     <string name="status_bar_toggle_brightness_summary">Điều chỉnh độ sáng bằng cách trượt trên thanh trạng thái</string>
+    <string name="statusbar_batterybar_title">Cài đặt thanh pin</string>
     <string name="statusbar_battery_icon_options">Biểu tượng pin</string>
     <string name="statusbar_icons">Biểu tượng thanh trạng thái</string>
     <!-- Statusbar notification strings -->
@@ -52,17 +154,60 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">Thông báo trên thanh trạng thái</string>
     <string name="statusbar_use_app_icon">Sử dụng biểu tượng ứng dụng để nhận thông báo</string>
+    <string name="statusbar_app_icon_scale">Tỉ lệ biểu tượng</string>
     <string name="statusbar_notifications_transparency">Thông báo trong suốt</string>
     <string name="statusbar_notification_transparency">Thông báo trong suốt</string>
     <string name="statusbar_notification_transparency_value">Độ trong suốt</string>
     <string name="statusbar_notification_count">Hiển thị số lượng thông báo</string>
+    <string name="statusbar_notifications_related">Tùy chọn thông báo</string>
     <!-- Statusbar Clock Strings -->
     <!-- Status bar - Clock -->
+    <string name="status_bar_clock_position_title">Kiểu đồng hồ</string>
+    <string name="status_bar_clock_position_right">Phải</string>
+    <string name="status_bar_clock_position_left">Trái</string>
+    <string name="status_bar_clock_position_center">Giữa</string>
+    <string name="status_bar_clock_position_hidden">Ẩn</string>
+    <string name="status_bar_clock_hide_category">Ẩn đồng hồ</string>
+    <string name="status_bar_clock_auto_hide_title">Tự động ẩn</string>
+    <string name="status_bar_am_pm_title">Kiểu AM/PM</string>
+    <string name="status_bar_am_pm_normal">Bình thường</string>
+    <string name="status_bar_am_pm_small">Nhỏ</string>
+    <string name="status_bar_am_pm_hidden">Ẩn</string>
+    <string name="status_bar_date_title">Ngày</string>
+    <string name="status_bar_date_none">Ẩn</string>
+    <string name="status_bar_date_small">Nhỏ</string>
+    <string name="status_bar_date_normal">Bình thường</string>
+    <string name="status_bar_date_format_title">Định dạng ngày tháng</string>
     <string name="status_bar_date_style">Kiểu ngày</string>
+    <string name="status_bar_date_style_normal">Bình thường</string>
+    <string name="status_bar_date_style_lowercase">Chữ thường</string>
+    <string name="status_bar_date_style_uppercase">Chữ hoa</string>
+    <string name="status_bar_date_format_custom">Tuỳ chỉnh định dạng Java</string>
+    <string name="string_formatter_manual_body">Ngoài văn bản thông thường, các biến cũng khả dụng, như Ngày và Nhiệt độ:\n\n$G\&lt;format\&gt; : Ngày Gregorian, dựa trên định dạng*\n$P\&lt;format\&gt; : Ngày Ba Tư, dựa trên định dạng*\n$L cho Ngày Âm lịch\n$I\&lt;calendar\&gt;&lt;format\&gt; : Lịch Hồi giáo. Lịch là tùy chọn, mặc định là lịch Hồi giáo, bạn cũng có thể sử dụng C cho Hồi giáo-Dân sự và U cho Hồi giáo Umalqura.\n$T\&lt;định dạng\&gt;[interval] : Nhiệt độ; \nđịnh dạng có thể là b (cho pin), c (cho CPU), g (cho GPU) và s (cho skin).\n$B\&lt;định dạng\&gt; : Pin; \nđịnh dạng có thể là v (đối với điện áp tính bằng mV), l (đối với mức) \nCuối cùng, có số TÙY CHỌN khoảng thời gian cập nhật tính bằng giây (mặc định: 60 giây)\n\n*để biết tài liệu định dạng, hãy tìm kiếm \"Java Date Format\"</string>
+    <string name="preview">Xem trước</string>
+    <string name="clock_date_right">Thời gian bên phải</string>
+    <string name="clock_date_left">Thời gian bên trái</string>
     <string name="status_bar_clock_color_title">Tùy chỉnh màu đồng hồ</string>
+    <string name="status_bar_custom_clock_color_summary">Màu đồng hồ</string>
+    <string name="status_bar_clock_chip_category">Màu đồng hồ</string>
+    <string name="status_bar_clock_background_chip_title">Màu nền</string>
+    <string name="status_bar_clock_smaller">Nhỏ hơn (70%)</string>
     <!-- Status bar padding -->
     <!-- Statusbar logo -->
+    <string name="statusbar_logo">Logo thanh trạng thái</string>
+    <string name="status_bar_logo_style_android">Android</string>
+    <string name="status_bar_logo_style_adidas">Adidas</string>
+    <string name="status_bar_logo_style_alien">Người ngoài hành tinh</string>
+    <string name="status_bar_logo_style_apple">Quả táo</string>
+    <string name="status_bar_logo_style_avengers">Biệt đội Avengers</string>
+    <string name="status_bar_logo_style_batman">Người dơi</string>
+    <string name="status_bar_logo_style_batman_tdk">Người dơi Kỵ sĩ bóng đêm</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Ma</string>
+    <string name="status_bar_logo_style_ninja">Ninja</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
     <!-- Battery Bar Strings -->
+    <string name="BB_batteryChargingColor">Màu sạc</string>
     <!-- Battery Icon Strings -->
     <!-- Battery Stock Prefs -->
     <!-- Battery Icon Styles -->
