@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <plurals name="notification_summary">
+        <item quantity="one">Сповіщень: %1$d</item>
+        <item quantity="few">Сповіщень: %1$d</item>
+        <item quantity="many">Сповіщень: %1$d</item>
+        <item quantity="other">Сповіщень: %1$d</item>
+    </plurals>
+</resources>
