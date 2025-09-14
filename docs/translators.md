@@ -153,18 +153,18 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>318 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/ALT021"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16730729/medium/42053ed38fe8f71a596c25d64c921d8c.jpg" />
+          <br />
+          <sub><b>ALT021</b></sub></a>
+        <br />
+        <sub><b>240 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/blxckhundred"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17084616/medium/9c598b72ff42c1c32e82f2269d5e4943.jpeg" />
           <br />
           <sub><b>Ranzar Loys (blxckhundred)</b></sub></a>
         <br />
         <sub><b>235 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/ALT021"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16730729/medium/42053ed38fe8f71a596c25d64c921d8c.jpg" />
-          <br />
-          <sub><b>ALT021</b></sub></a>
-        <br />
-        <sub><b>207 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Czak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16485797/medium/1f83cf36d385b6dda97fd604bc4ea3b8.jpg" />
