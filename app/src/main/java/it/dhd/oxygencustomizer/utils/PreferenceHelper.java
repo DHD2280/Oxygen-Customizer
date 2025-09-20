@@ -888,7 +888,7 @@ public class PreferenceHelper {
             }
             case "lockscreen_clock_stock_prefs",
                  "lockscreen_stock_clock_red_one_mode" -> {
-                return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
+                return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) && Build.VERSION.SDK_INT < 35;
             }
             case "lockscreen_stock_clock_red_one_color" -> {
                 return !instance.mPreferences.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false) &&
