@@ -60,7 +60,10 @@ public class ReoptimizeDialog extends AppCompatActivity {
         mOk = dialog.findViewById(R.id.apply);
         mRestart = dialog.findViewById(R.id.restart);
         mOk.setOnClickListener(v -> dismiss());
-        mRestart.setOnClickListener(v -> AppUtils.restartAllScope(new String[]{mPkgName}));
+        mRestart.setOnClickListener(v -> {
+            dismiss();
+            AppUtils.restartAllScope(new String[]{mPkgName});
+        });
         String[] commands = {
                 "pm compile -r bg-dexopt " + mPkgName,
                 "cmd package compile -m speed -f " + mPkgName
