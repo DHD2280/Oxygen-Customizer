@@ -218,6 +218,27 @@
     <string name="statusbar_right_padding">Margen derecho</string>
     <string name="sb_padding_title">Margen izquierdo y derecho de la barra de estado</string>
     <!-- Statusbar logo -->
+    <string name="status_bar_logo_style_fire">Fuego</string>
+    <string name="status_bar_logo_style_heart">Corazón</string>
+    <string name="status_bar_logo_style_nike">Nike</string>
+    <string name="status_bar_logo_style_pacman">Pac-man</string>
+    <string name="status_bar_logo_style_puma">Puma</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">Spider-Man</string>
+    <string name="status_bar_logo_style_superman">Superman</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">Fantasma</string>
+    <string name="status_bar_logo_style_ninja">Ninja</string>
+    <string name="status_bar_logo_style_robot">Robot</string>
+    <string name="status_bar_logo_style_ironman">Iron Man</string>
+    <string name="status_bar_logo_style_captain_america">Capitán América</string>
+    <string name="status_bar_logo_style_flash">Flash</string>
+    <string name="status_bar_logo_style_tux">Tux</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Amogus</string>
+    <string name="status_bar_logo_style_custom">Imagen personalizada</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">Habilitar barra de batería</string>
     <string name="BB_onlycharging_title">Solo durante la carga</string>
