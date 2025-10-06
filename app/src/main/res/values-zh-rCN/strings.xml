@@ -72,6 +72,7 @@
     <string name="battery_full">电池已满</string>
     <string name="battery_level_percentage">电量</string>
     <string name="seconds">秒</string>
+    <string name="duration_seconds">%d第二</string>
     <string name="milliseconds">毫秒</string>
     <string name="steps">步骤</string>
     <string name="general_color_accent1">强调色 1</string>
@@ -94,7 +95,9 @@
     <string name="bottom">底部</string>
     <string name="reset">重置</string>
     <string name="lang_follow_system">跟随系统</string>
+    <string name="pick_font_title">选择字体</string>
     <string name="pick_font_summary">请选择字体文件\n注意:不要从最近文件中选取</string>
+    <string name="general_style">主题</string>
     <!-- Image Crop Strings -->
     <string name="pick_image">选择图像</string>
     <string name="pick_image_summary">点击这里来选择一张图片</string>
@@ -132,7 +135,11 @@
     <string name="white_color">白色</string>
     <string name="black_color">黑色</string>
     <string name="custom_color">自定义颜色</string>
+    <string name="background_color">背景颜色</string>
     <string name="battery_info_button_title">电池信息…</string>
+    <string name="general_enabled">应用</string>
+    <string name="general_disabled">禁用</string>
+    <string name="requires_reboot">需要重启</string>
     <!-- Statusbar Strings -->
     <string name="statusbar_options">状态栏选项</string>
     <string name="statusbar_double_tap_sleep">双击以休眠</string>
@@ -222,6 +229,7 @@
     <string name="sb_padding_title">状态栏左侧和右侧填充</string>
     <string name="sb_padding_summary">将最大/最小值设置为系统默认值</string>
     <!-- Statusbar logo -->
+    <string name="statusbar_logo_summary">在状态栏中展示一个自定义图标</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">启用电池条</string>
     <string name="BB_onlycharging_title">仅充电时</string>
@@ -588,6 +596,7 @@
     <string name="remove_home_pagination">移除主页分页</string>
     <string name="force_themed_launcher_icons">强制主题应用图标</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: 强制所有应用使用主题图标.\n在启动器中重新启用主题图标以应用。</string>
+    <string name="themed_icons_search">搜索结果</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">手势导航</string>
     <string name="gesture_navigation_title">手势导航</string>

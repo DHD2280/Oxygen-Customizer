@@ -323,12 +323,45 @@
     <string name="blend_color_title">Màu pha trộn</string>
     <string name="blend_color_desc">Tùy chỉnh màu pin</string>
     <string name="fill_color_title">Điền màu</string>
+    <string name="fill_color_desc">Tùy chỉnh màu pin</string>
+    <string name="fill_gradient_color_title">Tô màu chuyển sắc</string>
+    <string name="fill_gradient_color_desc">Dùng màu chuyển sắc để tô đầy pin</string>
+    <string name="charging_fill_color_title">Màu điền sạc</string>
+    <string name="charging_fill_color_desc">Thay đổi màu sắc sạc</string>
+    <string name="fast_charging_fill_color_title">Màu nền sạc nhanh</string>
+    <string name="fast_charging_fill_color_desc">Thay đổi màu sắc của sạc nhanh</string>
+    <string name="powersave_fill_color_title">Màu nền tiết kiệm pin</string>
+    <string name="powersave_fill_color_desc">Thay đổi màu tiết kiệm pin</string>
+    <string name="powersave_indicator_color_title">Hiện màu tiết kiệm pin</string>
+    <string name="powersave_indicator_color_desc">Thay đổi màu hiển thị tiết kiệm pin</string>
+    <string name="battery_icon_margins">Biên độ biểu tượng pin</string>
+    <string name="reverse_layout_title">Bố cục đảo ngược</string>
+    <string name="reverse_layout_desc">Hiện phần trăm ở phía đối diện</string>
+    <string name="rotate_layout_title">Bố cục xoay</string>
+    <string name="rotate_layout_desc">Xoay bố cục pin 180 độ</string>
+    <string name="hide_percentage_title">Ẩn phần trăm</string>
+    <string name="hide_percentage_desc">Ẩn văn bản phần trăm pin</string>
+    <string name="inside_percentage_title">Phần trăm bên trong</string>
+    <string name="inside_percentage_desc">Di chuyển phần trăm vào biểu tượng pin</string>
+    <string name="battery_icon_color">Màu biểu tượng pin</string>
+    <string name="battery_icon_animate_charging">Hoạt ảnh sạc</string>
     <!-- Battery Stock Prefs -->
     <string name="battery_text_category">Văn bản pin</string>
     <string name="battery_edit_percentage_size_title">Tùy chỉnh phần trăm kích thước</string>
     <string name="battery_percentage_size">Phần trăm kích thước</string>
+    <string name="battery_text_attach_to_batterybar">Gắn vào thanh Pin</string>
+    <string name="battery_text_attach_to_batterybar_summary">Gắn màu văn bản vào màu của thanh pin</string>
+    <string name="battery_text_enable_bb_first">Bật thanh pin trước</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">Mặc định</string>
+    <string name="battery_landscape_r_default">Ngang sang phải mặc định</string>
+    <string name="battery_landscape_l_default">Ngang sang trái mặc định</string>
+    <string name="battery_landscape_r_custom">Ngang sang phải tuỳ chỉnh</string>
+    <string name="battery_landscape_l_custom">Ngang sang trái tuỳ chỉnh</string>
+    <string name="battery_portrait_capsule">Viên nang dọc</string>
+    <string name="battery_portrait_lorn">Lorn dọc</string>
+    <string name="battery_portrait_mx">Mx dọc</string>
+    <string name="battery_portrait_airoo">Airoo dọc</string>
     <string name="battery_landscape_r_style_a">Nằm sang phải kiểu A</string>
     <string name="battery_landscape_l_style_a">Nằm sang trái kiểu A</string>
     <string name="battery_landscape_r_style_b">Nằm sang phải kiểu B</string>
@@ -363,6 +396,10 @@
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">Ẩn biểu tượng Bluetooth</string>
     <string name="statusbar_icons_bluetooth_hide_summary">Ẩn biểu tượng Bluetooth khi chưa kết nối.</string>
+    <string name="statusbar_icons_inout_wifi_hide_title">Ẩn biểu tượng mũi tên Wifi</string>
+    <string name="statusbar_icons_inout_wifi_hide_summary">Tắt/Bật WiFi để hiện thay đổi.</string>
+    <string name="statusbar_icons_inout_mobile_hide_title">Ẩn biểu tượng mũi tên dữ liệu mạng</string>
+    <string name="statusbar_icons_inout_mobile_hide_summary">Tắt/Bật dữ liệu di động để hiện thay đổi.</string>
     <!-- Quick Settings Mods -->
     <string name="quick_pulldown">Kéo xuống nhanh</string>
     <string name="quick_pulldown_side_left">Trái</string>
