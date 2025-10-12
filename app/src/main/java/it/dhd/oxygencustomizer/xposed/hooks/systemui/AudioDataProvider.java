@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -20,6 +21,8 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import androidx.palette.graphics.Palette;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -265,20 +268,25 @@ public class AudioDataProvider extends XposedMods {
             XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
         }
         if (colorScheme == null) return;
-        int newMediaArtColor;
         if (Build.VERSION.SDK_INT == 33) {
-            List<Integer> accent1 = (List<Integer>) callMethod(colorScheme, "getAccent1");
-            newMediaArtColor = (int) (isDarkThemeOn ? accent1.get(0) : accent1.get(accent1.size()-2));
+            Palette.Builder builder = new Palette.Builder(mArt);
+            builder.generate(palette -> {
+                int color = palette.getDominantColor(Color.WHITE);
+                if (mCurrentMediaArtColor != color) {
+                    mCurrentMediaArtColor = color;
+                    mWallpaperColors = wallpaperColors;
+                    onMediaColorsChanged();
+                }
+            });
         } else {
+            int newMediaArtColor;
             newMediaArtColor = (int) (isDarkThemeOn ? callMethod(callMethod(colorScheme, "getAccent1"), "getS100") : callMethod(callMethod(colorScheme, "getAccent1"), "getS800"));
-        }
-
-
-        if (mCurrentMediaArtColor != newMediaArtColor) {
-            mCurrentMediaArtColor = newMediaArtColor;
-            mCurrentColorScheme = colorScheme;
-            mWallpaperColors = wallpaperColors;
-            onMediaColorsChanged();
+            if (mCurrentMediaArtColor != newMediaArtColor) {
+                mCurrentMediaArtColor = newMediaArtColor;
+                mCurrentColorScheme = colorScheme;
+                mWallpaperColors = wallpaperColors;
+                onMediaColorsChanged();
+            }
         }
     }
 
