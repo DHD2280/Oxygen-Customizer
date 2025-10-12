@@ -66,15 +66,20 @@ If you are running OOS14 or OOS13 based rom.
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&label=STABLE" alt="Stable"></a>
     
 ### 🟡 **Beta**
-More updated with fixes and new features , if you are using OOS15 based rom.
+More updated with fixes and new features, if you are using OOS15 based rom - consider to use nightly variant.
 <br>
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases&label=BETA" alt="Beta"></a>
   
 ### 🌒 **Nightly**
 This variant is released on every push on this repo.
-It can include varius fixes or new feature that will came in beta and stable.
+It can include various fixes or new feature that will came in beta and stable.
 <br>
 <a href="https://github.com/DHD2280/Oxygen-Customizer/actions/workflows/build_debug.yml"><img src="https://img.shields.io/github/actions/workflow/status/DHD2280/Oxygen-Customizer/build_debug.yml?branch=beta&label=Nightliy&style=for-the-badge" alt="Nightly Build"></a>
+
+> [!WARNING]
+>
+> If you are using OOS15 .850+ you NEED to use LSPosed IT (Internal Test) or any version of LSPosed Irena 7280+ (recommended with Zygisk Next 534+) or ReLSPosed 7200+
+> Any Issue report with a different LSPosed version or incompatible software will be closed
 
 # 👨‍💻 Installation
 
