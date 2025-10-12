@@ -40,6 +40,10 @@ public class OnboardingCompiler {
                     "find " + source + " -name \"*_qs_*\" -exec sed -i 's/android:insetRight=\"6dp/android:insetRight=\"0dp/g' {} \\;",
                     "find "+ source + " -name \"*_qs_*\" -exec sed -i 's/android:insetBottom=\"6dp/android:insetBottom=\"0dp/g' {} \\;"
             ).exec();
+        } else if (name.contains("SGIC")) {
+            Shell.cmd(
+                    "find "+ source + " -name \"*_signal_*\" -exec sed -i 's/android:insetRight=\"3.0dip/android:insetRight=\"0.5dp/g' {} \\;"
+            );
         }
     }
 
