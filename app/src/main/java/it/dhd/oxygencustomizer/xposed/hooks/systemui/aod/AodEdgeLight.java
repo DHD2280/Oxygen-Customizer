@@ -250,7 +250,12 @@ public class AodEdgeLight extends XposedMods {
                 .after("onCreate")
                 .run(param -> {
                     EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
-                    FrameLayout mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
+                    FrameLayout mAodBlackLayout;
+                    try {
+                        mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
+                    } catch (Throwable ignored) {
+                        mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mRootLayout");
+                    }
                     edgeController.setBlockLayout(mAodBlackLayout);
                 });
 
@@ -258,20 +263,22 @@ public class AodEdgeLight extends XposedMods {
                 .after("addCurvedDisplayView")
                 .run(param -> {
                     EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
-                    FrameLayout mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
+                    FrameLayout mAodBlackLayout;
+                    try {
+                        mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mAodBlackLayout");
+                    } catch (Throwable ignored) {
+                        mAodBlackLayout = (FrameLayout) getObjectField(param.thisObject, "mRootLayout");
+                    }
                     edgeController.setBlockLayout(mAodBlackLayout);
                     edgeController.setCurved(true);
-                    XposedBridge.log("AodEdgeLight: addCurvedDisplayView - removing reticker callbacks");
                     mRetickerHandler.removeCallbacks(mTriggerShow);
                 });
 
         AodRecord
                 .after("removeCurvedDisplayView")
                 .run(param -> {
-                    XposedBridge.log("AodEdgeLight: removing view");
                     EdgeLightControllerImpl edgeController = EdgeLightControllerImpl.getInstance(mContext);
                     edgeController.setCurved(false);
-                    XposedBridge.log("AodEdgeLight: removeCurvedDisplayView - removing reticker callbacks & trigger again in " + mRetickDuration);
                     mRetickerHandler.removeCallbacks(mTriggerShow);
                     mRetickerHandler.postDelayed(mTriggerShow, mRetickDuration);
                 });
@@ -334,7 +341,6 @@ public class AodEdgeLight extends XposedMods {
         AodSensorManager
                 .after("triggerShow")
                 .run(param -> {
-                    XposedBridge.log("AodEdgeLight triggerShow");
                     boolean isOc = false;
                     try {
                         isOc = (boolean) getAdditionalInstanceField(mAodSensorManager, "mIsOC");
@@ -345,7 +351,6 @@ public class AodEdgeLight extends XposedMods {
                     } catch (Throwable t) {
                         log(t);
                     }
-                    XposedBridge.log("AodEdgeLight triggerShow isOc = " + isOc);
                     if (EdgeLightControllerImpl.hasInstance()) {
                         EdgeLightControllerImpl.getInstance(mContext).triggerShow(isOc);
                     }
