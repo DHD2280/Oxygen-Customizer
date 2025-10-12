@@ -176,6 +176,7 @@ public class ReflectionTools {
 
 	public static void dumpClass(Class<?> ourClass) {
 		Method[] ms = ourClass.getDeclaredMethods();
+		Method[] ms2 = ourClass.getMethods();
 		log("ReflectionTools - Class: " + ourClass.getName());
 		log("ReflectionTools - extends: " + ourClass.getSuperclass().getName());
 		log("ReflectionTools - Subclasses:");
@@ -184,19 +185,28 @@ public class ReflectionTools {
 		{
 			log(c.getName());
 		}
-		log("ReflectionTools - Methods:");
+		log("ReflectionTools - Constructors:");
 
 		Constructor<?>[] cons = ourClass.getDeclaredConstructors();
 		for (Constructor<?> m : cons) {
+			m.setAccessible(true);
 			log(m.getName() + " - " + " - " + m.getParameterCount());
 			Class<?>[] cs = m.getParameterTypes();
 			for (Class<?> c : cs) {
 				log("\t\t" + c.getTypeName());
 			}
 		}
-
-
+		log("ReflectionTools - Methods:");
 		for (Method m : ms) {
+			m.setAccessible(true);
+			log(m.getName() + " - " + m.getReturnType() + " - " + m.getParameterCount());
+			Class<?>[] cs = m.getParameterTypes();
+			for (Class<?> c : cs) {
+				log("\t\t" + c.getTypeName());
+			}
+		}
+		for (Method m : ms2) {
+			m.setAccessible(true);
 			log(m.getName() + " - " + m.getReturnType() + " - " + m.getParameterCount());
 			Class<?>[] cs = m.getParameterTypes();
 			for (Class<?> c : cs) {
