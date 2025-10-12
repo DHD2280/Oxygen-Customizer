@@ -78,8 +78,7 @@ It can include various fixes or new feature that will came in beta and stable.
 
 > [!WARNING]
 >
-> If you are using OOS15 .850+ you NEED to use LSPosed IT (Internal Test) or any version of LSPosed Irena 7280+ (recommended with Zygisk Next 534+) or ReLSPosed 7200+
-> Any Issue report with a different LSPosed version or incompatible software will be closed
+> If you are using OOS15 .850+ you NEED to use LSPosed IT (Internal Test) or any version of LSPosed Irena 7280+ (recommended with Zygisk Next 534+) or ReLSPosed 7200+. Any Issue report with a different LSPosed version or incompatible software will be closed
 
 # 👨‍💻 Installation
 
