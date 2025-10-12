@@ -133,6 +133,7 @@ public class StatusbarNotification extends XposedMods {
                 });
 
         ReflectedClass FlashlightNotification = ReflectedClass.of(
+                "com.oplus.systemui.notification.flashlight.FlashlightNotification", /* OOS 15.0.1+ */
                 "com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", /* OOS 15-14 */
                 "com.oplusos.systemui.flashlight.FlashlightNotification" /* OOS 13 */
         );
