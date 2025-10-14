@@ -183,7 +183,7 @@ public class QsMediaTile extends LinearLayout implements QsMediaTileI {
         Object nextOrCustom = MediaButton != null ? callMethod(MediaButton, "getNextOrCustom") : null;
 
         setSemanticButton(mPrev, mPrevIconDrawable, prevOrCustom, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-        setSemanticButton(mPlayPause, (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable, playOrPause, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        setSemanticButton(mPlayPause, mediaData != null ? (boolean) callMethod(mediaData, "isPlaying") ? mPauseIconDrawable : mPlayIconDrawable : mPlayIconDrawable, playOrPause, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
         setSemanticButton(mNext, mNextIconDrawable, nextOrCustom, KeyEvent.KEYCODE_MEDIA_NEXT);
 
     }
