@@ -1044,7 +1044,6 @@ public class QsTileCustomization extends XposedMods {
         OplusQsVerticalSeekBar
                 .before("createActiveTrackBlurParams")
                 .run(param -> {
-                    XposedBridge.log("QsTileCustomization: createActiveTrackBlurParams");
                     if (!qsBrightnessSliderCustomize) return;
                     Object ForegroundParams = getForegroundBlur(SLIDER_PROGRESS);
                     param.setResult(ForegroundParams);
