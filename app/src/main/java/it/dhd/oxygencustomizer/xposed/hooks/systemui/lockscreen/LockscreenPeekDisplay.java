@@ -1,8 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -17,14 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
-import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayHolder;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayView;
@@ -43,7 +39,7 @@ public class LockscreenPeekDisplay extends XposedMods {
 
     private int mStatusBarState = -1;
     private boolean mKeyguardShowing = false;
-    private int mTopHeight;
+    private int mTopHeight, mStackScrollerPaddingExpanded;
     private int mTopMargin = 0;
     private boolean mMarginSet = false;
 
@@ -144,15 +140,13 @@ public class LockscreenPeekDisplay extends XposedMods {
                         XposedBridge.log("LockscreenPeekDisplay, NotificationPanelViewController onFinishInflate, notificationController != param.thisObject");
                         return;
                     }
-                    XposedBridge.log("NotificationPanelViewController, NotificationPanelViewController onFinishInflate");
                     mNotificationPanelViewController = (ViewGroup) getObjectField(param.thisObject, "mView");
                     Object mNotificationStackScrollLayoutController = getObjectField(param.thisObject, "mNotificationStackScrollLayoutController");
 
                     mNotificationStackScroller = (View) callMethod(mNotificationStackScrollLayoutController, "getView");
                     Object mClockPositionResult = getObjectField(param.thisObject, "mClockPositionResult");
                     mTopHeight = getIntField(mClockPositionResult, "stackScrollerPadding");
-                    int stackScrollerPaddingExpanded = getIntField(mClockPositionResult, "stackScrollerPaddingExpanded");
-                    XposedBridge.log("LockscreenPeekDisplay, NotificationPanelViewController onFinishInflate, mTopHeight: " + mTopHeight + ", stackScrollerPaddingExpanded: " + stackScrollerPaddingExpanded);
+                    mStackScrollerPaddingExpanded = getIntField(mClockPositionResult, "stackScrollerPaddingExpanded");
                     placePeek();
                 });
 
@@ -164,14 +158,22 @@ public class LockscreenPeekDisplay extends XposedMods {
                         param.setResult(false);
                     }
                 });
+        // OOS15+ need this bool change
+        NotificationLockscreenUserManagerImpl
+                .before("setShowLockscreenNotifications")
+                .run(param ->{
+                    if (mPeekEnabled) {
+                        param.args[0] = false;
+                    }
+                });
 
         ReflectedClass NotificationPanelViewControllerExImp = ReflectedClass.of("com.oplus.systemui.shade.NotificationPanelViewControllerExImp");
         NotificationPanelViewControllerExImp
                 .before("setNotificationsConstraints")
                 .run(param -> {
-                    int top = (int) param.args[3];
                     if (mPeekContainer == null) return;
-                    ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, top + dp2px(mContext, mTopMargin), 0, 0);
+                    int top = (int) param.args[3];
+                    setMarginsNoConvert(mPeekContainer, mContext, 0, (top == 0 ? mStackScrollerPaddingExpanded + mTopHeight : top) + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
         ReflectedClass KeyguardStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardStatusBarView");
@@ -190,7 +192,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                     if (mPeekContainer == null) return;
                     if (QsStyleObserver.isSeparateStyle()) return;
                     float position = (float) param.getResult();
-                    ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int) position + dp2px(mContext, mTopMargin), 0, 0);
+                    setMarginsNoConvert(mPeekContainer, mContext, 0, (int) position + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
         ReflectedClass NotificationStackScrollLayout = ReflectedClass.of("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout");
@@ -202,7 +204,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                     f2 = (float) param.args[0];
                     f3 = (float) param.args[1];
                     if (!QsStyleObserver.isSeparateStyle()) return;
-                    ViewHelper.setMarginsNoConvert(mPeekContainer, mContext, 0, (int)f2 - (int)f3 + dp2px(mContext, mTopMargin), 0, 0);
+                    setMarginsNoConvert(mPeekContainer, mContext, 0, (int)f2 - (int)f3 + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
         ReflectedClass NotificationListener = ReflectedClass.of("com.android.systemui.statusbar.NotificationListener");
