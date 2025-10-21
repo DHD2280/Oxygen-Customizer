@@ -406,7 +406,6 @@ public class NowBarMusic extends LinearLayout {
 
     private void updateMediaPlaybackState() {
         MediaMetadata mediaMetadata = AudioDataProvider.getMediaMetadata();
-        boolean isPlaying = AudioDataProvider.isMediaPlaying();
         if (resetMediaIfNeeded()) {
             return;
         }

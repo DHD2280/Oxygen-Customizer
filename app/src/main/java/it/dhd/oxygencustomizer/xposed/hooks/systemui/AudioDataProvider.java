@@ -444,11 +444,23 @@ public class AudioDataProvider extends XposedMods {
     }
 
     public static boolean isMediaPlaying() {
-        return instance.isMediaControllerAvailable() && instance.getMediaControllerPlaybackState(instance.getActiveLocalMediaController()) == PlaybackState.STATE_PLAYING;
+        try {
+            return instance.isMediaControllerAvailable() && instance.getMediaControllerPlaybackState(instance.getActiveLocalMediaController()) == PlaybackState.STATE_PLAYING;
+        } catch (Throwable t) {
+            XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
+            return false;
+        }
     }
 
     public int getMediaControllerPlaybackState(MediaController controller) {
-        return controller != null && controller.getPlaybackState() != null ? controller.getPlaybackState().getState() : PlaybackState.STATE_NONE;
+        if (controller == null) return PlaybackState.STATE_NONE;
+        try {
+            PlaybackState state = controller.getPlaybackState();
+            return state != null ? state.getState() : PlaybackState.STATE_NONE;
+        } catch (Throwable ignored) {
+            // PlaybackState changed state while checking
+            return PlaybackState.STATE_NONE;
+        }
     }
 
     public PlaybackState getMediaControllerPlaybackState() {
