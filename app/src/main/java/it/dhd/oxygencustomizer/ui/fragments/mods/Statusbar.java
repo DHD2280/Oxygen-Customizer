@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
@@ -25,6 +26,7 @@ import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
+import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 import it.dhd.oxygencustomizer.xposed.batterystyles.BatteryDrawable;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleBattery;
 import it.dhd.oxygencustomizer.xposed.batterystyles.CircleFilledBattery;
@@ -397,6 +399,21 @@ public class Statusbar extends ControlledPreferenceFragmentCompat {
         @Override
         public String[] getScopes() {
             return new String[]{SYSTEM_UI};
+        }
+
+        @Override
+        public void updateScreen(String key) {
+            super.updateScreen(key);
+
+            if (!TextUtils.isEmpty(key)) {
+                if (key.equals("hide_inout_wifi")) {
+                    if (OCPreferences.getBoolean("hide_inout_wifi"))
+                        OverlayUtil.enableOverlay("OxygenCustomizerComponentRMWFAC.overlay");
+                    else
+                        OverlayUtil.disableOverlay("OxygenCustomizerComponentRMWFAC.overlay");
+                }
+            }
+
         }
     }
 
