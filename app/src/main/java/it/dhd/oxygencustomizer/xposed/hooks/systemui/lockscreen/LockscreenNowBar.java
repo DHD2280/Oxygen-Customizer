@@ -277,6 +277,13 @@ public class LockscreenNowBar extends XposedMods {
                             param.setResult(true);
                         }
                     });
+            KeyguardGlideTipView
+                    .before("getBlendAlpha")
+                    .run(param -> {
+                        if (mNowBarEnabled) {
+                            param.setResult(0f);
+                        }
+                    });
         }
 
         ControllersProvider.registerDozingCallback(mDozingChanged);
