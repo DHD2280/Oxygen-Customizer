@@ -615,9 +615,19 @@ public class ControllersProvider extends XposedMods {
 
     public static boolean isOOS1501() {
         Object sysPropHelper = instance.mSystemPropertiesHelper;
+        if (Build.VERSION.SDK_INT < 35) return false;
         if (sysPropHelper == null) return false;
         String getprop = (String) callMethod(sysPropHelper, "get", "ro.build.version.oplusrom");
-        return !TextUtils.isEmpty(getprop) && getprop.contains("15.0.1");
+        if (TextUtils.isEmpty(getprop)) return false;
+        if (getprop.contains(".")) {
+            String[] vs = getprop.split("\\.");
+            try {
+                return Integer.parseInt(vs[vs.length - 1]) >= 1;
+            } catch (Throwable ignored) {
+                return getprop.endsWith(".1") || getprop.endsWith(".2");
+            }
+        }
+        return false;
     }
 
     public static Object getBatteryInfoExternal() {
