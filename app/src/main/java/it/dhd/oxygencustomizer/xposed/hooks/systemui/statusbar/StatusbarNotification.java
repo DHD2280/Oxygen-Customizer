@@ -132,6 +132,12 @@ public class StatusbarNotification extends XposedMods {
                     if (removeLowBattery) param.setResult(null);
                 });
 
+        OplusPowerNotificationWarnings
+                .before("createNotification")
+                .run(param -> {
+                    if (removeLowBattery) param.setResult(null);
+                });
+
         ReflectedClass FlashlightNotification = ReflectedClass.of(
                 "com.oplus.systemui.notification.flashlight.FlashlightNotification", /* OOS 15.0.1+ */
                 "com.oplus.systemui.statusbar.notification.flashlight.FlashlightNotification", /* OOS 15-14 */
