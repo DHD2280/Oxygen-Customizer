@@ -206,7 +206,7 @@ public class Hooks extends BaseFragment {
                 desc.setText(getString(R.string.package_checking, ""));
             } else {
                 desc.setText(getText(R.string.package_not_found));
-                desc.setTextColor(requireContext().getColor(com.google.android.material.R.color.design_default_color_error));
+                desc.setTextColor(requireContext().getColor(R.color.design_default_color_error));
             }
 
             ImageView preview = list.findViewById(R.id.icon);
@@ -258,9 +258,9 @@ public class Hooks extends BaseFragment {
 
     private void handleApplicationRestart(String packageName) {
         if (Constants.Packages.FRAMEWORK.equals(packageName)) {
-            AppUtils.restartScopes(requireContext(), new String[]{FRAMEWORK});
+            AppUtils.restartAllScope(new String[]{FRAMEWORK});
         } else if (SYSTEM_UI.equals(packageName)) {
-            AppUtils.restartScopes(requireContext(), new String[]{SYSTEM_UI});
+            AppUtils.restartAllScope(new String[]{SYSTEM_UI});
         } else {
             Shell.cmd(
                     "killall " + packageName,
