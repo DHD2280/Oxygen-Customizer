@@ -163,6 +163,14 @@ public class StatusbarNotification extends XposedMods {
                 .run(param -> {
                     if (removeDevMode) param.setResult(null);
                 });
+        ReflectedClass StatusBarFeatureOption = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.feature.StatusBarFeatureOption");
+        if (StatusBarFeatureOption.getClazz() != null) {
+            StatusBarFeatureOption
+                    .before("getSendDeveloperModeNotification")
+                    .run(param -> {
+                        if (removeDevMode) param.setResult(false);
+                    });
+        }
 
         ReflectedClass NotificationStackScrollLayoutClass = ReflectedClass.of("com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout");
         ReflectedClass NotifCollectionClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.notification.collection.NotifCollection");
