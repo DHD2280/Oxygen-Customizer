@@ -60,6 +60,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -567,15 +568,15 @@ public class StatusbarClock extends XposedMods {
         textPaint.setTypeface(mClockView.getTypeface());
 
         SpannableStringBuilder fullText = new SpannableStringBuilder();
-
+        // before
         fullText.append(getFormattedString(mCustomBeforeClock, mCustomBeforeSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
-
+        // clock
         fullText.append(new SimpleDateFormat(countSeconds && mShowSeconds ? "HH:mm:ss" : "HH:mm", Locale.getDefault()).format(new Date()));
-
+        // am/pm
         if (mAmPmStyle != AM_PM_STYLE_GONE) {
             fullText.append(getFormattedString("$Ga", mAmPmStyle == AM_PM_STYLE_SMALL, 0, mClockCustomColor ? mClockColor : null));
         }
-
+        // after
         fullText.append(getFormattedString(mCustomAfterClock, mCustomAfterSmall, mClockDateStyle, mClockCustomColor ? mClockColor : null));
 
         return calculateMaxLineWidth(fullText, textPaint);
@@ -589,27 +590,16 @@ public class StatusbarClock extends XposedMods {
 
         copySpans(text, ssb);
 
-        StaticLayout layout = new StaticLayout(
-                ssb,
-                paint,
-                Integer.MAX_VALUE,
-                Layout.Alignment.ALIGN_NORMAL,
-                1.0f,
-                0.0f,
-                false
-        );
-
         float maxWidth = 0f;
-        for (int i = 0; i < layout.getLineCount(); i++) {
-            maxWidth = Math.max(maxWidth, layout.getLineWidth(i));
+        for (String line : text.toString().split("\n")) {
+            maxWidth = Math.max(maxWidth, paint.measureText(line));
         }
 
         return maxWidth;
     }
 
     private void copySpans(CharSequence source, SpannableStringBuilder dest) {
-        if (source instanceof Spanned) {
-            Spanned spanned = (Spanned) source;
+        if (source instanceof Spanned spanned) {
             Object[] spans = spanned.getSpans(0, source.length(), Object.class);
             for (Object span : spans) {
                 dest.setSpan(span,
