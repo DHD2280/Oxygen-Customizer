@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -130,6 +129,12 @@ public class StatusbarNotification extends XposedMods {
                 .before("showLowBatteryDialog")
                 .run(param -> {
                     if (removeLowBattery) param.setResult(null);
+                });
+
+        OplusPowerNotificationWarnings
+                .before("showLowBatteryWarning")
+                .run(param -> {
+                    if (removeLowBattery) param.setResult(false);
                 });
 
         OplusPowerNotificationWarnings
