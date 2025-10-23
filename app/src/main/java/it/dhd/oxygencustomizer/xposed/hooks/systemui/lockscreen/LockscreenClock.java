@@ -323,7 +323,6 @@ public class LockscreenClock extends XposedMods {
             OplusKeyguardStyleBaseClock
                     .after("setTime")
                     .run(param -> {
-                        XposedBridge.log("LockscreenClock setTime");
                         long time = (long) param.args[0];
                         if (customLockscreenClock) {
                             mLockscreenView.updateClock(time);
@@ -753,17 +752,6 @@ public class LockscreenClock extends XposedMods {
 
                 TimeUtils.setCurrentTimeTextClock(mContext, tickIndicator, hourView, minuteView);
             }
-        }
-    }
-
-    private void moveClockView(int uiMode) {
-        if (!customLockscreenClock) return;
-
-        if (mLockscreenView == null) return;
-        try {
-            mLockscreenView.onUiStateChanged(uiMode);
-        } catch (Throwable t) {
-            XposedBridge.log("Error moving clock view: " + Log.getStackTraceString(t));
         }
     }
 
