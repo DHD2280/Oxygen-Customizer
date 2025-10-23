@@ -1,3 +1,39 @@
+**beta-205**  
+- Fixed clock on OOS15.0.1  
+- Fixed lockscreen peek notifications (OOS15)  
+- Fixed hide wifi activity (OOS15)  
+- Fixed remove low battery notification on OOS15  
+- Fixed signal styles margins on OOS15  
+- Added 2 new signal styles  
+- Fixed remove flashlight notification on OOS15  
+- Fixed SystemUI crash on OOS13 for media  
+- Fixed Settings OTA Card for OOS15.0.1  
+- Fixed Edge Light on OOS 15.0.1  
+- Fixed statusbar clock seconds for OOS15.0.1  
+- Improved device custom widgets  
+- Fixed close all button customizations for OOS15.0.1  
+- Fixed header clock for OOS15.0.1  
+- Fixed custom qs menus for OOS15.0.1  
+- Fixed notification style for OOS15.0.1  
+- Fixed header image on split style for OOS15.0.1  
+- Fixed custom qs widgets in split mode for OOS15.0.1  
+- Fixed hold back gesture on OOS15.0.1  
+- Photo Showcase: allow multiple images  
+- Fixed Depth Wallpaper scale on OOS15  
+- Added qs pulldown width for split style (OOS15)  
+- Fixed override back gesture on OOS15.0.1  
+- Added iOS 10 signal icon  
+- Fixed qs blur amount for OOS15  
+- Added a switch for custom qs layout  
+- Fixed Depth Wallpaper for OOS15  
+- Added One UI 7 battery style  
+- Fixed notification style on OOS15  
+- Fixed Keyguard pin scrambler for OOS15.0.1  
+- Added dock background (OOS15)  
+- Fixed launcher folder preview for OOS15  
+- Fixed Advanced Reboot for OOS15.0.1  
+- Fixed fingerprint icon tweaks on some OOS15 variants  
+  
 **beta-204**  
 - Improved nightly updater  
 - Unzip nightly in cache and remove files after work done  
