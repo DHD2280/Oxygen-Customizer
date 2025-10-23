@@ -269,6 +269,7 @@ public class UpdateFragment extends BaseFragment {
             binding.updateBtn.setEnabled(rebootPending);
 
             checkUpdates(mCurrentFlavor, result -> {
+                if (result == null) return;
                 latestVersion = result;
 
                 if (getActivity() != null) {
