@@ -18,7 +18,7 @@ public class ThemeUtils {
     public static @ColorInt int getPrimaryColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true);
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimaryVariant, typedValue, true);
         return typedValue.data;
     }
 

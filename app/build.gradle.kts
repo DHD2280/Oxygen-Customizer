@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -10,12 +11,12 @@ plugins {
 android {
 
     namespace = "it.dhd.oxygencustomizer"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 205
         versionName = "beta-205"
         setProperty("archivesBaseName", "OxygenCustomizer.apk")
@@ -39,8 +40,7 @@ android {
             enableV1Signing = true
             enableV2Signing = true
         }
-    } catch (ignored: Exception) {
-    }
+    } catch (_: Exception) {}
 
     buildTypes {
         release {
@@ -73,7 +73,7 @@ android {
             }
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
         dataBinding = true
         buildConfig = true
@@ -84,8 +84,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
     }
     packaging {
         jniLibs.excludes += setOf(

@@ -123,7 +123,7 @@ public class TopIntroWidget extends LinearLayout {
             TypedValue typedValue = new TypedValue();
             TypedArray a = getContext().obtainStyledAttributes(
                     typedValue.data,
-                    new int[]{com.google.android.material.R.attr.colorPrimary}
+                    new int[]{com.google.android.material.R.attr.colorPrimaryVariant}
             );
             int color = a.getColor(0, 0);
             a.recycle();
