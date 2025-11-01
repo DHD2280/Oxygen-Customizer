@@ -119,7 +119,7 @@ public class Misc extends ControlledPreferenceFragmentCompat {
             String[] split = osVersion.split("\\.");
             String version = split[split.length - 1].substring(0, split[split.length - 1].indexOf("("));
             Log.d("Misc OC", "Oplus version: " + version);
-            if (Integer.parseInt(version) >= 610) {
+            if (Build.VERSION.SDK_INT >= 34 && Integer.parseInt(version) >= 610) {
                 Log.d("Misc OC", "Oplus version is greater than 610");
                 showConfirmDialog();
             } else {
