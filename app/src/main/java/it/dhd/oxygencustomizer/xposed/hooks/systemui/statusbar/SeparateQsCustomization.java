@@ -384,7 +384,7 @@ public class SeparateQsCustomization extends XposedMods {
 
         mContext.registerReceiver(mDeviceProfileReceiver, new IntentFilter(BuildConfig.APPLICATION_ID + ".DEVICE_PROFILE_GET"), RECEIVER_EXPORTED);
 
-        ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
+        ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
         OplusQSQuickEntranceContainerViewController
                 .after("onInit")
                 .run(param -> {
