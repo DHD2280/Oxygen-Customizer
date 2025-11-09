@@ -44,7 +44,9 @@ public class MediaPlayerObserver extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
         try {
-            ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+            ReflectedClass OplusQsMediaPanelView = ReflectedClass.of(
+                    "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", // OOS16 - They added OplusQsNormalMediaPanelView and OplusQsLargeMediaPanelView
+                    "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
             OplusQsMediaPanelView
                     .after("bindTitleAndText")
                     .run(param -> {
@@ -66,7 +68,7 @@ public class MediaPlayerObserver extends XposedMods {
                     .run(param -> {
                         unBindMediaData();
                     });
-            // OOS15.0.1 method
+            // OOS15.0.1 method & OOS16
             OplusQsMediaPanelView
                     .after("resetButtonEnableState")
                     .run(param -> {
