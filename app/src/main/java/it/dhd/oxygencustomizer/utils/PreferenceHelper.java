@@ -297,11 +297,12 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 
+import com.topjohnwu.superuser.Shell;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import it.dhd.oneplusui.preference.OplusSliderPreference;
@@ -315,7 +316,7 @@ public class PreferenceHelper {
     public static boolean showOverlays, showFonts;
 
     public final ExtendedSharedPreferences mPreferences;
-
+    public final String mOsVersion;
     public static PreferenceHelper instance;
 
     private final List<Integer> LsClockDateFormat = new ArrayList<>() {{
@@ -348,13 +349,30 @@ public class PreferenceHelper {
 
     private PreferenceHelper(ExtendedSharedPreferences prefs) {
         mPreferences = prefs;
-
+        mOsVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);
         instance = this;
     }
 
     public static SharedPreferences getModulePrefs() {
         if (instance != null) return instance.mPreferences;
         return null;
+    }
+
+    public static String getOsVersion() {
+        if (instance != null) return instance.mOsVersion;
+        return "";
+    }
+
+    public static int getOOSVersion() {
+        if (instance == null) return -1;
+        String[] split = instance.mOsVersion.split("\\.");
+        String version = split[split.length - 1].substring(0, split[split.length - 1].indexOf("("));
+        try {
+            return Integer.parseInt(version);
+        } catch (NumberFormatException e) {
+            Log.getStackTraceString(e);
+            return -1;
+        }
     }
 
     public static boolean isVisible(String key) {
@@ -1079,8 +1097,15 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("volume_panel_seekbar_color_enabled", false) &&
                         !instance.mPreferences.getBoolean("volume_panel_seekbar_link_primary", false);
             }
+            case "volume_panel_seekbar_bg_color_enabled" -> {
+                return switch (Build.VERSION.SDK_INT) {
+                    case 35 -> getOOSVersion() <= 840;
+                    case 34 -> true;
+                    default -> Build.VERSION.SDK_INT >= 36 ? false : true;
+                };
+            }
             case "volume_panel_seekbar_bg_color" -> {
-                return instance.mPreferences.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
+                return isVisible("volume_panel_seekbar_bg_color_enabled") && instance.mPreferences.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
             }
             case "volume_panel_icon_accent" -> {
                 return instance.mPreferences.getBoolean("volume_panel_icon_color_enabled", false);
