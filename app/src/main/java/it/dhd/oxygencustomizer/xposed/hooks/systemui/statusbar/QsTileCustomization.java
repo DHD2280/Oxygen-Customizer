@@ -653,7 +653,9 @@ public class QsTileCustomization extends XposedMods {
                     if (!customHighlightTileRadius) return;
                     param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
                 });
-        ReflectedClass OplusQSHighlightTileViewImpl = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        ReflectedClass OplusQSHighlightTileViewImpl = ReflectedClass.of(
+                "com.oplus.systemui.qs.tileimpl.OplusQSHighlightTileViewImpl", // OOS 16
+                "com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         OplusQSHighlightTileViewImpl
                 .before("getOutlineProviderForHighlightTile")
                 .run(param -> {
