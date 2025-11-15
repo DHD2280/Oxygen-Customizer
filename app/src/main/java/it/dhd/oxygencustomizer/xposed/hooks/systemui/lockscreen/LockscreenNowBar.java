@@ -236,7 +236,7 @@ public class LockscreenNowBar extends XposedMods {
             }
         });
 
-        ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
+        ReflectedClass KeyguardStatusViewController = ReflectedClass.ofIfPossible("com.android.keyguard.KeyguardStatusViewController");
         KeyguardStatusViewController
                 .after("setAlpha")
                 .run(param -> {
