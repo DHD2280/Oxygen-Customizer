@@ -8,6 +8,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_RECEIVED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -249,7 +250,9 @@ public class MemcEnhancer extends XposedMods {
 
     private void hookOplusMemcHelper(XC_LoadPackage.LoadPackageParam lpparam) {
 
-        Class<?> OplusMemcHelper = findClassIfExists("com.android.server.display.memc.OplusMemcHelper", lpparam.classLoader);
+        Class<?> OplusMemcHelper = findClassInArray(lpparam,
+                "com.android.server.display.feature.vrr.memc.OplusMemcHelper", // OOS16
+                "com.android.server.display.memc.OplusMemcHelper");
 
         hookAllMethods(OplusMemcHelper, "getConfigAppList", new XC_MethodHook() {
             @Override
