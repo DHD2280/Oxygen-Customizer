@@ -117,7 +117,7 @@ public class SeparateQsCustomization extends XposedMods {
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mPhotoShowcase = Xprefs.getString(QS_PHOTO_SHOWCASE, "0").equals("1");
         mRows = Xprefs.getInt(SEPARATE_QS_ROWS, 3);
-        mCustomLayout = Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false);
+        mCustomLayout = Build.VERSION.SDK_INT == 35 ? Xprefs.getBoolean(SEPARATE_QS_LAYOUT_SWITCH, false) : false;
         mHideMenu = Xprefs.getBoolean(SEPARATE_HIDE_MENU, false);
         mHideEdit = Xprefs.getBoolean(SEPARATE_HIDE_EDIT, false);
         mCustomQsArea = Xprefs.getBoolean(SEPARATE_QS_CUSTOM_WIDTH, false);
@@ -384,7 +384,9 @@ public class SeparateQsCustomization extends XposedMods {
 
         mContext.registerReceiver(mDeviceProfileReceiver, new IntentFilter(BuildConfig.APPLICATION_ID + ".DEVICE_PROFILE_GET"), RECEIVER_EXPORTED);
 
-        ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
+        ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.of(
+                "com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent", //OOS16
+                "com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
         OplusQSQuickEntranceContainerViewController
                 .after("onInit")
                 .run(param -> {
@@ -393,9 +395,16 @@ public class SeparateQsCustomization extends XposedMods {
                         openOxygenCustomizer();
                         return true;
                     });
+                    if (Build.VERSION.SDK_INT >= 36) {
+                        try {
+                            mEditButton = (View) getObjectField(param.thisObject, "editBtn");
+                            mMenuButton = (View) getObjectField(param.thisObject, "moreBtn");
+                            setupButtons();
+                        } catch (Throwable ignored) {}
+                    }
                 });
 
-        ReflectedClass OplusQSBottomViewController = ReflectedClass.of("com.oplus.systemui.plugins.qs.bottom.OplusQSBottomViewController");
+        ReflectedClass OplusQSBottomViewController = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.bottom.OplusQSBottomViewController");
         OplusQSBottomViewController
                 .after("init")
                 .run(param -> {
@@ -404,12 +413,12 @@ public class SeparateQsCustomization extends XposedMods {
                     setupButtons();
                 });
 
-        ReflectedClass DeviceProfile = ReflectedClass.of("com.oplus.systemui.plugins.qs.DeviceProfile");
+        ReflectedClass DeviceProfile = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.DeviceProfile");
         DeviceProfile
                 .afterConstruction()
                 .run(param -> mDeviceProfile = param.thisObject);
 
-        ReflectedClass OplusLargeTileContainerViewClz = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView");
+        ReflectedClass OplusLargeTileContainerViewClz = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusLargeTileContainerView");
 
         OplusLargeTileContainerViewClz
                 .before("onMeasure")
@@ -421,13 +430,11 @@ public class SeparateQsCustomization extends XposedMods {
         OplusLargeTileContainerViewClz
                 .after("onFinishInflate")
                 .run(param -> {
-                    XposedBridge.log("Oxygen Customizer - SeparateQsCustomization - onFinishInflate");
                     mOplusLargeTileContainerView = (OplusLargeTileContainerView) param.thisObject;
                     updateCellsHook(param.thisObject);
                     mOplusLargeTileContainerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                         @Override
                         public void onViewAttachedToWindow(@NonNull View v) {
-                            XposedBridge.log("Oxygen Customizer - SeparateQsCustomization - onViewAttachedToWindow");
                             try {
                                 updateCellsHook(v);
                             } catch (Throwable e) {
@@ -444,6 +451,7 @@ public class SeparateQsCustomization extends XposedMods {
                 .before("updateViewState")
                 .run(param -> {
                     // float f2, float f3, int i2
+                    if (!mCustomQsArea) return;
                     float f2 = (float) param.args[0];
                     float f3 = (float) param.args[1];
                     int i2 = (int) param.args[2];
@@ -461,6 +469,7 @@ public class SeparateQsCustomization extends XposedMods {
                 .before("setCusTranslationY")
                 .run(param -> {
                    // int i2, int i3, float f2
+                    if (!mCustomQsArea) return;
                     View v = (View) param.thisObject;
                     int i2 = (int) param.args[0];
                     int i3 = (int) param.args[1];
@@ -481,6 +490,7 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("setCusTranslationY")
                     .run(param -> {
                         // float f2, int i2, int i3
+                        if (!mCustomQsArea) return;
                         View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
                         int i3 = (int) param.args[2];
                         float f2 = (float) param.args[0];
@@ -494,6 +504,7 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("updateState")
                     .run(param -> {
                         // float f2, float f3, int i2
+                        if (!mCustomQsArea) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
                         int i2 = (int) param.args[2];
