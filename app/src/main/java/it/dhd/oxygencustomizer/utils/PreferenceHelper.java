@@ -551,6 +551,9 @@ public class PreferenceHelper {
             }
 
             // Separate Qs
+            case "qs_separate_layout_category" -> {
+                return Build.VERSION.SDK_INT == 35;
+            }
             case SEPARATE_QS_WIDTH -> {
                 return instance.mPreferences.getBoolean(SEPARATE_QS_CUSTOM_WIDTH, false);
             }

@@ -27,7 +27,8 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="qs_separate_layout_category">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusPrimarySwitchPreference
             android:title="@string/qs_separate_layout"
