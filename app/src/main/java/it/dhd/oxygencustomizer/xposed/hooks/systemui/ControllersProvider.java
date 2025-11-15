@@ -630,6 +630,12 @@ public class ControllersProvider extends XposedMods {
         return false;
     }
 
+    public static String getProp(String property) {
+        Object sysPropHelper = instance.mSystemPropertiesHelper;
+        if (sysPropHelper == null) return "";
+        return (String) callMethod(sysPropHelper, "get", property);
+    }
+
     public static Object getBatteryInfoExternal() {
         return instance.mBatteryInfo;
     }
