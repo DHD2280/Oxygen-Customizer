@@ -451,7 +451,6 @@ public class SeparateQsCustomization extends XposedMods {
                 .before("updateViewState")
                 .run(param -> {
                     // float f2, float f3, int i2
-                    if (!mCustomQsArea) return;
                     float f2 = (float) param.args[0];
                     float f3 = (float) param.args[1];
                     int i2 = (int) param.args[2];
@@ -469,7 +468,6 @@ public class SeparateQsCustomization extends XposedMods {
                 .before("setCusTranslationY")
                 .run(param -> {
                    // int i2, int i3, float f2
-                    if (!mCustomQsArea) return;
                     View v = (View) param.thisObject;
                     int i2 = (int) param.args[0];
                     int i3 = (int) param.args[1];
@@ -490,7 +488,6 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("setCusTranslationY")
                     .run(param -> {
                         // float f2, int i2, int i3
-                        if (!mCustomQsArea) return;
                         View oplusLargeTileContainerView = (View) getObjectField(param.thisObject, "mView");
                         int i3 = (int) param.args[2];
                         float f2 = (float) param.args[0];
@@ -504,7 +501,6 @@ public class SeparateQsCustomization extends XposedMods {
                     .before("updateState")
                     .run(param -> {
                         // float f2, float f3, int i2
-                        if (!mCustomQsArea) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
                         int i2 = (int) param.args[2];
