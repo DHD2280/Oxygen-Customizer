@@ -359,7 +359,7 @@ public class Lockscreen extends XposedMods {
         }
 
         if (Build.VERSION.SDK_INT >= 34) {
-            ReflectedClass KeyguardBottomAreaView = ReflectedClass.of("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
+            ReflectedClass KeyguardBottomAreaView = ReflectedClass.ofIfPossible("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
             KeyguardBottomAreaView
                     .after("updateButton")
                     .run(param -> {
