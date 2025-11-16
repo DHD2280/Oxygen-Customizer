@@ -40,6 +40,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 import it.dhd.oxygencustomizer.xposed.views.pulse.ColorController;
 import it.dhd.oxygencustomizer.xposed.views.pulse.FadingBlockRenderer;
@@ -50,7 +51,7 @@ import it.dhd.oxygencustomizer.xposed.views.pulse.SolidLineRenderer;
 public class PulseViewHook extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private static Class<?> CentralSurfacesImpl = null;
+    private static ReflectedClass CentralSurfacesImpl = null;
     private FrameLayout mNotificationShadeView = null;
     private FrameLayout mKeyguardBottomArea = null;
     private boolean mNavBarPulse, mLockScreenPulse, mAmbientPulse, mPulseEnabled, mPulseSmoothing;
@@ -141,99 +142,88 @@ public class PulseViewHook extends XposedMods {
 
         AudioDataProvider.registerInfoCallback(this::onPrimaryMetadataOrStateChanged);
 
-        CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+        CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
 
-        Class<?> NavigationBarView = findClass("com.android.systemui.navigationbar.NavigationBarView", lpparam.classLoader);
+        ReflectedClass NavigationBarView = ReflectedClass.of(
+                "com.android.systemui.navigationbar.views.NavigationBarView", //OOS16
+                "com.android.systemui.navigationbar.NavigationBarView");
 
-        Class<?> NotificationShadeWindowView;
-        try {
-            NotificationShadeWindowView = findClass("com.android.systemui.shade.NotificationShadeWindowView", lpparam.classLoader);
-        } catch (Throwable t) {
-            NotificationShadeWindowView = findClass("com.android.systemui.statusbar.phone.NotificationShadeWindowView", lpparam.classLoader);
-        }
-        hookAllConstructors(NotificationShadeWindowView, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNotificationShadeView = (FrameLayout) param.thisObject;
-                placePulseView();
-            }
-        });
+        ReflectedClass NotificationShadeWindowView = ReflectedClass.of(
+                "com.android.systemui.shade.NotificationShadeWindowView",
+                "com.android.systemui.statusbar.phone.NotificationShadeWindowView");
+        NotificationShadeWindowView
+                .afterConstruction()
+                .run(param -> {
+                    mNotificationShadeView = (FrameLayout) param.thisObject;
+                    placePulseView();
+                });
 
-        hookAllMethods(CentralSurfacesImpl, "getNotificationShadeWindowView", new XC_MethodHook() {
-            protected void afterHookedMethod(XC_MethodHook.MethodHookParam methodHookParam) throws Throwable {
-                mNavigationBar = (FrameLayout) callMethod(methodHookParam.thisObject, "getNavigationBarView", new Object[0]);
-                if (PulseControllerImpl.hasInstance()) {
-                    PulseControllerImpl.getInstance().setNavbar(mNavigationBar);
-                }
-            }
-        });
+        CentralSurfacesImpl
+                .after("getNotificationShadeWindowView")
+                .run(param -> {
+                    mNavigationBar = (FrameLayout) callMethod(param.thisObject, "getNavigationBarView", new Object[0]);
+                    if (PulseControllerImpl.hasInstance()) {
+                        PulseControllerImpl.getInstance().setNavbar(mNavigationBar);
+                    }
+                });
 
-        Class<?> AodRootLayout;
-        try {
-            AodRootLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodRootLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            AodRootLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodRootLayout", lpparam.classLoader);
-        }
-        hookAllConstructors(AodRootLayout, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mAodRootLayout = (FrameLayout) param.thisObject;
-                if (PulseControllerImpl.hasInstance()) {
-                    PulseControllerImpl.getInstance().setAodRootLayout(mAodRootLayout);
-                }
-            }
-        });
+        ReflectedClass AodRootLayout = ReflectedClass.of(
+                "com.oplus.systemui.aod.aodclock.off.AodRootLayout",
+                "com.oplusos.systemui.aod.aodclock.off.AodRootLayout"
+        );
+        AodRootLayout
+                .afterConstruction()
+                .run(param -> {
+                    mAodRootLayout = (FrameLayout) param.thisObject;
+                    if (PulseControllerImpl.hasInstance()) {
+                        PulseControllerImpl.getInstance().setAodRootLayout(mAodRootLayout);
+                    }
+                });
 
-        Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
-        hookAllMethods(KeyguardBottomAreaView, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mKeyguardBottomArea = (FrameLayout) param.thisObject;
-                try {
-                    mStartButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("start_button", "id", Constants.Packages.SYSTEM_UI));
-                    mEndButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("end_button", "id", Constants.Packages.SYSTEM_UI));
-                } catch (Throwable t) {
-                    log("Failed to find start/end button");
-                }
-                updateLockscreenIcons();
-            }
-        });
+        ReflectedClass KeyguardBottomAreaView = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.KeyguardBottomAreaView");
+        KeyguardBottomAreaView
+                .after("onFinishInflate")
+                .run(param -> {
+                    mKeyguardBottomArea = (FrameLayout) param.thisObject;
+                    try {
+                        mStartButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("start_button", "id", Constants.Packages.SYSTEM_UI));
+                        mEndButton = mKeyguardBottomArea.findViewById(mContext.getResources().getIdentifier("end_button", "id", Constants.Packages.SYSTEM_UI));
+                    } catch (Throwable t) {
+                        log("Failed to find start/end button");
+                    }
+                    updateLockscreenIcons();
+                });
 
-        hookAllMethods(CentralSurfacesImpl, "keyguardGoingAway", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (PulseControllerImpl.hasInstance()) {
-                    ///log("keyguardGoingAway");
-                    PulseControllerImpl.getInstance().notifyKeyguardGoingAway();
-                }
-            }
-        });
+        CentralSurfacesImpl
+                .after("keyguardGoingAway")
+                .run(param -> {
+                    if (PulseControllerImpl.hasInstance()) {
+                        PulseControllerImpl.getInstance().notifyKeyguardGoingAway();
+                    }
+                });
 
-        // Stole Dozing State
-        hookAllMethods(CentralSurfacesImpl, "updateDozingState", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //log("updateDozingState, dozing: " + getBooleanField(param.thisObject, "mDozing"));
-                if (PulseControllerImpl.hasInstance()) {
-                    PulseControllerImpl.getInstance().setDozing(getBooleanField(param.thisObject, "mDozing"));
-                }
-            }
-        });
+        CentralSurfacesImpl
+                .after("updateDozingState")
+                .run(param -> {
+                    //log("updateDozingState, dozing: " + getBooleanField(param.thisObject, "mDozing"));
+                    if (PulseControllerImpl.hasInstance()) {
+                        PulseControllerImpl.getInstance().setDozing(getBooleanField(param.thisObject, "mDozing"));
+                    }
+                });
 
         // Stole Keyguard is showing
         ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing);
 
         // Stole Screen Pinning
         try {
-            hookAllMethods(NavigationBarView, "setInScreenPinning", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (PulseControllerImpl.hasInstance()) {
-                        //log("Screen pinning: " + (boolean)param.args[0]);
-                        PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
-                    }
-                }
-            });
+            NavigationBarView
+                    .after("setInScreenPinning")
+                    .run(param -> {
+                        if (PulseControllerImpl.hasInstance()) {
+                            //log("Screen pinning: " + (boolean)param.args[0]);
+                            PulseControllerImpl.getInstance().setScreenPinning((boolean) param.args[0]);
+                        }
+                    });
         } catch (Throwable ignored) {
         }
 
@@ -259,8 +249,10 @@ public class PulseViewHook extends XposedMods {
             mEndButton.bringToFront();
             mEndButton.requestLayout();
         }
-        mKeyguardBottomArea.bringToFront();
-        mKeyguardBottomArea.requestLayout();
+        if (mKeyguardBottomArea != null) {
+            mKeyguardBottomArea.bringToFront();
+            mKeyguardBottomArea.requestLayout();
+        }
     }
 
     private void onPrimaryMetadataOrStateChanged(int state) {
