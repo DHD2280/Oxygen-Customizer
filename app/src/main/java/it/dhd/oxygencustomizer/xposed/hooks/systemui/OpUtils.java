@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -54,7 +55,15 @@ public class OpUtils extends XposedMods {
     public static boolean isMediaIconNeedUseLightColor(Context context) {
         if (QsColorUtil == null) return false;
         try {
-            return (boolean) callStaticMethod(QsColorUtil, Build.VERSION.SDK_INT >= 35 ? "isIconNeedUseLightColor" : "isMediaIconNeedUseLightColor", context);
+            String method = Build.VERSION.SDK_INT >= 35
+                    ? "isIconNeedUseLightColor"
+                    : "isMediaIconNeedUseLightColor";
+
+            Object[] params = Build.VERSION.SDK_INT >= 36
+                    ? new Object[]{ context, false }
+                    : new Object[]{ context };
+
+            return (boolean) callStaticMethod(QsColorUtil, method, params);
         } catch (Throwable t) {
             return false;
         }
@@ -64,7 +73,10 @@ public class OpUtils extends XposedMods {
         boolean isNightMode = (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         if (QsColorUtil == null) return isNightMode;
         try {
-            return (boolean) callStaticMethod(QsColorUtil, "isNeedSeparateDarkThemeColor", context);
+            Object[] params = Build.VERSION.SDK_INT >= 36
+                    ? new Object[]{ context, false }
+                    : new Object[]{ context };
+            return (boolean) callStaticMethod(QsColorUtil, "isNeedSeparateDarkThemeColor", params);
         } catch (Throwable t) {
             return isNightMode;
         }
@@ -111,28 +123,21 @@ public class OpUtils extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
-    }
+    public void updatePrefs(String... Key) {}
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        try {
-            OpUtils = findClass("com.oplusos.systemui.util.OpUtils", lpparam.classLoader);
-        } catch (Throwable t) {
-            OpUtils = null;
-        }
+        OpUtils = findClassIfExists("com.oplusos.systemui.util.OpUtils", lpparam.classLoader);
 
         QsColorUtil = findClassInArray(lpparam,
                 "com.oplus.systemui.qs.base.util.QsColorUtil" /* OOS15 */,
                 "com.oplus.systemui.qs.util.QsColorUtil" /* OOS13-14 */);
 
-        try {
-            QSFragmentHelper = findClass("com.oplus.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
-        } catch (Throwable ignored) {
-            QSFragmentHelper = findClass("com.oplusos.systemui.qs.helper.QSFragmentHelper", lpparam.classLoader);
-        }
+        QSFragmentHelper = findClassInArray(lpparam,
+                "com.oplus.systemui.qs.helper.QSFragmentHelper",
+                "com.oplusos.systemui.qs.helper.QSFragmentHelper");
 
         Class<?> LunarHelperClass = findClassInArray(lpparam,
                 "com.oplus.systemui.keyguard.clock.LunarHelper", // OOS14
