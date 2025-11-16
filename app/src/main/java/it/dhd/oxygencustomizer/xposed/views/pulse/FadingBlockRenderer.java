@@ -20,7 +20,6 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  */
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -29,7 +28,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
@@ -37,7 +35,6 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 
 public class FadingBlockRenderer extends Renderer {
-    //private static final int DEF_PAINT_ALPHA = (byte) 188;
 
     @SuppressLint("StaticFieldLeak")
     private static FadingBlockRenderer instance = null;
@@ -52,9 +49,6 @@ public class FadingBlockRenderer extends Renderer {
     private boolean mLeftInLandscape = false;
     private FFTAverage[] mFFTAverage;
     private float[] mFFTPoints;
-    private byte rfk, ifk;
-    private int dbValue;
-    private float magnitude;
     private int mDivisions;
     private int mDbFuzzFactor;
     private int mPathEffect1;
@@ -135,8 +129,7 @@ public class FadingBlockRenderer extends Renderer {
         } else {
             mFFTAverage = null;
         }
-        int i = 0;
-        for (; i < (mCenterMirrored ? (divisionLength / 2) : divisionLength); i++) {
+        for (int i = 0; i < (mCenterMirrored ? (divisionLength / 2) : divisionLength); i++) {
             if (mVertical) {
                 mFFTPoints[i * 4 + 1] = i * 4 * mDivisions;
                 mFFTPoints[i * 4 + 3] = i * 4 * mDivisions;
