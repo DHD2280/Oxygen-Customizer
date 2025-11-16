@@ -4,7 +4,6 @@ import static android.view.MotionEvent.ACTION_DOWN;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
@@ -50,7 +49,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -187,13 +185,16 @@ public class GestureNavbarManager extends XposedMods {
             SideGestureDetector
                     .afterConstruction()
                     .run(param -> {
-                        SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
-                        mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
+                        try {
+                            SideGestureConfigurationEx = getObjectField(param.thisObject, "mSideGestureConfiguration");
+                            mOverviewProxyService = getObjectField(param.thisObject, "mOverviewProxyService");
+                        } catch (Throwable ignored) {}
                         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
                     });
             SideGestureDetector
                     .before("onMotionEventImpl")
                             .run(param -> {
+                                if (SideGestureConfigurationEx == null) return;
                                 MotionEvent ev = (MotionEvent) param.args[0];
                                 if (getForegroundApp()[0].equals(getDefaultLauncherPackageName())) return;
 
@@ -512,6 +513,7 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     private void switchApp(int side) {
+        if (mOverviewProxyService == null) return;
         try {
             Object proxy = callMethod(mOverviewProxyService, "getProxy");
             if (proxy != null) {
