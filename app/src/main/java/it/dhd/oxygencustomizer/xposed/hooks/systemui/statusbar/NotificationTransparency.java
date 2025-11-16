@@ -124,7 +124,9 @@ public class NotificationTransparency extends XposedMods {
                     } catch (Throwable ignored) {
                     }
 
-                    setObjectField(notificationBackgroundView, "mTintColor", 0);
+                    try {
+                        setObjectField(notificationBackgroundView, "mTintColor", 0);
+                    } catch (Throwable ignored) {}
                     notificationBackgroundView.invalidate();
                 }
             };
@@ -137,7 +139,9 @@ public class NotificationTransparency extends XposedMods {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     if (!hasOverlays) return;
 
-                    setObjectField(param.thisObject, "mTintColor", 0);
+                    try {
+                        setObjectField(param.thisObject, "mTintColor", 0);
+                    } catch (Throwable ignored) {}
                 }
             };
 
