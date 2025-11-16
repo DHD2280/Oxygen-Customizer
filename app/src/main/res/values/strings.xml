@@ -234,6 +234,8 @@
     <string name="clock_date_right">Right of time</string>
     <string name="clock_date_left">Left of time</string>
     <string name="clock_font_size_title">Clock font size</string>
+    <string name="clock_extra_padding">Clock extra padding</string>
+    <string name="clock_extra_padding_summary">Some OOS variants have issues with clock width, breaking space or something else. With this value you can adjust the padding to your preference.</string>
     <string name="status_bar_clock_font_style_title">Clock font style</string>
     <string name="status_bar_clock_color_title">Clock custom color</string>
     <string name="status_bar_custom_clock_color_title">Custom clock color</string>

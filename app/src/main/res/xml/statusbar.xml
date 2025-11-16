@@ -30,6 +30,16 @@
             app:minVal="4"
             app:valueFormat="sp" />
 
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="status_bar_clock_padding"
+            android:summary="@string/clock_extra_padding_summary"
+            android:title="@string/clock_extra_padding"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="-100"
+            app:showSeekBarValue="true"
+            app:valueFormat="dp" />
+
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Clock"
             android:key="clock"

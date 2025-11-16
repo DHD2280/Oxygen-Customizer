@@ -11,6 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_EXTRA_PADDING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -33,11 +34,9 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
@@ -60,7 +59,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -152,7 +150,7 @@ public class StatusbarClock extends XposedMods {
     private int chipMarginSx, chipMarginDx, chipMarginTop, chipMarginBottom;
     private int chipPaddingSx, chipPaddingDx, chipPaddingTop, chipPaddingBottom;
     private LayerDrawable mClockChipDrawable;
-    private int mClockSize = 12;
+    private int mClockSize = 12, mClockPadding = 0;
 
     @SuppressLint("DiscouragedApi")
     public StatusbarClock(Context context) {
@@ -185,6 +183,7 @@ public class StatusbarClock extends XposedMods {
         mClockCustomColor = Xprefs.getBoolean(STATUSBAR_CLOCK_COLOR_SWITCH, false);
         mClockColor = Xprefs.getInt(STATUSBAR_CLOCK_COLOR, Color.WHITE);
         mClockSize = Xprefs.getSliderInt(STATUSBAR_CLOCK_SIZE, 12);
+        mClockPadding = Xprefs.getSliderInt(STATUSBAR_CLOCK_EXTRA_PADDING, 0);
 
         // gradients prefs
         clockChip = Xprefs.getBoolean("status_bar_clock_background_chip_switch", false);
@@ -253,7 +252,8 @@ public class StatusbarClock extends XposedMods {
                      "status_bar_custom_clock_format",
                      "sbc_before_clock_format", "sbc_before_small", "sbc_after_clock_format",
                      "sbc_after_small" -> updateClock();
-                case STATUSBAR_CLOCK_SIZE -> setClockSize();
+                case STATUSBAR_CLOCK_SIZE,
+                     STATUSBAR_CLOCK_EXTRA_PADDING -> setClockSize();
                 case STATUSBAR_CLOCK_STYLE,
                      "status_bar_clock_seconds",
                      STATUSBAR_CLOCK_COLOR_SWITCH,
@@ -391,6 +391,7 @@ public class StatusbarClock extends XposedMods {
                                 if (clockChip) {
                                     totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
                                 }
+                                totalWidth += dp2px(mContext, mClockPadding);
                                 int calculatedMinWidth = (int) totalWidth;
                                 if (tv.getMinimumWidth() != calculatedMinWidth) {
                                     tv.setMinimumWidth(calculatedMinWidth);
@@ -414,6 +415,7 @@ public class StatusbarClock extends XposedMods {
                                     if (clockChip) {
                                         totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
                                     }
+                                    totalWidth += dp2px(mContext, mClockPadding);
                                     int calculatedMinWidth = (int) totalWidth;
                                     if (tv.getMinimumWidth() != calculatedMinWidth) {
                                         tv.setMinimumWidth(calculatedMinWidth);
@@ -425,6 +427,9 @@ public class StatusbarClock extends XposedMods {
                         .run(param -> {
                             TextView tv = (TextView) param.thisObject;
                             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                            try {
+                                tv.postInvalidate();
+                            } catch (Throwable ignored) {}
                         });
             } catch (Throwable ignored) {
                 log("updateMinWidth in StatClock not found");

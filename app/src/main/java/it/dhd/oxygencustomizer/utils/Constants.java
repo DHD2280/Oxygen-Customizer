@@ -814,6 +814,7 @@ public final class Constants {
 
             public static final String STATUSBAR_CLOCK_STYLE = "status_bar_clock";
             public static final String STATUSBAR_CLOCK_SIZE = "status_bar_clock_size";
+            public static final String STATUSBAR_CLOCK_EXTRA_PADDING = "status_bar_clock_padding";
             public static final String STATUSBAR_CLOCK_COLOR_SWITCH = "status_bar_custom_clock_color";
             public static final String STATUSBAR_CLOCK_COLOR = "status_bar_clock_color";
             public static final String STATUSBAR_DT_SLEEP = "double_tap_sleep_statusbar";
