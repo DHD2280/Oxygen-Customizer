@@ -47,6 +47,7 @@
             app:defaultValue="5"
             app:maxVal="600"
             app:minVal="5"
+            app:showSeekBarValue="false"
             app:tickInterval="5"
             app:valueFormat="s" />
 

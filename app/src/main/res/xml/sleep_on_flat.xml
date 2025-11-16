@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/sleep_on_flat_screen_title" >
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/sleep_on_flat_screen_title">
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:key="FlatStandbyTime"
@@ -13,6 +11,7 @@
             app:iconSpaceReserved="false"
             app:maxVal="100"
             app:minVal="5"
+            app:showSeekBarValue="false"
             app:tickInterval="5"
             app:valueCount="1" />
 

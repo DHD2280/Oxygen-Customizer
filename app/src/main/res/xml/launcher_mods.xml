@@ -29,6 +29,7 @@
             app:iconSpaceReserved="false"
             app:maxVal="8"
             app:minVal="4"
+            app:showSeekBarValue="true"
             app:tickInterval="1" />
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
@@ -39,6 +40,7 @@
             app:iconSpaceReserved="false"
             app:maxVal="10"
             app:minVal="3"
+            app:showSeekBarValue="true"
             app:tickInterval="1" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
@@ -70,6 +72,7 @@
             app:maxVal="7"
             app:minVal="3"
             app:tickInterval="1" />
+
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:dependency="rearrange_folder"
             android:key="folder_rows"
@@ -79,6 +82,7 @@
             app:maxVal="7"
             app:minVal="3"
             app:tickInterval="1" />
+
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="rearrange_preview"
@@ -129,9 +133,9 @@
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDockBackground"
             android:key="dock_background_jump"
             android:title="@string/dock_background"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDockBackground"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
@@ -150,13 +154,12 @@
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="disable_previous_recents"
-            android:title="@string/launcher_disable_recents_previous_page_title"
-            android:summary="@string/launcher_disable_recents_previous_page_summary" />
+            android:summary="@string/launcher_disable_recents_previous_page_summary"
+            android:title="@string/launcher_disable_recents_previous_page_title" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/launcher_themed_icons">
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/launcher_themed_icons">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"

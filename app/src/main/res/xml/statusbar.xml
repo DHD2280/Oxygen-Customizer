@@ -37,7 +37,6 @@
             android:title="@string/status_bar_clock_title"
             app:iconSpaceReserved="false" />
 
-
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:key="status_bar_custom_clock_color"
@@ -83,21 +82,21 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryBar"
             android:key="battery_bar"
             android:title="@string/statusbar_batterybar_title"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryBar"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
             android:key="battery_icon"
             android:title="@string/statusbar_battery_icon_options"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$BatteryIcon"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
             android:key="statusbar_icons"
             android:title="@string/statusbar_icons"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar$Icons"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
@@ -133,6 +132,7 @@
             app:iconSpaceReserved="false"
             app:maxVal="101"
             app:minVal="-1"
+            app:showSeekBarValue="false"
             app:tickInterval="1"
             app:valueCount="2"
             app:valueFormat="dp" />

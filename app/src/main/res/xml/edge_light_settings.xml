@@ -94,6 +94,7 @@
             app:defaultValue="12"
             app:maxVal="20"
             app:minVal="8"
+            app:showSeekBarValue="false"
             app:valueCount="1" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
