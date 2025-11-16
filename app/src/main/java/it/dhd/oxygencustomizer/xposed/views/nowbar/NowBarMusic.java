@@ -16,6 +16,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.WallpaperColors;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -623,7 +624,7 @@ public class NowBarMusic extends LinearLayout {
         }
 
         @Override
-        public void onMediaColorsChanged() {
+        public void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors, Object colorScheme) {
             if (resetMediaIfNeeded()) {
                 return;
             }
