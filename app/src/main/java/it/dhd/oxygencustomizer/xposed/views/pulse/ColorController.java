@@ -29,6 +29,7 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 
 import android.annotation.SuppressLint;
+import android.app.WallpaperColors;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -71,20 +72,17 @@ public class ColorController
         }
 
         @Override
-        public void onMediaColorsChanged() {
-            Object mColorScheme = AudioDataProvider.getColorScheme();
-            if (mColorScheme != null) {
+        public void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors, Object colorScheme) {
+            if (Build.VERSION.SDK_INT == 33) {
+                setMediaNotificationColor(mediaColor);
+                return;
+            }
+            if (colorScheme != null) {
                 boolean isDark = SystemUtils.isDarkMode();
-                if (Build.VERSION.SDK_INT == 33) {
-                    List<Integer> accent1 = (List<Integer>) callMethod(mColorScheme, "getAccent1");
-                    setMediaNotificationColor(isDark ?
-                            accent1.get(0) :
-                            accent1.get(accent1.size() - 2));
-                    return;
-                }
+
                 setMediaNotificationColor((int) ((!isDark) ?
-                        callMethod(callMethod(mColorScheme, "getAccent1"), "getS100") :
-                        callMethod(callMethod(mColorScheme, "getAccent1"), "getS700")));
+                        callMethod(callMethod(colorScheme, "getAccent1"), "getS100") :
+                        callMethod(callMethod(colorScheme, "getAccent1"), "getS700")));
             }
         }
     };

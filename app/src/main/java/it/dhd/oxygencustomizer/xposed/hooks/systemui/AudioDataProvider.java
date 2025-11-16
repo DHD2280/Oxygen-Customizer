@@ -124,10 +124,14 @@ public class AudioDataProvider extends XposedMods {
         }
     }
 
-    public void onMediaColorsChanged() {
+    public void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors) {
+        if (mCurrentMediaArtColor != mediaColor) {
+            mCurrentMediaArtColor = mediaColor;
+            mWallpaperColors = wallpaperColors;
+        }
         for (MediaMetadataListener callback : mMediaMetaDataListeners) {
             try {
-                callback.onMediaColorsChanged();
+                callback.onMediaColorsChanged(mCurrentMediaArtColor, mWallpaperColors, mCurrentColorScheme);
             } catch (Throwable ignored) {
             }
         }
@@ -268,25 +272,17 @@ public class AudioDataProvider extends XposedMods {
             XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
         }
         if (colorScheme == null) return;
+        mCurrentColorScheme = colorScheme;
         if (Build.VERSION.SDK_INT == 33) {
             Palette.Builder builder = new Palette.Builder(mArt);
             builder.generate(palette -> {
                 int color = palette.getDominantColor(Color.WHITE);
-                if (mCurrentMediaArtColor != color) {
-                    mCurrentMediaArtColor = color;
-                    mWallpaperColors = wallpaperColors;
-                    onMediaColorsChanged();
-                }
+                onMediaColorsChanged(color, wallpaperColors);
             });
         } else {
             int newMediaArtColor;
             newMediaArtColor = (int) (isDarkThemeOn ? callMethod(callMethod(colorScheme, "getAccent1"), "getS100") : callMethod(callMethod(colorScheme, "getAccent1"), "getS800"));
-            if (mCurrentMediaArtColor != newMediaArtColor) {
-                mCurrentMediaArtColor = newMediaArtColor;
-                mCurrentColorScheme = colorScheme;
-                mWallpaperColors = wallpaperColors;
-                onMediaColorsChanged();
-            }
+            onMediaColorsChanged(newMediaArtColor, wallpaperColors);
         }
     }
 
@@ -314,7 +310,7 @@ public class AudioDataProvider extends XposedMods {
         for (MediaMetadataListener listener : mMediaMetaDataListeners) {
             listener.onMediaMetadataChanged();
             listener.onPlaybackStateChanged();
-            listener.onMediaColorsChanged();
+            listener.onMediaColorsChanged(mCurrentMediaArtColor, mWallpaperColors, mCurrentColorScheme);
         }
     }
 
@@ -506,6 +502,6 @@ public class AudioDataProvider extends XposedMods {
     public interface MediaMetadataListener {
         void onMediaMetadataChanged();
         void onPlaybackStateChanged();
-        void onMediaColorsChanged();
+        void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors, Object colorScheme);
     }
 }
