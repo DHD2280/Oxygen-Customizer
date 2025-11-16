@@ -267,7 +267,8 @@ public class AudioDataProvider extends XposedMods {
 
         Object colorScheme = null;
         try {
-            colorScheme = XposedHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn);
+            if (Build.VERSION.SDK_INT >= 36) colorScheme = XposedHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn, 1);
+            else colorScheme = XposedHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn);
         } catch (Throwable t) {
             XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
         }
