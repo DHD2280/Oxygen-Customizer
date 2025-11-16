@@ -23,9 +23,10 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 
-public class PulseControllerImpl {
+public class
+PulseControllerImpl {
 
-    public static final boolean DEBUG = /*BuildConfig.VERSION_NAME.contains("beta") || BuildConfig.VERSION_NAME.contains("nightly") ||*/ BuildConfig.DEBUG;
+    public static final boolean DEBUG = false;
     @SuppressLint("StaticFieldLeak")
     private static PulseControllerImpl instance = null;
     private final String STREAM_MUTE_CHANGED_ACTION = "android.media.STREAM_MUTE_CHANGED_ACTION";
@@ -33,11 +34,8 @@ public class PulseControllerImpl {
     private final String EXTRA_VOLUME_STREAM_TYPE = "android.media.EXTRA_VOLUME_STREAM_TYPE";
 
     private static final String TAG = PulseControllerImpl.class.getSimpleName();
-    private static final int RENDER_STYLE_LEGACY = 0;
     private static final int RENDER_STYLE_CM = 1;
     private static final int RENDER_STYLE_LINE = 2;
-    private static final int RENDER_STYLE_CIRCLE = 3;
-    private static final int RENDER_STYLE_CIRCLE_BAR = 4;
 
     private final Context mContext;
     private static AudioManager mAudioManager;
