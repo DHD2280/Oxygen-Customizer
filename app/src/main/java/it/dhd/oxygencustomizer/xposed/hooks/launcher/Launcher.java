@@ -11,9 +11,14 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
+import android.util.Pair;
 import android.view.View;
 
+import java.util.ArrayList;
+
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -210,6 +215,43 @@ public class Launcher extends XposedMods {
                     .run(param -> {
                         if (mRearrangeHome) param.setResult(true);
                     });
+
+            if (Build.VERSION.SDK_INT >= 36) { //OOS16
+                UiConfig
+                        .before("getSupportLayout")
+                        .run(param -> {
+                            /*
+                                List<Pair<Integer, Pair<Integer, Integer>>> getLayoutNormal()
+                             */
+                            ArrayList<Pair<Integer, Pair<Integer, Integer>>> arrayList = new ArrayList<>();
+                            arrayList.add(Pair.create(3, Pair.create(5, 5)));
+                            arrayList.add(Pair.create(3, Pair.create(6, 6)));
+                            arrayList.add(Pair.create(4, Pair.create(5, 5)));
+                            arrayList.add(Pair.create(4, Pair.create(6, 6)));
+                            arrayList.add(Pair.create(4, Pair.create(6, 7)));
+                            arrayList.add(Pair.create(5, Pair.create(5, 5)));
+                            arrayList.add(Pair.create(5, Pair.create(6, 6)));
+                            arrayList.add(Pair.create(5, Pair.create(7, 7)));
+                            arrayList.add(Pair.create(5, Pair.create(8, 8)));
+                            arrayList.add(Pair.create(5, Pair.create(9, 9)));
+                            arrayList.add(Pair.create(5, Pair.create(10, 10)));
+                            arrayList.add(Pair.create(6, Pair.create(6, 6)));
+                            arrayList.add(Pair.create(6, Pair.create(7, 7)));
+                            arrayList.add(Pair.create(6, Pair.create(8, 8)));
+                            arrayList.add(Pair.create(6, Pair.create(9, 9)));
+                            arrayList.add(Pair.create(6, Pair.create(10, 10)));
+                            arrayList.add(Pair.create(7, Pair.create(7, 7)));
+                            arrayList.add(Pair.create(7, Pair.create(8, 8)));
+                            arrayList.add(Pair.create(7, Pair.create(9, 9)));
+                            arrayList.add(Pair.create(7, Pair.create(10, 10)));
+                            arrayList.add(Pair.create(7, Pair.create(11, 11)));
+                            arrayList.add(Pair.create(8, Pair.create(8, 8)));
+                            arrayList.add(Pair.create(8, Pair.create(9, 9)));
+                            arrayList.add(Pair.create(8, Pair.create(10, 10)));
+                            XposedBridge.log("OXYGEN CUSTOMIZER - Launcher: getSupportLayout modified " + arrayList);
+                            param.setResult(arrayList);
+                        });
+            }
 
             ReflectedClass ToggleBarLayoutAdapter = ReflectedClass.of("com.android.launcher.togglebar.adapter.ToggleBarLayoutAdapter");
             ToggleBarLayoutAdapter
