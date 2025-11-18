@@ -401,7 +401,7 @@ public class StatusbarClock extends XposedMods {
                 StatClock
                         .after("onMeasure")
                                 .run(param -> {
-                                    if (!isOOS1501()) return;
+                                    if (!isOOS1501() && Build.VERSION.SDK_INT < 36) return;
                                     TextView tv = (TextView) param.thisObject;
                                     tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
                                     if (mClockDoubleRow) {
