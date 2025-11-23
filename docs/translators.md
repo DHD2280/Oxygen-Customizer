@@ -86,14 +86,21 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>2654 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/chetaoquocte"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/13578264/medium/bfbe6aee5834e2bb052bc1a61e9b9de3.jpg" />
+          <br />
+          <sub><b>Quân Xinh Tươi (chetaoquocte)</b></sub></a>
+        <br />
+        <sub><b>2046 words</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/dimatteo"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12427235/medium/9fdf4e19f3760f3e45cae5572efbf94b_default.png" />
           <br />
           <sub><b>cedric di-matteo (dimatteo)</b></sub></a>
         <br />
         <sub><b>2042 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
           <br />
@@ -114,13 +121,6 @@ Thanks to these translators and proofreaders, this project exists:
           <sub><b>Dosix97</b></sub></a>
         <br />
         <sub><b>1448 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/chetaoquocte"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/13578264/medium/bfbe6aee5834e2bb052bc1a61e9b9de3.jpg" />
-          <br />
-          <sub><b>Quân Xinh Tươi (chetaoquocte)</b></sub></a>
-        <br />
-        <sub><b>1129 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/elimani0411"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12897637/medium/5b1f68860654069044e13cf15e784ac8.jpg" />
@@ -278,6 +278,13 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>6 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/rezash4147"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17423870/medium/15d6f66a2d01451d73e4733c0f32b530.png" />
+          <br />
+          <sub><b>Reza Shoaei (rezash4147)</b></sub></a>
+        <br />
+        <sub><b>6 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Shukurjon"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16677795/medium/4f90e4e3e87f55178210c594d2b22744.jpeg" />
           <br />
           <sub><b>Шукурджон «Regalis» Абдуллаев (Shukurjon)</b></sub></a>
@@ -305,6 +312,8 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>2 words</b></sub>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Kirrillak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16446461/medium/d37b1ee9ce34b8fb2afdec3ee7eb7a4e_default.png" />
           <br />
@@ -312,8 +321,6 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>2 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/mirroxin_meow"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16622307/medium/7d69e335f364b543922d759dece3dfc4.jpeg" />
           <br />
