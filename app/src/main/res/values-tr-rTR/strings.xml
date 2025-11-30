@@ -215,6 +215,8 @@
     <string name="clock_date_right">Saatin sağı</string>
     <string name="clock_date_left">Saatin solu</string>
     <string name="clock_font_size_title">Saat yazı tipi boyutu</string>
+    <string name="clock_extra_padding">Saat ek dolgusu</string>
+    <string name="clock_extra_padding_summary">Bazı OOS sürümlerinde saat genişliği, boşluklar veya benzeri sorunlar bulunur. Bu ayarla dolguyu tercihinize göre ayarlayabilirsiniz.</string>
     <string name="status_bar_clock_font_style_title">Saat yazı tipi stili</string>
     <string name="status_bar_clock_color_title">Saat özel rengi</string>
     <string name="status_bar_custom_clock_color_title">Özel saat rengi</string>
