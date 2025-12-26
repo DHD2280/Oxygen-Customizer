@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.utils;
 
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_FEATURE_XML;
 import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_MEMC_FEATURES;
 import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_POCKET_STUDIO_FEATURE;
@@ -22,14 +23,12 @@ import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.dhd.oxygencustomizer.BuildConfig;
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.utils.helper.BackupRestore;
 import it.dhd.oxygencustomizer.utils.helper.BinaryInstaller;
 import it.dhd.oxygencustomizer.utils.overlay.FabricatedUtil;
@@ -64,6 +63,7 @@ public class ModuleUtil {
                         "versionCode=" + MODULE_VERSION_CODE + "\n" +
                         "author=@DHD2280\n" +
                         "description=Systemless module for Oxygen Customizer.\n" +
+                        "banner=banner.png\n" +
                         "' > " + ModuleConstants.TEMP_MODULE_DIR + "/module.prop"
         ).exec();
 
@@ -113,7 +113,7 @@ public class ModuleUtil {
     private static void writePostExec() {
         StringBuilder post_exec = new StringBuilder();
 
-        SharedPreferences prefs = OxygenCustomizer.getAppContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+        SharedPreferences prefs = getAppContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
         Map<String, ?> map = prefs.getAll();
         for (Map.Entry<String, ?> item : map.entrySet()) {
             if (item.getValue() instanceof Boolean && ((Boolean) item.getValue()) && item.getKey().startsWith("fabricated")) {

@@ -321,6 +321,7 @@ public class OnboardingView extends FrameLayout {
                     waiter(100);
                 } else {
                     // Extract overlays from assets
+                    FileUtil.extractBanner();
                     FileUtil.copyAssets("Overlays");
                 }
 

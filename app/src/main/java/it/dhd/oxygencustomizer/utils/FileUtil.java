@@ -1,11 +1,16 @@
 package it.dhd.oxygencustomizer.utils;
 
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.TEMP_MODULE_DIR;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 
@@ -19,16 +24,14 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import it.dhd.oxygencustomizer.OxygenCustomizer;
-
 public class FileUtil {
 
-    public static final String DATA_DIR = OxygenCustomizer.getAppContext().getFilesDir().toString();
+    public static final String DATA_DIR = getAppContext().getFilesDir().toString();
 
     public static void copyAssets(String assetFolder) throws IOException {
         cleanDir(assetFolder);
         createDir(assetFolder);
-        copyFileOrDirectory(OxygenCustomizer.getAppContext(), assetFolder, DATA_DIR + "/" + assetFolder);
+        copyFileOrDirectory(getAppContext(), assetFolder, DATA_DIR + "/" + assetFolder);
     }
 
     public static void cleanDir(String dirName) {
@@ -38,6 +41,22 @@ public class FileUtil {
     private static void createDir(String dirName) {
         File new_folder = new File(DATA_DIR + "/" + dirName + "/");
         new_folder.mkdirs();
+    }
+
+    public static void extractBanner() {
+        AssetManager assetManager = getAppContext().getAssets();
+        try (InputStream in = assetManager.open("banner.png");
+             OutputStream out = new FileOutputStream(TEMP_MODULE_DIR + "/banner.png")) {
+
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            out.flush();
+        } catch (IOException e) {
+            Log.e("OxygenCustomizer", "Failed to extract banner.png", e);
+        }
     }
 
     private static void copyFileOrDirectory(Context context, String dirName, String outPath) throws IOException {
@@ -96,15 +115,15 @@ public class FileUtil {
     private static String getRealPathFromURI(Uri uri) {
         File file;
         try {
-            @SuppressLint("Recycle") Cursor returnCursor = OxygenCustomizer.getAppContext().getContentResolver().query(uri, null, null, null, null);
+            @SuppressLint("Recycle") Cursor returnCursor = getAppContext().getContentResolver().query(uri, null, null, null, null);
 
             if (returnCursor == null) return null;
 
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             returnCursor.moveToFirst();
             String name = returnCursor.getString(nameIndex);
-            file = new File(OxygenCustomizer.getAppContext().getFilesDir(), name);
-            @SuppressLint("Recycle") InputStream inputStream = OxygenCustomizer.getAppContext().getContentResolver().openInputStream(uri);
+            file = new File(getAppContext().getFilesDir(), name);
+            @SuppressLint("Recycle") InputStream inputStream = getAppContext().getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(file);
             int read;
             int maxBufferSize = 1024 * 1024;
