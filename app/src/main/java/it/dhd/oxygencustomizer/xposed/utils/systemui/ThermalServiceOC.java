@@ -1,6 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.utils.systemui;
 
+
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.oplus.epona.Epona;
@@ -12,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 
 public class ThermalServiceOC {
 
@@ -36,6 +42,9 @@ public class ThermalServiceOC {
     }
 
     public static Object[] getCurrentTemperatures() {
+        if (Build.VERSION.SDK_INT >= 36) {
+            return getTemperatures();
+        }
         Request request = null;
         for (RequestFactory factory : factories) {
             try {
@@ -62,6 +71,30 @@ public class ThermalServiceOC {
         }
 
         return new TemperatureNative[0];
+    }
+
+    public static Object[] getTemperatures() {
+        try {
+            // 1. Get binder from SystemUI -- runtime
+            IBinder b = (IBinder) Class.forName("android.os.ServiceManager")
+                    .getMethod("getService", String.class)
+                    .invoke(null, "thermalservice"); // oplus-services com.android.server.wm.CrossDeviceService
+
+            if (b != null) {
+                // call the asInterface method to get IThermalService instance
+                Object thermalService = callStaticMethod(
+                        XposedHelpers.findClass("android.os.IThermalService$Stub", ClassLoader.getSystemClassLoader()),
+                        "asInterface",
+                        b
+                );
+
+                // 3. getCurrentTemperatures()
+                return (Object[]) XposedHelpers.callMethod(thermalService, "getCurrentTemperatures");
+            }
+        } catch (Exception e) {
+            logE("ThermalServiceOC: error in getTemperatures", e);
+        }
+        return new Object[0];
     }
 
     private static void logE(String message, Throwable throwable) {
