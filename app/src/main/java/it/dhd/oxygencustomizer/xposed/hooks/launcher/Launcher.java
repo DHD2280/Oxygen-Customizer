@@ -18,7 +18,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -224,31 +223,16 @@ public class Launcher extends XposedMods {
                                 List<Pair<Integer, Pair<Integer, Integer>>> getLayoutNormal()
                              */
                             ArrayList<Pair<Integer, Pair<Integer, Integer>>> arrayList = new ArrayList<>();
-                            arrayList.add(Pair.create(3, Pair.create(5, 5)));
-                            arrayList.add(Pair.create(3, Pair.create(6, 6)));
-                            arrayList.add(Pair.create(4, Pair.create(5, 5)));
-                            arrayList.add(Pair.create(4, Pair.create(6, 6)));
-                            arrayList.add(Pair.create(4, Pair.create(6, 7)));
-                            arrayList.add(Pair.create(5, Pair.create(5, 5)));
-                            arrayList.add(Pair.create(5, Pair.create(6, 6)));
-                            arrayList.add(Pair.create(5, Pair.create(7, 7)));
-                            arrayList.add(Pair.create(5, Pair.create(8, 8)));
-                            arrayList.add(Pair.create(5, Pair.create(9, 9)));
-                            arrayList.add(Pair.create(5, Pair.create(10, 10)));
-                            arrayList.add(Pair.create(6, Pair.create(6, 6)));
-                            arrayList.add(Pair.create(6, Pair.create(7, 7)));
-                            arrayList.add(Pair.create(6, Pair.create(8, 8)));
-                            arrayList.add(Pair.create(6, Pair.create(9, 9)));
-                            arrayList.add(Pair.create(6, Pair.create(10, 10)));
-                            arrayList.add(Pair.create(7, Pair.create(7, 7)));
-                            arrayList.add(Pair.create(7, Pair.create(8, 8)));
-                            arrayList.add(Pair.create(7, Pair.create(9, 9)));
-                            arrayList.add(Pair.create(7, Pair.create(10, 10)));
-                            arrayList.add(Pair.create(7, Pair.create(11, 11)));
-                            arrayList.add(Pair.create(8, Pair.create(8, 8)));
-                            arrayList.add(Pair.create(8, Pair.create(9, 9)));
-                            arrayList.add(Pair.create(8, Pair.create(10, 10)));
-                            XposedBridge.log("OXYGEN CUSTOMIZER - Launcher: getSupportLayout modified " + arrayList);
+
+                            int MIN_COLS = 3;
+                            int MIN_ROWS = 4;
+
+                            for (int col = MIN_COLS; col <= mMaxColumns; col++) {
+                                for (int row = MIN_ROWS; row <= mMaxRows; row++) {
+                                    arrayList.add(Pair.create(col, Pair.create(row, row)));
+
+                                }
+                            }
                             param.setResult(arrayList);
                         });
             }
