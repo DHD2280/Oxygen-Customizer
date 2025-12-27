@@ -21,27 +21,23 @@
             android:title="@string/launcher_edit_layout"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oneplusui.preference.OplusSliderPreference
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="4"
             android:dependency="rearrange_home"
-            android:key="launcher_max_columns"
+            android:key="launcher_columns"
+            android:max="8"
+            android:min="4"
             android:title="@string/launcher_columns"
-            app:defaultValue="4"
-            app:iconSpaceReserved="false"
-            app:maxVal="8"
-            app:minVal="4"
-            app:showSeekBarValue="true"
-            app:tickInterval="1" />
+            app:showSeekBarValue="true" />
 
-        <it.dhd.oneplusui.preference.OplusSliderPreference
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="4"
             android:dependency="rearrange_home"
-            android:key="launcher_max_rows"
+            android:key="launcher_rows"
+            android:max="10"
+            android:min="3"
             android:title="@string/launcher_rows"
-            app:defaultValue="4"
-            app:iconSpaceReserved="false"
-            app:maxVal="10"
-            app:minVal="3"
-            app:showSeekBarValue="true"
-            app:tickInterval="1" />
+            app:showSeekBarValue="true" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -63,25 +59,21 @@
             android:title="@string/launcher_folder_edit_layout"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oneplusui.preference.OplusSliderPreference
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:dependency="rearrange_folder"
-            android:key="folder_columns"
+            android:key="folder_max_columns"
             android:title="@string/launcher_folder_columns"
-            app:defaultValue="3"
-            app:iconSpaceReserved="false"
-            app:maxVal="7"
-            app:minVal="3"
-            app:tickInterval="1" />
+            android:defaultValue="3"
+            android:max="7"
+            android:min="3" />
 
-        <it.dhd.oneplusui.preference.OplusSliderPreference
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
             android:dependency="rearrange_folder"
-            android:key="folder_rows"
+            android:key="folder_max_rows"
             android:title="@string/launcher_folder_rows"
-            app:defaultValue="3"
-            app:iconSpaceReserved="false"
-            app:maxVal="7"
-            app:minVal="3"
-            app:tickInterval="1" />
+            android:defaultValue="3"
+            android:max="7"
+            android:min="3" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"

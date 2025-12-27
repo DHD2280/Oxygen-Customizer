@@ -45,11 +45,11 @@ public class Launcher extends XposedMods {
     public void updatePrefs(String... Key) {
         if (Xprefs == null) return;
 
-        mFolderRows = Xprefs.getSliderInt("folder_rows", 3);
-        mFolderColumns = Xprefs.getSliderInt("folder_columns", 3);
+        mFolderRows = Xprefs.getSliderInt("folder_max_rows", 3);
+        mFolderColumns = Xprefs.getSliderInt("folder_max_columns", 3);
         mDrawerColumns = Xprefs.getSliderInt("drawer_columns", 4);
-        mMaxRows = Xprefs.getSliderInt("launcher_max_rows", 6);
-        mMaxColumns = Xprefs.getSliderInt("launcher_max_columns", 5);
+        mMaxRows = Xprefs.getSliderInt("launcher_rows", 6);
+        mMaxColumns = Xprefs.getSliderInt("launcher_columns", 5);
         mRearrangeHome = Xprefs.getBoolean("rearrange_home", false);
         mFolderRearrange = Xprefs.getBoolean("rearrange_folder", true);
         mFolderPreview = Xprefs.getBoolean("rearrange_preview", true);

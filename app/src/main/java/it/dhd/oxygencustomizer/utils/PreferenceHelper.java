@@ -401,13 +401,13 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("BBarEnabled", false);
             }
             // Launcher Prefs
-            case "folder_rows", "folder_columns", "rearrange_preview" -> {
+            case "folder_max_rows", "folder_max_columns", "rearrange_preview" -> {
                 return instance.mPreferences.getBoolean("rearrange_folder", false);
             }
             case "drawer_columns" -> {
                 return instance.mPreferences.getBoolean("rearrange_drawer", false);
             }
-            case "launcher_max_columns", "launcher_max_rows" -> {
+            case "launcher_columns", "launcher_rows" -> {
                 return instance.mPreferences.getBoolean("rearrange_home", false);
             }
             case "disable_previous_recents",
