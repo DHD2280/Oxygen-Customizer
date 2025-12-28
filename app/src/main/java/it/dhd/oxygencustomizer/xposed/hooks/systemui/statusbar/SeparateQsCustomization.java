@@ -27,7 +27,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -39,7 +38,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,7 +48,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
@@ -390,7 +387,7 @@ public class SeparateQsCustomization extends XposedMods {
         OplusQSQuickEntranceContainerViewController
                 .after("onInit")
                 .run(param -> {
-                    ImageView settingsButton = (ImageView) getObjectField(param.thisObject, "settingsButton");
+                    View settingsButton = (View) getObjectField(param.thisObject, "settingsButton");
                     settingsButton.setOnLongClickListener(v -> {
                         openOxygenCustomizer();
                         return true;
