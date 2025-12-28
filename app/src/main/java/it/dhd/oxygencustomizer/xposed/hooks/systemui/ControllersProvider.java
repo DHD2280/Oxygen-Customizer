@@ -463,7 +463,9 @@ public class ControllersProvider extends XposedMods {
 
         // QS Media Tile, for Media Dialog OOS15
         try {
-            ReflectedClass OplusQsMediaTile = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+            ReflectedClass OplusQsMediaTile = ReflectedClass.of(
+                    "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", /* OOS16 */
+                    "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
             OplusQsMediaTile.afterConstruction().run(param -> mOplusQsMediaTile = param.thisObject);
         } catch (Throwable t) {
             log("OplusQsMediaTile not found: " + t.getMessage());
