@@ -67,7 +67,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,6 +250,15 @@ public class LockscreenClock extends XposedMods {
 
         createCustomClockView();
 
+        if (Build.VERSION.SDK_INT >= 36) {
+            ReflectedClass ThemePlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.ThemePlugin");
+            ThemePlugin
+                    .after("render")
+                    .run(param -> {
+                        View v = (View) callMethod(param.thisObject, "getClockScrimLayer");
+                        v.setVisibility(View.GONE);
+                    });
+        }
         if (Build.VERSION.SDK_INT >= 35) {
 
             ReflectedClass KeyguardStyleClockControllerImpl = ReflectedClass.of("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl");
@@ -277,7 +285,7 @@ public class LockscreenClock extends XposedMods {
                         param.setResult(finalResult);
                     });
 
-            ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
+            ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
             ReflectedClass OplusKeyguardStyleWrapper = ReflectedClass.ofIfPossible("com.oplus.keyguard.comm.OplusKeyguardStyleWrapper");
 
             ReflectedClass.ReflectionConsumer lockscreenClockPostHook = param -> {
