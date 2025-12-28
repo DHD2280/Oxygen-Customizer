@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.StaticLayout;
@@ -168,7 +169,7 @@ public class AodEdgeLight extends XposedMods {
         OplusAodCurvedDisplayView
                 .afterConstruction()
                 .run(param -> {
-                    if (!isOOS1501()) return;
+                    if (!isOOS1501() && (Build.VERSION.SDK_INT < 35)) return;
                     int maskDuration = getIntField(param.thisObject, "mNotificationMaskMoveDuration");
                     int fadeInDuration = getIntField(param.thisObject, "AOD_NOTIFICATION_FADE_DURATION");
                     int fadeOutDuration = getIntField(param.thisObject, "mNotificationFadeOutDuration");
