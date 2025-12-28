@@ -1,9 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_BG_COLOR;
@@ -19,8 +17,8 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 
-import java.sql.Ref;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -77,6 +75,13 @@ public class VolumePanel extends XposedMods {
 
         ReflectedClass OplusVolumeSeekBar = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusVolumeSeekBar");
         sliderCustomizable = OplusVolumeSeekBar.getClazz() != null;
+//        OplusVolumeSeekBar
+//                .before("getBackgroundBlurDrawable")
+//                .run(param -> {
+//                    if (customizeVolumeBg) {
+//                        param.setResult(null);
+//                    }
+//                });
 
         ReflectedClass OplusVolumeDialogImpl = ReflectedClass.of(
                 "com.oplus.systemui.volume.OplusVolumeDialogImpl",
@@ -123,6 +128,13 @@ public class VolumePanel extends XposedMods {
                 .before("onShowSafetyWarning")
                 .run(panelDisabled);
 
+        ReflectedClass OplusSafetyWarningDialog = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusSafetyWarningDialog");
+        if (OplusSafetyWarningDialog.getClazz() != null) {
+            OplusSafetyWarningDialog
+                    .before("getSafetyWarningDialog")
+                    .run(panelDisabled);
+        }
+
         try {
             ReflectedClass OplusQsVolumeController = ReflectedClass.of("com.oplus.systemui.qs.slider.OplusQsVolumeController");
             OplusQsVolumeController
@@ -154,20 +166,45 @@ public class VolumePanel extends XposedMods {
                 .after("initRow")
                         .run(param -> {
                             if (!sliderCustomizable) return;
-
                             Object VolumeRow = param.args[0];
                             Object slider = getObjectField(VolumeRow, "slider");
-                            if (customizeVolumeProgress) {
-                                if (volumeProgressPrimary)
-                                    callMethod(slider, "setProgressColor", ColorStateList.valueOf(getPrimaryColor(mContext)));
-                                else
-                                    callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
-                            }
-                            if (customizeVolumeBg) {
-                                callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
-                            }
+                            hookVolume(slider);
                         });
 
+        ReflectedClass OplusVolumeRow = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.view.OplusVolumeRow");
+        OplusVolumeRow
+                .after("initRow")
+                .run(param -> {
+                    if (!sliderCustomizable) return;
+
+                    Object slider = getObjectField(param.thisObject, "slider");
+                    hookVolume(slider);
+                });
+
+        OplusVolumeSeekBar
+                .before("onPreDraw")
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT != 36) return;
+                    if (!customizeVolumeBg) return;
+                    try {
+                        Object blurDrawable = callMethod(param.thisObject, "getBackgroundBlurDrawable");
+                        callMethod(blurDrawable, "setColor", volumeBgColor);
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                });
+
+    }
+
+    private void hookVolume(Object slider) {
+        if (customizeVolumeProgress) {
+            if (volumeProgressPrimary)
+                callMethod(slider, "setProgressColor", ColorStateList.valueOf(getPrimaryColor(mContext)));
+            else
+                callMethod(slider, "setProgressColor", ColorStateList.valueOf(volumeProgressColor));
+        }
+        if (customizeVolumeBg)
+            callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
     }
 
     private void updateVolumePanel() {
@@ -186,6 +223,11 @@ public class VolumePanel extends XposedMods {
             }
             if (customizeVolumeBg) {
                 callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(volumeBgColor));
+                try {
+                    Object bblur = callMethod(slider, "getBackgroundBlurDrawable");
+                    callMethod(bblur, "setBlurRadius", 0f);
+                } catch (Throwable ignored) {
+                }
             }
         }
     }
