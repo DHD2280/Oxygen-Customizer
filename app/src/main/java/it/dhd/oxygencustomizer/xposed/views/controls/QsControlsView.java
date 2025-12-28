@@ -105,7 +105,6 @@ import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.QsWidgets;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
@@ -377,7 +376,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             if (view != null && !viewList.contains(view)) {
                 if (view == mMediaPlayer) {
                     view.setOnLongClickListener(v -> {
-                        showMediaDialog(mContainer);
+                        try {
+                            showMediaDialog(mContainer);
+                        } catch (Throwable t) {
+                            log(TAG + "showMediaDialog error: " + t.getMessage());
+                        }
                         return true;
                     });
                 }
