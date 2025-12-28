@@ -726,6 +726,8 @@
     <string name="launcher_app_details_summary">Tap on the app icon to open app details in Settings.</string>
     <string name="launcher_disable_recents_previous_page_title">Disable previous task</string>
     <string name="launcher_disable_recents_previous_page_summary">Disable the automatic switch to previous task in recents.</string>
+    <string name="launcher_replace_lock_title">Replace lock with kill</string>
+    <string name="launcher_replace_lock_summary">Replace the lock gesture (swipe down in recents) with kill app feature.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
     <string name="launcher_themed_icons">Themed icons</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>

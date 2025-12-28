@@ -149,6 +149,12 @@
             android:summary="@string/launcher_disable_recents_previous_page_summary"
             android:title="@string/launcher_disable_recents_previous_page_title" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="replace_lock"
+            android:summary="@string/launcher_replace_lock_title"
+            android:title="@string/launcher_replace_lock_summary" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/launcher_themed_icons">

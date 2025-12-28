@@ -6,21 +6,26 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Process;
 import android.provider.Settings;
 import android.util.Pair;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Launcher extends XposedMods {
@@ -33,6 +38,7 @@ public class Launcher extends XposedMods {
     private boolean mHideScroller = false;
     private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
     private boolean mDisablePreviousRecents = false;
+    private boolean mReplaceLock = false;
 
     private View OplusFastScroll;
 
@@ -60,6 +66,7 @@ public class Launcher extends XposedMods {
         mHideDesktopLabels = Xprefs.getBoolean("desktop_hide_app_labels", false);
         mHideDrawerLabels = Xprefs.getBoolean("drawer_hide_app_labels", false);
         mDisablePreviousRecents = Xprefs.getBoolean("disable_previous_recents", false);
+        mReplaceLock = Xprefs.getBoolean("replace_lock", false);
 
         if (Key.length > 0 && Key[0].equals("hide_scroller")) {
             updateFastScroll();
@@ -299,6 +306,63 @@ public class Launcher extends XposedMods {
                     if (mDisablePreviousRecents) {
                         param.setResult(false);
                     }
+                });
+
+        ReflectedClass OplusStackTaskViewTouchCtrl = ReflectedClass.ofIfPossible("com.android.quickstep.uioverrides.touchcontrollers.OplusStackTaskViewTouchCtrl");
+        ReflectionTools.dumpClass(OplusStackTaskViewTouchCtrl.getClazz());
+        OplusStackTaskViewTouchCtrl
+                .before("onDragEnd")
+                .run(param -> {
+                    if (!mReplaceLock) return;
+                    // check orientation first
+                    Object recentsView = getObjectField(param.thisObject, "mRecentsView");
+                    Object pagedOrientationHandler = callMethod(recentsView, "getPagedOrientationHandler");
+                    int rotation = (Integer) callMethod(pagedOrientationHandler, "getRotation");
+                    float mDisplacement = (float) getObjectField(param.thisObject, "mDisplacement");
+                    boolean mIsRtl = (boolean) getObjectField(param.thisObject, "mIsRtl");
+
+                    boolean shouldLock = false;
+                    if (rotation == 1) {
+                        shouldLock = mIsRtl ? (mDisplacement > 100.0f) : (mDisplacement < -100.0f);
+                    } else if (rotation == 3) {
+                        shouldLock = mIsRtl ? (mDisplacement < -100.0f) : (mDisplacement > 100.0f);
+                    } else {
+                        // Rotation 0 o 2 (Portrait)
+                        shouldLock = (mDisplacement > 200.0f);
+                    }
+
+                    XposedBridge.log("OplusStackTaskViewTouchCtrl::shouldLock (manual): " + shouldLock);
+
+                    if (!shouldLock) {
+                        XposedBridge.log("OplusStackTaskViewTouchCtrl:: Abort: shouldLock is false");
+                        return;
+                    }
+                    param.setResult(null);
+                    Object task = null;
+                    Object taskView = getObjectField(param.thisObject, "mTaskBeingDragged");
+                    if (taskView != null) task = callMethod(taskView, "getTask");
+                    if (taskView == null && task == null) return;
+                    String packageName = (String) callMethod(task, "getPackageName");
+                    XposedBridge.log("OplusStackTaskViewTouchCtrl::packageName: " + packageName);
+                    callMethod(mContext.getSystemService(Context.ACTIVITY_SERVICE),
+                            "forceStopPackageAsUser",
+                            packageName,
+                            callMethod(Process.myUserHandle(), "getIdentifier"));
+                    callMethod(taskView, "performAccessibilityAction", mContext.getResources().getIdentifier("accessibility_close", "string", LAUNCHER), null);
+                    Toast.makeText(mContext, "App Killed", Toast.LENGTH_SHORT).show();
+
+                });
+
+        OplusStackTaskViewTouchCtrl
+                .before("lockCard")
+                .run(param -> {
+                    XposedBridge.log("OplusStackTaskViewTouchCtrl::lockCard hooked");
+                });
+
+        OplusStackTaskViewTouchCtrl
+                .before("unLockCard")
+                .run(param -> {
+                    XposedBridge.log("OplusStackTaskViewTouchCtrl::unlockCard hooked");
                 });
 
     }

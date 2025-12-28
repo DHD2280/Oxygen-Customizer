@@ -410,6 +410,9 @@ public class PreferenceHelper {
             case "launcher_columns", "launcher_rows" -> {
                 return instance.mPreferences.getBoolean("rearrange_home", false);
             }
+            case "replace_lock" -> {
+                return Build.VERSION.SDK_INT >= 36;
+            }
             case "disable_previous_recents",
                  "dock_background_jump" -> {
                 return Build.VERSION.SDK_INT >= 35;
