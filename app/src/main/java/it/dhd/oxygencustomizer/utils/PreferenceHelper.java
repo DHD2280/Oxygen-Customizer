@@ -1080,13 +1080,6 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("volume_panel_seekbar_color_enabled", false) &&
                         !instance.mPreferences.getBoolean("volume_panel_seekbar_link_primary", false);
             }
-            case "volume_panel_seekbar_bg_color_enabled" -> {
-                return switch (Build.VERSION.SDK_INT) {
-                    case 35 -> getOOSVersion() <= 840;
-                    case 34 -> true;
-                    default -> Build.VERSION.SDK_INT >= 36 ? false : true;
-                };
-            }
             case "volume_panel_seekbar_bg_color" -> {
                 return isVisible("volume_panel_seekbar_bg_color_enabled") && instance.mPreferences.getBoolean("volume_panel_seekbar_bg_color_enabled", false);
             }

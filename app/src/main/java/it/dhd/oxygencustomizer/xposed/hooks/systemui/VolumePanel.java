@@ -17,7 +17,6 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Build;
 
 import java.util.List;
 
@@ -184,7 +183,6 @@ public class VolumePanel extends XposedMods {
         OplusVolumeSeekBar
                 .before("onPreDraw")
                 .run(param -> {
-                    if (Build.VERSION.SDK_INT != 36) return;
                     if (!customizeVolumeBg) return;
                     try {
                         Object blurDrawable = callMethod(param.thisObject, "getBackgroundBlurDrawable");
