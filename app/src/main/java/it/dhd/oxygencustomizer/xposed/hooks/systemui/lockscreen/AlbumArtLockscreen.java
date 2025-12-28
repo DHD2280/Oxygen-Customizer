@@ -11,6 +11,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.ge
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaMetadata;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 
+import android.app.WallpaperColors;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,7 +30,6 @@ import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
-import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
 public class AlbumArtLockscreen extends XposedMods {
 
@@ -65,6 +65,7 @@ public class AlbumArtLockscreen extends XposedMods {
 
         // Get mediadata change
         AudioDataProvider.registerInfoCallback(this::onPrimaryMetadataOrStateChanged);
+        AudioDataProvider.registerMediaMetadataListener(mMediaMetadataListener);
 
         // Get Scrim Controller for checking Scrim Change
         Class<?> ScrimControllerClassEx = findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpparam.classLoader);
@@ -133,6 +134,22 @@ public class AlbumArtLockscreen extends XposedMods {
             albumArtContainer.post(() -> albumArtContainer.setVisibility(View.GONE));
         }
     }
+
+    private AudioDataProvider.MediaMetadataListener mMediaMetadataListener = new AudioDataProvider.MediaMetadataListener() {
+        @Override
+        public void onMediaMetadataChanged() {
+            onPrimaryMetadataOrStateChanged(AudioDataProvider.getPlaybackState());
+        }
+
+        @Override
+        public void onPlaybackStateChanged() {
+            onPrimaryMetadataOrStateChanged(AudioDataProvider.getPlaybackState());
+        }
+
+        @Override
+        public void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors, Object colorScheme) {
+        }
+    };
 
     private void onPrimaryMetadataOrStateChanged(int state) {
         canShowArt = (getMediaMetadata() != null &&
