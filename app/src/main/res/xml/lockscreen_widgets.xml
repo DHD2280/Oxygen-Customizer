@@ -206,6 +206,7 @@
             app:valueFormat="%" />
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:dependency="lockscreen_widgets_enabled"
             android:key="lockscreen_widgets_top_margin"
             android:title="@string/lockscreen_clock_top_margin_title"
             app:defaultValue="0"
