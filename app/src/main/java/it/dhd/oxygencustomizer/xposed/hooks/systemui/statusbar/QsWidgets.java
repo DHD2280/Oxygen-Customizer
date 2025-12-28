@@ -223,7 +223,9 @@ public class QsWidgets extends XposedMods {
                 .afterConstruction()
                 .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
 
-        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of(
+                "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", /* OOS16 */
+                "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
         if (Build.VERSION.SDK_INT >= 35) {
             ReflectedClass BaseQsViewBackgroundClz = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.widget.BaseQsViewBackground");
             OplusQsMediaPanelView
@@ -269,7 +271,7 @@ public class QsWidgets extends XposedMods {
             OplusPanelViewPagerController
                     .before("onScrollX")
                     .run(param -> {
-                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
+                        Object separateQSManager = getObjectField(param.thisObject, "separateQSManager");
                         boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
                         if (!QsStyleObserver.isSeparateStyle()) return;
                         if (!isQsFullyExpanded) return;
@@ -305,6 +307,7 @@ public class QsWidgets extends XposedMods {
     private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
         if (!mQsWidgetsEnabled) return;
         boolean isKeyguardVisible = (boolean) callMethod(mOplusPanelPagerController, "isKeyguardVisible");
+        log("QsWidgets - " + methodName + " - isKeyguardVisible: " + isKeyguardVisible);
         if (isKeyguardVisible) return;
         int[] location = new int[2];
         mOplusQsMediaView.getLocationOnScreen(location);
