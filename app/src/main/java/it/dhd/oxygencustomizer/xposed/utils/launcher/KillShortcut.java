@@ -30,8 +30,6 @@ public class KillShortcut extends SystemShortcut<BaseDraggingActivity> {
     @Override
     public void onClick(View v) {
         try {
-            Toast.makeText(activity, "App Killed", Toast.LENGTH_SHORT).show();
-
             callMethod(activity.getSystemService(Context.ACTIVITY_SERVICE),
 
                     "forceStopPackageAsUser",
@@ -39,6 +37,7 @@ public class KillShortcut extends SystemShortcut<BaseDraggingActivity> {
                     callMethod(Process.myUserHandle(), "getIdentifier"));
             TaskView taskView = mTaskContainer.getTaskView();
             callMethod(taskView, "performAccessibilityAction", activity.getResources().getIdentifier("accessibility_close", "string", LAUNCHER), null);
+            Toast.makeText(activity, "App Killed", Toast.LENGTH_SHORT).show();
         } catch (Throwable t) {
             Log.e("[ Oxygen Customizer - Launcher - Kill Shortcut ]", "Error while killing app " + Log.getStackTraceString(t));
         }
