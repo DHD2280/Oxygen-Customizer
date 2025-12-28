@@ -39,7 +39,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>tugaia56</b></sub></a>
         <br />
-        <sub><b>4601 words</b></sub>
+        <sub><b>4647 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/muhammadbahaa2001"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15231004/medium/1f277872da157dce11a9a6d1fc9120b6.png" />
@@ -90,7 +90,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Quân Xinh Tươi (chetaoquocte)</b></sub></a>
         <br />
-        <sub><b>2046 words</b></sub>
+        <sub><b>2067 words</b></sub>
       </td>
     </tr>
     <tr>
@@ -106,7 +106,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Andfi</b></sub></a>
         <br />
-        <sub><b>1883 words</b></sub>
+        <sub><b>1910 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Osean22"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15718399/medium/c1732446f8e330322a6101dd554ab494_default.png" />
