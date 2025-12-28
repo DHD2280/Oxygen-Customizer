@@ -342,6 +342,7 @@ public class CustomNavGestures extends XposedMods {
 
 	String mTasksFieldName = null; // in case the code was obfuscated
 	private void saveFocusedTask() {
+        if (mSysUiProxy == null) return;
 		try {
 			ArrayList<?> recentTaskList = (ArrayList<?>) callMethod(
 					mSysUiProxy,
@@ -349,15 +350,17 @@ public class CustomNavGestures extends XposedMods {
 					1,
 					callMethod(Process.myUserHandle(), "getIdentifier"));
 
-			if(recentTaskList == null || recentTaskList.isEmpty()) return;
+            if (recentTaskList == null || recentTaskList.isEmpty()) return;
 
-			if(mTasksFieldName == null) {
+            if (mTasksFieldName == null) {
 				for(Field f : recentTaskList.get(0).getClass().getDeclaredFields()) {
 					if(f.getType().getName().contains("RecentTaskInfo")) {
 						mTasksFieldName = f.getName();
 					}
 				}
 			}
+
+            if (mTasksFieldName == null) return;
 
 			Optional<?> focusedTask = recentTaskList.stream().filter(recentTask ->
 					(boolean) getObjectField(
