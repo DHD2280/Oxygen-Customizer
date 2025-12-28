@@ -204,6 +204,7 @@ public class AudioDataProvider extends XposedMods {
                 .after("onMediaDataLoaded")
                 .run(param -> {
                     mMediaData = param.args[2];
+                    onMediaMetadataChanged();
                     setArtWork();
                 });
         OplusMediaControllerImpl
@@ -212,6 +213,7 @@ public class AudioDataProvider extends XposedMods {
                     try {
                         mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
                     } catch (Throwable ignored) {}
+                    onMediaMetadataChanged();
                     mArt = null;
                 });
 
