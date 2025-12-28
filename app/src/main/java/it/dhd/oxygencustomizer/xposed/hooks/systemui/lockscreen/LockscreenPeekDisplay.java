@@ -4,7 +4,28 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.*;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BDX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BSX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BUTTONS_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TDX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TITLE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_TSX;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CLEAR_ALL_COUNT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CLEAR_ALL_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_BG_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_PADDING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_ICON_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_IGNORE_SECURITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_TOP_MARGIN;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_USE_APP_ICON;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -124,7 +145,7 @@ public class LockscreenPeekDisplay extends XposedMods {
             updateVisibility();
         });
 
-        ReflectedClass KeyguardStatusViewController = ReflectedClass.of("com.android.keyguard.KeyguardStatusViewController");
+        ReflectedClass KeyguardStatusViewController = ReflectedClass.ofIfPossible("com.android.keyguard.KeyguardStatusViewController");
         KeyguardStatusViewController
                 .after("setAlpha")
                 .run(param -> {
