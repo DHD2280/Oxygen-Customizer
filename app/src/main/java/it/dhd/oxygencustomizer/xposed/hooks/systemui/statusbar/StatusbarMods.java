@@ -14,7 +14,11 @@ import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.*;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_BRIGHTNESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_DT_SLEEP;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_PADDING_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_PADDING_SIDE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_PADDING_TOP;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
 
@@ -41,8 +45,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,13 +53,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableSize;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
  * @noinspection RedundantThrows
@@ -483,13 +485,11 @@ public class StatusbarMods extends XposedMods {
 
 
         // Notifications
-        NotificationIconAreaController = findClass("com.android.systemui.statusbar.phone.NotificationIconAreaController", lpparam.classLoader);
-        hookAllConstructors(NotificationIconAreaController, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNotificationIconAreaController = param.thisObject;
-            }
-        });
+        ReflectedClass NotificationIconAreaControllerClz = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.NotificationIconAreaController");
+        NotificationIconAreaControllerClz
+                .afterConstruction()
+                .run(param -> mNotificationIconAreaController = param.thisObject);
+
         Class<?> NotificationIconContainer = findClass("com.android.systemui.statusbar.phone.NotificationIconContainer", lpparam.classLoader);
         hookAllConstructors(NotificationIconContainer, new XC_MethodHook() {
             @Override
