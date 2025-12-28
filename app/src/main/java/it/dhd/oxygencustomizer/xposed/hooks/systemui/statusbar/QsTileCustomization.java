@@ -702,7 +702,7 @@ public class QsTileCustomization extends XposedMods {
 
 
         // Highlight separated
-        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
+        ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         OplusQSHighlightPluginTileView
                 .afterConstruction()
                 .run(param -> {
@@ -722,7 +722,7 @@ public class QsTileCustomization extends XposedMods {
                 });
 
         // Highlight icon background
-        ReflectedClass OplusQSIconView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusQSIconView");
+        ReflectedClass OplusQSIconView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSIconView");
         OplusQSIconView
                 .after("tintBgColor")
                 .run(param -> {
@@ -751,7 +751,9 @@ public class QsTileCustomization extends XposedMods {
                 });
 
         // Media Panel
-        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of(
+                "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", /* OOS16 */
+                "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
         OplusQsMediaPanelView
                 .afterConstruction()
                 .run(param -> {
@@ -888,7 +890,9 @@ public class QsTileCustomization extends XposedMods {
     }
 
     public void hookMediaPanel() {
-        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaPanelView");
+        ReflectedClass OplusQsMediaPanelView = ReflectedClass.of(
+                "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", /* OOS16 */
+                "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
         OplusQsMediaPanelView
                 .after("onFinishInflate")
                 .run(param -> {
