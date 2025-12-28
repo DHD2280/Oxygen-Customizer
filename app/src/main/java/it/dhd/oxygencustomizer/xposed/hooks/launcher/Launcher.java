@@ -35,6 +35,7 @@ public class Launcher extends XposedMods {
     private boolean mRearrangeHome = false, mFolderRearrange = false, mFolderPreview = false, mDrawerRearrange = false, mOpenAppDetails;
     private boolean mRemoveFolderPagination = false, mRemoveHomePagination = false;
     private int mMaxRows = 6, mMaxColumns = 4;
+    private boolean mForceDockAsColumns = false;
     private boolean mHideScroller = false;
     private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
     private boolean mDisablePreviousRecents = false;
@@ -55,6 +56,7 @@ public class Launcher extends XposedMods {
         mDrawerColumns = Xprefs.getSliderInt("drawer_columns", 4);
         mMaxRows = Xprefs.getSliderInt("launcher_rows", 6);
         mMaxColumns = Xprefs.getSliderInt("launcher_columns", 5);
+        mForceDockAsColumns = Xprefs.getBoolean("force_dock_as_columns", false);
         mRearrangeHome = Xprefs.getBoolean("rearrange_home", false);
         mFolderRearrange = Xprefs.getBoolean("rearrange_folder", true);
         mFolderPreview = Xprefs.getBoolean("rearrange_preview", true);
@@ -297,6 +299,14 @@ public class Launcher extends XposedMods {
                             param.setResult(null);
                         }
                     }
+                });
+
+        ReflectedClass FeatureOption = ReflectedClass.of("com.android.common.config.FeatureOption");
+        FeatureOption
+                .before("isDockerMax5")
+                .run(param -> {
+                    if (!mForceDockAsColumns) return;
+                    param.setResult(false);
                 });
 
         ReflectedClass AppFeatureUtils = ReflectedClass.of("com.android.common.util.AppFeatureUtils");

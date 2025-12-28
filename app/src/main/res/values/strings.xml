@@ -712,6 +712,8 @@
     <string name="hide_app_labels">Hide app labels</string>
     <string name="hide_app_labels_desktop">Hide app labels in home screen</string>
     <string name="hide_app_labels_drawer">Hide app labels in drawer</string>
+    <string name="launcher_force_dock">Force dock items</string>
+    <string name="launcher_force_dock_summary">Make the icons in the dock same as launcher columns.\nEg: if your layout is 6*7 then you can have 6 items.</string>
     <string name="launcher_folder_layout">Folder layout</string>
     <string name="launcher_folder_edit_layout">Edit layout</string>
     <string name="launcher_folder_columns">Columns</string>
