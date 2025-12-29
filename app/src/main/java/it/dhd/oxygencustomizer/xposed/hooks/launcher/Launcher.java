@@ -231,6 +231,7 @@ public class Launcher extends XposedMods {
                             /*
                                 List<Pair<Integer, Pair<Integer, Integer>>> getLayoutNormal()
                              */
+                            if (!mRearrangeHome) return;
                             ArrayList<Pair<Integer, Pair<Integer, Integer>>> arrayList = new ArrayList<>();
 
                             int MIN_COLS = 3;
