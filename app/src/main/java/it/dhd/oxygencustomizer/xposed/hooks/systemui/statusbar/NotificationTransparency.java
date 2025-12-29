@@ -127,7 +127,8 @@ public class NotificationTransparency extends XposedMods {
                     try {
                         setObjectField(notificationBackgroundView, "mTintColor", 0);
                     } catch (Throwable ignored) {}
-                    notificationBackgroundView.invalidate();
+
+                    if (notificationBackgroundView != null) notificationBackgroundView.invalidate();
                 }
             };
 
