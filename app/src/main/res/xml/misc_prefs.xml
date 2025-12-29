@@ -139,7 +139,7 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="Face Up Screen Off"
+        android:title="@string/sleep_on_flat_cat"
         app:iconSpaceReserved="false">
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusPrimarySwitchPreference

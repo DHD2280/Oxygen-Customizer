@@ -1583,6 +1583,7 @@
     <string name="memc_footer">If your device does not have Pixelwork chip or does not support Memc, don\'t touch those settings.</string>
 
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_cat">Face Up Screen Off</string>
     <string name="sleep_on_flat_screen_title">Turn off the screen on flat surface</string>
     <string name="sleep_on_flat_screen_tile_title">Sleep on surface</string>
     <string name="flat_screen_timeout_title">Screen timeout on flat surface</string>
