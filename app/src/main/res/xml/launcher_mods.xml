@@ -66,20 +66,20 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="3"
             android:dependency="rearrange_folder"
             android:key="folder_max_columns"
-            android:title="@string/launcher_folder_columns"
-            android:defaultValue="3"
             android:max="7"
-            android:min="3" />
+            android:min="3"
+            android:title="@string/launcher_folder_columns" />
 
         <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="3"
             android:dependency="rearrange_folder"
             android:key="folder_max_rows"
-            android:title="@string/launcher_folder_rows"
-            android:defaultValue="3"
             android:max="7"
-            android:min="3" />
+            android:min="3"
+            android:title="@string/launcher_folder_rows" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -177,6 +177,13 @@
             android:key="alternative_monochrome"
             android:summary="@string/alternative_themed_icons_summary"
             android:title="@string/alternative_themed_icons_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="custom_themed_icons_where"
+            android:summary="@string/themed_icons_where_switch_summary"
+            android:title="@string/themed_icons_where_switch"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusMultiSelectListPreference

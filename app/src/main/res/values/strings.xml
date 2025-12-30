@@ -736,6 +736,8 @@
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>
     <string name="alternative_themed_icons_title">Alternative themed icons</string>
     <string name="alternative_themed_icons_summary">Use alternative method to theme icons.\nNote: this method won\'t override Oplus icons, but could be slower.</string>
+    <string name="themed_icons_where_switch">Custom themed icons map</string>
+    <string name="themed_icons_where_switch_summary">Choose where themed icons should be applied</string>
     <string name="themed_icons_where_title">Select where to apply themed icons</string>
     <string name="themed_icons_workspace">Workspace</string>
     <string name="themed_icons_drawer">Drawer</string>
@@ -1588,6 +1590,10 @@
     <string name="sleep_on_flat_screen_tile_title">Sleep on surface</string>
     <string name="flat_screen_timeout_title">Screen timeout on flat surface</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Respect wake locks</string>
+
+    <!-- Bypass resizable windows -->
+    <string name="bypass_resizable_windows_title">Bypass resizable windows</string>
+    <string name="bypass_resizable_windows_summary">This will allow any app to be resizable</string>
 
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Allow players AOD</string>

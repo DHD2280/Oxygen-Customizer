@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
-import static org.lsposed.hiddenapibypass.HiddenApiBypass.newInstance;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
@@ -9,21 +8,15 @@ import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageItemInfo;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
-import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,12 +35,13 @@ public class ThemedIcons extends XposedMods {
     private final static String listenPackage = LAUNCHER;
     private final static String TAG = "Oxygen Customizer - Launcher - ThemedIcons: ";
     private Set<String> mAllowedMonochrome = new HashSet<>();
+    private boolean mAllowCustomMap = false;
     Set<String> defaultValues = new HashSet<>(Arrays.asList("0", "1", "2", "3", "4"));
-    private boolean mDrawerMonochrome = false;
-    private boolean mWorkspaceMonochrome = false;
-    private boolean mFolderMonochrome = false;
-    private boolean mSearchMonochrome = false;
-    private boolean mTaskbarMonochrome = false;
+    private boolean mDrawerMonochrome = false,
+            mWorkspaceMonochrome = false,
+            mFolderMonochrome = false,
+            mSearchMonochrome = false,
+            mTaskbarMonochrome = false;
 
     private static final int DISPLAY_ALL_APPS = 1;
     private static final int DISPLAY_FOLDER = 2;
@@ -71,6 +65,7 @@ public class ThemedIcons extends XposedMods {
     public void updatePrefs(String... Key) {
         ForceThemedLauncherIcons = Xprefs.getBoolean("force_themed_launcher_icons", false);
         mAlternative = Xprefs.getBoolean("alternative_monochrome", false);
+        mAllowCustomMap = Xprefs.getBoolean("custom_themed_icons_where", false);
         mAllowedMonochrome = Xprefs.getStringSet("themed_icons_where", defaultValues);
         mDrawerMonochrome = mAllowedMonochrome.contains("1");
         mWorkspaceMonochrome = mAllowedMonochrome.contains("0");
@@ -155,6 +150,7 @@ public class ThemedIcons extends XposedMods {
         OplusBubbleTextView
                 .after("applyIconAndLabel")
                 .run(param -> {
+                    if (!mAllowCustomMap) return;
                     Object itemInfoWithIcon = param.args[0];
                     if (itemInfoWithIcon == null) return;
                     int mDisplay = getIntField(param.thisObject, "mDisplay");
