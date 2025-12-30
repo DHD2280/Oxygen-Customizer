@@ -25,7 +25,6 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Launcher extends XposedMods {
@@ -320,7 +319,6 @@ public class Launcher extends XposedMods {
                 });
 
         ReflectedClass OplusStackTaskViewTouchCtrl = ReflectedClass.ofIfPossible("com.android.quickstep.uioverrides.touchcontrollers.OplusStackTaskViewTouchCtrl");
-        ReflectionTools.dumpClass(OplusStackTaskViewTouchCtrl.getClazz());
         OplusStackTaskViewTouchCtrl
                 .before("onDragEnd")
                 .run(param -> {
@@ -342,10 +340,7 @@ public class Launcher extends XposedMods {
                         shouldLock = (mDisplacement > 200.0f);
                     }
 
-                    XposedBridge.log("OplusStackTaskViewTouchCtrl::shouldLock (manual): " + shouldLock);
-
                     if (!shouldLock) {
-                        XposedBridge.log("OplusStackTaskViewTouchCtrl:: Abort: shouldLock is false");
                         return;
                     }
                     param.setResult(null);
@@ -354,7 +349,6 @@ public class Launcher extends XposedMods {
                     if (taskView != null) task = callMethod(taskView, "getTask");
                     if (taskView == null && task == null) return;
                     String packageName = (String) callMethod(task, "getPackageName");
-                    XposedBridge.log("OplusStackTaskViewTouchCtrl::packageName: " + packageName);
                     callMethod(mContext.getSystemService(Context.ACTIVITY_SERVICE),
                             "forceStopPackageAsUser",
                             packageName,
