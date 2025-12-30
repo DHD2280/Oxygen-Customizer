@@ -49,9 +49,7 @@ public class MediaPlayerObserver extends XposedMods {
                     "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
             OplusQsMediaPanelView
                     .after("bindTitleAndText")
-                    .run(param -> {
-                        bindMediaData(param.args[0]);
-                    });
+                    .run(param -> bindMediaData(param.args[0]));
             OplusQsMediaPanelView
                     .after("bindMediaData")
                     .run(param -> {
@@ -65,14 +63,17 @@ public class MediaPlayerObserver extends XposedMods {
 
             OplusQsMediaPanelView
                     .after("unBindMediaData")
-                    .run(param -> {
-                        unBindMediaData();
-                    });
+                    .run(param -> unBindMediaData());
             // OOS15.0.1 method & OOS16
             OplusQsMediaPanelView
                     .after("resetButtonEnableState")
+                    .run(param -> unBindMediaData());
+            OplusQsMediaPanelView
+                    .after("setMediaData")
                     .run(param -> {
-                        unBindMediaData();
+                        if (param.args[0] == null) {
+                            unBindMediaData();
+                        }
                     });
         } catch (Throwable t) {
             log(t);
