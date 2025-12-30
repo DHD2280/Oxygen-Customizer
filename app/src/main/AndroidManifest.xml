@@ -39,6 +39,7 @@
         android:name=".OxygenCustomizer"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -184,7 +185,7 @@
             android:name=".xposed.utils.CalendarProvider"
             android:authorities="it.dhd.oxygencustomizer.calendarprovider"
             android:exported="true"
-            android:grantUriPermissions="true"/>
+            android:grantUriPermissions="true" />
 
         <receiver
             android:name=".receivers.SystemReceiver"
