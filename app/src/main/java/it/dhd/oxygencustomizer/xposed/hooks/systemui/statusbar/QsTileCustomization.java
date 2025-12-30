@@ -76,6 +76,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.getObject;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.animation.ObjectAnimator;
@@ -914,14 +915,9 @@ public class QsTileCustomization extends XposedMods {
                             mOplusQsMediaView.setBackground(mOplusQsMediaDefaultBackground);
                         }
                     } else {
-                        try {
-                            mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
-                        } catch (Throwable ignored) {
-                        }
-                        try {
-                            mCoverImg = (ImageView) getObjectField(param.thisObject, "coverImg");
-                        } catch (Throwable ignored) {
-                        }
+                        mCoverImg = (ImageView) getObject(param.thisObject,
+                                "coverImg", /* OOS16 */
+                                "mCoverImg" /* OOS15 and below */);
                         mMediaBackground.setId(View.generateViewId());
                         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
                         params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
@@ -939,12 +935,16 @@ public class QsTileCustomization extends XposedMods {
                     }
 
                     // Listen for default tip change
-                    View mDefaultTip = (View) getObjectField(param.thisObject, "mDefaultTip");
-                    mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                        if (v.getVisibility() == View.VISIBLE) {
-                            hideMediaQsBackground();
-                        }
-                    });
+                    View mDefaultTip = (View) getObject(param.thisObject,
+                            "defaultTip", /* OOS16 */
+                            "mDefaultTip" /* OOS15 and below */);
+                    if (mDefaultTip != null) {
+                        mDefaultTip.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                            if (v.getVisibility() == View.VISIBLE) {
+                                hideMediaQsBackground();
+                            }
+                        });
+                    }
                 });
 
         MediaPlayerObserver.registerMediaData(mMediaDataObserver);
