@@ -187,6 +187,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusMultiSelectListPreference
+            android:dependency="custom_themed_icons_where"
             android:defaultValue="@array/themed_icons_default"
             android:entries="@array/themed_icons_entries"
             android:entryValues="@array/themed_icons_values"
