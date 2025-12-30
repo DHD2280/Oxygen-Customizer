@@ -918,6 +918,10 @@ public class QsTileCustomization extends XposedMods {
                             mCoverImg = (ImageView) getObjectField(param.thisObject, "mCoverImg");
                         } catch (Throwable ignored) {
                         }
+                        try {
+                            mCoverImg = (ImageView) getObjectField(param.thisObject, "coverImg");
+                        } catch (Throwable ignored) {
+                        }
                         mMediaBackground.setId(View.generateViewId());
                         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
                         params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
