@@ -400,4 +400,14 @@ public class ReflectionTools {
 		return null;
 	}
 
+    public static Object getObject(Object obj, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            try {
+                return XposedHelpers.getObjectField(obj, fieldName);
+            } catch (Throwable ignored) {
+            }
+        }
+        return null;
+    }
+
 }
