@@ -64,6 +64,7 @@ public class ControllersProvider extends XposedMods {
     private Object mMediaOutputDialogFactory = null;
     private Object mCameraGestureHelper = null;
     private Object mOplusQsMediaTile = null;
+    private Class<?> mMediaActionBinder = null;
     private Class<?> SystemUIDialog = null;
     private Object mActivityStarterImpl = null;
     private Object mSystemPropertiesHelper = null;
@@ -200,6 +201,10 @@ public class ControllersProvider extends XposedMods {
 
     public static Object getOplusQsMediaTile() {
         return instance.mOplusQsMediaTile;
+    }
+
+    public static Class<?> getMediaActionBinder() {
+        return instance.mMediaActionBinder;
     }
 
     public static Object getControlsTile() {
@@ -503,6 +508,14 @@ public class ControllersProvider extends XposedMods {
             }
         } catch (Throwable t) {
             log("OplusQsMediaPanelViewController not found: " + t.getMessage());
+        }
+
+        // MediaActionBinderKt for media actions OOS16
+        try {
+            ReflectedClass MediaActionBinderKt = ReflectedClass.ofIfPossible("com.oplus.systemui.media.controls.ui.MediaActionBinderKt");
+            mMediaActionBinder = MediaActionBinderKt.getClazz();
+        } catch (Throwable t) {
+            log("MediaActionBinderKt not found: " + t.getMessage());
         }
 
         // Home Controls Tile - for ContrlsActivity

@@ -12,6 +12,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.ge
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaData;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getMediaActionBinder;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 
 import android.annotation.SuppressLint;
@@ -29,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.Icon;
 import android.media.MediaMetadata;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -540,12 +542,25 @@ public class NowBarMusic extends LinearLayout {
     private void bindActions(Object mediaData) throws Throwable {
         if (mediaData == null) return;
         List<Object> actions = (List<Object>) callMethod(mediaData, "getActions");
-        if (actions == null || actions.isEmpty()) return;
-        if (actions.size() < 4) return;
+        if (Build.VERSION.SDK_INT <= 35) {
+            if (actions == null || actions.isEmpty()) return;
+        }
+        if (Build.VERSION.SDK_INT >= 36) {
+            Object activityStarter = getActivityStarterExternal();
+            Object OplusMediaActions = callStaticMethod(getMediaActionBinder(), "createQSMediaActions", mediaData, activityStarter);
+            XposedBridge.log("NowBarMusic:: bindActions OplusMediaActions: " + (OplusMediaActions == null));
+            if (OplusMediaActions == null) return;
+            actions = (List<Object>) callMethod(OplusMediaActions, "getNotNullActions");
+            if (actions == null || actions.isEmpty()) return;
+        }
         int size = actions.size();
+        if (size < 4) {
+            return;
+        }
+
         boolean isRtl = mContext.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         if (size == 4) {
-            bindMediaNotificationButton(mediaData, actions.get(0),null);
+            bindMediaNotificationButton(mediaData, actions.get(Build.VERSION.SDK_INT <= 35 ? 0 : 3), null);
         } else {
             bindMediaNotificationButton(mediaData, actions.get(isRtl ? 4 : 0), actions.get(isRtl ? 0 : 4));
         }
@@ -559,10 +574,10 @@ public class NowBarMusic extends LinearLayout {
         mLocalLyricSpace.setVisibility(mediaAction1 == null ? View.GONE : View.VISIBLE);
 
         if (mediaAction != null) {
-            setExtraBtnState(this.mLocalFavoriteButton, mediaAction, mediaData);
+            setExtraBtnState(mLocalFavoriteButton, mediaAction, mediaData);
         }
         if (mediaAction1 != null) {
-            setExtraBtnState(this.mLocalLyricBtn, mediaAction1, mediaData);
+            setExtraBtnState(mLocalLyricBtn, mediaAction1, mediaData);
         }
     }
 
@@ -593,7 +608,7 @@ public class NowBarMusic extends LinearLayout {
         if (action != null) {
             action.run();
         }
-        new Handler(Looper.getMainLooper()).postDelayed(this::refreshMediaData, 250);
+        new Handler(Looper.getMainLooper()).postDelayed(this::refreshMediaData, 500);
     }
 
     private void refreshMediaData() {
