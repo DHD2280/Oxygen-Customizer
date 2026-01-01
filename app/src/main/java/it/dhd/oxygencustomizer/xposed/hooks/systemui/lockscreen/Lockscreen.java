@@ -359,7 +359,9 @@ public class Lockscreen extends XposedMods {
         }
 
         if (Build.VERSION.SDK_INT >= 34) {
-            ReflectedClass KeyguardBottomAreaView = ReflectedClass.ofIfPossible("com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
+            ReflectedClass KeyguardBottomAreaView = ReflectedClass.of(
+                    "com.oplus.systemui.keyguard.ui.binder.OplusKeyguardBottomAreaViewBinder",
+                    "com.android.systemui.keyguard.ui.binder.KeyguardBottomAreaViewBinder");
             KeyguardBottomAreaView
                     .after("updateButton")
                     .run(param -> {
@@ -378,19 +380,52 @@ public class Lockscreen extends XposedMods {
                         }
                     });
             KeyguardBottomAreaView
+                    .after("bind")
+                    .run(param -> { // OOS 16
+                        if (Build.VERSION.SDK_INT < 35) return;
+                        try {
+                            Object oplusKeyguardStyleBaseUIControllerImpl = param.args[param.args.length - 1];
+                            mStartButton = (View) callMethod(oplusKeyguardStyleBaseUIControllerImpl, "getStartButton");
+                            mEndButton = (View) callMethod(oplusKeyguardStyleBaseUIControllerImpl, "getEndButton");
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+
+                    });
+            KeyguardBottomAreaView
                     .after("access$updateButton")
-                    .run(param -> { // OOS 15.0.1
+                    .run(param -> { // OOS 15.0.1 && 16
                         if (!(removeLeftAffordance || removeRightAffordance)) return;
-                        ImageView view = (ImageView) param.args[1];
-                        if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
-                            mStartButton = view;
-                            if (removeLeftAffordance) {
-                                view.setVisibility(View.GONE);
-                            }
-                        } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
-                            mEndButton = view;
-                            if (removeRightAffordance) {
-                                view.setVisibility(View.GONE);
+                        ImageView view = (ImageView) ((Build.VERSION.SDK_INT >= 36) ? param.args[2] : param.args[1]);
+                        Object viewModel = (Build.VERSION.SDK_INT >= 36) ? param.args[3] : null;
+                        XposedBridge.log("access$updateButton view != null: " + (view != null));
+                        if (view != null) {
+                            if (Build.VERSION.SDK_INT >= 36) {
+                                String slotId = (String) getObjectField(viewModel, "slotId");
+                                XposedBridge.log("access$updateButton slotId: " + slotId);
+                                if ("bottom_start".equals(slotId)) {
+                                    mStartButton = view;
+                                    if (removeLeftAffordance) {
+                                        view.setVisibility(View.GONE);
+                                    }
+                                } else if ("bottom_end".equals(slotId)) {
+                                    mEndButton = view;
+                                    if (removeRightAffordance) {
+                                        view.setVisibility(View.GONE);
+                                    }
+                                }
+                            } else {
+                                if (view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                                    mStartButton = view;
+                                    if (removeLeftAffordance) {
+                                        view.setVisibility(View.GONE);
+                                    }
+                                } else if (view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
+                                    mEndButton = view;
+                                    if (removeRightAffordance) {
+                                        view.setVisibility(View.GONE);
+                                    }
+                                }
                             }
                         }
                     });
