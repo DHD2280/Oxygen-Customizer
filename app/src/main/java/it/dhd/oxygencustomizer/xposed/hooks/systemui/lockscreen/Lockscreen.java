@@ -64,7 +64,7 @@ public class Lockscreen extends XposedMods {
     private final static String listenPackage = SYSTEM_UI;
     final StringFormatter carrierStringFormatter = new StringFormatter();
     private final String TAG = "Oxygen Customizer - Lockscreen: ";
-    private boolean removeSOS;
+    private boolean removeSOS = false;
     private boolean hideFingerprint = false, customFingerprint = false;
     private int fingerprintStyle = 0;
     private float mFpScale = 1.0f;
@@ -167,7 +167,17 @@ public class Lockscreen extends XposedMods {
             log(t);
         }
 
-        if (Build.VERSION.SDK_INT >= 34) {
+        if (Build.VERSION.SDK_INT >= 36) {
+            ReflectedClass EmergencyButton = ReflectedClass.of("com.android.keyguard.EmergencyButton");
+            EmergencyButton
+                    .before("updateEmergencyCallButton")
+                    .run(param -> {
+                        if (!removeSOS) return;
+                        callMethod(param.thisObject, "setVisibility", View.GONE);
+                        param.setResult(null);
+                    });
+
+        } else if (Build.VERSION.SDK_INT >= 34) {
             try {
                 ReflectedClass OplusEmergencyButtonExImpl = ReflectedClass.of("com.oplus.keyguard.OplusEmergencyButtonExImpl");
                 OplusEmergencyButtonExImpl.before("disableShowEmergencyButton").run(param -> {
