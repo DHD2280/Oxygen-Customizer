@@ -1468,6 +1468,7 @@
     <string name="sleep_on_flat_screen_tile_title">Yüzeyde uyu</string>
     <string name="flat_screen_timeout_title">Düz yüzeyde ekran zaman aşımı</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Uyandırma kilitlerine saygı göster</string>
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Oynatıcıların AOD\'sine izin ver</string>
     <string name="aod_music_allow_summary">Herhangi bir müzik çaların AOD\'de gösterilmesine izin verin.\nNot: tüm müzik çalarlar desteklenmeyebilir.</string>
