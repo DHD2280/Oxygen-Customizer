@@ -216,6 +216,8 @@
     <string name="clock_date_right">Самое подходящее время</string>
     <string name="clock_date_left">Осталось совсем немного времени</string>
     <string name="clock_font_size_title">Размер шрифта часов</string>
+    <string name="clock_extra_padding">Дополнительный отступ часов</string>
+    <string name="clock_extra_padding_summary">В некоторых вариантах OOS есть проблемы с шириной часов, разделительным пространством или чем-то еще. С помощью этого значения вы можете настроить отступы по своему усмотрению.</string>
     <string name="status_bar_clock_font_style_title">Стиль шрифта часов</string>
     <string name="status_bar_clock_color_title">Пользовательский цвет часов</string>
     <string name="status_bar_custom_clock_color_title">Пользовательский цвет часов</string>
@@ -673,6 +675,8 @@
     <string name="hide_app_labels">Скрыть названия приложений</string>
     <string name="hide_app_labels_desktop">Скрыть названия приложений на домашнем экране</string>
     <string name="hide_app_labels_drawer">Скрыть названия приложений в меню</string>
+    <string name="launcher_force_dock">Принудительная стыковка элементов</string>
+    <string name="launcher_force_dock_summary">Сделайте иконки в док-баре таким же, как колонки лаунчера.\nНапример: если макет 6*7, то вы можете иметь 6 элементов.</string>
     <string name="launcher_folder_layout">Расположение папок</string>
     <string name="launcher_folder_edit_layout">Редактировать макет</string>
     <string name="launcher_folder_columns">Столбцы</string>
@@ -687,12 +691,16 @@
     <string name="launcher_app_details_summary">Нажмите на значок приложения, чтобы открыть сведения о приложении в разделе \"Настройки\".</string>
     <string name="launcher_disable_recents_previous_page_title">Отключить предыдущую задачу</string>
     <string name="launcher_disable_recents_previous_page_summary">Отключить автопереключение на предыдущую задачу в недавних приложениях.</string>
+    <string name="launcher_replace_lock_title">Заменить блокировку на выключение</string>
+    <string name="launcher_replace_lock_summary">Замените жест блокировки (свайп вниз в недавних приложениях) функцией закрытия приложения.</string>
     <string name="remove_home_pagination">Убрать нумерацию страниц</string>
     <string name="launcher_themed_icons">Тематические значки</string>
     <string name="force_themed_launcher_icons">Принудительные тематические значки приложений</string>
     <string name="force_themed_launcher_icons_summary">БЕТА-ФУНКЦИЯ: принудительно использовать тематические значки для всех приложений.\nВновь включите тематические значки в панели запуска, чтобы они применялись.</string>
     <string name="alternative_themed_icons_title">Альтернативные тематические значки</string>
     <string name="alternative_themed_icons_summary">Используйте альтернативный метод для оформления значков.\nПримечание: этот метод не заменит значки Oplus, но может работать медленнее.</string>
+    <string name="themed_icons_where_switch">Пользовательские тематические значки</string>
+    <string name="themed_icons_where_switch_summary">Выберите, где следует разместить тематические значки</string>
     <string name="themed_icons_where_title">Выберите, где применить тематические значки</string>
     <string name="themed_icons_workspace">Рабочее пространство</string>
     <string name="themed_icons_drawer">Панель</string>
@@ -1469,10 +1477,14 @@
     <string name="refresh_rate_error">Частота обновления пуста!</string>
     <string name="memc_footer">Если ваше устройство не оснащено чипом Pixelwork или не поддерживает Memc, не трогайте эти настройки.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_cat">Экран лицевой стороной вверх выключен</string>
     <string name="sleep_on_flat_screen_title">Выключить экран на плоской поверхности</string>
     <string name="sleep_on_flat_screen_tile_title">Сон на поверхности</string>
     <string name="flat_screen_timeout_title">Тайм-аут экрана на плоской поверхности</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Соблюдение пробуждения</string>
+    <!-- Bypass resizable windows -->
+    <string name="bypass_resizable_windows_title">Игнорировать масштабирующиеся окна</string>
+    <string name="bypass_resizable_windows_summary">Это позволит любому приложению изменять размер</string>
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Разрешить плееры на AOD</string>
     <string name="aod_music_allow_summary">Разрешить отображение любого музыкального плеера в AOD.\nпримечание: возможно, поддерживаются не все плееры.</string>

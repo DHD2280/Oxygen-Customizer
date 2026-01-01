@@ -592,6 +592,7 @@
     <string name="sleep_on_flat_screen_tile_title">Uspanie ekranu na płaskiej powierzchni</string>
     <string name="flat_screen_timeout_title">Czas wygaszania ekranu podczas ułożenia telefonu na płaskiej powierzchni</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Respektuj blokadę wybudzania</string>
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
     <!-- Separate qs tweaks -->

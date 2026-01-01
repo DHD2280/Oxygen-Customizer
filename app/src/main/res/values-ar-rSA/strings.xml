@@ -1207,6 +1207,7 @@
     <string name="refresh_rate_error">تحديث المعدل فارغ!</string>
     <string name="memc_footer">إذا لم يكن جهازك يحتوي على رقاقة Pixelwork أو لا يدعم Memc، لا تلمس تقترب من تلك الإعدادات.</string>
     <!-- Screen Off On Flat -->
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
     <!-- Separate qs tweaks -->

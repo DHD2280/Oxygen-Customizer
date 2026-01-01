@@ -1466,6 +1466,7 @@
     <string name="sleep_on_flat_screen_tile_title">Készülék alvó állapot, ha a készüléket lerakja</string>
     <string name="flat_screen_timeout_title">Képernyő-időtúllépés sík felületen</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Ébresztések elfogadása</string>
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Lejátszó a \'Mindig látható\'-ban</string>
     <string name="aod_music_allow_summary">Az ANT-zenelejátszó megjelenhet a \'Mindig látható\' funkcióban.\nMegjegyzés: nem minden zenelejátszó támogatott.</string>
