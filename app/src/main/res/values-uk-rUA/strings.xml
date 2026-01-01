@@ -1466,6 +1466,7 @@
     <string name="sleep_on_flat_screen_tile_title">Сон на поверхні</string>
     <string name="flat_screen_timeout_title">Затримка вимкнення екрану на пласкій поверхні</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Коректне використання блокувань виходу зі сну</string>
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Дозволити плеєрам відображатись на AOD</string>
     <string name="aod_music_allow_summary">Дозволити музичному плеєру відображатись на AOD.\nПримітка: не всі музичні плеєри підтримують цю можливість.</string>

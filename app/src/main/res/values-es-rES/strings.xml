@@ -1123,6 +1123,7 @@
     <string name="select_app">Seleccionar aplicación</string>
     <string name="memc_footer">Si tu dispositivo no tiene el chip Pixelwork o no soporta Memc, no toques esos ajustes.</string>
     <!-- Screen Off On Flat -->
+    <!-- Bypass resizable windows -->
     <!-- Allow music players in AOD -->
     <!-- Shortcut string -->
     <!-- Separate qs tweaks -->
