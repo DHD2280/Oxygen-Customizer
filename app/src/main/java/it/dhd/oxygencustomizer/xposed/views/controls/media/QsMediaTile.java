@@ -46,7 +46,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
-import it.dhd.oxygencustomizer.xposed.utils.ReflectionTools;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.WidgetUtils;
@@ -467,7 +466,7 @@ public class QsMediaTile extends LinearLayout implements QsMediaTileI {
     }
 
     private void hideMediaQsBackground() {
-        if (Build.VERSION.SDK_INT == 35) {
+        if (Build.VERSION.SDK_INT >= 35) {
             setBackground(null);
             return;
         }
