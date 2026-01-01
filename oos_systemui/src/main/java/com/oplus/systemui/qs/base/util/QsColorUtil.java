@@ -16,4 +16,9 @@ public final class QsColorUtil {
         throw new UnsupportedOperationException("Stub!");
     }
 
+    public static final int obtainColorForQsPanelBackground(Context context, boolean isActive, boolean isBeginDragged) {
+        throw new UnsupportedOperationException("Stub!");
+    }
+
+
 }

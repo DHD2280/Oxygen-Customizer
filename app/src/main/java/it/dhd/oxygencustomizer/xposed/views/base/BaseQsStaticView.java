@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 
 import androidx.appcompat.content.res.AppCompatResources;
@@ -56,6 +57,9 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
 
     @Override
     public int getNormalBackGroundColor() {
+        if (Build.VERSION.SDK_INT >= 36) {
+            return QsColorUtil.obtainColorForQsPanelBackground(getContext(), false, false);
+        }
         return QsColorUtil.obtainColorForQsPanelBackground(getContext());
     }
 
