@@ -54,7 +54,31 @@ Oxygen Customizer is compatible with OxygenOS/ColorOS/RUI 15, 14 and 13.
 
 - [Magisk](https://github.com/topjohnwu/Magisk) (Recommended) or [KernelSU](https://github.com/tiann/KernelSU) or [APatch](https://github.com/bmax121/APatch)
 
-- [LSPosed](https://github.com/LSPosed/LSPosed)
+- [LSPosed](#lsposed)
+
+# LSPosed
+
+The official LSPosed can be found [here](https://github.com/LSPosed/LSPosed).
+Anyway this version is now only suitable for OxygenOS 14.
+
+You can now use different variants:
+
+- LSPosed IT (Internal Test),
+- [LSPosed Irena](https://github.com/re-zero001/LSPosed-Irena)
+- [LSPosed JingMatrix](https://github.com/JingMatrix/LSPosed)
+- [ReLSPosed](https://github.com/ThePedroo/ReLSPosed)
+
+For all of them you need Zygisk (especially on KSU).
+There are a lot of Zygisk modules available.
+If you choose to use LSPosed Internal Test, any version of Zygisk will work.
+If you choose to use LSPosed Irena, it's recommended to use Zygisk next.
+If you choose to use ReLSPosed, it's recommended to use ReZygisk.
+
+### Quick hints
+
+OxygenOS 14: any LSPosed
+OxygenOS 15: LSPosed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+
+OxygenOS 16: LSposed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+
 
 # 📦 Release Variants
 
@@ -97,12 +121,43 @@ It can include various fixes or new feature that will came in beta and stable.
   ### Installation for KernelSU/APatch Users:
 
   2. Grant SuperSU/root permission for Oxygen Customizer & SystemUI from KernelSU app
-  
-  3. Disable `Unmount modules` option if it's available in the app
+
+3. Disable `Unmount modules` option if it's available in the app.
+   If you don't care about system detection, just enable OverlayFS
+   or [configure meta module](#configure-meta-module).
   
   4. Open the app, wait for it to finish generating rom specific module.
   
   5. Reboot the device when prompted.
+
+# Configure Meta Module
+
+If you are on KernelSU (or Next) 3.0+ you need meta-modules to mount modules because ksu doesn't
+mount modules.
+For OxygenOS is suggested [Mountify](https://github.com/backslashxx/mountify), alternatively you can
+try [Magic Mount](https://github.com/7a72/meta-magic_mount/).
+
+> [!WARNING]
+> Always download those module from official sources and ensure you are using latest build from
+> actions page.
+
+## Mountify
+
+After flashing mountify you need a little setup.
+Open mountify Web UI and fill the following values:
+
+`mountify_mount = 2`
+`mount_device_name = KSU`
+If you are using susfs 2.0.0+
+`mountify_custom_umount = 2`
+If you are using a lower version of susfs
+`mountify_custom_umount = 1`
+
+After configuration, reboot and continue with Oxygen Customizer installation.
+
+## Magic Mount
+
+Magic Mount doesn't require any additional configuration from user side.
 
 # 🔒 Permissions
 
