@@ -548,7 +548,6 @@ public class NowBarMusic extends LinearLayout {
         if (Build.VERSION.SDK_INT >= 36) {
             Object activityStarter = getActivityStarterExternal();
             Object OplusMediaActions = callStaticMethod(getMediaActionBinder(), "createQSMediaActions", mediaData, activityStarter);
-            XposedBridge.log("NowBarMusic:: bindActions OplusMediaActions: " + (OplusMediaActions == null));
             if (OplusMediaActions == null) return;
             actions = (List<Object>) callMethod(OplusMediaActions, "getNotNullActions");
             if (actions == null || actions.isEmpty()) return;
