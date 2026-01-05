@@ -1,3 +1,5 @@
+**English** | [Italiano](docs/README_IT.md)
+
 # Oxygen Customizer
 
 <div align="center">
@@ -74,11 +76,15 @@ If you choose to use LSPosed Internal Test, any version of Zygisk will work.
 If you choose to use LSPosed Irena, it's recommended to use Zygisk next.
 If you choose to use ReLSPosed, it's recommended to use ReZygisk.
 
+> [!WARNING]
+> Always download those module from official sources and ensure you are using latest build from
+> actions page.
+
 ### Quick hints
 
 OxygenOS 14: any LSPosed
-OxygenOS 15: LSPosed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+
-OxygenOS 16: LSposed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+
+OxygenOS 15: LSPosed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+ (ReZygisk CI)
+OxygenOS 16: LSposed IT or LSPosed Irena 7280+ (Zygisk Next 534+) or ReLSPosed 7200+ (ReZygisk CI)
 
 # 📦 Release Variants
 
@@ -102,9 +108,9 @@ It can include various fixes or new feature that will came in beta and stable.
 
 > [!WARNING]
 >
-> If you are using OOS15 .850+ you NEED to use LSPosed IT (Internal Test) or any version of LSPosed Irena 7280+ (recommended with Zygisk Next 534+) or ReLSPosed 7200+. Any Issue report with a different LSPosed version or incompatible software will be closed
+> If you are using OOS15 .850+ you NEED to use LSPosed IT (Internal Test) or any version of LSPosed Irena 7280+ (recommended with Zygisk Next 534+) or ReLSPosed 7200+ (recommended with ReZygisk CI). Any Issue report with a different LSPosed version or incompatible software will be closed
 
-# 👨‍💻 Installation
+# 💻 Installation
 
   1. Download and install the Oxygen Customizer app.
 
@@ -134,8 +140,9 @@ It can include various fixes or new feature that will came in beta and stable.
 
 If you are on KernelSU (or Next) 3.0+ you need meta-modules to mount modules because ksu doesn't
 mount modules.
-For OxygenOS is suggested [Mountify](https://github.com/backslashxx/mountify), alternatively you can
-try [Magic Mount](https://github.com/7a72/meta-magic_mount/).
+For OxygenOS is suggested [Mountify](https://github.com/backslashxx/mountify),
+alternatively you can try [Magic Mount](https://github.com/7a72/meta-magic_mount/),
+or [Hybrid Mount](https://github.com/Hybrid-Mount/meta-hybrid_mount).
 
 > [!WARNING]
 > Always download those module from official sources and ensure you are using latest build from
@@ -146,11 +153,11 @@ try [Magic Mount](https://github.com/7a72/meta-magic_mount/).
 After flashing mountify you need a little setup.
 Open mountify Web UI and fill the following values:
 
-`mountify_mount = 2`
-`mount_device_name = KSU`
-If you are using susfs 2.0.0+
-`mountify_custom_umount = 2`
-If you are using a lower version of susfs
+`mountify_mount = 2`  
+`mount_device_name = KSU`  
+If you are using susfs 2.0.0+  
+`mountify_custom_umount = 2`  
+If you are using a lower version of susfs  
 `mountify_custom_umount = 1`
 
 After configuration, reboot and continue with Oxygen Customizer installation.
@@ -163,26 +170,22 @@ Magic Mount doesn't require any additional configuration from user side.
 
 This app requires the following permissions:
 
-`
-android.permission.ACCESS_NETWORK_STATE
-android.permission.INTERNET
-android.permission.ACCESS_FINE_LOCATION
-android.permission.ACCESS_COARSE_LOCATION
-android.permission.ACCESS_BACKGROUND_LOCATION
-`
+`android.permission.ACCESS_NETWORK_STATE`  
+`android.permission.INTERNET`  
+`android.permission.ACCESS_FINE_LOCATION`  
+`android.permission.ACCESS_COARSE_LOCATION`  
+`android.permission.ACCESS_BACKGROUND_LOCATION`  
 Permissions to access the internet and location are required for fetching weather data and location-based services. These permissions are essential for the proper functioning of the Lockscreen Weather and are not used for any other purposes.
 
-`android.permission.USE_BIOMETRIC`
+`android.permission.USE_BIOMETRIC`  
 Permission to use biometric authentication is required for showing the Authentiation Prompt when enabled for Advanced Reboot Menu.
 
-`android.permission.VIBRATE`
+`android.permission.VIBRATE`  
 Permission to vibrate the device is required for haptic feedback when using the app.
 
-`
-android.permission.WRITE_EXTERNAL_STORAGE
-android.permission.READ_EXTERNAL_STORAGE
-android.permission.MANAGE_EXTERNAL_STORAGE
-`
+`android.permission.WRITE_EXTERNAL_STORAGE`  
+`android.permission.READ_EXTERNAL_STORAGE`  
+`android.permission.MANAGE_EXTERNAL_STORAGE`  
 Permissions to read and write external storage are required for saving and loading custom images/fonts. These permissions are essential for the proper functioning of the app and are not used for any other purposes.
 
 # 🤝 Contribution
@@ -213,6 +216,7 @@ We highly appreciate and welcome all forms of contributions, ranging from code, 
   <summary>I got bootloop. How do I fix it?</summary>
 
 - Boot into [Safe Mode](https://www.androidauthority.com/how-to-enter-safe-mode-android-801476/) and uninstall module.
+- For KernelSu and its forks: [Guide](https://kernelsu.org/guide/rescue-from-bootloop.html#brick-by-modules).
 </details>
 
 <details>
