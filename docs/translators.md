@@ -39,7 +39,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>tugaia56</b></sub></a>
         <br />
-        <sub><b>4688 words</b></sub>
+        <sub><b>4714 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/muhammadbahaa2001"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15231004/medium/1f277872da157dce11a9a6d1fc9120b6.png" />
