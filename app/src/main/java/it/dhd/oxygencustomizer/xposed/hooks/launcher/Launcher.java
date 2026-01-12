@@ -1,9 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
@@ -21,7 +23,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -358,17 +359,49 @@ public class Launcher extends XposedMods {
 
                 });
 
-        OplusStackTaskViewTouchCtrl
-                .before("lockCard")
+        ReflectedClass OplusTaskViewTouchControllerImpl = ReflectedClass.ofIfPossible("com.android.quickstep.uioverrides.touchcontrollers.OplusTaskViewTouchControllerImpl");
+        OplusTaskViewTouchControllerImpl
+                .before("onDragEnd")
                 .run(param -> {
-                    XposedBridge.log("OplusStackTaskViewTouchCtrl::lockCard hooked");
+
+                    if (!mReplaceLock) return;
+
+                    setAdditionalInstanceField(getObjectField(param.thisObject, "mTaskBeingDragged"), "mShouldKill", true);
+
                 });
 
-        OplusStackTaskViewTouchCtrl
-                .before("unLockCard")
-                .run(param -> {
-                    XposedBridge.log("OplusStackTaskViewTouchCtrl::unlockCard hooked");
-                });
+        ReflectedClass.ReflectionConsumer killHook = param -> {
+            if (!mReplaceLock) return;
+
+            Object task = null;
+            Object TaskView = param.args[0];
+            boolean shouldLock = false;
+            try {
+                shouldLock = (boolean) getAdditionalInstanceField(TaskView, "mShouldKill");
+            } catch (Throwable ignored) {
+            }
+
+            if (!shouldLock) return;
+            if (TaskView != null) task = callMethod(TaskView, "getTask");
+            if (TaskView == null && task == null) return;
+            String packageName = (String) callMethod(task, "getPackageName");
+            callMethod(mContext.getSystemService(Context.ACTIVITY_SERVICE),
+                    "forceStopPackageAsUser",
+                    packageName,
+                    callMethod(Process.myUserHandle(), "getIdentifier"));
+            callMethod(TaskView, "performAccessibilityAction", mContext.getResources().getIdentifier("accessibility_close", "string", LAUNCHER), null);
+            Toast.makeText(mContext, "App Killed", Toast.LENGTH_SHORT).show();
+        };
+
+
+        ReflectedClass OplusLockManager = ReflectedClass.ofIfPossible("com.oplus.quickstep.applock.OplusLockManager");
+        OplusLockManager
+                .before("unLockForPullDown")
+                .run(killHook);
+        OplusLockManager
+                .before("lockForPullDown")
+                .run(killHook);
+
 
     }
 
