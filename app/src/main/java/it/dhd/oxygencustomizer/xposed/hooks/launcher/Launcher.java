@@ -382,6 +382,7 @@ public class Launcher extends XposedMods {
             }
 
             if (!shouldLock) return;
+            param.setResult(null);
             if (TaskView != null) task = callMethod(TaskView, "getTask");
             if (TaskView == null && task == null) return;
             String packageName = (String) callMethod(task, "getPackageName");
