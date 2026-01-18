@@ -95,6 +95,15 @@ Thanks to those contributors, this project exists:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/luigimak">
+                    <img src="https://avatars.githubusercontent.com/u/10235885?v=4" width="32;" alt="luigimak"/>
+                    <br />
+                    <sub><b>luigimak</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
                 <a href="https://github.com/rustammendel">
                     <img src="https://avatars.githubusercontent.com/u/30227161?v=4" width="32;" alt="rustammendel"/>
                     <br />
