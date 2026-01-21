@@ -12,6 +12,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class QsMenuItems extends XposedMods {
     private Context mMenuContext;
     private Context mSeparateMenuContext;
     private ActivityLauncherUtils mActivityLauncherUtils;
+    private AdapterView.OnItemClickListener mOriginalClickListener = null;
 
     private final ArrayList<Object[]> mMenuOptions = new ArrayList<>(){{
         add(new Object[]{R.string.qs_header_title, "qs_header_options"});
@@ -51,7 +53,6 @@ public class QsMenuItems extends XposedMods {
 
     @Override
     public void updatePrefs(String... Key) {
-
     }
 
     @Override
@@ -68,7 +69,28 @@ public class QsMenuItems extends XposedMods {
                     mActivityLauncherUtils = new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal());
                     mMenuContext = (Context) param.args[0];
                 });
+        MoreButtonPopupWindow
+                .afterConstruction()
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT < 36) return;
+                    final AdapterView.OnItemClickListener originalListener = (AdapterView.OnItemClickListener) getObjectField(param.thisObject, "mOnMainMenuItemClickListener");
+                    if (mOriginalClickListener == null) {
+                        mOriginalClickListener = originalListener;
+                    }
 
+                    callMethod(param.thisObject, "setOnItemClickListener", ((AdapterView.OnItemClickListener) (parent, view, position, id) -> {
+                        if (view.getTag() != null) {
+                            XposedBridge.log("QS Menu Item clicked view tag != null");
+                            final ClickListener clickListener = new ClickListener();
+                            clickListener.onClick(view);
+                            return;
+                        }
+
+                        if (mOriginalClickListener != null) {
+                            mOriginalClickListener.onItemClick(parent, view, position, id);
+                        }
+                    }));
+                });
 
         MoreButtonPopupWindow
                 .before(Pattern.compile("initList.*"))
@@ -119,8 +141,8 @@ public class QsMenuItems extends XposedMods {
                                 "oplus_more_menu_item_qs_cc_setting", "layout", SYSTEM_UI), null);
                         TextView textView = (TextView) v.getChildAt(0);
                         final ClickListener clickListener = new ClickListener();
-                        v.setOnClickListener(clickListener);
                         v.setTag(menuOption[1]);
+                        v.setOnClickListener(clickListener);
                         textView.setText(modRes.getString((Integer) menuOption[0]));
                         callMethod(ListBuilder, "reset");
                         Object builder = callMethod(ListBuilder, "setItemType", 2);
@@ -165,21 +187,27 @@ public class QsMenuItems extends XposedMods {
                         builder = callMethod(builder, "setCustomItemView", view2);
                         arrayList.add(callMethod(builder, "build"));
                     }
-                    View view3 = (View) getObjectField(param.thisObject, "qsSettingsView");
-                    if (view3 != null && view3.getVisibility() == View.VISIBLE) {
-                        callMethod(ListBuilder, "reset");
-                        Object builder = callMethod(ListBuilder, "setItemType", 2);
-                        builder = callMethod(builder, "setItemType", 2);
-                        builder = callMethod(builder, "setCustomItemView", view3);
-                        arrayList.add(callMethod(builder, "build"));
+                    try {
+                        View view3 = (View) getObjectField(param.thisObject, "qsSettingsView");
+                        if (view3 != null && view3.getVisibility() == View.VISIBLE) {
+                            callMethod(ListBuilder, "reset");
+                            Object builder = callMethod(ListBuilder, "setItemType", 2);
+                            builder = callMethod(builder, "setItemType", 2);
+                            builder = callMethod(builder, "setCustomItemView", view3);
+                            arrayList.add(callMethod(builder, "build"));
+                        }
+                    } catch (Throwable ignored) {
                     }
-                    View view4 = (View) getObjectField(param.thisObject, "myDeviceView");
-                    if (view4 != null && view4.getVisibility() == View.VISIBLE) {
-                        callMethod(ListBuilder, "reset");
-                        Object builder = callMethod(ListBuilder, "setItemType", 2);
-                        builder = callMethod(builder, "setItemType", 2);
-                        builder = callMethod(builder, "setCustomItemView", view4);
-                        arrayList.add(callMethod(builder, "build"));
+                    try {
+                        View view4 = (View) getObjectField(param.thisObject, "myDeviceView");
+                        if (view4 != null && view4.getVisibility() == View.VISIBLE) {
+                            callMethod(ListBuilder, "reset");
+                            Object builder = callMethod(ListBuilder, "setItemType", 2);
+                            builder = callMethod(builder, "setItemType", 2);
+                            builder = callMethod(builder, "setCustomItemView", view4);
+                            arrayList.add(callMethod(builder, "build"));
+                        }
+                    } catch (Throwable ignored) {
                     }
                     View view5 = (View) getObjectField(param.thisObject, "ccSettingView");
                     if (view5 != null && view5.getVisibility() == View.VISIBLE) {
