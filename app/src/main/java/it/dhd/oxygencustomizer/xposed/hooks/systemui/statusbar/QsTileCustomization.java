@@ -791,7 +791,7 @@ public class QsTileCustomization extends XposedMods {
                     }
                     iconView.setImageTintList(ColorStateList.valueOf(color));
 
-                }, true);
+                });
         OplusQSIconView
                 .before("getTintBgColor")
                 .run(param -> {
