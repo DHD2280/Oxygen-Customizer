@@ -677,6 +677,7 @@ public class QsTileCustomization extends XposedMods {
 
         // Base Classic
         ReflectedClass OplusQSTileBaseView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSTileBaseView");
+        ReflectedClass OplusQSResizeableTileViewOneXOne = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileViewOneXOne");
         OplusQSTileBaseView
                 .afterConstruction()
                 .run(param -> {
@@ -686,6 +687,16 @@ public class QsTileCustomization extends XposedMods {
                         mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
                         mBackgroundProxy = mTileViewBackgroundProxy;
                         setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
+                    }
+                });
+        OplusQSResizeableTileViewOneXOne
+                .before("initializeBackgroundProxy")
+                .run(param -> {
+                    if (qsCustomTileColors) {
+                        mTileViewBackgroundProxy = new QsTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                        mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
+                        param.setResult(mTileViewBackgroundProxy);
+
                     }
                 });
         OplusQSTileBaseView
@@ -703,6 +714,29 @@ public class QsTileCustomization extends XposedMods {
 
 
         // Highlight separated
+        ReflectedClass OplusQSResizeableTileViewTwoXOne = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileViewTwoXOne");
+        OplusQSResizeableTileViewTwoXOne
+                .before("initializeBackgroundProxy")
+                .run(param -> {
+                    if (qsCustomHighlightTileColors) {
+                        mHighlightPluginTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                        mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
+                        param.setResult(mHighlightPluginTileViewBackgroundProxy);
+
+                    }
+                });
+//        OplusQSResizeableTileViewTwoXOne
+//                .before("getBgOutlineProvider")
+//                .run(param -> {
+//                    if (!customHighlightTileRadius) return;
+//                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
+//                });
+//        OplusQSResizeableTileViewTwoXOne
+//                .before("createBgOutlineProvider")
+//                .run(param -> {
+//                    if (!customHighlightTileRadius) return;
+//                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, highlightTileRadius)));
+//                });
         ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         OplusQSHighlightPluginTileView
                 .afterConstruction()
@@ -723,7 +757,9 @@ public class QsTileCustomization extends XposedMods {
                 });
 
         // Highlight icon background
-        ReflectedClass OplusQSIconView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSIconView");
+        ReflectedClass OplusQSIconView = ReflectedClass.of(
+                "com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSIconView", /* OOS 16*/
+                "com.oplus.systemui.plugins.qs.tile.OplusQSIconView");
         OplusQSIconView
                 .after("tintBgColor")
                 .run(param -> {
@@ -742,13 +778,31 @@ public class QsTileCustomization extends XposedMods {
                     if (!qsCustomIconColors) return;
                     int tileState = getIntField(param.thisObject, "tileState");
                     int color = switch (tileState) {
-                        case STATE_ACTIVE -> qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColorIcon;
+                        case STATE_ACTIVE ->
+                                qsActiveColorIconAccent ? getPrimaryColor(mContext) : (Build.VERSION.SDK_INT >= 36) ? qsActiveColorHighlightIcon : qsActiveColorIcon;
                         case STATE_INACTIVE -> qsInactiveColorIcon;
                         default -> qsDisabledColorIcon;
                     };
-                    ImageView iconView = (ImageView) getObjectField(param.thisObject, "iconView");
+                    ImageView iconView;
+                    try {
+                        iconView = (ImageView) getObjectField(param.thisObject, "iconView");
+                    } catch (Throwable ignored) {
+                        iconView = (ImageView) callMethod(param.thisObject, "getIconView");
+                    }
                     iconView.setImageTintList(ColorStateList.valueOf(color));
 
+                }, true);
+        OplusQSIconView
+                .before("getTintBgColor")
+                .run(param -> {
+                    int state = (int) param.args[0];
+                    if (!qsCustomHighlightIconTileColors) return;
+                    int color = switch (state) {
+                        case STATE_ACTIVE -> qsActiveColorHighlightIcon;
+                        case STATE_INACTIVE -> qsInactiveColorHighlightIcon;
+                        default -> qsDisabledColorHighlightIcon;
+                    };
+                    param.setResult(color);
                 });
 
         // Media Panel
@@ -812,7 +866,8 @@ public class QsTileCustomization extends XposedMods {
         methods.addAll(Arrays.asList(clazz.getClazz().getDeclaredMethods()));
         methods.addAll(Arrays.asList(clazz.getClazz().getMethods()));
         for (Method method : methods) {
-            if (method.getName().contains("$default")) {
+            log("QsTileCustomization getTileOutlineTest checking method: " + method.getName());
+            if (method.getName().contains("$default") || (Build.VERSION.SDK_INT >= 36 && method.getName().contains("getQsViewRoundRectOutlineProvider"))) {
                 Log.d("QsTileCustomization", "getTileOutlineTest: " + method.getName());
                 int paramCount = method.getParameterTypes().length;
                 if (paramCount > maxParams) {
