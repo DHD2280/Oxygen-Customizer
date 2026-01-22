@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -182,7 +183,10 @@ public class UpdateFragment extends BaseFragment {
     private void installNightly(String downloadPath) {
         unzip(downloadPath, apkFile -> {
             requireActivity().runOnUiThread(() -> mLoadingDialog.dismiss());
-            installApk(apkFile.getPath());
+            if (apkFile != null && !TextUtils.isEmpty(apkFile.getPath()))
+                installApk(apkFile.getPath());
+            else
+                Toast.makeText(requireContext(), R.string.installation_failed, Toast.LENGTH_SHORT).show();
         });
     }
 

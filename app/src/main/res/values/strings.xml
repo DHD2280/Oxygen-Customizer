@@ -1145,6 +1145,7 @@
     <string name="update_notification_text">Tap here to install</string>
     <string name="download_failed">Failed to download the update</string>
     <string name="try_again_later">Please try again later</string>
+    <string name="installation_failed">Installation failed. Try to install manually.</string>
     <string name="update_flavor_title">Update channel</string>
     <string name="stable_flavor">Stable</string>
     <string name="beta_flavor" translatable="false">Beta</string>
