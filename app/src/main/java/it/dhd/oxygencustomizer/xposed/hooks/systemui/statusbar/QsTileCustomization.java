@@ -689,16 +689,19 @@ public class QsTileCustomization extends XposedMods {
                         setObjectField(param.thisObject, "mBackgroundProxy", mBackgroundProxy);
                     }
                 });
+        ReflectedClass.ReflectionConsumer colorBaseHook = param -> {
+            if (qsCustomTileColors) {
+                mTileViewBackgroundProxy = new QsTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
+                param.setResult(mTileViewBackgroundProxy);
+            }
+        };
         OplusQSResizeableTileViewOneXOne
                 .before("initializeBackgroundProxy")
-                .run(param -> {
-                    if (qsCustomTileColors) {
-                        mTileViewBackgroundProxy = new QsTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
-                        mTileViewBackgroundProxy.setColors(qsActiveColor, qsInactiveColor, qsDisabledColor);
-                        param.setResult(mTileViewBackgroundProxy);
-
-                    }
-                });
+                .run(colorBaseHook);
+        OplusQSResizeableTileViewOneXOne
+                .before("initializeDisableThemeBackgroundProxy")
+                .run(colorBaseHook);
         OplusQSTileBaseView
                 .before("getBgOutlineProvider")
                 .run(param -> {
@@ -715,16 +718,20 @@ public class QsTileCustomization extends XposedMods {
 
         // Highlight separated
         ReflectedClass OplusQSResizeableTileViewTwoXOne = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileViewTwoXOne");
+        ReflectedClass.ReflectionConsumer colorHighlightHook = param -> {
+            if (qsCustomHighlightTileColors) {
+                mHighlightPluginTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
+                mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
+                param.setResult(mHighlightPluginTileViewBackgroundProxy);
+
+            }
+        };
         OplusQSResizeableTileViewTwoXOne
                 .before("initializeBackgroundProxy")
-                .run(param -> {
-                    if (qsCustomHighlightTileColors) {
-                        mHighlightPluginTileViewBackgroundProxy = new QsHighlightTileViewBackgroundProxyImplOC((QsTileViewInfoProvider) param.thisObject);
-                        mHighlightPluginTileViewBackgroundProxy.setColors(qsActiveColorHighlight, qsInactiveColorHighlight, qsDisabledColorHighlight);
-                        param.setResult(mHighlightPluginTileViewBackgroundProxy);
-
-                    }
-                });
+                .run(colorHighlightHook);
+        OplusQSResizeableTileViewTwoXOne
+                .before("initializeDisableThemeBackgroundProxy")
+                .run(colorHighlightHook);
 //        OplusQSResizeableTileViewTwoXOne
 //                .before("getBgOutlineProvider")
 //                .run(param -> {
