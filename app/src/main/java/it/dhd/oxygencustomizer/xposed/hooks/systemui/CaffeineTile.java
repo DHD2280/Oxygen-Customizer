@@ -7,6 +7,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
+import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_TILE_REMOVED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -20,6 +21,7 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +52,9 @@ public class CaffeineTile extends XposedMods {
     private CountDownTimer mCountdownTimer = null;
     private boolean mRegistered = false;
     private View mTileView;
+    private Object mTileObject;
+    private Object mTileState;
+    private int mCurrentState = STATE_INACTIVE;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, android.content.Intent intent) {
@@ -59,11 +64,11 @@ public class CaffeineTile extends XposedMods {
                     if (mWakeLock.isHeld())
                         mWakeLock.release();
                     updateTileView((LinearLayout) mTileView, STATE_INACTIVE);
+                    updateTileViewPlugin(mTileObject, STATE_INACTIVE);
                 }
             }
         }
     };
-    private Object mTile;
 
     public CaffeineTile(Context context) {
         super(context);
@@ -120,6 +125,50 @@ public class CaffeineTile extends XposedMods {
                     });
         }
 
+        ReflectedClass OplusQSResizeableTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileView");
+        OplusQSResizeableTileView
+                .before("init")
+                .run(param -> {
+                    Object qsTile = param.args[0];
+                    String tileSpec = (String) callMethod(qsTile, "getTileSpec");
+                    if (TextUtils.isEmpty(tileSpec)) return;
+
+                    if (TARGET_SPEC.equals(tileSpec)) {
+                        setupTile(qsTile, (View) param.thisObject);
+                        mTileObject = param.thisObject;
+                        setAdditionalInstanceField(param.thisObject, "mTag", "caffeine");
+                    }
+                });
+        ReflectedClass OplusQsOneXOne = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileViewOneXOne");
+        OplusQsOneXOne
+                .before("bindClickListener")
+                .run(param -> {
+                    if (getAdditionalInstanceField(param.thisObject, "mTileTag") != null &&
+                            getAdditionalInstanceField(param.thisObject, "mTileTag").equals("caffeine")) {
+                        param.args[0] = new ClickListener();
+                        param.args[1] = new ClickListener();
+                        param.args[2] = (View.OnLongClickListener) view -> {
+                            handleLongClick();
+                            return true;
+                        };
+                    }
+                });
+        OplusQSResizeableTileView
+                .before("access$handleStateChanged")
+                .run(param -> {
+                    try {
+                        Object tileState = param.args[1];
+                        String spec = (String) getObjectField(tileState, "spec");
+                        if (!TextUtils.isEmpty(spec) && spec.equals(TARGET_SPEC) &&
+                                mCurrentState == STATE_ACTIVE) {
+                            mTileState = tileState;
+                            setIntField(mTileState, "state", mCurrentState);
+                            updateTileViewPlugin(param.thisObject, mCurrentState);
+                        }
+                    } catch (Throwable ignored) {
+                    }
+                });
+
         ReflectedClass QSTileViewImplClass = ReflectedClass.of(
                 "com.oplus.systemui.qs.base.tile.OplusQSTileBaseView", /* OOS15 */
                 "com.oplus.systemui.qs.qstileimpl.OplusQSTileBaseView", /* OOS14 */
@@ -129,8 +178,6 @@ public class CaffeineTile extends XposedMods {
                 .run(param -> {
                     try {
                         if (getAdditionalInstanceField(param.thisObject, "mParentTile") != null) {
-                            mTile = param.args[0];
-                            log("handleStateChanged");
                             updateTileView((LinearLayout) param.thisObject, (int) getObjectField(param.args[0] /* QSTile.State */, "state"));
                         }
                     } catch (Throwable ignored) {
@@ -160,10 +207,9 @@ public class CaffeineTile extends XposedMods {
     }
 
     private void setupTile(Object tile, View tileView) {
-
         setAdditionalInstanceField(tileView, "mParentTile", tile);
         setAdditionalInstanceField(tileView, "mTileTag", "caffeine");
-        setOnClickListener((LinearLayout) tileView);
+        setOnClickListener(tileView);
 
     }
 
@@ -178,6 +224,18 @@ public class CaffeineTile extends XposedMods {
         }
     }
 
+    private void updateTileViewPlugin(Object tileView, int state) {
+        try { //don't crash systemui if failed
+            mCurrentState = state;
+            Object QsLabelView = getObjectField(tileView, "labelView");
+            String newLabel = formatValueWithRemainingTime();
+            callMethod(QsLabelView, "updateText", state == STATE_ACTIVE ? newLabel : modRes.getString(R.string.caffeine));
+            if (mTileState == null) mTileState = getObjectField(tileView, "tileState");
+            setIntField(mTileState, "state", state);
+        } catch (Throwable ignored) {
+        }
+    }
+
     @SuppressLint("DefaultLocale")
     private String formatValueWithRemainingTime() {
 
@@ -188,7 +246,7 @@ public class CaffeineTile extends XposedMods {
                 mSecondsRemaining / 60 % 60, mSecondsRemaining % 60);
     }
 
-    private void setOnClickListener(LinearLayout tileView) {
+    private void setOnClickListener(View tileView) {
         final ClickListener clickListener = new ClickListener();
         tileView.setOnClickListener(clickListener);
     }
@@ -210,7 +268,7 @@ public class CaffeineTile extends XposedMods {
             mCountdownTimer.cancel();
             mCountdownTimer = null;
         }
-        if (callChange) handleStateChange(mTileView, STATE_INACTIVE, false);
+        if (callChange) handleStateChange(mTileObject, mTileView, STATE_INACTIVE, false);
     }
 
     private void startCountDown(long duration) {
@@ -218,42 +276,53 @@ public class CaffeineTile extends XposedMods {
         mSecondsRemaining = (int) duration;
         if (duration == -1) {
             // infinity timing, no need to start timer
-            handleStateChange(mTileView, STATE_ACTIVE, true);
+            handleStateChange(mTileObject, mTileView, STATE_ACTIVE, true);
             return;
         }
-        handleStateChange(mTileView, STATE_ACTIVE, false);
+        handleStateChange(mTileObject, mTileView, STATE_ACTIVE, false);
         mCountdownTimer = new CountDownTimer(duration * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mSecondsRemaining = (int) (millisUntilFinished / 1000);
                 updateTileView((LinearLayout) mTileView, STATE_ACTIVE); // sets time
+                updateTileViewPlugin(mTileObject, STATE_ACTIVE);
             }
 
             @Override
             public void onFinish() {
                 if (mWakeLock.isHeld())
                     mWakeLock.release();
-                handleStateChange(mTileView, STATE_INACTIVE, true);
+                handleStateChange(mTileObject, mTileView, STATE_INACTIVE, true);
             }
 
         }.start();
     }
 
-    private void handleStateChange(View thisView, int newState, boolean force) {
-        if (thisView == null) return;
-        new Thread(() -> {
-            Object parentTile = getAdditionalInstanceField(thisView, "mParentTile");
+    private void handleStateChange(Object tileViewSplit, View thisView, int newState, boolean force) {
+        if (thisView != null) {
+            new Thread(() -> {
+                Object parentTile = getAdditionalInstanceField(thisView, "mParentTile");
 
-            Object mTile = getObjectField(parentTile, "mTile");
+                Object mTile = getObjectField(parentTile, "mTile");
 
-            int currentState = (int) getObjectField(mTile, "mState");
+                int currentState = (int) getObjectField(mTile, "mState");
 
-            if (force || currentState != newState) {
-                setObjectField(mTile, "mState", newState);
-                callMethod(parentTile, "refreshState");
-            }
-            thisView.post(() -> updateTileView((LinearLayout) thisView, newState));
-        }).start();
+                if (force || currentState != newState) {
+                    mCurrentState = newState;
+                    setObjectField(mTile, "mState", newState);
+                    callMethod(parentTile, "refreshState");
+                }
+                thisView.post(() -> updateTileView((LinearLayout) thisView, newState));
+            }).start();
+        }
+        if (tileViewSplit != null) {
+            if (mTileState == null) mTileState = getObjectField(mTileObject, "tileState");
+            setIntField(mTileState, "state", newState);
+            mCurrentState = newState;
+            callMethod(mTileObject, "onStateChanged", mTileState);
+            callMethod(mTileObject, "setStateImmediately", mTileState);
+            updateTileViewPlugin(mTileObject, newState);
+        }
     }
 
     @Override
