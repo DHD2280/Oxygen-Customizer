@@ -296,7 +296,7 @@
     <string name="BB_batteryChargingColor">Colore di ricarica</string>
     <string name="BB_batteryPowerSaveColor">Colore risparmio energetico</string>
     <string name="BB_batteryFastChargingColor">Colore ricarica rapida</string>
-    <string name="BB_transit_colors">Shade colors between this range</string>
+    <string name="BB_transit_colors">Sfuma i colori tra questo range</string>
     <string name="colored_battery_percentage_title">Percentuale batteria colorata quando in ricarica</string>
     <!-- Battery Icon Strings -->
     <string name="battery_icon_customize_title">Personalizza Icona Batteria</string>
