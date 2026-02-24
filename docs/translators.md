@@ -113,7 +113,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Andfi</b></sub></a>
         <br />
-        <sub><b>1977 words</b></sub>
+        <sub><b>1983 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Osean22"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15718399/medium/c1732446f8e330322a6101dd554ab494_default.png" />
