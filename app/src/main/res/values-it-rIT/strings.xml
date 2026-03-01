@@ -296,7 +296,7 @@
     <string name="BB_batteryChargingColor">Colore di ricarica</string>
     <string name="BB_batteryPowerSaveColor">Colore risparmio energetico</string>
     <string name="BB_batteryFastChargingColor">Colore ricarica rapida</string>
-    <string name="BB_transit_colors">Shade colors between this range</string>
+    <string name="BB_transit_colors">Sfuma i colori tra questo range</string>
     <string name="colored_battery_percentage_title">Percentuale batteria colorata quando in ricarica</string>
     <!-- Battery Icon Strings -->
     <string name="battery_icon_customize_title">Personalizza Icona Batteria</string>
@@ -696,6 +696,8 @@
     <string name="force_themed_launcher_icons_summary">FUNZIONE BETA: forza le icone a tema per tutte le app.\nRiattiva le icone a tema nel launcher per applicarle.</string>
     <string name="alternative_themed_icons_title">Icone a tema alternative</string>
     <string name="alternative_themed_icons_summary">Utilizzare un metodo alternativo per applicare temi alle icone.\nNota: questo metodo non sovrascrive le icone Oneplus, ma potrebbe essere più lento.</string>
+    <string name="themed_icons_where_switch">Mappa personalizzata delle icone a tema</string>
+    <string name="themed_icons_where_switch_summary">Seleziona dove applicare le icone a tema</string>
     <string name="themed_icons_where_title">Seleziona dove applicare le icone a tema</string>
     <string name="themed_icons_workspace">Spazio di lavoro</string>
     <string name="themed_icons_drawer">Drawer</string>
@@ -1073,6 +1075,7 @@
     <string name="update_notification_text">Tocca qui per installare</string>
     <string name="download_failed">Impossibile scaricare l\'aggiornamento</string>
     <string name="try_again_later">Riprova più tardi</string>
+    <string name="installation_failed">Installazione non riuscita. Provare a installare manualmente.</string>
     <string name="update_flavor_title">Aggiorna canale</string>
     <string name="stable_flavor">Stabile</string>
     <string name="nightly_github_login">Accesso e download manuale</string>
@@ -1468,11 +1471,14 @@
     <string name="refresh_rate_error">Frequenza aggiornamento vuoto!</string>
     <string name="memc_footer">Se il tuo dispositivo non dispone di un chip Pixelwork o non supporta Memc, non toccare queste impostazioni.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_cat">Spegni lo schermo</string>
     <string name="sleep_on_flat_screen_title">Spegni lo schermo su superficie piana</string>
     <string name="sleep_on_flat_screen_tile_title">Spegni lo schermo</string>
     <string name="flat_screen_timeout_title">Timeout spegni schermo</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Rispetta i wakelock</string>
     <!-- Bypass resizable windows -->
+    <string name="bypass_resizable_windows_title">Ignora le finestre ridimensionabili</string>
+    <string name="bypass_resizable_windows_summary">Ciò consentirà a qualsiasi app di essere ridimensionabili</string>
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Consenti lettore AOD</string>
     <string name="aod_music_allow_summary">Consenti al lettore musicale Ant di essere visualizzato in AOD.\nNota: non tutti i lettori musicali potrebbero essere supportati.</string>

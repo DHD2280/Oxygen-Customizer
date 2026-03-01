@@ -215,6 +215,8 @@
     <string name="clock_date_right">Праворуч від годинника</string>
     <string name="clock_date_left">Ліворуч від годинника</string>
     <string name="clock_font_size_title">Розмір шрифту годинника</string>
+    <string name="clock_extra_padding">Додаткові відступи годинника</string>
+    <string name="clock_extra_padding_summary">У деяких варіантах OOS є проблеми з шириною годинника, зламаними відступами або чимось іншим. За допомогою цього регулювання ви можете налаштувати відступи за вашим уподобанням.</string>
     <string name="status_bar_clock_font_style_title">Стиль шрифту годинника</string>
     <string name="status_bar_clock_color_title">Колір годинника</string>
     <string name="status_bar_custom_clock_color_title">Користувацький колір годинника</string>
@@ -670,6 +672,8 @@
     <string name="hide_app_labels">Приховати назви додатків</string>
     <string name="hide_app_labels_desktop">Приховати назви додатків на Початковому екрані</string>
     <string name="hide_app_labels_drawer">Приховати назви додатків в Меню додатків</string>
+    <string name="launcher_force_dock">Примусова кількість іконок в док</string>
+    <string name="launcher_force_dock_summary">Зробить кількість іконок в док-станції такою ж самою, як і колонок в лаунчері.\nТобто, якщо в макеті 6*7, то в док-станції 6 іконок.</string>
     <string name="launcher_folder_layout">Макет теки</string>
     <string name="launcher_folder_edit_layout">Редагувати макет</string>
     <string name="launcher_folder_columns">Стовпці</string>
@@ -684,12 +688,16 @@
     <string name="launcher_app_details_summary">Натисніть на іконку додатка, щоб відкрити подробиці в Налаштуваннях.</string>
     <string name="launcher_disable_recents_previous_page_title">Відключити перехід на попередній додаток</string>
     <string name="launcher_disable_recents_previous_page_summary">Вимкнути автоматичний перехід до попереднього додатка при відкритті Меню Нещодавніх завдань.</string>
+    <string name="launcher_replace_lock_title">Заміна блокування зі зупинкою</string>
+    <string name="launcher_replace_lock_summary">Замінить жест закріплення (проведіть вниз в нещодавніх програмах) завершенням програми.</string>
     <string name="remove_home_pagination">Виключити індикацію розбивки на сторінки Початкового екрана</string>
     <string name="launcher_themed_icons">Тематичні іконки</string>
     <string name="force_themed_launcher_icons">Примусове відображення тематичних іконок</string>
     <string name="force_themed_launcher_icons_summary">БЕТА-ФУНКЦІЯ: Примусове відображення тематичних іконок для всіх програм.\nДля застосування, ввімкніть повторно тематичні іконки на Початковому екрані.</string>
     <string name="alternative_themed_icons_title">Альтернативні тематичні іконки</string>
     <string name="alternative_themed_icons_summary">Використовувати альтернативний метод для тематичних іконок.\nПримітка: цей метод не перевизначить іконки Oplus та може бути повільнішим.</string>
+    <string name="themed_icons_where_switch">Власна тема іконок</string>
+    <string name="themed_icons_where_switch_summary">Виберіть, де тематичні іконки повинні бути застосовані</string>
     <string name="themed_icons_where_title">Виберіть, де застосувати тематичні іконки</string>
     <string name="themed_icons_workspace">Робочий простір</string>
     <string name="themed_icons_drawer">Меню додатків</string>
@@ -1067,6 +1075,7 @@
     <string name="update_notification_text">Натисніть тут для встановлення</string>
     <string name="download_failed">Не вдалося завантажити оновлення</string>
     <string name="try_again_later">Будь ласка, спробуйте пізніше</string>
+    <string name="installation_failed">Помилка встановлення. Спробуйте встановити вручну.</string>
     <string name="update_flavor_title">Канал оновлень</string>
     <string name="stable_flavor">Стабільна версія</string>
     <string name="nightly_github_login">Ввійти та Завантажити вручну</string>
@@ -1462,11 +1471,14 @@
     <string name="refresh_rate_error">Частота оновлення порожня!</string>
     <string name="memc_footer">Якщо ваш пристрій не має мікросхеми Pixelwork або не підтримує MEMC, не торкайтеся цих налаштувань.</string>
     <!-- Screen Off On Flat -->
+    <string name="sleep_on_flat_cat">Вимкнення екрану на рівній поверхні</string>
     <string name="sleep_on_flat_screen_title">Вимкнути екран на пласкій поверхні</string>
     <string name="sleep_on_flat_screen_tile_title">Сон на поверхні</string>
     <string name="flat_screen_timeout_title">Затримка вимкнення екрану на пласкій поверхні</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Коректне використання блокувань виходу зі сну</string>
     <!-- Bypass resizable windows -->
+    <string name="bypass_resizable_windows_title">Ігнорувати обмеження зміни розміру вікон</string>
+    <string name="bypass_resizable_windows_summary">Це дозволить змінювати розмір вікон будь-яких додатків</string>
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Дозволити плеєрам відображатись на AOD</string>
     <string name="aod_music_allow_summary">Дозволити музичному плеєру відображатись на AOD.\nПримітка: не всі музичні плеєри підтримують цю можливість.</string>
