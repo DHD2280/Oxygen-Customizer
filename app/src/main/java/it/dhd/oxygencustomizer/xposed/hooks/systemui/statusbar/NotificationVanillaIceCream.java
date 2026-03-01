@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -64,6 +65,15 @@ public class NotificationVanillaIceCream extends XposedMods {
         NotificationChildrenContainerExtImp
                 .before("getHeaderBlurDrawable")
                 .run(nullReturner);
+
+        ReflectedClass OplusCloseAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.notification.OplusCloseAllController");
+        OplusCloseAllController
+                .before("access$getPlatformBlurDrawable")
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT < 36) return;
+                    Drawable d = (Drawable) param.args[1];
+                    param.setResult(d);
+                });
 
     }
 
