@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -24,12 +21,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class AlbumArtLockscreen extends XposedMods {
 
@@ -68,56 +65,47 @@ public class AlbumArtLockscreen extends XposedMods {
         AudioDataProvider.registerMediaMetadataListener(mMediaMetadataListener);
 
         // Get Scrim Controller for checking Scrim Change
-        Class<?> ScrimControllerClassEx = findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpparam.classLoader);
-        hookAllConstructors(ScrimControllerClassEx, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mScrimController = param.thisObject;
-            }
-        });
+        ReflectedClass ScrimControllerClassEx = ReflectedClass.of("com.android.systemui.statusbar.phone.ScrimControllerEx");
+        ScrimControllerClassEx
+                .afterConstruction()
+                .run(param -> mScrimController = param.thisObject);
 
         // Hook Central Surfaces so we can put the new view
-        Class<?> CentralSurfacesImplClass = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
-        hookAllMethods(CentralSurfacesImplClass, "start", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        ReflectedClass CentralSurfacesImplClass = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
+        CentralSurfacesImplClass
+                .after("start")
+                .run(param -> {
+                    if (mScrimController == null) {
+                        log("ScrimController is null!");
+                        return;
+                    }
+                    View scrimBehind = (View) getObjectField(callMethod(mScrimController, "getScrimController"), "mScrimBehind");
+                    if (scrimBehind == null) {
+                        log("ScrimBehind is null");
+                        return;
+                    }
+                    ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
 
-                if (mScrimController == null) {
-                    log("ScrimController is null!");
-                    return;
-                }
-                View scrimBehind = (View) getObjectField(callMethod(mScrimController, "getScrimController"), "mScrimBehind");
-                if (scrimBehind == null) {
-                    log("ScrimBehind is null");
-                    return;
-                }
-                ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
+                    albumArtContainer = new FrameLayout(mContext);
+                    albumArtContainer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                    albumArtContainer.setVisibility(View.GONE);
+                    albumArtView = new ImageView(mContext);
+                    albumArtView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                    albumArtView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    albumArtView.setVisibility(View.VISIBLE);
+                    albumArtContainer.addView(albumArtView);
 
-                albumArtContainer = new FrameLayout(mContext);
-                albumArtContainer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-                albumArtContainer.setVisibility(View.GONE);
-                albumArtView = new ImageView(mContext);
-                albumArtView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-                albumArtView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                albumArtView.setVisibility(View.VISIBLE);
-                albumArtContainer.addView(albumArtView);
-
-                rootView.addView(albumArtContainer, 3);
-
-            }
-        });
+                    rootView.addView(albumArtContainer, 3);
+                });
 
         ControllersProvider.registerKeyguardShowingCallback(showing -> {
             shouldShowArt = showing;
             updateAlbumArt();
         });
 
-        hookAllMethods(CentralSurfacesImplClass, "onKeyguardGoingAway", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                updateAlbumArt();
-            }
-        });
+        CentralSurfacesImplClass
+                .after("onKeyguardGoingAway")
+                .run(param -> updateAlbumArt());
 
     }
 
