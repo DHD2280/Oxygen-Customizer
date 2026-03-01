@@ -98,6 +98,7 @@ import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock;
 import it.dhd.oxygencustomizer.utils.TextUtil;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -548,6 +549,7 @@ public class HeaderClock extends XposedMods {
         QSSecurityFooterUtilsClass
                 .afterConstruction()
                 .run(param -> mActivityStarter = getObjectField(param.thisObject, "mActivityStarter"));
+        ControllersProvider.registerExpandedFractionChangeCallback(mExpandedFractionChangeListener);
 
         if (Build.VERSION.SDK_INT >= 35) {
             hookNotificationClock();
@@ -570,6 +572,13 @@ public class HeaderClock extends XposedMods {
         }
 
     }
+
+    private final ControllersProvider.ExpandedFractionChangeListener mExpandedFractionChangeListener = fraction -> {
+        if (!showHeaderClock) return;
+        float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
+        View v = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
+        v.setAlpha(alpha);
+    };
 
     @Override
     public boolean listensTo(String packageName) {
