@@ -3,10 +3,8 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 import static android.content.Context.RECEIVER_EXPORTED;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getFloatField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_AOD_INVALIDATE_DEPTH;
@@ -161,197 +159,187 @@ public class DepthWallpaper extends XposedMods {
             mPluginBroadcastRegistered = true;
         }
 
-        Class<?> QSImplClass = null;
-        try {
-            QSImplClass = findClass("com.android.systemui.qs.QSFragment", lpParam.classLoader); // OOS14
-        } catch (Throwable ignored) {
-            QSImplClass = findClass("com.android.systemui.qs.QSImpl", lpParam.classLoader); // OOS15
-        }
+        ReflectedClass QSImplClass = ReflectedClass.of(
+                "com.android.systemui.qs.QSImpl", // OOS15+
+                "com.android.systemui.qs.QSFragment"
+        );
 
-        Class<?> CentralSurfacesImplClass = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpParam.classLoader);
-        Class<?> ScrimControllerClassEx = findClass("com.android.systemui.statusbar.phone.ScrimControllerEx", lpParam.classLoader);
+        ReflectedClass CentralSurfacesImplClass = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
+        ReflectedClass ScrimControllerClassEx = ReflectedClass.of("com.android.systemui.statusbar.phone.ScrimControllerEx");
 
-        Class<?> ScrimViewClass = findClass("com.oplus.systemui.scrim.ScrimViewExImp", lpParam.classLoader);
+        ReflectedClass ScrimViewClass = ReflectedClass.of("com.oplus.systemui.scrim.ScrimViewExImp");
+        ScrimViewClass
+                .before("setViewAlpha")
+                .run(param -> {
+                    log("ScrimViewExImp setViewAlpha mLayersCreated " + mLayersCreated);
+                    if (!mLayersCreated) return;
 
-        hookAllMethods(ScrimViewClass, "setViewAlpha", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mLayersCreated) return;
-
-                //TODO: get scrim name for OOS15
-                String scrimName;
-                if (Build.VERSION.SDK_INT >= 35) {
-                    Object ScrimView = callMethod(param.thisObject, "getScrimView");
-                    scrimName = (String) getObjectField(ScrimView, "mScrimName");
-                } else {
-                    scrimName = (String) getObjectField(param.thisObject, "name");
-                }
-
-                if (mLayersCreated && DWallpaperEnabled) {
-                    if (scrimName.toLowerCase().contains("notification")) {
-                        log("ScrimViewExImp Notification Scrim Alpha: " + param.args[0]);
-                        float notificationAlpha = (float) param.args[0];
-                        final float finalAlpha = calculateAlpha(notificationAlpha);// * getFloatField(getScrimController(), "mBehindAlpha");
-                        log("ScrimViewExImp finalAlpha: " + finalAlpha);
-                        mLockScreenSubject.post(() -> mLockScreenSubject.setAlpha(finalAlpha));
+                    //TODO: get scrim name for OOS15
+                    String scrimName;
+                    if (Build.VERSION.SDK_INT >= 35) {
+                        Object ScrimView = callMethod(param.thisObject, "getScrimView");
+                        scrimName = (String) getObjectField(ScrimView, "mScrimName");
+                    } else {
+                        scrimName = (String) getObjectField(param.thisObject, "name");
                     }
-                }
-            }
-        });
 
-        hookAllMethods(CentralSurfacesImplClass, "start", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                log("CentralSurfacesImpl started");
-
-                View scrimBehind = (View) getObjectField(getScrimController(), "mScrimBehind");
-                ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
-
-                @SuppressLint("DiscouragedApi")
-                ViewGroup targetView = rootView.findViewById(mContext.getResources().getIdentifier("notification_container_parent", "id", mContext.getPackageName()));
-
-                if (!mLayersCreated) {
-                    createLayers();
-                }
-
-                rootView.addView(mWallpaperBackground, 2);
-
-                targetView.addView(mLockScreenSubject, 1);
-
-                if (DWMode == 1) {
-                    setDepthBackground();
-                }
-
-                log("CentralSurfacesImpl finished");
-            }
-        });
-
-        Class<?> OplusLockScreenWallpaperController;
-        try {
-            OplusLockScreenWallpaperController = findClass("com.oplus.systemui.keyguard.wallpaper.OplusLockScreenWallpaperController", lpParam.classLoader);
-        } catch (Throwable t) {
-            OplusLockScreenWallpaperController = findClass("com.oplusos.systemui.keyguard.wallpaper.OplusLockScreenWallpaper", lpParam.classLoader); //OOS 13
-        }
-
-        hookAllConstructors(OplusLockScreenWallpaperController, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Object mLockscreenWallpaper = param.thisObject;
-                Object mWallpaperChangeListener = getObjectField(param.thisObject, "mWallpaperChangeListener");
-                log("OplusLockScreenWallpaperController created");
-                hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (DWallpaperEnabled && DWMode == 0 || DWMode == 2) {
-                            if (superPowerSave) return;
-                            log("Wallpaper Changed");
-
-                            Drawable wallpaperDrawable = null;
-                            String[] methodNames = {"getDrawable", "loadDrawable", "loadBitmap"};
-                            for (String methodName : methodNames) {
-                                try {
-                                    wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, methodName);
-                                    if (wallpaperDrawable != null) break;
-                                } catch (Throwable ignored) {}
-                            }
-                            if (wallpaperDrawable == null) {
-                                log("Wallpaper Drawable is null");
-                                return;
-                            }
-                            Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
-
-                            Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
-                                    .getCurrentWindowMetrics()
-                                    .getBounds();
-
-                            float scale = 1.0f;
-
-                            try {
-                                View v = (View) getObjectField(mLockscreenWallpaper, "mBackDropBackView");
-                                if (v != null) {
-                                    scale = v.getScaleX();
-                                }
-                            } catch (Throwable t) {
-                                log("Error getting scale: " + t.getMessage());
-                            }
-
-                            float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
-                            float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
-
-                            int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
-                            int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
-
-                            int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
-                            int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
-
-                            Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
-
-                            //crop to display bounds
-                            scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
-                            Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
-
-                            boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
-
-                            if (!mLayersCreated) {
-                                log("drawFrameOnCanvas Layers not created");
-                                createLayers();
-                            }
-
-                            log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
-
-                            mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
-
-                            log("cacheIsValid " + cacheIsValid);
-
-                            if (!cacheIsValid) {
-                                XPLauncher.enqueueProxyCommand(proxy -> {
-                                    if (DWMode == 0) {
-                                        proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
-                                    } else if (DWMode == 2) {
-                                        try {
-                                            Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
-                                            intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
-                                            intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
-                                            intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
-                                            intent.setPackage(mContext.getPackageName());
-                                            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                                            mContext.sendBroadcast(intent);
-                                        } catch (Throwable t) {
-                                            log(t);
-                                        }
-                                    }
-                                });
-                            }
+                    if (mLayersCreated && DWallpaperEnabled) {
+                        if (scrimName.toLowerCase().contains("notification")) {
+                            log("ScrimViewExImp Notification Scrim Alpha: " + param.args[0]);
+                            float notificationAlpha = (float) param.args[0];
+                            final float finalAlpha = calculateAlpha(notificationAlpha);// * getFloatField(getScrimController(), "mBehindAlpha");
+                            log("ScrimViewExImp finalAlpha: " + finalAlpha);
+                            mLockScreenSubject.post(() -> mLockScreenSubject.setAlpha(finalAlpha));
                         }
                     }
                 });
-            }
-        });
 
-        hookAllConstructors(ScrimControllerClassEx, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mScrimController = param.thisObject;
-            }
-        });
+        CentralSurfacesImplClass
+                .after("start")
+                .run(param -> {
+                    log("CentralSurfacesImpl started");
 
-        Class<?> ScrimControllerClass = findClass("com.android.systemui.statusbar.phone.ScrimController", lpParam.classLoader);
-        hookAllMethods(ScrimControllerClass, "applyAndDispatchState", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (Build.VERSION.SDK_INT >= 35) return;
-                setDepthWallpaper();
-            }
-        });
+                    View scrimBehind = (View) getObjectField(getScrimController(), "mScrimBehind");
+                    ViewGroup rootView = (ViewGroup) scrimBehind.getParent();
 
-        hookAllMethods(QSImplClass, "setQsExpansion", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if ((boolean) callMethod(param.thisObject, "isKeyguardState") && Build.VERSION.SDK_INT < 35) {
+                    @SuppressLint("DiscouragedApi")
+                    ViewGroup targetView = rootView.findViewById(mContext.getResources().getIdentifier("notification_container_parent", "id", mContext.getPackageName()));
+
+                    if (!mLayersCreated) {
+                        createLayers();
+                    }
+
+                    rootView.addView(mWallpaperBackground, 2);
+                    targetView.addView(mLockScreenSubject, 1);
+
+                    if (DWMode == 1) {
+                        setDepthBackground();
+                    }
+
+                    log("CentralSurfacesImpl finished");
+                });
+
+        ReflectedClass OplusLockScreenWallpaperController = ReflectedClass.of(
+                "com.oplus.systemui.keyguard.wallpaper.OplusLockScreenWallpaperController", //OOS14+
+                "com.oplusos.systemui.keyguard.wallpaper.OplusLockScreenWallpaper" //OOS13
+        );
+
+        OplusLockScreenWallpaperController
+                .afterConstruction()
+                .run(param -> {
+                    Object mLockscreenWallpaper = param.thisObject;
+                    Object mWallpaperChangeListener = getObjectField(param.thisObject, "mWallpaperChangeListener");
+                    log("OplusLockScreenWallpaperController created");
+                    hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            if (DWallpaperEnabled && DWMode == 0 || DWMode == 2) {
+                                if (superPowerSave) return;
+                                log("Wallpaper Changed");
+
+                                Drawable wallpaperDrawable = null;
+                                String[] methodNames = {"getDrawable", "loadDrawable", "loadBitmap"};
+                                for (String methodName : methodNames) {
+                                    try {
+                                        wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, methodName);
+                                        if (wallpaperDrawable != null) break;
+                                    } catch (Throwable ignored) {
+                                    }
+                                }
+                                if (wallpaperDrawable == null) {
+                                    log("Wallpaper Drawable is null");
+                                    return;
+                                }
+                                Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
+
+                                Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
+                                        .getCurrentWindowMetrics()
+                                        .getBounds();
+
+                                float scale = 1.0f;
+
+                                try {
+                                    View v = (View) getObjectField(mLockscreenWallpaper, "mBackDropBackView");
+                                    if (v != null) {
+                                        scale = v.getScaleX();
+                                    }
+                                } catch (Throwable t) {
+                                    log("Error getting scale: " + t.getMessage());
+                                }
+
+                                float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
+                                float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
+
+                                int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
+                                int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
+
+                                int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
+                                int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
+
+                                Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
+
+                                //crop to display bounds
+                                scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
+                                Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
+
+                                boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
+
+                                if (!mLayersCreated) {
+                                    log("drawFrameOnCanvas Layers not created");
+                                    createLayers();
+                                }
+
+                                log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
+
+                                mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
+
+                                log("cacheIsValid " + cacheIsValid);
+
+                                if (!cacheIsValid) {
+                                    XPLauncher.enqueueProxyCommand(proxy -> {
+                                        if (DWMode == 0) {
+                                            proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
+                                        } else if (DWMode == 2) {
+                                            try {
+                                                Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
+                                                intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
+                                                intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
+                                                intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
+                                                intent.setPackage(mContext.getPackageName());
+                                                intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                                                mContext.sendBroadcast(intent);
+                                            } catch (Throwable t) {
+                                                log(t);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                });
+
+
+        ScrimControllerClassEx
+                .afterConstruction()
+                .run(param -> mScrimController = param.thisObject);
+
+
+        ReflectedClass ScrimControllerClass = ReflectedClass.of("com.android.systemui.statusbar.phone.ScrimController");
+        ScrimControllerClass
+                .after("applyAndDispatchState")
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT >= 35) return;
                     setDepthWallpaper();
-                }
-            }
-        });
+                });
+
+        QSImplClass
+                .before("setQsExpansion")
+                .run(param -> {
+                    if ((boolean) callMethod(param.thisObject, "isKeyguardState") && Build.VERSION.SDK_INT < 35) {
+                        setDepthWallpaper();
+                    }
+                });
 
         ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
         if (OplusKeyguardStyleClock.getClazz() != null) {
@@ -362,10 +350,19 @@ public class DepthWallpaper extends XposedMods {
                         setDepthWallpaper(mLastUiState);
                     });
         }
+        ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
+        if (KeyguardPlugin.getClazz() != null) {
+            KeyguardPlugin
+                    .after("onUiStateChanged")
+                    .run(param -> {
+                        mLastUiState = (int) param.args[0];
+                        setDepthWallpaper(mLastUiState);
+                    });
+        }
 
         ReflectedClass OplusWallpaperAnimControllerImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl");
         ReflectedClass OplusWallpaperAnimControllerImplCompanion = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl$Companion");
-        if(OplusWallpaperAnimControllerImplCompanion.getClazz() != null) {
+        if (OplusWallpaperAnimControllerImplCompanion.getClazz() != null) {
             OplusWallpaperAnimControllerImplCompanion
                     .before("setRemoteWindowScale")
                     .run(param -> {
@@ -553,7 +550,7 @@ public class DepthWallpaper extends XposedMods {
                 && canShow;
 
         if (showSubject) {
-           log("Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(getLockScreenSubjectCachePath()).exists());
+            log("Show Subject lockScreenSubjectCacheValid " + lockScreenSubjectCacheValid + " cacheFile exists " + new File(getLockScreenSubjectCachePath()).exists());
             if (!lockScreenSubjectCacheValid && new File(getLockScreenSubjectCachePath()).exists()) {
                 log("lockScreenSubjectCacheValid false");
                 try (FileInputStream inputStream = new FileInputStream(getLockScreenSubjectCachePath())) {
