@@ -20,4 +20,5 @@ dependencyResolutionManagement {
 rootProject.name = "Oxygen Customizer"
 include(":app")
 include(":oos_launcher")
-include(":oos_systemui")
+include(":oos_systemui_15")
+include(":oos_systemui_16")

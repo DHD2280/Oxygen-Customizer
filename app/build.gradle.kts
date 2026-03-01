@@ -225,7 +225,8 @@ dependencies {
 
     // Stub classes
     compileOnly(project(":oos_launcher"))
-    compileOnly(project(":oos_systemui"))
+    compileOnly(project(":oos_systemui_15"))
+    compileOnly(project(":oos_systemui_16"))
 
 }
 
