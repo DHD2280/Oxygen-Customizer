@@ -13,6 +13,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
@@ -35,6 +36,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class StatusbarNotification extends XposedMods {
@@ -346,7 +348,16 @@ public class StatusbarNotification extends XposedMods {
 
                     setupButtons();
                 });
+
+        ControllersProvider.registerExpandedFractionChangeCallback(mExpandedFractionChangeListener);
+
     }
+
+    private final ControllersProvider.ExpandedFractionChangeListener mExpandedFractionChangeListener = fraction -> {
+        if (!mShowButtons) return;
+        float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
+        mNotificationButtonsContainer.setAlpha(alpha);
+    };
 
     private void setupButtons() {
         mNotificationButtonsContainer.setVisibility(mShowButtons ? View.VISIBLE : View.GONE);
