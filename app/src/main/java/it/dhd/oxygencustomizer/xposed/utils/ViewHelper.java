@@ -487,4 +487,11 @@ public class ViewHelper {
         return bitmap;
     }
 
+    public static float coerceIn(float f, float min, float max) {
+        if (min <= max) {
+            return f < min ? min : f > max ? max : f;
+        }
+        throw new IllegalArgumentException("Cannot coerce value to an empty range: maximum " + max + " is less than minimum " + min + '.');
+    }
+
 }

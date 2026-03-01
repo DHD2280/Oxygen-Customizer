@@ -37,6 +37,7 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
@@ -1256,13 +1257,6 @@ public class HeaderClock extends XposedMods {
         View v = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
         v.setAlpha(alpha);
     };
-
-    public static float coerceIn(float f, float min, float max) {
-        if (min <= max) {
-            return f < min ? min : f > max ? max : f;
-        }
-        throw new IllegalArgumentException("Cannot coerce value to an empty range: maximum " + max + " is less than minimum " + min + '.');
-    }
 
 
     class ClickListener implements View.OnClickListener {
