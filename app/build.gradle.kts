@@ -19,7 +19,7 @@ android {
         targetSdk = 36
         versionCode = 205
         versionName = "beta-205"
-        setProperty("archivesBaseName", "OxygenCustomizer.apk")
+//        setProperty("archivesBaseName", "OxygenCustomizer.apk")
         buildConfigField("int", "MIN_SDK_VERSION", "$minSdk")
     }
 
@@ -210,7 +210,7 @@ dependencies {
 
     // Oneplus UI
     implementation(libs.oneplus.ui)
-//    implementation("it.dhd:oneplusui:1.4.5")
+//    implementation("it.dhd:oneplusui:1.5.2")
 
     // Hidden API
     implementation(libs.lsposed.hiddenapi)
