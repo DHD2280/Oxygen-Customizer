@@ -409,6 +409,15 @@ public class HeaderClock extends XposedMods {
                         panelAnimationEx.getPanelExpandFraction().addCallback(this.fractionChangeListener);
                     }
                 });
+        OplusSimpleQSFakeController
+                .after("onDestroy")
+                .run(param -> {
+                    PanelAnimationEx panelAnimationEx = (PanelAnimationEx) getObjectField(param.thisObject, "panelAnimationEx");
+                    if (panelAnimationEx == null) return;
+                    if (panelAnimationEx.getUseLayeredAnimation()) {
+                        panelAnimationEx.getPanelExpandFraction().removeCallback(this.fractionChangeListener);
+                    }
+                });
 
         ReflectedClass OplusClockExImpl = ReflectedClass.of("com.oplus.systemui.common.clock.OplusClockExImpl",
                 "com.oplusos.systemui.ext.BaseClockExt");
@@ -543,46 +552,6 @@ public class HeaderClock extends XposedMods {
         if (Build.VERSION.SDK_INT >= 35) {
             hookNotificationClock();
             hookPluginClock();
-        }
-        if (Build.VERSION.SDK_INT >= 36) {
-            ReflectedClass OplusClock = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.widget.OplusQSClock");
-            OplusClock
-                    .after("onFinishInflate")
-                    .run(param -> {
-                        View v = (View) param.thisObject;
-
-//                                // Ottieni tutti i parent
-//                                List<ViewParent> allParents = getAllParents(v);
-//
-//                                // Log della gerarchia completa
-//                                XposedBridge.log("=== OplusQSClock Hierarchy ===");
-//                                XposedBridge.log("OplusQSClock Hierarchy: View: " + v.getClass().getName());
-//
-//                                for (int i = 0; i < allParents.size(); i++) {
-//                                    ViewParent parent = allParents.get(i);
-//                                    String indent = "  ".repeat(i + 1);
-//                                    XposedBridge.log("OplusQSClock Hierarchy: " + indent + "Level " + (i + 1) + ": " +
-//                                            parent.getClass().getName() +
-//                                            " (canonical: " + parent.getClass().getCanonicalName() + ")");
-//
-//                                    // Se è una View, puoi ottenere anche l'ID
-//                                    if (parent instanceof View) {
-//                                        View parentView = (View) parent;
-//                                        int id = parentView.getId();
-//                                        if (id != View.NO_ID) {
-//                                            try {
-//                                                String resourceName = parentView.getResources().getResourceName(id);
-//                                                XposedBridge.log("OplusQSClock Hierarchy: " + indent + "  ID: " + resourceName);
-//                                            } catch (Exception e) {
-//                                                XposedBridge.log("OplusQSClock Hierarchy: " + indent + "  ID: 0x" + Integer.toHexString(id));
-//                                            }
-//                                        }
-//                                    }
-//                                }
-
-                        XposedBridge.log("=== End Hierarchy ===");
-                    });
-            hookPluginQsClock();
         }
 
         try {
@@ -743,50 +712,6 @@ public class HeaderClock extends XposedMods {
                     updateStockPrefs();
 
                 });
-
-    }
-
-    private void hookPluginQsClock() {
-
-        ReflectedClass OplusQSFooterImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.OplusQSFooterImpl");
-        OplusQSFooterImpl
-                .after("onFinishInflate")
-                .run(param -> {
-
-                    FrameLayout qsFooterImpl = (FrameLayout) param.thisObject;
-                    LinearLayout clockContaier = getQsClockContainer(QS_CLOCK_PLUGIN);
-                    mClockContainers.add(clockContaier);
-
-                    if (clockContaier.getParent() != null) {
-                        ((ViewGroup) clockContaier.getParent()).removeView(clockContaier);
-                    }
-
-                    // Set main container height WRAP_CONTENT
-                    // for better custom clock handling
-                    ViewGroup.LayoutParams containerParams = (ViewGroup.LayoutParams) qsFooterImpl.getLayoutParams();
-                    containerParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//                    qsFooterImpl.setLayoutParams(containerParams);
-                    qsFooterImpl.requestLayout();
-
-                    if (qsFooterImpl.findViewWithTag(QS_CLOCK_PLUGIN) == null)
-                        qsFooterImpl.addView(clockContaier, 0);
-
-                    try {
-                        TextView clockView = (TextView) getObjectField(param.thisObject, "mClockView");
-                        mOplusClock.add(clockView);
-                    } catch (Throwable ignored) {
-                    }
-
-                    try {
-                        TextView dateView = (TextView) getObjectField(param.thisObject, "mQsDateView");
-                        mOplusDate.add(dateView);
-                    } catch (Throwable ignored) {
-                    }
-
-                    updateClockView();
-                    updateStockPrefs();
-                });
-
 
     }
 
