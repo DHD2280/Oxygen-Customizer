@@ -3,10 +3,8 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 import static android.app.Activity.RESULT_OK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_FINGERPRINT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.PLUGIN_URL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_FINGERPRINT_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenBitmapCachePath;
 import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCachePath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
@@ -21,8 +19,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oxygencustomizer.R;
@@ -130,6 +126,7 @@ public class DepthWallpaperFragment extends ControlledPreferenceFragmentCompat {
 
     private void checkAiStatus() {
         mAiStatus = findPreference("DWAIStatus");
+        mAiStatus.setOnPreferenceClickListener(null);
         if (mPreferences.getString("DWMode", "0").equals("0")) {
             new BitmapSubjectSegmenter(getActivity()).checkModelAvailability(moduleAvailabilityResponse ->
                     mAiStatus
