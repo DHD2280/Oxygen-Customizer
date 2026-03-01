@@ -75,6 +75,15 @@ public class NotificationVanillaIceCream extends XposedMods {
                     param.setResult(d);
                 });
 
+        ReflectedClass ClearAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.clearall.ClearAllController");
+        ClearAllController
+                .before("getPlatformBlurDrawable")
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT < 36) return;
+                    Drawable d = (Drawable) param.args[0];
+                    param.setResult(d);
+                });
+
     }
 
     @Override
