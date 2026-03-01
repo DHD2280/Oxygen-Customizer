@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.google.android.gms.common.moduleinstall.ModuleAvailabilityResponse;
 import com.google.android.gms.common.moduleinstall.ModuleInstall;
@@ -27,8 +28,8 @@ public class BitmapSubjectSegmenter {
 
         try {
             MlKit.initialize(context);
+        } catch (Throwable ignored) {
         }
-        catch (Throwable ignored){}
 
         try {
             mSegmenter = SubjectSegmentation.getClient(
@@ -68,7 +69,10 @@ public class BitmapSubjectSegmenter {
         }
 
         ModuleInstallClient moduleInstallClient = ModuleInstall.getClient(mContext);
-        moduleInstallClient.areModulesAvailable(mSegmenter).addOnSuccessListener(resultListener);
+        moduleInstallClient.areModulesAvailable(mSegmenter).addOnSuccessListener(resultListener).addOnFailureListener(e -> {
+            Log.e("BitmapSubjectSegmenter", "checkModelAvailability failed", e);
+            resultListener.onSuccess(new ModuleAvailabilityResponse(false, 0));
+        });
     }
 
     public void segmentSubject(Bitmap inputBitmap, SegmentResultListener listener) {
@@ -86,13 +90,10 @@ public class BitmapSubjectSegmenter {
                     FloatBuffer mSubjectMask = subjectSegmentationResult.getForegroundConfidenceMask();
 
                     resultBitmap.setHasAlpha(true);
-                    for(int y = 0; y < inputBitmap.getHeight(); y++)
-                    {
-                        for(int x = 0; x < inputBitmap.getWidth(); x++)
-                        {
+                    for (int y = 0; y < inputBitmap.getHeight(); y++) {
+                        for (int x = 0; x < inputBitmap.getWidth(); x++) {
                             //noinspection DataFlowIssue
-                            if(mSubjectMask.get() < .5f)
-                            {
+                            if (mSubjectMask.get() < .5f) {
                                 resultBitmap.setPixel(x, y, transparentColor);
                             }
                         }
@@ -108,8 +109,9 @@ public class BitmapSubjectSegmenter {
 
     }
 
-    public interface SegmentResultListener{
+    public interface SegmentResultListener {
         void onSuccess(Bitmap result);
+
         void onFail();
     }
 }
