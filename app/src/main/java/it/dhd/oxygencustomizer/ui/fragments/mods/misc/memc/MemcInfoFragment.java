@@ -38,7 +38,7 @@ public class MemcInfoFragment extends BottomSheetDialogFragment {
         Dialog dialog = new BottomSheetDialog(requireContext(), getTheme());
         dialog.setOnShowListener(it -> {
             BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) it;
-            View parentLayout = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            View parentLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
             if (parentLayout != null) {
                 BottomSheetBehavior.from(parentLayout).setState(BottomSheetBehavior.STATE_EXPANDED);
                 DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -79,7 +79,7 @@ public class MemcInfoFragment extends BottomSheetDialogFragment {
         css.addRule("body, p, h1, h2, h3, h4, h5, h6, span, div", "color: " + intToHex(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)));
         css.addRule("kbd", "border-color: " + intToHex(ThemeUtils.getAttrColor(requireContext(), R.attr.preferenceBackgroundColor)));
         css.addRule("kbd", "color: " + intToHex(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)));
-        css.addRule("a", "color: " + intToHex(getColorFromAttribute(requireContext(), com.google.android.material.R.attr.colorPrimaryVariant)));
+        css.addRule("a", "color: " + intToHex(getColorFromAttribute(requireContext(), R.attr.colorPrimaryVariant)));
         binding.memcInfo.addStyleSheet(css);
         binding.memcInfo.loadMarkdown(LoadData("IrisConfig.md"));
 
