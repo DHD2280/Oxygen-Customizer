@@ -70,6 +70,18 @@
         <attr name="titleText" />
     </declare-styleable>
 
+    <declare-styleable name="MenuWidget">
+        <attr name="titleText" />
+        <attr name="summaryText" />
+        <attr name="icon" />
+        <attr name="iconWidth" />
+        <attr name="iconHeight" />
+        <attr name="iconSpaceReserved" />
+        <attr name="forcePosition" />
+        <attr name="entries" />
+        <attr name="entryValues" />
+    </declare-styleable>
+
     <declare-styleable name="SearchPreference">
         <attr name="textHint" format="string" />
         <attr name="textNoResults" format="string" />
