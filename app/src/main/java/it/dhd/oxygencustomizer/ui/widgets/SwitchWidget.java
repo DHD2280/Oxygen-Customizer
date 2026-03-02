@@ -183,7 +183,7 @@ public class SwitchWidget extends RelativeLayout {
             TypedValue typedValue = new TypedValue();
             TypedArray a = getContext().obtainStyledAttributes(
                     typedValue.data,
-                    new int[]{com.google.android.material.R.attr.colorPrimaryVariant}
+                    new int[]{R.attr.colorPrimaryVariant}
             );
             int color = a.getColor(0, 0);
             a.recycle();

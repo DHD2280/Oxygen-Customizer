@@ -154,7 +154,7 @@ public class ListWidget extends RelativeLayout {
             TypedValue typedValue = new TypedValue();
             TypedArray a = getContext().obtainStyledAttributes(
                     typedValue.data,
-                    new int[]{com.google.android.material.R.attr.colorPrimaryVariant}
+                    new int[]{R.attr.colorPrimaryVariant}
             );
             int color = a.getColor(0, 0);
             a.recycle();
@@ -210,11 +210,11 @@ public class ListWidget extends RelativeLayout {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(titleTextView.getText());
-        builder.setAdapter(new ChoiceListAdapter(getContext(), it.dhd.oneplusui.R.layout.oplus_select_dialog_singlechoice, this.mEntries, null, checkedValue, false) {
+        builder.setAdapter(new ChoiceListAdapter(getContext(), R.layout.oplus_select_dialog_singlechoice, this.mEntries, null, checkedValue, false) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view3 = super.getView(position, convertView, parent);
-                View findViewById = view3.findViewById(it.dhd.oneplusui.R.id.item_divider);
+                View findViewById = view3.findViewById(R.id.item_divider);
                 int count = getCount();
                 if (findViewById != null) {
                     if (count != 1 && position != count - 1) {

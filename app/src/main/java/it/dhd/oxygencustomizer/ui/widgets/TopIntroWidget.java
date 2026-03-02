@@ -9,13 +9,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.android.material.materialswitch.MaterialSwitch;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -123,7 +120,7 @@ public class TopIntroWidget extends LinearLayout {
             TypedValue typedValue = new TypedValue();
             TypedArray a = getContext().obtainStyledAttributes(
                     typedValue.data,
-                    new int[]{com.google.android.material.R.attr.colorPrimaryVariant}
+                    new int[]{R.attr.colorPrimaryVariant}
             );
             int color = a.getColor(0, 0);
             a.recycle();
