@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<it.dhd.oxygencustomizer.ui.widgets.MenuWidget xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_menu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:iconHeight="40dp"
+    app:iconWidth="40dp" />

@@ -34,6 +34,7 @@
         android:paddingEnd="@dimen/preference_title_padding_end">
 
         <View
+            android:id="@+id/divider"
             style="@style/HorizontalDivider"
             android:layout_width="match_parent" />
 
