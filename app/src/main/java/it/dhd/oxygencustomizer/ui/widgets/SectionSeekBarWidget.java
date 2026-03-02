@@ -323,5 +323,10 @@ public class SectionSeekBarWidget extends CardListSelectedItemLayout {
             }
         };
     }
+
+    public View getSliderView() {
+        return this.sectionSeekBar;
+    }
+
 }
 

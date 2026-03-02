@@ -224,8 +224,16 @@ public class SwitchWidget extends RelativeLayout {
         findViewById(R.id.text_container).setLayoutParams(layoutParams);
     }
 
+    public View getIconView() {
+        return this.iconImageView;
+    }
+
     public View getTitleView() {
         return this.titleTextView;
+    }
+
+    public View getSwitchView() {
+        return this.materialSwitch;
     }
 
     public interface BeforeSwitchChangeListener {
