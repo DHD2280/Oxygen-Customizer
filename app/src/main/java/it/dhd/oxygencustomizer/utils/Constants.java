@@ -808,6 +808,7 @@ public final class Constants {
                     CLEAR_BUTTON_ICON_LINK_ACCENT,
                     CLEAR_BUTTON_ICON_COLOR
             };
+            public static final String CUSTOM_NOTIFICATION_APPS = "custom_notification_expansion";
         }
 
         public static class Statusbar {

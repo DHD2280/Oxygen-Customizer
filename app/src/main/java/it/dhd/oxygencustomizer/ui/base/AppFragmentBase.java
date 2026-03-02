@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -92,7 +93,13 @@ public abstract class AppFragmentBase extends BaseFragment {
             binding.appFunctionSwitch.setTitle(getFunctionTitle());
             binding.appFunctionSwitch.setSummary(getFunctionSummary());
         } else {
+            binding.divider.setVisibility(View.GONE);
             binding.appFunctionSwitch.setVisibility(View.GONE);
+            LinearLayout.LayoutParams switchParams = (LinearLayout.LayoutParams) binding.appFunctionSwitch.getLayoutParams();
+            LinearLayout.LayoutParams editTextParams = (LinearLayout.LayoutParams) binding.edittextContainer.getLayoutParams();
+            editTextParams.topMargin = switchParams.topMargin;
+            binding.edittextContainer.setLayoutParams(editTextParams);
+            binding.edittextContainer.setBackgroundResource(R.drawable.preference_background_center);
         }
 
         return binding.getRoot();
@@ -172,6 +179,8 @@ public abstract class AppFragmentBase extends BaseFragment {
         private final OnTaskCompleted taskCompletedListener;
         private final OnPreTaskExecution preExecutionListener;
         private final boolean hasSlider;
+        private final boolean hasMenu;
+        private CharSequence[] entries, entryValues;
 
         public interface OnTaskCompleted {
             void onTaskCompleted(List<AppModel> appList);
@@ -181,6 +190,25 @@ public abstract class AppFragmentBase extends BaseFragment {
             void onPreTaskExecution();
         }
 
+        /**
+         * Used when you only have menu
+         */
+        public LoadAppsTask(Context context,
+                            Map<String, Integer> enabledApps,
+                            OnPreTaskExecution preExecutionListener,
+                            OnTaskCompleted taskCompleted,
+                            CharSequence[] entries,
+                            CharSequence[] entryValues) {
+            this.mContext = context;
+            this.hasSlider = false;
+            this.hasMenu = true;
+            this.entries = entries;
+            this.entryValues = entryValues;
+            this.mEnabledApps = enabledApps;
+            this.preExecutionListener = preExecutionListener;
+            this.taskCompletedListener = taskCompleted;
+        }
+
         public LoadAppsTask(Context context,
                             Map<String, Integer> enabledApps,
                             boolean hasSlider,
@@ -188,6 +216,7 @@ public abstract class AppFragmentBase extends BaseFragment {
                             OnTaskCompleted taskCompleted) {
             this.mContext = context;
             this.hasSlider = hasSlider;
+            this.hasMenu = false;
             this.mEnabledApps = enabledApps;
             this.preExecutionListener = preExecutionListener;
             this.taskCompletedListener = taskCompleted;
@@ -200,6 +229,7 @@ public abstract class AppFragmentBase extends BaseFragment {
                             OnTaskCompleted taskCompleted) {
             this.mContext = context;
             this.hasSlider = hasSlider;
+            this.hasMenu = false;
             this.mEnabledSetApps = enabledApps;
             this.preExecutionListener = preExecutionListener;
             this.taskCompletedListener = taskCompleted;
@@ -226,6 +256,15 @@ public abstract class AppFragmentBase extends BaseFragment {
                     }
                     boolean isSystem = (app.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
                     appList.add(
+                            hasMenu ?
+                                    new AppModel(
+                                            app.loadLabel(packageManager).toString(),
+                                            app.packageName,
+                                            app.loadIcon(packageManager),
+                                            isSystem,
+                                            entries,
+                                            entryValues,
+                                            String.valueOf(mEnabledApps.getOrDefault(app.packageName, 0))) :
                             hasSlider ?
                             new AppModel(
                                     app.loadLabel(packageManager).toString(),

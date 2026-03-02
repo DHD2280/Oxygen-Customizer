@@ -89,6 +89,10 @@
             android:title="@string/remove_low_battery_notification"
             app:iconSpaceReserved="false" />
 
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory app:iconSpaceReserved="false">
+
         <it.dhd.oneplusui.preference.OplusMenuPreference
             android:defaultValue="0"
             android:entries="@array/notif_default_expansion_entries"
@@ -96,6 +100,12 @@
             android:key="notificationDefaultExpansion"
             android:summary="%s"
             android:title="@string/notif_default_expansion_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.statusbar.StatusbarNotificationChoice"
+            android:key="notification_per_app"
+            android:title="@string/notif_choose_app_expansion"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference

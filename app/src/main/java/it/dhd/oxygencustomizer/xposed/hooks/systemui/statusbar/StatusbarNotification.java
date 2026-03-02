@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_ICON_LINK_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOM_NOTIFICATION_APPS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATIONS_SHOW_BUTTONS;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -19,6 +20,8 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.service.notification.StatusBarNotification;
+import android.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,14 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.android.systemui.statusbar.AlphaOptimizedImageView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -45,10 +55,13 @@ public class StatusbarNotification extends XposedMods {
     // Notification Expander
     private static final int DEFAULT = 0;
     private static final int EXPAND_ALWAYS = 1;
+    private static final int EXPAND_PACKAGE = 3;
     /**
      * @noinspection unused
      */
     private static final int COLLAPSE_ALWAYS = 2;
+    private Set<String> notificationApps = new HashSet<>();
+    private Map<String, Integer> notificationAppMode = new HashMap<>();
     private static int notificationDefaultExpansion = DEFAULT;
     private static Drawable defaultClearAllIcon = null, defaultClearAllBg = null;
     private final String TAG = this.getClass().getSimpleName() + ": ";
@@ -83,6 +96,19 @@ public class StatusbarNotification extends XposedMods {
         linkIconAccent = Xprefs.getBoolean(CLEAR_BUTTON_ICON_LINK_ACCENT, false);
         clearButtonBgColor = Xprefs.getInt(CLEAR_BUTTON_BG_COLOR, Color.GRAY);
         clearButtonIconColor = Xprefs.getInt(CLEAR_BUTTON_ICON_COLOR, Color.WHITE);
+        notificationApps = Xprefs.getStringSet(CUSTOM_NOTIFICATION_APPS, new HashSet<>());
+        notificationAppMode = new ArrayMap<>();
+        for (String item : notificationApps) {
+            if (item.contains("|")) {
+                List<String> arr = new ArrayList<>(Arrays.asList(item.split("\\|")));
+                if (arr.size() < 2 || arr.get(1).isBlank()) {
+                    arr.set(1, "0");
+                }
+                notificationAppMode.put(arr.get(0), Integer.parseInt(arr.get(1)));
+            } else {
+                notificationAppMode.put(item, 0);
+            }
+        }
 
         if (Key.length > 0) {
             for (String k : CLEAR_ALL_BUTTON_PREFS)
@@ -186,7 +212,7 @@ public class StatusbarNotification extends XposedMods {
                 .before("notifyExpandingStarted")
                 .run(param -> {
                     if (notificationDefaultExpansion != DEFAULT)
-                        expandAll(notificationDefaultExpansion == EXPAND_ALWAYS);
+                        expandAll(notificationDefaultExpansion);
                 });
         //endregion
 
@@ -261,10 +287,11 @@ public class StatusbarNotification extends XposedMods {
 
     }
 
-    public void expandAll(boolean expand) {
+    public void expandAll(int expandMode) {
         if (NotifCollection == null) return;
 
-        if (!expand) {
+
+        if (!(expandMode == EXPAND_ALWAYS)) {
             callMethod(
                     Scroller,
                     "setOwnScrollY",
@@ -277,11 +304,20 @@ public class StatusbarNotification extends XposedMods {
         entries = (Collection<Object>) getObjectField(NotifCollection, "mReadOnlyNotificationSet");
         for (Object entry : entries.toArray()) {
             Object row = getObjectField(entry, "row");
+            StatusBarNotification mSbn = (StatusBarNotification) getObjectField(entry, "mSbn");
             if (row != null) {
-                setRowExpansion(row, expand);
+                setRowExpansion(row, expandMode == EXPAND_PACKAGE ?
+                        checkExpansion(mSbn.getPackageName()) :
+                        expandMode == EXPAND_ALWAYS);
             }
         }
 
+    }
+
+    private boolean checkExpansion(String packageName) {
+        if (notificationAppMode == null || notificationAppMode.isEmpty()) return false;
+        int value = notificationAppMode.getOrDefault(packageName, 0);
+        return value == 1;
     }
 
     private void setRowExpansion(Object row, boolean expand) {
@@ -342,9 +378,9 @@ public class StatusbarNotification extends XposedMods {
                     mExpand.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_expand, mContext.getTheme()));
                     mCollapse.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_collapse, mContext.getTheme()));
 
-                    mExpand.setOnClickListener(v -> expandAll(true));
+                    mExpand.setOnClickListener(v -> expandAll(EXPAND_ALWAYS));
 
-                    mCollapse.setOnClickListener(v -> expandAll(false));
+                    mCollapse.setOnClickListener(v -> expandAll(COLLAPSE_ALWAYS));
 
                     setupButtons();
                 });

@@ -6,12 +6,14 @@ import androidx.annotation.NonNull;
 
 public class AppModel {
 
-    private String appName;
-    private String packageName;
-    private Drawable appIcon;
+    private final String appName;
+    private final String packageName;
+    private final Drawable appIcon;
     private boolean isEnabled;
     private int darkModeValue;
-    private boolean isSystem;
+    private final boolean isSystem;
+    private CharSequence[] mEntries, mEntryValues;
+    private String mSelectedValue = "";
 
     public AppModel(String appName, String packageName, Drawable appIcon, boolean isSystemApp, boolean enabled, int darkModeValue) {
         this.appName = appName;
@@ -28,6 +30,17 @@ public class AppModel {
         this.appIcon = appIcon;
         this.isEnabled = enabled;
         this.isSystem = isSystemApp;
+    }
+
+    public AppModel(String appName, String packageName, Drawable appIcon, boolean isSystemApp,
+                    CharSequence[] entries, CharSequence[] entryValues, String selectedValue) {
+        this.appName = appName;
+        this.packageName = packageName;
+        this.appIcon = appIcon;
+        this.mEntries = entries;
+        this.mEntryValues = entryValues;
+        this.isSystem = isSystemApp;
+        this.mSelectedValue = selectedValue;
     }
 
     public String getAppName() {
@@ -50,8 +63,32 @@ public class AppModel {
         return darkModeValue;
     }
 
+    public String getSelectedValue() {
+        return mSelectedValue;
+    }
+
+    public void setSelectedValue(String selectedValue) {
+        mSelectedValue = selectedValue;
+    }
+
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public CharSequence[] getEntries() {
+        return mEntries;
+    }
+
+    public void setEntries(CharSequence[] entries) {
+        mEntries = entries;
+    }
+
+    public CharSequence[] getEntryValues() {
+        return mEntryValues;
+    }
+
+    public void setEntryValues(CharSequence[] entryValues) {
+        mEntryValues = entryValues;
     }
 
     public void setDarkModeValue(int value) {
@@ -71,6 +108,7 @@ public class AppModel {
                 ", appIcon=" + appIcon +
                 ", isEnabled=" + isEnabled +
                 ", darkModeValue=" + darkModeValue +
+                ", mSelectedValue='" + mSelectedValue +
                 ", isSystem=" + isSystem +
                 '}';
     }

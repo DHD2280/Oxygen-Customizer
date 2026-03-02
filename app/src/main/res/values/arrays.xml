@@ -383,12 +383,14 @@
         <item>@string/default_value</item>
         <item>@string/notif_always_expand</item>
         <item>@string/notif_always_collapse</item>
+        <item>@string/notif_per_app</item>
     </string-array>
 
     <string-array name="notif_default_expansion_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <!-- Statsubar logo position -->

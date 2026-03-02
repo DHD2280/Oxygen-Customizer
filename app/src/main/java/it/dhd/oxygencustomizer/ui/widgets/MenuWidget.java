@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -85,6 +86,7 @@ public class MenuWidget extends RelativeLayout {
 
         mPopupWindow = new SimpleMenuPopupWindow(popupContext, attrs, R.styleable.OplusMenuPreference_android_popupMenuStyle, popupStyle);
         mPopupWindow.setOnItemClickListener(i -> {
+            Log.d("MenuWidget", "setOnItemClickListener: " + i + " " + mEntries[i] + " " + mEntryValues[i]);
             setSelectedValue(mEntryValues[i]);
             if (mOnSelectedListener != null) {
                 mOnSelectedListener.onSelected(mEntries[i], mEntryValues[i]);

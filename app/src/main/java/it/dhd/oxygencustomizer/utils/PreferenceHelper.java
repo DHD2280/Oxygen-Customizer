@@ -426,6 +426,9 @@ public class PreferenceHelper {
                 return instance.mPreferences.getBoolean("status_bar_custom_clock_color", false);
             }
             // Notification
+            case "notification_per_app" -> {
+                return instance.mPreferences.getString("notificationDefaultExpansion", "0").equals("3");
+            }
             case "statusbar_notification_app_icon_scale" -> {
                 return instance.mPreferences.getBoolean("statusbar_notification_app_icon", false);
             }
