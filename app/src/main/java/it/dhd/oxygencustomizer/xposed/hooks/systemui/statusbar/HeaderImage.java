@@ -18,6 +18,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -49,7 +50,6 @@ import com.bosphere.fadingedgelayout.FadingEdgeLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,8 +61,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -98,6 +97,12 @@ public class HeaderImage extends XposedMods {
     private boolean isResetNeeded = false;
     private final boolean ignore = true;
     private boolean isLandscape = false;
+
+    private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
+        XposedBridge.log(TAG + "mExpandedQsFractionChangeListener: " + fraction);
+        float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
+        setAlpha(alpha);
+    };
 
     public HeaderImage(Context context) {
         super(context);
@@ -212,7 +217,7 @@ public class HeaderImage extends XposedMods {
                                                 isResetNeeded = true;
                                             }
                                             if (expansion >= .20f) {
-                                                if (Build.VERSION.SDK_INT >= 35 && !isSeparateStyle()) {
+                                                if (Build.VERSION.SDK_INT == 35 && !isSeparateStyle()) {
                                                     for (View v : mQsHeaderLayouts) {
                                                         v.setAlpha(1f);
                                                         v.setVisibility(View.VISIBLE);
@@ -227,7 +232,7 @@ public class HeaderImage extends XposedMods {
                                             isFirstExpansionIgnored = true;
                                             isResetNeeded = false;
                                         }
-                                        if (Build.VERSION.SDK_INT >= 35 && !isSeparateStyle()) {
+                                        if (Build.VERSION.SDK_INT == 35 && !isSeparateStyle()) {
                                             for (View v : mQsHeaderLayouts) {
                                                 if (v != null) {
                                                     if (expansion <= .900f) {
@@ -297,6 +302,7 @@ public class HeaderImage extends XposedMods {
                     .before("updateViewState")
                     .run(param -> {
                         // float f2, float f3, int i2
+                        if (Build.VERSION.SDK_INT != 35) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
                         int i2 = (int) param.args[2];
@@ -366,6 +372,7 @@ public class HeaderImage extends XposedMods {
                     .before("updateState")
                     .run(param -> {
                         // float f2, float f3, int i2
+                        if (Build.VERSION.SDK_INT != 35) return;
                         if (!isSeparateStyle()) return;
                         float f2 = (float) param.args[0];
                         float f3 = (float) param.args[1];
@@ -379,6 +386,8 @@ public class HeaderImage extends XposedMods {
                         }
                     });
         }
+
+        ControllersProvider.registerExpandedQsFractionChangeCallback(mExpandedQsFractionChangeListener);
 
     }
 
@@ -439,8 +448,16 @@ public class HeaderImage extends XposedMods {
     }
 
     private void setAlpha(int alpha) {
+        if (mQsHeaderImageViews.isEmpty()) return;
         for (ImageView iv : mQsHeaderImageViews) {
             iv.setImageAlpha(alpha);
+        }
+    }
+
+    private void setAlpha(float alpha) {
+        if (mQsHeaderImageViews.isEmpty()) return;
+        for (ImageView iv : mQsHeaderImageViews) {
+            iv.setAlpha(alpha);
         }
     }
 

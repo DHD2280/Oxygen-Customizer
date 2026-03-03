@@ -48,6 +48,7 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnKeyguardShowing> mKeyguardShowingListeners = new ArrayList<>();
     private final ArrayList<OnStatusBarStateChanged> mStatusBarStateListeners = new ArrayList<>();
     private final ArrayList<ExpandedFractionChangeListener> mExpandedFractionChangeListeners = new ArrayList<>();
+    private final ArrayList<ExpandedQsFractionChangeListener> mExpandedQsFractionChangeListeners = new ArrayList<>();
 
 
     private Object mBluetoothController = null;
@@ -176,6 +177,17 @@ public class ControllersProvider extends XposedMods {
      */
     public static void unRegisterExpandedFractionChangeCallback(ExpandedFractionChangeListener callback) {
         instance.mExpandedFractionChangeListeners.remove(callback);
+    }
+
+    public static void registerExpandedQsFractionChangeCallback(ExpandedQsFractionChangeListener callback) {
+        instance.mExpandedQsFractionChangeListeners.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterExpandedQsFractionChangeCallback(ExpandedQsFractionChangeListener callback) {
+        instance.mExpandedQsFractionChangeListeners.remove(callback);
     }
 
     public static Object getBluetoothController() {
@@ -645,6 +657,11 @@ public class ControllersProvider extends XposedMods {
                     }
                 });
 
+        ReflectedClass OplusQSQuickEntranceComponent = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent");
+        OplusQSQuickEntranceComponent
+                .after("updateState")
+                .run(param -> notifyQsFractionChange((float) param.args[0]));
+
     }
 
     private void getActivityStarter() {
@@ -830,6 +847,15 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
+    public void notifyQsFractionChange(float fraction) {
+        for (ControllersProvider.ExpandedQsFractionChangeListener callback : mExpandedQsFractionChangeListeners) {
+            try {
+                callback.updateState(fraction);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     /**
      * Callbacks for Mobile Data
      */
@@ -891,7 +917,7 @@ public class ControllersProvider extends XposedMods {
     }
 
     /**
-     * Callback for QS Panel fraction change /OOS16
+     * Callback for QS Panel (notification side) fraction change /OOS16
      */
     public interface ExpandedFractionChangeListener {
         void onFractionChanged(float fraction);
@@ -901,6 +927,13 @@ public class ControllersProvider extends XposedMods {
 
         default void onFractionEnd(float fraction) {
         }
+    }
+
+    /**
+     * Callback for QS Panel (QS side) fraction change /OOS16
+     */
+    public interface ExpandedQsFractionChangeListener {
+        void updateState(float fraction);
     }
 
 }
