@@ -55,7 +55,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -99,7 +98,6 @@ public class HeaderImage extends XposedMods {
     private boolean isLandscape = false;
 
     private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
-        XposedBridge.log(TAG + "mExpandedQsFractionChangeListener: " + fraction);
         float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
         setAlpha(alpha);
     };
