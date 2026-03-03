@@ -521,7 +521,6 @@ public class HeaderClock extends XposedMods {
             log("ShadeHeaderController error: " + t.getMessage());
         }
 
-
         ReflectedClass QSSecurityFooterUtilsClass = ReflectedClass.of(
                 "com.android.systemui.qs.QSSecurityFooterUtils",
                 "com.android.systemui.qs.QSSecurityFooter");
