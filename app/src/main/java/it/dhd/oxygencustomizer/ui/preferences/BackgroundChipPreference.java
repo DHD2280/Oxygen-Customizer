@@ -38,17 +38,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceViewHolder;
+import androidx.recyclerview.widget.OplusRecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import it.dhd.oneplusui.appcompat.cardlist.CardListHelper;
+import it.dhd.oneplusui.appcompat.cardlist.CardListSelectedItemLayout;
 import it.dhd.oneplusui.appcompat.seekbar.OplusSlider;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.QsChipLayoutBinding;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
 
-public class BackgroundChipPreference extends DialogPreference {
+public class BackgroundChipPreference extends DialogPreference implements OplusRecyclerView.IOplusDividerDecorationInterface {
 
+    private String mForcePosition = null;
+    private View mItemView, mTitleView;
+    private final int mDividerDefaultHorizontalPadding;
     private BottomSheetDialog bottomSheetDialog;
     private int mAccentColor;
     boolean useGradient;
@@ -75,29 +80,24 @@ public class BackgroundChipPreference extends DialogPreference {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
         chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
+        if (a.hasValue(R.styleable.BackgroundChipPreference_forcePosition)) {
+            mForcePosition = a.getString(R.styleable.BackgroundChipPreference_forcePosition);
+        }
+        this.mDividerDefaultHorizontalPadding = context.getResources().getDimensionPixelSize(R.dimen.preference_divider_default_horizontal_padding);
         a.recycle();
         initResources();
     }
 
     public BackgroundChipPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
-        chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
-        a.recycle();
-        initResources();
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public BackgroundChipPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BackgroundChipPreference);
-        chipStyle = a.getInteger(R.styleable.BackgroundChipPreference_backgroundChipStyle, 0);
-        a.recycle();
-        initResources();
+        this(context, attrs, 0);
     }
 
     public BackgroundChipPreference(@NonNull Context context) {
-        super(context);
-        initResources();
+        this(context, null);
     }
 
     private void initResources() {
@@ -108,7 +108,20 @@ public class BackgroundChipPreference extends DialogPreference {
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        CardListHelper.setItemCardBackground(holder.itemView, CardListHelper.getPositionInGroup(this));
+        mItemView = holder.itemView;
+        mTitleView = holder.findViewById(android.R.id.title);
+        if (mForcePosition != null) {
+            int pos = switch (mForcePosition) {
+                case "top" -> CardListHelper.HEAD;
+                case "middle" -> CardListHelper.MIDDLE;
+                case "bottom" -> CardListHelper.TAIL;
+                case "full" -> CardListHelper.FULL;
+                default -> CardListHelper.NONE;
+            };
+            CardListHelper.setItemCardBackground(holder.itemView, pos);
+        } else {
+            CardListHelper.setItemCardBackground(holder.itemView, CardListHelper.getPositionInGroup(this));
+        }
     }
 
     @Override
@@ -635,4 +648,37 @@ public class BackgroundChipPreference extends DialogPreference {
         bottomSheetDialog.setContentView(binding.getRoot());
         bottomSheetDialog.show();
     }
+
+    @Override
+    public boolean drawDivider() {
+        if (!(this.mItemView instanceof CardListSelectedItemLayout)) {
+            return false;
+        }
+        if (mForcePosition != null) {
+            return mForcePosition.equals("middle") || mForcePosition.equals("top");
+        }
+        int positionInGroup = CardListHelper.getPositionInGroup(this);
+        return positionInGroup == 1 || positionInGroup == 2;
+    }
+
+    @Override
+    public View getDividerEndAlignView() {
+        return null;
+    }
+
+    @Override
+    public int getDividerEndInset() {
+        return this.mDividerDefaultHorizontalPadding;
+    }
+
+    @Override
+    public View getDividerStartAlignView() {
+        return this.mTitleView;
+    }
+
+    @Override
+    public int getDividerStartInset() {
+        return this.mDividerDefaultHorizontalPadding;
+    }
+
 }

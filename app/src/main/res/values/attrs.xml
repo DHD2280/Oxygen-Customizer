@@ -89,6 +89,7 @@
     </declare-styleable>
 
     <declare-styleable name="BackgroundChipPreference">
+        <attr name="forcePosition" />
         <attr name="backgroundChipStyle" format="integer" />
     </declare-styleable>
 
