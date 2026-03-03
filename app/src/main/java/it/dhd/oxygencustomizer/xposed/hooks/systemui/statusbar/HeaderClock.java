@@ -398,27 +398,8 @@ public class HeaderClock extends XposedMods {
                     }
                 });
 
-        ReflectedClass OplusSimpleQSFakeController = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusSimpleQSFakeController");
-        OplusSimpleQSFakeController
-                .after("onViewCreated")
-                .run(param -> {
-                    PanelAnimationEx panelAnimationEx = (PanelAnimationEx) getObjectField(param.thisObject, "panelAnimationEx");
-                    if (panelAnimationEx == null) return;
-                    if (panelAnimationEx.getUseLayeredAnimation()) {
-                        panelAnimationEx.getPanelExpandFraction().addCallback(this.fractionChangeListener);
-                    }
-                });
-        OplusSimpleQSFakeController
-                .after("onDestroy")
-                .run(param -> {
-                    PanelAnimationEx panelAnimationEx = (PanelAnimationEx) getObjectField(param.thisObject, "panelAnimationEx");
-                    if (panelAnimationEx == null) return;
-                    if (panelAnimationEx.getUseLayeredAnimation()) {
-                        panelAnimationEx.getPanelExpandFraction().removeCallback(this.fractionChangeListener);
-                    }
-                });
-
-        ReflectedClass OplusClockExImpl = ReflectedClass.of("com.oplus.systemui.common.clock.OplusClockExImpl",
+        ReflectedClass OplusClockExImpl = ReflectedClass.of(
+                "com.oplus.systemui.common.clock.OplusClockExImpl",
                 "com.oplusos.systemui.ext.BaseClockExt");
 
         OplusClockExImpl
