@@ -79,8 +79,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.TextUtilsCompat;
 
-import com.android.systemui.panelanimation.PanelAnimationEx;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -464,7 +462,7 @@ public class HeaderClock extends XposedMods {
         OplusClockExImpl
                 .before("setTextWithRedOneStyle")
                 .run(param -> {
-                    if (!isOOS1501() && !(Build.VERSION.SDK_INT < 36)) return;
+                    if (!isOOS1501() && Build.VERSION.SDK_INT < 36) return;
                     boolean mIsDateTimePanel = false;
                     if (isOOS1501() || Build.VERSION.SDK_INT >= 36) {
                         mIsDateTimePanel = getBooleanField(param.thisObject, "mIsDateTimePanel");
@@ -1184,13 +1182,6 @@ public class HeaderClock extends XposedMods {
                 null
         );
     }
-
-    private final PanelAnimationEx.ExpandedFractionChangeListener fractionChangeListener = fraction -> {
-        if (!showHeaderClock) return;
-        float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
-        View v = getQsClockContainer(QS_CLOCK_NOTIF_CONTAINER);
-        v.setAlpha(alpha);
-    };
 
 
     class ClickListener implements View.OnClickListener {
