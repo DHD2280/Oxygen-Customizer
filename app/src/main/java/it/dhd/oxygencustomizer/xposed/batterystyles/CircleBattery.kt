@@ -89,7 +89,7 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
 
     override fun setColors(fgColor: Int, bgColor: Int, singleToneColor: Int) {
         mFGColor = fgColor
-        mBoltPaint.setColor(mFGColor)
+        mBoltPaint.setColor(bgColor)
         mFramePaint.setColor(bgColor)
         mTextPaint.setColor(mFGColor)
         initColors()
@@ -118,7 +118,7 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
         mPowerSaveColor = if (customBlendColor && powerSaveFillColor != Color.BLACK) {
             powerSaveFillColor
         } else {
-            getColorAttrDefaultColor(android.R.attr.colorError, mContext)
+            -0x5b00
         }
 
         @ColorInt val fillColor = customFillColor
