@@ -1255,6 +1255,11 @@ public class PreferenceHelper {
                     instance.mPreferences.getBoolean(EDGE_LIGHT_ENABLED, false) &&
                             instance.mPreferences.getBoolean(EDGE_LIGHT_RETICK, false);
 
+            // Sleep on flat
+            case "FlatStandbyTime",
+                 "SleepOnFlatRespectWakeLock" ->
+                    instance.mPreferences.getBoolean("SleepOnFlatScreen", false);
+
             case "fix_lag_force_all_apps" ->
                     instance.mPreferences.getBoolean("fix_lag_switch", false);
             case "fix_lag_app_chooser" ->
