@@ -22,9 +22,7 @@ import androidx.core.graphics.PathParser
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_CIRCLE
 import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.BATTERY_STYLE_DOTTED_CIRCLE
-import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_BLEND_COLOR
 import it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_STYLE
-import it.dhd.oxygencustomizer.utils.Prefs.getBoolean
 import it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs
 import it.dhd.oxygencustomizer.xposed.utils.AlphaRefreshedPaint
 import kotlin.math.roundToInt
@@ -97,12 +95,6 @@ open class CircleBattery(private val mContext: Context, frameColor: Int) : Batte
     }
 
     private fun initColors() {
-        customBlendColor = try {
-            Xprefs?.getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false) ?: false
-        } catch (ignored: Throwable) {
-            getBoolean(CUSTOM_BATTERY_BLEND_COLOR, false)
-        }
-
         mChargingColor = if (customBlendColor && chargingColor != Color.BLACK) {
             chargingColor
         } else {
