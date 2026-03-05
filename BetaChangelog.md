@@ -1,3 +1,31 @@
+**beta-206**  
+- Fixed QS Widgets for OOS16  
+- Fixed Red One customization in Header Clock for OOS16  
+- Fixed Header Image visibility on OOS16  
+- Added per-app notification expansion  
+- Fixed Header Clock on OOS16  
+- Fixed Depth Wallpaper for OOS16  
+- Fixed Notification Style on OOS16  
+- Fixed Caffeine Tile on Split QS for OOS16  
+- Fixed qs tile colors for OOS16  
+- Fixed custom qs menu on OOS16  
+- Fixed hide SOS in lockscreen for OOS16  
+- Fixed remove lockscreen affordance on OOS16  
+- Fixed issues with ColorOS Calendar and Clock icons for OOS16  
+- Fixed media action in Now Bar Music on OOS16  
+- Added the ability to have more items on the launcher dock  
+- Fixed volume panel slider color for OOS16  
+- Added replace launcher lock with kill for OOS16  
+- Fixed launcher grid for OOS16  
+- include banner in ksu module  
+- Fixed statusbar temperature for OOS16  
+- Fixed statusbar clock on OOS16  
+- Added statusbar clock extra padding  
+- Fixed Pulse for OOS16  
+- Fixed album art color for OOS16  
+- Fixed MEMC Enhancer for OOS16  
+- Fixed separate qs customizations for OOS16  
+  
 **beta-205**  
 - Fixed clock on OOS15.0.1  
 - Fixed lockscreen peek notifications (OOS15)  
