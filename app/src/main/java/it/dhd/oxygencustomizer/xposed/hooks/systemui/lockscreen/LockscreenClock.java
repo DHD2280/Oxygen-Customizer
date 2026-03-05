@@ -125,7 +125,7 @@ public class LockscreenClock extends XposedMods {
     private int topMargin, bottomMargin, bottomAodMargin;
     private float clockScale;
     private int lineHeight;
-    private boolean customFontEnabled;
+    private boolean customFontEnabled = false;
     private String customName, customDeviceName;
     private boolean useCustomUserImage;
     private boolean useCustomImage;
