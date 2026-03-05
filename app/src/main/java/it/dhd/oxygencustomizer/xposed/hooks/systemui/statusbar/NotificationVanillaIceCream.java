@@ -84,6 +84,14 @@ public class NotificationVanillaIceCream extends XposedMods {
                     param.setResult(d);
                 });
 
+        ReflectedClass FullScreenBannerContainer = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.interruption.fullscreenbanner.view.FullScreenBannerContainer");
+        FullScreenBannerContainer
+                .before("onViewAttachedToWindow")
+                .run(nullReturner);
+        FullScreenBannerContainer
+                .before("onViewDetachedFromWindow")
+                .run(nullReturner);
+
     }
 
     @Override
