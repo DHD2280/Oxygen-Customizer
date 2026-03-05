@@ -205,7 +205,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
         setId(generateViewId());
         loadColors();
-
+        setClickable(true);
+        setFocusable(true);
         setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -222,12 +223,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
+        mContainer.setClickable(true);
+        mContainer.setFocusable(true);
 
         mViewPager = new ViewPager(mContext);
         mViewPager.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
+        mViewPager.setClickable(true);
+        mViewPager.setFocusable(true);
 
         mContainer.addView(mViewPager);
         addView(mContainer);
