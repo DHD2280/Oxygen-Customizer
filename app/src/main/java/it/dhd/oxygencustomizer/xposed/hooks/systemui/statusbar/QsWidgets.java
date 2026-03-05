@@ -50,12 +50,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
@@ -69,6 +71,10 @@ public class QsWidgets extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     public Object mActivityStarter = null;
     private ViewGroup mOplusQsMediaView = null;
+    private float mDownX, mDownY;
+    private boolean mIsDragging;
+    private final int TOUCH_SLOP = ViewConfiguration.get(mContext).getScaledTouchSlop();
+    private boolean mIsTouchOnWidgets;
     private Object mOplusPanelPagerController = null; // separate view pager controller
     private boolean mQsWidgetsEnabled = false;
     private String mQsWidgetsList = "media";
@@ -271,10 +277,12 @@ public class QsWidgets extends XposedMods {
             OplusPanelViewPagerController
                     .before("onScrollX")
                     .run(param -> {
-                        Object separateQSManager = getObjectField(param.thisObject, "separateQSManager");
-                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        if (!QsStyleObserver.isSeparateStyle()) return;
-                        if (!isQsFullyExpanded) return;
+                        MotionEvent event = (MotionEvent) param.args[1];
+                        hookTouchHandler(param, event, "onScrollX");
+                    });
+            OplusPanelViewPagerController
+                    .before("onScrollY")
+                    .run(param -> {
                         MotionEvent event = (MotionEvent) param.args[1];
                         hookTouchHandler(param, event, "onScrollX");
                     });
@@ -282,30 +290,37 @@ public class QsWidgets extends XposedMods {
             TouchHandler
                     .before("onTouchEvent")
                     .run(param -> {
-                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
-                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        if (!QsStyleObserver.isSeparateStyle()) return;
-                        if (!isQsFullyExpanded) return;
                         MotionEvent event = (MotionEvent) param.args[0];
                         hookTouchHandler(param, event, "onTouchEvent");
                     });
             TouchHandler
                     .before("onInterceptTouchEvent")
                     .run(param -> {
-                        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
-                        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
-                        if (!QsStyleObserver.isSeparateStyle()) return;
-                        if (!isQsFullyExpanded) return;
+                        XposedBridge.log("QsWidgets: onInterceptTouchEvent");
                         MotionEvent event = (MotionEvent) param.args[0];
                         hookTouchHandler(param, event, "onInterceptTouchEvent");
                     });
 
+            ReflectedClass OplusSeparateQSManager = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusSeparateQSManager");
+            OplusSeparateQSManager
+                    .before("collapseQSPanel")
+                    .run(param -> {
+                        if (!mQsWidgetsEnabled) return;
+
+                        if (mIsTouchOnWidgets) {
+                            param.setResult(null);
+                        }
+                    });
         }
 
     }
 
     private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
         if (!mQsWidgetsEnabled) return;
+        Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
+        boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
+        if (!QsStyleObserver.isSeparateStyle()) return;
+        if (!isQsFullyExpanded) return;
         boolean isKeyguardVisible = (boolean) callMethod(mOplusPanelPagerController, "isKeyguardVisible");
         log("QsWidgets - " + methodName + " - isKeyguardVisible: " + isKeyguardVisible);
         if (isKeyguardVisible) return;
@@ -318,16 +333,102 @@ public class QsWidgets extends XposedMods {
         float x = event.getRawX();
         float y = event.getRawY();
 
-        if (panelView.contains((int) x, (int) y)) {
-            ViewGroup parent = (ViewGroup) mOplusQsMediaView.getParent();
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                parent.requestDisallowInterceptTouchEvent(true);
-            }
+        mOplusQsMediaView.getLocationOnScreen(location);
+        boolean isTouchOnWidgets = x >= location[0] && x <= location[0] + mOplusQsMediaView.getWidth() &&
+                y >= location[1] && y <= location[1] + mOplusQsMediaView.getHeight();
 
-            QsControlsView.getInstance().getPager().dispatchTouchEvent(event);
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                param.setResult(true);
+        ViewGroup parent = (ViewGroup) mOplusQsMediaView.getParent();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mIsTouchOnWidgets = isTouchOnWidgets;
+                mDownX = x;
+                mDownY = y;
+                mIsDragging = false;
+
+                if (mIsTouchOnWidgets) {
+                    setDownExpandedNone();
+                    parent.requestDisallowInterceptTouchEvent(true);
+
+                    MotionEvent translatedEvent = MotionEvent.obtain(event);
+                    translatedEvent.setLocation(x - location[0], y - location[1]);
+                    QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
+                    translatedEvent.recycle();
+
+                    param.setResult(true);
+                    return;
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (mIsTouchOnWidgets) {
+                    float dx = Math.abs(x - mDownX);
+                    float dy = Math.abs(y - mDownY);
+
+                    if (dx > TOUCH_SLOP || dy > TOUCH_SLOP) {
+                        mIsDragging = true;
+                    }
+
+                    MotionEvent translatedEvent = MotionEvent.obtain(event);
+                    translatedEvent.setLocation(x - location[0], y - location[1]);
+
+                    if (dy > TOUCH_SLOP) {
+                        // vertical scroll
+                        translatedEvent.recycle();
+                        param.setResult(true);
+                        return;
+                    } else {
+                        QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
+                    }
+
+                    translatedEvent.recycle();
+                    param.setResult(true);
+                    return;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (mIsTouchOnWidgets) {
+                    float dx = Math.abs(x - mDownX);
+                    float dy = Math.abs(y - mDownY);
+
+                    if (!mIsDragging && dx < TOUCH_SLOP && dy < TOUCH_SLOP) {
+                        // tap
+                        MotionEvent translatedUp = MotionEvent.obtain(event);
+                        translatedUp.setLocation(x - location[0], y - location[1]);
+                        QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedUp);
+                        translatedUp.recycle();
+                        QsControlsView.getInstance().getPager().performClick();
+                    } else {
+                        // swipe
+                        MotionEvent translatedEvent = MotionEvent.obtain(event);
+                        translatedEvent.setLocation(x - location[0], y - location[1]);
+                        QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
+                        translatedEvent.recycle();
+                    }
+
+                    parent.requestDisallowInterceptTouchEvent(false);
+                    mIsTouchOnWidgets = false;
+                    mIsDragging = false;
+
+                    param.setResult(true);
+                    return;
+                }
+                break;
+        }
+    }
+
+    private void setDownExpandedNone() {
+        if (Build.VERSION.SDK_INT != 36) return;
+        try {
+            Object downExpanded = getObjectField(mOplusPanelPagerController, "downExpanded");
+            if (downExpanded != null) {
+                Object noneValue = Enum.valueOf((Class<Enum>) downExpanded.getClass(), "NONE");
+                setObjectField(mOplusPanelPagerController, "downExpanded", noneValue);
             }
+        } catch (Exception e) {
+            XposedBridge.log("QsWidgets: Error setting downExpanded: " + e);
         }
     }
 
