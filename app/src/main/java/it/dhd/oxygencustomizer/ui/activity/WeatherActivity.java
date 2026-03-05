@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.ui.activity;
 
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
-
 import android.content.ContentValues;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -175,6 +173,10 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
 
     private void queryAndUpdateWeather() {
         stopProgress();
+        if (!mWeatherClient.isOmniJawsEnabled()) {
+            setDisabled();
+            return;
+        }
         mWeatherClient.queryWeather();
         if (mWeatherClient.getWeatherInfo().hourlyForecasts.size() >= 2) {
             mForecastHourAdapter.updateList(mWeatherClient.getWeatherInfo().hourlyForecasts);
@@ -190,6 +192,10 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
             binding.dailyForecastCard.setVisibility(View.GONE);
         }
         updateViews();
+    }
+
+    private void setDisabled() {
+        binding.currentTemperature.setText(R.string.omnijaws_service_disabled);
     }
 
     private void forceRefresh() {
