@@ -1,12 +1,18 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -65,6 +71,22 @@ public class NotificationVanillaIceCream extends XposedMods {
         NotificationChildrenContainerExtImp
                 .before("getHeaderBlurDrawable")
                 .run(nullReturner);
+        NotificationChildrenContainerExtImp
+                .before("getHeaderBgDrawable")
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT != 36) return;
+                    Drawable colorDrawable = new ColorDrawable(mContext.getColor(mContext.getResources().getIdentifier(
+                            "notification_material_background_color_compass",
+                            "color",
+                            mContext.getPackageName()
+                    )));
+                    Drawable header = new HeaderDrawable(
+                            colorDrawable,
+                            (int) callMethod(param.thisObject, "getStackedNotificationMaskColor")
+                    );
+                    param.setResult(header);
+
+                });
 
         ReflectedClass OplusCloseAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.notification.OplusCloseAllController");
         OplusCloseAllController
@@ -98,4 +120,41 @@ public class NotificationVanillaIceCream extends XposedMods {
     public boolean listensTo(String packageName) {
         return listenPackage.equals(packageName);
     }
+
+    public static class HeaderDrawable extends Drawable {
+
+        private final Drawable drawable;
+        private final int maskColor;
+
+        public HeaderDrawable(Drawable drawable, int maskColor) {
+            this.drawable = drawable;
+            this.maskColor = maskColor;
+        }
+
+        @Override
+        public void draw(@NonNull Canvas canvas) {
+            this.drawable.setBounds(getBounds());
+            this.drawable.draw(canvas);
+            if (maskColor != 0) {
+                canvas.drawColor(maskColor);
+            }
+
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+            drawable.setAlpha(alpha);
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter colorFilter) {
+            drawable.setColorFilter(colorFilter);
+        }
+
+        @Override
+        public int getOpacity() {
+            return drawable.getOpacity();
+        }
+    }
+
 }
