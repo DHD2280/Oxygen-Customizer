@@ -15,8 +15,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.systemui.panelanimation.PanelAnimationEx;
-
 import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -47,7 +45,6 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnDozingChanged> mDozingChangedListeners = new ArrayList<>();
     private final ArrayList<OnKeyguardShowing> mKeyguardShowingListeners = new ArrayList<>();
     private final ArrayList<OnStatusBarStateChanged> mStatusBarStateListeners = new ArrayList<>();
-    private final ArrayList<ExpandedFractionChangeListener> mExpandedFractionChangeListeners = new ArrayList<>();
     private final ArrayList<ExpandedQsFractionChangeListener> mExpandedQsFractionChangeListeners = new ArrayList<>();
 
 
@@ -168,17 +165,6 @@ public class ControllersProvider extends XposedMods {
         instance.mStatusBarStateListeners.remove(callback);
     }
 
-    public static void registerExpandedFractionChangeCallback(ExpandedFractionChangeListener callback) {
-        instance.mExpandedFractionChangeListeners.add(callback);
-    }
-
-    /**
-     * @noinspection unused
-     */
-    public static void unRegisterExpandedFractionChangeCallback(ExpandedFractionChangeListener callback) {
-        instance.mExpandedFractionChangeListeners.remove(callback);
-    }
-
     public static void registerExpandedQsFractionChangeCallback(ExpandedQsFractionChangeListener callback) {
         instance.mExpandedQsFractionChangeListeners.add(callback);
     }
@@ -261,23 +247,6 @@ public class ControllersProvider extends XposedMods {
     public static Object getHotspotController() {
         return instance.mHotspotController;
     }
-
-    private final PanelAnimationEx.ExpandedFractionChangeListener fractionChangeListener = new PanelAnimationEx.ExpandedFractionChangeListener() {
-        @Override
-        public void onFractionChanged(float fraction) {
-            notifyFractionChanged(fraction);
-        }
-
-        @Override
-        public void onFractionEnd(float fraction) {
-            notifyFractionEnd(fraction);
-        }
-
-        @Override
-        public void onBlurFractionChange() {
-            notifyBlurFractionChange();
-        }
-    };
 
     @Override
     public void updatePrefs(String... Key) {}
@@ -637,26 +606,6 @@ public class ControllersProvider extends XposedMods {
             log("HotspotCallback error: " + t.getMessage());
         }
 
-        ReflectedClass OplusSimpleQSFakeController = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusSimpleQSFakeController");
-        OplusSimpleQSFakeController
-                .after("onViewCreated")
-                .run(param -> {
-                    PanelAnimationEx panelAnimationEx = (PanelAnimationEx) getObjectField(param.thisObject, "panelAnimationEx");
-                    if (panelAnimationEx == null) return;
-                    if (panelAnimationEx.getUseLayeredAnimation()) {
-                        panelAnimationEx.getPanelExpandFraction().addCallback(this.fractionChangeListener);
-                    }
-                });
-        OplusSimpleQSFakeController
-                .after("onDestroy")
-                .run(param -> {
-                    PanelAnimationEx panelAnimationEx = (PanelAnimationEx) getObjectField(param.thisObject, "panelAnimationEx");
-                    if (panelAnimationEx == null) return;
-                    if (panelAnimationEx.getUseLayeredAnimation()) {
-                        panelAnimationEx.getPanelExpandFraction().removeCallback(this.fractionChangeListener);
-                    }
-                });
-
         ReflectedClass OplusQSQuickEntranceComponent = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent");
         OplusQSQuickEntranceComponent
                 .after("updateState")
@@ -820,33 +769,6 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
-    private void notifyFractionChanged(float fraction) {
-        for (ControllersProvider.ExpandedFractionChangeListener callback : mExpandedFractionChangeListeners) {
-            try {
-                callback.onFractionChanged(fraction);
-            } catch (Throwable ignored) {
-            }
-        }
-    }
-
-    private void notifyFractionEnd(float fraction) {
-        for (ControllersProvider.ExpandedFractionChangeListener callback : mExpandedFractionChangeListeners) {
-            try {
-                callback.onFractionEnd(fraction);
-            } catch (Throwable ignored) {
-            }
-        }
-    }
-
-    private void notifyBlurFractionChange() {
-        for (ControllersProvider.ExpandedFractionChangeListener callback : mExpandedFractionChangeListeners) {
-            try {
-                callback.onBlurFractionChange();
-            } catch (Throwable ignored) {
-            }
-        }
-    }
-
     public void notifyQsFractionChange(float fraction) {
         for (ControllersProvider.ExpandedQsFractionChangeListener callback : mExpandedQsFractionChangeListeners) {
             try {
@@ -914,19 +836,6 @@ public class ControllersProvider extends XposedMods {
      */
     public interface OnStatusBarStateChanged {
         void onStatusBarStateChanged(int state);
-    }
-
-    /**
-     * Callback for QS Panel (notification side) fraction change /OOS16
-     */
-    public interface ExpandedFractionChangeListener {
-        void onFractionChanged(float fraction);
-
-        default void onBlurFractionChange() {
-        }
-
-        default void onFractionEnd(float fraction) {
-        }
     }
 
     /**

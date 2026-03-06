@@ -24,7 +24,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.MemcEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.OtaCard;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AdaptivePlayback;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.advancedreboot.AdvancedReboot;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.CaffeineTile;
@@ -35,6 +34,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PulseViewHook;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
@@ -43,6 +43,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.VolumePanel;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.advancedreboot.AdvancedReboot;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodClock;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodDepthSubject;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.aod.AodEdgeLight;
@@ -109,6 +110,9 @@ public class ModPacks {
 
                     // Controllers Provider
                     modPacks.add(ControllersProvider.class);
+                    if (Build.VERSION.SDK_INT >= 36) {
+                        modPacks.add(PanelAnimationListener.class);
+                    }
 
                     // Notification Listener
                     modPacks.add(SystemNotificationListener.class);
