@@ -20,6 +20,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import android.util.ArrayMap;
 import android.view.Gravity;
@@ -46,7 +47,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class StatusbarNotification extends XposedMods {
@@ -385,11 +386,12 @@ public class StatusbarNotification extends XposedMods {
                     setupButtons();
                 });
 
-        ControllersProvider.registerExpandedFractionChangeCallback(mExpandedFractionChangeListener);
+        if (Build.VERSION.SDK_INT >= 36)
+            PanelAnimationListener.registerExpandedFractionChangeCallback(mExpandedFractionChangeListener);
 
     }
 
-    private final ControllersProvider.ExpandedFractionChangeListener mExpandedFractionChangeListener = fraction -> {
+    private final PanelAnimationListener.ExpandedFractionChangeListener mExpandedFractionChangeListener = fraction -> {
         if (!mShowButtons) return;
         float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
         mNotificationButtonsContainer.setAlpha(alpha);
