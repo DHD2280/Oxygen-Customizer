@@ -75,6 +75,7 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .before("getHeaderBgDrawable")
                 .run(param -> {
                     if (Build.VERSION.SDK_INT != 36) return;
+                    if (!hasOverlays) return;
                     Drawable colorDrawable = new ColorDrawable(mContext.getColor(mContext.getResources().getIdentifier(
                             "notification_material_background_color_compass",
                             "color",
