@@ -7,8 +7,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 
 @SuppressLint("ViewConstructor")
@@ -33,14 +31,12 @@ public class QsCustomAppWidgetView extends BaseQsStaticView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.backgroundProxy.onBackgroundAttach();
-        if (!mSettingsInterface) PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.backgroundProxy.onBackgroundDetach();
-        if (!mSettingsInterface) PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
     public void onSizeChanged(int newWidth) {

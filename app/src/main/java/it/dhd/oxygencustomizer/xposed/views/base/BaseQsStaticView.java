@@ -15,6 +15,7 @@ import com.android.systemui.animation.view.LaunchableLinearLayout;
 import com.android.systemui.qs.OplusQuickSettingsEx;
 import com.android.systemui.qs.personality.PersonalityManagerEx;
 import com.oplus.systemui.blur.GaussBlurUtils;
+import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
 import com.oplus.systemui.qs.base.util.QsColorUtil;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseQsStaticView extends LaunchableLinearLayout implements QsStaticViewInfoProvider {
 
     private Context mContext;
+
+    protected boolean mSettingsInterface;
     protected final QsViewBackgroundProxy backgroundProxy;
 
     public BaseQsStaticView(@Nullable Context context) {
@@ -87,6 +90,26 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         reloadBackground();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (!mSettingsInterface) {
+            attachPressFeedback(this, this);
+        }
+    }
+
+    private void attachPressFeedback(View view, View parent) {
+        try {
+            PressFeedbackHelper.attachPressFeedback(view, parent);
+        } catch (Throwable ignored) {
+        } //method not found
+        try {
+            PressFeedbackHelper.QsTilePressFeedback qsTilePressFeedback = new PressFeedbackHelper.QsTilePressFeedback(this);
+            PressFeedbackHelper.attachPressFeedback(this, qsTilePressFeedback);
+        } catch (Throwable ignored) {
+        }
     }
 
 }

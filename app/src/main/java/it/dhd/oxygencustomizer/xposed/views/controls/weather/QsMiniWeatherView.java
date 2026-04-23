@@ -7,8 +7,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 
 /**
@@ -18,7 +16,6 @@ import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 public class QsMiniWeatherView extends BaseQsStaticView {
 
     private final WeatherBinder mWeatherBinder;
-    private final boolean mSettingsInterface;
 
     public QsMiniWeatherView(@NonNull Context context, boolean settingsInterface) {
         super(context);
@@ -46,9 +43,6 @@ public class QsMiniWeatherView extends BaseQsStaticView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.backgroundProxy.onBackgroundAttach();
-        if (!mSettingsInterface) {
-            PressFeedbackHelper.attachPressFeedback(this, this);
-        }
         mWeatherBinder.enableWeatherUpdates();
     }
 

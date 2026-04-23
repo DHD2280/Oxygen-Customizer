@@ -4,12 +4,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
 import org.jetbrains.annotations.Nullable;
 
-import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 
 /**
  * OOS 15 custom Media Tile
@@ -33,7 +31,6 @@ public class QsMediaTileView extends BaseQsStaticView implements QsMediaTileI {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.backgroundProxy.onBackgroundAttach();
-        PressFeedbackHelper.attachPressFeedback(this, this);
     }
 
     @Override

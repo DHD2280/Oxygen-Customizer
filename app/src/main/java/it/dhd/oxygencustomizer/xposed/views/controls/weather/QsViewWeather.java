@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.view.ViewGroup;
 
-import com.oplus.systemui.qs.base.tile.PressFeedbackHelper;
-
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 
 /**
@@ -38,9 +36,6 @@ public class QsViewWeather extends BaseQsStaticView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.backgroundProxy.onBackgroundAttach();
-        if (!mSettingsInterface) {
-            PressFeedbackHelper.attachPressFeedback(this, this);
-        }
         mWeatherBinder.enableWeatherUpdates();
     }
 
