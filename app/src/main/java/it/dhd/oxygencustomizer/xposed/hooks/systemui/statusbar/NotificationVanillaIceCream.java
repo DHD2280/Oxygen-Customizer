@@ -97,6 +97,17 @@ public class NotificationVanillaIceCream extends XposedMods {
                     Drawable d = (Drawable) param.args[1];
                     param.setResult(d);
                 });
+        OplusCloseAllController
+                .before("updatePlatformBlurDrawable")
+                .run(nullReturner);
+        OplusCloseAllController
+                .before("updatePlatformBlurDrawable$default")
+                .run(param -> {
+                    if (hasOverlays) {
+                        param.setResult(null);
+                        param.setThrowable(null);
+                    }
+                });
 
         ReflectedClass ClearAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.clearall.ClearAllController");
         ClearAllController
@@ -105,6 +116,17 @@ public class NotificationVanillaIceCream extends XposedMods {
                     if (Build.VERSION.SDK_INT < 36) return;
                     Drawable d = (Drawable) param.args[0];
                     param.setResult(d);
+                });
+        ClearAllController
+                .before("updatePlatformBlurDrawable")
+                .run(nullReturner);
+        ClearAllController
+                .before("updatePlatformBlurDrawable$default")
+                .run(param -> {
+                    if (hasOverlays) {
+                        param.setResult(null);
+                        param.setThrowable(null);
+                    }
                 });
 
         ReflectedClass FullScreenBannerContainer = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.interruption.fullscreenbanner.view.FullScreenBannerContainer");
