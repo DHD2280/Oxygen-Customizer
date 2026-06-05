@@ -1,6 +1,7 @@
 package com.oplus.systemui.qs.base.widget
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import com.oplusos.systemui.common.blurability.BlurConfig
 import com.oplusos.systemui.common.blurability.MixColor
@@ -33,7 +34,7 @@ class QsViewBackgroundKt {
         }
 
         @JvmStatic
-        fun createMixColorDrawableForQsView(BackgroundView: View, mixColor: MixColor?): Any {
+        fun createMixColorDrawableForQsView(BackgroundView: View, mixColor: MixColor?): Drawable {
             throw UnsupportedOperationException("Stub!")
         }
 

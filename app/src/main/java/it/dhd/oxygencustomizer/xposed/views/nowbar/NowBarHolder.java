@@ -269,12 +269,16 @@ public class NowBarHolder extends LinearLayout {
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
         if (Build.VERSION.SDK_INT >= 35) {
-            Drawable blurred = (Drawable) QsViewBackgroundKt.createMixColorDrawableForQsView(
-                    mAutoBlurredBackground,
-                    new MixColor(4, Color.parseColor("#1a525252"), Color.parseColor("#40262626"))
-            );
-            mAutoBlurredBackground.setBackground(blurred);
-            mBlurredBackground.setBackground(null);
+            try {
+                Drawable blurred = QsViewBackgroundKt.createMixColorDrawableForQsView(
+                        mAutoBlurredBackground,
+                        new MixColor(4, Color.parseColor("#1a525252"), Color.parseColor("#40262626"))
+                );
+                mAutoBlurredBackground.setBackground(blurred);
+                mBlurredBackground.setBackground(null);
+            } catch (Throwable ignored) {
+                mBlurredBackground.setBackground(background);
+            }
         } else {
             mBlurredBackground.setBackground(background);
         }
