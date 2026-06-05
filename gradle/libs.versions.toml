@@ -1,17 +1,17 @@
 [versions]
 # Plugins
 agp = "9.0.1"
-kandroid = "2.3.10"
-kapt = "2.3.10"
+kandroid = "2.4.0"
+kapt = "2.4.0"
 
 # Magisk libsu
 libsu = "5.2.2"
 
 # AndroidX Libraries
 appcompat = "1.7.1"
-navigation = "2.9.7"
+navigation = "2.9.8"
 recyclerview = "1.4.0"
-work = "2.11.1"
+work = "2.11.2"
 concurrent = "1.3.0"
 biometric = "1.1.0"
 splashscreen = "1.2.0"
@@ -21,7 +21,7 @@ constraintlayout = "2.2.1"
 palette = "1.0.0"
 
 # Google Libraries
-material = "1.13.0"
+material = "1.14.0"
 mlkit-segmentation = "16.0.0-beta1"
 play-services-base = "18.10.0"
 flexbox = "3.0.0"
@@ -29,25 +29,25 @@ flexbox = "3.0.0"
 # External Libraries
 colorpicker = "1.1.0"
 lottie = "6.7.1"
-glide = "5.0.5"
-glide-compiler = "5.0.5"
+glide = "5.0.7"
+glide-compiler = "5.0.7"
 fadingedgelayout = "1.0.0"
 eventbus = "3.3.1"
 remotepreferences = "0.8"
 markdownview = "0.19.0"
-bcpkix = "1.83"
+bcpkix = "1.84"
 zip4j = "2.11.6"
 dotsindicator = "5.1.0"
 persian-date-time = "4.2.1"
 okhttp = "5.3.2"
 image-cropper = "4.7.0"
 commons-text = "1.15.0"
-oneplus-ui = "2.0.0"
+oneplus-ui = "2.0.2"
 lsposed-hiddenapi = "6.1"
-gson = "2.13.2"
-core-ktx = "1.17.0"
+gson = "2.14.0"
+core-ktx = "1.19.0"
 dexplore = "1.4.5"
-guava = "33.5.0-android"
+guava = "33.6.0-android"
 
 [libraries]
 
