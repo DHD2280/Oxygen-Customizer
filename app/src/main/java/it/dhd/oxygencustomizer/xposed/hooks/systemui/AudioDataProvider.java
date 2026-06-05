@@ -56,7 +56,7 @@ public class AudioDataProvider extends XposedMods {
     private WallpaperColors mWallpaperColors = null;
     private Class<?> mColorSchemeClass = null;
     private Object mCurrentColorScheme = null;
-    private Class<?> mOplusMediaControllerImpl = null;
+    private Class<?> mOplusMediaControllerImpl = null, mOp;
     public Object mMediaData = null;
 
     private final Handler handler = new Handler();
@@ -72,7 +72,7 @@ public class AudioDataProvider extends XposedMods {
         @Override
         public void onMetadataChanged(MediaMetadata metadata) {
             try {
-                mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+                mMediaData = instance.selectPlayingOnes();
             } catch (Throwable ignored) {}
             setArtWork();
             if (mMediaMetadata != metadata) {
@@ -84,7 +84,7 @@ public class AudioDataProvider extends XposedMods {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
             try {
-                mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+                mMediaData = instance.selectPlayingOnes();
             } catch (Throwable ignored) {}
             instance.onPlaybackStateChanged();
             if (mPlaybackState == PlaybackState.STATE_NONE) {
@@ -199,7 +199,9 @@ public class AudioDataProvider extends XposedMods {
             mOplusMediaControllerImpl = OplusQsMediaUtil.getClazz();
         } catch (Throwable ignored) {}
 
-        ReflectedClass OplusMediaControllerImpl = ReflectedClass.of("com.oplus.systemui.media.OplusMediaControllerImpl");
+        ReflectedClass OplusMediaControllerImpl = ReflectedClass.of(
+                "com.oplus.systemui.media.controls.pipeline.OplusMediaDataManagerExImpl", // OOS 16.0.7+
+                "com.oplus.systemui.media.OplusMediaControllerImpl");
         OplusMediaControllerImpl
                 .after("onMediaDataLoaded")
                 .run(param -> {
@@ -207,15 +209,24 @@ public class AudioDataProvider extends XposedMods {
                     onMediaMetadataChanged();
                     setArtWork();
                 });
+
+        ReflectedClass.ReflectionConsumer mediaDataRemove = param -> {
+            try {
+                mMediaData = instance.selectPlayingOnes();
+            } catch (Throwable ignored) {
+            }
+            onMediaMetadataChanged();
+            mArt = null;
+        };
+
         OplusMediaControllerImpl
                 .after("dispatchMediaDataOnRemove")
-                .run(param -> {
-                    try {
-                        mMediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
-                    } catch (Throwable ignored) {}
-                    onMediaMetadataChanged();
-                    mArt = null;
-                });
+                .run(mediaDataRemove);
+
+        ReflectedClass OplusMediaDataFilterExImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.media.OplusMediaDataFilterExImpl"); //OOS16.0.7+
+        OplusMediaDataFilterExImpl
+                .after("dispatchMediaDataOnRemove")
+                .run(mediaDataRemove);
 
     }
 
@@ -237,7 +248,7 @@ public class AudioDataProvider extends XposedMods {
         MediaMetadata mediaMetadata = instance.mMediaMetadata;
         Object MediaData = null;
         try {
-            MediaData = callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+            MediaData = selectPlayingOnes();
         } catch (Throwable ignored) {}
         Bitmap art = null;
         if (mediaMetadata != null) {
@@ -299,7 +310,7 @@ public class AudioDataProvider extends XposedMods {
 
     public static void refreshMediaData() {
         try {
-            instance.mMediaData = callStaticMethod(instance.mOplusMediaControllerImpl, "selectPlayingOnes");
+            instance.mMediaData = instance.selectPlayingOnes();
         } catch (Throwable ignored) {}
     }
 
@@ -465,6 +476,12 @@ public class AudioDataProvider extends XposedMods {
     public PlaybackState getMediaControllerPlaybackState() {
         MediaController controller = getActiveLocalMediaController();
         return controller != null ? controller.getPlaybackState() : null;
+    }
+
+    private Object selectPlayingOnes() {
+        if (mOplusMediaControllerImpl != null)
+            return callStaticMethod(mOplusMediaControllerImpl, "selectPlayingOnes");
+        return null;
     }
 
     private void dispatchMediaKeyWithWakeLockToMediaSession(final int keycode) {
