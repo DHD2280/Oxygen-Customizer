@@ -50,6 +50,15 @@
             android:summary="@string/use_auth_for_advanced_reboot_summary"
             android:title="@string/use_auth_for_advanced_reboot_title"
             app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusSeekbarPreference
+            android:defaultValue="0"
+            android:dependency="show_advanced_reboot"
+            android:key="advanced_reboot_y_offset"
+            android:title="@string/advanced_reboot_y_offset_title"
+            android:summary="@string/advanced_reboot_y_offset_summary"
+            android:min="0"
+            android:max="100"
+            app:tickInterval="1" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 

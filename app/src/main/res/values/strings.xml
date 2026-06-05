@@ -1115,6 +1115,8 @@
     <string name="show_advanced_reboot_summary">Add advanced reboot options to power menu.</string>
     <string name="use_auth_for_advanced_reboot_title">Use Authentication</string>
     <string name="use_auth_for_advanced_reboot_summary">Require authentication to use advanced reboot options.</string>
+    <string name="advanced_reboot_y_offset_title">Y Offset</string>
+    <string name="advanced_reboot_y_offset_summary">Move advanced reboot button down.</string>"
     <string name="advanced_reboot_hide_lockscreen">Hide in Lockscreen</string>
     <string name="show_entry_settings_title">Show entry in Settings</string>
     <string name="remove_usb_dialog">Remove USB Dialog</string>

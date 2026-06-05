@@ -48,4 +48,10 @@
         <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.OxygenCustomizer</item>
     </style>
+
+    <style name="Theme.Traslucent" parent="Theme.Material3.Translucent">
+        <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
+    </style>
+
 </resources>

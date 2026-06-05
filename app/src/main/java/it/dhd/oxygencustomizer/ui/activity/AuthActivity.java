@@ -8,14 +8,15 @@ import static androidx.biometric.BiometricPrompt.ERROR_CANCELED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
@@ -24,13 +25,12 @@ import com.topjohnwu.superuser.Shell;
 
 import java.util.concurrent.Executor;
 
+import it.dhd.oneplusui.appcompat.app.OplusActivity;
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.fragments.UpdateFragment;
 import it.dhd.oxygencustomizer.utils.Constants;
 
-public class AuthActivity extends AppCompatActivity {
-
+public class AuthActivity extends OplusActivity {
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
@@ -39,8 +39,15 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().setDimAmount(0.5f);
+        Intent intent = getIntent();
+        boolean shouldAuth = true;
+        shouldAuth = intent.getBooleanExtra("shouldAuth", false);
 
-        showAuth();
+        if (shouldAuth) showAuth();
+        else showAdvancedReboot();
 
     }
 

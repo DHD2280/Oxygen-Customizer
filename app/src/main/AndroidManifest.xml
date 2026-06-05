@@ -109,7 +109,7 @@
             android:name=".ui.activity.AuthActivity"
             android:excludeFromRecents="true"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Translucent" />
+            android:theme="@style/Theme.Traslucent" />
 
         <activity
             android:name=".ui.activity.ShortcutActivity"
