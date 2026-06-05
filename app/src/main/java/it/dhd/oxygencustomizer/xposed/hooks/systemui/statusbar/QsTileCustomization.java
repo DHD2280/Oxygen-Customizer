@@ -120,7 +120,6 @@ import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 import com.oplus.systemui.qs.base.widget.QsViewOutlineProvider;
-import com.oplus.systemui.qs.widget.QsViewOutlineProviderKt;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -633,7 +632,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     private void hookQsColors15() {
-        ReflectedClass QsViewOutlineProviderKtClz = ReflectedClass.of(QsViewOutlineProviderKt.class.getName());
+        ReflectedClass QsViewOutlineProviderKtClz = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.widget.QsViewOutlineProviderKt");
 
         // Highlight Classic
         ReflectedClass OplusQSHighlightTileView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView");

@@ -47,7 +47,7 @@ public abstract class MixColorTileViewBackgroundOC extends MixColorTileViewBackg
         if (autoBlurDrawable != null) {
             return autoBlurDrawable;
         }
-        AutoBlurDrawable createMixColorDrawableForQsView$default = QsViewBackgroundKt.createMixColorDrawableForQsView(this.qsTileView.getBackgroundView(), null);
+        AutoBlurDrawable createMixColorDrawableForQsView$default = (AutoBlurDrawable) QsViewBackgroundKt.createMixColorDrawableForQsView(this.qsTileView.getBackgroundView(), null);
         this.autoBlurDrawable = createMixColorDrawableForQsView$default;
         return createMixColorDrawableForQsView$default;
     }

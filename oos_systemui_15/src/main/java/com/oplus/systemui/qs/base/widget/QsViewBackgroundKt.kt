@@ -33,7 +33,7 @@ class QsViewBackgroundKt {
         }
 
         @JvmStatic
-        fun createMixColorDrawableForQsView(BackgroundView: View, mixColor: MixColor?): AutoBlurDrawable {
+        fun createMixColorDrawableForQsView(BackgroundView: View, mixColor: MixColor?): Any {
             throw UnsupportedOperationException("Stub!")
         }
 

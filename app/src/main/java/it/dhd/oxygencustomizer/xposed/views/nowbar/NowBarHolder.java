@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils.getNewAutoBlurDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
@@ -270,7 +269,7 @@ public class NowBarHolder extends LinearLayout {
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
         if (Build.VERSION.SDK_INT >= 35) {
-            Drawable blurred = QsViewBackgroundKt.createMixColorDrawableForQsView(
+            Drawable blurred = (Drawable) QsViewBackgroundKt.createMixColorDrawableForQsView(
                     mAutoBlurredBackground,
                     new MixColor(4, Color.parseColor("#1a525252"), Color.parseColor("#40262626"))
             );
