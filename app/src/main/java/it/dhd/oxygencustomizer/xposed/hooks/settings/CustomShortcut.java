@@ -87,11 +87,19 @@ public class CustomShortcut extends XposedMods {
                 Object OCPreference = TopHomePreferenceClass.getConstructor(Context.class)
                         .newInstance(c);
 
-                Object mPersonalizationCategory = null;
-                try {
-                    mPersonalizationCategory = callMethod(param.args[0], "findPreference", "personality_settings_category");
-                } catch (Throwable ignored) {}
-                Object mNotificationCategory = callMethod(param.args[0], "findPreference", "notification_settings_category");
+                Object mCategory = null;
+                String[] possibleCategories = new String[]{
+                        "personality_settings_category", // OOS14-15
+                        "notification_settings_category",
+                        "system_settings_category" // OOS16+
+                };
+                for (String category : possibleCategories) {
+                    try {
+                        mCategory = callMethod(param.args[0], "findPreference", category);
+                        if (mCategory != null) break;
+                    } catch (Throwable ignored) {
+                    }
+                }
 
                 Drawable OCIcon = ResourcesCompat.getDrawable(ResourceManager.modRes,
                         Build.VERSION.SDK_INT >= 35 ?
@@ -125,9 +133,7 @@ public class CustomShortcut extends XposedMods {
                 callMethod(OCPreference, "setTitle", "Oxygen Customizer");
                 callMethod(OCPreference, "setOrder", Integer.MIN_VALUE);
                 callMethod(OCPreference, "setKey", "oxygen_customizer");
-                callMethod(mPersonalizationCategory != null ?
-                        mPersonalizationCategory :
-                        mNotificationCategory, "addPreference", OCPreference);
+                callMethod(mCategory, "addPreference", OCPreference);
             }
         });
     }
