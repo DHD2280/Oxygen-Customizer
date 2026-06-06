@@ -11,12 +11,12 @@ plugins {
 android {
 
     namespace = "it.dhd.oxygencustomizer"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 206
         versionName = "beta-206"
 //        setProperty("archivesBaseName", "OxygenCustomizer.apk")
