@@ -609,7 +609,17 @@ public class ControllersProvider extends XposedMods {
         ReflectedClass OplusQSQuickEntranceComponent = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent");
         OplusQSQuickEntranceComponent
                 .after("updateState")
-                .run(param -> notifyQsFractionChange((float) param.args[0]));
+                .run(param -> {
+                    float f;
+                    if (param.args[0] instanceof Float) {
+                        f = (float) param.args[0];
+                    } else if (param.args[2] instanceof Float) {
+                        f = (int) param.args[0];
+                    } else {
+                        return;
+                    }
+                    notifyQsFractionChange(f);
+                });
 
     }
 
