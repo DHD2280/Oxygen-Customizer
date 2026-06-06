@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.android.launcher"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 33
