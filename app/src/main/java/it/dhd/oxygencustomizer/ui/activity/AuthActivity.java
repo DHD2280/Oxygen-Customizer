@@ -28,7 +28,6 @@ import java.util.concurrent.Executor;
 import it.dhd.oneplusui.appcompat.app.OplusActivity;
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.Constants;
 
 public class AuthActivity extends OplusActivity {
     private Executor executor;
@@ -77,11 +76,7 @@ public class AuthActivity extends OplusActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Intent broadcast = new Intent(Constants.ACTION_AUTH_SUCCESS_SHOW_ADVANCED_REBOOT);
-                broadcast.putExtra("packageName", SYSTEM_UI);
-                broadcast.setPackage(SYSTEM_UI);
-                AuthActivity.this.sendBroadcast(broadcast);
-                finishAndRemoveTask();
+                showAdvancedReboot();
             }
 
             @Override
