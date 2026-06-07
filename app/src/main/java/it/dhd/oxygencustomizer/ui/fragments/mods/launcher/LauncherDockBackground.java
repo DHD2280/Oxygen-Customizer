@@ -4,13 +4,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
-import it.dhd.oxygencustomizer.utils.Constants;
 
 public class LauncherDockBackground extends ControlledPreferenceFragmentCompat {
 
     @Override
     public String getTitle() {
-        return "Dock Background";
+        return getString(R.string.dock_background);
     }
 
     @Override
