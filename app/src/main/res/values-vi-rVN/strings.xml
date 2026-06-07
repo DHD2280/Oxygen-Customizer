@@ -168,6 +168,9 @@
     <string name="notif_default_expansion_title">Thông báo mặc định mở rộng</string>
     <string name="notif_always_expand">Luôn mở rộng</string>
     <string name="notif_always_collapse">Luôn thu gọn</string>
+    <string name="notif_per_app">Chọn từng ứng dụng</string>
+    <string name="notif_choose_app_expansion">Chọn tùy chọn ứng dụng</string>
+    <string name="notif_choose_app_expansion_description">Chọn chế độ hiển thị thông báo cho từng ứng dụng.</string>
     <string name="notif_show_buttons">Hiện nút mở rộng và thu gọn</string>
     <string name="notif_show_buttons_summary">Hiện nút mở rộng và thu gọn trong bảng thông báo.\nChỉ tương thích với kiểu QS chia đôi.</string>
     <string name="customize_clear_all_button">Tùy chỉnh nút Xóa tất cả</string>
@@ -447,6 +450,7 @@
     <string name="qs_widget_photo_default_summary">Hiện một ảnh duy nhất.</string>
     <string name="qs_widget_photo_random_summary">Hiện tất cả ảnh bạn chọn theo vòng lặp. Ảnh sẽ thay đổi sau mỗi 30 giây, bạn cũng có thể chạm vào màn hình để chuyển sang ảnh tiếp theo.</string>
     <!-- Quick Settings Tiles Customizations -->
+    <string name="quick_settings_tiles_customization_title">Tuỳ chỉnh trung tâm điều khiển</string>
     <string name="qs_highlight_tile">Ô nổi bật</string>
     <string name="qs_base_tile">Ô nền</string>
     <string name="quick_settings_tiles_customize_category_title">Nền của ô cài đặt nhanh</string>
@@ -462,6 +466,7 @@
     <string name="quick_settings_tiles_customize_active_color_icon">Màu biểu tượng đang hoạt động</string>
     <string name="quick_settings_tiles_customize_inactive_color_icon">Màu biểu tượng đang tắt</string>
     <string name="quick_settings_tiles_customize_disabled_color_icon">Màu biểu tượng bị tắt</string>
+    <string name="quick_settings_tiles_customize_labels">Nhãn trung tâm điều khiển</string>
     <string name="quick_settings_tiles_customize_hide_labels">Ẩn nhãn QS</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">Tùy chỉnh màu văn bản QS</string>
     <string name="quick_settings_tiles_customize_labels_color">Màu văn bản QS</string>
@@ -485,6 +490,8 @@
     <string name="sliders_custom_radius">Tuỳ chỉnh độ cong thanh trượt</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">Tuỳ chỉnh đường cong ô QS</string>
+    <string name="qs_tile_custom_highlight">Tuỳ chỉnh bán kính ô nổi trung tâm điều khiển</string>
+    <string name="qs_tile_custom_radius">Tuỳ chỉnh độ cong ô trung tâm điều khiển</string>
     <string name="qs_tile_radius">Bán kính</string>
     <!-- Media Tile -->
     <string name="media_tile"></string>
@@ -1070,6 +1077,7 @@ Gói không phản hồi nghĩa là ứng dụng có thể chưa được bật 
     <string name="update_notification_text">Nhấn vào đây để cài đặt</string>
     <string name="download_failed">Tải bản cập nhật thất bại</string>
     <string name="try_again_later">Nhấn vào đây để cài đặt</string>
+    <string name="installation_failed">Quá trình cài đặt thất bại. Hãy thử cài đặt thủ công.</string>
     <string name="update_flavor_title">Kênh cập nhật</string>
     <string name="stable_flavor">Ổn định</string>
     <string name="nightly_github_login">Kênh cập nhật</string>

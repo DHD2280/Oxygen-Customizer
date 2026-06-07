@@ -168,6 +168,9 @@
     <string name="notif_default_expansion_title">Értesítések kibontása</string>
     <string name="notif_always_expand">Mindig kibontva</string>
     <string name="notif_always_collapse">Mindig összecsukva</string>
+    <string name="notif_per_app">Alkalmazásonkénti lehetőségek</string>
+    <string name="notif_choose_app_expansion">Alkalmazásbeállítások kiválasztása</string>
+    <string name="notif_choose_app_expansion_description">Válasszon értesítés-kibontást minden alkamazáshoz.</string>
     <string name="notif_show_buttons">Egy \'Kinyitás és becsukás\' gomb megjelenítése</string>
     <string name="notif_show_buttons_summary">Az értesítési panelen láthatóvá válik a \'Kinyitás és becsukás\' gomb.\nCsak a felosztott stílussal kompatibilis.</string>
     <string name="customize_clear_all_button">Az \'Összes törlése\" gomb módosítása</string>
@@ -215,6 +218,8 @@
     <string name="clock_date_right">Az idő-kijelzéstől jobbra</string>
     <string name="clock_date_left">Az idő-kijelzéstől balra</string>
     <string name="clock_font_size_title">Az Óra betűmérete</string>
+    <string name="clock_extra_padding">Az óra extra kitöltése</string>
+    <string name="clock_extra_padding_summary">Néhány OS változatnál problémák lehetnek az óra szélességével, vagy a térközökkel. Ezzel az értékkel a kitöltést a saját belátása szerint állíthatja be.</string>
     <string name="status_bar_clock_font_style_title">Az Óra betűstílusa</string>
     <string name="status_bar_clock_color_title">Egyéni óraszín</string>
     <string name="status_bar_custom_clock_color_title">Egyéni óraszín</string>
@@ -670,6 +675,8 @@
     <string name="hide_app_labels">Alkalmazásnevek elrejtése</string>
     <string name="hide_app_labels_desktop">Alkalmazásnevek elrejtése a kezdőoldalon</string>
     <string name="hide_app_labels_drawer">Alkalmazásnevek elrejtése az alkalmazásfiókban</string>
+    <string name="launcher_force_dock">A dokk elemeinek erőltetése</string>
+    <string name="launcher_force_dock_summary">A dokkban lévő ikonokat ugyanannyivá teszi, ahány oszlop van az alkalmazásfiókban.\nPéldául: ha az elrendezés 6*7-es, akkor 6 elem megengedet.</string>
     <string name="launcher_folder_layout">Mapparendezés</string>
     <string name="launcher_folder_edit_layout">Az elrendezés szerkesztése</string>
     <string name="launcher_folder_columns">Oszlopok</string>
@@ -684,12 +691,16 @@
     <string name="launcher_app_details_summary">Érintse meg az alkalmazás ikonját az alkalmazás részleteinek megnyitásához a Beállításokban.</string>
     <string name="launcher_disable_recents_previous_page_title">Az előző feladat letiltása</string>
     <string name="launcher_disable_recents_previous_page_summary">Kikapcsolja az automatikus váltást az előző feladatra az Előzményekben.</string>
+    <string name="launcher_replace_lock_title">Lezárás helyett kilövés</string>
+    <string name="launcher_replace_lock_summary">Lecseréli a lezárási mozdulatot (húzás lefelé az előzmények között) alkalmazásleállításra.</string>
     <string name="remove_home_pagination">Képernyőlapozás eltávolítása</string>
     <string name="launcher_themed_icons">Témázott ikonok</string>
     <string name="force_themed_launcher_icons">Témázott alkalmazásikon kényszerítve</string>
     <string name="force_themed_launcher_icons_summary">BETA FUNKCIÓ: Kényszerítés minden alkalmazáshoz.\nAz alkalmazáshoz engedélyezze újra a témázott ikonokat a launcherben.</string>
     <string name="alternative_themed_icons_title">Alternatív témázott ikonok</string>
     <string name="alternative_themed_icons_summary">Alternatív módszer használata a témaikonok helyett.\nMegjegyzés: ez a módszer nem írja felül az Oplus-ikonokat, de lehet, hogy lassabb.</string>
+    <string name="themed_icons_where_switch">Egyéni térkép a tematikus ikonokhoz</string>
+    <string name="themed_icons_where_switch_summary">Válassza ki, hogy hol legyenek alkalmazva a tematikus ikonok</string>
     <string name="themed_icons_where_title">Válassza ki, hol szeretné alkalmazni a témázott ikonokat</string>
     <string name="themed_icons_workspace">A munkaterületen</string>
     <string name="themed_icons_drawer">Az alkalmazásfiókban</string>
@@ -1067,6 +1078,7 @@
     <string name="update_notification_text">Telepítéshez érintse meg</string>
     <string name="download_failed">A frissítés letöltése nem sikerült</string>
     <string name="try_again_later">Kérjük, próbálja meg később.</string>
+    <string name="installation_failed">A telepítés nem sikerült. Próbálja meg manuálisan telepíteni.</string>
     <string name="update_flavor_title">Frissítési csatorna</string>
     <string name="stable_flavor">Stabil</string>
     <string name="nightly_github_login">Belépés és manuális letöltés</string>
@@ -1463,10 +1475,12 @@
     <string name="memc_footer">Ha készüléke nem rendelkezik Pixelwork chippel, vagy nem támogatja a MEMC-et, ne módosítsa ezeket a beállításokat.</string>
     <!-- Screen Off On Flat -->
     <string name="sleep_on_flat_screen_title">Képernyőkikapcsolás ha a készülék lapos felületre kerül</string>
-    <string name="sleep_on_flat_screen_tile_title">Készülék alvó állapot, ha a készüléket lerakja</string>
+    <string name="sleep_on_flat_screen_tile_title">Alvó mód vizszintes felületen</string>
     <string name="flat_screen_timeout_title">Képernyő-időtúllépés sík felületen</string>
     <string name="flat_screen_timeout_respect_wakelock_title">Ébresztések elfogadása</string>
     <!-- Bypass resizable windows -->
+    <string name="bypass_resizable_windows_title">Az átméretezhető ablakok mellőzése</string>
+    <string name="bypass_resizable_windows_summary">Ez lehetővé teszi bármely alkalmazás átméretezését</string>
     <!-- Allow music players in AOD -->
     <string name="aod_music_allow_title">Lejátszó a \'Mindig látható\'-ban</string>
     <string name="aod_music_allow_summary">Az ANT-zenelejátszó megjelenhet a \'Mindig látható\' funkcióban.\nMegjegyzés: nem minden zenelejátszó támogatott.</string>
