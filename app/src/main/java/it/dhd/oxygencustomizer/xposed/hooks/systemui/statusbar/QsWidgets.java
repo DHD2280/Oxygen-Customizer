@@ -48,6 +48,8 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -278,7 +280,10 @@ public class QsWidgets extends XposedMods {
                     .before("onScrollX")
                     .run(param -> {
                         MotionEvent event = (MotionEvent) param.args[1];
-                        hookTouchHandler(param, event, "onScrollX");
+                        try {
+                            hookTouchHandler(param, event, "onScrollX");
+                        } catch (Throwable ignored) {
+                        }
                     });
             OplusPanelViewPagerController
                     .before("onScrollY")
@@ -317,6 +322,13 @@ public class QsWidgets extends XposedMods {
 
     private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
         if (!mQsWidgetsEnabled) return;
+
+        if (event != null && event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+            log("QsWidgets - " + methodName + " - ACTION_OUTSIDE received, ignoring");
+            param.setResult(false);
+            return;
+        }
+
         Object separateQSManager = getObjectField(mOplusPanelPagerController, "separateQSManager");
         boolean isQsFullyExpanded = (boolean) callMethod(separateQSManager, "isFullyExpanded");
         if (!QsStyleObserver.isSeparateStyle()) return;
@@ -324,6 +336,7 @@ public class QsWidgets extends XposedMods {
         boolean isKeyguardVisible = (boolean) callMethod(mOplusPanelPagerController, "isKeyguardVisible");
         log("QsWidgets - " + methodName + " - isKeyguardVisible: " + isKeyguardVisible);
         if (isKeyguardVisible) return;
+        if (mOplusQsMediaView == null) return;
         int[] location = new int[2];
         mOplusQsMediaView.getLocationOnScreen(location);
         Rect panelView = new Rect(location[0], location[1],
@@ -347,14 +360,19 @@ public class QsWidgets extends XposedMods {
                 mIsDragging = false;
 
                 if (mIsTouchOnWidgets) {
-                    setDownExpandedNone();
-                    parent.requestDisallowInterceptTouchEvent(true);
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        try {
+                            setDownExpandedNone();
+                            parent.requestDisallowInterceptTouchEvent(true);
 
-                    MotionEvent translatedEvent = MotionEvent.obtain(event);
-                    translatedEvent.setLocation(x - location[0], y - location[1]);
-                    QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
-                    translatedEvent.recycle();
-
+                            MotionEvent translatedEvent = MotionEvent.obtain(event);
+                            translatedEvent.setLocation(x - location[0], y - location[1]);
+                            QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
+                            translatedEvent.recycle();
+                        } catch (Throwable t) {
+                            log(t);
+                        }
+                    });
                     param.setResult(true);
                     return;
                 }
