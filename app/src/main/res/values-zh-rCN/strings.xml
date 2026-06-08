@@ -59,6 +59,7 @@
     <!-- Dialogs -->
     <string name="installing">正在安装...</string>
     <string name="loading_dialog_wait">请稍候</string>
+    <string name="optimizing">优化</string>
     <!-- Main Activity -->
     <!-- App kill Alert -->
     <string name="app_kill_alert_title">通知</string>
@@ -113,6 +114,7 @@
     <string name="restart_module">重启作用域进程</string>
     <string name="restart_page_scope">仅重启此页面</string>
     <string name="restart_scope_message">你确定要重启除系统框架之外的所有作用域进程吗\n如果模块不工作，请使用此功能\n确保所有相关作用域都被选中！</string>
+    <string name="add_notification">添加通知</string>
     <!-- NavBar Strings -->
     <string name="navbar_ui">用户界面</string>
     <string name="navbar_mods">模组</string>
@@ -153,6 +155,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="statusbar_notifications_cat">状态栏通知</string>
     <string name="statusbar_use_app_icon">将应用图标用于通知</string>
+    <string name="statusbar_app_icon_scale">图标缩放</string>
     <string name="statusbar_notifications_transparency">通知栏透明度</string>
     <string name="statusbar_notification_transparency">通知栏透明度</string>
     <string name="statusbar_notification_transparency_value">透明度</string>
@@ -165,6 +168,11 @@
     <string name="notif_default_expansion_title">通知默认展开</string>
     <string name="notif_always_expand">总是展开</string>
     <string name="notif_always_collapse">总是折叠</string>
+    <string name="notif_per_app">按应用选择</string>
+    <string name="notif_choose_app_expansion">选择应用程序偏好设置</string>
+    <string name="notif_choose_app_expansion_description">为每个应用选择通知展开选项。</string>
+    <string name="notif_show_buttons">显示展开和折叠按钮</string>
+    <string name="notif_show_buttons_summary">在通知面板中显示展开和折叠按钮。\n仅与分体式快速设置样式兼容。</string>
     <string name="customize_clear_all_button">自定义“清除全部”按钮</string>
     <string name="clear_all_link_bg_accent">背景使用强调色</string>
     <string name="clear_all_bg_color">自定义背景颜色</string>
@@ -204,11 +212,14 @@
     <string name="status_bar_date_style_lowercase">小写</string>
     <string name="status_bar_date_style_uppercase">大写</string>
     <string name="status_bar_date_format_custom">自定义java格式</string>
+    <string name="string_formatter_manual_body">除了普通文本外，还可以使用动态变量，例如日期和温度：\n\n$G\&lt;format\&gt; : 公历日期，基于格式*\n$P\&lt;format\&gt; : 波斯历日期，基于格式\n$L 用于农历日期\n$I\&lt;calendar\&gt;&lt;format\&gt; : 伊斯兰历日期。日历为可选参数，默认为伊斯兰的，也可使用 C 表示伊斯兰-民用历，U 表示伊斯兰-乌姆古拉历。\n$T\&lt;format\&gt;[interval] : 温度；\n格式可以是 b（电池）、c（CPU）、g（GPU）和 s（机身）。\n$B\&lt;format\&gt; : 电池；\n格式可以是 v（电压，单位 mV）、l（电量）\n最后，还可选填更新间隔（秒），默认为 60 秒\n\n有关格式的文档，请搜索 \"Java 日期格式\"</string>
     <string name="preview">预览</string>
     <string name="clock_date_position">日期位置</string>
     <string name="clock_date_right">时间右侧</string>
     <string name="clock_date_left">时间左侧</string>
     <string name="clock_font_size_title">时钟字体大小</string>
+    <string name="clock_extra_padding">时钟额外内边距</string>
+    <string name="clock_extra_padding_summary">某些OOS版本在时钟宽度上存在问题，导致空格或其他元素错乱。通过此值，您可以根据偏好调整内边距。</string>
     <string name="status_bar_clock_font_style_title">时钟字体样式</string>
     <string name="status_bar_clock_color_title">时钟自定义颜色</string>
     <string name="status_bar_custom_clock_color_title">自定义时钟颜色</string>
@@ -229,7 +240,46 @@
     <string name="sb_padding_title">状态栏左侧和右侧填充</string>
     <string name="sb_padding_summary">将最大/最小值设置为系统默认值</string>
     <!-- Statusbar logo -->
+    <string name="statusbar_logo">状态栏图标</string>
     <string name="statusbar_logo_summary">在状态栏中展示一个自定义图标</string>
+    <string name="statusbar_logo_position">Logo 位置</string>
+    <string name="statusbar_logo_style">标志样式</string>
+    <string name="status_bar_logo_style_android">安卓</string>
+    <string name="status_bar_logo_style_adidas">阿迪达斯</string>
+    <string name="status_bar_logo_style_alien">外星人</string>
+    <string name="status_bar_logo_style_apple">苹果</string>
+    <string name="status_bar_logo_style_avengers">复仇者联盟</string>
+    <string name="status_bar_logo_style_batman">蝙蝠侠</string>
+    <string name="status_bar_logo_style_batman_tdk">蝙蝠侠：黑暗骑士</string>
+    <string name="status_bar_logo_style_beats">Beats</string>
+    <string name="status_bar_logo_style_biohazard">生化危机</string>
+    <string name="status_bar_logo_style_blackberry">黑莓</string>
+    <string name="status_bar_logo_style_cannabis">大麻</string>
+    <string name="status_bar_logo_style_emoticon_cool">酷表情</string>
+    <string name="status_bar_logo_style_emoticon_devil">恶魔表情</string>
+    <string name="status_bar_logo_style_fire">火焰</string>
+    <string name="status_bar_logo_style_heart">心形</string>
+    <string name="status_bar_logo_style_nike">耐克</string>
+    <string name="status_bar_logo_style_pacman">吃豆人</string>
+    <string name="status_bar_logo_style_puma">彪马</string>
+    <string name="status_bar_logo_style_rog">ROG</string>
+    <string name="status_bar_logo_style_spiderman">蜘蛛侠</string>
+    <string name="status_bar_logo_style_superman">超人</string>
+    <string name="status_bar_logo_style_windows">Windows</string>
+    <string name="status_bar_logo_style_xbox">Xbox</string>
+    <string name="status_bar_logo_style_ghost">幽灵</string>
+    <string name="status_bar_logo_style_ninja">忍者</string>
+    <string name="status_bar_logo_style_robot">机器人</string>
+    <string name="status_bar_logo_style_ironman">钢铁侠</string>
+    <string name="status_bar_logo_style_captain_america">美国队长</string>
+    <string name="status_bar_logo_style_flash">闪电侠</string>
+    <string name="status_bar_logo_style_tux">Tux</string>
+    <string name="status_bar_logo_style_ubuntu">Ubuntu</string>
+    <string name="status_bar_logo_style_mint">Linux Mint</string>
+    <string name="status_bar_logo_style_amogus">Amogus</string>
+    <string name="status_bar_logo_style_custom">自定义图片</string>
+    <string name="statusbar_logo_size">标志大小</string>
+    <string name="statusbar_logo_force_tint">跟随状态栏色调</string>
     <!-- Battery Bar Strings -->
     <string name="BB_enable_title">启用电池条</string>
     <string name="BB_onlycharging_title">仅充电时</string>
@@ -299,9 +349,14 @@
     <string name="inside_percentage_title">内部百分比</string>
     <string name="inside_percentage_desc">移动百分比到电池图标内</string>
     <string name="battery_icon_color">电池图标颜色</string>
+    <string name="battery_icon_animate_charging">充电动画</string>
     <!-- Battery Stock Prefs -->
+    <string name="battery_text_category">电池文本</string>
     <string name="battery_edit_percentage_size_title">自定义百分比大小</string>
     <string name="battery_percentage_size">百分比大小</string>
+    <string name="battery_text_attach_to_batterybar">附加到电池条</string>
+    <string name="battery_text_attach_to_batterybar_summary">将文本颜色附加到电池条</string>
+    <string name="battery_text_enable_bb_first">先启用电池条</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">默认</string>
     <string name="battery_landscape_r_default">横向 向右 默认</string>
@@ -341,6 +396,8 @@
     <string name="battery_circle">圆形电池</string>
     <string name="battery_dotted_circle">虚线圆形电池</string>
     <string name="battery_filled_circle">实心圆</string>
+    <string name="battery_landscape_kim">横向 Kim</string>
+    <string name="battery_landscape_one_ui">横向 One UI 7</string>
     <!-- Statusbar Icons Strings -->
     <string name="statusbar_icons_bluetooth_hide">隐藏蓝牙图标</string>
     <string name="statusbar_icons_bluetooth_hide_summary">未连接时隐藏蓝牙图标。</string>
@@ -375,6 +432,8 @@
     <string name="quick_settings_tiles_landscape">横屏时</string>
     <string name="quick_settings_tiles_vertical_rows">磁贴行数(横屏时)</string>
     <string name="quick_settings_tiles_vertical_columns">磁贴列数(横屏时)</string>
+    <string name="qs_blur_max_amount">最大模糊量</string>
+    <string name="qs_blur_max_amount_summary">设置快速设置的最大模糊量。</string>
     <!-- Quick Settings Widgets -->
     <string name="quick_settings_widgets_summary">显示小组件</string>
     <string name="add_widget">添加小组件</string>
@@ -385,16 +444,28 @@
     <string name="qs_widget_media_player">媒体播放器</string>
     <string name="qs_media_alert">无法移除媒体播放器！</string>
     <string name="qs_widget_set_radius">设置图像半径</string>
+    <string name="qs_widget_set_photo_mode">设置照片模式</string>
     <string name="qs_widget_set_custom_photo">设置自定义图像</string>
+    <string name="qs_widget_photo_showcase">展示模式</string>
+    <string name="qs_widget_photo_default_summary">显示单张照片。</string>
+    <string name="qs_widget_photo_random_summary">循环显示您选择的所有照片。图片每30秒更换一次，您也可以点击展示区域切换到下一张。</string>
     <!-- Quick Settings Tiles Customizations -->
     <string name="quick_settings_tiles_customization_title">自定义</string>
+    <string name="qs_highlight_tile">高亮磁贴</string>
+    <string name="qs_base_tile">基础磁贴</string>
     <string name="quick_settings_tiles_customize_category_title">磁贴背景</string>
+    <string name="quick_settings_tile_custom_color">自定义磁贴颜色</string>
     <string name="qs_tile_active_color_title">自定义活动磁贴颜色</string>
     <string name="quick_settings_tiles_customize_active_color">活动颜色</string>
     <string name="qs_tile_inactive_color_title">自定义非活动磁贴颜色</string>
     <string name="quick_settings_tiles_customize_inactive_color">非活动颜色</string>
     <string name="qs_tile_disabled_color_title">自定义禁用磁贴颜色</string>
     <string name="quick_settings_tiles_customize_disabled_color">禁用颜色</string>
+    <string name="quick_settings_tile_custom_color_icon">自定义图标背景颜色</string>
+    <string name="quick_settings_tile_custom_color_icon_summary">此颜色适用于独立的快速设置样式</string>
+    <string name="quick_settings_tiles_customize_active_color_icon">图标激活颜色</string>
+    <string name="quick_settings_tiles_customize_inactive_color_icon">图标未激活颜色</string>
+    <string name="quick_settings_tiles_customize_disabled_color_icon">图标禁用颜色</string>
     <string name="quick_settings_tiles_customize_labels">标签</string>
     <string name="quick_settings_tiles_customize_hide_labels">隐藏标签</string>
     <string name="quick_settings_tiles_customize_labels_color_switch">自定义文本颜色</string>
@@ -404,12 +475,24 @@
     <string name="quick_settings_tiles_customize_labels_subtitle">自定义标题颜色</string>
     <string name="quick_settings_tiles_customize_labels_subtitle_color">标题颜色</string>
     <string name="brightness_slider">亮度滑块</string>
+    <string name="qs_sliders">快速设置滑块</string>
     <string name="customize_brightness_slider_title">自定义亮度滑块</string>
+    <string name="customize_qs_sliders_title">自定义快速设置滑块</string>
+    <string name="brightness_slider_progress_color_title">滑块颜色模式</string>
     <string name="brightness_slider_background_color_title">自定义背景颜色</string>
+    <string name="qs_sliders_remove_blur">移除模糊</string>
+    <string name="blur_mode">模糊模式</string>
+    <string name="blur_luminosity_color_dodge">发光度 - 颜色减淡</string>
+    <string name="blur_color_dodge_luminosity">颜色减淡 - 发光度</string>
+    <string name="blur_overlay_luminosity">叠加 - 发光度</string>
+    <string name="blur_luminosity_overlay">发光度 - 叠加</string>
+    <string name="brightness_dark_icon">移除自动亮度颜色色调</string>
+    <string name="sliders_custom_radius">自定义滑块圆角</string>
     <!-- QS Tile Radius -->
     <string name="qs_tiles_custom_radius">自定义磁贴半径</string>
     <string name="qs_tile_custom_highlight">自定义高亮磁贴半径</string>
     <string name="qs_tile_custom_radius">自定义磁贴半径</string>
+    <string name="qs_tile_radius">圆角大小</string>
     <!-- Media Tile -->
     <string name="media_tile">媒体磁贴</string>
     <!-- QS Tiles animation -->
@@ -419,6 +502,14 @@
     <string name="qs_tile_animation_interpolator_title">磁贴动画插值器</string>
     <string name="qs_tile_animation_style_off">无动画</string>
     <string name="qs_tile_animation_style_rotate">旋转</string>
+    <string name="qs_tile_animation_style_flipx">水平翻转</string>
+    <string name="qs_tile_animation_style_flipy">垂直翻转</string>
+    <string name="qs_tile_animation_style_shake">晃动</string>
+    <string name="qs_tile_animation_style_fade_in">淡入</string>
+    <string name="qs_tile_animation_style_bounce_x">弹跳效果（水平缩放）</string>
+    <string name="qs_tile_animation_style_bounce_y">弹跳效果（垂直缩放）</string>
+    <string name="qs_tile_animation_style_pulse_x">脉冲效果（水平缩放）</string>
+    <string name="qs_tile_animation_style_pulse_y">脉冲效果（垂直缩放）</string>
     <string name="qs_tile_animation_duration_low">慢速</string>
     <string name="qs_tile_animation_duration_default">默认</string>
     <string name="qs_tile_animation_duration_fast">快速</string>
@@ -581,6 +672,8 @@
     <string name="launcher_edit_layout">编辑主页布局</string>
     <string name="launcher_columns">桌面布局列数</string>
     <string name="launcher_rows">桌面布局行数</string>
+    <string name="hide_app_labels">隐藏应用标签</string>
+    <string name="hide_app_labels_desktop">在主屏幕隐藏应用标签</string>
     <string name="launcher_folder_layout">文件夹布局</string>
     <string name="launcher_folder_edit_layout">编辑布局</string>
     <string name="launcher_folder_columns">列数</string>
