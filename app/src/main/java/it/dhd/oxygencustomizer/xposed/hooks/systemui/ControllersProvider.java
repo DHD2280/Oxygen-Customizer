@@ -614,7 +614,7 @@ public class ControllersProvider extends XposedMods {
                     if (param.args[0] instanceof Float) {
                         f = (float) param.args[0];
                     } else if (param.args[2] instanceof Float) {
-                        f = (float) param.args[0];
+                        f = (float) param.args[2];
                     } else {
                         return;
                     }
