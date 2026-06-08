@@ -11,8 +11,11 @@ import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+
+import java.util.regex.Pattern;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -22,6 +25,9 @@ public class NotificationVanillaIceCream extends XposedMods {
 
     private static final String listenPackage = SYSTEM_UI;
     private boolean hasOverlays = false;
+    private final Pattern capsulePattern = Pattern.compile(
+            "Capsule|NotificationCapsuleContainer|CapsuleEarView|OplusClearAllButton"
+    );
 
     public NotificationVanillaIceCream(Context context) {
         super(context);
@@ -57,6 +63,10 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .before("requireBlurProxyForView")
                 .run(param -> {
                     if (!isOOS1501() && hasOverlays) {
+                        View v = (View) param.args[0];
+                        String className = v != null ? v.getClass().getName() : "";
+                        if (v != null &&
+                                capsulePattern.matcher(className).find()) return;
                         param.setResult(null);
                     }
                 });
