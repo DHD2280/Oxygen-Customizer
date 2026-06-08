@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
+import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
@@ -13,6 +14,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Process;
@@ -40,8 +42,15 @@ public class Launcher extends XposedMods {
     private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
     private boolean mDisablePreviousRecents = false;
     private boolean mReplaceLock = false;
+    private boolean mCustomShelfBehavior = false;
+    private int mShelfBehavior = 2;
+    // 0 disable discover
+    // 1 replace discover with shelf
+    // 2 enable discover
 
     private View OplusFastScroll;
+
+    private ContentObserver assistScreenSwitchObserverExp, shelfSupportAssistScreenObserver;
 
     public Launcher(Context context) {
         super(context);
@@ -70,8 +79,16 @@ public class Launcher extends XposedMods {
         mDisablePreviousRecents = Xprefs.getBoolean("disable_previous_recents", false);
         mReplaceLock = Xprefs.getBoolean("replace_lock", false);
 
-        if (Key.length > 0 && Key[0].equals("hide_scroller")) {
-            updateFastScroll();
+        // shelf behavior
+        mCustomShelfBehavior = Xprefs.getBoolean("launcher_custom_shelf_switch", false);
+        mShelfBehavior = Xprefs.getInt("laucher_shelf_custom", 2);
+
+        if (Key.length > 0) {
+            if (Key[0].equals("hide_scroller")) {
+                updateFastScroll();
+            } else if (Key[0].equals("launcher_custom_shelf_switch") || Key[0].equals("laucher_shelf_custom")) {
+                callChanges();
+            }
         }
 
     }
@@ -198,7 +215,7 @@ public class Launcher extends XposedMods {
             ReflectedClass OplusPageIndicator = ReflectedClass.of("com.android.launcher.pageindicators.OplusPageIndicator");
             OplusPageIndicator
                     .before("dispatchDraw")
-                            .run(pageIndicator);
+                    .run(pageIndicator);
             OplusPageIndicator
                     .before("onDraw")
                     .run(pageIndicator);
@@ -404,11 +421,60 @@ public class Launcher extends XposedMods {
                 .run(killHook);
 
 
+        ReflectedClass LauncherClient = ReflectedClass.ofIfPossible("com.google.android.libraries.gsa.launcherclient.LauncherClient");
+        LauncherClient
+                .afterConstruction()
+                .run(param -> {
+                    try {
+                        assistScreenSwitchObserverExp = (ContentObserver) getObjectField(param.thisObject, "mAssistScreenSwitchObserverExp");
+                    } catch (Throwable ignored) {
+                    }
+                    try {
+                        shelfSupportAssistScreenObserver = (ContentObserver) getObjectField(param.thisObject, "mShelfSupportAssistScreenObserver");
+                    } catch (Throwable ignored) {
+                    }
+
+                });
+
+
+        ReflectedClass OverlayProxy = ReflectedClass.ofIfPossible("com.android.overlay.OverlayProxy");
+        OverlayProxy
+                .before("getAssistScreenType")
+                .run(param -> {
+                    if (!mCustomShelfBehavior) return;
+                    param.setResult(mShelfBehavior);
+                });
+        OverlayProxy
+                .before("setAssistScreenType")
+                .run(param -> {
+                    if (!mCustomShelfBehavior) return;
+                    param.args[0] = mShelfBehavior;
+                });
+        FeatureOption
+                .before("getSShelfAssistantEnable")
+                .run(param -> {
+                    if (!mCustomShelfBehavior) return;
+                    param.setResult(mShelfBehavior == 0);
+                });
+        FeatureOption
+                .before("updateSupportShelfAssistant")
+                .run(param -> {
+                    if (!mCustomShelfBehavior) return;
+                    setBooleanField(param.thisObject, "sShelfAssistantEnable", mShelfBehavior == 0);
+                });
+
     }
 
     private void updateFastScroll() {
         if (OplusFastScroll == null) return;
         OplusFastScroll.setVisibility(mHideScroller ? View.GONE : View.VISIBLE);
+    }
+
+    private void callChanges() {
+        if (assistScreenSwitchObserverExp != null)
+            assistScreenSwitchObserverExp.onChange(true);
+        if (shelfSupportAssistScreenObserver != null)
+            shelfSupportAssistScreenObserver.onChange(true);
     }
 
     @Override

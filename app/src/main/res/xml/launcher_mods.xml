@@ -216,6 +216,13 @@
             android:title="@string/hide_scroller"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherShelf"
+            android:key="custom_shelf"
+            android:title="@string/custom_swipe_right_behavior_title"
+            android:summary="@string/custom_swipe_right_behavior_summary"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

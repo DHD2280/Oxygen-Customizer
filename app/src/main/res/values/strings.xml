@@ -753,6 +753,13 @@
     <string name="dock_background_material">Material dock background</string>
     <string name="dock_background_radius">Background radius</string>
     <string name="dock_background_amount">Blur amount</string>
+    <string name="custom_swipe_right_behavior_title">Custom swipe right behavior</string>
+    <string name="custom_swipe_right_behavior_summary">Customize the behavior when you swipe right on home screen.</string>
+    <string name="custom_swipe_right_behavior_explaination">Here you can choose the behavior of your right swipe on the home screen. You can fully disable Discover, resulting in a disabled swipe, or replace Discover with Shelf.</string>
+    <string name="choose_behavior">Choose behavior</string>
+    <string name="disable_discover">Disable Discover</string>
+    <string name="replace_discover_with_shelf">Replace Discover with Shelf</string>
+    <string name="enable_discover">Enable Discover (stock behavior)</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>

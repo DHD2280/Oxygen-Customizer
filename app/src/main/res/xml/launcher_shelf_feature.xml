@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory />
+
+    <it.dhd.oneplusui.preference.OplusSwitchPreference
+        android:key="launcher_custom_shelf_switch"
+        android:title="@string/custom_swipe_right_behavior_title"
+        app:forcePosition="full"
+        app:iconSpaceReserved="false" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory />
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference android:title="@string/custom_swipe_right_behavior_explaination" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="behavior_category"
+        android:title="@string/choose_behavior" />
+
+</PreferenceScreen>
