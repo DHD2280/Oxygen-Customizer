@@ -45,19 +45,6 @@
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:dialogCornerRadius">32dp</item>
-        <item name="android:background">@color/oplusColorSurfaces</item>
-        <item name="android:backgroundDimAmount">0.40</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text</item>
-    </style>
-
-    <style name="MaterialAlertDialog.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">@color/text_color_primary</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
     <style name="HorizontalDivider" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/list_divider_height</item>
