@@ -49,7 +49,21 @@
         <item name="postSplashScreenTheme">@style/Theme.OxygenCustomizer</item>
     </style>
 
-    <style name="Theme.Traslucent" parent="Theme.Material3.Translucent">
+    <style name="Theme.Traslucent" parent="Theme.Oneplus.Light.NoActionBar">
+        <!--on below line we are setting background as transparent color-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--on below line we are displaying the windowNotitle as true as we are not displaying our status bar-->
+        <item name="android:windowNoTitle">true</item>
+        <!--on below line we are setting our window background as transparent color-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--on below line we are setting color background cache hint as null-->
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <!--on below line we are adding a window translucent as true-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--on below line we are adding a window animationstyle-->
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
     </style>
