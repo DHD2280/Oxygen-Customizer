@@ -3,4 +3,6 @@
     android:id="@+id/headerText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/preference_item_margin_top"
+    android:layout_marginBottom="@dimen/preference_item_margin_bottom"
     style="@style/OplusPreferenceCategoryStyle" />
