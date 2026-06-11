@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.views;
 
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.TRANSITION_DELAY;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
@@ -38,7 +39,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ViewOnboardingPageBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
@@ -157,6 +157,35 @@ public class OnboardingView extends FrameLayout {
         binding.slider.setCurrentItem(lastSlidePos, true);
     }
 
+    private boolean canContinue() {
+        if (!RootUtil.isDeviceRooted()) {
+            ErrorDialog errorDialog = new ErrorDialog(getContext());
+            errorDialog.show(R.string.root_not_found_title, R.string.root_not_found_desc);
+            return false;
+        }
+        if (!RootUtil.deviceProperlyRooted()) {
+            ErrorDialog errorDialog = new ErrorDialog(getContext());
+            errorDialog.show(R.string.compatible_root_not_found_title, R.string.compatible_root_not_found_desc);
+            return false;
+        }
+        if (RootUtil.requireMetamodule()) {
+            ErrorDialog errorDialog = new ErrorDialog(getContext());
+            errorDialog.show(R.string.meta_module_missing_title, R.string.meta_module_missing_desc);
+            return false;
+        }
+        if (!AppUtils.hasStoragePermission()) {
+            Toast.makeText(getContext(), R.string.need_storage_perm_title, Toast.LENGTH_SHORT).show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                clickedContinue = true;
+                AppUtils.requestStoragePermission(getContext());
+            }, clickedContinue ? 10 : 1000);
+            return false;
+        }
+
+        return true;
+    }
+
     private void startOnClickActions() {
         if (!isClickable) return;
 
@@ -164,40 +193,21 @@ public class OnboardingView extends FrameLayout {
         skippedInstallation = false;
         hasErroredOut = false;
 
+        if (!canContinue()) return;
+
+
         Shell.getShell(shell -> {
-            if (!RootUtil.isDeviceRooted()) {
-                ErrorDialog errorDialog = new ErrorDialog(getContext());
-                errorDialog.show(R.string.root_not_found_title, R.string.root_not_found_desc);
-                return;
-            }
+            boolean moduleExists = ModuleUtil.moduleExists();
+            boolean overlayExists = OverlayUtil.overlayExists();
 
-            if (!RootUtil.deviceProperlyRooted()) {
-                ErrorDialog errorDialog = new ErrorDialog(getContext());
-                errorDialog.show(R.string.compatible_root_not_found_title, R.string.compatible_root_not_found_desc);
-                return;
-            }
-
-            if (!AppUtils.hasStoragePermission()) {
-                Toast.makeText(getContext(), R.string.need_storage_perm_title, Toast.LENGTH_SHORT).show();
-
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    clickedContinue = true;
-                    AppUtils.requestStoragePermission(getContext());
-                }, clickedContinue ? 10 : 1000);
+            if (!ModuleUtil.checkModuleVersion(getAppContext()) || !moduleExists || !overlayExists) {
+                handleInstallation();
             } else {
-                boolean moduleExists = ModuleUtil.moduleExists();
-                boolean overlayExists = OverlayUtil.overlayExists();
-
-                if (!ModuleUtil.checkModuleVersion(OxygenCustomizer.getAppContext()) || !moduleExists || !overlayExists) {
-
-                    handleInstallation();
-                } else {
-                    Prefs.putBoolean(XPOSED_ONLY_MODE, false);
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getContext().startActivity(intent);
-                    Animatoo.animateSlideLeft(getContext());
-                }
+                Prefs.putBoolean(XPOSED_ONLY_MODE, false);
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+                Animatoo.animateSlideLeft(getContext());
             }
         });
 
@@ -209,36 +219,16 @@ public class OnboardingView extends FrameLayout {
         hasErroredOut = false;
 
         Shell.getShell(shell -> {
-            if (!RootUtil.isDeviceRooted()) {
-                ErrorDialog errorDialog = new ErrorDialog(getContext());
-                errorDialog.show(R.string.root_not_found_title, R.string.root_not_found_desc);
-                return;
-            }
-
-            if (!RootUtil.deviceProperlyRooted()) {
-                ErrorDialog errorDialog = new ErrorDialog(getContext());
-                errorDialog.show(R.string.compatible_root_not_found_title, R.string.compatible_root_not_found_desc);
-                return;
-            }
-
-            if (!AppUtils.hasStoragePermission()) {
-                Toast.makeText(getContext(), R.string.need_storage_perm_title, Toast.LENGTH_SHORT).show();
-
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    clickedContinue = true;
-                    AppUtils.requestStoragePermission(getContext());
-                }, clickedContinue ? 10 : 1000);
+            if (!canContinue()) return;
+            if (!ModuleUtil.moduleExists()) {
+                handleInstallation();
             } else {
-                if (!ModuleUtil.moduleExists()) {
-                    handleInstallation();
-                } else {
-                    Prefs.putBoolean(XPOSED_ONLY_MODE, true);
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getContext().startActivity(intent);
-                    Animatoo.animateSlideLeft(getContext());
-                    Toast.makeText(getContext(), R.string.toast_skipped_installation, Toast.LENGTH_LONG).show();
-                }
+                Prefs.putBoolean(XPOSED_ONLY_MODE, true);
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+                Animatoo.animateSlideLeft(getContext());
+                Toast.makeText(getContext(), R.string.toast_skipped_installation, Toast.LENGTH_LONG).show();
             }
         });
         return true;

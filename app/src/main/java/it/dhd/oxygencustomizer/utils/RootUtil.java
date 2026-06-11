@@ -3,6 +3,8 @@ package it.dhd.oxygencustomizer.utils;
 import com.topjohnwu.superuser.Shell;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RootUtil {
 
@@ -58,4 +60,35 @@ public class RootUtil {
     public static boolean deviceProperlyRooted() {
         return isDeviceRooted() && (isMagiskInstalled() || isKSUInstalled() || isApatchInstalled());
     }
+
+    public static boolean requireMetamodule() {
+        return isKSUInstalled() && getKsuVersion() >= 3 && !isMetaModuleInstalled();
+    }
+
+    public static int getKsuVersion() {
+        String ksuVersion = Shell.cmd("ksud -V").exec().getOut().stream()
+                .reduce("", (acc, s) -> acc + s).trim();
+
+        Pattern pattern = Pattern.compile("\\b(\\d+)(?=\\.)");
+        Matcher matcher = pattern.matcher(ksuVersion);
+
+        if (matcher.find()) {
+            String majorVersion = matcher.group(1);
+            try {
+                return Integer.parseInt(majorVersion);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public static boolean isMetaModuleInstalled() {
+        String command = "for d in /data/adb/modules/*; do prop=\"$d/module.prop\"; [ -f \"$prop\" ] && grep -qiE \"^metamodule[[:space:]]*=[[:space:]]*(1|true)$\" \"$prop\" && echo true && exit 0; done; echo false";
+        Shell.Result result = Shell.cmd(command).exec();
+
+        List<String> output = result.getOut();
+        return !output.isEmpty() && "true".equals(output.get(0));
+    }
+
 }
