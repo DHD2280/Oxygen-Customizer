@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
@@ -26,7 +27,7 @@ public class NotificationVanillaIceCream extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     private boolean hasOverlays = false;
     private final Pattern capsulePattern = Pattern.compile(
-            "Capsule|NotificationCapsuleContainer|CapsuleEarView|OplusClearAllButton"
+            "Capsule|NotificationCapsuleContainer|CapsuleEarView|OplusClearAllButton|OplusNotificationChildrenContainerOverlayExImpl"
     );
 
     public NotificationVanillaIceCream(Context context) {
@@ -75,6 +76,9 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(nullReturner);
         ViewBlurManager
                 .before("cancelBlurForHeadsUp")
+                .run(nullReturner);
+        ViewBlurManager
+                .before("applyBlurConfig")
                 .run(nullReturner);
 
         ReflectedClass NotificationChildrenContainerExtImp = ReflectedClass.of("com.oplus.systemui.statusbar.notification.stack.NotificationChildrenContainerExtImp");
@@ -146,6 +150,35 @@ public class NotificationVanillaIceCream extends XposedMods {
         FullScreenBannerContainer
                 .before("onViewDetachedFromWindow")
                 .run(nullReturner);
+
+        ReflectedClass OplusNotificationChildrenContainerOverlayExImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.notification.stack.OplusNotificationChildrenContainerOverlayExImpl");
+        OplusNotificationChildrenContainerOverlayExImpl
+                .before("flushBackground")
+                .run(param -> {
+                    // run method without blur
+                    // fucking oos16.0.7 makes things harder
+                    if (!hasOverlays) return;
+                    View view = (View) param.args[0];
+                    Object expandableNotificationRow = param.args[1];
+                    Drawable drawableMutate;
+                    Drawable drawableNewDrawable;
+                    if (view != null) {
+                        Object notificationBackgroundView = expandableNotificationRow != null ? getObjectField(expandableNotificationRow, "mBackgroundNormal") : null;
+                        Drawable baseBackLayer = notificationBackgroundView != null ? (Drawable) getObjectField(notificationBackgroundView, "getBaseBackgroundLayer") : null;
+                        Drawable baseBackgroundLayer = notificationBackgroundView != null ? baseBackLayer : null;
+                        if (baseBackgroundLayer != null) {
+                            Drawable.ConstantState constantState = baseBackgroundLayer.getConstantState();
+                            if (constantState == null || (drawableNewDrawable = constantState.newDrawable(view.getContext().getResources())) == null || (drawableMutate = drawableNewDrawable.mutate()) == null) {
+                                drawableMutate = baseBackgroundLayer.mutate();
+                            }
+                        } else {
+                            drawableMutate = null;
+                        }
+                        view.setBackground(drawableMutate);
+                        view.invalidate();
+                    }
+                    param.setResult(null);
+                });
 
     }
 
