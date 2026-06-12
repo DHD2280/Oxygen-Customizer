@@ -27,7 +27,12 @@ public class NotificationVanillaIceCream extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     private boolean hasOverlays = false;
     private final Pattern capsulePattern = Pattern.compile(
-            "Capsule|NotificationCapsuleContainer|CapsuleEarView|OplusClearAllButton|OplusNotificationChildrenContainerOverlayExImpl"
+            "Capsule|" +
+                    "NotificationCapsuleContainer|" +
+                    "CapsuleEarView|" +
+                    "OplusClearAllButton|" +
+                    "OplusNotificationChildrenContainerOverlayExImpl|" +
+                    "OplusCustomRow"
     );
 
     public NotificationVanillaIceCream(Context context) {
@@ -164,7 +169,7 @@ public class NotificationVanillaIceCream extends XposedMods {
                     Drawable drawableNewDrawable;
                     if (view != null) {
                         Object notificationBackgroundView = expandableNotificationRow != null ? getObjectField(expandableNotificationRow, "mBackgroundNormal") : null;
-                        Drawable baseBackLayer = notificationBackgroundView != null ? (Drawable) getObjectField(notificationBackgroundView, "getBaseBackgroundLayer") : null;
+                        Drawable baseBackLayer = notificationBackgroundView != null ? (Drawable) callMethod(notificationBackgroundView, "getBaseBackgroundLayer") : null;
                         Drawable baseBackgroundLayer = notificationBackgroundView != null ? baseBackLayer : null;
                         if (baseBackgroundLayer != null) {
                             Drawable.ConstantState constantState = baseBackgroundLayer.getConstantState();
