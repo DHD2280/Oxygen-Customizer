@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -46,6 +47,8 @@ public class Buttons extends XposedMods {
     private static boolean volumeToTorchHasTimeout = false;
     private static Object PWMExImpl = null;
     private static boolean volumeToTorchProximity = false;
+    private static boolean mindspaceButtonAction = false;
+    private static int KEYCODE_MIND_SPACE_SHORT_PRESS = 781;
     private static SensorManager sensorManager;
     private static Sensor proximitySensor;
     private static SensorEventListener proximitySensorListener;
@@ -95,6 +98,7 @@ public class Buttons extends XposedMods {
         volumeToTorchHasTimeout = Xprefs.getBoolean("volbtn_torch_enable_timeout", false);
         volumeToTorchTimeout = Xprefs.getSliderInt("volbtn_torch_timeout", 5) * 1000;
         volumeToTorchProximity = Xprefs.getBoolean("volbtn_torch_use_proximity", false);
+        mindspaceButtonAction = Xprefs.getBoolean("mindspace_button_action", false);
 
         settingsUpdated = true;
     }
@@ -270,6 +274,35 @@ public class Buttons extends XposedMods {
                     }
                 }
             });
+
+            if(lpparam.packageName.equals("android")){
+            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if(!mindspaceButtonAction) return;
+                    try{
+                        KeyEvent event = (KeyEvent) param.args[0];
+                        if (event.getKeyCode() == KEYCODE_MIND_SPACE_SHORT_PRESS) {
+                            if (event.getAction() == KeyEvent.ACTION_UP) {
+                                Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                                // Open the browser as a test action
+                                if (context == null) return;
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                                    intent.addCategory(Intent.CATEGORY_APP_BROWSER);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    context.startActivity(intent);
+                                } catch (Throwable t) {
+                                    XposedBridge.log("MindSpace ERROR Browser: " + t.getMessage());
+                                }
+                            }
+                            param.setResult(0);
+                        }
+                    } catch (Throwable t) {
+                        log(" ERROR IN interceptKeyBeforeQueueing-MindspaceButton\n" + t);
+                    }
+                }});
+            }
 
             hookAllMethods(PhoneWindowManagerClass, "startedWakingUp", new XC_MethodHook() {
                 @Override

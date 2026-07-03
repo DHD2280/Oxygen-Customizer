@@ -478,6 +478,7 @@ public final class Constants {
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT_SWITCH = "torch_long_press_power_gesture_enable_timeout";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT = "torch_long_press_power_timeout";
             public static final String BUTTONS_VOLUME_MUSIC = "volbtn_music_controls";
+            public static final String BUTTONS_MINDSPACE = "mindspace_button_action";
         }
 
         public static class Lockscreen {

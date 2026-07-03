@@ -61,4 +61,17 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="mindspace_button"
+        android:title="@string/mindspace_button_category_title"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="mindspace_button_action"
+            android:summary="@string/mindspace_button_summary"
+            android:title="@string/mindspace_button_title"
+            app:iconSpaceReserved="false" />
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>

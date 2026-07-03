@@ -824,6 +824,9 @@
     <string name="volume_buttons_category_title">Volume Buttons</string>
     <string name="volbtn_music_controls_title">Volume button music controls</string>
     <string name="volbtn_music_controls_summary">Control music playback with volume buttons</string>
+    <string name="mindspace_button_category_title">MindSpace Button</string>
+    <string name="mindspace_button_summary">Open Browser on button press</string>
+    <string name="mindspace_button_title">MindSpace Button Action</string>
 
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Lockscreen</string>
