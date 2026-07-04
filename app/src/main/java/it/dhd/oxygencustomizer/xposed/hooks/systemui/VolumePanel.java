@@ -21,7 +21,7 @@ import android.graphics.Color;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -44,7 +44,7 @@ public class VolumePanel extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mDesiredTimeout = Xprefs.getSliderInt(VOLUME_PANEL_TIMEOUT, 3);
@@ -69,8 +69,7 @@ public class VolumePanel extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass OplusVolumeSeekBar = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusVolumeSeekBar");
         sliderCustomizable = OplusVolumeSeekBar.getClazz() != null;

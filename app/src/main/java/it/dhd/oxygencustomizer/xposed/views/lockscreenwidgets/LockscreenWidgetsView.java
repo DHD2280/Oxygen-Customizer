@@ -7,7 +7,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getBluetoothController;
@@ -253,19 +253,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private void setupDimens() {
 
         // Fab Dimens
-        mFabWidth = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_width);
-        mFabHeight = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_height);
-        mFabMarginStart = modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_start);
-        mFabMarginEnd = modRes.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_end);
-        mFabPadding = modRes.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding);
+        mFabWidth = moduleResources.getDimensionPixelSize(R.dimen.kg_widget_main_width);
+        mFabHeight = moduleResources.getDimensionPixelSize(R.dimen.kg_widget_main_height);
+        mFabMarginStart = moduleResources.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_start);
+        mFabMarginEnd = moduleResources.getDimensionPixelSize(R.dimen.kg_widgets_main_margin_end);
+        mFabPadding = moduleResources.getDimensionPixelSize(R.dimen.kg_main_widgets_icon_padding);
 
         // Circle Dimens
-        mWidgetCircleSize = modRes.getDimensionPixelSize(R.dimen.kg_widget_circle_size);
-        mWidgetMarginHorizontal = modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
+        mWidgetCircleSize = moduleResources.getDimensionPixelSize(R.dimen.kg_widget_circle_size);
+        mWidgetMarginHorizontal = moduleResources.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
         if (Build.VERSION.SDK_INT >= 35) {
             mWidgetCircleSize = (int) (mWidgetCircleSize * 0.85f);
         }
-        mWidgetIconPadding = modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
+        mWidgetIconPadding = moduleResources.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
     }
 
     private void drawUI() {
@@ -387,9 +387,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).topMargin =
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
+                moduleResources.getDimensionPixelSize(R.dimen.kg_widget_margin_vertical);
         ((MarginLayoutParams) secondaryWidgetsContainer.getLayoutParams()).bottomMargin =
-                modRes.getDimensionPixelSize(R.dimen.kg_widget_margin_bottom);
+                moduleResources.getDimensionPixelSize(R.dimen.kg_widget_margin_bottom);
 
         // Add ImageViews to the secondary widgets container
         mSecondaryWidgetViews = new ImageView[]{
@@ -537,19 +537,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 // OpenWeatherMap
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_rain);
                 } else if (formattedCondition.toLowerCase().contains("clear")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clear);
                 } else if (formattedCondition.toLowerCase().contains("storm")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_storm);
                 } else if (formattedCondition.toLowerCase().contains("snow")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_snow);
                 } else if (formattedCondition.toLowerCase().contains("wind")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_mist);
                 }
 
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
@@ -755,8 +755,8 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         ViewGroup.LayoutParams params = efab.getLayoutParams();
         if (params instanceof LayoutParams layoutParams) {
             if (efab.getVisibility() == View.VISIBLE && mMainWidgetsList.size() == 1) {
-                layoutParams.width = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_width);
-                layoutParams.height = modRes.getDimensionPixelSize(R.dimen.kg_widget_main_height);
+                layoutParams.width = moduleResources.getDimensionPixelSize(R.dimen.kg_widget_main_width);
+                layoutParams.height = moduleResources.getDimensionPixelSize(R.dimen.kg_widget_main_height);
             } else {
                 layoutParams.width = 0;
                 layoutParams.weight = 1;
@@ -772,7 +772,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             case 1 -> R.drawable.lockscreen_widget_background_square;
             default -> R.drawable.lockscreen_widget_background_circle;
         };
-        Drawable d = ResourcesCompat.getDrawable(modRes, bgRes, mContext.getTheme());
+        Drawable d = ResourcesCompat.getDrawable(moduleResources, bgRes, mContext.getTheme());
         iv.setBackground(d);
         setButtonActiveState(iv, null, false);
     }
@@ -895,7 +895,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 setUpWidgetResources(iv, efab, v -> {
                     mActivityLauncherUtils.launchTimer(false);
                     vibrate(1);
-                }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
+                }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), moduleResources.getString(R.string.clock_timer));
                 break;
             case "camera":
                 setUpWidgetResources(iv, efab, v -> {
@@ -924,7 +924,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                     mediaButtonFab = efab;
                 }
                 setUpWidgetResources(iv, efab, v -> toggleMediaPlaybackState(),
-                        ResourcesCompat.getDrawable(modRes, R.drawable.ic_play, mContext.getTheme()),
+                        ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_play, mContext.getTheme()),
                         getString(mContext,MEDIA_PLAY_LABEL, SYSTEM_UI));
                 break;
             case "weather":
@@ -1151,7 +1151,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
     private void updateMediaPlaybackState() {
         boolean isPlaying = isMediaPlaying();
         Drawable icon = ResourcesCompat.getDrawable(
-                modRes,
+                moduleResources,
                 isPlaying ? R.drawable.ic_pause : R.drawable.ic_play,
                 mContext.getTheme()
         );

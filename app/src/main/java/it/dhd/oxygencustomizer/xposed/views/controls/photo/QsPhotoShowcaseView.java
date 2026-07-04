@@ -1,7 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.photo;
 
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
@@ -122,7 +122,7 @@ public class QsPhotoShowcaseView extends ImageView {
             radius = getContext().getResources().getDimension(R.dimen.qs_controls_container_radius);
             mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         } else {
-            radius = modRes.getDimension(R.dimen.qs_controls_container_radius);
+            radius = moduleResources.getDimension(R.dimen.qs_controls_container_radius);
             mPowerManager = SystemUtils.PowerManager();
         }
         if (mPowerManager != null) {
@@ -222,7 +222,7 @@ public class QsPhotoShowcaseView extends ImageView {
                                 setImageDrawable(ResourcesCompat.getDrawable(
                                         mSettingsInterface ?
                                                 mContext.getResources() :
-                                                modRes,
+                                                moduleResources,
                                         R.mipmap.ic_launcher,
                                         mContext.getTheme()));
                             }

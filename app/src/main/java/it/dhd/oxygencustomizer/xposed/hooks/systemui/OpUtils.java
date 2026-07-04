@@ -19,7 +19,7 @@ import android.text.TextUtils;
 import androidx.core.content.res.ResourcesCompat;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -123,30 +123,31 @@ public class OpUtils extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!listenPackage.equals(PRParam.getPackageName())) return;
 
-        OpUtils = findClassIfExists("com.oplusos.systemui.util.OpUtils", lpparam.classLoader);
+        OpUtils = findClassIfExists("com.oplusos.systemui.util.OpUtils", PRParam.getClassLoader());
 
-        QsColorUtil = findClassInArray(lpparam,
+        QsColorUtil = findClassInArray(PRParam,
                 "com.oplus.systemui.qs.base.util.QsColorUtil" /* OOS15 */,
                 "com.oplus.systemui.qs.util.QsColorUtil" /* OOS13-14 */);
 
-        QSFragmentHelper = findClassInArray(lpparam,
+        QSFragmentHelper = findClassInArray(PRParam,
                 "com.oplus.systemui.qs.helper.QSFragmentHelper",
                 "com.oplusos.systemui.qs.helper.QSFragmentHelper");
 
-        Class<?> LunarHelperClass = findClassInArray(lpparam,
+        Class<?> LunarHelperClass = findClassInArray(PRParam,
                 "com.oplus.systemui.keyguard.clock.LunarHelper", // OOS14
                 "com.oplusos.systemui.keyguard.clock.LunarHelper" /* OOS13 */);
 
         if (LunarHelperClass != null) {
             if (Build.VERSION.SDK_INT >= 35) {
                 Object LunarHelperCompanion = getStaticObjectField(LunarHelperClass, "Companion");
-                ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper", lpparam.classLoader);
+                ReflectedClass StatusBarHelper = ReflectedClass.of("com.oplus.systemui.statusbar.util.StatusBarHelper", PRParam.getClassLoader());
                 StatusBarHelper
                         .afterConstruction()
                         .run(param -> {
@@ -169,13 +170,13 @@ public class OpUtils extends XposedMods {
         } catch (Throwable ignored) {}
 
         try {
-            COUISeekBar = findClass("com.coui.appcompat.seekbar.COUISeekBar", lpparam.classLoader);
+            COUISeekBar = findClass("com.coui.appcompat.seekbar.COUISeekBar", PRParam.getClassLoader());
         } catch (Throwable ignored) {}
 
         try {
             COUISeekBarListener = findClass(
                     "com.coui.appcompat.seekbar.COUISeekBar$OnSeekBarChangeListener",
-                    lpparam.classLoader
+                    PRParam.getClassLoader()
             );
         } catch (Throwable ignored) {}
 

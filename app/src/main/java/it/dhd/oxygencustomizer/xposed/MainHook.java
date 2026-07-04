@@ -19,7 +19,7 @@ public class MainHook implements IXposedHookZygoteInit, IXposedHookInitPackageRe
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         ReflectedClass.setDefaultClassloader(loadPackageParam.classLoader);
-        XPLauncher.handleLoadPackage(loadPackageParam);
+//        XPLauncher.handleLoadPackage(loadPackageParam);
     }
 
     @Override

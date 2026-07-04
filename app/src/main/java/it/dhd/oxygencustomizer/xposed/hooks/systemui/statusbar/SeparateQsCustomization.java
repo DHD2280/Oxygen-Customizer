@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
@@ -109,7 +109,7 @@ public class SeparateQsCustomization extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mPhotoShowcase = Xprefs.getString(QS_PHOTO_SHOWCASE, "0").equals("1");
@@ -375,7 +375,7 @@ public class SeparateQsCustomization extends XposedMods {
     }
     
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
@@ -512,7 +512,7 @@ public class SeparateQsCustomization extends XposedMods {
                     });
         }
 
-        ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
+        ReflectedClass OplusPanelViewPagerController = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusPanelViewPagerController");
         OplusPanelViewPagerController
                 .before("isRightArea")
                 .run(param -> {

@@ -24,7 +24,7 @@ import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.GoogleMonochromeIconFactory;
@@ -62,7 +62,7 @@ public class ThemedIcons extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         ForceThemedLauncherIcons = Xprefs.getBoolean("force_themed_launcher_icons", false);
         mAlternative = Xprefs.getBoolean("alternative_monochrome", false);
         mAllowCustomMap = Xprefs.getBoolean("custom_themed_icons_where", false);
@@ -83,9 +83,9 @@ public class ThemedIcons extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         try {
-            Class<?> BaseIconFactoryClass = findClass("com.android.launcher3.icons.BaseIconFactory", lpparam.classLoader);
+            Class<?> BaseIconFactoryClass = findClass("com.android.launcher3.icons.BaseIconFactory", PRParam.getClassLoader());
 
             hookAllConstructors(BaseIconFactoryClass, new XC_MethodHook() {
                 @Override

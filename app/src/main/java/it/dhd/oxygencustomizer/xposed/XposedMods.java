@@ -6,9 +6,9 @@ import android.util.Log;
 import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.startup.HybridClassLoader;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public abstract class XposedMods {
 
@@ -19,27 +19,22 @@ public abstract class XposedMods {
         mContext = context;
     }
 
-    public abstract void updatePrefs(String... Key);
+    public abstract void onPreferenceUpdated(String... Key);
 
-    public abstract void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable;
+    public abstract void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable;
 
     protected void initResources() {}
-
-    public final void handleLoadPackageInternal(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
-        ReflectedClass.setDefaultClassloader(injectClassLoader(lpParam.classLoader));
-        handleLoadPackage(lpParam);
-    }
 
     public abstract boolean listensTo(String packageName);
 
     public void log(String message) {
         if (!mDebug) return;
-        XposedBridge.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] " + message);
+        Logger.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] " + message);
     }
 
     public void log(Throwable throwable) {
-        XposedBridge.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] ERROR:" + " \n " + Log.getStackTraceString(throwable));
-        XposedBridge.log(throwable);
+        Logger.log("[ Oxygen Customizer - " + getClass().getSimpleName() + " ] ERROR:" + " \n " + Log.getStackTraceString(throwable));
+        Logger.log(throwable);
     }
 
     private static void injectClassLoader(ClassLoader self, ClassLoader newParent) {

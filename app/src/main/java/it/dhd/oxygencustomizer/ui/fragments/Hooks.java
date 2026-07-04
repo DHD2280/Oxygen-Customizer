@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
@@ -48,9 +49,12 @@ import com.topjohnwu.superuser.ipc.RootService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import io.github.libxposed.service.XposedService;
+import io.github.libxposed.service.XposedServiceHelper;
 import it.dhd.oxygencustomizer.IRootProviderService;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -61,6 +65,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.ReoptimizeDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.xposed.XPrefs;
 
 public class Hooks extends BaseFragment {
 
@@ -70,9 +75,38 @@ public class Hooks extends BaseFragment {
     private final List<String> hookedPackageList = new ArrayList<>();
     private List<String> monitorPackageList;
     private int dotCount = 0;
+    private XposedService mXposedService;
+    private List<String> mActiveScope = new ArrayList<>();
     private ServiceConnection mCoreRootServiceConnection;
     private IRootProviderService mRootServiceIPC = null;
     private final String reboot_key = "reboot_pending";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        XPrefs.init(requireContext());
+
+        XposedServiceHelper.registerListener(new XposedServiceHelper.OnServiceListener() {
+            @Override
+            public void onServiceBind(@NonNull XposedService service) {
+                mXposedService = service;
+                refreshScope();
+            }
+
+            @Override
+            public void onServiceDied(@NonNull XposedService service) {
+                mXposedService = null;
+            }
+        });
+    }
+
+    private void refreshScope() {
+        if (mXposedService != null) {
+            mActiveScope = mXposedService.getScope();
+        } else {
+            mActiveScope = new ArrayList<>();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -167,6 +201,26 @@ public class Hooks extends BaseFragment {
             refreshListItem();
         }
     };
+
+    private void requestScopeActivation(String pkgName, ScopeResultCallback callback) {
+        if (mXposedService == null) {
+            callback.onFail("lsposed_not_found");
+            return;
+        }
+        mXposedService.requestScope(Collections.singletonList(pkgName), new XposedService.OnScopeEventListener() {
+            @Override
+            public void onScopeRequestApproved(@NonNull List<String> approved) {
+                XposedService.OnScopeEventListener.super.onScopeRequestApproved(approved);
+                callback.onSuccess();
+            }
+
+            @Override
+            public void onScopeRequestFailed(@NonNull String message) {
+                XposedService.OnScopeEventListener.super.onScopeRequestFailed(message);
+                callback.onFail(message);
+            }
+        });
+    }
 
     private void checkHookedPackages() {
         hookedPackageList.clear();
@@ -295,8 +349,8 @@ public class Hooks extends BaseFragment {
                 desc.setText(getText(
                         isAppInstalled(pkgName)
                                 ? isBootLooped(pkgName)
-                                ? R.string.package_hook_bootlooped
-                                : R.string.package_hook_no_response
+                                  ? R.string.package_hook_bootlooped
+                                  : R.string.package_hook_no_response
                                 : R.string.package_not_found));
             }
         }
@@ -336,31 +390,31 @@ public class Hooks extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            MenuHost menuHost = requireActivity();
-            // Add menu items without using the Fragment Menu APIs
-            // Note how we can tie the MenuProvider to the viewLifecycleOwner
-            // and an optional Lifecycle.State (here, RESUMED) to indicate when
-            // the menu should be visible
-            menuHost.addMenuProvider(new MenuProvider() {
-                @Override
-                public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                    // Add menu items here
-                    menu.add(0, 1, 0, R.string.info_hooks)
-                            .setIcon(R.drawable.settingslib_ic_info_outline_24)
-                            .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
-                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                }
+        MenuHost menuHost = requireActivity();
+        // Add menu items without using the Fragment Menu APIs
+        // Note how we can tie the MenuProvider to the viewLifecycleOwner
+        // and an optional Lifecycle.State (here, RESUMED) to indicate when
+        // the menu should be visible
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Add menu items here
+                menu.add(0, 1, 0, R.string.info_hooks)
+                        .setIcon(R.drawable.settingslib_ic_info_outline_24)
+                        .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            }
 
-                @Override
-                public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                    // Handle the menu selection
-                    if (menuItem.getItemId() == 1) {
-                        showInfoDialog();
-                        return true;
-                    }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                // Handle the menu selection
+                if (menuItem.getItemId() == 1) {
+                    showInfoDialog();
                     return true;
                 }
-            }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+                return true;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     private void showInfoDialog() {
@@ -418,4 +472,11 @@ public class Hooks extends BaseFragment {
     public boolean backButtonEnabled() {
         return true;
     }
+
+    interface ScopeResultCallback {
+        void onSuccess();
+
+        void onFail(String reason);
+    }
+
 }

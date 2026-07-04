@@ -33,8 +33,7 @@ import android.view.ViewConfiguration;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -71,7 +70,7 @@ public class Buttons extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(Buttons.class.getSimpleName())) {
                         log("Buttons: Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -85,7 +84,7 @@ public class Buttons extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         if (settingsUpdated) return;
 
@@ -100,7 +99,7 @@ public class Buttons extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;
@@ -116,8 +115,8 @@ public class Buttons extends XposedMods {
         Method overrideShowGlobalActionsInternal;  // PhoneWindowManagerExtImpl
 
         try {
-            PhoneWindowManagerClass = findClass("com.android.server.policy.PhoneWindowManager", lpparam.classLoader);
-            PhoneWindowManagerExtImpl = findClass("com.android.server.policy.PhoneWindowManagerExtImpl", lpparam.classLoader);
+            PhoneWindowManagerClass = findClass("com.android.server.policy.PhoneWindowManager", PRParam.getClassLoader());
+            PhoneWindowManagerExtImpl = findClass("com.android.server.policy.PhoneWindowManagerExtImpl", PRParam.getClassLoader());
 
             overrideInterceptKeyBeforeQueueing = findMethodExact(PhoneWindowManagerExtImpl, "overrideInterceptKeyBeforeQueueing", KeyEvent.class, int.class);
             overrideShowGlobalActionsInternal = findMethodExact(PhoneWindowManagerExtImpl, "overrideShowGlobalActionsInternal");

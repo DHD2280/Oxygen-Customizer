@@ -1,10 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
@@ -31,6 +28,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_STOCK_CLOCK_RED_ONE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_STOCK_CLOCK_RED_ONE_COLOR;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -88,13 +86,11 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -184,7 +180,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         customLockscreenClock = Xprefs.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
@@ -242,7 +238,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         LottieAn = ReflectedClass.of("com.airbnb.lottie.LottieAnimationView").getClazz();
 
@@ -407,26 +403,23 @@ public class LockscreenClock extends XposedMods {
                     });
 
         } else {
-            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
-            hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
-                @SuppressLint("DiscouragedApi")
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
+            ReflectedClass KeyguardStatusViewClass = ReflectedClass.of("com.android.keyguard.KeyguardStatusView");
+            KeyguardStatusViewClass
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        ViewGroup statusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
+                        mStatusViewContainer = (ViewGroup) param.thisObject;
+                        mClockViewContainer = statusViewContainer;
 
-                    ViewGroup statusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
-                    mStatusViewContainer = (ViewGroup) param.thisObject;
-                    mClockViewContainer = statusViewContainer;
+                        // Hide stock clock
+                        GridLayout KeyguardStatusView = (GridLayout) param.thisObject;
 
-                    // Hide stock clock
-                    GridLayout KeyguardStatusView = (GridLayout) param.thisObject;
+                        mClockView = KeyguardStatusView.findViewById(mContext.getResources().getIdentifier("keyguard_clock_container", "id", mContext.getPackageName()));
 
-                    mClockView = KeyguardStatusView.findViewById(mContext.getResources().getIdentifier("keyguard_clock_container", "id", mContext.getPackageName()));
+                        mMediaHostContainer = (View) getObjectField(param.thisObject, "mMediaHostContainer");
 
-                    mMediaHostContainer = (View) getObjectField(param.thisObject, "mMediaHostContainer");
-
-                    registerClockUpdater();
-                }
-            });
+                        registerClockUpdater();
+                    });
         }
 
 
@@ -449,30 +442,27 @@ public class LockscreenClock extends XposedMods {
                     }
                 });
 
-        Class<?> RedTextClock;
-        try {
-            RedTextClock = findClass("com.oplus.systemui.shared.clocks.RedTextClock", lpparam.classLoader);
-        } catch (Throwable t) {
-            RedTextClock = findClass("com.oplusos.systemui.keyguard.clock.RedTextClock", lpparam.classLoader); // OOS 13
-        }
-        findAndHookMethod(RedTextClock, "onTimeChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (customLockscreenClock || mStockClockRed == 0) return;
+        ReflectedClass RedTextClock = ReflectedClass.of(
+                "com.oplus.systemui.shared.clocks.RedTextClock",
+                "com.oplusos.systemui.keyguard.clock.RedTextClock" // OOS13
+        );
+        RedTextClock
+                .after("onTimeChanged")
+                .run(param -> {
+                    if (customLockscreenClock || mStockClockRed == 0) return;
 
-                boolean mShouldRunTicker = getBooleanField(param.thisObject, "mShouldRunTicker");
-                if (!mShouldRunTicker) return;
+                    boolean mShouldRunTicker = getBooleanField(param.thisObject, "mShouldRunTicker");
+                    if (!mShouldRunTicker) return;
 
-                try {
-                    Calendar mTime = (Calendar) getObjectField(param.thisObject, "mTime");
-                    String format = (String) getObjectField(param.thisObject, "format");
-                    String mHour = DateFormat.format(format, mTime).toString();
-                    TextView mTimeHour = (TextView) param.thisObject;
-                    setClockRed(mTimeHour, mHour);
-                } catch (Throwable ignored) {
-                }
-            }
-        });
+                    try {
+                        Calendar mTime = (Calendar) getObjectField(param.thisObject, "mTime");
+                        String format = (String) getObjectField(param.thisObject, "format");
+                        String mHour = DateFormat.format(format, mTime).toString();
+                        TextView mTimeHour = (TextView) param.thisObject;
+                        setClockRed(mTimeHour, mHour);
+                    } catch (Throwable ignored) {
+                    }
+                });
 
     }
 
@@ -766,14 +756,14 @@ public class LockscreenClock extends XposedMods {
     private void initBatteryStatus() {
         if (mBatteryStatusView != null) {
             if (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_charging));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_charging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING ||
                     mBatteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_discharging));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_discharging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_full));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_full));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_level_percentage));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_level_percentage));
             }
         }
 

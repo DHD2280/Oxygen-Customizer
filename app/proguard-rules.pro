@@ -35,6 +35,11 @@
 -keepnames class it.dhd.oxygencustomizer.xposed.**
 -keepnames class it.dhd.oxygencustomizer.xposed.XPrefs
 -keep class it.dhd.oxygencustomizer.xposed.** { *; }
+-dontwarn io.github.libxposed.annotation.**
+-adaptresourcefilecontents META-INF/xposed/java_init.list
+-keep,allowoptimization,allowobfuscation public class * extends io.github.libxposed.api.XposedModule {
+    public <init>();
+}
 
 # UI
 -keep class it.dhd.oxygencustomizer.ui.** { *; }
