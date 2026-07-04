@@ -9,9 +9,11 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
+import android.app.NotificationManager;
 import android.app.usage.NetworkStatsManager;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -29,6 +31,7 @@ import android.os.UserManager;
 import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.VibratorManager;
+import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 
@@ -546,6 +549,52 @@ public class SystemUtils {
             }
         }
         return "";
+    }
+
+    public static void toggleRingerMode() {
+        AudioManager am = AudioManager();
+        if (am != null) {
+            int mode = am.getRingerMode();
+            // Cycle ringer and vibrate
+            if (mode == AudioManager.RINGER_MODE_NORMAL) {
+                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            } else {
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
+        }
+    }
+
+    public static void toggleDnd() {
+        if (instance == null) return;
+        NotificationManager nm = (NotificationManager) instance.mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (nm != null && nm.isNotificationPolicyAccessGranted()) {
+            int filter = nm.getCurrentInterruptionFilter();
+            if (filter == NotificationManager.INTERRUPTION_FILTER_ALL) {
+                // Enable DND
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+            } else {
+                // Disable DND
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+            }
+        }
+    }
+
+    public static void launchCamera(Context context) {
+        Intent intent = new Intent(android.provider.MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void launchAudioRecorder(Context context) {
+        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Intent fallback = context.getPackageManager().getLaunchIntentForPackage("com.oneplus.recorder");
+            if (fallback != null) context.startActivity(fallback);
+        }
     }
 
 }

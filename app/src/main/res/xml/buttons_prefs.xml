@@ -63,15 +63,48 @@
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:key="mindspace_button"
-        android:title="@string/mindspace_button_category_title"
+        android:title="@string/plusKey_button_category_title"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="mindspace_button_action"
-            android:summary="@string/mindspace_button_summary"
-            android:title="@string/mindspace_button_title"
+        <it.dhd.oneplusui.preference.OplusListPreference
+            android:key="plusKey_single_press_button_action_value"
+            android:title="@string/plusKey_single_press_button_title"
+            android:entries="@array/pluskey_action_entries"
+            android:entryValues="@array/pluskey_action_values"
+            android:defaultValue="none"
             app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusListPreference
+            android:key="plusKey_double_press_button_action_value"
+            android:title="@string/plusKey_double_press_button_title"
+            android:entries="@array/pluskey_action_entries"
+            android:entryValues="@array/pluskey_action_values"
+            android:defaultValue="none"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusListPreference
+            android:key="plusKey_triple_press_button_action_value"
+            android:title="@string/plusKey_triple_press_button_title"
+            android:entries="@array/pluskey_action_entries"
+            android:entryValues="@array/pluskey_action_values"
+            android:defaultValue="none"
+            app:iconSpaceReserved="false" />
+
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="plusKey_press_button_action_timeout"
+            android:title="@string/torch_long_press_volbtn_torch_timeout_title"
+            app:defaultValue="250"
+            app:maxVal="600"
+            app:minVal="5"
+            app:showSeekBarValue="false"
+            app:tickInterval="5"
+            app:valueFormat="ms" />
+        <it.dhd.oneplusui.preference.OplusListPreference
+            android:key="plusKey_long_press_button_action_value"
+            android:title="@string/plusKey_long_press_button_title"
+            android:entries="@array/pluskey_action_entries"
+            android:defaultValue="none"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

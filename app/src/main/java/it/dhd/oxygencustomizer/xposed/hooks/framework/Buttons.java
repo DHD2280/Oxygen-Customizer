@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static android.content.Context.RECEIVER_EXPORTED;
+import static android.widget.Toast.LENGTH_LONG;
 import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
@@ -14,6 +15,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.DIS
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,10 +28,13 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
+import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -47,8 +52,6 @@ public class Buttons extends XposedMods {
     private static boolean volumeToTorchHasTimeout = false;
     private static Object PWMExImpl = null;
     private static boolean volumeToTorchProximity = false;
-    private static boolean mindspaceButtonAction = false;
-    private static int KEYCODE_MIND_SPACE_SHORT_PRESS = 781;
     private static SensorManager sensorManager;
     private static Sensor proximitySensor;
     private static SensorEventListener proximitySensorListener;
@@ -83,6 +86,170 @@ public class Buttons extends XposedMods {
         }
     };
 
+    public class PlusKeyActionHandler {
+        public static void execute(Context context, String actionValue) {
+            if (context == null || TextUtils.isEmpty(actionValue) || actionValue.equals("none")) return;
+
+            try {
+                if (actionValue.contains("/")) {
+                    // Activity Format: "package.name/com.package.ActivityName"
+                    String[] parts = actionValue.split("/");
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.setComponent(new ComponentName(parts[0], parts[1]));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+                } else {
+                    switch (actionValue) {
+                        case "browser":
+                            Intent browser = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_BROWSER);
+                            browser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            context.startActivity(browser);
+                            break;
+                        case "torch": SystemUtils.toggleFlash(); break;
+                        case "ringer": SystemUtils.toggleRingerMode(); break;
+                        case "dnd": SystemUtils.toggleDnd(); break;
+                        case "camera": SystemUtils.launchCamera(context); break;
+                        case "recorder": SystemUtils.launchAudioRecorder(context); break;
+                        case "screenshot":
+                            context.sendBroadcast(new Intent("it.dhd.oxygencustomizer.ACTIONS_SCREENSHOT_OC"));
+                            break;
+                        default:
+                            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(actionValue);
+                            if (launchIntent != null) {
+                                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                context.startActivity(launchIntent);
+                            }
+                            break;
+                    }
+                }
+            } catch (Throwable t) {
+                XposedBridge.log("PlusKey ERROR executing " + actionValue + ": " + t.getMessage());
+            }
+        }
+    }
+    public static class PlusKeyButtonHandlerClass {
+
+        private static final int KEYCODE_PLUSKEY_SHORT_PRESS = 781;
+        private static final int KEYCODE_PLUSKEY_LONG_PRESS = 782;
+        private static int pressCount = 0;
+
+        // Using WeakReference to avoid memory leaks
+        private static WeakReference<Context> contextRef;
+        public static boolean singlePressEnabled = false;
+        public static boolean doublePressEnabled = false;
+        public static boolean triplePressEnabled = false;
+        public static boolean longPressEnabled = false;
+        public static long timeout = 250;
+
+        public static boolean isAnyShortPressEnabled(){
+            return singlePressEnabled || doublePressEnabled || triplePressEnabled;
+        }
+        public static boolean isLongPressEnabled(){
+            return longPressEnabled;
+        }
+
+        private static final Runnable actionRunnable = () -> {
+            int count = pressCount;
+            //XposedBridge.log("PlusKey LOG: actionRunnable START. Current pressCount read as: " + count);
+
+            // Reset count immediately for next sequence
+            pressCount = 0;
+            //XposedBridge.log("PlusKey LOG: actionRunnable. pressCount reset to 0");
+
+            Context context = (contextRef != null) ? contextRef.get() : null;
+            if (context == null) {
+                XposedBridge.log("PlusKey LOG: actionRunnable ABORT. Context from WeakReference is NULL");
+                return;
+            }
+
+            boolean shouldExecute = false;
+            if (count == 1 && singlePressEnabled) shouldExecute = true;
+            else if (count == 2 && doublePressEnabled) shouldExecute = true;
+            else if (count >= 3 && triplePressEnabled) shouldExecute = true;
+
+            //XposedBridge.log("PlusKey LOG: actionRunnable evaluation. count=" + count +
+            //        ", single=" + singlePressEnabled + ", double=" + doublePressEnabled +
+            //        ", triple=" + triplePressEnabled + " -> shouldExecute=" + shouldExecute);
+
+            if (shouldExecute) {
+                executeAction(context, count);
+            } else {
+                XposedBridge.log("PlusKey LOG: actionRunnable. No enabled action matched count=" + count);
+            }
+        };
+
+        /**
+         * Call this when the short press key (781) ACTION_UP is detected.
+         */
+        public static void ShortPressDetected(Context context, Handler handler) {
+            //XposedBridge.log("PlusKey LOG: ShortPressDetected ENTRY. Current pressCount before increment: " + pressCount);
+
+            if (!singlePressEnabled && !doublePressEnabled && !triplePressEnabled) {
+                //XposedBridge.log("PlusKey LOG: ShortPressDetected EXIT. No short press actions are enabled in settings.");
+                return;
+            }
+
+            contextRef = new WeakReference<>(context);
+            pressCount++;
+            //XposedBridge.log("PlusKey LOG: ShortPressDetected. pressCount incremented to: " + pressCount);
+
+            if (handler != null) {
+                //XposedBridge.log("PlusKey LOG: ShortPressDetected. Calling handler.removeCallbacks(actionRunnable)");
+                handler.removeCallbacks(actionRunnable);
+
+                // Check if we should execute immediately
+                boolean hasMultiPressActions = doublePressEnabled || triplePressEnabled;
+                boolean isOnlySingleEnabled = singlePressEnabled && !hasMultiPressActions;
+
+                //XposedBridge.log("PlusKey LOG: ShortPressDetected. isOnlySingleEnabled=" + isOnlySingleEnabled + ", hasMultiPressActions=" + hasMultiPressActions + " (pressCount=" + pressCount + ")");
+
+                if (isOnlySingleEnabled || pressCount >= 3 || (pressCount == 2 && !triplePressEnabled)) {
+                    //XposedBridge.log("PlusKey LOG: ShortPressDetected. TRIGGERING IMMEDIATE EXECUTION (runnable.run())");
+                    actionRunnable.run();
+                } else {
+                    //XposedBridge.log("PlusKey LOG: ShortPressDetected. SCHEDULING DELAYED EXECUTION (postDelayed) with timeout: " + timeout);
+                    handler.postDelayed(actionRunnable, timeout);
+                }
+            } else {
+                XposedBridge.log("PlusKey LOG: ShortPressDetected ERROR. Handler provided is NULL");
+            }
+        }
+
+        /**
+         * Call this when the long press key (782) is detected.
+         */
+        public static void LongPressDetected(Context context) {
+            //XposedBridge.log("PlusKey LOG: LongPressDetected ENTRY. Settings longPressEnabled=" + longPressEnabled);
+            if (context == null) {
+            //    XposedBridge.log("PlusKey LOG: LongPressDetected ABORT. Context is NULL");
+                return;
+            }
+            if (!longPressEnabled) {
+            //    XposedBridge.log("PlusKey LOG: LongPressDetected EXIT. longPressEnabled is FALSE");
+                return;
+            }
+            //XposedBridge.log("PlusKey LOG: LongPressDetected. Triggering executeAction for long press (count=0)");
+            executeAction(context, 0);
+        }
+
+        private static void executeAction(Context context, int count) {
+            try {
+                String key = switch (count) {
+                    case 0 -> "plusKey_long_press_button_action_value";
+                    case 1 -> "plusKey_single_press_button_action_value";
+                    case 2 -> "plusKey_double_press_button_action_value";
+                    case 3 -> "plusKey_triple_press_button_action_value";
+                    default -> "";
+                };
+
+                String actionValue = it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs.getString(key, "none");
+                PlusKeyActionHandler.execute(context, actionValue);
+            } catch (Throwable t) {
+                XposedBridge.log("PlusKey executeAction ERROR: " + t.getMessage());
+            }
+        }
+    }
+
     public Buttons(Context context) {
         super(context);
     }
@@ -98,7 +265,21 @@ public class Buttons extends XposedMods {
         volumeToTorchHasTimeout = Xprefs.getBoolean("volbtn_torch_enable_timeout", false);
         volumeToTorchTimeout = Xprefs.getSliderInt("volbtn_torch_timeout", 5) * 1000;
         volumeToTorchProximity = Xprefs.getBoolean("volbtn_torch_use_proximity", false);
-        mindspaceButtonAction = Xprefs.getBoolean("mindspace_button_action", false);
+
+        String singleAction = Xprefs.getString("plusKey_single_press_button_action_value", "none");
+        PlusKeyButtonHandlerClass.singlePressEnabled = !TextUtils.isEmpty(singleAction) && !singleAction.equals("none");
+
+        String doubleAction = Xprefs.getString("plusKey_double_press_button_action_value", "none");
+        PlusKeyButtonHandlerClass.doublePressEnabled = !TextUtils.isEmpty(doubleAction) && !doubleAction.equals("none");
+
+        String tripleAction = Xprefs.getString("plusKey_triple_press_button_action_value", "none");
+        PlusKeyButtonHandlerClass.triplePressEnabled = !TextUtils.isEmpty(tripleAction) && !tripleAction.equals("none");
+
+        String longAction = Xprefs.getString("plusKey_long_press_button_action_value", "none");
+        PlusKeyButtonHandlerClass.longPressEnabled = !TextUtils.isEmpty(longAction) && !longAction.equals("none");
+
+        PlusKeyButtonHandlerClass.timeout = Xprefs.getSliderInt("plusKey_press_button_action_timeout", 250);
+
 
         settingsUpdated = true;
     }
@@ -275,31 +456,38 @@ public class Buttons extends XposedMods {
                 }
             });
 
+
             if(lpparam.packageName.equals("android")){
             hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if(!mindspaceButtonAction) return;
-                    try{
+
+                    try {
                         KeyEvent event = (KeyEvent) param.args[0];
-                        if (event.getKeyCode() == KEYCODE_MIND_SPACE_SHORT_PRESS) {
-                            if (event.getAction() == KeyEvent.ACTION_UP) {
-                                Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
-                                // Open the browser as a test action
-                                if (context == null) return;
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                                    intent.addCategory(Intent.CATEGORY_APP_BROWSER);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    context.startActivity(intent);
-                                } catch (Throwable t) {
-                                    XposedBridge.log("MindSpace ERROR Browser: " + t.getMessage());
+                        int keyCode = event.getKeyCode();
+
+                        Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                        Handler handler = (Handler) XposedHelpers.getObjectField(getObjectField(param.thisObject, "mBase"), "mHandler");
+
+                        if (keyCode == PlusKeyButtonHandlerClass.KEYCODE_PLUSKEY_SHORT_PRESS) {
+                            // Check if any multi-press action is enabled in settings
+                            if (PlusKeyButtonHandlerClass.isAnyShortPressEnabled()) {
+                                if (event.getAction() == KeyEvent.ACTION_UP) {
+                                    PlusKeyButtonHandlerClass.ShortPressDetected(context, handler);
                                 }
+                                param.setResult(0); // Consume the event
+
                             }
-                            param.setResult(0);
+                        } else if (keyCode == PlusKeyButtonHandlerClass.KEYCODE_PLUSKEY_LONG_PRESS) {
+                            if (PlusKeyButtonHandlerClass.isLongPressEnabled()) {
+                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                    PlusKeyButtonHandlerClass.LongPressDetected(context);
+                                }
+                                param.setResult(0); // Consume the event
+                            }
                         }
                     } catch (Throwable t) {
-                        log(" ERROR IN interceptKeyBeforeQueueing-MindspaceButton\n" + t);
+                        log(" ERROR IN PlusKey hook: " + t.getMessage());
                     }
                 }});
             }
@@ -337,6 +525,7 @@ public class Buttons extends XposedMods {
             log(t);
         }
     }
+
 
     @Override
     public boolean listensTo(String packageName) {

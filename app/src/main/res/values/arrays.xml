@@ -1055,4 +1055,32 @@
         <item>1</item>
     </string-array>
 
+    <!-- Buttons -->
+    <string-array name="pluskey_action_entries">
+        <item>@string/none</item>
+        <item>@string/plusKey_action_browser</item>
+        <item>@string/torch</item>
+        <item>@string/ringer</item>
+        <item>@string/plusKey_action_dnd</item>
+        <item>@string/camera</item>
+        <item>@string/plusKey_action_recorder</item>
+        <item>@string/gesture_override_back_hold_command_screenshot</item>
+        <item>@string/qs_widget_custom_app</item>
+        <item>@string/plusKey_activity</item>
+
+    </string-array>
+
+    <string-array name="pluskey_action_values">
+        <item>none</item>
+        <item>browser</item>
+        <item>torch</item>
+        <item>ringer</item>
+        <item>dnd</item>
+        <item>camera</item>
+        <item>recorder</item>
+        <item>screenshot</item>
+        <item>activity_picker</item>
+        <item>full_activity_picker</item>
+    </string-array>
+
 </resources>
