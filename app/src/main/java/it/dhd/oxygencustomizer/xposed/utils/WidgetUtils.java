@@ -2,7 +2,7 @@ package it.dhd.oxygencustomizer.xposed.utils;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -59,7 +59,7 @@ public class WidgetUtils {
         } catch (Throwable t) {
             // We have a calculator icon, so if SystemUI doesn't just return ours
             if (drawableRes.equals(CALCULATOR_ICON))
-                return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
+                return ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_calculator, mContext.getTheme());
             else if (drawableRes.equals(HOME_CONTROLS))
                 return getDrawable(mContext, "controls_icon", SYSTEM_UI);
 
@@ -81,13 +81,13 @@ public class WidgetUtils {
                 // We have out own strings too, so if getString from SystemUI fails
                 // return our own strings,
                 case CALCULATOR_LABEL -> {
-                    return modRes.getString(R.string.calculator);
+                    return moduleResources.getString(R.string.calculator);
                 }
                 case CAMERA_LABEL -> {
-                    return modRes.getString(R.string.camera);
+                    return moduleResources.getString(R.string.camera);
                 }
                 case WALLET_LABEL -> {
-                    return modRes.getString(R.string.wallet);
+                    return moduleResources.getString(R.string.wallet);
                 }
             }
             try {

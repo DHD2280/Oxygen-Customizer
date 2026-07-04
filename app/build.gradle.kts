@@ -125,6 +125,10 @@ dependencies {
     compileOnly(files("libs/api-82.jar"))
     compileOnly(files("libs/api-82-sources.jar"))
 
+    // LSposed
+    implementation(libs.lsposed.api)
+    implementation(libs.lsposed.service)
+
     // App Compat
     implementation(libs.appcompat)
 

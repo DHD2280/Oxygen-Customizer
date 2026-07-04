@@ -1,16 +1,14 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 
 import android.content.Context;
 import android.os.Build;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -36,12 +34,12 @@ public class SuperPowerSaveObserver extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         ReflectedClass SuperPowerSaveSettingsObserver = ReflectedClass.of("com.oplus.systemui.qs.observer.SuperPowerSaveSettingsObserver" /* OOS15-14 */,
                 "com.oplusos.systemui.common.observer.SuperPowerSaveSettingsObserver" /* OOS13 */);
 

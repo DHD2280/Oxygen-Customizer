@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.weather;
 
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
@@ -136,7 +136,7 @@ public class WeatherBinder implements OmniJawsClient.OmniJawsObserver {
 
     @SuppressLint("SetTextI18n")
     private void queryAndUpdateWeather() {
-        Resources res = mSettingsInterface ? mContext.getResources() : modRes;
+        Resources res = mSettingsInterface ? mContext.getResources() : moduleResources;
         Log.v(String.format(TAG, VIEW_TAG), "Querying weather");
         try {
             if (mWeatherClient == null) {

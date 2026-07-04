@@ -18,7 +18,7 @@ package it.dhd.oxygencustomizer.xposed.views;
 
 import static android.view.Gravity.CENTER_VERTICAL;
 import static de.robv.android.xposed.XposedBridge.log;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.applyTextSizeRecursively;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
@@ -34,7 +34,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +46,6 @@ import java.util.ArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -201,9 +199,9 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         boolean reQuery = false;
         String errorText = switch (errorReason) {
             case OmniJawsClient.EXTRA_ERROR_DISABLED ->
-                    modRes.getString(R.string.omnijaws_service_disabled);
+                    moduleResources.getString(R.string.omnijaws_service_disabled);
             case OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS ->
-                    modRes.getString(R.string.omnijaws_service_error_permissions);
+                    moduleResources.getString(R.string.omnijaws_service_error_permissions);
             default -> "";
         };
         if (!TextUtils.isEmpty(errorText)) {
@@ -253,19 +251,19 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
             if (mWeatherInfo != null) {
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_rain);
                 } else if (formattedCondition.toLowerCase().contains("clear")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clear);
                 } else if (formattedCondition.toLowerCase().contains("storm")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_storm);
                 } else if (formattedCondition.toLowerCase().contains("snow")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_snow);
                 } else if (formattedCondition.toLowerCase().contains("wind")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_mist);
                 }
                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 mCurrentImage.setImageDrawable(d);
@@ -348,38 +346,38 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 break;
             case 1: // semi-transparent box
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_box_str_border, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 2: // semi-transparent box (round)
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_border, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 3: // Q-Now Playing background
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.ambient_indication_pill_background, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 4, 5: // accent box
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_accent, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 6: // gradient box
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_gradient, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 7: // Dark Accent border
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_borderacc, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
                 break;
             case 8: // Dark Gradient border
                 bg = ResourcesCompat.getDrawable(appContext.getResources(), R.drawable.date_str_bordergrad, appContext.getTheme());
-                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
-                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, moduleResources.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
 
                 break;
             default:

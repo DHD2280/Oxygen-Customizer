@@ -8,7 +8,7 @@ import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableLinearLayout;
@@ -341,19 +341,19 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 // OpenWeatherMap
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_rain);
                 } else if (formattedCondition.toLowerCase().contains("clear")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clear);
                 } else if (formattedCondition.toLowerCase().contains("storm")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_storm);
                 } else if (formattedCondition.toLowerCase().contains("snow")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_snow);
                 } else if (formattedCondition.toLowerCase().contains("wind")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_mist);
                 }
 
                 final Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
@@ -1142,7 +1142,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 setUpWidgetResources(iv, efab, v -> {
                     mActivityLauncherUtils.launchTimer(true);
                     vibrate(1);
-                }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), modRes.getString(R.string.clock_timer));
+                }, getDrawable(mContext, "ic_alarm", SYSTEM_UI), moduleResources.getString(R.string.clock_timer));
                 break;
             case "w:camera":
                 setUpWidgetResources(iv, efab, v -> {

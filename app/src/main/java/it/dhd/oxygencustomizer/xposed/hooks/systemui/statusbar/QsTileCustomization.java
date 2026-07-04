@@ -131,7 +131,7 @@ import java.util.function.Function;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import io.github.neonorbit.dexplore.DexFactory;
 import io.github.neonorbit.dexplore.Dexplore;
 import io.github.neonorbit.dexplore.filter.ClassFilter;
@@ -277,7 +277,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Qs Colors
@@ -410,8 +410,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenerPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass PersonalityManager = ReflectedClass.of(
                 "com.oplus.systemui.qs.personality.PersonalityManager" /* OOS14-15 */,
@@ -422,7 +421,7 @@ public class QsTileCustomization extends XposedMods {
                     .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
-        if (Build.VERSION.SDK_INT >= 35) findMyDevices(lpparam);
+        if (Build.VERSION.SDK_INT >= 35) findMyDevices(PRParam);
         // Color Hooker
         hookQsColors();
 
@@ -483,7 +482,7 @@ public class QsTileCustomization extends XposedMods {
                     if (qsBrightnessBackgroundCustomize) {
                         setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                     } else {
-                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                         if (color != 0x0) {
                             setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
                         }
@@ -511,7 +510,7 @@ public class QsTileCustomization extends XposedMods {
                     if (qsBrightnessBackgroundCustomize) {
                         setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                     } else {
-                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                         if (color != 0x0) {
                             setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
                         }
@@ -532,7 +531,7 @@ public class QsTileCustomization extends XposedMods {
             if (qsBrightnessBackgroundCustomize) {
                 callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
             } else {
-                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                 callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
             }
         };
@@ -590,7 +589,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
 
-    private void findMyDevices(XC_LoadPackage.LoadPackageParam lpParam) {
+    private void findMyDevices(XposedModuleInterface.PackageReadyParam PRParam) {
         ClassFilter classFilter = new ClassFilter.Builder()
                 .setReferenceTypes(ReferenceTypes.STRINGS_ONLY)
                 .setReferenceFilter(pool ->
@@ -599,7 +598,7 @@ public class QsTileCustomization extends XposedMods {
                 .setModifiers(Modifier.PUBLIC | Modifier.ABSTRACT)
                 .build();
 
-        Dexplore dexplore = DexFactory.load(lpParam.appInfo.sourceDir);
+        Dexplore dexplore = DexFactory.load(PRParam.getApplicationInfo().sourceDir);
 
         ClassData result = dexplore.findClass(DexFilter.MATCH_ALL, classFilter);
         if (result == null) {
@@ -635,7 +634,7 @@ public class QsTileCustomization extends XposedMods {
         ReflectedClass QsViewOutlineProviderKtClz = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.widget.QsViewOutlineProviderKt");
 
         // Highlight Classic
-        ReflectedClass OplusQSHighlightTileView = ReflectedClass.of("com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView");
+        ReflectedClass OplusQSHighlightTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.tile.OplusQSHighlightTileView");
         OplusQSHighlightTileView
                 .afterConstruction()
                 .run(param -> {

@@ -1,16 +1,14 @@
 package it.dhd.oxygencustomizer.xposed.hooks.settings;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.OPLUS_MEMC_FEATURES;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MemcEnabler extends XposedMods {
 
@@ -24,26 +22,22 @@ public class MemcEnabler extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mForceEnableMemc = Xprefs.getBoolean("force_memc_enabled", false);
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        try {
-            Class<?> SysFeatureUtils = findClass("com.oplus.settings.utils.SysFeatureUtils", lpparam.classLoader);
-            hookAllMethods(SysFeatureUtils, "hasOplusFeature", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-
+        ReflectedClass SysFeatureUtils = ReflectedClass.ofIfPossible("com.oplus.settings.utils.SysFeatureUtils");
+        SysFeatureUtils
+                .before("hasOplusFeature")
+                .run(param -> {
                     String requestedFeature = (String) param.args[0];
                     if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && mForceEnableMemc) {
                         param.setResult(true);
                     }
-                }
-            });
-        } catch (Throwable ignored) {}
+                });
     }
 
     @Override

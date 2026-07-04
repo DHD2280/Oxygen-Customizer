@@ -13,7 +13,7 @@ import android.os.Handler;
 import android.view.KeyEvent;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
@@ -35,7 +35,7 @@ public class AdaptivePlayback extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mAdaptivePlaybackEnabled = Xprefs.getBoolean(Constants.Preferences.ADAPTIVE_PLAYBACK_ENABLED, false);
@@ -51,12 +51,11 @@ public class AdaptivePlayback extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        mVolumeState = findClass("com.android.systemui.plugins.VolumeDialogController$StreamState", lpparam.classLoader);
+        mVolumeState = findClass("com.android.systemui.plugins.VolumeDialogController$StreamState", PRParam.getClassLoader());
 
-        Class<?> VolumeDialogControllerImpl = findClass("com.android.systemui.volume.VolumeDialogControllerImpl", lpparam.classLoader);
+        Class<?> VolumeDialogControllerImpl = findClass("com.android.systemui.volume.VolumeDialogControllerImpl", PRParam.getClassLoader());
         hookAllConstructors(VolumeDialogControllerImpl, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

@@ -15,7 +15,7 @@ import android.util.Log;
 import java.util.Arrays;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -134,7 +134,7 @@ public class ThermalProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         TemperatureUnitF = Xprefs.getBoolean("TemperatureUnitF", false);
     }
 
@@ -144,9 +144,9 @@ public class ThermalProvider extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         try {
-            ThermalServiceNative = findClass("com.oplus.compat.os.ThermalServiceNative", lpParam.classLoader);
+            ThermalServiceNative = findClass("com.oplus.compat.os.ThermalServiceNative", PRParam.getClassLoader());
         } catch (Throwable t) {
             log("Error in ThermalProvider: " + t);
         }

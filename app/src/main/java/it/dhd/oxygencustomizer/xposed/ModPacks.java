@@ -201,7 +201,6 @@ public class ModPacks {
                 modPacks.add(CustomNavGestures.class);
                 modPacks.add(DockBackground.class);
                 modPacks.add(RecentsMenu.class);
-
             }
         }
 

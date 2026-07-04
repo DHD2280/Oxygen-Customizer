@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -111,7 +111,7 @@ public class SettingsLibUtilsProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
     }
 
     @Override
@@ -120,8 +120,8 @@ public class SettingsLibUtilsProvider extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        UtilsClass = findClass("com.android.settingslib.Utils", lpparam.classLoader);
-        CoUIColors = findClass("com.coui.appcompat.contextutil.COUIContextUtil", lpparam.classLoader);
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        UtilsClass = findClass("com.android.settingslib.Utils", PRParam.getClassLoader());
+        CoUIColors = findClass("com.coui.appcompat.contextutil.COUIContextUtil", PRParam.getClassLoader());
     }
 }

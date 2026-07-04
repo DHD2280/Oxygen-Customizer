@@ -1,7 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isFastCharging;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isPowerSaving;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
@@ -21,8 +21,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.BatteryManager;
 import android.text.TextUtils;
-import android.widget.RelativeLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -113,49 +113,49 @@ public class NowBarBattery extends RelativeLayout {
     private Drawable getChargingIcon(int style) {
         return switch (style) {
             case 0 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_bold, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_bold, mContext.getTheme());
             case 1 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_asus, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_asus, mContext.getTheme());
             case 2 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_buddy, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_buddy, appContext.getTheme());
             case 3 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_evplug, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_evplug, appContext.getTheme());
             case 4 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_idc, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_idc, appContext.getTheme());
             case 5 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_ios, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_ios, appContext.getTheme());
             case 6 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_koplak, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_koplak, appContext.getTheme());
             case 7 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_miui, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_miui, appContext.getTheme());
             case 8 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_mmk, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_mmk, appContext.getTheme());
             case 9 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_moto, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_moto, appContext.getTheme());
             case 10 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_nokia, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_nokia, appContext.getTheme());
             case 11 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_plug, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_plug, appContext.getTheme());
             case 12 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercable, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powercable, appContext.getTheme());
             case 13 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercord, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powercord, appContext.getTheme());
             case 14 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powerstation, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powerstation, appContext.getTheme());
             case 15 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_realme, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_realme, appContext.getTheme());
             case 16 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_soak, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_soak, appContext.getTheme());
             case 17 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_stres, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_stres, appContext.getTheme());
             case 18 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_strip, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_strip, appContext.getTheme());
             case 19 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_usbcable, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_usbcable, appContext.getTheme());
             case 20 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_xiaomi, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_xiaomi, appContext.getTheme());
             default ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_battery, appContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_battery, appContext.getTheme());
         };
     }
 
@@ -403,7 +403,7 @@ public class NowBarBattery extends RelativeLayout {
     }
 
     private void updateChargingIcon() {
-        int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
+        int roundSize = (int) moduleResources.getDimension(R.dimen.nowbar_album_art_size);
         GradientDrawable background = new GradientDrawable();
         background.setCornerRadius(roundSize);
         background.setColor(mTextColor);

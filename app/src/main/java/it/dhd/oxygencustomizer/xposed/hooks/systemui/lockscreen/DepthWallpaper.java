@@ -57,7 +57,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
@@ -124,7 +124,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         DWallpaperEnabled = Xprefs.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
         DWOpacity = Xprefs.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192);
         DWMode = Integer.parseInt(Xprefs.getString(DEPTH_WALLPAPER_MODE, "0"));
@@ -139,7 +139,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         SuperPowerSaveObserver.registerSuperPowerSaveCallback(isSuperPowerSave -> superPowerSave = isSuperPowerSave);
 

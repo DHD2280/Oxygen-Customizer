@@ -2,7 +2,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.advancedreboot;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.BuildConfig.APPLICATION_ID;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -21,7 +21,7 @@ import android.view.MotionEvent;
 import androidx.core.content.res.ResourcesCompat;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -46,7 +46,7 @@ public class AdvancedReboot extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         hideSosPowerMenu = Xprefs.getBoolean("power_menu_hide_sos", false);
         showAdvancedReboot = Xprefs.getBoolean("show_advanced_reboot", false);
         useAuthForAdvancedReboot = Xprefs.getBoolean("advanced_reboot_auth", false);
@@ -54,7 +54,7 @@ public class AdvancedReboot extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
@@ -139,7 +139,7 @@ public class AdvancedReboot extends XposedMods {
 
         float textX = (float) viewWidth / 2;
         float textY = centerY + radius + dp2px(mContext, 20);
-        String buttonText = modRes.getString(R.string.advanced_reboot_title);
+        String buttonText = moduleResources.getString(R.string.advanced_reboot_title);
         canvas.drawText(buttonText, textX, textY, textPaint);
     }
 

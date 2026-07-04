@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -35,7 +35,7 @@ public class KeyguardPinScrambler extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         shufflePinEnabled = Xprefs.getBoolean(LOCKSCREEN_SHUFFLE_PIN, false);
         keepShuffling = Xprefs.getBoolean(LOCKSCREEN_KEEP_SHUFFLING, false);
     }
@@ -44,7 +44,7 @@ public class KeyguardPinScrambler extends XposedMods {
 
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         ReflectedClass COUINumericKeyboardClass = ReflectedClass.of("com.coui.appcompat.lockview.COUINumericKeyboard");
 
         ReflectedClass.ReflectionConsumer pinShuffleHook = param -> {

@@ -35,10 +35,10 @@ import android.os.Looper;
 import android.text.StaticLayout;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightControllerImpl;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
@@ -95,7 +95,7 @@ public class AodEdgeLight extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mEdgeLightEnabled = Xprefs.getBoolean(EDGE_LIGHT_ENABLED, false);
         mEdgeLightStyle = Integer.parseInt(Xprefs.getString(EDGE_LIGHT_STYLE, "0"));
         mEdgeLightWidth = Xprefs.getSliderFloat(EDGE_LIGHT_WIDTH, 20f);
@@ -122,7 +122,7 @@ public class AodEdgeLight extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass QuickSettingsControllerImpl = ReflectedClass.ofIfPossible("com.android.systemui.shade.QuickSettingsControllerImpl");
         if (QuickSettingsControllerImpl.getClazz() != null) {
@@ -372,7 +372,7 @@ public class AodEdgeLight extends XposedMods {
         EdgeLightControllerImpl.getInstance(mContext).setOptions(mEdgeLightEnabled, mEdgeLightStyle, mEdgeLightWidth, mEdgeLightColorMode, mAlwaysTriggerOnPulse, mRetick, mEdgeLightCustomColor, mEdgeDrawBlur, mEdgeBlurMode, mEdgeBlurType);
     }
 
-    private void drawIncomingPaint(XC_MethodHook.MethodHookParam param, Object mIncomingNotiPaint) {
+    private void drawIncomingPaint(HookHelper.RunParam param, Object mIncomingNotiPaint) {
         Canvas canvas = (Canvas) param.args[0];
         // Drawable
         Drawable mDrawable = (Drawable) getObjectField(mIncomingNotiPaint, "mDrawable");

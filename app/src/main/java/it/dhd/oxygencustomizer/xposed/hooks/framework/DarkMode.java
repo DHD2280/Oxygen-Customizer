@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
@@ -46,7 +46,7 @@ public class DarkMode extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(DarkMode.class.getSimpleName())) {
                         log("DarkMode: Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -61,7 +61,7 @@ public class DarkMode extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (settingsUpdated) return;
 
         enableCustomDarkMode = Xprefs.getBoolean("custom_dark_mode_switch", false);
@@ -71,7 +71,7 @@ public class DarkMode extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;
@@ -84,8 +84,8 @@ public class DarkMode extends XposedMods {
         Class<?> OplusDarkModeServiceManager;
         Method updateList;
         try {
-            OplusDarkModeServiceManager = findClass("com.android.server.OplusDarkModeServiceManager", lpparam.classLoader);
-            final Class<?> OplusDarkModeData = findClass("com.oplus.darkmode.OplusDarkModeData", lpparam.classLoader);
+            OplusDarkModeServiceManager = findClass("com.android.server.OplusDarkModeServiceManager", PRParam.getClassLoader());
+            final Class<?> OplusDarkModeData = findClass("com.oplus.darkmode.OplusDarkModeData", PRParam.getClassLoader());
             updateList = findMethodExact(OplusDarkModeServiceManager, "updateList", int.class);
 
             hookMethod(updateList, new XC_MethodHook() {

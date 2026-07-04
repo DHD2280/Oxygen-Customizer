@@ -10,19 +10,22 @@ import android.annotation.SuppressLint;
 import android.util.ArraySet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 
 /** @noinspection unused, RedundantThrows */
 public class ReflectionTools {
@@ -236,6 +239,18 @@ public class ReflectionTools {
 		}
 	}
 
+	public static List<ViewParent> getAllParents(View view) {
+		List<ViewParent> parents = new ArrayList<>();
+		ViewParent current = view.getParent();
+
+		while (!getAllParents(view).isEmpty()) {
+			parents.add(current);
+			current = current.getParent();
+		}
+
+		return parents;
+	}
+
 	public static void dumpView(View view) {
 		StringBuilder result = new StringBuilder();
 		dumpView(view, result, "");
@@ -386,12 +401,12 @@ public class ReflectionTools {
 	}
 
 	public static Class<?> findClassInArray(
-			XC_LoadPackage.LoadPackageParam lpparam,
+			XposedModuleInterface.PackageReadyParam lpparam,
 			String...classes
 	) {
 		for(String clazz : classes) {
 			try {
-				Class<?> mClazz = findClass(clazz, lpparam.classLoader);
+				Class<?> mClazz = findClass(clazz, lpparam.getClassLoader());
 				if (mClazz != null) {
 					return mClazz;
 				}

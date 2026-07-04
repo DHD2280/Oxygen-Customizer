@@ -48,6 +48,8 @@ gson = "2.14.0"
 core-ktx = "1.19.0"
 dexplore = "1.4.5"
 guava = "33.6.0-android"
+lsposed-api = "101.0.1"
+lsposed-service = "101.0.0"
 
 [libraries]
 
@@ -64,6 +66,10 @@ preference = { module = "androidx.preference:preference", version.ref = "prefere
 swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 palette = { module = "androidx.palette:palette", version.ref = "palette" }
+
+# LSposed 101
+lsposed-api = { module = "io.github.libxposed:api", version.ref = "lsposed-api" }
+lsposed-service = { module = "io.github.libxposed:service", version.ref = "lsposed-service" }
 
 # Google Libraries
 material = { module = "com.google.android.material:material", version.ref = "material" }

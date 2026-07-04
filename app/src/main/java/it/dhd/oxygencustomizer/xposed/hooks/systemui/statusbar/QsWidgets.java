@@ -58,13 +58,13 @@ import android.view.ViewGroup;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplExOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
 
@@ -114,7 +114,7 @@ public class QsWidgets extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
@@ -200,7 +200,7 @@ public class QsWidgets extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass OplusQSTileMediaContainer = ReflectedClass.of(
                 "com.oplus.systemui.qs.OplusQSTileMediaContainer", /* OOS 14-15 */
@@ -272,7 +272,7 @@ public class QsWidgets extends XposedMods {
 
         if (Build.VERSION.SDK_INT >= 35) {
             // Hook oplus view pager in split mode
-            ReflectedClass OplusPanelViewPagerController = ReflectedClass.of("com.oplus.systemui.separate.OplusPanelViewPagerController");
+            ReflectedClass OplusPanelViewPagerController = ReflectedClass.ofIfPossible("com.oplus.systemui.separate.OplusPanelViewPagerController");
             OplusPanelViewPagerController
                     .afterConstruction()
                     .run(param -> mOplusPanelPagerController = param.thisObject);
@@ -320,7 +320,7 @@ public class QsWidgets extends XposedMods {
 
     }
 
-    private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
+    private void hookTouchHandler(HookHelper.RunParam param, MotionEvent event, String methodName) {
         if (!mQsWidgetsEnabled) return;
 
         if (event != null && event.getAction() == MotionEvent.ACTION_OUTSIDE) {

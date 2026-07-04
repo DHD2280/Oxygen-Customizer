@@ -5,7 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.NOW_BAR_CLOCK_FONT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getColorScheme;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getLastNonNullPackageName;
@@ -413,8 +413,8 @@ public class NowBarMusic extends LinearLayout {
             return;
         }
 
-        mPlayPauseButton.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_pause, null));
-        mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_pause, null));
+        mPlayPauseButton.setBackground(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_pause, null));
+        mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_pause, null));
 
         Object mediaData = getMediaData();
         try {
@@ -432,9 +432,9 @@ public class NowBarMusic extends LinearLayout {
                 mTitle.setText(title);
                 mCompactTitle.setText(title);
             } else if (TextUtils.isEmpty(title)) {
-                trackTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
-                mTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
-                mCompactTitle.setText(modRes.getString(R.string.omnijaws_city_unknown));
+                trackTitle.setText(moduleResources.getString(R.string.omnijaws_city_unknown));
+                mTitle.setText(moduleResources.getString(R.string.omnijaws_city_unknown));
+                mCompactTitle.setText(moduleResources.getString(R.string.omnijaws_city_unknown));
             }
             trackTitle.setSelected(true);
             mCompactTitle.setSelected(true);
@@ -444,8 +444,8 @@ public class NowBarMusic extends LinearLayout {
                 mCompactAuthor.setText(artist);
                 mCompactAuthor.setSelected(true);
             } else if (TextUtils.isEmpty(artist)) {
-                mAuthor.setText(modRes.getString(R.string.omnijaws_city_unknown));
-                mCompactAuthor.setText(modRes.getString(R.string.omnijaws_city_unknown));
+                mAuthor.setText(moduleResources.getString(R.string.omnijaws_city_unknown));
+                mCompactAuthor.setText(moduleResources.getString(R.string.omnijaws_city_unknown));
             }
 
             long currentMillis = AudioDataProvider.instance.getCurrentTime();
@@ -471,7 +471,7 @@ public class NowBarMusic extends LinearLayout {
                 roundedDrawable.setAntiAlias(true);
                 mAlbumArtBig.setImageDrawable(roundedDrawable);
                 mAlbumArtListener.onAlbumArtChanged(roundedDrawable);
-                int roundSize = (int) modRes.getDimension(R.dimen.nowbar_album_art_size);
+                int roundSize = (int) moduleResources.getDimension(R.dimen.nowbar_album_art_size);
                 CircleFramedDrawable drawable = new CircleFramedDrawable(bitmap, roundSize);
                 albumArt.setImageDrawable(drawable);
                 albumArt.clearColorFilter();
@@ -508,8 +508,8 @@ public class NowBarMusic extends LinearLayout {
 
     private boolean resetMediaIfNeeded() {
         if (!AudioDataProvider.isMediaPlaying()) {
-            mPlayPauseButton.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_play, null));
-            mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(modRes, R.drawable.ic_play, null));
+            mPlayPauseButton.setBackground(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_play, null));
+            mPlayPauseButtonBig.setBackground(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_play, null));
             mCurrentTime.setText("0:00");
             mTotalTime.setText("0:00");
             mTrackSeekBar.setProgress(0);
@@ -616,7 +616,7 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void setDefaultIcon() {
-        Drawable defaultIcon = ResourcesCompat.getDrawable(modRes, R.drawable.ic_volume_eq, appContext.getTheme());
+        Drawable defaultIcon = ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_volume_eq, appContext.getTheme());
         albumArt.setImageDrawable(defaultIcon);
         albumArt.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         mAlbumArtBig.setImageDrawable(defaultIcon);

@@ -14,7 +14,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -42,7 +42,7 @@ public class QSTiles extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mCustomizeQSTiles = Xprefs.getBoolean(QS_CUSTOMIZE_TILES, false);
@@ -61,10 +61,9 @@ public class QSTiles extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        ReflectedClass QuickQSPanel = ReflectedClass.of("com.android.systemui.qs.QuickQSPanel");
+        ReflectedClass QuickQSPanel = ReflectedClass.ofIfPossible("com.android.systemui.qs.QuickQSPanel");
         QuickQSPanel
                 .before("getNumQuickTiles")
                 .run(param -> {

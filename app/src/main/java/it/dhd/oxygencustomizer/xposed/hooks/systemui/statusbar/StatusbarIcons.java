@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -27,7 +27,7 @@ public class StatusbarIcons extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         hideBluetooth = Xprefs.getBoolean("hide_bluetooth_when_disconnected", false);
         mHideWifiActivity = Xprefs.getBoolean("hide_inout_wifi", false);
         mHideMobileActivity = Xprefs.getBoolean("hide_inout_mobile", false);
@@ -36,7 +36,7 @@ public class StatusbarIcons extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         try {
             ReflectedClass OplusPhoneStatusBarPolicyExImpl = ReflectedClass.of(
                     "com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl" /* OOS15-14 */,
@@ -77,6 +77,54 @@ public class StatusbarIcons extends XposedMods {
                                 log(t);
                             }
                         });
+//                OplusStatusBarSignalPolicyExImpl
+//                        .after("bindEx")
+//                        .run(param -> {
+//                            XposedBridge.log("StatusbarIcons: after bindEx");
+//                            if (!(param.args[0] instanceof ViewGroup viewGroup)) return;
+//                            int id = viewGroup.getContext().getResources()
+//                                    .getIdentifier("wifi_inout", "id", viewGroup.getContext().getPackageName());
+//                            if (id != 0) {
+//                                View wifiInOut = viewGroup.findViewById(id);
+//                                if (wifiInOut != null) {
+//                                    wifiInOut.setVisibility(View.GONE);
+//                                    XposedBridge.log("StatusbarIcons: wifi_inout view found and set gone");
+//                                }
+//                            }
+//                            XposedBridge.log("StatusbarIcons: wifi_inout id NULL");
+//                        }, true);
+//
+//                ReflectedClass WifiViewBinder = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.pipeline.wifi.ui.binder.WifiViewBinder");
+//                if (WifiViewBinder.getClazz() != null) {
+//                    WifiViewBinder
+//                            .after("bind")
+//                            .run(param -> {
+//                                XposedBridge.log("StatusbarIcons: after WifiViewBinder bind");
+//                                if (!(param.args[0] instanceof ViewGroup viewGroup)) return;
+//                                int resId = viewGroup.getResources().getIdentifier(
+//                                        "wifi_in", "id", viewGroup.getContext().getPackageName()
+//                                );
+//                                int resId2 = viewGroup.getResources().getIdentifier(
+//                                        "wifi_out", "id", viewGroup.getContext().getPackageName()
+//                                );
+//                                ImageView imageView2 = (ImageView) viewGroup.findViewById(resId);
+//                                ImageView imageView3 = (ImageView) viewGroup.findViewById(resId2);
+//                                if (mHideWifiActivity) {
+//                                    imageView2.setVisibility(View.GONE);
+//                                    imageView3.setVisibility(View.GONE);
+//                                }
+//                                XposedBridge.log("StatusbarIcons: wifi_in/out view found and set gone");
+//                            }, true);
+//                }
+//
+//                ReflectedClass DataActivityModelKt = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModelKt");
+//                if (DataActivityModelKt.getClazz() != null) {
+//                    DataActivityModelKt
+//                            .before("toWifiDataActivityModel")
+//                            .run(param -> {
+////                                if (mHideWifiActivity) param.args[0] = 0;
+//                            });
+//                }
             } else {
                 OplusStatusBarSignalPolicyExImpl
                         .before("getWifiActivityId")

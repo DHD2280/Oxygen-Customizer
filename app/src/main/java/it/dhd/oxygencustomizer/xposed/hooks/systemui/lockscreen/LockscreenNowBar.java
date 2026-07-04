@@ -1,8 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -48,7 +46,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
@@ -58,9 +55,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
@@ -137,7 +133,7 @@ public class LockscreenNowBar extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mNowBarEnabled = Xprefs.getBoolean(NOW_BAR_ENABLED, false);
         mHideLeftAfforfance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE, false);
@@ -222,19 +218,18 @@ public class LockscreenNowBar extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        Class<?> NotificationPanelViewController = findClassInArray(lpparam,
+        ReflectedClass NotificationPanelViewController = ReflectedClass.of(
                 "com.android.systemui.shade.NotificationPanelViewController", /* OOS15-14 */
                 "com.android.systemui.statusbar.phone.NotificationPanelViewController" /* OOS13 */);
-        hookAllMethods(NotificationPanelViewController, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("LockscreenNowBar NotificationPanelViewController onFinishInflate");
-                mNotificationPanelView = (ViewGroup) getObjectField(param.thisObject, "mView");
-                placeNowBar();
-            }
-        });
+        NotificationPanelViewController
+                .after("onFinishInflate")
+                .run(param -> {
+                    log("LockscreenNowBar NotificationPanelViewController onFinishInflate");
+                    mNotificationPanelView = (ViewGroup) getObjectField(param.thisObject, "mView");
+                    placeNowBar();
+                });
 
         ReflectedClass KeyguardStatusViewController = ReflectedClass.ofIfPossible("com.android.keyguard.KeyguardStatusViewController");
         KeyguardStatusViewController
@@ -243,20 +238,18 @@ public class LockscreenNowBar extends XposedMods {
                     mNowBarLayout.setAlpha((float) param.args[0]);
                 });
 
-        Class<?> QSImpl = findClassInArray(
-                lpparam,
+        ReflectedClass QSImpl = ReflectedClass.of(
                 "com.android.systemui.qs.QSImpl", //OOS15
                 "com.android.systemui.qs.QSFragment" //OOS14
         );
-        hookAllMethods(QSImpl, "setQsExpansion", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
-                if (NowBarController.hasInstance()) {
-                    NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
-                }
-            }
-        });
+        QSImpl
+                .after("setQsExpansion")
+                .run(param -> {
+                    boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
+                    if (NowBarController.hasInstance()) {
+                        NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
+                    }
+                });
 
         // Or handlePrimaryBouncerChanged(int, int)
         ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing -> {
@@ -265,7 +258,7 @@ public class LockscreenNowBar extends XposedMods {
             }
         });
 
-        ReflectedClass KeyguardGlideTipView = ReflectedClass.ofIfPossible("com.oplusos.systemui.keyguard.view.KeyguardGlideTipView", lpparam.classLoader);
+        ReflectedClass KeyguardGlideTipView = ReflectedClass.ofIfPossible("com.oplusos.systemui.keyguard.view.KeyguardGlideTipView");
         if (KeyguardGlideTipView.getClazz() != null) {
             KeyguardGlideTipView
                     .after("onFinishInflate")

@@ -26,7 +26,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeek
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_USE_APP_ICON;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
@@ -37,7 +37,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
@@ -92,7 +92,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mPeekEnabled = Xprefs.getBoolean(LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED, false);
         mPeekLocation = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION, "0"));
@@ -106,8 +106,8 @@ public class LockscreenPeekDisplay extends XposedMods {
         // Icon Style
         mPeekIconBgColor = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_BG_COLOR, PeekDisplayView.getSurfaceColor(mContext));
         mPeekIconStyle = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_ICON_STYLE, "0"));
-        mPeekIconSize = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_SIZE, modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size));
-        mPeekIconMargin = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_MARGIN, modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end));
+        mPeekIconSize = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_SIZE, moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size));
+        mPeekIconMargin = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_MARGIN, moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end));
         mPeekIconPadding = Xprefs.getInt(LOCKSCREEN_PEEK_ICON_PADDING, 0);
 
         mPeekCardRadius = new float[]{
@@ -134,7 +134,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ControllersProvider.registerStatusBarStateChangedCallback(mStatusBarState -> {
             this.mStatusBarState = mStatusBarState;

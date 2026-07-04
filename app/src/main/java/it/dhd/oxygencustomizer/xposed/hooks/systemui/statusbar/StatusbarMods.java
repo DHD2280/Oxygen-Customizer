@@ -53,7 +53,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -140,7 +140,7 @@ public class StatusbarMods extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Quick Pulldown
@@ -184,8 +184,7 @@ public class StatusbarMods extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -208,26 +207,26 @@ public class StatusbarMods extends XposedMods {
 
         Class<?> NotificationPanelViewControllerClass;
         try {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", PRParam.getClassLoader());
         } catch (Throwable e) {
             oos13 = true;
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
+            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", PRParam.getClassLoader());
         }
-        Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
-        Class<?> PhoneStatusBarViewControllerClass = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", lpparam.classLoader);
+        Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", PRParam.getClassLoader());
+        Class<?> PhoneStatusBarViewControllerClass = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", PRParam.getClassLoader());
         Class<?> QSSecurityFooterUtilsClass;
         try {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", PRParam.getClassLoader());
         } catch (Throwable e) {
             oos13 = true;
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
+            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", PRParam.getClassLoader());
         }
         Class<?> QuickStatusBarHeaderClass;
         try {
-            QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
+            QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", PRParam.getClassLoader());
         } catch (Throwable t) {
             oos13 = true;
-            QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
+            QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", PRParam.getClassLoader());
         }
 
         hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
@@ -328,10 +327,10 @@ public class StatusbarMods extends XposedMods {
 
         Class<?> OplusQSFooterImpl;
         try {
-            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
+            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", PRParam.getClassLoader());
         } catch (Throwable e) {
             oos13 = true;
-            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); // OOS 13
+            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", PRParam.getClassLoader()); // OOS 13
         }
 
         LongClickListener onLongClick = new LongClickListener();
@@ -353,7 +352,7 @@ public class StatusbarMods extends XposedMods {
                 : "expandWithQs"; //A13
 
 
-        Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
+        Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", PRParam.getClassLoader());
 
         hookAllConstructors(CollapsedStatusBarFragmentClass, new XC_MethodHook() {
             @Override
@@ -371,13 +370,13 @@ public class StatusbarMods extends XposedMods {
                     }
                 });
 
-        Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+        Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", PRParam.getClassLoader());
 
         Class<?> OplusBrightnessControllerExImpl;
         try {
-            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", PRParam.getClassLoader());
         } catch (Throwable t) {
-            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.OplusBrightnessControllerExImpl", lpparam.classLoader); // OOS 13
+            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.OplusBrightnessControllerExImpl", PRParam.getClassLoader()); // OOS 13
         }
 
         hookAllConstructors(OplusBrightnessControllerExImpl, new XC_MethodHook() {
@@ -408,7 +407,7 @@ public class StatusbarMods extends XposedMods {
         });
 
         if (!oos13) {
-            Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
+            Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", PRParam.getClassLoader());
             findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -490,7 +489,7 @@ public class StatusbarMods extends XposedMods {
                 .afterConstruction()
                 .run(param -> mNotificationIconAreaController = param.thisObject);
 
-        Class<?> NotificationIconContainer = findClass("com.android.systemui.statusbar.phone.NotificationIconContainer", lpparam.classLoader);
+        Class<?> NotificationIconContainer = findClass("com.android.systemui.statusbar.phone.NotificationIconContainer", PRParam.getClassLoader());
         hookAllConstructors(NotificationIconContainer, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -498,10 +497,10 @@ public class StatusbarMods extends XposedMods {
             }
         });
         try {
-            ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
+            ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", PRParam.getClassLoader());
         } catch (Throwable ignored) {
         }
-        Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
+        Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", PRParam.getClassLoader());
         try {
             findAndHookMethod(StatusBarIconView,
                     "getIcon",

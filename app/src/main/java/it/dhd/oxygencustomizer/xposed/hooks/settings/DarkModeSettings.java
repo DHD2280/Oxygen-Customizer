@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.settings;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -16,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class DarkModeSettings extends XposedMods {
 
@@ -32,26 +30,25 @@ public class DarkModeSettings extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         enableCustomDarkMode = Xprefs.getBoolean("custom_dark_mode_switch", false);
         darkModeApps = Xprefs.getStringSet("custom_dark_mode", new HashSet<>());
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> DarkModeFileUtils = findClassIfExists("com.oplus.settings.feature.display.darkmode.utils.DarkModeFileUtils", lpparam.classLoader);
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        ReflectedClass DarkModeFileUtils = ReflectedClass.ofIfPossible("com.oplus.settings.feature.display.darkmode.utils.DarkModeFileUtils");
 
-        final Class<?> AppEntity = findClassIfExists("com.oplus.settings.feature.display.darkmode.utils.DarkModeFileUtils$AppEntity", lpparam.classLoader);
+        final ReflectedClass AppEntity = ReflectedClass.ofIfPossible("com.oplus.settings.feature.display.darkmode.utils.DarkModeFileUtils$AppEntity");
 
-        if (DarkModeFileUtils != null) {
-            hookAllMethods(DarkModeFileUtils, "parseManagedList", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        DarkModeFileUtils
+                .before("parseManagedList")
+                .run(param -> {
                     if (!enableCustomDarkMode) return;
 
                     Map<String, Object> mEnabledApps = new ArrayMap<>();
                     for (String item : darkModeApps) {
-                        final Object mAppEntity = AppEntity.getConstructor().newInstance();
+                        final Object mAppEntity = AppEntity.getClazz().getConstructor().newInstance();
                         if (item.contains("|")) {
                             List<String> arr = new ArrayList<>(Arrays.asList(item.split("\\|")));
                             if (arr.size() < 2 || arr.get(1).isBlank()) {
@@ -65,9 +62,7 @@ public class DarkModeSettings extends XposedMods {
                     }
                     setObjectField(param.thisObject, "mAppsMap", mEnabledApps);
                     param.setResult(null);
-                }
-            });
-        }
+                });
     }
 
     @Override

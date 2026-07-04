@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
@@ -10,7 +12,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.xposed.ResourceManager;
 
 public class ExtendedFAB extends ExtendedFloatingActionButton {
 
@@ -26,7 +27,7 @@ public class ExtendedFAB extends ExtendedFloatingActionButton {
         super(context.getPackageName().equals(BuildConfig.APPLICATION_ID) ? context : new ContextThemeWrapper(new ContextWrapper(context) {
             @Override
             public Resources getResources() {
-                return ResourceManager.modRes;
+                return moduleResources;
             }
         }, R.style.Theme_MaterialComponents_DayNight), attrs, defStyleAttr);
     }

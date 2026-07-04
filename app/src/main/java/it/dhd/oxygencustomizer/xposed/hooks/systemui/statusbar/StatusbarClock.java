@@ -59,7 +59,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -162,7 +162,7 @@ public class StatusbarClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mClockAutoHide = Xprefs.getBoolean("status_bar_clock_auto_hide", false);
         mClockAutoHideLauncherSwitch = Xprefs.getBoolean("status_bar_clock_auto_hide_launcher", false);
@@ -291,8 +291,7 @@ public class StatusbarClock extends XposedMods {
 
     //noinspection throwableresult of the method is ignored
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock");
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");

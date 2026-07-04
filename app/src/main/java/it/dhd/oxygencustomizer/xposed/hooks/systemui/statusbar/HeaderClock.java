@@ -33,7 +33,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.
 import static it.dhd.oxygencustomizer.utils.Constants.getRoundedCorners;
 import static it.dhd.oxygencustomizer.utils.Constants.getStrokeWidth;
 import static it.dhd.oxygencustomizer.utils.Constants.getStyle;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
@@ -88,7 +88,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -183,7 +183,7 @@ public class HeaderClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         // Custom Header Prefs
         showHeaderClock = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_ENABLED, false);
         clockStyle = Xprefs.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);
@@ -289,7 +289,7 @@ public class HeaderClock extends XposedMods {
 
     @SuppressLint("DiscouragedApi")
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -1095,14 +1095,14 @@ public class HeaderClock extends XposedMods {
             iv.setImageDrawable(circled);
         } catch (Throwable t) {
             log("applyRoundedImage: " + t.getMessage());
-            iv.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme()));
+            iv.setImageDrawable(ResourcesCompat.getDrawable(moduleResources, R.drawable.default_avatar, appContext.getTheme()));
         }
     }
 
     @SuppressWarnings("all")
     private Drawable getUserImage() {
         if (mUserManager == null) {
-            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
+            return ResourcesCompat.getDrawable(moduleResources, R.drawable.default_avatar, appContext.getTheme());
         }
 
         try {
@@ -1112,7 +1112,7 @@ public class HeaderClock extends XposedMods {
             return new BitmapDrawable(mContext.getResources(), bitmapUserIcon);
         } catch (Throwable throwable) {
             log(throwable);
-            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
+            return ResourcesCompat.getDrawable(moduleResources, R.drawable.default_avatar, appContext.getTheme());
         }
     }
 
@@ -1129,7 +1129,7 @@ public class HeaderClock extends XposedMods {
 
             return drawable;
         } catch (Throwable ignored) {
-            return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
+            return ResourcesCompat.getDrawable(moduleResources, R.drawable.default_avatar, appContext.getTheme());
         }
     }
 

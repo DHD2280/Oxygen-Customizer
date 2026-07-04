@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import it.dhd.oxygencustomizer.xposed.ResourceManager.modRes
+import it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider
 
 abstract class BatteryDrawable : Drawable() {
@@ -89,7 +89,7 @@ abstract class BatteryDrawable : Drawable() {
 
     fun getResources(context: Context): Resources {
         return try {
-            modRes ?: context.resources
+            moduleResources ?: context.resources
         } catch (ignored: Throwable) {
             context.resources
         }

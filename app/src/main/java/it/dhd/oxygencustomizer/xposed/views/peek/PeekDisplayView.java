@@ -2,7 +2,7 @@ package it.dhd.oxygencustomizer.xposed.views.peek;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
@@ -39,7 +39,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -172,25 +171,25 @@ public class PeekDisplayView extends LinearLayout {
                 0, /* Style int according to pref */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
                 getSurfaceColor(), /* Background Color */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_padding) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
         );
         PEEK_STYLE_ICON_MINIMAL = new PeekIconStyle(
                 "minimal",
                 1, /* Style int according to pref */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal), /* Background Size */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size_minimal), /* Background Size */
                 Color.TRANSPARENT, /* Background Color */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                 0 /* Icon Padding */
         );
         PEEK_STYLE_ICON_CUSTOM = new PeekIconStyle(
@@ -198,14 +197,14 @@ public class PeekDisplayView extends LinearLayout {
                 2, /* Style int according to pref */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_size) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_size), /* Background Size */
                 getSurfaceColor(), /* Background Color */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_display_notification_icon_margin_end), /* Icon Margin Horizontal */
                 mIsSettingsInterface ?
                         getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_padding) :
-                        modRes.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
+                        moduleResources.getDimensionPixelSize(R.dimen.peek_notification_icon_padding) /* Icon Padding */
         );
         mCurrentIconStyle = PEEK_STYLE_ICON_DEFAULT;
     }
@@ -593,7 +592,7 @@ public class PeekDisplayView extends LinearLayout {
                             notificationContent.second :
                             mIsSettingsInterface ?
                                     notificationContent.second :
-                                    modRes.getString(R.string.lockscreen_now_bar_new_notification_content));
+                                    moduleResources.getString(R.string.lockscreen_now_bar_new_notification_content));
             notificationIcon.setImageDrawable(
                     mIsSettingsInterface ?
                             AppUtils.getAppIcon(appContext, packageName) :
@@ -778,7 +777,7 @@ public class PeekDisplayView extends LinearLayout {
             return mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? 0 :
                     mIsSettingsInterface ?
                             appContext.getResources().getDimensionPixelSize(resId) :
-                            modRes.getDimensionPixelSize(resId);
+                            moduleResources.getDimensionPixelSize(resId);
         }
 
         @Override
@@ -857,7 +856,7 @@ public class PeekDisplayView extends LinearLayout {
             drawable.setColor(color);
             drawable.setCornerRadius(mIsSettingsInterface ?
                     getContext().getResources().getDimensionPixelSize(R.dimen.peek_notification_icon_corner_radius) :
-                    modRes.getDimension(R.dimen.peek_notification_icon_corner_radius));
+                    moduleResources.getDimension(R.dimen.peek_notification_icon_corner_radius));
             return drawable;
         }
 
@@ -874,20 +873,20 @@ public class PeekDisplayView extends LinearLayout {
 
     public static int getSurfaceColor(Context context) {
         return SystemUtils.isDarkMode() ?
-                ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_background_color_dark, context.getTheme()) :
-                ResourcesCompat.getColor(modRes, R.color.lockscreen_widget_background_color_light, context.getTheme());
+                ResourcesCompat.getColor(moduleResources, R.color.lockscreen_widget_background_color_dark, context.getTheme()) :
+                ResourcesCompat.getColor(moduleResources, R.color.lockscreen_widget_background_color_light, context.getTheme());
     }
 
     public static int getPrimaryColor(Context context) {
         return SystemUtils.isDarkMode() ?
-                ResourcesCompat.getColor(modRes, R.color.peek_title_text_color_dark, context.getTheme()) :
-                ResourcesCompat.getColor(modRes, R.color.peek_title_text_color_light, context.getTheme());
+                ResourcesCompat.getColor(moduleResources, R.color.peek_title_text_color_dark, context.getTheme()) :
+                ResourcesCompat.getColor(moduleResources, R.color.peek_title_text_color_light, context.getTheme());
     }
 
     public static int getSecondaryColor(Context context) {
         return SystemUtils.isDarkMode() ?
-                ResourcesCompat.getColor(modRes, R.color.peek_summary_text_color_dark, context.getTheme()) :
-                ResourcesCompat.getColor(modRes, R.color.peek_summary_text_color_light, context.getTheme());
+                ResourcesCompat.getColor(moduleResources, R.color.peek_summary_text_color_dark, context.getTheme()) :
+                ResourcesCompat.getColor(moduleResources, R.color.peek_summary_text_color_light, context.getTheme());
     }
 
     public int getSurfaceColor() {

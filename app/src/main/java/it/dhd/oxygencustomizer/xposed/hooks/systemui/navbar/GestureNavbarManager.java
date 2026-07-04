@@ -20,6 +20,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 
@@ -49,10 +50,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
-import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
@@ -124,7 +124,7 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         //region Back gesture
@@ -161,8 +161,7 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             IntentFilter filter = new IntentFilter(ACTIONS_SWITCH_APP);
@@ -284,13 +283,13 @@ public class GestureNavbarManager extends XposedMods {
                         });
 
 
-        Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
+        Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", PRParam.getClassLoader());
 
         Class<?> OplusNavigationHandle;
         try {
-            OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader);
+            OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", PRParam.getClassLoader());
         } catch (Throwable t) {
-            OplusNavigationHandle = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader); // OOS 13
+            OplusNavigationHandle = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", PRParam.getClassLoader()); // OOS 13
         }
         //region pill color
         hookAllMethods(OplusNavigationHandle, "setDarkIntensity", new XC_MethodHook() {
@@ -371,7 +370,7 @@ public class GestureNavbarManager extends XposedMods {
             case 10 -> R.drawable.ic_circle_search;
             default -> 0;
         };
-        return ResourcesCompat.getDrawable(ResourceManager.modRes,
+        return ResourcesCompat.getDrawable(moduleResources,
                 resId,
                 mContext.getTheme());
     }
@@ -383,7 +382,7 @@ public class GestureNavbarManager extends XposedMods {
                     appIcon,
                     0.2f);
         } catch (Throwable ignored) {
-            return ResourcesCompat.getDrawable(ResourceManager.modRes,
+            return ResourcesCompat.getDrawable(moduleResources,
                     R.drawable.ic_custom_app,
                     mContext.getTheme());
         }

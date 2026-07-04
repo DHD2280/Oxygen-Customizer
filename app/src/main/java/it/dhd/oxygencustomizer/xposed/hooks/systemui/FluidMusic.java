@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class FluidMusic extends XposedMods {
@@ -29,7 +29,7 @@ public class FluidMusic extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mFluidCustomEnabled = Xprefs.getBoolean("fluid_music_custom_switch", false);
         Set<String> mFluidApps = Xprefs.getStringSet("fluid_music_apps", new HashSet<>());
         mFluidAppsList.clear();
@@ -37,8 +37,8 @@ public class FluidMusic extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> OplusMediaRusUpdateManager = findClassIfExists("com.oplus.systemui.media.seedling.rus.OplusMediaRusUpdateManager", lpparam.classLoader);
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        Class<?> OplusMediaRusUpdateManager = findClassIfExists("com.oplus.systemui.media.seedling.rus.OplusMediaRusUpdateManager", PRParam.getClassLoader());
 
         if (OplusMediaRusUpdateManager != null) {
             hookAllMethods(OplusMediaRusUpdateManager, "getRusWhiteList", new XC_MethodHook() {

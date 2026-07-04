@@ -15,6 +15,7 @@ public class XPrefs {
     private static String packageName;
 
     private static final SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, key) -> loadEverything(packageName, key);
+
     public static void init(Context context) {
         packageName = context.getPackageName();
 
@@ -28,11 +29,13 @@ public class XPrefs {
         if (key.length > 0 && (key[0] == null || Constants.Preferences.General.PREF_UPDATE_EXCLUSIONS.stream().anyMatch(exclusion -> key[0].startsWith(exclusion))))
             return;
 
-        boolean moreLogging = Xprefs.getBoolean(Constants.Preferences.General.PREF_MORE_LOGGING, false);
+        boolean moreLogging = false;
+        if (Xprefs != null)
+            moreLogging = Xprefs.getBoolean(Constants.Preferences.General.PREF_MORE_LOGGING, false);
 
         for (XposedMods thisMod : XPLauncher.runningMods) {
             thisMod.mDebug = BuildConfig.VERSION_NAME.contains("nightly") || moreLogging;
-            thisMod.updatePrefs(key);
+            thisMod.onPreferenceUpdated(key);
         }
     }
 }

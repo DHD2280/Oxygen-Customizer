@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -40,12 +40,12 @@ public class NotificationVanillaIceCream extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false);
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
@@ -124,7 +124,6 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(param -> {
                     if (hasOverlays) {
                         param.setResult(null);
-                        param.setThrowable(null);
                     }
                 });
 
@@ -144,7 +143,6 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(param -> {
                     if (hasOverlays) {
                         param.setResult(null);
-                        param.setThrowable(null);
                     }
                 });
 

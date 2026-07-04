@@ -9,7 +9,7 @@ import android.content.Context;
 import android.os.Build;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class QsStyleObserver extends XposedMods {
@@ -25,14 +25,15 @@ public class QsStyleObserver extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
-        Class<?> OplusSeparateNotificationAndQSState = findClass("com.oplus.systemui.separate.OplusSeparateNotificationAndQSState", lpparam.classLoader);
+        Class<?> OplusSeparateNotificationAndQSState = findClass("com.oplus.systemui.separate.OplusSeparateNotificationAndQSState", PRParam.getClassLoader());
         hookAllConstructors(OplusSeparateNotificationAndQSState, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

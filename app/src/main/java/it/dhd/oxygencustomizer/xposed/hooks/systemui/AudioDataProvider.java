@@ -29,7 +29,7 @@ import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -170,10 +170,11 @@ public class AudioDataProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         mMediaSessionManager = mContext.getSystemService(MediaSessionManager.class);
         ReflectedClass colorScheme = ReflectedClass.of("com.android.systemui.monet.ColorScheme");
@@ -195,7 +196,7 @@ public class AudioDataProvider extends XposedMods {
 
         // OplusQsMediaUtil
         try {
-            ReflectedClass OplusQsMediaUtil = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaUtil", lpparam.classLoader);
+            ReflectedClass OplusQsMediaUtil = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaUtil", PRParam.getClassLoader());
             mOplusMediaControllerImpl = OplusQsMediaUtil.getClazz();
         } catch (Throwable ignored) {}
 

@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
@@ -73,7 +73,7 @@ public class MemcEnhancer extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(MemcEnhancer.class.getSimpleName())) {
                         log("Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -87,7 +87,7 @@ public class MemcEnhancer extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (settingsUpdated) return;
 
         enableMemcFeature = Xprefs.getBoolean("force_memc_enabled", false);
@@ -128,7 +128,7 @@ public class MemcEnhancer extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -143,10 +143,10 @@ public class MemcEnhancer extends XposedMods {
             mContext.registerReceiver(mSettingsBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         }
 
-        hookFeatureManager(lpparam);
-        hookSystemProperties(lpparam);
-        hookOplusFeatureMEMC(lpparam);
-        hookOplusMemcHelper(lpparam);
+        hookFeatureManager(PRParam);
+        hookSystemProperties(PRParam);
+        hookOplusFeatureMEMC(PRParam);
+        hookOplusMemcHelper(PRParam);
 
     }
 
@@ -172,9 +172,9 @@ public class MemcEnhancer extends XposedMods {
         mContext.sendBroadcast(intent);
     }
 
-    private void hookFeatureManager(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusFeatureConfigManagerService = findClassIfExists("com.android.server.content.OplusFeatureConfigManagerService", lpparam.classLoader);
-        Class<?> OplusFeatureConfigManager = findClassIfExists("com.oplus.content.OplusFeatureConfigManager", lpparam.classLoader);
+    private void hookFeatureManager(XposedModuleInterface.PackageReadyParam lpparam) {
+        Class<?> OplusFeatureConfigManagerService = findClassIfExists("com.android.server.content.OplusFeatureConfigManagerService", lpparam.getClassLoader());
+        Class<?> OplusFeatureConfigManager = findClassIfExists("com.oplus.content.OplusFeatureConfigManager", lpparam.getClassLoader());
 
         if (OplusFeatureConfigManagerService == null) {
             log(new Throwable("OplusFeatureManager not found"));
@@ -203,9 +203,9 @@ public class MemcEnhancer extends XposedMods {
         hookAllMethods(OplusFeatureConfigManagerService, "hasFeature", featureHooker);
     }
 
-    private void hookSystemProperties(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookSystemProperties(XposedModuleInterface.PackageReadyParam lpparam) {
         Class<?> SystemProperties;
-        SystemProperties = findClassIfExists("android.os.SystemProperties", lpparam.classLoader);
+        SystemProperties = findClassIfExists("android.os.SystemProperties", lpparam.getClassLoader());
 
         if (SystemProperties == null) {
             log("SystemProperties not found");
@@ -225,9 +225,9 @@ public class MemcEnhancer extends XposedMods {
         });
     }
 
-    private void hookOplusFeatureMEMC(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookOplusFeatureMEMC(XposedModuleInterface.PackageReadyParam lpparam) {
         Class<?> OplusFeatureMEMC;
-        OplusFeatureMEMC = findClassIfExists("com.android.server.display.OplusFeatureMEMC", lpparam.classLoader);
+        OplusFeatureMEMC = findClassIfExists("com.android.server.display.OplusFeatureMEMC", lpparam.getClassLoader());
 
         if (OplusFeatureMEMC == null) {
             log("OplusFeatureMEMC not found");
@@ -248,7 +248,7 @@ public class MemcEnhancer extends XposedMods {
 
     }
 
-    private void hookOplusMemcHelper(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookOplusMemcHelper(XposedModuleInterface.PackageReadyParam lpparam) {
 
         Class<?> OplusMemcHelper = findClassInArray(lpparam,
                 "com.android.server.display.feature.vrr.memc.OplusMemcHelper", // OOS16

@@ -1,7 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener.getNotificationListenerExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.NotificationUtils.filterNotifications;
@@ -114,7 +114,7 @@ public class NowBarNotification extends RelativeLayout {
         } catch (Throwable ignored) {
         }
         mActivityLauncherUtils = new ActivityLauncherUtils(mContext, getActivityStarterExternal());
-        mNotificationDrawable = ResourcesCompat.getDrawable(modRes, R.drawable.notifications_24px, appContext.getTheme());
+        mNotificationDrawable = ResourcesCompat.getDrawable(moduleResources, R.drawable.notifications_24px, appContext.getTheme());
 
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0.0f);
@@ -354,7 +354,7 @@ public class NowBarNotification extends RelativeLayout {
         if (mListContainer.getVisibility() == View.VISIBLE) {
             switchView();
         }
-        mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
+        mNumText.setText(moduleResources.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
         StatusBarNotification usefulNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
         boolean isAlertOnce = usefulNotification == null ? false : (usefulNotification.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == Notification.FLAG_FOREGROUND_SERVICE;
         if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime() && !isAlertOnce) {
@@ -366,7 +366,7 @@ public class NowBarNotification extends RelativeLayout {
         }
         if (isAlertOnce) return;
         if (currentDisplayedNotification == null) {
-            mNotificationTitleText = modRes.getString(R.string.lockscreen_now_bar_no_notifications);
+            mNotificationTitleText = moduleResources.getString(R.string.lockscreen_now_bar_no_notifications);
             mNotificationContentText = "";
             mIcon.setImageDrawable(mNotificationDrawable);
             refreshText();
@@ -393,10 +393,10 @@ public class NowBarNotification extends RelativeLayout {
     private void refreshText() {
         mTitle.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
                 mNotificationTitleText :
-                modRes.getString(R.string.lockscreen_now_bar_new_notification));
+                moduleResources.getString(R.string.lockscreen_now_bar_new_notification));
         mMessage.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
                 mNotificationContentText :
-                modRes.getString(R.string.lockscreen_now_bar_new_notification_content));
+                moduleResources.getString(R.string.lockscreen_now_bar_new_notification_content));
         mTitle.setSelected(true);
         mMessage.setSelected(true);
     }
@@ -416,7 +416,7 @@ public class NowBarNotification extends RelativeLayout {
             }
             mNumText.setText(mUnlocked ?
                     notificationContent.first + ": " + notificationContent.second :
-                    appName + ": " + modRes.getString(R.string.lockscreen_now_bar_new_notification_content));
+                    appName + ": " + moduleResources.getString(R.string.lockscreen_now_bar_new_notification_content));
             mNumText.setSelected(true);
 
         }
@@ -430,7 +430,7 @@ public class NowBarNotification extends RelativeLayout {
         private void submitList(List<StatusBarNotification> list) {
             notifications.clear();
             notifications.addAll(list);
-            mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
+            mNumText.setText(moduleResources.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
             notifyDataSetChanged();
             updateRecyclerViewPadding();
         }
@@ -456,7 +456,7 @@ public class NowBarNotification extends RelativeLayout {
             if (previousSelectedPosition != RecyclerView.NO_POSITION) {
                 notifyItemChanged(previousSelectedPosition);
             }
-            mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
+            mNumText.setText(moduleResources.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
         }
 
         @NonNull
@@ -492,7 +492,7 @@ public class NowBarNotification extends RelativeLayout {
                 if (isSelected) {
                     selectedPosition = RecyclerView.NO_POSITION;
                     notifyItemChanged(position);
-                    mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
+                    mNumText.setText(moduleResources.getQuantityString(R.plurals.notification_summary, notifications.size(), notifications.size()));
                 } else {
                     int prevSelectedPosition = selectedPosition;
                     selectedPosition = position;

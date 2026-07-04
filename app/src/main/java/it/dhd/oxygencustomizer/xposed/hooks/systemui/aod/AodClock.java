@@ -19,6 +19,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_TEXT_SCALING;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
@@ -64,11 +65,10 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
@@ -128,7 +128,7 @@ public class AodClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mAodClockEnabled = Xprefs.getBoolean(AOD_CLOCK_SWITCH, false);
@@ -151,8 +151,7 @@ public class AodClock extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         initResources(mContext);
 
@@ -414,14 +413,14 @@ public class AodClock extends XposedMods {
     private void initBatteryStatus() {
         if (mBatteryStatusView != null) {
             if (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_charging));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_charging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING ||
                     mBatteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_discharging));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_discharging));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_full));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_full));
             } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
-                mBatteryStatusView.setText(ResourceManager.modRes.getString(R.string.battery_level_percentage));
+                mBatteryStatusView.setText(moduleResources.getString(R.string.battery_level_percentage));
             }
         }
 

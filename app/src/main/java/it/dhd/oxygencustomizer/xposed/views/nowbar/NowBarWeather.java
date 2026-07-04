@@ -1,14 +1,13 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
 import static de.robv.android.xposed.XposedBridge.log;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setTextRecursively;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -118,19 +117,19 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
             if (mWeatherInfo != null) {
                 String formattedCondition = mWeatherInfo.condition;
                 if (formattedCondition.toLowerCase().contains("clouds") || formattedCondition.toLowerCase().contains("overcast")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clouds);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_rain);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_rain);
                 } else if (formattedCondition.toLowerCase().contains("clear")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_clear);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_clear);
                 } else if (formattedCondition.toLowerCase().contains("storm")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_storm);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_storm);
                 } else if (formattedCondition.toLowerCase().contains("snow")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_snow);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_snow);
                 } else if (formattedCondition.toLowerCase().contains("wind")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_wind);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
-                    formattedCondition = modRes.getString(R.string.weather_condition_mist);
+                    formattedCondition = moduleResources.getString(R.string.weather_condition_mist);
                 }
                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 mConditionImage.setImageDrawable(d);
@@ -164,9 +163,9 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         boolean reQuery = false;
         String errorText = switch (errorReason) {
             case OmniJawsClient.EXTRA_ERROR_DISABLED ->
-                    modRes.getString(R.string.omnijaws_service_disabled);
+                    moduleResources.getString(R.string.omnijaws_service_disabled);
             case OmniJawsClient.EXTRA_ERROR_NO_PERMISSIONS ->
-                    modRes.getString(R.string.omnijaws_service_error_permissions);
+                    moduleResources.getString(R.string.omnijaws_service_error_permissions);
             default -> "";
         };
         if (!TextUtils.isEmpty(errorText)) {

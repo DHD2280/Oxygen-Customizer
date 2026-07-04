@@ -11,7 +11,7 @@ import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_TILE_REMOVED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -77,11 +77,11 @@ public class CaffeineTile extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mRegistered) {
             IntentFilter filter = new IntentFilter();
@@ -218,7 +218,7 @@ public class CaffeineTile extends XposedMods {
 
             TextView label = (TextView) getObjectField(tileView, "mLabel");
             String newLabel = formatValueWithRemainingTime();
-            label.post(() -> label.setText(state == STATE_ACTIVE ? newLabel : modRes.getString(R.string.caffeine)));
+            label.post(() -> label.setText(state == STATE_ACTIVE ? newLabel : moduleResources.getString(R.string.caffeine)));
 
         } catch (Throwable ignored) {
         }
@@ -229,7 +229,7 @@ public class CaffeineTile extends XposedMods {
             mCurrentState = state;
             Object QsLabelView = getObjectField(tileView, "labelView");
             String newLabel = formatValueWithRemainingTime();
-            callMethod(QsLabelView, "updateText", state == STATE_ACTIVE ? newLabel : modRes.getString(R.string.caffeine));
+            callMethod(QsLabelView, "updateText", state == STATE_ACTIVE ? newLabel : moduleResources.getString(R.string.caffeine));
             if (mTileState == null) mTileState = getObjectField(tileView, "tileState");
             setIntField(mTileState, "state", state);
         } catch (Throwable ignored) {

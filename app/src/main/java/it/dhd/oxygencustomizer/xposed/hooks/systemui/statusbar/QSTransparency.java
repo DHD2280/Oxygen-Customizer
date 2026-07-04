@@ -13,15 +13,28 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.bosphere.fadingedgelayout.FadingEdgeLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class QSTransparency extends XposedMods {
@@ -34,13 +47,17 @@ public class QSTransparency extends XposedMods {
     private int blurRadius = 60;
     private Object mScrimControllerExImp = null;
     private float maxBlurRadius = 1f;
+    private boolean mCustomColorEnabled = false;
+    private int mCustomColor = Color.GRAY;
+    private List<FrameLayout> mBackgroundLayouts = new ArrayList<>();
+    private List<ImageView> mQsHeaderImageViews = new ArrayList<>();
 
     public QSTransparency(Context context) {
         super(context);
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         qsTransparencyActive = Xprefs.getBoolean(QS_TRANSPARENCY_SWITCH, false);
@@ -52,9 +69,51 @@ public class QSTransparency extends XposedMods {
 
     }
 
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) {
-        setQsTransparency(loadPackageParam);
+    private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
+        float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
+        setAlpha(alpha);
+    };
+
+    @Override
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        setQsTransparency(PRParam);
         setBlurRadius();
+
+        ReflectedClass OplusQSRootView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.OplusQSRootView");
+        if (OplusQSRootView.getClazz() != null) {
+            OplusQSRootView
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        FrameLayout mOplusQsSplitView = (FrameLayout) param.thisObject;
+
+                        FrameLayout mQsHeaderSplitLayout = new FadingEdgeLayout(mContext);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+                        mQsHeaderSplitLayout.setLayoutParams(layoutParams);
+                        mQsHeaderSplitLayout.setVisibility(View.GONE);
+
+                        ImageView mQsHeaderSplitImageView = new ImageView(mContext);
+                        mQsHeaderSplitImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        mQsHeaderSplitLayout.addView(mQsHeaderSplitImageView);
+                        mQsHeaderSplitImageView.setBackgroundColor(Color.BLACK);
+
+//                        mOplusQsSplitView.addView(mQsHeaderSplitLayout, 0);
+
+//                        mBackgroundLayouts.add(mQsHeaderSplitLayout);
+//                        mQsHeaderImageViews.add(mQsHeaderSplitImageView);
+
+                    });
+
+            ControllersProvider.registerExpandedQsFractionChangeCallback(mExpandedQsFractionChangeListener);
+        }
+
+    }
+
+    private void setAlpha(float alpha) {
+        if (mQsHeaderImageViews.isEmpty()) return;
+        for (ImageView iv : mQsHeaderImageViews) {
+            iv.setAlpha(alpha);
+        }
     }
 
     @Override
@@ -62,8 +121,8 @@ public class QSTransparency extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
-    private void setQsTransparency(XC_LoadPackage.LoadPackageParam loadPackageParam) {
-        final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", loadPackageParam.classLoader);
+    private void setQsTransparency(XposedModuleInterface.PackageReadyParam PRParam) {
+        final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", PRParam.getClassLoader());
 
         hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -106,6 +165,52 @@ public class QSTransparency extends XposedMods {
                 .run(param -> {
                     mScrimControllerExImp = param.thisObject;
                 });
+
+//        ScrimControllerExImp
+//                .after("updateBehindMixConfig")
+//                .run(param -> {
+//                    ViewBlurProxy viewBlurProxy;
+//                    Object scrimBehind = callMethod(callMethod(param.thisObject, "getScrimController"), "getScrimBehind");
+//                    if (scrimBehind == null) return;
+//                    Object ext = callMethod(scrimBehind, "getExt");
+//                    if (ext == null) return;
+//                    viewBlurProxy = (ViewBlurProxy) callMethod(ext, "getViewBlurProxy");
+//                    if (viewBlurProxy == null) return;
+//                    Object currentConfig = callMethod(param.thisObject, "getPanelPlatformMixConfig");
+//                    if (currentConfig != null) {
+//                        // Se è un BlurMixMulti
+//                        if (currentConfig.getClass().getSimpleName().equals("BlurMixMulti")) {
+//                            // Ottieni i MixColor
+//                            Object foregroundMixColor = callMethod(currentConfig, "getForegroundMixColor");
+//                            Object backgroundMixColor = callMethod(currentConfig, "getBackgroundMixColor");
+//
+//                            // Modifica i colori
+//                            if (foregroundMixColor != null) {
+//                                callMethod(foregroundMixColor, "setTopLayerColor", 0xFFFF5733);
+//                                callMethod(foregroundMixColor, "setBottomLayerColor", 0x40FF5733);
+//                            }
+//
+//                            if (backgroundMixColor != null) {
+//                                callMethod(backgroundMixColor, "setTopLayerColor", 0xFF3366FF);
+//                                callMethod(backgroundMixColor, "setBottomLayerColor", 0x403366FF);
+//                            }
+//                        }
+//                        // Se è un BlurMixSingle
+//                        else if (currentConfig.getClass().getSimpleName().equals("BlurMixSingle")) {
+//                            Object mixColor = callMethod(currentConfig, "getMixColor");
+//                            if (mixColor != null) {
+//                                callMethod(mixColor, "setTopLayerColor", 0xFFFF5733);
+//                                callMethod(mixColor, "setBottomLayerColor", 0x40FF5733);
+//                            }
+//                        } else if (currentConfig.getClass().getSimpleName().equals("BlurMixConfig")) {
+//
+//                        }
+//                    }
+//                    callMethod(currentConfig, "setBlurColor", Color.BLACK);
+//                    viewBlurProxy.getBlurConfig().setPlatformMixConfig((BlurMixConfig) currentConfig);
+//                    viewBlurProxy.applyBlurConfig();
+//
+//                });
 
         ReflectedClass ScrimViewExImp = ReflectedClass.of("com.oplus.systemui.scrim.ScrimViewExImp");
         ScrimViewExImp

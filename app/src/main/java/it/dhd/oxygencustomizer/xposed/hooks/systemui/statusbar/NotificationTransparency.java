@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.Button;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 
 public class NotificationTransparency extends XposedMods {
@@ -37,17 +37,17 @@ public class NotificationTransparency extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         notificationTransparency = Xprefs.getBoolean(NOTIF_TRANSPARENCY, false);
         notificationTransparencyValue = Xprefs.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25);
         hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false);
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        Class<?> NotificationBackgroundView = findClass("com.android.systemui.statusbar.notification.row.NotificationBackgroundView", lpparam.classLoader);
-        Class<?> ExpandableNotificationRow = findClass("com.android.systemui.statusbar.notification.row.ExpandableNotificationRow", lpparam.classLoader);
+        Class<?> NotificationBackgroundView = findClass("com.android.systemui.statusbar.notification.row.NotificationBackgroundView", PRParam.getClassLoader());
+        Class<?> ExpandableNotificationRow = findClass("com.android.systemui.statusbar.notification.row.ExpandableNotificationRow", PRParam.getClassLoader());
 
         findAndHookMethod(NotificationBackgroundView,
                 "draw",
@@ -75,7 +75,7 @@ public class NotificationTransparency extends XposedMods {
         });
 
         try {
-            Class<?> OpNotificationBackgroundView = findClass("com.oplus.systemui.statusbar.notification.row.NotificationBackgroundViewExtImp", lpparam.classLoader);
+            Class<?> OpNotificationBackgroundView = findClass("com.oplus.systemui.statusbar.notification.row.NotificationBackgroundViewExtImp", PRParam.getClassLoader());
             findAndHookMethod(OpNotificationBackgroundView,
                     "drawBlur",
                     new XC_MethodHook() {
@@ -89,18 +89,18 @@ public class NotificationTransparency extends XposedMods {
             log("ERROR IN OpNotificationBackgroundView " + t.getMessage());
         }
 
-        fixNotificationColorA14(lpparam);
+        fixNotificationColorA14(PRParam);
     }
 
-    private void fixNotificationColorA14(XC_LoadPackage.LoadPackageParam loadPackageParam) {
+    private void fixNotificationColorA14(XposedModuleInterface.PackageReadyParam PRParam) {
         if (Build.VERSION.SDK_INT < 34) return;
 
         try {
-            Class<?> ActivatableNotificationViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.ActivatableNotificationView", loadPackageParam.classLoader);
-            Class<?> NotificationBackgroundViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.NotificationBackgroundView", loadPackageParam.classLoader);
-            Class<?> FooterViewClass = findClassIfExists(SYSTEM_UI + ".statusbar.notification.footer.ui.view.FooterView", loadPackageParam.classLoader);
+            Class<?> ActivatableNotificationViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.ActivatableNotificationView", PRParam.getClassLoader());
+            Class<?> NotificationBackgroundViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.NotificationBackgroundView", PRParam.getClassLoader());
+            Class<?> FooterViewClass = findClassIfExists(SYSTEM_UI + ".statusbar.notification.footer.ui.view.FooterView", PRParam.getClassLoader());
             if (FooterViewClass == null) {
-                FooterViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.FooterView", loadPackageParam.classLoader);
+                FooterViewClass = findClass(SYSTEM_UI + ".statusbar.notification.row.FooterView", PRParam.getClassLoader());
             }
 
             XC_MethodHook removeNotificationTint = new XC_MethodHook() {

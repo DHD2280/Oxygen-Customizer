@@ -4,7 +4,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -52,11 +52,11 @@ public class QsMenuItems extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return; // Don't care about this on previous versions\
 
@@ -143,7 +143,7 @@ public class QsMenuItems extends XposedMods {
                         final ClickListener clickListener = new ClickListener();
                         v.setTag(menuOption[1]);
                         v.setOnClickListener(clickListener);
-                        textView.setText(modRes.getString((Integer) menuOption[0]));
+                        textView.setText(moduleResources.getString((Integer) menuOption[0]));
                         callMethod(ListBuilder, "reset");
                         Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);
@@ -225,7 +225,7 @@ public class QsMenuItems extends XposedMods {
                         final ClickListener clickListener = new ClickListener();
                         v.setOnClickListener(clickListener);
                         v.setTag(menuOption[1]);
-                        textView.setText(modRes.getString((Integer) menuOption[0]));
+                        textView.setText(moduleResources.getString((Integer) menuOption[0]));
                         callMethod(ListBuilder, "reset");
                         Object builder = callMethod(ListBuilder, "setItemType", 2);
                         builder = callMethod(builder, "setItemType", 2);

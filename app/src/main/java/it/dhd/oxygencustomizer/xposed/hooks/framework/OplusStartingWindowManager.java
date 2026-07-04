@@ -22,8 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -48,7 +47,7 @@ public class OplusStartingWindowManager extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(this.getClass().getSimpleName())) {
                         log("Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -63,7 +62,7 @@ public class OplusStartingWindowManager extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         if (settingsUpdated) return;
 
@@ -79,7 +78,7 @@ public class OplusStartingWindowManager extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         if (Build.VERSION.SDK_INT < 34) return;
 
         XPLauncher.enqueueProxyCommand((proxy) ->
@@ -97,7 +96,7 @@ public class OplusStartingWindowManager extends XposedMods {
         Class<?> OplusStartingWindowManager;
         Method isLayerMatchToStartingWindow;
         try {
-            OplusStartingWindowManager = findClass("com.android.server.wm.OplusStartingWindowManager", lpparam.classLoader);
+            OplusStartingWindowManager = findClass("com.android.server.wm.OplusStartingWindowManager", PRParam.getClassLoader());
             isLayerMatchToStartingWindow = OplusStartingWindowManager.getDeclaredMethod("isLayerMatchToStartingWindow", String.class);
 
             hookMethod(isLayerMatchToStartingWindow, new XC_MethodHook() {

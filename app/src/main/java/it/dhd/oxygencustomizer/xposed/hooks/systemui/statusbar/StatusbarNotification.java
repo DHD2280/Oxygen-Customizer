@@ -11,7 +11,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotif
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOMIZE_CLEAR_BUTTON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CUSTOM_NOTIFICATION_APPS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATIONS_SHOW_BUTTONS;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
@@ -85,7 +85,7 @@ public class StatusbarNotification extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         removeChargingCompleteNotification = Xprefs.getBoolean("remove_charging_complete_notification", false);
         removeDevMode = Xprefs.getBoolean("remove_dev_mode", false);
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
@@ -123,8 +123,7 @@ public class StatusbarNotification extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
 
@@ -376,8 +375,8 @@ public class StatusbarNotification extends XposedMods {
                     mNotificationButtonsContainer.addView(mExpand);
                     mNotificationButtonsContainer.addView(mCollapse);
 
-                    mExpand.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_expand, mContext.getTheme()));
-                    mCollapse.setImageDrawable(ResourcesCompat.getDrawable(modRes, R.drawable.ic_collapse, mContext.getTheme()));
+                    mExpand.setImageDrawable(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_expand, mContext.getTheme()));
+                    mCollapse.setImageDrawable(ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_collapse, mContext.getTheme()));
 
                     mExpand.setOnClickListener(v -> expandAll(EXPAND_ALWAYS));
 

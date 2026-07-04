@@ -4,8 +4,6 @@ import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.Gravity.START;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.AOD_WEATHER_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -35,9 +33,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.CurrentWeatherView;
 
 public class AodWeather extends XposedMods {
@@ -62,7 +60,7 @@ public class AodWeather extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         // Weather
         weatherEnabled = Xprefs.getBoolean(AOD_WEATHER_SWITCH, false);
         weatherTextSize = Xprefs.getSliderInt(AOD_WEATHER_TEXT_SIZE, 16);
@@ -81,32 +79,29 @@ public class AodWeather extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> AodClockLayout;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         mWeatherContainer = new LinearLayout(mContext);
         mWeatherContainer.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
 
-        try {
-            AodClockLayout = findClass("com.oplus.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader);
-        } catch (Throwable t) {
-            AodClockLayout = findClass("com.oplusos.systemui.aod.aodclock.off.AodClockLayout", lpparam.classLoader); //OOS 13
-        }
+        ReflectedClass AodClockLayout = ReflectedClass.of(
+                "com.oplus.systemui.aod.aodclock.off.AodClockLayout",
+                "com.oplusos.systemui.aod.aodclock.off.AodClockLayout"
+        );
 
-
-        hookAllMethods(AodClockLayout, "initForAodApk", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!weatherEnabled) return;
-                FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
-                for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
-                    if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
-                        mAodRootLayout = v;
+        AodClockLayout
+                .after("initForAodApk")
+                .run(param -> {
+                    if (!weatherEnabled) return;
+                    FrameLayout mAodViewFromApk = (FrameLayout) getObjectField(param.thisObject, "mAodViewFromApk");
+                    for (int i = 0; i < mAodViewFromApk.getChildCount(); i++) {
+                        if (mAodViewFromApk.getChildAt(i) instanceof ViewGroup v) {
+                            mAodRootLayout = v;
+                        }
                     }
-                }
-                placeWeatherView();
-            }
-        });
+                    placeWeatherView();
+                });
+
     }
 
     private void updateMargins() {

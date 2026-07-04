@@ -15,7 +15,7 @@ import android.view.ViewTreeObserver;
 import com.android.launcher3.uioverrides.states.blurdrawable.LayerBlurDrawable;
 import com.android.launcher3.uioverrides.states.blurdrawable.OplusBlurProperties;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -36,7 +36,7 @@ public class DockBackground extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mDockBackground = Xprefs.getBoolean("dockBackground", false);
         mDockBackgroundMaterial = Xprefs.getBoolean("dockBackgroundMaterial", false);
@@ -46,7 +46,7 @@ public class DockBackground extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
         ReflectedClass OplusHotseatCls = ReflectedClass.of("com.android.launcher3.OplusHotseat");

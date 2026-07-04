@@ -83,7 +83,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_WIDTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_CUSTOMIZE_PERCENTAGE_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_PERCENTAGE_SIZE;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.getCurrentLevel;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider.isCharging;
@@ -115,7 +115,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -239,7 +239,7 @@ public class BatteryStyleManager extends XposedMods {
 
     @SuppressWarnings("DiscouragedApi")
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         BatteryStyle = Integer.parseInt(Xprefs.getString(CUSTOM_BATTERY_STYLE, String.valueOf(BATTERY_STYLE_CUSTOM_RLANDSCAPE)));
         boolean hidePercentage = Xprefs.getBoolean(CUSTOM_BATTERY_HIDE_PERCENTAGE, false);
@@ -343,23 +343,22 @@ public class BatteryStyleManager extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listensTo(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT >= 34) {
-            hookBattery(lpparam); // OOS 14 - 15
+            hookBattery(PRParam); // OOS 14 - 15
         } else {
-            hookBattery13(lpparam); // OOS 13
+            hookBattery13(PRParam); // OOS 13
         }
 
     }
 
-    private void hookBattery(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookBattery(XposedModuleInterface.PackageReadyParam PRParam) {
 
         BatteryDataProvider.registerInfoCallback(this::refreshAllBatteryIcons);
 
-        DarkIconDispatcher = findClass("com.android.systemui.plugins.DarkIconDispatcher", lpparam.classLoader);
-        DualToneHandler = findClass("com.android.systemui.DualToneHandler", lpparam.classLoader);
+        DarkIconDispatcher = findClass("com.android.systemui.plugins.DarkIconDispatcher", PRParam.getClassLoader());
+        DualToneHandler = findClass("com.android.systemui.DualToneHandler", PRParam.getClassLoader());
 
         final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
             @Override
@@ -375,7 +374,7 @@ public class BatteryStyleManager extends XposedMods {
             }
         };
 
-        Class<?> StatBatteryMeterView = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.view.StatBatteryMeterView", lpparam.classLoader);
+        Class<?> StatBatteryMeterView = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.view.StatBatteryMeterView", PRParam.getClassLoader());
         hookAllConstructors(StatBatteryMeterView, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -455,7 +454,7 @@ public class BatteryStyleManager extends XposedMods {
         });
 
 
-        Class<?> BatteryViewBinder = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.binder.BatteryViewBinder", lpparam.classLoader);
+        Class<?> BatteryViewBinder = findClass("com.oplus.systemui.statusbar.pipeline.battery.ui.binder.BatteryViewBinder", PRParam.getClassLoader());
         hookAllMethods(BatteryViewBinder, "bind", new XC_MethodHook() {
 
             @Override
@@ -692,10 +691,10 @@ public class BatteryStyleManager extends XposedMods {
         mBatteryDrawable.invalidateSelf();
     }
 
-    private void hookBattery13(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookBattery13(XposedModuleInterface.PackageReadyParam PRParam) {
         oos13 = true;
-        Class<?> TwoBatteryMeterDrawable = findClass("com.oplusos.systemui.statusbar.widget.TwoBatteryMeterDrawable", lpparam.classLoader);
-        Class<?> StatBatteryMeterView = findClass("com.oplusos.systemui.statusbar.widget.StatBatteryMeterView", lpparam.classLoader);
+        Class<?> TwoBatteryMeterDrawable = findClass("com.oplusos.systemui.statusbar.widget.TwoBatteryMeterDrawable", PRParam.getClassLoader());
+        Class<?> StatBatteryMeterView = findClass("com.oplusos.systemui.statusbar.widget.StatBatteryMeterView", PRParam.getClassLoader());
         findAndHookMethod(StatBatteryMeterView, "updateColors",
                 int.class,
                 int.class,
@@ -912,47 +911,47 @@ public class BatteryStyleManager extends XposedMods {
     private Drawable getNewChargingIcon() {
         return switch (mChargingIconStyle) {
             case 0 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_bold, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_bold, mContext.getTheme());
             case 1 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_asus, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_asus, mContext.getTheme());
             case 2 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_buddy, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_buddy, mContext.getTheme());
             case 3 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_evplug, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_evplug, mContext.getTheme());
             case 4 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_idc, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_idc, mContext.getTheme());
             case 5 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_ios, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_ios, mContext.getTheme());
             case 6 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_koplak, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_koplak, mContext.getTheme());
             case 7 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_miui, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_miui, mContext.getTheme());
             case 8 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_mmk, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_mmk, mContext.getTheme());
             case 9 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_moto, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_moto, mContext.getTheme());
             case 10 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_nokia, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_nokia, mContext.getTheme());
             case 11 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_plug, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_plug, mContext.getTheme());
             case 12 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercable, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powercable, mContext.getTheme());
             case 13 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powercord, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powercord, mContext.getTheme());
             case 14 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_powerstation, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_powerstation, mContext.getTheme());
             case 15 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_realme, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_realme, mContext.getTheme());
             case 16 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_soak, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_soak, mContext.getTheme());
             case 17 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_stres, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_stres, mContext.getTheme());
             case 18 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_strip, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_strip, mContext.getTheme());
             case 19 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_usbcable, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_usbcable, mContext.getTheme());
             case 20 ->
-                    ResourcesCompat.getDrawable(modRes, R.drawable.ic_charging_xiaomi, mContext.getTheme());
+                    ResourcesCompat.getDrawable(moduleResources, R.drawable.ic_charging_xiaomi, mContext.getTheme());
             default -> null;
         };
     }

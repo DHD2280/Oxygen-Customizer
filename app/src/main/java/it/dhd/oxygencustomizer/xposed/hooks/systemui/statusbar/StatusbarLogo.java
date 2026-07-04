@@ -8,7 +8,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.STATUSBAR_LOGO_FILE;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.XPLauncher.moduleResources;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
@@ -34,11 +34,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
-import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.statusbar.LogoView;
 
@@ -68,7 +67,7 @@ public class StatusbarLogo extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mStatusbarLogo = Xprefs.getBoolean(STATUSBAR_LOGO_SWITCH, false);
         mLogoStyle = Integer.parseInt(Xprefs.getString(STATUSBAR_LOGO_STYLE, "0"));
@@ -89,7 +88,7 @@ public class StatusbarLogo extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         mStatusbarLogoView.setLayoutParams(new ViewGroup.LayoutParams(dp2px(mContext, mLogoSize), dp2px(mContext, mLogoSize)));
         mStatusbarLogoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -195,10 +194,10 @@ public class StatusbarLogo extends XposedMods {
                 roundedDrawable.setCornerRadius(customBitmap.getHeight());
                 return roundedDrawable;
             } catch (Throwable t) {
-                return ResourcesCompat.getDrawable(modRes, predefinedLogos.get(0), mContext.getTheme());
+                return ResourcesCompat.getDrawable(moduleResources, predefinedLogos.get(0), mContext.getTheme());
             }
         } else {
-            return ResourcesCompat.getDrawable(modRes, predefinedLogos.get(style), mContext.getTheme());
+            return ResourcesCompat.getDrawable(moduleResources, predefinedLogos.get(style), mContext.getTheme());
         }
     }
 
