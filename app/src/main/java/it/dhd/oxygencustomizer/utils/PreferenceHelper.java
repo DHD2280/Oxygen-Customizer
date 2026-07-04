@@ -1366,6 +1366,8 @@ public class PreferenceHelper {
             // Buttons
             case "volbtn_torch_timeout" ->
                     String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt("volbtn_torch_timeout", 5));
+            case "plusKey_press_button_action_timeout" ->
+                    instance.mPreferences.getSliderInt("plusKey_press_button_action_timeout", 250) + " ms";
 
             // Screen Off On Flat
             case "FlatStandbyTime" ->
