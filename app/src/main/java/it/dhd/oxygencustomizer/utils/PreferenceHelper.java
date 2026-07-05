@@ -1408,6 +1408,28 @@ public class PreferenceHelper {
                 }
             }
 
+            // Buttons pref
+            if (key.equals("plusKey_single_press_button_action_value") ||
+                    key.equals("plusKey_double_press_button_action_value") ||
+                    key.equals("plusKey_triple_press_button_action_value") ||
+                    key.equals("plusKey_long_press_button_action_value")) {
+                String prefValue = instance.mPreferences.getString(key, "none");
+                if (prefValue.contains(":")) {
+                    int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;
+                    String title = preference.getContext().getString(titleRes);
+                    String cleanValue = prefValue.replace("app:", "").replace("activity:", "");
+                    String[] parts = cleanValue.split("/", 2);
+                    String name = AppUtils.getAppName(preference.getContext(), parts[0]);
+                    if (parts.length > 1) {
+                        name += "\n" + parts[1];
+                    }
+                    String finalName = name;
+                    preference.setSummaryProvider(p -> title + "\n" + finalName);
+                } else {
+                    preference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+                }
+            }
+
             if (preference instanceof OplusSliderPreference sliderPreference) {
                 if (Objects.equals(sliderPreference.getKey(), "batteryWarningRange")) {
                     sliderPreference.mOplusSlider.setLabelFormatter(value -> (int) value + "%");
