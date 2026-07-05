@@ -14,7 +14,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.DIS
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -141,25 +140,21 @@ public class Buttons extends XposedMods {
         pressCount++;
         log("PlusKey LOG: ShortPressDetected. pressCount incremented to: " + pressCount);
 
-        if (mHandler != null) {
-            log("PlusKey LOG: ShortPressDetected. Calling handler.removeCallbacks(actionRunnable)");
-            mHandler.removeCallbacks(actionRunnable);
+        log("PlusKey LOG: ShortPressDetected. Calling handler.removeCallbacks(actionRunnable)");
+        if (mHandler.hasCallbacks(actionRunnable)) mHandler.removeCallbacks(actionRunnable);
 
-            // Check if we should execute immediately
-            boolean hasMultiPressActions = doublePressEnabled || triplePressEnabled;
-            boolean isOnlySingleEnabled = singlePressEnabled && !hasMultiPressActions;
+        // Check if we should execute immediately
+        boolean hasMultiPressActions = doublePressEnabled || triplePressEnabled;
+        boolean isOnlySingleEnabled = singlePressEnabled && !hasMultiPressActions;
 
-            log("PlusKey LOG: ShortPressDetected. isOnlySingleEnabled=" + isOnlySingleEnabled + ", hasMultiPressActions=" + hasMultiPressActions + " (pressCount=" + pressCount + ")");
+        log("PlusKey LOG: ShortPressDetected. isOnlySingleEnabled=" + isOnlySingleEnabled + ", hasMultiPressActions=" + hasMultiPressActions + " (pressCount=" + pressCount + ")");
 
-            if (isOnlySingleEnabled || pressCount >= 3 || (pressCount == 2 && !triplePressEnabled)) {
-                log("PlusKey LOG: ShortPressDetected. TRIGGERING IMMEDIATE EXECUTION (runnable.run())");
-                actionRunnable.run();
-            } else {
-                log("PlusKey LOG: ShortPressDetected. SCHEDULING DELAYED EXECUTION (postDelayed) with timeout: " + plusKeyTimeout);
-                mHandler.postDelayed(actionRunnable, plusKeyTimeout);
-            }
+        if (isOnlySingleEnabled || pressCount >= 3 || (pressCount == 2 && !triplePressEnabled)) {
+            log("PlusKey LOG: ShortPressDetected. TRIGGERING IMMEDIATE EXECUTION (runnable.run())");
+            actionRunnable.run();
         } else {
-            log("PlusKey LOG: ShortPressDetected ERROR. Handler provided is NULL");
+            log("PlusKey LOG: ShortPressDetected. SCHEDULING DELAYED EXECUTION (postDelayed) with timeout: " + plusKeyTimeout);
+            mHandler.postDelayed(actionRunnable, plusKeyTimeout);
         }
     }
 
@@ -336,70 +331,86 @@ public class Buttons extends XposedMods {
             hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!holdVolumeToSkip && !holdVolumeToTorch) return;
 
                     try {
                         Object mBase = getObjectField(param.thisObject, "mBase");
-                        mHandler = (Handler) getObjectField(mBase, "mHandler");
+                        if (mHandler == null)
+                            mHandler = (Handler) getObjectField(mBase, "mHandler");
 
                         KeyEvent e = (KeyEvent) param.args[0];
                         int Keycode = e.getKeyCode();
 
                         switch (e.getAction()) {
                             case KeyEvent.ACTION_UP -> {
-                                if (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN || Keycode == KeyEvent.KEYCODE_VOLUME_UP) {
-                                    if (!holdVolumeToSkip && !holdVolumeToTorch) return;
-                                    if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
-                                        SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, 0);
-                                        if (mHandler.hasCallbacks(mVolumeLongPress))
-                                            mHandler.removeCallbacks(mVolumeLongPress);
-                                        if (mHandler.hasCallbacks(mVolumeLongPressTorch))
-                                            mHandler.removeCallbacks(mVolumeLongPressTorch);
-                                        if (mHandler.hasCallbacks(mToggleFlash))
-                                            mHandler.removeCallbacks(mToggleFlash);
-                                    }
-                                } else if (Keycode == KEYCODE_PLUSKEY_SHORT_PRESS) {
-                                    if (isAnyShortPressEnabled()) {
-                                        if (e.getAction() == KeyEvent.ACTION_UP) {
-                                            ShortPressDetected();
-                                        }
-                                        param.setResult(0); // Consume the event
-                                    }
+                                if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
+                                    SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, 0);
+                                    if (mHandler.hasCallbacks(mVolumeLongPress))
+                                        mHandler.removeCallbacks(mVolumeLongPress);
+                                    if (mHandler.hasCallbacks(mVolumeLongPressTorch))
+                                        mHandler.removeCallbacks(mVolumeLongPressTorch);
+                                    if (mHandler.hasCallbacks(mToggleFlash))
+                                        mHandler.removeCallbacks(mToggleFlash);
                                 }
                             }
                             case KeyEvent.ACTION_DOWN -> {
-                                if ((Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-                                        Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                                    if (!SystemUtils.PowerManager().isInteractive()) {
-                                        if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
-                                            isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
-                                            mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
+                                if (!SystemUtils.PowerManager().isInteractive() &&
+                                        (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+                                                Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                                    if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
+                                        isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
+                                        mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
+                                        param.setResult(0);
+                                    } else {
+                                        int audioMode = SystemUtils.AudioManager().getMode();
+                                        if (audioMode == AudioManager.MODE_IN_CALL ||
+                                                audioMode == AudioManager.MODE_IN_COMMUNICATION ||
+                                                audioMode == AudioManager.MODE_RINGTONE) return;
+                                        if (holdVolumeToTorch) {
+                                            mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
                                             param.setResult(0);
-                                        } else {
-                                            int audioMode = SystemUtils.AudioManager().getMode();
-                                            if (audioMode == AudioManager.MODE_IN_CALL ||
-                                                    audioMode == AudioManager.MODE_IN_COMMUNICATION ||
-                                                    audioMode == AudioManager.MODE_RINGTONE) return;
-                                            if (holdVolumeToTorch) {
-                                                mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
-                                                param.setResult(0);
-                                            }
                                         }
-                                    }
-                                } else if (Keycode == KEYCODE_PLUSKEY_LONG_PRESS) {
-                                    if (isLongPressEnabled()) {
-                                        if (e.getAction() == KeyEvent.ACTION_DOWN) {
-                                            if (!longPressEnabled) {
-                                                return;
-                                            }
-                                            executeAction(0);
-                                        }
-                                        param.setResult(0); // Consume the event
                                     }
                                 }
                             }
                         }
                     } catch (Throwable t) {
                         log(" ERROR IN interceptKeyBeforeQueueing\n" + t);
+                    }
+                }
+            });
+
+
+            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!isAnyShortPressEnabled() && !isLongPressEnabled()) return;
+                    try {
+                        Object mBase = getObjectField(param.thisObject, "mBase");
+                        if (mHandler == null)
+                            mHandler = (Handler) getObjectField(mBase, "mHandler");
+                        KeyEvent event = (KeyEvent) param.args[0];
+                        int keyCode = event.getKeyCode();
+
+                        if (keyCode == KEYCODE_PLUSKEY_SHORT_PRESS) {
+                            // Check if any multi-press action is enabled in settings
+                            if (isAnyShortPressEnabled()) {
+                                if (event.getAction() == KeyEvent.ACTION_UP) {
+                                    ShortPressDetected();
+                                }
+                                param.setResult(0); // Consume the event
+
+                            }
+                        } else if (keyCode == KEYCODE_PLUSKEY_LONG_PRESS) {
+                            if (isLongPressEnabled()) {
+                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                    executeAction(0);
+                                }
+                                param.setResult(0); // Consume the event
+                            }
+                        }
+                    } catch (Throwable t) {
+                        log(" ERROR IN PlusKey hook: " + t.getMessage());
                     }
                 }
             });
@@ -445,16 +456,11 @@ public class Buttons extends XposedMods {
         try {
             if (actionValue.contains(":")) {
                 if (actionValue.contains("app:")) {
-                    actionValue = actionValue.split(":")[1];
-                    new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchApp(actionValue);
+                    new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchApp(actionValue.replace("app:", ""));
                 } else if (actionValue.contains("/")) {
                     // Activity Format: "package.name/com.package.ActivityName"
-                    actionValue = actionValue.split(":")[1]; // Remove prefix if present
-                    String[] parts = actionValue.split("/");
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.setComponent(new ComponentName(parts[0], parts[1]));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    mContext.startActivity(intent);
+                    String[] parts = actionValue.replace("activity:", "").split("/");
+                    new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchActivity(parts[0], parts[1], false);
                 }
             } else {
                 switch (actionValue) {
