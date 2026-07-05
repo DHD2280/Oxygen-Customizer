@@ -4,6 +4,12 @@ import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.annotation.SuppressLint;
@@ -25,13 +31,13 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserManager;
 import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.VibratorManager;
-import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 
@@ -41,6 +47,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 
 public class SystemUtils {
@@ -580,21 +587,44 @@ public class SystemUtils {
         }
     }
 
-    public static void launchCamera(Context context) {
-        Intent intent = new Intent(android.provider.MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+    public static void toggleNotifications() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_PANEL);
+        intent.setPackage(LAUNCHER);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
     }
 
-    public static void launchAudioRecorder(Context context) {
-        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            Intent fallback = context.getPackageManager().getLaunchIntentForPackage("com.oneplus.recorder");
-            if (fallback != null) context.startActivity(fallback);
-        }
+    public static void toggleOneHanded() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_ONE_HANDED);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.setPackage(LAUNCHER);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void runCircleToSearch() {
+        new Handler(Looper.getMainLooper()).postDelayed(AppUtils::circleToSearch, 150L);
+    }
+
+    public static void takeScreenshot(ScreenshotUtils.ScreenshotType type) {
+        ScreenshotUtils.takeScreenshot(type, instance.mContext, 250L);
+    }
+
+    public static void openQs() {
+        Intent intent = new Intent(ACTIONS_OPEN_QUICK_SETTINGS);
+        intent.setPackage(SYSTEM_UI);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void killForeground() {
+        Intent intent = new Intent(ACTION_INTENT_KILL_APP);
+        intent.setPackage(SYSTEM_UI);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void goToSleep() {
+        callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
     }
 
 }
