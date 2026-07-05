@@ -37,8 +37,6 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
-import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
@@ -456,16 +454,16 @@ public class Buttons extends XposedMods {
         try {
             if (actionValue.contains(":")) {
                 if (actionValue.contains("app:")) {
-                    new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchApp(actionValue.replace("app:", ""));
+                    SystemUtils.launchApp(actionValue.replace("app:", ""));
                 } else if (actionValue.contains("/")) {
                     // Activity Format: "package.name/com.package.ActivityName"
                     String[] parts = actionValue.replace("activity:", "").split("/");
-                    new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchActivity(parts[0], parts[1], false);
+                    SystemUtils.launchActivity(parts[0], parts[1]);
                 }
             } else {
                 switch (actionValue) {
                     case "browser":
-                        new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchBrowser(false);
+                        SystemUtils.launchBrowser();
                         break;
                     case "torch":
                         SystemUtils.toggleFlash();
@@ -477,10 +475,10 @@ public class Buttons extends XposedMods {
                         SystemUtils.toggleDnd();
                         break;
                     case "camera":
-                        new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchCamera(false);
+                        SystemUtils.launchCamera();
                         break;
                     case "recorder":
-                        new ActivityLauncherUtils(mContext, ControllersProvider.getActivityStarterExternal()).launchAudioRecorder(false);
+                        SystemUtils.launchAudioRecorder();
                         break;
                     case "screenshot":
                         SystemUtils.takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);

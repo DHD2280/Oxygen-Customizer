@@ -49,6 +49,7 @@ import org.jetbrains.annotations.Contract;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 
 public class SystemUtils {
     private static final int THREAD_PRIORITY_BACKGROUND = 10;
@@ -625,6 +626,26 @@ public class SystemUtils {
 
     public static void goToSleep() {
         callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+    }
+
+    public static void launchApp(String appName) {
+        new ActivityLauncherUtils(instance.mContext, ControllersProvider.getActivityStarterExternal()).launchApp(appName);
+    }
+
+    public static void launchActivity(String app, String activity) {
+        new ActivityLauncherUtils(instance.mContext, ControllersProvider.getActivityStarterExternal()).launchActivity(app, activity, false);
+    }
+
+    public static void launchBrowser() {
+        new ActivityLauncherUtils(instance.mContext, ControllersProvider.getActivityStarterExternal()).launchBrowser(false);
+    }
+
+    public static void launchCamera() {
+        new ActivityLauncherUtils(instance.mContext, ControllersProvider.getActivityStarterExternal()).launchCamera(false);
+    }
+
+    public static void launchAudioRecorder() {
+        new ActivityLauncherUtils(instance.mContext, ControllersProvider.getActivityStarterExternal()).launchAudioRecorder(false);
     }
 
 }
