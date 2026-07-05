@@ -1,12 +1,10 @@
 package it.dhd.oxygencustomizer.ui.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +23,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import it.dhd.oxygencustomizer.R;
 
@@ -121,7 +118,7 @@ public class ActivitiesListAdapter extends BaseAdapter implements Runnable {
         ActivityItem applicationInfo = getItem(position);
         holder.title.setText(applicationInfo.title);
         holder.icon.setImageDrawable(applicationInfo.icon);
-        holder.summary.setText(String.join("/n", mPackageName, applicationInfo.activityName));
+        holder.summary.setText(String.join("\n", mPackageName, applicationInfo.activityName));
         holder.summary.setVisibility(View.VISIBLE);
         holder.divider.setVisibility(position == getCount() - 1 ? View.GONE : View.VISIBLE);
 
