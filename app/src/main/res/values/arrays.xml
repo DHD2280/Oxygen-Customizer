@@ -1065,6 +1065,14 @@
         <item>@string/camera</item>
         <item>@string/plusKey_action_recorder</item>
         <item>@string/gesture_override_back_hold_command_screenshot</item>
+        <item>@string/gesture_override_back_hold_command_area_screenshot</item>
+        <item>@string/gesture_override_back_hold_command_scroll_screenshot</item>
+        <item>@string/gesture_override_back_hold_command_quick_settings</item>
+        <item>@string/gesture_override_back_hold_command_kill_app</item>
+        <item>@string/gesture_override_back_hold_command_notification_panel</item>
+        <item>@string/gesture_override_back_hold_command_toggle_one_handed</item>
+        <item>@string/gesture_override_back_hold_command_screen_off</item>
+        <item>@string/gesture_override_back_hold_command_circle_to_search</item>
         <item>@string/qs_widget_custom_app</item>
         <item>@string/plusKey_activity</item>
 
@@ -1079,8 +1087,16 @@
         <item>camera</item>
         <item>recorder</item>
         <item>screenshot</item>
-        <item>activity_picker</item>
-        <item>full_activity_picker</item>
+        <item>screenshot_area</item>
+        <item>screenshot_scroll</item>
+        <item>quick_settings</item>
+        <item>kill_app</item>
+        <item>notification_panel</item>
+        <item>toggle_one_handed</item>
+        <item>screen_off</item>
+        <item>circle_to_search</item>
+        <item>app:</item>
+        <item>activity:</item>
     </string-array>
 
 </resources>
