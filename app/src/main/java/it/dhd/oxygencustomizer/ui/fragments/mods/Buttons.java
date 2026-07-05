@@ -3,20 +3,14 @@ package it.dhd.oxygencustomizer.ui.fragments.mods;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 
 import android.content.Intent;
-import android.content.pm.LauncherApps;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ShortcutInfo;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.preference.Preference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.List;
-
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.adapters.ActivitiesListAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -61,13 +55,17 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
     }
 
     private PackageListAdapter mPackageAdapter;
+    private ActivitiesListAdapter mActivitiesAdapter;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
         // Initialize adapter for app list
-        new Thread(() -> mPackageAdapter = new PackageListAdapter(requireActivity())).start();
+        new Thread(() -> {
+            mPackageAdapter = new PackageListAdapter(requireActivity());
+            mActivitiesAdapter = new ActivitiesListAdapter(requireActivity());
+        }).start();
 
         setupActionPreference("plusKey_single_press_button_action_value");
         setupActionPreference("plusKey_double_press_button_action_value");
@@ -81,11 +79,11 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
         if (pref != null) {
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 String val = (String) newValue;
-                if (val.equals("activity_picker")) {
+                if (val.equals("app:")) {
                     // Standard launch
                     showAppPicker(key, "app");
                     return false;
-                } else if (val.equals("full_activity_picker")) {
+                } else if (val.equals("activity:")) {
                     // Specific activity
                     showAppPicker(key, "activity");
                     return false;
@@ -103,44 +101,24 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
 
             if (mode.equals("app")) {
                 // Save package name (PlusKeyActionHandler will use getLaunchIntentForPackage)
-                saveAction(prefKey, item.packageName);
+                saveAction(prefKey, "app:" + item.packageName);
             } else if (mode.equals("activity")) {
                 // Show activities of package
-                showActivityPicker(prefKey, item.packageName);
+                showActivityPicker(prefKey, item.title, item.packageName);
             }
         });
         builder.show();
     }
 
-    private void showActivityPicker(String prefKey, String packageName) {
-        try {
-            PackageManager pm = requireActivity().getPackageManager();
-
-            PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-
-            if (info.activities == null || info.activities.length == 0) {
-                Toast.makeText(getContext(), "No activities found for this app", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String[] names = new String[info.activities.length];
-            for (int i = 0; i < info.activities.length; i++) {
-                // Short name for readability
-                String activityName = info.activities[i].name;
-                names[i] = activityName.startsWith(packageName) ? activityName.substring(packageName.length()) : activityName;
-            }
-
-            new MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.plusKey_select_activity)
-                    .setItems(names, (dialog, which) -> {
-                        String fullClassName = info.activities[which].name;
-                        // Save in format "pkg/class"
-                        saveAction(prefKey, packageName + "/" + fullClassName);
-                    }).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), "Error reading activities", Toast.LENGTH_SHORT).show();
-        }
+    private void showActivityPicker(String prefKey, CharSequence appName, String packageName) {
+        mActivitiesAdapter.setPackageName(packageName);
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(appName)
+                .setAdapter(mActivitiesAdapter, (acDialog, whichApp) -> {
+                    String fullClassName = mActivitiesAdapter.getItem(whichApp).activityName;
+                    // Save in format "pkg/class"
+                    saveAction(prefKey, "activity:" + packageName + "/" + fullClassName);
+                }).show();
     }
 
     private void saveAction(String key, String value) {
