@@ -13,7 +13,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT_PARTIAL;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT_SCROLL;
@@ -42,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -124,9 +124,6 @@ public class CustomNavGestures extends XposedMods {
 				case ACTION_INTENT_SCREENSHOT_SCROLL:
 					takeScreenshot(ScreenshotUtils.ScreenshotType.SCROLL);
 					break;
-				case ACTION_INTENT_KILL_APP:
-					killForeground();
-					break;
 			}
 		}
 	};
@@ -174,7 +171,6 @@ public class CustomNavGestures extends XposedMods {
 			filter.addAction(ACTION_INTENT_SCREENSHOT);
 			filter.addAction(ACTION_INTENT_SCREENSHOT_PARTIAL);
 			filter.addAction(ACTION_INTENT_SCREENSHOT_SCROLL);
-			filter.addAction(ACTION_INTENT_KILL_APP);
 			mContext.registerReceiver(mSystemUiReceiver, filter, Context.RECEIVER_EXPORTED);
 			mBroadcastRegistered = true;
 		}
@@ -445,7 +441,10 @@ public class CustomNavGestures extends XposedMods {
 	}
 
 	private void killForeground() {
-		if(currentFocusedTask == null) return;
+		if (currentFocusedTask == null) {
+			XposedBridge.log("CustomNavGestures - killForeground: currentFocusedTask is null");
+			return;
+		}
 
 		try {
 			Toast.makeText(mContext, "App Killed", Toast.LENGTH_SHORT).show();

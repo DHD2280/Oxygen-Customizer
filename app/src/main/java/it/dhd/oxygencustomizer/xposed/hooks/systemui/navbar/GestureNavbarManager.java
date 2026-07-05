@@ -13,6 +13,7 @@ import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
@@ -118,6 +119,13 @@ public class GestureNavbarManager extends XposedMods {
         }
     };
 
+    private final BroadcastReceiver mAppKiller = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            killForegroundApp();
+        }
+    };
+
 
     public GestureNavbarManager(Context context) {
         super(context);
@@ -169,6 +177,8 @@ public class GestureNavbarManager extends XposedMods {
             mContext.registerReceiver(mSwitchAppReceiver, filter, Context.RECEIVER_EXPORTED);
             IntentFilter overrideFilter = new IntentFilter(ACTIONS_OVERRIDE_BACK);
             mContext.registerReceiver(mOverrideBackReceiver, overrideFilter, Context.RECEIVER_EXPORTED);
+            IntentFilter appKillerFilter = new IntentFilter(ACTION_INTENT_KILL_APP);
+            mContext.registerReceiver(mAppKiller, appKillerFilter, Context.RECEIVER_EXPORTED);
             mBroadcastRegistered = true;
         }
 
