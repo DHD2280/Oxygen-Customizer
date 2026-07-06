@@ -14,6 +14,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.DIS
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -454,16 +455,16 @@ public class Buttons extends XposedMods {
         try {
             if (actionValue.contains(":")) {
                 if (actionValue.contains("app:")) {
-                    SystemUtils.launchApp(actionValue.replace("app:", ""));
+                    launchApp(actionValue.replace("app:", ""), "");
                 } else if (actionValue.contains("/")) {
                     // Activity Format: "package.name/com.package.ActivityName"
                     String[] parts = actionValue.replace("activity:", "").split("/");
-                    SystemUtils.launchActivity(parts[0], parts[1]);
+                    launchApp(parts[0], parts[1]);
                 }
             } else {
                 switch (actionValue) {
                     case "browser":
-                        SystemUtils.launchBrowser();
+                        launchBrowser();
                         break;
                     case "torch":
                         SystemUtils.toggleFlash();
@@ -475,10 +476,10 @@ public class Buttons extends XposedMods {
                         SystemUtils.toggleDnd();
                         break;
                     case "camera":
-                        SystemUtils.launchCamera();
+                        launchCamera();
                         break;
                     case "recorder":
-                        SystemUtils.launchAudioRecorder();
+                        launchAudioRecorder();
                         break;
                     case "screenshot":
                         SystemUtils.takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
@@ -516,6 +517,43 @@ public class Buttons extends XposedMods {
         }
     }
 
+    private void launchBrowser() {
+        Intent browser = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_BROWSER);
+        browser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mContext.startActivity(browser);
+    }
+
+    private void launchCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+    }
+
+    private void launchApp(String appName, String activity) {
+        Intent launchIntent;
+        if (activity.isEmpty()) {
+            launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(appName);
+        } else {
+            launchIntent = new Intent(Intent.ACTION_MAIN);
+            launchIntent.setComponent(new ComponentName(appName, activity));
+        }
+        if (launchIntent != null) {
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+        mContext.startActivity(launchIntent);
+    }
+
+    private void launchAudioRecorder() {
+        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            Intent fallback = mContext.getPackageManager().getLaunchIntentForPackage("com.oneplus.recorder");
+            if (fallback != null) mContext.startActivity(fallback);
+        }
+        mContext.startActivity(intent);
+    }
 
     @Override
     public boolean listensTo(String packageName) {
