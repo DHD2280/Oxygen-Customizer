@@ -397,6 +397,7 @@ public class Buttons extends XposedMods {
                                 if (event.getAction() == KeyEvent.ACTION_UP) {
                                     ShortPressDetected();
                                 }
+                                SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
                                 param.setResult(0); // Consume the event
 
                             }
@@ -405,6 +406,7 @@ public class Buttons extends XposedMods {
                                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                                     executeAction(0);
                                 }
+                                SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
                                 param.setResult(0); // Consume the event
                             }
                         }
