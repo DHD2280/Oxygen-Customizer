@@ -12,6 +12,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_NORMAL;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_VIBRATE;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_TIP_MODE;
 
 import android.annotation.SuppressLint;
@@ -567,8 +569,10 @@ public class SystemUtils {
             // Cycle ringer and vibrate
             if (mode == AudioManager.RINGER_MODE_NORMAL) {
                 am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                sendRingerTipIntent(RINGER_MODE_VIBRATE);
             } else {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                sendRingerTipIntent(RINGER_MODE_NORMAL);
             }
         }
     }
