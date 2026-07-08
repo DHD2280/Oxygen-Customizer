@@ -7,12 +7,15 @@ import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_FLASHLIGHT_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.FLASHLIGHT_TIP_STATE;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_NORMAL;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_SILENT;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_VIBRATE;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_TIP_MODE;
 
@@ -50,6 +53,7 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
@@ -64,6 +68,7 @@ public class SystemUtils {
     CameraManager mCameraManager;
     VibratorManager mVibrationManager;
     AudioManager mAudioManager;
+    NotificationManager mNotificationManager;
     BatteryManager mBatteryManager;
     PowerManager mPowerManager;
     ConnectivityManager mConnectivityManager;
@@ -112,6 +117,14 @@ public class SystemUtils {
         return instance == null
                 ? null
                 : instance.getAudioManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static NotificationManager NotificationManager() {
+        return instance == null
+                ? null
+                : instance.getNotificationManager();
     }
 
     @Nullable
@@ -313,6 +326,19 @@ public class SystemUtils {
         return mAudioManager;
     }
 
+    private NotificationManager getNotificationManager() {
+        if (mNotificationManager == null) {
+            try {
+                mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mNotificationManager;
+    }
+
     private WindowManager getWindowManager() {
         if (mWindowManager == null) {
             try {
@@ -448,9 +474,16 @@ public class SystemUtils {
         return isTorchOn;
     }
 
-    public static void toggleFlash() {
-        if (instance != null)
+    /**
+     * Toggles flash
+     * @return boolean flash state
+     */
+    public static boolean toggleFlash() {
+        if (instance != null) {
             instance.toggleFlashInternal();
+            return isFlashOn();
+        }
+        return false;
     }
 
     public static void shutdownFlash() {
@@ -562,19 +595,53 @@ public class SystemUtils {
         return "";
     }
 
-    public static void toggleRingerMode() {
+    /**
+     * Toggles ringer mode between Normal, Vibrate, Silent
+     * Issues the capsule special notifications
+     * @return current mode integer (coincidentally, also the number of tickles in Buttons.java)
+     */
+    public static int toggleRingerMode() {
         AudioManager am = AudioManager();
+
         if (am != null) {
             int mode = am.getRingerMode();
-            // Cycle ringer and vibrate
-            if (mode == AudioManager.RINGER_MODE_NORMAL) {
+            // Cycle ringer, vibrate and silent
+            if (mode == AudioManager.RINGER_MODE_VIBRATE) {
+                // Vibrate -> Silent
+
+                // Avoid this or we get Vibrate + DND
+                // NotificationManager nm = NotificationManager();
+                //am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                // if(nm != null)
+                //     nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+
+                try {
+                    // Call hidden API or we get Vibrate + DND
+                    de.robv.android.xposed.XposedHelpers.callMethod(
+                            am,
+                            "setRingerModeInternal",
+                            AudioManager.RINGER_MODE_SILENT
+                    );
+                } catch (Throwable t) {
+                    // Fallback
+                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    XposedBridge.log("OxygenCustomizer Error: Impossibile usare setRingerModeInternal - " + t.getMessage());
+                }
+
+                sendRingerTipIntent(RINGER_MODE_SILENT);
+                return RINGER_MODE_SILENT;
+            } else if (mode == AudioManager.RINGER_MODE_NORMAL) {
                 am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                 sendRingerTipIntent(RINGER_MODE_VIBRATE);
+                return RINGER_MODE_VIBRATE;
             } else {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 sendRingerTipIntent(RINGER_MODE_NORMAL);
+                return RINGER_MODE_NORMAL;
             }
+
         }
+        return 0;
     }
 
     public static void sendRingerTipIntent(int ringerMode) {
@@ -585,8 +652,20 @@ public class SystemUtils {
         instance.mContext.sendBroadcast(ringer);
     }
 
-    public static void toggleDnd() {
-        if (instance == null) return;
+    public static void sendFlashIntent(boolean onOff){
+        Intent flashIntent = new Intent(ACTION_INTENT_FLASHLIGHT_TIP);
+        flashIntent.setPackage(SYSTEM_UI);
+        flashIntent.putExtra(FLASHLIGHT_TIP_STATE, onOff ? 1 : 2);
+        flashIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(flashIntent);
+    }
+
+    /**
+     * Toggles Dnd
+     * @return Dnd state on/off
+     */
+    public static boolean toggleDnd() {
+        if (instance == null) return false;
         NotificationManager nm = (NotificationManager) instance.mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (nm != null && nm.isNotificationPolicyAccessGranted()) {
@@ -594,11 +673,14 @@ public class SystemUtils {
             if (filter == NotificationManager.INTERRUPTION_FILTER_ALL) {
                 // Enable DND
                 nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                return true;
             } else {
                 // Disable DND
                 nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+                return false;
             }
         }
+        return false;
     }
 
     public static void toggleNotifications() {

@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_FLASHLIGHT_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
@@ -54,6 +55,7 @@ public class OpUtils extends XposedMods {
     public static final int RINGER_MODE_VIBRATE = 1;
     public static final int RINGER_MODE_NORMAL = 2;
     public static final String RINGER_TIP_MODE = "ringer_tip";
+    public static final String FLASHLIGHT_TIP_STATE = "flashlight_state";
 
 
     private final BroadcastReceiver mRingerTipReceiver = new BroadcastReceiver() {
@@ -86,6 +88,26 @@ public class OpUtils extends XposedMods {
                 fakeData.putString("seedling_event", "ringModeEvent");
 
                 Event fakeEvent = new Event("ringModeEvent", fakeData);
+                EventDispatch.INSTANCE.dispatch(fakeEvent);
+            } else if (intent.getAction().equals(ACTION_INTENT_FLASHLIGHT_TIP)) {
+                Log.d("OxygenCustomizer", "Flashlight tip intent received");
+
+                int rawState = intent.getIntExtra(FLASHLIGHT_TIP_STATE, 2);
+                int flashState = (rawState == 0) ? 2 : rawState;
+
+                Bundle fakeData = new Bundle();
+                fakeData.putInt("flashlightState", flashState);
+
+                // CRITICAL FIX: Add EventType for UTraceContext
+                fakeData.putString("EventType", "flashlightEvent");
+                fakeData.putString("seedling_event", "flashlightEvent");
+
+                // Let's try passing the 'switch' param that sendLiveAlert uses
+                fakeData.putString("switch", String.valueOf(flashState == 1));
+
+                Event fakeEvent = new Event("flashlightEvent", fakeData);
+
+                // Send it to the dispatcher
                 EventDispatch.INSTANCE.dispatch(fakeEvent);
             }
         }
@@ -186,7 +208,9 @@ public class OpUtils extends XposedMods {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
         if (!mBroadcastRegistered) {
-            IntentFilter filter = new IntentFilter(ACTION_INTENT_RINGER_TIP);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_INTENT_RINGER_TIP);
+            filter.addAction(ACTION_INTENT_FLASHLIGHT_TIP);
             mContext.registerReceiver(mRingerTipReceiver, filter, Context.RECEIVER_EXPORTED);
             mBroadcastRegistered = true;
         }

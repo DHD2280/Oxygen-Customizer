@@ -397,7 +397,8 @@ public class Buttons extends XposedMods {
                                 if (event.getAction() == KeyEvent.ACTION_UP) {
                                     ShortPressDetected();
                                 }
-                                SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+                                // Vibrate on execution, so we can add special feedbacks
+                                // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
                                 param.setResult(0); // Consume the event
 
                             }
@@ -454,6 +455,9 @@ public class Buttons extends XposedMods {
         if (mContext == null || TextUtils.isEmpty(actionValue) || actionValue.equals("none"))
             return;
 
+        // How many short vibrations in response to the command
+        int tickles = 1;
+
         try {
             if (actionValue.contains(":")) {
                 if (actionValue.contains("app:")) {
@@ -469,13 +473,15 @@ public class Buttons extends XposedMods {
                         launchBrowser();
                         break;
                     case "torch":
-                        SystemUtils.toggleFlash();
+                        boolean result = !SystemUtils.toggleFlash();
+                        tickles+= result ? 1 : 0;
+                        SystemUtils.sendFlashIntent(result);
                         break;
                     case "ringer":
-                        SystemUtils.toggleRingerMode();
+                        tickles += 2-SystemUtils.toggleRingerMode();
                         break;
                     case "dnd":
-                        SystemUtils.toggleDnd();
+                        tickles += SystemUtils.toggleDnd() ? 1 : 0;
                         break;
                     case "camera":
                         launchCamera();
@@ -514,8 +520,30 @@ public class Buttons extends XposedMods {
                         break;
                 }
             }
+            vibrateTickles(tickles);
         } catch (Throwable t) {
             XposedBridge.log("PlusKey ERROR executing " + actionValue + ": " + t.getMessage());
+        }
+    }
+    private void vibrateTickles(int totalCount) {
+        if (totalCount > 0) {
+            playTickleSequence(1, totalCount);
+        }
+    }
+
+    private void playTickleSequence(int currentStep, int totalCount) {
+        if (currentStep > totalCount) return;
+
+        int effect = switch (currentStep) {
+            case 1 -> VibrationEffect.EFFECT_TICK;
+            case 2 -> VibrationEffect.EFFECT_CLICK;
+            default -> VibrationEffect.EFFECT_HEAVY_CLICK;
+        };
+
+        SystemUtils.vibrate(effect, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+
+        if (currentStep < totalCount && mHandler != null) {
+            mHandler.postDelayed(() -> playTickleSequence(currentStep + 1, totalCount), 125);
         }
     }
 
