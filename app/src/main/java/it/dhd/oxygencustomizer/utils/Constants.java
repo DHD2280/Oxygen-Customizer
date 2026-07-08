@@ -984,6 +984,7 @@ public final class Constants {
     public static final String ACTION_INTENT_SCREENSHOT_PARTIAL = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_PARTIAL_OC";
     public static final String ACTION_INTENT_SCREENSHOT_SCROLL = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_SCROLL_OC";
     public static final String ACTION_INTENT_KILL_APP = BuildConfig.APPLICATION_ID + ".ACTIONS_KILL_APP_OC";
+    public static final String ACTION_INTENT_RINGER_TIP = BuildConfig.APPLICATION_ID + ".ACTIONS_RINGER_TIP";
     public static final String ACTION_DEPTH_BACKGROUND_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_BACKGROUND_CHANGED_OC";
     public static final String ACTION_DEPTH_SUBJECT_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_SUBJECT_CHANGED_OC";
     public static final String ACTIONS_MEMC_FEATURE_GET = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_GET_OC";

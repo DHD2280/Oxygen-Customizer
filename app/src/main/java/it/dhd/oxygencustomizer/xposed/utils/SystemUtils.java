@@ -8,9 +8,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTING
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_TIP_MODE;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -569,6 +571,14 @@ public class SystemUtils {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
         }
+    }
+
+    public static void sendRingerTipIntent(int ringerMode) {
+        Intent ringer = new Intent(ACTION_INTENT_RINGER_TIP);
+        ringer.setPackage(SYSTEM_UI);
+        ringer.putExtra(RINGER_TIP_MODE, ringerMode);
+        ringer.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(ringer);
     }
 
     public static void toggleDnd() {
