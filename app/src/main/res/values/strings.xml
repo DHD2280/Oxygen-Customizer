@@ -825,15 +825,21 @@
     <string name="volbtn_music_controls_title">Volume button music controls</string>
     <string name="volbtn_music_controls_summary">Control music playback with volume buttons</string>
     <string name="plusKey_button_category_title">Plus Key</string>
+    <string name="plusKey_button_category_title_screenoff">Plus Key - Screen Off</string>
     <string name="plusKey_single_press_button_title">Single Press</string>
     <string name="plusKey_double_press_button_title">Double Press</string>
     <string name="plusKey_triple_press_button_title">Triple Press</string>
     <string name="plusKey_long_press_button_title">Long Press</string>
+    <string name="plusKey_single_press_button_title_screenoff">Single Press</string>
+    <string name="plusKey_double_press_button_title_screenoff">Double Press</string>
+    <string name="plusKey_triple_press_button_title_screenoff">Triple Press</string>
+    <string name="plusKey_long_press_button_title_screenoff">Long Press</string>
     <string name="plusKey_action_dnd">Do Not Disturb</string>
     <string name="plusKey_action_recorder">Audio Recorder</string>
     <string name="plusKey_action_browser">Browser</string>
     <string name="plusKey_activity">Custom Activity</string>
     <string name="plusKey_select_activity">Select Activity</string>
+    <string name="plusKey_same_as_screen_on">Same as screen on</string>
 
 
 

@@ -1412,7 +1412,11 @@ public class PreferenceHelper {
             if (key.equals("plusKey_single_press_button_action_value") ||
                     key.equals("plusKey_double_press_button_action_value") ||
                     key.equals("plusKey_triple_press_button_action_value") ||
-                    key.equals("plusKey_long_press_button_action_value")) {
+                    key.equals("plusKey_long_press_button_action_value") ||
+                    key.equals("plusKey_single_press_button_action_value_screenoff") ||
+                    key.equals("plusKey_double_press_button_action_value_screenoff") ||
+                    key.equals("plusKey_triple_press_button_action_value_screenoff") ||
+                    key.equals("plusKey_long_press_button_action_value_screenoff")) {
                 String prefValue = instance.mPreferences.getString(key, "none");
                 if (prefValue.contains(":")) {
                     int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;
@@ -1425,6 +1429,8 @@ public class PreferenceHelper {
                     }
                     String finalName = name;
                     preference.setSummaryProvider(p -> title + "\n" + finalName);
+                } else if(prefValue.equals("none") && key.contains("screenoff")) {
+                    preference.setSummaryProvider(p -> preference.getContext().getString(R.string.plusKey_same_as_screen_on));
                 } else {
                     preference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
                 }

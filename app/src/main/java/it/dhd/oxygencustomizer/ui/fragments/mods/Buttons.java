@@ -71,6 +71,11 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
         setupActionPreference("plusKey_double_press_button_action_value");
         setupActionPreference("plusKey_triple_press_button_action_value");
         setupActionPreference("plusKey_long_press_button_action_value");
+
+        setupActionPreference("plusKey_single_press_button_action_value_screenoff");
+        setupActionPreference("plusKey_double_press_button_action_value_screenoff");
+        setupActionPreference("plusKey_triple_press_button_action_value_screenoff");
+        setupActionPreference("plusKey_long_press_button_action_value_screenoff");
     }
 
 

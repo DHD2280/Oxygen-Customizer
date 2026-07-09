@@ -723,4 +723,14 @@ public class SystemUtils {
         callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
     }
 
+    // Detect screen on-off
+    public static boolean isInteractive() {
+        PowerManager pm = PowerManager();
+        return pm != null && pm.isInteractive();
+    }
+
+    public static boolean isScreenOff() {
+        return !isInteractive();
+    }
+
 }

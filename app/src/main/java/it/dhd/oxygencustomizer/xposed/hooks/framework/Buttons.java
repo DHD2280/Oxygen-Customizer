@@ -61,8 +61,8 @@ public class Buttons extends XposedMods {
     private boolean broadcastRegistered = false;
     private int volumeToTorchTimeout = 5000;
     private boolean settingsUpdated = false;
-    private String actionValueSingle, actionValueDouble, actionValueTriple, actionValueLong = "none";
-    private boolean singlePressEnabled, doublePressEnabled, triplePressEnabled, longPressEnabled = false;
+    private String actionValueSingle, actionValueDouble, actionValueTriple, actionValueLong, actionValueSingleScreenOff, actionValueDoubleScreenOff, actionValueTripleScreenOff, actionValueLongScreenOff = "none";
+    private boolean singlePressEnabled, doublePressEnabled, triplePressEnabled, longPressEnabled, singlePressEnabledScreenOff, doublePressEnabledScreenOff, triplePressEnabledScreenOff, longPressEnabledScreenOff = false;
     private final int KEYCODE_PLUSKEY_SHORT_PRESS = 781;
     private final int KEYCODE_PLUSKEY_LONG_PRESS = 782;
     private int pressCount = 0;
@@ -89,11 +89,11 @@ public class Buttons extends XposedMods {
     };
 
     private boolean isAnyShortPressEnabled() {
-        return singlePressEnabled || doublePressEnabled || triplePressEnabled;
+        return SystemUtils.isScreenOff() ? (singlePressEnabledScreenOff || doublePressEnabledScreenOff || triplePressEnabledScreenOff) : (singlePressEnabled || doublePressEnabled || triplePressEnabled);
     }
 
     private boolean isLongPressEnabled() {
-        return longPressEnabled;
+        return SystemUtils.isScreenOff() ? longPressEnabledScreenOff : longPressEnabled;
     }
 
     private final Runnable actionRunnable = () -> {
@@ -109,14 +109,16 @@ public class Buttons extends XposedMods {
             return;
         }
 
+        boolean screenOff = SystemUtils.isScreenOff();
+
         boolean shouldExecute = false;
-        if (count == 1 && singlePressEnabled) shouldExecute = true;
-        else if (count == 2 && doublePressEnabled) shouldExecute = true;
-        else if (count >= 3 && triplePressEnabled) shouldExecute = true;
+        if (count == 1 && screenOff ? singlePressEnabledScreenOff : singlePressEnabled) shouldExecute = true;
+        else if (count == 2 && screenOff ? doublePressEnabledScreenOff : doublePressEnabled) shouldExecute = true;
+        else if (count >= 3 && screenOff ? triplePressEnabledScreenOff : triplePressEnabled) shouldExecute = true;
 
         log("PlusKey LOG: actionRunnable evaluation. count=" + count +
-                ", single=" + singlePressEnabled + ", double=" + doublePressEnabled +
-                ", triple=" + triplePressEnabled + " -> shouldExecute=" + shouldExecute);
+                ", single=" + (screenOff ? singlePressEnabledScreenOff : singlePressEnabled) + ", double=" + (screenOff ? doublePressEnabledScreenOff : doublePressEnabled) +
+                ", triple=" + (screenOff ? triplePressEnabledScreenOff : triplePressEnabled) + " -> shouldExecute=" + shouldExecute);
 
         if (shouldExecute) {
             executeAction(count);
@@ -131,10 +133,12 @@ public class Buttons extends XposedMods {
     private void ShortPressDetected() {
         log("PlusKey LOG: ShortPressDetected ENTRY. Current pressCount before increment: " + pressCount);
 
-        if (!singlePressEnabled && !doublePressEnabled && !triplePressEnabled) {
+        if (!isAnyShortPressEnabled()) {
             log("PlusKey LOG: ShortPressDetected EXIT. No short press actions are enabled in settings.");
             return;
         }
+
+        boolean screenOff = SystemUtils.isScreenOff();
 
         pressCount++;
         log("PlusKey LOG: ShortPressDetected. pressCount incremented to: " + pressCount);
@@ -143,12 +147,12 @@ public class Buttons extends XposedMods {
         if (mHandler.hasCallbacks(actionRunnable)) mHandler.removeCallbacks(actionRunnable);
 
         // Check if we should execute immediately
-        boolean hasMultiPressActions = doublePressEnabled || triplePressEnabled;
-        boolean isOnlySingleEnabled = singlePressEnabled && !hasMultiPressActions;
+        boolean hasMultiPressActions = screenOff ? (doublePressEnabledScreenOff || triplePressEnabledScreenOff) : (doublePressEnabled || triplePressEnabled);
+        boolean isOnlySingleEnabled = (screenOff ? singlePressEnabledScreenOff : singlePressEnabled) && !hasMultiPressActions;
 
         log("PlusKey LOG: ShortPressDetected. isOnlySingleEnabled=" + isOnlySingleEnabled + ", hasMultiPressActions=" + hasMultiPressActions + " (pressCount=" + pressCount + ")");
 
-        if (isOnlySingleEnabled || pressCount >= 3 || (pressCount == 2 && !triplePressEnabled)) {
+        if (isOnlySingleEnabled || pressCount >= 3 || (pressCount == 2 && !(screenOff ? triplePressEnabledScreenOff : triplePressEnabled))) {
             log("PlusKey LOG: ShortPressDetected. TRIGGERING IMMEDIATE EXECUTION (runnable.run())");
             actionRunnable.run();
         } else {
@@ -159,11 +163,13 @@ public class Buttons extends XposedMods {
 
     private void executeAction(int count) {
         try {
+            boolean screenOff = SystemUtils.isScreenOff();
             String key = switch (count) {
-                case 0 -> actionValueLong;
-                case 1 -> actionValueSingle;
-                case 2 -> actionValueDouble;
-                case 3 -> actionValueTriple;
+                case 0 -> (!screenOff || actionValueLongScreenOff.equals("none")) ? actionValueLong : actionValueLongScreenOff;
+                case 1 -> (!screenOff || actionValueSingleScreenOff.equals("none")) ? actionValueSingle : actionValueSingleScreenOff;
+                case 2 -> (!screenOff || actionValueDoubleScreenOff.equals("none")) ? actionValueDouble : actionValueDoubleScreenOff;
+                case 3 -> (!screenOff || actionValueTripleScreenOff.equals("none")) ? actionValueTriple : actionValueTripleScreenOff;
+
                 default -> "";
             };
 
@@ -200,6 +206,19 @@ public class Buttons extends XposedMods {
 
         actionValueLong = Xprefs.getString("plusKey_long_press_button_action_value", "none");
         longPressEnabled = !TextUtils.isEmpty(actionValueLong) && !actionValueLong.equals("none");
+
+        actionValueSingleScreenOff = Xprefs.getString("plusKey_single_press_button_action_value_screenoff", "none");
+        singlePressEnabledScreenOff = (!TextUtils.isEmpty(actionValueSingleScreenOff) && !actionValueSingleScreenOff.equals("none")) || singlePressEnabled;
+
+        actionValueDoubleScreenOff = Xprefs.getString("plusKey_double_press_button_action_value_screenoff", "none");
+        doublePressEnabledScreenOff = (!TextUtils.isEmpty(actionValueDoubleScreenOff) && !actionValueDoubleScreenOff.equals("none")) || doublePressEnabled;
+
+        actionValueTripleScreenOff = Xprefs.getString("plusKey_triple_press_button_action_value_screenoff", "none");
+        triplePressEnabledScreenOff = (!TextUtils.isEmpty(actionValueTripleScreenOff) && !actionValueTripleScreenOff.equals("none")) || triplePressEnabled;
+
+        actionValueLongScreenOff = Xprefs.getString("plusKey_long_press_button_action_value_screenoff", "none");
+        longPressEnabledScreenOff = (!TextUtils.isEmpty(actionValueLongScreenOff) && !actionValueLongScreenOff.equals("none")) || longPressEnabled;
+
 
         plusKeyTimeout = Xprefs.getSliderInt("plusKey_press_button_action_timeout", 250);
 
@@ -407,7 +426,8 @@ public class Buttons extends XposedMods {
                                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                                     executeAction(0);
                                 }
-                                SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+                                // Vibrate later
+                                // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
                                 param.setResult(0); // Consume the event
                             }
                         }

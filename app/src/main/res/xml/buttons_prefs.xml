@@ -66,6 +66,8 @@
         android:title="@string/plusKey_button_category_title"
         app:iconSpaceReserved="false">
 
+
+
         <it.dhd.oneplusui.preference.OplusListPreference
             android:defaultValue="none"
             android:entries="@array/pluskey_action_entries"
@@ -74,6 +76,7 @@
             android:title="@string/plusKey_single_press_button_title"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
+
         <it.dhd.oneplusui.preference.OplusListPreference
             android:defaultValue="none"
             android:entries="@array/pluskey_action_entries"
@@ -82,6 +85,7 @@
             android:title="@string/plusKey_double_press_button_title"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
+
         <it.dhd.oneplusui.preference.OplusListPreference
             android:defaultValue="none"
             android:entries="@array/pluskey_action_entries"
@@ -90,7 +94,6 @@
             android:title="@string/plusKey_triple_press_button_title"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
-
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
             android:key="plusKey_press_button_action_timeout"
@@ -110,6 +113,50 @@
             android:title="@string/plusKey_long_press_button_title"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
+
+
+        <it.dhd.oneplusui.preference.OplusPreferenceCategory
+            android:key="mindspace_button"
+            android:title="@string/plusKey_button_category_title_screenoff"
+            app:iconSpaceReserved="false">
+            <it.dhd.oneplusui.preference.OplusListPreference
+                android:defaultValue="none"
+                android:entries="@array/pluskey_action_entries"
+                android:entryValues="@array/pluskey_action_values"
+                android:key="plusKey_single_press_button_action_value_screenoff"
+                android:title="@string/plusKey_single_press_button_title_screenoff"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
+
+            <it.dhd.oneplusui.preference.OplusListPreference
+                android:defaultValue="none"
+                android:entries="@array/pluskey_action_entries"
+                android:entryValues="@array/pluskey_action_values"
+                android:key="plusKey_double_press_button_action_value_screenoff"
+                android:title="@string/plusKey_double_press_button_title_screenoff"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
+
+            <it.dhd.oneplusui.preference.OplusListPreference
+                android:defaultValue="none"
+                android:entries="@array/pluskey_action_entries"
+                android:entryValues="@array/pluskey_action_values"
+                android:key="plusKey_triple_press_button_action_value_screenoff"
+                android:title="@string/plusKey_triple_press_button_title_screenoff"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
+
+            <it.dhd.oneplusui.preference.OplusListPreference
+                android:defaultValue="none"
+                android:entries="@array/pluskey_action_entries"
+                android:entryValues="@array/pluskey_action_values"
+                android:key="plusKey_long_press_button_action_value_screenoff"
+                android:title="@string/plusKey_long_press_button_title_screenoff"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
+
+        </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
