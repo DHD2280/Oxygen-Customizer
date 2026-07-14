@@ -7,6 +7,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
 
+import android.os.Build;
 import android.os.Environment;
 
 import java.util.Arrays;
@@ -478,6 +479,7 @@ public final class Constants {
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT_SWITCH = "torch_long_press_power_gesture_enable_timeout";
             public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT = "torch_long_press_power_timeout";
             public static final String BUTTONS_VOLUME_MUSIC = "volbtn_music_controls";
+            public static final String BUTTONS_MINDSPACE = "mindspace_button_action";
         }
 
         public static class Lockscreen {
@@ -979,7 +981,12 @@ public final class Constants {
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
     public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";
     public static final String ACTIONS_QS_PHOTO_RADIUS_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_RADIUS_CHANGED";
-    public static final String ACTION_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
+    public static final String ACTION_INTENT_SCREENSHOT = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_OC";
+    public static final String ACTION_INTENT_SCREENSHOT_PARTIAL = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_PARTIAL_OC";
+    public static final String ACTION_INTENT_SCREENSHOT_SCROLL = BuildConfig.APPLICATION_ID + ".ACTIONS_SCREENSHOT_SCROLL_OC";
+    public static final String ACTION_INTENT_KILL_APP = BuildConfig.APPLICATION_ID + ".ACTIONS_KILL_APP_OC";
+    public static final String ACTION_INTENT_RINGER_TIP = BuildConfig.APPLICATION_ID + ".ACTIONS_RINGER_TIP";
+    public static final String ACTION_INTENT_FLASHLIGHT_TIP = BuildConfig.APPLICATION_ID + "ACTION_FLASHLIGHT_TIP";
     public static final String ACTION_DEPTH_BACKGROUND_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_BACKGROUND_CHANGED_OC";
     public static final String ACTION_DEPTH_SUBJECT_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_DEPTH_SUBJECT_CHANGED_OC";
     public static final String ACTIONS_MEMC_FEATURE_GET = BuildConfig.APPLICATION_ID + ".ACTIONS_MEMC_FEATURE_GET_OC";

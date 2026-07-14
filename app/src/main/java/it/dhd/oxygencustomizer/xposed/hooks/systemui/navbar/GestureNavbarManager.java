@@ -11,17 +11,20 @@ import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_LEFT_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.GesturesPrefs.GESTURE_HOLD_BACK_RIGHT_APP;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.goToSleep;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.openQs;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.runCircleToSearch;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.takeScreenshot;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.toggleNotifications;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.toggleOneHanded;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -36,7 +39,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,7 +53,6 @@ import java.util.List;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -118,6 +119,13 @@ public class GestureNavbarManager extends XposedMods {
         }
     };
 
+    private final BroadcastReceiver mAppKiller = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            killForegroundApp();
+        }
+    };
+
 
     public GestureNavbarManager(Context context) {
         super(context);
@@ -169,6 +177,8 @@ public class GestureNavbarManager extends XposedMods {
             mContext.registerReceiver(mSwitchAppReceiver, filter, Context.RECEIVER_EXPORTED);
             IntentFilter overrideFilter = new IntentFilter(ACTIONS_OVERRIDE_BACK);
             mContext.registerReceiver(mOverrideBackReceiver, overrideFilter, Context.RECEIVER_EXPORTED);
+            IntentFilter appKillerFilter = new IntentFilter(ACTION_INTENT_KILL_APP);
+            mContext.registerReceiver(mAppKiller, appKillerFilter, Context.RECEIVER_EXPORTED);
             mBroadcastRegistered = true;
         }
 
@@ -395,11 +405,10 @@ public class GestureNavbarManager extends XposedMods {
             case 3 -> takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
             case 8 -> takeScreenshot(ScreenshotUtils.ScreenshotType.SCROLL);
             case 9 -> takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
-            case 4 -> showQs();
+            case 4 -> openQs();
             case 5 -> toggleOneHanded();
             case 6 -> toggleNotifications();
-            case 7 ->
-                    callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+            case 7 -> goToSleep();
             case 10 -> runCircleToSearch();
             case 11 -> mActivityLauncherUtils.launchApp(app);
         }
@@ -494,24 +503,6 @@ public class GestureNavbarManager extends XposedMods {
         });
     }
 
-    private void takeScreenshot(ScreenshotUtils.ScreenshotType type) {
-        ScreenshotUtils.takeScreenshot(type, mContext, 750L);
-    }
-
-    private void showQs() {
-        Intent intent = new Intent(ACTIONS_OPEN_QUICK_SETTINGS);
-        intent.setPackage(SYSTEM_UI);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        mContext.sendBroadcast(intent);
-    }
-
-    private void toggleOneHanded() {
-        Intent intent = new Intent(ACTIONS_TOGGLE_ONE_HANDED);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        intent.setPackage(LAUNCHER);
-        mContext.sendBroadcast(intent);
-    }
-
     private void switchApp(int side) {
         if (mOverviewProxyService == null) return;
         try {
@@ -527,17 +518,6 @@ public class GestureNavbarManager extends XposedMods {
         } catch (Throwable t) {
             log(t);
         }
-    }
-
-    private void toggleNotifications() {
-        Intent intent = new Intent(ACTIONS_TOGGLE_PANEL);
-        intent.setPackage(LAUNCHER);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        mContext.sendBroadcast(intent);
-    }
-
-    private void runCircleToSearch() {
-        new Handler(Looper.getMainLooper()).postDelayed(AppUtils::circleToSearch, 150L);
     }
 
     private String getDefaultLauncherPackageName() {

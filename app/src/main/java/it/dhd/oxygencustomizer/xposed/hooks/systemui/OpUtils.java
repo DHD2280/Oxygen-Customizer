@@ -6,17 +6,27 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_FLASHLIGHT_TIP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.hookAllConstructors;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
+
+import com.oplus.systemui.seedlingservice.eventmanager.Event;
+import com.oplus.systemui.seedlingservice.eventmanager.EventDispatch;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -34,6 +44,74 @@ public class OpUtils extends XposedMods {
     private static Object mAffordanceSqlHelper = null;
     public static Class<?> COUISeekBar = null;
     public static Class<?> COUISeekBarListener = null;
+    private boolean mBroadcastRegistered = false;
+    private final String PATH_STATE_DOWN = "assets/images/op_ring.json";
+    private final String PATH_STATE_MIDDLE = "assets/images/op_vibrate.json";
+    private final String PATH_STATE_UP = "assets/images/op_silence.json";
+    private final String STRING_SILENCE = "volume_footer_slient";
+    private final String STRING_VIBRATE = "volume_vibrate";
+    private final String STRING_RING = "volume_footer_ring";
+    public static final int RINGER_MODE_SILENT = 0;
+    public static final int RINGER_MODE_VIBRATE = 1;
+    public static final int RINGER_MODE_NORMAL = 2;
+    public static final String RINGER_TIP_MODE = "ringer_tip";
+    public static final String FLASHLIGHT_TIP_STATE = "flashlight_state";
+
+
+    private final BroadcastReceiver mRingerTipReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(ACTION_INTENT_RINGER_TIP)) {
+                Log.d("OxygenCustomizer", "Ringer tip intent received");
+                int ringerTip = intent.getIntExtra(RINGER_TIP_MODE, 0);
+                String desc, imagePath;
+
+                Bundle fakeData = new Bundle();
+                fakeData.putInt("ringModeType", ringerTip); // 0 = Silenzioso, 1 = Vibrazione, 2 = Normale
+                switch (ringerTip) {
+                    case RINGER_MODE_SILENT:
+                        desc = STRING_SILENCE;
+                        imagePath = PATH_STATE_DOWN;
+                        break;
+                    case RINGER_MODE_VIBRATE:
+                        desc = STRING_VIBRATE;
+                        imagePath = PATH_STATE_MIDDLE;
+                        break;
+                    default:
+                        desc = STRING_RING;
+                        imagePath = PATH_STATE_UP;
+                        break;
+                }
+                fakeData.putString("upOrDown", "up");
+                fakeData.putString("description", mContext.getString(mContext.getResources().getIdentifier(desc, "string", mContext.getPackageName())));
+                fakeData.putString("imagePath", imagePath);
+                fakeData.putString("seedling_event", "ringModeEvent");
+
+                Event fakeEvent = new Event("ringModeEvent", fakeData);
+                EventDispatch.INSTANCE.dispatch(fakeEvent);
+            } else if (intent.getAction().equals(ACTION_INTENT_FLASHLIGHT_TIP)) {
+                Log.d("OxygenCustomizer", "Flashlight tip intent received");
+
+                int rawState = intent.getIntExtra(FLASHLIGHT_TIP_STATE, 2);
+                int flashState = (rawState == 0) ? 2 : rawState;
+
+                Bundle fakeData = new Bundle();
+                fakeData.putInt("flashlightState", flashState);
+
+                // CRITICAL FIX: Add EventType for UTraceContext
+                fakeData.putString("EventType", "flashlightEvent");
+                fakeData.putString("seedling_event", "flashlightEvent");
+
+                // Let's try passing the 'switch' param that sendLiveAlert uses
+                fakeData.putString("switch", String.valueOf(flashState == 1));
+
+                Event fakeEvent = new Event("flashlightEvent", fakeData);
+
+                // Send it to the dispatcher
+                EventDispatch.INSTANCE.dispatch(fakeEvent);
+            }
+        }
+    };
 
     public OpUtils(Context context) {
         super(context);
@@ -128,6 +206,14 @@ public class OpUtils extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
+
+        if (!mBroadcastRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_INTENT_RINGER_TIP);
+            filter.addAction(ACTION_INTENT_FLASHLIGHT_TIP);
+            mContext.registerReceiver(mRingerTipReceiver, filter, Context.RECEIVER_EXPORTED);
+            mBroadcastRegistered = true;
+        }
 
         OpUtils = findClassIfExists("com.oplusos.systemui.util.OpUtils", lpparam.classLoader);
 

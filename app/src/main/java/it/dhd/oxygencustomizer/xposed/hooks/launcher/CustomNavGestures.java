@@ -9,14 +9,18 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
-import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT_PARTIAL;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_SCREENSHOT_SCROLL;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.goToSleep;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.openQs;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.takeScreenshot;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -28,7 +32,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Process;
-import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -111,6 +115,15 @@ public class CustomNavGestures extends XposedMods {
 				case ACTIONS_TOGGLE_PANEL:
 					toggleNotification();
 					break;
+				case ACTION_INTENT_SCREENSHOT:
+					takeScreenshot(ScreenshotUtils.ScreenshotType.FULL);
+					break;
+				case ACTION_INTENT_SCREENSHOT_PARTIAL:
+					takeScreenshot(ScreenshotUtils.ScreenshotType.PARTIAL);
+					break;
+				case ACTION_INTENT_SCREENSHOT_SCROLL:
+					takeScreenshot(ScreenshotUtils.ScreenshotType.SCROLL);
+					break;
 			}
 		}
 	};
@@ -155,6 +168,9 @@ public class CustomNavGestures extends XposedMods {
 			IntentFilter filter = new IntentFilter();
 			filter.addAction(ACTIONS_TOGGLE_PANEL);
 			filter.addAction(ACTIONS_TOGGLE_ONE_HANDED);
+			filter.addAction(ACTION_INTENT_SCREENSHOT);
+			filter.addAction(ACTION_INTENT_SCREENSHOT_PARTIAL);
+			filter.addAction(ACTION_INTENT_SCREENSHOT_SCROLL);
 			mContext.registerReceiver(mSystemUiReceiver, filter, Context.RECEIVER_EXPORTED);
 			mBroadcastRegistered = true;
 		}
@@ -342,7 +358,7 @@ public class CustomNavGestures extends XposedMods {
 
 	String mTasksFieldName = null; // in case the code was obfuscated
 	private void saveFocusedTask() {
-        if (mSysUiProxy == null) return;
+		if (mSysUiProxy == null) return;
 		try {
 			ArrayList<?> recentTaskList = (ArrayList<?>) callMethod(
 					mSysUiProxy,
@@ -410,10 +426,6 @@ public class CustomNavGestures extends XposedMods {
 		}
 	}
 
-	private void goToSleep() {
-		callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
-	}
-
 	private void switchApp(boolean isOnLeftEdge) {
 		Intent intent = new Intent(ACTIONS_SWITCH_APP);
 		intent.putExtra("side", !isOnLeftEdge ? 1 : 0);
@@ -429,7 +441,10 @@ public class CustomNavGestures extends XposedMods {
 	}
 
 	private void killForeground() {
-		if(currentFocusedTask == null) return;
+		if (currentFocusedTask == null) {
+			XposedBridge.log("CustomNavGestures - killForeground: currentFocusedTask is null");
+			return;
+		}
 
 		try {
 			Toast.makeText(mContext, "App Killed", Toast.LENGTH_SHORT).show();
@@ -454,13 +469,6 @@ public class CustomNavGestures extends XposedMods {
 		mContext.startActivity(intent);
 	}
 
-	private void openQs() {
-		Intent intent = new Intent(ACTIONS_OPEN_QUICK_SETTINGS);
-		intent.setPackage(SYSTEM_UI);
-		intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-		mContext.sendBroadcast(intent);
-	}
-
 	private void startOneHandedMode() {
 		callMethod(getObjectField(mSystemUIProxy, "mOneHanded"), "startOneHanded");
 	}
@@ -469,7 +477,4 @@ public class CustomNavGestures extends XposedMods {
 		callMethod(mSystemUIProxy, "toggleNotificationPanel");
 	}
 
-	private void takeScreenshot(ScreenshotUtils.ScreenshotType type) {
-		ScreenshotUtils.takeScreenshot(type, mContext, 250L);
-	}
 }

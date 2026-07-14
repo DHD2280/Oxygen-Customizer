@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -112,6 +111,16 @@ public class ActivityLauncherUtils {
     }
 
     /**
+     * Launches an activity using the ActivityStarter
+     *
+     * @param packageName  The package name of the app
+     * @param activityName The activity name of the app
+     */
+    public void launchActivity(String packageName, String activityName) {
+        launchActivity(packageName, activityName, false);
+    }
+
+    /**
      * Launches an app using the ActivityStarter
      * dismissing the shade.
      * Used for launching apps from Quick Settings.
@@ -128,6 +137,25 @@ public class ActivityLauncherUtils {
             return;
         }
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        launchAppIfAvailable(launchIntent, AppUtils.getAppName(mContext, packageName), fromQs);
+    }
+
+    /**
+     * Launches an activity using the ActivityStarter
+     * dismissing the shade.
+     * Used for launching activity from Quick Settings.
+     *
+     * @param packageName  The package name of the app
+     * @param activityName The activity name of the app
+     */
+    public void launchActivity(String packageName, String activityName, boolean fromQs) {
+        if (mActivityStarter == null) {
+            log("ActivityStarter is null");
+            return;
+        }
+        Intent launchIntent = new Intent(Intent.ACTION_MAIN);
+        launchIntent.setComponent(new ComponentName(packageName, activityName));
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         launchAppIfAvailable(launchIntent, AppUtils.getAppName(mContext, packageName), fromQs);
     }
 
@@ -169,6 +197,18 @@ public class ActivityLauncherUtils {
             final Intent launchIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
             launchAppIfAvailable(launchIntent, R.string.camera, fromQs);
         }
+    }
+
+    public void launchAudioRecorder(boolean fromQs) {
+        Intent launchIntent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
+    }
+
+    public void launchBrowser(boolean fromQs) {
+        Intent browser = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_BROWSER);
+        browser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", browser, fromQs ? 0 : false);
     }
 
     public void launchTimer(boolean fromQs) {

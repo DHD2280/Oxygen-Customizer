@@ -4,14 +4,29 @@ import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_FLASHLIGHT_TIP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_RINGER_TIP;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.FLASHLIGHT_TIP_STATE;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_NORMAL;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_SILENT;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_VIBRATE;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_TIP_MODE;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
+import android.app.NotificationManager;
 import android.app.usage.NetworkStatsManager;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -23,6 +38,7 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserManager;
@@ -37,7 +53,9 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
 
+import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 
 public class SystemUtils {
@@ -50,6 +68,7 @@ public class SystemUtils {
     CameraManager mCameraManager;
     VibratorManager mVibrationManager;
     AudioManager mAudioManager;
+    NotificationManager mNotificationManager;
     BatteryManager mBatteryManager;
     PowerManager mPowerManager;
     ConnectivityManager mConnectivityManager;
@@ -98,6 +117,14 @@ public class SystemUtils {
         return instance == null
                 ? null
                 : instance.getAudioManager();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static NotificationManager NotificationManager() {
+        return instance == null
+                ? null
+                : instance.getNotificationManager();
     }
 
     @Nullable
@@ -299,6 +326,19 @@ public class SystemUtils {
         return mAudioManager;
     }
 
+    private NotificationManager getNotificationManager() {
+        if (mNotificationManager == null) {
+            try {
+                mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    log(t);
+                }
+            }
+        }
+        return mNotificationManager;
+    }
+
     private WindowManager getWindowManager() {
         if (mWindowManager == null) {
             try {
@@ -434,9 +474,16 @@ public class SystemUtils {
         return isTorchOn;
     }
 
-    public static void toggleFlash() {
-        if (instance != null)
+    /**
+     * Toggles flash
+     * @return boolean flash state
+     */
+    public static boolean toggleFlash() {
+        if (instance != null) {
             instance.toggleFlashInternal();
+            return isFlashOn();
+        }
+        return false;
     }
 
     public static void shutdownFlash() {
@@ -546,6 +593,144 @@ public class SystemUtils {
             }
         }
         return "";
+    }
+
+    /**
+     * Toggles ringer mode between Normal, Vibrate, Silent
+     * Issues the capsule special notifications
+     * @return current mode integer (coincidentally, also the number of tickles in Buttons.java)
+     */
+    public static int toggleRingerMode() {
+        AudioManager am = AudioManager();
+
+        if (am != null) {
+            int mode = am.getRingerMode();
+            // Cycle ringer, vibrate and silent
+            if (mode == AudioManager.RINGER_MODE_VIBRATE) {
+                // Vibrate -> Silent
+
+                // Avoid this or we get Vibrate + DND
+                // NotificationManager nm = NotificationManager();
+                //am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                // if(nm != null)
+                //     nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+
+                try {
+                    // Call hidden API or we get Vibrate + DND
+                    de.robv.android.xposed.XposedHelpers.callMethod(
+                            am,
+                            "setRingerModeInternal",
+                            AudioManager.RINGER_MODE_SILENT
+                    );
+                } catch (Throwable t) {
+                    // Fallback
+                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    XposedBridge.log("OxygenCustomizer Error: Impossibile usare setRingerModeInternal - " + t.getMessage());
+                }
+
+                sendRingerTipIntent(RINGER_MODE_SILENT);
+                return RINGER_MODE_SILENT;
+            } else if (mode == AudioManager.RINGER_MODE_NORMAL) {
+                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                sendRingerTipIntent(RINGER_MODE_VIBRATE);
+                return RINGER_MODE_VIBRATE;
+            } else {
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                sendRingerTipIntent(RINGER_MODE_NORMAL);
+                return RINGER_MODE_NORMAL;
+            }
+
+        }
+        return 0;
+    }
+
+    public static void sendRingerTipIntent(int ringerMode) {
+        Intent ringer = new Intent(ACTION_INTENT_RINGER_TIP);
+        ringer.setPackage(SYSTEM_UI);
+        ringer.putExtra(RINGER_TIP_MODE, ringerMode);
+        ringer.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(ringer);
+    }
+
+    public static void sendFlashIntent(boolean onOff){
+        Intent flashIntent = new Intent(ACTION_INTENT_FLASHLIGHT_TIP);
+        flashIntent.setPackage(SYSTEM_UI);
+        flashIntent.putExtra(FLASHLIGHT_TIP_STATE, onOff ? 1 : 2);
+        flashIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(flashIntent);
+    }
+
+    /**
+     * Toggles Dnd
+     * @return Dnd state on/off
+     */
+    public static boolean toggleDnd() {
+        if (instance == null) return false;
+        NotificationManager nm = (NotificationManager) instance.mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (nm != null && nm.isNotificationPolicyAccessGranted()) {
+            int filter = nm.getCurrentInterruptionFilter();
+            if (filter == NotificationManager.INTERRUPTION_FILTER_ALL) {
+                // Enable DND
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                return true;
+            } else {
+                // Disable DND
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static void toggleNotifications() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_PANEL);
+        intent.setPackage(LAUNCHER);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void toggleOneHanded() {
+        Intent intent = new Intent(ACTIONS_TOGGLE_ONE_HANDED);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.setPackage(LAUNCHER);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void runCircleToSearch() {
+        new Handler(Looper.getMainLooper()).postDelayed(AppUtils::circleToSearch, 150L);
+    }
+
+    public static void takeScreenshot(ScreenshotUtils.ScreenshotType type) {
+        ScreenshotUtils.takeScreenshot(type, instance.mContext, 250L);
+    }
+
+    public static void openQs() {
+        Intent intent = new Intent(ACTIONS_OPEN_QUICK_SETTINGS);
+        intent.setPackage(SYSTEM_UI);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void killForeground() {
+        Intent intent = new Intent(ACTION_INTENT_KILL_APP);
+        intent.setPackage(SYSTEM_UI);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        instance.mContext.sendBroadcast(intent);
+    }
+
+    public static void goToSleep() {
+        callMethod(SystemUtils.PowerManager(), "goToSleep", SystemClock.uptimeMillis());
+    }
+
+    // Detect screen on-off
+    public static boolean isInteractive() {
+        PowerManager pm = PowerManager();
+        return pm != null && pm.isInteractive();
+    }
+
+    public static boolean isScreenOff() {
+        return !isInteractive();
     }
 
 }
