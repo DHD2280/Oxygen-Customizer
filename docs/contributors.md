@@ -81,6 +81,13 @@ Thanks to those contributors, this project exists:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/LollosoSi">
+                    <img src="https://avatars.githubusercontent.com/u/24529432?v=4" width="32;" alt="LollosoSi"/>
+                    <br />
+                    <sub><b>Andrea</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/jeanrivera">
                     <img src="https://avatars.githubusercontent.com/u/24832354?v=4" width="32;" alt="jeanrivera"/>
                     <br />
@@ -94,6 +101,8 @@ Thanks to those contributors, this project exists:
                     <sub><b>DrDisagree</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/luigimak">
                     <img src="https://avatars.githubusercontent.com/u/10235885?v=4" width="32;" alt="luigimak"/>
@@ -101,8 +110,6 @@ Thanks to those contributors, this project exists:
                     <sub><b>luigimak</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/rustammendel">
                     <img src="https://avatars.githubusercontent.com/u/30227161?v=4" width="32;" alt="rustammendel"/>
