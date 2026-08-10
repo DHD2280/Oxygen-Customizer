@@ -7,7 +7,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_PROVIDER;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UNITS;
 import static it.dhd.oxygencustomizer.utils.Constants.Weather.WEATHER_UPDATE_INTERVAL;
 
-import android.os.Build;
 import android.os.Environment;
 
 import java.util.Arrays;
@@ -702,6 +701,7 @@ public final class Constants {
                     LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED,
                     LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION,
                     LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE,
+                    LOCKSCREEN_PEEK_TOP_MARGIN,
                     LOCKSCREEN_PEEK_CARD_BG_COLOR,
                     LOCKSCREEN_PEEK_CARD_TITLE_COLOR,
                     LOCKSCREEN_PEEK_CARD_SUMMARY_COLOR,
