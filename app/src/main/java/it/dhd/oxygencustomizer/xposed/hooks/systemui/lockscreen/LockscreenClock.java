@@ -123,6 +123,7 @@ public class LockscreenClock extends XposedMods {
     private boolean customLockscreenClock = false;
     private int lockscreenClockStyle = 1;
     private int topMargin, bottomMargin, bottomAodMargin;
+    private float mLockHeight = 0;
     private float clockScale;
     private int lineHeight;
     private boolean customFontEnabled = false;
@@ -151,7 +152,7 @@ public class LockscreenClock extends XposedMods {
     public final static int CLOCK_UI_STATE_LS = 2;
     public final static int CLOCK_UI_STATE_AOD = 3;
     private Object mKeyguardStyleClockControllerImpl = null;
-
+    public static float mFinalHeight = 0f;
     private boolean mBatteryReceiverRegistered = false;
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
@@ -267,10 +268,10 @@ public class LockscreenClock extends XposedMods {
                     .run(param -> {
                         Object lockIconViewController = getObjectField(param.thisObject, "lockIconViewController");
                         Object obj = callMethod(lockIconViewController, "get");
-                        float height = (float) callMethod(obj, "getBottom");
+                        mLockHeight = (float) callMethod(obj, "getBottom");
                         if (mLockscreenView == null) return;
                         int clockHeight = mLockscreenView.getFullHeight(customLockscreenClock);
-                        int finalResult = (int) (height + clockHeight);
+                        int finalResult = (int) (mLockHeight + clockHeight);
                         if (customLockscreenClock) {
                             finalResult += dp2px(mContext, topMargin);
                             finalResult += dp2px(mContext, bottomMargin);
@@ -282,6 +283,25 @@ public class LockscreenClock extends XposedMods {
                         if (!customLockscreenClock) {
                             return;
                         }
+                        param.setResult(finalResult);
+                    });
+
+            ReflectedClass NotificationPanelViewController = ReflectedClass.ofIfPossible("com.android.systemui.shade.NotificationPanelViewController");
+            NotificationPanelViewController
+                    .before("getKeyguardNotificationStaticPadding")
+                    .run(param -> {
+                        int clockHeight = mLockscreenView.getFullHeight(customLockscreenClock);
+                        int finalResult = (int) (mLockHeight + clockHeight);
+                        setMarginsNoConvert(mLockscreenView, mContext, 0, 0, 0, 0);
+                        if (customLockscreenClock) {
+                            finalResult += dp2px(mContext, topMargin);
+                            finalResult += dp2px(mContext, bottomMargin);
+                        } else {
+                            int mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
+                            setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
+                            finalResult += mStockClockHeight;
+                        }
+                        mFinalHeight = finalResult;
                         param.setResult(finalResult);
                     });
 
@@ -888,6 +908,10 @@ public class LockscreenClock extends XposedMods {
             }
         }
         tv.setText(spannableString, TextView.BufferType.SPANNABLE);
+    }
+
+    public static float getClockHeight() {
+        return mFinalHeight;
     }
 
     @Override
