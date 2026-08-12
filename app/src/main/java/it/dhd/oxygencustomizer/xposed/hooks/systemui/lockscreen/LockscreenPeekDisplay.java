@@ -61,6 +61,8 @@ public class LockscreenPeekDisplay extends XposedMods {
     private int mStatusBarState = -1;
     private boolean mKeyguardShowing = false;
     private int mTopHeight, mStackScrollerPaddingExpanded;
+    private int mNotificationsTopHeight = 0;
+    private float mLockHeight;
     private int mTopMargin = 0;
     private boolean mMarginSet = false;
 
@@ -153,6 +155,15 @@ public class LockscreenPeekDisplay extends XposedMods {
                     mPeekContainer.setAlpha((float) param.args[0]);
                 });
 
+        ReflectedClass KeyguardStyleClockControllerImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl");
+        KeyguardStyleClockControllerImpl
+                .before("getKeyguardStyleClockHeight")
+                .run(param -> {
+                    Object lockIconViewController = getObjectField(param.thisObject, "lockIconViewController");
+                    Object obj = callMethod(lockIconViewController, "get");
+                    mLockHeight = (float) callMethod(obj, "getBottom");
+                });
+
         ReflectedClass NotificationPanelViewController = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController");
         NotificationPanelViewController
                 .after("onFinishInflate")
@@ -168,6 +179,14 @@ public class LockscreenPeekDisplay extends XposedMods {
                     Object mClockPositionResult = getObjectField(param.thisObject, "mClockPositionResult");
                     mTopHeight = getIntField(mClockPositionResult, "stackScrollerPadding");
                     mStackScrollerPaddingExpanded = getIntField(mClockPositionResult, "stackScrollerPaddingExpanded");
+                    Object mClockPositionAlgorithm;
+                    try {
+                        mClockPositionAlgorithm = getObjectField(param.thisObject, "mClockPositionAlgorithm");
+                        mStackScrollerPaddingExpanded = getIntField(mClockPositionAlgorithm, "mSplitShadeTopNotificationsMargin");
+                        mTopHeight = dp2px(mContext, mStackScrollerPaddingExpanded);
+                        mTopHeight += (int) mLockHeight;
+                    } catch (Throwable ignored) {
+                    }
                     placePeek();
                 });
 
@@ -194,6 +213,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .run(param -> {
                     if (mPeekContainer == null) return;
                     int top = (int) param.args[3];
+                    XposedBridge.log("LockscreenPeekDisplay, NotificationPanelViewControllerExImp setNotificationsConstraints, top=" + top + ", mTopHeight=" + mTopHeight + ", mStackScrollerPaddingExpanded=" + mStackScrollerPaddingExpanded);
                     setMarginsNoConvert(mPeekContainer, mContext, 0, (top == 0 ? mStackScrollerPaddingExpanded + mTopHeight : top) + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
