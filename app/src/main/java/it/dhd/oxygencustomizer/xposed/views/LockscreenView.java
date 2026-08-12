@@ -31,7 +31,7 @@ public class LockscreenView extends FrameLayout {
     private CurrentWeatherView mWeatherView;
     private LockscreenWidgetsView mWidgetsView;
 
-    private boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
+    public boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
 
     @SuppressLint("StaticFieldLeak")
     public static LockscreenView instance = null;
@@ -210,6 +210,18 @@ public class LockscreenView extends FrameLayout {
                 setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public boolean isClockEnabled() {
+        return mLockscreenClockEnabled;
+    }
+
+    public boolean isWeatherEnabled() {
+        return mLockscreenWeatherEnabled;
+    }
+
+    public boolean isWidgetsEnabled() {
+        return mLockscreenWidgetsEnabled;
     }
 
 }
