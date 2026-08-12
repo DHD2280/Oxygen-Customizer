@@ -307,6 +307,7 @@ public class LockscreenClock extends XposedMods {
 
             ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
             ReflectedClass OplusKeyguardStyleWrapper = ReflectedClass.ofIfPossible("com.oplus.keyguard.comm.OplusKeyguardStyleWrapper");
+            ReflectedClass ClockPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.ClockPlugin");
 
             ReflectedClass.ReflectionConsumer lockscreenClockPostHook = param -> {
                 int viewType = (int) param.args[0];
@@ -349,14 +350,18 @@ public class LockscreenClock extends XposedMods {
                     .after("getView")
                     .run(lockscreenClockPostHook);
 
+            ReflectedClass.ReflectionConsumer timeHooker = param -> {
+                long time = (long) param.args[0];
+                if (customLockscreenClock) {
+                    mLockscreenView.updateClock(time);
+                }
+            };
             OplusKeyguardStyleBaseClock
                     .after("setTime")
-                    .run(param -> {
-                        long time = (long) param.args[0];
-                        if (customLockscreenClock) {
-                            mLockscreenView.updateClock(time);
-                        }
-                    });
+                    .run(timeHooker);
+            ClockPlugin
+                    .after("setTime")
+                    .run(timeHooker);
 
             if (OplusKeyguardStyleWrapper.getClazz() != null) { // RUI 6.0
                 OplusKeyguardStyleWrapper
