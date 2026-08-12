@@ -152,7 +152,6 @@ public class LockscreenClock extends XposedMods {
     public final static int CLOCK_UI_STATE_LS = 2;
     public final static int CLOCK_UI_STATE_AOD = 3;
     private Object mKeyguardStyleClockControllerImpl = null;
-    public static float mFinalHeight = 0f;
     private boolean mBatteryReceiverRegistered = false;
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
@@ -301,8 +300,9 @@ public class LockscreenClock extends XposedMods {
                             setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
                             finalResult += mStockClockHeight;
                         }
-                        mFinalHeight = finalResult;
-                        param.setResult(finalResult);
+                        if (mLockscreenView.isClockEnabled() ||
+                                mLockscreenView.isWeatherEnabled() ||
+                                mLockscreenView.isWidgetsEnabled()) param.setResult(finalResult);
                     });
 
             ReflectedClass OplusKeyguardStyleBaseClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleBaseClock");
@@ -332,7 +332,8 @@ public class LockscreenClock extends XposedMods {
                 }
                 try {
                     ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
-                } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {
+                }
                 mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
                 if (view instanceof ViewGroup viewGroup) {
                     viewGroup.addView(mLockscreenView);
@@ -370,7 +371,8 @@ public class LockscreenClock extends XposedMods {
                         if (mLockscreenView != null) {
                             try {
                                 ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
-                            } catch (Throwable ignored) {}
+                            } catch (Throwable ignored) {
+                            }
                         }
                         if (!isPluginLoaded) {
                             try {
@@ -390,7 +392,8 @@ public class LockscreenClock extends XposedMods {
                             int marginTop = dp2px(mContext, topMargin);
                             int marginBottom = dp2px(mContext, bottomAodMargin);
                             setIntField(param.thisObject, "mAodWorkShopClockHeight", (mLockscreenView.getClockHeight() + marginTop + marginBottom));
-                        } catch (Throwable ignored) {}
+                        } catch (Throwable ignored) {
+                        }
                     });
             ReflectedClass AodData = ReflectedClass.of("com.oplus.systemui.aod.aodclock.constant.AodData");
             AodData
@@ -726,10 +729,12 @@ public class LockscreenClock extends XposedMods {
 
         try {
             ((ViewGroup) mVolumeLevelArcProgress.getParent()).removeView(mVolumeLevelArcProgress);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
         try {
             ((ViewGroup) mRamUsageArcProgress.getParent()).removeView(mRamUsageArcProgress);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         switch (lockscreenClockStyle) {
             case 2 -> {
@@ -908,10 +913,6 @@ public class LockscreenClock extends XposedMods {
             }
         }
         tv.setText(spannableString, TextView.BufferType.SPANNABLE);
-    }
-
-    public static float getClockHeight() {
-        return mFinalHeight;
     }
 
     @Override
