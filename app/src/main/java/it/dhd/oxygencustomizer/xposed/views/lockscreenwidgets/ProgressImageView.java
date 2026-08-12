@@ -29,7 +29,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.BatteryManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -43,8 +42,6 @@ import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.ThemeUtils;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 
@@ -216,7 +213,6 @@ public class ProgressImageView extends ImageView {
 
     private int getVolumeLevel() {
         AudioManager audioManager;
-        Log.w("ProgressImageView", "mContext packageName: " + mContext.getPackageName());
         if (Objects.equals(mContext.getPackageName(), BuildConfig.APPLICATION_ID)) {
             audioManager = mContext.getSystemService(AudioManager.class);
         } else {
