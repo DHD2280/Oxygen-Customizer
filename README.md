@@ -45,14 +45,14 @@ Furthermore, the open-source nature of Oxygen Customizer encourages community co
 
 # 🧩 Compatibility
 
-Oxygen Customizer is compatible with OxygenOS/ColorOS/RUI 15, 14 and 13.
+Oxygen Customizer is compatible with OxygenOS/ColorOS/RUI 16, 15, 14 and 13.
 
 > [!WARNING]
 > If you are using OOS15 based rom, please use at least beta versions.
 
 # 🛠 Requirements
 
-- Oxygen OS 15, 14 or 13 (check compatibility above)
+- Oxygen OS 16, 15, 14 or 13 (check compatibility above)
 
 - [Magisk](https://github.com/topjohnwu/Magisk) (Recommended) or [KernelSU](https://github.com/tiann/KernelSU) or [APatch](https://github.com/bmax121/APatch)
 
@@ -96,7 +96,9 @@ If you are running OOS14 or OOS13 based rom.
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&label=STABLE" alt="Stable"></a>
     
 ### 🟡 **Beta**
-More updated with fixes and new features, if you are using OOS15 based rom - consider to use nightly variant.
+
+More updated with fixes and new features, if you are using OOS15 or OOS16 based rom - consider to
+use nightly variant.
 <br>
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases&label=BETA" alt="Beta"></a>
   
@@ -203,7 +205,9 @@ We highly appreciate and welcome all forms of contributions, ranging from code, 
 <details>
   <summary>Which devices does Oxygen Customizer support?</summary>
 
-- Oxygen Customizer exclusively supports Oxygen OS 14 and later versions. Compatibility with other devices or custom ROMs is not guaranteed.
+- Oxygen Customizer supports Oxygen OS 13 based roms and later. Since it's based on Oxygen OS
+  system, compatibility with ColorOS and Realme UI it's not guaranteed, but we are keep improving
+  this project to support those three systems together.
 </details>
 
 <details>
