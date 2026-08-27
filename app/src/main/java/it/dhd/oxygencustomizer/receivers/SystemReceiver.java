@@ -42,6 +42,10 @@ public class SystemReceiver extends BroadcastReceiver {
             Intent broadcast = new Intent(Constants.ACTIONS_BOOT_COMPLETED);
             broadcast.putExtra("packageName", SYSTEM_UI);
             context.sendBroadcast(broadcast);
+        } else if (Intent.ACTION_USER_UNLOCKED.equals(action)) {
+            Intent broadcast = new Intent(Constants.ACTIONS_USER_UNLOCKED);
+            broadcast.putExtra("packageName", SYSTEM_UI);
+            context.sendBroadcast(broadcast);
         }
     }
 }

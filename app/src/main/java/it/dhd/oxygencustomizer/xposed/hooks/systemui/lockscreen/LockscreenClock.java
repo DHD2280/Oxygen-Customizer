@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
@@ -8,6 +9,8 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_USER_UNLOCKED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_BOTTOM_MARGIN_AOD;
@@ -174,10 +177,16 @@ public class LockscreenClock extends XposedMods {
         }
     };
 
-    private enum ImageType {
-        USER_IMAGE,
-        CUSTOM_IMAGE
-    }
+    private boolean mBroadcastRegistered = false;
+
+    final BroadcastReceiver mBootReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                updateClockView();
+            }
+        }
+    };
 
     public LockscreenClock(Context context) {
         super(context);
@@ -243,6 +252,15 @@ public class LockscreenClock extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+        if (!mBroadcastRegistered) {
+            mBroadcastRegistered = true;
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTIONS_BOOT_COMPLETED);
+            intentFilter.addAction(ACTIONS_USER_UNLOCKED);
+            mContext.registerReceiver(mBootReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
+        }
 
         LottieAn = ReflectedClass.of("com.airbnb.lottie.LottieAnimationView").getClazz();
 

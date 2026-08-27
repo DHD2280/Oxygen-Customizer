@@ -1,6 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
+import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_USER_UNLOCKED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_APPLY_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_POSITION;
@@ -12,7 +15,10 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
@@ -38,7 +44,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
-import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.statusbar.LogoView;
 
@@ -60,6 +65,16 @@ public class StatusbarLogo extends XposedMods {
     private int mPaddingStart = 0;
 
     private LogoView mStatusbarLogoView = new LogoView(mContext);
+    private boolean mBroadcastRegistered = false;
+
+    final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                placeLogo();
+            }
+        }
+    };
 
     public StatusbarLogo(Context context) {
         super(context);
@@ -90,6 +105,15 @@ public class StatusbarLogo extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+        if (!mBroadcastRegistered) {
+            mBroadcastRegistered = true;
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTIONS_BOOT_COMPLETED);
+            intentFilter.addAction(ACTIONS_USER_UNLOCKED);
+            mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
+        }
 
         mStatusbarLogoView.setLayoutParams(new ViewGroup.LayoutParams(dp2px(mContext, mLogoSize), dp2px(mContext, mLogoSize)));
         mStatusbarLogoView.setScaleType(ImageView.ScaleType.FIT_CENTER);

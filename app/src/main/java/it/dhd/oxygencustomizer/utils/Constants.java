@@ -977,6 +977,7 @@ public final class Constants {
     public static final String ACTIONS_QS_CLOCK_FONT_CHANGEG = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_FONT_CHANGEG_OC";
     public static final String ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_CLOCK_USER_IMAGE_CHANGED_OC";
     public static final String ACTIONS_BOOT_COMPLETED = BuildConfig.APPLICATION_ID + ".ACTIONS_BOOT_COMPLETED";
+    public static final String ACTIONS_USER_UNLOCKED = BuildConfig.APPLICATION_ID + ".ACTIONS_USER_UNLOCKED";
     public static final String ACTION_TILE_REMOVED = BuildConfig.APPLICATION_ID + ".ACTION_TILE_REMOVED_OC";
     public static final String ACTION_WEATHER_INFLATED = BuildConfig.APPLICATION_ID + ".ACTION_WEATHER_INFLATED_OC";
     public static final String ACTIONS_QS_PHOTO_CHANGED = BuildConfig.APPLICATION_ID + ".ACTIONS_QS_PHOTO_CHANGED_OC";

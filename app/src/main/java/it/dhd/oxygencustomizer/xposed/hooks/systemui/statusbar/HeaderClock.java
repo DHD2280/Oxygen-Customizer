@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
+import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_USER_UNLOCKED;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.DATE_TAG;
 import static it.dhd.oxygencustomizer.utils.Constants.HEADER_CLOCK_LAYOUT;
@@ -158,9 +159,7 @@ public class HeaderClock extends XposedMods {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null && intent.getAction() != null) {
-                if (intent.getAction().equals(ACTIONS_BOOT_COMPLETED)) {
-                    updateClockView();
-                }
+                updateClockView();
             }
         }
     };
@@ -296,6 +295,7 @@ public class HeaderClock extends XposedMods {
 
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ACTIONS_BOOT_COMPLETED);
+            intentFilter.addAction(ACTIONS_USER_UNLOCKED);
             mContext.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
