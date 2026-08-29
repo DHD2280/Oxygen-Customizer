@@ -45,14 +45,14 @@ Inoltre, la natura open source di Oxygen Customizer incoraggia i contributi dell
 
 # 🧩 Compatibilità
 
-Oxygen Customizer è compatibile con OxygenOS/ColorOS/RUI 15, 14 e 13.
+Oxygen Customizer è compatibile con OxygenOS/ColorOS/RUI 16, 15, 14 e 13.
 
 > [!WARNING]
 > Se si utilizza una ROM basata su OOS15, utilizzare almeno le versioni beta.
 
 # 🛠 Requisiti
 
-- Oxygen OS 15, 14 o 13 (verificare la compatibilità sopra)
+- Oxygen OS 16, 15, 14 o 13 (verificare la compatibilità sopra)
 
 - [Magisk](https://github.com/topjohnwu/Magisk) (Raccomandato) o [KernelSU](https://github.com/tiann/KernelSU) o [APatch](https://github.com/bmax121/APatch)
 
@@ -96,7 +96,8 @@ Se stai utilizzando una ROM basata su OOS14 o OOS13.
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&label=STABLE" alt="Stable"></a>
     
 ### 🟡 **Beta**
-Aggiornato con correzioni e nuove funzionalità, se si utilizza una ROM basata su OOS15, si consiglia di utilizzare la variante nightly.
+Aggiornato con correzioni e nuove funzionalità, se si utilizza una ROM basata su OOS15 o OOS16, 
+si consiglia di utilizzare la variante nightly.
 <br>
 <a href="https://github.com/DHD2280/Oxygen-Customizer/releases"><img src="https://img.shields.io/github/v/release/DHD2280/Oxygen-Customizer?style=for-the-badge&include_prereleases&label=BETA" alt="Beta"></a>
   
@@ -203,7 +204,9 @@ Apprezziamo e accogliamo con piacere ogni tipo di contributo, dal codice alla do
 <details>
   <summary>Quali dispositivi supporta Oxygen Customizer?</summary>
 
-- Oxygen Customizer supporta esclusivamente Oxygen OS 14 e versioni successive. La compatibilità con altri dispositivi o ROM personalizzate non è garantita.
+- Oxygen Customizer supporta le ROM basate su Oxygen OS 13 e versioni successive. Essendo basato sul sistema Oxygen OS, 
+  la compatibilità con ColorOS e Realme UI non è garantita, ma stiamo continuando a migliorare questo progetto per supportare 
+  tutti e tre i sistemi contemporaneamente.
 </details>
 
 <details>
