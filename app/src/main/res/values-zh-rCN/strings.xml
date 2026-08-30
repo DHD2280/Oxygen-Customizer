@@ -35,6 +35,8 @@
     <string name="need_storage_perm_desc">需要存储权限才能构建必要的文件。</string>
     <string name="compatible_root_not_found_title">无法找到兼容的 Root 方法</string>
     <string name="compatible_root_not_found_desc">使用任何流行的 root 解决方案进行操作。</string>
+    <string name="meta_module_missing_title">元模块未安装</string>
+    <string name="meta_module_missing_desc">KernelSU 3.0.0 及更高版本需要安装 Metamodule 才能进行无系统 /system 修改。</string>
     <string name="root_not_found_title">Root 不可访问</string>
     <string name="root_not_found_desc">看起来您的设备没有Root!</string>
     <string name="need_reboot_title">需要重启设备</string>
@@ -674,6 +676,9 @@
     <string name="launcher_rows">桌面布局行数</string>
     <string name="hide_app_labels">隐藏应用标签</string>
     <string name="hide_app_labels_desktop">在主屏幕隐藏应用标签</string>
+    <string name="hide_app_labels_drawer">隐藏抽屉中的应用标签</string>
+    <string name="launcher_force_dock">强制显示 dock 栏项目</string>
+    <string name="launcher_force_dock_summary">使 Dock 栏的图标数量与主屏幕列数保持一致。\n例如：如果你的布局是 6 × 7，那么 Dock 栏就可以放置 6 个图标。</string>
     <string name="launcher_folder_layout">文件夹布局</string>
     <string name="launcher_folder_edit_layout">编辑布局</string>
     <string name="launcher_folder_columns">列数</string>
@@ -686,10 +691,26 @@
     <string name="launcher_recents">最近任务</string>
     <string name="launcher_app_details_title">打开应用程序详细信息</string>
     <string name="launcher_app_details_summary">长按应用图标打开应用详情</string>
+    <string name="launcher_disable_recents_previous_page_title">禁用上一个任务</string>
+    <string name="launcher_disable_recents_previous_page_summary">禁用在最近任务中自动切换至上一个任务的功能。</string>
+    <string name="launcher_replace_lock_title">将锁定替换为结束进程</string>
+    <string name="launcher_replace_lock_summary">将锁定手势（在最近任务中下滑）替换为结束应用功能。</string>
     <string name="remove_home_pagination">移除主页分页</string>
+    <string name="launcher_themed_icons">主题化图标</string>
     <string name="force_themed_launcher_icons">强制主题应用图标</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: 强制所有应用使用主题图标.\n在启动器中重新启用主题图标以应用。</string>
+    <string name="alternative_themed_icons_title">其他主题图标</string>
+    <string name="alternative_themed_icons_summary">使用其他方法来设置图标样式。\n注意：此方法不会覆盖 Oplus 图标，但速度可能会变慢。</string>
+    <string name="themed_icons_where_switch_summary">选择应用主题图标的位置</string>
+    <string name="themed_icons_where_title">选择应用主题图标的位置</string>
+    <string name="themed_icons_workspace">工作区</string>
+    <string name="themed_icons_drawer">抽屉</string>
+    <string name="themed_icons_folder">文件夹</string>
     <string name="themed_icons_search">搜索结果</string>
+    <string name="themed_icons_taskbar">任务栏</string>
+    <string name="hide_scroller">隐藏滚动条</string>
+    <string name="hide_scroller_summary">在应用抽屉中隐藏滚动条</string>
+    <string name="dock_background_radius">背景半径</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">手势导航</string>
     <string name="gesture_navigation_title">手势导航</string>
@@ -710,6 +731,9 @@
     <string name="gesture_override_back_hold_command_switch_app">切换到上一应用</string>
     <string name="gesture_override_back_hold_command_close_recents">清除所有最近任务</string>
     <string name="gesture_override_back_hold_command_kill_app">结束活动应用</string>
+    <string name="gesture_override_back_hold_command_screenshot">截图</string>
+    <string name="gesture_override_back_hold_command_scroll_screenshot">滚动截图</string>
+    <string name="gesture_override_back_hold_command_area_screenshot">部分截图</string>
     <string name="gesture_override_back_hold_command_quick_settings">打开快速设置</string>
     <string name="gesture_override_back_hold_command_power_menu">打开电源菜单</string>
     <string name="gesture_override_back_hold_command_notification_panel">打开通知面板</string>
@@ -719,6 +743,7 @@
     <string name="gesture_nav_pill_width_title">对比标准大小的宽度</string>
     <string name="colorpill">小白条强调色</string>
     <!-- Custom Gestures -->
+    <string name="gesture_nav_long_swipe_fc_title">向屏幕顶部滑动以关闭前台应用</string>
     <!-- Buttons Title -->
     <string name="buttons_title">按键</string>
     <string name="power_button_category_title">电源键</string>
@@ -766,6 +791,7 @@
     <string name="depth_wallpaper_plugin_not_installed">AI模型未安装。\n请点击这里安装它！</string>
     <string name="depth_wallpaper_mode_ai">AI</string>
     <string name="depth_wallpaper_mode_custom_images">自定义图像</string>
+    <string name="depth_wallpaper_mode_ai_plugin">Ai（本地）</string>
     <string name="depth_wallpaper_opacity_title">壁纸前景透明度</string>
     <string name="depth_wallpaper_aod_title">应用至息屏显示</string>
     <string name="depth_wallpaper_pick_background_title">填充背景</string>
@@ -822,6 +848,7 @@
     <string name="lockscreen_stock_clock_red_one_title">红“1”行为</string>
     <string name="lockscreen_stock_clock_red_one_disable">禁用红色“1”</string>
     <string name="lockscreen_stock_clock_red_one_color">时钟中1的颜色</string>
+    <string name="welcome_back">欢迎回来</string>
     <string name="default_user_name">用户</string>
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">时间是</string>
@@ -851,6 +878,16 @@
     <string name="aod_weather">AOD 天气</string>
     <!-- Aod Pulse -->
     <!-- Edge light -->
+    <string name="edge_light_30_sec">30秒</string>
+    <string name="edge_light_1_min">1分钟</string>
+    <string name="edge_light_2_min">2分钟</string>
+    <string name="edge_light_5_min">5分钟</string>
+    <string name="edge_light_10_min">10分钟</string>
+    <string name="edge_light_blur_type_normal">普通</string>
+    <string name="edge_light_rainbow_gradient">彩虹渐变</string>
+    <string name="notification_color">通知颜色</string>
+    <string name="wallpaper_color">壁纸颜色</string>
+    <string name="edge_light_style_title">边缘发光风格</string>
     <!-- Sound Mods -->
     <string name="misc_category">其他</string>
     <!-- Pulse music visualizer -->
@@ -1049,6 +1086,7 @@
     <string name="usage_summary">打开 Wiki 页面</string>
     <string name="credits_title">鸣谢</string>
     <string name="credits_summary">感谢那些使这一切成为可能的人</string>
+    <string name="none">无</string>
     <!-- Omni Jaws Strings -->
     <string name="provider_title">天气数据来源</string>
     <string name="units_title">单位</string>
@@ -1170,6 +1208,8 @@
     <string name="theme_customization_toast_frame_title">吐司样式</string>
     <string name="theme_customization_toast_frame_summary">更改吐司消息样式</string>
     <!-- Dark Shadow Theme Strings -->
+    <string name="dark_shadow_ui_style_summary">该主题包含可单独设置的背景色和强调色。</string>
+    <string name="dark_shadow_enable_theme">启用主题</string>
     <!-- Settings Icons -->
     <string name="settings_icons_customized">自定义库存</string>
     <string name="settings_bg_color">背景颜色</string>
@@ -1195,6 +1235,8 @@
     <!-- Style List -->
     <string name="style_0">无</string>
     <string name="style">%d 风格</string>
+    <string name="clock_none">无时钟</string>
+    <string name="clock_style_name">时钟样式 %d</string>
     <!-- Dark Mode -->
     <string name="menu_show_system_apps">显示系统应用</string>
     <string name="dark_mode">黑暗模式</string>
@@ -1234,6 +1276,7 @@
     <string name="weather_settings">天气设置</string>
     <string name="widgets_scale">部件比例</string>
     <!-- Lockscreen Widgets Styles -->
+    <string name="lockscreen_widgets_style_title">锁屏小工具样式</string>
     <!-- LS Widgets Actions -->
     <string name="camera">相机</string>
     <string name="clock_timer">时钟/计时器</string>
@@ -1251,9 +1294,14 @@
     <string name="wallet">钱包</string>
     <string name="hotspot">热点</string>
     <!-- Device Widgets -->
+    <string name="battery_widget">电池</string>
+    <string name="calendar_widget">日历</string>
+    <string name="remove_widget">删除</string>
     <!-- Battery Widget -->
     <!-- Weather Widget -->
     <!-- Lockscreen Now Bar -->
+    <string name="lockscreen_now_bar_weather">显示天气</string>
+    <string name="lockscreen_now_bar_notifications">显示通知</string>
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
     <!-- Lag Fix Strings -->
