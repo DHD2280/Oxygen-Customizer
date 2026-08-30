@@ -95,19 +95,19 @@ Thanks to those contributors, this project exists:
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/Mahmud0808">
-                    <img src="https://avatars.githubusercontent.com/u/29881338?v=4" width="32;" alt="Mahmud0808"/>
+                <a href="https://github.com/luigimak">
+                    <img src="https://avatars.githubusercontent.com/u/10235885?v=4" width="32;" alt="luigimak"/>
                     <br />
-                    <sub><b>DrDisagree</b></sub>
+                    <sub><b>luigimak</b></sub>
                 </a>
             </td>
 		</tr>
 		<tr>
             <td align="center">
-                <a href="https://github.com/luigimak">
-                    <img src="https://avatars.githubusercontent.com/u/10235885?v=4" width="32;" alt="luigimak"/>
+                <a href="https://github.com/Mahmud0808">
+                    <img src="https://avatars.githubusercontent.com/u/29881338?v=4" width="32;" alt="Mahmud0808"/>
                     <br />
-                    <sub><b>luigimak</b></sub>
+                    <sub><b>DrDisagree</b></sub>
                 </a>
             </td>
             <td align="center">
