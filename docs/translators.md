@@ -11,7 +11,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Luigi (lc98)</b></sub></a>
         <br />
-        <sub><b>62992 words</b></sub>
+        <sub><b>63317 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/If.you.know.better.than.me.do.it.If.not.shut.up"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/13525964/medium/22265802c0ad24a0a71f1abfc4776771.jpg" />
@@ -39,7 +39,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>tugaia56</b></sub></a>
         <br />
-        <sub><b>4725 words</b></sub>
+        <sub><b>4761 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/muhammadbahaa2001"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15231004/medium/1f277872da157dce11a9a6d1fc9120b6.png" />
@@ -99,7 +99,14 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Quân Xinh Tươi (chetaoquocte)</b></sub></a>
         <br />
-        <sub><b>2091 words</b></sub>
+        <sub><b>2197 words</b></sub>
+      </td>
+      <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
+          <br />
+          <sub><b>Andfi</b></sub></a>
+        <br />
+        <sub><b>2107 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/dimatteo"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12427235/medium/9fdf4e19f3760f3e45cae5572efbf94b_default.png" />
@@ -107,13 +114,6 @@ Thanks to these translators and proofreaders, this project exists:
           <sub><b>cedric di-matteo (dimatteo)</b></sub></a>
         <br />
         <sub><b>2042 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
-          <br />
-          <sub><b>Andfi</b></sub></a>
-        <br />
-        <sub><b>1983 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Osean22"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15718399/medium/c1732446f8e330322a6101dd554ab494_default.png" />
@@ -143,7 +143,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Ai686Leo</b></sub></a>
         <br />
-        <sub><b>478 words</b></sub>
+        <sub><b>594 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/senpai4ek"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14493092/medium/52c9f6b7343f364ccd8d63d1dbc3b1f7.jpeg" />
@@ -241,6 +241,13 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>83 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/luigimak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14047242/medium/ed318c8597ebed1bd6839d1f819f1766.jpeg" />
+          <br />
+          <sub><b>Luigi Maccarrone (luigimak)</b></sub></a>
+        <br />
+        <sub><b>83 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Neko-Madoka"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16507005/medium/f64338670cd6bd0d15ce3c276cf87947.png" />
           <br />
           <sub><b>-拂暁- (Neko-Madoka)</b></sub></a>
@@ -261,6 +268,8 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>22 words</b></sub>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/jkmaxfli76"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16781989/medium/d136e914c14575b2e1fdaf4e6c5f75f5.jpeg" />
           <br />
@@ -268,8 +277,6 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>19 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Creeze"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17125722/medium/cc1dbfdbd02132b2c6d6a036692439cb.jpeg" />
           <br />
@@ -288,13 +295,6 @@ Thanks to these translators and proofreaders, this project exists:
         <a href="https://crowdin.com/profile/rezash4147"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17423870/medium/15d6f66a2d01451d73e4733c0f32b530.png" />
           <br />
           <sub><b>Reza Shoaei (rezash4147)</b></sub></a>
-        <br />
-        <sub><b>6 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/luigimak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14047242/medium/ed318c8597ebed1bd6839d1f819f1766.jpeg" />
-          <br />
-          <sub><b>Luigi Maccarrone (luigimak)</b></sub></a>
         <br />
         <sub><b>6 words</b></sub>
       </td>
@@ -325,6 +325,13 @@ Thanks to these translators and proofreaders, this project exists:
         <a href="https://crowdin.com/profile/nalankang521"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16521037/medium/ac82f8d386129a7af83597c7607d0c28.jpeg" />
           <br />
           <sub><b>何康业 (nalankang521)</b></sub></a>
+        <br />
+        <sub><b>3 words</b></sub>
+      </td>
+      <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/ayan0997"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17843567/medium/66b30caae157cb69cd4ac16fd8a7cb30.jpeg" />
+          <br />
+          <sub><b>Legend Boys (ayan0997)</b></sub></a>
         <br />
         <sub><b>3 words</b></sub>
       </td>

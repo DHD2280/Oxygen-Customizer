@@ -713,6 +713,13 @@
     <string name="dock_background_material">Sfondo dock materiale avanzato</string>
     <string name="dock_background_radius">Raggio sfondo</string>
     <string name="dock_background_amount">Livello sfocatura</string>
+    <string name="custom_swipe_right_behavior_title">Comportamento personalizzato dello scorrimento a destra</string>
+    <string name="custom_swipe_right_behavior_summary">Personalizza il comportamento quando scorri verso destra nella schermata iniziale.</string>
+    <string name="custom_swipe_right_behavior_explaination">Qui puoi scegliere il comportamento dello scorrimento verso destra nella schermata iniziale. Puoi disabilitare completamente Discover, disabilitando così lo scorrimento, oppure sostituire Discover con Shelf.</string>
+    <string name="choose_behavior">Scegli il comportamento</string>
+    <string name="disable_discover">Disabilita Discover</string>
+    <string name="replace_discover_with_shelf">Sostituisci Discover con Shelf</string>
+    <string name="enable_discover">Abilita Discover (comportamento stock)</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -1047,6 +1054,8 @@
     <string name="show_advanced_reboot_summary">Aggiungi opzioni di riavvio avanzate al menu di accensione.</string>
     <string name="use_auth_for_advanced_reboot_title">Usa Autenticazione</string>
     <string name="use_auth_for_advanced_reboot_summary">Richiede autenticazione per utilizzare le opzioni avanzate di riavvio.</string>
+    <string name="advanced_reboot_y_offset_title">Offset Y</string>
+    <string name="advanced_reboot_y_offset_summary">Sposta verso il basso il pulsante di riavvio avanzato.</string>
     <string name="advanced_reboot_hide_lockscreen">Nascondi nella schermata di blocco</string>
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
     <string name="remove_usb_dialog">Rimuovi Finestra Dialogo Usb</string>

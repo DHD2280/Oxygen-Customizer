@@ -35,6 +35,8 @@
     <string name="need_storage_perm_desc">Cần quyền truy cập bộ nhớ để xây dựng các tệp cần thiết.</string>
     <string name="compatible_root_not_found_title">Không tìm thấy phương pháp root tương thích</string>
     <string name="compatible_root_not_found_desc">Sử dụng bất kỳ phương pháp root phổ biến nào để tiếp tục.</string>
+    <string name="meta_module_missing_title">Metamodule chưa được cài đặt</string>
+    <string name="meta_module_missing_desc">KernelSU 3.0.0 trở lên yêu cầu Metamodule để cho phép sửa đổi hệ thống/không cần can thiệp vào hệ thống.</string>
     <string name="root_not_found_title">Không thể truy cập Root</string>
     <string name="root_not_found_desc">Hình như thiết bị của bạn chưa Root!</string>
     <string name="need_reboot_title">Cần khởi động lại thiết bị</string>
@@ -713,6 +715,13 @@
     <string name="dock_background_material">Nền dock Material</string>
     <string name="dock_background_radius">Độ bo nền</string>
     <string name="dock_background_amount">Mức độ làm mờ</string>
+    <string name="custom_swipe_right_behavior_title">Tuỳ chỉnh hành vi vuốt sang phải</string>
+    <string name="custom_swipe_right_behavior_summary">Tùy chỉnh hành vi khi bạn vuốt sang phải trên màn hình chính.</string>
+    <string name="custom_swipe_right_behavior_explaination">Tại đây, bạn có thể chọn hành vi của thao tác vuốt sang phải trên màn hình chính. Bạn có thể tắt hoàn toàn tính năng Khám phá, dẫn đến việc vô hiệu hóa thao tác vuốt, hoặc thay thế Khám phá bằng Shelf.</string>
+    <string name="choose_behavior">Chọn hành vi</string>
+    <string name="disable_discover">Tắt khám phá</string>
+    <string name="replace_discover_with_shelf">Thay thế khám phá bằng Shelf</string>
+    <string name="enable_discover">Bật Khám phá (hành vi mặc định)</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Thanh điều hướng</string>
     <string name="gesture_navigation_title">Điều hướng bằng cử chỉ</string>
@@ -1047,6 +1056,8 @@
     <string name="show_advanced_reboot_summary">Thêm tuỳ chọn khởi động nâng cao vào menu nguồn.</string>
     <string name="use_auth_for_advanced_reboot_title">Sử dụng xác thực</string>
     <string name="use_auth_for_advanced_reboot_summary">Yêu cầu xác thực để sử dụng các tuỳ chọn khởi động nâng cao.</string>
+    <string name="advanced_reboot_y_offset_title">Độ lệch Y</string>
+    <string name="advanced_reboot_y_offset_summary">Đưa nút khởi động lại nâng cao xuống dưới.</string>
     <string name="advanced_reboot_hide_lockscreen">Ẩn trên màn hình khoá</string>
     <string name="show_entry_settings_title">Hiển thị mục trong Cài đặt</string>
     <string name="remove_usb_dialog">Xoá hộp thoại USB</string>

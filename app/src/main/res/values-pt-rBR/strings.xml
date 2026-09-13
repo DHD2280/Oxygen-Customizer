@@ -391,7 +391,8 @@
     <string name="customize_brightness_slider_title">Personalizar Controle de Brilho</string>
     <string name="brightness_slider_background_color_title">Personalizar cor de fundo</string>
     <!-- QS Tile Radius -->
-    <string name="qs_tiles_custom_radius">Raio do bloco personalizado</string>
+    <string name="qs_tiles_custom_radius">Raio do bloco personalizado
+</string>
     <string name="qs_tile_custom_highlight">Raio dos Blocos de Destaque Personalizados da Configuração Rápida</string>
     <string name="qs_tile_custom_radius">Raio dos blocos personalizados de configuração rápida</string>
     <!-- Media Tile -->
@@ -919,7 +920,8 @@
     <string name="notification_channel_update_desc">Este canal mostra notificação sobre as últimas atualizações.</string>
     <string name="new_update_title">Atualização disponível</string>
     <string name="new_update_desc">Uma nova versão do Oxygen Customizer está disponível</string>
-    <string name="usage_title">Uso</string>
+    <string name="usage_title">Uso
+</string>
     <string name="usage_summary">Abrir página wiki</string>
     <string name="credits_title">Créditos</string>
     <string name="credits_summary">Obrigado àqueles que tornaram isso possível.</string>
