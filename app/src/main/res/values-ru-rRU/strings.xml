@@ -36,6 +36,8 @@
     <string name="need_storage_perm_desc">Разрешение на доступ к хранилищу требуется для создания необходимых файлов.</string>
     <string name="compatible_root_not_found_title">Не удалось найти совместимый root метод</string>
     <string name="compatible_root_not_found_desc">Для продолжения предоставьте root доступ любым известным способом.</string>
+    <string name="meta_module_missing_title">Мета модуль не установлен</string>
+    <string name="meta_module_missing_desc">Для KernelSU 3.0.0 и позднее требуется мета модуль, позволяющий вносить внесистемные изменения в систему.</string>
     <string name="root_not_found_title">Рут недоступен</string>
     <string name="root_not_found_desc">Похоже, ваше устройство не рутировано!</string>
     <string name="need_reboot_title">Требуется перезагрузка устройства</string>
@@ -169,6 +171,9 @@
     <string name="notif_default_expansion_title">Раскрытие уведомлений по умолчанию</string>
     <string name="notif_always_expand">Всегда разворачивать</string>
     <string name="notif_always_collapse">Всегда сворачивать</string>
+    <string name="notif_per_app"></string>
+    <string name="notif_choose_app_expansion"></string>
+    <string name="notif_choose_app_expansion_description">Выберите расширение уведомлений для каждого приложения.</string>
     <string name="notif_show_buttons">Показать кнопку развернуть и свернуть</string>
     <string name="notif_show_buttons_summary">Показать развернуть и свернуть в панели уведомлений.\nСовместим только с разделенным стилем QS.</string>
     <string name="customize_clear_all_button">Настроить кнопку Очистить все</string>
@@ -713,6 +718,13 @@
     <string name="dock_background_material">Материал фона док-панели</string>
     <string name="dock_background_radius">Радиус фона</string>
     <string name="dock_background_amount">Степень размытия</string>
+    <string name="custom_swipe_right_behavior_title">Настраиваемый свайп вправо</string>
+    <string name="custom_swipe_right_behavior_summary">Настройка поведения при свайпе вправо на главном экране.</string>
+    <string name="custom_swipe_right_behavior_explaination">Здесь вы можете выбрать поведение вашего свайпа вправо на главном экране. Вы можете полностью отключить Discover, в результате отключится свайп или заменить Discover на Shelf.</string>
+    <string name="choose_behavior"></string>
+    <string name="disable_discover">Отключить Discover</string>
+    <string name="replace_discover_with_shelf">Заменить Discover с Shelf</string>
+    <string name="enable_discover">Включить Discover (поведение стоковое)</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Панель навигации</string>
     <string name="gesture_navigation_title">Навигация с помощью жестов</string>
@@ -770,6 +782,22 @@
     <string name="volume_buttons_category_title">Кнопки регулировки громкости</string>
     <string name="volbtn_music_controls_title">Управление музыкой</string>
     <string name="volbtn_music_controls_summary">Управляйте воспроизведением музыки зажатием кнопок громкости на экране блокировки</string>
+    <string name="plusKey_button_category_title">Кнопка Плюс</string>
+    <string name="plusKey_button_category_title_screenoff">Кнопка плюс - Выкл. экрана</string>
+    <string name="plusKey_single_press_button_title">Одинарное нажатие</string>
+    <string name="plusKey_double_press_button_title">Двойное нажатие</string>
+    <string name="plusKey_triple_press_button_title">Тройное нажатие</string>
+    <string name="plusKey_long_press_button_title">Долгое нажатие</string>
+    <string name="plusKey_single_press_button_title_screenoff">Одинарное нажатие</string>
+    <string name="plusKey_double_press_button_title_screenoff">Двойное нажатие</string>
+    <string name="plusKey_triple_press_button_title_screenoff">Тройное нажатие</string>
+    <string name="plusKey_long_press_button_title_screenoff">Долгое нажатие</string>
+    <string name="plusKey_action_dnd">Режим \"Не беспокоить\"</string>
+    <string name="plusKey_action_recorder">Запись звука</string>
+    <string name="plusKey_action_browser">Браузер</string>
+    <string name="plusKey_activity">Пользовательское действие</string>
+    <string name="plusKey_select_activity">Выбрать действие</string>
+    <string name="plusKey_same_as_screen_on">То же, когда экран вкл</string>
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Экран блокировки</string>
     <string name="lockscreen_hide_carrier">Скрыть оператора связи</string>
@@ -1049,6 +1077,8 @@
     <string name="show_advanced_reboot_summary">Добавьте дополнительные параметры перезагрузки в меню питания.</string>
     <string name="use_auth_for_advanced_reboot_title">Использовать аутентификацию</string>
     <string name="use_auth_for_advanced_reboot_summary">Требуется проверка подлинности для использования расширенных параметров перезагрузки.</string>
+    <string name="advanced_reboot_y_offset_title">Смещение по Y</string>
+    <string name="advanced_reboot_y_offset_summary">Переместить расширенную кнопку перезагрузки вниз.</string>
     <string name="advanced_reboot_hide_lockscreen">Скрыть на экране блокировки</string>
     <string name="show_entry_settings_title">Показать запись в настройках</string>
     <string name="remove_usb_dialog">Убрать диалоговое окно USB</string>
@@ -1080,6 +1110,7 @@
     <string name="update_notification_text">Нажмите здесь, чтобы установить</string>
     <string name="download_failed">Не удалось загрузить обновление</string>
     <string name="try_again_later">Пожалуйста, повторите попытку позже</string>
+    <string name="installation_failed">Ошибка установки. Попробуйте установить вручную.</string>
     <string name="update_flavor_title">Источник обновлений</string>
     <string name="stable_flavor">Стабильный</string>
     <string name="nightly_github_login">Вход и ручная загрузка</string>
