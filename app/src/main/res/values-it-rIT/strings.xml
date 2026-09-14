@@ -35,6 +35,8 @@
     <string name="need_storage_perm_desc">Per creare i file necessari è necessaria l\'autorizzazione di archiviazione.</string>
     <string name="compatible_root_not_found_title">Impossibile trovare il metodo root compatibile</string>
     <string name="compatible_root_not_found_desc">Utilizza qualsiasi soluzione root popolare per procedere.</string>
+    <string name="meta_module_missing_title">Metamodulo non installato</string>
+    <string name="meta_module_missing_desc">KernelSU 3.0.0 e versioni successive richiedono il Metamodulo per abilitare le modifiche systemless /system.</string>
     <string name="root_not_found_title">Root non accessibile</string>
     <string name="root_not_found_desc">Sembra che il tuo dispositivo non sia rootato!</string>
     <string name="need_reboot_title">Riavvio dispositivo necessario</string>
@@ -713,6 +715,17 @@
     <string name="dock_background_material">Sfondo dock materiale avanzato</string>
     <string name="dock_background_radius">Raggio sfondo</string>
     <string name="dock_background_amount">Livello sfocatura</string>
+    <string name="custom_swipe_right_behavior_title">Comportamento personalizzato dello scorrimento a destra</string>
+    <string name="custom_swipe_right_behavior_summary">Personalizza il comportamento quando scorri verso destra nella schermata iniziale.</string>
+    <string name="custom_swipe_right_behavior_explaination">Qui puoi scegliere il comportamento dello scorrimento verso destra nella schermata iniziale. Puoi disabilitare completamente Discover, disabilitando così lo scorrimento, oppure sostituire Discover con Shelf.</string>
+    <string name="choose_behavior">Scegli il comportamento</string>
+    <string name="disable_discover">Disabilita Discover</string>
+    <string name="replace_discover_with_shelf">Sostituisci Discover con Shelf</string>
+    <string name="enable_discover">Abilita Discover (comportamento stock)</string>
+    <string name="custom_global_search">Ricerca globale personalizzata</string>
+    <string name="custom_global_search_summary">Scegli l\'app o l\'attività da avviare con la scorciatoia di ricerca globale</string>
+    <string name="custom_global_search_explaination">Possiamo avviare ogni app e ogni attività con la gesture di ricerca globale integrata dal Launcher. Sentiti libero di scegliere tra app e attività.</string>
+    <string name="custom_global_search_action">Azione</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -770,6 +783,22 @@
     <string name="volume_buttons_category_title">Pulsanti Volume</string>
     <string name="volbtn_music_controls_title">Controlli musicali con pulsanti volume</string>
     <string name="volbtn_music_controls_summary">Controlla la riproduzione musicale con i pulsanti del volume</string>
+    <string name="plusKey_button_category_title">Tasto Plus</string>
+    <string name="plusKey_button_category_title_screenoff">Tasto Plus - Schermo Spento</string>
+    <string name="plusKey_single_press_button_title">Pressione Singola</string>
+    <string name="plusKey_double_press_button_title">Doppia Pressione</string>
+    <string name="plusKey_triple_press_button_title">Tripla Pressione</string>
+    <string name="plusKey_long_press_button_title">Pressione Prolungata</string>
+    <string name="plusKey_single_press_button_title_screenoff">Pressione Singola</string>
+    <string name="plusKey_double_press_button_title_screenoff">Doppia Pressione</string>
+    <string name="plusKey_triple_press_button_title_screenoff">Tripla Pressione</string>
+    <string name="plusKey_long_press_button_title_screenoff">Pressione Prolungata</string>
+    <string name="plusKey_action_dnd">Non disturbare</string>
+    <string name="plusKey_action_recorder">Registratore Audio</string>
+    <string name="plusKey_action_browser">Browser</string>
+    <string name="plusKey_activity">Attività Personalizzata</string>
+    <string name="plusKey_select_activity">Seleziona Attività</string>
+    <string name="plusKey_same_as_screen_on">Come sullo Schermo Acceso</string>
     <!-- Lockscreen Strings -->
     <string name="lockscreen_title">Schermata di Blocco</string>
     <string name="lockscreen_hide_carrier">Nascondi Operatore</string>
@@ -1047,6 +1076,8 @@
     <string name="show_advanced_reboot_summary">Aggiungi opzioni di riavvio avanzate al menu di accensione.</string>
     <string name="use_auth_for_advanced_reboot_title">Usa Autenticazione</string>
     <string name="use_auth_for_advanced_reboot_summary">Richiede autenticazione per utilizzare le opzioni avanzate di riavvio.</string>
+    <string name="advanced_reboot_y_offset_title">Offset Y</string>
+    <string name="advanced_reboot_y_offset_summary">Sposta verso il basso il pulsante di riavvio avanzato.</string>
     <string name="advanced_reboot_hide_lockscreen">Nascondi nella schermata di blocco</string>
     <string name="show_entry_settings_title">Mostra voce nelle impostazioni</string>
     <string name="remove_usb_dialog">Rimuovi Finestra Dialogo Usb</string>
