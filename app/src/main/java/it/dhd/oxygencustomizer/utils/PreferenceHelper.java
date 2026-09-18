@@ -1436,7 +1436,8 @@ public class PreferenceHelper {
                 }
             }
 
-            if (preference.getKey().equals("launcher_global_search_launch")) {
+            if (preference.getKey().equals("launcher_global_search_launch") ||
+                    preference.getKey().equals("launcher_page_indicator_tap_launch")) {
                 String prefValue = instance.mPreferences.getString(key, "none");
                 int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;
                 String title = preference.getContext().getString(titleRes);

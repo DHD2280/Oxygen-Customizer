@@ -52,6 +52,9 @@ public class Launcher extends XposedMods {
 
     private boolean mCustomGlobalSearch = false;
     private String mCustomGlobalSearchInt = "app:it.dhd.oxygencustomizer";
+    private boolean mCustomPageIndicatorTap = false;
+    private String mCustomPageIndicatorTapInt = "app:it.dhd.oxygencustomizer";
+
 
     private View OplusFastScroll;
 
@@ -85,6 +88,9 @@ public class Launcher extends XposedMods {
         mReplaceLock = Xprefs.getBoolean("replace_lock", false);
         mCustomGlobalSearch = Xprefs.getBoolean("launcher_custom_search_switch", false);
         mCustomGlobalSearchInt = Xprefs.getString("launcher_global_search_launch", "app:it.dhd.oxygencustomizer");
+        mCustomPageIndicatorTap = Xprefs.getBoolean("launcher_custom_tap_page_indicator_switch", false);
+        mCustomPageIndicatorTapInt = Xprefs.getString("launcher_page_indicator_tap_launch", "app:it.dhd.oxygencustomizer");
+
 
         // shelf behavior
         mCustomShelfBehavior = Xprefs.getBoolean("launcher_custom_shelf_switch", false);
@@ -503,6 +509,24 @@ public class Launcher extends XposedMods {
                     if (!mCustomShelfBehavior) return;
                     setBooleanField(param.thisObject, "sShelfAssistantEnable", mShelfBehavior == 0);
                 });
+
+        ReflectedClass IndicatorEntry = ReflectedClass.of("com.android.launcher3.search.IndicatorEntry$Companion");
+        IndicatorEntry
+                .before("getIndicatorAppLaunchIntent")
+                .run(param -> {
+                    if (!mCustomPageIndicatorTap) return;
+                    PackageManager mPackageManager = mContext.getPackageManager();
+                    Intent launchIntent;
+                    if (mCustomPageIndicatorTapInt.contains("app:")) {
+                        launchIntent = mPackageManager.getLaunchIntentForPackage(mCustomPageIndicatorTapInt.replace("app:", ""));
+                        launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    } else {
+                        String[] parts = mCustomPageIndicatorTapInt.replace("activity:", "").split("/");
+                        launchIntent = new Intent(Intent.ACTION_MAIN);
+                        launchIntent.setComponent(new ComponentName(parts[0], parts[1]));
+                    }
+                    param.setResult(launchIntent);
+                }, true);
 
     }
 

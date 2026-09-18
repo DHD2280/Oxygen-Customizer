@@ -68,6 +68,11 @@
             android:title="@string/remove_home_pagination"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherPageIndicator"
+            android:summary="@string/custom_page_indicator_tap_summary"
+            android:title="@string/custom_page_indicator_tap_title" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
