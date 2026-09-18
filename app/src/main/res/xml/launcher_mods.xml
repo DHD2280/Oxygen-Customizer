@@ -1,235 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
-        android:key="launcher_intro"
-        android:title="@string/launcher_intro_title"
-        app:iconSpaceReserved="false"
-        search:ignore="true" />
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/launcher_layout"
-        app:iconSpaceReserved="false">
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="rearrange_home"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/launcher_edit_layout"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:defaultValue="4"
-            android:dependency="rearrange_home"
-            android:key="launcher_columns"
-            android:max="8"
-            android:min="4"
-            android:title="@string/launcher_columns"
-            app:showSeekBarValue="true" />
-
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:defaultValue="4"
-            android:dependency="rearrange_home"
-            android:key="launcher_rows"
-            android:max="10"
-            android:min="3"
-            android:title="@string/launcher_rows"
-            app:showSeekBarValue="true" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="desktop_hide_app_labels"
-            android:summary="@string/hide_app_labels_desktop"
-            android:title="@string/hide_app_labels" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="force_dock_as_columns"
-            android:summary="@string/launcher_force_dock_summary"
-            android:title="@string/launcher_force_dock" />
-
-    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
-
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/launcher_folder_layout"
-        app:iconSpaceReserved="false">
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="rearrange_folder"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/launcher_folder_edit_layout"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:defaultValue="3"
-            android:dependency="rearrange_folder"
-            android:key="folder_max_columns"
-            android:max="7"
-            android:min="3"
-            android:title="@string/launcher_folder_columns" />
-
-        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
-            android:defaultValue="3"
-            android:dependency="rearrange_folder"
-            android:key="folder_max_rows"
-            android:max="7"
-            android:min="3"
-            android:title="@string/launcher_folder_rows" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="rearrange_preview"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/launcher_folder_update_preview"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="remove_folder_pagination"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/remove_folder_pagination_title"
-            app:iconSpaceReserved="false" />
-    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
-
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/drawer"
-        app:iconSpaceReserved="false">
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="rearrange_drawer"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/launcher_drawer_edit_columns"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSliderPreference
-            android:dependency="rearrange_drawer"
-            android:key="drawer_columns"
-            android:title="@string/drawer_columns"
-            app:defaultValue="4"
-            app:iconSpaceReserved="false"
-            app:maxVal="7"
-            app:minVal="3"
-            app:tickInterval="1" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="drawer_hide_app_labels"
-            android:summary="@string/hide_app_labels_drawer"
-            android:title="@string/hide_app_labels" />
-
-    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
-
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory app:iconSpaceReserved="false">
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDockBackground"
-            android:key="dock_background_jump"
-            android:title="@string/dock_background"
-            app:iconSpaceReserved="false" />
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherHomeLayout"
+            android:title="@string/launcher_layout" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherFolderLayout"
+            android:title="@string/launcher_folder_layout" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDrawer"
+            android:title="@string/drawer" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherRecents"
+            android:title="@string/launcher_recents" />
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherThemedIcons"
+            android:title="@string/launcher_themed_icons" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/launcher_recents"
-        app:iconSpaceReserved="false">
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="launcher_open_app_details"
-            android:summary="@string/launcher_app_details_summary"
-            android:title="@string/launcher_app_details_title"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="disable_previous_recents"
-            android:summary="@string/launcher_disable_recents_previous_page_summary"
-            android:title="@string/launcher_disable_recents_previous_page_title" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="replace_lock"
-            android:summary="@string/launcher_replace_lock_summary"
-            android:title="@string/launcher_replace_lock_title" />
-
-    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
-
-    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/launcher_themed_icons">
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="force_themed_launcher_icons"
-            android:summary="@string/force_themed_launcher_icons_summary"
-            android:title="@string/force_themed_launcher_icons"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="alternative_monochrome"
-            android:summary="@string/alternative_themed_icons_summary"
-            android:title="@string/alternative_themed_icons_title"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="custom_themed_icons_where"
-            android:summary="@string/themed_icons_where_switch_summary"
-            android:title="@string/themed_icons_where_switch"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusMultiSelectListPreference
-            android:dependency="custom_themed_icons_where"
-            android:defaultValue="@array/themed_icons_default"
-            android:entries="@array/themed_icons_entries"
-            android:entryValues="@array/themed_icons_values"
-            android:key="themed_icons_where"
-            android:title="@string/themed_icons_where_title"
-            app:iconSpaceReserved="false" />
-
-    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:title="@string/misc_category"
         app:iconSpaceReserved="false">
 
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="remove_home_pagination"
-            android:summaryOff="@string/general_off"
-            android:summaryOn="@string/general_on"
-            android:title="@string/remove_home_pagination"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
-            android:key="hide_scroller"
-            android:summary="@string/hide_scroller_summary"
-            android:title="@string/hide_scroller"
-            app:iconSpaceReserved="false" />
-
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherShelf"
             android:key="custom_shelf"
-            android:title="@string/custom_swipe_right_behavior_title"
             android:summary="@string/custom_swipe_right_behavior_summary"
+            android:title="@string/custom_swipe_right_behavior_title"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherSearch"
             android:key="custom_search"
-            android:title="@string/custom_global_search"
             android:summary="@string/custom_global_search_summary"
+            android:title="@string/custom_global_search"
             app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 
 </PreferenceScreen>

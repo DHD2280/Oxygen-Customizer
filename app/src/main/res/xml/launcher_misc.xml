@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
+        android:key="launcher_intro"
+        android:title="@string/launcher_intro_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true" />
+
+
+</PreferenceScreen>

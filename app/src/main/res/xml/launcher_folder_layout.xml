@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
+        android:key="launcher_intro"
+        android:title="@string/launcher_intro_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/launcher_folder_layout"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="rearrange_folder"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/launcher_folder_edit_layout"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="3"
+            android:dependency="rearrange_folder"
+            android:key="folder_max_columns"
+            android:max="7"
+            android:min="3"
+            android:title="@string/launcher_folder_columns" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="3"
+            android:dependency="rearrange_folder"
+            android:key="folder_max_rows"
+            android:max="7"
+            android:min="3"
+            android:title="@string/launcher_folder_rows" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="rearrange_preview"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/launcher_folder_update_preview"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="remove_folder_pagination"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/remove_folder_pagination_title"
+            app:iconSpaceReserved="false" />
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

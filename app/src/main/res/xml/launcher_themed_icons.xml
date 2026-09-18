@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
+        android:key="launcher_intro"
+        android:title="@string/launcher_intro_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/launcher_themed_icons">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="force_themed_launcher_icons"
+            android:summary="@string/force_themed_launcher_icons_summary"
+            android:title="@string/force_themed_launcher_icons"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="alternative_monochrome"
+            android:summary="@string/alternative_themed_icons_summary"
+            android:title="@string/alternative_themed_icons_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="custom_themed_icons_where"
+            android:summary="@string/themed_icons_where_switch_summary"
+            android:title="@string/themed_icons_where_switch"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusMultiSelectListPreference
+            android:defaultValue="@array/themed_icons_default"
+            android:dependency="custom_themed_icons_where"
+            android:entries="@array/themed_icons_entries"
+            android:entryValues="@array/themed_icons_values"
+            android:key="themed_icons_where"
+            android:title="@string/themed_icons_where_title"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>

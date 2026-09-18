@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/it.dhd.oxygencustomizer.ui.preferences.preferencesearch">
+
+    <it.dhd.oxygencustomizer.ui.preferences.TopIntroPreference
+        android:key="launcher_intro"
+        android:title="@string/launcher_intro_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true" />
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/launcher_layout"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="rearrange_home"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/launcher_edit_layout"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="4"
+            android:dependency="rearrange_home"
+            android:key="launcher_columns"
+            android:max="8"
+            android:min="4"
+            android:title="@string/launcher_columns"
+            app:showSeekBarValue="true" />
+
+        <it.dhd.oneplusui.preference.OplusSectionSeekbarPreference
+            android:defaultValue="4"
+            android:dependency="rearrange_home"
+            android:key="launcher_rows"
+            android:max="10"
+            android:min="3"
+            android:title="@string/launcher_rows"
+            app:showSeekBarValue="true" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="desktop_hide_app_labels"
+            android:summary="@string/hide_app_labels_desktop"
+            android:title="@string/hide_app_labels" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="force_dock_as_columns"
+            android:summary="@string/launcher_force_dock_summary"
+            android:title="@string/launcher_force_dock" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="remove_home_pagination"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/remove_home_pagination"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherDockBackground"
+            android:key="dock_background_jump"
+            android:title="@string/dock_background"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+</PreferenceScreen>
