@@ -766,6 +766,10 @@
     <string name="custom_global_search_summary">Choose the app or the activity to launch with global search shortcut</string>
     <string name="custom_global_search_explaination">We can launch every app and every activity with built-in global search gesture from Launcher. Feel free to choose between app and activity.</string>
     <string name="custom_global_search_action">Action</string>
+    <string name="custom_page_indicator_tap_title">Custom tap action</string>
+    <string name="custom_page_indicator_tap_summary">Choose the action when you tap on page indicator</string>
+    <string name="custom_page_indicator_tap_explaination">Here you can choose what to launch when you press page indicator in home.</string>
+    "
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>
