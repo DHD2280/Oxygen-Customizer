@@ -2,19 +2,11 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -23,10 +15,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.BatteryBarView;
 
 public class BatteryBar extends XposedMods {
@@ -104,52 +96,42 @@ public class BatteryBar extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
-        Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
-        Class<?> PhoneStatusBarViewClass = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass PhoneStatusBarViewClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView");
 
         //getting statusbar class for further use
-        hookAllConstructors(CollapsedStatusBarFragmentClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCollapsedStatusBarFragment = param.thisObject;
-            }
-        });
+        CollapsedStatusBarFragmentClass
+                .afterConstruction()
+                .run(param -> mCollapsedStatusBarFragment = param.thisObject);
 
-        hookAllMethods(PhoneStatusBarViewClass, "onConfigurationChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (BatteryBarView.hasInstance()) {
-                            BatteryBarView.getInstance().post(() -> refreshBatteryBar(BatteryBarView.getInstance()));
+        PhoneStatusBarViewClass
+                .after("onConfigurationChanged")
+                .run(param -> {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (BatteryBarView.hasInstance()) {
+                                BatteryBarView.getInstance().post(() -> refreshBatteryBar(BatteryBarView.getInstance()));
+                            }
                         }
-                    }
-                }, 2000);
-            }
-        });
-
-
-        findAndHookMethod(CollapsedStatusBarFragmentClass,
-                "onViewCreated", View.class, Bundle.class, new XC_MethodHook() {
-                    @SuppressLint("DiscouragedApi")
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-
-                        mStatusBarIconController = getObjectField(param.thisObject, "mStatusBarIconController");
-
-                        mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-
-                        fullStatusbar = (FrameLayout) mStatusBar.getParent();
-
-
-                        if (BBarEnabled) //in case we got the config but view wasn't ready yet
-                        {
-                            placeBatteryBar();
-                        }
-                    }
+                    }, 2000);
                 });
 
+        CollapsedStatusBarFragmentClass
+                .after("onViewCreated")
+                .run(param -> {
+                    mStatusBarIconController = getObjectField(param.thisObject, "mStatusBarIconController");
+
+                    mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
+
+                    fullStatusbar = (FrameLayout) mStatusBar.getParent();
+
+
+                    if (BBarEnabled) //in case we got the config but view wasn't ready yet
+                    {
+                        placeBatteryBar();
+                    }
+                });
 
     }
 
