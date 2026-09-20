@@ -1,13 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setFloatField;
@@ -22,7 +19,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,7 +28,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
@@ -132,7 +127,6 @@ public class StatusbarMods extends XposedMods {
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
     private float mNewIconScale = 1f;
-    private boolean oos13 = false;
     private boolean mBroadcastRegistered = false;
 
     public StatusbarMods(Context context) {
@@ -206,215 +200,164 @@ public class StatusbarMods extends XposedMods {
             }
         });
 
-        Class<?> NotificationPanelViewControllerClass;
-        try {
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.shade.NotificationPanelViewController", lpparam.classLoader);
-        } catch (Throwable e) {
-            oos13 = true;
-            NotificationPanelViewControllerClass = findClass("com.android.systemui.statusbar.phone.NotificationPanelViewController", lpparam.classLoader);
-        }
-        Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
-        Class<?> PhoneStatusBarViewControllerClass = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", lpparam.classLoader);
-        Class<?> QSSecurityFooterUtilsClass;
-        try {
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooterUtils", lpparam.classLoader);
-        } catch (Throwable e) {
-            oos13 = true;
-            QSSecurityFooterUtilsClass = findClass("com.android.systemui.qs.QSSecurityFooter", lpparam.classLoader);
-        }
-        Class<?> QuickStatusBarHeaderClass;
-        try {
-            QuickStatusBarHeaderClass = findClass("com.oplus.systemui.qs.OplusQuickStatusBarHeader", lpparam.classLoader);
-        } catch (Throwable t) {
-            oos13 = true;
-            QuickStatusBarHeaderClass = findClass("com.android.systemui.qs.QuickStatusBarHeader", lpparam.classLoader);
-        }
+        ReflectedClass NotificationPanelViewControllerClass = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController",
+                "com.android.systemui.statusbar.phone.NotificationPanelViewController");
+        ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
+        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", lpparam.classLoader);
+        ReflectedClass QSSecurityFooterUtilsClass = ReflectedClass.of("com.android.systemui.qs.QSSecurityFooterUtils",
+                "com.android.systemui.qs.QSSecurityFooter");
+        ReflectedClass QuickStatusBarHeaderClass = ReflectedClass.of("com.oplus.systemui.qs.OplusQuickStatusBarHeader",
+                "com.android.systemui.qs.QuickStatusBarHeader");
 
-        hookAllConstructors(QSSecurityFooterUtilsClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
-            }
-        });
+        QSSecurityFooterUtilsClass
+                .afterConstruction()
+                .run(param -> {
+                    mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
+                });
 
         final ClickListener clickListener = new ClickListener();
 
         //marking clock instances for recognition and setting click actions on some icons
-        hookAllMethods(QuickStatusBarHeaderClass,
-                "onFinishInflate", new XC_MethodHook() {
-                    @SuppressLint("DiscouragedApi")
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        //Getting QS text color for Network traffic
-                        try {
-                            //Clickable icons
-                            Object mBatteryRemainingIcon = getObjectField(param.thisObject, "mBatteryView");
+        QuickStatusBarHeaderClass
+                .after("onFinishInflate")
+                .run(param -> {
+                    try {
+                        //Clickable icons
+                        Object mBatteryRemainingIcon = getObjectField(param.thisObject, "mBatteryView");
 
-                            callMethod(mBatteryRemainingIcon, "setOnClickListener", clickListener);
-                            callMethod(mBatteryRemainingIcon, "setOnLongClickListener", clickListener);
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
+                        callMethod(mBatteryRemainingIcon, "setOnClickListener", clickListener);
+                        callMethod(mBatteryRemainingIcon, "setOnLongClickListener", clickListener);
+                    } catch (Throwable e) {
+                        log(e);
                     }
                 });
 
         try { //13 QPR3
-            hookTouchHandler(PhoneStatusBarViewControllerClass);
+            hookTouchHandler(PhoneStatusBarViewControllerClass.getClazz());
         } catch (Throwable ignored) {
         }
 
-        hookAllConstructors(PhoneStatusBarView, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                PSBV = param.thisObject;
-            }
-        });
+        PhoneStatusBarView
+                .afterConstruction()
+                .run(param -> PSBV = param.thisObject);
 
-        hookAllMethods(PhoneStatusBarView, "updateStatusBarHeight", new XC_MethodHook() {
-            @SuppressLint("DiscouragedApi")
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
+        PhoneStatusBarView
+                .after("updateStatusBarHeight")
+                .run(param -> {
+                    mStatusBarContents = ((View) param.thisObject).findViewById(mContext.getResources().getIdentifier("status_bar_contents", "id", listenPackage));
 
-                if (!statusBarPadding) return;
+                    if (!statusBarPadding) return;
 
-                int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+                    int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
-                int paddingStart = SBPaddingStart == PADDING_DEFAULT
-                        ? mContext.getResources().getIdentifier("status_bar_padding_start", "type/dimen", listenPackage)
-                        : Math.round(SBPaddingStart * screenWidth / 100f);
+                    int paddingStart = SBPaddingStart == PADDING_DEFAULT
+                            ? mContext.getResources().getIdentifier("status_bar_padding_start", "type/dimen", listenPackage)
+                            : Math.round(SBPaddingStart * screenWidth / 100f);
 
-                int paddingEnd = SBPaddingEnd == PADDING_DEFAULT
-                        ? mContext.getResources().getIdentifier("status_bar_padding_end", "type/dimen", listenPackage)
-                        : Math.round(SBPaddingEnd * screenWidth / 100f);
-                mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
-            }
-        });
-        hookAllMethods(PhoneStatusBarView, "onConfigurationChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                updateStatusbarHeight();
-            }
-        });
-
-        hookAllConstructors(NotificationPanelViewControllerClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                NotificationPanelViewController = param.thisObject;
-                Object mTouchHandler = getObjectField(param.thisObject, "mTouchHandler");
-                GestureDetector pullUpDetector = new GestureDetector(mContext, getPullUpListener());
-                try {
-                    hookTouchHandler(getObjectField(param.thisObject, "mStatusBarViewTouchEventHandler").getClass());
-                } catch (Throwable ignored) {
-                }
-                hookAllMethods(mTouchHandler.getClass(), "onTouchEvent", new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (oneFingerPullupEnabled
-                                && STATUSBAR_MODE_KEYGUARD != (int) getObjectField(NotificationPanelViewController, "mBarState")) {
-                            pullUpDetector.onTouchEvent((MotionEvent) param.args[0]);
-                        }
-                    }
+                    int paddingEnd = SBPaddingEnd == PADDING_DEFAULT
+                            ? mContext.getResources().getIdentifier("status_bar_padding_end", "type/dimen", listenPackage)
+                            : Math.round(SBPaddingEnd * screenWidth / 100f);
+                    mStatusBarContents.setPaddingRelative(paddingStart, (int) mTopPad, paddingEnd, 0);
                 });
-            }
-        });
 
-        hookAllMethods(NotificationPanelViewControllerClass, "createTouchHandler", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                hookTouchHandler(param.getResult().getClass());
-            }
-        });
+        NotificationPanelViewControllerClass
+                .afterConstruction()
+                .run(param -> {
+                    NotificationPanelViewController = param.thisObject;
+                    Object mTouchHandler = getObjectField(param.thisObject, "mTouchHandler");
+                    GestureDetector pullUpDetector = new GestureDetector(mContext, getPullUpListener());
+                    try {
+                        hookTouchHandler(getObjectField(param.thisObject, "mStatusBarViewTouchEventHandler").getClass());
+                    } catch (Throwable ignored) {
+                    }
+                    hookAllMethods(mTouchHandler.getClass(), "onTouchEvent", new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            if (oneFingerPullupEnabled
+                                    && STATUSBAR_MODE_KEYGUARD != (int) getObjectField(NotificationPanelViewController, "mBarState")) {
+                                pullUpDetector.onTouchEvent((MotionEvent) param.args[0]);
+                            }
+                        }
+                    });
+                });
 
-        Class<?> OplusQSFooterImpl;
-        try {
-            OplusQSFooterImpl = findClass("com.oplus.systemui.qs.OplusQSFooterImpl", lpparam.classLoader);
-        } catch (Throwable e) {
-            oos13 = true;
-            OplusQSFooterImpl = findClass("com.oplusos.systemui.qs.OplusQSFooterImpl", lpparam.classLoader); // OOS 13
-        }
+        NotificationPanelViewControllerClass
+                .after("createTouchHandler")
+                .run(param -> {
+                    hookTouchHandler(param.getResult().getClass());
+                });
+
+
+        ReflectedClass OplusQSFooterImpl = ReflectedClass.of("com.oplus.systemui.qs.OplusQSFooterImpl",
+                "com.oplusos.systemui.qs.OplusQSFooterImpl");
 
         LongClickListener onLongClick = new LongClickListener();
-        hookAllMethods(OplusQSFooterImpl, "onFinishInflate", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                View mSettingsButton = (View) getObjectField(param.thisObject, "mSettingsButton");
-                try {
-                    callMethod(mSettingsButton, "setOnLongClickListener", onLongClick);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        OplusQSFooterImpl
+                .after("onFinishInflate")
+                .run(param -> {
+                    View mSettingsButton = (View) getObjectField(param.thisObject, "mSettingsButton");
+                    try {
+                        callMethod(mSettingsButton, "setOnLongClickListener", onLongClick);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
 
-        QSExpandMethodName = Arrays.stream(NotificationPanelViewControllerClass.getMethods())
+
+        QSExpandMethodName = Arrays.stream(NotificationPanelViewControllerClass.getClazz().getMethods())
                 .anyMatch(m -> m.getName().equals("expandToQs"))
                 ? "expandToQs" //A14
                 : "expandWithQs"; //A13
 
 
-        Class<?> CollapsedStatusBarFragmentClass = findClassIfExists("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment", lpparam.classLoader);
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
 
-        hookAllConstructors(CollapsedStatusBarFragmentClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mCollapsedStatusBarFragment = param.thisObject;
-            }
-        });
+        CollapsedStatusBarFragmentClass
+                .afterConstruction()
+                .run(param -> mCollapsedStatusBarFragment = param.thisObject);
 
-        findAndHookMethod(CollapsedStatusBarFragmentClass,
-                "onViewCreated", View.class, Bundle.class, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
+        CollapsedStatusBarFragmentClass
+                .after("onViewCreated")
+                .run(param -> mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar"));
 
-                    }
+
+        ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+
+        ReflectedClass OplusBrightnessControllerExImpl = ReflectedClass.of("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl",
+                "com.oplus.systemui.qs.OplusBrightnessControllerExImpl");
+
+        OplusBrightnessControllerExImpl
+                .afterConstruction()
+                .run(param -> {
+                    OplusBrightnessControllerExt = param.thisObject;
                 });
 
-        Class<?> CentralSurfacesImpl = findClass("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+        OplusBrightnessControllerExImpl
+                .after("setBrightnessMin")
+                .run(param -> {
+                    mMinimumBacklight = (int) param.args[0];
+                });
 
-        Class<?> OplusBrightnessControllerExImpl;
-        try {
-            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl", lpparam.classLoader);
-        } catch (Throwable t) {
-            OplusBrightnessControllerExImpl = findClass("com.oplus.systemui.qs.OplusBrightnessControllerExImpl", lpparam.classLoader); // OOS 13
-        }
+        OplusBrightnessControllerExImpl
+                .after("setBrightnessMax")
+                .run(param -> {
+                    mMaximumBacklight = (int) param.args[0];
+                });
 
-        hookAllConstructors(OplusBrightnessControllerExImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                OplusBrightnessControllerExt = param.thisObject;
-            }
-        });
-        hookAllMethods(OplusBrightnessControllerExImpl, "setBrightnessMin", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mMinimumBacklight = (int) param.args[0];
-            }
-        });
-        hookAllMethods(OplusBrightnessControllerExImpl, "setBrightnessMax", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mMaximumBacklight = (int) param.args[0];
-            }
-        });
+        CentralSurfacesImpl
+                .afterConstruction()
+                .run(param -> {
+                    mDisplayMetrics = (DisplayMetrics) getObjectField(param.thisObject, "mDisplayMetrics");
+                    mDisplayManager = (DisplayManager) mContext.getSystemService(Context.DISPLAY_SERVICE);
+                });
 
-        hookAllConstructors(CentralSurfacesImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mDisplayMetrics = (DisplayMetrics) getObjectField(param.thisObject, "mDisplayMetrics");
-                mDisplayManager = (DisplayManager) mContext.getSystemService(Context.DISPLAY_SERVICE);
-            }
-        });
-
-        if (!oos13) {
-            Class<?> NotificationStackScrollLayoutExtImpl = findClass("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl", lpparam.classLoader);
-            findAndHookMethod(NotificationStackScrollLayoutExtImpl, "initView", Context.class, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
-                }
-            });
+        if (Build.VERSION.SDK_INT >= 35) {
+            ReflectedClass NotificationStackScrollLayoutExtImpl = ReflectedClass.of("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl");
+            NotificationStackScrollLayoutExtImpl
+                    .after("initView")
+                    .run(param -> {
+                        mQuickQsOffsetHeight = getIntField(param.thisObject, "mQuickQsOffsetHeight");
+                    });
         } else {
             try {
                 mQuickQsOffsetHeight = mContext.getResources().getDimensionPixelSize(mContext.getResources().getIdentifier("notification_quick_qs_offset_height", "dimen", listenPackage));
@@ -425,64 +368,60 @@ public class StatusbarMods extends XposedMods {
 
         final GestureDetector mGestureDetector = new GestureDetector(mContext, getPullDownLPListener());
 
-        hookAllMethods(PhoneStatusBarViewControllerClass, "onTouch", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        PhoneStatusBarViewControllerClass
+                .before("onTouch")
+                .run(param -> {
+                    MotionEvent event =
+                            param.args[0] instanceof MotionEvent
+                                    ? (MotionEvent) param.args[0]
+                                    : (MotionEvent) param.args[1];
 
-                MotionEvent event =
-                        param.args[0] instanceof MotionEvent
-                                ? (MotionEvent) param.args[0]
-                                : (MotionEvent) param.args[1];
-
-                if (oneFingerPulldownEnabled) {
-                    mGestureDetector.onTouchEvent(event);
-                }
-
-                if (!mBrightnessControl) return;
-
-                final int action = event.getAction();
-                final int x = (int) event.getRawX();
-                final int y = (int) event.getRawY();
-                if (action == MotionEvent.ACTION_DOWN) {
-                    if (y < mQuickQsOffsetHeight) {
-                        mLinger = 0;
-                        mInitialTouchX = x;
-                        mInitialTouchY = y;
-                        mJustPeeked = true;
-                        handler.removeCallbacks(mLongPressed);
-                        handler.postDelayed(mLongPressed, BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
+                    if (oneFingerPulldownEnabled) {
+                        mGestureDetector.onTouchEvent(event);
                     }
-                } else if (action == MotionEvent.ACTION_MOVE) {
-                    if (y < mQuickQsOffsetHeight && mJustPeeked) {
-                        if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
-                            //mStatusBar.performHapticFeedback(HapticFeedbackConstants.SEGMENT_TICK);
-                            adjustBrightness(x);
+
+                    if (!mBrightnessControl) return;
+
+                    final int action = event.getAction();
+                    final int x = (int) event.getRawX();
+                    final int y = (int) event.getRawY();
+                    if (action == MotionEvent.ACTION_DOWN) {
+                        if (y < mQuickQsOffsetHeight) {
+                            mLinger = 0;
+                            mInitialTouchX = x;
+                            mInitialTouchY = y;
+                            mJustPeeked = true;
+                            handler.removeCallbacks(mLongPressed);
+                            handler.postDelayed(mLongPressed, BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
+                        }
+                    } else if (action == MotionEvent.ACTION_MOVE) {
+                        if (y < mQuickQsOffsetHeight && mJustPeeked) {
+                            if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
+                                //mStatusBar.performHapticFeedback(HapticFeedbackConstants.SEGMENT_TICK);
+                                adjustBrightness(x);
+                            } else {
+                                final int xDiff = Math.abs(x - mInitialTouchX);
+                                final int yDiff = Math.abs(y - mInitialTouchY);
+                                final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                                if (xDiff > yDiff) {
+                                    mLinger++;
+                                }
+                                if (xDiff > touchSlop || yDiff > touchSlop) {
+                                    handler.removeCallbacks(mLongPressed);
+                                }
+                            }
                         } else {
-                            final int xDiff = Math.abs(x - mInitialTouchX);
-                            final int yDiff = Math.abs(y - mInitialTouchY);
-                            final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-                            if (xDiff > yDiff) {
-                                mLinger++;
+                            if (y > mQuickQsOffsetHeight) {
+                                mJustPeeked = false;
                             }
-                            if (xDiff > touchSlop || yDiff > touchSlop) {
-                                handler.removeCallbacks(mLongPressed);
-                            }
+                            handler.removeCallbacks(mLongPressed);
                         }
-                    } else {
-                        if (y > mQuickQsOffsetHeight) {
-                            mJustPeeked = false;
-                        }
+                    } else if (action == MotionEvent.ACTION_UP
+                            || action == MotionEvent.ACTION_CANCEL) {
                         handler.removeCallbacks(mLongPressed);
                     }
-                } else if (action == MotionEvent.ACTION_UP
-                        || action == MotionEvent.ACTION_CANCEL) {
-                    handler.removeCallbacks(mLongPressed);
-                }
-                //mGestureDetector.onTouchEvent(event);
-
-            }
-        });
-
+                    //mGestureDetector.onTouchEvent(event);
+                });
 
         // Notifications
         ReflectedClass NotificationIconAreaControllerClz = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.NotificationIconAreaController");
@@ -490,127 +429,72 @@ public class StatusbarMods extends XposedMods {
                 .afterConstruction()
                 .run(param -> mNotificationIconAreaController = param.thisObject);
 
-        Class<?> NotificationIconContainer = findClass("com.android.systemui.statusbar.phone.NotificationIconContainer", lpparam.classLoader);
-        hookAllConstructors(NotificationIconContainer, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNotificationIconContainer = param.thisObject;
-            }
-        });
+        ReflectedClass NotificationIconContainer = ReflectedClass.of("com.android.systemui.statusbar.phone.NotificationIconContainer", lpparam.classLoader);
+        NotificationIconContainer
+                .afterConstruction()
+                .run(param -> mNotificationIconContainer = param.thisObject);
+
         try {
             ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
         } catch (Throwable ignored) {
         }
-        Class<?> StatusBarIconView = findClass("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
+        ReflectedClass StatusBarIconView = ReflectedClass.of("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
         try {
-            findAndHookMethod(StatusBarIconView,
-                    "getIcon",
-                    Context.class,
-                    Context.class,
-                    "com.android.internal.statusbar.StatusBarIcon",
-                    new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            if (!mNewIconStyle) return;
-                            Context sysuiContext = (Context) param.args[0];
-                            Context context = (Context) param.args[1];
-                            Drawable icon = null;
-                            Object statusBarIcon = param.args[2];
-
-                            String pkgName = (String) getObjectField(statusBarIcon, "pkg");
-                            if (pkgName.contains("com.android") || pkgName.contains("systemui"))
-                                return;
-                            try {
-                                if (!pkgName.contains("systemui")) {
-                                    icon = context.getPackageManager().getApplicationIcon(pkgName);
-                                }
-                            } catch (Throwable e) {
-                                return;
+            StatusBarIconView
+                    .before("getIcon")
+                    .run(param -> {
+                        if (!mNewIconStyle) return;
+                        View v = (View) param.thisObject;
+                        Context sysuiContext = v.getContext();
+                        Drawable icon = null;
+                        Object statusBarIcon;
+                        if (param.args.length >= 2)
+                            statusBarIcon = param.args[2];
+                        else
+                            statusBarIcon = param.args[0];
+                        String pkgName = (String) getObjectField(statusBarIcon, "pkg");
+                        if (pkgName.contains("com.android") || pkgName.contains("systemui"))
+                            return;
+                        try {
+                            if (!pkgName.contains("systemui")) {
+                                icon = sysuiContext.getPackageManager().getApplicationIcon(pkgName);
                             }
-                            int dimen = 0;
-                            try {
-                                boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
-                                dimen = mContext.getResources().getDimensionPixelSize(
-                                        mContext.getResources().getIdentifier(
-                                                isLowRam ?
-                                                        "notification_small_icon_size" :
-                                                        "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
-                            } catch (Throwable ignored) {
-                            }
-                            TypedValue typedValue = new TypedValue();
-                            sysuiContext.getResources().getValue(
-                                    sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
-                                    typedValue, true);
-                            float scaleFactor = typedValue.getFloat();
-
-                            if (icon != null) {
-                                Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
-                                icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
-                                if (Build.VERSION.SDK_INT >= 35) {
-                                    setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
-                                } else {
-                                    setFloatField(param.thisObject, "mIconAppearAmount", mNewIconScale);
-                                }
-                                if (scaleFactor == 1f) { // No need to scale icon
-                                    param.setResult(icon);
-                                } else { // Scale Factor != 1f so return a scaled icon
-                                    param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
-                                }
-                            }
+                        } catch (Throwable e) {
+                            return;
                         }
-                    });
-        } catch (Throwable ignored) {
-            // Method not found in OOS 15.0.1
-            findAndHookMethod(StatusBarIconView,
-                    "getIcon",
-                    "com.android.internal.statusbar.StatusBarIcon",
-                    new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            if (!mNewIconStyle) return;
-                            View v = (View) param.thisObject;
-                            Context context = v.getContext();
-                            Drawable icon = null;
-                            Object statusBarIcon = param.args[0];
+                        int dimen = 0;
+                        try {
+                            boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
+                            dimen = mContext.getResources().getDimensionPixelSize(
+                                    mContext.getResources().getIdentifier(
+                                            isLowRam ?
+                                                    "notification_small_icon_size" :
+                                                    "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
+                        } catch (Throwable ignored) {
+                        }
+                        TypedValue typedValue = new TypedValue();
+                        sysuiContext.getResources().getValue(
+                                sysuiContext.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
+                                typedValue, true);
+                        float scaleFactor = typedValue.getFloat();
 
-                            String pkgName = (String) getObjectField(statusBarIcon, "pkg");
-                            if (pkgName.contains("com.android") || pkgName.contains("systemui"))
-                                return;
-                            try {
-                                if (!pkgName.contains("systemui")) {
-                                    icon = context.getPackageManager().getApplicationIcon(pkgName);
-                                }
-                            } catch (Throwable e) {
-                                return;
-                            }
-                            int dimen = 0;
-                            try {
-                                boolean isLowRam = (boolean) callStaticMethod(ActivityManager.class, "isLowRamDeviceStatic");
-                                dimen = mContext.getResources().getDimensionPixelSize(
-                                        mContext.getResources().getIdentifier(
-                                                isLowRam ?
-                                                        "notification_small_icon_size" :
-                                                        "notification_small_icon_size_low_ram", "dimen", FRAMEWORK));
-                            } catch (Throwable ignored) {
-                            }
-                            TypedValue typedValue = new TypedValue();
-                            context.getResources().getValue(
-                                    context.getResources().getIdentifier("status_bar_icon_scale_factor", "dimen", listenPackage),
-                                    typedValue, true);
-                            float scaleFactor = typedValue.getFloat();
-
-                            if (icon != null) {
-                                Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
-                                icon = DrawableSize.downscaleToSize(context.getResources(), icon, dimen, dimen);
+                        if (icon != null) {
+                            Log.d("StatusbarMods", "dimen " + dimen + " scaleFactor " + scaleFactor + " mNewIconScale " + mNewIconScale);
+                            icon = DrawableSize.downscaleToSize(sysuiContext.getResources(), icon, dimen, dimen);
+                            if (Build.VERSION.SDK_INT >= 35) {
                                 setFloatField(param.thisObject, "mScaleToFitNewIconSize", mNewIconScale);
-                                if (scaleFactor == 1f) { // No need to scale icon
-                                    param.setResult(icon);
-                                } else { // Scale Factor != 1f so return a scaled icon
-                                    param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
-                                }
+                            } else {
+                                setFloatField(param.thisObject, "mIconAppearAmount", mNewIconScale);
+                            }
+                            if (scaleFactor == 1f) { // No need to scale icon
+                                param.setResult(icon);
+                            } else { // Scale Factor != 1f so return a scaled icon
+                                param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
                             }
                         }
                     });
+        } catch (Throwable t) {
+            log(t);
         }
     }
 
@@ -623,28 +507,6 @@ public class StatusbarMods extends XposedMods {
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", new Intent(Intent.ACTION_POWER_USAGE_SUMMARY), 0);
     }
     //endregion
-
-    @SuppressLint("DiscouragedApi")
-    private void updatePaddings() {
-        if (mStatusBarContents == null) return;
-
-        int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
-
-        int paddingStart = SBPaddingStart == PADDING_DEFAULT
-                ? mContext.getResources().getIdentifier("status_bar_padding_start", "dimen", listenPackage)
-                : Math.round(SBPaddingStart * screenWidth / 100f);
-
-        int paddingEnd = SBPaddingEnd == PADDING_DEFAULT
-                ? mContext.getResources().getIdentifier("status_bar_padding_end", "dimen", listenPackage)
-                : Math.round(SBPaddingEnd * screenWidth / 100f);
-
-        mStatusBarContents.setPaddingRelative(
-                paddingStart,
-                (int) mTopPad,
-                paddingEnd,
-                mStatusBarContents.getPaddingBottom());
-
-    }
 
     private void onLongPressBrightnessChange() {
         if (mStatusBar != null)
@@ -747,6 +609,7 @@ public class StatusbarMods extends XposedMods {
                 }
             }
         };
+
 
         hookAllMethods(TouchHanlderClass, "onTouch", touchHook); //13 QPR2
         hookAllMethods(TouchHanlderClass, "handleTouchEvent", touchHook); //A13 R18
