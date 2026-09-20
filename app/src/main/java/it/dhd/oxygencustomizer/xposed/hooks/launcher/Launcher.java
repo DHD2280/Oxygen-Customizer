@@ -507,7 +507,13 @@ public class Launcher extends XposedMods {
                 .before("updateSupportShelfAssistant")
                 .run(param -> {
                     if (!mCustomShelfBehavior) return;
-                    setBooleanField(param.thisObject, "sShelfAssistantEnable", mShelfBehavior == 0);
+                    String[] objects = new String[]{"sShelfAssistantEnable", "sSupportShelfAssistant"};
+                    for (String obj : objects) {
+                        try {
+                            setBooleanField(param.thisObject, obj, mShelfBehavior == 0);
+                        } catch (Throwable ignored) {
+                        }
+                    }
                 });
 
         ReflectedClass IndicatorEntry = ReflectedClass.of("com.android.launcher3.search.IndicatorEntry$Companion");
