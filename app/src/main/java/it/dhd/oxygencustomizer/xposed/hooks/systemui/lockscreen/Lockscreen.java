@@ -488,7 +488,12 @@ public class Lockscreen extends XposedMods {
                             }
                         } catch (Throwable ignored) {
                             try {
-                                mLockIconContaier = (View) getObjectField(param.thisObject, "lockIcon");
+                                mLockIconContaier = (View) getObjectField(param.thisObject, "lockIconContainer");
+                                mLockIconView = (View) getObjectField(param.thisObject, "lockIcon");
+                                if (removeLockIcon) {
+                                    mLockIconContaier.setVisibility(View.GONE);
+                                    mLockIconView.setVisibility(View.GONE);
+                                }
                             } catch (Throwable ignored2) {
                             }
                         }
