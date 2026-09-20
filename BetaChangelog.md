@@ -1,3 +1,15 @@
+**beta-207**  
+- Added searchbar tweaks for launcher  
+- Added custom action for page indicator click  
+- Fixed disable previous task on latest launcher  
+- Added custom global search override  
+- Added Mind Space button customization  
+- Fixed notification style on OOS16.0.7  
+- Added home swipe right behavior feature  
+- Fixed settings entry for OOS16.0.7  
+- Fixed Advanced Reboot button  
+- Fixed notification style  
+  
 **beta-206**  
 - Fixed QS Widgets for OOS16  
 - Fixed Red One customization in Header Clock for OOS16  
