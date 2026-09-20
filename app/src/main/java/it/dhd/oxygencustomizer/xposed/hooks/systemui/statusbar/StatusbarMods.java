@@ -4,7 +4,6 @@ import static android.content.Context.RECEIVER_EXPORTED;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.setFloatField;
@@ -122,7 +121,7 @@ public class StatusbarMods extends XposedMods {
     private float mTopPad;
     private Object mActivityStarter;
     private Class<?> NotificationIconAreaController;
-    private Class<?> ScalingDrawableWrapper = null;
+    private ReflectedClass ScalingDrawableWrapper = null;
     private Object mNotificationIconAreaController = null;
     private Object mNotificationIconContainer = null;
     private boolean mNewIconStyle;
@@ -202,8 +201,8 @@ public class StatusbarMods extends XposedMods {
 
         ReflectedClass NotificationPanelViewControllerClass = ReflectedClass.of("com.android.systemui.shade.NotificationPanelViewController",
                 "com.android.systemui.statusbar.phone.NotificationPanelViewController");
-        ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView", lpparam.classLoader);
-        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarViewController", lpparam.classLoader);
+        ReflectedClass PhoneStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView");
+        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");
         ReflectedClass QSSecurityFooterUtilsClass = ReflectedClass.of("com.android.systemui.qs.QSSecurityFooterUtils",
                 "com.android.systemui.qs.QSSecurityFooter");
         ReflectedClass QuickStatusBarHeaderClass = ReflectedClass.of("com.oplus.systemui.qs.OplusQuickStatusBarHeader",
@@ -321,7 +320,7 @@ public class StatusbarMods extends XposedMods {
                 .run(param -> mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar"));
 
 
-        ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl", lpparam.classLoader);
+        ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
 
         ReflectedClass OplusBrightnessControllerExImpl = ReflectedClass.of("com.oplus.systemui.qs.impl.OplusBrightnessControllerExImpl",
                 "com.oplus.systemui.qs.OplusBrightnessControllerExImpl");
@@ -429,16 +428,16 @@ public class StatusbarMods extends XposedMods {
                 .afterConstruction()
                 .run(param -> mNotificationIconAreaController = param.thisObject);
 
-        ReflectedClass NotificationIconContainer = ReflectedClass.of("com.android.systemui.statusbar.phone.NotificationIconContainer", lpparam.classLoader);
+        ReflectedClass NotificationIconContainer = ReflectedClass.of("com.android.systemui.statusbar.phone.NotificationIconContainer");
         NotificationIconContainer
                 .afterConstruction()
                 .run(param -> mNotificationIconContainer = param.thisObject);
 
         try {
-            ScalingDrawableWrapper = findClass("com.android.systemui.statusbar.ScalingDrawableWrapper", lpparam.classLoader);
+            ScalingDrawableWrapper = ReflectedClass.of("com.android.systemui.statusbar.ScalingDrawableWrapper");
         } catch (Throwable ignored) {
         }
-        ReflectedClass StatusBarIconView = ReflectedClass.of("com.android.systemui.statusbar.StatusBarIconView", lpparam.classLoader);
+        ReflectedClass StatusBarIconView = ReflectedClass.of("com.android.systemui.statusbar.StatusBarIconView");
         try {
             StatusBarIconView
                     .before("getIcon")
@@ -489,7 +488,7 @@ public class StatusbarMods extends XposedMods {
                             if (scaleFactor == 1f) { // No need to scale icon
                                 param.setResult(icon);
                             } else { // Scale Factor != 1f so return a scaled icon
-                                param.setResult(ScalingDrawableWrapper.getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
+                                param.setResult(ScalingDrawableWrapper.getClazz().getConstructor(Drawable.class, float.class).newInstance(icon, scaleFactor));
                             }
                         }
                     });
