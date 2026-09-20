@@ -19,14 +19,21 @@ import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -55,10 +62,14 @@ public class Launcher extends XposedMods {
     private boolean mCustomPageIndicatorTap = false;
     private String mCustomPageIndicatorTapInt = "app:it.dhd.oxygencustomizer";
 
+    private boolean mSearchDisableGB, mSearchKeyboard, mSearchEnter;
 
     private View OplusFastScroll;
 
     private ContentObserver assistScreenSwitchObserverExp, shelfSupportAssistScreenObserver;
+
+    private boolean pendingSearchFocus = false;
+    private static final String TAG = "OplusAllAppsSearchBarController";
 
     public Launcher(Context context) {
         super(context);
@@ -90,7 +101,9 @@ public class Launcher extends XposedMods {
         mCustomGlobalSearchInt = Xprefs.getString("launcher_global_search_launch", "app:it.dhd.oxygencustomizer");
         mCustomPageIndicatorTap = Xprefs.getBoolean("launcher_custom_tap_page_indicator_switch", false);
         mCustomPageIndicatorTapInt = Xprefs.getString("launcher_page_indicator_tap_launch", "app:it.dhd.oxygencustomizer");
-
+        mSearchDisableGB = Xprefs.getBoolean("searchbar_disable_globalsearch", false);
+        mSearchKeyboard = Xprefs.getBoolean("searchbar_show_keyboard", false);
+        mSearchEnter = Xprefs.getBoolean("searchbar_enter_to_open", false);
 
         // shelf behavior
         mCustomShelfBehavior = Xprefs.getBoolean("launcher_custom_shelf_switch", false);
@@ -534,6 +547,183 @@ public class Launcher extends XposedMods {
                     param.setResult(launchIntent);
                 }, true);
 
+        ReflectedClass LauncherAppsSearchContainerLayout = ReflectedClass.of("com.android.launcher3.allapps.search.LauncherAppsSearchContainerLayout");
+        LauncherAppsSearchContainerLayout
+                .before("onSearchBarClick")
+                .run(param -> {
+                    if (!mSearchDisableGB) return;
+                    param.setResult(null);
+                    XposedHelpers.callMethod(param.thisObject, "onSearchBarClickInternal");
+                });
+
+        LauncherAppsSearchContainerLayout
+                .before("shouldInterceptTouchEventToStartBranch")
+                .run(param -> {
+                    if (mSearchDisableGB) param.setResult(false);
+                });
+
+
+        ReflectedClass OplusAllAppsTransitionController = ReflectedClass.of("com.android.launcher3.allapps.OplusAllAppsTransitionController");
+        OplusAllAppsTransitionController
+                .after("setStateWithAnimation")
+                .run(param -> {
+                    if (!mSearchKeyboard) return;
+                    Object toState = param.args[0];
+                    if (toState == null) return;
+                    XposedBridge.log("LauncherState: " + toState.toString());
+                    if (!toState.toString().contains("AllApps")) return;
+                    float progress = XposedHelpers.getFloatField(
+                            param.thisObject, "mProgress");
+                    if (progress == 1.0f) {
+                        pendingSearchFocus = true;
+                    }
+                    Object searchContainer = XposedHelpers.getObjectField(
+                            param.thisObject, "mSearchViewContainer");
+                    XposedHelpers.callMethod(searchContainer, "onSearchBarClickInternal");
+                }, true);
+
+        OplusAllAppsTransitionController
+                .after("onProgressAnimationEnd")
+                .run(param -> {
+                    if (!mSearchKeyboard) return;
+                    if (!pendingSearchFocus) return;
+                    float progress = XposedHelpers.getFloatField(
+                            param.thisObject, "mProgress");
+                    if (progress != 0.0f) return;
+                    pendingSearchFocus = true;
+                    Object searchContainer = XposedHelpers.getObjectField(
+                            param.thisObject, "mSearchViewContainer");
+                    if (searchContainer != null) {
+                        retrySearchFocus(param.thisObject, 0);
+                    }
+                });
+
+        OplusAllAppsTransitionController
+                .after("setProgress")
+                .run(param -> {
+                    if (!mSearchKeyboard) return;
+                    if (!pendingSearchFocus) return;
+                    float progress = (float) param.args[0];
+
+                    if (progress > 0.05f || progress < 0.0f) return;
+                    pendingSearchFocus = false;
+                    Object container = XposedHelpers.getObjectField(
+                            param.thisObject, "mSearchViewContainer"
+                    );
+                    retrySearchFocus(container, 0);
+                });
+
+        ReflectedClass OplusAllAppsSearchBarController = ReflectedClass.of("com.android.launcher3.allapps.search.OplusAllAppsSearchBarController");
+        OplusAllAppsSearchBarController
+                .after("initialize")
+                .run(param -> {
+                    EditText mSearchView = (EditText) getObjectField(param.thisObject, "mSearchView");
+                    final Object launcher = XposedHelpers.getObjectField(param.thisObject, "mLauncher");
+                    mSearchView.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+                        if (actionId != 3 && actionId != 2) return false;
+
+                        try {
+                            if (mSearchEnter) launchFirstResult(launcher);
+                        } catch (Throwable t) {
+                            XposedBridge.log(TAG + " launch failed:\n"
+                                    + Log.getStackTraceString(t));
+                        }
+                        return true;
+                    });
+                });
+    }
+
+    private void launchFirstResult(Object launcher) throws Throwable {
+        Object appsView = XposedHelpers.callMethod(launcher, "getAppsView");
+        Object rvObj = XposedHelpers.callMethod(appsView, "getActiveSearchRecyclerView");
+        if (rvObj == null) {
+            XposedBridge.log(TAG + " rvObj is null");
+            return;
+        }
+        int childCount = (int) XposedHelpers.callMethod(rvObj, "getChildCount");
+
+        for (int i = 0; i < childCount; i++) {
+            Object childObj = XposedHelpers.callMethod(rvObj, "getChildAt", i);
+            if (!(childObj instanceof View child)) continue;
+            if (child.getVisibility() != View.VISIBLE) continue;
+            Object vh = XposedHelpers.callMethod(rvObj, "getChildViewHolder", child);
+            if (vh == null) continue;
+            Object typeObj = XposedHelpers.callMethod(vh, "getItemViewType");
+            int itemViewType = (typeObj instanceof Integer) ? (Integer) typeObj : -1;
+
+            if ((itemViewType == 2 || itemViewType == 256) && child.isClickable()) {
+                XposedBridge.log(TAG + " performing click on child " + i);
+                child.performClick();
+                return;
+            }
+        }
+
+        // Fallback
+        XposedBridge.log(TAG + " no typed child found, fallback click");
+        for (int i = 0; i < childCount; i++) {
+            Object childObj = XposedHelpers.callMethod(rvObj, "getChildAt", i);
+            if (!(childObj instanceof View child)) continue;
+            if (child.getVisibility() == View.VISIBLE && child.isClickable()) {
+                child.performClick();
+                return;
+            }
+        }
+
+        // Fallback again
+        XposedBridge.log(TAG + " no clickable child, manual intent");
+        launchViaIntent(launcher, rvObj);
+    }
+
+    private void launchViaIntent(Object launcher, Object rvObj) {
+        Object resultsObj = XposedHelpers.callMethod(rvObj, "getSearchResults");
+        if (!(resultsObj instanceof List)) return;
+
+        List<?> results = (List<?>) resultsObj;
+        if (results.isEmpty()) {
+            XposedBridge.log(TAG + " results empty");
+            return;
+        }
+
+        Object first = results.get(0);
+        Object itemInfo = XposedHelpers.getObjectField(first, "itemInfo");
+        if (itemInfo == null) return;
+
+        Object componentName = XposedHelpers.getObjectField(itemInfo, "componentName");
+        Object user = XposedHelpers.getObjectField(itemInfo, "user");
+
+        Intent intent = new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setComponent((android.content.ComponentName) componentName)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+        android.content.Context ctx = (android.content.Context) launcher;
+
+        if (user != null) {
+            try {
+                XposedHelpers.callMethod(ctx, "startActivityAsUser", intent, user);
+                XposedBridge.log(TAG + " started via startActivityAsUser");
+                return;
+            } catch (Throwable ignored) {
+            }
+        }
+
+        ctx.startActivity(intent);
+        XposedBridge.log(TAG + " started via startActivity");
+    }
+
+    private void retrySearchFocus(Object container, int attempt) {
+        if (attempt > 5) return;
+        Object listener = XposedHelpers.getObjectField(container, "animationControlListener");
+        boolean hideRunning = listener != null && (Boolean) XposedHelpers.callMethod(listener, "isHideImeAnimationRunning");
+
+        if (hideRunning) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> retrySearchFocus(container, attempt + 1), 60
+            );
+            return;
+        }
+        XposedHelpers.callMethod(container, "onSearchBarClickInternal");
     }
 
     private void updateFastScroll() {

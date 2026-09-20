@@ -769,7 +769,13 @@
     <string name="custom_page_indicator_tap_title">Custom tap action</string>
     <string name="custom_page_indicator_tap_summary">Choose the action when you tap on page indicator</string>
     <string name="custom_page_indicator_tap_explaination">Here you can choose what to launch when you press page indicator in home.</string>
-    "
+    <string name="drawer_searchbar">SearchBar</string>
+    <string name="searchbar_disable_gbsearch_title">Disable global search launch</string>
+    <string name="searchbar_disable_gbsearch_summary">Use the SearchBar like a standard searchbar instead of launching global search</string>
+    <string name="searchbar_open_keyboard_title">Always show keyboard</string>
+    <string name="searchbar_open_keyboard_summary">Open the keyboard on swiping up on your home screen to search</string>
+    <string name="searchbar_enter_to_open_title">Enter to open</string>
+    <string name="searchbar_enter_to_open_summary">Press Enter to open the first item in search</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>

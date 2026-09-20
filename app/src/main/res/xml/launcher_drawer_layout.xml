@@ -50,4 +50,31 @@
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/drawer_searchbar">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="searchbar_disable_globalsearch"
+            android:summary="@string/searchbar_disable_gbsearch_summary"
+            android:title="@string/searchbar_disable_gbsearch_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:dependency="searchbar_disable_globalsearch"
+            android:defaultValue="false"
+            android:key="searchbar_show_keyboard"
+            android:summary="@string/searchbar_open_keyboard_summary"
+            android:title="@string/searchbar_open_keyboard_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:dependency="searchbar_disable_globalsearch"
+            android:defaultValue="false"
+            android:key="searchbar_enter_to_open"
+            android:summary="@string/searchbar_enter_to_open_summary"
+            android:title="@string/searchbar_enter_to_open_title"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>
