@@ -3,6 +3,9 @@ name: Build Nightly APK
 on:
   push:
     branches: [ "beta" ]
+    paths-ignore:
+      - 'website/**'
+      - '.github/workflows/website.yml'
   workflow_dispatch:
 
 jobs:

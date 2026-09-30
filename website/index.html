@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Oxygen Customizer: open-source customizer for OxygenOS</title>
+		<meta name="description" content="Oxygen Customizer is a free, open-source Xposed module for rooted OnePlus, OPPO and realme phones. Restyle the statusbar, lockscreen and Quick Settings." />
+		<meta name="robots" content="index, follow, max-image-preview:large" />
+		<meta name="author" content="DHD2280" />
+		<link rel="canonical" href="https://dhd2280.github.io/Oxygen-Customizer/" />
+		<link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+		<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+		<meta name="color-scheme" content="dark light" />
+		<meta name="theme-color" content="#000000" data-theme-color />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Oxygen Customizer" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:title" content="Oxygen Customizer: open-source customizer for OxygenOS" />
+		<meta property="og:description" content="Move the clock, swap every statusbar icon, remap the Plus Key and rebuild Quick Settings. Free and open source, for rooted OxygenOS, ColorOS and realme UI 13 to 16." />
+		<meta property="og:url" content="https://dhd2280.github.io/Oxygen-Customizer/" />
+		<meta property="og:image" content="https://dhd2280.github.io/Oxygen-Customizer/assets/og.jpg" />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Oxygen Customizer screens: UI styles, icon packs, statusbar and Quick Settings" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Oxygen Customizer: open-source customizer for OxygenOS" />
+		<meta name="twitter:description" content="Move the clock, swap every statusbar icon, remap the Plus Key and rebuild Quick Settings. Free and open source, for rooted OxygenOS, ColorOS and realme UI 13 to 16." />
+		<meta name="twitter:image" content="https://dhd2280.github.io/Oxygen-Customizer/assets/og.jpg" />
+		<meta name="twitter:image:alt" content="Oxygen Customizer screens: UI styles, icon packs, statusbar and Quick Settings" />
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@graph": [
+					{
+						"@type": "WebSite",
+						"@id": "https://dhd2280.github.io/Oxygen-Customizer/#website",
+						"url": "https://dhd2280.github.io/Oxygen-Customizer/",
+						"name": "Oxygen Customizer",
+						"inLanguage": "en",
+						"publisher": {
+							"@id": "https://dhd2280.github.io/Oxygen-Customizer/#author"
+						}
+					},
+					{
+						"@type": "Person",
+						"@id": "https://dhd2280.github.io/Oxygen-Customizer/#author",
+						"name": "DHD2280",
+						"url": "https://github.com/DHD2280"
+					},
+					{
+						"@type": "SoftwareApplication",
+						"@id": "https://dhd2280.github.io/Oxygen-Customizer/#app",
+						"name": "Oxygen Customizer",
+						"url": "https://dhd2280.github.io/Oxygen-Customizer/",
+						"description": "Free and open-source Xposed module that customizes the statusbar, lockscreen, Always On Display, Quick Settings, hardware keys and OnePlus Launcher on rooted OxygenOS, ColorOS and realme UI.",
+						"applicationCategory": "UtilitiesApplication",
+						"operatingSystem": "Android 13 or later (OxygenOS, ColorOS, realme UI 13 to 16)",
+						"softwareRequirements": "Root access through Magisk, KernelSU or APatch, and LSPosed",
+						"featureList": [
+							"Statusbar clock position, color and background chip",
+							"42 signal, 19 Wi-Fi and 37 battery icon styles",
+							"Lockscreen Now Bar and Peek notifications",
+							"Always On Display edge light",
+							"Separate Quick Settings layout and widgets",
+							"Plus Key remapping and Circle to Search",
+							"OnePlus Launcher Shelf, themed icons and grids",
+							"Pixelworks MEMC and Pocket Studio",
+							"Smart Pause and Fluid Music"
+						],
+						"screenshot": [
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/home.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/statusbar.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/qs.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/header-image.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/header-clock.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/gestures.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/launcher.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/lockscreen.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/aod.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/sound.webp",
+						"https://dhd2280.github.io/Oxygen-Customizer/assets/screens/misc.webp"
+					],
+						"image": "https://dhd2280.github.io/Oxygen-Customizer/assets/og.jpg",
+						"downloadUrl": "https://github.com/DHD2280/Oxygen-Customizer/releases",
+						"installUrl": "https://github.com/DHD2280/Oxygen-Customizer/releases",
+						"license": "https://github.com/DHD2280/Oxygen-Customizer/blob/beta/LICENSE.md",
+						"isAccessibleForFree": true,
+						"inLanguage": "en",
+						"author": {
+							"@id": "https://dhd2280.github.io/Oxygen-Customizer/#author"
+						},
+						"sameAs": [
+							"https://github.com/DHD2280/Oxygen-Customizer",
+							"https://t.me/OxygenCustomizer"
+						],
+						"offers": {
+							"@type": "Offer",
+							"price": "0",
+							"priceCurrency": "USD"
+						}
+					},
+					{
+						"@type": "SoftwareSourceCode",
+						"name": "Oxygen Customizer",
+						"codeRepository": "https://github.com/DHD2280/Oxygen-Customizer",
+						"programmingLanguage": [
+						"Java",
+						"Kotlin"
+					],
+						"license": "https://github.com/DHD2280/Oxygen-Customizer/blob/beta/LICENSE.md",
+						"author": {
+							"@id": "https://dhd2280.github.io/Oxygen-Customizer/#author"
+						},
+						"targetProduct": {
+							"@id": "https://dhd2280.github.io/Oxygen-Customizer/#app"
+						}
+					},
+					{
+						"@type": "FAQPage",
+						"@id": "https://dhd2280.github.io/Oxygen-Customizer/#faq",
+						"mainEntity": [
+							{
+								"@type": "Question",
+								"name": "KernelSU 3.0 and meta modules</summary>\n\t\t\t\t\t\t\t<div class=\"meta-body\">\n\t\t\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t\t\tKernelSU 3.0 no longer mounts modules by itself. Install\n\t\t\t\t\t\t\t\t\t<a href=\"https://github.com/backslashxx/mountify\">Mountify</a> (recommended),\n\t\t\t\t\t\t\t\t\t<a href=\"https://github.com/7a72/meta-magic_mount/\">Magic Mount</a> or\n\t\t\t\t\t\t\t\t\t<a href=\"https://github.com/Hybrid-Mount/meta-hybrid_mount\">Hybrid Mount</a>. Magic Mount needs\n\t\t\t\t\t\t\t\t\tno setup. For Mountify, open its web UI and set:\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<pre><code>mountify_mount = 2\nmount_device_name = KSU\nmountify_custom_umount = 2</code></pre>\n\t\t\t\t\t\t\t\t<p>Use <code>mountify_custom_umount = 1</code> with susfs older than 2.0.0. Reboot, then install Oxygen Customizer.</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</details>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>\n\n\t\t\t<section id=\"faq\" class=\"faq\" aria-labelledby=\"faq-title\">\n\t\t\t\t<div class=\"head\">\n\t\t\t\t\t<h2 id=\"faq-title\">Before you ask in the group.</h2>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"faq-list\">\n\t\t\t\t\t<details>\n\t\t\t\t\t\t<summary>Does it need root?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "Yes. Oxygen Customizer hooks System UI through LSPosed and installs a small module, so it needs Magisk, KernelSU or APatch."
+								}
+							},
+							{
+								"@type": "Question",
+								"name": "Which phones and ROMs does it support?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "It targets OxygenOS 13 to 16 and ROMs based on it. ColorOS and realme UI share most of the code and mostly work, but they are not guaranteed."
+								}
+							},
+							{
+								"@type": "Question",
+								"name": "My phone bootloops after installing. What now?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "Boot into Safe Mode and remove the module. On KernelSU and its forks, follow the rescue guide."
+								}
+							},
+							{
+								"@type": "Question",
+								"name": "Can I use it with other customization apps?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "Yes, but two apps changing the same part of the UI can conflict. If something looks wrong, turn off the overlapping option in one of them."
+								}
+							},
+							{
+								"@type": "Question",
+								"name": "What is the difference between release and nightly builds?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "Release builds are optimized for everyday use. Nightly builds come from every commit and include the newest fixes along with extra logging for debugging."
+								}
+							},
+							{
+								"@type": "Question",
+								"name": "How do I report a bug or ask for a feature?",
+								"acceptedAnswer": {
+									"@type": "Answer",
+									"text": "Update to the latest nightly first. Then open an issue with the Bug Report or Feature Request template and include your ROM, LSPosed build, steps to reproduce and logs."
+								}
+							}
+						]
+					}
+				]
+			}
+		</script>
+
+		<link rel="preconnect" href="https://api.github.com" crossorigin />
+
+		<script>
+			try {
+				const t = localStorage.getItem("oc-theme");
+				if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+			} catch {}
+		</script>
+		<link rel="preload" href="assets/fonts/red-hat-display-latin.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="assets/fonts/red-hat-text-latin.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="stylesheet" href="assets/tokens.css" />
+		<link rel="stylesheet" href="assets/style.css" />
+		<script type="module" src="assets/main.js"></script>
+	</head>
+	<body>
+		<a class="skip" href="#main">Skip to content</a>
+
+		<header class="top">
+			<a class="capsule brand" href="#main" aria-label="Oxygen Customizer, back to top">
+				<img class="brand-mark" src="assets/icon.svg" width="40" height="40" alt="" />
+				<span class="brand-name">Oxygen<br />Customizer</span>
+			</a>
+			<nav class="capsule nav" aria-label="Sections">
+				<a href="#icons">Statusbar</a>
+				<a href="#features">Features</a>
+				<a href="#install">Install</a>
+				<a href="#faq">FAQ</a>
+			</nav>
+			<div class="capsule actions">
+				<button class="action theme" type="button" data-theme-toggle aria-label="Switch to light theme">
+					<svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z" /></svg>
+					<svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+				</button>
+				<a class="action" href="https://github.com/DHD2280/Oxygen-Customizer" aria-label="Source on GitHub">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" /></svg>
+				</a>
+				<a class="action" href="https://t.me/OxygenCustomizerGroup" aria-label="Telegram support group">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 4.2 2.9 11.3c-1.3.5-1.2 1.2-.2 1.5l4.7 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.2 4.8 3.5c.9.5 1.5.2 1.7-.8l3.1-14.7c.3-1.3-.5-1.9-1.5-1.4ZM8.2 14 18.6 7.4c.5-.3.9-.1.5.2l-8.9 8-.3 3.7L8.2 14Z" /></svg>
+				</a>
+			</div>
+		</header>
+
+		<main id="main">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="stage">
+					<div class="screen">
+						<div class="sb" data-sb="hero" data-clock-pos="left">
+							<div class="sb-battery-bar" aria-hidden="true"><span></span></div>
+							<div class="sb-row" aria-hidden="true">
+								<div class="sb-start">
+									<span class="sb-clock-slot" data-slot-pos="left"><span class="sb-clock" data-clock>11:21</span></span>
+									<span class="sb-notifs">
+										<svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H9.2L5.6 19.4c-.6.6-1.6.2-1.6-.7V5.5Z" fill="currentColor" /></svg>
+										<svg viewBox="0 0 24 24"><path d="M12 3v11m0 0-4.5-4.5M12 14l4.5-4.5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									</span>
+								</div>
+								<div class="sb-mid">
+									<span class="sb-clock-slot" data-slot-pos="center"></span>
+								</div>
+								<div class="sb-end">
+									<svg class="sb-alarm" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.4" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 9.2V13l2.6 1.6M3.6 6.6l3.2-2.8m13.6 2.8-3.2-2.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									<span class="sb-icon" data-part="wifi"></span>
+									<span class="sb-icon" data-part="signal"></span>
+									<span class="sb-icon sb-batt" data-part="battery"></span>
+									<span class="sb-clock-slot" data-slot-pos="right"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="capsule toolbar" data-console>
+						<div class="seg" data-seg="clock-pos" role="group" aria-label="Clock position">
+							<button type="button" data-value="left" aria-pressed="true">Left</button>
+							<button type="button" data-value="center" aria-pressed="false">Center</button>
+							<button type="button" data-value="right" aria-pressed="false">Right</button>
+						</div>
+						<div class="swatches" data-seg="clock-color" role="group" aria-label="Clock color">
+							<button type="button" data-value="#f2f4f3" style="--sw: #f2f4f3" aria-pressed="false" aria-label="White"></button>
+							<button type="button" data-value="#54dbc8" style="--sw: #54dbc8" aria-pressed="true" aria-label="Oxygen teal"></button>
+							<button type="button" data-value="#ff4d5e" style="--sw: #ff4d5e" aria-pressed="false" aria-label="Red"></button>
+							<button type="button" data-value="#ffc24d" style="--sw: #ffc24d" aria-pressed="false" aria-label="Amber"></button>
+							<button type="button" data-value="#b8a4ff" style="--sw: #b8a4ff" aria-pressed="false" aria-label="Lilac"></button>
+						</div>
+						<div class="toggles" role="group" aria-label="Statusbar extras">
+							<button class="toggle" type="button" data-toggle="chip" aria-pressed="false">Chip</button>
+							<button class="toggle" type="button" data-toggle="bar" aria-pressed="true">Battery bar</button>
+						</div>
+						<button class="pause" type="button" data-pause aria-pressed="false" aria-label="Pause preview" hidden>
+							<svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13M16 5.5v13" /></svg>
+							<svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.8v12.4L18 12 8 5.8Z" /></svg>
+						</button>
+					</div>
+				</div>
+
+				<div class="hero-copy">
+					<h1 id="hero-title">Tune OxygenOS down to the clock.</h1>
+					<div class="hero-side">
+						<p class="lede">
+							Oxygen Customizer is a free, open-source Xposed module for rooted OnePlus, OPPO and realme phones.
+							Move the clock, swap every statusbar icon, remap the Plus Key and rebuild Quick Settings, all without
+							flashing a new ROM.
+						</p>
+						<div class="cta">
+							<a class="btn" href="https://github.com/DHD2280/Oxygen-Customizer/releases">
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" /></svg>
+								<span data-download-label>Download</span>
+							</a>
+							<a class="btn-quiet" href="#install">Which build do I need?</a>
+						</div>
+					</div>
+				</div>
+
+				<dl class="stats" data-stats hidden>
+					<div>
+						<dt>GitHub stars</dt>
+						<dd data-stat="stars"></dd>
+					</div>
+					<div>
+						<dt>Release downloads</dt>
+						<dd data-stat="downloads"></dd>
+					</div>
+					<div>
+						<dt>Contributors</dt>
+						<dd data-stat="contributors"></dd>
+					</div>
+					<div>
+						<dt>Languages</dt>
+						<dd data-value="32">32</dd>
+					</div>
+				</dl>
+			</section>
+
+			<section id="icons" class="icons" aria-labelledby="icons-title">
+				<div class="head">
+					<h2 id="icons-title">Every statusbar icon, your pick.</h2>
+					<p>
+						These are the signal, <span class="nowrap">Wi-Fi</span> and battery styles shipped in the app, drawn from its own vector files.
+						Choose one to put it in the bar, then drag the strength slider to see how it reads on a weak
+						connection.
+					</p>
+				</div>
+
+				<div class="picker">
+					<div class="picker-preview">
+						<div class="screen screen-sm">
+							<div class="sb sb-sm" data-sb="picker" data-clock-pos="left">
+								<div class="sb-row" aria-hidden="true">
+									<div class="sb-start">
+										<span class="sb-clock-slot" data-slot-pos="left"><span class="sb-clock" data-clock>11:21</span></span>
+									</div>
+									<div class="sb-mid"></div>
+									<div class="sb-end">
+										<span class="sb-icon" data-part="wifi"></span>
+										<span class="sb-icon" data-part="signal"></span>
+										<span class="sb-icon sb-batt" data-part="battery"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<label class="level">
+							<span>Strength</span>
+							<input type="range" min="0" max="4" step="1" value="4" data-level />
+							<output data-level-out>Full</output>
+						</label>
+					</div>
+
+					<div class="tabs" role="tablist" aria-label="Icon type">
+						<button role="tab" id="tab-signal" aria-controls="panel-signal" aria-selected="true" data-tab="signal">
+							Signal <span data-count="signal">42</span>
+						</button>
+						<button role="tab" id="tab-wifi" aria-controls="panel-wifi" aria-selected="false" data-tab="wifi" tabindex="-1">
+							Wi-Fi <span data-count="wifi">19</span>
+						</button>
+						<button role="tab" id="tab-battery" aria-controls="panel-battery" aria-selected="false" data-tab="battery" tabindex="-1">
+							Battery <span data-count="battery">37</span>
+						</button>
+					</div>
+
+					<div class="panel" role="tabpanel" id="panel-signal" aria-labelledby="tab-signal">
+						<ul class="tiles" data-tiles="signal"></ul>
+					</div>
+					<div class="panel" role="tabpanel" id="panel-wifi" aria-labelledby="tab-wifi" hidden>
+						<ul class="tiles" data-tiles="wifi"></ul>
+					</div>
+					<div class="panel" role="tabpanel" id="panel-battery" aria-labelledby="tab-battery" hidden>
+						<ul class="tiles" data-tiles="battery"></ul>
+					</div>
+					<noscript><p class="noscript">Turn on JavaScript to browse the icon styles.</p></noscript>
+				</div>
+			</section>
+
+			<section id="features" class="features" aria-labelledby="features-title">
+				<div class="head">
+					<h2 id="features-title">Made for OxygenOS, not ported to it.</h2>
+					<p>
+						Most of what Oxygen Customizer changes only exists on OnePlus, OPPO and realme phones: the Now Bar,
+						the Plus Key, Pixelworks display chips and the OnePlus Launcher. These are the parts you will not find
+						in a generic Android customizer.
+					</p>
+				</div>
+
+				<div class="features-grid">
+					<article class="feature">
+						<p class="feature-where">Lockscreen</p>
+						<h3>Now Bar and Peek notifications</h3>
+						<p>
+							Turn the space between the lockscreen shortcuts into a live bar for music, battery, weather or your
+							latest notification. Tap the album art to open an extended player over blurred artwork. Peek
+							notifications add compact cards to the top or bottom of the lockscreen.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">Always On Display</p>
+						<h3>Edge light</h3>
+						<p>
+							Light up the screen edges when a notification arrives while the display sleeps, and pulse again
+							until you read it.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">Quick Settings</p>
+						<h3>Separate QS, laid out by you</h3>
+						<p>
+							Split Quick Settings from notifications, then place the media player, two highlight tiles and the
+							brightness and volume sliders where you want them. Add widgets for weather, photos, media, Wallet or
+							Home controls.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">Buttons and gestures</p>
+						<h3>A Plus Key that does what you want</h3>
+						<p>
+							Give the Plus Key its own action for single, double, triple and long press, with a separate set
+							while the screen is off. Hold the gesture bar for Circle to Search, add swipe-up shortcuts to the
+							bottom corners, and use the volume keys to wake the phone, skip tracks or toggle the torch.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">OnePlus Launcher</p>
+						<h3>Shelf, themed icons, real grids</h3>
+						<p>
+							Swap Discover for Shelf, force themed icons on home, drawer, folders, search and the taskbar, and
+							set your own grid for each.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">Display</p>
+						<h3>Pixelworks and Pocket Studio</h3>
+						<p>
+							Turn on MEMC and SDR to HDR for the apps and activities you pick, force-enable Pocket Studio and
+							apply App Lag Fix to single apps.
+						</p>
+					</article>
+
+					<article class="feature">
+						<p class="feature-where">Music</p>
+						<h3>Smart Pause and Fluid Music</h3>
+						<p>
+							Pause playback when you mute and resume it if you turn the sound back on in time. Choose which apps
+							get Fluid Music, and run the Pulse visualizer on the navbar, lockscreen or AOD.
+						</p>
+					</article>
+				</div>
+
+				<div class="also">
+					<h3>And the small things</h3>
+					<dl>
+						<div>
+							<dt>Red One clock</dt>
+							<dd>Recolor or turn off the red 1 in the OnePlus clock, on the lockscreen and in Quick Settings.</dd>
+						</div>
+						<div>
+							<dt>Statusbar logo</dt>
+							<dd>Put one of 33 logos, or your own image, next to the clock.</dd>
+						</div>
+						<div>
+							<dt>Fingerprint icon</dt>
+							<dd>Pick from 60 presets or use your own image, scaled to fit the sensor.</dd>
+						</div>
+						<div>
+							<dt>Sleep on flat</dt>
+							<dd>Turn the screen off when the phone lies face up, unless an app is keeping it awake.</dd>
+						</div>
+						<div>
+							<dt>Quieter shade</dt>
+							<dd>Hide the charging, developer mode, flashlight and low battery notifications.</dd>
+						</div>
+						<div>
+							<dt>Advanced reboot</dt>
+							<dd>Restart to recovery, bootloader or safe mode, behind a fingerprint or face check.</dd>
+						</div>
+						<div>
+							<dt>OTA card image</dt>
+							<dd>Replace the picture on the system update screen with your own.</dd>
+						</div>
+						<div>
+							<dt>Backup and restore</dt>
+							<dd>Export every setting to one file and bring it back after a clean flash.</dd>
+						</div>
+					</dl>
+				</div>
+			</section>
+
+			<section id="screens" class="screens" aria-labelledby="screens-title">
+				<div class="head">
+					<h2 id="screens-title">Looks like it shipped with the phone.</h2>
+					<p>
+						The app follows the OxygenOS settings layout, so every option sits where you expect it. Pure black on
+						AMOLED, one accent color, nothing extra.
+					</p>
+				</div>
+				<ul class="phones" data-strip>
+					<li>
+						<img src="assets/screens/home.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Home screen with UI style, notification style, corner radius and navbar style options" />
+						<p>UI styles and notification looks</p>
+					</li>
+					<li>
+						<img src="assets/screens/statusbar.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Statusbar settings with clock style, font size and extra padding" />
+						<p>Statusbar clock and padding</p>
+					</li>
+					<li>
+						<img src="assets/screens/qs.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Quick Settings with tile count, tile customization, widgets, Separate QS and blur" />
+						<p>Quick Settings, widgets and Separate QS</p>
+					</li>
+					<li>
+						<img src="assets/screens/header-image.webp" width="720" height="1608" loading="lazy" decoding="async" alt="QS header image settings with local image, tint, opacity and bottom fade" />
+						<p>QS header image, tint and fade</p>
+					</li>
+					<li>
+						<img src="assets/screens/header-clock.webp" width="720" height="1608" loading="lazy" decoding="async" alt="QS header clock picker showing a custom clock style with font and color options" />
+						<p>Custom QS header clocks</p>
+					</li>
+					<li>
+						<img src="assets/screens/gestures.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Gesture navigation settings with back gesture height per side, landscape and gesture pill options" />
+						<p>Back gesture and gesture pill</p>
+					</li>
+					<li>
+						<img src="assets/screens/launcher.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Launcher settings with home, folder and drawer layout, recents and themed icons" />
+						<p>OnePlus Launcher layouts and themed icons</p>
+					</li>
+					<li>
+						<img src="assets/screens/lockscreen.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Lockscreen settings with clock, weather, widgets, Now Bar and Peek notifications" />
+						<p>Lockscreen clock, widgets and Now Bar</p>
+					</li>
+					<li>
+						<img src="assets/screens/aod.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Always On Display settings with AOD clock, AOD weather and edge light" />
+						<p>AOD clock, weather and edge light</p>
+					</li>
+					<li>
+						<img src="assets/screens/sound.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Sound settings with Pulse, Fluid Music and Smart Pause" />
+						<p>Pulse, Fluid Music and Smart Pause</p>
+					</li>
+					<li>
+						<img src="assets/screens/misc.webp" width="720" height="1608" loading="lazy" decoding="async" alt="Miscellaneous settings to remove the rotate button and USB dialog and hide SOS in the power menu" />
+						<p>Rotate button, USB dialog and power menu</p>
+					</li>
+				</ul>
+				<div class="strip-nav" data-strip-nav hidden>
+					<button type="button" data-step="-1" aria-label="Previous screenshots">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" /></svg>
+					</button>
+					<button type="button" data-step="1" aria-label="Next screenshots">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
+					</button>
+				</div>
+			</section>
+
+			<section id="install" class="install" aria-labelledby="install-title">
+				<div class="head">
+					<h2 id="install-title">Set up in five steps.</h2>
+					<p>
+						You need root through Magisk, KernelSU or APatch, plus an LSPosed build that matches your OxygenOS
+						version. Other root or hook methods will not work.
+					</p>
+				</div>
+
+				<div class="builds">
+					<article class="build">
+						<h3>Stable</h3>
+						<p class="build-for">OxygenOS 13 and 14</p>
+						<p>Tested releases for older ROMs. Updates less often.</p>
+						<a href="https://github.com/DHD2280/Oxygen-Customizer/releases/latest">Latest stable</a>
+					</article>
+					<article class="build is-pick">
+						<h3>Beta</h3>
+						<p class="build-for">OxygenOS 15 and 16</p>
+						<p>Newer features and fixes. The minimum for ROMs based on OxygenOS 15.</p>
+						<a href="https://github.com/DHD2280/Oxygen-Customizer/releases">All releases</a>
+					</article>
+					<article class="build">
+						<h3>Nightly</h3>
+						<p class="build-for">Every push to the repo</p>
+						<p>What lands in the next beta, built automatically. Try it before reporting a bug.</p>
+						<a href="https://github.com/DHD2280/Oxygen-Customizer/actions/workflows/build_debug.yml">Nightly builds</a>
+					</article>
+				</div>
+
+				<div class="setup">
+					<div class="steps-wrap">
+						<div class="seg seg-wide" role="tablist" aria-label="Root method">
+							<button role="tab" id="root-magisk" aria-controls="steps-magisk" aria-selected="true">Magisk</button>
+							<button role="tab" id="root-ksu" aria-controls="steps-ksu" aria-selected="false" tabindex="-1">KernelSU or APatch</button>
+						</div>
+						<ol class="steps" id="steps-magisk" role="tabpanel" aria-labelledby="root-magisk">
+							<li>Install LSPosed for your OxygenOS version, then download and install Oxygen Customizer.</li>
+							<li>Enable the Oxygen Customizer module in the LSPosed manager.</li>
+							<li>Open the app and grant root access when Magisk asks.</li>
+							<li>Follow the setup screens and wait while it builds a module for your exact ROM.</li>
+							<li>Reboot when prompted. Your changes apply from the next boot.</li>
+						</ol>
+						<ol class="steps" id="steps-ksu" role="tabpanel" aria-labelledby="root-ksu" hidden>
+							<li>Install LSPosed for your OxygenOS version, then download and install Oxygen Customizer.</li>
+							<li>In the KernelSU or APatch manager, grant root to both Oxygen Customizer and System UI.</li>
+							<li>Turn off <em>Unmount modules</em> if your manager shows it. On KernelSU 3.0 or later, set up a meta module first.</li>
+							<li>Open the app and wait while it builds a module for your exact ROM.</li>
+							<li>Reboot when prompted. Your changes apply from the next boot.</li>
+						</ol>
+					</div>
+
+					<div class="lsposed">
+						<h3>Which LSPosed to use</h3>
+						<table>
+							<thead>
+								<tr>
+									<th scope="col">OxygenOS</th>
+									<th scope="col">Works with</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">14</th>
+									<td>Any LSPosed build</td>
+								</tr>
+								<tr>
+									<th scope="row">15</th>
+									<td>LSPosed IT, LSPosed Irena 7280+ with Zygisk Next 534+, or ReLSPosed 7200+ with ReZygisk CI</td>
+								</tr>
+								<tr>
+									<th scope="row">16</th>
+									<td>LSPosed IT, LSPosed Irena 7280+ with Zygisk Next 534+, or ReLSPosed 7200+ with ReZygisk CI</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="note">
+							On OxygenOS 15 .850 or later, bug reports from any other LSPosed build are closed. Download modules
+							only from their official pages.
+						</p>
+
+						<details class="meta">
+							<summary>KernelSU 3.0 and meta modules</summary>
+							<div class="meta-body">
+								<p>
+									KernelSU 3.0 no longer mounts modules by itself. Install
+									<a href="https://github.com/backslashxx/mountify">Mountify</a> (recommended),
+									<a href="https://github.com/7a72/meta-magic_mount/">Magic Mount</a> or
+									<a href="https://github.com/Hybrid-Mount/meta-hybrid_mount">Hybrid Mount</a>. Magic Mount needs
+									no setup. For Mountify, open its web UI and set:
+								</p>
+								<pre><code>mountify_mount = 2
+mount_device_name = KSU
+mountify_custom_umount = 2</code></pre>
+								<p>Use <code>mountify_custom_umount = 1</code> with susfs older than 2.0.0. Reboot, then install Oxygen Customizer.</p>
+							</div>
+						</details>
+					</div>
+				</div>
+			</section>
+
+			<section id="faq" class="faq" aria-labelledby="faq-title">
+				<div class="head">
+					<h2 id="faq-title">Before you ask in the group.</h2>
+				</div>
+				<div class="faq-list">
+					<details>
+						<summary>Does it need root?</summary>
+						<div class="faq-a"><p>Yes. Oxygen Customizer hooks System UI through LSPosed and installs a small module, so it needs Magisk, KernelSU or APatch.</p></div>
+					</details>
+					<details>
+						<summary>Which phones and ROMs does it support?</summary>
+						<div class="faq-a"><p>It targets OxygenOS 13 to 16 and ROMs based on it. ColorOS and realme UI share most of the code and mostly work, but they are not guaranteed.</p></div>
+					</details>
+					<details>
+						<summary>My phone bootloops after installing. What now?</summary>
+						<div class="faq-a"><p>Boot into <a href="https://www.androidauthority.com/how-to-enter-safe-mode-android-801476/">Safe Mode</a> and remove the module. On KernelSU and its forks, follow the <a href="https://kernelsu.org/guide/rescue-from-bootloop.html#brick-by-modules">rescue guide</a>.</p></div>
+					</details>
+					<details>
+						<summary>Can I use it with other customization apps?</summary>
+						<div class="faq-a"><p>Yes, but two apps changing the same part of the UI can conflict. If something looks wrong, turn off the overlapping option in one of them.</p></div>
+					</details>
+					<details>
+						<summary>What is the difference between release and nightly builds?</summary>
+						<div class="faq-a"><p>Release builds are optimized for everyday use. Nightly builds come from every commit and include the newest fixes along with extra logging for debugging.</p></div>
+					</details>
+					<details>
+						<summary>How do I report a bug or ask for a feature?</summary>
+						<div class="faq-a"><p>Update to the latest nightly first. Then open an <a href="https://github.com/DHD2280/Oxygen-Customizer/issues/new/choose">issue</a> with the Bug Report or Feature Request template and include your ROM, LSPosed build, steps to reproduce and logs.</p></div>
+					</details>
+				</div>
+			</section>
+		</main>
+
+		<footer class="foot">
+			<div class="foot-main">
+				<div class="foot-brand">
+					<img src="assets/icon.svg" width="48" height="48" alt="" />
+					<p>
+						Oxygen Customizer is developed by <a href="https://github.com/DHD2280">DHD2280</a> and its
+						<a href="https://github.com/DHD2280/Oxygen-Customizer/blob/beta/docs/contributors.md">contributors</a>, and
+						translated by the <a href="https://github.com/DHD2280/Oxygen-Customizer/blob/beta/docs/translators.md">community</a>.
+					</p>
+				</div>
+				<div class="foot-cols">
+					<div>
+						<h3>Community</h3>
+						<ul>
+							<li><a href="https://t.me/OxygenCustomizerGroup">Support group</a></li>
+							<li><a href="https://t.me/OxygenCustomizer">Update channel</a></li>
+							<li><a href="https://github.com/DHD2280/Oxygen-Customizer/issues">Issues</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3>Support the work</h3>
+						<ul>
+							<li><a href="https://www.paypal.me/luigifale">PayPal</a></li>
+							<li><a href="https://www.buymeacoffee.com/DHD2280">Buy me a coffee</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3>Thanks to</h3>
+						<ul>
+							<li><a href="https://github.com/siavash79/PixelXpert">PixelXpert</a></li>
+							<li><a href="https://github.com/Mahmud0808/Iconify">Iconify</a></li>
+							<li><a href="https://github.com/crdroidandroid">crDroid</a></li>
+							<li><a href="https://github.com/omnirom">OmniROM</a></li>
+							<li><a href="https://github.com/SuperiorExtended">SuperiorExtended</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<p class="foot-legal">
+				Licensed under <a href="https://github.com/DHD2280/Oxygen-Customizer/blob/beta/LICENSE.md">GPL-3.0</a>. Not affiliated
+				with OnePlus, OPPO or realme. Modifying system UI can cause issues on some ROM variants, so keep a way to remove the
+				module.
+			</p>
+		</footer>
+	</body>
+</html>
