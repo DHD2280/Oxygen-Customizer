@@ -1,0 +1,141 @@
+@font-face {
+	font-family: "Red Hat Display";
+	font-style: normal;
+	font-weight: 400 900;
+	font-display: swap;
+	src: url("fonts/red-hat-display-latin.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Red Hat Text";
+	font-style: normal;
+	font-weight: 300 700;
+	font-display: swap;
+	src: url("fonts/red-hat-text-latin.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Red Hat Mono";
+	font-style: normal;
+	font-weight: 300 700;
+	font-display: swap;
+	src: url("fonts/red-hat-mono-latin.woff2") format("woff2");
+}
+
+:root {
+	color-scheme: dark;
+
+	--page: #000000;
+	--surface: #0d1110;
+	--surface-2: #141a19;
+	--surface-3: #1c2322;
+	--ink: #e4e9e7;
+	--ink-2: #bec9c5;
+	--muted: #87928f;
+	--rule: #2b3433;
+	--rule-2: #182020;
+	--scroll-thumb: #3a4745;
+	--glass: rgb(28 34 33 / 0.62);
+	--glass-edge: rgb(255 255 255 / 0.075);
+	--glass-shine: rgb(255 255 255 / 0.06);
+
+	--teal: #54dbc8;
+	--teal-strong: #74f8e4;
+	--teal-deep: #005048;
+	--on-teal: #00201c;
+	--teal-wash: rgb(84 219 200 / 0.1);
+	--slate: #2f3b49;
+	--silver: #cac9c9;
+	--focus: #74f8e4;
+
+	--screen: #000000;
+	--screen-ink: #f2f4f3;
+
+	--font-display: "Red Hat Display", ui-sans-serif, system-ui, sans-serif;
+	--font-body: "Red Hat Text", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Red Hat Mono", ui-monospace, "SFMono-Regular", monospace;
+
+	--text-xs: 0.8125rem;
+	--text-sm: 0.9375rem;
+	--text-base: 1.0625rem;
+	--text-md: 1.1875rem;
+	--text-lg: 1.375rem;
+	--text-xl: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
+	--text-2xl: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
+	--text-hero: clamp(2.75rem, 1.4rem + 4.4vw, 5.5rem);
+
+	--space-3xs: 0.25rem;
+	--space-2xs: 0.5rem;
+	--space-xs: 0.75rem;
+	--space-sm: 1rem;
+	--space-md: 1.5rem;
+	--space-lg: 2rem;
+	--space-xl: 3rem;
+	--space-2xl: 5rem;
+	--space-3xl: clamp(5rem, 3rem + 7vw, 9rem);
+
+	--gutter: clamp(1rem, 4vw, 2.5rem);
+	--page-w: min(76rem, 100% - 2 * var(--gutter));
+
+	--radius-sm: 0.75rem;
+	--radius-md: 1.25rem;
+	--radius-lg: 2rem;
+	--radius-pill: 999px;
+
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+	--dur-short: 160ms;
+	--dur-med: 260ms;
+}
+
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme="dark"]) {
+		color-scheme: light;
+
+		--page: #f3f6f5;
+		--surface: #ffffff;
+		--surface-2: #eaf0ee;
+		--surface-3: #dde6e3;
+		--ink: #121716;
+		--ink-2: #3f4946;
+		--muted: #5f6a67;
+		--rule: #c8d3d0;
+		--rule-2: #e3eae8;
+		--scroll-thumb: #b4c0bd;
+		--glass: rgb(255 255 255 / 0.66);
+		--glass-edge: rgb(0 0 0 / 0.07);
+		--glass-shine: rgb(255 255 255 / 0.8);
+
+		--teal: #006b5f;
+		--teal-strong: #005048;
+		--teal-deep: #74f8e4;
+		--on-teal: #ffffff;
+		--teal-wash: rgb(0 107 95 / 0.08);
+		--focus: #006b5f;
+	}
+}
+
+:root[data-theme="light"] {
+	color-scheme: light;
+
+	--page: #f3f6f5;
+	--surface: #ffffff;
+	--surface-2: #eaf0ee;
+	--surface-3: #dde6e3;
+	--ink: #121716;
+	--ink-2: #3f4946;
+	--muted: #5f6a67;
+	--rule: #c8d3d0;
+	--rule-2: #e3eae8;
+	--scroll-thumb: #b4c0bd;
+	--glass: rgb(255 255 255 / 0.66);
+	--glass-edge: rgb(0 0 0 / 0.07);
+	--glass-shine: rgb(255 255 255 / 0.8);
+
+	--teal: #006b5f;
+	--teal-strong: #005048;
+	--teal-deep: #74f8e4;
+	--on-teal: #ffffff;
+	--teal-wash: rgb(0 107 95 / 0.08);
+	--focus: #006b5f;
+}
