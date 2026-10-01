@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dhd2280.github.io/Oxygen-Customizer/sitemap.xml
