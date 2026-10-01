@@ -73,6 +73,13 @@ public class NotificationVanillaIceCream extends XposedMods {
                         String className = v != null ? v.getClass().getName() : "";
                         if (v != null &&
                                 capsulePattern.matcher(className).find()) return;
+                        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+                            if ("com.oplus.systemui.statusbar.notification.customcard.OplusCustomRowControllerManager"
+                                    .equals(ste.getClassName())
+                                    && "setCustomContainerControllerList".equals(ste.getMethodName())) {
+                                return;
+                            }
+                        }
                         param.setResult(null);
                     }
                 });
