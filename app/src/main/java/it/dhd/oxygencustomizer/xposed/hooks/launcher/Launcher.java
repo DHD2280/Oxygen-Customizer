@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class Launcher extends XposedMods {
     private String mCustomPageIndicatorTapInt = "app:it.dhd.oxygencustomizer";
 
     private boolean mSearchDisableGB, mSearchKeyboard, mSearchEnter;
+    private boolean mAutoCloseFolder = false;
 
     private View OplusFastScroll;
 
@@ -104,6 +106,7 @@ public class Launcher extends XposedMods {
         mSearchDisableGB = Xprefs.getBoolean("searchbar_disable_globalsearch", false);
         mSearchKeyboard = Xprefs.getBoolean("searchbar_show_keyboard", false);
         mSearchEnter = Xprefs.getBoolean("searchbar_enter_to_open", false);
+        mAutoCloseFolder = Xprefs.getBoolean("auto_close_folder", false);
 
         // shelf behavior
         mCustomShelfBehavior = Xprefs.getBoolean("launcher_custom_shelf_switch", false);
@@ -631,6 +634,40 @@ public class Launcher extends XposedMods {
                         return true;
                     });
                 });
+
+        ReflectedClass AbstractFloatingView = ReflectedClass.ofIfPossible("com.android.launcher3.AbstractFloatingView");
+        AbstractFloatingView
+                .before("closeOpenViews")
+                .run(param -> {
+                    if (!mAutoCloseFolder) return;
+                    if (param.args.length != 4) return;
+                    if (!(param.args[1] instanceof Boolean) || !(param.args[2] instanceof Integer))
+                        return;
+
+                    boolean animate = (Boolean) param.args[1];
+                    int type = (Integer) param.args[2];
+
+                    int typeFolder = getStaticIntField(AbstractFloatingView.getClazz(), "TYPE_FOLDER");
+
+                    if ((type & typeFolder) == 0) return;
+
+                    Object activityContext = param.args[0];
+                    Object dragLayerObj = callMethod(activityContext, "getDragLayer");
+
+                    if (!(dragLayerObj instanceof ViewGroup dragLayer)) return;
+
+                    for (int i = 0; i < dragLayer.getChildCount(); i++) {
+                        View child = dragLayer.getChildAt(i);
+
+                        if (!AbstractFloatingView.getClazz().isInstance(child)) continue;
+
+                        Object isFolderObj = callMethod(child, "isOfType", typeFolder);
+                        if (Boolean.TRUE.equals(isFolderObj)) {
+                            callMethod(child, "close", animate);
+                        }
+                    }
+                });
+
     }
 
     private void launchFirstResult(Object launcher) throws Throwable {

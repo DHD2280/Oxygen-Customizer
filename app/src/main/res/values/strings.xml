@@ -776,6 +776,8 @@
     <string name="searchbar_open_keyboard_summary">Open the keyboard on swiping up on your home screen to search</string>
     <string name="searchbar_enter_to_open_title">Enter to open</string>
     <string name="searchbar_enter_to_open_summary">Press Enter to open the first item in search</string>
+    <string name="auto_close_folder_title">Auto close folders</string>
+    <string name="auto_close_folder_summary">Automatically close folders after opening an app</string>
 
     <!-- NavBar Strings -->
     <string name="navbar_title">Navigation Bar</string>

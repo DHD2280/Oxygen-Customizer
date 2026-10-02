@@ -58,4 +58,14 @@
             app:iconSpaceReserved="false" />
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="auto_close_folder"
+            android:summary="@string/auto_close_folder_summary"
+            android:title="@string/auto_close_folder_title"
+            app:iconSpaceReserved="false" />
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
 </PreferenceScreen>
