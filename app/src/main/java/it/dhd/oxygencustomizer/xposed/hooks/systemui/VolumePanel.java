@@ -138,37 +138,37 @@ public class VolumePanel extends XposedMods {
             ReflectedClass OplusQsVolumeController = ReflectedClass.of("com.oplus.systemui.qs.slider.OplusQsVolumeController");
             OplusQsVolumeController
                     .afterConstruction()
-                            .run(param -> {
-                                try {
-                                    Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
-                                    hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
-                                        @Override
-                                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                            if (mDisableVolumeWarning) {
-                                                param.setResult(null);
-                                            }
-                                        }
-                                    });
-                                } catch (Throwable t) {
-                                    log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
+                    .run(param -> {
+                        try {
+                            Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
+                            hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
+                                @Override
+                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                                    if (mDisableVolumeWarning) {
+                                        param.setResult(null);
+                                    }
                                 }
                             });
+                        } catch (Throwable t) {
+                            log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
+                        }
+                    });
         } catch (Throwable t) {
             log("Error OplusQsVolumeController: " + t.getMessage());
         }
 
         OplusVolumeDialogImpl
                 .afterConstruction()
-                        .run(param -> OVDI = param.thisObject);
+                .run(param -> OVDI = param.thisObject);
 
         OplusVolumeDialogImpl
                 .after("initRow")
-                        .run(param -> {
-                            if (!sliderCustomizable) return;
-                            Object VolumeRow = param.args[0];
-                            Object slider = getObjectField(VolumeRow, "slider");
-                            hookVolume(slider);
-                        });
+                .run(param -> {
+                    if (!sliderCustomizable) return;
+                    Object VolumeRow = param.args[0];
+                    Object slider = getObjectField(VolumeRow, "slider");
+                    hookVolume(slider);
+                });
 
         ReflectedClass OplusVolumeRow = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.view.OplusVolumeRow");
         OplusVolumeRow
@@ -187,8 +187,7 @@ public class VolumePanel extends XposedMods {
                     try {
                         Object blurDrawable = callMethod(param.thisObject, "getBackgroundBlurDrawable");
                         callMethod(blurDrawable, "setColor", volumeBgColor);
-                    } catch (Throwable t) {
-                        log(t);
+                    } catch (Throwable ignored) {
                     }
                 });
 
