@@ -1,8 +1,5 @@
 package com.oplusos.systemui.common.blurability
 
-import java.lang.Boolean
-import java.lang.Float
-
 
 class BlurConfig(
     var blurRadius: Int,
