@@ -99,7 +99,7 @@ Thanks to these translators and proofreaders, this project exists:
           <br />
           <sub><b>Quân Xinh Tươi (chetaoquocte)</b></sub></a>
         <br />
-        <sub><b>2197 words</b></sub>
+        <sub><b>2316 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
@@ -174,14 +174,21 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>235 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/luigimak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14047242/medium/ed318c8597ebed1bd6839d1f819f1766.jpeg" />
+          <br />
+          <sub><b>Luigi Maccarrone (luigimak)</b></sub></a>
+        <br />
+        <sub><b>192 words</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Czak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/16485797/medium/1f83cf36d385b6dda97fd604bc4ea3b8.jpg" />
           <br />
           <sub><b>Czak</b></sub></a>
         <br />
         <sub><b>182 words</b></sub>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/pasqui1978"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12888356/medium/6acbbcf3a0210a00a50064c3ddddb73c.jpg" />
           <br />
@@ -209,13 +216,6 @@ Thanks to these translators and proofreaders, this project exists:
           <sub><b>wasao0807</b></sub></a>
         <br />
         <sub><b>126 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/luigimak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14047242/medium/ed318c8597ebed1bd6839d1f819f1766.jpeg" />
-          <br />
-          <sub><b>Luigi Maccarrone (luigimak)</b></sub></a>
-        <br />
-        <sub><b>122 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/serge.croise"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15460260/medium/5068dd643cc47609c74d82a8430cf682.png" />
