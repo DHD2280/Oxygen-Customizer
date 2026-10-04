@@ -389,6 +389,7 @@
     <string name="battery_text_attach_to_batterybar">Attach to Battery Bar</string>
     <string name="battery_text_attach_to_batterybar_summary">Attach text color to Battery Bar colors</string>
     <string name="battery_text_enable_bb_first">Enable Battery Bar first</string>
+    <string name="battery_remove_percentage">Remove % symbol in percentage text</string>
 
     <!-- Battery Icon Styles -->
     <string name="battery_default">Default</string>

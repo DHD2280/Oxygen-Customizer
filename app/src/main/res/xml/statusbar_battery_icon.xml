@@ -218,6 +218,14 @@
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
+            android:key="stock_remove_percentage_symbol"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/battery_remove_percentage"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
             android:key="battery_text_color_batterybar"
             android:summary="@string/battery_text_attach_to_batterybar_summary"
             android:title="@string/battery_text_attach_to_batterybar"
