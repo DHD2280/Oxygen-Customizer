@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.ui.fragments;
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.AppUtils.restartApplication;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -27,9 +28,11 @@ import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.SplashActivity;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.AppUtils;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.PrefManager;
 import it.dhd.oxygencustomizer.utils.UpdateScheduler;
 
@@ -44,6 +47,8 @@ public class Settings extends ControlledPreferenceFragmentCompat {
     // Updater Prefs
     private OplusJumpPreference updatePref;
     private OplusSwitchPreference autoUpdatePref;
+
+    private OplusJumpPreference handleInstallation;
 
     boolean export = true;
 
@@ -86,6 +91,7 @@ public class Settings extends ControlledPreferenceFragmentCompat {
         creditsPref = findPreference("credits");
         updatePref = findPreference("updates");
         autoUpdatePref = findPreference("autoUpdate");
+        handleInstallation = findPreference("handleInstallation");
         supportGroupPref = findPreference("SupportGroup");
         translatePref = findPreference("translate");
 
@@ -163,6 +169,20 @@ public class Settings extends ControlledPreferenceFragmentCompat {
                 if ((boolean) newValue) {
                     UpdateScheduler.scheduleUpdateNow(requireContext());
                 }
+                return true;
+            });
+        }
+
+        if (handleInstallation != null) {
+            handleInstallation.setVisible(OCPreferences.getBoolean(XPOSED_ONLY_MODE, false));
+            handleInstallation.setOnPreferenceClickListener(preference -> {
+                OCPreferences.clear(XPOSED_ONLY_MODE);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    Intent intent = new Intent(requireActivity(), SplashActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    requireActivity().finish();
+                    requireActivity().startActivity(intent);
+                }, 600);
                 return true;
             });
         }

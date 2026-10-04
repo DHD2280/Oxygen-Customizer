@@ -49,6 +49,11 @@
     <string name="installation_failed_desc">Logs have been saved in documents folder.</string>
     <string name="logs">Logs</string>
     <string name="toast_skipped_installation">Installation skipped. Some features may not function properly.</string>
+    <string name="installation_mode_title">Installation mode</string>
+    <string name="installation_full_title">Full installation</string>
+    <string name="installation_xposed_title">Xposed Only</string>
+    <string name="installation_full_summary">Install the overlay module.\nSuggested</string>
+    <string name="installation_xposed_summary">Avoid the installation of the module and use only Xposed tweaks and customizations.\nLimited features in theming.</string>
 
     <!-- Buttons -->
     <string name="btn_select">Select</string>
@@ -66,6 +71,7 @@
 
     <!-- Dialogs -->
     <string name="installing">Installing</string>
+    <string name="uninstalling">Uninstalling</string>
     <string name="loading_dialog_wait">Please Wait</string>
     <string name="optimizing">Optimizing</string>
 
@@ -1242,6 +1248,8 @@
     <string name="import_failed">Import failed</string>
     <string name="more_logging_title">More logging</string>
     <string name="more_logging_summary">Enable more logging.\nThis can help when sending Bug Reports.</string>
+    <string name="handle_installation">Handle installation</string>
+    <string name="handle_installation_summary">Restart the app and handle module installation.</string>
     <string name="settings_about_section_title">About</string>
     <string name="github_repo_title">GitHub repository</string>
     <string name="github_repo_summary" translatable="false">DHD22800/OxygenCustomizer</string>

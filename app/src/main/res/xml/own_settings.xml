@@ -53,6 +53,12 @@
             android:title="@string/more_logging_title"
             app:icon="@drawable/ic_logging" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:key="handleInstallation"
+            android:summary="@string/handle_installation_summary"
+            android:title="@string/handle_installation"
+            app:icon="@drawable/ic_install" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory

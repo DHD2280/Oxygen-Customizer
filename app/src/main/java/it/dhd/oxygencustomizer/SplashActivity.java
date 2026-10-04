@@ -4,12 +4,9 @@ import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.google.android.material.color.DynamicColors;
@@ -18,9 +15,8 @@ import com.topjohnwu.superuser.Shell;
 import it.dhd.oneplusui.appcompat.app.OplusActivity;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.activity.OnboardingActivity;
-import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
-import it.dhd.oxygencustomizer.utils.Prefs;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
 
@@ -48,21 +44,22 @@ public class SplashActivity extends OplusActivity {
         boolean isRooted = RootUtil.deviceProperlyRooted();
         boolean isModuleInstalled = ModuleUtil.moduleExists();
         boolean isOverlayInstalled = OverlayUtil.overlayExists();
-        boolean isXposedOnlyMode = Prefs.getBoolean(XPOSED_ONLY_MODE, false);
+        boolean isXposedOnlyMode = OCPreferences.getBoolean(XPOSED_ONLY_MODE, false);
         boolean isVersionCodeCorrect = ModuleUtil.checkModuleVersion(OxygenCustomizer.getAppContext());
 
-        if (isRooted) {
-            if (isOverlayInstalled) {
-                Prefs.putBoolean(XPOSED_ONLY_MODE, false);
-            } else if (isModuleInstalled) {
-                Prefs.putBoolean(XPOSED_ONLY_MODE, true);
-                isXposedOnlyMode = true;
-            }
-        }
+        boolean isSetupComplete = isXposedOnlyMode || (isModuleInstalled && isOverlayInstalled);
 
-        boolean isModuleProperlyInstalled = isModuleInstalled && (isOverlayInstalled || isXposedOnlyMode);
+        boolean isVersionValid = isXposedOnlyMode || isVersionCodeCorrect;
 
-        if (SKIP_INSTALLATION || (isRooted && isModuleProperlyInstalled && isVersionCodeCorrect)) {
+        Log.d("SplashActivity", "isRooted: " + isRooted + ",\n" +
+                " isModuleInstalled: " + isModuleInstalled + ",\n" +
+                " isOverlayInstalled: " + isOverlayInstalled + ",\n" +
+                " isXposedOnlyMode: " + isXposedOnlyMode + ",\n" +
+                " isVersionCodeCorrect: " + isVersionCodeCorrect + ",\n" +
+                " isSetupComplete: " + isSetupComplete + ",\n" +
+                " isVersionValid: " + isVersionValid);
+
+        if (SKIP_INSTALLATION || (isRooted && isSetupComplete && isVersionValid)) {
             keepShowing = false;
             intent = new Intent(SplashActivity.this, MainActivity.class);
             Log.i("SplashActivity", "Starting MainActivity with intentKey: " + intentKey);
