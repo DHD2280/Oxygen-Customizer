@@ -1,5 +1,7 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.misc.memc;
 
+import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
+
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,13 +18,13 @@ import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentMemcBinding;
-import it.dhd.oxygencustomizer.ui.adapters.MemcCollectionAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
 
 public class MemcConfigurationFragment extends BaseFragment {
@@ -114,6 +116,39 @@ public class MemcConfigurationFragment extends BaseFragment {
         } else {
             binding.addButton.setText(R.string.add_activity);
         }
+    }
+
+    private static class MemcCollectionAdapter extends FragmentStateAdapter {
+
+        public MemcCollectionAdapter(Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            Fragment fragment;
+            if (position == 0) {
+                fragment = new MemcApplicationsFragment();
+            } else {
+                fragment = new MemcActivitiesFragment();
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+
+        public String getTitle(int position) {
+            if (position == 0) {
+                return getAppContext().getString(R.string.applications);
+            } else {
+                return getAppContext().getString(R.string.activities);
+            }
+        }
+
     }
 
 }
