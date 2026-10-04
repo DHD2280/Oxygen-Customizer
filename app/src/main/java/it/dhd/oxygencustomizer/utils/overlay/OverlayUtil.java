@@ -113,6 +113,10 @@ public class OverlayUtil {
         Shell.cmd(command.toString().trim()).submit();
     }
 
+    public static void disableOverlays(List<String> overlays) {
+        disableOverlays(overlays.toArray(new String[0]));
+    }
+
     public static void changeOverlayState(Object... args) {
         if (args.length % 2 != 0) {
             throw new IllegalArgumentException("Number of arguments must be even.");

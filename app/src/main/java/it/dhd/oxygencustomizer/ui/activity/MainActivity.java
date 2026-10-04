@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.activity;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.fragments.UpdateFragment.UPDATES_CHANNEL_ID;
+import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -36,17 +37,17 @@ import it.dhd.oxygencustomizer.ui.base.BaseActivity;
 import it.dhd.oxygencustomizer.ui.events.ColorDismissedEvent;
 import it.dhd.oxygencustomizer.ui.events.ColorSelectedEvent;
 import it.dhd.oxygencustomizer.ui.fragments.Hooks;
-import it.dhd.oxygencustomizer.ui.fragments.mods.Misc;
 import it.dhd.oxygencustomizer.ui.fragments.Mods;
 import it.dhd.oxygencustomizer.ui.fragments.Settings;
 import it.dhd.oxygencustomizer.ui.fragments.UpdateFragment;
 import it.dhd.oxygencustomizer.ui.fragments.UserInterface;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Buttons;
-import it.dhd.oxygencustomizer.ui.fragments.mods.launcher.Launcher;
+import it.dhd.oxygencustomizer.ui.fragments.mods.Misc;
 import it.dhd.oxygencustomizer.ui.fragments.mods.Statusbar;
 import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
 import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodClock;
 import it.dhd.oxygencustomizer.ui.fragments.mods.aod.AodWeather;
+import it.dhd.oxygencustomizer.ui.fragments.mods.launcher.Launcher;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.Lockscreen;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment;
 import it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenWeather;
@@ -64,6 +65,8 @@ import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceR
 import it.dhd.oxygencustomizer.ui.preferences.preferencesearch.SearchPreferenceResultListener;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.ModuleUtil;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.ShortcutUtils;
 import it.dhd.oxygencustomizer.utils.overlay.OverlayUtil;
@@ -92,7 +95,7 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         createChannels();
 
         if (savedInstanceState == null) {
-            replaceFragment(!OverlayUtil.overlayExists() ?
+            replaceFragment(OCPreferences.getBoolean(XPOSED_ONLY_MODE, false) ?
                     new Mods() :
                     new UserInterface());
         } else {
@@ -178,7 +181,10 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
 
     @SuppressLint("NonConstantResourceId")
     private void setupBottomNavigationView() {
-        if (!OverlayUtil.overlayExists()) {
+        boolean isOverlayOk = ModuleUtil.moduleExists() &&
+                OverlayUtil.overlayExists() &&
+                !OCPreferences.getBoolean(XPOSED_ONLY_MODE, false);
+        if (!isOverlayOk) {
             binding.bottomNavigationView.getMenu().clear();
             binding.bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_xposed_only);
         }
@@ -190,16 +196,16 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
                 binding.bottomNavigationView.getMenu().getItem(0).setChecked(true);
             } else if (Objects.equals(tag, Mods.class.getSimpleName())) {
                 selectedFragment = R.id.mods;
-                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 0 : 1).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!isOverlayOk ? 0 : 1).setChecked(true);
             } else if (Objects.equals(tag, UpdateFragment.class.getSimpleName())) {
                 selectedFragment = R.id.updates;
-                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 1 : 2).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!isOverlayOk ? 1 : 2).setChecked(true);
             } else if (Objects.equals(tag, Hooks.class.getSimpleName())) {
                 selectedFragment = R.id.hooks;
-                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 2 : 3).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!isOverlayOk ? 2 : 3).setChecked(true);
             } else if (Objects.equals(tag, Settings.class.getSimpleName())) {
                 selectedFragment = R.id.settings;
-                binding.bottomNavigationView.getMenu().getItem(!OverlayUtil.overlayExists() ? 3 : 4).setChecked(true);
+                binding.bottomNavigationView.getMenu().getItem(!isOverlayOk ? 3 : 4).setChecked(true);
             }
         });
 

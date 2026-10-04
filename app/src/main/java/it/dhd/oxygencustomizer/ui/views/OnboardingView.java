@@ -1,8 +1,6 @@
 package it.dhd.oxygencustomizer.ui.views;
 
-import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
 import static it.dhd.oxygencustomizer.utils.Dynamic.skippedInstallation;
-import static it.dhd.oxygencustomizer.utils.ModuleConstants.TRANSITION_DELAY;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 import static it.dhd.oxygencustomizer.utils.helper.Logger.writeLog;
 
@@ -16,13 +14,17 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -33,12 +35,14 @@ import com.airbnb.lottie.RenderMode;
 import com.airbnb.lottie.SimpleColorFilter;
 import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.topjohnwu.superuser.Shell;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import it.dhd.oneplusui.appcompat.dialog.adapter.ChoiceListAdapter;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ViewOnboardingPageBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
@@ -52,6 +56,7 @@ import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.FileUtil;
 import it.dhd.oxygencustomizer.utils.ModuleConstants;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
+import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.Prefs;
 import it.dhd.oxygencustomizer.utils.RootUtil;
 import it.dhd.oxygencustomizer.utils.extension.TaskExecutor;
@@ -65,30 +70,34 @@ public class OnboardingView extends FrameLayout {
     private static ViewOnboardingPageBinding binding;
     private static final String TAG = OnboardingView.class.getSimpleName();
     private int numberOfPages;
-    private static boolean isClickable = true;
     private static boolean clickedContinue = false;
     private static boolean hasErroredOut = false;
     private static StartInstallationProcess installModule = null;
     private InstallationDialog progressDialog;
     private String logger = null, prev_log = null;
+    private final Context mContext;
 
     public OnboardingView(@NonNull Context context) {
         super(context);
+        mContext = context;
         initialize(context, null, 0, 0);
     }
 
     public OnboardingView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         initialize(context, attrs, 0, 0);
     }
 
     public OnboardingView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
         initialize(context, attrs, defStyleAttr, 0);
     }
 
     public OnboardingView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        mContext = context;
         initialize(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -136,7 +145,6 @@ public class OnboardingView extends FrameLayout {
         binding.nextBtn.setOnClickListener(view -> navigateToNextSlide());
         binding.skipBtn.setOnClickListener(view -> navigateToLastSlide());
         binding.startBtn.setOnClickListener(view -> startOnClickActions());
-        binding.startBtn.setOnLongClickListener(view -> startOnLongClickActions());
     }
 
     private void navigateToNextSlide() {
@@ -187,75 +195,116 @@ public class OnboardingView extends FrameLayout {
     }
 
     private void startOnClickActions() {
-        if (!isClickable) return;
 
-        isClickable = false;
         skippedInstallation = false;
         hasErroredOut = false;
 
         if (!canContinue()) return;
 
+        Log.d(TAG, "Starting installation process");
+        askInstallation();
 
-        Shell.getShell(shell -> {
-            boolean moduleExists = ModuleUtil.moduleExists();
-            boolean overlayExists = OverlayUtil.overlayExists();
-
-            if (!ModuleUtil.checkModuleVersion(getAppContext()) || !moduleExists || !overlayExists) {
-                handleInstallation();
-            } else {
-                Prefs.putBoolean(XPOSED_ONLY_MODE, false);
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
-                Animatoo.animateSlideLeft(getContext());
-            }
-        });
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> isClickable = true, TRANSITION_DELAY + 50);
     }
 
-    private boolean startOnLongClickActions() {
-        skippedInstallation = true;
-        hasErroredOut = false;
+    private void askInstallation() {
+        Log.d(TAG, "Asking user for installation mode");
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext)
+                .setTitle(R.string.installation_mode_title)
+                .setCancelable(false)
+                .setAdapter(new ChoiceListAdapter(
+                        mContext,
+                        R.layout.oplus_select_dialog_singlechoice,
+                        new CharSequence[]{mContext.getString(R.string.installation_full_title), mContext.getString(R.string.installation_xposed_title)},
+                        new CharSequence[]{mContext.getString(R.string.installation_full_summary), mContext.getString(R.string.installation_xposed_summary)},
+                        new boolean[]{true, false},
+                        false
+                ) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        View divider = view.findViewById(it.dhd.oneplusui.R.id.item_divider);
+                        int count = getCount();
+                        if (divider != null) {
+                            divider.setVisibility((count != 1 && position != count - 1) ? View.VISIBLE : View.GONE);
+                        }
+                        return view;
+                    }
+                }, (dialogInterface, which) -> {
+                    boolean xposedOnly = (which != 0);
+                    OCPreferences.putBoolean(XPOSED_ONLY_MODE, xposedOnly);
 
-        Shell.getShell(shell -> {
-            if (!canContinue()) return;
-            if (!ModuleUtil.moduleExists()) {
-                handleInstallation();
-            } else {
-                Prefs.putBoolean(XPOSED_ONLY_MODE, true);
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
-                Animatoo.animateSlideLeft(getContext());
-                Toast.makeText(getContext(), R.string.toast_skipped_installation, Toast.LENGTH_LONG).show();
-            }
-        });
-        return true;
+                    if (xposedOnly) {
+                        if (true) {//ModuleUtil.moduleExists()) {
+                            // Module installed but xposed only ==> let's remove it
+                            handleModuleRemoval();
+                        } else {
+                            // who cares skip to main
+                            launchMainActivity();
+                        }
+                    } else {
+                        skippedInstallation = false;
+                        handleInstallation();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setWindowAnimations(it.dhd.oneplusui.R.style.DialogAnimation);
+        }
+        dialog.show();
+    }
+
+    private void launchMainActivity() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(intent);
+        Animatoo.animateSlideLeft(getContext());
     }
 
     private void handleInstallation() {
         LottieCompositionFactory.fromRawRes(getContext(), R.raw.loading_anim).addListener(result -> {
-            binding.loadingAnim.setMaxWidth(binding.startBtn.getHeight());
-            binding.loadingAnim.setMaxHeight(binding.startBtn.getHeight());
-            binding.loadingAnim.setAnimation(R.raw.loading_anim);
-            binding.loadingAnim.setRenderMode(RenderMode.HARDWARE);
-            binding.loadingAnim.setVisibility(LottieAnimationView.VISIBLE);
-            binding.startBtn.setTextColor(Color.TRANSPARENT);
+            startLottieAnimation();
 
-            installModule = new StartInstallationProcess();
+            installModule = new StartInstallationProcess(true);
             installModule.execute();
         });
     }
 
+    private void handleModuleRemoval() {
+        LottieCompositionFactory.fromRawRes(getContext(), R.raw.loading_anim).addListener(result -> {
+            startLottieAnimation();
+
+            installModule = new StartInstallationProcess(false);
+            installModule.execute();
+        });
+    }
+
+    private void startLottieAnimation() {
+        binding.loadingAnim.setMaxWidth(binding.startBtn.getHeight());
+        binding.loadingAnim.setMaxHeight(binding.startBtn.getHeight());
+        binding.loadingAnim.setAnimation(R.raw.loading_anim);
+        binding.loadingAnim.setRenderMode(RenderMode.HARDWARE);
+        binding.loadingAnim.setVisibility(LottieAnimationView.VISIBLE);
+        binding.startBtn.setTextColor(Color.TRANSPARENT);
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class StartInstallationProcess extends TaskExecutor<Void, Integer, Integer> {
+
+        // if install false then remove the module so we can only have one task executor
+        boolean install = true;
+
+        public StartInstallationProcess(boolean install) {
+            this.install = install;
+        }
+
         @SuppressLint("SetTextI18n")
         @Override
         protected void onPreExecute() {
             binding.startBtn.setText(R.string.btn_lets_go);
 
-            progressDialog.show(getResources().getString(R.string.installing), getResources().getString(R.string.init_module_installation));
+            progressDialog.show(getResources().getString(install ? R.string.installing : R.string.uninstalling), getResources().getString(R.string.init_module_installation));
         }
 
         @SuppressLint("SetTextI18n")
@@ -276,8 +325,11 @@ public class OnboardingView extends FrameLayout {
                     case 6 -> getResources().getString(R.string.module_installation_step6);
                     default -> getResources().getString(R.string.loading_dialog_wait);
                 };
+                String titleUninstall = getResources().getString(R.string.step) +
+                        (value == 0 ? " 0" : "1") + "/1";
+                String descUninstall = getResources().getString(R.string.uninstalling) + "...";
 
-                progressDialog.setMessage(title, desc);
+                progressDialog.setMessage(install ? title : titleUninstall, install ? desc : descUninstall);
 
                 if (logger != null && !Objects.equals(prev_log, logger)) {
                     progressDialog.setLogs(logger);
@@ -289,6 +341,36 @@ public class OnboardingView extends FrameLayout {
         @Override
         protected Integer doInBackground(Void... voids) {
             int step = 0;
+
+            if (!install) {
+                logger = "I: Removing module";
+                publishProgress(++step);
+                waiter(1000);
+                ModuleUtil.handleModuleUninstall();
+
+                waiter(1000);
+                logger = "Module uninstalled";
+                publishProgress(++step);
+                waiter(1000);
+
+                logger = "Closing in...";
+                publishProgress(++step);
+                waiter(1000);
+
+                logger = "3...";
+                publishProgress(++step);
+                waiter(1000);
+
+                logger = "2..";
+                publishProgress(++step);
+                waiter(1000);
+
+                logger = "1.";
+                publishProgress(++step);
+                waiter(1000);
+
+                return null;
+            }
 
             logger = "I: Creating blank module template";
             publishProgress(++step);
@@ -488,7 +570,19 @@ public class OnboardingView extends FrameLayout {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         protected void onPostExecute(Integer integer) {
+            Log.d(TAG, "Installation process finished onPostExecute");
             progressDialog.hide();
+
+            if (!install) {
+                Toast.makeText(getContext(), R.string.need_reboot_title, Toast.LENGTH_LONG).show();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(intent);
+                    Animatoo.animateSlideLeft(getContext());
+                }, 1500);
+                return;
+            }
 
             if (!hasErroredOut) {
                 if (!skippedInstallation) {

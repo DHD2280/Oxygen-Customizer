@@ -49,6 +49,11 @@
     <string name="installation_failed_desc">Logs have been saved in documents folder.</string>
     <string name="logs">Logs</string>
     <string name="toast_skipped_installation">Installation skipped. Some features may not function properly.</string>
+    <string name="installation_mode_title">Installation mode</string>
+    <string name="installation_full_title">Full installation</string>
+    <string name="installation_xposed_title">Xposed Only</string>
+    <string name="installation_full_summary">Install the overlay module.\nSuggested</string>
+    <string name="installation_xposed_summary">Avoid the installation of the module and use only Xposed tweaks and customizations.\nLimited features in theming.</string>
 
     <!-- Buttons -->
     <string name="btn_select">Select</string>
@@ -66,6 +71,7 @@
 
     <!-- Dialogs -->
     <string name="installing">Installing</string>
+    <string name="uninstalling">Uninstalling</string>
     <string name="loading_dialog_wait">Please Wait</string>
     <string name="optimizing">Optimizing</string>
 

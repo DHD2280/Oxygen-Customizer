@@ -49,6 +49,18 @@ public class ModuleUtil {
         installModule();
     }
 
+    public static void handleModuleUninstall() {
+        if (moduleExists()) {
+            // Clean temporary directory
+            Shell.cmd("rm -rf " + ModuleConstants.TEMP_DIR).exec();
+
+            // Backup necessary files
+            OverlayUtil.disableOverlays(OverlayUtil.getEnabledOverlayList());
+        }
+        Shell.cmd("rm -rf " + ModuleConstants.INSTALLED_MODULE_DIR).exec();
+    }
+
+
     static void installModule() {
         Log.d(TAG, "Magisk module does not exist, creating...");
 
