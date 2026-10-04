@@ -63,6 +63,7 @@ public final class Constants {
             public static final String CUSTOM_BATTERY_HEIGHT = "battery_height";
             public static final String STOCK_CUSTOMIZE_PERCENTAGE_SIZE = "battery_text_size_switch";
             public static final String STOCK_PERCENTAGE_SIZE = "stock_percentage_size";
+            public static final String STOCK_REMOVE_PERCENTAGE_SYMBOL = "stock_remove_percentage_symbol";
             public static final String BATTERY_TEXT_INDICATE_CHARGING = "battery_text_indicate_charging";
             public static final String BATTERY_TEXT_CHARGING_COLOR = "battery_text_color_charging";
             public static final String BATTERY_TEXT_INDICATE_FAST = "battery_text_indicate_fastcharging";
