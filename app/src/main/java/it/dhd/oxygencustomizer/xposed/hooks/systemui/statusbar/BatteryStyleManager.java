@@ -588,7 +588,7 @@ public class BatteryStyleManager extends XposedMods {
                 batteryOutPercentage.setTextColor(mBatteryBarColor);
             }
             CharSequence cs = batteryOutPercentage.getText();
-            if (cs != null) {
+            if (cs != null && removePercentSymbol) {
                 String s = cs.toString();
                 if (s.endsWith("%")) {
                     batteryOutPercentage.setText(s.substring(0, s.length() - 1));
