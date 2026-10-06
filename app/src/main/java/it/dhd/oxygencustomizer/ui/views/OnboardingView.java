@@ -325,7 +325,7 @@ public class OnboardingView extends FrameLayout {
                     case 6 -> getResources().getString(R.string.module_installation_step6);
                     default -> getResources().getString(R.string.loading_dialog_wait);
                 };
-                String titleUninstall = getResources().getString(R.string.step) +
+                String titleUninstall = getResources().getString(R.string.step) + " " +
                         (value == 0 ? " 0" : "1") + "/1";
                 String descUninstall = getResources().getString(R.string.uninstalling) + "...";
 
