@@ -466,9 +466,6 @@ public class BatteryStyleManager extends XposedMods {
         BatteryViewBinder
                 .after("bind$updatePercentOutView")
                 .run(param -> {
-                    XposedBridge.log("bind$updatePercentOutView called");
-                    if (!removePercentSymbol) return;
-
                     TextView batteryText = (TextView) param.args[0];
                     Object percentIcon = param.args[param.args.length - 1];
                     if (batteryText == null || percentIcon == null) return;
@@ -476,15 +473,15 @@ public class BatteryStyleManager extends XposedMods {
                     Object raw = callMethod(percentIcon, "getBatteryLevel");
                     int perc = (raw instanceof Number) ? ((Number) raw).intValue() : 0;
 
-                    batteryText.setText(String.valueOf(perc));
+                    if (removePercentSymbol) batteryText.setText(String.valueOf(perc));
+                    if (CustomBatteryEnabled && mHidePercentage) {
+                        batteryText.setVisibility(View.GONE);
+                    }
                 });
 
         BatteryViewBinder
                 .after("bind$updateOldHorizontalViewContent")
                 .run(param -> {
-                    XposedBridge.log("bind$updateOldHorizontalViewContent called");
-                    if (!removePercentSymbol) return;
-
                     TextView batteryText = (TextView) param.args[1];
                     Object old = param.args[param.args.length - 1];
                     if (batteryText == null || old == null) return;
@@ -492,7 +489,10 @@ public class BatteryStyleManager extends XposedMods {
                     Object raw = callMethod(old, "getPowerLevel");
                     int perc = (raw instanceof Number) ? ((Number) raw).intValue() : 0;
 
-                    batteryText.setText(String.valueOf(perc));
+                    if (removePercentSymbol) batteryText.setText(String.valueOf(perc));
+                    if (CustomBatteryEnabled && mHidePercentage) {
+                        batteryText.setVisibility(View.GONE);
+                    }
                 });
         BatteryViewBinder
                 .after("bind$initView")
