@@ -102,7 +102,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-            echo "SKIP_BUILD=false" >> $GITHUB_ENV
+          echo "SKIP_BUILD=false" >> $GITHUB_ENV
           
           LAST_SHA=$(cat .ci/last_notified_sha 2>/dev/null || true)
           
