@@ -117,7 +117,7 @@ jobs:
           
           HEADERS=$(echo "$HEADERS" \
           | sed -E 's/^Merge remote-tracking branch.*/Synced with the latest changes/' \
-          | sed -E 's|.*Mahmud0808/beta-localization$|Updated translations|' \
+          | sed -E 's|.*DHD2280/beta-localization$|Updated translations|' \
           | sed '/^[[:space:]]*$/d' \
           | awk '!seen[$0]++')
           
