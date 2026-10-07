@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/icon_pack_search"
+        android:icon="@drawable/ic_search"
+        android:iconTint="?attr/colorOnSurface"
+        android:orderInCategory="0"
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:title="@string/searchpreference_search" />
+
+    <item
+        android:id="@+id/icon_pack_info"
+        android:icon="@drawable/settingslib_ic_info_outline_24"
+        android:title="@string/icon_pack_info"
+        app:showAsAction="always" />
+</menu>

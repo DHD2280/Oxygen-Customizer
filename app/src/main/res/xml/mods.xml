@@ -95,6 +95,13 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Misc"
             search:ignore="true" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_icon_packs"
+            android:key="iconpacks"
+            android:title="@string/icon_packs_title"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.iconpack.IconPackFragment"
+            search:ignore="true" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>

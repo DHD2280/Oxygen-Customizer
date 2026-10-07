@@ -1684,4 +1684,25 @@
     <string name="width">Width</string>
     <string name="height">Height</string>
 
+    <!-- Icon Packs -->
+    <string name="shrug" translatable="false">¯\\_(シ)_/¯</string>
+    <!-- Icon Packs -->
+    <string name="icon_packs_title">Icon packs</string>
+    <string name="icon_pack_selection_title">Select pack</string>
+    <string name="icon_pack_customization_title">Customize icons</string>
+    <string name="menu_more_info">More info</string>
+    <string name="menu_show_icons">Show icons</string>
+    <string name="select_replacement_icon">Select replacement icon</string>
+    <string name="icon_default">Default</string>
+    <string name="partially_enabled">(Partially enabled)</string>
+    <string name="icon_pack_icon_disabled">Disabled</string>
+    <string name="icon_pack_author">by %s</string>
+    <string name="icon_pack_unknown_author">by unknown author</string>
+    <string name="icon_pack_unknown_name">Unknown icon pack</string>
+    <string name="icon_pack_pack_reset">Reset icons</string>
+    <string name="icon_pack_info">Icon pack info</string>
+    <string name="no_icon_pack_installed">No icon pack installed</string>
+    <string name="icon_pack_disclaimer_title">Disclaimer</string>
+    <string name="icon_pack_disclaimer_desc">Icon packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for icon packs. Support regarding how OxygenCustomizer handles icon packs will only be provided to the respective pack developers.\n\nFor instructions on how to compile an icon pack, please refer to the guide here: %s</string>
+
 </resources>

@@ -30,6 +30,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.CaffeineTile;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FeatureOption;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.IconPacks;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
@@ -96,6 +97,7 @@ public class ModPacks {
             }
             case SYSTEM_UI -> {
                 if (!XPLauncher.isChildProcess) {
+                    modPacks.add(IconPacks.class);
                     // Caffeine Tile
                     modPacks.add(CaffeineTile.class);
 
@@ -190,6 +192,7 @@ public class ModPacks {
                 }
             }
             case Constants.Packages.SETTINGS -> {
+                modPacks.add(IconPacks.class);
                 modPacks.add(CustomShortcut.class);
                 modPacks.add(DarkModeSettings.class);
                 modPacks.add(OtaCard.class);

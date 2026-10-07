@@ -1108,4 +1108,15 @@
         <item>activity:</item>
     </string-array>
 
+    <string-array name="iconpack_preview_icons">
+        <item>ic_signal_cellular_3_4_bar</item>
+        <item>ic_wifi_signal_3</item>
+        <item>ic_audio_ring_notif</item>
+        <item>stat_sys_airplane_mode</item>
+        <item>ic_alarm</item>
+        <item>ic_hotspot</item>
+        <item>qs_bluetooth</item>
+        <item>location</item>
+    </string-array>
+
 </resources>
