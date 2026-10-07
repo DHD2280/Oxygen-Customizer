@@ -30,9 +30,9 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.withClip
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
-import androidx.core.graphics.withClip
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
@@ -378,7 +378,7 @@ open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
         if (charging && !customChargingIcon) {
             scaledPerimeterStripPaint.color = fillColor
             c.drawPath(scaledBolt, scaledPerimeterStripPaint)
-            scaledPerimeterStripPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
+            scaledPerimeterStripPaint.color = fillColor.inv() or 0xFF000000.toInt()
             c.withClip(
                 fillRect.left,
                 fillRect.top,
@@ -390,7 +390,7 @@ open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
         }
         scaledPerimeterStripPaint.color = fillColor
         c.drawPath(scaledPerimeterStrip, scaledPerimeterStripPaint)
-        scaledPerimeterStripPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
+        scaledPerimeterStripPaint.color = fillColor.inv() or 0xFF000000.toInt()
         c.save()
         c.clipRect(
             fillRect.left,
@@ -414,7 +414,7 @@ open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
                     textPaint.color = fillColor
                     c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
 
-                    textPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
+                    textPaint.color = fillColor.inv() or 0xFF000000.toInt()
                     c.save()
                     c.clipRect(
                         if (isRotation) fillRect.left + (fillRect.width() * (1 - fillFraction)) else fillRect.left,
@@ -427,7 +427,7 @@ open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
                     textPaint.color = fillColor
                     c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
 
-                    textPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
+                    textPaint.color = fillColor.inv() or 0xFF000000.toInt()
                     c.save()
                     c.clipRect(
                         if (isRotation) fillRect.left + (fillRect.width() * (1 - fillFraction)) else fillRect.left,
@@ -444,7 +444,7 @@ open class LandscapeBatteryN(private val context: Context, frameColor: Int) :
                 textPaint.color = fillColor
                 c.drawText(batteryLevel.toString(), pctX, pctY, textPaint)
 
-                textPaint.color = fillColor.toInt().inv() or 0xFF000000.toInt()
+                textPaint.color = fillColor.inv() or 0xFF000000.toInt()
                 c.save()
                 c.clipRect(
                     if (isRotation) fillRect.left + (fillRect.width() * (1 - fillFraction)) else fillRect.left,

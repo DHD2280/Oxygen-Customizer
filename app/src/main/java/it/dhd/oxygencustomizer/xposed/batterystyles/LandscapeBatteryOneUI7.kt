@@ -33,6 +33,7 @@ import android.os.SystemClock
 import android.util.TypedValue
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.withClip
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
 import kotlin.math.sin
@@ -282,7 +283,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
     }
 
     private fun startSlideAnimation() {
-        slideAnimationStartTime = android.os.SystemClock.uptimeMillis()
+        slideAnimationStartTime = SystemClock.uptimeMillis()
         slideAnimationActive = true
         postInvalidate()
     }
@@ -321,7 +322,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
         // Calculate animation progress for slide in effect
         var slideProgress = 1.0f // Default to fully shown (no animation)
         if (slideAnimationActive) {
-            val currentTime = android.os.SystemClock.uptimeMillis()
+            val currentTime = SystemClock.uptimeMillis()
             val elapsedTime = currentTime - slideAnimationStartTime
 
             if (elapsedTime < SLIDE_ANIMATION_DURATION_MS) {
@@ -363,12 +364,11 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
 
         // Apply the animated positions
         val pctX = textXOffset
-        val pctY = baseTextY
 
         val textPath = Path()
         textPath.reset()
         textPaint.getTextPath(
-            batteryLevel.toString(), 0, batteryLevel.toString().length, pctX, pctY, textPath
+            batteryLevel.toString(), 0, batteryLevel.toString().length, pctX, baseTextY, textPath
         )
 
         mergedPath.addPath(textPath)
@@ -418,7 +418,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
 
         // Handle the glow animation for charging
         if (charging && animationActive) {
-            val currentTime = android.os.SystemClock.uptimeMillis()
+            val currentTime = SystemClock.uptimeMillis()
             val elapsedTime = currentTime - animationStartTime
 
             if (elapsedTime < ANIMATION_DURATION_MS) {
@@ -447,15 +447,14 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
 
         // Dual tone means we draw the shape again, clipped to the charge level
         c.drawPath(unifiedPath, dualToneBackgroundFill)
-        c.save()
-        c.clipRect(
+        c.withClip(
             bounds.left.toFloat(),
             bounds.top.toFloat(),
             bounds.left + bounds.width() * fillFraction,
             bounds.bottom.toFloat()
-        )
-        c.drawPath(unifiedPath, fillPaint)
-        c.restore()
+        ) {
+            drawPath(unifiedPath, fillPaint)
+        }
     }
 
     private fun batteryColorForLevel(level: Int): Int {
@@ -463,7 +462,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
             fastCharging -> 0xFF0066FF.toInt() // Blue color for fast charging as Oplus VOOC
             charging -> 0xFF34C759.toInt() // Keep the green color for charging state
             powerSaveEnabled -> 0xFFFFCC0A.toInt() // Yellow color for power save mode
-            level > Companion.CRITICAL_LEVEL -> fillColor
+            level > CRITICAL_LEVEL -> fillColor
             level >= 0 -> 0xFFFF0000.toInt()
             else -> getColorForLevel(level)
         }
@@ -527,9 +526,9 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
     /**
      * Set the fill level
      */
-    override fun setBatteryLevel(l: Int) {
-        invertFillIcon = if (l >= 67) true else if (l <= 33) false else invertFillIcon
-        batteryLevel = l
+    override fun setBatteryLevel(mLevel: Int) {
+        invertFillIcon = if (mLevel >= 67) true else if (mLevel <= 33) false else invertFillIcon
+        batteryLevel = mLevel
         levelColor = batteryColorForLevel(batteryLevel)
         invalidateSelf()
     }
@@ -572,7 +571,7 @@ open class LandscapeBatteryOneUI7(private val context: Context, frameColor: Int)
 
         if ((charging && animationActive) || slideAnimationActive) {
             // When charging and animation is active, schedule the next frame
-            scheduleSelf(invalidateRunnable, android.os.SystemClock.uptimeMillis() + FRAME_RATE_MS)
+            scheduleSelf(invalidateRunnable, SystemClock.uptimeMillis() + FRAME_RATE_MS)
         } else {
             // Otherwise, invalidate immediately
             scheduleSelf(invalidateRunnable, 0)

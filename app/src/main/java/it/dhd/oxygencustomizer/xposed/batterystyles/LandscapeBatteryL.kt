@@ -32,10 +32,10 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import androidx.core.graphics.PathParser
-import it.dhd.oxygencustomizer.R
-import kotlin.math.floor
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withSave
+import it.dhd.oxygencustomizer.R
+import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
@@ -258,7 +258,7 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
                 "Fonts/SanFranciscoText-Semibold.otf"
             )
             typefaceBuilder.build() ?: Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Typeface.DEFAULT
         }
     }
@@ -445,7 +445,7 @@ open class LandscapeBatteryL(private val context: Context, frameColor: Int) :
                 if (isQsPercent) textQsPaint else textPaint
             )
 
-            textPaint.color = fillColor.toInt().inv()
+            textPaint.color = fillColor.inv()
             textQsPaint.color = getColorAttrDefaultColor(
                                 context,
                                 android.R.attr.textColorPrimaryInverse

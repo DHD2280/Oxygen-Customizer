@@ -30,10 +30,10 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import androidx.core.graphics.PathParser
-import it.dhd.oxygencustomizer.R
-import kotlin.math.floor
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withSave
+import it.dhd.oxygencustomizer.R
+import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryM(private val context: Context, frameColor: Int) :
@@ -234,7 +234,7 @@ open class LandscapeBatteryM(private val context: Context, frameColor: Int) :
                 "Fonts/SanFranciscoText-Semibold.otf"
             )
             typefaceBuilder.build() ?: Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Typeface.DEFAULT
         }
     }

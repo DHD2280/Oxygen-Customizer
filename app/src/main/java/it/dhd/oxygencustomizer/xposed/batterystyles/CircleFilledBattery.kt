@@ -40,7 +40,7 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
     private var mShadeLevels: FloatArray? = null
 
     init {
-        mLevelAlphaAnimator.setDuration(2000)
+        mLevelAlphaAnimator.duration = 2000
         mLevelAlphaAnimator.interpolator = FastOutSlowInInterpolator()
         mLevelAlphaAnimator.repeatMode = ValueAnimator.REVERSE
         mLevelAlphaAnimator.repeatCount = ValueAnimator.INFINITE
@@ -102,7 +102,7 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
     private fun setLevelBasedColor(paint: Paint, cx: Float, cy: Float, baseRadius: Float) {
         var singleColor = mFGColor
 
-        paint.setShader(null)
+        paint.shader = null
         if (fastCharging && batteryLevel < 100) {
             paint.color = mFastChargingColor
             return
@@ -138,7 +138,7 @@ open class CircleFilledBattery(private val mContext: Context, frameColor: Int) :
                 cx, cy, baseRadius,
                 mShadeColors!!, mShadeLevels, Shader.TileMode.CLAMP
             )
-            paint.setShader(shader)
+            paint.shader = shader
         }
     }
 
