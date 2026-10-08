@@ -342,6 +342,18 @@ public class StatusbarNotification extends XposedMods {
                                     mContext.getPackageName()
                             )
                     );
+                    for (int i = clockContainer.getChildCount() - 1; i >= 0; i--) {
+                        View child = clockContainer.getChildAt(i);
+                        if ("notification_buttons_container".equals(child.getTag())) {
+                            clockContainer.removeViewAt(i);
+                        }
+                    }
+                    mNotificationButtonsContainer.removeAllViews();
+                    try {
+                        ((ViewGroup) mNotificationButtonsContainer.getParent()).removeView(mNotificationButtonsContainer);
+                    } catch (Throwable ignored) {
+                    }
+
                     mNotificationButtonsContainer.setTag("notification_buttons_container");
                     mNotificationButtonsContainer.setLayoutParams(
                             new LinearLayout.LayoutParams(
