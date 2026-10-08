@@ -1,3 +1,11 @@
+**beta-208**  
+- Added Icon packs option to modify system icons.  
+- Added remove % symbol in battery percentage  
+- Added installation mode: Full with overlays or Xposed Only  
+- Added auto close folders on app launch  
+- Fixed notification style on OOS16.0.7+  
+- Added version info in update notification  
+  
 **beta-207**  
 - Added searchbar tweaks for launcher  
 - Added custom action for page indicator click  
