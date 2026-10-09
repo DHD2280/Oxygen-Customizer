@@ -7,6 +7,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider.getMediaMetadata;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
 
 import android.app.WallpaperColors;
 import android.content.Context;
@@ -42,6 +43,7 @@ public class AlbumArtLockscreen extends XposedMods {
     private ImageView albumArtView;
     private Object mScrimController;
     private boolean shouldShowArt = false;
+    private boolean isAod = false;
 
     public AlbumArtLockscreen(Context context) {
         super(context);
@@ -71,6 +73,8 @@ public class AlbumArtLockscreen extends XposedMods {
                 .run(param -> mScrimController = param.thisObject);
 
         // Hook Central Surfaces so we can put the new view
+        ReflectedClass TileDrawableWrapper = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.res.drawable.TileDrawableWrapper");
+
         ReflectedClass CentralSurfacesImplClass = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
         CentralSurfacesImplClass
                 .after("start")
@@ -95,8 +99,23 @@ public class AlbumArtLockscreen extends XposedMods {
                     albumArtView.setVisibility(View.VISIBLE);
                     albumArtContainer.addView(albumArtView);
 
-                    rootView.addView(albumArtContainer, 3);
+                    int scrimNotifId = mContext.getResources().getIdentifier(
+                            "scrim_notifications", "id", SYSTEM_UI);
+                    View scrimNotifications = rootView.findViewById(scrimNotifId);
+                    int index = rootView.indexOfChild(scrimNotifications);
+
+                    rootView.addView(albumArtContainer, TileDrawableWrapper.getClazz() != null ? index : 3);
                 });
+
+
+        ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
+        OplusKeyguardStyleClock
+                .after("onUiStateChanged")
+                .run(param -> onUiStateChanged((int) param.args[0]));
+        ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
+        KeyguardPlugin
+                .after("onUiStateChanged")
+                .run(param -> onUiStateChanged((int) param.args[0]));
 
         ControllersProvider.registerKeyguardShowingCallback(showing -> {
             shouldShowArt = showing;
@@ -109,12 +128,17 @@ public class AlbumArtLockscreen extends XposedMods {
 
     }
 
+    private void onUiStateChanged(int uiState) {
+        isAod = uiState == CLOCK_UI_STATE_AOD;
+        updateAlbumArt();
+    }
+
     private void updateAlbumArt() {
         if (albumArtContainer == null) {
             log("AlbumArtContainer is null");
             return;
         }
-        if (showAlbumArt && shouldShowArt && canShowArt) {
+        if (showAlbumArt && shouldShowArt && canShowArt && !isAod) {
             // Keyguard so we can show album art
             albumArtContainer.post(() -> albumArtContainer.setVisibility(View.VISIBLE));
         } else {
