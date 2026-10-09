@@ -284,6 +284,17 @@ public class StatusbarNotification extends XposedMods {
                             XposedBridge.log(TAG + "updateClearAllBackground: icon color set to " + clearButtonIconColor);
                         }
                     });
+            ClearAllController
+                    .before("getClearAllMaskOverlayColor")
+                    .run(param -> {
+                        if (customizeClearButton) {
+                            if (linkBackgroundAccent) {
+                                param.setResult(getPrimaryColor(mContext));
+                            } else {
+                                param.setResult(clearButtonBgColor);
+                            }
+                        }
+                    });
         }
 
     }
