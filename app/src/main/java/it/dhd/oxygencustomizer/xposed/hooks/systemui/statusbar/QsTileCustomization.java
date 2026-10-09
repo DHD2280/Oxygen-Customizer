@@ -819,18 +819,24 @@ public class QsTileCustomization extends XposedMods {
                 .afterConstruction()
                 .run(param -> {
                     if (qsCustomMediaTileColor) {
-                        mStaticViewBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
-                        QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
-                        mStaticViewBackgroundProxy.setColors(qsMediaTileColor);
-                        mBackgroundProxy = mStaticViewBackgroundProxy;
-                        setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                        try {
+                            mStaticViewBackgroundProxy = new StaticViewBackgroundProxyImplOC((QsStaticViewInfoProvider) param.thisObject);
+                            QsViewBackgroundProxy mBackgroundProxy = (QsViewBackgroundProxy) getObjectField(param.thisObject, "backgroundProxy");
+                            mStaticViewBackgroundProxy.setColors(qsMediaTileColor);
+                            mBackgroundProxy = mStaticViewBackgroundProxy;
+                            setObjectField(param.thisObject, "backgroundProxy", mBackgroundProxy);
+                        } catch (Throwable ignored) {
+                        } // ok here we are in 16.0.10 or something
                     }
                 });
         OplusQsMediaPanelView
                 .before("getBgOutlineProvider")
                 .run(param -> {
                     if (!customMediaTileRadius) return;
-                    param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, mediaTileRadius)));
+                    try {
+                        param.setResult(getTileOutlineTest((View) param.thisObject, dp2px(mContext, mediaTileRadius)));
+                    } catch (Throwable ignored) {
+                    } // 16.0.10
                 });
 
         // My device tile
