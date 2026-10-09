@@ -1212,6 +1212,7 @@ public class QsTileCustomization extends XposedMods {
         OplusQsVerticalSeekBar
                 .after("updateColor")
                 .run(param -> {
+                    if (!qsBrightnessSliderCustomize) return;
                     setObjectField(param.thisObject, "baseMixColorDrawable", null);
                     setObjectField(param.thisObject, "activeMixColorDrawable", null);
                     setObjectField(param.thisObject, "fluidGlassSliderBgDrawable", null);
@@ -1224,11 +1225,20 @@ public class QsTileCustomization extends XposedMods {
         QSBlurConfigProvider
                 .before("getSeekBarActiveBlurConfig")
                 .run(param -> {
+                    if (!qsBrightnessSliderCustomize) return;
                     int activeColor = qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext);
                     param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
                                     getBlendMode(), activeColor, 4, Color.parseColor("#80CCCCCC")), param.args[0]));
                 });
+        QSBlurConfigProvider
+                .before("getSeekBarInactiveBlurConfig")
+                .run(param -> {
+                    if (!qsBrightnessBackgroundCustomize) return;
+                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                            newInstance(MixColorWithShader.getClazz(),
+                                    getBlendMode(), qsBrightnessBackgroundColor, 2, qsBrightnessBackgroundColor), param.args[0]));
+                }, true);
 
 
     }
