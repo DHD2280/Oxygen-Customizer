@@ -1,3 +1,13 @@
+**beta-209**  
+- Added customizations for camera button (KeyCode event 767 and 769)  
+- Fixed header image alpha on OOS16.0.10+  
+- Fixed album art on lockscreen on OOS16.0.10+  
+- Fixed clear all button color for OOS16.0.10  
+- Fixed qs tile colors on OOS16.0.10  
+- Fixed custom qs sliders color on OOS16.0.10+  
+- Fixed media cover art on OOS16.0.10+  
+- Improved expand and collapse button behavior  
+  
 **beta-208**  
 - Added Icon packs option to modify system icons.  
 - Added remove % symbol in battery percentage  
