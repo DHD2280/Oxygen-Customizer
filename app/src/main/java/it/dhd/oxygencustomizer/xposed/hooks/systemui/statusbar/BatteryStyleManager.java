@@ -111,7 +111,6 @@ import androidx.core.content.res.ResourcesCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -572,7 +571,6 @@ public class BatteryStyleManager extends XposedMods {
         } catch (Throwable ignored) {
             log("battery_percentage_view not found");
         }
-        XposedBridge.log("updateBatteryViewValues running");
         if (batteryOutPercentage != null && batteryOutPercentage.getVisibility() == View.VISIBLE) {
             mBatteryText = batteryOutPercentage;
             batteryOutPercentage.setTextSize(TypedValue.COMPLEX_UNIT_SP, customizePercSize ? mBatteryPercSize : 12);
