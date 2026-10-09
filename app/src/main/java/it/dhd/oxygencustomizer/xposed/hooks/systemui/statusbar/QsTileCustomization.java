@@ -7,6 +7,7 @@ import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.newInstance;
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_DARK_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
@@ -84,6 +85,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -1204,6 +1207,29 @@ public class QsTileCustomization extends XposedMods {
                     if (!qsSlidersRoundness) return;
                     param.args[1] = dp2px(mContext, qsSlidersRoundnessValue);
                 });
+
+        // OOS 16.0.10
+        OplusQsVerticalSeekBar
+                .after("updateColor")
+                .run(param -> {
+                    setObjectField(param.thisObject, "baseMixColorDrawable", null);
+                    setObjectField(param.thisObject, "activeMixColorDrawable", null);
+                    setObjectField(param.thisObject, "fluidGlassSliderBgDrawable", null);
+                    View v = (View) param.thisObject;
+                    v.invalidate();
+                });
+        ReflectedClass MixColorWithShader = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.blurability.MixColorWithShader");
+        ReflectedClass QSBlurConfigProvider = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.util.QSBlurConfigProvider");
+
+        QSBlurConfigProvider
+                .before("getSeekBarActiveBlurConfig")
+                .run(param -> {
+                    int activeColor = qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext);
+                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                            newInstance(MixColorWithShader.getClazz(),
+                                    getBlendMode(), activeColor, 4, Color.parseColor("#80CCCCCC")), param.args[0]));
+                });
+
 
     }
 
