@@ -342,13 +342,13 @@ public class PreferenceHelper {
         return "";
     }
 
-    public static boolean is16010() {
-        return getOsVersion().equals("16.0.1.0");
-    }
-
     public static String getOplusRom() {
         if (instance != null) return instance.mOplusVersion;
         return "";
+    }
+
+    public static boolean is16010() {
+        return getOsVersion().contains("16.0.10") || getOplusRom().contains("16.0.10");
     }
 
     public static int getOOSVersion() {
