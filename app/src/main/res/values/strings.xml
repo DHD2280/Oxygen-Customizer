@@ -857,6 +857,8 @@
     <string name="plusKey_double_press_button_title_screenoff">Double Press</string>
     <string name="plusKey_triple_press_button_title_screenoff">Triple Press</string>
     <string name="plusKey_long_press_button_title_screenoff">Long Press</string>
+    <string name="cameraKey_button_category_title">Camera Button</string>
+    <string name="cameraKey_button_category_title_screenoff">Camera Button - Screen Off</string>
     <string name="plusKey_action_dnd">Do Not Disturb</string>
     <string name="plusKey_action_recorder">Audio Recorder</string>
     <string name="plusKey_action_browser">Browser</string>

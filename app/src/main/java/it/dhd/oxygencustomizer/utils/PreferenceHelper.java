@@ -1449,7 +1449,11 @@ public class PreferenceHelper {
                     key.equals("plusKey_single_press_button_action_value_screenoff") ||
                     key.equals("plusKey_double_press_button_action_value_screenoff") ||
                     key.equals("plusKey_triple_press_button_action_value_screenoff") ||
-                    key.equals("plusKey_long_press_button_action_value_screenoff")) {
+                    key.equals("plusKey_long_press_button_action_value_screenoff") ||
+                    key.equals("cameraKey_single_press_button_action_value") ||
+                    key.equals("cameraKey_double_press_button_action_value") ||
+                    key.equals("cameraKey_single_press_button_action_value_screenoff") ||
+                    key.equals("cameraKey_double_press_button_action_value_screenoff")) {
                 String prefValue = instance.mPreferences.getString(key, "none");
                 if (prefValue.contains(":")) {
                     int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;

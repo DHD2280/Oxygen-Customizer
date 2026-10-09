@@ -62,9 +62,13 @@ public class Buttons extends XposedMods {
     private int volumeToTorchTimeout = 5000;
     private boolean settingsUpdated = false;
     private String actionValueSingle, actionValueDouble, actionValueTriple, actionValueLong, actionValueSingleScreenOff, actionValueDoubleScreenOff, actionValueTripleScreenOff, actionValueLongScreenOff = "none";
+    private String actionValueSingleCamera, actionValueDoubleCamera, actionValueSingleCameraScreenOff, actionValueDoubleCameraScreenOff = "none";
     private boolean singlePressEnabled, doublePressEnabled, triplePressEnabled, longPressEnabled, singlePressEnabledScreenOff, doublePressEnabledScreenOff, triplePressEnabledScreenOff, longPressEnabledScreenOff = false;
+    private boolean singlePressCameraEnabled, doublePressCameraEnabled, singlePressCameraScreenOffEnabled, doublePressCameraScreenOffEnabled = false;
     private final int KEYCODE_PLUSKEY_SHORT_PRESS = 781;
     private final int KEYCODE_PLUSKEY_LONG_PRESS = 782;
+    private final int KEYCODE_CAMERA_SINGLE = 767;
+    private final int KEYCODE_CAMERA_DOUBLE = 769;
     private int pressCount = 0;
     private long plusKeyTimeout = 250;
 
@@ -96,6 +100,14 @@ public class Buttons extends XposedMods {
         return SystemUtils.isScreenOff() ? longPressEnabledScreenOff : longPressEnabled;
     }
 
+    private boolean isAnyShortPressEnabledCamera() {
+        return SystemUtils.isScreenOff() ? singlePressCameraScreenOffEnabled : singlePressCameraEnabled;
+    }
+
+    private boolean isAnyDoublePressEnabledCamera() {
+        return SystemUtils.isScreenOff() ? doublePressCameraScreenOffEnabled : doublePressCameraEnabled;
+    }
+
     private final Runnable actionRunnable = () -> {
         int count = pressCount;
         log("PlusKey LOG: actionRunnable START. Current pressCount read as: " + count);
@@ -121,7 +133,7 @@ public class Buttons extends XposedMods {
                 ", triple=" + (screenOff ? triplePressEnabledScreenOff : triplePressEnabled) + " -> shouldExecute=" + shouldExecute);
 
         if (shouldExecute) {
-            executeAction(count);
+            executeAction(count, false);
         } else {
             XposedBridge.log("PlusKey LOG: actionRunnable. No enabled action matched count=" + count);
         }
@@ -161,13 +173,41 @@ public class Buttons extends XposedMods {
         }
     }
 
-    private void executeAction(int count) {
+    private void executeAction(int count, boolean isCamera) {
         try {
             boolean screenOff = SystemUtils.isScreenOff();
             String key = switch (count) {
                 case 0 -> (!screenOff || actionValueLongScreenOff.equals("none")) ? actionValueLong : actionValueLongScreenOff;
-                case 1 -> (!screenOff || actionValueSingleScreenOff.equals("none")) ? actionValueSingle : actionValueSingleScreenOff;
-                case 2 -> (!screenOff || actionValueDoubleScreenOff.equals("none")) ? actionValueDouble : actionValueDoubleScreenOff;
+                case 1 -> {
+                    if (isCamera) {
+                        if (screenOff) {
+                            if (!singlePressCameraScreenOffEnabled) yield "none";
+                            yield actionValueSingleCameraScreenOff;
+                        } else {
+                            if (!singlePressCameraEnabled) yield "none";
+                            yield actionValueSingleCamera;
+                        }
+                    } else {
+                        yield (!screenOff || actionValueSingleScreenOff.equals("none"))
+                                ? actionValueSingle
+                                : actionValueSingleScreenOff;
+                    }
+                }
+                case 2 -> {
+                    if (isCamera) {
+                        if (screenOff) {
+                            if (!doublePressCameraScreenOffEnabled) yield "none";
+                            yield actionValueDoubleCameraScreenOff;
+                        } else {
+                            if (!doublePressCameraEnabled) yield "none";
+                            yield actionValueDoubleCamera;
+                        }
+                    } else {
+                        yield (!screenOff || actionValueDoubleScreenOff.equals("none"))
+                                ? actionValueDouble
+                                : actionValueDoubleScreenOff;
+                    }
+                }
                 case 3 -> (!screenOff || actionValueTripleScreenOff.equals("none")) ? actionValueTriple : actionValueTripleScreenOff;
 
                 default -> "";
@@ -219,8 +259,19 @@ public class Buttons extends XposedMods {
         actionValueLongScreenOff = Xprefs.getString("plusKey_long_press_button_action_value_screenoff", "none");
         longPressEnabledScreenOff = (!TextUtils.isEmpty(actionValueLongScreenOff) && !actionValueLongScreenOff.equals("none")) || longPressEnabled;
 
-
         plusKeyTimeout = Xprefs.getSliderInt("plusKey_press_button_action_timeout", 250);
+
+        actionValueSingleCamera = Xprefs.getString("cameraKey_single_press_button_action_value", "none");
+        singlePressCameraEnabled = !TextUtils.isEmpty(actionValueSingleCamera) && !actionValueSingleCamera.equals("none");
+
+        actionValueDoubleCamera = Xprefs.getString("cameraKey_double_press_button_action_value", "none");
+        doublePressCameraEnabled = !TextUtils.isEmpty(actionValueDoubleCamera) && !actionValueDoubleCamera.equals("none");
+
+        actionValueSingleCameraScreenOff = Xprefs.getString("cameraKey_single_press_button_action_value_screenoff", "none");
+        singlePressCameraScreenOffEnabled = (!TextUtils.isEmpty(actionValueSingleCameraScreenOff) && !actionValueSingleCameraScreenOff.equals("none")) || singlePressCameraEnabled;
+
+        actionValueDoubleCameraScreenOff = Xprefs.getString("cameraKey_double_press_button_action_value_screenoff", "none");
+        doublePressCameraScreenOffEnabled = (!TextUtils.isEmpty(actionValueDoubleCameraScreenOff) && !actionValueDoubleCameraScreenOff.equals("none")) || doublePressCameraEnabled;
 
         settingsUpdated = true;
     }
@@ -424,10 +475,44 @@ public class Buttons extends XposedMods {
                         } else if (keyCode == KEYCODE_PLUSKEY_LONG_PRESS) {
                             if (isLongPressEnabled()) {
                                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                                    executeAction(0);
+                                    executeAction(0, false);
                                 }
                                 // Vibrate later
                                 // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+                                param.setResult(0); // Consume the event
+                            }
+                        }
+                    } catch (Throwable t) {
+                        log(" ERROR IN PlusKey hook: " + t.getMessage());
+                    }
+                }
+            });
+
+            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    if (!isAnyShortPressEnabledCamera() && !isAnyDoublePressEnabledCamera()) return;
+                    try {
+                        Object mBase = getObjectField(param.thisObject, "mBase");
+                        if (mHandler == null)
+                            mHandler = (Handler) getObjectField(mBase, "mHandler");
+                        KeyEvent event = (KeyEvent) param.args[0];
+                        int keyCode = event.getKeyCode();
+
+                        if (keyCode == KEYCODE_CAMERA_SINGLE) {
+                            if (isAnyShortPressEnabledCamera()) {
+                                if (event.getAction() == KeyEvent.ACTION_UP) {
+                                    executeAction(1, true);
+                                }
+                                param.setResult(0); // Consume the event
+
+                            }
+                        } else if (keyCode == KEYCODE_CAMERA_DOUBLE) {
+                            if (isAnyDoublePressEnabledCamera()) {
+                                if (event.getAction() == KeyEvent.ACTION_UP) {
+                                    executeAction(2, true);
+                                }
+                                // Vibrate later
                                 param.setResult(0); // Consume the event
                             }
                         }

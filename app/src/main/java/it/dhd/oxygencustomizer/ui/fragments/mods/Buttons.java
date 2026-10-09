@@ -76,6 +76,11 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
         setupActionPreference("plusKey_double_press_button_action_value_screenoff");
         setupActionPreference("plusKey_triple_press_button_action_value_screenoff");
         setupActionPreference("plusKey_long_press_button_action_value_screenoff");
+
+        setupActionPreference("cameraKey_single_press_button_action_value");
+        setupActionPreference("cameraKey_double_press_button_action_value");
+        setupActionPreference("cameraKey_single_press_button_action_value_screenoff");
+        setupActionPreference("cameraKey_double_press_button_action_value_screenoff");
     }
 
 
