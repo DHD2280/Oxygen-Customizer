@@ -55,6 +55,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -99,6 +100,7 @@ public class HeaderImage extends XposedMods {
 
     private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
         float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
+        XposedBridge.log("ExpandedQsFractionChangeListener: " + alpha);
         setAlpha(alpha);
     };
 
@@ -138,9 +140,8 @@ public class HeaderImage extends XposedMods {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> NewBrightnessSlider;
         try {
-            NewBrightnessSlider = findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
+            findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
             newControlCenter = true;
             log("New Control Center");
         } catch (Throwable ignored) {
@@ -384,6 +385,44 @@ public class HeaderImage extends XposedMods {
                         }
                     });
         }
+
+        ReflectedClass OplusQSQuickEntranceComponent = ReflectedClass.ofIfPossible(
+                "com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent");
+
+        OplusQSQuickEntranceComponent
+                .after("resetEntranceState")
+                .run(param -> {
+                    for (View v : mQsHeaderLayouts) {
+                        v.setTranslationY(0.0f);
+                        v.setTransitionAlpha(0.0f);
+                    }
+                });
+
+        OplusQSQuickEntranceComponent
+                .before("updateQuickEntranceState")
+                .run(param -> {
+                    if (!(param.args[0] instanceof Float)) return;
+                    float alpha = (float) param.args[0];
+                    for (View v : mQsHeaderLayouts) {
+                        v.setTransitionAlpha(alpha);
+                    }
+                });
+
+        OplusQSQuickEntranceComponent
+                .before("updateState")
+                .run(param -> {
+                    if (param.args.length < 3) return;
+                    if (!(param.args[0] instanceof Integer)) return;
+                    if (!(param.args[1] instanceof Float)) return;
+                    if (!(param.args[2] instanceof Float)) return;
+
+                    for (View v : mQsHeaderLayouts) {
+                        v.setTranslationY((Float) param.args[2]);
+                        v.setTransitionAlpha((Float) param.args[1]);
+                    }
+
+
+                });
 
         ControllersProvider.registerExpandedQsFractionChangeCallback(mExpandedQsFractionChangeListener);
 
