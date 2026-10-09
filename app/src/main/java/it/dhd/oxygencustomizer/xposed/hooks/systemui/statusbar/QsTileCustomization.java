@@ -958,6 +958,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     public void hookMediaPanel() {
+        ReflectedClass TileDrawableWrapper = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.res.drawable.TileDrawableWrapper");
         ReflectedClass OplusQsMediaPanelView = ReflectedClass.of(
                 "com.oplus.systemui.qs.media.OplusQsBaseMediaPanelView", /* OOS16 */
                 "com.oplus.systemui.qs.media.OplusQsMediaPanelView");
@@ -998,7 +999,7 @@ public class QsTileCustomization extends XposedMods {
                             ((ViewGroup) mMediaBackground.getParent()).removeView(mMediaBackground);
                         } catch (Throwable ignored) {
                         }
-                        ((ViewGroup) param.thisObject).addView(mMediaBackground, 0);
+                        ((ViewGroup) param.thisObject).addView(mMediaBackground, TileDrawableWrapper.getClazz() != null ? 1 : 0);
                     }
 
                     // Listen for default tip change
