@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oxygencustomizer.R;
@@ -49,18 +48,12 @@ public class QuickSettingsCustomization extends ControlledPreferenceFragmentComp
 
         OplusJumpPreference highlightTile = findPreference("highlight_tile");
         OplusJumpPreference baseTile = findPreference("base_tile");
-
-        String oplusRom = PreferenceHelper.getOsVersion();
-        Log.d("QuickSettingsCustomization", "Oplus ROM: " + oplusRom);
-
-        boolean isOOS16 = oplusRom != null && oplusRom.contains("16.0.10");
-
         if (highlightTile != null) {
-            highlightTile.setVisible(!isOOS16);
+            highlightTile.setVisible(!PreferenceHelper.is16010());
         }
 
         if (baseTile != null) {
-            baseTile.setVisible(!isOOS16);
+            baseTile.setVisible(!PreferenceHelper.is16010());
         }
 
     }
