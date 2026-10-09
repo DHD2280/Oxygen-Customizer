@@ -210,6 +210,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLORS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLOR_ACTIVE_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR_HIGHLIGHT;
@@ -293,7 +294,7 @@ public class PreferenceHelper {
     public static boolean showOverlays, showFonts;
 
     public final ExtendedSharedPreferences mPreferences;
-    public final String mOsVersion;
+    public final String mOsVersion, mOplusVersion;
     public static PreferenceHelper instance;
 
     private final List<Integer> LsClockDateFormat = new ArrayList<>() {{
@@ -327,6 +328,7 @@ public class PreferenceHelper {
     private PreferenceHelper(ExtendedSharedPreferences prefs) {
         mPreferences = prefs;
         mOsVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);
+        mOplusVersion = Shell.cmd("getprop ro.build.version.oplusrom.display]").exec().getOut().get(0);
         instance = this;
     }
 
@@ -337,6 +339,15 @@ public class PreferenceHelper {
 
     public static String getOsVersion() {
         if (instance != null) return instance.mOsVersion;
+        return "";
+    }
+
+    public static boolean is16010() {
+        return getOsVersion().equals("16.0.1.0");
+    }
+
+    public static String getOplusRom() {
+        if (instance != null) return instance.mOplusVersion;
         return "";
     }
 
@@ -551,9 +562,7 @@ public class PreferenceHelper {
             // Qs Appearance
             // Tile colors
             // Common
-            case QS_TILE_ACTIVE_COLOR_ENABLED,
-                 QS_TILE_INACTIVE_COLOR_ENABLED,
-                 QS_TILE_DISABLED_COLOR_ENABLED,
+            case QS_TILE_DISABLED_COLOR_ENABLED,
                  QS_TILE_ACTIVE_COLOR_HIGHLIGHT_ENABLED,
                  QS_TILE_INACTIVE_COLOR_HIGHLIGHT_ENABLED,
                  QS_TILE_DISABLED_COLOR_HIGHLIGHT_ENABLED -> {
@@ -589,24 +598,48 @@ public class PreferenceHelper {
             case QS_TILE_ICON_CUSTOM_COLOR -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
-            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT,
-                 QS_TILE_ICON_CUSTOM_COLOR_ACTIVE,
+            case QS_TILE_ACTIVE_COLOR_ENABLED,
+                 QS_TILE_INACTIVE_COLOR_ENABLED -> {
+                return is16010() ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                        Build.VERSION.SDK_INT < 35;
+            }
+            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT -> {
+                return is16010() ?
+                        instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false) :
+                        isVisible(QS_TILE_ICON_CUSTOM_COLOR) &&
+                                instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
+            }
+            case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE,
                  QS_TILE_ICON_CUSTOM_COLOR_INACTIVE,
                  QS_TILE_ICON_CUSTOM_COLOR_DISABLED -> {
                 return isVisible(QS_TILE_ICON_CUSTOM_COLOR) &&
                         instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
             }
+            case "tile_colors_16" -> {
+                return is16010();
+            }
             // Base
             case QS_TILE_CUSTOM_COLORS_SWITCH -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
+            case QS_TILE_CUSTOM_COLOR_ACTIVE_ACCENT -> {
+                return is16010() &&
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) &&
+                        instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
+            }
             case QS_TILE_ACTIVE_COLOR -> {
-                return Build.VERSION.SDK_INT >= 35 ?
+                return is16010() ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) &&
+                                instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false) :
+                        Build.VERSION.SDK_INT >= 35 ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
                         instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_INACTIVE_COLOR -> {
-                return Build.VERSION.SDK_INT >= 35 ?
+                return is16010() ?
+                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) && instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false) :
+                        Build.VERSION.SDK_INT >= 35 ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
                         instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
             }

@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="tile_colors_16"
+        android:title="@string/quick_settings_tiles_customize_category_title">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_custom_tiles_colors"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/quick_settings_tile_custom_color"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_tile_active_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_active_color_title"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_tile_oos16_link_primary"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/chip_use_accent"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_active_color"
+            android:title="@string/quick_settings_tiles_customize_active_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_tile_inactive_color_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_inactive_color_title"
+            app:iconSpaceReserved="false" />
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0xffffffff"
+            android:key="qs_tile_inactive_color"
+            android:title="@string/quick_settings_tiles_customize_inactive_color"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
         app:iconSpaceReserved="false">
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:title="@string/qs_highlight_tile"
+            android:key="highlight_tile"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsHighlightTiles" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:title="@string/qs_base_tile"
+            android:key="base_tile"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings.QsBaseTiles" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference

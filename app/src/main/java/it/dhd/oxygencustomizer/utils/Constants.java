@@ -252,6 +252,7 @@ public final class Constants {
             // Icons
             public static final String QS_TILE_ICON_CUSTOM_COLOR = "qs_custom_icon_colors";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT = "qs_custom_icon_active_accent_color";
+            public static final String QS_TILE_CUSTOM_COLOR_ACTIVE_ACCENT = "qs_tile_oos16_link_primary";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_ACTIVE = "qs_custom_icon_active_color";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_INACTIVE = "qs_custom_icon_inactive_color";
             public static final String QS_TILE_ICON_CUSTOM_COLOR_DISABLED = "qs_custom_icon_disabled_color";
