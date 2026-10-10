@@ -1279,16 +1279,28 @@ public class QsTileCustomization extends XposedMods {
                 .before("getSeekBarActiveBlurConfig")
                 .run(param -> {
                     if (!qsBrightnessSliderCustomize) return;
+                    float f = 0;
+                    if (param.args.length >= 2) f = (float) param.args[1];
                     int activeColor = qsBrightnessSliderColorMode == 2 ? qsBrightnessSliderColor : getPrimaryColor(mContext);
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
-                            newInstance(MixColorWithShader.getClazz(),
-                                    getBlendMode(), activeColor, 4, Color.parseColor("#80CCCCCC")), param.args[0]));
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            getBlendMode(), activeColor, 4, Color.parseColor("#80CCCCCC")), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            getBlendMode(), activeColor, 4, Color.parseColor("#80CCCCCC")), param.args[0]));
                 });
         QSBlurConfigProvider
                 .before("getSeekBarInactiveBlurConfig")
                 .run(param -> {
                     if (!qsBrightnessBackgroundCustomize) return;
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                    float f = 0;
+                    if (param.args.length >= 2) f = (float) param.args[1];
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            getBlendMode(), qsBrightnessBackgroundColor, 2, qsBrightnessBackgroundColor), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
                                     getBlendMode(), qsBrightnessBackgroundColor, 2, qsBrightnessBackgroundColor), param.args[0]));
                 }, true);
