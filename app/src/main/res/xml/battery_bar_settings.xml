@@ -73,7 +73,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="indicateCharging"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -81,13 +81,13 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="-16711936"
+            android:defaultValue="#00FF00"
             android:key="batteryChargingColor"
             android:title="@string/BB_batteryChargingColor"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="indicateFastCharging"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -95,13 +95,13 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="-16711936"
+            android:defaultValue="#673AB7"
             android:key="batteryFastChargingColor"
             android:title="@string/BB_batteryFastChargingColor"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="indicatePowerSave"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
@@ -109,7 +109,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="-16711936"
+            android:defaultValue="#FF9800"
             android:key="batteryPowerSaveColor"
             android:title="@string/BB_batteryPowerSaveColor"
             app:iconSpaceReserved="false" />
