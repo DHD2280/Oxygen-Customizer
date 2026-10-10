@@ -113,7 +113,7 @@ public class VolumePanel extends XposedMods {
             }
         };
 
-        ReflectedClass VolumeDialogImpl = ReflectedClass.of("com.android.systemui.volume.VolumeDialogImpl");
+        ReflectedClass VolumeDialogImpl = ReflectedClass.ofIfPossible("com.android.systemui.volume.VolumeDialogImpl");
         VolumeDialogImpl
                 .before("showSafetyWarningH")
                 .run(panelDisabled);
