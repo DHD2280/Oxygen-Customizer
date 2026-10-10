@@ -20,9 +20,11 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.BatteryManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.widget.RelativeLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -96,7 +98,7 @@ public class NowBarBattery extends RelativeLayout {
         SuperPowerSaveObserver.registerSuperPowerSaveCallback(mSuperPowerSaveListener);
 
         setOnLongClickListener(v -> {
-            mActivityLauncherUtils.launchApp(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY));
+            mActivityLauncherUtils.launchApp(new Intent(Build.VERSION.SDK_INT >= 37 ? Settings.ACTION_BATTERY_SAVER_SETTINGS : Intent.ACTION_POWER_USAGE_SUMMARY));
             return true;
         });
     }
