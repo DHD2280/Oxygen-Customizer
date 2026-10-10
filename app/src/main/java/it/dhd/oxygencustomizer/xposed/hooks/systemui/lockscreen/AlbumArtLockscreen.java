@@ -104,7 +104,7 @@ public class AlbumArtLockscreen extends XposedMods {
                     View scrimNotifications = rootView.findViewById(scrimNotifId);
                     int index = rootView.indexOfChild(scrimNotifications);
 
-                    rootView.addView(albumArtContainer, TileDrawableWrapper.getClazz() != null ? index : 3);
+                    rootView.addView(albumArtContainer, Build.VERSION.SDK_INT >= 37 ? 6 : TileDrawableWrapper.getClazz() != null ? index : 3);
                 });
 
         ControllersProvider.registerUiStateChangedCallback(this::onUiStateChanged);
@@ -113,6 +113,15 @@ public class AlbumArtLockscreen extends XposedMods {
             shouldShowArt = showing;
             updateAlbumArt();
         });
+
+        ReflectedClass PanoramicAODUIDeBurnInControllerImpl = ReflectedClass.of("com.oplus.systemui.aod.controller.PanoramicAODUIDeBurnInControllerImpl");
+        PanoramicAODUIDeBurnInControllerImpl
+                .after("onSmoothTransitionUIStateChanged")
+                .run(param -> {
+                    int state = (int) param.args[0];
+                    isAod = (state == 3 || state == 4 || state == 5);
+                    updateAlbumArt();
+                });
 
         CentralSurfacesImplClass
                 .after("onKeyguardGoingAway")
