@@ -314,6 +314,10 @@ public class BatteryStyleManager extends XposedMods {
                 if (CustomBatteryEnabled && batteryIcon != null) {
                     BatteryDrawable newDrawable = getNewBatteryDrawable(mContext);
                     batteryIcon.setImageDrawable(newDrawable);
+                    try {
+                        callMethod(view, "setBatteryStyleDrawable", newDrawable);
+                    } catch (Throwable ignored) {
+                    }
                     setAdditionalInstanceField(view, "mBatteryDrawable", newDrawable);
                 }
             }
@@ -517,6 +521,28 @@ public class BatteryStyleManager extends XposedMods {
                         }
                     }
                 });
+        // COS
+        BatteryViewBinder
+                .after("bind$updateBatteryIconStyle")
+                .run(param -> {
+                    /*
+                stock method
+                public static final void bind$updateBatteryIconStyle(
+                    ImageView imageView,                    // 0
+                    StatBatteryMeterView statBatteryMeterView, // 1
+                    LocationBasedBatteryViewModel vm,       // 2
+                    FrameLayout frameLayout,                // 3
+                    TextView textView,                      // 4
+                    BatteryIconStyle batteryIconStyle       // 5) {
+                 */
+                    log("BatteryViewBinder bind$updateBatteryIconStyle called");
+                    if (param.args[1] instanceof View v) {
+                        Object statBattery = param.args[1];
+                        if (statBattery.getClass().getCanonicalName().equals(StatBatteryMeterView.getClazz().getCanonicalName())) {
+                            updateBatteryViewValues(v);
+                        }
+                    }
+                });
         BatteryViewBinder
                 .after("bind$updateChargingView")
                 .run(param -> {
@@ -671,6 +697,10 @@ public class BatteryStyleManager extends XposedMods {
                 drawable.setBatteryLevel(getCurrentLevel());
                 drawable.invalidateSelf();
                 batteryIcon.setImageDrawable(drawable);
+                try {
+                    callMethod(view, "setBatteryStyleDrawable", drawable);
+                } catch (Throwable ignored) {
+                }
             } catch (Throwable t) {
                 log("BatteryDrawable not found " + t.getMessage());
             } //it's probably the default battery. no action needed
