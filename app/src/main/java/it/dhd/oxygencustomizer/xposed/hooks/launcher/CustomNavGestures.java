@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
@@ -87,7 +84,7 @@ public class CustomNavGestures extends XposedMods {
 	private static int leftSwipeUpAction = NO_ACTION, rightSwipeUpAction = NO_ACTION, twoFingerSwipeUpAction = NO_ACTION;
 	private Object mSysUiProxy;
 	private Object currentFocusedTask = null;
-	private Class<?> OplusInputInterceptHelper = null;
+	private ReflectedClass OplusInputInterceptHelper = null;
 	private boolean mOverrideBack = false;
 	private int overrideMode = 0;
 	private int overrideLeft = 0;
@@ -175,43 +172,43 @@ public class CustomNavGestures extends XposedMods {
 			mBroadcastRegistered = true;
 		}
 
-		OplusInputInterceptHelper = findClass("com.oplus.quickstep.gesture.helper.OplusInputInterceptHelper", lpParam.classLoader);
-		Class<?> OtherActivityInputConsumerClass = findClass("com.android.quickstep.inputconsumers.OtherActivityInputConsumer", lpParam.classLoader); //When apps are open
-		Class<?> OplusOverviewInputConsumerImpl = findClass("com.android.quickstep.inputconsumers.OplusOverviewInputConsumerImpl", lpParam.classLoader); //When on Home screen and Recents
-		Class<?> SystemUiProxyClass = findClass("com.android.quickstep.SystemUiProxy", lpParam.classLoader);
-		Class<?> RecentTasksListClass = findClass("com.android.quickstep.RecentTasksList", lpParam.classLoader);
+		OplusInputInterceptHelper = ReflectedClass.of("com.oplus.quickstep.gesture.helper.OplusInputInterceptHelper");
+		ReflectedClass OtherActivityInputConsumerClass = ReflectedClass.ofIfPossible("com.android.quickstep.inputconsumers.OtherActivityInputConsumer"); //When apps are open
+		ReflectedClass OplusOverviewInputConsumerImpl = ReflectedClass.ofIfPossible("com.android.quickstep.inputconsumers.OplusOverviewInputConsumerImpl"); //When on Home screen and Recents
+		ReflectedClass OplusCuiInputConsumer = ReflectedClass.ofIfPossible("com.android.quickstep.inputconsumers.OplusCuiInputConsumer");
+		ReflectedClass SystemUiProxyClass = ReflectedClass.ofIfPossible("com.android.quickstep.SystemUiProxy");
+		ReflectedClass RecentTasksListClass = ReflectedClass.of("com.android.quickstep.RecentTasksList");
 
 		Rect displayBounds = SystemUtils.WindowManager().getMaximumWindowMetrics().getBounds();
 		displayW = Math.min(displayBounds.width(), displayBounds.height());
 		displayH = Math.max(displayBounds.width(), displayBounds.height());
 
-		hookAllConstructors(RecentTasksListClass, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mSysUiProxy = getObjectField(param.thisObject, "mSysUiProxy");
-			}
-		});
+		RecentTasksListClass
+				.afterConstruction()
+				.run(param -> mSysUiProxy = getObjectField(param.thisObject, "mSysUiProxy"));
 
-		hookAllConstructors(SystemUiProxyClass, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mSystemUIProxy = param.thisObject;
-			}
-		});
+		SystemUiProxyClass
+				.afterConstruction()
+				.run(param -> mSystemUIProxy = param.thisObject);
 
-		hookAllMethods(OtherActivityInputConsumerClass, "onMotionEvent", new XC_MethodHook() {
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				onMotionEvent(param, false);
-			}
-		});
+		OtherActivityInputConsumerClass
+				.before("onMotionEvent")
+				.run(param -> {
+					onMotionEvent(param, false);
+				});
 
-		hookAllMethods(OplusOverviewInputConsumerImpl, "onMotionEvent", new XC_MethodHook() {
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				onMotionEvent(param, true);
-			}
-		});
+		OplusOverviewInputConsumerImpl
+				.before("onMotionEvent")
+				.run(param -> {
+					onMotionEvent(param, false);
+				});
+
+		OplusCuiInputConsumer
+				.before("onMotionEvent")
+				.run(param -> {
+					onMotionEvent(param, false);
+				});
+
 
 		ReflectedClass OplusAbsOverviewProxyImpl = ReflectedClass.of("com.oplus.quickstep.proxy.OplusAbsOverviewProxyImpl");
 		if (OplusAbsOverviewProxyImpl.getClazz() != null) {
@@ -236,8 +233,15 @@ public class CustomNavGestures extends XposedMods {
 	private void onMotionEvent(XC_MethodHook.MethodHookParam param, boolean isOverViewListener) {
 		MotionEvent e = (MotionEvent) param.args[0];
 
+		boolean mPassedWindowMoveSlopClz = true;
+		try {
+			mPassedWindowMoveSlopClz = getBooleanField(param.thisObject, "mPassedWindowMoveSlop");
+		} catch (Throwable t) {
+			log(t);
+		}
+
 		boolean mPassedWindowMoveSlop = isOverViewListener //if it's overview page (read: home page) we don't need this. true is good
-				|| getBooleanField(param.thisObject, "mPassedWindowMoveSlop"); //checking if they've swiped long enough to cancel touch for app
+				|| mPassedWindowMoveSlopClz; //checking if they've swiped long enough to cancel touch for app
 
 		int action = e.getActionMasked();
 		final int x = (int) e.getRawX();
@@ -314,7 +318,7 @@ public class CustomNavGestures extends XposedMods {
 				setObjectField(param.thisObject, "mPassedWindowMoveSlop", false);
 				setBooleanField(param.thisObject, "mPassedPilferInputSlop", false);
 				try {
-					Object instance = getStaticObjectField(OplusInputInterceptHelper, "INSTANCE");
+					Object instance = getStaticObjectField(OplusInputInterceptHelper.getClazz(), "INSTANCE");
 					Object result = callMethod(instance, "get");
 					if (Build.VERSION.SDK_INT >= 35) {
 						callMethod(result, "forceCancelGesture", true);
