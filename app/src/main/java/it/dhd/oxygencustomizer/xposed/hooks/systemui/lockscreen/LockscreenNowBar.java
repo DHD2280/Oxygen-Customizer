@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -118,9 +117,9 @@ public class LockscreenNowBar extends XposedMods {
     private boolean mNowBarNotificationIgnoreSecurity = false;
     private boolean mNowBarNotificationCustomColors = false, mNowBarNotificationUseAppIcon = false;
     private int mNowBarNotificationBgColor = Color.BLACK,
-                mNowBarNotification1LineColor = Color.WHITE,
-                mNowBarNotification2LineColor = Color.WHITE,
-                mNowBarNotificationIconColor = Color.WHITE;
+            mNowBarNotification1LineColor = Color.WHITE,
+            mNowBarNotification2LineColor = Color.WHITE,
+            mNowBarNotificationIconColor = Color.WHITE;
 
     private int mAffordanceWidth = 0;
 
@@ -243,20 +242,18 @@ public class LockscreenNowBar extends XposedMods {
                     mNowBarLayout.setAlpha((float) param.args[0]);
                 });
 
-        Class<?> QSImpl = findClassInArray(
-                lpparam,
+        ReflectedClass QSImpl = ReflectedClass.of(
                 "com.android.systemui.qs.QSImpl", //OOS15
                 "com.android.systemui.qs.QSFragment" //OOS14
         );
-        hookAllMethods(QSImpl, "setQsExpansion", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
-                if (NowBarController.hasInstance()) {
-                    NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
-                }
-            }
-        });
+        QSImpl
+                .after("setQsExpansion")
+                .run(param -> {
+                    boolean isFullyCollapsed = (boolean) callMethod(param.thisObject, "isFullyCollapsed");
+                    if (NowBarController.hasInstance()) {
+                        NowBarController.getInstance().setFullyCollapsed(isFullyCollapsed);
+                    }
+                });
 
         // Or handlePrimaryBouncerChanged(int, int)
         ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing -> {
