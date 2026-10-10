@@ -196,8 +196,35 @@ public class Launcher extends XposedMods {
                     if (task == null) return;
                     Object key = getObjectField(task, "key");
                     if (key == null) return;
-                    String pkgName = (String) callMethod(key, "getPackageName");
-                    int userId = getIntField(key, "userId");
+                    String pkgName = null;
+                    try {
+                        pkgName = (String) callMethod(task, "getPackageName");
+                    } catch (Throwable ignored) {
+                    }
+                    try {
+                        pkgName = (String) callMethod(key, "getPackageName");
+                    } catch (Throwable ignored) {
+                    }
+
+                    if (pkgName == null) {
+                        try {
+                            Intent intent = (Intent) getObjectField(key, "intent");
+                            if (intent != null) {
+                                pkgName = intent.getComponent() != null ? intent.getComponent().getPackageName() : intent.getPackage();
+                            }
+                        } catch (Throwable ignored) {
+                        }
+                    }
+                    if (pkgName == null) return;
+                    int userId = 0;
+                    try {
+                        userId = getIntField(key, "userId");
+                    } catch (Throwable ignored) {
+                        try {
+                            userId = (Integer) callMethod(task, "getUserId");
+                        } catch (Throwable ignored2) {
+                        }
+                    }
                     final ClickListener clickListener = new ClickListener(pkgName, userId);
 
                     iconView.setOnLongClickListener(clickListener);
