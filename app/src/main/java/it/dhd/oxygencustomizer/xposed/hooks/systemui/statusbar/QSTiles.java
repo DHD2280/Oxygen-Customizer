@@ -64,7 +64,7 @@ public class QSTiles extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        ReflectedClass QuickQSPanel = ReflectedClass.of("com.android.systemui.qs.QuickQSPanel");
+        ReflectedClass QuickQSPanel = ReflectedClass.ofIfPossible("com.android.systemui.qs.QuickQSPanel");
         QuickQSPanel
                 .before("getNumQuickTiles")
                 .run(param -> {
@@ -73,7 +73,7 @@ public class QSTiles extends XposedMods {
                     }
                 });
 
-        ReflectedClass TileLayout = ReflectedClass.of("com.android.systemui.qs.TileLayout");
+        ReflectedClass TileLayout = ReflectedClass.ofIfPossible("com.android.systemui.qs.TileLayout");
         TileLayout
                 .before("updateMaxRows")
                 .run(param -> {
