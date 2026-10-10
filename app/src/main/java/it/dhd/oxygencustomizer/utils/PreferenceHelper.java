@@ -618,12 +618,12 @@ public class PreferenceHelper {
             }
             case QS_TILE_ACTIVE_COLOR_ENABLED,
                  QS_TILE_INACTIVE_COLOR_ENABLED -> {
-                return is16010() ?
+                return is16010() || Build.VERSION.SDK_INT >= 37 ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
                         Build.VERSION.SDK_INT < 35;
             }
             case QS_TILE_ICON_CUSTOM_COLOR_ACTIVE_ACCENT -> {
-                return is16010() ?
+                return is16010() || Build.VERSION.SDK_INT >= 37 ?
                         instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false) :
                         isVisible(QS_TILE_ICON_CUSTOM_COLOR) &&
                                 instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
@@ -635,19 +635,19 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean(QS_TILE_ICON_CUSTOM_COLOR, false);
             }
             case "tile_colors_16" -> {
-                return is16010();
+                return is16010() || Build.VERSION.SDK_INT >= 37;
             }
             // Base
             case QS_TILE_CUSTOM_COLORS_SWITCH -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
             case QS_TILE_CUSTOM_COLOR_ACTIVE_ACCENT -> {
-                return is16010() &&
+                return is16010() || Build.VERSION.SDK_INT >= 37 &&
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) &&
                         instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_ACTIVE_COLOR -> {
-                return is16010() ?
+                return is16010() || Build.VERSION.SDK_INT >= 37 ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) &&
                                 instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false) :
                         Build.VERSION.SDK_INT >= 35 ?
@@ -655,7 +655,7 @@ public class PreferenceHelper {
                                 instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_INACTIVE_COLOR -> {
-                return is16010() ?
+                return is16010() || Build.VERSION.SDK_INT >= 37 ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) && instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false) :
                         Build.VERSION.SDK_INT >= 35 ?
                                 instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
