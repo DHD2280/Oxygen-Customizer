@@ -319,6 +319,10 @@ public class StatusbarMods extends XposedMods {
                 .after("onViewCreated")
                 .run(param -> mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar"));
 
+        ReflectedClass PhoneStatusBarViewClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarView");
+        PhoneStatusBarViewClass
+                .afterConstruction()
+                .run(param -> mStatusBar = (ViewGroup) param.thisObject);
 
         ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
 
