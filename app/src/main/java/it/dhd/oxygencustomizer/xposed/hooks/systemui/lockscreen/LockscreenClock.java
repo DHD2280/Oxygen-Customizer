@@ -444,7 +444,7 @@ public class LockscreenClock extends XposedMods {
                         }
                     });
 
-            ReflectedClass OplusKeyguardStyleClock = ReflectedClass.of("com.oplus.keyguard.OplusKeyguardStyleClock");
+            ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
             OplusKeyguardStyleClock
                     .after("onUiStateChanged")
                     .run(param -> {
