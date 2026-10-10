@@ -118,6 +118,7 @@ jobs:
           HEADERS=$(echo "$HEADERS" \
           | sed -E 's/^Merge remote-tracking branch.*/Synced with the latest changes/' \
           | sed -E 's|.*DHD2280/beta-localization$|Updated translations|' \
+          | sed -E 's/^[[:space:]]*CHANGELOG:[[:space:]]*//' \
           | sed '/^[[:space:]]*$/d' \
           | awk '!seen[$0]++')
           
@@ -177,7 +178,7 @@ jobs:
           COMMIT_MESSAGE_HEADER: ${{ env.COMMIT_MESSAGE_HEADER }}
         run: |
           set -e
-          MSG=$(printf '%b' "New push to github!\n\`\`\`\n${COMMIT_MESSAGE_HEADER}\n\`\`\`\nNightly version: ${{ env.VERSION_NAME }} Dev (#${{ github.run_number }})\nSee commit detail [here](${{ github.event.head_commit.url }})")
+          MSG=$(printf '%b' "New push to github!\n\`\`\`${COMMIT_MESSAGE_HEADER}\n\`\`\`\nNightly version: ${{ env.VERSION_NAME }} Dev (#${{ github.run_number }})\nSee commit detail [here](${{ github.event.head_commit.url }})")
 
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage" \
             --data-urlencode chat_id="${{ secrets.OC_NIGHTLY_BUILDS }}" \
