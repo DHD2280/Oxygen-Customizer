@@ -92,7 +92,7 @@ public class CaffeineTile extends XposedMods {
         }
 
         if (Build.VERSION.SDK_INT >= 35) {
-            ReflectedClass QSPanelControllerBaseClass = ReflectedClass.of("com.android.systemui.qs.QSPanelControllerBase");
+            ReflectedClass QSPanelControllerBaseClass = ReflectedClass.ofIfPossible("com.android.systemui.qs.QSPanelControllerBase");
             QSPanelControllerBaseClass
                     .after("setTiles")
                     .run(param -> {
