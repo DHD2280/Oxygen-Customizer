@@ -191,3 +191,17 @@ jobs:
           -d parse_mode=Markdown \
           -d disable_web_page_preview=true \
           -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"
+
+
+      - name: Remember notified commit
+        if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
+        run: |
+          mkdir -p .ci
+          echo "${{ github.sha }}" > .ci/last_notified_sha
+
+      - name: Save last notified commit
+        if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ci/last_notified_sha
+          key: telegram-last-sha-${{ github.run_id }}
