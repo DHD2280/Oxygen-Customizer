@@ -33,13 +33,13 @@ public class BatteryBar extends XposedMods {
     private static int BBarHeight = 10;
     private static List<Float> batteryLevels = Arrays.asList(20f, 40f);
     private static int[] batteryColors = new int[]{Color.RED, Color.YELLOW};
-    private static int chargingColor = Color.parseColor("#00FF00");
-    private static int fastChargingColor = Color.parseColor("#673AB7");
+    private static int chargingColor = Color.GREEN;
+    private static int fastChargingColor = Color.GREEN;
     private static boolean indicateCharging = true;
     private static boolean indicateFastCharging = true;
     private static boolean BBarTransitColors = false;
     private static boolean indicatePowerSave = true;
-    private static int powerSaveColor = Color.parseColor("#FF9800");
+    private static int powerSaveColor = Color.GREEN;
     private FrameLayout fullStatusbar;
     private ViewGroup mStatusBar;
     private Object mCollapsedStatusBarFragment = null;
