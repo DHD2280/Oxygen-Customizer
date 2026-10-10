@@ -843,6 +843,12 @@ public class QsTileCustomization extends XposedMods {
                     } catch (Throwable ignored) {
                     } // 16.0.10
                 });
+        OplusQsMediaPanelView
+                .after("bindCoverImg")
+                .run(param -> {
+                    if (showMediaArtMediaQs && mCoverImg != null)
+                        mCoverImg.setVisibility(View.GONE);
+                });
 
         // My device tile
         if (MyDeviceBaseClass != null) {
