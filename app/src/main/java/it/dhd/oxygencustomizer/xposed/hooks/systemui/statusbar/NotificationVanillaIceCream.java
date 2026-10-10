@@ -73,13 +73,22 @@ public class NotificationVanillaIceCream extends XposedMods {
                         String className = v != null ? v.getClass().getName() : "";
                         if (v != null &&
                                 capsulePattern.matcher(className).find()) return;
+                        // they don't check null on blur proxy so let's ignore
                         for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-                            if ("com.oplus.systemui.statusbar.notification.customcard.OplusCustomRowControllerManager"
-                                    .equals(ste.getClassName())
-                                    && "setCustomContainerControllerList".equals(ste.getMethodName())) {
+                            String cn = ste.getClassName();
+                            String mn = ste.getMethodName();
+                            // CustomRowControllerManager.setCustomContainerControllerList → .getBlurConfig()
+                            if ("com.oplus.systemui.statusbar.notification.customcard.OplusCustomRowControllerManager".equals(cn)
+                                    && "setCustomContainerControllerList".equals(mn)) {
+                                return;
+                            }
+                            // NotificationMenuRowExtImpl.getMenuItemBackground → .setBlurType()
+                            if ("com.oplus.systemui.notification.row.NotificationMenuRowExtImpl".equals(cn)
+                                    && "getMenuItemBackground".equals(mn)) {
                                 return;
                             }
                         }
+
                         param.setResult(null);
                     }
                 });
