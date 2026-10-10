@@ -60,6 +60,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -341,25 +342,6 @@ public class DepthWallpaper extends XposedMods {
                     }
                 });
 
-        ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
-        if (OplusKeyguardStyleClock.getClazz() != null) {
-            OplusKeyguardStyleClock
-                    .after("onUiStateChanged")
-                    .run(param -> {
-                        mLastUiState = (int) param.args[0];
-                        setDepthWallpaper(mLastUiState);
-                    });
-        }
-        ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
-        if (KeyguardPlugin.getClazz() != null) {
-            KeyguardPlugin
-                    .after("onUiStateChanged")
-                    .run(param -> {
-                        mLastUiState = (int) param.args[0];
-                        setDepthWallpaper(mLastUiState);
-                    });
-        }
-
         ReflectedClass OplusWallpaperAnimControllerImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl");
         ReflectedClass OplusWallpaperAnimControllerImplCompanion = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.anim.OplusWallpaperAnimControllerImpl$Companion");
         if (OplusWallpaperAnimControllerImplCompanion.getClazz() != null) {
@@ -391,6 +373,14 @@ public class DepthWallpaper extends XposedMods {
                         }
                     });
         }
+
+        ControllersProvider.registerUiStateChangedCallback(uiState -> {
+            if (mLastUiState != uiState) {
+                mLastUiState = uiState;
+                setDepthWallpaper(uiState);
+            }
+        });
+
     }
 
     public final float convertZoomOutByScale(float f2) {

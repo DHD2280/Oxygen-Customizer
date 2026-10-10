@@ -107,15 +107,7 @@ public class AlbumArtLockscreen extends XposedMods {
                     rootView.addView(albumArtContainer, TileDrawableWrapper.getClazz() != null ? index : 3);
                 });
 
-
-        ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
-        OplusKeyguardStyleClock
-                .after("onUiStateChanged")
-                .run(param -> onUiStateChanged((int) param.args[0]));
-        ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
-        KeyguardPlugin
-                .after("onUiStateChanged")
-                .run(param -> onUiStateChanged((int) param.args[0]));
+        ControllersProvider.registerUiStateChangedCallback(this::onUiStateChanged);
 
         ControllersProvider.registerKeyguardShowingCallback(showing -> {
             shouldShowArt = showing;

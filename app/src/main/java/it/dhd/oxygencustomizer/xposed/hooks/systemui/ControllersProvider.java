@@ -46,6 +46,7 @@ public class ControllersProvider extends XposedMods {
     private final ArrayList<OnKeyguardShowing> mKeyguardShowingListeners = new ArrayList<>();
     private final ArrayList<OnStatusBarStateChanged> mStatusBarStateListeners = new ArrayList<>();
     private final ArrayList<ExpandedQsFractionChangeListener> mExpandedQsFractionChangeListeners = new ArrayList<>();
+    private final ArrayList<UiStateChangedListener> mUiStateChangedListeners = new ArrayList<>();
 
 
     private Object mBluetoothController = null;
@@ -174,6 +175,17 @@ public class ControllersProvider extends XposedMods {
      */
     public static void unRegisterExpandedQsFractionChangeCallback(ExpandedQsFractionChangeListener callback) {
         instance.mExpandedQsFractionChangeListeners.remove(callback);
+    }
+
+    public static void registerUiStateChangedCallback(UiStateChangedListener callback) {
+        instance.mUiStateChangedListeners.add(callback);
+    }
+
+    /**
+     * @noinspection unused
+     */
+    public static void unRegisterUiStateChangedCallback(UiStateChangedListener callback) {
+        instance.mUiStateChangedListeners.remove(callback);
     }
 
     public static Object getBluetoothController() {
@@ -621,6 +633,16 @@ public class ControllersProvider extends XposedMods {
                     notifyQsFractionChange(f);
                 });
 
+        // UI State Changed
+        ReflectedClass OplusKeyguardStyleClock = ReflectedClass.ofIfPossible("com.oplus.keyguard.OplusKeyguardStyleClock");
+        OplusKeyguardStyleClock
+                .after("onUiStateChanged")
+                .run(param -> onUiStateChanged((int) param.args[0]));
+        ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
+        KeyguardPlugin
+                .after("onUiStateChanged")
+                .run(param -> onUiStateChanged((int) param.args[0]));
+
     }
 
     private void getActivityStarter() {
@@ -788,6 +810,15 @@ public class ControllersProvider extends XposedMods {
         }
     }
 
+    public void onUiStateChanged(int state) {
+        for (ControllersProvider.UiStateChangedListener callback : mUiStateChangedListeners) {
+            try {
+                callback.onUiStateChanged(state);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     /**
      * Callbacks for Mobile Data
      */
@@ -853,6 +884,13 @@ public class ControllersProvider extends XposedMods {
      */
     public interface ExpandedQsFractionChangeListener {
         void updateState(float fraction);
+    }
+
+    /**
+     * Callback for UI State Changed (AOD - Keyguard - SysUI)
+     */
+    public interface UiStateChangedListener {
+        void onUiStateChanged(int state);
     }
 
 }
