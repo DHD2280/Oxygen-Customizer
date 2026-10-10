@@ -17,6 +17,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.idOf;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
@@ -131,6 +132,7 @@ public class StatusbarClock extends XposedMods {
     };
     private TextView mClockView;
     private Object mCollapsedStatusBarFragment = null;
+    private FrameLayout mPhoneStatusbarView;
     private ViewGroup mStatusbarStartSide = null;
     private View mCenteredIconArea = null;
     private LinearLayout mSystemIconArea = null;
@@ -295,7 +297,9 @@ public class StatusbarClock extends XposedMods {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
         ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock");
-        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass PhoneStatusBarViewClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarView");
+        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");
         ReflectedClass TaskStackListenerImpl = ReflectedClass.of("com.android.wm.shell.common.TaskStackListenerImpl");
         ReflectedClass StatClock = null;
         try {
@@ -311,6 +315,11 @@ public class StatusbarClock extends XposedMods {
         CollapsedStatusBarFragmentClass
                 .afterConstruction()
                 .run(param -> mCollapsedStatusBarFragment = param.thisObject);
+
+        // COS17
+        PhoneStatusBarViewClass
+                .afterConstruction()
+                .run(param -> mPhoneStatusbarView = (FrameLayout) param.thisObject);
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
@@ -361,6 +370,35 @@ public class StatusbarClock extends XposedMods {
                         mCenteredIconArea.setLayoutParams(lp);
                         mStatusBar.addView(mCenteredIconArea);
                     }
+
+                    updateClock();
+                    updateChip();
+                    setupChip();
+                    placeClock();
+                    setClockSize();
+                });
+
+        PhoneStatusBarViewControllerClass
+                .after("onViewAttached")
+                .run(param -> {
+                    try {
+                        mClockView = mPhoneStatusbarView.findViewById(idOf("clock"));
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                    mClockDefaultLineSpacingExtra = mClockView.getLineSpacingExtra();
+                    mClockDefaultLineSpacingMultiplier = mClockView.getLineSpacingMultiplier();
+
+                    mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
+
+                    mSystemIconArea = mPhoneStatusbarView.findViewById(idOf("statusIcons"));
+
+
+                    mCenteredIconArea = new LinearLayout(mContext);
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+                    lp.gravity = Gravity.CENTER;
+                    mCenteredIconArea.setLayoutParams(lp);
+                    mPhoneStatusbarView.addView(mCenteredIconArea);
 
                     updateClock();
                     updateChip();
