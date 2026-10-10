@@ -81,7 +81,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="#00FF00"
+            android:defaultValue="0xff00FF00"
             android:key="batteryChargingColor"
             android:title="@string/BB_batteryChargingColor"
             app:iconSpaceReserved="false" />
@@ -95,7 +95,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="#673AB7"
+            android:defaultValue="0xff673AB7"
             android:key="batteryFastChargingColor"
             android:title="@string/BB_batteryFastChargingColor"
             app:iconSpaceReserved="false" />
@@ -109,7 +109,7 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
-            android:defaultValue="#FF9800"
+            android:defaultValue="0xffff9800"
             android:key="batteryPowerSaveColor"
             android:title="@string/BB_batteryPowerSaveColor"
             app:iconSpaceReserved="false" />
