@@ -33,15 +33,14 @@ public class BatteryBar extends XposedMods {
     private static int BBarHeight = 10;
     private static List<Float> batteryLevels = Arrays.asList(20f, 40f);
     private static int[] batteryColors = new int[]{Color.RED, Color.YELLOW};
-    private static int chargingColor = Color.WHITE;
-    private static int fastChargingColor = Color.WHITE;
-    private static boolean indicateCharging = false;
-    private static boolean indicateFastCharging = false;
+    private static int chargingColor = Color.parseColor("#00FF00");
+    private static int fastChargingColor = Color.parseColor("#673AB7");
+    private static boolean indicateCharging = true;
+    private static boolean indicateFastCharging = true;
     private static boolean BBarTransitColors = false;
-    private static boolean indicatePowerSave = false;
-    private static int powerSaveColor = Color.GREEN;
+    private static boolean indicatePowerSave = true;
+    private static int powerSaveColor = Color.parseColor("#FF9800");
     private FrameLayout fullStatusbar;
-    private Object mStatusBarIconController;
     private ViewGroup mStatusBar;
     private Object mCollapsedStatusBarFragment = null;
     private boolean BBarEnabled;
@@ -70,13 +69,12 @@ public class BatteryBar extends XposedMods {
                 Xprefs.getInt("batteryCriticalColor", Color.RED),
                 Xprefs.getInt("batteryWarningColor", Color.YELLOW)};
 
-        indicateFastCharging = Xprefs.getBoolean("indicateFastCharging", false);
+        indicateFastCharging = Xprefs.getBoolean("indicateFastCharging", true);
         indicateCharging = Xprefs.getBoolean("indicateCharging", true);
-        indicatePowerSave = Xprefs.getBoolean("indicatePowerSave", false);
-        powerSaveColor = Xprefs.getInt("batteryPowerSaveColor", Color.GREEN);
-
-        chargingColor = Xprefs.getInt("batteryChargingColor", Color.GREEN);
-        fastChargingColor = Xprefs.getInt("batteryFastChargingColor", Color.GREEN);
+        indicatePowerSave = Xprefs.getBoolean("indicatePowerSave", true);
+        powerSaveColor = Xprefs.getInt("batteryPowerSaveColor", Color.parseColor("#FF9800"));
+        chargingColor = Xprefs.getInt("batteryChargingColor", Color.parseColor("#00FF00"));
+        fastChargingColor = Xprefs.getInt("batteryFastChargingColor", Color.parseColor("#673AB7"));
 
         if (Key.length > 0) {
             if (Key[0].equals("BBarEnabled")) {
@@ -97,6 +95,7 @@ public class BatteryBar extends XposedMods {
         if (!lpparam.packageName.equals(listenPackage)) return;
 
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");
         ReflectedClass PhoneStatusBarViewClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView");
 
         //getting statusbar class for further use
@@ -120,13 +119,26 @@ public class BatteryBar extends XposedMods {
         CollapsedStatusBarFragmentClass
                 .after("onViewCreated")
                 .run(param -> {
-                    mStatusBarIconController = getObjectField(param.thisObject, "mStatusBarIconController");
 
                     mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
 
                     fullStatusbar = (FrameLayout) mStatusBar.getParent();
 
 
+                    if (BBarEnabled) //in case we got the config but view wasn't ready yet
+                    {
+                        placeBatteryBar();
+                    }
+                });
+
+        // COS 17
+        PhoneStatusBarViewClass
+                .afterConstruction()
+                .run(param -> fullStatusbar = (FrameLayout) param.thisObject);
+
+        PhoneStatusBarViewControllerClass
+                .after("onViewAttached")
+                .run(param -> {
                     if (BBarEnabled) //in case we got the config but view wasn't ready yet
                     {
                         placeBatteryBar();
