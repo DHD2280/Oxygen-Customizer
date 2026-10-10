@@ -887,18 +887,30 @@ public class QsTileCustomization extends XposedMods {
                 .run(param -> {
                     if (!qsCustomTileColors) return;
                     if (!qsActiveColorEnabled) return;
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                    float f = 0;
+                    if (param.args.length >= 2) f = (float) param.args[1];
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            5, qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 3, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
-                                    getBlendMode(), qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 4, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0]));
+                                    5, qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 3, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0]));
                 });
         QSBlurConfigProvider
                 .before("getStdInactiveBlurConfig")
                 .run(param -> {
                     if (!qsCustomTileColors) return;
                     if (!qsInactiveColorEnabled) return;
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                    float f = 0;
+                    if (param.args.length >= 3) f = (float) param.args[2];
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            5, qsInactiveColor, 3, qsInactiveColor), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
-                                    getBlendMode(), qsInactiveColor, 2, qsInactiveColor), param.args[0]));
+                                    5, qsInactiveColor, 3, qsInactiveColor), param.args[0]));
                 });
 
         QSBlurConfigProvider
@@ -906,18 +918,30 @@ public class QsTileCustomization extends XposedMods {
                 .run(param -> {
                     if (!qsCustomTileColors) return;
                     if (!qsActiveColorEnabled) return;
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                    float f = 0;
+                    if (param.args.length >= 2) f = (float) param.args[1];
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            5, qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 3, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
-                                    getBlendMode(), qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 4, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0]));
+                                    5, qsActiveOOS16Accent ? getPrimaryColor(mContext) : qsActiveColor, 3, qsActiveColorIconAccent ? getPrimaryColor(mContext) : qsActiveColor), param.args[0]));
                 });
         QSBlurConfigProvider
                 .before("getSepInactiveBlurConfig")
                 .run(param -> {
                     if (!qsCustomTileColors) return;
                     if (!qsInactiveColorEnabled) return;
-                    param.setResult(callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                    float f = 0;
+                    if (param.args.length >= 3) f = (float) param.args[2];
+                    param.setResult(Build.VERSION.SDK_INT >= 37 ?
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
                             newInstance(MixColorWithShader.getClazz(),
-                                    getBlendMode(), qsInactiveColor, 2, qsInactiveColor), param.args[0]));
+                                    5, qsInactiveColor, 3, qsInactiveColor), param.args[0], f) :
+                            callStaticMethod(QSBlurConfigProvider.getClazz(), "createMixColorConfig",
+                                    newInstance(MixColorWithShader.getClazz(),
+                                            5, qsInactiveColor, 3, qsInactiveColor), param.args[0]));
                 });
 
     }
