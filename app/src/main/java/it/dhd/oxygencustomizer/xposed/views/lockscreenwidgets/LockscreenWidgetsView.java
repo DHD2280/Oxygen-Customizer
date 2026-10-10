@@ -1491,9 +1491,9 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private boolean isMobileDataEnabled() {
         Object dataController = getDataController();
-        if (dataController != null) {
+        try {
             return (boolean) callMethod(dataController, "isMobileDataEnabled");
-        } else {
+        } catch (Throwable ignored) {
             try {
                 Class<?> cmClass = Class.forName(SystemUtils.ConnectivityManager().getClass().getName());
                 Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
