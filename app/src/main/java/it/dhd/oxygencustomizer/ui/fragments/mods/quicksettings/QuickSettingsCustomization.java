@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
@@ -48,12 +49,13 @@ public class QuickSettingsCustomization extends ControlledPreferenceFragmentComp
 
         OplusJumpPreference highlightTile = findPreference("highlight_tile");
         OplusJumpPreference baseTile = findPreference("base_tile");
+        boolean shouldShow = !PreferenceHelper.is16010() || Build.VERSION.SDK_INT > 37;
         if (highlightTile != null) {
-            highlightTile.setVisible(!PreferenceHelper.is16010());
+            highlightTile.setVisible(!shouldShow);
         }
 
         if (baseTile != null) {
-            baseTile.setVisible(!PreferenceHelper.is16010());
+            baseTile.setVisible(!shouldShow);
         }
 
     }
