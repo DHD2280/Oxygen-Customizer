@@ -77,6 +77,23 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.CUSTOM_BATTERY_HIDE_PERCENTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_CUSTOMIZE_PERCENTAGE_SIZE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.BatteryPrefs.STOCK_PERCENTAGE_SIZE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_DOUBLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_DOUBLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_LONG_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_LONG_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_SINGLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_SINGLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TIMEOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_PROXIMITY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_TIMEOUT;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AI_STATUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.DepthWallpaper.DEPTH_WALLPAPER_AOD_OPACITY;
@@ -633,15 +650,15 @@ public class PreferenceHelper {
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) &&
                                 instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false) :
                         Build.VERSION.SDK_INT >= 35 ?
-                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
-                        instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
+                                instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                                instance.mPreferences.getBoolean(QS_TILE_ACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_INACTIVE_COLOR -> {
                 return is16010() ?
                         instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) && instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false) :
                         Build.VERSION.SDK_INT >= 35 ?
-                        instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
-                        instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
+                                instance.mPreferences.getBoolean(QS_TILE_CUSTOM_COLORS_SWITCH, false) :
+                                instance.mPreferences.getBoolean(QS_TILE_INACTIVE_COLOR_ENABLED, false);
             }
             case QS_TILE_DISABLED_COLOR -> {
                 return Build.VERSION.SDK_INT >= 35 ?
@@ -1145,11 +1162,11 @@ public class PreferenceHelper {
             }
 
 
-            case "volbtn_torch_enable_timeout", "volbtn_torch_use_proximity" -> {
-                return instance.mPreferences.getBoolean("volbtn_torch", false);
+            case BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED, BUTTONS_VOLUME_TORCH_PROXIMITY -> {
+                return instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH, false);
             }
-            case "volbtn_torch_timeout" -> {
-                return instance.mPreferences.getBoolean("volbtn_torch", false) && instance.mPreferences.getBoolean("volbtn_torch_enable_timeout", false);
+            case BUTTONS_VOLUME_TORCH_TIMEOUT -> {
+                return instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH, false) && instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED, false);
             }
 
             // Weather
@@ -1397,10 +1414,10 @@ public class PreferenceHelper {
                             instance.mPreferences.getSliderFloat(EDGE_LIGHT_WIDTH, 20f) + " dp";
 
             // Buttons
-            case "volbtn_torch_timeout" ->
-                    String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt("volbtn_torch_timeout", 5));
-            case "plusKey_press_button_action_timeout" ->
-                    instance.mPreferences.getSliderInt("plusKey_press_button_action_timeout", 250) + " ms";
+            case BUTTONS_VOLUME_TORCH_TIMEOUT ->
+                    String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt(BUTTONS_VOLUME_TORCH_TIMEOUT, 5));
+            case BUTTONS_PLUSKEY_TIMEOUT ->
+                    instance.mPreferences.getSliderInt(BUTTONS_PLUSKEY_TIMEOUT, 250) + " ms";
 
             // Screen Off On Flat
             case "FlatStandbyTime" ->
@@ -1442,18 +1459,18 @@ public class PreferenceHelper {
             }
 
             // Buttons pref
-            if (key.equals("plusKey_single_press_button_action_value") ||
-                    key.equals("plusKey_double_press_button_action_value") ||
-                    key.equals("plusKey_triple_press_button_action_value") ||
-                    key.equals("plusKey_long_press_button_action_value") ||
-                    key.equals("plusKey_single_press_button_action_value_screenoff") ||
-                    key.equals("plusKey_double_press_button_action_value_screenoff") ||
-                    key.equals("plusKey_triple_press_button_action_value_screenoff") ||
-                    key.equals("plusKey_long_press_button_action_value_screenoff") ||
-                    key.equals("cameraKey_single_press_button_action_value") ||
-                    key.equals("cameraKey_double_press_button_action_value") ||
-                    key.equals("cameraKey_single_press_button_action_value_screenoff") ||
-                    key.equals("cameraKey_double_press_button_action_value_screenoff")) {
+            if (key.equals(BUTTONS_PLUSKEY_SINGLE_PRESS) ||
+                    key.equals(BUTTONS_PLUSKEY_DOUBLE_PRESS) ||
+                    key.equals(BUTTONS_PLUSKEY_TRIPLE_PRESS) ||
+                    key.equals(BUTTONS_PLUSKEY_LONG_PRESS) ||
+                    key.equals(BUTTONS_PLUSKEY_SINGLE_PRESS_SOFF) ||
+                    key.equals(BUTTONS_PLUSKEY_DOUBLE_PRESS_SOFF) ||
+                    key.equals(BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF) ||
+                    key.equals(BUTTONS_PLUSKEY_LONG_PRESS_SOFF) ||
+                    key.equals(BUTTONS_CAMERA_SINGLE_PRESS) ||
+                    key.equals(BUTTONS_CAMERA_DOUBLE_PRESS) ||
+                    key.equals(BUTTONS_CAMERA_SINGLE_PRESS_SOFF) ||
+                    key.equals(BUTTONS_CAMERA_DOUBLE_PRESS_SOFF)) {
                 String prefValue = instance.mPreferences.getString(key, "none");
                 if (prefValue.contains(":")) {
                     int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;
@@ -1466,7 +1483,7 @@ public class PreferenceHelper {
                     }
                     String finalName = name;
                     preference.setSummaryProvider(p -> title + "\n" + finalName);
-                } else if(prefValue.equals("none") && key.contains("screenoff")) {
+                } else if (prefValue.equals("none") && key.contains("screenoff")) {
                     preference.setSummaryProvider(p -> preference.getContext().getString(R.string.plusKey_same_as_screen_on));
                 } else {
                     preference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());

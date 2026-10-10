@@ -1,6 +1,18 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_DOUBLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_DOUBLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_LONG_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_LONG_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_SINGLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_SINGLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,20 +79,20 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
             mActivitiesAdapter = new ActivitiesListAdapter(requireActivity());
         }).start();
 
-        setupActionPreference("plusKey_single_press_button_action_value");
-        setupActionPreference("plusKey_double_press_button_action_value");
-        setupActionPreference("plusKey_triple_press_button_action_value");
-        setupActionPreference("plusKey_long_press_button_action_value");
+        setupActionPreference(BUTTONS_PLUSKEY_SINGLE_PRESS);
+        setupActionPreference(BUTTONS_PLUSKEY_DOUBLE_PRESS);
+        setupActionPreference(BUTTONS_PLUSKEY_TRIPLE_PRESS);
+        setupActionPreference(BUTTONS_PLUSKEY_LONG_PRESS);
 
-        setupActionPreference("plusKey_single_press_button_action_value_screenoff");
-        setupActionPreference("plusKey_double_press_button_action_value_screenoff");
-        setupActionPreference("plusKey_triple_press_button_action_value_screenoff");
-        setupActionPreference("plusKey_long_press_button_action_value_screenoff");
+        setupActionPreference(BUTTONS_PLUSKEY_SINGLE_PRESS_SOFF);
+        setupActionPreference(BUTTONS_PLUSKEY_DOUBLE_PRESS_SOFF);
+        setupActionPreference(BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF);
+        setupActionPreference(BUTTONS_PLUSKEY_LONG_PRESS_SOFF);
 
-        setupActionPreference("cameraKey_single_press_button_action_value");
-        setupActionPreference("cameraKey_double_press_button_action_value");
-        setupActionPreference("cameraKey_single_press_button_action_value_screenoff");
-        setupActionPreference("cameraKey_double_press_button_action_value_screenoff");
+        setupActionPreference(BUTTONS_CAMERA_SINGLE_PRESS);
+        setupActionPreference(BUTTONS_CAMERA_DOUBLE_PRESS);
+        setupActionPreference(BUTTONS_CAMERA_SINGLE_PRESS_SOFF);
+        setupActionPreference(BUTTONS_CAMERA_DOUBLE_PRESS_SOFF);
     }
 
 

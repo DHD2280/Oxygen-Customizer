@@ -476,11 +476,26 @@ public final class Constants {
         }
 
         public static class Buttons {
-            public static final String BUTTONS_POWER_LONGPRESS_TORCH = "torch_long_press_power_gesture";
-            public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT_SWITCH = "torch_long_press_power_gesture_enable_timeout";
-            public static final String BUTTONS_POWER_LONGPRESS_TORCH_TIMEOUT = "torch_long_press_power_timeout";
             public static final String BUTTONS_VOLUME_MUSIC = "volbtn_music_controls";
-            public static final String BUTTONS_MINDSPACE = "mindspace_button_action";
+            public static final String BUTTONS_VOLUME_MUSIC_SON = "volbtn_music_controls_son";
+            public static final String BUTTONS_VOLUME_TORCH = "volbtn_torch";
+            public static final String BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED = "volbtn_torch_enable_timeout";
+            public static final String BUTTONS_VOLUME_TORCH_TIMEOUT = "volbtn_torch_timeout";
+            public static final String BUTTONS_VOLUME_TORCH_PROXIMITY = "volbtn_torch_use_proximity";
+            public static final String BUTTONS_PLUSKEY_SINGLE_PRESS = "plusKey_single_press_button_action_value";
+            public static final String BUTTONS_PLUSKEY_DOUBLE_PRESS = "plusKey_double_press_button_action_value";
+            public static final String BUTTONS_PLUSKEY_TRIPLE_PRESS = "plusKey_triple_press_button_action_value";
+            public static final String BUTTONS_PLUSKEY_LONG_PRESS = "plusKey_long_press_button_action_value";
+            public static final String BUTTONS_PLUSKEY_SINGLE_PRESS_SOFF = "plusKey_single_press_button_action_value_screenoff";
+            public static final String BUTTONS_PLUSKEY_DOUBLE_PRESS_SOFF = "plusKey_double_press_button_action_value_screenoff";
+            public static final String BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF = "plusKey_triple_press_button_action_value_screenoff";
+            public static final String BUTTONS_PLUSKEY_LONG_PRESS_SOFF = "plusKey_long_press_button_action_value_screenoff";
+            public static final String BUTTONS_PLUSKEY_TIMEOUT = "plusKey_press_button_action_timeout";
+            public static final String BUTTONS_CAMERA_SINGLE_PRESS = "cameraKey_single_press_button_action_value";
+            public static final String BUTTONS_CAMERA_DOUBLE_PRESS = "cameraKey_double_press_button_action_value";
+            public static final String BUTTONS_CAMERA_SINGLE_PRESS_SOFF = "cameraKey_single_press_button_action_value_screenoff";
+            public static final String BUTTONS_CAMERA_DOUBLE_PRESS_SOFF = "cameraKey_double_press_button_action_value_screenoff";
+
         }
 
         public static class Lockscreen {
