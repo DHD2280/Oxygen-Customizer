@@ -13,6 +13,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.utils.Constants.STATUSBAR_LOGO_FILE;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.idOf;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.BroadcastReceiver;
@@ -26,6 +27,7 @@ import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -54,6 +56,7 @@ public class StatusbarLogo extends XposedMods {
     private ViewGroup mStatusbarStartSide = null;
     private LinearLayout mSystemIconArea = null;
     private Object mCollapsedStatusBarFragment = null;
+    private FrameLayout mPhoneStatusbarView = null;
 
     private boolean mStatusbarLogo = false;
     private int mLogoStyle = 0;
@@ -118,7 +121,7 @@ public class StatusbarLogo extends XposedMods {
         mStatusbarLogoView.setLayoutParams(new ViewGroup.LayoutParams(dp2px(mContext, mLogoSize), dp2px(mContext, mLogoSize)));
         mStatusbarLogoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.of("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
+        ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
         CollapsedStatusBarFragmentClass
                 .afterConstruction()
                 .run(param -> mCollapsedStatusBarFragment = param.thisObject);
@@ -141,6 +144,19 @@ public class StatusbarLogo extends XposedMods {
                     }
 
                     placeLogo();
+                });
+
+        ReflectedClass PhoneStatusBarViewClass = ReflectedClass.of("com.android.systemui.statusbar.phone.PhoneStatusBarView");
+        PhoneStatusBarViewClass
+                .afterConstruction()
+                .run(param -> mPhoneStatusbarView = (FrameLayout) param.thisObject);
+
+        ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");
+        PhoneStatusBarViewControllerClass
+                .after("onViewAttached")
+                .run(param -> {
+                    mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
+                    mSystemIconArea = mPhoneStatusbarView.findViewById(idOf("statusIcons"));
                 });
 
         ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing);
