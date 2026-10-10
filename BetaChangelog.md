@@ -1,3 +1,16 @@
+**beta-210**  
+- Fixed qs tile colors for COS17  
+- Fixed qs sliders color for COS17  
+- Improved custom battery icon for COS17  
+- Fixed qs settings icon longpress to open OC for COS17  
+- Fixed Album Art on Lockscreen  
+- Fixed battery intent for battery click for COS17  
+- Fixed vibration for statusbar mods for COS17  
+- Fixed Statusbar Logo for COS17  
+- Fixed clock customizations on COS17  
+- Fixed Battery Bar for COS17  
+- Fixed longpress on app icon to open in settings (Launcher) for COS17  
+  
 **beta-209**  
 - Added customizations for camera button (KeyCode event 767 and 769)  
 - Fixed header image alpha on OOS16.0.10+  
