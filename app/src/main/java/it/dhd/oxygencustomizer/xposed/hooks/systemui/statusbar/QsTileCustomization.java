@@ -566,7 +566,7 @@ public class QsTileCustomization extends XposedMods {
         }
 
         try {
-            ReflectedClass PagedTileLayout = ReflectedClass.of("com.android.systemui.qs.PagedTileLayout");
+            ReflectedClass PagedTileLayout = ReflectedClass.ofIfPossible("com.android.systemui.qs.PagedTileLayout");
             PagedTileLayout
                     .afterConstruction()
                     .run(param -> {
@@ -1263,11 +1263,14 @@ public class QsTileCustomization extends XposedMods {
                 .after("updateColor")
                 .run(param -> {
                     if (!qsBrightnessSliderCustomize) return;
-                    setObjectField(param.thisObject, "baseMixColorDrawable", null);
-                    setObjectField(param.thisObject, "activeMixColorDrawable", null);
-                    setObjectField(param.thisObject, "fluidGlassSliderBgDrawable", null);
-                    View v = (View) param.thisObject;
-                    v.invalidate();
+                    try {
+                        setObjectField(param.thisObject, "baseMixColorDrawable", null);
+                        setObjectField(param.thisObject, "activeMixColorDrawable", null);
+                        setObjectField(param.thisObject, "fluidGlassSliderBgDrawable", null);
+                        View v = (View) param.thisObject;
+                        v.invalidate();
+                    } catch (Throwable ignored) {
+                    }
                 });
         ReflectedClass MixColorWithShader = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.blurability.MixColorWithShader");
         ReflectedClass QSBlurConfigProvider = ReflectedClass.ofIfPossible("com.oplusos.systemui.common.util.QSBlurConfigProvider");
