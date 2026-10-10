@@ -9,25 +9,18 @@ import static it.dhd.oxygencustomizer.xposed.hooks.launcher.CustomShortcut.DIVID
 import static it.dhd.oxygencustomizer.xposed.hooks.launcher.CustomShortcut.KILL_SHORTCUT;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
-import android.os.Build;
 import android.util.Log;
 
-import com.android.launcher3.popup.SystemShortcut;
 import com.android.quickstep.TaskShortcutFactory;
-import com.oplus.quickstep.shortcuts.OplusGroupDividerShortcut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.launcher.KillShortcut;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class RecentsMenu extends XposedMods {
@@ -53,7 +46,8 @@ public class RecentsMenu extends XposedMods {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        ReflectedClass OplusTaskOverlayFactoryKt = ReflectedClass.of("com.oplus.quickstep.shortcuts.OplusTaskOverlayFactoryKt");
+        ReflectedClass OplusTaskOverlayFactoryKt = ReflectedClass.ofIfPossible("com.oplus.quickstep.shortcuts.OplusTaskOverlayFactoryKt");
+        if (OplusTaskOverlayFactoryKt.getClazz() == null) return;
         Object[] MENU_OPTIONS = (Object[]) getStaticObjectField(OplusTaskOverlayFactoryKt.getClazz(), "MENU_OPTIONS");
 
         ArrayList<Object> taskShortcutFactories = new ArrayList<>(Arrays.asList(MENU_OPTIONS));
