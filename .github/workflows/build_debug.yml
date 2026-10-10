@@ -169,28 +169,23 @@ jobs:
           files: latestNightly.json
           name: GitHub
           email: OxygenCustomizer@dhd.it
-      
+
 
       - name: Telegram File Message
         if: github.repository == 'DHD2280/Oxygen-Customizer' && env.SKIP_BUILD != 'true'
         env:
-          COMMIT_MESSAGE: |+
-            New push to github!
-            \`\`\`
-            ${{ env.COMMIT_MESSAGE_HEADER }}
-            \`\`\`
-            Nightly version: ${{ env.VERSION_NAME }} Dev (#${{github.run_number}})
-            See commit detail [here](${{ github.event.head_commit.url }})
-          COMMIT_URL: ${{ github.event.head_commit.url }}
+          COMMIT_MESSAGE_HEADER: ${{ env.COMMIT_MESSAGE_HEADER }}
         run: |
           set -e
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage \
-          -d chat_id=${{ secrets.OC_NIGHTLY_BUILDS }} \
-          -d message_thread_id=${{ secrets.OC_NIGHTLY_BUILDS_THREAD }} \
-          -d text="${{ env.COMMIT_MESSAGE_HEADER }}" \
-          -d parse_mode=Markdown \
-          -d disable_web_page_preview=true \
-          -d reply_markup="{\"inline_keyboard\": [[{\"text\": \"⬇️ Download (required login)\",\"url\": \"https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{github.run_id}}\"}]]}"
+          MSG=$(printf '%b' "New push to github!\n\`\`\`\n${COMMIT_MESSAGE_HEADER}\n\`\`\`\nNightly version: ${{ env.VERSION_NAME }} Dev (#${{ github.run_number }})\nSee commit detail [here](${{ github.event.head_commit.url }})")
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TK }}/sendMessage" \
+            --data-urlencode chat_id="${{ secrets.OC_NIGHTLY_BUILDS }}" \
+            --data-urlencode message_thread_id="${{ secrets.OC_NIGHTLY_BUILDS_THREAD }}" \
+            --data-urlencode text="$MSG" \
+            -d parse_mode=Markdown \
+            -d disable_web_page_preview=true \
+            -d reply_markup='{"inline_keyboard": [[{"text": "⬇️ Download (required login)","url": "https://github.com/DHD2280/Oxygen-Customizer/actions/runs/${{ github.run_id }}"}]]}'
 
 
       - name: Remember notified commit
