@@ -384,14 +384,18 @@ public class SeparateQsCustomization extends XposedMods {
         ReflectedClass OplusQSQuickEntranceContainerViewController = ReflectedClass.of(
                 "com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceComponent", //OOS16
                 "com.oplus.systemui.plugins.qs.quickentrance.OplusQSQuickEntranceContainerViewController");
+        final LongClickListener onLongClick = new LongClickListener();
         OplusQSQuickEntranceContainerViewController
                 .after("onInit")
                 .run(param -> {
                     View settingsButton = (View) getObjectField(param.thisObject, "settingsButton");
-                    settingsButton.setOnLongClickListener(v -> {
-                        openOxygenCustomizer();
-                        return true;
-                    });
+                    try {
+                        View settingsRemote = (View) getObjectField(param.thisObject, "settingsButtonRemote");
+                        settingsRemote.setLongClickable(true);
+                        settingsRemote.setOnLongClickListener(onLongClick);
+                    } catch (Throwable ignored) {
+                    }
+                    settingsButton.setOnLongClickListener(onLongClick);
                     if (Build.VERSION.SDK_INT >= 36) {
                         try {
                             mEditButton = (View) getObjectField(param.thisObject, "editBtn");
@@ -537,6 +541,14 @@ public class SeparateQsCustomization extends XposedMods {
         Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(BuildConfig.APPLICATION_ID);
         Object mActivityStarter = ControllersProvider.getActivityStarterExternal();
         callMethod(mActivityStarter, "postStartActivityDismissingKeyguard", intent, 0 /* dismissShade */);
+    }
+
+    class LongClickListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View v) {
+            openOxygenCustomizer();
+            return true;
+        }
     }
 
     private void setupButtons() {
