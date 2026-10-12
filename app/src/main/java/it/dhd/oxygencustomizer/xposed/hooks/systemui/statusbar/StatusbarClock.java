@@ -687,7 +687,7 @@ public class StatusbarClock extends XposedMods {
         switch (mClockPosition) {
             case POSITION_LEFT -> {
                 targetArea = mStatusbarStartSide;
-                index = 1;
+                if (Build.VERSION.SDK_INT < 37) index = 1;
                 mClockView.setPadding(rightClockPadding, 0, rightClockPadding, 0);
             }
             case POSITION_CENTER -> {
