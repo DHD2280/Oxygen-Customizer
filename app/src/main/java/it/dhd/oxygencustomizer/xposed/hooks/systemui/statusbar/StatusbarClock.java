@@ -60,6 +60,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -469,6 +470,13 @@ public class StatusbarClock extends XposedMods {
                     } catch (Throwable ignored) {
                     }
                 });
+        ReflectedClass OplusHomeStatusBarViewModelImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.pipeline.shared.ui.viewmodel.OplusHomeStatusBarViewModelImpl");
+        OplusHomeStatusBarViewModelImpl
+                .before("notifyClockLayoutAreasChanged")
+                .run(param -> {
+                    if (mCustomBeforeClock.isEmpty() && mCustomAfterClock.isEmpty()) return;
+                    param.setResult(null);
+                });
 
         CollapsedStatusBarFragmentClass
                 .after("animateShow")
@@ -842,9 +850,11 @@ public class StatusbarClock extends XposedMods {
                 break;
             }
         }
+        XposedBridge.log("StatusbarClock - foregroundApp: " + foregroundApp);
 
         if (TextUtils.isEmpty(foregroundApp)) return;
         final boolean clockAutoHide = foregroundApp.equals(getDefaultLauncherPackageName());
+        XposedBridge.log("StatusbarClock - getDefaultLauncherPackageName: " + getDefaultLauncherPackageName() + ", foregroundApp: " + foregroundApp + ", clockAutoHide: " + clockAutoHide);
         if (mClockAutoHideLauncher != clockAutoHide) {
             mClockAutoHideLauncher = clockAutoHide;
             updateClock();
