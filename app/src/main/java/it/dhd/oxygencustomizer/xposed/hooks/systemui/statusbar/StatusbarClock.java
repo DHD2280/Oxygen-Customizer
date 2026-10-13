@@ -112,6 +112,7 @@ public class StatusbarClock extends XposedMods {
     private boolean mClockDoubleRow = false;
     private Object Clock = null;
     private float mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier;
+    private boolean clockForFake = false;
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -301,12 +302,7 @@ public class StatusbarClock extends XposedMods {
         ReflectedClass PhoneStatusBarViewClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarView");
         ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");
         ReflectedClass TaskStackListenerImpl = ReflectedClass.of("com.android.wm.shell.common.TaskStackListenerImpl");
-        ReflectedClass StatClock = null;
-        try {
-            StatClock = ReflectedClass.of("com.oplus.systemui.statusbar.widget.StatClock");
-        } catch (Throwable ignored) {
-            log("StatClock not found");
-        }
+        ReflectedClass StatClock = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.widget.StatClock");
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -389,7 +385,12 @@ public class StatusbarClock extends XposedMods {
                     mClockDefaultLineSpacingExtra = mClockView.getLineSpacingExtra();
                     mClockDefaultLineSpacingMultiplier = mClockView.getLineSpacingMultiplier();
 
-                    mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
+                    try {
+                        mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("clock_for_fake"));
+                        clockForFake = true;
+                    } catch (Throwable ignored) {
+                        mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
+                    }
 
                     mSystemIconArea = mPhoneStatusbarView.findViewById(idOf("statusIcons"));
 
@@ -407,72 +408,67 @@ public class StatusbarClock extends XposedMods {
                     setClockSize();
                 });
 
-        if (StatClock != null) {
-            try {
-                StatClock
-                        .after("updateMinWidth")
-                        .run(param -> {
-                            // StatClock has a method to update the minimum width of the clock
-                            // we can use it to update the clock width
-                            // Based on our custom formats
-                            TextView tv = (TextView) param.thisObject;
-                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                            if (mClockDoubleRow) {
-                                tv.setSingleLine(false);
-                                tv.setLineSpacing(0f, 0.8f);
-                            } else {
-                                tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
-                            }
-                            if (!mShowSeconds) {
-                                float totalWidth = measureTextWithSpans(false);
-                                totalWidth += rightClockPadding*2;
-                                if (clockChip) {
-                                    totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
-                                }
-                                totalWidth += dp2px(mContext, mClockPadding);
-                                int calculatedMinWidth = (int) totalWidth;
-                                if (tv.getMinimumWidth() != calculatedMinWidth) {
-                                    tv.setMinimumWidth(calculatedMinWidth);
-                                }
-                            }
-                        });
-                StatClock
-                        .after("onMeasure")
-                                .run(param -> {
-                                    if (!isOOS1501() && Build.VERSION.SDK_INT < 36) return;
-                                    TextView tv = (TextView) param.thisObject;
-                                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                                    if (mClockDoubleRow) {
-                                        tv.setSingleLine(false);
-                                        tv.setLineSpacing(0f, 0.8f);
-                                    } else {
-                                        tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
-                                    }
-                                    float totalWidth = measureTextWithSpans(true);
-                                    totalWidth += rightClockPadding*2;
-                                    if (clockChip) {
-                                        totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
-                                    }
-                                    totalWidth += dp2px(mContext, mClockPadding);
-                                    int calculatedMinWidth = (int) totalWidth;
-                                    if (tv.getMinimumWidth() != calculatedMinWidth) {
-                                        tv.setMinimumWidth(calculatedMinWidth);
-                                    }
-                                    callMethod(param.thisObject, "setMeasuredDimension", calculatedMinWidth, param.args[1]);
-                                });
-                StatClock
-                        .after("updateConfigurationChanged")
-                        .run(param -> {
-                            TextView tv = (TextView) param.thisObject;
-                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
-                            try {
-                                tv.postInvalidate();
-                            } catch (Throwable ignored) {}
-                        });
-            } catch (Throwable ignored) {
-                log("updateMinWidth in StatClock not found");
-            }
-        }
+        StatClock
+                .after("updateMinWidth")
+                .run(param -> {
+                    // StatClock has a method to update the minimum width of the clock
+                    // we can use it to update the clock width
+                    // Based on our custom formats
+                    TextView tv = (TextView) param.thisObject;
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                    if (mClockDoubleRow) {
+                        tv.setSingleLine(false);
+                        tv.setLineSpacing(0f, 0.8f);
+                    } else {
+                        tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
+                    }
+                    if (!mShowSeconds) {
+                        float totalWidth = measureTextWithSpans(false);
+                        totalWidth += rightClockPadding * 2;
+                        if (clockChip) {
+                            totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
+                        }
+                        totalWidth += dp2px(mContext, mClockPadding);
+                        int calculatedMinWidth = (int) totalWidth;
+                        if (tv.getMinimumWidth() != calculatedMinWidth) {
+                            tv.setMinimumWidth(calculatedMinWidth);
+                        }
+                    }
+                });
+        StatClock
+                .after("onMeasure")
+                .run(param -> {
+                    if (!isOOS1501() && Build.VERSION.SDK_INT < 36) return;
+                    TextView tv = (TextView) param.thisObject;
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                    if (mClockDoubleRow) {
+                        tv.setSingleLine(false);
+                        tv.setLineSpacing(0f, 0.8f);
+                    } else {
+                        tv.setLineSpacing(mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier);
+                    }
+                    float totalWidth = measureTextWithSpans(true);
+                    totalWidth += rightClockPadding * 2;
+                    if (clockChip) {
+                        totalWidth += dp2px(mContext, chipPaddingSx + chipPaddingDx);
+                    }
+                    totalWidth += dp2px(mContext, mClockPadding);
+                    int calculatedMinWidth = (int) totalWidth;
+                    if (tv.getMinimumWidth() != calculatedMinWidth) {
+                        tv.setMinimumWidth(calculatedMinWidth);
+                    }
+                    callMethod(param.thisObject, "setMeasuredDimension", calculatedMinWidth, param.args[1]);
+                });
+        StatClock
+                .after("updateConfigurationChanged")
+                .run(param -> {
+                    TextView tv = (TextView) param.thisObject;
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mClockSize);
+                    try {
+                        tv.postInvalidate();
+                    } catch (Throwable ignored) {
+                    }
+                });
 
         CollapsedStatusBarFragmentClass
                 .after("animateShow")
@@ -687,7 +683,7 @@ public class StatusbarClock extends XposedMods {
         switch (mClockPosition) {
             case POSITION_LEFT -> {
                 targetArea = mStatusbarStartSide;
-                if (Build.VERSION.SDK_INT < 37) index = 1;
+                index = clockForFake ? 0 : 1;
                 mClockView.setPadding(rightClockPadding, 0, rightClockPadding, 0);
             }
             case POSITION_CENTER -> {
