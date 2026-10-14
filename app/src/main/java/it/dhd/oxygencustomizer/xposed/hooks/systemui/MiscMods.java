@@ -39,16 +39,15 @@ public class MiscMods extends XposedMods {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!listenPackage.equals(lpparam.packageName)) return;
 
-        try {
-            ReflectedClass FloatingRotationButton = ReflectedClass.of("com.android.systemui.shared.rotation.FloatingRotationButton");
-            FloatingRotationButton
-                    .afterConstruction()
-                    .run(param -> {
-                        mRotationButton = (View) getObjectField(param.thisObject, "mKeyButtonView");
-                        setupButton();
-                    });
-        } catch (Throwable ignored) {
-        }
+        ReflectedClass FloatingRotationButton = ReflectedClass.of("com.android.systemui.shared.rotation.FloatingRotationButton");
+        FloatingRotationButton.afterConstruction().run(param -> {
+            mRotationButton = (View) getObjectField(param.thisObject, "mKeyButtonView");
+            setupButton();
+        });
+        FloatingRotationButton.after("updateDimensionResources").run(param -> {
+            mRotationButton = (View) getObjectField(param.thisObject, "mKeyButtonView");
+            setupButton();
+        });
 
         try {
             ReflectedClass UsbService = ReflectedClass.of("com.oplus.systemui.usb.UsbService");
