@@ -49,13 +49,12 @@ public class QuickSettingsCustomization extends ControlledPreferenceFragmentComp
 
         OplusJumpPreference highlightTile = findPreference("highlight_tile");
         OplusJumpPreference baseTile = findPreference("base_tile");
-        boolean shouldShow = !PreferenceHelper.is16010() || Build.VERSION.SDK_INT > 37;
+        boolean shouldHide = PreferenceHelper.is16010() || Build.VERSION.SDK_INT >= 37;
         if (highlightTile != null) {
-            highlightTile.setVisible(!shouldShow);
+            highlightTile.setVisible(!shouldHide);
         }
-
         if (baseTile != null) {
-            baseTile.setVisible(!shouldShow);
+            baseTile.setVisible(!shouldHide);
         }
 
     }
