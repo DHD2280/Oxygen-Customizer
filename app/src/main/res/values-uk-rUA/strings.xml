@@ -168,6 +168,9 @@
     <string name="notif_default_expansion_title">Розгорнені сповіщення за замовчуванням</string>
     <string name="notif_always_expand">Завжди розгорнуто</string>
     <string name="notif_always_collapse">Завжди згортати</string>
+    <string name="notif_per_app">Вибір для програми</string>
+    <string name="notif_choose_app_expansion">Виберіть параметри програми</string>
+    <string name="notif_choose_app_expansion_description">Виберіть розширення сповіщень для кожного додатку.</string>
     <string name="notif_show_buttons">Показувати кнопку Розгорнути та Згорнути</string>
     <string name="notif_show_buttons_summary">Показати кнопку Розгорнути та Згорнути на Панелі Сповіщень.\nСумісне тільки з розділеним стилем Швидких Налаштувань.</string>
     <string name="customize_clear_all_button">Налаштувати кнопку Очистити Все</string>
@@ -1504,4 +1507,6 @@
     <string name="qs_separate_rows">Рядки</string>
     <string name="width">Ширина</string>
     <string name="height">Висота</string>
+    <!-- Icon Packs -->
+    <!-- Icon Packs -->
 </resources>

@@ -722,6 +722,22 @@
     <string name="disable_discover">Tắt khám phá</string>
     <string name="replace_discover_with_shelf">Thay thế khám phá bằng Shelf</string>
     <string name="enable_discover">Bật Khám phá (hành vi mặc định)</string>
+    <string name="custom_global_search">Tuỳ chỉnh tìm kiếm toàn cục</string>
+    <string name="custom_global_search_summary">Chọn ứng dụng hoặc hoạt động bạn muốn khởi chạy bằng phím tắt tìm kiếm toàn cục</string>
+    <string name="custom_global_search_explaination">Chúng ta có thể khởi chạy mọi ứng dụng và mọi hoạt động bằng cử chỉ tìm kiếm toàn cục tích hợp sẵn từ Launcher. Thoải mái lựa chọn giữa ứng dụng và hoạt động.</string>
+    <string name="custom_global_search_action">Hành động</string>
+    <string name="custom_page_indicator_tap_title">Tuỳ chỉnh thao tác chạm</string>
+    <string name="custom_page_indicator_tap_summary">Chọn hành động khi bạn chạm vào chỉ báo trang</string>
+    <string name="custom_page_indicator_tap_explaination">Tại đây bạn có thể chọn ứng dụng nào sẽ được mở khi nhấn vào chỉ báo trang trên trang chủ.</string>
+    <string name="drawer_searchbar">Thanh tìm kiếm</string>
+    <string name="searchbar_disable_gbsearch_title">Tắt tính năng khởi chạy tìm kiếm toàn cục</string>
+    <string name="searchbar_disable_gbsearch_summary">Hãy sử dụng thanh tìm kiếm như một thanh tìm kiếm thông thường thay vì khởi chạy tìm kiếm toàn cục</string>
+    <string name="searchbar_open_keyboard_title">Luôn hiện bàn phím</string>
+    <string name="searchbar_open_keyboard_summary">Mở bàn phím bằng cách vuốt lên trên màn hình chính để tìm kiếm</string>
+    <string name="searchbar_enter_to_open_title">Enter để mở</string>
+    <string name="searchbar_enter_to_open_summary">Nhấn Enter để mở mục đầu tiên trong kết quả tìm kiếm</string>
+    <string name="auto_close_folder_title">Tự động đóng thư mục</string>
+    <string name="auto_close_folder_summary">Tự động đóng thư mục sau khi mở ứng dụng</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Thanh điều hướng</string>
     <string name="gesture_navigation_title">Điều hướng bằng cử chỉ</string>
@@ -1534,4 +1550,6 @@ Lưu ý: không phải tất cả trình phát đều được hỗ trợ.</stri
     <string name="qs_separate_rows">Số hàng</string>
     <string name="width">Chiều rộng</string>
     <string name="height">Chiều cao</string>
+    <!-- Icon Packs -->
+    <!-- Icon Packs -->
 </resources>
