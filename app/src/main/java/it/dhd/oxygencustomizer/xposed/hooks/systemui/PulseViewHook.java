@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_AMBIENT;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_CENTER_MIRRORED;
@@ -36,7 +33,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -51,7 +47,6 @@ import it.dhd.oxygencustomizer.xposed.views.pulse.SolidLineRenderer;
 public class PulseViewHook extends XposedMods {
 
     private static final String listenPackage = Constants.Packages.SYSTEM_UI;
-    private static ReflectedClass CentralSurfacesImpl = null;
     private FrameLayout mNotificationShadeView = null;
     private FrameLayout mKeyguardBottomArea = null;
     private boolean mNavBarPulse, mLockScreenPulse, mAmbientPulse, mPulseEnabled, mPulseSmoothing;
@@ -67,7 +62,6 @@ public class PulseViewHook extends XposedMods {
     private boolean mShowFlash = true;
     private int mWaveOpacity = 200;
     private float mWaveStroke = 5f;
-    private boolean DWallpaperEnabled = false;
 
 
     public PulseViewHook(Context context) {
@@ -121,8 +115,6 @@ public class PulseViewHook extends XposedMods {
 
         mPulseEnabled = mNavBarPulse || mLockScreenPulse || mAmbientPulse;
 
-        DWallpaperEnabled = Xprefs.getBoolean("DWallpaperEnabled", false);
-
         if (Key.length > 0) {
             for (String PulsePref : PULSE_PREFS) {
                 if (Key[0].equals(PulsePref)) {
@@ -142,7 +134,7 @@ public class PulseViewHook extends XposedMods {
 
         AudioDataProvider.registerInfoCallback(this::onPrimaryMetadataOrStateChanged);
 
-        CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
+        ReflectedClass CentralSurfacesImpl = ReflectedClass.of("com.android.systemui.statusbar.phone.CentralSurfacesImpl");
 
         ReflectedClass NavigationBarView = ReflectedClass.of(
                 "com.android.systemui.navigationbar.views.NavigationBarView", //OOS16
