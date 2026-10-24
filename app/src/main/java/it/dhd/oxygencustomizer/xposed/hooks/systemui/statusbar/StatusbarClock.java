@@ -854,7 +854,6 @@ public class StatusbarClock extends XposedMods {
 
         if (TextUtils.isEmpty(foregroundApp)) return;
         final boolean clockAutoHide = foregroundApp.equals(getDefaultLauncherPackageName());
-        XposedBridge.log("StatusbarClock - getDefaultLauncherPackageName: " + getDefaultLauncherPackageName() + ", foregroundApp: " + foregroundApp + ", clockAutoHide: " + clockAutoHide);
         if (mClockAutoHideLauncher != clockAutoHide) {
             mClockAutoHideLauncher = clockAutoHide;
             updateClock();
