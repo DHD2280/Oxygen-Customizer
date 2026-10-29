@@ -753,20 +753,26 @@ public class PreferenceHelper {
             case "gesture_right_height_double" -> {
                 return instance.mPreferences.getBoolean("gesture_right", false);
             }
+            case GESTURE_OVERRIDE_HOLDBACK -> {
+                return Build.VERSION.SDK_INT < 37;
+            }
             case GESTURE_OVERRIDE_HOLDBACK_LEFT, GESTURE_OVERRIDE_HOLDBACK_MODE -> {
-                return instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
+                return isVisible(GESTURE_OVERRIDE_HOLDBACK) &&
+                        instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
             }
             case GESTURE_OVERRIDE_HOLDBACK_RIGHT -> {
                 String mode = instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_MODE, "0");
-                return mode.equals("1") && instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
+                return isVisible(GESTURE_OVERRIDE_HOLDBACK) && mode.equals("1") && instance.mPreferences.getBoolean(GESTURE_OVERRIDE_HOLDBACK, false);
             }
             case GESTURE_HOLD_BACK_LEFT_APP -> {
-                return instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_LEFT, "0").equals("11");
+                return isVisible(GESTURE_OVERRIDE_HOLDBACK) &&
+                        instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_LEFT, "0").equals("11");
             }
 
             case GESTURE_HOLD_BACK_RIGHT_APP -> {
                 String action = instance.mPreferences.getString(GESTURE_OVERRIDE_HOLDBACK_RIGHT, "0");
-                return action.equals("11") && isVisible(GESTURE_OVERRIDE_HOLDBACK_RIGHT);
+                return isVisible(GESTURE_OVERRIDE_HOLDBACK) &&
+                        action.equals("11") && isVisible(GESTURE_OVERRIDE_HOLDBACK_RIGHT);
             }
 
             case "leftSwipeUpPercentage" -> {
