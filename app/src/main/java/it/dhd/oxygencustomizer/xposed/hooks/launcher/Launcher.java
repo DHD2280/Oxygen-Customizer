@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+import static de.robv.android.xposed.XposedHelpers.removeAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static de.robv.android.xposed.XposedHelpers.setIntField;
@@ -30,9 +31,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -52,6 +55,7 @@ public class Launcher extends XposedMods {
     private boolean mHideDesktopLabels = false, mHideDrawerLabels = false;
     private boolean mDisablePreviousRecents = false;
     private boolean mReplaceLock = false;
+    private boolean mDragEndHooked = false;
     private boolean mCustomShelfBehavior = false;
     private int mShelfBehavior = 2;
     // 0 disable discover
@@ -470,11 +474,38 @@ public class Launcher extends XposedMods {
         OplusTaskViewTouchControllerImpl
                 .before("onDragEnd")
                 .run(param -> {
-
                     if (!mReplaceLock) return;
-
                     setAdditionalInstanceField(getObjectField(param.thisObject, "mTaskBeingDragged"), "mShouldKill", true);
+                });
 
+        ReflectedClass TaskViewTouchController = ReflectedClass.ofIfPossible("com.android.launcher3.uioverrides.touchcontrollers.TaskViewTouchController");
+        TaskViewTouchController
+                .afterConstruction()
+                .run(param -> {
+                    if (mDragEndHooked) return;
+                    Method onDragEnd = findDragEnd(param.thisObject.getClass());
+                    if (onDragEnd == null) {
+                        log("TaskViewTouchController: onDragEnd(float) not found in " + param.thisObject.getClass().getName());
+                        return;
+                    }
+                    mDragEndHooked = true;
+                    XposedBridge.hookMethod(onDragEnd, new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam mp) {
+                            if (!mReplaceLock) return;
+                            Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
+                            if (taskView != null)
+                                setAdditionalInstanceField(taskView, "mShouldKill", true);
+                        }
+
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam mp) {
+                            Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
+                            if (taskView != null)
+                                removeAdditionalInstanceField(taskView, "mShouldKill");
+                        }
+                    });
+                    log("TaskViewTouchController: hooked " + onDragEnd);
                 });
 
         ReflectedClass.ReflectionConsumer killHook = param -> {
@@ -695,6 +726,16 @@ public class Launcher extends XposedMods {
                     }
                 });
 
+    }
+
+    private static Method findDragEnd(Class<?> cls) {
+        for (Class<?> c = cls; c != null && c != Object.class; c = c.getSuperclass()) {
+            try {
+                return c.getDeclaredMethod("onDragEnd", float.class);
+            } catch (NoSuchMethodException ignored) {
+            }
+        }
+        return null;
     }
 
     private void launchFirstResult(Object launcher) throws Throwable {
