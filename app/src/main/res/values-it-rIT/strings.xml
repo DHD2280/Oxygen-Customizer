@@ -726,6 +726,16 @@
     <string name="custom_global_search_summary">Scegli l\'app o l\'attività da avviare con la scorciatoia di ricerca globale</string>
     <string name="custom_global_search_explaination">Possiamo avviare ogni app e ogni attività con la gesture di ricerca globale integrata dal Launcher. Sentiti libero di scegliere tra app e attività.</string>
     <string name="custom_global_search_action">Azione</string>
+    <string name="custom_page_indicator_tap_title">Azione tocco personalizzato</string>
+    <string name="custom_page_indicator_tap_summary">Scegli l\'azione quando premi sull\'indicatore di pagina</string>
+    <string name="custom_page_indicator_tap_explaination">Qui puoi scegliere cosa avviare quando premi l\'indicatore di pagina nella home.</string>
+    <string name="drawer_searchbar">Barra di ricerca</string>
+    <string name="searchbar_disable_gbsearch_title">Disabilita avvio di ricerca globale</string>
+    <string name="searchbar_disable_gbsearch_summary">Usa la barra di ricerca come una normale barra di ricerca invece di avviare la ricerca globale</string>
+    <string name="searchbar_open_keyboard_title">Mostra sempre la tastiera</string>
+    <string name="searchbar_open_keyboard_summary">Apri la tastiera scorrendo verso l\'alto nella schermata iniziale per cercare</string>
+    <string name="searchbar_enter_to_open_title">Invio per aprire</string>
+    <string name="searchbar_enter_to_open_summary">Premi Invio per aprire il primo elemento nella ricerca</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -1538,4 +1548,6 @@
     <string name="qs_separate_rows">Righe</string>
     <string name="width">Larghezza</string>
     <string name="height">Altezza</string>
+    <!-- Icon Packs -->
+    <!-- Icon Packs -->
 </resources>
