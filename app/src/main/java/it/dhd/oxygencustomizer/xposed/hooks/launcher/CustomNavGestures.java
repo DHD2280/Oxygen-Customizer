@@ -27,10 +27,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Process;
+import android.view.Display;
 import android.view.InputEvent;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -109,7 +113,10 @@ public class CustomNavGestures extends XposedMods {
 
     private boolean mBroadcastRegistered = false;
     private int mInitialTouchY = 0;
-    // Obustaced overview consumer stuff for COS17
+    private boolean mRawTracking = false;
+    private int mNavGestureHeightResId = -1;
+
+    // Obfuscated overview consumer stuff for COS17
     private static final String[] OVERVIEW_CONSUMER_TYPES = {
             "TYPE_OVERVIEW",               // also matches TYPE_OVERVIEW_WITHOUT_FOCUS
             "TYPE_RESET_GESTURE"
@@ -321,7 +328,7 @@ public class CustomNavGestures extends XposedMods {
         boolean mPassedWindowMoveSlopClz = false;
         try {
             mPassedWindowMoveSlopClz = getBooleanField(param.thisObject, "mPassedWindowMoveSlop");
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
 
         boolean mPassedWindowMoveSlop = isOverViewListener //if it's overview page (read: home page) we don't need this. true is good
@@ -440,47 +447,50 @@ public class CustomNavGestures extends XposedMods {
     private void onMotionEventRaw(XC_MethodHook.MethodHookParam param, MotionEvent e, Object tisInstance) {
         if (tisInstance == null || e == null) return;
 
-        boolean isOverViewListener = isOverviewConsumer(tisInstance);
-
         int action = e.getActionMasked();
-        final int x = (int) e.getRawX();
         int pointers = e.getPointerCount();
 
         if (action == MotionEvent.ACTION_DOWN) {
-            isLandscape = e.getY() < displayW;
-            int currentW = isLandscape ? displayH : displayW;
-
-            mInitialTouchX = x;
-            mInitialTouchY = (int) e.getRawY();
+            longPressHandler.removeCallbacks(longPressRunnable);
+            swipeType = SWIPE_NONE;
+            FCHandled = false;
             isLongPress = false;
-            if (pointers == 1 && isInPill(currentW, x)) {
+
+            Point size = getRealDisplaySize();
+            // Only gestures starting from the bottom nav area, like the old input consumers
+            mRawTracking = e.getRawY() >= size.y - getNavGestureHeight();
+            if (!mRawTracking) return;
+
+            mInitialTouchX = (int) e.getRawX();
+            mInitialTouchY = (int) e.getRawY();
+
+            if (pointers == 1 && isInPill(size.x, mInitialTouchX)) {
                 longPressHandler.postDelayed(longPressRunnable, LONG_PRESS_THRESHOLD);
             }
 
             saveFocusedTask();
 
-            FCHandled = false;
-            swipeType = SWIPE_NONE;
-
-            mSwipeUpThreshold = e.getY() * (1f - swipeUpPercentage);
-            mLongThreshold = e.getY() / 10f;
+            mSwipeUpThreshold = e.getRawY() * (1f - swipeUpPercentage);
+            mLongThreshold = e.getRawY() / 10f;
 
             if (pointers == 1) {
                 if (leftSwipeUpAction != NO_ACTION
-                        && e.getX() < currentW * leftSwipeUpPercentage) {
+                        && e.getRawX() < size.x * leftSwipeUpPercentage) {
                     swipeType = SWIPE_LEFT;
                 } else if (rightSwipeUpAction != NO_ACTION
-                        && e.getX() > currentW * (1f - rightSwipeUpPercentage)) {
+                        && e.getRawX() > size.x * (1f - rightSwipeUpPercentage)) {
                     swipeType = SWIPE_RIGHT;
                 }
             }
         }
+
+        if (!mRawTracking) return; // back gesture, app touch, etc.: not ours
+
+        boolean isOverViewListener = isOverviewConsumer(tisInstance);
+
         if (action == MotionEvent.ACTION_MOVE) {
-            if (Math.abs(e.getX() - mInitialTouchX) > TOUCH_SLOP) {
-                longPressHandler.removeCallbacks(longPressRunnable);
-            }
-            int dy = (int) Math.abs(e.getRawY() - mInitialTouchY);
-            if (dy > TOUCH_SLOP) {
+            if (Math.abs(e.getRawX() - mInitialTouchX) > TOUCH_SLOP
+                    || Math.abs(e.getRawY() - mInitialTouchY) > TOUCH_SLOP) {
                 longPressHandler.removeCallbacks(longPressRunnable);
             }
         }
@@ -495,22 +505,23 @@ public class CustomNavGestures extends XposedMods {
             param.setResult(null);
         }
 
-        if (pointers == 1) {
-            boolean FCAllowed = swipeType == SWIPE_NONE;
-            if (FCAllowed
-                    && FCLongSwipeEnabled
-                    && e.getY() < mLongThreshold
-                    && !FCHandled
-                    && !isOverViewListener) {
-                FCHandled = true;
-                param.setResult(null);
-                runAction(ACTION_KILL_APP, false);
-            }
+        if (pointers == 1
+                && swipeType == SWIPE_NONE
+                && FCLongSwipeEnabled
+                && e.getRawY() < mLongThreshold
+                && !FCHandled
+                && !isOverViewListener) {
+            FCHandled = true;
+            param.setResult(null);
+            runAction(ACTION_KILL_APP, false);
         }
 
-        if (action == MotionEvent.ACTION_UP
-                && swipeType != SWIPE_NONE) {
-            if (e.getY() < mSwipeUpThreshold) {
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+            longPressHandler.removeCallbacks(longPressRunnable);
+
+            if (action == MotionEvent.ACTION_UP
+                    && swipeType != SWIPE_NONE
+                    && e.getRawY() < mSwipeUpThreshold) {
                 switch (swipeType) {
                     case SWIPE_LEFT:
                         runAction(leftSwipeUpAction, true);
@@ -522,13 +533,29 @@ public class CustomNavGestures extends XposedMods {
                         runAction(twoFingerSwipeUpAction, false);
                         break;
                 }
-                swipeType = SWIPE_NONE;
             }
+            swipeType = SWIPE_NONE;
             currentFocusedTask = null;
-        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-            longPressHandler.removeCallbacks(longPressRunnable);
+            mRawTracking = false;
         }
+    }
 
+    private Point getRealDisplaySize() {
+        Point p = new Point();
+        DisplayManager dm = (DisplayManager) mContext.getSystemService(Context.DISPLAY_SERVICE);
+        dm.getDisplay(Display.DEFAULT_DISPLAY).getRealSize(p);
+        return p;
+    }
+
+    private int getNavGestureHeight() {
+        Resources res = mContext.getResources();
+        if (mNavGestureHeightResId == -1) {
+            mNavGestureHeightResId = res.getIdentifier("navigation_bar_gesture_height", "dimen", "android");
+            if (mNavGestureHeightResId == 0)
+                mNavGestureHeightResId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+        }
+        if (mNavGestureHeightResId != 0) return res.getDimensionPixelSize(mNavGestureHeightResId);
+        return (int) (48 * res.getDisplayMetrics().density);
     }
 
     private boolean isOverviewConsumer(Object tisInstance) {
