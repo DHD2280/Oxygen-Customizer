@@ -345,11 +345,7 @@ public class StatusbarClock extends XposedMods {
                     mClockDefaultLineSpacingMultiplier = mClockView.getLineSpacingMultiplier();
 
                     ViewGroup mStatusBar = (ViewGroup) getObjectField(mCollapsedStatusBarFragment, "mStatusBar");
-                    try {
-                        mStatusbarStartSide = mStatusBar.findViewById(mContext.getResources().getIdentifier("status_bar_start_side_except_heads_up", "id", mContext.getPackageName()));
-                    } catch (Throwable t) {
-                        mStatusbarStartSide = null;
-                    }
+                    resolveStartSide(mStatusBar);
 
                     try {
                         mSystemIconArea = mStatusBar.findViewById(mContext.getResources().getIdentifier("statusIcons", "id", mContext.getPackageName()));
@@ -386,12 +382,7 @@ public class StatusbarClock extends XposedMods {
                     mClockDefaultLineSpacingExtra = mClockView.getLineSpacingExtra();
                     mClockDefaultLineSpacingMultiplier = mClockView.getLineSpacingMultiplier();
 
-                    try {
-                        mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("clock_for_fake"));
-                        clockForFake = true;
-                    } catch (Throwable ignored) {
-                        mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
-                    }
+                    resolveStartSide(mPhoneStatusbarView);
 
                     mSystemIconArea = mPhoneStatusbarView.findViewById(idOf("statusIcons"));
 
@@ -680,6 +671,19 @@ public class StatusbarClock extends XposedMods {
                 callMethod(mClockView, "updateClock");
             });
         } catch (Throwable ignored) {
+        }
+    }
+
+    private void resolveStartSide(View statusBar) {
+        if (statusBar == null) return;
+        ViewGroup clockForFakeView = statusBar.findViewById(idOf("clock_for_fake"));
+        clockForFake = clockForFakeView != null;
+        if (clockForFake) {
+            mStatusbarStartSide = clockForFakeView;
+        } else {
+            ViewGroup startSide = statusBar.findViewById(idOf("status_bar_start_side_except_heads_up"));
+            if (startSide != null)
+                mStatusbarStartSide = startSide; // else keep OOS13 status_bar_left_side
         }
     }
 

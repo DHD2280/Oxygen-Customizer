@@ -157,6 +157,7 @@ public class StatusbarLogo extends XposedMods {
                 .run(param -> {
                     mStatusbarStartSide = mPhoneStatusbarView.findViewById(idOf("status_bar_start_side_except_heads_up"));
                     mSystemIconArea = mPhoneStatusbarView.findViewById(idOf("statusIcons"));
+                    placeLogo();
                 });
 
         ControllersProvider.registerKeyguardShowingCallback(mKeyguardShowing);
