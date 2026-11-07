@@ -45,6 +45,11 @@
     <string name="installation_failed_desc">I registri sono stati salvati nella cartella dei documenti.</string>
     <string name="logs">File di registro</string>
     <string name="toast_skipped_installation">Installazione saltata. Alcune funzionalità potrebbero non funzionare correttamente.</string>
+    <string name="installation_mode_title">Modalità di installazione</string>
+    <string name="installation_full_title">Installazione completa</string>
+    <string name="installation_xposed_title">Solo Xposed</string>
+    <string name="installation_full_summary">Installa il modulo overlay.\nSuggerito</string>
+    <string name="installation_xposed_summary">Evita l\'installazione del modulo e utilizza solo tweak e personalizzazioni di Xposed.\nFunzionalità limitate nella personalizzazione del tema.</string>
     <!-- Buttons -->
     <string name="btn_select">Seleziona</string>
     <string name="btn_skip">Salta</string>
@@ -60,6 +65,7 @@
     <string name="btn_apply">Applica</string>
     <!-- Dialogs -->
     <string name="installing">Installazione</string>
+    <string name="uninstalling">Disinstallazione</string>
     <string name="loading_dialog_wait">Attendere</string>
     <string name="optimizing">Ottimizzazione</string>
     <!-- Main Activity -->
@@ -359,6 +365,7 @@
     <string name="battery_text_attach_to_batterybar">Collega alla barra della batteria</string>
     <string name="battery_text_attach_to_batterybar_summary">Allega il colore del testo ai colori della barra batteria</string>
     <string name="battery_text_enable_bb_first">Abilita prima la barra della batteria</string>
+    <string name="battery_remove_percentage">Rimuovi il simbolo % nel testo percentuale</string>
     <!-- Battery Icon Styles -->
     <string name="battery_default">Predefinito</string>
     <string name="battery_landscape_r_default">Orizzontale a destra</string>
@@ -726,6 +733,18 @@
     <string name="custom_global_search_summary">Scegli l\'app o l\'attività da avviare con la scorciatoia di ricerca globale</string>
     <string name="custom_global_search_explaination">Possiamo avviare ogni app e ogni attività con la gesture di ricerca globale integrata dal Launcher. Sentiti libero di scegliere tra app e attività.</string>
     <string name="custom_global_search_action">Azione</string>
+    <string name="custom_page_indicator_tap_title">Azione tocco personalizzato</string>
+    <string name="custom_page_indicator_tap_summary">Scegli l\'azione quando premi sull\'indicatore di pagina</string>
+    <string name="custom_page_indicator_tap_explaination">Qui puoi scegliere cosa avviare quando premi l\'indicatore di pagina nella home.</string>
+    <string name="drawer_searchbar">Barra di ricerca</string>
+    <string name="searchbar_disable_gbsearch_title">Disabilita avvio di ricerca globale</string>
+    <string name="searchbar_disable_gbsearch_summary">Usa la barra di ricerca come una normale barra di ricerca invece di avviare la ricerca globale</string>
+    <string name="searchbar_open_keyboard_title">Mostra sempre la tastiera</string>
+    <string name="searchbar_open_keyboard_summary">Apri la tastiera scorrendo verso l\'alto nella schermata iniziale per cercare</string>
+    <string name="searchbar_enter_to_open_title">Invio per aprire</string>
+    <string name="searchbar_enter_to_open_summary">Premi Invio per aprire il primo elemento nella ricerca</string>
+    <string name="auto_close_folder_title">Chiusura automatica delle cartelle</string>
+    <string name="auto_close_folder_summary">Chiude automaticamente le cartelle dopo l\'apertura di un\'app</string>
     <!-- NavBar Strings -->
     <string name="navbar_title">Barra Di Navigazione</string>
     <string name="gesture_navigation_title">Navigazione con gesti</string>
@@ -793,6 +812,8 @@
     <string name="plusKey_double_press_button_title_screenoff">Doppia Pressione</string>
     <string name="plusKey_triple_press_button_title_screenoff">Tripla Pressione</string>
     <string name="plusKey_long_press_button_title_screenoff">Pressione Prolungata</string>
+    <string name="cameraKey_button_category_title">Pulsante fotocamera</string>
+    <string name="cameraKey_button_category_title_screenoff">Pulsante Fotocamera - Schermo Spento</string>
     <string name="plusKey_action_dnd">Non disturbare</string>
     <string name="plusKey_action_recorder">Registratore Audio</string>
     <string name="plusKey_action_browser">Browser</string>
@@ -1152,6 +1173,8 @@
     <string name="import_failed">Importazione fallita</string>
     <string name="more_logging_title">Log aggiuntivi</string>
     <string name="more_logging_summary">Abilita log aggiuntivi.\nQuesto può aiutare quando si inviano Bug Report.</string>
+    <string name="handle_installation">Gestisci l\'installazione</string>
+    <string name="handle_installation_summary">Riavvia l\'app e gestisci l\'installazione del modulo.</string>
     <string name="settings_about_section_title">Informazioni</string>
     <string name="github_repo_title">Repository GitHub</string>
     <string name="support_group_title">Gruppo di supporto</string>
@@ -1538,4 +1561,23 @@
     <string name="qs_separate_rows">Righe</string>
     <string name="width">Larghezza</string>
     <string name="height">Altezza</string>
+    <!-- Icon Packs -->
+    <!-- Icon Packs -->
+    <string name="icon_packs_title">Pacchetti icone</string>
+    <string name="icon_pack_selection_title">Seleziona pacchetto</string>
+    <string name="icon_pack_customization_title">Personalizza icone</string>
+    <string name="menu_more_info">Altre info</string>
+    <string name="menu_show_icons">Mostra icone</string>
+    <string name="select_replacement_icon">Seleziona icona sostitutiva</string>
+    <string name="icon_default">Predefinito</string>
+    <string name="partially_enabled">(Parzialmente abilitato)</string>
+    <string name="icon_pack_icon_disabled">Disabilitato</string>
+    <string name="icon_pack_author">di %s</string>
+    <string name="icon_pack_unknown_author">di autore sconosciuto</string>
+    <string name="icon_pack_unknown_name">Pacchetto icone sconosciuto</string>
+    <string name="icon_pack_pack_reset">Ripristina icone</string>
+    <string name="icon_pack_info">Info pacchetto icone</string>
+    <string name="no_icon_pack_installed">Nessun pacchetto icone installato</string>
+    <string name="icon_pack_disclaimer_title">Dichiarazione di non responsabilità</string>
+    <string name="icon_pack_disclaimer_desc">I pacchetti di icone non sono sviluppati o distribuiti da OxygenCustomizer. Pertanto, il team di OxygenCustomizer non è in grado di fornire supporto per i pacchetti di icone. Il supporto relativo alla gestione dei pacchetti di icone da parte di OxygenCustomizer sarà fornito solo agli sviluppatori dei rispettivi pacchetti.\n\nPer istruzioni su come compilare un pacchetto di icone, fare riferimento alla guida qui: %s</string>
 </resources>
