@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -40,12 +40,12 @@ public class NotificationVanillaIceCream extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false);
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
@@ -140,7 +140,7 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(param -> {
                     if (hasOverlays) {
                         param.setResult(null);
-                        param.setThrowable(null);
+//                        param.setThrowable(null);
                     }
                 });
 
@@ -160,7 +160,7 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(param -> {
                     if (hasOverlays) {
                         param.setResult(null);
-                        param.setThrowable(null);
+//                        param.setThrowable(null);
                     }
                 });
 

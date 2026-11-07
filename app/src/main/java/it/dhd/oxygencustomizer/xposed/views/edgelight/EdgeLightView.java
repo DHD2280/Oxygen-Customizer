@@ -1,5 +1,27 @@
 package it.dhd.oxygencustomizer.xposed.views.edgelight;
 
+import android.annotation.SuppressLint;
+import android.app.WallpaperColors;
+import android.app.WallpaperManager;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+
+import it.dhd.oxygencustomizer.utils.ThemeUtils;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeBlinkAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeDottedLineAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeEchoAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeLineAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeSideLinesAnimator;
+import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeSnakeAnimator;
+
 /*
  * Copyright (C) 2022 FlamingoOS Project
  * Copyright (C) 2023-2025 the risingOS Android Project
@@ -16,28 +38,6 @@ package it.dhd.oxygencustomizer.xposed.views.edgelight;
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-
-import android.annotation.SuppressLint;
-import android.app.WallpaperColors;
-import android.app.WallpaperManager;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
-
-import androidx.annotation.NonNull;
-
-import de.robv.android.xposed.XposedBridge;
-import it.dhd.oxygencustomizer.utils.ThemeUtils;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeBlinkAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeSideLinesAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeDottedLineAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeEchoAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeLineAnimator;
-import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeSnakeAnimator;
 
 @SuppressLint("ViewConstructor")
 public class EdgeLightView extends View {
@@ -302,7 +302,7 @@ public class EdgeLightView extends View {
         if (mSettingsInterface) {
             Log.w("EdgeLightView", msg);
         } else {
-            XposedBridge.log("EdgeLightView: " + msg);
+            Logger.log("EdgeLightView: " + msg);
         }
 
     }

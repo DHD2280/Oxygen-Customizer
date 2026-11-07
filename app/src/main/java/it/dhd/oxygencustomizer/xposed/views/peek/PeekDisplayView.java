@@ -1,11 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.views.peek;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -39,7 +39,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;

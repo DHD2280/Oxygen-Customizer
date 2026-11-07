@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.advancedreboot;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.BuildConfig.APPLICATION_ID;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,11 +20,11 @@ import android.view.MotionEvent;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class AdvancedReboot extends XposedMods {
@@ -46,7 +46,7 @@ public class AdvancedReboot extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         hideSosPowerMenu = Xprefs.getBoolean("power_menu_hide_sos", false);
         showAdvancedReboot = Xprefs.getBoolean("show_advanced_reboot", false);
         useAuthForAdvancedReboot = Xprefs.getBoolean("advanced_reboot_auth", false);
@@ -54,7 +54,7 @@ public class AdvancedReboot extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass ShutdownView = ReflectedClass.of(
                 "com.oplus.systemui.shutdown.OplusShutdownView" /* OOS14-15 */,
@@ -72,14 +72,14 @@ public class AdvancedReboot extends XposedMods {
                 .after("onTouchEvent")
                 .run(param -> {
                     if (!showAdvancedReboot) return;
-                    XposedBridge.log(AdvancedReboot.class.getSimpleName() + " - onTouchEvent");
+                    Logger.log(AdvancedReboot.class.getSimpleName() + " - onTouchEvent");
                     MotionEvent event = (MotionEvent) param.args[0];
                     Rect bounds = new Rect(
                             centerX - radius,
                             centerY - radius,
                             centerX + radius,
                             centerY + radius);
-                    XposedBridge.log("AdvancedReboot x: " + event.getX() + " y: " + event.getY() + " bounds: " + bounds.toString());
+                    Logger.log("AdvancedReboot x: " + event.getX() + " y: " + event.getY() + " bounds: " + bounds.toString());
                     if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                         float x = event.getX();
                         float y = event.getY();

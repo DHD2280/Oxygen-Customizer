@@ -14,8 +14,6 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;
 import it.dhd.oxygencustomizer.ui.preferences.dialogadapter.ListPreferenceAdapter;
-import it.dhd.oxygencustomizer.utils.OCPreferences;
-import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 import it.dhd.oxygencustomizer.utils.WeatherScheduler;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 

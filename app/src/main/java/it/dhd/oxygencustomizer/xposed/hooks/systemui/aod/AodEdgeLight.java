@@ -1,13 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_BLUR_MODE;
@@ -22,6 +14,14 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.E
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodEdgeLight.EDGE_LIGHT_WIDTH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -35,10 +35,10 @@ import android.os.Looper;
 import android.text.StaticLayout;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightControllerImpl;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
@@ -70,7 +70,7 @@ public class AodEdgeLight extends XposedMods {
     private final Runnable mTriggerShow = new Runnable() {
         @Override
         public void run() {
-            XposedBridge.log("AodEdgeLight: mTriggerShow");
+            Logger.log("AodEdgeLight: mTriggerShow");
             if (!mRetick) return;
             if (mAodSensorManager == null) return;
             try {
@@ -95,7 +95,7 @@ public class AodEdgeLight extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mEdgeLightEnabled = Xprefs.getBoolean(EDGE_LIGHT_ENABLED, false);
         mEdgeLightStyle = Integer.parseInt(Xprefs.getString(EDGE_LIGHT_STYLE, "0"));
         mEdgeLightWidth = Xprefs.getSliderFloat(EDGE_LIGHT_WIDTH, 20f);
@@ -122,7 +122,7 @@ public class AodEdgeLight extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass QuickSettingsControllerImpl = ReflectedClass.ofIfPossible("com.android.systemui.shade.QuickSettingsControllerImpl");
         if (QuickSettingsControllerImpl.getClazz() != null) {
@@ -160,7 +160,7 @@ public class AodEdgeLight extends XposedMods {
         DozeParameters
                 .afterConstruction()
                 .run(param -> {
-                    XposedBridge.log("AodEdgeLight: DozeParameters");
+                    Logger.log("AodEdgeLight: DozeParameters");
                     mDozeParameters = param.thisObject;
                     EdgeLightControllerImpl.getInstance(mContext).setDozeParameters(mDozeParameters);
                 });
@@ -181,14 +181,14 @@ public class AodEdgeLight extends XposedMods {
                     long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
                     totalDuration *= repeatCount;
 
-                    XposedBridge.log("AodEdgeLight: totalDuration = " + totalDuration);
+                    Logger.log("AodEdgeLight: totalDuration = " + totalDuration);
                     mTotalDuration = totalDuration;
                     EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
                 });
         OplusAodCurvedDisplayView
                 .after("initAnimatorData")
                 .run(param -> {
-                    XposedBridge.log("AodEdgeLight: initAnimatorData");
+                    Logger.log("AodEdgeLight: initAnimatorData");
                     int maskDuration = getIntField(param.thisObject, "mNotificationMaskMoveDuration");
                     int fadeInDuration = getIntField(param.thisObject, "AOD_NOTIFICATION_FADE_DURATION");
                     int fadeOutDuration = getIntField(param.thisObject, "mNotificationFadeOutDuration");
@@ -200,7 +200,7 @@ public class AodEdgeLight extends XposedMods {
                     long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
                     totalDuration *= repeatCount;
 
-                    XposedBridge.log("AodEdgeLight: totalDuration = " + totalDuration);
+                    Logger.log("AodEdgeLight: totalDuration = " + totalDuration);
                     mTotalDuration = totalDuration;
                     EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
                 });
@@ -234,7 +234,7 @@ public class AodEdgeLight extends XposedMods {
                 .run(param -> {
                     boolean dozing = getBooleanField(param.thisObject, "mDozing");
                     if (!dozing) {
-                        XposedBridge.log("AodEdgeLight: dozing = false, removing reticker callbacks");
+                        Logger.log("AodEdgeLight: dozing = false, removing reticker callbacks");
                         mRetickerHandler.removeCallbacks(mTriggerShow);
                     }
                     if (EdgeLightControllerImpl.hasInstance()) {
@@ -298,7 +298,7 @@ public class AodEdgeLight extends XposedMods {
                 .after("updateNotification")
                 .run(param -> {
                     int mNotificationColor = getIntField(param.thisObject, "mMainColor");
-                    XposedBridge.log("AodEdgeLight: updateNotification - mNotificationColor = " + mNotificationColor);
+                    Logger.log("AodEdgeLight: updateNotification - mNotificationColor = " + mNotificationColor);
                     EdgeLightControllerImpl.getInstance(mContext).setNotificationColor(mNotificationColor);
                 });
 
@@ -306,7 +306,7 @@ public class AodEdgeLight extends XposedMods {
         AodManager
                 .before("notNeedWakeAod")
                 .run(param -> {
-                    XposedBridge.log("AodEdgeLight: notNeedWakeAod - mIsOc = " + mIsOc);
+                    Logger.log("AodEdgeLight: notNeedWakeAod - mIsOc = " + mIsOc);
                     if (mIsOc) {
                         param.setResult(false);
                     }
@@ -372,7 +372,7 @@ public class AodEdgeLight extends XposedMods {
         EdgeLightControllerImpl.getInstance(mContext).setOptions(mEdgeLightEnabled, mEdgeLightStyle, mEdgeLightWidth, mEdgeLightColorMode, mAlwaysTriggerOnPulse, mRetick, mEdgeLightCustomColor, mEdgeDrawBlur, mEdgeBlurMode, mEdgeBlurType);
     }
 
-    private void drawIncomingPaint(XC_MethodHook.MethodHookParam param, Object mIncomingNotiPaint) {
+    private void drawIncomingPaint(HookHelper.RunParam param, Object mIncomingNotiPaint) {
         Canvas canvas = (Canvas) param.args[0];
         // Drawable
         Drawable mDrawable = (Drawable) getObjectField(mIncomingNotiPaint, "mDrawable");

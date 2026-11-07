@@ -12,13 +12,13 @@ import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-import android.os.Build;
 
 import com.canhub.cropper.CropImage;
 import com.canhub.cropper.CropImageOptions;

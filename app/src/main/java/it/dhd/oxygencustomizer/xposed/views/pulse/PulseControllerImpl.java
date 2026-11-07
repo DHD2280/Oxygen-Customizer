@@ -17,9 +17,8 @@ import android.widget.FrameLayout;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.robv.android.xposed.XposedBridge;
-import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.PulseView;
 import it.dhd.oxygencustomizer.xposed.views.VisualizerView;
 
@@ -503,7 +502,7 @@ PulseControllerImpl {
 
     private void log(String msg) {
         if (DEBUG) {
-            XposedBridge.log(TAG + " " + msg + " " + getState());
+            Logger.log(TAG + " " + msg + " " + getState());
             Log.i(TAG, msg + " " + getState());
         }
     }

@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_PANEL;
@@ -18,6 +15,9 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_SILENT;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_MODE_VIBRATE;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.RINGER_TIP_MODE;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticObjectField;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -53,10 +53,10 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class SystemUtils {
     private static final int THREAD_PRIORITY_BACKGROUND = 10;
@@ -619,7 +619,7 @@ public class SystemUtils {
 
                 try {
                     // Call hidden API or we get Vibrate + DND
-                    de.robv.android.xposed.XposedHelpers.callMethod(
+                    it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod(
                             am,
                             "setRingerModeInternal",
                             AudioManager.RINGER_MODE_SILENT
@@ -627,7 +627,7 @@ public class SystemUtils {
                 } catch (Throwable t) {
                     // Fallback
                     am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                    XposedBridge.log("OxygenCustomizer Error: Impossibile usare setRingerModeInternal - " + t.getMessage());
+                    Logger.log("OxygenCustomizer Error: Impossibile usare setRingerModeInternal - " + t.getMessage());
                 }
 
                 sendRingerTipIntent(RINGER_MODE_SILENT);

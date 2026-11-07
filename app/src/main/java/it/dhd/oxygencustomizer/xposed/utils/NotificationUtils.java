@@ -1,8 +1,8 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.app.Notification;
 import android.app.Notification.MessagingStyle;
@@ -16,8 +16,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
-import android.util.Log;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;

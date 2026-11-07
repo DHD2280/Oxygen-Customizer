@@ -1,12 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setFloatField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OPEN_QUICK_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
@@ -17,6 +11,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STAT
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_PADDING_TOP;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setFloatField;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -47,8 +46,7 @@ import androidx.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
@@ -134,7 +132,7 @@ public class StatusbarMods extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Quick Pulldown
@@ -178,8 +176,8 @@ public class StatusbarMods extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -270,15 +268,14 @@ public class StatusbarMods extends XposedMods {
                         hookTouchHandler(getObjectField(param.thisObject, "mStatusBarViewTouchEventHandler").getClass());
                     } catch (Throwable ignored) {
                     }
-                    hookAllMethods(mTouchHandler.getClass(), "onTouchEvent", new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            if (oneFingerPullupEnabled
-                                    && STATUSBAR_MODE_KEYGUARD != (int) getObjectField(NotificationPanelViewController, "mBarState")) {
-                                pullUpDetector.onTouchEvent((MotionEvent) param.args[0]);
-                            }
-                        }
-                    });
+                    ReflectedClass.of(mTouchHandler.getClass())
+                            .before("onTouchEvent")
+                            .run(param2 -> {
+                                if (oneFingerPullupEnabled
+                                        && STATUSBAR_MODE_KEYGUARD != (int) getObjectField(NotificationPanelViewController, "mBarState")) {
+                                    pullUpDetector.onTouchEvent((MotionEvent) param2.args[0]);
+                                }
+                            });
                 });
 
         NotificationPanelViewControllerClass
@@ -599,9 +596,7 @@ public class StatusbarMods extends XposedMods {
     }
 
     private void hookTouchHandler(Class<?> TouchHanlderClass) {
-        XC_MethodHook touchHook = new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+        ReflectedClass.ReflectionConsumer touchHook = param -> {
                 if (!doubleTapToSleepStatusbarEnabled) return;
 
                 //double tap to sleep, statusbar only
@@ -611,12 +606,11 @@ public class StatusbarMods extends XposedMods {
                         && (boolean) callMethod(NotificationPanelViewController, "isFullyCollapsed")) {
                     mLockscreenDoubleTapToSleep.onTouchEvent((MotionEvent) param.args[param.args.length - 1]);
                 }
-            }
         };
 
-
-        hookAllMethods(TouchHanlderClass, "onTouch", touchHook); //13 QPR2
-        hookAllMethods(TouchHanlderClass, "handleTouchEvent", touchHook); //A13 R18
+        ReflectedClass TouchHandler = ReflectedClass.of(TouchHanlderClass);
+        TouchHandler.before("onTouch").run(touchHook); //13 QPR2
+        TouchHandler.before("handleTouchEvent").run(touchHook); //A13 R18
     }
 
     private void updateStatusbarHeight() {

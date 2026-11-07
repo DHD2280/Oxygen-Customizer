@@ -5,8 +5,7 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 
 import android.content.Context;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -22,16 +21,16 @@ public class FeatureOption extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         volumePanelPosition = Integer.parseInt(Xprefs.getString("volume_panel_position", "0"));
         showMyDevice = Xprefs.getBoolean("qs_show_my_device", false);
         allowAodMusic = Xprefs.getBoolean("allow_aod_music", false);
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        ReflectedClass FeatureOptions = ReflectedClass.of("com.oplusos.systemui.common.feature.FeatureOption", lpparam.classLoader);
+        ReflectedClass FeatureOptions = ReflectedClass.of("com.oplusos.systemui.common.feature.FeatureOption", PRParam.getClassLoader());
 
         FeatureOptions
                 .before("isOplusVolumeKeyInRight")

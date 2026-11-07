@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.utils.json;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

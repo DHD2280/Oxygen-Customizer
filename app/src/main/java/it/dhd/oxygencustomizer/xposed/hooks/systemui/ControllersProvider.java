@@ -1,13 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,11 +15,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class ControllersProvider extends XposedMods {
 
@@ -261,10 +259,11 @@ public class ControllersProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         boolean oos13 = Build.VERSION.SDK_INT == 33;
 
         try {
@@ -469,24 +468,17 @@ public class ControllersProvider extends XposedMods {
 
         // Stole FlashLight Callback
         try {
-            Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", lpparam.classLoader);
-            hookAllConstructors(FlashlightControllerImpl, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    Object mTorchCallback = getObjectField(param.thisObject, "mTorchCallback");
-                    findAndHookMethod(
-                            mTorchCallback.getClass(),
-                            "onTorchModeChanged",
-                            String.class,
-                            boolean.class,
-                            new XC_MethodHook() {
-                                @Override
-                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                    onTorchModeChanged((boolean) param.args[1]);
-                                }
-                            });
-                }
-            });
+            Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", PRParam.getClassLoader());
+            ReflectedClass.of(FlashlightControllerImpl)
+                    .afterConstruction()
+                    .run(param -> {
+                        Object mTorchCallback = getObjectField(param.thisObject, "mTorchCallback");
+                        ReflectedClass.of(mTorchCallback.getClass())
+                                .after(ReflectionHelpers.findMethodExact(mTorchCallback.getClass(), "onTorchModeChanged", String.class, boolean.class))
+                                .run(param2 -> {
+                                    onTorchModeChanged((boolean) param2.args[1]);
+                                });
+                    });
         } catch (Throwable t) {
             log("FlashlightControllerImpl not found " + t.getMessage());
         }
@@ -787,7 +779,7 @@ public class ControllersProvider extends XposedMods {
             try {
                 callback.onKeyguardShowing(keyguardShowing);
             } catch (Throwable t) {
-                XposedBridge.log("ControllersProvider - error " + Log.getStackTraceString(t));
+                Logger.log("ControllersProvider - error " + Log.getStackTraceString(t));
             }
         }
     }

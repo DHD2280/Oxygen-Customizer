@@ -1,8 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BDX;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenPeekNotifications.LOCKSCREEN_PEEK_CARD_BG_COLOR;
@@ -30,18 +27,21 @@ import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayHolder;
 import it.dhd.oxygencustomizer.xposed.views.peek.PeekDisplayView;
@@ -94,7 +94,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mPeekEnabled = Xprefs.getBoolean(LOCKSCREEN_PEEK_NOTIFICATIONS_ENABLED, false);
         mPeekLocation = Integer.parseInt(Xprefs.getString(LOCKSCREEN_PEEK_NOTIFICATIONS_LOCATION, "0"));
@@ -136,7 +136,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ControllersProvider.registerStatusBarStateChangedCallback(mStatusBarState -> {
             this.mStatusBarState = mStatusBarState;
@@ -169,7 +169,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .after("onFinishInflate")
                 .run(param -> {
                     if (notificationController != null && notificationController != param.thisObject) {
-                        XposedBridge.log("LockscreenPeekDisplay, NotificationPanelViewController onFinishInflate, notificationController != param.thisObject");
+                        Logger.log("LockscreenPeekDisplay, NotificationPanelViewController onFinishInflate, notificationController != param.thisObject");
                         return;
                     }
                     mNotificationPanelViewController = (ViewGroup) getObjectField(param.thisObject, "mView");
@@ -213,7 +213,7 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .run(param -> {
                     if (mPeekContainer == null) return;
                     int top = (int) param.args[3];
-                    XposedBridge.log("LockscreenPeekDisplay, NotificationPanelViewControllerExImp setNotificationsConstraints, top=" + top + ", mTopHeight=" + mTopHeight + ", mStackScrollerPaddingExpanded=" + mStackScrollerPaddingExpanded);
+                    Logger.log("LockscreenPeekDisplay, NotificationPanelViewControllerExImp setNotificationsConstraints, top=" + top + ", mTopHeight=" + mTopHeight + ", mStackScrollerPaddingExpanded=" + mStackScrollerPaddingExpanded);
                     setMarginsNoConvert(mPeekContainer, mContext, 0, (top == 0 ? mStackScrollerPaddingExpanded + mTopHeight : top) + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
@@ -259,7 +259,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     }
 
     private void placePeek() {
-        XposedBridge.log("LockscreenPeekDisplay, placePeek mNotificationPanelViewController null?: " + (mNotificationPanelViewController == null));
+        Logger.log("LockscreenPeekDisplay, placePeek mNotificationPanelViewController null?: " + (mNotificationPanelViewController == null));
         mPeekDisplayView = new PeekDisplayHolder(mContext, "TOP");
         mPeekContainer = new FrameLayout(mContext);
         mPeekContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -276,7 +276,7 @@ public class LockscreenPeekDisplay extends XposedMods {
 
     private void updateVisibility() {
         if (mPeekDisplayView == null) return;
-        XposedBridge.log("LockscreenPeekDisplay, updateVisibility - mPeekEnabled=" + mPeekEnabled + ", mStatusBarState=" + mStatusBarState + ", mKeyguardShowing=" + mKeyguardShowing);
+        Logger.log("LockscreenPeekDisplay, updateVisibility - mPeekEnabled=" + mPeekEnabled + ", mStatusBarState=" + mStatusBarState + ", mKeyguardShowing=" + mKeyguardShowing);
         if (!mPeekEnabled) {
             mPeekContainer.setVisibility(ViewGroup.GONE);
             return;

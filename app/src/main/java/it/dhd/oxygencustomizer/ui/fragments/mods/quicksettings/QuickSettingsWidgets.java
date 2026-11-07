@@ -7,10 +7,6 @@ import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_U
 import static it.dhd.oxygencustomizer.utils.AppUtils.showPhotoModeDialog;
 import static it.dhd.oxygencustomizer.utils.AppUtils.showPhotoShowcaseRadiusDialog;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_QS_PHOTO_CHANGED;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_LIST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.QS_PHOTO_DIR;
@@ -51,7 +47,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import it.dhd.oneplusui.appcompat.dialog.adapter.SummaryAdapter;
@@ -64,7 +59,6 @@ import it.dhd.oxygencustomizer.ui.dslv.DragSortController;
 import it.dhd.oxygencustomizer.ui.dslv.DragSortListView;
 import it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage;
 import it.dhd.oxygencustomizer.ui.fragments.mods.WeatherSettings;
-import it.dhd.oxygencustomizer.ui.widgets.SliderWidget;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;

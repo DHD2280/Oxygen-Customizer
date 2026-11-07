@@ -1,11 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findField;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.BLUR_RADIUS_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QSPANEL_BLUR_SWITCH;
@@ -13,14 +7,18 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QuickSettings.QS_TRANSPARENCY_VAL;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -40,7 +38,7 @@ public class QSTransparency extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         qsTransparencyActive = Xprefs.getBoolean(QS_TRANSPARENCY_SWITCH, false);
@@ -52,8 +50,9 @@ public class QSTransparency extends XposedMods {
 
     }
 
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) {
-        setQsTransparency(loadPackageParam);
+    @Override
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        setQsTransparency(PRParam);
         setBlurRadius();
     }
 
@@ -62,36 +61,36 @@ public class QSTransparency extends XposedMods {
         return listenPackage.equals(packageName);
     }
 
-    private void setQsTransparency(XC_LoadPackage.LoadPackageParam loadPackageParam) {
-        final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", loadPackageParam.classLoader);
+    private void setQsTransparency(XposedModuleInterface.PackageReadyParam PRParam) {
+        final Class<?> ScrimControllerClass = findClass(SYSTEM_UI + ".statusbar.phone.ScrimController", PRParam.getClassLoader());
 
-        hookAllMethods(ScrimControllerClass, "updateScrimColor", new XC_MethodHook() {
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!qsTransparencyActive) return;
-                if (Build.VERSION.SDK_INT >= 35) return;
+        ReflectedClass.of(ScrimControllerClass)
+                .before("updateScrimColor")
+                .run(param -> {
+                    if (!qsTransparencyActive) return;
+                    if (Build.VERSION.SDK_INT >= 35) return;
 
-                int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
-                String scrimState = getObjectField(param.thisObject, "mState").toString();
+                    int alphaIndex = param.args[2] instanceof Float ? 2 : 1;
+                    String scrimState = getObjectField(param.thisObject, "mState").toString();
 
-                if (scrimState.contains("BOUNCER")) {
-                    param.args[alphaIndex] = (Float) param.args[alphaIndex] * keyguard_alpha;
-                } else {
-                    String scrimName = "unknown_scrim";
+                    if (scrimState.contains("BOUNCER")) {
+                        param.args[alphaIndex] = (Float) param.args[alphaIndex] * keyguard_alpha;
+                    } else {
+                        String scrimName = "unknown_scrim";
 
-                    if (findField(ScrimControllerClass, "mScrimInFront").get(param.thisObject).equals(param.args[0])) {
-                        scrimName = "scrim_in_front";
-                    } else if (findField(ScrimControllerClass, "mScrimBehind").get(param.thisObject).equals(param.args[0])) {
-                        scrimName = "scrim_behind";
-                    } else if (findField(ScrimControllerClass, "mNotificationsScrim").get(param.thisObject).equals(param.args[0])) {
-                        scrimName = "scrim_notifications";
+                        if (findField(ScrimControllerClass, "mScrimInFront").get(param.thisObject).equals(param.args[0])) {
+                            scrimName = "scrim_in_front";
+                        } else if (findField(ScrimControllerClass, "mScrimBehind").get(param.thisObject).equals(param.args[0])) {
+                            scrimName = "scrim_behind";
+                        } else if (findField(ScrimControllerClass, "mNotificationsScrim").get(param.thisObject).equals(param.args[0])) {
+                            scrimName = "scrim_notifications";
+                        }
+
+                        if (scrimName.equals("scrim_notifications") || scrimName.equals("scrim_behind")) {
+                            param.args[alphaIndex] = (Float) param.args[alphaIndex] * alpha;
+                        }
                     }
-
-                    if (scrimName.equals("scrim_notifications") || scrimName.equals("scrim_behind")) {
-                        param.args[alphaIndex] = (Float) param.args[alphaIndex] * alpha;
-                    }
-                }
-            }
-        });
+                });
 
         if (Build.VERSION.SDK_INT >= 35) {
             hookQs();
@@ -137,22 +136,21 @@ public class QSTransparency extends XposedMods {
     }
 
     private void setBlurRadius() {
-        hookAllMethods(Resources.class, "getDimensionPixelSize", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(XC_MethodHook.MethodHookParam param) {
-                if (!blurEnabled) return;
-                if (Build.VERSION.SDK_INT >= 35) return;
+        ReflectedClass.of(Resources.class)
+                .before("getDimensionPixelSize")
+                .run(param -> {
+                    if (!blurEnabled) return;
+                    if (Build.VERSION.SDK_INT >= 35) return;
 
-                try {
-                    @SuppressLint("DiscouragedApi") int resId = mContext.getResources()
-                            .getIdentifier("max_window_blur_radius", "dimen", mContext.getPackageName());
-                    if (param.args[0].equals(resId)) {
-                        param.setResult(blurRadius);
+                    try {
+                        @SuppressLint("DiscouragedApi") int resId = mContext.getResources()
+                                .getIdentifier("max_window_blur_radius", "dimen", mContext.getPackageName());
+                        if (param.args[0].equals(resId)) {
+                            param.setResult(blurRadius);
+                        }
+                    } catch (Throwable throwable) {
+                        log(throwable);
                     }
-                } catch (Throwable throwable) {
-                    log(throwable);
-                }
-            }
-        });
+                });
     }
 }

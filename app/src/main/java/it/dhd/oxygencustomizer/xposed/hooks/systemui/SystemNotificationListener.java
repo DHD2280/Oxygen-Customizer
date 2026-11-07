@@ -1,8 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,8 +11,7 @@ import android.service.notification.StatusBarNotification;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -34,10 +32,11 @@ public class SystemNotificationListener extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass NotificationListener = ReflectedClass.of("com.android.systemui.statusbar.NotificationListener");
 
@@ -74,14 +73,13 @@ public class SystemNotificationListener extends XposedMods {
                 });
 
 
-        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", lpparam.classLoader);
-        hookAllMethods(KeyguardUpdateMonitor, "getUserCanSkipBouncer", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                boolean canSkipBouncer = (boolean) param.getResult();
-                onDeviceUnlock(canSkipBouncer);
-            }
-        });
+        Class<?> KeyguardUpdateMonitor = findClass("com.android.keyguard.KeyguardUpdateMonitor", PRParam.getClassLoader());
+        ReflectedClass.of(KeyguardUpdateMonitor)
+                .after("getUserCanSkipBouncer")
+                .run(param -> {
+                    boolean canSkipBouncer = (boolean) param.getResult();
+                    onDeviceUnlock(canSkipBouncer);
+                });
 
     }
 

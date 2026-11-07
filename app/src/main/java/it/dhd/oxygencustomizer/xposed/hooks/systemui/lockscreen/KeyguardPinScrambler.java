@@ -1,12 +1,12 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SHUFFLING;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_SHUFFLE_PIN;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -25,12 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class KeyguardPinScrambler extends XposedMods {
 
@@ -44,7 +43,7 @@ public class KeyguardPinScrambler extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         shufflePinEnabled = Xprefs.getBoolean(LOCKSCREEN_SHUFFLE_PIN, false);
         keepShuffling = Xprefs.getBoolean(LOCKSCREEN_KEEP_SHUFFLING, false);
     }
@@ -53,11 +52,11 @@ public class KeyguardPinScrambler extends XposedMods {
 
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         ReflectedClass COUINumericKeyboardClass = ReflectedClass.of("com.coui.appcompat.lockview.COUINumericKeyboard");
 
         ReflectedClass.ReflectionConsumer pinShuffleHook = param -> {
-            XposedBridge.log("KeyguardPinScrambler: Shuffling PIN numbers");
+            Logger.log("KeyguardPinScrambler: Shuffling PIN numbers");
             if (!shufflePinEnabled) return;
 
             List<Integer> valuesToShuffle = new ArrayList<>();
@@ -102,7 +101,7 @@ public class KeyguardPinScrambler extends XposedMods {
             setObjectField(param.thisObject , "mKeyboardNumbers", result.stream().mapToInt(i -> i).toArray());
             setObjectField(param.thisObject, "sCells", sCells);
 
-            XposedBridge.log("KeyguardPinScrambler: Shuffled PIN numbers: " + Arrays.toString(result.stream().mapToInt(i -> i).toArray()));
+            Logger.log("KeyguardPinScrambler: Shuffled PIN numbers: " + Arrays.toString(result.stream().mapToInt(i -> i).toArray()));
 
         };
 
@@ -154,43 +153,39 @@ public class KeyguardPinScrambler extends XposedMods {
             }
         }
         if (deliverMethod != null) {
-            XposedBridge.hookMethod(deliverMethod, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam p) {
-                    if (!shufflePinEnabled) return;
-                    try {
-                        Object dial = p.args[0];
-                        int digit = (int) p.args[1];
-                        int[] map = (int[]) XposedHelpers.getAdditionalInstanceField(dial, "pinScrambleMap");
-                        if (map == null) return;
-                        int pos = (digit == 0) ? 10 : digit - 1;
-                        if (pos >= 0 && pos < map.length && map[pos] >= 0) {
-                            Log.d("KeyguardPinScrambler", "translate " + digit + " -> " + map[pos]);
-                            p.args[1] = map[pos];
+            ReflectedClass.of(deliverMethod.getDeclaringClass())
+                    .hook(deliverMethod)
+                    .run(p -> {
+                        if (!shufflePinEnabled) return;
+                        try {
+                            Object dial = p.args[0];
+                            int digit = (int) p.args[1];
+                            int[] map = (int[]) ReflectionHelpers.getAdditionalInstanceField(dial, "pinScrambleMap");
+                            if (map == null) return;
+                            int pos = (digit == 0) ? 10 : digit - 1;
+                            if (pos >= 0 && pos < map.length && map[pos] >= 0) {
+                                Log.d("KeyguardPinScrambler", "translate " + digit + " -> " + map[pos]);
+                                p.args[1] = map[pos];
+                            }
+                        } catch (Throwable t) {
+                            Log.e("KeyguardPinScrambler", "deliver before", t);
                         }
-                    } catch (Throwable t) {
-                        Log.e("KeyguardPinScrambler", "deliver before", t);
-                    }
-                }
-
-                @Override
-                protected void afterHookedMethod(MethodHookParam p) {
-                    if (!shufflePinEnabled || !keepShuffling) return;
-                    try {
-                        View dial = (View) p.args[0];
-                        dial.post(() -> doShuffle(dial));
-                    } catch (Throwable t) {
-                        Log.e("KeyguardPinScrambler", "deliver after", t);
-                    }
-                }
-            });
+                    }, p -> {
+                        if (!shufflePinEnabled || !keepShuffling) return;
+                        try {
+                            View dial = (View) p.args[0];
+                            dial.post(() -> doShuffle(dial));
+                        } catch (Throwable t) {
+                            Log.e("KeyguardPinScrambler", "deliver after", t);
+                        }
+                    });
         }
 
         COUIPasswordDial
                 .afterConstruction()
                 .run(p -> {
                     if (!shufflePinEnabled) return;
-                    if (XposedHelpers.getAdditionalInstanceField(p.thisObject, "pinScrambleMap") != null)
+                    if (ReflectionHelpers.getAdditionalInstanceField(p.thisObject, "pinScrambleMap") != null)
                         return;
                     View dial = (View) p.thisObject;
                     mCurrentDial = new WeakReference<>(dial);
@@ -214,15 +209,15 @@ public class KeyguardPinScrambler extends XposedMods {
                             dial = self.findViewById(id);
                         }
                         if (dial == null) {
-                            XposedBridge.log("KeyguardPinScrambler reset: dial null");
+                            Logger.log("KeyguardPinScrambler reset: dial null");
                             return;
                         }
 
                         final View target = dial;
                         target.post(() -> doShuffle(target));
-                        XposedBridge.log("KeyguardPinScrambler reset(wrong): re-shuffle");
+                        Logger.log("KeyguardPinScrambler reset(wrong): re-shuffle");
                     } catch (Throwable t) {
-                        XposedBridge.log("KeyguardPinScrambler reset hook " + Arrays.toString(t.getStackTrace()));
+                        Logger.log("KeyguardPinScrambler reset hook " + Arrays.toString(t.getStackTrace()));
                     }
                 });
 
@@ -255,10 +250,10 @@ public class KeyguardPinScrambler extends XposedMods {
                     ((android.widget.TextView) key).setText(String.valueOf(map[i]));
                 }
             }
-            XposedHelpers.setAdditionalInstanceField(dial, "pinScrambleMap", map);
-            XposedBridge.log("KeyguardPinScrambler shuffle: " + Arrays.toString(map));
+            ReflectionHelpers.setAdditionalInstanceField(dial, "pinScrambleMap", map);
+            Logger.log("KeyguardPinScrambler shuffle: " + Arrays.toString(map));
         } catch (Throwable t) {
-            XposedBridge.log("KeyguardPinScrambler " + Arrays.toString(t.getStackTrace()));
+            Logger.log("KeyguardPinScrambler " + Arrays.toString(t.getStackTrace()));
         }
     }
 

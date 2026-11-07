@@ -1,12 +1,9 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen;
 
 import static android.app.Activity.RESULT_OK;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_FONT_DIR;
-import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CUSTOM_IMAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_WEATHER_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_CUSTOM_FONT_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
@@ -18,8 +15,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
-
-import java.util.Objects;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.WeatherPreferenceFragment;

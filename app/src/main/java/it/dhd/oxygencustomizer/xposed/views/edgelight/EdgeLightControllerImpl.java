@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.edgelight;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.edgelight.animators.EdgeAnimator;
 
 public class EdgeLightControllerImpl {
@@ -189,7 +189,7 @@ public class EdgeLightControllerImpl {
 
     private void logD(String msg) {
         if (!DEBUG) return;
-        XposedBridge.log(TAG + "\n" + msg + "\n" +
+        Logger.log(TAG + "\n" + msg + "\n" +
                 "mEdgeLightEnabled: " + mEdgeLightEnabled + " " +
                 "mDozing: " + mDozing + " " +
                 "mCurved: " + mCurved + " " +

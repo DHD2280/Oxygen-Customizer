@@ -35,10 +35,10 @@ import com.oplusos.systemui.common.blurability.MixColor;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.ExtendedViewPager;
 
 @SuppressLint("ViewConstructor")
@@ -184,22 +184,22 @@ public class NowBarHolder extends LinearLayout {
         try {
             mNowBarMusic = NowBarMusic.getInstance(mContext, musicExpansionListener, albumArtListener);
         } catch (Throwable t) {
-            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+            Logger.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
         }
         try {
             mNowBarBattery = new NowBarBattery(mContext);
         } catch (Throwable t) {
-            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+            Logger.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
         }
         try {
             mNowBarWeather = new NowBarWeather(mContext);
         } catch (Throwable t) {
-            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+            Logger.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
         }
         try {
             mNowBarNotification = new NowBarNotification(mContext, notificationListener);
         } catch (Throwable t) {
-            XposedBridge.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
+            Logger.log(this.getClass().getSimpleName() + " - " + Log.getStackTraceString(t));
         }
         mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
         setupPager();

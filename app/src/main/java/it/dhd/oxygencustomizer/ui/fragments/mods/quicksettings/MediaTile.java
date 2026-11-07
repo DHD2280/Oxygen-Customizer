@@ -2,8 +2,6 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
-import androidx.fragment.app.Fragment;
-
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 

@@ -24,7 +24,6 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  *
  */
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.audiofx.Visualizer;
 import android.os.Handler;

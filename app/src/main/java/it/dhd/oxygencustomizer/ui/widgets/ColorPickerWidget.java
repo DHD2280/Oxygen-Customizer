@@ -3,13 +3,11 @@ package it.dhd.oxygencustomizer.ui.widgets;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -24,7 +22,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.databinding.ViewWidgetColorpickerBinding;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.ui.events.ColorDismissedEvent;
 import it.dhd.oxygencustomizer.ui.events.ColorSelectedEvent;

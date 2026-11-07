@@ -1,9 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.views.peek;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.Gravity;
 import android.widget.LinearLayout;
-import android.content.Context;
 
 @SuppressLint("ViewConstructor")
 public class PeekDisplayHolder extends LinearLayout {

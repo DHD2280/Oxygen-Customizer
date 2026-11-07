@@ -29,9 +29,12 @@
 -keepnames class it.dhd.oxygencustomizer.weather.**
 -keep class it.dhd.oxygencustomizer.weather.** { *; }
 
-# Xposed
--keep class de.robv.android.xposed.**
--keep class it.dhd.oxygencustomizer.xposed.MainHook
+# Xposed (libxposed API)
+-adaptresourcefilecontents META-INF/xposed/java_init.list
+-keep,allowobfuscation,allowoptimization public class * extends io.github.libxposed.api.XposedModule {
+    public <init>();
+    public void on*(...);
+}
 -keepnames class it.dhd.oxygencustomizer.xposed.**
 -keepnames class it.dhd.oxygencustomizer.xposed.XPrefs
 -keep class it.dhd.oxygencustomizer.xposed.** { *; }

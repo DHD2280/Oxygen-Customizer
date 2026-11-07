@@ -1,28 +1,27 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClassIfExists;
 
 import android.annotation.SuppressLint;
 import android.util.ArraySet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 /** @noinspection unused, RedundantThrows */
 public class ReflectionTools {
@@ -37,57 +36,6 @@ public class ReflectionTools {
 	{
 		dumpClass(className, classLoader);
 		return findClassIfExists(className, classLoader);
-	}
-
-	public static Set<XC_MethodHook.Unhook> hookAllMethods(Class<?> clazz, String method, XC_MethodHook callback)
-	{
-		XC_MethodHook hook = new XC_MethodHook() {
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				if(true) {
-					log(param.method.getName() + " called");
-				}
-				callMethod(callback, "beforeHookedMethod", param);
-			}
-
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				callMethod(callback, "afterHookedMethod", param);
-			}
-		};
-
-		Set<XC_MethodHook.Unhook> result = XposedBridge.hookAllMethods(clazz, method, hook);
-		if(true) {
-			Throwable t = new Throwable();
-			log(t.getStackTrace()[1].getClassName() + " " + t.getStackTrace()[1].getLineNumber() + " hook size " + result.size());
-		}
-		return result;
-	}
-
-	public static Set<XC_MethodHook.Unhook> hookAllConstructors(Class<?> clazz, XC_MethodHook callback)
-	{
-		XC_MethodHook hook = new XC_MethodHook() {
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				if(true) {
-					log(param.method.getName() + " called");
-				}
-				callMethod(callback, "beforeHookedMethod", param);
-			}
-
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				callMethod(callback, "afterHookedMethod", param);
-			}
-		};
-
-
-		Set<XC_MethodHook.Unhook> result = XposedBridge.hookAllConstructors(clazz, hook);
-		if(true) {
-			Throwable t = new Throwable();
-			log(t.getStackTrace()[1].getClassName() + " " + t.getStackTrace()[1].getLineNumber() + " hook size " + result.size());
-		}
-		return result;
 	}
 
 	public static void runDelayedOnMainThread(View viewObject, long delay, Runnable runnable)
@@ -121,17 +69,6 @@ public class ReflectionTools {
 		parentView.addView(childView, index);
 	}
 
-
-	public static Set<XC_MethodHook.Unhook> hookAllMethodsMatchPattern(Class<?> clazz, String namePatter, XC_MethodHook callback)
-	{
-		Set<XC_MethodHook.Unhook> result = new ArraySet<>();
-
-		for(Method method : findMethods(clazz, namePatter))
-		{
-			result.add(hookMethod(method, callback));
-		}
-		return result;
-	}
 
 	public static Set<Method> findMethods(Class<?> clazz, String namePattern)
 	{
@@ -222,18 +159,16 @@ public class ReflectionTools {
 		log("ReflectionTools - End dump");
 	}
 
-	public static void tryHookAllMethods(Class<?> clazz, String method, XC_MethodHook hook) {
-		try {
-			XposedBridge.hookAllMethods(clazz, method, hook);
-		} catch (Throwable ignored) {
-		}
-	}
+    public static List<ViewParent> getAllParents(View view) {
+        List<ViewParent> parents = new ArrayList<>();
+        ViewParent current = view.getParent();
 
-	public static void tryHookAllConstructors(Class<?> clazz, XC_MethodHook hook) {
-		try {
-			XposedBridge.hookAllConstructors(clazz, hook);
-		} catch (Throwable ignored) {
-		}
+        while (!getAllParents(view).isEmpty()) {
+            parents.add(current);
+            current = current.getParent();
+        }
+
+        return parents;
 	}
 
 	public static void dumpView(View view) {
@@ -386,12 +321,12 @@ public class ReflectionTools {
 	}
 
 	public static Class<?> findClassInArray(
-			XC_LoadPackage.LoadPackageParam lpparam,
+            XposedModuleInterface.PackageReadyParam lpparam,
 			String...classes
 	) {
 		for(String clazz : classes) {
 			try {
-				Class<?> mClazz = findClass(clazz, lpparam.classLoader);
+                Class<?> mClazz = findClass(clazz, lpparam.getClassLoader());
 				if (mClazz != null) {
 					return mClazz;
 				}
@@ -403,7 +338,7 @@ public class ReflectionTools {
     public static Object getObject(Object obj, String... fieldNames) {
         for (String fieldName : fieldNames) {
             try {
-                return XposedHelpers.getObjectField(obj, fieldName);
+                return ReflectionHelpers.getObjectField(obj, fieldName);
             } catch (Throwable ignored) {
             }
         }

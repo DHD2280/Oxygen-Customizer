@@ -1,14 +1,14 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
 
 import android.content.Context;
 import android.view.View;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -26,7 +26,7 @@ public class MiscMods extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mHideRotationButton = Xprefs.getBoolean("misc_remove_rotate_floating", false);
         mRemoveUsb = Xprefs.getBoolean("remove_usb_dialog", false);
 
@@ -36,8 +36,8 @@ public class MiscMods extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!listenPackage.equals(PRParam.getPackageName())) return;
 
         ReflectedClass FloatingRotationButton = ReflectedClass.of("com.android.systemui.shared.rotation.FloatingRotationButton");
         FloatingRotationButton.afterConstruction().run(param -> {

@@ -1,10 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_PHOTO_SHOWCASE;
@@ -17,6 +13,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPref
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDGETS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.SeparateQsPrefs.SEPARATE_QS_WIDTH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,12 +43,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.SeparateQsWidgetsFactory;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 import it.dhd.oxygencustomizer.xposed.views.controls.customapp.QsCustomAppWidgetView;
@@ -109,7 +109,7 @@ public class SeparateQsCustomization extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mPhotoRadius = Xprefs.getSliderInt(QS_PHOTO_RADIUS, 22);
         mPhotoShowcase = Xprefs.getString(QS_PHOTO_SHOWCASE, "0").equals("1");
@@ -198,7 +198,7 @@ public class SeparateQsCustomization extends XposedMods {
                 };
             }
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - QsTileCustomization: Error parsing layout_cells\n" + Log.getStackTraceString(t));
+            Logger.log("Oxygen Customizer - QsTileCustomization: Error parsing layout_cells\n" + Log.getStackTraceString(t));
         }
     }
 
@@ -226,7 +226,7 @@ public class SeparateQsCustomization extends XposedMods {
                 mOldWidgets.putAll(mWidgets);
             }
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - SeparateQsCustomization: Error parsing custom_widgets\n" + Log.getStackTraceString(t));
+            Logger.log("Oxygen Customizer - SeparateQsCustomization: Error parsing custom_widgets\n" + Log.getStackTraceString(t));
         }
     }
     
@@ -371,11 +371,11 @@ public class SeparateQsCustomization extends XposedMods {
         setObjectField(obj, "mViewCells", mViewCells);
         mOplusLargeTileContainerView.requestLayout();
         mOplusLargeTileContainerView.postInvalidate();
-        XposedBridge.log("Oxygen Customizer - SeparateQsCustomization - updateCellsHook: mViewCells size: " + mViewCells.size());
+        Logger.log("Oxygen Customizer - SeparateQsCustomization - updateCellsHook: mViewCells size: " + mViewCells.size());
     }
     
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
@@ -533,7 +533,7 @@ public class SeparateQsCustomization extends XposedMods {
         try {
             updateCellsHook(mOplusLargeTileContainerView);
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - SeparateQsCustomization: Error updating layout\n" + Log.getStackTraceString(t));
+            Logger.log("Oxygen Customizer - SeparateQsCustomization: Error updating layout\n" + Log.getStackTraceString(t));
         }
     }
 

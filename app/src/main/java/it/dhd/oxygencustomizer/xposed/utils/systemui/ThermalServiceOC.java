@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.utils.systemui;
 
-
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class ThermalServiceOC {
 
@@ -83,13 +82,13 @@ public class ThermalServiceOC {
             if (b != null) {
                 // call the asInterface method to get IThermalService instance
                 Object thermalService = callStaticMethod(
-                        XposedHelpers.findClass("android.os.IThermalService$Stub", ClassLoader.getSystemClassLoader()),
+                        ReflectionHelpers.findClass("android.os.IThermalService$Stub", ClassLoader.getSystemClassLoader()),
                         "asInterface",
                         b
                 );
 
                 // 3. getCurrentTemperatures()
-                return (Object[]) XposedHelpers.callMethod(thermalService, "getCurrentTemperatures");
+                return (Object[]) ReflectionHelpers.callMethod(thermalService, "getCurrentTemperatures");
             }
         } catch (Exception e) {
             logE("ThermalServiceOC: error in getTemperatures", e);
@@ -99,7 +98,7 @@ public class ThermalServiceOC {
 
     private static void logE(String message, Throwable throwable) {
         try {
-            XposedBridge.log(TAG + " " + message + ": " + Log.getStackTraceString(throwable));
+            Logger.log(TAG + " " + message + ": " + Log.getStackTraceString(throwable));
         } catch (Throwable ignored) {
         }
         Log.e(TAG, message, throwable);

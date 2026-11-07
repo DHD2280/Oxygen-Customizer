@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.aod;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_AOD_INVALIDATE_DEPTH;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -27,10 +26,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Random;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
  * @noinspection RedundantThrows
@@ -100,7 +99,7 @@ public class AodDepthSubject extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         mDepthWallpaper = Xprefs.getBoolean("DWallpaperEnabled", false);
         mDepthOnAod = Xprefs.getBoolean("DWShowOnAod", false);
         mDepthSubjectAlpha = Xprefs.getSliderInt("DWAodOpacity", 192);
@@ -111,7 +110,7 @@ public class AodDepthSubject extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mReceiverRegistered) {
             IntentFilter filter = new IntentFilter();
@@ -120,40 +119,37 @@ public class AodDepthSubject extends XposedMods {
             mReceiverRegistered = true;
         }
 
-        Class<?> AodRecord = findClassInArray(lpparam,
+        Class<?> AodRecord = findClassInArray(PRParam,
                 "com.oplus.systemui.aod.AodRecord",
                 "com.oplusos.systemui.aod.AodRecord");
-        hookAllMethods(AodRecord, "createAndInitRootView", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mAodRootLayout = (FrameLayout) param.getResult();
-                placeSubject();
-            }
-        });
+        ReflectedClass.of(AodRecord)
+                .after("createAndInitRootView")
+                .run(param -> {
+                    mAodRootLayout = (FrameLayout) param.getResult();
+                    placeSubject();
+                });
 
-        hookAllMethods(AodRecord, "onDreamingStarted", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mDepthWallpaper) return;
-                if (!mDepthOnAod) return;
-                if (!mLayersCreated) return;
-                log("onDreamingStarted");
-                animateView(true);
-                startMoving();
-            }
-        });
+        ReflectedClass.of(AodRecord)
+                .after("onDreamingStarted")
+                .run(param -> {
+                    if (!mDepthWallpaper) return;
+                    if (!mDepthOnAod) return;
+                    if (!mLayersCreated) return;
+                    log("onDreamingStarted");
+                    animateView(true);
+                    startMoving();
+                });
 
-        hookAllMethods(AodRecord, "onDreamingStopped", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mDepthWallpaper) return;
-                if (!mDepthOnAod) return;
-                if (!mLayersCreated) return;
-                log("onDreamingStopped");
-                animateView(false);
-                stopMoving();
-            }
-        });
+        ReflectedClass.of(AodRecord)
+                .after("onDreamingStopped")
+                .run(param -> {
+                    if (!mDepthWallpaper) return;
+                    if (!mDepthOnAod) return;
+                    if (!mLayersCreated) return;
+                    log("onDreamingStopped");
+                    animateView(false);
+                    stopMoving();
+                });
 
     }
 

@@ -1,8 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_NOW_BAR_EXPANDED_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_CARRIER_REPLACEMENT;
@@ -17,16 +14,20 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LOCK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_SOS;
-import static it.dhd.oxygencustomizer.xposed.ResourceManager.resparams;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
 import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExact;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
@@ -34,7 +35,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,15 +50,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources;
-import de.robv.android.xposed.callbacks.XC_LayoutInflated;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Lockscreen extends XposedMods {
@@ -100,7 +101,7 @@ public class Lockscreen extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         removeSOS = Xprefs.getBoolean(LOCKSCREEN_REMOVE_SOS, false);
         hideFingerprint = Xprefs.getBoolean(LOCKSCREEN_HIDE_FINGERPRINT, false);
@@ -136,8 +137,8 @@ public class Lockscreen extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         if (!mReceiverRegistered) {
             IntentFilter filter = new IntentFilter();
@@ -268,7 +269,7 @@ public class Lockscreen extends XposedMods {
 
     }
 
-    private void updateFingerprintIcon(XC_MethodHook.MethodHookParam param, boolean isStartMethod) {
+    private void updateFingerprintIcon(HookHelper.RunParam param, boolean isStartMethod) {
         Object mFpIcon;
 
         mFpIcon = getObjectField(param.thisObject, mFpIconField);
@@ -529,66 +530,81 @@ public class Lockscreen extends XposedMods {
         }
     }
 
+    private boolean mStatusBarInflateHooked = false;
+
+    /**
+     * Hides keyguard status bar elements when SystemUI inflates {@code keyguard_status_bar}.
+     * Hooked once: the callback reads current preferences on every inflation.
+     */
     private void hideLockscreenStuff() {
-        XC_InitPackageResources.InitPackageResourcesParam ourResparam = resparams.get(SYSTEM_UI);
-        if (ourResparam == null) return;
+        if (mStatusBarInflateHooked) return;
+
+        @SuppressLint("DiscouragedApi")
+        int keyguardStatusBarLayout = mContext.getResources().getIdentifier("keyguard_status_bar", "layout", mContext.getPackageName());
+        if (keyguardStatusBarLayout == 0) return;
+        mStatusBarInflateHooked = true;
 
         try {
-            ourResparam.res.hookLayout(SYSTEM_UI, "layout", "keyguard_status_bar", new XC_LayoutInflated() {
-                @SuppressLint("DiscouragedApi")
-                @Override
-                public void handleLayoutInflated(XC_LayoutInflated.LayoutInflatedParam liparam) {
-                    if (hideLockscreenCarrier) {
-                        try {
-                            @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = liparam.view.findViewById(liparam.res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
-                            keyguard_carrier_text.getLayoutParams().height = 0;
-                            keyguard_carrier_text.setVisibility(View.INVISIBLE);
-                            keyguard_carrier_text.requestLayout();
-                        } catch (Throwable ignored) {
-                        }
-                    }
-                    if (hideLockscreenCapsule) {
-                        try {
-                            @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = liparam.view.findViewById(liparam.res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
-                            keyguard_seeding_card_container.getLayoutParams().height = 0;
-                            keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
-                            keyguard_seeding_card_container.requestLayout();
-                        } catch (Throwable ignored) {
-                        }
-                    }
-                    if (hideLockscreenStatusbar) {
-                        try {
-                            @SuppressLint("DiscouragedApi") LinearLayout status_icon_area = liparam.view.findViewById(liparam.res.getIdentifier("status_icon_area", "id", mContext.getPackageName()));
-                            status_icon_area.getLayoutParams().height = 0;
-                            status_icon_area.setVisibility(View.INVISIBLE);
-                            status_icon_area.requestLayout();
-                        } catch (Throwable ignored) {
-                        }
-
-                        try {
-                            @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = liparam.view.findViewById(liparam.res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
-                            keyguard_carrier_text.getLayoutParams().height = 0;
-                            keyguard_carrier_text.setVisibility(View.INVISIBLE);
-                            keyguard_carrier_text.requestLayout();
-                        } catch (Throwable ignored) {
-                        }
-                        try {
-                            @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = liparam.view.findViewById(liparam.res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
-                            keyguard_seeding_card_container.getLayoutParams().height = 0;
-                            keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
-                            keyguard_seeding_card_container.requestLayout();
-                        } catch (Throwable ignored) {
-                        }
-                    }
-                }
-            });
+            ReflectedClass.of(LayoutInflater.class)
+                    .after(findMethodExact(LayoutInflater.class, "inflate", int.class, ViewGroup.class, boolean.class))
+                    .run(param -> {
+                        if ((int) param.args[0] != keyguardStatusBarLayout) return;
+                        if (!(param.getResult() instanceof View root)) return;
+                        applyKeyguardStatusBarHides(root, root.getResources());
+                    });
         } catch (Throwable t) {
             log(t);
         }
     }
 
+    @SuppressLint("DiscouragedApi")
+    private void applyKeyguardStatusBarHides(View root, Resources res) {
+        if (hideLockscreenCarrier) {
+            try {
+                @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = root.findViewById(res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
+                keyguard_carrier_text.getLayoutParams().height = 0;
+                keyguard_carrier_text.setVisibility(View.INVISIBLE);
+                keyguard_carrier_text.requestLayout();
+            } catch (Throwable ignored) {
+            }
+        }
+        if (hideLockscreenCapsule) {
+            try {
+                @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = root.findViewById(res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
+                keyguard_seeding_card_container.getLayoutParams().height = 0;
+                keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
+                keyguard_seeding_card_container.requestLayout();
+            } catch (Throwable ignored) {
+            }
+        }
+        if (hideLockscreenStatusbar) {
+            try {
+                @SuppressLint("DiscouragedApi") LinearLayout status_icon_area = root.findViewById(res.getIdentifier("status_icon_area", "id", mContext.getPackageName()));
+                status_icon_area.getLayoutParams().height = 0;
+                status_icon_area.setVisibility(View.INVISIBLE);
+                status_icon_area.requestLayout();
+            } catch (Throwable ignored) {
+            }
+
+            try {
+                @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = root.findViewById(res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
+                keyguard_carrier_text.getLayoutParams().height = 0;
+                keyguard_carrier_text.setVisibility(View.INVISIBLE);
+                keyguard_carrier_text.requestLayout();
+            } catch (Throwable ignored) {
+            }
+            try {
+                @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = root.findViewById(res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
+                keyguard_seeding_card_container.getLayoutParams().height = 0;
+                keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
+                keyguard_seeding_card_container.requestLayout();
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
     private void animateButtons(boolean isExpanded) {
-        XposedBridge.log("animateButtons: " + isExpanded);
+        Logger.log("animateButtons: " + isExpanded);
         if (removeLeftAffordance && removeRightAffordance) return;
         if (isExpanded) {
             if (mStartAnimatable != null) {

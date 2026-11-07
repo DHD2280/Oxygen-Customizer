@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ALPHA;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_BOTTOM_FADE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderImage.QS_HEADER_IMAGE_ENABLED;
@@ -19,6 +17,8 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver.isSeparateStyle;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -55,14 +55,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderImage extends XposedMods {
@@ -100,7 +100,7 @@ public class HeaderImage extends XposedMods {
 
     private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
         float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
-        XposedBridge.log("ExpandedQsFractionChangeListener: " + alpha);
+        Logger.log("ExpandedQsFractionChangeListener: " + alpha);
         setAlpha(alpha);
     };
 
@@ -109,7 +109,7 @@ public class HeaderImage extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         qshiEnabled = Xprefs.getBoolean(QS_HEADER_IMAGE_ENABLED, false);
@@ -139,9 +139,9 @@ public class HeaderImage extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         try {
-            findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", lpparam.classLoader);
+            findClass("com.oplus.systemui.qs.widget.OplusQsToggleSliderLayout", PRParam.getClassLoader());
             newControlCenter = true;
             log("New Control Center");
         } catch (Throwable ignored) {

@@ -1,9 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_USER_UNLOCKED;
 import static it.dhd.oxygencustomizer.utils.Constants.CLOCK_TAG;
@@ -42,6 +39,9 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -88,8 +88,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -101,6 +100,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderClock extends XposedMods {
@@ -182,7 +182,7 @@ public class HeaderClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         // Custom Header Prefs
         showHeaderClock = Xprefs.getBoolean(QS_HEADER_CLOCK_CUSTOM_ENABLED, false);
         clockStyle = Xprefs.getInt(QS_HEADER_CLOCK_CUSTOM_VALUE, 0);
@@ -288,7 +288,7 @@ public class HeaderClock extends XposedMods {
 
     @SuppressLint("DiscouragedApi")
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -382,7 +382,7 @@ public class HeaderClock extends XposedMods {
                 .after("onFractionUpdated")
                 .run(param -> {
                     if (!showHeaderClock) return;
-                    XposedBridge.log("QsFragmentHelper onFractionUpdated");
+                    Logger.log("QsFragmentHelper onFractionUpdated");
 
                     float f = (float) param.args[0];
                     Interpolator mAlphaAnimInterpolator = (Interpolator) getObjectField(param.thisObject, "mAlphaAnimInterpolator");

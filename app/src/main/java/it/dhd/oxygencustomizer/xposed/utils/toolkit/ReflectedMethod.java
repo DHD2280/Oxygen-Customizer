@@ -1,17 +1,15 @@
 package it.dhd.oxygencustomizer.xposed.utils.toolkit;
 
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExact;
+
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.XC_MethodHook;
+import io.github.libxposed.api.XposedInterface;
 
-/*
-    Reflection Toolkit by @Siavash79/PixelXpert
- */
 /**
  * @noinspection unused
  */
@@ -27,20 +25,20 @@ public class ReflectedMethod {
     }
 
     public static ReflectedMethod ofExactData(ReflectedClass reflectedClass, String name, Class<?>... parameterTypes) {
-        return new ReflectedMethod(findMethodExact(reflectedClass.getClazz(), name, parameterTypes));
+        return new ReflectedMethod(findMethodExact(reflectedClass.getClazz(), name, (Object[]) parameterTypes));
     }
 
     public static ReflectedMethod ofName(ReflectedClass reflectedClass, String exactName) {
         return new ReflectedMethod(findMethod(reflectedClass.getClazz(), exactName));
     }
 
-    public Collection<? extends XC_MethodHook.Unhook> beforeThat(ReflectedClass.ReflectionConsumer consumer) {
+    public Collection<XposedInterface.HookHandle> beforeThat(ReflectedClass.ReflectionConsumer consumer) {
         return ReflectedClass.of(method.getClass())
                 .before(method)
                 .run(consumer);
     }
 
-    public Set<XC_MethodHook.Unhook> afterThat(ReflectedClass.ReflectionConsumer consumer) {
+    public Set<XposedInterface.HookHandle> afterThat(ReflectedClass.ReflectionConsumer consumer) {
         return ReflectedClass.of(method.getClass())
                 .after(method)
                 .run(consumer);
@@ -55,6 +53,16 @@ public class ReflectedMethod {
             }
         }
         return null;
+    }
+
+    /**
+     * Invokes the original method, skipping all hooks.
+     */
+    public Object invokeOriginal(Object object, Object... args) throws Throwable {
+        return ReflectedClass.getDefaultXposedInterface()
+                .getInvoker(method)
+                .setType(XposedInterface.Invoker.Type.ORIGIN)
+                .invoke(object, args);
     }
 
     public Object invoke(Object object, Object... args) throws Throwable {

@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class QsMenuItems extends XposedMods {
@@ -52,11 +52,11 @@ public class QsMenuItems extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return; // Don't care about this on previous versions\
 
@@ -80,7 +80,7 @@ public class QsMenuItems extends XposedMods {
 
                     callMethod(param.thisObject, "setOnItemClickListener", ((AdapterView.OnItemClickListener) (parent, view, position, id) -> {
                         if (view.getTag() != null) {
-                            XposedBridge.log("QS Menu Item clicked view tag != null");
+                            Logger.log("QS Menu Item clicked view tag != null");
                             final ClickListener clickListener = new ClickListener();
                             clickListener.onClick(view);
                             return;
@@ -248,10 +248,10 @@ public class QsMenuItems extends XposedMods {
 
         @Override
         public void onClick(View v) {
-            XposedBridge.log("QS Menu Item clicked");
+            Logger.log("QS Menu Item clicked");
             Object tag = v.getTag();
             if (tag != null) {
-                XposedBridge.log("QS Menu Item tag: " + tag.toString());
+                Logger.log("QS Menu Item tag: " + tag.toString());
                 launch(tag.toString());
             }
         }

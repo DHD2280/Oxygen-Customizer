@@ -15,8 +15,8 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.TypedValue
 import androidx.core.graphics.PathParser
-import kotlin.math.floor
 import it.dhd.oxygencustomizer.R
+import kotlin.math.floor
 
 @SuppressLint("DiscouragedApi")
 open class LandscapeBatteryKim(private val context: Context, frameColor: Int) :

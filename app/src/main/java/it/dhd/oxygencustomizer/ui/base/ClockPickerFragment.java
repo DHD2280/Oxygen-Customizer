@@ -2,18 +2,12 @@ package it.dhd.oxygencustomizer.ui.base;
 
 import static android.content.Context.BATTERY_SERVICE;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
-import android.annotation.SuppressLint;
-import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,7 +20,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
@@ -36,7 +29,6 @@ import java.util.concurrent.Executors;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.databinding.BatteryIconOptionsBinding;
 import it.dhd.oxygencustomizer.databinding.FragmentClockPickerBinding;
 import it.dhd.oxygencustomizer.ui.views.ClockCarouselItemViewModel;
 import it.dhd.oxygencustomizer.ui.views.ClockCarouselView;

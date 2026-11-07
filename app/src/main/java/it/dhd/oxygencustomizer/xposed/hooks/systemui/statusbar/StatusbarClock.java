@@ -2,12 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_CLOCK_COLOR_SWITCH;
@@ -21,6 +15,12 @@ import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.idOf;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.getChip;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -60,10 +60,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
@@ -166,7 +166,7 @@ public class StatusbarClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         mClockAutoHide = Xprefs.getBoolean("status_bar_clock_auto_hide", false);
         mClockAutoHideLauncherSwitch = Xprefs.getBoolean("status_bar_clock_auto_hide_launcher", false);
@@ -295,8 +295,8 @@ public class StatusbarClock extends XposedMods {
 
     //noinspection throwableresult of the method is ignored
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!listenPackage.equals(PRParam.getPackageName())) return;
 
         ReflectedClass ClockClass = ReflectedClass.of("com.android.systemui.statusbar.policy.Clock");
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
@@ -854,7 +854,7 @@ public class StatusbarClock extends XposedMods {
                 break;
             }
         }
-        XposedBridge.log("StatusbarClock - foregroundApp: " + foregroundApp);
+        Logger.log("StatusbarClock - foregroundApp: " + foregroundApp);
 
         if (TextUtils.isEmpty(foregroundApp)) return;
         final boolean clockAutoHide = foregroundApp.equals(getDefaultLauncherPackageName());

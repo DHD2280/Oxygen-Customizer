@@ -1,8 +1,8 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -12,7 +12,8 @@ import androidx.annotation.NonNull;
 import java.text.NumberFormat;
 import java.util.Objects;
 
-import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+
 
 public class OplusBatteryStatus {
 
@@ -20,7 +21,7 @@ public class OplusBatteryStatus {
 
     public OplusBatteryStatus(Object oplusAddBatteryStatus) {
         if (oplusAddBatteryStatus == null) return;
-        XposedBridge.log("OplusAddBatteryStatus class: " + oplusAddBatteryStatus.getClass().getCanonicalName());
+        Logger.log("OplusAddBatteryStatus class: " + oplusAddBatteryStatus.getClass().getCanonicalName());
 
         mOplusAddBatteryStatus = oplusAddBatteryStatus;
 

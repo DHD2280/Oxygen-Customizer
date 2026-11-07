@@ -2,8 +2,8 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -50,7 +50,7 @@ public class BatteryBar extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         BBarEnabled = Xprefs.getBoolean("BBarEnabled", false);
@@ -91,8 +91,8 @@ public class BatteryBar extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
         ReflectedClass PhoneStatusBarViewControllerClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.PhoneStatusBarViewController");

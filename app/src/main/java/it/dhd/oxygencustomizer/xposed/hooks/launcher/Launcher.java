@@ -1,17 +1,17 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
-import static de.robv.android.xposed.XposedHelpers.removeAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.removeAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -35,13 +35,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class Launcher extends XposedMods {
 
@@ -82,7 +81,7 @@ public class Launcher extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mFolderRows = Xprefs.getSliderInt("folder_max_rows", 3);
@@ -127,8 +126,8 @@ public class Launcher extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         ReflectedClass GridOption = ReflectedClass.of("com.android.launcher3.InvariantDeviceProfile$GridOption");
         GridOption
@@ -145,48 +144,41 @@ public class Launcher extends XposedMods {
                 });
 
         ReflectedClass FolderInfo = ReflectedClass.ofIfPossible("com.android.launcher3.model.data.FolderInfo");
-        if (FolderInfo.getClazz() != null) {
-            FolderInfo
-                    .before("getPreviewRow")
-                    .run(param -> {
-                        try {
-                            int spanX = getIntField(param.thisObject, "spanX");
-                            int spanY = getIntField(param.thisObject, "spanY");
-                            if (spanX == 1 && spanY == 1 && mFolderPreview) {
-                                param.setResult(mFolderRows);
-                            }
-                        } catch (Throwable t) {
-                            log(t);
+        FolderInfo
+                .before("getPreviewRow")
+                .run(param -> {
+                    try {
+                        int spanX = getIntField(param.thisObject, "spanX");
+                        int spanY = getIntField(param.thisObject, "spanY");
+                        if (spanX == 1 && spanY == 1 && mFolderPreview) {
+                            param.setResult(mFolderRows);
                         }
-                    });
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                });
 
-            FolderInfo
-                    .before("getPreviewColumn")
-                    .run(param -> {
-                        try {
-                            int spanX = getIntField(param.thisObject, "spanX");
-                            int spanY = getIntField(param.thisObject, "spanY");
-                            if (spanX == 1 && spanY == 1 && mFolderPreview) {
-                                param.setResult(mFolderColumns);
-                            }
-                        } catch (Throwable t) {
-                            log(t);
+        FolderInfo
+                .before("getPreviewColumn")
+                .run(param -> {
+                    try {
+                        int spanX = getIntField(param.thisObject, "spanX");
+                        int spanY = getIntField(param.thisObject, "spanY");
+                        if (spanX == 1 && spanY == 1 && mFolderPreview) {
+                            param.setResult(mFolderColumns);
                         }
-                    });
-        }
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                });
 
-        try {
-            ReflectedClass AllAppsParam = ReflectedClass.of("com.android.launcher.layoutparam.AllAppsParam");
-            if (AllAppsParam.getClazz() != null) {
-                AllAppsParam
-                        .after("getNumAllAppsColumns")
-                        .run(param -> {
-                            if (mDrawerRearrange)
-                                param.setResult(mDrawerColumns);
-                        });
-            }
-        } catch (Throwable ignored) {
-        }
+        ReflectedClass AllAppsParam = ReflectedClass.ofIfPossible("com.android.launcher.layoutparam.AllAppsParam");
+        AllAppsParam
+                .after("getNumAllAppsColumns")
+                .run(param -> {
+                    if (mDrawerRearrange)
+                        param.setResult(mDrawerColumns);
+                });
 
         ReflectedClass OplusTaskViewImpl = ReflectedClass.of("com.android.quickstep.views.OplusTaskViewImpl");
 
@@ -489,22 +481,18 @@ public class Launcher extends XposedMods {
                         return;
                     }
                     mDragEndHooked = true;
-                    XposedBridge.hookMethod(onDragEnd, new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam mp) {
-                            if (!mReplaceLock) return;
-                            Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
-                            if (taskView != null)
-                                setAdditionalInstanceField(taskView, "mShouldKill", true);
-                        }
-
-                        @Override
-                        protected void afterHookedMethod(MethodHookParam mp) {
-                            Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
-                            if (taskView != null)
-                                removeAdditionalInstanceField(taskView, "mShouldKill");
-                        }
-                    });
+                    ReflectedClass.of(onDragEnd.getDeclaringClass())
+                            .hook(onDragEnd)
+                            .run(mp -> {
+                                if (!mReplaceLock) return;
+                                Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
+                                if (taskView != null)
+                                    setAdditionalInstanceField(taskView, "mShouldKill", true);
+                            }, mp -> {
+                                Object taskView = getObjectField(mp.thisObject, "mTaskBeingDragged");
+                                if (taskView != null)
+                                    removeAdditionalInstanceField(taskView, "mShouldKill");
+                            });
                     log("TaskViewTouchController: hooked " + onDragEnd);
                 });
 
@@ -614,7 +602,7 @@ public class Launcher extends XposedMods {
                 .run(param -> {
                     if (!mSearchDisableGB) return;
                     param.setResult(null);
-                    XposedHelpers.callMethod(param.thisObject, "onSearchBarClickInternal");
+                    ReflectionHelpers.callMethod(param.thisObject, "onSearchBarClickInternal");
                 });
 
         LauncherAppsSearchContainerLayout
@@ -631,16 +619,16 @@ public class Launcher extends XposedMods {
                     if (!mSearchKeyboard) return;
                     Object toState = param.args[0];
                     if (toState == null) return;
-                    XposedBridge.log("LauncherState: " + toState.toString());
+                    Logger.log("LauncherState: " + toState.toString());
                     if (!toState.toString().contains("AllApps")) return;
-                    float progress = XposedHelpers.getFloatField(
+                    float progress = ReflectionHelpers.getFloatField(
                             param.thisObject, "mProgress");
                     if (progress == 1.0f) {
                         pendingSearchFocus = true;
                     }
-                    Object searchContainer = XposedHelpers.getObjectField(
+                    Object searchContainer = ReflectionHelpers.getObjectField(
                             param.thisObject, "mSearchViewContainer");
-                    XposedHelpers.callMethod(searchContainer, "onSearchBarClickInternal");
+                    ReflectionHelpers.callMethod(searchContainer, "onSearchBarClickInternal");
                 }, true);
 
         OplusAllAppsTransitionController
@@ -648,11 +636,11 @@ public class Launcher extends XposedMods {
                 .run(param -> {
                     if (!mSearchKeyboard) return;
                     if (!pendingSearchFocus) return;
-                    float progress = XposedHelpers.getFloatField(
+                    float progress = ReflectionHelpers.getFloatField(
                             param.thisObject, "mProgress");
                     if (progress != 0.0f) return;
                     pendingSearchFocus = true;
-                    Object searchContainer = XposedHelpers.getObjectField(
+                    Object searchContainer = ReflectionHelpers.getObjectField(
                             param.thisObject, "mSearchViewContainer");
                     if (searchContainer != null) {
                         retrySearchFocus(param.thisObject, 0);
@@ -668,7 +656,7 @@ public class Launcher extends XposedMods {
 
                     if (progress > 0.05f || progress < 0.0f) return;
                     pendingSearchFocus = false;
-                    Object container = XposedHelpers.getObjectField(
+                    Object container = ReflectionHelpers.getObjectField(
                             param.thisObject, "mSearchViewContainer"
                     );
                     retrySearchFocus(container, 0);
@@ -679,14 +667,14 @@ public class Launcher extends XposedMods {
                 .after("initialize")
                 .run(param -> {
                     EditText mSearchView = (EditText) getObjectField(param.thisObject, "mSearchView");
-                    final Object launcher = XposedHelpers.getObjectField(param.thisObject, "mLauncher");
+                    final Object launcher = ReflectionHelpers.getObjectField(param.thisObject, "mLauncher");
                     mSearchView.setOnEditorActionListener((textView, actionId, keyEvent) -> {
                         if (actionId != 3 && actionId != 2) return false;
 
                         try {
                             if (mSearchEnter) launchFirstResult(launcher);
                         } catch (Throwable t) {
-                            XposedBridge.log(TAG + " launch failed:\n"
+                            Logger.log(TAG + " launch failed:\n"
                                     + Log.getStackTraceString(t));
                         }
                         return true;
@@ -739,34 +727,34 @@ public class Launcher extends XposedMods {
     }
 
     private void launchFirstResult(Object launcher) throws Throwable {
-        Object appsView = XposedHelpers.callMethod(launcher, "getAppsView");
-        Object rvObj = XposedHelpers.callMethod(appsView, "getActiveSearchRecyclerView");
+        Object appsView = ReflectionHelpers.callMethod(launcher, "getAppsView");
+        Object rvObj = ReflectionHelpers.callMethod(appsView, "getActiveSearchRecyclerView");
         if (rvObj == null) {
-            XposedBridge.log(TAG + " rvObj is null");
+            Logger.log(TAG + " rvObj is null");
             return;
         }
-        int childCount = (int) XposedHelpers.callMethod(rvObj, "getChildCount");
+        int childCount = (int) ReflectionHelpers.callMethod(rvObj, "getChildCount");
 
         for (int i = 0; i < childCount; i++) {
-            Object childObj = XposedHelpers.callMethod(rvObj, "getChildAt", i);
+            Object childObj = ReflectionHelpers.callMethod(rvObj, "getChildAt", i);
             if (!(childObj instanceof View child)) continue;
             if (child.getVisibility() != View.VISIBLE) continue;
-            Object vh = XposedHelpers.callMethod(rvObj, "getChildViewHolder", child);
+            Object vh = ReflectionHelpers.callMethod(rvObj, "getChildViewHolder", child);
             if (vh == null) continue;
-            Object typeObj = XposedHelpers.callMethod(vh, "getItemViewType");
+            Object typeObj = ReflectionHelpers.callMethod(vh, "getItemViewType");
             int itemViewType = (typeObj instanceof Integer) ? (Integer) typeObj : -1;
 
             if ((itemViewType == 2 || itemViewType == 256) && child.isClickable()) {
-                XposedBridge.log(TAG + " performing click on child " + i);
+                Logger.log(TAG + " performing click on child " + i);
                 child.performClick();
                 return;
             }
         }
 
         // Fallback
-        XposedBridge.log(TAG + " no typed child found, fallback click");
+        Logger.log(TAG + " no typed child found, fallback click");
         for (int i = 0; i < childCount; i++) {
-            Object childObj = XposedHelpers.callMethod(rvObj, "getChildAt", i);
+            Object childObj = ReflectionHelpers.callMethod(rvObj, "getChildAt", i);
             if (!(childObj instanceof View child)) continue;
             if (child.getVisibility() == View.VISIBLE && child.isClickable()) {
                 child.performClick();
@@ -775,26 +763,26 @@ public class Launcher extends XposedMods {
         }
 
         // Fallback again
-        XposedBridge.log(TAG + " no clickable child, manual intent");
+        Logger.log(TAG + " no clickable child, manual intent");
         launchViaIntent(launcher, rvObj);
     }
 
     private void launchViaIntent(Object launcher, Object rvObj) {
-        Object resultsObj = XposedHelpers.callMethod(rvObj, "getSearchResults");
+        Object resultsObj = ReflectionHelpers.callMethod(rvObj, "getSearchResults");
         if (!(resultsObj instanceof List)) return;
 
         List<?> results = (List<?>) resultsObj;
         if (results.isEmpty()) {
-            XposedBridge.log(TAG + " results empty");
+            Logger.log(TAG + " results empty");
             return;
         }
 
         Object first = results.get(0);
-        Object itemInfo = XposedHelpers.getObjectField(first, "itemInfo");
+        Object itemInfo = ReflectionHelpers.getObjectField(first, "itemInfo");
         if (itemInfo == null) return;
 
-        Object componentName = XposedHelpers.getObjectField(itemInfo, "componentName");
-        Object user = XposedHelpers.getObjectField(itemInfo, "user");
+        Object componentName = ReflectionHelpers.getObjectField(itemInfo, "componentName");
+        Object user = ReflectionHelpers.getObjectField(itemInfo, "user");
 
         Intent intent = new Intent(Intent.ACTION_MAIN)
                 .addCategory(Intent.CATEGORY_LAUNCHER)
@@ -806,21 +794,21 @@ public class Launcher extends XposedMods {
 
         if (user != null) {
             try {
-                XposedHelpers.callMethod(ctx, "startActivityAsUser", intent, user);
-                XposedBridge.log(TAG + " started via startActivityAsUser");
+                ReflectionHelpers.callMethod(ctx, "startActivityAsUser", intent, user);
+                Logger.log(TAG + " started via startActivityAsUser");
                 return;
             } catch (Throwable ignored) {
             }
         }
 
         ctx.startActivity(intent);
-        XposedBridge.log(TAG + " started via startActivity");
+        Logger.log(TAG + " started via startActivity");
     }
 
     private void retrySearchFocus(Object container, int attempt) {
         if (attempt > 5) return;
-        Object listener = XposedHelpers.getObjectField(container, "animationControlListener");
-        boolean hideRunning = listener != null && (Boolean) XposedHelpers.callMethod(listener, "isHideImeAnimationRunning");
+        Object listener = ReflectionHelpers.getObjectField(container, "animationControlListener");
+        boolean hideRunning = listener != null && (Boolean) ReflectionHelpers.callMethod(listener, "isHideImeAnimationRunning");
 
         if (hideRunning) {
             new Handler(Looper.getMainLooper()).postDelayed(
@@ -828,7 +816,7 @@ public class Launcher extends XposedMods {
             );
             return;
         }
-        XposedHelpers.callMethod(container, "onSearchBarClickInternal");
+        ReflectionHelpers.callMethod(container, "onSearchBarClickInternal");
     }
 
     private void updateFastScroll() {

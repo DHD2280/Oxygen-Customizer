@@ -7,7 +7,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_APPLY_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Statusbar.STATUSBAR_LOGO_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
 import static it.dhd.oxygencustomizer.utils.Constants.STATUSBAR_LOGO_FILE;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
@@ -16,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 

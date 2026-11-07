@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import it.dhd.oxygencustomizer.xposed.views.edgelight.EdgeLightView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetMode;
 
 public class WidgetConfig {

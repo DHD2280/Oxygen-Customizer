@@ -5,7 +5,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_C
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodClock.AOD_CLOCK_SWITCH;
 
 import android.os.Build;
-import android.view.View;
 
 import androidx.annotation.StringRes;
 

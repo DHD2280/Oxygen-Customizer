@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
-import it.dhd.oxygencustomizer.xposed.views.base.BaseQsStaticView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BaseDeviceWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetMode;
 

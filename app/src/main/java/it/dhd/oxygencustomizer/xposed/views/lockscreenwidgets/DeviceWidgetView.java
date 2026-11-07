@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
@@ -31,12 +30,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.adapters.DeviceWidgetsAdapter;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BaseDeviceWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetMode;
 
@@ -367,7 +366,7 @@ public class DeviceWidgetView extends FrameLayout {
         mCustomRow.setGravity(Gravity.NO_GRAVITY);
         for (BaseDeviceWidget wid : widgets) {
             if (!mSettingsInterface)
-                XposedBridge.log("DeviceWidgetView - add: " + wid.toJson());
+                Logger.log("DeviceWidgetView - add: " + wid.toJson());
             else
                 Log.w("DeviceWidgetView", "add: " + wid.toJson());
         }

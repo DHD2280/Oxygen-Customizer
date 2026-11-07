@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_ALL_BUTTON_PREFS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.CLEAR_BUTTON_BG_COLOR;
@@ -16,6 +14,8 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -43,11 +43,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class StatusbarNotification extends XposedMods {
@@ -85,7 +85,7 @@ public class StatusbarNotification extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         removeChargingCompleteNotification = Xprefs.getBoolean("remove_charging_complete_notification", false);
         removeDevMode = Xprefs.getBoolean("remove_dev_mode", false);
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
@@ -123,8 +123,8 @@ public class StatusbarNotification extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         ReflectedClass CollapsedStatusBarFragmentClass = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment");
 
@@ -271,7 +271,7 @@ public class StatusbarNotification extends XposedMods {
             ClearAllController
                     .after("updateClearAllBackground")
                     .run(param -> {
-                        XposedBridge.log("StatusbarNotification updateClearAllBackground" );
+                        Logger.log("StatusbarNotification updateClearAllBackground");
                         if (customizeClearButton) {
                             ImageView clearAllButton = (ImageView) getObjectField(param.thisObject, "clearAll");
                             Drawable icon = clearAllButton.getDrawable();
@@ -281,7 +281,7 @@ public class StatusbarNotification extends XposedMods {
                                 icon.setTint(clearButtonIconColor);
                             icon.invalidateSelf();
                             clearAllButton.setImageDrawable(icon);
-                            XposedBridge.log(TAG + "updateClearAllBackground: icon color set to " + clearButtonIconColor);
+                            Logger.log(TAG + "updateClearAllBackground: icon color set to " + clearButtonIconColor);
                         }
                     });
             ClearAllController

@@ -1,7 +1,7 @@
 package it.dhd.oxygencustomizer.utils;
 
-import static de.robv.android.xposed.XposedBridge.log;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getLunarDate;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -28,12 +28,11 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThermalProvider;
-import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class StringFormatter {
 
@@ -55,7 +54,7 @@ public class StringFormatter {
             BatteryDataProvider.registerStatusCallback(mBatteryStatusCallback);
         } catch (Throwable t) {
             try {
-                XposedBridge.log("StringFormatter - Error registering battery status callback" + Log.getStackTraceString(t));
+                Logger.log("StringFormatter - Error registering battery status callback" + Log.getStackTraceString(t));
             } catch (Throwable ignored) {} // executed outside xposed
             Log.e(StringFormatter.class.getSimpleName(), "Error registering battery status callback", t);
         }

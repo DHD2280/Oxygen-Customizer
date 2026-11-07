@@ -1,21 +1,19 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.os.Handler;
 import android.view.KeyEvent;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class AdaptivePlayback extends XposedMods {
 
@@ -35,7 +33,7 @@ public class AdaptivePlayback extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mAdaptivePlaybackEnabled = Xprefs.getBoolean(Constants.Preferences.ADAPTIVE_PLAYBACK_ENABLED, false);
@@ -51,45 +49,43 @@ public class AdaptivePlayback extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
-        mVolumeState = findClass("com.android.systemui.plugins.VolumeDialogController$StreamState", lpparam.classLoader);
+        mVolumeState = findClass("com.android.systemui.plugins.VolumeDialogController$StreamState", PRParam.getClassLoader());
 
-        Class<?> VolumeDialogControllerImpl = findClass("com.android.systemui.volume.VolumeDialogControllerImpl", lpparam.classLoader);
-        hookAllConstructors(VolumeDialogControllerImpl, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mAudio = getObjectField(param.thisObject, "mAudio");
-                mWorker = (Handler) getObjectField(param.thisObject, "mWorker");
-            }
-        });
-        hookAllMethods(VolumeDialogControllerImpl, "updateStreamLevelW", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!mAdaptivePlaybackEnabled) return;
-                Object volState = callMethod(param.thisObject, "streamStateW", param.args[0]);
-                int level = getIntField(volState, "level");
-                int stream = (int) param.args[0];
-                boolean isMusicActive = (boolean) callMethod(mAudio, "isMusicActive");
-                if (mAdaptivePlaybackEnabled && stream == STREAM_MUSIC && level == 0
-                        && isMusicActive) {
-                    callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE));
-                    callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE));
-                    mAdaptivePlaybackResumable = true;
+        Class<?> VolumeDialogControllerImpl = findClass("com.android.systemui.volume.VolumeDialogControllerImpl", PRParam.getClassLoader());
+        ReflectedClass.of(VolumeDialogControllerImpl)
+                .afterConstruction()
+                .run(param -> {
+                    mAudio = getObjectField(param.thisObject, "mAudio");
+                    mWorker = (Handler) getObjectField(param.thisObject, "mWorker");
+                });
+        ReflectedClass.of(VolumeDialogControllerImpl)
+                .after("updateStreamLevelW")
+                .run(param -> {
+                    if (!mAdaptivePlaybackEnabled) return;
+                    Object volState = callMethod(param.thisObject, "streamStateW", param.args[0]);
+                    int level = getIntField(volState, "level");
+                    int stream = (int) param.args[0];
+                    boolean isMusicActive = (boolean) callMethod(mAudio, "isMusicActive");
+                    if (mAdaptivePlaybackEnabled && stream == STREAM_MUSIC && level == 0
+                            && isMusicActive) {
+                        callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE));
+                        callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE));
+                        mAdaptivePlaybackResumable = true;
 
-                    mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
-                    mWorker.postDelayed(mAdaptivePlaybackRunnable, ADAPTIVE_PLAYBACK_TOKEN,
-                            mAdaptivePlaybackTimeout);
-                }
-                if (stream == STREAM_MUSIC && level > 0 && mAdaptivePlaybackResumable) {
-                    mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
-                    callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
-                    callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-                    mAdaptivePlaybackResumable = false;
-                }
-            }
-        });
+                        mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
+                        mWorker.postDelayed(mAdaptivePlaybackRunnable, ADAPTIVE_PLAYBACK_TOKEN,
+                                mAdaptivePlaybackTimeout);
+                    }
+                    if (stream == STREAM_MUSIC && level > 0 && mAdaptivePlaybackResumable) {
+                        mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
+                        callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
+                        callMethod(mAudio, "dispatchMediaKeyEvent", new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+                        mAdaptivePlaybackResumable = false;
+                    }
+                });
     }
 
     @Override

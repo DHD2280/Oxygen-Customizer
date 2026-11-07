@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.peek;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,10 +11,10 @@ import android.view.View;
 import java.util.Arrays;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class PeekDisplayViewController {
 
@@ -48,7 +48,7 @@ public class PeekDisplayViewController {
     }
 
     private final ControllersProvider.OnDozingChanged onDozingChanged = dozing -> {
-        XposedBridge.log("PeekDisplayViewController onDozingChanged: " + dozing);
+        Logger.log("PeekDisplayViewController onDozingChanged: " + dozing);
         if (mDozing == dozing) {
             return;
         }
@@ -102,7 +102,7 @@ public class PeekDisplayViewController {
         registerCallbacks();
         mPeekView = view;
         mPeekView.setNotificationListener(mNotificationListener);
-        XposedBridge.log("PeekDisplayViewController addPeekDisplayView: " + view.toString());
+        Logger.log("PeekDisplayViewController addPeekDisplayView: " + view.toString());
     }
 
     public void registerCallbacks() {

@@ -28,9 +28,9 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.withClip
 import it.dhd.oxygencustomizer.R
 import kotlin.math.floor
-import androidx.core.graphics.withClip
 
 @SuppressLint("DiscouragedApi")
 open class RLandscapeBattery(private val context: Context, frameColor: Int) :

@@ -1,7 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 
 import android.annotation.SuppressLint;
 import android.app.WallpaperColors;
@@ -27,14 +27,14 @@ import androidx.palette.graphics.Palette;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class AudioDataProvider extends XposedMods {
 
@@ -170,10 +170,11 @@ public class AudioDataProvider extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         mMediaSessionManager = mContext.getSystemService(MediaSessionManager.class);
         ReflectedClass colorScheme = ReflectedClass.of("com.android.systemui.monet.ColorScheme");
@@ -195,7 +196,7 @@ public class AudioDataProvider extends XposedMods {
 
         // OplusQsMediaUtil
         try {
-            ReflectedClass OplusQsMediaUtil = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaUtil", lpparam.classLoader);
+            ReflectedClass OplusQsMediaUtil = ReflectedClass.of("com.oplus.systemui.qs.media.OplusQsMediaUtil", PRParam.getClassLoader());
             mOplusMediaControllerImpl = OplusQsMediaUtil.getClazz();
         } catch (Throwable ignored) {}
 
@@ -280,10 +281,12 @@ public class AudioDataProvider extends XposedMods {
 
         Object colorScheme = null;
         try {
-            if (Build.VERSION.SDK_INT >= 36) colorScheme = XposedHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn, 1);
-            else colorScheme = XposedHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn);
+            if (Build.VERSION.SDK_INT >= 36)
+                colorScheme = ReflectionHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn, 1);
+            else
+                colorScheme = ReflectionHelpers.newInstance(mColorSchemeClass, wallpaperColors, isDarkThemeOn);
         } catch (Throwable t) {
-            XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
+            Logger.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
         }
         if (colorScheme == null) return;
         mCurrentColorScheme = colorScheme;
@@ -457,7 +460,7 @@ public class AudioDataProvider extends XposedMods {
         try {
             return instance.isMediaControllerAvailable() && instance.getMediaControllerPlaybackState(instance.getActiveLocalMediaController()) == PlaybackState.STATE_PLAYING;
         } catch (Throwable t) {
-            XposedBridge.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
+            Logger.log("AudioDataProvider Error: " + Log.getStackTraceString(t));
             return false;
         }
     }

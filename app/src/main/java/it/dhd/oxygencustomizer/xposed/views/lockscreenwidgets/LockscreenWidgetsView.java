@@ -2,10 +2,6 @@ package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets;
 
 
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.LaunchableImageView;
@@ -55,6 +51,10 @@ import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WIFI_INACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WIFI_LABEL_INACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getString;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

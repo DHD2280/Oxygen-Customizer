@@ -1,10 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCameraGestureHelper;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.content.ComponentName;
 import android.content.Context;

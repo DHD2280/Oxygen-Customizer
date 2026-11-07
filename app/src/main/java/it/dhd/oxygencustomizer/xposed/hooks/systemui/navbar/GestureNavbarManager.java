@@ -1,16 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.navbar;
 
 import static android.view.MotionEvent.ACTION_DOWN;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getFloatField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_INTENT_KILL_APP;
@@ -25,6 +15,14 @@ import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.runCircleToSearch
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.takeScreenshot;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.toggleNotifications;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.toggleOneHanded;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getFloatField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -50,8 +48,7 @@ import androidx.core.content.res.ResourcesCompat;
 import java.util.Arrays;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
@@ -132,7 +129,7 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         //region Back gesture
@@ -169,8 +166,8 @@ public class GestureNavbarManager extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         if (!mBroadcastRegistered) {
             IntentFilter filter = new IntentFilter(ACTIONS_SWITCH_APP);
@@ -294,69 +291,63 @@ public class GestureNavbarManager extends XposedMods {
                         });
 
 
-        Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", lpparam.classLoader);
+        Class<?> OplusNavigationBarInflaterView = findClass("com.oplusos.systemui.navigationbar.OplusNavigationBarInflaterView", PRParam.getClassLoader());
 
         Class<?> OplusNavigationHandle;
         try {
-            OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader);
+            OplusNavigationHandle = findClass("com.oplus.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", PRParam.getClassLoader());
         } catch (Throwable t) {
-            OplusNavigationHandle = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", lpparam.classLoader); // OOS 13
+            OplusNavigationHandle = findClass("com.oplusos.systemui.navigationbar.gesture.sidegesture.OplusNavigationHandle", PRParam.getClassLoader()); // OOS 13
         }
         //region pill color
-        hookAllMethods(OplusNavigationHandle, "setDarkIntensity", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (navPillColorAccent || colorReplaced) {
-                    setObjectField(param.thisObject, "mLightColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_200, mContext.getTheme()) : mLightColor);
-                    setObjectField(param.thisObject, "mDarkColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_600, mContext.getTheme()) : mDarkColor);
-                    colorReplaced = true;
-                }
-            }
-        });
+        ReflectedClass.of(OplusNavigationHandle)
+                .before("setDarkIntensity")
+                .run(param -> {
+                    if (navPillColorAccent || colorReplaced) {
+                        setObjectField(param.thisObject, "mLightColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_200, mContext.getTheme()) : mLightColor);
+                        setObjectField(param.thisObject, "mDarkColor", (navPillColorAccent) ? mContext.getResources().getColor(android.R.color.system_accent1_600, mContext.getTheme()) : mDarkColor);
+                        colorReplaced = true;
+                    }
+                });
         //endregion
 
         //region pill size
-        hookAllMethods(OplusNavigationHandle,
-                "setVertical", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (widthFactor != 1f) {
-                            View result = (View) param.thisObject;
-                            ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
-                            int originalWidth;
-                            try {
-                                originalWidth = (int) getAdditionalInstanceField(param.thisObject, "originalWidth");
-                            } catch (Throwable ignored) {
-                                originalWidth = resultLayoutParams.width;
-                                setAdditionalInstanceField(param.thisObject, "originalWidth", originalWidth);
-                            }
-                            resultLayoutParams.width = Math.round(originalWidth * widthFactor);
+        ReflectedClass.of(OplusNavigationHandle)
+                .after("setVertical")
+                .run(param -> {
+                    if (widthFactor != 1f) {
+                        View result = (View) param.thisObject;
+                        ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
+                        int originalWidth;
+                        try {
+                            originalWidth = (int) getAdditionalInstanceField(param.thisObject, "originalWidth");
+                        } catch (Throwable ignored) {
+                            originalWidth = resultLayoutParams.width;
+                            setAdditionalInstanceField(param.thisObject, "originalWidth", originalWidth);
                         }
+                        resultLayoutParams.width = Math.round(originalWidth * widthFactor);
                     }
                 });
 
 
-        hookAllConstructors(OplusNavigationBarInflaterView, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mNavigationBarInflaterView = param.thisObject;
-                refreshNavbar();
-            }
-        });
+        ReflectedClass.of(OplusNavigationBarInflaterView)
+                .afterConstruction()
+                .run(param -> {
+                    mNavigationBarInflaterView = param.thisObject;
+                    refreshNavbar();
+                });
 
-        hookAllMethods(OplusNavigationBarInflaterView,
-                "createView", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (widthFactor != 1f) {
-                            String button = (String) callMethod(param.thisObject, "extractButton", param.args[0]);
-                            if (!button.equals("home_handle")) return;
+        ReflectedClass.of(OplusNavigationBarInflaterView)
+                .after("createView")
+                .run(param -> {
+                    if (widthFactor != 1f) {
+                        String button = (String) callMethod(param.thisObject, "extractButton", param.args[0]);
+                        if (!button.equals("home_handle")) return;
 
-                            View result = (View) param.getResult();
-                            ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
-                            resultLayoutParams.width = Math.round(resultLayoutParams.width * widthFactor);
-                            result.setLayoutParams(resultLayoutParams);
-                        }
+                        View result = (View) param.getResult();
+                        ViewGroup.LayoutParams resultLayoutParams = result.getLayoutParams();
+                        resultLayoutParams.width = Math.round(resultLayoutParams.width * widthFactor);
+                        result.setLayoutParams(resultLayoutParams);
                     }
                 });
         //endregion

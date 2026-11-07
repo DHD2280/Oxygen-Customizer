@@ -1,17 +1,15 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
 
 import android.content.Context;
 import android.content.pm.PackageItemInfo;
@@ -22,12 +20,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.GoogleMonochromeIconFactory;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class ThemedIcons extends XposedMods {
@@ -62,7 +59,7 @@ public class ThemedIcons extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         ForceThemedLauncherIcons = Xprefs.getBoolean("force_themed_launcher_icons", false);
         mAlternative = Xprefs.getBoolean("alternative_monochrome", false);
         mAllowCustomMap = Xprefs.getBoolean("custom_themed_icons_where", false);
@@ -83,16 +80,15 @@ public class ThemedIcons extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         try {
-            Class<?> BaseIconFactoryClass = findClass("com.android.launcher3.icons.BaseIconFactory", lpparam.classLoader);
+            Class<?> BaseIconFactoryClass = findClass("com.android.launcher3.icons.BaseIconFactory", PRParam.getClassLoader());
 
-            hookAllConstructors(BaseIconFactoryClass, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mIconBitmapSize = getIntField(param.thisObject, "mIconBitmapSize");
-                }
-            });
+            ReflectedClass.of(BaseIconFactoryClass)
+                    .afterConstruction()
+                    .run(param -> {
+                        mIconBitmapSize = getIntField(param.thisObject, "mIconBitmapSize");
+                    });
 
 
             ReflectedClass UxIconLoaderHelper = ReflectedClass.of("com.oplus.uxicon.ui.util.UxIconLoaderHelper");
@@ -102,35 +98,35 @@ public class ThemedIcons extends XposedMods {
                         if (!ForceThemedLauncherIcons) return;
                         PackageItemInfo info = (PackageItemInfo) param.args[1];
                         if (mAlternative && param.getResult() == null) {
-                            if (BuildConfig.DEBUG) XposedBridge.log("ThemedIcons: getIconThemeDrawable is null for " + info.packageName);
+                            if (BuildConfig.DEBUG)
+                                Logger.log("ThemedIcons: getIconThemeDrawable is null for " + info.packageName);
                             Drawable icon = info.loadIcon(PackageManager());
                             GoogleMonochromeIconFactory monochrome = new GoogleMonochromeIconFactory(icon, mIconBitmapSize);
                             param.setResult(monochrome);
                         }
                     });
 
-            hookAllMethods(AdaptiveIconDrawable.class, "getMonochrome", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    try {
-                        if (param.getResult() == null && ForceThemedLauncherIcons && !mAlternative) {
+            ReflectedClass.of(AdaptiveIconDrawable.class)
+                    .after("getMonochrome")
+                    .run(param -> {
+                        try {
+                            if (param.getResult() == null && ForceThemedLauncherIcons && !mAlternative) {
 
-                            if (new Throwable().getStackTrace()[4].getMethodName().toLowerCase().contains("override")) //It's from com.android.launcher3.icons.IconProvider.getIconWithOverrides. Monochrome is included
-                            {
-                                return;
-                            }
+                                if (new Throwable().getStackTrace()[4].getMethodName().toLowerCase().contains("override")) //It's from com.android.launcher3.icons.IconProvider.getIconWithOverrides. Monochrome is included
+                                {
+                                    return;
+                                }
 
-                            GoogleMonochromeIconFactory mono = (GoogleMonochromeIconFactory) getAdditionalInstanceField(param.thisObject, "mMonoFactoryOC");
-                            if (mono == null) {
-                                mono = new GoogleMonochromeIconFactory((AdaptiveIconDrawable) param.thisObject, mIconBitmapSize);
-                                setAdditionalInstanceField(param.thisObject, "mMonoFactoryOC", mono);
+                                GoogleMonochromeIconFactory mono = (GoogleMonochromeIconFactory) getAdditionalInstanceField(param.thisObject, "mMonoFactoryOC");
+                                if (mono == null) {
+                                    mono = new GoogleMonochromeIconFactory((AdaptiveIconDrawable) param.thisObject, mIconBitmapSize);
+                                    setAdditionalInstanceField(param.thisObject, "mMonoFactoryOC", mono);
+                                }
+                                param.setResult(mono);
                             }
-                            param.setResult(mono);
+                        } catch (Throwable ignored) {
                         }
-                    } catch (Throwable ignored) {
-                    }
-                }
-            });
+                    });
         } catch (Throwable t) {
             log(t.getMessage());
         }

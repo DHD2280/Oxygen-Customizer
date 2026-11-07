@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.graphics.drawable.VectorDrawable;
 import android.renderscript.Allocation;
 import android.renderscript.Element;

@@ -1,9 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_BG_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_CUSTOMIZE_BG;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_CUSTOMIZE_PROGRESS;
@@ -13,6 +9,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_PR
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.VOLUME_PANEL_TIMEOUT;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -20,8 +19,7 @@ import android.graphics.Color;
 
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -44,7 +42,7 @@ public class VolumePanel extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mDesiredTimeout = Xprefs.getSliderInt(VOLUME_PANEL_TIMEOUT, 3);
@@ -69,8 +67,8 @@ public class VolumePanel extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!listenPackage.equals(lpparam.packageName)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!listenPackage.equals(PRParam.getPackageName())) return;
 
         ReflectedClass OplusVolumeSeekBar = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusVolumeSeekBar");
         sliderCustomizable = OplusVolumeSeekBar.getClazz() != null;
@@ -141,14 +139,13 @@ public class VolumePanel extends XposedMods {
                     .run(param -> {
                         try {
                             Object volumeCallback = getObjectField(param.thisObject, "volumeCallback");
-                            hookAllMethods(volumeCallback.getClass(), "onShowSafetyWarning", new XC_MethodHook() {
-                                @Override
-                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                    if (mDisableVolumeWarning) {
-                                        param.setResult(null);
-                                    }
-                                }
-                            });
+                            ReflectedClass.of(volumeCallback.getClass())
+                                    .before("onShowSafetyWarning")
+                                    .run(param2 -> {
+                                        if (mDisableVolumeWarning) {
+                                            param2.setResult(null);
+                                        }
+                                    });
                         } catch (Throwable t) {
                             log("OplusQsVolumeController, no volumeCallback " + t.getMessage());
                         }

@@ -1,12 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.views.controls;
 
 import static android.net.wifi.WifiManager.UNKNOWN_SSID;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
@@ -62,6 +56,12 @@ import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WIFI_INACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.WIFI_LABEL_INACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getString;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticIntField;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -98,7 +98,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -111,6 +110,7 @@ import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileHelper;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTile;
 import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileI;
 import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainer;
@@ -1704,7 +1704,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
      * to ensure all backgrounds are updated
      */
     private void reloadBackground() {
-        XposedBridge.log(TAG + "reloadBackground - mDefaultBackground null? " + (mDefaultBackground == null));
+        Logger.log(TAG + "reloadBackground - mDefaultBackground null? " + (mDefaultBackground == null));
         if (mPages.isEmpty()) return;
         for (View v : mPages) {
             if (v.getTag() != null && v.getTag().equals("widgetsContainer")) {
@@ -1721,7 +1721,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                     mediaTile.updateDefaultBackground(back);
                     continue;
                 }
-                XposedBridge.log("QsControlsView - reloadBackground - " + v.getClass().getName());
+                Logger.log("QsControlsView - reloadBackground - " + v.getClass().getName());
                 if (v.getClass().getSimpleName().equals("QsMediaTileView")) {
                     callMethod(v, "refreshViewBackground");
                     continue;

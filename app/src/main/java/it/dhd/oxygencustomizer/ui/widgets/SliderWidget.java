@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.slider.Slider;
 
 import java.text.DecimalFormat;
 import java.util.Objects;

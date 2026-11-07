@@ -3,10 +3,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_WEATHER_INFLATED;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
@@ -34,8 +30,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -44,11 +41,11 @@ import android.os.Build;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.LockscreenWidgetsView;
 
@@ -104,7 +101,7 @@ public class LockscreenWidgets extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Widgets
@@ -170,7 +167,7 @@ public class LockscreenWidgets extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         // Receiver to handle weather inflated
         if (!mReceiverRegistered) {
@@ -185,27 +182,25 @@ public class LockscreenWidgets extends XposedMods {
         mWidgetsContainer.setGravity(CENTER_HORIZONTAL);
 
         try {
-            Class<?> KeyguardQuickAffordanceInteractor = findClass("com.android.systemui.keyguard.domain.interactor.KeyguardQuickAffordanceInteractor", lpparam.classLoader);
-            hookAllConstructors(KeyguardQuickAffordanceInteractor, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    mActivityStarter = getObjectField(param.thisObject, "activityStarter");
-                    setActivityStarter();
-                }
-            });
+            Class<?> KeyguardQuickAffordanceInteractor = findClass("com.android.systemui.keyguard.domain.interactor.KeyguardQuickAffordanceInteractor", PRParam.getClassLoader());
+            ReflectedClass.of(KeyguardQuickAffordanceInteractor)
+                    .afterConstruction()
+                    .run(param -> {
+                        mActivityStarter = getObjectField(param.thisObject, "activityStarter");
+                        setActivityStarter();
+                    });
         } catch (Throwable ignored) {
         }
 
         if (Build.VERSION.SDK_INT == 33) {
             try {
-                Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", lpparam.classLoader);
-                hookAllMethods(KeyguardBottomAreaView, "onFinishInflate", new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
-                        setActivityStarter();
-                    }
-                });
+                Class<?> KeyguardBottomAreaView = findClass("com.android.systemui.statusbar.phone.KeyguardBottomAreaView", PRParam.getClassLoader());
+                ReflectedClass.of(KeyguardBottomAreaView)
+                        .after("onFinishInflate")
+                        .run(param -> {
+                            mActivityStarter = getObjectField(param.thisObject, "mActivityStarter");
+                            setActivityStarter();
+                        });
             } catch (Throwable ignored) {
             }
         }
@@ -213,18 +208,15 @@ public class LockscreenWidgets extends XposedMods {
         if (Build.VERSION.SDK_INT >= 35) {
             placeLockscreenWidgets();
         } else {
-            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
+            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", PRParam.getClassLoader());
 
-            hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
-                @SuppressLint("DiscouragedApi")
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
+            ReflectedClass.of(KeyguardStatusViewClass)
+                    .after("onFinishInflate")
+                    .run(param -> {
+                        mStatusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
 
-                    mStatusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
-
-                    placeLockscreenWidgets();
-                }
-            });
+                        placeLockscreenWidgets();
+                    });
         }
 
     }
@@ -306,7 +298,7 @@ public class LockscreenWidgets extends XposedMods {
 
     private void setActivityStarter() {
         LockscreenWidgetsView lsWidgets = LockscreenWidgetsView.getInstance();
-        XposedBridge.log(TAG + "setActivityStarter lsWidgets null? " + (lsWidgets == null));
+        Logger.log(TAG + "setActivityStarter lsWidgets null? " + (lsWidgets == null));
         if (lsWidgets == null) return;
         lsWidgets.setActivityStarter(mActivityStarter);
     }

@@ -3,15 +3,11 @@ package it.dhd.oxygencustomizer.xposed.utils.systemui;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 
 import com.oplus.systemui.qs.base.widget.BaseQsViewBackground;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackground;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
-import com.oplus.systemui.qs.base.widget.QsViewOutlineProvider;
-
-import de.robv.android.xposed.XposedBridge;
 
 /**
  * A transparent background proxy for any {@link QsStaticViewInfoProvider}

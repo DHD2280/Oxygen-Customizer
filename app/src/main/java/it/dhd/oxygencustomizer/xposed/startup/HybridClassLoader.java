@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.startup;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.net.URL;
 
@@ -98,6 +97,7 @@ public class HybridClassLoader extends ClassLoader {
                 || name.startsWith("com.android.tools.r8.")
                 || name.startsWith("com.google.android.")
                 || name.startsWith("com.google.gson.")
+                || name.startsWith("org.apache.commons.")
                 || name.startsWith("com.google.common.")
                 || name.startsWith("com.google.protobuf.")
                 || name.startsWith("com.microsoft.appcenter.")

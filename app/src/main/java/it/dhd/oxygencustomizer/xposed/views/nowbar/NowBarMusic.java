@@ -1,8 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.NOW_BAR_CLOCK_FONT_FILE;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
@@ -14,6 +11,9 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getMediaActionBinder;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -63,7 +63,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
@@ -72,6 +71,7 @@ import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 @SuppressLint("ViewConstructor")
 public class NowBarMusic extends LinearLayout {
@@ -420,7 +420,7 @@ public class NowBarMusic extends LinearLayout {
         try {
             bindActions(mediaData);
         } catch (Throwable t) {
-            XposedBridge.log("NowBarMusic bindActions: " + Log.getStackTraceString(t));
+            Logger.log("NowBarMusic bindActions: " + Log.getStackTraceString(t));
         }
 
         if (mediaMetadata != null) {

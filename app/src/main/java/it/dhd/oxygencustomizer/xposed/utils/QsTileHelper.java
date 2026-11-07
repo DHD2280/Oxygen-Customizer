@@ -1,11 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManager;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerClass;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.PersonalityManagerEx;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,7 +13,8 @@ import android.graphics.drawable.shapes.PathShape;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Log;
 
-import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+
 
 public class QsTileHelper {
     public static final int TYPE_QS_QUICK_TILE_SIZE = 1;
@@ -102,7 +103,7 @@ public class QsTileHelper {
         try {
             return (PathShape) callMethod(PersonalityManagerEx, "getLastShape", c);
         } catch (Throwable t) {
-            XposedBridge.log("QsTileHelper, get last shape error: \n" + Log.getStackTraceString(t));
+            Logger.log("QsTileHelper, get last shape error: \n" + Log.getStackTraceString(t));
             if (PersonalityManagerClass != null) {
                 Object PersonalityManager = callStaticMethod(PersonalityManagerClass, "getInstance");
                 if (PersonalityManager != null) {
@@ -117,7 +118,7 @@ public class QsTileHelper {
         try {
             return (float) callMethod(PersonalityManager, "getMediaPanelRadius", c);
         } catch (Throwable t) {
-            XposedBridge.log("Error getting media panel radius: " + Log.getStackTraceString(t));
+            Logger.log("Error getting media panel radius: " + Log.getStackTraceString(t));
             return getShapeRadius(c, -1);
         }
     }

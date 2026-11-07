@@ -9,18 +9,16 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  *
  */
 
-import static de.robv.android.xposed.XposedBridge.log;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
 import static it.dhd.oxygencustomizer.xposed.views.pulse.PulseControllerImpl.DEBUG;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.os.Handler;
 
 import androidx.core.graphics.ColorUtils;
 

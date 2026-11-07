@@ -1,6 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,7 +8,8 @@ import android.os.Bundle;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+
 
 public final class ScreenShotRunnable implements Runnable {
     public final Context context;
@@ -35,7 +36,7 @@ public final class ScreenShotRunnable implements Runnable {
             ClassLoader classLoader = otherAppContext.getClassLoader();
             OplusLongshotUtils = Class.forName("com.oplus.screenshot.OplusLongshotUtils", false, classLoader);
         } catch (Exception e) {
-            XposedBridge.log(e);
+            Logger.log(e);
         }
         if (OplusLongshotUtils == null) return;
         Method getScreenshotManagerMethod = null;
@@ -44,7 +45,7 @@ public final class ScreenShotRunnable implements Runnable {
             getScreenshotManagerMethod = OplusLongshotUtils.getMethod("getScreenshotManager", Context.class);
             screenshotManager = getScreenshotManagerMethod.invoke(null, context);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            XposedBridge.log(e);
+            Logger.log(e);
         }
 
         if (screenshotManager != null) {

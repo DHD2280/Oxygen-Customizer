@@ -20,7 +20,6 @@ import java.util.List;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.ui.adapters.AppAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.preferences.ListWithPopUpPreference;

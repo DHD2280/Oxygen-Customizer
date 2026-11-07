@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.utils.systemui;
 
-import android.util.Log;
-
 import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackground;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;

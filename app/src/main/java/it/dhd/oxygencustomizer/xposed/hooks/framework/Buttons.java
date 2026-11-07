@@ -1,14 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static android.content.Context.RECEIVER_EXPORTED;
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS_SOFF;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS;
@@ -30,6 +22,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTON
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.DISABLE_POWER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -49,15 +44,13 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
-import java.lang.reflect.Method;
-
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Buttons extends XposedMods {
 
@@ -102,7 +95,7 @@ public class Buttons extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(Buttons.class.getSimpleName())) {
                         log("Buttons: Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -136,7 +129,7 @@ public class Buttons extends XposedMods {
         log("PlusKey LOG: actionRunnable. pressCount reset to 0");
 
         if (mContext == null) {
-            XposedBridge.log("PlusKey LOG: actionRunnable ABORT. Context from WeakReference is NULL");
+            Logger.log("PlusKey LOG: actionRunnable ABORT. Context from WeakReference is NULL");
             return;
         }
 
@@ -157,7 +150,7 @@ public class Buttons extends XposedMods {
         if (shouldExecute) {
             executeAction(count, false);
         } else {
-            XposedBridge.log("PlusKey LOG: actionRunnable. No enabled action matched count=" + count);
+            Logger.log("PlusKey LOG: actionRunnable. No enabled action matched count=" + count);
         }
     };
 
@@ -248,7 +241,7 @@ public class Buttons extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
 
         if (settingsUpdated) return;
 
@@ -302,7 +295,7 @@ public class Buttons extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;
@@ -312,17 +305,12 @@ public class Buttons extends XposedMods {
             mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
         }
 
-        Class<?> PhoneWindowManagerClass;
-        Class<?> PhoneWindowManagerExtImpl;
-        Method overrideInterceptKeyBeforeQueueing; // PhoneWindowManagerExtImpl
-        Method overrideShowGlobalActionsInternal;  // PhoneWindowManagerExtImpl
+        ReflectedClass PhoneWindowManagerClass;
+        ReflectedClass PhoneWindowManagerExtImpl;
 
         try {
-            PhoneWindowManagerClass = findClass("com.android.server.policy.PhoneWindowManager", lpparam.classLoader);
-            PhoneWindowManagerExtImpl = findClass("com.android.server.policy.PhoneWindowManagerExtImpl", lpparam.classLoader);
-
-            overrideInterceptKeyBeforeQueueing = findMethodExact(PhoneWindowManagerExtImpl, "overrideInterceptKeyBeforeQueueing", KeyEvent.class, int.class);
-            overrideShowGlobalActionsInternal = findMethodExact(PhoneWindowManagerExtImpl, "overrideShowGlobalActionsInternal");
+            PhoneWindowManagerClass = ReflectedClass.of("com.android.server.policy.PhoneWindowManager", PRParam.getClassLoader());
+            PhoneWindowManagerExtImpl = ReflectedClass.of("com.android.server.policy.PhoneWindowManagerExtImpl", PRParam.getClassLoader());
 
             Runnable mVolumeLongPress = () -> {
                 try {
@@ -401,180 +389,171 @@ public class Buttons extends XposedMods {
             };
 
             try {
-                hookAllConstructors(PhoneWindowManagerClass, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        PWM = param.thisObject;
-                    }
-                });
+                PhoneWindowManagerClass
+                        .afterConstruction()
+                        .run(param -> {
+                            PWM = param.thisObject;
+                        });
             } catch (Throwable t) {
                 log(t);
             }
 
-            hookAllMethods(PhoneWindowManagerExtImpl, "overrideInit", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    try {
-                        PWMExImpl = param.thisObject;
-                    } catch (Throwable ignored) {
-                        PWMExImpl = null;
-                    }
-                }
-            });
+            PhoneWindowManagerExtImpl
+                    .after("overrideInit")
+                    .run(param -> {
+                        try {
+                            PWMExImpl = param.thisObject;
+                        } catch (Throwable ignored) {
+                            PWMExImpl = null;
+                        }
+                    });
 
-            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!holdVolumeToSkip && !holdVolumeToTorch) return;
+            PhoneWindowManagerExtImpl
+                    .before("overrideInterceptKeyBeforeQueueing")
+                    .run(param -> {
+                        if (!holdVolumeToSkip && !holdVolumeToTorch) return;
 
-                    try {
-                        Object mBase = getObjectField(param.thisObject, "mBase");
-                        if (mHandler == null)
-                            mHandler = (Handler) getObjectField(mBase, "mHandler");
+                        try {
+                            Object mBase = getObjectField(param.thisObject, "mBase");
+                            if (mHandler == null)
+                                mHandler = (Handler) getObjectField(mBase, "mHandler");
 
-                        KeyEvent e = (KeyEvent) param.args[0];
-                        int Keycode = e.getKeyCode();
+                            KeyEvent e = (KeyEvent) param.args[0];
+                            int Keycode = e.getKeyCode();
 
-                        switch (e.getAction()) {
-                            case KeyEvent.ACTION_UP -> {
-                                if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
-                                    SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, 0);
-                                    if (mHandler.hasCallbacks(mVolumeLongPress))
-                                        mHandler.removeCallbacks(mVolumeLongPress);
-                                    if (mHandler.hasCallbacks(mVolumeLongPressTorch))
-                                        mHandler.removeCallbacks(mVolumeLongPressTorch);
-                                    if (mHandler.hasCallbacks(mToggleFlash))
-                                        mHandler.removeCallbacks(mToggleFlash);
+                            switch (e.getAction()) {
+                                case KeyEvent.ACTION_UP -> {
+                                    if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
+                                        SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, 0);
+                                        if (mHandler.hasCallbacks(mVolumeLongPress))
+                                            mHandler.removeCallbacks(mVolumeLongPress);
+                                        if (mHandler.hasCallbacks(mVolumeLongPressTorch))
+                                            mHandler.removeCallbacks(mVolumeLongPressTorch);
+                                        if (mHandler.hasCallbacks(mToggleFlash))
+                                            mHandler.removeCallbacks(mToggleFlash);
+                                    }
                                 }
-                            }
-                            case KeyEvent.ACTION_DOWN -> {
-                                if (!SystemUtils.PowerManager().isInteractive() &&
-                                        (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-                                                Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                                    if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
-                                        isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
-                                        mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
-                                        param.setResult(0);
-                                    } else {
-                                        int audioMode = SystemUtils.AudioManager().getMode();
-                                        if (audioMode == AudioManager.MODE_IN_CALL ||
-                                                audioMode == AudioManager.MODE_IN_COMMUNICATION ||
-                                                audioMode == AudioManager.MODE_RINGTONE) return;
-                                        if (holdVolumeToTorch) {
-                                            mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
+                                case KeyEvent.ACTION_DOWN -> {
+                                    if (!SystemUtils.PowerManager().isInteractive() &&
+                                            (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+                                                    Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                                        if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
+                                            isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
+                                            mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
                                             param.setResult(0);
+                                        } else {
+                                            int audioMode = SystemUtils.AudioManager().getMode();
+                                            if (audioMode == AudioManager.MODE_IN_CALL ||
+                                                    audioMode == AudioManager.MODE_IN_COMMUNICATION ||
+                                                    audioMode == AudioManager.MODE_RINGTONE) return;
+                                            if (holdVolumeToTorch) {
+                                                mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
+                                                param.setResult(0);
+                                            }
                                         }
                                     }
                                 }
                             }
+                        } catch (Throwable t) {
+                            log(" ERROR IN interceptKeyBeforeQueueing\n" + t);
                         }
-                    } catch (Throwable t) {
-                        log(" ERROR IN interceptKeyBeforeQueueing\n" + t);
-                    }
-                }
-            });
+                    });
 
+            PhoneWindowManagerExtImpl
+                    .before("overrideInterceptKeyBeforeQueueing")
+                    .run(param -> {
+                        if (!isAnyShortPressEnabled() && !isLongPressEnabled()) return;
+                        try {
+                            Object mBase = getObjectField(param.thisObject, "mBase");
+                            if (mHandler == null)
+                                mHandler = (Handler) getObjectField(mBase, "mHandler");
+                            KeyEvent event = (KeyEvent) param.args[0];
+                            int keyCode = event.getKeyCode();
 
-            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!isAnyShortPressEnabled() && !isLongPressEnabled()) return;
-                    try {
+                            if (keyCode == KEYCODE_PLUSKEY_SHORT_PRESS) {
+                                // Check if any multi-press action is enabled in settings
+                                if (isAnyShortPressEnabled()) {
+                                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                                        ShortPressDetected();
+                                    }
+                                    // Vibrate on execution, so we can add special feedbacks
+                                    // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+                                    param.setResult(0); // Consume the event
+
+                                }
+                            } else if (keyCode == KEYCODE_PLUSKEY_LONG_PRESS) {
+                                if (isLongPressEnabled()) {
+                                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                        executeAction(0, false);
+                                    }
+                                    // Vibrate later
+                                    // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
+                                    param.setResult(0); // Consume the event
+                                }
+                            }
+                        } catch (Throwable t) {
+                            log(" ERROR IN PlusKey hook: " + t.getMessage());
+                        }
+                    });
+
+            PhoneWindowManagerExtImpl
+                    .before("overrideInterceptKeyBeforeQueueing")
+                    .run(param -> {
+                        if (!isAnyShortPressEnabledCamera() && !isAnyDoublePressEnabledCamera())
+                            return;
+                        try {
+                            Object mBase = getObjectField(param.thisObject, "mBase");
+                            if (mHandler == null)
+                                mHandler = (Handler) getObjectField(mBase, "mHandler");
+                            KeyEvent event = (KeyEvent) param.args[0];
+                            int keyCode = event.getKeyCode();
+
+                            if (keyCode == KEYCODE_CAMERA_SINGLE) {
+                                if (isAnyShortPressEnabledCamera()) {
+                                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                                        executeAction(1, true);
+                                    }
+                                    param.setResult(0); // Consume the event
+
+                                }
+                            } else if (keyCode == KEYCODE_CAMERA_DOUBLE) {
+                                if (isAnyDoublePressEnabledCamera()) {
+                                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                                        executeAction(2, true);
+                                    }
+                                    // Vibrate later
+                                    param.setResult(0); // Consume the event
+                                }
+                            }
+                        } catch (Throwable t) {
+                            log(" ERROR IN PlusKey hook: " + t.getMessage());
+                        }
+                    });
+
+            PhoneWindowManagerClass
+                    .before("startedWakingUp")
+                    .run(param -> {
+                        if (!holdVolumeToTorch) return;
+                        int r = (int) param.args[param.args.length - 1];
+
+                        if (r == 1) {
+                            wakeTime = SystemClock.uptimeMillis();
+                        }
+                    });
+
+            PhoneWindowManagerExtImpl
+                    .before("overrideShowGlobalActionsInternal")
+                    .run(param -> {
+                        if (!disablePowerOnLockscreen) return;
                         Object mBase = getObjectField(param.thisObject, "mBase");
-                        if (mHandler == null)
-                            mHandler = (Handler) getObjectField(mBase, "mHandler");
-                        KeyEvent event = (KeyEvent) param.args[0];
-                        int keyCode = event.getKeyCode();
-
-                        if (keyCode == KEYCODE_PLUSKEY_SHORT_PRESS) {
-                            // Check if any multi-press action is enabled in settings
-                            if (isAnyShortPressEnabled()) {
-                                if (event.getAction() == KeyEvent.ACTION_UP) {
-                                    ShortPressDetected();
-                                }
-                                // Vibrate on execution, so we can add special feedbacks
-                                // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
-                                param.setResult(0); // Consume the event
-
-                            }
-                        } else if (keyCode == KEYCODE_PLUSKEY_LONG_PRESS) {
-                            if (isLongPressEnabled()) {
-                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                                    executeAction(0, false);
-                                }
-                                // Vibrate later
-                                // SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_COMMUNICATION_REQUEST);
-                                param.setResult(0); // Consume the event
-                            }
+                        if (mBase == null) return;
+                        int mCurrentUserId = getIntField(param.thisObject, "mCurrentUserId");
+                        if (disablePowerOnLockscreen &&
+                                (boolean) callMethod(mBase, "keyguardOn") &&
+                                (boolean) callMethod(mBase, "isKeyguardSecure", mCurrentUserId)) {
+                            param.setResult(null);
                         }
-                    } catch (Throwable t) {
-                        log(" ERROR IN PlusKey hook: " + t.getMessage());
-                    }
-                }
-            });
-
-            hookMethod(overrideInterceptKeyBeforeQueueing, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!isAnyShortPressEnabledCamera() && !isAnyDoublePressEnabledCamera()) return;
-                    try {
-                        Object mBase = getObjectField(param.thisObject, "mBase");
-                        if (mHandler == null)
-                            mHandler = (Handler) getObjectField(mBase, "mHandler");
-                        KeyEvent event = (KeyEvent) param.args[0];
-                        int keyCode = event.getKeyCode();
-
-                        if (keyCode == KEYCODE_CAMERA_SINGLE) {
-                            if (isAnyShortPressEnabledCamera()) {
-                                if (event.getAction() == KeyEvent.ACTION_UP) {
-                                    executeAction(1, true);
-                                }
-                                param.setResult(0); // Consume the event
-
-                            }
-                        } else if (keyCode == KEYCODE_CAMERA_DOUBLE) {
-                            if (isAnyDoublePressEnabledCamera()) {
-                                if (event.getAction() == KeyEvent.ACTION_UP) {
-                                    executeAction(2, true);
-                                }
-                                // Vibrate later
-                                param.setResult(0); // Consume the event
-                            }
-                        }
-                    } catch (Throwable t) {
-                        log(" ERROR IN PlusKey hook: " + t.getMessage());
-                    }
-                }
-            });
-
-            hookAllMethods(PhoneWindowManagerClass, "startedWakingUp", new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-
-                    if (!holdVolumeToTorch) return;
-                    int r = (int) param.args[param.args.length - 1];
-
-                    if (r == 1) {
-                        wakeTime = SystemClock.uptimeMillis();
-                    }
-                }
-            });
-
-
-            hookMethod(overrideShowGlobalActionsInternal, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    if (!disablePowerOnLockscreen) return;
-                    Object mBase = getObjectField(param.thisObject, "mBase");
-                    if (mBase == null) return;
-                    int mCurrentUserId = getIntField(param.thisObject, "mCurrentUserId");
-                    if (disablePowerOnLockscreen &&
-                            (boolean) callMethod(mBase, "keyguardOn") &&
-                            (boolean) callMethod(mBase, "isKeyguardSecure", mCurrentUserId)) {
-                        param.setResult(null);
-                    }
-                }
-            });
+                    });
 
         } catch (Throwable t) {
             log(t);
@@ -652,7 +631,7 @@ public class Buttons extends XposedMods {
             }
             vibrateTickles(tickles);
         } catch (Throwable t) {
-            XposedBridge.log("PlusKey ERROR executing " + actionValue + ": " + t.getMessage());
+            Logger.log("PlusKey ERROR executing " + actionValue + ": " + t.getMessage());
         }
     }
 

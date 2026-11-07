@@ -28,7 +28,6 @@ import android.view.animation.BaseInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.core.graphics.ColorUtils;
 
@@ -37,9 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
-import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.BatteryBar;
 
 public class BatteryBarView extends FrameLayout {
     private static int[] shadeColors;

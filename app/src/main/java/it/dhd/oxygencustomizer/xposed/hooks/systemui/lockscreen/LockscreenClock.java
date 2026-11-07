@@ -2,13 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 
 import static android.content.Context.RECEIVER_EXPORTED;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_BOOT_COMPLETED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_USER_UNLOCKED;
 import static it.dhd.oxygencustomizer.utils.Constants.LOCKSCREEN_CLOCK_LAYOUT;
@@ -41,6 +34,11 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setIntField;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -91,9 +89,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -104,7 +100,9 @@ import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.ProgressImageView;
 
@@ -193,7 +191,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         customLockscreenClock = Xprefs.getBoolean(LOCKSCREEN_CLOCK_SWITCH, false);
@@ -251,7 +249,7 @@ public class LockscreenClock extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -453,12 +451,10 @@ public class LockscreenClock extends XposedMods {
                     });
 
         } else {
-            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", lpparam.classLoader);
-            hookAllMethods(KeyguardStatusViewClass, "onFinishInflate", new XC_MethodHook() {
-                @SuppressLint("DiscouragedApi")
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-
+            Class<?> KeyguardStatusViewClass = findClass("com.android.keyguard.KeyguardStatusView", PRParam.getClassLoader());
+            ReflectedClass.of(KeyguardStatusViewClass)
+                    .after("onFinishInflate")
+                    .run(param -> {
                     ViewGroup statusViewContainer = (ViewGroup) getObjectField(param.thisObject, "mStatusViewContainer");
                     mStatusViewContainer = (ViewGroup) param.thisObject;
                     mClockViewContainer = statusViewContainer;
@@ -471,8 +467,7 @@ public class LockscreenClock extends XposedMods {
                     mMediaHostContainer = (View) getObjectField(param.thisObject, "mMediaHostContainer");
 
                     registerClockUpdater();
-                }
-            });
+                    });
         }
 
 
@@ -497,28 +492,27 @@ public class LockscreenClock extends XposedMods {
 
         Class<?> RedTextClock;
         try {
-            RedTextClock = findClass("com.oplus.systemui.shared.clocks.RedTextClock", lpparam.classLoader);
+            RedTextClock = findClass("com.oplus.systemui.shared.clocks.RedTextClock", PRParam.getClassLoader());
         } catch (Throwable t) {
-            RedTextClock = findClass("com.oplusos.systemui.keyguard.clock.RedTextClock", lpparam.classLoader); // OOS 13
+            RedTextClock = findClass("com.oplusos.systemui.keyguard.clock.RedTextClock", PRParam.getClassLoader()); // OOS 13
         }
-        findAndHookMethod(RedTextClock, "onTimeChanged", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (customLockscreenClock || mStockClockRed == 0) return;
+        ReflectedClass.of(RedTextClock)
+                .after(ReflectionHelpers.findMethodExact(RedTextClock, "onTimeChanged"))
+                .run(param -> {
+                    if (customLockscreenClock || mStockClockRed == 0) return;
 
-                boolean mShouldRunTicker = getBooleanField(param.thisObject, "mShouldRunTicker");
-                if (!mShouldRunTicker) return;
+                    boolean mShouldRunTicker = getBooleanField(param.thisObject, "mShouldRunTicker");
+                    if (!mShouldRunTicker) return;
 
-                try {
-                    Calendar mTime = (Calendar) getObjectField(param.thisObject, "mTime");
-                    String format = (String) getObjectField(param.thisObject, "format");
-                    String mHour = DateFormat.format(format, mTime).toString();
-                    TextView mTimeHour = (TextView) param.thisObject;
-                    setClockRed(mTimeHour, mHour);
-                } catch (Throwable ignored) {
-                }
-            }
-        });
+                    try {
+                        Calendar mTime = (Calendar) getObjectField(param.thisObject, "mTime");
+                        String format = (String) getObjectField(param.thisObject, "format");
+                        String mHour = DateFormat.format(format, mTime).toString();
+                        TextView mTimeHour = (TextView) param.thisObject;
+                        setClockRed(mTimeHour, mHour);
+                    } catch (Throwable ignored) {
+                    }
+                });
 
     }
 
@@ -564,7 +558,7 @@ public class LockscreenClock extends XposedMods {
 
     private void reloadPlugin() {
         if (Build.VERSION.SDK_INT < 35) return;
-        XposedBridge.log("LockscreenClock reloadPlugin (mKeyguardStyleClockControllerImpl == null) " + (mKeyguardStyleClockControllerImpl == null));
+        Logger.log("LockscreenClock reloadPlugin (mKeyguardStyleClockControllerImpl == null) " + (mKeyguardStyleClockControllerImpl == null));
         if (mKeyguardStyleClockControllerImpl == null) return;
         try {
             boolean isPluginLoaded = getBooleanField(mKeyguardStyleClockControllerImpl, "isPluginLoaded");

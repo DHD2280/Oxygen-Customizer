@@ -1,7 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_AMBIENT;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_CENTER_MIRRORED;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_COLOR_MODE;
@@ -27,13 +25,15 @@ import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_UNI
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_SOLID_UNITS_ROUNDED;
 import static it.dhd.oxygencustomizer.utils.Constants.SoundPrefs.PULSE_VERTICAL_MIRROR;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
@@ -69,7 +69,7 @@ public class PulseViewHook extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Pulse State
@@ -128,9 +128,9 @@ public class PulseViewHook extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
-        if (!lpparam.packageName.equals(listenPackage)) return;
+        if (!PRParam.getPackageName().equals(listenPackage)) return;
 
         AudioDataProvider.registerInfoCallback(this::onPrimaryMetadataOrStateChanged);
 

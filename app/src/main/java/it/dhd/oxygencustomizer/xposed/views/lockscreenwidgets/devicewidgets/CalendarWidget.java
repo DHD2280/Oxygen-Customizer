@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -39,6 +38,7 @@ import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.xposed.utils.CalendarProvider;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 @SuppressLint("ViewConstructor")
 public class CalendarWidget extends BaseDeviceWidget {
@@ -115,7 +115,7 @@ public class CalendarWidget extends BaseDeviceWidget {
                 try {
                     scheduleWidgetUpdate(eventEndTime);
                 } catch (Throwable t) {
-                    XposedBridge.log("CalendarWidget - error scheduling update");
+                    Logger.log("CalendarWidget - error scheduling update");
                 }
             }
 

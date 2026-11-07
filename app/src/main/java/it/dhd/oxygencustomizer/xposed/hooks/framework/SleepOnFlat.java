@@ -1,13 +1,13 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getLongField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getLongField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -48,7 +48,7 @@ public class SleepOnFlat extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         SleepOnFlatScreen = Xprefs.getBoolean("SleepOnFlatScreen", false);
         FlatStandbyTimeMillis = Xprefs.getSliderInt("FlatStandbyTime", 5) * 1000L;
         SleepOnFlatRespectWakeLock = Xprefs.getBoolean("SleepOnFlatRespectWakeLock", true);
@@ -56,16 +56,16 @@ public class SleepOnFlat extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
-        ReflectedClass FaceDownDetectorClass = ReflectedClass.of("com.android.server.power.FaceDownDetector", lpParam.classLoader);
-        ReflectedClass PowerManagerServiceClass = ReflectedClass.of("com.android.server.power.PowerManagerService", lpParam.classLoader);
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        ReflectedClass FaceDownDetectorClass = ReflectedClass.of("com.android.server.power.FaceDownDetector", PRParam.getClassLoader());
+        ReflectedClass PowerManagerServiceClass = ReflectedClass.of("com.android.server.power.PowerManagerService", PRParam.getClassLoader());
 
-        List<Set<XC_MethodHook.Unhook>> unHooks = new ArrayList<>();
+        List<Set<XposedInterface.HookHandle>> unHooks = new ArrayList<>();
         unHooks.add(PowerManagerServiceClass
                 .after("updatePowerStateLocked")
                 .run(param -> {
                     mPowerManagerServiceInstance = param.thisObject;
-                    unHooks.get(0).forEach(XC_MethodHook.Unhook::unhook);
+                    unHooks.get(0).forEach(XposedInterface.HookHandle::unhook);
                     unHooks.clear();
                 }));
 

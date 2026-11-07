@@ -6,12 +6,11 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.widget.ImageView;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.plugins.DarkIconDispatcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import com.android.systemui.Dependency;
 
 @SuppressLint("AppCompatCustomView")
 public class LogoView extends ImageView implements DarkIconDispatcher.DarkReceiver {

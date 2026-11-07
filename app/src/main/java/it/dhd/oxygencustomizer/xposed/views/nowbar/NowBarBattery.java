@@ -31,7 +31,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.text.NumberFormat;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.BatteryDataProvider;
@@ -39,6 +38,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class NowBarBattery extends RelativeLayout {
 
@@ -332,7 +332,7 @@ public class NowBarBattery extends RelativeLayout {
 
     private void updateOplusBatteryStats(OplusBatteryStatus oplusBatteryStatus) {
         mOplusBatteryStatus = oplusBatteryStatus;
-        XposedBridge.log("OplusBatteryStatus changed: " + oplusBatteryStatus.toString());
+        Logger.log("OplusBatteryStatus changed: " + oplusBatteryStatus.toString());
         mChargingString = getChargingStringByTechnology(mContext, NumberFormat.getPercentInstance().format(mExtraLevel / 100f));
         updateBatteryUI();
     }

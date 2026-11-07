@@ -1,12 +1,12 @@
 package it.dhd.oxygencustomizer.xposed.views.controls.widgets;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.Expandable;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getControlsTile;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.HOME_CONTROLS_LABEL;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

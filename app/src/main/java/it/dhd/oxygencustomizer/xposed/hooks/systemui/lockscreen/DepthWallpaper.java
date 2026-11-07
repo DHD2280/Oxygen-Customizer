@@ -3,10 +3,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen;
 import static android.content.Context.RECEIVER_EXPORTED;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getFloatField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_AOD_INVALIDATE_DEPTH;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_BACKGROUND_CHANGED;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTION_DEPTH_SUBJECT_CHANGED;
@@ -24,6 +20,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCacheP
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.canShowArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.showAlbumArt;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getFloatField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -55,14 +54,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
@@ -109,7 +107,7 @@ public class DepthWallpaper extends XposedMods {
                     case ACTION_EXTRACT_FAILURE -> {
                         lockScreenSubjectCacheValid = false;
                         String error = intent.getStringExtra("error");
-                        XposedBridge.log("Subject extraction failed \n" + error);
+                        Logger.log("Subject extraction failed \n" + error);
                     }
                 }
             }
@@ -125,7 +123,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         DWallpaperEnabled = Xprefs.getBoolean(DEPTH_WALLPAPER_ENABLED, false);
         DWOpacity = Xprefs.getSliderInt(DEPTH_WALLPAPER_OPACITY, 192);
         DWMode = Integer.parseInt(Xprefs.getString(DEPTH_WALLPAPER_MODE, "0"));
@@ -140,7 +138,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         SuperPowerSaveObserver.registerSuperPowerSaveCallback(isSuperPowerSave -> superPowerSave = isSuperPowerSave);
 
@@ -231,93 +229,92 @@ public class DepthWallpaper extends XposedMods {
                     Object mLockscreenWallpaper = param.thisObject;
                     Object mWallpaperChangeListener = getObjectField(param.thisObject, "mWallpaperChangeListener");
                     log("OplusLockScreenWallpaperController created");
-                    hookAllMethods(mWallpaperChangeListener.getClass(), "onWallpaperChange", new XC_MethodHook() {
-                        @Override
-                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                            if (DWallpaperEnabled && DWMode == 0 || DWMode == 2) {
-                                if (superPowerSave) return;
-                                log("Wallpaper Changed");
+                    ReflectedClass.of(mWallpaperChangeListener.getClass())
+                            .after("onWallpaperChange")
+                            .run(param2 -> {
+                                if (DWallpaperEnabled && DWMode == 0 || DWMode == 2) {
+                                    if (superPowerSave) return;
+                                    log("Wallpaper Changed");
 
-                                Drawable wallpaperDrawable = null;
-                                String[] methodNames = {"getDrawable", "loadDrawable", "loadBitmap"};
-                                for (String methodName : methodNames) {
-                                    try {
-                                        wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, methodName);
-                                        if (wallpaperDrawable != null) break;
-                                    } catch (Throwable ignored) {
-                                    }
-                                }
-                                if (wallpaperDrawable == null) {
-                                    log("Wallpaper Drawable is null");
-                                    return;
-                                }
-                                Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
-
-                                Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
-                                        .getCurrentWindowMetrics()
-                                        .getBounds();
-
-                                float scale = 1.0f;
-
-                                try {
-                                    View v = (View) getObjectField(mLockscreenWallpaper, "mBackDropBackView");
-                                    if (v != null) {
-                                        scale = v.getScaleX();
-                                    }
-                                } catch (Throwable t) {
-                                    log("Error getting scale: " + t.getMessage());
-                                }
-
-                                float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
-                                float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
-
-                                int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
-                                int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
-
-                                int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
-                                int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
-
-                                Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
-
-                                //crop to display bounds
-                                scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
-                                Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
-
-                                boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
-
-                                if (!mLayersCreated) {
-                                    log("drawFrameOnCanvas Layers not created");
-                                    createLayers();
-                                }
-
-                                log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
-
-                                mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
-
-                                log("cacheIsValid " + cacheIsValid);
-
-                                if (!cacheIsValid) {
-                                    XPLauncher.enqueueProxyCommand(proxy -> {
-                                        if (DWMode == 0) {
-                                            proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
-                                        } else if (DWMode == 2) {
-                                            try {
-                                                Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
-                                                intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
-                                                intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
-                                                intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
-                                                intent.setPackage(mContext.getPackageName());
-                                                intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                                                mContext.sendBroadcast(intent);
-                                            } catch (Throwable t) {
-                                                log(t);
-                                            }
+                                    Drawable wallpaperDrawable = null;
+                                    String[] methodNames = {"getDrawable", "loadDrawable", "loadBitmap"};
+                                    for (String methodName : methodNames) {
+                                        try {
+                                            wallpaperDrawable = (Drawable) callMethod(mLockscreenWallpaper, methodName);
+                                            if (wallpaperDrawable != null) break;
+                                        } catch (Throwable ignored) {
                                         }
-                                    });
+                                    }
+                                    if (wallpaperDrawable == null) {
+                                        log("Wallpaper Drawable is null");
+                                        return;
+                                    }
+                                    Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
+
+                                    Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
+                                            .getCurrentWindowMetrics()
+                                            .getBounds();
+
+                                    float scale = 1.0f;
+
+                                    try {
+                                        View v = (View) getObjectField(mLockscreenWallpaper, "mBackDropBackView");
+                                        if (v != null) {
+                                            scale = v.getScaleX();
+                                        }
+                                    } catch (Throwable t) {
+                                        log("Error getting scale: " + t.getMessage());
+                                    }
+
+                                    float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
+                                    float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
+
+                                    int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
+                                    int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
+
+                                    int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
+                                    int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
+
+                                    Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
+
+                                    //crop to display bounds
+                                    scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
+                                    Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
+
+                                    boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
+
+                                    if (!mLayersCreated) {
+                                        log("drawFrameOnCanvas Layers not created");
+                                        createLayers();
+                                    }
+
+                                    log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
+
+                                    mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
+
+                                    log("cacheIsValid " + cacheIsValid);
+
+                                    if (!cacheIsValid) {
+                                        XPLauncher.enqueueProxyCommand(proxy -> {
+                                            if (DWMode == 0) {
+                                                proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
+                                            } else if (DWMode == 2) {
+                                                try {
+                                                    Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
+                                                    intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
+                                                    intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
+                                                    intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
+                                                    intent.setPackage(mContext.getPackageName());
+                                                    intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                                                    mContext.sendBroadcast(intent);
+                                                } catch (Throwable t) {
+                                                    log(t);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        }
-                    });
+                            });
                 });
 
 
@@ -525,7 +522,7 @@ public class DepthWallpaper extends XposedMods {
 
     private void setDepthWallpaper() {
         String state = getObjectField(getScrimController(), "mState").toString();
-        XposedBridge.log("DepthWallpaper - setDepthWallpaper: " + state);
+        Logger.log("DepthWallpaper - setDepthWallpaper: " + state);
         boolean canShow = true;
         if (showAlbumArt && !canShowArt) {
             canShow = true;
@@ -606,7 +603,7 @@ public class DepthWallpaper extends XposedMods {
     }
 
     private void setupViews() {
-        XposedBridge.log("DepthWallpaper - setupViews: DWallpaperEnabled = " + DWallpaperEnabled);
+        Logger.log("DepthWallpaper - setupViews: DWallpaperEnabled = " + DWallpaperEnabled);
         if (mLayersCreated) {
             if (mWallpaperBackground != null) {
                 mWallpaperBackground.post(() -> {

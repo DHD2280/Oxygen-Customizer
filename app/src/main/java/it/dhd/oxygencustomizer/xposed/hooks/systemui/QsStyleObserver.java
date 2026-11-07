@@ -1,16 +1,15 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 
 import android.content.Context;
 import android.os.Build;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class QsStyleObserver extends XposedMods {
 
@@ -25,20 +24,20 @@ public class QsStyleObserver extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {}
+    public void onPreferenceUpdated(String... Key) {
+    }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (Build.VERSION.SDK_INT < 35) return;
 
-        Class<?> OplusSeparateNotificationAndQSState = findClass("com.oplus.systemui.separate.OplusSeparateNotificationAndQSState", lpparam.classLoader);
-        hookAllConstructors(OplusSeparateNotificationAndQSState, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                OplusQsStyle = param.thisObject;
-            }
-        });
+        Class<?> OplusSeparateNotificationAndQSState = findClass("com.oplus.systemui.separate.OplusSeparateNotificationAndQSState", PRParam.getClassLoader());
+        ReflectedClass.of(OplusSeparateNotificationAndQSState)
+                .afterConstruction()
+                .run(param -> {
+                    OplusQsStyle = param.thisObject;
+                });
 
     }
 

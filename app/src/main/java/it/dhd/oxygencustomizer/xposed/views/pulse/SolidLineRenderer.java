@@ -25,12 +25,9 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  */
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
 
 import androidx.core.graphics.ColorUtils;
 

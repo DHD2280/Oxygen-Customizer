@@ -32,7 +32,7 @@ public class XPrefs {
 
         for (XposedMods thisMod : XPLauncher.runningMods) {
             thisMod.mDebug = BuildConfig.VERSION_NAME.contains("nightly") || moreLogging;
-            thisMod.updatePrefs(key);
+            thisMod.onPreferenceUpdated(key);
         }
     }
 }

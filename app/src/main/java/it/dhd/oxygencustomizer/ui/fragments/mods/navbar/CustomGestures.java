@@ -1,7 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.navbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;

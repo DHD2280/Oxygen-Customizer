@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ThemePackMapping.TYPE_DRAWABLE;
 
@@ -13,20 +12,22 @@ import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ThemePackMapping.IDMapping;
 import it.dhd.oxygencustomizer.xposed.utils.ThemePackMapping.Mapping;
 import it.dhd.oxygencustomizer.xposed.utils.ThemePackMapping.OverlayID;
 import it.dhd.oxygencustomizer.xposed.utils.ThemePackMapping.OverlayIDName;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class IconPacks extends XposedMods {
 
     static IDMapping drawableMapping = new IDMapping();
     private final android.content.pm.PackageManager mPackageManager;
-    private final List<XC_MethodHook.Unhook> hooks = new ArrayList<>();
+    private final List<XposedInterface.HookHandle> hooks = new ArrayList<>();
     private boolean mPackageLoaded = false;
 
     public IconPacks(Context context) {
@@ -35,57 +36,52 @@ public class IconPacks extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         updateMapping();
     }
 
     private void hookAll() {
         if (hooks.isEmpty() && mPackageLoaded && !drawableMapping.isEmpty()) {
-            hooks.add(findAndHookMethod(Resources.class, "getDrawable", int.class, Resources.Theme.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    Drawable drawable = getDrawable((int) param.args[0], (Resources.Theme) param.args[1]);
-                    if (drawable != null) {
-                        param.setResult(drawable);
-                    }
-                }
-            }));
+            hooks.addAll(ReflectedClass.of(Resources.class)
+                    .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawable", int.class, Resources.Theme.class))
+                    .run(param -> {
+                        Drawable drawable = getDrawable((int) param.args[0], (Resources.Theme) param.args[1]);
+                        if (drawable != null) {
+                            param.setResult(drawable);
+                        }
+                    }));
 
-            hooks.add(findAndHookMethod(Resources.class, "getDrawable", int.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    Drawable drawable = getDrawable((int) param.args[0], mContext.getTheme());
-                    if (drawable != null) {
-                        param.setResult(drawable);
-                    }
-                }
-            }));
+            hooks.addAll(ReflectedClass.of(Resources.class)
+                    .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawable", int.class))
+                    .run(param -> {
+                        Drawable drawable = getDrawable((int) param.args[0], mContext.getTheme());
+                        if (drawable != null) {
+                            param.setResult(drawable);
+                        }
+                    }));
 
-            hooks.add(findAndHookMethod(Resources.class, "getDrawableForDensity", int.class, int.class, Resources.Theme.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    Drawable drawable = getDrawable((int) param.args[0], (Resources.Theme) param.args[2]);
-                    if (drawable != null) {
-                        param.setResult(drawable);
-                    }
+            hooks.addAll(ReflectedClass.of(Resources.class)
+                    .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawableForDensity", int.class, int.class, Resources.Theme.class))
+                    .run(param -> {
+                        Drawable drawable = getDrawable((int) param.args[0], (Resources.Theme) param.args[2]);
+                        if (drawable != null) {
+                            param.setResult(drawable);
+                        }
+                    }));
 
-                }
-            }));
-
-            hooks.add(findAndHookMethod(Resources.class, "getDrawableForDensity", int.class, int.class, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    Drawable drawable = getDrawable((int) param.args[0], mContext.getTheme());
-                    if (drawable != null) {
-                        param.setResult(drawable);
-                    }
-                }
-            }));
+            hooks.addAll(ReflectedClass.of(Resources.class)
+                    .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawableForDensity", int.class, int.class))
+                    .run(param -> {
+                        Drawable drawable = getDrawable((int) param.args[0], mContext.getTheme());
+                        if (drawable != null) {
+                            param.setResult(drawable);
+                        }
+                    }));
         }
     }
 
     private void unhookAll() {
-        for (XC_MethodHook.Unhook hook : hooks) {
+        for (XposedInterface.HookHandle hook : hooks) {
             hook.unhook();
         }
         hooks.clear();
@@ -149,7 +145,7 @@ public class IconPacks extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         mPackageLoaded = true;
         hookAll();
     }

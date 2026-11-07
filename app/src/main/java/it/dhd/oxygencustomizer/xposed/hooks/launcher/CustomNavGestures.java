@@ -1,12 +1,6 @@
 package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 
 import static java.lang.reflect.Modifier.isStatic;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_OVERRIDE_BACK;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_SWITCH_APP;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_TOGGLE_ONE_HANDED;
@@ -19,6 +13,12 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.goToSleep;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.openQs;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.takeScreenshot;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.app.TaskInfo;
 import android.content.BroadcastReceiver;
@@ -47,13 +47,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
@@ -152,7 +152,7 @@ public class CustomNavGestures extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         FCLongSwipeEnabled = Xprefs.getBoolean("FCLongSwipeEnabled", false);
         leftSwipeUpAction = readAction(Xprefs, "leftSwipeUpAction");
         rightSwipeUpAction = readAction(Xprefs, "rightSwipeUpAction");
@@ -181,7 +181,7 @@ public class CustomNavGestures extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpParam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             IntentFilter filter = new IntentFilter();
@@ -264,15 +264,14 @@ public class CustomNavGestures extends XposedMods {
                 }
             }
             if (entry != null) {
-                XposedBridge.hookMethod(entry, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) {
-                        InputEvent ev = (InputEvent) param.args[0];
-                        if (ev instanceof MotionEvent) {
-                            onMotionEventRaw(param, (MotionEvent) ev, param.thisObject);
-                        }
-                    }
-                });
+                ReflectedClass.of(entry.getDeclaringClass())
+                        .before(entry)
+                        .run(param -> {
+                            InputEvent ev = (InputEvent) param.args[0];
+                            if (ev instanceof MotionEvent) {
+                                onMotionEventRaw(param, (MotionEvent) ev, param.thisObject);
+                            }
+                        });
             }
         }
 
@@ -306,23 +305,22 @@ public class CustomNavGestures extends XposedMods {
             //         ISysuiUnlockAnimationController, IBackAnimation)
             if (!p[6].getName().equals("com.android.wm.shell.recents.IRecentTasks")) continue;
 
-            XposedBridge.hookMethod(m, new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam mp) {
-                    Object recentTasks = mp.args[6];
-                    if (recentTasks != null) {
-                        mRecentTask = recentTasks;
-                        log("mRecentTasks got: "
-                                + mRecentTask.getClass().getName());
-                    }
-                }
-            });
+            ReflectedClass.of(m.getDeclaringClass())
+                    .before(m)
+                    .run(mp -> {
+                        Object recentTasks = mp.args[6];
+                        if (recentTasks != null) {
+                            mRecentTask = recentTasks;
+                            log("mRecentTasks got: "
+                                    + mRecentTask.getClass().getName());
+                        }
+                    });
             return;
         }
         log("setProxy not found in " + cls.getName());
     }
 
-    private void onMotionEvent(XC_MethodHook.MethodHookParam param, boolean isOverViewListener) {
+    private void onMotionEvent(HookHelper.RunParam param, boolean isOverViewListener) {
         MotionEvent e = (MotionEvent) param.args[0];
 
         boolean mPassedWindowMoveSlopClz = false;
@@ -444,7 +442,7 @@ public class CustomNavGestures extends XposedMods {
         }
     }
 
-    private void onMotionEventRaw(XC_MethodHook.MethodHookParam param, MotionEvent e, Object tisInstance) {
+    private void onMotionEventRaw(HookHelper.RunParam param, MotionEvent e, Object tisInstance) {
         if (tisInstance == null || e == null) return;
 
         int action = e.getActionMasked();
@@ -743,7 +741,7 @@ public class CustomNavGestures extends XposedMods {
 
     private void killForeground() {
         if (currentFocusedTask == null) {
-            XposedBridge.log("CustomNavGestures - killForeground: currentFocusedTask is null");
+            Logger.log("CustomNavGestures - killForeground: currentFocusedTask is null");
             return;
         }
 

@@ -1,14 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
-import static de.robv.android.xposed.XposedHelpers.newInstance;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_DARK_ICON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_BRIGHTNESS_SLIDER_BACKGROUND_ENABLED;
@@ -80,6 +71,14 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import static it.dhd.oxygencustomizer.xposed.utils.QsTileHelper.getMediaPanelRadius;
 import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.getObject;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticIntField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.newInstance;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -131,9 +130,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import io.github.neonorbit.dexplore.DexFactory;
 import io.github.neonorbit.dexplore.Dexplore;
 import io.github.neonorbit.dexplore.filter.ClassFilter;
@@ -148,6 +145,7 @@ import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsHighlightTileViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.QsTileViewBackgroundProxyImplOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.AccordionTransformer;
 import it.dhd.oxygencustomizer.xposed.utils.viewpager.BackgroundToForegroundTransformer;
@@ -279,7 +277,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         // Qs Colors
@@ -415,8 +413,8 @@ public class QsTileCustomization extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(listenerPackage)) return;
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (!PRParam.getPackageName().equals(listenerPackage)) return;
 
         ReflectedClass PersonalityManager = ReflectedClass.of(
                 "com.oplus.systemui.qs.personality.PersonalityManager" /* OOS14-15 */,
@@ -427,7 +425,7 @@ public class QsTileCustomization extends XposedMods {
                     .run(param -> mPersonalityManager = param.thisObject);
         } else log("PersonalityManager not found");
 
-        if (Build.VERSION.SDK_INT >= 35) findMyDevices(lpparam);
+        if (Build.VERSION.SDK_INT >= 35) findMyDevices(PRParam);
         // Color Hooker
         hookQsColors();
 
@@ -488,7 +486,7 @@ public class QsTileCustomization extends XposedMods {
                     if (qsBrightnessBackgroundCustomize) {
                         setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                     } else {
-                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                         if (color != 0x0) {
                             setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
                         }
@@ -516,7 +514,7 @@ public class QsTileCustomization extends XposedMods {
                     if (qsBrightnessBackgroundCustomize) {
                         setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(qsBrightnessBackgroundColor));
                     } else {
-                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                        int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                         if (color != 0x0) {
                             setSliderBackgroundColor(getObjectField(param.thisObject, "mSlider"), ColorStateList.valueOf(color));
                         }
@@ -537,7 +535,7 @@ public class QsTileCustomization extends XposedMods {
             if (qsBrightnessBackgroundCustomize) {
                 callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(qsBrightnessBackgroundColor));
             } else {
-                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", lpparam.packageName), mContext.getTheme());
+                int color = ResourcesCompat.getColor(mContext.getResources(), mContext.getResources().getIdentifier("status_bar_qs_brightness_slider_bg_color", "color", PRParam.getPackageName()), mContext.getTheme());
                 callMethod(slider, "setSeekBarBackgroundColor", ColorStateList.valueOf(color));
             }
         };
@@ -572,19 +570,17 @@ public class QsTileCustomization extends XposedMods {
                     .run(param -> {
                         Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
                         Object vPager = param.thisObject;
-                        hookAllMethods(VPagerListener.getClass(),
-                                "onPageScrolled", new XC_MethodHook() {
-                                    @Override
-                                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                        if (!mTrasformationsEnabled) return;
-                                        final int childCount = (int) callMethod(vPager, "getChildCount");
-                                        for (int i = 0; i < childCount; i++) {
-                                            final View child = (View) callMethod(vPager, "getChildAt", i);
-                                            final Object lp = callMethod(child, "getLayoutParams");
-                                            if (getBooleanField(lp, "isDecor")) continue;
-                                            final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
-                                            getCustomTransitions().transformPage(child, transformPos);
-                                        }
+                        ReflectedClass.of(VPagerListener.getClass())
+                                .before("onPageScrolled")
+                                .run(param2 -> {
+                                    if (!mTrasformationsEnabled) return;
+                                    final int childCount = (int) callMethod(vPager, "getChildCount");
+                                    for (int i = 0; i < childCount; i++) {
+                                        final View child = (View) callMethod(vPager, "getChildAt", i);
+                                        final Object lp = callMethod(child, "getLayoutParams");
+                                        if (getBooleanField(lp, "isDecor")) continue;
+                                        final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
+                                        getCustomTransitions().transformPage(child, transformPos);
                                     }
                                 });
                     });
@@ -595,7 +591,7 @@ public class QsTileCustomization extends XposedMods {
     }
 
 
-    private void findMyDevices(XC_LoadPackage.LoadPackageParam lpParam) {
+    private void findMyDevices(XposedModuleInterface.PackageReadyParam PRParam) {
         ClassFilter classFilter = new ClassFilter.Builder()
                 .setReferenceTypes(ReferenceTypes.STRINGS_ONLY)
                 .setReferenceFilter(pool ->
@@ -604,7 +600,7 @@ public class QsTileCustomization extends XposedMods {
                 .setModifiers(Modifier.PUBLIC | Modifier.ABSTRACT)
                 .build();
 
-        Dexplore dexplore = DexFactory.load(lpParam.appInfo.sourceDir);
+        Dexplore dexplore = DexFactory.load(PRParam.getApplicationInfo().sourceDir);
 
         ClassData result = dexplore.findClass(DexFilter.MATCH_ALL, classFilter);
         if (result == null) {
@@ -995,11 +991,11 @@ public class QsTileCustomization extends XposedMods {
             try {
                 return callStaticMethod(clazz.getClazz(), targetMethod.getName(), args);
             } catch (Throwable t) {
-                XposedBridge.log("QsTileCustomization - getTileOutlineTest: " + t.getMessage());
+                Logger.log("QsTileCustomization - getTileOutlineTest: " + t.getMessage());
             }
 
         } else {
-            XposedBridge.log("QsTileCustomization - getTileOutlineTest No method found.");
+            Logger.log("QsTileCustomization - getTileOutlineTest No method found.");
         }
         return null;
     }
@@ -1270,7 +1266,7 @@ public class QsTileCustomization extends XposedMods {
                 param.args[2] = newForeground;
 
             } catch (Throwable t) {
-                XposedBridge.log("Error in drawForegroundBlur hook: " + t);
+                Logger.log("Error in drawForegroundBlur hook: " + t);
             }
         });
 
@@ -1500,9 +1496,9 @@ public class QsTileCustomization extends XposedMods {
         try {
             currentShape = (int) callMethod(mPersonalityManager, "getLastShapeType");
         } catch (Throwable t) {
-            XposedBridge.log("Oxygen Customizer - QsTileCustomization error: " + Log.getStackTraceString(t));
+            Logger.log("Oxygen Customizer - QsTileCustomization error: " + Log.getStackTraceString(t));
         }
-        XposedBridge.log("QsTileCustomization notifyQsUpdate: 0 " + currentShape);
+        Logger.log("QsTileCustomization notifyQsUpdate: 0 " + currentShape);
         callMethod(mPersonalityManager, "notifyListener", 0);
         callMethod(mPersonalityManager, "notifyListener", currentShape);
     }

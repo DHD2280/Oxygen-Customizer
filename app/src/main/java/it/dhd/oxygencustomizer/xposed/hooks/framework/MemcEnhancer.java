@@ -1,14 +1,10 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedHelpers.findClassIfExists;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_RECEIVED;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
-import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInArray;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,10 +18,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class MemcEnhancer extends XposedMods {
 
@@ -73,7 +69,7 @@ public class MemcEnhancer extends XposedMods {
                     if (!TextUtils.isEmpty(className) && className.equals(MemcEnhancer.class.getSimpleName())) {
                         log("Intent received - will update preferences");
                         settingsUpdated = false;
-                        updatePrefs();
+                        onPreferenceUpdated();
                     }
                 }
             } catch (Throwable t) {
@@ -87,7 +83,7 @@ public class MemcEnhancer extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (settingsUpdated) return;
 
         enableMemcFeature = Xprefs.getBoolean("force_memc_enabled", false);
@@ -128,7 +124,7 @@ public class MemcEnhancer extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
@@ -143,10 +139,10 @@ public class MemcEnhancer extends XposedMods {
             mContext.registerReceiver(mSettingsBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         }
 
-        hookFeatureManager(lpparam);
-        hookSystemProperties(lpparam);
-        hookOplusFeatureMEMC(lpparam);
-        hookOplusMemcHelper(lpparam);
+        hookFeatureManager();
+        hookSystemProperties();
+        hookOplusFeatureMEMC();
+        hookOplusMemcHelper();
 
     }
 
@@ -172,132 +168,107 @@ public class MemcEnhancer extends XposedMods {
         mContext.sendBroadcast(intent);
     }
 
-    private void hookFeatureManager(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusFeatureConfigManagerService = findClassIfExists("com.android.server.content.OplusFeatureConfigManagerService", lpparam.classLoader);
-        Class<?> OplusFeatureConfigManager = findClassIfExists("com.oplus.content.OplusFeatureConfigManager", lpparam.classLoader);
+    private void hookFeatureManager() {
+        ReflectedClass OplusFeatureConfigManagerService = ReflectedClass.ofIfPossible("com.android.server.content.OplusFeatureConfigManagerService");
+        ReflectedClass OplusFeatureConfigManager = ReflectedClass.ofIfPossible("com.oplus.content.OplusFeatureConfigManager");
 
-        if (OplusFeatureConfigManagerService == null) {
-            log(new Throwable("OplusFeatureManager not found"));
-        }
-        if (OplusFeatureConfigManager == null) {
-            log(new Throwable("OplusFeatureManager not found"));
-        }
-
-        XC_MethodHook featureHooker = new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                /*
+        ReflectedClass.ReflectionConsumer featureHooker = param -> {
+            /*
                         oplus.software.display.pixelworks_enable
                         oplus.software.display.iris_enable
                         oplus.software.display.memc_enable
                         oplus.software.display.game.memc_enable
                     */
-                String requestedFeature = (String) param.args[0];
-                if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && enableMemcFeature) {
-                    param.setResult(true);
-                }
+            String requestedFeature = (String) param.args[0];
+            if (OPLUS_MEMC_FEATURES.contains(requestedFeature) && enableMemcFeature) {
+                param.setResult(true);
             }
         };
 
-        hookAllMethods(OplusFeatureConfigManager, "hasFeature", featureHooker);
-        hookAllMethods(OplusFeatureConfigManagerService, "hasFeature", featureHooker);
+        OplusFeatureConfigManager
+                .before("hasFeature")
+                .run(featureHooker);
+        OplusFeatureConfigManagerService
+                .before("hasFeature")
+                .run(featureHooker);
     }
 
-    private void hookSystemProperties(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> SystemProperties;
-        SystemProperties = findClassIfExists("android.os.SystemProperties", lpparam.classLoader);
+    private void hookSystemProperties() {
+        ReflectedClass SystemProperties = ReflectedClass.ofIfPossible("android.os.SystemProperties");
 
-        if (SystemProperties == null) {
-            log("SystemProperties not found");
-            return;
-        }
-
-        hookAllMethods(SystemProperties, "getBoolean", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!enableMemcFeature) return;
-                if (param.args[0].equals("ro.oplus.display.memc_video_refreshrate") ||
-                        param.args[0].equals("vendor.display.show_memc_tomast")) {
-                    log("get: " + param.args[0] + " called, returning true");
-                    param.setResult(true);
-                }
-            }
-        });
+        SystemProperties
+                .before("getBoolean")
+                .run(param -> {
+                    if (!enableMemcFeature) return;
+                    if (param.args[0].equals("ro.oplus.display.memc_video_refreshrate") ||
+                            param.args[0].equals("vendor.display.show_memc_tomast")) {
+                        log("get: " + param.args[0] + " called, returning true");
+                        param.setResult(true);
+                    }
+                });
     }
 
-    private void hookOplusFeatureMEMC(XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> OplusFeatureMEMC;
-        OplusFeatureMEMC = findClassIfExists("com.android.server.display.OplusFeatureMEMC", lpparam.classLoader);
+    private void hookOplusFeatureMEMC() {
+        ReflectedClass OplusFeatureMEMC = ReflectedClass.ofIfPossible("com.android.server.display.OplusFeatureMEMC");
 
-        if (OplusFeatureMEMC == null) {
-            log("OplusFeatureMEMC not found");
-            return;
-        }
-
-        hookAllConstructors(OplusFeatureMEMC, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                mOplusFeatureMEMC = param.thisObject;
-                mIsFeatureOn = getBooleanField(param.thisObject, "mIsFeatureOn");
-                mIsPwX7Enable = getBooleanField(param.thisObject, "mIsPwX7Enable");
-                mMemcEnable = getBooleanField(param.thisObject, "mMemcEnable");
-                mSdr2hdrEnable = getBooleanField(param.thisObject, "mSdr2hdrEnable");
-                mVideoOsieSupport = getBooleanField(param.thisObject, "mVideoOsieSupport");
-            }
-        });
+        OplusFeatureMEMC
+                .afterConstruction()
+                .run(param -> {
+                    mOplusFeatureMEMC = param.thisObject;
+                    mIsFeatureOn = getBooleanField(param.thisObject, "mIsFeatureOn");
+                    mIsPwX7Enable = getBooleanField(param.thisObject, "mIsPwX7Enable");
+                    mMemcEnable = getBooleanField(param.thisObject, "mMemcEnable");
+                    mSdr2hdrEnable = getBooleanField(param.thisObject, "mSdr2hdrEnable");
+                    mVideoOsieSupport = getBooleanField(param.thisObject, "mVideoOsieSupport");
+                });
 
     }
 
-    private void hookOplusMemcHelper(XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookOplusMemcHelper() {
 
-        Class<?> OplusMemcHelper = findClassInArray(lpparam,
+        ReflectedClass OplusMemcHelper = ReflectedClass.of(
                 "com.android.server.display.feature.vrr.memc.OplusMemcHelper", // OOS16
                 "com.android.server.display.memc.OplusMemcHelper");
 
-        hookAllMethods(OplusMemcHelper, "getConfigAppList", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                log("getConfigAppList called");
-                param.setResult(sConfigPackage);
-            }
-        });
+        OplusMemcHelper
+                .before("getConfigAppList")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    log("getConfigAppList called");
+                    param.setResult(sConfigPackage);
+                });
 
-        hookAllMethods(OplusMemcHelper, "getConfigActivityList", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                log("getConfigActivityList called");
-                param.setResult(sConfigActivity);
-            }
-        });
+        OplusMemcHelper
+                .before("getConfigActivityList")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    log("getConfigActivityList called");
+                    param.setResult(sConfigActivity);
+                });
 
-        hookAllMethods(OplusMemcHelper, "getSdr2hdrCommandMap", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                log("getSdr2hdrCommandMap called");
-                param.setResult(sSdr2hdrCommandMap);
-            }
-        });
+        OplusMemcHelper
+                .before("getSdr2hdrCommandMap")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    log("getSdr2hdrCommandMap called");
+                    param.setResult(sSdr2hdrCommandMap);
+                });
 
-        hookAllMethods(OplusMemcHelper, "getMemcCommandMap", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                log("getMemcCommandMap called");
-                param.setResult(sMemcCommandMap);
-            }
-        });
+        OplusMemcHelper
+                .before("getMemcCommandMap")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    log("getMemcCommandMap called");
+                    param.setResult(sMemcCommandMap);
+                });
 
-        hookAllMethods(OplusMemcHelper, "getAppScreenRateMap", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                log("getAppScreenRateMap called");
-                param.setResult(sAppScreenRateMap);
-            }
-        });
+        OplusMemcHelper
+                .before("getAppScreenRateMap")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    log("getAppScreenRateMap called");
+                    param.setResult(sAppScreenRateMap);
+                });
 
         /*
         public boolean isInConfigpackageList(String packageName) {
@@ -312,15 +283,15 @@ public class MemcEnhancer extends XposedMods {
         }
          */
 
-        hookAllMethods(OplusMemcHelper, "isInConfigpackageList", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                if (!useCustomMemcConfig) return;
-                String packageName = (String) param.args[0];
-                log("isInConfigpackageList called with: " + packageName + " returning: " + sConfigPackage.contains(packageName));
-                param.setResult(sConfigPackage.contains(packageName));
-            }
-        });
+        OplusMemcHelper
+                .before("isInConfigpackageList")
+                .run(param -> {
+                    if (!useCustomMemcConfig) return;
+                    String packageName = (String) param.args[0];
+                    log("isInConfigpackageList called with: " + packageName + " returning: " + sConfigPackage.contains(packageName));
+                    param.setResult(sConfigPackage.contains(packageName));
+                });
+
     }
 
     private void logLists() {

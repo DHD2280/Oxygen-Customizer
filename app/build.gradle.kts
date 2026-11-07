@@ -121,10 +121,6 @@ dependencies {
     implementation(libs.libsu.service)
     implementation(libs.libsu.nio)
 
-    // Xposed
-    compileOnly(files("libs/api-82.jar"))
-    compileOnly(files("libs/api-82-sources.jar"))
-
     // App Compat
     implementation(libs.appcompat)
 
@@ -222,6 +218,9 @@ dependencies {
         exclude(group = "com.google.guava")
     }
     implementation(libs.guava)
+
+    compileOnly(libs.lsposed.api)
+    implementation(libs.lsposed.service)
 
     // Stub classes
     compileOnly(project(":oos_launcher"))

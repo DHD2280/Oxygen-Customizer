@@ -1,9 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_BLUR_AMOUNT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_MEDIA_ART_FILTER;
@@ -42,6 +38,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsWidgetsPrefs.QS_WIDGETS_SWITCH;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -58,13 +58,13 @@ import android.view.ViewGroup;
 import com.oplus.systemui.qs.base.widget.QsStaticViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplExOC;
 import it.dhd.oxygencustomizer.xposed.utils.systemui.StaticViewBackgroundProxyImplOC;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.views.controls.QsControlsView;
 
@@ -114,7 +114,7 @@ public class QsWidgets extends XposedMods {
     }
 
     @Override
-    public void updatePrefs(String... Key) {
+    public void onPreferenceUpdated(String... Key) {
         if (Xprefs == null) return;
 
         mQsWidgetsEnabled = Xprefs.getBoolean(QS_WIDGETS_SWITCH, false);
@@ -200,7 +200,7 @@ public class QsWidgets extends XposedMods {
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         ReflectedClass OplusQSTileMediaContainer = ReflectedClass.of(
                 "com.oplus.systemui.qs.OplusQSTileMediaContainer", /* OOS 14-15 */
@@ -301,7 +301,7 @@ public class QsWidgets extends XposedMods {
             TouchHandler
                     .before("onInterceptTouchEvent")
                     .run(param -> {
-                        XposedBridge.log("QsWidgets: onInterceptTouchEvent");
+                        Logger.log("QsWidgets: onInterceptTouchEvent");
                         MotionEvent event = (MotionEvent) param.args[0];
                         hookTouchHandler(param, event, "onInterceptTouchEvent");
                     });
@@ -320,7 +320,7 @@ public class QsWidgets extends XposedMods {
 
     }
 
-    private void hookTouchHandler(XC_MethodHook.MethodHookParam param, MotionEvent event, String methodName) {
+    private void hookTouchHandler(HookHelper.RunParam param, MotionEvent event, String methodName) {
         if (!mQsWidgetsEnabled) return;
 
         if (event != null && event.getAction() == MotionEvent.ACTION_OUTSIDE) {
@@ -446,7 +446,7 @@ public class QsWidgets extends XposedMods {
                 setObjectField(mOplusPanelPagerController, "downExpanded", noneValue);
             }
         } catch (Exception e) {
-            XposedBridge.log("QsWidgets: Error setting downExpanded: " + e);
+            Logger.log("QsWidgets: Error setting downExpanded: " + e);
         }
     }
 

@@ -16,7 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import de.robv.android.xposed.XposedBridge;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+
 
 public class TimeUtils {
 
@@ -105,7 +106,7 @@ public class TimeUtils {
                 return euDateFormat.format(currentDate);
             }
         } catch (Throwable throwable) {
-            XposedBridge.log(TAG + throwable);
+            Logger.log(TAG + throwable);
         }
         return new SimpleDateFormat(usFormat, Locale.getDefault()).format(new Date());
     }

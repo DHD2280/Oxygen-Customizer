@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 
-import de.robv.android.xposed.XposedBridge;
 import it.dhd.oxygencustomizer.BuildConfig;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class NowBarController {
 
@@ -175,7 +175,7 @@ public class NowBarController {
 
     private void logD(String message) {
         if (!DEBUG) return;
-        XposedBridge.log("NowBarController" + "\n" + message + "\n" +
+        Logger.log("NowBarController" + "\n" + message + "\n" +
                 "mEnabled: " + mEnabled + "\n" +
                 "mWeatherEnabled: " + mWeatherEnabled + "\n" +
                 "mLeftMargin: " + mLeftMargin + "\n" +

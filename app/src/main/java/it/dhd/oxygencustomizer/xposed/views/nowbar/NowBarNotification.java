@@ -1,12 +1,12 @@
 package it.dhd.oxygencustomizer.xposed.views.nowbar;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.SystemNotificationListener.getNotificationListenerExternal;
 import static it.dhd.oxygencustomizer.xposed.utils.NotificationUtils.filterNotifications;
 import static it.dhd.oxygencustomizer.xposed.utils.SystemUtils.PackageManager;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;

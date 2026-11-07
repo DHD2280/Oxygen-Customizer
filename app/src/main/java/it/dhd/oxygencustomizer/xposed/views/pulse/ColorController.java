@@ -26,7 +26,7 @@ package it.dhd.oxygencustomizer.xposed.views.pulse;
  *
  */
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 
 import android.annotation.SuppressLint;
 import android.app.WallpaperColors;
@@ -36,8 +36,6 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
-
-import java.util.List;
 
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;

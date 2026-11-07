@@ -4,14 +4,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class TileContainerView extends ViewGroup {
     public int mCellHeight;
