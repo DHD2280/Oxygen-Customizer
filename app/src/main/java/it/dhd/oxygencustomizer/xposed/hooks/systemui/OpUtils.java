@@ -117,7 +117,7 @@ public class OpUtils extends XposedMods {
     public static int getPrimaryColor(Context mContext) {
         if (mContext == null) return Color.WHITE;
         int colorIfNull = ResourcesCompat.getColor(mContext.getResources(), android.R.color.system_accent1_600, mContext.getTheme());
-        if (OpUtils.getClazz() == null) return colorIfNull;
+        if (OpUtils == null || OpUtils.getClazz() == null) return colorIfNull;
         int color;
         try {
             color = (int) callStaticMethod(OpUtils.getClazz(), "getThemeAccentColor", mContext, true);

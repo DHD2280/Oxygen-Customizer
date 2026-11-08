@@ -96,11 +96,7 @@ public class ProgressImageView extends ImageView {
             appContext = mContext.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY);
         } catch (Throwable ignored) {}
         progressType = ProgressType.UNKNOWN;
-        try {
-            mProgressColor = getPrimaryColor(mContext);
-        } catch (Throwable ignored) { //Run in app, not xposed
-            mProgressColor = ResourcesCompat.getColor(mContext.getResources(), android.R.color.system_accent1_600, mContext.getTheme());
-        }
+        mProgressColor = getPrimaryColor(mContext);
     }
 
     public void setProgressType(ProgressType progressType) {
