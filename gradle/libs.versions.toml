@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "9.3.3"
+agp = "9.5.1"
 kandroid = "2.4.21"
 kapt = "2.4.21"
 
