@@ -7,6 +7,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.findClassInAr
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClassIfExists;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticObjectField;
 
@@ -35,6 +36,7 @@ public class OpUtils extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     public static Class<?> QsColorUtil = null;
     private static ReflectedClass OpUtils = null;
+    private static Class<?> OplusQSSpecialModeProvider = null;
     private static Class<?> QSFragmentHelper = null;
     private Context mSysuiAppContext = null;
     private static Object LunarHelper = null;
@@ -197,6 +199,16 @@ public class OpUtils extends XposedMods {
         return isLeftHidden;
     }
 
+    public static boolean isQsColorfulEnabled() {
+        if (OplusQSSpecialModeProvider == null) return false;
+        try {
+            Object provider = callStaticMethod(OplusQSSpecialModeProvider, "getInstance");
+            return (boolean) callMethod(provider, "getColorfulSettingEnable");
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
     @Override
     public void onPreferenceUpdated(String... Key) {
     }
@@ -226,6 +238,8 @@ public class OpUtils extends XposedMods {
         Class<?> LunarHelperClass = findClassInArray(PRParam,
                 "com.oplus.systemui.keyguard.clock.LunarHelper", // OOS14
                 "com.oplusos.systemui.keyguard.clock.LunarHelper" /* OOS13 */);
+
+        OplusQSSpecialModeProvider = findClassIfExists("com.oplus.systemui.plugins.qs.OplusQSSpecialModeProvider", PRParam.getClassLoader());
 
         if (LunarHelperClass != null) {
             if (Build.VERSION.SDK_INT >= 35) {

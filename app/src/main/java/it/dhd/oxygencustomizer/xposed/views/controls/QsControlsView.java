@@ -110,10 +110,14 @@ import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileHelper;
 import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.utils.systemui.StockQsTileResources;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTile;
 import it.dhd.oxygencustomizer.xposed.views.controls.media.QsMediaTileI;
 import it.dhd.oxygencustomizer.xposed.views.controls.photo.QsPhotoShowcaseContainer;
+import it.dhd.oxygencustomizer.xposed.views.controls.tile.QsStockHighlightContainer;
+import it.dhd.oxygencustomizer.xposed.views.controls.tile.QsStockHighlightTile;
+import it.dhd.oxygencustomizer.xposed.views.controls.tile.QsStockTileImageView;
 import it.dhd.oxygencustomizer.xposed.views.controls.weather.QsWeatherWidget;
 
 @SuppressLint("ViewConstructor")
@@ -124,6 +128,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
     private static final String TAG = "QsControlsView: ";
 
+    private static final int STOCK_TILE_ICON_SIZE_DP = 28;
     private static final int QS_BG_INACTIVE = Color.parseColor("#CCFFFFFF");
     private static final int QS_BG_INACTIVE_DARK = Color.parseColor("#33FFFFFF");
     private static final int ICON_LIGHT_COLOR = Color.parseColor("#99000000");
@@ -683,15 +688,15 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             // One big FAB
             ExtendedFAB fab = createFAB();
             setUpWidgetWiews(null, fab, group.get(0));
-            firstRow.addView(fab);
+            firstRow.addView(rowItem(fab));
         } else if (numItems == 2) {
             // Two big FABs, one per row
             ExtendedFAB fab = createFAB();
             ExtendedFAB fab2 = createFAB();
             setUpWidgetWiews(null, fab, group.get(0));
             setUpWidgetWiews(null, fab2, group.get(1));
-            firstRow.addView(fab);
-            secondRow.addView(fab2);
+            firstRow.addView(rowItem(fab));
+            secondRow.addView(rowItem(fab2));
         } else if (numItems == 3) {
             // Two small ImageViews in first row, one big FAB in second
             Space space1 = createSpace();
@@ -701,14 +706,10 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             Space space3 = createSpace();
             setUpWidgetWiews(iv1, null, group.get(0));
             setUpWidgetWiews(iv2, null, group.get(1));
-            firstRow.addView(space1);
-            firstRow.addView(iv1);
-            firstRow.addView(space2);
-            firstRow.addView(iv2);
-            firstRow.addView(space3);
+            addTilesToRow(firstRow, space1, iv1, space2, iv2, space3);
             ExtendedFAB fab = createFAB();
             setUpWidgetWiews(null, fab, group.get(2));
-            secondRow.addView(fab);
+            secondRow.addView(rowItem(fab));
         } else {
             // Four small ImageViews, two per row
             Space space1 = createSpace();
@@ -718,11 +719,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             Space space3 = createSpace();
             setUpWidgetWiews(iv1, null, group.get(0));
             setUpWidgetWiews(iv2, null, group.get(1));
-            firstRow.addView(space1);
-            firstRow.addView(iv1);
-            firstRow.addView(space2);
-            firstRow.addView(iv2);
-            firstRow.addView(space3);
+            addTilesToRow(firstRow, space1, iv1, space2, iv2, space3);
 
             Space space4 = createSpace();
             ImageView iv3 = createImageView();
@@ -731,11 +728,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             Space space6 = createSpace();
             setUpWidgetWiews(iv3, null, group.get(2));
             setUpWidgetWiews(iv4, null, group.get(3));
-            secondRow.addView(space4);
-            secondRow.addView(iv3);
-            secondRow.addView(space5);
-            secondRow.addView(iv4);
-            secondRow.addView(space6);
+            addTilesToRow(secondRow, space4, iv3, space5, iv4, space6);
         }
 
         for (int i = 0; i < firstRow.getChildCount(); i++) {
@@ -744,6 +737,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 updateWidgetsResources((ImageView) v);
             } else if (v instanceof ExtendedFAB) {
                 updateMainWidgetResources((ExtendedFAB) v, false);
+            } else if (v instanceof QsStockHighlightContainer container) {
+                updateMainWidgetResources(container.getTile(), false);
             }
         }
         for (int i = 0; i < secondRow.getChildCount(); i++) {
@@ -752,6 +747,8 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 updateWidgetsResources((ImageView) v);
             } else if (v instanceof ExtendedFAB) {
                 updateMainWidgetResources((ExtendedFAB) v, false);
+            } else if (v instanceof QsStockHighlightContainer container) {
+                updateMainWidgetResources(container.getTile(), false);
             }
         }
 
@@ -761,7 +758,52 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         return widgetsContainer;
     }
 
+    private void addTilesToRow(LinearLayout row, Space start, ImageView first, Space middle, ImageView second, Space end) {
+        boolean edgeAligned = first instanceof QsStockTileImageView && useStockTiles();
+        if (!edgeAligned) row.addView(start);
+        row.addView(first);
+        row.addView(middle);
+        row.addView(second);
+        if (!edgeAligned) row.addView(end);
+    }
+
+    private View rowItem(ExtendedFAB fab) {
+        if (fab instanceof QsStockHighlightTile tile && tile.getContainer() != null)
+            return tile.getContainer();
+        return fab;
+    }
+
+    private boolean useStockTiles() {
+        return StockQsTileResources.isSupported() && !mCustomTileRadius && !mCustomActive && !mCustomInactive;
+    }
+
+    private boolean useStockHighlight() {
+        return StockQsTileResources.isSupported() && !mCustomFabRadius && !mCustomHighlightActive && !mCustomHighlightInactive;
+    }
+
     private ExtendedFAB createFAB() {
+        if (useStockHighlight()) {
+            QsStockHighlightTile tile = new QsStockHighlightTile(mContext);
+            tile.setId(View.generateViewId());
+            QsStockHighlightContainer container = new QsStockHighlightContainer(mContext, tile);
+            container.setId(View.generateViewId());
+            container.setLayoutParams(new LinearLayout.LayoutParams(0, StockQsTileResources.getCapsuleSize(container), 1));
+            tile.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            tile.setSingleLine(true);
+            tile.setMarqueeRepeatLimit(-1);
+            tile.setFocusable(false);
+            tile.setFocusableInTouchMode(false);
+            tile.setHorizontallyScrolling(true);
+            tile.setClickable(true);
+            tile.setTypeface(null, Typeface.BOLD);
+            tile.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+            tile.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) tile.setSelected(true);
+            });
+            QsTileTouchAnim anim = new QsTileTouchAnim();
+            anim.initTouchAnim(container, true);
+            return tile;
+        }
         ExtendedFAB fab = new ExtendedFAB(mContext);
         int resIdH = mContext.getResources().getIdentifier("qs_footer_hl_tile_height_with_media_with_volume", "dimen", SYSTEM_UI);
         if (resIdH == 0) {
@@ -831,23 +873,34 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
 
         ImageView imageView;
         try {
-            imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(mContext);
+            if (StockQsTileResources.isSupported()) {
+                imageView = new QsStockTileImageView(mContext);
+            } else {
+                imageView = (ImageView) LaunchableImageView.getConstructor(Context.class).newInstance(mContext);
+            }
         } catch (Exception e) {
             // LaunchableImageView not found or other error, ensure the creation of our ImageView
             imageView = new ImageView(mContext);
         }
 
         imageView.setId(View.generateViewId());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                QsTileHelper.getQsTileSize(mContext, QsTileHelper.TYPE_QS_QUICK_TILE_SIZE),
-                QsTileHelper.getQsTileSize(mContext, QsTileHelper.TYPE_QS_QUICK_TILE_SIZE)); // Weight 1 for small views
-        params.gravity = Gravity.CENTER;
-        imageView.setLayoutParams(params);
-        imageView.setPadding(
-                dp2px(mContext, 10),
-                dp2px(mContext, 10),
-                dp2px(mContext, 10),
-                dp2px(mContext, 10));
+        if (imageView instanceof QsStockTileImageView && useStockTiles()) {
+            int size = StockQsTileResources.getCapsuleSize(imageView);
+            int padding = (size - dp2px(mContext, STOCK_TILE_ICON_SIZE_DP)) / 2;
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(size, size));
+            imageView.setPadding(padding, padding, padding, padding);
+        } else {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    QsTileHelper.getQsTileSize(mContext, QsTileHelper.TYPE_QS_QUICK_TILE_SIZE),
+                    QsTileHelper.getQsTileSize(mContext, QsTileHelper.TYPE_QS_QUICK_TILE_SIZE)); // Weight 1 for small views
+            params.gravity = Gravity.CENTER;
+            imageView.setLayoutParams(params);
+            imageView.setPadding(
+                    dp2px(mContext, 10),
+                    dp2px(mContext, 10),
+                    dp2px(mContext, 10),
+                    dp2px(mContext, 10));
+        }
         imageView.setFocusable(true);
         imageView.setClickable(true);
         QsTileTouchAnim anim = new QsTileTouchAnim();
@@ -892,7 +945,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             bgTintFab = mCustomHighlightInactive ? mCustomHighlightInactiveColor : mInactiveColor;
             tintColorFab = mIconInactiveColor;
         }
-        if (iv != null) {
+        if (iv != null && useStockTile(iv)) {
+            QsStockTileImageView stockTile = (QsStockTileImageView) iv;
+            stockTile.setTileState(active ? StockQsTileResources.STATE_ACTIVE : StockQsTileResources.STATE_INACTIVE);
+            boolean keepOriginalIcon = (iv.getTag() != null && iv.getTag().equals("app")) || iv == weatherButton;
+            if (keepOriginalIcon) {
+                stockTile.setUseStockIconColors(false);
+                iv.setImageTintList(null);
+            } else {
+                stockTile.setUseStockIconColors(true);
+            }
+        } else if (iv != null) {
             iv.setBackgroundTintList(ColorStateList.valueOf(bgTint));
             if (iv.getTag() != null && iv.getTag().equals("app")) {
                 iv.setImageTintList(null);
@@ -904,7 +967,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
                 }
             }
         }
-        if (efab != null) {
+        if (efab != null && useStockHighlight(efab)) {
+            QsStockHighlightTile stockTile = (QsStockHighlightTile) efab;
+            stockTile.setTileState(active ? StockQsTileResources.STATE_ACTIVE : StockQsTileResources.STATE_INACTIVE);
+            boolean keepOriginalIcon = (efab.getTag() != null && efab.getTag().equals("app")) || efab == weatherButtonFab;
+            stockTile.setUseStockIconColors(!keepOriginalIcon);
+        } else if (efab != null) {
             efab.setBackgroundTintList(ColorStateList.valueOf(bgTintFab));
             efab.setBackgroundTintMode(PorterDuff.Mode.SRC_IN);
             if (efab.getTag() != null && efab.getTag().equals("app")) {
@@ -950,8 +1018,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         return groups;
     }
 
+    private boolean useStockHighlight(ExtendedFAB efab) {
+        return efab instanceof QsStockHighlightTile && useStockHighlight();
+    }
+
     private void updateMainWidgetResources(ExtendedFAB efab, boolean active) {
         if (efab == null) return;
+        if (useStockHighlight(efab)) {
+            ((QsStockHighlightTile) efab).applyStockBackground();
+            setButtonActiveState(null, efab, active);
+            return;
+        }
         ShapeDrawable shapeDrawable = new ShapeDrawable();
         if (mCustomFabRadius) {
             shapeDrawable.setShape(new RoundRectShape(mFabRadius, null, null));
@@ -969,8 +1046,17 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         setButtonActiveState(null, efab, false);
     }
 
+    private boolean useStockTile(ImageView iv) {
+        return iv instanceof QsStockTileImageView && !mCustomTileRadius && !mCustomActive && !mCustomInactive;
+    }
+
     private void updateWidgetsResources(ImageView iv) {
         if (iv == null) return;
+        if (useStockTile(iv)) {
+            ((QsStockTileImageView) iv).applyStockBackground();
+            setButtonActiveState(iv, null, false);
+            return;
+        }
         ShapeDrawable shapeDrawable = new ShapeDrawable();
         if (mCustomTileRadius) {
             shapeDrawable.setShape(new RoundRectShape(mTileRadius, null, null));
@@ -1025,6 +1111,12 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     }
 
     private void setUpWidgetWiews(ImageView iv, ExtendedFAB efab, String widgetType) {
+        if (iv instanceof QsStockTileImageView stockTile) {
+            stockTile.setColorfulConfig(StockQsTileResources.getColorfulConfig(iv, widgetType));
+        }
+        if (efab instanceof QsStockHighlightTile stockHighlight) {
+            stockHighlight.setColorfulConfig(StockQsTileResources.getColorfulConfig(efab, widgetType));
+        }
         if (widgetType.contains(":")) {
             String[] parts = widgetType.split(":");
             if (parts[0].startsWith("ca")) {

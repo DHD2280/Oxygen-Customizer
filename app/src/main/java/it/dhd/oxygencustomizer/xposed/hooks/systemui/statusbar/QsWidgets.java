@@ -50,7 +50,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -512,7 +511,7 @@ public class QsWidgets extends XposedMods {
             updatePhotoRadius();
             updateShowcaseMode();
         } catch (Throwable t) {
-            log("Error while placing widgets: " + Log.getStackTraceString(t));
+            log(t);
         }
     }
 

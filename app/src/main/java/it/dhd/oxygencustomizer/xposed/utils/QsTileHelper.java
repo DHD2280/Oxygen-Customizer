@@ -13,6 +13,9 @@ import android.graphics.drawable.shapes.PathShape;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Log;
 
+import com.android.systemui.DependencyEx;
+import com.android.systemui.qs.OplusQuickSettingsEx;
+
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 
@@ -96,7 +99,22 @@ public class QsTileHelper {
     }
 
     public static float getHighlightRadius(Context c) {
-        return (float) callMethod(PersonalityManager, "getHighlightRadius", c);
+        try {
+            return (float) callMethod(resolvePersonalityManager(), "getHighlightRadius", c);
+        } catch (Throwable t) {
+            Logger.log("QsTileHelper, get highlight radius error: \n" + Log.getStackTraceString(t));
+            return getShapeRadius(c, -1);
+        }
+    }
+
+    private static Object resolvePersonalityManager() {
+        if (PersonalityManager != null) return PersonalityManager;
+        if (PersonalityManagerEx != null) return PersonalityManagerEx;
+        try {
+            return ((OplusQuickSettingsEx) DependencyEx.get(OplusQuickSettingsEx.class)).getPersonalityManagerEx();
+        } catch (Throwable ignored) {
+            return ((OplusQuickSettingsEx) DependencyEx.sDependency.getDependency(OplusQuickSettingsEx.class)).getPersonalityManagerEx();
+        }
     }
 
     public static PathShape getLastShape(Context c) {
