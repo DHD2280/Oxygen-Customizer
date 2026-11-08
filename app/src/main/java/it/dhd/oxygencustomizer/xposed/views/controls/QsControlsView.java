@@ -518,13 +518,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             mIconInactiveColor = isNightMode() ? ICON_LIGHT_COLOR : ICON_DARK_COLOR;
         }
 
-        String res = "status_bar_qs_tile_icon_color_active";
+        int activeColorId = 0;
         if (Build.VERSION.SDK_INT >= 35 && isNightMode()) {
-            res = "status_bar_qs_tile_icon_color_active_night";
+            activeColorId = mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active_night", "color", SYSTEM_UI);
+        }
+        if (activeColorId == 0) {
+            activeColorId = mContext.getResources().getIdentifier("status_bar_qs_tile_icon_color_active", "color", SYSTEM_UI);
         }
         mIconActiveColor = ResourcesCompat.getColor(
                 mContext.getResources(),
-                mContext.getResources().getIdentifier(res, "color", SYSTEM_UI),
+                activeColorId,
                 appContext.getTheme()
         );
     }
@@ -1494,7 +1497,11 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private boolean isMobileDataEnabled() {
         Object dataController = getDataController();
         if (dataController != null) {
-            return (boolean) callMethod(dataController, "isMobileDataEnabled");
+            try {
+                return (boolean) callMethod(dataController, "isMobileDataEnabled");
+            } catch (NoSuchMethodError ignored) {
+                return ((android.telephony.TelephonyManager) callMethod(dataController, "getTelephonyManager")).isDataEnabled();
+            }
         } else {
             try {
                 Class<?> cmClass = Class.forName(SystemUtils.ConnectivityManager().getClass().getName());

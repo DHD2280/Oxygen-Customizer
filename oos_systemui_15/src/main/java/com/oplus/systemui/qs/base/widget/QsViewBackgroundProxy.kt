@@ -59,6 +59,10 @@ abstract class QsViewBackgroundProxy(val qsView: QsViewInfoProvider?) : QsViewBa
             throw UnsupportedOperationException("Stub!")
         }
 
+        fun getQsStaticViewBackgroundProxy(qsStaticViewInfoProvider: QsStaticViewInfoProvider?): QsViewBackgroundProxy? {
+            throw UnsupportedOperationException("Stub!")
+        }
+
         fun getQsTileViewBackgroundProxy(qsTileViewInfoProvider: QsTileViewInfoProvider?): QsViewBackgroundProxy {
             throw UnsupportedOperationException("Stub!")
         }

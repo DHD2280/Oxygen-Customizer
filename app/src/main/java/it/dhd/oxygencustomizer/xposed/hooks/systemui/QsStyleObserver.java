@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExactIfExists;
 
 import android.content.Context;
 import android.os.Build;
@@ -43,6 +44,10 @@ public class QsStyleObserver extends XposedMods {
 
     public static boolean isSeparateStyle() {
         if (OplusQsStyle == null) return false;
+        if (findMethodExactIfExists(OplusQsStyle.getClass(), "getEnableSeparateNotificationAndQS") != null) {
+            Object stateFlow = callMethod(OplusQsStyle, "getEnableSeparateNotificationAndQS");
+            return Boolean.TRUE.equals(callMethod(stateFlow, "getValue"));
+        }
         return (boolean) callMethod(OplusQsStyle, "getSeparateNotificationAndQSStateBySettings");
     }
 

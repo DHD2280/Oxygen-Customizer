@@ -4,9 +4,11 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -25,6 +27,13 @@ import com.oplusos.systemui.common.blurability.MixColor;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
+import java.util.function.Function;
+
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStyleObserver;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
+
 public abstract class BaseQsStaticView extends LaunchableLinearLayout implements QsStaticViewInfoProvider {
 
     private Context mContext;
@@ -35,7 +44,15 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
     public BaseQsStaticView(@Nullable Context context) {
         super(context);
         mContext = context;
-        backgroundProxy = QsViewBackgroundProxy.Companion.getMediaPanelBackgroundProxy(this);
+        backgroundProxy = createBackgroundProxy(this);
+    }
+
+    private static QsViewBackgroundProxy createBackgroundProxy(QsStaticViewInfoProvider provider) {
+        try {
+            return QsViewBackgroundProxy.Companion.getQsStaticViewBackgroundProxy(provider);
+        } catch (NoSuchMethodError ignored) {
+            return QsViewBackgroundProxy.Companion.getMediaPanelBackgroundProxy(provider);
+        }
     }
 
     @Override
@@ -60,10 +77,11 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
 
     @Override
     public int getNormalBackGroundColor() {
-        if (Build.VERSION.SDK_INT >= 36) {
-            return QsColorUtil.obtainColorForQsPanelBackground(getContext(), false, false);
-        }
-        return QsColorUtil.obtainColorForQsPanelBackground(getContext());
+        return switch (Build.VERSION.SDK_INT) {
+            case 37 -> Color.parseColor("#33FFFFFF");
+            case 36 -> QsColorUtil.obtainColorForQsPanelBackground(getContext(), false, false);
+            default -> QsColorUtil.obtainColorForQsPanelBackground(getContext());
+        };
     }
 
     @Override
@@ -79,7 +97,97 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
         } catch (Throwable ignored) {
             personalityManagerEx = ((OplusQuickSettingsEx) DependencyEx.sDependency.getDependency(OplusQuickSettingsEx.class)).getPersonalityManagerEx();
         }
-        return QsViewOutlineProviderKt.getMediaPanelViewOutlineProvider(this, personalityManagerEx);
+        try {
+            return QsViewOutlineProviderKt.getMediaPanelViewOutlineProvider(this, personalityManagerEx);
+        } catch (NoClassDefFoundError | NoSuchMethodError ignored) {
+            return createRoundRectOutlineProvider(personalityManagerEx);
+        }
+    }
+
+    private QsViewOutlineProvider createRoundRectOutlineProvider(PersonalityManagerEx personalityManagerEx) {
+        try {
+            Class<?> roundRectProvider = ReflectionHelpers.findClass(
+                    "com.oplus.systemui.qs.base.widget.QsViewOutlineProvider$QsViewRoundRectOutlineProvider",
+                    getClass().getClassLoader());
+            Function<Context, Float> radius = context -> personalityManagerEx.getMediaPanelRadius(context);
+            return (QsViewOutlineProvider) roundRectProvider
+                    .getConstructor(View.class, Function.class)
+                    .newInstance(this, radius);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public void updateBackground(Drawable drawable) {
+        if (applyStockMediaPanelBackground()) return;
+        QsStaticViewInfoProvider.super.updateBackground(drawable);
+    }
+
+    private Drawable mStockBgWrapper;
+    private Drawable mStockThemeBgWrapper;
+    private Drawable mStockTransitionDrawable;
+
+    private boolean applyStockMediaPanelBackground() {
+        if (Build.VERSION.SDK_INT < 37) return false;
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            if (mStockTransitionDrawable == null) {
+                Constructor<?> wrapperConstructor = ReflectionHelpers.findClass("com.oplus.systemui.qs.base.res.drawable.TileDrawableWrapper", classLoader)
+                        .getConstructor(Drawable.class);
+                mStockBgWrapper = (Drawable) wrapperConstructor.newInstance((Object) null);
+                mStockThemeBgWrapper = (Drawable) wrapperConstructor.newInstance((Object) null);
+                mStockTransitionDrawable = (Drawable) ReflectionHelpers.findClass("com.oplus.systemui.qs.media.multilight.OplusQsMediaBackgroundDrawable", classLoader)
+                        .getConstructor(Context.class, Drawable.class, Drawable.class)
+                        .newInstance(getContext(), mStockBgWrapper, mStockThemeBgWrapper);
+            }
+
+            Object panelBuilder;
+            Object outline;
+            if (QsStyleObserver.isSeparateStyle()) {
+                Object sepResPool = ReflectionHelpers.getStaticObjectField(
+                        ReflectionHelpers.findClass("com.oplus.systemui.qs.base.res.SepQSResPool", classLoader), "INSTANCE");
+                panelBuilder = stateFlowValue(ReflectionHelpers.callMethod(sepResPool, "getMediaPanelDrawable"));
+                outline = stateFlowValue(ReflectionHelpers.callMethod(sepResPool, "getMediaPanelOutline"));
+                setWrappedDrawable(mStockThemeBgWrapper,
+                        buildQsDrawable(stateFlowValue(ReflectionHelpers.callMethod(sepResPool, "getMediaPanelThemeDrawable")), false));
+                boolean globalTheme = (boolean) ReflectionHelpers.callStaticMethod(
+                        ReflectionHelpers.findClass("com.oplus.systemui.qs.base.res.BaseQSResPool", classLoader), "globalThemeApplied");
+                ReflectionHelpers.callMethod(mStockTransitionDrawable, "setTransitionAlpha", globalTheme ? 0 : 255);
+            } else {
+                Class<?> stdResPool = ReflectionHelpers.findClass("com.oplus.systemui.qs.base.res.StdQSResPool", classLoader);
+                panelBuilder = stateFlowValue(ReflectionHelpers.getStaticObjectField(stdResPool, "mediaPanelDrawable"));
+                outline = stateFlowValue(ReflectionHelpers.callMethod(ReflectionHelpers.getStaticObjectField(stdResPool, "INSTANCE"), "getMediaPanelOutline"));
+            }
+            setWrappedDrawable(mStockBgWrapper, buildQsDrawable(panelBuilder, true));
+
+            ReflectionHelpers.callMethod(mStockTransitionDrawable, "setPathProvider", outline);
+            Object cornerRadius = ReflectionHelpers.callMethod(outline, "getCornerRadius", new Class<?>[]{Drawable.class}, mStockTransitionDrawable);
+            Object cornerWeight = ReflectionHelpers.callMethod(outline, "getCornerWeight", new Class<?>[]{Drawable.class}, mStockTransitionDrawable);
+            ReflectionHelpers.callMethod(mStockTransitionDrawable, "setCornerParams",
+                    new Class<?>[]{float.class, Float.class}, cornerRadius, cornerWeight);
+
+            setOutlineProvider((ViewOutlineProvider) outline);
+            setClipToOutline(true);
+            setBackground(mStockTransitionDrawable);
+            return true;
+        } catch (Throwable t) {
+            Logger.log(t);
+            return false;
+        }
+    }
+
+    private static Object stateFlowValue(Object stateFlow) {
+        return ReflectionHelpers.callMethod(stateFlow, "getValue");
+    }
+
+    private Drawable buildQsDrawable(Object builder, boolean useDefaultFlag) {
+        return (Drawable) ReflectionHelpers.callMethod(builder, "build",
+                new Class<?>[]{View.class, boolean.class, Integer.class}, this, useDefaultFlag, null);
+    }
+
+    private static void setWrappedDrawable(Drawable wrapper, Drawable drawable) {
+        ReflectionHelpers.callMethod(wrapper, "setDrawable", new Class<?>[]{Drawable.class}, drawable);
     }
 
     public void reloadBackground() {
@@ -95,6 +203,7 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        applyStockMediaPanelBackground();
         if (!mSettingsInterface) {
             attachPressFeedback(this, this);
         }
