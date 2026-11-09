@@ -75,13 +75,34 @@ public abstract class BaseQsStaticView extends LaunchableLinearLayout implements
         return null;
     }
 
+    private static final int BG_COLOR_SOURCE_UNRESOLVED = -1;
+    private static final int BG_COLOR_SOURCE_FIXED = 0;
+    private static final int BG_COLOR_SOURCE_EXTENDED = 1;
+    private static final int BG_COLOR_SOURCE_LEGACY = 2;
+    private static final int FIXED_NORMAL_BACKGROUND_COLOR = Color.parseColor("#33FFFFFF");
+
+    private static int sBgColorSource = BG_COLOR_SOURCE_UNRESOLVED;
+
     @Override
     public int getNormalBackGroundColor() {
-        return switch (Build.VERSION.SDK_INT) {
-            case 37 -> Color.parseColor("#33FFFFFF");
-            case 36 -> QsColorUtil.obtainColorForQsPanelBackground(getContext(), false, false);
-            default -> QsColorUtil.obtainColorForQsPanelBackground(getContext());
-        };
+        if (sBgColorSource == BG_COLOR_SOURCE_UNRESOLVED) {
+            sBgColorSource = Build.VERSION.SDK_INT >= 37 ? BG_COLOR_SOURCE_FIXED : BG_COLOR_SOURCE_EXTENDED;
+        }
+        if (sBgColorSource == BG_COLOR_SOURCE_EXTENDED) {
+            try {
+                return QsColorUtil.obtainColorForQsPanelBackground(getContext(), false, false);
+            } catch (NoSuchMethodError ignored) {
+                sBgColorSource = BG_COLOR_SOURCE_LEGACY;
+            }
+        }
+        if (sBgColorSource == BG_COLOR_SOURCE_LEGACY) {
+            try {
+                return QsColorUtil.obtainColorForQsPanelBackground(getContext());
+            } catch (NoSuchMethodError ignored) {
+                sBgColorSource = BG_COLOR_SOURCE_FIXED;
+            }
+        }
+        return FIXED_NORMAL_BACKGROUND_COLOR;
     }
 
     @Override
