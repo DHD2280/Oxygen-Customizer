@@ -3,6 +3,7 @@ package it.dhd.oxygencustomizer.xposed.hooks.launcher;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExact;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
@@ -36,6 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.libxposed.api.XposedModuleInterface;
+import io.github.neonorbit.dexplore.DexFactory;
+import io.github.neonorbit.dexplore.Dexplore;
+import io.github.neonorbit.dexplore.filter.ClassFilter;
+import io.github.neonorbit.dexplore.filter.MethodFilter;
+import io.github.neonorbit.dexplore.filter.ReferenceTypes;
+import io.github.neonorbit.dexplore.reference.MethodRefData;
+import io.github.neonorbit.dexplore.result.MethodData;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
@@ -297,22 +305,7 @@ public class Launcher extends XposedMods {
                 UiConfig
                         .before("getSupportLayout")
                         .run(param -> {
-                            /*
-                                List<Pair<Integer, Pair<Integer, Integer>>> getLayoutNormal()
-                             */
-                            if (!mRearrangeHome) return;
-                            ArrayList<Pair<Integer, Pair<Integer, Integer>>> arrayList = new ArrayList<>();
-
-                            int MIN_COLS = 3;
-                            int MIN_ROWS = 4;
-
-                            for (int col = MIN_COLS; col <= mMaxColumns; col++) {
-                                for (int row = MIN_ROWS; row <= mMaxRows; row++) {
-                                    arrayList.add(Pair.create(col, Pair.create(row, row)));
-
-                                }
-                            }
-                            param.setResult(arrayList);
+                            if (mRearrangeHome) param.setResult(buildSupportLayouts());
                         });
             }
 
@@ -330,6 +323,19 @@ public class Launcher extends XposedMods {
                     });
         } catch (Throwable t) {
             log("Error in Launcher Layout " + t);
+        }
+
+        if (Build.VERSION.SDK_INT >= 37) {
+            try {
+                hookObfuscatedUiConfig(PRParam);
+            } catch (Throwable t) {
+                log(t);
+            }
+            try {
+                hookPredefinedDeviceProfiles();
+            } catch (Throwable t) {
+                log(t);
+            }
         }
 
         ReflectedClass OplusFastScrollLayoutClass = ReflectedClass.of(
@@ -724,6 +730,115 @@ public class Launcher extends XposedMods {
             }
         }
         return null;
+    }
+
+    //COS17 changed everything
+    private void hookObfuscatedUiConfig(XposedModuleInterface.PackageReadyParam PRParam) {
+        ClassLoader classLoader = PRParam.getClassLoader();
+        Dexplore dexplore = DexFactory.load(PRParam.getApplicationInfo().sourceDir);
+
+        ClassFilter adapterFilter = ClassFilter.builder()
+                .setClasses("com.android.launcher.togglebar.adapter.ToggleBarDialogLayoutAdapter")
+                .build();
+        MethodFilter adapterConstructorFilter = MethodFilter.builder()
+                .setMethodNames("<init>")
+                .setReferenceTypes(ReferenceTypes.builder().addMethodWithDetails().build())
+                .build();
+        MethodData adapterConstructor = dexplore.findMethod(adapterFilter, adapterConstructorFilter);
+        if (adapterConstructor == null) {
+            log("ToggleBarDialogLayoutAdapter constructor not found");
+            return;
+        }
+
+        MethodRefData supportLayoutRef = null;
+        for (MethodRefData ref : adapterConstructor.getReferencePool().getMethodSection()) {
+            if (!ref.getParameterTypes().isEmpty() || !ArrayList.class.getName().equals(ref.getReturnType()))
+                continue;
+            ClassFilter uiConfigFilter = ClassFilter.builder()
+                    .setClasses(ref.getDeclaringClass())
+                    .setSourceNames("UiConfig.java")
+                    .build();
+            if (dexplore.findClass(uiConfigFilter) != null) {
+                supportLayoutRef = ref;
+                break;
+            }
+        }
+        if (supportLayoutRef == null) {
+            log("UiConfig.getSupportLayout not found");
+            return;
+        }
+
+        String supportLayoutSignature = supportLayoutRef.getSignature();
+        MethodFilter isSupportLayoutFilter = MethodFilter.builder()
+                .setParamList(List.of("int", "int"))
+                .setReturnType("boolean")
+                .setReferenceTypes(ReferenceTypes.builder().addMethodWithDetails().build())
+                .setReferenceFilter(pool -> pool.methodSignaturesContain(supportLayoutSignature))
+                .build();
+        MethodData isSupportLayout = dexplore.findMethod(
+                ClassFilter.builder().setClasses(supportLayoutRef.getDeclaringClass()).build(),
+                isSupportLayoutFilter);
+
+        Class<?> uiConfigClass = ReflectedClass.of(supportLayoutRef.getDeclaringClass(), classLoader).getClazz();
+        ReflectedClass UiConfig = ReflectedClass.of(uiConfigClass);
+        UiConfig
+                .before(findMethodExact(uiConfigClass, supportLayoutRef.getName()))
+                .run(param -> {
+                    if (mRearrangeHome) param.setResult(buildSupportLayouts());
+                });
+
+        if (isSupportLayout == null) {
+            log("UiConfig.isSupportLayout not found");
+            return;
+        }
+        UiConfig
+                .before(isSupportLayout.loadMethod(classLoader))
+                .run(param -> {
+                    if (mRearrangeHome) param.setResult(true);
+                });
+    }
+
+    private void hookPredefinedDeviceProfiles() {
+        ReflectedClass InvariantDeviceProfile = ReflectedClass.of("com.android.launcher3.InvariantDeviceProfile");
+        InvariantDeviceProfile
+                .after("getPredefinedDeviceProfiles")
+                .run(param -> {
+                    if (!mRearrangeHome || param.args.length < 2 || !(param.args[1] instanceof String gridName))
+                        return;
+                    String[] shape = gridName.split("_by_");
+                    if (shape.length != 2) return;
+                    int columns, rows;
+                    try {
+                        columns = Integer.parseInt(shape[0]);
+                        rows = Integer.parseInt(shape[1]);
+                    } catch (NumberFormatException ignored) {
+                        return;
+                    }
+                    if (columns < 3 || columns > mMaxColumns || rows < 4 || rows > mMaxRows) return;
+                    if (!(param.getResult() instanceof ArrayList<?> options) || options.isEmpty())
+                        return;
+                    Object option = options.get(0);
+                    Object gridOption = getObjectField(option, "grid");
+                    if (gridOption == null || gridName.equals(getObjectField(gridOption, "name")))
+                        return;
+                    setObjectField(gridOption, "name", gridName);
+                    setIntField(gridOption, "numColumns", columns);
+                    setIntField(gridOption, "numRows", rows);
+                    setBooleanField(gridOption, "isEnabled", true);
+                    ArrayList<Object> result = new ArrayList<>();
+                    result.add(option);
+                    param.setResult(result);
+                });
+    }
+
+    private ArrayList<Pair<Integer, Pair<Integer, Integer>>> buildSupportLayouts() {
+        ArrayList<Pair<Integer, Pair<Integer, Integer>>> layouts = new ArrayList<>();
+        for (int col = 3; col <= mMaxColumns; col++) {
+            for (int row = 4; row <= mMaxRows; row++) {
+                layouts.add(Pair.create(col, Pair.create(row, row)));
+            }
+        }
+        return layouts;
     }
 
     private void launchFirstResult(Object launcher) throws Throwable {
