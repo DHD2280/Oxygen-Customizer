@@ -19,8 +19,10 @@ import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.isLeftAffordanceHidden;
 import static it.dhd.oxygencustomizer.xposed.utils.DrawableConverter.scaleDrawable;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
-import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExact;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.removeAdditionalInstanceField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
 import android.annotation.SuppressLint;
@@ -28,7 +30,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.AnimatedImageDrawable;
@@ -36,11 +37,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -165,7 +164,7 @@ public class Lockscreen extends XposedMods {
         }
 
         try {
-            hideLockscreenStuff();
+            hookKeyguardStatusBar();
         } catch (Throwable t) {
             log(t);
         }
@@ -551,77 +550,56 @@ public class Lockscreen extends XposedMods {
         }
     }
 
-    private boolean mStatusBarInflateHooked = false;
+    private View mKeyguardStatusBarView = null;
 
-    /**
-     * Hides keyguard status bar elements when SystemUI inflates {@code keyguard_status_bar}.
-     * Hooked once: the callback reads current preferences on every inflation.
-     */
+    private void hookKeyguardStatusBar() {
+        ReflectedClass KeyguardStatusBarView = ReflectedClass.of("com.android.systemui.statusbar.phone.KeyguardStatusBarView");
+        KeyguardStatusBarView
+                .after("onFinishInflate")
+                .run(param -> {
+                    mKeyguardStatusBarView = (View) param.thisObject;
+                    applyKeyguardStatusBarHides();
+                });
+        KeyguardStatusBarView
+                .after("onConfigurationChanged")
+                .run(param -> applyKeyguardStatusBarHides());
+    }
+
     private void hideLockscreenStuff() {
-        if (mStatusBarInflateHooked) return;
+        if (mKeyguardStatusBarView == null) return;
+        mKeyguardStatusBarView.post(this::applyKeyguardStatusBarHides);
+    }
 
-        @SuppressLint("DiscouragedApi")
-        int keyguardStatusBarLayout = mContext.getResources().getIdentifier("keyguard_status_bar", "layout", mContext.getPackageName());
-        if (keyguardStatusBarLayout == 0) return;
-        mStatusBarInflateHooked = true;
-
-        try {
-            ReflectedClass.of(LayoutInflater.class)
-                    .after(findMethodExact(LayoutInflater.class, "inflate", int.class, ViewGroup.class, boolean.class))
-                    .run(param -> {
-                        if ((int) param.args[0] != keyguardStatusBarLayout) return;
-                        if (!(param.getResult() instanceof View root)) return;
-                        applyKeyguardStatusBarHides(root, root.getResources());
-                    });
-        } catch (Throwable t) {
-            log(t);
-        }
+    private void applyKeyguardStatusBarHides() {
+        View root = mKeyguardStatusBarView;
+        if (root == null) return;
+        setKeyguardChildHidden(root, "keyguard_carrier_text", hideLockscreenCarrier || hideLockscreenStatusbar);
+        setKeyguardChildHidden(root, "keyguard_seeding_card_container", hideLockscreenCapsule || hideLockscreenStatusbar);
+        setKeyguardChildHidden(root, "status_icon_area", hideLockscreenStatusbar);
     }
 
     @SuppressLint("DiscouragedApi")
-    private void applyKeyguardStatusBarHides(View root, Resources res) {
-        if (hideLockscreenCarrier) {
-            try {
-                @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = root.findViewById(res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
-                keyguard_carrier_text.getLayoutParams().height = 0;
-                keyguard_carrier_text.setVisibility(View.INVISIBLE);
-                keyguard_carrier_text.requestLayout();
-            } catch (Throwable ignored) {
+    private void setKeyguardChildHidden(View root, String idName, boolean hide) {
+        int id = root.getResources().getIdentifier(idName, "id", listenPackage);
+        if (id == 0) return;
+        View view = root.findViewById(id);
+        if (view == null || view.getLayoutParams() == null) return;
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        Object originalHeight = getAdditionalInstanceField(view, "ocOriginalHeight");
+        if (hide) {
+            if (originalHeight == null) {
+                setAdditionalInstanceField(view, "ocOriginalHeight", params.height);
             }
+            if (params.height == 0 && view.getVisibility() == View.INVISIBLE) return;
+            params.height = 0;
+            view.setVisibility(View.INVISIBLE);
+        } else {
+            if (originalHeight == null) return;
+            params.height = (int) originalHeight;
+            removeAdditionalInstanceField(view, "ocOriginalHeight");
+            view.setVisibility(View.VISIBLE);
         }
-        if (hideLockscreenCapsule) {
-            try {
-                @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = root.findViewById(res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
-                keyguard_seeding_card_container.getLayoutParams().height = 0;
-                keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
-                keyguard_seeding_card_container.requestLayout();
-            } catch (Throwable ignored) {
-            }
-        }
-        if (hideLockscreenStatusbar) {
-            try {
-                @SuppressLint("DiscouragedApi") LinearLayout status_icon_area = root.findViewById(res.getIdentifier("status_icon_area", "id", mContext.getPackageName()));
-                status_icon_area.getLayoutParams().height = 0;
-                status_icon_area.setVisibility(View.INVISIBLE);
-                status_icon_area.requestLayout();
-            } catch (Throwable ignored) {
-            }
-
-            try {
-                @SuppressLint("DiscouragedApi") TextView keyguard_carrier_text = root.findViewById(res.getIdentifier("keyguard_carrier_text", "id", mContext.getPackageName()));
-                keyguard_carrier_text.getLayoutParams().height = 0;
-                keyguard_carrier_text.setVisibility(View.INVISIBLE);
-                keyguard_carrier_text.requestLayout();
-            } catch (Throwable ignored) {
-            }
-            try {
-                @SuppressLint("DiscouragedApi") LinearLayout keyguard_seeding_card_container = root.findViewById(res.getIdentifier("keyguard_seeding_card_container", "id", mContext.getPackageName()));
-                keyguard_seeding_card_container.getLayoutParams().height = 0;
-                keyguard_seeding_card_container.setVisibility(View.INVISIBLE);
-                keyguard_seeding_card_container.requestLayout();
-            } catch (Throwable ignored) {
-            }
-        }
+        view.setLayoutParams(params);
     }
 
     private void animateButtons(boolean isExpanded) {
