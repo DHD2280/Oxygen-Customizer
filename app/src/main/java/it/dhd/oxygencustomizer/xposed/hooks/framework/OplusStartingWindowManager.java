@@ -5,24 +5,19 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Environment;
 import android.text.TextUtils;
 
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.XPLauncher;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
@@ -30,7 +25,6 @@ public class OplusStartingWindowManager extends XposedMods {
 
     private final static String listenPackage = FRAMEWORK;
 
-    private final String LOG_FILE = Environment.getExternalStorageDirectory() + "/.oxygen_customizer/OplusStartingWindowManager_fix.log";
     private boolean mEnableLagFix = false;
     private boolean mForceAllApps = false;
     private Set<String> mLagFixApps = new HashSet<>();
@@ -70,18 +64,11 @@ public class OplusStartingWindowManager extends XposedMods {
         mLagFixApps = Xprefs.getStringSet("lag_fix_apps", null);
 
         log("Enabled Lag Fix: " + mEnableLagFix + " Force All Apps: " + mForceAllApps + " Lag Fix Apps: " + mLagFixApps);
-        try {
-            XPLauncher.enqueueProxyCommand((proxy) -> proxy.runCommand("echo " + getFormattedDate() + " - updatePrefs: Enabled Lag Fix: " + mEnableLagFix + " Force All Apps: " + mForceAllApps + " Lag Fix Apps: " + mLagFixApps + " >> " + LOG_FILE));
-        } catch (Throwable ignored) {
-        }
     }
 
     @Override
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         if (Build.VERSION.SDK_INT < 34) return;
-
-        XPLauncher.enqueueProxyCommand((proxy) ->
-                proxy.runCommand("echo " + getFormattedDate() + " - OplusStartingWindowManager: hook started >> " + LOG_FILE));
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;
@@ -101,47 +88,24 @@ public class OplusStartingWindowManager extends XposedMods {
             ReflectedClass.of(isLayerMatchToStartingWindow.getDeclaringClass())
                     .before(isLayerMatchToStartingWindow)
                     .run(param -> {
-                        XPLauncher.enqueueProxyCommand((proxy) ->
-                                proxy.runCommand("echo " + getFormattedDate() + " - isLayerMatchToStartingWindow: " + param.args[0] + " >> " + LOG_FILE));
-                        if (mEnableLagFix) {
-                            XPLauncher.enqueueProxyCommand((proxy) ->
-                                    proxy.runCommand("echo " + getFormattedDate() + " - lag fix enabled >> " + LOG_FILE));
-                            if (mForceAllApps) {
-                                XPLauncher.enqueueProxyCommand((proxy) ->
-                                        proxy.runCommand("echo " + getFormattedDate() + " - forced all apps, return ture >> " + LOG_FILE));
+                        if (!mEnableLagFix) return;
+                        if (mForceAllApps) {
+                            param.setResult(true);
+                            return;
+                        }
+                        String layer = (String) param.args[0];
+                        if (TextUtils.isEmpty(layer) || mLagFixApps == null) return;
+                        for (String app : mLagFixApps) {
+                            if (layer.contains(app)) {
                                 param.setResult(true);
-                            } else {
-                                String layer = (String) param.args[0];
-                                if (TextUtils.isEmpty(layer)) {
-                                    XPLauncher.enqueueProxyCommand((proxy) ->
-                                            proxy.runCommand("echo " + getFormattedDate() + " - layer is empty, return >> " + LOG_FILE));
-                                    return;
-                                }
-                                if (mLagFixApps != null) {
-                                    mLagFixApps.forEach((app) -> {
-                                        if (layer.contains(app)) {
-                                            XPLauncher.enqueueProxyCommand((proxy) ->
-                                                    proxy.runCommand("echo " + getFormattedDate() + " - lag fix app found '" + app + "', return ture >> " + LOG_FILE));
-                                            param.setResult(true);
-                                        }
-                                    });
-                                }
+                                return;
                             }
-                        } else {
-                            XPLauncher.enqueueProxyCommand((proxy) ->
-                                    proxy.runCommand("echo " + getFormattedDate() + " - lag fix disabled, do nothing >> " + LOG_FILE));
                         }
                     });
         } catch (Throwable t) {
             log(t);
         }
 
-    }
-
-    private String getFormattedDate() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-HH:mm:ss:SSS");
-        Date now = new Date();
-        return sdf.format(now);
     }
 
     @Override
