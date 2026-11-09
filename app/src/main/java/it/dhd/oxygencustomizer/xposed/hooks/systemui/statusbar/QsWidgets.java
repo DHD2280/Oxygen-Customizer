@@ -72,8 +72,12 @@ public class QsWidgets extends XposedMods {
     private static final String listenPackage = SYSTEM_UI;
     public Object mActivityStarter = null;
     private ViewGroup mOplusQsMediaView = null;
+    private static final int AXIS_NONE = 0;
+    private static final int AXIS_HORIZONTAL = 1;
+    private static final int AXIS_VERTICAL = 2;
     private float mDownX, mDownY;
     private boolean mIsDragging;
+    private int mScrollAxis = AXIS_NONE;
     private final int TOUCH_SLOP = ViewConfiguration.get(mContext).getScaledTouchSlop();
     private boolean mIsTouchOnWidgets;
     private Object mOplusPanelPagerController = null; // separate view pager controller
@@ -368,6 +372,7 @@ public class QsWidgets extends XposedMods {
                 mDownX = x;
                 mDownY = y;
                 mIsDragging = false;
+                mScrollAxis = AXIS_NONE;
 
                 if (mIsTouchOnWidgets) {
                     new Handler(Looper.getMainLooper()).post(() -> {
@@ -395,21 +400,25 @@ public class QsWidgets extends XposedMods {
 
                     if (dx > TOUCH_SLOP || dy > TOUCH_SLOP) {
                         mIsDragging = true;
+                        if (mScrollAxis == AXIS_NONE) {
+                            mScrollAxis = dx * 2 >= dy ? AXIS_HORIZONTAL : AXIS_VERTICAL;
+                            if (mScrollAxis == AXIS_VERTICAL) {
+                                MotionEvent cancelEvent = MotionEvent.obtain(event);
+                                cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
+                                cancelEvent.setLocation(mDownX - location[0], mDownY - location[1]);
+                                QsControlsView.getInstance().getPager().dispatchTouchEvent(cancelEvent);
+                                cancelEvent.recycle();
+                            }
+                        }
                     }
 
-                    MotionEvent translatedEvent = MotionEvent.obtain(event);
-                    translatedEvent.setLocation(x - location[0], y - location[1]);
-
-                    if (dy > TOUCH_SLOP) {
-                        // vertical scroll
-                        translatedEvent.recycle();
-                        param.setResult(true);
-                        return;
-                    } else {
+                    if (mScrollAxis != AXIS_VERTICAL) {
+                        MotionEvent translatedEvent = MotionEvent.obtain(event);
+                        translatedEvent.setLocation(x - location[0], mDownY - location[1]);
                         QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
+                        translatedEvent.recycle();
                     }
 
-                    translatedEvent.recycle();
                     param.setResult(true);
                     return;
                 }
@@ -428,10 +437,9 @@ public class QsWidgets extends XposedMods {
                         QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedUp);
                         translatedUp.recycle();
                         QsControlsView.getInstance().getPager().performClick();
-                    } else {
-                        // swipe
+                    } else if (mScrollAxis != AXIS_VERTICAL) {
                         MotionEvent translatedEvent = MotionEvent.obtain(event);
-                        translatedEvent.setLocation(x - location[0], y - location[1]);
+                        translatedEvent.setLocation(x - location[0], mDownY - location[1]);
                         QsControlsView.getInstance().getPager().dispatchTouchEvent(translatedEvent);
                         translatedEvent.recycle();
                     }
@@ -439,6 +447,7 @@ public class QsWidgets extends XposedMods {
                     parent.requestDisallowInterceptTouchEvent(false);
                     mIsTouchOnWidgets = false;
                     mIsDragging = false;
+                    mScrollAxis = AXIS_NONE;
 
                     param.setResult(true);
                     return;
