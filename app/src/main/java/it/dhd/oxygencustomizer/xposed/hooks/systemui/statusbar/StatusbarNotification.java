@@ -15,6 +15,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.coerceIn;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExactIfExists;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
@@ -34,6 +35,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.android.systemui.statusbar.AlphaOptimizedImageView;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -68,7 +70,7 @@ public class StatusbarNotification extends XposedMods {
     private final String TAG = this.getClass().getSimpleName() + ": ";
     private Object mCollapsedStatusBarFragment = null;
     private View mStatusBar;
-    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery, muteLowBatterySound;
+    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery, muteLowBatterySound, hideClearAll;
     private Object Scroller;
     private Object NotifCollection = null;
     private ImageView mClearAllButton = null;
@@ -91,6 +93,7 @@ public class StatusbarNotification extends XposedMods {
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
         muteLowBatterySound = Xprefs.getBoolean("mute_low_battery_sound", false);
+        hideClearAll = Xprefs.getBoolean("hide_notification_clear_all", false);
         notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
         mShowButtons = Xprefs.getBoolean(NOTIFICATIONS_SHOW_BUTTONS, false);
         customizeClearButton = Xprefs.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
@@ -267,6 +270,14 @@ public class StatusbarNotification extends XposedMods {
 
         ReflectedClass ClearAllController = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.clearall.ClearAllController");
         if (ClearAllController.getClazz() != null) {
+            Method setVisible = findMethodExactIfExists(ClearAllController.getClazz(), "setVisible", OplusClearAllButton.getClazz(), boolean.class, boolean.class);
+            if (setVisible != null) {
+                ClearAllController
+                        .before(setVisible)
+                        .run(param -> {
+                            if (hideClearAll) param.args[1] = false;
+                        });
+            }
             ClearAllController
                     .before("getPlatformBlurDrawable")
                     .run(param -> {

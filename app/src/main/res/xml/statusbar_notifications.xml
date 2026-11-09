@@ -125,6 +125,12 @@
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="hide_notification_clear_all"
+            android:summary="@string/hide_notification_clear_all_summary"
+            android:title="@string/hide_notification_clear_all_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:key="customizeClearButton"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"
