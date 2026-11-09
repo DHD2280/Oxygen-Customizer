@@ -522,7 +522,22 @@ public class StatusbarClock extends XposedMods {
 
         ClockClass
                 .before("getSmallTime")
-                .run(param -> setObjectField(param.thisObject, "mShowSeconds", mShowSeconds));
+                .run(param -> {
+                    View clock = (View) param.thisObject;
+                    boolean current = getBooleanField(clock, "mShowSeconds");
+                    boolean handlerMissing = mShowSeconds && getObjectField(clock, "mSecondsHandler") == null;
+                    if (current == mShowSeconds && !handlerMissing) return;
+                    setObjectField(clock, "mShowSeconds", mShowSeconds);
+                    if (clock.isAttachedToWindow()) {
+                        clock.post(() -> {
+                            try {
+                                callMethod(clock, "updateShowSeconds");
+                            } catch (Throwable t) {
+                                log(t);
+                            }
+                        });
+                    }
+                });
 
         ClockClass
                 .after("getSmallTime")
