@@ -1,3 +1,16 @@
+**beta-211**  
+- Added launcher infinite scroll  
+- Improved Weather Updater  
+- Improved QsWidgets tiles look and feel on COS17  
+- Fixed QsWidgets on COS17  
+- Migrated to LSPosed API102 Warning: you can lose your configuration  
+- Fixed replace lock with kill for COS17  
+- Fixed custom nav gestures on COS17  
+- Fixed kayguard pin scrambler on COS17  
+- Fixed qs customization preferences on OOS<=15  
+- Fixed hide rotation button on COS17  
+- Improved statusbar clock animation and visibility  
+  
 **beta-210**  
 - Fixed qs tile colors for COS17  
 - Fixed qs sliders color for COS17  
