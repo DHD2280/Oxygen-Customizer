@@ -17,8 +17,8 @@ android {
         applicationId = "it.dhd.oxygencustomizer"
         minSdk = 33
         targetSdk = 37
-        versionCode = 211
-        versionName = "beta-211"
+        versionCode = 212
+        versionName = "beta-212"
 //        setProperty("archivesBaseName", "OxygenCustomizer.apk")
         buildConfigField("int", "MIN_SDK_VERSION", "$minSdk")
     }

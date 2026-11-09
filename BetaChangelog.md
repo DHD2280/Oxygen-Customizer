@@ -1,3 +1,13 @@
+**beta-212**  
+- Bring back gesture to expand a notification on OOS16.0.7+  
+- Fixed launcher home grid on COS17  
+- Added the ability to hide the clear all button in notification panel  
+- Added mute low battery sound  
+- Fixed hide lockscreen stuff with API 102  
+- Added music controls with screen on  
+- Added keep notifications on lockscreen  
+- Fixed QsWidgets for OOS16.0.10  
+  
 **beta-211**  
 - Added launcher infinite scroll  
 - Improved Weather Updater  
