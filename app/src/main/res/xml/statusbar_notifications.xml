@@ -89,6 +89,12 @@
             android:title="@string/remove_low_battery_notification"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="mute_low_battery_sound"
+            android:summary="@string/mute_low_battery_sound_summary"
+            android:title="@string/mute_low_battery_sound_title"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory app:iconSpaceReserved="false">

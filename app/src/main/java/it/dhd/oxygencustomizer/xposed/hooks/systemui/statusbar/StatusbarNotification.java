@@ -68,7 +68,7 @@ public class StatusbarNotification extends XposedMods {
     private final String TAG = this.getClass().getSimpleName() + ": ";
     private Object mCollapsedStatusBarFragment = null;
     private View mStatusBar;
-    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery;
+    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery, muteLowBatterySound;
     private Object Scroller;
     private Object NotifCollection = null;
     private ImageView mClearAllButton = null;
@@ -90,6 +90,7 @@ public class StatusbarNotification extends XposedMods {
         removeDevMode = Xprefs.getBoolean("remove_dev_mode", false);
         removeFlashlightNotification = Xprefs.getBoolean("remove_flashlight_notification", false);
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
+        muteLowBatterySound = Xprefs.getBoolean("mute_low_battery_sound", false);
         notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
         mShowButtons = Xprefs.getBoolean(NOTIFICATIONS_SHOW_BUTTONS, false);
         customizeClearButton = Xprefs.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
@@ -171,6 +172,17 @@ public class StatusbarNotification extends XposedMods {
                 .run(param -> {
                     if (removeLowBattery) param.setResult(null);
                 });
+
+        ReflectedClass OplusPowerUISoundUtil = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.notification.power.OplusPowerUISoundUtil");
+        if (OplusPowerUISoundUtil.getClazz() != null) {
+            OplusPowerUISoundUtil
+                    .before("playPowerUISound")
+                    .run(param -> {
+                        if (!muteLowBatterySound) return;
+                        int flag = (int) param.args[0];
+                        if (flag == 0 || flag == 2) param.setResult(null);
+                    });
+        }
 
         ReflectedClass FlashlightNotification = ReflectedClass.of(
                 "com.oplus.systemui.notification.flashlight.FlashlightNotification", /* OOS 15.0.1+ */
