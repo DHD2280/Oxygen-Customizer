@@ -195,6 +195,8 @@
     <string name="mute_low_battery_sound_summary">Silence the chime played when the battery reaches low and critical levels</string>
     <string name="hide_notification_clear_all_title">Hide clear all button</string>
     <string name="hide_notification_clear_all_summary">Remove the clear all button from the notification panel</string>
+    <string name="notification_pull_to_expand_title">Swipe down to expand notifications</string>
+    <string name="notification_pull_to_expand_summary">Expand a notification by dragging it down</string>
     <string name="notif_default_expansion_title">Notification default expansion</string>
     <string name="notif_always_expand">Always expand</string>
     <string name="notif_always_collapse">Always collapse</string>

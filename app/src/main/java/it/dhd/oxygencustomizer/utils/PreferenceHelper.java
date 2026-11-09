@@ -466,6 +466,19 @@ public class PreferenceHelper {
             case NOTIFICATIONS_SHOW_BUTTONS -> {
                 return Build.VERSION.SDK_INT >= 35;
             }
+            case "notification_pull_to_expand" -> {
+                String rom = getOplusRom();
+                if (rom == null || rom.isEmpty()) return false;
+
+                String[] version = rom.split("\\.");
+                int major = version.length > 0 ? Integer.parseInt(version[0]) : 0;
+                int minor = version.length > 1 ? Integer.parseInt(version[1]) : 0;
+                int patch = version.length > 2 ? Integer.parseInt(version[2]) : 0;
+                boolean isVersionValid = (major > 16) ||
+                        (major == 16 && minor > 0) ||
+                        (major == 16 && minor == 0 && patch > 7);
+                return Build.VERSION.SDK_INT >= 37 && isVersionValid;
+            }
             // Statusbar Logo
             case STATUSBAR_LOGO_APPLY_TINT -> {
                 return instance.mPreferences.getString(STATUSBAR_LOGO_STYLE, "0").equals("-1");

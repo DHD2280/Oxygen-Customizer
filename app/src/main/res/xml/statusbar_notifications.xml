@@ -131,6 +131,12 @@
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="notification_pull_to_expand"
+            android:summary="@string/notification_pull_to_expand_summary"
+            android:title="@string/notification_pull_to_expand_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:key="customizeClearButton"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"

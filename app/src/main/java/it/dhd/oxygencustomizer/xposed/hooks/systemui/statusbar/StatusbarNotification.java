@@ -17,6 +17,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExactIfExists;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setBooleanField;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -70,10 +71,11 @@ public class StatusbarNotification extends XposedMods {
     private final String TAG = this.getClass().getSimpleName() + ": ";
     private Object mCollapsedStatusBarFragment = null;
     private View mStatusBar;
-    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery, muteLowBatterySound, hideClearAll;
+    private boolean removeChargingCompleteNotification, removeDevMode, removeFlashlightNotification, removeLowBattery, muteLowBatterySound, hideClearAll, pullToExpand;
     private Object Scroller;
     private Object NotifCollection = null;
     private ImageView mClearAllButton = null;
+    private Object mStackScrollLayoutExt = null;
     // Close All Notification Button
     private boolean customizeClearButton = false, linkBackgroundAccent = true, linkIconAccent = false;
     private int clearButtonBgColor = Color.GRAY, clearButtonIconColor = Color.WHITE;
@@ -94,6 +96,7 @@ public class StatusbarNotification extends XposedMods {
         removeLowBattery = Xprefs.getBoolean("remove_low_battery_notification", false);
         muteLowBatterySound = Xprefs.getBoolean("mute_low_battery_sound", false);
         hideClearAll = Xprefs.getBoolean("hide_notification_clear_all", false);
+        pullToExpand = Xprefs.getBoolean("notification_pull_to_expand", false);
         notificationDefaultExpansion = Integer.parseInt(Xprefs.getString("notificationDefaultExpansion", "0"));
         mShowButtons = Xprefs.getBoolean(NOTIFICATIONS_SHOW_BUTTONS, false);
         customizeClearButton = Xprefs.getBoolean(CUSTOMIZE_CLEAR_BUTTON, false);
@@ -123,6 +126,21 @@ public class StatusbarNotification extends XposedMods {
             if (Key[0].equals(NOTIFICATIONS_SHOW_BUTTONS)) {
                 setupButtons();
             }
+            if (Key[0].equals("notification_pull_to_expand")) {
+                applyPullToExpand();
+            }
+        }
+    }
+
+    private void applyPullToExpand() {
+        if (mStackScrollLayoutExt == null) return;
+        try {
+            Object view = callMethod(mStackScrollLayoutExt, "getView");
+            if (view == null) return;
+            boolean onKeyguard = (boolean) callMethod(view, "onKeyguard");
+            callMethod(mStackScrollLayoutExt, "setExpandingEnabled", !onKeyguard);
+        } catch (Throwable t) {
+            log(t);
         }
     }
 
@@ -186,6 +204,27 @@ public class StatusbarNotification extends XposedMods {
                         if (flag == 0 || flag == 2) param.setResult(null);
                     });
         }
+
+        ReflectedClass NotificationStackScrollLayoutExtImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.statusbar.notification.stack.NotificationStackScrollLayoutExtImpl");
+        NotificationStackScrollLayoutExtImpl
+                .before("setExpandingEnabled")
+                .run(param -> {
+                    mStackScrollLayoutExt = param.thisObject;
+                    if (!pullToExpand) return;
+                    Object view = callMethod(param.thisObject, "getView");
+                    if (view == null) return;
+                    callMethod(view, "setExpandingEnabled", (boolean) param.args[0]);
+                    param.setResult(null);
+                });
+
+        ReflectedClass ExpandHelper = ReflectedClass.ofIfPossible("com.android.systemui.ExpandHelper");
+        ExpandHelper
+                .before("startExpanding")
+                .run(param -> {
+                    if (!pullToExpand || (int) param.args[1] != 2) return;
+                    param.args[1] = 1;
+                    setBooleanField(param.thisObject, "mHasPopped", false);
+                });
 
         ReflectedClass FlashlightNotification = ReflectedClass.of(
                 "com.oplus.systemui.notification.flashlight.FlashlightNotification", /* OOS 15.0.1+ */
