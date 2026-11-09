@@ -111,7 +111,8 @@ public class WeatherWork extends ListenableWorker {
         Intent errorIntent = new Intent(ACTION_ERROR);
         errorIntent.putExtra(EXTRA_ERROR, errorExtra);
         mContext.sendBroadcast(errorIntent);
-        completer.set(Result.retry());
+        boolean retryable = errorExtra != EXTRA_ERROR_DISABLED && errorExtra != EXTRA_ERROR_NO_PERMISSIONS;
+        completer.set(retryable ? Result.retry() : Result.failure());
     }
 
     private boolean doCheckLocationEnabled() {
