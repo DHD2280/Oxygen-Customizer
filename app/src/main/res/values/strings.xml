@@ -743,6 +743,8 @@
     <string name="launcher_replace_lock_title">Replace lock with kill</string>
     <string name="launcher_replace_lock_summary">Replace the lock gesture (swipe down in recents) with kill app feature.</string>
     <string name="remove_home_pagination">Remove Home Pagination</string>
+    <string name="launcher_infinite_scroll_title">Infinite scroll</string>
+    <string name="launcher_infinite_scroll_summary">Swipe past the last home screen page to go back to the first one, and vice versa. The swipe on the right at the first page will only work when shelf is disabled.</string>
     <string name="launcher_themed_icons">Themed icons</string>
     <string name="force_themed_launcher_icons">Force Themed App Icons</string>
     <string name="force_themed_launcher_icons_summary">BETA FEATURE: Force themed icons for all apps.\nRe-enable themed icons in launcher to apply.</string>

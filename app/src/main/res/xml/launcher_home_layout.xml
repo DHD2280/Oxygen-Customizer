@@ -68,6 +68,13 @@
             android:title="@string/remove_home_pagination"
             app:iconSpaceReserved="false" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="launcher_infinite_scroll"
+            android:summary="@string/launcher_infinite_scroll_summary"
+            android:title="@string/launcher_infinite_scroll_title"
+            app:iconSpaceReserved="false" />
+
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.launcher.LauncherPageIndicator"
             android:summary="@string/custom_page_indicator_tap_summary"
