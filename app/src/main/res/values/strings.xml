@@ -849,6 +849,8 @@
     <string name="volume_buttons_category_title">Volume Buttons</string>
     <string name="volbtn_music_controls_title">Volume button music controls</string>
     <string name="volbtn_music_controls_summary">Control music playback with volume buttons</string>
+    <string name="volbtn_music_controls_son_title">Music controls with screen on</string>
+    <string name="volbtn_music_controls_son_summary">Long press volume buttons to skip tracks even when the screen is on</string>
     <string name="plusKey_button_category_title">Plus Key</string>
     <string name="plusKey_button_category_title_screenoff">Plus Key - Screen Off</string>
     <string name="plusKey_single_press_button_title">Single Press</string>

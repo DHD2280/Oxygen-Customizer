@@ -29,6 +29,13 @@
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
+            android:key="volbtn_music_controls_son"
+            android:summary="@string/volbtn_music_controls_son_summary"
+            android:title="@string/volbtn_music_controls_son_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
             android:key="volbtn_torch"
             android:summary="@string/torch_long_press_volbtn_torch_desc"
             android:title="@string/torch_long_press_volbtn_torch_title"

@@ -424,7 +424,7 @@ public class Buttons extends XposedMods {
                             switch (e.getAction()) {
                                 case KeyEvent.ACTION_UP -> {
                                     if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
-                                        SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, 0);
+                                        SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, SystemUtils.PowerManager().isInteractive() ? AudioManager.FLAG_SHOW_UI : 0);
                                         if (mHandler.hasCallbacks(mVolumeLongPress))
                                             mHandler.removeCallbacks(mVolumeLongPress);
                                         if (mHandler.hasCallbacks(mVolumeLongPressTorch))
@@ -434,22 +434,21 @@ public class Buttons extends XposedMods {
                                     }
                                 }
                                 case KeyEvent.ACTION_DOWN -> {
-                                    if (!SystemUtils.PowerManager().isInteractive() &&
-                                            (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-                                                    Keycode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                                        if (SystemUtils.AudioManager().isMusicActive() && holdVolumeToSkip) {
-                                            isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
-                                            mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
+                                    if (Keycode != KeyEvent.KEYCODE_VOLUME_DOWN && Keycode != KeyEvent.KEYCODE_VOLUME_UP)
+                                        return;
+                                    boolean interactive = SystemUtils.PowerManager().isInteractive();
+                                    if (holdVolumeToSkip && (!interactive || holdVolumeToSkipScreenOn) && SystemUtils.AudioManager().isMusicActive()) {
+                                        isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
+                                        mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
+                                        param.setResult(0);
+                                    } else if (!interactive) {
+                                        int audioMode = SystemUtils.AudioManager().getMode();
+                                        if (audioMode == AudioManager.MODE_IN_CALL ||
+                                                audioMode == AudioManager.MODE_IN_COMMUNICATION ||
+                                                audioMode == AudioManager.MODE_RINGTONE) return;
+                                        if (holdVolumeToTorch) {
+                                            mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
                                             param.setResult(0);
-                                        } else {
-                                            int audioMode = SystemUtils.AudioManager().getMode();
-                                            if (audioMode == AudioManager.MODE_IN_CALL ||
-                                                    audioMode == AudioManager.MODE_IN_COMMUNICATION ||
-                                                    audioMode == AudioManager.MODE_RINGTONE) return;
-                                            if (holdVolumeToTorch) {
-                                                mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
-                                                param.setResult(0);
-                                            }
                                         }
                                     }
                                 }

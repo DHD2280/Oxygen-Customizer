@@ -90,6 +90,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTON
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TIMEOUT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_MUSIC;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_MUSIC_SON;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_PROXIMITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_VOLUME_TORCH_TIMEOUT;
@@ -1174,6 +1176,9 @@ public class PreferenceHelper {
 
             case BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED, BUTTONS_VOLUME_TORCH_PROXIMITY -> {
                 return instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH, false);
+            }
+            case BUTTONS_VOLUME_MUSIC_SON -> {
+                return instance.mPreferences.getBoolean(BUTTONS_VOLUME_MUSIC, false);
             }
             case BUTTONS_VOLUME_TORCH_TIMEOUT -> {
                 return instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH, false) && instance.mPreferences.getBoolean(BUTTONS_VOLUME_TORCH_TIMEOUT_ENABLED, false);
