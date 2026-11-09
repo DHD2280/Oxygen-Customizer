@@ -120,6 +120,12 @@
             android:summary="@string/notif_show_buttons_summary"
             android:title="@string/notif_show_buttons" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:key="notification_pull_to_expand"
+            android:summary="@string/notification_pull_to_expand_summary"
+            android:title="@string/notification_pull_to_expand_title"
+            app:iconSpaceReserved="false" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory>
@@ -128,12 +134,6 @@
             android:key="hide_notification_clear_all"
             android:summary="@string/hide_notification_clear_all_summary"
             android:title="@string/hide_notification_clear_all_title"
-            app:iconSpaceReserved="false" />
-
-        <it.dhd.oneplusui.preference.OplusSwitchPreference
-            android:key="notification_pull_to_expand"
-            android:summary="@string/notification_pull_to_expand_summary"
-            android:title="@string/notification_pull_to_expand_title"
             app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
