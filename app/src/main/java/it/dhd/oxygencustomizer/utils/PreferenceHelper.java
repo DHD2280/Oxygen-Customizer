@@ -348,7 +348,7 @@ public class PreferenceHelper {
     private PreferenceHelper(ExtendedSharedPreferences prefs) {
         mPreferences = prefs;
         mOsVersion = Shell.cmd("getprop ro.build.display.id").exec().getOut().get(0);
-        mOplusVersion = Shell.cmd("getprop ro.build.version.oplusrom.display]").exec().getOut().get(0);
+        mOplusVersion = Shell.cmd("getprop ro.build.version.oplusrom.display").exec().getOut().get(0);
         instance = this;
     }
 
@@ -365,6 +365,15 @@ public class PreferenceHelper {
     public static String getOplusRom() {
         if (instance != null) return instance.mOplusVersion;
         return "";
+    }
+
+    private static int parseVersionPart(String[] parts, int index) {
+        if (parts.length <= index || parts[index].isEmpty()) return 0;
+        try {
+            return Integer.parseInt(parts[index]);
+        } catch (NumberFormatException ignored) {
+            return 0;
+        }
     }
 
     public static boolean is16010() {
@@ -470,14 +479,14 @@ public class PreferenceHelper {
                 String rom = getOplusRom();
                 if (rom == null || rom.isEmpty()) return false;
 
-                String[] version = rom.split("\\.");
-                int major = version.length > 0 ? Integer.parseInt(version[0]) : 0;
-                int minor = version.length > 1 ? Integer.parseInt(version[1]) : 0;
-                int patch = version.length > 2 ? Integer.parseInt(version[2]) : 0;
+                String[] version = rom.replaceAll("[^0-9.]", "").split("\\.");
+                int major = parseVersionPart(version, 0);
+                int minor = parseVersionPart(version, 1);
+                int patch = parseVersionPart(version, 2);
                 boolean isVersionValid = (major > 16) ||
                         (major == 16 && minor > 0) ||
-                        (major == 16 && minor == 0 && patch > 7);
-                return Build.VERSION.SDK_INT >= 37 && isVersionValid;
+                        (major == 16 && minor == 0 && patch >= 7);
+                return Build.VERSION.SDK_INT >= 36 && isVersionValid;
             }
             // Statusbar Logo
             case STATUSBAR_LOGO_APPLY_TINT -> {
