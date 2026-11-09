@@ -8,7 +8,10 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,15 @@ public class LockscreenView extends FrameLayout {
 
     @SuppressLint("StaticFieldLeak")
     public static LockscreenView instance = null;
+
+    private boolean mTimeReceiverRegistered = false;
+
+    private final BroadcastReceiver mTimeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            post(LockscreenView.this::refreshClock);
+        }
+    };
 
     public LockscreenView(@NonNull Context context) {
         super(context);
@@ -101,9 +113,45 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void updateClock(long time) {
+        refreshClock();
+    }
+
+    private void refreshClock() {
         if (mClockContainer == null || mClockView == null) return;
 
         processAllTextClocks(mClockContainer);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mTimeReceiverRegistered) return;
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_TIME_TICK);
+        filter.addAction(Intent.ACTION_TIME_CHANGED);
+        filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        mContext.registerReceiver(mTimeReceiver, filter, Context.RECEIVER_EXPORTED);
+        mTimeReceiverRegistered = true;
+        refreshClock();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (!mTimeReceiverRegistered) return;
+        try {
+            mContext.unregisterReceiver(mTimeReceiver);
+        } catch (Throwable ignored) {
+        }
+        mTimeReceiverRegistered = false;
+    }
+
+    @Override
+    public void onVisibilityAggregated(boolean isVisible) {
+        super.onVisibilityAggregated(isVisible);
+        if (isVisible) refreshClock();
     }
 
     private void processAllTextClocks(ViewGroup parent) {
