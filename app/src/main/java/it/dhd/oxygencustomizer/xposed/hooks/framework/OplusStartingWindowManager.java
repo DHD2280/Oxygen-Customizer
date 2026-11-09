@@ -68,7 +68,7 @@ public class OplusStartingWindowManager extends XposedMods {
 
     @Override
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
-        if (Build.VERSION.SDK_INT < 34) return;
+        if (Build.VERSION.SDK_INT < 34 || Build.VERSION.SDK_INT >= 37) return;
 
         if (!broadcastRegistered) {
             broadcastRegistered = true;

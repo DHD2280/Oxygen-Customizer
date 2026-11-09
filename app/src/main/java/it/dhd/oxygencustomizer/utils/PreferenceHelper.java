@@ -1219,7 +1219,7 @@ public class PreferenceHelper {
                  "fix_lag_switch",
                  "fix_lag_force_all_apps",
                  "fix_lag_app_chooser" -> {
-                return Build.VERSION.SDK_INT >= 34;
+                return Build.VERSION.SDK_INT >= 34 && Build.VERSION.SDK_INT < 37;
             }
 
             // Ota Card
