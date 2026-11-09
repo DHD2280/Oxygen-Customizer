@@ -886,6 +886,8 @@
     <string name="lockscreen_hide_power_menu_summary">Hide power menu on secure lockscreen</string>
     <string name="lockscreen_remove_sos_title">Hide SOS button</string>
     <string name="lockscreen_remove_sos_summary">Hide bottom SOS button in lockscreen</string>
+    <string name="lockscreen_keep_seen_notifications_title">Keep seen notifications</string>
+    <string name="lockscreen_keep_seen_notifications_summary">Keep showing notifications on lockscreen after unlocking and locking again</string>
     <string name="lockscreen_fingerprint">Fingerprint Icon</string>
     <string name="lockscreen_fp_remove_icon">Remove Fingerprint Icon</string>
     <string name="lockscreen_fp_custom_icon">Custom Fingerprint Icon</string>

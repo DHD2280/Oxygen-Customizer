@@ -514,6 +514,7 @@ public final class Constants {
             public static final String LOCKSCREEN_CARRIER_REPLACEMENT = "lockscreen_carrier_replacement";
             public static final String LOCKSCREEN_SHUFFLE_PIN = "shufflePinEnabled";
             public static final String LOCKSCREEN_KEEP_SHUFFLING = "keepShuffling";
+            public static final String LOCKSCREEN_KEEP_SEEN_NOTIFICATIONS = "lockscreen_keep_seen_notifications";
         }
 
         public static class LockscreenClock {

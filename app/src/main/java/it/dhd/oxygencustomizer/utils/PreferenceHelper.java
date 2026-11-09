@@ -439,7 +439,7 @@ public class PreferenceHelper {
             case "launcher_columns", "launcher_rows" -> {
                 return instance.mPreferences.getBoolean("rearrange_home", false);
             }
-            case "replace_lock" -> {
+            case "replace_lock", "lockscreen_keep_seen_notifications" -> {
                 return Build.VERSION.SDK_INT >= 36;
             }
             case "disable_previous_recents",

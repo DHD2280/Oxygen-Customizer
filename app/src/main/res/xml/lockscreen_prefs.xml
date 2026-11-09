@@ -221,6 +221,12 @@
             android:summary="@string/lockscreen_remove_sos_summary"
             android:title="@string/lockscreen_remove_sos_title"
             app:iconSpaceReserved="false" />
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_keep_seen_notifications"
+            android:summary="@string/lockscreen_keep_seen_notifications_summary"
+            android:title="@string/lockscreen_keep_seen_notifications_title"
+            app:iconSpaceReserved="false" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 

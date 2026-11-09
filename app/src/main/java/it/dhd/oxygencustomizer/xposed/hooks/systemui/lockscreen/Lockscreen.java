@@ -10,6 +10,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOC
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_CARRIER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_FINGERPRINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_HIDE_STATUSBAR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_KEEP_SEEN_NOTIFICATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LEFT_AFFORDANCE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_LOCK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Lockscreen.LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE;
@@ -78,6 +79,7 @@ public class Lockscreen extends XposedMods {
     private boolean hideLockscreenCarrier = false, hideLockscreenStatusbar = false, hideLockscreenCapsule = false;
     private TextView mCarrierText = null;
     private String lockscreenCarrierReplacement = "";
+    private boolean keepSeenNotifications = false;
 
     private String mFpIconField;
     private String mImMobileDrawableField;
@@ -115,6 +117,7 @@ public class Lockscreen extends XposedMods {
         hideLockscreenStatusbar = Xprefs.getBoolean(LOCKSCREEN_HIDE_STATUSBAR, false);
         hideLockscreenCapsule = Xprefs.getBoolean(LOCKSCREEN_HIDE_CAPSULE, false);
         lockscreenCarrierReplacement = Xprefs.getString(LOCKSCREEN_CARRIER_REPLACEMENT, "");
+        keepSeenNotifications = Xprefs.getBoolean(LOCKSCREEN_KEEP_SEEN_NOTIFICATIONS, false);
 
         updateDrawable();
 
@@ -267,6 +270,24 @@ public class Lockscreen extends XposedMods {
             log(t);
         }
 
+        if (Build.VERSION.SDK_INT >= 36) {
+            try {
+                hookSeenNotifications();
+            } catch (Throwable t) {
+                log(t);
+            }
+        }
+
+    }
+
+    private void hookSeenNotifications() {
+        ReflectedClass OplusNotificationDebug = ReflectedClass.ofIfPossible("com.oplus.systemui.notification.debug.OplusNotificationDebug");
+        if (OplusNotificationDebug.getClazz() == null) return;
+        OplusNotificationDebug
+                .before("getSkipCheckPostedBeforeLock")
+                .run(param -> {
+                    if (keepSeenNotifications) param.setResult(true);
+                });
     }
 
     private void updateFingerprintIcon(HookHelper.RunParam param, boolean isStartMethod) {
