@@ -59,6 +59,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.getString;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExactIfExists;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getStaticIntField;
@@ -385,9 +386,16 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             }
             if (view != null && !viewList.contains(view)) {
                 if (view == mMediaPlayer) {
+                    view.setOnClickListener(v -> {
+                        try {
+                            showMediaDialog(v);
+                        } catch (Throwable t) {
+                            log(TAG + "showMediaDialog error: " + t.getMessage());
+                        }
+                    });
                     view.setOnLongClickListener(v -> {
                         try {
-                            showMediaDialog(mContainer);
+                            showMediaDialog(v);
                         } catch (Throwable t) {
                             log(TAG + "showMediaDialog error: " + t.getMessage());
                         }
@@ -553,8 +561,14 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         if (Build.VERSION.SDK_INT == 33) return;
 
         Object[] mediaQsHelper = getQsMediaDialog();
-        if (mediaQsHelper[0] == null || mediaQsHelper[1] == null) return;
-        callMethod(mediaQsHelper[1], "showPrompt", mContext, view, mediaQsHelper[0]);
+        Object dialogController = mediaQsHelper[1];
+        if (dialogController == null) return;
+        if (findMethodExactIfExists(dialogController.getClass(), "showPrompt", View.class) != null) {
+            callMethod(dialogController, "showPrompt", view);
+        } else {
+            if (mediaQsHelper[0] == null) return;
+            callMethod(dialogController, "showPrompt", mContext, view, mediaQsHelper[0]);
+        }
         vibrate(0);
     }
 

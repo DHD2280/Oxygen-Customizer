@@ -515,7 +515,10 @@ public class ControllersProvider extends XposedMods {
                 OplusQsMediaTileController
                         .afterConstruction()
                         .run(param -> {
-                            mQsDialogLaunchAnimator = getObjectField(param.thisObject, "dialogLaunchAnimator");
+                            try {
+                                mQsDialogLaunchAnimator = getObjectField(param.thisObject, "dialogLaunchAnimator");
+                            } catch (Throwable ignored) {
+                            }
                             mQsMediaDialogController = getObjectField(param.thisObject, "qsMediaDialogController");
                         });
             } else {
