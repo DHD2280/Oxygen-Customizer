@@ -7,12 +7,12 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_QUI
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_ROWS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTiles.QS_TILES_PREFS;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExactIfExists;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setIntField;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.Constants;
@@ -64,7 +64,9 @@ public class QSTiles extends XposedMods {
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         if (!listenPackage.equals(PRParam.getPackageName())) return;
 
-        ReflectedClass QuickQSPanel = ReflectedClass.ofIfPossible("com.android.systemui.qs.QuickQSPanel");
+        ReflectedClass QuickQSPanel = ReflectedClass.of(
+                "com.android.systemui.qs.deprecated.QuickQSPanel",
+                "com.android.systemui.qs.QuickQSPanel");
         QuickQSPanel
                 .before("getNumQuickTiles")
                 .run(param -> {
@@ -73,18 +75,34 @@ public class QSTiles extends XposedMods {
                     }
                 });
 
-        ReflectedClass TileLayout = ReflectedClass.ofIfPossible("com.android.systemui.qs.TileLayout");
-        TileLayout
-                .before("updateMaxRows")
-                .run(param -> {
-                    if (!mCustomizeQSTiles ||
-                            mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-                        return;
+        ReflectedClass TileLayout = ReflectedClass.of(
+                "com.android.systemui.qs.deprecated.TileLayout",
+                "com.android.systemui.qs.TileLayout");
+        Class<?> tileLayoutClass = TileLayout.getClazz();
+        if (tileLayoutClass != null && findMethodExactIfExists(tileLayoutClass, "updateMaxRows", int.class, int.class) != null) {
+            TileLayout
+                    .before("updateMaxRows")
+                    .run(param -> {
+                        if (!shouldOverrideRows()) return;
 
-                    int mRows = getIntField(param.thisObject, "mRows");
-                    setIntField(param.thisObject, "mRows", QSRowQty);
-                    param.setResult(mRows != QSRowQty);
-                });
+                        int mRows = getIntField(param.thisObject, "mRows");
+                        setIntField(param.thisObject, "mRows", QSRowQty);
+                        param.setResult(mRows != QSRowQty);
+                    });
+        } else {
+            TileLayout
+                    .after("updateResources")
+                    .run(param -> {
+                        if (!shouldOverrideRows()) return;
+                        setIntField(param.thisObject, "mMaxAllowedRows", QSRowQty);
+                    });
+            TileLayout
+                    .before("needUpdateResources")
+                    .run(param -> {
+                        if (!shouldOverrideRows()) return;
+                        param.setResult(getIntField(param.thisObject, "mMaxAllowedRows") != QSRowQty);
+                    });
+        }
 
 
         TileLayout
@@ -100,28 +118,12 @@ public class QSTiles extends XposedMods {
 
                 });
 
-        if (Build.VERSION.SDK_INT >= 35) {
-            // Columns and Rows for separate qs
-//            ReflectedClass OplusTileContainerView = ReflectedClass.of("com.oplus.systemui.plugins.qs.tile.OplusTileContainerView");
-//            OplusTileContainerView
-//                    .before("updateCell")
-//                    .run(param -> {
-//                        if (!mCustomizeQSTiles) return;
-//                        setIntField(param.thisObject, "mRows", QSRowQty);
-//                        setIntField(param.thisObject, "mColumns", QSColQty);
-//                        param.setResult(null);
-//                    });
 
-//            ReflectedClass DeviceProfile = ReflectedClass.of("com.oplus.systemui.plugins.qs.DeviceProfile$DefaultCellCalculator");
-//            DeviceProfile
-//                    .before("getMaxItemNum")
-//                    .run(param1 -> {
-//                        if (!mCustomizeQSTiles) return;
-//                        param1.setResult(QSRowQty * QSColQty);
-//                    });
+    }
 
-        }
-
+    private boolean shouldOverrideRows() {
+        return mCustomizeQSTiles
+                && mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
