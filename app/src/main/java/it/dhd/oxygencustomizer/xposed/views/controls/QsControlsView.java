@@ -14,6 +14,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getHotspotTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getNetworkController;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusBluetoothTile;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusQsMediaTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getOplusWifiTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
@@ -563,6 +564,7 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         Object[] mediaQsHelper = getQsMediaDialog();
         Object dialogController = mediaQsHelper[1];
         if (dialogController == null) return;
+        if (isStockMediaHistoryEmpty()) return;
         if (findMethodExactIfExists(dialogController.getClass(), "showPrompt", View.class) != null) {
             callMethod(dialogController, "showPrompt", view);
         } else {
@@ -570,6 +572,14 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
             callMethod(dialogController, "showPrompt", mContext, view, mediaQsHelper[0]);
         }
         vibrate(0);
+    }
+
+    private boolean isStockMediaHistoryEmpty() {
+        Object stockMediaPanel = getOplusQsMediaTile();
+        if (stockMediaPanel == null) return false;
+        if (findMethodExactIfExists(stockMediaPanel.getClass(), "isHistoryListEmpty") == null)
+            return false;
+        return (boolean) callMethod(stockMediaPanel, "isHistoryListEmpty");
     }
 
     private void resetButtons() {
