@@ -175,11 +175,7 @@ public class LockscreenWeather extends XposedMods {
     }
 
     private void setWeatherCentered() {
-        CurrentWeatherView currentWeatherView = CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER);
-        if (currentWeatherView != null) {
-            currentWeatherView.getLayoutParams().width = mWeatherCentered ? WRAP_CONTENT : MATCH_PARENT;
-            currentWeatherView.requestLayout();
-        }
+        updateWeatherWidth(CurrentWeatherView.getInstance(LOCKSCREEN_WEATHER));
 
         LockscreenView lockscreenView = LockscreenView.getInstance();
         if (lockscreenView != null) {
@@ -208,9 +204,18 @@ public class LockscreenWeather extends XposedMods {
         currentWeatherView.updateColors(mWeatherCustomColor ? mWeatherColor : Color.WHITE, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateWeatherSettings(mWeatherShowLocation, mWeatherShowCondition, mWeatherShowHumidity, mWeatherShowWind, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
         currentWeatherView.updateWeatherBg(mWeatherBackground, Constants.LockscreenWeather.LOCKSCREEN_WEATHER);
+        updateWeatherWidth(currentWeatherView);
         currentWeatherView.setCustomFont(mWeatherCustomFont, LOCKSCREEN_WEATHER_CUSTOM_FONT, LOCKSCREEN_WEATHER);
         updateMargins();
         if (mWeatherContainer != null) mWeatherContainer.setVisibility(mWeatherEnabled ? View.VISIBLE : View.GONE);
+    }
+
+    private void updateWeatherWidth(CurrentWeatherView currentWeatherView) {
+        if (currentWeatherView == null || currentWeatherView.getLayoutParams() == null) return;
+        int width = mWeatherCentered || mWeatherBackground != 0 ? WRAP_CONTENT : MATCH_PARENT;
+        if (currentWeatherView.getLayoutParams().width == width) return;
+        currentWeatherView.getLayoutParams().width = width;
+        currentWeatherView.requestLayout();
     }
 
     private void updateWeatherView() {

@@ -48,6 +48,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 
@@ -380,10 +381,18 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
                 mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver), mContext.getResources().getDisplayMetrics()));
 
                 break;
+            case 9: // liquid glass
+                mWeatherHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_hor), mContext.getResources().getDisplayMetrics()));
+                mWeatherVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, modRes.getDimensionPixelSize(R.dimen.widget_date_box_padding_ver), mContext.getResources().getDisplayMetrics()));
+                break;
             default:
                 break;
         }
-        setViewBackground(bg, (bg != null && mWeatherBgSelection == 5) ? 160 : 255);
+        if (mWeatherBgSelection == 9) {
+            LiquidGlass.apply(this, ViewHelper.dp2px(mContext, 18), LiquidGlass.DEFAULT_COLOR);
+        } else {
+            setViewBackground(bg, (bg != null && mWeatherBgSelection == 5) ? 160 : 255);
+        }
         setPadding(mWeatherHorPadding, mWeatherVerPadding, mWeatherHorPadding, mWeatherVerPadding);
 
     }
