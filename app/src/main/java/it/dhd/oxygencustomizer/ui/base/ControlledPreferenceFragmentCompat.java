@@ -25,6 +25,7 @@ import androidx.preference.OplusPreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
+import it.dhd.oneplusui.preference.OplusListPreference;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.activity.MainActivity;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -56,6 +57,25 @@ public abstract class ControlledPreferenceFragmentCompat extends OplusPreference
             setPreferencesFromResource(R.xml.mods, rootKey);
         }
 
+    }
+
+    protected void removeListEntry(String key, String value) {
+        OplusListPreference pref = findPreference(key);
+        if (pref == null) return;
+        int index = pref.findIndexOfValue(value);
+        if (index < 0) return;
+        CharSequence[] entries = pref.getEntries();
+        CharSequence[] values = pref.getEntryValues();
+        CharSequence[] newEntries = new CharSequence[entries.length - 1];
+        CharSequence[] newValues = new CharSequence[values.length - 1];
+        for (int i = 0, j = 0; i < entries.length; i++) {
+            if (i == index) continue;
+            newEntries[j] = entries[i];
+            newValues[j] = values[i];
+            j++;
+        }
+        pref.setEntries(newEntries);
+        pref.setEntryValues(newValues);
     }
 
     @Override
