@@ -148,7 +148,7 @@
             android:title="@string/lockscreen_clock_top_margin_title"
             app:defaultValue="0"
             app:maxVal="600"
-            app:minVal="0"
+            app:minVal="-100"
             app:valueFormat="dp" />
 
         <it.dhd.oneplusui.preference.OplusSliderPreference
