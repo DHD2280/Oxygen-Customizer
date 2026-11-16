@@ -33,7 +33,6 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.findViewWithTag;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.loadLottieAnimationView;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
-import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMarginsNoConvert;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
@@ -153,6 +152,8 @@ public class LockscreenClock extends XposedMods {
     public final static int CLOCK_UI_STATE_LS = 2;
     public final static int CLOCK_UI_STATE_AOD = 3;
     private Object mKeyguardStyleClockControllerImpl = null;
+    private ViewGroup mStyleClockContainer = null;
+    private int mStockClockBottom = 0;
     private boolean mBatteryReceiverRegistered = false;
     private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
         @Override
@@ -290,15 +291,25 @@ public class LockscreenClock extends XposedMods {
                         if (customLockscreenClock) {
                             finalResult += dp2px(mContext, topMargin);
                             finalResult += dp2px(mContext, bottomMargin);
-                            setMarginsNoConvert(mLockscreenView, mContext, 0, 0, 0, 0);
+                            applyLockscreenViewTop(0);
                         } else {
                             int mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
-                            setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
+                            applyLockscreenViewTop(mStockClockHeight);
                         }
                         if (!customLockscreenClock) {
                             return;
                         }
                         param.setResult(finalResult);
+                    });
+            KeyguardStyleClockControllerImpl
+                    .after("getKeyguardStyleClockHeight")
+                    .run(param -> {
+                        if (customLockscreenClock || mStyleClockContainer == null || mLockscreenView == null)
+                            return;
+                        int stockClockBottom = (int) mLockHeight + (int) param.getResult();
+                        if (stockClockBottom == mStockClockBottom) return;
+                        mStockClockBottom = stockClockBottom;
+                        applyLockscreenViewTop(0);
                     });
 
             ReflectedClass NotificationPanelViewController = ReflectedClass.ofIfPossible("com.android.systemui.shade.NotificationPanelViewController");
@@ -307,14 +318,14 @@ public class LockscreenClock extends XposedMods {
                     .run(param -> {
                         int clockHeight = mLockscreenView.getFullHeight(customLockscreenClock);
                         int finalResult = (int) (mLockHeight + clockHeight);
-                        setMarginsNoConvert(mLockscreenView, mContext, 0, 0, 0, 0);
                         if (customLockscreenClock) {
                             finalResult += dp2px(mContext, topMargin);
                             finalResult += dp2px(mContext, bottomMargin);
+                            applyLockscreenViewTop(0);
                         } else {
                             int mStockClockHeight = Settings.System.getInt(mContext.getContentResolver(), "oplus_keyguardstyle_aod_clock_height", 0);
-                            setMarginsNoConvert(mLockscreenView, mContext, 0, mStockClockHeight, 0, 0);
-                            finalResult += mStockClockHeight;
+                            applyLockscreenViewTop(mStockClockHeight);
+                            finalResult += mStyleClockContainer != null ? mStockClockBottom - (int) mLockHeight : mStockClockHeight;
                         }
                         if (mLockscreenView.isClockEnabled() ||
                                 mLockscreenView.isWeatherEnabled() ||
@@ -328,40 +339,43 @@ public class LockscreenClock extends XposedMods {
             ReflectedClass.ReflectionConsumer lockscreenClockPostHook = param -> {
                 int viewType = (int) param.args[0];
                 if (viewType != 1) return;
-                View view = (View) param.getResult();
-                if (view instanceof ViewGroup viewGroup) {
-                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                        View child = viewGroup.getChildAt(i);
-                        if (child instanceof LockscreenView) {
-                            continue;
-                        }
-                        if (child.getTag() != null && child.getTag().toString().contains("BY_OC")) {
-                            child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
-                        }
-                        if (child.getVisibility() == View.VISIBLE) {
-                            child.setTag("BY_OC");
-                            child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
-                        }
-                    }
-                }
-                if (ViewHelper.findViewWithTag(view, OC_LOCKSCREEN_CLOCK_LAYOUT) != null) {
-                    return;
-                }
-                try {
-                    ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
-                } catch (Throwable ignored) {
-                }
-                mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
-                if (view instanceof ViewGroup viewGroup) {
-                    viewGroup.addView(mLockscreenView);
-                }
-                if (customLockscreenClock) {
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    layoutParams.width = MATCH_PARENT;
-                    view.setLayoutParams(layoutParams);
-                    view.requestLayout();
-                }
+                attachLockscreenView((View) param.getResult());
             };
+
+            Class<?> customStyleClockClass = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.view.CustomOplusKeyguardStyleClock").getClazz();
+            if (customStyleClockClass != null) {
+                ReflectedClass KeyguardPlugin = ReflectedClass.ofIfPossible("com.oplus.keyguard.plugin.KeyguardPlugin");
+                KeyguardPlugin
+                        .after("setUp")
+                        .run(param -> {
+                            if (param.args.length != 2) return;
+                            Object container = getObjectField(param.thisObject, "pluginContainer");
+                            if (!customStyleClockClass.isInstance(container)) return;
+                            mStyleClockContainer = (ViewGroup) container;
+                            attachLockscreenView(mStyleClockContainer);
+                            applyLockscreenViewTop(0);
+                        });
+
+                ReflectedClass.of(customStyleClockClass)
+                        .after("setAlpha")
+                        .run(param -> {
+                            if (mStyleClockContainer == param.thisObject) return;
+                            ViewGroup container = (ViewGroup) param.thisObject;
+                            if (container.getChildCount() == 0) return;
+                            mStyleClockContainer = container;
+                            attachLockscreenView(mStyleClockContainer);
+                            applyLockscreenViewTop(0);
+                        });
+
+                ReflectedClass KeyguardStyleServiceCallback = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl$keyguardStyleServiceCallback$1");
+                KeyguardStyleServiceCallback
+                        .after("onUiStateChanged")
+                        .run(param -> {
+                            if (mLockscreenView == null) return;
+                            if (!(param.args[0] instanceof Enum<?> uiState)) return;
+                            mLockscreenView.onUiStateChanged(uiState.ordinal());
+                        });
+            }
             OplusKeyguardStyleBaseClock
                     .after("getView")
                     .run(lockscreenClockPostHook);
@@ -556,7 +570,61 @@ public class LockscreenClock extends XposedMods {
         mLockscreenView.updateClockMargins(dp2px(mContext, topMargin));
     }
 
+    private void applyLockscreenViewTop(int legacyTop) {
+        if (mLockscreenView == null) return;
+        int top = legacyTop;
+        if (mStyleClockContainer != null) {
+            top = customLockscreenClock ? (int) mLockHeight : mStockClockBottom;
+        }
+        if (!(mLockscreenView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams lp)) return;
+        if (lp.topMargin == top && lp.leftMargin == 0 && lp.rightMargin == 0 && lp.bottomMargin == 0)
+            return;
+        lp.setMargins(0, top, 0, 0);
+        mLockscreenView.setLayoutParams(lp);
+    }
+
+    private void attachLockscreenView(View view) {
+        if (view == null || mLockscreenView == null) return;
+        if (view instanceof ViewGroup viewGroup) {
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                if (child instanceof LockscreenView) {
+                    continue;
+                }
+                if (child.getTag() != null && child.getTag().toString().contains("BY_OC")) {
+                    child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
+                }
+                if (child.getVisibility() == View.VISIBLE) {
+                    child.setTag("BY_OC");
+                    child.setVisibility(customLockscreenClock ? View.GONE : View.VISIBLE);
+                }
+            }
+        }
+        if (customLockscreenClock) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (layoutParams != null && layoutParams.width != MATCH_PARENT) {
+                layoutParams.width = MATCH_PARENT;
+                view.setLayoutParams(layoutParams);
+                view.requestLayout();
+            }
+        }
+        if (ViewHelper.findViewWithTag(view, OC_LOCKSCREEN_CLOCK_LAYOUT) != null) {
+            return;
+        }
+        try {
+            ((ViewGroup) mLockscreenView.getParent()).removeView(mLockscreenView);
+        } catch (Throwable ignored) {
+        }
+        mLockscreenView.setTag(OC_LOCKSCREEN_CLOCK_LAYOUT);
+        if (view instanceof ViewGroup viewGroup) {
+            viewGroup.addView(mLockscreenView);
+        }
+    }
+
     private void reloadPlugin() {
+        if (mStyleClockContainer != null) {
+            mStyleClockContainer.post(() -> attachLockscreenView(mStyleClockContainer));
+        }
         if (Build.VERSION.SDK_INT < 35) return;
         Logger.log("LockscreenClock reloadPlugin (mKeyguardStyleClockControllerImpl == null) " + (mKeyguardStyleClockControllerImpl == null));
         if (mKeyguardStyleClockControllerImpl == null) return;
