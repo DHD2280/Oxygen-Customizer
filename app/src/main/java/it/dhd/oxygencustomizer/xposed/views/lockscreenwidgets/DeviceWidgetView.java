@@ -28,12 +28,15 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.adapters.DeviceWidgetsAdapter;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BaseDeviceWidget;
@@ -49,6 +52,12 @@ public class DeviceWidgetView extends FrameLayout {
     public int DEVICE_WIDGET_CUSTOM = 2;
 
     private int mDeviceWidgetStyle = DEVICE_WIDGET_CLASSIC;
+    private boolean mLiquidGlass = false;
+    private LinearLayout mBatteryArcContainer;
+    private LinearLayout mBatteryTempContainer;
+    private final Map<View, int[]> mOriginalMargins = new HashMap<>();
+    private static final int GRID_COLUMNS = 4;
+    private static final int GLASS_GAP_DP = 12;
     private float mWidgetScaling = 1f;
     private TextView mBatteryLevelView;
     private ProgressBar mBatteryProgress;
@@ -174,6 +183,8 @@ public class DeviceWidgetView extends FrameLayout {
 
         LinearLayout batteryArc = (LinearLayout) ViewHelper.findViewWithTag(this, "battery_progress_arc");
         LinearLayout batteryTemp = (LinearLayout) ViewHelper.findViewWithTag(this, "temperature_progress");
+        mBatteryArcContainer = batteryArc;
+        mBatteryTempContainer = batteryTemp;
 
         if (mBatteryPercentArc == null) {
             mBatteryPercentArc = new ProgressImageView(mContext);
@@ -231,6 +242,48 @@ public class DeviceWidgetView extends FrameLayout {
         mCustomRow.setVisibility(View.GONE);
     }
 
+    public void setLiquidGlass(boolean enabled) {
+        if (mLiquidGlass == enabled) return;
+        mLiquidGlass = enabled;
+        updateScaling();
+        updateWidgetMargin();
+    }
+
+    private void applyLiquidGlass() {
+        setGlass((View) mBatteryProgress.getParent());
+        setGlass(mVolumeLevelContainer);
+        setGlass(mRamUsageContainer);
+        setGlass(mVolumeLevelContainerArc);
+        setGlass(mRamUsageContainerArc);
+        setGlass(mBatteryArcContainer);
+        setGlass(mBatteryTempContainer);
+        for (int i = 0; i < mCustomRow.getChildCount(); i++) {
+            if (mCustomRow.getChildAt(i) instanceof BaseDeviceWidget widget) {
+                setGlass(widget);
+            }
+        }
+        int rowPadding = mLiquidGlass ? dp2px(mContext, 6) : 0;
+        for (LinearLayout row : List.of(mClassicRow, mArcRow, mCustomRow)) {
+            row.setPadding(rowPadding, 0, rowPadding, 0);
+        }
+        setPadding(0, 0, 0, mLiquidGlass ? dp2px(mContext, 12) : 0);
+    }
+
+    private void setGlass(View view) {
+        if (view == null) return;
+        if (mLiquidGlass) {
+            LiquidGlass.apply(view, dp2px(mContext, 18), LiquidGlass.DEFAULT_COLOR);
+        } else {
+            view.setBackground(null);
+        }
+    }
+
+    private void setHorizontalMargins(View view, LinearLayout.LayoutParams params, int glassMargin) {
+        int[] original = mOriginalMargins.computeIfAbsent(view, v -> new int[]{params.leftMargin, params.rightMargin});
+        params.leftMargin = mLiquidGlass ? glassMargin : original[0];
+        params.rightMargin = mLiquidGlass ? glassMargin : original[1];
+    }
+
     public void setDeviceWidgetStyle(int newStyle) {
         mDeviceWidgetStyle = newStyle;
         setupRows();
@@ -242,26 +295,79 @@ public class DeviceWidgetView extends FrameLayout {
     }
 
     private void updateScaling() {
-        int artContainerSize = dp2px(mContext, 60);
+        int artContainerSize = (int) (dp2px(mContext, 60) * mWidgetScaling);
         int batteryProgressContainerSize = dp2px(mContext, 120);
+        int glassMargin = dp2px(mContext, GLASS_GAP_DP / 2);
 
         List<View> views = List.of(mVolumeLevelArcProgress, mRamUsageArcProgress, mBatteryPercentArc, mBatteryTempArc);
         for (View v : views) {
             ViewGroup parent = (ViewGroup) v.getParent();
-            int width = (int) (artContainerSize * mWidgetScaling);
-            int height = (int) (artContainerSize * mWidgetScaling);
-            ViewGroup.LayoutParams params = parent.getLayoutParams();
-            params.width = width;
-            params.height = height;
+            if (parent == null) continue;
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) parent.getLayoutParams();
+            params.width = artContainerSize;
+            params.height = artContainerSize;
+            setHorizontalMargins(parent, params, glassMargin);
             parent.setLayoutParams(params);
-            parent.requestLayout();
+            parent.setPadding(0, 0, 0, 0);
         }
 
-        ViewGroup batteryProgressParent = (ViewGroup) mBatteryProgress.getParent();
-        ViewGroup.LayoutParams params = batteryProgressParent.getLayoutParams();
+        LinearLayout batteryProgressParent = (LinearLayout) mBatteryProgress.getParent();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) batteryProgressParent.getLayoutParams();
         params.width = (int) (batteryProgressContainerSize * mWidgetScaling);
+        params.height = WRAP_CONTENT;
+        params.weight = 0f;
+        setHorizontalMargins(batteryProgressParent, params, glassMargin);
         batteryProgressParent.setLayoutParams(params);
-        batteryProgressParent.requestLayout();
+        batteryProgressParent.setGravity(mLiquidGlass ? Gravity.CENTER_VERTICAL : Gravity.NO_GRAVITY);
+        int batteryPadding = mLiquidGlass ? dp2px(mContext, 14) : 0;
+        batteryProgressParent.setPadding(batteryPadding, 0, batteryPadding, 0);
+
+        applyLiquidGlass();
+        post(this::applyGrid);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (w != oldw) post(this::applyGrid);
+    }
+
+    private void applyGrid() {
+        if (!mLiquidGlass) return;
+        int width = getWidth() - getPaddingLeft() - getPaddingRight();
+        if (width <= 0) return;
+        int rowPadding = dp2px(mContext, GLASS_GAP_DP / 2);
+        int column = (width - 2 * rowPadding) / GRID_COLUMNS;
+        int height = column - dp2px(mContext, GLASS_GAP_DP);
+        int artContainerSize = (int) (dp2px(mContext, 60) * mWidgetScaling);
+        int arcPadding = Math.max(0, (height - artContainerSize) / 2);
+
+        setGridSize((View) mBatteryProgress.getParent(), column, 2, height);
+        for (View arcContainer : List.of(mVolumeLevelContainer, mRamUsageContainer,
+                mVolumeLevelContainerArc, mRamUsageContainerArc, mBatteryArcContainer, mBatteryTempContainer)) {
+            setGridSize(arcContainer, column, 1, height);
+            arcContainer.setPadding(arcPadding, arcPadding, arcPadding, arcPadding);
+        }
+        for (int i = 0; i < mCustomRow.getChildCount(); i++) {
+            if (mCustomRow.getChildAt(i) instanceof BaseDeviceWidget widget) {
+                setGridSize(widget, column, widget.getMode() == WidgetMode.SMALL ? 1 : 2, height);
+            }
+        }
+    }
+
+    private void setGridSize(View view, int column, int span, int height) {
+        if (view == null || !(view.getLayoutParams() instanceof LinearLayout.LayoutParams params))
+            return;
+        int margin = dp2px(mContext, GLASS_GAP_DP / 2);
+        int width = column * span - 2 * margin;
+        if (params.width == width && params.height == height && params.weight == 0f
+                && params.leftMargin == margin && params.rightMargin == margin) return;
+        params.width = width;
+        params.height = height;
+        params.weight = 0f;
+        params.leftMargin = margin;
+        params.rightMargin = margin;
+        view.setLayoutParams(params);
     }
 
     private void initBatteryStatus() {
@@ -460,9 +566,14 @@ public class DeviceWidgetView extends FrameLayout {
                 params = new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f);
             }
 
-            params.setMargins(dp2px(mContext, 12), 0, dp2px(mContext, 12), 0);
+            int margin = dp2px(mContext, mLiquidGlass ? GLASS_GAP_DP / 2 : 12);
+            params.setMargins(margin, 0, margin, 0);
             widget.setLayoutParams(params);
+            int padding = mLiquidGlass ? dp2px(mContext, 8) : 0;
+            widget.setPadding(padding, padding, padding, padding);
         }
+        applyLiquidGlass();
+        post(this::applyGrid);
     }
 
     public List<BaseDeviceWidget> getWidgetsList() {

@@ -56,6 +56,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.ColorUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 import it.dhd.oxygencustomizer.xposed.utils.NotificationUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -102,7 +103,9 @@ public class PeekDisplayView extends LinearLayout {
     public int peekDisplayLocation = PEEK_DISPLAY_LOCATION_TOP;
 
     // Styles
-    private PeekStyle PEEK_STYLE_DEFAULT, PEEK_STYLE_MINIMAL, PEEK_STYLE_CUSTOM;
+    private PeekStyle PEEK_STYLE_DEFAULT, PEEK_STYLE_MINIMAL, PEEK_STYLE_CUSTOM, PEEK_STYLE_GLASS;
+    private static final int GLASS_SELECTED_COLOR = 0x59FFFFFF;
+    private static final int GLASS_SUMMARY_COLOR = 0xB3FFFFFF;
     private PeekIconStyle PEEK_STYLE_ICON_DEFAULT, PEEK_STYLE_ICON_MINIMAL, PEEK_STYLE_ICON_CUSTOM;
     private PeekStyle mCurrentPeekStyle;
     private PeekIconStyle mCurrentIconStyle;
@@ -245,6 +248,16 @@ public class PeekDisplayView extends LinearLayout {
                         getPrimaryColor(), /* Buttons Color */
                         false, /* Use App Icons */
                         PEEK_STYLE_ICON_CUSTOM /* Icon Style */);
+        PEEK_STYLE_GLASS =
+                new PeekStyle("glass", /* Style Name */
+                        3, /* Style int according to pref */
+                        Color.WHITE, /* Title Color */
+                        GLASS_SUMMARY_COLOR, /* Summary Color */
+                        LiquidGlass.DEFAULT_COLOR, /* Card Background Color */
+                        corners, /* Card Background Radius */
+                        Color.WHITE, /* Buttons Color */
+                        false, /* Use App Icons */
+                        PEEK_STYLE_ICON_DEFAULT /* Icon Style */);
         mCurrentPeekStyle = PEEK_STYLE_DEFAULT;
     }
 
@@ -304,6 +317,7 @@ public class PeekDisplayView extends LinearLayout {
                 "buttonsColor: " + buttonsColor + "\n" +
                 "useAppIcons: " + useAppIcons);
         boolean requireUpdate = checkChange(newIconStyle, iconSize, backgroundColor, iconMarginEnd, iconPadding) ||
+                (newStyle == 3) != (mCurrentPeekStyle == PEEK_STYLE_GLASS) ||
                 newIconStyle != mCurrentPeekStyle.getPeekIconStyle().getStyle() ||
                 useAppIcons != mCurrentPeekStyle.useAppIcons() ||
                 clearAllCount != mClearAllCount ||
@@ -315,6 +329,7 @@ public class PeekDisplayView extends LinearLayout {
         );
         PEEK_STYLE_DEFAULT.setUseAppIcons(useAppIcons);
         PEEK_STYLE_MINIMAL.setUseAppIcons(useAppIcons);
+        PEEK_STYLE_GLASS.setUseAppIcons(useAppIcons);
         switch (newStyle) {
             case 0:
                 mCurrentPeekStyle = PEEK_STYLE_DEFAULT;
@@ -324,6 +339,9 @@ public class PeekDisplayView extends LinearLayout {
                 break;
             case 2:
                 mCurrentPeekStyle = PEEK_STYLE_CUSTOM;
+                break;
+            case 3:
+                mCurrentPeekStyle = PEEK_STYLE_GLASS;
                 break;
         }
         mClearAllMode = clearAllMode;
@@ -428,8 +446,16 @@ public class PeekDisplayView extends LinearLayout {
         updateView();
     }
 
+    private boolean isGlassStyle() {
+        return mCurrentPeekStyle == PEEK_STYLE_GLASS;
+    }
+
     private void updateClearAllButtonSize() {
         clearAllButton.setLayoutParams(new LinearLayout.LayoutParams(getIconSize(), getIconSize()));
+        if (isGlassStyle()) {
+            LiquidGlass.apply(clearAllButton, getIconSize() / 2f, LiquidGlass.DEFAULT_COLOR);
+            return;
+        }
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(ColorStateList.valueOf(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
         RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), DrawableConverter.drawableToBitmap(drawable));
@@ -699,12 +725,16 @@ public class PeekDisplayView extends LinearLayout {
     private void updateViewColors() {
         int surfaceColor = mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? Color.TRANSPARENT : getSurfaceColor();
         updateClearAllButtonSize();
-        notificationCard.setBackground(getNotificationBackground(mCurrentPeekStyle.getCardBackgroundColor()));
-        clearAllButton.setBackgroundTintList(ColorStateList.valueOf(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
+        if (isGlassStyle()) {
+            LiquidGlass.apply(notificationCard, dp2px(mContext, 24), LiquidGlass.DEFAULT_COLOR);
+        } else {
+            notificationCard.setBackground(getNotificationBackground(mCurrentPeekStyle.getCardBackgroundColor()));
+            clearAllButton.setBackgroundTintList(ColorStateList.valueOf(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
+        }
         notificationTitle.setTextColor(mCurrentPeekStyle.getTitleColor());
         notificationSummary.setTextColor(mCurrentPeekStyle.getSummaryColor());
         notificationHeader.setTextColor(mCurrentPeekStyle.getTitleColor());
-        overflowText.setTextColor(mCurrentPeekStyle == PEEK_STYLE_MINIMAL ? Color.WHITE : surfaceColor);
+        overflowText.setTextColor(mCurrentPeekStyle == PEEK_STYLE_MINIMAL || isGlassStyle() ? Color.WHITE : surfaceColor);
         minimizeButton.setImageTintList(ColorStateList.valueOf(mCurrentPeekStyle.getButtonsColor()));
         dismissButton.setImageTintList(ColorStateList.valueOf(mCurrentPeekStyle.getButtonsColor()));
         clearAllButton.setImageTintList(ColorStateList.valueOf(mCurrentPeekStyle.getButtonsColor()));
@@ -758,7 +788,9 @@ public class PeekDisplayView extends LinearLayout {
             Log.d("PeekDisplayView", "onCreateViewHolder: icon size= " + mCurrentPeekStyle.getPeekIconStyle().getIconSize() + " icon padding= " + getIconPadding());
             RecyclerView.LayoutParams imageParams = new RecyclerView.LayoutParams(getIconSize(), getIconSize());
             iconView.setLayoutParams(imageParams);
-            iconView.setBackground(createBackgroundDrawable(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
+            if (!isGlassStyle()) {
+                iconView.setBackground(createBackgroundDrawable(mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor()));
+            }
             int padding = getIconPadding();
             iconView.setPadding(padding, padding, padding, padding);
             iconView.setClickable(true);
@@ -800,7 +832,8 @@ public class PeekDisplayView extends LinearLayout {
                                     NotificationUtils.resolveAppIcon(notification) :
                             NotificationUtils.resolveSmallIcon(notification, mContext);
             holder.iconView.setImageDrawable(iconDrawable);
-            float[] matrix = getTintMatrix(NotificationUtils.interpolateColors(isNightMode() ? Color.WHITE : Color.BLACK, -1, 1f), 1f * 0.67f);
+            int tintColor = isGlassStyle() || isNightMode() ? Color.WHITE : Color.BLACK;
+            float[] matrix = getTintMatrix(NotificationUtils.interpolateColors(tintColor, -1, 1f), 1f * 0.67f);
             ColorMatrixColorFilter matrixFilter = new ColorMatrixColorFilter(matrix);
             holder.iconView.clearColorFilter();
             if (mCurrentPeekStyle.useAppIcons()) {
@@ -812,9 +845,13 @@ public class PeekDisplayView extends LinearLayout {
                 }
             }
             boolean isSelected = selectedPosition == position;
-            int color = mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor();
-            int newColor = isSelected ? ColorUtils.adjustColorForPressed(color, 0.7f) : color;
-            holder.iconView.setBackground(createBackgroundDrawable(newColor));
+            if (isGlassStyle()) {
+                LiquidGlass.setColor(holder.iconView, getIconSize() / 2f, isSelected ? GLASS_SELECTED_COLOR : LiquidGlass.DEFAULT_COLOR);
+            } else {
+                int color = mCurrentPeekStyle.getPeekIconStyle().getIconBackgroundColor();
+                int newColor = isSelected ? ColorUtils.adjustColorForPressed(color, 0.7f) : color;
+                holder.iconView.setBackground(createBackgroundDrawable(newColor));
+            }
             holder.iconView.setOnClickListener(v -> {
                 if (mCurrentPeekStyle == PEEK_STYLE_MINIMAL) {
                     toggleNotificationDetails(notification);

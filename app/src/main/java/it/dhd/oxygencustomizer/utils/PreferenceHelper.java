@@ -171,6 +171,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LINEAR_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LIQUID_GLASS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_ENABLED;
@@ -1019,6 +1020,11 @@ public class PreferenceHelper {
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE -> {
                 return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+            }
+
+            case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LIQUID_GLASS -> {
+                return Build.VERSION.SDK_INT >= 37 &&
+                        instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
             }
 
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR -> {

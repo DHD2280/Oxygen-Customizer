@@ -16,6 +16,14 @@
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
+            android:key="lockscreen_device_widget_liquid_glass"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/lockscreen_device_widget_liquid_glass_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
             android:key="lockscreen_device_widget_custom_color"
             android:summaryOff="@string/general_off"
             android:summaryOn="@string/general_on"

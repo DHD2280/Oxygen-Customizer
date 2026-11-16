@@ -1510,6 +1510,8 @@
     <string name="lockscreen_widgets_style1">Material Rounded</string>
     <string name="lockscreen_widgets_style2">Material Square</string>
     <string name="lockscreen_widgets_style3">Translucent</string>
+    <string name="lockscreen_widgets_style4">Liquid Glass</string>
+    <string name="lockscreen_device_widget_liquid_glass_title">Liquid Glass background</string>
 
     <!-- LS Widgets Actions -->
     <string name="camera">Camera</string>
