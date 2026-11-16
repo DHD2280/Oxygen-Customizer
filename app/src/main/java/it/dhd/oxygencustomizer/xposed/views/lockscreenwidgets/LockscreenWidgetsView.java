@@ -18,6 +18,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getQsMediaDialog;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getRingerTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getWalletTile;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.BT_ACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.BT_INACTIVE;
 import static it.dhd.oxygencustomizer.xposed.utils.WidgetUtils.BT_LABEL_INACTIVE;
@@ -106,6 +107,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.WidgetFactory;
 
@@ -138,6 +140,7 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     // Widgets style
     private int mWidgetsStyle = 0;
+    private static final int STYLE_GLASS = 3;
     // Custom Widgets Colors
     private boolean mCustomColors = false;
     private int mBigInactiveColor, mBigActiveColor, mSmallInactiveColor, mSmallActiveColor;
@@ -761,6 +764,19 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
                 layoutParams.width = 0;
                 layoutParams.weight = 1;
             }
+            if (mWidgetsStyle == STYLE_GLASS) {
+                layoutParams.height = (int) (dp2px(mContext, 58) * mWidgetsScale);
+                int padding = (int) (dp2px(mContext, 16) * mWidgetsScale);
+                efab.setPadding(padding, 0, padding, 0);
+                efab.setMaxLines(1);
+                efab.setEllipsize(TextUtils.TruncateAt.END);
+                if (mMainWidgetsContainer != null && mMainWidgetsContainer.getLayoutParams() instanceof LayoutParams containerParams
+                        && (containerParams.height != LayoutParams.WRAP_CONTENT || containerParams.weight != 0f)) {
+                    containerParams.height = LayoutParams.WRAP_CONTENT;
+                    containerParams.weight = 0f;
+                    mMainWidgetsContainer.setLayoutParams(containerParams);
+                }
+            }
             efab.setLayoutParams(layoutParams);
         }
         efab.setMaxWidth((int)(mFabWidth*mWidgetsScale));
@@ -768,6 +784,21 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
 
     private void updateWidgetsResources(ImageView iv) {
         if (iv == null) return;
+        if (mWidgetsStyle == STYLE_GLASS) {
+            int size = (int) (dp2px(mContext, 58) * mWidgetsScale);
+            int margin = (int) (dp2px(mContext, 10) * mWidgetsScale);
+            int padding = (int) (dp2px(mContext, 15) * mWidgetsScale);
+            if (iv.getLayoutParams() instanceof MarginLayoutParams lp) {
+                lp.width = size;
+                lp.height = size;
+                lp.setMargins(margin, 0, margin, 0);
+                iv.setLayoutParams(lp);
+            }
+            iv.setPadding(padding, padding, padding, padding);
+            iv.setBackground(null);
+            setButtonActiveState(iv, null, false);
+            return;
+        }
         int bgRes = switch (mWidgetsStyle) {
             case 1 -> R.drawable.lockscreen_widget_background_square;
             default -> R.drawable.lockscreen_widget_background_circle;
@@ -1043,6 +1074,27 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
         int bgTint;
         int tintColor;
 
+        if (mWidgetsStyle == STYLE_GLASS) {
+            if (mCustomColors) {
+                bgTint = iv != null ? (active ? mSmallActiveColor : mSmallInactiveColor) : (active ? mBigActiveColor : mBigInactiveColor);
+                tintColor = iv != null ? (active ? mSmallIconActiveColor : mSmallIconInactiveColor) : (active ? mBigIconActiveColor : mBigIconInactiveColor);
+            } else {
+                bgTint = active ? LiquidGlass.ACTIVE_COLOR : LiquidGlass.DEFAULT_COLOR;
+                tintColor = active ? Color.BLACK : Color.WHITE;
+            }
+            if (iv != null) {
+                setGlassColor(iv, bgTint);
+                iv.setImageTintList(iv != weatherButton ? ColorStateList.valueOf(tintColor) : null);
+            }
+            if (efab != null) {
+                setGlassColor(efab, bgTint);
+                boolean keepIconColors = efab == weatherButtonFab || "app".equals(efab.getTag());
+                efab.setIconTint(keepIconColors ? null : ColorStateList.valueOf(tintColor));
+                efab.setTextColor(tintColor);
+            }
+            return;
+        }
+
         if (!mCustomColors) {
             if (active) {
                 bgTint = mWidgetsStyle == 2 ?
@@ -1101,6 +1153,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             }
         }
 
+    }
+
+    private void setGlassColor(View view, int color) {
+        LiquidGlass.setColor(view, dp2px(mContext, 18) * mWidgetsScale, color);
     }
 
     public void updateMediaState() {
@@ -1495,6 +1551,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             return (boolean) callMethod(dataController, "isMobileDataEnabled");
         } catch (Throwable ignored) {
             try {
+                return ((android.telephony.TelephonyManager) callMethod(dataController, "getTelephonyManager")).isDataEnabled();
+            } catch (Throwable ignoredToo) {
+            }
+            try {
                 Class<?> cmClass = Class.forName(SystemUtils.ConnectivityManager().getClass().getName());
                 Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
                 method.setAccessible(true); // Make the method callable
@@ -1602,9 +1662,10 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
      * @param devName               device name, keep blank for default Build.MODEL
      * @param customWidgets         custom widgets string from preference, it must be a json
      */
-    public void setDeviceWidgetOptions(int deviceWidgetStyle, boolean customColor, int linearColor, int circularColor, int textColor, String devName, String customWidgets) {
+    public void setDeviceWidgetOptions(int deviceWidgetStyle, boolean liquidGlass, boolean customColor, int linearColor, int circularColor, int textColor, String devName, String customWidgets) {
         if (instance.mDeviceWidgetView == null) return;
         instance.mDeviceWidgetView.setDeviceWidgetStyle(deviceWidgetStyle);
+        instance.mDeviceWidgetView.setLiquidGlass(liquidGlass);
         instance.mDeviceWidgetView.setCustomColor(customColor, linearColor, circularColor);
         instance.mDeviceWidgetView.setTextCustomColor(textColor);
         instance.mDeviceWidgetView.setDeviceName(devName);
@@ -1617,8 +1678,13 @@ public class LockscreenWidgetsView extends LinearLayout implements OmniJawsClien
             boolean customColorsEnabled,
             int bigInactive, int bigActive, int smallInactive, int smallActive,
             int bigIconInactive, int bigIconActive, int smallIconInactive, int smallIconActive) {
+        boolean glassChanged = (instance.mWidgetsStyle == STYLE_GLASS) != (widgetsStyle == STYLE_GLASS);
         instance.mWidgetsStyle = widgetsStyle;
         instance.mCustomColors = customColorsEnabled;
+        if (glassChanged) {
+            instance.removeAllViews();
+            instance.drawUI();
+        }
         instance.mBigInactiveColor = bigInactive;
         instance.mBigActiveColor = bigActive;
         instance.mSmallInactiveColor = smallInactive;
