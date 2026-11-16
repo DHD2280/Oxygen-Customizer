@@ -65,6 +65,7 @@ public class LockscreenPeekDisplay extends XposedMods {
     private float mLockHeight;
     private int mTopMargin = 0;
     private boolean mMarginSet = false;
+    private boolean mLegacyStatusView = true;
 
     // Preferences
     private boolean mPeekEnabled = false;
@@ -148,12 +149,30 @@ public class LockscreenPeekDisplay extends XposedMods {
         });
 
         ReflectedClass KeyguardStatusViewController = ReflectedClass.ofIfPossible("com.android.keyguard.KeyguardStatusViewController");
+        mLegacyStatusView = KeyguardStatusViewController.getClazz() != null;
         KeyguardStatusViewController
                 .after("setAlpha")
                 .run(param -> {
                     if (mPeekContainer == null) return;
                     mPeekContainer.setAlpha((float) param.args[0]);
                 });
+
+        if (!mLegacyStatusView) {
+            ReflectedClass PrimaryBouncerCallbackInteractor = ReflectedClass.ofIfPossible("com.android.systemui.bouncer.domain.interactor.PrimaryBouncerCallbackInteractor");
+            PrimaryBouncerCallbackInteractor
+                    .after("dispatchExpansionChanged")
+                    .run(param -> {
+                        if (mPeekContainer == null) return;
+                        float expansion = (float) param.args[0];
+                        mPeekContainer.setAlpha(Math.max(0f, Math.min(1f, (expansion - 0.9f) / 0.1f)));
+                    });
+            PrimaryBouncerCallbackInteractor
+                    .after("dispatchFullyHidden")
+                    .run(param -> {
+                        if (mPeekContainer == null) return;
+                        mPeekContainer.setAlpha(1f);
+                    });
+        }
 
         ReflectedClass KeyguardStyleClockControllerImpl = ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl");
         KeyguardStyleClockControllerImpl
@@ -190,6 +209,17 @@ public class LockscreenPeekDisplay extends XposedMods {
                     placePeek();
                 });
 
+        if (!mLegacyStatusView) {
+            NotificationPanelViewController
+                    .after("positionClockAndNotifications")
+                    .run(param -> {
+                        if (mPeekContainer == null) return;
+                        int top = (int) callMethod(param.thisObject, "getKeyguardNotificationStaticPadding");
+                        if (top <= 0) return;
+                        setPeekTop(top + dp2px(mContext, mTopMargin));
+                    });
+        }
+
         ReflectedClass NotificationLockscreenUserManagerImpl = ReflectedClass.of("com.android.systemui.statusbar.NotificationLockscreenUserManagerImpl");
         NotificationLockscreenUserManagerImpl
                 .before("shouldShowLockscreenNotifications")
@@ -211,7 +241,7 @@ public class LockscreenPeekDisplay extends XposedMods {
         NotificationPanelViewControllerExImp
                 .before("setNotificationsConstraints")
                 .run(param -> {
-                    if (mPeekContainer == null) return;
+                    if (mPeekContainer == null || !mLegacyStatusView) return;
                     int top = (int) param.args[3];
                     Logger.log("LockscreenPeekDisplay, NotificationPanelViewControllerExImp setNotificationsConstraints, top=" + top + ", mTopHeight=" + mTopHeight + ", mStackScrollerPaddingExpanded=" + mStackScrollerPaddingExpanded);
                     setMarginsNoConvert(mPeekContainer, mContext, 0, (top == 0 ? mStackScrollerPaddingExpanded + mTopHeight : top) + dp2px(mContext, mTopMargin), 0, 0);
@@ -272,6 +302,13 @@ public class LockscreenPeekDisplay extends XposedMods {
         updatePeekOptions();
         mNotificationPanelViewController.addView(mPeekContainer, mNotificationPanelViewController.getChildCount() - 1);
         setMarginsNoConvert(mPeekContainer, mContext, 0, mTopHeight + dp2px(mContext, mTopMargin), 0, 0);
+    }
+
+    private void setPeekTop(int top) {
+        if (!(mPeekContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams lp)) return;
+        if (lp.topMargin == top) return;
+        lp.topMargin = top;
+        mPeekContainer.setLayoutParams(lp);
     }
 
     private void updateVisibility() {

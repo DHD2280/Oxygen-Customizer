@@ -9,6 +9,7 @@ import static it.dhd.oxygencustomizer.utils.FileUtil.launchFilePicker;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class LockscreenWeather
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+        if (Build.VERSION.SDK_INT < 37) {
+            removeListEntry("weather_background", "9");
+        }
         Preference mCustomFontPiker = findPreference("font_picker");
         if (mCustomFontPiker != null) {
             mCustomFontPiker.setOnPreferenceClickListener(preference -> {

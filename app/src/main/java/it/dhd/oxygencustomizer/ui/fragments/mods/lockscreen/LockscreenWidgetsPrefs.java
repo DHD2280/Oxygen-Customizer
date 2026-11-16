@@ -10,6 +10,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_2_KEY;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -77,6 +78,9 @@ public class LockscreenWidgetsPrefs extends ControlledPreferenceFragmentCompat{
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+        if (Build.VERSION.SDK_INT < 37) {
+            removeListEntry("lockscreen_widgets_style", "3");
+        }
 
         mWeatherClient = new OmniJawsClient(getContext());
         mWeatherClient.queryWeather();

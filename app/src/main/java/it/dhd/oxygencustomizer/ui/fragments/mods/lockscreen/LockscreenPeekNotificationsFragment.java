@@ -22,6 +22,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.app.Notification;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.service.notification.StatusBarNotification;
@@ -218,6 +219,14 @@ public class LockscreenPeekNotificationsFragment extends BaseFragment {
         @Override
         public int getLayoutResource() {
             return R.xml.lockscreen_peek_notifications_prefs;
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferences(savedInstanceState, rootKey);
+            if (Build.VERSION.SDK_INT < 37) {
+                removeListEntry(LOCKSCREEN_PEEK_NOTIFICATIONS_STYLE, "3");
+            }
         }
 
         @Override

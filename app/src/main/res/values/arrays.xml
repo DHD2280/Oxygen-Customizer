@@ -715,6 +715,7 @@
         <item>@string/lockscreen_weather_selection_str_gradient</item>
         <item>@string/lockscreen_weather_selection_str_border_accent</item>
         <item>@string/lockscreen_weather_selection_str_border_gradient</item>
+        <item>@string/lockscreen_widgets_style4</item>
     </string-array>
 
     <string-array name="lockscreen_weather_bg_values" translatable="false">
@@ -727,6 +728,7 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
+        <item>9</item>
     </string-array>
 
     <!-- Lockscreen album art filter -->
@@ -858,12 +860,14 @@
         <item>@string/lockscreen_widgets_style1</item>
         <item>@string/lockscreen_widgets_style2</item>
         <item>@string/lockscreen_widgets_style3</item>
+        <item>@string/lockscreen_widgets_style4</item>
     </string-array>
 
     <string-array name="lockscreen_widgets_style_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <!-- Edge light -->
@@ -1012,12 +1016,14 @@
         <item>@string/default_value</item>
         <item>@string/peek_display_minimalist</item>
         <item>@string/peek_display_custom_style</item>
+        <item>@string/lockscreen_widgets_style4</item>
     </string-array>
 
     <string-array name="peek_display_style_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <!-- Peek display location  -->
