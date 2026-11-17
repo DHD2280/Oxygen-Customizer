@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,67 +190,39 @@ public class Launcher extends XposedMods {
                         param.setResult(mDrawerColumns);
                 });
 
-        ReflectedClass OplusTaskViewImpl = ReflectedClass.of("com.android.quickstep.views.OplusTaskViewImpl");
-
-        OplusTaskViewImpl
-                .after("setIcon")
-                .run(param -> {
-                    View headerView = (View) callMethod(param.thisObject, "getHeaderView");
-                    View iconView = (View) callMethod(headerView, "getTaskIcon");
-                    View titleView = (View) callMethod(headerView, "getTitleTv");
-                    Object task = callMethod(param.thisObject, "getTask");
-                    if (task == null) return;
-                    Object key = getObjectField(task, "key");
-                    if (key == null) return;
-                    String pkgName = null;
-                    try {
-                        pkgName = (String) callMethod(task, "getPackageName");
-                    } catch (Throwable ignored) {
-                    }
-                    try {
-                        pkgName = (String) callMethod(key, "getPackageName");
-                    } catch (Throwable ignored) {
-                    }
-
-                    if (pkgName == null) {
+        ReflectedClass OplusTaskHeaderView = ReflectedClass.ofIfPossible("com.oplus.quickstep.views.OplusTaskHeaderView");
+        if (OplusTaskHeaderView.getClazz() != null && hasMethod(OplusTaskHeaderView.getClazz(), "setTitle")) {
+            OplusTaskHeaderView
+                    .after("setTitle")
+                    .run(param -> {
+                        if (param.args.length == 0) return;
+                        bindAppDetails(param.args[0],
+                                (View) callMethod(param.thisObject, "getTaskIcon"),
+                                (View) callMethod(param.thisObject, "getTitleTv"));
+                    });
+        } else {
+            ReflectedClass OplusTaskViewImpl = ReflectedClass.ofIfPossible("com.android.quickstep.views.OplusTaskViewImpl");
+            OplusTaskViewImpl
+                    .after("setIcon")
+                    .run(param -> {
+                        Object headerView = callMethod(param.thisObject, "getHeaderView");
+                        if (headerView == null) return;
+                        View titleView;
                         try {
-                            Intent intent = (Intent) getObjectField(key, "intent");
-                            if (intent != null) {
-                                pkgName = intent.getComponent() != null ? intent.getComponent().getPackageName() : intent.getPackage();
-                            }
+                            titleView = (View) callMethod(headerView, "getTitleTv");
                         } catch (Throwable ignored) {
+                            titleView = (View) getObjectField(headerView, "mTitleView");
                         }
-                    }
-                    if (pkgName == null) return;
-                    int userId = 0;
-                    try {
-                        userId = getIntField(key, "userId");
-                    } catch (Throwable ignored) {
-                        try {
-                            userId = (Integer) callMethod(task, "getUserId");
-                        } catch (Throwable ignored2) {
-                        }
-                    }
-                    final ClickListener clickListener = new ClickListener(pkgName, userId);
+                        bindAppDetails(callMethod(param.thisObject, "getTask"),
+                                (View) callMethod(headerView, "getTaskIcon"),
+                                titleView);
+                    });
+        }
 
-                    iconView.setOnLongClickListener(clickListener);
-                    titleView.setOnLongClickListener(clickListener);
-                });
-
-        ReflectedClass DockIconView = ReflectedClass.of("com.oplus.quickstep.dock.DockIconView");
+        ReflectedClass DockIconView = ReflectedClass.ofIfPossible("com.oplus.quickstep.dock.DockIconView");
         DockIconView
                 .after("setIcon")
-                .run(param -> {
-                    Object task = callMethod(param.thisObject, "getTask");
-                    if (task == null) return;
-                    Object key = getObjectField(task, "key");
-                    if (key == null) return;
-                    String pkgName = (String) callMethod(key, "getPackageName");
-                    int userId = getIntField(key, "userId");
-                    View iconView = (View) param.thisObject;
-                    final ClickListener clickListener = new ClickListener(pkgName, userId);
-                    iconView.setOnLongClickListener(clickListener);
-                });
+                .run(param -> bindAppDetails(callMethod(param.thisObject, "getTask"), (View) param.thisObject));
 
         try {
             ReflectedClass.ReflectionConsumer pageIndicator = param -> {
@@ -727,6 +701,65 @@ public class Launcher extends XposedMods {
             try {
                 return c.getDeclaredMethod("onDragEnd", float.class);
             } catch (NoSuchMethodException ignored) {
+            }
+        }
+        return null;
+    }
+
+    private static boolean hasMethod(Class<?> clazz, String name) {
+        for (Method m : clazz.getDeclaredMethods()) {
+            if (m.getName().equals(name)) return true;
+        }
+        return false;
+    }
+
+    private void bindAppDetails(Object task, View... views) {
+        if (task == null) return;
+        Object key;
+        try {
+            key = getObjectField(task, "key");
+        } catch (Throwable ignored) {
+            key = null;
+        }
+        String pkgName = null;
+        try {
+            pkgName = (String) callMethod(task, "getPackageName");
+        } catch (Throwable ignored) {
+        }
+        if (TextUtils.isEmpty(pkgName == null ? null : pkgName.trim()) && key != null) {
+            Intent intent = findIntentField(key);
+            if (intent != null) {
+                pkgName = intent.getComponent() != null ? intent.getComponent().getPackageName() : intent.getPackage();
+            }
+        }
+        if (TextUtils.isEmpty(pkgName)) return;
+        int userId = 0;
+        try {
+            userId = (int) callMethod(task, "getUserId");
+        } catch (Throwable ignored) {
+            if (key != null) {
+                try {
+                    userId = getIntField(key, "userId");
+                } catch (Throwable ignored2) {
+                }
+            }
+        }
+        ClickListener listener = new ClickListener(pkgName, userId);
+        for (View v : views) {
+            if (v != null) v.setOnLongClickListener(listener);
+        }
+    }
+
+    private static Intent findIntentField(Object obj) {
+        for (Class<?> c = obj.getClass(); c != null; c = c.getSuperclass()) {
+            for (Field f : c.getDeclaredFields()) {
+                if (f.getType() == Intent.class) {
+                    try {
+                        f.setAccessible(true);
+                        return (Intent) f.get(obj);
+                    } catch (Throwable ignored) {
+                    }
+                }
             }
         }
         return null;
