@@ -4,14 +4,18 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.LAUNCHER;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callStaticMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.android.launcher3.uioverrides.states.blurdrawable.BlurUtils;
+import com.android.launcher3.uioverrides.states.blurdrawable.IBlurBaseController;
 import com.android.launcher3.uioverrides.states.blurdrawable.LayerBlurDrawable;
 import com.android.launcher3.uioverrides.states.blurdrawable.OplusBlurProperties;
 
@@ -31,6 +35,9 @@ public class DockBackground extends XposedMods {
     private int mDockBackgroundRadius = 30;
     private ViewGroup mOplusHotseat = null;
     private OplusBlurProperties mBlurProp = null;
+    private Class<?> mBlurPropertiesCompanion = null;
+    private IBlurBaseController mBlurController = null;
+    private Drawable mBlurBackground = null;
 
     public DockBackground(Context context) {
         super(context);
@@ -44,6 +51,11 @@ public class DockBackground extends XposedMods {
         mDockBackgroundBlurAmount = mBlurAmount[Xprefs.getInt("dockBackgroundMaterialAmount", 0)];
         mDockBackgroundRadius = Xprefs.getInt("dockBackgroundRadius", 30);
 
+        ViewGroup hotseat = mOplusHotseat;
+        if (hotseat != null && mDockBackgroundMaterial && !mDockBackground) {
+            hotseat.post(() -> initBlurBackground(hotseat));
+        }
+
     }
 
     @Override
@@ -51,6 +63,29 @@ public class DockBackground extends XposedMods {
 
         if (Build.VERSION.SDK_INT < 35) return;
         ReflectedClass OplusHotseatCls = ReflectedClass.of("com.android.launcher3.OplusHotseat");
+        if (ReflectedClass.ofIfPossible("com.android.launcher3.uioverrides.states.blurdrawable.BlurBaseFactory").getClazz() != null) {
+            mBlurPropertiesCompanion = ReflectedClass.of("com.android.launcher3.uioverrides.states.blurdrawable.OplusBlurProperties$Companion").getClazz();
+        }
+
+        if (mBlurPropertiesCompanion != null) {
+            OplusHotseatCls
+                    .after("setDockerBackground")
+                    .run(param -> {
+                        if (mDockBackgroundMaterial && !mDockBackground) {
+                            initBlurBackground(param.thisObject);
+                        }
+                    });
+
+            OplusHotseatCls
+                    .after("onDetachedFromWindow")
+                    .run(param -> {
+                        if (mBlurController != null) {
+                            mBlurController.recycle();
+                            mBlurController = null;
+                        }
+                        mBlurBackground = null;
+                    });
+        }
 
         OplusHotseatCls
                 .after("init")
@@ -111,6 +146,10 @@ public class DockBackground extends XposedMods {
 
     // Reference: OplusPageIndicator
     public final void initBlurBackground(Object thisObject) {
+        if (mBlurPropertiesCompanion != null) {
+            initBlurBaseBackground((ViewGroup) thisObject);
+            return;
+        }
         this.mOplusHotseat = (ViewGroup) thisObject;
         View mShortcutsAndWidgets = (View) getObjectField(mOplusHotseat, "mShortcutsAndWidgets");
         Context context = mOplusHotseat.getContext();
@@ -132,6 +171,23 @@ public class DockBackground extends XposedMods {
         mBlurProp.setBlurParams(mDockBackgroundBlurAmount, blurColorParams.getBlendMode(), blurColorParams.getBlendColor(), blurColorParams.getMixColor());
     }
 
+    private void initBlurBaseBackground(ViewGroup hotseat) {
+        mOplusHotseat = hotseat;
+        View container = (View) getObjectField(hotseat, "mShortcutsAndWidgets");
+        Context context = hotseat.getContext();
+        if (mBlurController == null || container.getBackground() != mBlurBackground) {
+            if (mBlurController != null) {
+                mBlurController.recycle();
+            }
+            mBlurController = (IBlurBaseController) callStaticMethod(mBlurPropertiesCompanion, "prepareBlur", container, context, true, true, 4, true);
+            mBlurBackground = container.getBackground();
+            if (mBlurController == null) return;
+        }
+        BlurUtils.BlendColorParams colors = BlurUtils.getBlurColorParams(context);
+        mBlurController.setBlurCornerRadius(dp2px(mContext, mDockBackgroundRadius), false, null, true);
+        mBlurController.setBlurParams(mDockBackgroundBlurAmount, 2, colors.getBlendColor(), colors.getMixColor());
+        mBlurController.setIgnorePageScrollBlurAnim(true);
+    }
 
     @Override
     public boolean listensTo(String packageName) {
