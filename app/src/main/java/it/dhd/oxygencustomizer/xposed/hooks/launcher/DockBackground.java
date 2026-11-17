@@ -17,6 +17,7 @@ import com.android.launcher3.uioverrides.states.blurdrawable.OplusBlurProperties
 
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class DockBackground extends XposedMods {
@@ -57,7 +58,11 @@ public class DockBackground extends XposedMods {
                     if (mDockBackground) {
                         callMethod(param.thisObject, "setDockerBackground");
                     } else if (mDockBackgroundMaterial) {
-                        initBlurBackground(param.thisObject);
+                        try {
+                            initBlurBackground(param.thisObject);
+                        } catch (Throwable t) {
+                            Logger.log(t);
+                        }
                     }
                 });
 
@@ -70,7 +75,11 @@ public class DockBackground extends XposedMods {
                                 public boolean onPreDraw() {
                                     oplusHotseat.getViewTreeObserver().removeOnPreDrawListener(this);
                                     if (mDockBackgroundMaterial) {
-                                        initBlurBackground(oplusHotseat);
+                                        try {
+                                            initBlurBackground(param.thisObject);
+                                        } catch (Throwable t) {
+                                            Logger.log(t);
+                                        }
                                     }
                                     return true;
                                 }
