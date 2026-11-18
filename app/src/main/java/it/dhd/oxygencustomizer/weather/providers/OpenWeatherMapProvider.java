@@ -110,6 +110,14 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
                     hourlyForecasts,
                     forecasts,
                     System.currentTimeMillis());
+            JSONObject sys = conditions.optJSONObject("sys");
+            w.setExtras(
+                    conditionData.has("feels_like") ? sanitizeTemperature(conditionData.getDouble("feels_like"), metric) : Float.NaN,
+                    Float.NaN,
+                    (float) conditionData.optDouble("pressure", Double.NaN),
+                    -1,
+                    sys == null ? 0 : sys.optLong("sunrise", 0) * 1000L,
+                    sys == null ? 0 : sys.optLong("sunset", 0) * 1000L);
 
             log(TAG, "Weather updated: " + w);
             return w;

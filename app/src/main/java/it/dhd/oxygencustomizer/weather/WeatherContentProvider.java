@@ -49,6 +49,12 @@ public class WeatherContentProvider extends ContentProvider {
     private static final String COLUMN_CURRENT_TIME_STAMP = "time_stamp";
     private static final String COLUMN_CURRENT_CONDITION_CODE = "condition_code";
     private static final String COLUMN_CURRENT_PIN_WHEEL = "pin_wheel";
+    private static final String COLUMN_CURRENT_FEELS_LIKE = "feels_like";
+    private static final String COLUMN_CURRENT_UV_INDEX = "uv_index";
+    private static final String COLUMN_CURRENT_PRESSURE = "pressure";
+    private static final String COLUMN_CURRENT_RAIN_CHANCE = "rain_chance";
+    private static final String COLUMN_CURRENT_SUNRISE = "sunrise";
+    private static final String COLUMN_CURRENT_SUNSET = "sunset";
 
     private static final String COLUMN_FORECAST_LOW = "forecast_low";
     private static final String COLUMN_FORECAST_HIGH = "forecast_high";
@@ -90,7 +96,13 @@ public class WeatherContentProvider extends ContentProvider {
             COLUMN_FORECAST_HOUR,
             COLUMN_FORECAST_HOUR_TEMP,
             COLUMN_FORECAST_HOUR_CONDITION,
-            COLUMN_FORECAST_HOUR_CONDITION_CODE
+            COLUMN_FORECAST_HOUR_CONDITION_CODE,
+            COLUMN_CURRENT_FEELS_LIKE,
+            COLUMN_CURRENT_UV_INDEX,
+            COLUMN_CURRENT_PRESSURE,
+            COLUMN_CURRENT_RAIN_CHANCE,
+            COLUMN_CURRENT_SUNRISE,
+            COLUMN_CURRENT_SUNSET
     };
 
     private static final String[] PROJECTION_DEFAULT_SETTINGS = new String[] {
@@ -160,7 +172,13 @@ public class WeatherContentProvider extends ContentProvider {
                         .add(COLUMN_CURRENT_TEMPERATURE, weather.getTemperature())
                         .add(COLUMN_CURRENT_TIME_STAMP, weather.getTimestamp().toString())
                         .add(COLUMN_CURRENT_PIN_WHEEL, weather.getPinWheel())
-                        .add(COLUMN_CURRENT_CONDITION_CODE, weather.getConditionCode());
+                        .add(COLUMN_CURRENT_CONDITION_CODE, weather.getConditionCode())
+                        .add(COLUMN_CURRENT_FEELS_LIKE, weather.getFeelsLike())
+                        .add(COLUMN_CURRENT_UV_INDEX, weather.getUvIndex())
+                        .add(COLUMN_CURRENT_PRESSURE, weather.getPressure())
+                        .add(COLUMN_CURRENT_RAIN_CHANCE, weather.getRainChance())
+                        .add(COLUMN_CURRENT_SUNRISE, weather.getSunrise())
+                        .add(COLUMN_CURRENT_SUNSET, weather.getSunset());
 
                 // forecast
                 for (WeatherInfo.DayForecast day : weather.getForecasts()) {

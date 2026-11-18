@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -91,6 +93,15 @@ public class YandexProvider extends AbstractWeatherProvider {
                     parseHourlyForecasts(weather.getJSONArray("forecasts"), metric),
                     parseForecasts(weather.getJSONArray("forecasts"), metric),
                     weather.getLong("now") * 1000L);
+            JSONObject today = weather.getJSONArray("forecasts").optJSONObject(0);
+            JSONObject dayPart = today == null || today.optJSONObject("parts") == null ? null : today.getJSONObject("parts").optJSONObject("day");
+            w.setExtras(
+                    current.has("feels_like") ? convertTemperature(current.getInt("feels_like"), metric) : Float.NaN,
+                    (float) current.optDouble("uv_index", Double.NaN),
+                    (float) current.optDouble("pressure_pa", Double.NaN),
+                    dayPart == null ? -1 : dayPart.optInt("prec_prob", -1),
+                    today == null ? 0 : clockTime(today.optString("date"), today.optString("sunrise")),
+                    today == null ? 0 : clockTime(today.optString("date"), today.optString("sunset")));
 
             log(TAG, "Weather updated: " + w);
             return w;
@@ -346,6 +357,16 @@ public class YandexProvider extends AbstractWeatherProvider {
             }
         }
         return result;
+    }
+
+    private static long clockTime(String date, String time) {
+        if (TextUtils.isEmpty(date) || TextUtils.isEmpty(time)) return 0;
+        try {
+            Date parsed = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US).parse(date + " " + time);
+            return parsed == null ? 0 : parsed.getTime();
+        } catch (ParseException e) {
+            return 0;
+        }
     }
 
     private static float convertTemperature(int value, boolean metric) {

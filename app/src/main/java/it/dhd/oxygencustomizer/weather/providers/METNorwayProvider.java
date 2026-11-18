@@ -85,6 +85,16 @@ public class METNorwayProvider extends AbstractWeatherProvider {
                     parseHourlyForecasts(timeseries, metric),
                     parseForecasts(timeseries, metric),
                     System.currentTimeMillis());
+            JSONObject nextHour = timeseries.getJSONObject(0).getJSONObject("data").optJSONObject("next_1_hours");
+            JSONObject nextHourDetails = nextHour == null ? null : nextHour.optJSONObject("details");
+            double rain = nextHourDetails == null ? Double.NaN : nextHourDetails.optDouble("probability_of_precipitation", Double.NaN);
+            w.setExtras(
+                    Float.NaN,
+                    (float) weather.optDouble("ultraviolet_index_clear_sky", Double.NaN),
+                    (float) weather.optDouble("air_pressure_at_sea_level", Double.NaN),
+                    Double.isNaN(rain) ? -1 : (int) Math.round(rain),
+                    0,
+                    0);
 
             log(TAG, "Weather updated: " + w);
             return w;

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class WeatherInfo {
@@ -45,6 +46,12 @@ public class WeatherInfo {
     private ArrayList<DayForecast> forecasts;
     private ArrayList<HourForecast> hourForecasts;
     private boolean metric;
+    private float feelsLike = Float.NaN;
+    private float uvIndex = Float.NaN;
+    private float pressure = Float.NaN;
+    private int rainChance = -1;
+    private long sunrise = 0;
+    private long sunset = 0;
 
     private WeatherInfo(Context context, String id,
                         String city, String condition, int conditionCode, float temp,
@@ -258,6 +265,44 @@ public class WeatherInfo {
         return temperature;
     }
 
+    public WeatherInfo setExtras(float feelsLike, float uvIndex, float pressure, int rainChance, long sunrise, long sunset) {
+        this.feelsLike = feelsLike;
+        this.uvIndex = uvIndex;
+        this.pressure = pressure;
+        this.rainChance = rainChance;
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+        return this;
+    }
+
+    public float getFeelsLike() {
+        return feelsLike;
+    }
+
+    public float getUvIndex() {
+        return uvIndex;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+
+    public int getRainChance() {
+        return rainChance;
+    }
+
+    public long getSunrise() {
+        return sunrise;
+    }
+
+    public long getSunset() {
+        return sunset;
+    }
+
+    public boolean isMetric() {
+        return metric;
+    }
+
     private String getTemperatureUnit() {
         return "\u00b0" + (metric ? "C" : "F");
     }
@@ -334,6 +379,8 @@ public class WeatherInfo {
         if (!hourForecasts.isEmpty()) {
             serializeHourForecasts(builder);
         }
+        builder.append("|x;").append(feelsLike).append(';').append(uvIndex).append(';').append(pressure)
+                .append(';').append(rainChance).append(';').append(sunrise).append(';').append(sunset);
         return builder.toString();
     }
 
@@ -368,6 +415,11 @@ public class WeatherInfo {
         }
 
         String[] parts = input.split("\\|");
+        String extras = null;
+        if (parts.length > 0 && parts[parts.length - 1].startsWith("x;")) {
+            extras = parts[parts.length - 1];
+            parts = Arrays.copyOf(parts, parts.length - 1);
+        }
         boolean hasForecast = parts.length > 11;
         Log.d("WeatherInfo", "parts.length: " + parts.length);
 
@@ -458,11 +510,25 @@ public class WeatherInfo {
             return null;
         }
 
-        return new WeatherInfo(context,
+        WeatherInfo info = new WeatherInfo(context,
                 /* id */ parts[0], /* city */ parts[1], /* condition */ parts[2],
                 conditionCode, temperature,
                 humidity, wind, windDirection, metric,
                 /* hourForecasts */ hourForecasts,
                 /* forecasts */ forecasts, timestamp, pinWheel);
+        if (extras != null) info.parseExtras(extras);
+        return info;
+    }
+
+    private void parseExtras(String extras) {
+        String[] values = extras.split(";");
+        try {
+            if (values.length > 6) {
+                setExtras(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]),
+                        Integer.parseInt(values[4]), Long.parseLong(values[5]), Long.parseLong(values[6]));
+            }
+        } catch (NumberFormatException e) {
+            Log.e("WeatherInfo", "Error parsing weather extras", e);
+        }
     }
 }

@@ -8,9 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
     private static final String PART_COORDINATES =
             "latitude=%f&longitude=%f";
     private static final String PART_PARAMETERS =
-            "%s&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day&hourly=weather_code,temperature_2m&forecast_hours=24&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
+            "%s&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,apparent_temperature,surface_pressure&hourly=weather_code,temperature_2m,precipitation_probability,uv_index&forecast_hours=24&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max&temperature_unit=%s&windspeed_unit=%s&timezone=%s&past_days=1&models=best_match,gfs_seamless";
 
 
     public OpenMeteoProvider(Context context) {
@@ -78,6 +80,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
                     parseHourlyForecasts(new JSONObject(conditionResponse).getJSONObject("hourly"), metric),
                     parseForecasts(new JSONObject(conditionResponse).getJSONObject("daily"), metric),
                     System.currentTimeMillis());
+            applyExtras(w, new JSONObject(conditionResponse), weather);
 
             log(TAG, "Weather updated: " + w);
             return w;
@@ -87,6 +90,77 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
 
 
         return null;
+    }
+
+    private static void applyExtras(WeatherInfo w, JSONObject root, JSONObject current) {
+        JSONObject hourly = root.optJSONObject("hourly");
+        JSONObject daily = root.optJSONObject("daily");
+        int hour = hourly == null ? -1 : hourIndex(hourly.optJSONArray("time"));
+        int day = daily == null ? -1 : dayIndex(daily.optJSONArray("time"));
+        float uv = (float) arrayNumber(hourly, "uv_index", hour);
+        if (Float.isNaN(uv)) uv = (float) arrayNumber(daily, "uv_index_max", day);
+        double rain = arrayNumber(hourly, "precipitation_probability", hour);
+        if (Double.isNaN(rain)) rain = arrayNumber(daily, "precipitation_probability_max", day);
+        w.setExtras(
+                (float) number(current, "apparent_temperature"),
+                uv,
+                (float) number(current, "surface_pressure"),
+                Double.isNaN(rain) ? -1 : (int) Math.round(rain),
+                isoTime(arrayString(daily, "sunrise", day)),
+                isoTime(arrayString(daily, "sunset", day)));
+    }
+
+    private static double number(JSONObject object, String key) {
+        if (object == null) return Double.NaN;
+        if (object.has(key) && !object.isNull(key)) return object.optDouble(key, Double.NaN);
+        return object.optDouble(key + "_best_match", Double.NaN);
+    }
+
+    private static JSONArray array(JSONObject object, String key) {
+        if (object == null) return null;
+        JSONArray array = object.optJSONArray(key + "_best_match");
+        return array != null ? array : object.optJSONArray(key);
+    }
+
+    private static double arrayNumber(JSONObject object, String key, int index) {
+        JSONArray array = array(object, key);
+        if (array == null || index < 0 || index >= array.length() || array.isNull(index))
+            return Double.NaN;
+        return array.optDouble(index, Double.NaN);
+    }
+
+    private static String arrayString(JSONObject object, String key, int index) {
+        JSONArray array = array(object, key);
+        if (array == null || index < 0 || index >= array.length()) return null;
+        return array.optString(index, null);
+    }
+
+    private static int dayIndex(JSONArray time) {
+        if (time == null) return -1;
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime());
+        for (int i = 0; i < time.length(); i++) {
+            if (today.equals(time.optString(i))) return i;
+        }
+        return -1;
+    }
+
+    private static int hourIndex(JSONArray time) {
+        if (time == null) return -1;
+        String now = new SimpleDateFormat("yyyy-MM-dd'T'HH:00", Locale.US).format(Calendar.getInstance().getTime());
+        for (int i = 0; i < time.length(); i++) {
+            if (time.optString(i).compareTo(now) >= 0) return i;
+        }
+        return -1;
+    }
+
+    private static long isoTime(String value) {
+        if (value == null || value.isEmpty()) return 0;
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US).parse(value);
+            return date == null ? 0 : date.getTime();
+        } catch (ParseException e) {
+            return 0;
+        }
     }
 
     private static String getWeatherDescription(int code) {
@@ -205,13 +279,7 @@ public class OpenMeteoProvider extends AbstractWeatherProvider {
         JSONArray temperature = forecasts.getJSONArray("temperature_2m_best_match");
         JSONArray weatherCodeJson = forecasts.getJSONArray("weather_code_best_match");
         JSONArray altWeatherCodeJson = forecasts.getJSONArray("weather_code_gfs_seamless");
-        String currentDay = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US).format(Calendar.getInstance().getTime());
-
-        int startIndex = 1;
-        if (currentDay.equals(timeJson.getString(0)))
-            startIndex = 0;
-        else if (currentDay.equals(timeJson.getString(2)))
-            startIndex = 2;
+        int startIndex = Math.max(hourIndex(timeJson), 0);
 
         for (int i = startIndex; i < timeJson.length() && result.size() < 10; i++) {
             WeatherInfo.HourForecast item;

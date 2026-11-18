@@ -3,10 +3,13 @@ package it.dhd.oxygencustomizer.ui.activity;
 import android.content.ContentValues;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.ActivityWeatherBinding;
@@ -121,6 +125,47 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         binding.lastUpdate.setText(sdf.format(mWeatherClient.getWeatherInfo().timeStamp));
 
+        updateDetails(mWeatherClient.getWeatherInfo(), sdf);
+    }
+
+    private void updateDetails(OmniJawsClient.WeatherInfo info, SimpleDateFormat time) {
+        binding.detailsList.removeAllViews();
+        if (!"-".equals(info.feelsLike))
+            addDetail(R.string.weather_feels_like, info.feelsLike + info.tempUnits);
+        if (!Float.isNaN(info.uvIndex))
+            addDetail(R.string.weather_uv_index, String.format(Locale.getDefault(), "%.1f", info.uvIndex));
+        if (!Float.isNaN(info.pressure))
+            addDetail(R.string.weather_pressure, Math.round(info.pressure) + " hPa");
+        if (info.rainChance >= 0) addDetail(R.string.weather_rain_chance, info.rainChance + "%");
+        if (info.sunrise > 0) addDetail(R.string.weather_sunrise, time.format(info.sunrise));
+        if (info.sunset > 0) addDetail(R.string.weather_sunset, time.format(info.sunset));
+        if (info.sunrise > 0 && info.sunset > info.sunrise) {
+            long minutes = (info.sunset - info.sunrise) / 60000L;
+            addDetail(R.string.weather_daylight, String.format(Locale.getDefault(), "%dh %02dm", minutes / 60, minutes % 60));
+        }
+        if (!TextUtils.isEmpty(info.windDirection))
+            addDetail(R.string.weather_wind_direction, info.pinWheel + " (" + info.windDirection + ")");
+        binding.detailsCard.setVisibility(binding.detailsList.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+    }
+
+    private void addDetail(int label, String value) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setPadding(0, dp(6), 0, dp(6));
+        TextView name = new TextView(this);
+        name.setTextAppearance(R.style.DetailedWeatherText);
+        name.setText(label);
+        name.setAlpha(0.75f);
+        row.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        TextView text = new TextView(this);
+        text.setTextAppearance(R.style.DetailedWeatherText);
+        text.setText(value);
+        row.addView(text, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        binding.detailsList.addView(row);
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
     
     private String getWeatherCondition(String formattedCondition) {
@@ -234,6 +279,8 @@ public class WeatherActivity extends AppCompatActivity implements OmniJawsClient
         getWindow().getDecorView().setBackgroundColor(getCurrentHourColor());
         getWindow().setNavigationBarColor(getCurrentHourColor());
         getWindow().setStatusBarColor(getCurrentHourColor());
+        binding.detailsCard.setCardBackgroundColor(getCurrentCardColor());
+        binding.detailsCard.setStrokeColor(getCurrentCardColor());
         binding.hourlyForecastCard.setCardBackgroundColor(getCurrentCardColor());
         binding.hourlyForecastCard.setStrokeColor(getCurrentCardColor());
         binding.dailyForecastCard.setCardBackgroundColor(getCurrentCardColor());

@@ -82,7 +82,13 @@ public class OmniJawsClient {
             "forecast_hour",
             "forecast_hour_temp",
             "forecast_hour_condition",
-            "forecast_hour_condition_code"
+            "forecast_hour_condition_code",
+            "feels_like",
+            "uv_index",
+            "pressure",
+            "rain_chance",
+            "sunrise",
+            "sunset"
     };
 
     public static final String[] SETTINGS_PROJECTION = new String[]{
@@ -114,6 +120,12 @@ public class OmniJawsClient {
         public String provider;
         public String pinWheel;
         public String iconPack;
+        public String feelsLike = "-";
+        public float uvIndex = Float.NaN;
+        public float pressure = Float.NaN;
+        public int rainChance = -1;
+        public long sunrise = 0;
+        public long sunset = 0;
 
         public String toString() {
             return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" + conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + hourlyForecasts + ": " + dayForecasts + ": " + iconPack;
@@ -238,6 +250,14 @@ public class OmniJawsClient {
                                 mCachedInfo.condition = c.getString(6);
                                 mCachedInfo.timeStamp = Long.valueOf(c.getString(11));
                                 mCachedInfo.pinWheel = c.getString(13);
+                                if (c.getColumnCount() > 23) {
+                                    mCachedInfo.feelsLike = getFormattedValue(c.getFloat(18));
+                                    mCachedInfo.uvIndex = c.getFloat(19);
+                                    mCachedInfo.pressure = c.getFloat(20);
+                                    mCachedInfo.rainChance = c.getInt(21);
+                                    mCachedInfo.sunrise = c.getLong(22);
+                                    mCachedInfo.sunset = c.getLong(23);
+                                }
                             } else if (isDailyForecast) {
                                 DayForecast day = new DayForecast();
                                 day.low = getFormattedValue(c.getFloat(7));
