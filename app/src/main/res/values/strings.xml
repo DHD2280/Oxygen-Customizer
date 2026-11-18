@@ -1300,6 +1300,7 @@
     <string name="provider_metnorway" translatable="false">MET Norway</string>
     <string name="provider_openmeteo" translatable="false">OpenMeteo</string>
     <string name="provider_yandex" translatable="false">Yandex</string>
+    <string name="provider_meteoam" translatable="false">Meteo Aeronautica Militare</string>
     <string name="weather_progress_title">Verifying location</string>
     <string name="weather_select_location">Select location</string>
     <string name="custom_location_title">Custom location</string>

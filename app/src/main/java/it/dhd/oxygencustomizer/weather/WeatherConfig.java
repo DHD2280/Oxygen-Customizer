@@ -45,14 +45,17 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
 import it.dhd.oxygencustomizer.weather.providers.METNorwayProvider;
+import it.dhd.oxygencustomizer.weather.providers.MeteoAMProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 import it.dhd.oxygencustomizer.weather.providers.YandexProvider;
+import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
 
 public class WeatherConfig {
@@ -81,6 +84,7 @@ public class WeatherConfig {
             case "1" -> new METNorwayProvider(context);
             case "2" -> new OpenMeteoProvider(context);
             case "3" -> new YandexProvider(context);
+            case "4" -> new MeteoAMProvider(context);
             default -> new OpenWeatherMapProvider(context);
         };
     }

@@ -571,12 +571,14 @@
         <item>@string/provider_metnorway</item>
         <item>@string/provider_openmeteo</item>
         <item>@string/provider_yandex</item>
+        <item>@string/provider_meteoam</item>
     </string-array>
     <string-array name="provider_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
     <string-array name="units_entries" translatable="false">
         <item>@string/unit_metric</item>
