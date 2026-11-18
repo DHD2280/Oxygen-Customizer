@@ -35,15 +35,16 @@ public class RootProviderProxy extends Service {
         String TAG = getClass().getSimpleName();
 
         private final List<String> rootAllowedPacks;
-        private final boolean rootGranted;
+        private Boolean rootGranted = null;
 
         private RootPoviderProxyIPC(Context context)
         {
-            try {
-                Shell.setDefaultBuilder(Shell.Builder.create().setFlags(Shell.FLAG_MOUNT_MASTER));
+            if (Shell.getCachedShell() == null) {
+                try {
+                    Shell.setDefaultBuilder(Shell.Builder.create().setFlags(Shell.FLAG_MOUNT_MASTER));
+                } catch (Throwable ignored) {
+                }
             }
-            catch (Throwable ignored){}
-            rootGranted = Shell.getShell().isRoot();
 
             rootAllowedPacks = Arrays.asList(context.getResources().getStringArray(R.array.root_requirement));
         }
@@ -112,12 +113,17 @@ public class RootProviderProxy extends Service {
         }
 
         private void ensureEnvironment() throws RemoteException {
-            if(!rootGranted)
+            ensureSecurity(Binder.getCallingUid());
+
+            synchronized (this) {
+                if (rootGranted == null) {
+                    rootGranted = Shell.getShell().isRoot();
+                }
+            }
+            if (!rootGranted)
             {
                 throw new RemoteException("Root permission denied");
             }
-
-            ensureSecurity(Binder.getCallingUid());
         }
 
         private void ensureSecurity(int uid) throws RemoteException {
