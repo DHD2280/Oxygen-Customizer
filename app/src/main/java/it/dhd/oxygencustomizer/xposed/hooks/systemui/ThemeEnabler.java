@@ -27,13 +27,12 @@ public class ThemeEnabler extends XposedMods {
     }
 
     public static void registerThemeChangedListener(ThemeEnabler.OnThemeChangedListener listener) {
+        if (instance == null) return;
         instance.mThemeChangedListeners.add(listener);
     }
 
-    /**
-     * @noinspection unused
-     */
     public static void unRegisterThemeChangedListener(OnThemeChangedListener listener) {
+        if (instance == null) return;
         instance.mThemeChangedListeners.remove(listener);
     }
 
