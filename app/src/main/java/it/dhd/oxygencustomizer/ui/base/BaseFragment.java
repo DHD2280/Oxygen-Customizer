@@ -20,9 +20,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getContext() != null) {
-            setHeader(getContext(), getTitle());
-            ((MainActivity) getContext()).getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled());
+        if (getContext() instanceof MainActivity mainActivity) {
+            setHeader(mainActivity, getTitle());
+            mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled());
         }
     }
 
