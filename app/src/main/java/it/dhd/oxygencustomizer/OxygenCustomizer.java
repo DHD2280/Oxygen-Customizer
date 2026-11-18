@@ -8,6 +8,7 @@ import com.google.android.material.color.DynamicColors;
 import java.lang.ref.WeakReference;
 
 import it.dhd.oxygencustomizer.utils.LocaleHelper;
+import it.dhd.oxygencustomizer.xposed.ResourceManager;
 
 public class OxygenCustomizer extends Application {
 
@@ -18,6 +19,7 @@ public class OxygenCustomizer extends Application {
         super.onCreate();
         instance = this;
         contextReference = new WeakReference<>(getApplicationContext());
+        ResourceManager.modRes = getAppContextLocale().getResources();
         DynamicColors.applyToActivitiesIfAvailable(this);
     }
 
