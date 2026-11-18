@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.github.libxposed.api.XposedModule;
 import io.github.libxposed.api.XposedModuleInterface;
@@ -48,11 +49,13 @@ public class XPLauncher extends XposedModule implements ServiceConnection {
     private final java.util.concurrent.atomic.AtomicBoolean frameworkLoadStarted = new java.util.concurrent.atomic.AtomicBoolean(false);
 
     public static ArrayList<XposedMods> runningMods = new ArrayList<>();
+    private final ArrayList<FrameworkMods> earlyFrameworkMods = new ArrayList<>();
     public Context mContext = null;
     public static Resources moduleResources;
 
     private static IRootProviderProxy rootProxyIPC;
     private static final Queue<ProxyRunnable> proxyQueue = new LinkedList<>();
+    private static final AtomicBoolean rootConnectInProgress = new AtomicBoolean(false);
     @SuppressLint("StaticFieldLeak")
     static XPLauncher instance;
 
@@ -85,6 +88,7 @@ public class XPLauncher extends XposedModule implements ServiceConnection {
         ReflectedClass.setDefaultClassloader(systemServerClassLoader);
 
         PackageReadyParam frameworkParam = new SystemServerPackageParam(systemServerClassLoader);
+        installEarlyFrameworkMods(frameworkParam);
 
         Logger.log("[ Oxygen Customizer - XPLauncher ] onSystemServerStarting");
         ReflectedClass.of("com.android.server.policy.PhoneWindowManager", systemServerClassLoader)
@@ -206,6 +210,34 @@ public class XPLauncher extends XposedModule implements ServiceConnection {
         loadModpacks(PRParam);
     }
 
+    private void installEarlyFrameworkMods(PackageReadyParam PRParam) {
+        for (Class<? extends FrameworkMods> mod : ModPacks.getEarlyFrameworkMods()) {
+            try {
+                FrameworkMods instance = mod.getConstructor(Context.class).newInstance((Context) null);
+                instance.mDebug = true;
+                instance.onPackageLoaded(PRParam);
+                instance.mDebug = false;
+                earlyFrameworkMods.add(instance);
+            } catch (Throwable T) {
+                Logger.log("Start Error Dump - Occurred in " + mod.getName());
+                Logger.log(T);
+            }
+        }
+    }
+
+    private void attachEarlyFrameworkMods() {
+        for (FrameworkMods instance : earlyFrameworkMods) {
+            try {
+                instance.attach(mContext);
+                instance.onPreferenceUpdated();
+                runningMods.add(instance);
+            } catch (Throwable T) {
+                Logger.log("Start Error Dump - Occurred in " + instance.getClass().getName());
+                Logger.log(T);
+            }
+        }
+    }
+
     private void loadModpacks(PackageReadyParam PRParam) {
         String pkgName = PRParam.getPackageName();
         ReflectedClass.setDefaultClassloader(injectClassLoader(PRParam.getClassLoader()));
@@ -213,6 +245,7 @@ public class XPLauncher extends XposedModule implements ServiceConnection {
             Logger.log("Root required package: " + pkgName);
             forceConnectRootService();
         }
+        if (pkgName.equals(Constants.Packages.FRAMEWORK)) attachEarlyFrameworkMods();
         for (Class<? extends XposedMods> mod : ModPacks.getMods(pkgName)) {
             try {
                 XposedMods instance = mod.getConstructor(Context.class).newInstance(mContext);
@@ -251,17 +284,22 @@ public class XPLauncher extends XposedModule implements ServiceConnection {
     }
 
     private void forceConnectRootService() {
+        if (!rootConnectInProgress.compareAndSet(false, true)) return;
         new Thread(() -> {
-            while (SystemUtils.UserManager() == null
-                    || !SystemUtils.UserManager().isUserUnlocked()) //device is still CE encrypted
-            {
-                sleep(2000);
-            }
-            sleep(5000); //wait for the unlocked account to settle down a bit
+            try {
+                while (SystemUtils.UserManager() == null
+                        || !SystemUtils.UserManager().isUserUnlocked()) //device is still CE encrypted
+                {
+                    sleep(2000);
+                }
+                sleep(5000); //wait for the unlocked account to settle down a bit
 
-            while (rootProxyIPC == null) {
-                connectRootService();
-                sleep(5000);
+                while (rootProxyIPC == null) {
+                    connectRootService();
+                    sleep(5000);
+                }
+            } finally {
+                rootConnectInProgress.set(false);
             }
         }).start();
     }
