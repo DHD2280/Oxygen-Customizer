@@ -45,7 +45,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -55,8 +54,9 @@ import it.dhd.oxygencustomizer.weather.providers.MeteoAMProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 import it.dhd.oxygencustomizer.weather.providers.YandexProvider;
-import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
+
+//import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
 
 public class WeatherConfig {
     public static final String PREF_KEY_LOCATION_LAT = "location_lat";
@@ -169,6 +169,8 @@ public class WeatherConfig {
         boolean weatherInBar = nowBar && weathrNowBar;
         boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget(context);
         boolean weatherSeparateQs = separateWidgets.contains("weather");
+//        boolean designerWeather = getPrefs(context).getBoolean(LOCKSCREEN_DESIGNER_MODE, false) &&
+//                getPrefs(context).getString(DesignerClock.KEY_APPLIED, "").toLowerCase(Locale.ROOT).contains("weather");
 
         return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget || weatherSeparateQs;
     }
