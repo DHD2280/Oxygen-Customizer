@@ -1,17 +1,11 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
-import static android.content.Context.RECEIVER_EXPORTED;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findMethodExact;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.text.TextUtils;
 import android.util.ArrayMap;
 
 import java.lang.reflect.Method;
@@ -23,63 +17,27 @@ import java.util.Map;
 import java.util.Set;
 
 import io.github.libxposed.api.XposedModuleInterface;
-import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.FrameworkMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
-public class DarkMode extends XposedMods {
+public class DarkMode extends FrameworkMods {
 
-    private static final String listenPackage = FRAMEWORK;
     private static final int[] mapping = {4, 3, 2, 1, 0};
     private boolean enableCustomDarkMode = false;
     private Set<String> darkModeApps = new HashSet<>();
-    private boolean settingsUpdated = false;
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                if (action == null) return;
-                String className = intent.getStringExtra("class");
-                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
-                    if (!TextUtils.isEmpty(className) && className.equals(DarkMode.class.getSimpleName())) {
-                        log("DarkMode: Intent received - will update preferences");
-                        settingsUpdated = false;
-                        onPreferenceUpdated();
-                    }
-                }
-            } catch (Throwable t) {
-                log("Oxygen Customizer - DarkMode: " + t.getMessage());
-            }
-        }
-    };
-    private boolean broadcastRegistered = false;
 
     public DarkMode(Context context) {
         super(context);
     }
 
     @Override
-    public void onPreferenceUpdated(String... Key) {
-        if (settingsUpdated) return;
-
+    protected void loadSettings() {
         enableCustomDarkMode = Xprefs.getBoolean("custom_dark_mode_switch", false);
         darkModeApps = Xprefs.getStringSet("custom_dark_mode", new HashSet<>());
-
-        settingsUpdated = true;
     }
 
     @Override
-    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
-
-        if (!broadcastRegistered) {
-            broadcastRegistered = true;
-
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.ACTION_SETTINGS_CHANGED);
-            mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
-        }
-
+    protected void onFrameworkLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         Class<?> OplusDarkModeServiceManager;
         Method updateList;
         try {
@@ -124,10 +82,5 @@ public class DarkMode extends XposedMods {
         } catch (Throwable t) {
             log(t);
         }
-    }
-
-    @Override
-    public boolean listensTo(String packageName) {
-        return listenPackage.equals(packageName);
     }
 }

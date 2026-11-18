@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
-import static android.content.Context.RECEIVER_EXPORTED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS_SOFF;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS;
@@ -26,11 +25,9 @@ import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.cal
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -45,14 +42,13 @@ import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
 import io.github.libxposed.api.XposedModuleInterface;
-import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.FrameworkMods;
 import it.dhd.oxygencustomizer.xposed.utils.ScreenshotUtils;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
-public class Buttons extends XposedMods {
+public class Buttons extends FrameworkMods {
 
     private static boolean holdVolumeToSkip = false;
     private static boolean holdVolumeToSkipScreenOn = false;
@@ -70,9 +66,7 @@ public class Buttons extends XposedMods {
     //    private boolean isVolumeLongPress = false;
     private boolean isVolDown = false;
     private boolean disablePowerOnLockscreen = false;
-    private boolean broadcastRegistered = false;
     private int volumeToTorchTimeout = 5000;
-    private boolean settingsUpdated = false;
     private String actionValueSingle, actionValueDouble, actionValueTriple, actionValueLong, actionValueSingleScreenOff, actionValueDoubleScreenOff, actionValueTripleScreenOff, actionValueLongScreenOff = "none";
     private String actionValueSingleCamera, actionValueDoubleCamera, actionValueSingleCameraScreenOff, actionValueDoubleCameraScreenOff = "none";
     private boolean singlePressEnabled, doublePressEnabled, triplePressEnabled, longPressEnabled, singlePressEnabledScreenOff, doublePressEnabledScreenOff, triplePressEnabledScreenOff, longPressEnabledScreenOff = false;
@@ -83,26 +77,6 @@ public class Buttons extends XposedMods {
     private final int KEYCODE_CAMERA_DOUBLE = 769;
     private int pressCount = 0;
     private long plusKeyTimeout = 250;
-
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                if (action == null) return;
-                String className = intent.getStringExtra("class");
-                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
-                    if (!TextUtils.isEmpty(className) && className.equals(Buttons.class.getSimpleName())) {
-                        log("Buttons: Intent received - will update preferences");
-                        settingsUpdated = false;
-                        onPreferenceUpdated();
-                    }
-                }
-            } catch (Throwable t) {
-                log("Oxygen Customizer - Buttons: " + t.getMessage());
-            }
-        }
-    };
 
     private boolean isAnyShortPressEnabled() {
         return SystemUtils.isScreenOff() ? (singlePressEnabledScreenOff || doublePressEnabledScreenOff || triplePressEnabledScreenOff) : (singlePressEnabled || doublePressEnabled || triplePressEnabled);
@@ -241,10 +215,7 @@ public class Buttons extends XposedMods {
     }
 
     @Override
-    public void onPreferenceUpdated(String... Key) {
-
-        if (settingsUpdated) return;
-
+    protected void loadSettings() {
         holdVolumeToSkip = Xprefs.getBoolean(BUTTONS_VOLUME_MUSIC, false);
         holdVolumeToSkipScreenOn = Xprefs.getBoolean(BUTTONS_VOLUME_MUSIC_SON, false);
         disablePowerOnLockscreen = Xprefs.getBoolean(DISABLE_POWER, false);
@@ -290,21 +261,10 @@ public class Buttons extends XposedMods {
 
         actionValueDoubleCameraScreenOff = Xprefs.getString(BUTTONS_CAMERA_DOUBLE_PRESS_SOFF, "none");
         doublePressCameraScreenOffEnabled = (!TextUtils.isEmpty(actionValueDoubleCameraScreenOff) && !actionValueDoubleCameraScreenOff.equals("none")) || doublePressCameraEnabled;
-
-        settingsUpdated = true;
     }
 
     @Override
-    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
-
-        if (!broadcastRegistered) {
-            broadcastRegistered = true;
-
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.ACTION_SETTINGS_CHANGED);
-            mContext.registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED); //for Android 14, receiver flag is mandatory
-        }
-
+    protected void onFrameworkLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         ReflectedClass PhoneWindowManagerClass;
         ReflectedClass PhoneWindowManagerExtImpl;
 
@@ -329,7 +289,6 @@ public class Buttons extends XposedMods {
                     log(" ERROR IN mVolumeLongPress\n" + t);
                 }
             };
-
 
             Runnable mToggleFlash = () -> {
                 try {
@@ -692,10 +651,5 @@ public class Buttons extends XposedMods {
             if (fallback != null) mContext.startActivity(fallback);
         }
         mContext.startActivity(intent);
-    }
-
-    @Override
-    public boolean listensTo(String packageName) {
-        return packageName.equals(Constants.Packages.FRAMEWORK);
     }
 }
