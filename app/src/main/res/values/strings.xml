@@ -1611,6 +1611,13 @@
 
     <!-- Lag Fix Strings -->
     <string name="fix_lag_title">App Lag Fix</string>
+    <string name="panorama_category">Boundless View</string>
+    <string name="panorama_three_split_title">Split View</string>
+    <string name="panorama_three_split_summary">1 top, 2 bottom · drag in three apps</string>
+    <string name="panorama_floating_windows_title">Floating Windows</string>
+    <string name="panorama_floating_windows_summary">Multiple small windows at once</string>
+    <string name="panorama_max_windows_title">Display limit</string>
+    <string name="panorama_reboot_info">Reboot to apply changes</string>
     <string name="fix_lag_summary">Fix lag when opening app from recents</string>
     <string name="fix_lag_force_all_apps_title">Force all apps</string>
     <string name="fix_lag_force_all_apps_summary">Force all apps to use the fix.\nWarning: this could cause weird issues, use at your own risk!</string>
