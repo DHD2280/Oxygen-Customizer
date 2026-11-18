@@ -1,11 +1,9 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.misc.memc;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.PreferenceHelper.getModulePrefs;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -47,8 +45,7 @@ import it.dhd.oxygencustomizer.ui.adapters.MemcAppAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.dialogs.MemcDialog;
 import it.dhd.oxygencustomizer.ui.models.MemcAppModel;
-import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.hooks.framework.MemcEnhancer;
+import it.dhd.oxygencustomizer.utils.FrameworkSettings;
 
 public class MemcActivitiesFragment extends Fragment {
 
@@ -200,13 +197,7 @@ public class MemcActivitiesFragment extends Fragment {
         }
         mPreferences.edit().putStringSet("custom_memc_activities", enabledApps).apply();
 
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", MemcEnhancer.class.getSimpleName());
-
-        if (getContext() != null)
-            getContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.MEMC);
     }
 
     public static class LoadAppsTask {

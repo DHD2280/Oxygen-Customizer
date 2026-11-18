@@ -3,7 +3,6 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.misc;
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_RECEIVED;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_SECURE_OSIE_MOTION_FLUENCY_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_SECURE_OSIE_MOTION_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_SECURE_OSIE_VIDEO_SWITCH;
@@ -31,10 +30,9 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
-import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.FrameworkSettings;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
 import it.dhd.oxygencustomizer.utils.ThemeUtils;
-import it.dhd.oxygencustomizer.xposed.hooks.framework.MemcEnhancer;
 
 public class MemcFragment extends ControlledPreferenceFragmentCompat {
 
@@ -186,13 +184,7 @@ public class MemcFragment extends ControlledPreferenceFragmentCompat {
                 break;
         }
 
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", MemcEnhancer.class.getSimpleName());
-
-        if (getContext() != null)
-            getContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.MEMC);
     }
 
     private void enableMemc() {
@@ -218,13 +210,7 @@ public class MemcFragment extends ControlledPreferenceFragmentCompat {
         Thread thread = new Thread(runnable);
         thread.start();
 
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", MemcEnhancer.class.getSimpleName());
-
-        if (getContext() != null)
-            getContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.MEMC);
     }
 
 

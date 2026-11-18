@@ -1,10 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.misc;
 
 import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContext;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SETTINGS;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,7 +24,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.adapters.AppAdapter;
 import it.dhd.oxygencustomizer.ui.base.AppFragmentBase;
 import it.dhd.oxygencustomizer.ui.models.AppModel;
-import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.FrameworkSettings;
 
 public class DarkMode extends AppFragmentBase {
 
@@ -150,13 +148,7 @@ public class DarkMode extends AppFragmentBase {
         }
         mPreferences.edit().putStringSet("custom_dark_mode", enabledApps).apply();
 
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode.class.getSimpleName());
-
-        if (getContext() != null)
-            getContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.DARK_MODE);
     }
 
 }

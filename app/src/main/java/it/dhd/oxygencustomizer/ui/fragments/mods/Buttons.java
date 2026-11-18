@@ -1,6 +1,5 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods;
 
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_DOUBLE_PRESS_SOFF;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_CAMERA_SINGLE_PRESS;
@@ -14,7 +13,6 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTON
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.Buttons.BUTTONS_PLUSKEY_TRIPLE_PRESS_SOFF;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
@@ -25,7 +23,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.adapters.ActivitiesListAdapter;
 import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
-import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.FrameworkSettings;
 
 public class Buttons extends ControlledPreferenceFragmentCompat {
     @Override
@@ -56,13 +54,7 @@ public class Buttons extends ControlledPreferenceFragmentCompat {
     @Override
     public void updateScreen(String key) {
         super.updateScreen(key);
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", it.dhd.oxygencustomizer.xposed.hooks.framework.Buttons.class.getSimpleName());
-
-        if (getContext() != null)
-            getContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.BUTTONS);
 
     }
 
