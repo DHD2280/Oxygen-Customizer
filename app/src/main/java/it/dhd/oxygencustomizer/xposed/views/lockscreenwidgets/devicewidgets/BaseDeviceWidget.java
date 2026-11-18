@@ -1,16 +1,21 @@
 package it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets;
 
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryColor;
+import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.CallSuper;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
 
@@ -21,6 +26,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
+import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 
 public abstract class BaseDeviceWidget extends LinearLayout {
 
@@ -52,7 +58,8 @@ public abstract class BaseDeviceWidget extends LinearLayout {
         setupMenuInternal();
         setOnClickListener(v -> {
             if (mSettingsInterface && mAdded) popup.show();
-            else if (mWidgetClickListener != null) mWidgetClickListener.onWidgetClick(this);
+            else if (!onWidgetTap() && mWidgetClickListener != null)
+                mWidgetClickListener.onWidgetClick(this);
         });
         mProgressColor = getPrimaryColor(mContext);
     }
@@ -150,5 +157,30 @@ public abstract class BaseDeviceWidget extends LinearLayout {
     abstract public void onSetCustomColors(int progressColor, int textColor);
 
     abstract public void onSetDeviceName(String deviceName);
+
+    protected boolean onWidgetTap() {
+        return false;
+    }
+
+    protected Drawable tintedIcon(int res) {
+        Drawable drawable = ResourcesCompat.getDrawable(appContext.getResources(), res, appContext.getTheme());
+        if (drawable == null) return null;
+        drawable = drawable.mutate();
+        drawable.setTint(mTextColor);
+        return drawable;
+    }
+
+    protected Bitmap arcBitmap(int progress, int max, String text, Drawable icon) {
+        int size = text.length() > 5 ? 28 : text.length() > 4 ? 32 : 40;
+        return ArcProgressWidget.generateBitmap(mContext, Math.max(0, Math.min(progress, max)), Math.max(1, max), text, size,
+                icon, false, 36, null, mProgressColor, mTextColor);
+    }
+
+    protected ImageView createArcView() {
+        ImageView view = new ImageView(mContext);
+        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        view.setLayoutParams(new LayoutParams(dp2px(mContext, 60), dp2px(mContext, 60)));
+        return view;
+    }
 
 }

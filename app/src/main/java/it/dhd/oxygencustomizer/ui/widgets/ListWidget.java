@@ -82,6 +82,15 @@ public class ListWidget extends RelativeLayout {
         mOnSelectedListener = listener;
     }
 
+    public void setEntries(CharSequence[] entries, CharSequence[] entryValues) {
+        mEntries = entries;
+        mEntryValues = entryValues;
+    }
+
+    public void setOnRowClickListener(View.OnClickListener listener) {
+        container.setOnClickListener(listener);
+    }
+
     public void setTitle(int titleResId) {
         titleTextView.setText(titleResId);
     }
@@ -226,6 +235,8 @@ public class ListWidget extends RelativeLayout {
                 return view3;
             }
         }, (dialogInterface, which) -> {
+            selectedPosition = which;
+            setSummary(mEntries[which].toString());
             if (mOnSelectedListener != null) {
                 mOnSelectedListener.onSelected(mEntries[which], mEntryValues[which]);
             }

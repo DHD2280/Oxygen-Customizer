@@ -175,6 +175,7 @@ public class DeviceWidgetFragment extends BaseFragment {
     private final WidgetSettingsFragment.OnApplyButtonListener mApplyListener = new WidgetSettingsFragment.OnApplyButtonListener() {
         @Override
         public void onApplyClick() {
+            WidgetFactory.saveWidgets(mDeviceWidgetView.getWidgetsList());
             mWidgetSettingsSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
     };

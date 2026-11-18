@@ -1534,6 +1534,8 @@
     <string name="widget_string">%s widget</string>
     <string name="battery_widget">Battery</string>
     <string name="calendar_widget">Calendar</string>
+    <string name="calendar_permission_required">Calendar permission needed</string>
+    <string name="calendar_no_events">No upcoming events</string>
     <string name="remove_widget">Remove</string>
     <string name="remove_one_widget">Please remove one widget</string>
 
@@ -1544,6 +1546,48 @@
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Current temperature</string>
     <string name="weather_widget_humidity">Humidity</string>
+    <string name="weather_widget_wind">Wind</string>
+    <string name="weather_feels_like">Feels like</string>
+    <string name="weather_uv_index">UV index</string>
+    <string name="weather_pressure">Pressure</string>
+    <string name="weather_rain_chance">Chance of rain</string>
+    <string name="weather_sunrise">Sunrise</string>
+    <string name="weather_sunset">Sunset</string>
+    <string name="weather_daylight">Daylight</string>
+    <string name="weather_wind_direction">Wind direction</string>
+    <string name="weather_forecast_widget">Forecast</string>
+    <string name="weather_forecast_hourly">Hourly</string>
+    <string name="weather_forecast_daily">Daily</string>
+    <string name="weather_forecast_type">Forecast type</string>
+    <string name="memory_widget">RAM</string>
+    <string name="steps_widget">Steps</string>
+    <string name="steps_goal">Daily goal</string>
+    <string name="steps_permission_required">Physical activity permission needed</string>
+    <string name="alarm_widget">Next alarm</string>
+    <string name="storage_widget">Storage</string>
+    <string name="screen_time_widget">Screen time</string>
+    <string name="screen_time_goal">Daily target</string>
+    <string name="data_usage_widget">Mobile data</string>
+    <string name="data_usage_today">Today</string>
+    <string name="data_usage_month">This month</string>
+    <string name="data_usage_period">Period</string>
+    <string name="data_usage_limit">Limit</string>
+    <string name="network_widget">Network</string>
+    <string name="network_source">Source</string>
+    <string name="network_wifi">Wi-Fi</string>
+    <string name="network_mobile">Mobile</string>
+    <string name="network_disconnected">Disconnected</string>
+    <string name="dnd_widget">Do Not Disturb</string>
+    <string name="dnd_on">On</string>
+    <string name="dnd_off">Off</string>
+    <string name="now_playing_widget">Now playing</string>
+    <string name="now_playing_none">Nothing playing</string>
+    <string name="now_playing_dim">Darken</string>
+    <string name="usage_access_required">Usage access needed</string>
+    <string name="alarm_none">No alarm</string>
+    <string name="alarm_today">Today</string>
+    <string name="alarm_tomorrow">Tomorrow</string>
+    <string name="alarm_in">in %1$s</string>
 
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Lockscreen Now Bar</string>

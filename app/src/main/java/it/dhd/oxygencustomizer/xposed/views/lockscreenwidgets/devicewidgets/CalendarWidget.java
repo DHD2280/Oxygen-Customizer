@@ -5,14 +5,15 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,6 @@ import java.util.Map;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
-import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.xposed.utils.CalendarProvider;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
@@ -46,7 +46,9 @@ public class CalendarWidget extends BaseDeviceWidget {
     private ImageView mCalendarImage;
     private TextView mEventTitle, mEventTime, mEventLocation;
     private ImageView mCoundDownImage;
-    private static ContentObserver mCalendarObserver;
+    private ContentObserver mCalendarObserver;
+    private boolean mTickRegistered = false;
+    private static final long LOOKAHEAD_MS = 365L * 24 * 60 * 60 * 1000;
 
     private final int CALENDAR_NEXT_EVENT = 0;
     private final int CALENDAR_TODAY_EVENT = 1;
@@ -75,42 +77,53 @@ public class CalendarWidget extends BaseDeviceWidget {
         }
     }
 
+    public boolean hasCalendarPermission() {
+        Context context = appContext != null ? appContext : mContext;
+        return context.getPackageManager().checkPermission(Manifest.permission.READ_CALENDAR, BuildConfig.APPLICATION_ID) == PackageManager.PERMISSION_GRANTED;
+    }
+
     @SuppressLint("Range")
     public void getNextCalendarEvent() {
+        long now = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat(mDateFormat, Locale.getDefault());
+        mEventTime.setText(sdf.format(new Date(now)));
+        mEventLocation.setText("");
 
-        if (mSettingsInterface && !AppUtils.hasPermission(appContext, Manifest.permission.READ_CALENDAR)) {
-            mEventTitle.setText("Tap to set permission");
+        if (!hasCalendarPermission()) {
+            mEventTitle.setText(appContext.getString(R.string.calendar_permission_required));
             return;
-        } else {
-            if (!hasPermission(BuildConfig.APPLICATION_ID, AppOpsManager.OPSTR_READ_CALENDAR)) {
-                return;
-            }
         }
 
-        ContentResolver cr = appContext.getContentResolver();
+        Cursor cursor;
+        try {
+            cursor = appContext.getContentResolver().query(
+                    CalendarProvider.instancesUri(now, now + LOOKAHEAD_MS),
+                    new String[]{
+                            CalendarContract.Instances.EVENT_ID,
+                            CalendarContract.Instances.TITLE,
+                            CalendarContract.Instances.BEGIN,
+                            CalendarContract.Instances.END,
+                            CalendarContract.Instances.CALENDAR_DISPLAY_NAME
+                    },
+                    CalendarContract.Instances.END + " > ? AND " + CalendarContract.Instances.VISIBLE + " = 1",
+                    new String[]{String.valueOf(now)},
+                    CalendarContract.Instances.BEGIN + " ASC"
+            );
+        } catch (Throwable t) {
+            Log.e("CalendarWidget", "Calendar query failed", t);
+            mEventTitle.setText(appContext.getString(R.string.calendar_no_events));
+            return;
+        }
 
-        Cursor cursor = cr.query(
-                CalendarProvider.CONTENT_URI_EVENTS,
-                new String[]{
-                        CalendarContract.Events._ID,
-                        CalendarContract.Events.TITLE,
-                        CalendarContract.Events.DTSTART,
-                        CalendarContract.Events.CALENDAR_DISPLAY_NAME,
-                        CalendarContract.Events.DTEND
-                },
-                CalendarContract.Events.DTSTART + " >= ?",
-                new String[]{String.valueOf(System.currentTimeMillis())},
-                CalendarContract.Events.DTSTART + " ASC LIMIT 1"
-        );
-
-        if (cursor != null && cursor.moveToFirst()) {
-            String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE));
-            long startTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART));
-            String calendarName = cursor.getString(cursor.getColumnIndex(CalendarContract.Events.CALENDAR_DISPLAY_NAME));
-            long eventEndTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND));
-            SimpleDateFormat sdf2 = new SimpleDateFormat(mDateFormat, Locale.getDefault());
-            String evendEnd = sdf2.format(new Date(startTime));
-            Log.i("CalendarWidget", "Event end time: " + evendEnd);
+        try {
+            if (cursor == null || !cursor.moveToFirst()) {
+                mEventTitle.setText(appContext.getString(R.string.calendar_no_events));
+                return;
+            }
+            String title = cursor.getString(cursor.getColumnIndex(CalendarContract.Instances.TITLE));
+            long startTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Instances.BEGIN));
+            long eventEndTime = cursor.getLong(cursor.getColumnIndex(CalendarContract.Instances.END));
+            String calendarName = cursor.getString(cursor.getColumnIndex(CalendarContract.Instances.CALENDAR_DISPLAY_NAME));
             if (!mSettingsInterface) {
                 try {
                     scheduleWidgetUpdate(eventEndTime);
@@ -118,26 +131,17 @@ public class CalendarWidget extends BaseDeviceWidget {
                     Logger.log("CalendarWidget - error scheduling update");
                 }
             }
-
-            SimpleDateFormat sdf = new SimpleDateFormat(mDateFormat, Locale.getDefault());
-            String eventTime = sdf.format(new Date(startTime));
-            mEventTitle.setText(title.trim());
-            mEventTime.setText(eventTime);
-            mEventLocation.setText(calendarName);
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat(mDateFormat, Locale.getDefault());
-            String eventTime = sdf.format(new Date(System.currentTimeMillis()));
-            mEventTime.setText(eventTime);
-        }
-
-        if (cursor != null) {
-            cursor.close();
+            mEventTitle.setText(title == null ? "" : title.trim());
+            mEventTime.setText(sdf.format(new Date(startTime)));
+            mEventLocation.setText(calendarName == null ? "" : calendarName);
+        } finally {
+            if (cursor != null) cursor.close();
         }
     }
 
     private void scheduleWidgetUpdate(long eventEndTime) {
-        Log.d("CalendarWidget", "Scheduling widget update for event end time: " + eventEndTime + " appContext " + (appContext == null));
         AlarmManager alarmManager = SystemUtils.AlarmManager();
+        if (alarmManager == null) return;
         alarmManager.set(AlarmManager.RTC,
                 eventEndTime,
                 "",
@@ -212,12 +216,9 @@ public class CalendarWidget extends BaseDeviceWidget {
 
     @Override
     public void onSetCustomColors(int progressColor, int textColor) {
-        for (int i = 0; i<getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v instanceof TextView tv) {
-                tv.setTextColor(textColor);
-            }
-        }
+        mEventTitle.setTextColor(textColor);
+        mEventTime.setTextColor(textColor);
+        mEventLocation.setTextColor(textColor);
     }
 
     @Override
@@ -241,28 +242,37 @@ public class CalendarWidget extends BaseDeviceWidget {
     }
 
     private void registerCalendarObserver(Context context) {
-        if (mCalendarObserver == null) {
-            mCalendarObserver = new ContentObserver(new Handler()) {
+        if (mCalendarObserver == null && hasCalendarPermission()) {
+            mCalendarObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
                 @Override
                 public void onChange(boolean selfChange) {
                     getNextCalendarEvent();
                 }
             };
-
-            context.getContentResolver().registerContentObserver(
-                    CalendarProvider.CONTENT_URI_EVENTS,
-                    true,
-                    mCalendarObserver
-            );
+            try {
+                context.getContentResolver().registerContentObserver(CalendarContract.CONTENT_URI, true, mCalendarObserver);
+            } catch (Throwable t) {
+                mCalendarObserver = null;
+            }
         }
-        IntentFilter filter = new IntentFilter(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
-        context.registerReceiver(mEventTick, filter, Context.RECEIVER_EXPORTED);
+        if (!mTickRegistered) {
+            IntentFilter filter = new IntentFilter(BuildConfig.APPLICATION_ID + ".UPDATE_WIDGET_AFTER_EVENT");
+            mContext.registerReceiver(mEventTick, filter, Context.RECEIVER_EXPORTED);
+            mTickRegistered = true;
+        }
     }
 
     private void unregisterCalendarObserver(Context context) {
         if (mCalendarObserver != null) {
             context.getContentResolver().unregisterContentObserver(mCalendarObserver);
             mCalendarObserver = null;
+        }
+        if (mTickRegistered) {
+            try {
+                mContext.unregisterReceiver(mEventTick);
+            } catch (Throwable ignored) {
+            }
+            mTickRegistered = false;
         }
     }
 

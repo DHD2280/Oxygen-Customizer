@@ -18,17 +18,42 @@ import java.util.Map;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.AlarmWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BaseDeviceWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BatteryWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BluetoothWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.CalendarWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.DataUsageWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.DndWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.ForecastWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.MemoryWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.NetworkWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.NowPlayingWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.ScreenTimeWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.SoundWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.StepsWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.StorageWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetMode;
 
 public class WidgetFactory {
 
     private final static String PREF_KEY = LOCKSCREEN_WIDGETS_CUSTOM_DEVICE;
+
+    public static final List<String> REFERENCES = List.of("batteryWidget", "WeatherWidget", "CalendarWidget", "BluetoothWidget", "SoundWidget", "MemoryWidget", "StepsWidget", "AlarmWidget", "ForecastWidget", "StorageWidget", "ScreenTimeWidget", "DataUsageWidget", "NetworkWidget", "DndWidget", "NowPlayingWidget");
+
+    public static BaseDeviceWidget fromConfigJson(String json, Context context, boolean settingsInterface) {
+        try {
+            WidgetConfig config = new Gson().fromJson(json, WidgetConfig.class);
+            return config == null ? null : getNewWidget(context, config, settingsInterface);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    public static String toConfigJson(BaseDeviceWidget widget) {
+        return new Gson().toJson(new WidgetConfig(widget.getWidgetReference(), widget.getMode(), widget.getCustomSettings()));
+    }
 
     public static BaseDeviceWidget getNewWidget(Context context, WidgetConfig config, boolean settingsInterface) {
         String ref = config.getWidgetType();
@@ -60,6 +85,16 @@ public class WidgetFactory {
             case "CalendarWidget" -> new CalendarWidget(context, settingsInterface);
             case "BluetoothWidget" -> new BluetoothWidget(context, settingsInterface);
             case "SoundWidget" -> new SoundWidget(context, settingsInterface);
+            case "MemoryWidget" -> new MemoryWidget(context, settingsInterface);
+            case "StepsWidget" -> new StepsWidget(context, settingsInterface);
+            case "AlarmWidget" -> new AlarmWidget(context, settingsInterface);
+            case "ForecastWidget" -> new ForecastWidget(context, settingsInterface);
+            case "StorageWidget" -> new StorageWidget(context, settingsInterface);
+            case "ScreenTimeWidget" -> new ScreenTimeWidget(context, settingsInterface);
+            case "DataUsageWidget" -> new DataUsageWidget(context, settingsInterface);
+            case "NetworkWidget" -> new NetworkWidget(context, settingsInterface);
+            case "DndWidget" -> new DndWidget(context, settingsInterface);
+            case "NowPlayingWidget" -> new NowPlayingWidget(context, settingsInterface);
             default -> null;
         };
         if (widget != null) {

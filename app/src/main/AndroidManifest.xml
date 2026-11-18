@@ -32,6 +32,10 @@
         tools:ignore="ScopedStorage" />
     <!-- Calendar Widget -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
     <!-- Schedule Calendar update -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
@@ -55,6 +59,10 @@
         <activity
             android:name=".ui.activity.OnboardingActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activity.ClockDesignerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.OxygenCustomizer" />
         <activity
             android:name=".SplashActivity"
             android:enabled="true"
@@ -167,6 +175,17 @@
         <provider
             android:name=".weather.WeatherContentProvider"
             android:authorities="it.dhd.oxygencustomizer.weatherprovider"
+            android:exported="true" />
+
+        <provider
+            android:name=".provider.UsageProvider"
+            android:authorities="it.dhd.oxygencustomizer.usageprovider"
+            android:exported="true" />
+
+        <provider
+            android:name=".provider.StepsProvider"
+            android:authorities="it.dhd.oxygencustomizer.stepsprovider"
+            android:directBootAware="true"
             android:exported="true" />
 
         <provider

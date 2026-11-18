@@ -76,17 +76,34 @@ public class DeviceWidgetsAdapter extends RecyclerView.Adapter<DeviceWidgetsAdap
             binding.widgetTitle.setText(widget.getWidgetName());
             if (widget.hasBigMode()) {
                 binding.previewBig.setVisibility(View.VISIBLE);
-                binding.previewBig.addView(widget.getBigPreview());
+                binding.previewBig.removeAllViews();
+                binding.previewBig.addView(preview(widget.getBigPreview()));
                 binding.previewBig.setOnClickListener(v -> addWidget(widget, WidgetMode.BIG));
             } else {
                 binding.previewBig.setVisibility(View.GONE);
             }
             if (widget.hasSmallMode()) {
                 binding.previewSmall.setVisibility(View.VISIBLE);
-                binding.previewSmall.addView(widget.getSmallPreview());
+                binding.previewSmall.removeAllViews();
+                binding.previewSmall.addView(preview(widget.getSmallPreview()));
                 binding.previewSmall.setOnClickListener(v -> addWidget(widget, WidgetMode.SMALL));
             } else {
                 binding.previewSmall.setVisibility(View.GONE);
+            }
+        }
+
+        private View preview(View view) {
+            if (view.getParent() instanceof ViewGroup parent) parent.removeView(view);
+            disableTouch(view);
+            return view;
+        }
+
+        private void disableTouch(View view) {
+            view.setClickable(false);
+            view.setLongClickable(false);
+            view.setFocusable(false);
+            if (view instanceof ViewGroup group) {
+                for (int i = 0; i < group.getChildCount(); i++) disableTouch(group.getChildAt(i));
             }
         }
 

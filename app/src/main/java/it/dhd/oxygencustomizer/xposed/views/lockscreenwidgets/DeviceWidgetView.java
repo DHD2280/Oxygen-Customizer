@@ -58,6 +58,9 @@ public class DeviceWidgetView extends FrameLayout {
     private final Map<View, int[]> mOriginalMargins = new HashMap<>();
     private static final int GRID_COLUMNS = 4;
     private static final int GLASS_GAP_DP = 12;
+    private final Map<View, int[]> mOriginalBatteryLayout = new HashMap<>();
+    private static final int GLASS_BAR_HEIGHT_DP = 6;
+    private static final float GLASS_ARC_FILL = 0.78f;
     private float mWidgetScaling = 1f;
     private TextView mBatteryLevelView;
     private ProgressBar mBatteryProgress;
@@ -321,9 +324,30 @@ public class DeviceWidgetView extends FrameLayout {
         batteryProgressParent.setGravity(mLiquidGlass ? Gravity.CENTER_VERTICAL : Gravity.NO_GRAVITY);
         int batteryPadding = mLiquidGlass ? dp2px(mContext, 14) : 0;
         batteryProgressParent.setPadding(batteryPadding, 0, batteryPadding, 0);
+        compactBatteryCard();
 
         applyLiquidGlass();
         post(this::applyGrid);
+    }
+
+    private void compactBatteryCard() {
+        View percentage = mBatteryLevelView;
+        View name = ViewHelper.findViewWithTag(this, "device_name");
+        for (View view : new View[]{percentage, name, mBatteryProgress}) {
+            if (view == null || !(view.getLayoutParams() instanceof LinearLayout.LayoutParams params))
+                continue;
+            int[] original = mOriginalBatteryLayout.computeIfAbsent(view, v -> new int[]{
+                    params.topMargin, params.height, v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom()});
+            params.topMargin = mLiquidGlass && view != mBatteryProgress ? 0 : original[0];
+            params.height = mLiquidGlass && view == mBatteryProgress ? dp2px(mContext, GLASS_BAR_HEIGHT_DP) : original[1];
+            view.setLayoutParams(params);
+            if (view == mBatteryProgress) continue;
+            if (mLiquidGlass) {
+                view.setPadding(0, 0, 0, 0);
+            } else {
+                view.setPadding(original[2], original[3], original[4], original[5]);
+            }
+        }
     }
 
     @Override
@@ -339,14 +363,23 @@ public class DeviceWidgetView extends FrameLayout {
         int rowPadding = dp2px(mContext, GLASS_GAP_DP / 2);
         int column = (width - 2 * rowPadding) / GRID_COLUMNS;
         int height = column - dp2px(mContext, GLASS_GAP_DP);
-        int artContainerSize = (int) (dp2px(mContext, 60) * mWidgetScaling);
-        int arcPadding = Math.max(0, (height - artContainerSize) / 2);
 
-        setGridSize((View) mBatteryProgress.getParent(), column, 2, height);
+        View batteryCard = (View) mBatteryProgress.getParent();
+        int horizontalPadding = dp2px(mContext, 14);
+        batteryCard.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+        int batteryWidth = column * 2 - dp2px(mContext, GLASS_GAP_DP);
+        batteryCard.measure(MeasureSpec.makeMeasureSpec(Math.max(batteryWidth, 0), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        int verticalPadding = Math.max(0, (height - batteryCard.getMeasuredHeight()) / 2);
+        batteryCard.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding);
+        int arcSize = Math.round(height * GLASS_ARC_FILL);
+        int arcHorizontal = Math.max(0, (height - arcSize) / 2);
+        int arcVertical = arcHorizontal;
+
+        setGridSize(batteryCard, column, 2, height);
         for (View arcContainer : List.of(mVolumeLevelContainer, mRamUsageContainer,
                 mVolumeLevelContainerArc, mRamUsageContainerArc, mBatteryArcContainer, mBatteryTempContainer)) {
             setGridSize(arcContainer, column, 1, height);
-            arcContainer.setPadding(arcPadding, arcPadding, arcPadding, arcPadding);
+            arcContainer.setPadding(arcHorizontal, arcVertical, arcHorizontal, arcVertical);
         }
         for (int i = 0; i < mCustomRow.getChildCount(); i++) {
             if (mCustomRow.getChildAt(i) instanceof BaseDeviceWidget widget) {
@@ -557,7 +590,7 @@ public class DeviceWidgetView extends FrameLayout {
     private void updateWidgetMargin() {
         int childCount = mCustomRow.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            BaseDeviceWidget widget = (BaseDeviceWidget) mCustomRow.getChildAt(i);
+            if (!(mCustomRow.getChildAt(i) instanceof BaseDeviceWidget widget)) continue;
             LinearLayout.LayoutParams params;
             if (widget.getMode() == WidgetMode.SMALL) {
                 int size = dp2px(mContext, 60);

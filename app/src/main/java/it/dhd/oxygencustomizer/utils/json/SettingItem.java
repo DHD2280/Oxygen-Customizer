@@ -26,10 +26,22 @@ public class SettingItem {
     @SerializedName("options_entries")
     private List<String> optionsEntries;
 
+    @SerializedName("min")
+    private int min;
+
+    @SerializedName("max")
+    private int max;
+
 
 
     public SettingItem(String titleResName, String key, Type type, Object value) {
         this(titleResName, key, type, value, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public SettingItem(String title, String key, Type type, Object value, int min, int max) {
+        this(title, key, type, value, Collections.emptyList(), Collections.emptyList());
+        this.min = min;
+        this.max = max;
     }
 
     public SettingItem(String title, String key, Type type, Object value, List<String> entries, List<String> values) {
@@ -47,6 +59,14 @@ public class SettingItem {
     public String getTitleResName() { return title; }
     public List<String> getEntries() { return optionsEntries; }
     public List<String> getValues() { return optionsValues; }
+
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
+    }
 
     public void setValue(Object value) { this.value = value; }
 }

@@ -16,6 +16,7 @@ import it.dhd.oneplusui.preference.OplusEditTextPreference;
 import it.dhd.oneplusui.preference.OplusListPreference;
 import it.dhd.oneplusui.preference.OplusMenuPreference;
 import it.dhd.oneplusui.preference.OplusPreferenceCategory;
+import it.dhd.oneplusui.preference.OplusSeekbarPreference;
 import it.dhd.oneplusui.preference.OplusSwitchPreference;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.interfaces.PreferenceListener;
@@ -88,9 +89,22 @@ public class WidgetSettingsPreferenceFragment extends OplusPreferenceFragment im
                     listPref.setEntries(setting.getEntries().toArray(new String[0]));
                     listPref.setEntryValues(setting.getValues().toArray(new String[0]));
                     listPref.setValue(String.valueOf(value));
-                    listPref.setSummary(setting.getEntries().toArray(new String[0])[listPref.findIndexOfValue(String.valueOf(value))]);
+                    listPref.setSummary(entrySummary(setting.getEntries(), listPref.findIndexOfValue(String.valueOf(value))));
                     listPref.setOnPreferenceChangeListener(this);
                     category.addPreference(listPref);
+                    break;
+
+                case SEEKBAR_INT:
+                    OplusSeekbarPreference seekbarPref = new OplusSeekbarPreference(requireContext());
+                    seekbarPref.setPersistent(false);
+                    seekbarPref.setKey(key);
+                    seekbarPref.setTitle(title);
+                    seekbarPref.setMin(setting.getMin());
+                    seekbarPref.setMax(setting.getMax());
+                    seekbarPref.setShowSeekBarValue(true);
+                    seekbarPref.setValue(intValue(value, setting.getMin()));
+                    seekbarPref.setOnPreferenceChangeListener(this);
+                    category.addPreference(seekbarPref);
                     break;
 
                 case MENU:
@@ -101,7 +115,7 @@ public class WidgetSettingsPreferenceFragment extends OplusPreferenceFragment im
                     menuPref.setEntries(setting.getEntries().toArray(new String[0]));
                     menuPref.setEntryValues(setting.getValues().toArray(new String[0]));
                     menuPref.setValue(String.valueOf(value));
-                    menuPref.setSummary(setting.getEntries().toArray(new String[0])[menuPref.findIndexOfValue(String.valueOf(value))]);
+                    menuPref.setSummary(entrySummary(setting.getEntries(), menuPref.findIndexOfValue(String.valueOf(value))));
                     menuPref.setOnPreferenceChangeListener(this);
                     category.addPreference(menuPref);
             }
@@ -109,6 +123,23 @@ public class WidgetSettingsPreferenceFragment extends OplusPreferenceFragment im
     }
 
 
+    private static int intValue(Object value, int fallback) {
+        if (value instanceof Number number) return number.intValue();
+        try {
+            return Math.round(Float.parseFloat(String.valueOf(value)));
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
+    }
+
+    private static String entrySummary(List<String> entries, int index) {
+        if (index < 0 || index >= entries.size()) return "";
+        return escapeSummary(entries.get(index));
+    }
+
+    private static String escapeSummary(String summary) {
+        return summary.replace("%", "%%");
+    }
 
     private String getStringResource(Context context, String resName) {
         int resId = context.getResources().getIdentifier(resName, "string", context.getPackageName());
@@ -129,7 +160,8 @@ public class WidgetSettingsPreferenceFragment extends OplusPreferenceFragment im
         settingsMap.put(preference.getKey(), newValue);
         if (mPreferenceChangeListener != null) mPreferenceChangeListener.onPreferenceChanged();
         if (preference instanceof OplusListPreference pref) { // OplusMenuPreference is a subclass of OplusListPreference
-            preference.setSummary(pref.getEntries()[pref.findIndexOfValue((String) newValue)]);
+            int index = pref.findIndexOfValue((String) newValue);
+            preference.setSummary(index < 0 ? "" : escapeSummary(String.valueOf(pref.getEntries()[index])));
         } else if (preference instanceof OplusEditTextPreference) {
             preference.setSummary((String) newValue);
         }

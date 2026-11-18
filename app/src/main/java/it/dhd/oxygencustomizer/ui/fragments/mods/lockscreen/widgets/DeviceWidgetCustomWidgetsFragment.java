@@ -29,11 +29,21 @@ import it.dhd.oxygencustomizer.databinding.FragmentDeviceWidgetPreviewsBinding;
 import it.dhd.oxygencustomizer.ui.adapters.DeviceWidgetsAdapter;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.DeviceWidgetView;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.AlarmWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BaseDeviceWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BatteryWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.BluetoothWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.CalendarWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.DataUsageWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.DndWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.ForecastWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.MemoryWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.NetworkWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.NowPlayingWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.ScreenTimeWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.SoundWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.StepsWidget;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.StorageWidget;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
 
 public class DeviceWidgetCustomWidgetsFragment extends Fragment {
@@ -111,6 +121,16 @@ public class DeviceWidgetCustomWidgetsFragment extends Fragment {
         widgets.add(mCalendarWidget);
         widgets.add(new WeatherWidget(requireContext(), true));
         widgets.add(new SoundWidget(requireContext(), true));
+        widgets.add(new MemoryWidget(requireContext(), true));
+        widgets.add(new StepsWidget(requireContext(), true));
+        widgets.add(new AlarmWidget(requireContext(), true));
+        widgets.add(new ForecastWidget(requireContext(), true));
+        widgets.add(new StorageWidget(requireContext(), true));
+        widgets.add(new ScreenTimeWidget(requireContext(), true));
+        widgets.add(new DataUsageWidget(requireContext(), true));
+        widgets.add(new NetworkWidget(requireContext(), true));
+        widgets.add(new DndWidget(requireContext(), true));
+        widgets.add(new NowPlayingWidget(requireContext(), true));
         binding.selectDialogListview.addItemDecoration(new OplusRecyclerView.OplusRecyclerViewItemDecoration(requireContext()));
         binding.selectDialogListview.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         binding.selectDialogListview.setAdapter(new DeviceWidgetsAdapter(widgets, mDeviceWidgetView, mSettingsListener));
