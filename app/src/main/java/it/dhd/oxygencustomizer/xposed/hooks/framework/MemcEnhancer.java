@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.framework;
 
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_GET;
 import static it.dhd.oxygencustomizer.utils.Constants.ACTIONS_MEMC_FEATURE_RECEIVED;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 
@@ -10,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +17,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.github.libxposed.api.XposedModuleInterface;
-import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.FrameworkMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
-public class MemcEnhancer extends XposedMods {
+public class MemcEnhancer extends FrameworkMods {
 
     private static final Set<String> OPLUS_MEMC_FEATURES = new HashSet<>(Arrays.asList(
             "oplus.software.display.pixelworks_enable",
@@ -32,15 +29,12 @@ public class MemcEnhancer extends XposedMods {
             "oplus.software.display.game.memc_enable"
     ));
 
-    private static final String listenPackage = FRAMEWORK;
     private static final ArrayList<String> sConfigPackage = new ArrayList<>();
     private static final ArrayList<String> sConfigActivity = new ArrayList<>();
     private static final HashMap<String, String> sSdr2hdrCommandMap = new HashMap<>();
     private static final HashMap<String, String> sMemcCommandMap = new HashMap<>();
     private static final HashMap<String, String> sAppScreenRateMap = new HashMap<>();
     private boolean mBroadcastRegistered = false;
-    private boolean mSettingsBroadcastRegistered = false;
-    private boolean settingsUpdated = false;
     private boolean mIsFeatureOn = false;
     private boolean mIsPwX7Enable = false;
     private boolean mMemcEnable = false;
@@ -58,34 +52,13 @@ public class MemcEnhancer extends XposedMods {
     };
     private boolean enableMemcFeature = false;
     private boolean useCustomMemcConfig = false;
-    final BroadcastReceiver mSettingsBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String action = intent.getAction();
-                if (action == null) return;
-                String className = intent.getStringExtra("class");
-                if (action.equals(Constants.ACTION_SETTINGS_CHANGED)) {
-                    if (!TextUtils.isEmpty(className) && className.equals(MemcEnhancer.class.getSimpleName())) {
-                        log("Intent received - will update preferences");
-                        settingsUpdated = false;
-                        onPreferenceUpdated();
-                    }
-                }
-            } catch (Throwable t) {
-                log("error: " + t.getMessage());
-            }
-        }
-    };
 
     public MemcEnhancer(Context context) {
         super(context);
     }
 
     @Override
-    public void onPreferenceUpdated(String... Key) {
-        if (settingsUpdated) return;
-
+    protected void loadSettings() {
         enableMemcFeature = Xprefs.getBoolean("force_memc_enabled", false);
         useCustomMemcConfig = Xprefs.getBoolean("custom_memc_config", false);
 
@@ -111,8 +84,6 @@ public class MemcEnhancer extends XposedMods {
         }
 
         logLists();
-
-        settingsUpdated = true;
     }
 
     private void clearLists() {
@@ -124,19 +95,12 @@ public class MemcEnhancer extends XposedMods {
     }
 
     @Override
-    public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
-
+    protected void onFrameworkLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         if (!mBroadcastRegistered) {
             mBroadcastRegistered = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(ACTIONS_MEMC_FEATURE_GET);
             mContext.registerReceiver(mBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
-        }
-        if (!mSettingsBroadcastRegistered) {
-            mSettingsBroadcastRegistered = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Constants.ACTION_SETTINGS_CHANGED);
-            mContext.registerReceiver(mSettingsBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         }
 
         hookFeatureManager();
@@ -144,11 +108,6 @@ public class MemcEnhancer extends XposedMods {
         hookOplusFeatureMEMC();
         hookOplusMemcHelper();
 
-    }
-
-    @Override
-    public boolean listensTo(String packageName) {
-        return listenPackage.equals(packageName);
     }
 
     private void getAndSendBroadcast() {
@@ -304,5 +263,4 @@ public class MemcEnhancer extends XposedMods {
                 "sMemcCommandMap: " + sMemcCommandMap.toString() + "\n" +
                 "sAppScreenRateMap: " + sAppScreenRateMap.toString());
     }
-
 }
