@@ -5,6 +5,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import android.os.Build;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.xposed.hooks.HookTester;
@@ -13,6 +14,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.framework.DarkMode;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.MemcEnhancer;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.PackageManager;
+import it.dhd.oxygencustomizer.xposed.hooks.framework.PanoramaUnlock;
 import it.dhd.oxygencustomizer.xposed.hooks.framework.SleepOnFlat;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.CustomNavGestures;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.DockBackground;
@@ -20,6 +22,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.launcher.InfiniteScroll;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.Launcher;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.RecentsMenu;
 import it.dhd.oxygencustomizer.xposed.hooks.launcher.ThemedIcons;
+import it.dhd.oxygencustomizer.xposed.hooks.pscanvas.BoundlessView;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.CustomShortcut;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.DarkModeSettings;
 import it.dhd.oxygencustomizer.xposed.hooks.settings.MemcEnabler;
@@ -79,6 +82,10 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar.StatusbarNotification;
 
 public class ModPacks {
+
+    public static List<Class<? extends FrameworkMods>> getEarlyFrameworkMods() {
+        return List.of(PanoramaUnlock.class);
+    }
 
     public static ArrayList<Class<? extends XposedMods>> getMods(String packageName) {
         ArrayList<Class<? extends XposedMods>> modPacks = new ArrayList<>();
@@ -206,7 +213,9 @@ public class ModPacks {
                 modPacks.add(DockBackground.class);
                 modPacks.add(RecentsMenu.class);
                 modPacks.add(InfiniteScroll.class);
-
+            }
+            case Constants.Packages.PSCANVAS -> {
+                modPacks.add(BoundlessView.class);
             }
         }
 

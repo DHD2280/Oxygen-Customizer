@@ -29,6 +29,7 @@ public abstract class FrameworkMods extends XposedMods {
     };
     private boolean mSettingsLoaded = false;
     private boolean mReceiverRegistered = false;
+    private boolean mHooksInstalled = false;
 
     public FrameworkMods(Context context) {
         super(context);
@@ -37,6 +38,11 @@ public abstract class FrameworkMods extends XposedMods {
     protected abstract void loadSettings();
 
     protected abstract void onFrameworkLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable;
+
+    final void attach(Context context) {
+        mContext = context;
+        registerSettingsReceiver();
+    }
 
     @Override
     public final void onPreferenceUpdated(String... Key) {
@@ -48,6 +54,8 @@ public abstract class FrameworkMods extends XposedMods {
     @Override
     public final void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         registerSettingsReceiver();
+        if (mHooksInstalled) return;
+        mHooksInstalled = true;
         onFrameworkLoaded(PRParam);
     }
 
