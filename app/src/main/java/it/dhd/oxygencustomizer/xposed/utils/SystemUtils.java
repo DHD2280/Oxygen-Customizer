@@ -46,12 +46,16 @@ import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.VibratorManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.utils.AppUtils;
@@ -78,7 +82,14 @@ public class SystemUtils {
     NetworkStatsManager mNetworkStatsManager = null;
     boolean mHasVibrator = false;
     int maxFlashLevel = -1;
-    static boolean isTorchOn = false;
+    static volatile boolean isTorchOn = false;
+    private String mFlashId = null;
+    private static final List<TorchListener> sTorchListeners = new CopyOnWriteArrayList<>();
+    private static final Handler sMainHandler = new Handler(Looper.getMainLooper());
+
+    public interface TorchListener {
+        void onTorchChanged(boolean enabled);
+    }
 
     //ArrayList<ChangeListener> mFlashlightLevelListeners = new ArrayList<>();
     //ArrayList<ChangeListener> mVolumeChangeListeners = new ArrayList<>();
@@ -205,15 +216,22 @@ public class SystemUtils {
                 HandlerThread thread = new HandlerThread("", THREAD_PRIORITY_BACKGROUND);
                 thread.start();
                 Handler mHandler = new Handler(thread.getLooper());
-                mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
-
-                mCameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
+                CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+                mFlashId = getFlashID(manager);
+                manager.registerTorchCallback(new CameraManager.TorchCallback() {
                     @Override
                     public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
                         super.onTorchModeChanged(cameraId, enabled);
-                        isTorchOn = enabled;
+                        if (isFlashCamera(cameraId)) setTorchState(enabled);
+                    }
+
+                    @Override
+                    public void onTorchModeUnavailable(@NonNull String cameraId) {
+                        super.onTorchModeUnavailable(cameraId);
+                        if (isFlashCamera(cameraId)) setTorchState(false);
                     }
                 }, mHandler);
+                mCameraManager = manager;
             } catch (Throwable t) {
                 mCameraManager = null;
                 if (BuildConfig.DEBUG) {
@@ -474,6 +492,32 @@ public class SystemUtils {
         return isTorchOn;
     }
 
+    private boolean isFlashCamera(String cameraId) {
+        return TextUtils.isEmpty(mFlashId) || mFlashId.equals(cameraId);
+    }
+
+    private static void setTorchState(boolean enabled) {
+        if (isTorchOn == enabled) return;
+        isTorchOn = enabled;
+        sMainHandler.post(() -> {
+            for (TorchListener listener : sTorchListeners) listener.onTorchChanged(enabled);
+        });
+    }
+
+    public static void registerTorchListener(TorchListener listener) {
+        if (!sTorchListeners.contains(listener)) sTorchListeners.add(listener);
+    }
+
+    public static void unregisterTorchListener(TorchListener listener) {
+        sTorchListeners.remove(listener);
+    }
+
+    @Nullable
+    public static String flashCameraId() {
+        if (instance == null || instance.getCameraManager() == null) return null;
+        return TextUtils.isEmpty(instance.mFlashId) ? null : instance.mFlashId;
+    }
+
     /**
      * Toggles flash
      *
@@ -585,6 +629,7 @@ public class SystemUtils {
 
 
     private String getFlashID(@NonNull CameraManager cameraManager) throws CameraAccessException {
+        if (!TextUtils.isEmpty(mFlashId)) return mFlashId;
         String[] ids = cameraManager.getCameraIdList();
         for (String id : ids) {
             if (cameraManager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) == CameraMetadata.LENS_FACING_BACK) {

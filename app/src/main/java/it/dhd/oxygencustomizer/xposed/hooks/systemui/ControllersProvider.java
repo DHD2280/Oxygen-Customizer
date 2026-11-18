@@ -2,7 +2,6 @@ package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
-import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.findClass;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
+import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class ControllersProvider extends XposedMods {
 
@@ -466,22 +465,8 @@ public class ControllersProvider extends XposedMods {
         }
 
 
-        // Stole FlashLight Callback
-        try {
-            Class<?> FlashlightControllerImpl = findClass("com.android.systemui.statusbar.policy.FlashlightControllerImpl", PRParam.getClassLoader());
-            ReflectedClass.of(FlashlightControllerImpl)
-                    .afterConstruction()
-                    .run(param -> {
-                        Object mTorchCallback = getObjectField(param.thisObject, "mTorchCallback");
-                        ReflectedClass.of(mTorchCallback.getClass())
-                                .after(ReflectionHelpers.findMethodExact(mTorchCallback.getClass(), "onTorchModeChanged", String.class, boolean.class))
-                                .run(param2 -> {
-                                    onTorchModeChanged((boolean) param2.args[1]);
-                                });
-                    });
-        } catch (Throwable t) {
-            log("FlashlightControllerImpl not found " + t.getMessage());
-        }
+        SystemUtils.registerTorchListener(this::onTorchModeChanged);
+        SystemUtils.CameraManager();
 
         // QS Media Tile, for Media Dialog OOS15
         try {

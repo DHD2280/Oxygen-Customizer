@@ -202,7 +202,9 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
         mCameraManager = SystemUtils.CameraManager();
         try {
             //noinspection NullPointerException
-            mCameraId = mCameraManager.getCameraIdList()[0];
+            mCameraId = SystemUtils.flashCameraId();
+            if (mCameraId == null) mCameraId = mCameraManager.getCameraIdList()[0];
+            isFlashOn = SystemUtils.isFlashOn();
         } catch (Throwable e) {
             log(TAG + "error: " + e.getMessage());
         }
@@ -1483,8 +1485,13 @@ public class QsControlsView extends LinearLayout implements OmniJawsClient.OmniJ
     private void toggleFlashlight() {
         if (torchButton == null && torchButtonFab == null) return;
         try {
-            mCameraManager.setTorchMode(mCameraId, !isFlashOn);
-            isFlashOn = !isFlashOn;
+            boolean target = !SystemUtils.isFlashOn();
+            if (SystemUtils.CameraManager() != null) {
+                SystemUtils.toggleFlash();
+            } else {
+                mCameraManager.setTorchMode(mCameraId, target);
+            }
+            isFlashOn = target;
             updateTorchButtonState();
             vibrate(1);
         } catch (Exception e) {
