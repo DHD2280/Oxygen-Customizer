@@ -117,6 +117,38 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="panorama_cat"
+        android:title="@string/panorama_category"
+        app:iconSpaceReserved="false">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="panorama_three_split"
+            android:summary="@string/panorama_three_split_summary"
+            android:title="@string/panorama_three_split_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="panorama_floating_windows"
+            android:summary="@string/panorama_floating_windows_summary"
+            android:title="@string/panorama_floating_windows_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:dependency="panorama_floating_windows"
+            android:key="panorama_max_windows"
+            android:title="@string/panorama_max_windows_title"
+            android:summary="@string/panorama_reboot_info"
+            app:defaultValue="3"
+            app:iconSpaceReserved="false"
+            app:maxVal="20"
+            app:minVal="1"
+            app:tickInterval="1" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
         android:title="@string/ota_card_category"
         app:iconSpaceReserved="false">
 

@@ -4,13 +4,14 @@ import static it.dhd.oxygencustomizer.OxygenCustomizer.getAppContextLocale;
 import static it.dhd.oxygencustomizer.ui.activity.MainActivity.replaceFragment;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_CROP_KEY;
 import static it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage.DATA_FILE_URI;
-import static it.dhd.oxygencustomizer.utils.Constants.Packages.FRAMEWORK;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_FLOATING_WINDOWS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_MAX_WINDOWS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_THREE_SPLIT;
 import static it.dhd.oxygencustomizer.utils.Constants.SETTINGS_OTA_CARD_DIR;
 import static it.dhd.oxygencustomizer.utils.FileUtil.getRealPath;
 import static it.dhd.oxygencustomizer.utils.FileUtil.moveToOCHiddenDir;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +35,8 @@ import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.fragments.FragmentCropImage;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.utils.FrameworkSettings;
 import it.dhd.oxygencustomizer.utils.ModuleUtil;
-import it.dhd.oxygencustomizer.xposed.hooks.framework.OplusStartingWindowManager;
 
 public class Misc extends ControlledPreferenceFragmentCompat {
 
@@ -166,6 +167,11 @@ public class Misc extends ControlledPreferenceFragmentCompat {
             case "enable_pocket_studio":
                 enablePocketStudio();
                 break;
+            case PANORAMA_THREE_SPLIT:
+            case PANORAMA_FLOATING_WINDOWS:
+            case PANORAMA_MAX_WINDOWS:
+                FrameworkSettings.notifyChanged(getContext(), FrameworkSettings.Mod.PANORAMA);
+                break;
         }
     }
 
@@ -193,12 +199,7 @@ public class Misc extends ControlledPreferenceFragmentCompat {
     }
 
     private void sendIntent() {
-        Intent broadcast = new Intent(Constants.ACTION_SETTINGS_CHANGED);
-        broadcast.putExtra("packageName", FRAMEWORK);
-        broadcast.putExtra("class", OplusStartingWindowManager.class.getSimpleName());
-        broadcast.setPackage(FRAMEWORK);
-        broadcast.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        requireContext().sendBroadcast(broadcast);
+        FrameworkSettings.notifyChanged(requireContext(), FrameworkSettings.Mod.LAG_FIX);
     }
 
 }

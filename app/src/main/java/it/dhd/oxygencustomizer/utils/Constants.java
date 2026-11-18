@@ -25,6 +25,7 @@ public final class Constants {
         public static final String TELECOM_SERVER_PACKAGE = "com.android.server.telecom";
         public static final String LAUNCHER = "com.android.launcher";
         public static final String SETTINGS = "com.android.settings";
+        public static final String PSCANVAS = "com.oplus.pscanvas";
     }
 
     public static class Preferences {
@@ -473,6 +474,13 @@ public final class Constants {
             public static final String SEPARATE_QS_WIDGETS = "separate_widgets";
             public static final String SEPARATE_QS_CUSTOM_WIDTH = "separate_qs_custom_pulldown";
             public static final String SEPARATE_QS_WIDTH = "separate_qs_pulldown_area";
+        }
+
+        public static class PanoramaUnlock {
+            public static final String PANORAMA_CATEGORY = "panorama_cat";
+            public static final String PANORAMA_THREE_SPLIT = "panorama_three_split";
+            public static final String PANORAMA_FLOATING_WINDOWS = "panorama_floating_windows";
+            public static final String PANORAMA_MAX_WINDOWS = "panorama_max_windows";
         }
 
         public static class Buttons {

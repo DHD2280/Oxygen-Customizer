@@ -121,6 +121,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_CUSTOM_USER_VALUE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_DATE_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_DESIGNER_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_1;
@@ -183,6 +184,10 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidg
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS_WEATHER_SETTINGS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_1_KEY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.MAIN_WIDGET_2_KEY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_CATEGORY;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_FLOATING_WINDOWS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_MAX_WINDOWS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.PanoramaUnlock.PANORAMA_THREE_SPLIT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT1;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT2;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsHeaderClock.QS_HEADER_CLOCK_COLOR_CODE_ACCENT3;
@@ -397,6 +402,17 @@ public class PreferenceHelper {
         if (instance == null) return true;
 
         switch (key) {
+            case LOCKSCREEN_DESIGNER_MODE -> {
+                return Build.VERSION.SDK_INT >= 37;
+            }
+            case LOCKSCREEN_WEATHER_SWITCH,
+                 LOCKSCREEN_WIDGETS_ENABLED,
+                 LOCKSCREEN_WIDGETS_DEVICE_WIDGET,
+                 "widget_scale",
+                 "lockscreen_widgets_top_margin" -> {
+                return !designerMode();
+            }
+
             // Status Bar Prefs
             // Battery Bar
             case "batteryFastChargingColor",
@@ -999,19 +1015,21 @@ public class PreferenceHelper {
                  LOCKSCREEN_WEATHER_SHOW_LOCATION,
                  LOCKSCREEN_WEATHER_SHOW_CONDITION,
                  LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH,
-                 LOCKSCREEN_WEATHER_CUSTOM_MARGINS,
                  LOCKSCREEN_WEATHER_CENTERED,
                  LOCKSCREEN_WEATHER_BACKGROUND -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false);
+                return lockscreenWeatherShown();
+            }
+            case LOCKSCREEN_WEATHER_CUSTOM_MARGINS -> {
+                return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) && !designerMode();
             }
             case LOCKSCREEN_WEATHER_CUSTOM_COLOR,
                  LOCKSCREEN_WEATHER_CUSTOM_COLOR_CAT -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
+                return lockscreenWeatherShown() &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_COLOR_SWITCH, false);
             }
             case LOCKSCREEN_WEATHER_CUSTOM_MARGIN_TOP,
                  LOCKSCREEN_WEATHER_CUSTOM_MARGIN_LEFT -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) &&
+                return isVisible(LOCKSCREEN_WEATHER_CUSTOM_MARGINS) &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_CUSTOM_MARGINS, false);
             }
 
@@ -1019,16 +1037,15 @@ public class PreferenceHelper {
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_TEXT_COLOR,
                  LOCKSCREEN_WIDGETS_DEVICE_WIDGET_DEVICE -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+                return deviceWidgetShown();
             }
 
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_LIQUID_GLASS -> {
-                return Build.VERSION.SDK_INT >= 37 &&
-                        instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false);
+                return Build.VERSION.SDK_INT >= 37 && deviceWidgetShown();
             }
 
             case LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CIRCULAR_COLOR -> {
-                return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false) &&
+                return deviceWidgetShown() &&
                         instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET_CUSTOM_COLOR_SWITCH, false);
             }
 
@@ -1228,6 +1245,14 @@ public class PreferenceHelper {
                 return Build.VERSION.SDK_INT >= 34 && Build.VERSION.SDK_INT < 37;
             }
 
+            // Panorama view
+            case PANORAMA_CATEGORY,
+                 PANORAMA_THREE_SPLIT,
+                 PANORAMA_FLOATING_WINDOWS,
+                 PANORAMA_MAX_WINDOWS -> {
+                return Build.VERSION.SDK_INT >= 37;
+            }
+
             // Ota Card
             case "ota_card_picker" -> {
                 return instance.mPreferences.getBoolean("custom_ota_card", false);
@@ -1244,6 +1269,18 @@ public class PreferenceHelper {
 
         }
         return true;
+    }
+
+    private static boolean designerMode() {
+        return Build.VERSION.SDK_INT >= 37 && instance.mPreferences.getBoolean(LOCKSCREEN_DESIGNER_MODE, false);
+    }
+
+    private static boolean lockscreenWeatherShown() {
+        return instance.mPreferences.getBoolean(LOCKSCREEN_WEATHER_SWITCH, false) || designerMode();
+    }
+
+    private static boolean deviceWidgetShown() {
+        return instance.mPreferences.getBoolean(LOCKSCREEN_WIDGETS_DEVICE_WIDGET, false) || designerMode();
     }
 
     public static boolean isVisibleBattery(String key) {
