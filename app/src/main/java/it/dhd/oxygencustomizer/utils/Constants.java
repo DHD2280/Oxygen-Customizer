@@ -526,6 +526,7 @@ public final class Constants {
         }
 
         public static class LockscreenClock {
+            public static final String LOCKSCREEN_DESIGNER_MODE = "lockscreen_designer_mode";
             public static final String LOCKSCREEN_CLOCK_SWITCH = "lockscreen_custom_clock_switch";
             public static final String LOCKSCREEN_CLOCK_STYLE = "lockscreen_custom_clock_style";
             public static final String LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH = "lockscreen_custom_color_switch";
@@ -551,6 +552,7 @@ public final class Constants {
 
             public static final String[] LOCKSCREEN_CLOCK_PREFS = {
                     LOCKSCREEN_CLOCK_SWITCH,
+                    LOCKSCREEN_DESIGNER_MODE,
                     LOCKSCREEN_CLOCK_STYLE,
                     LOCKSCREEN_CLOCK_CUSTOM_COLOR_SWITCH,
                     LOCKSCREEN_CLOCK_CUSTOM_COLOR,
