@@ -122,6 +122,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenCloc
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_DATE_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_CLOCK_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_DESIGNER_MODE;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_KEEP_LARGE_CLOCK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_CHARGING_ICON_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_COLOR_1;
@@ -405,7 +406,7 @@ public class PreferenceHelper {
         if (instance == null) return true;
 
         switch (key) {
-            case LOCKSCREEN_DESIGNER_MODE -> {
+            case LOCKSCREEN_DESIGNER_MODE, LOCKSCREEN_KEEP_LARGE_CLOCK -> {
                 return Build.VERSION.SDK_INT >= 37;
             }
             case LOCKSCREEN_WEATHER_SWITCH,
@@ -1586,8 +1587,12 @@ public class PreferenceHelper {
                 }
             }
 
-            if (preference.getKey().equals("launcher_global_search_launch") ||
-                    preference.getKey().equals("launcher_page_indicator_tap_launch")) {
+            if (preference.getKey().equals("navbar_long_press_launch")
+                    && !instance.mPreferences.getString(key, "").contains(":")) {
+                preference.setSummaryProvider(null);
+            } else if (preference.getKey().equals("launcher_global_search_launch") ||
+                    preference.getKey().equals("launcher_page_indicator_tap_launch") ||
+                    preference.getKey().equals("navbar_long_press_launch")) {
                 String prefValue = instance.mPreferences.getString(key, "none");
                 int titleRes = prefValue.contains("app:") ? R.string.qs_widget_custom_app : R.string.plusKey_activity;
                 String title = preference.getContext().getString(titleRes);
