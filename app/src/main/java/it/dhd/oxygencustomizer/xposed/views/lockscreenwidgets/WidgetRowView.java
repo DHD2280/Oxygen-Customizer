@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.ExtendedFAB;
+import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 
 @SuppressLint("ViewConstructor")
 public class WidgetRowView extends FrameLayout {
@@ -31,6 +33,8 @@ public class WidgetRowView extends FrameLayout {
     private final int mMaxItems;
     private final List<String> mWidgets = new ArrayList<>();
     private float mScale = 1f;
+    private final QsTileTouchAnim mTouchAnim = new QsTileTouchAnim();
+    private View mPressed;
 
     public WidgetRowView(Context context, WidgetsController controller, boolean big, int maxItems) {
         super(context);
@@ -99,6 +103,28 @@ public class WidgetRowView extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mController.onVisible();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        int action = event.getActionMasked();
+        if (action == MotionEvent.ACTION_DOWN) mPressed = buttonAt(event.getX(), event.getY());
+        if (mPressed != null) mTouchAnim.doAction(action, mPressed);
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) mPressed = null;
+        return super.dispatchTouchEvent(event);
+    }
+
+    private View buttonAt(float x, float y) {
+        if (getChildCount() == 0 || !(getChildAt(0) instanceof ViewGroup container)) return null;
+        float localX = x - container.getLeft();
+        float localY = y - container.getTop();
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View child = container.getChildAt(i);
+            if (child.getVisibility() == VISIBLE && child.isClickable()
+                    && localX >= child.getLeft() && localX < child.getRight()
+                    && localY >= child.getTop() && localY < child.getBottom()) return child;
+        }
+        return null;
     }
 
     private LinearLayout createContainer() {
