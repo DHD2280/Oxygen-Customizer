@@ -79,7 +79,6 @@ public class AdvancedReboot extends XposedMods {
                             centerY - radius,
                             centerX + radius,
                             centerY + radius);
-                    Logger.log("AdvancedReboot x: " + event.getX() + " y: " + event.getY() + " bounds: " + bounds.toString());
                     if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                         float x = event.getX();
                         float y = event.getY();

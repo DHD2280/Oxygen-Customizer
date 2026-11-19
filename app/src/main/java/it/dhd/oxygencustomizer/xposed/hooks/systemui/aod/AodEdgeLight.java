@@ -70,7 +70,6 @@ public class AodEdgeLight extends XposedMods {
     private final Runnable mTriggerShow = new Runnable() {
         @Override
         public void run() {
-            Logger.log("AodEdgeLight: mTriggerShow");
             if (!mRetick) return;
             if (mAodSensorManager == null) return;
             try {
@@ -181,7 +180,6 @@ public class AodEdgeLight extends XposedMods {
                     long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
                     totalDuration *= repeatCount;
 
-                    Logger.log("AodEdgeLight: totalDuration = " + totalDuration);
                     mTotalDuration = totalDuration;
                     EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
                 });
@@ -200,7 +198,6 @@ public class AodEdgeLight extends XposedMods {
                     long totalDuration = maskDuration + fadeInDuration + fadeOutDuration;
                     totalDuration *= repeatCount;
 
-                    Logger.log("AodEdgeLight: totalDuration = " + totalDuration);
                     mTotalDuration = totalDuration;
                     EdgeLightControllerImpl.getInstance(mContext).setAnimationDuration(mTotalDuration);
                 });
@@ -298,7 +295,6 @@ public class AodEdgeLight extends XposedMods {
                 .after("updateNotification")
                 .run(param -> {
                     int mNotificationColor = getIntField(param.thisObject, "mMainColor");
-                    Logger.log("AodEdgeLight: updateNotification - mNotificationColor = " + mNotificationColor);
                     EdgeLightControllerImpl.getInstance(mContext).setNotificationColor(mNotificationColor);
                 });
 
@@ -306,7 +302,6 @@ public class AodEdgeLight extends XposedMods {
         AodManager
                 .before("notNeedWakeAod")
                 .run(param -> {
-                    Logger.log("AodEdgeLight: notNeedWakeAod - mIsOc = " + mIsOc);
                     if (mIsOc) {
                         param.setResult(false);
                     }

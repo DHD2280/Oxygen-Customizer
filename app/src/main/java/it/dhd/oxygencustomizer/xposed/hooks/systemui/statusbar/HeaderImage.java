@@ -62,7 +62,6 @@ import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.SettingsLibUtilsProvider;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderImage extends XposedMods {
@@ -100,7 +99,6 @@ public class HeaderImage extends XposedMods {
 
     private final ControllersProvider.ExpandedQsFractionChangeListener mExpandedQsFractionChangeListener = fraction -> {
         float alpha = coerceIn(fraction / 0.86f, 0.0f, 1.0f);
-        Logger.log("ExpandedQsFractionChangeListener: " + alpha);
         setAlpha(alpha);
     };
 

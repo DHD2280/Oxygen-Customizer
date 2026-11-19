@@ -533,7 +533,6 @@ public class DepthWallpaper extends XposedMods {
 
     private void setDepthWallpaper() {
         String state = getObjectField(getScrimController(), "mState").toString();
-        Logger.log("DepthWallpaper - setDepthWallpaper: " + state);
         boolean canShow = true;
         if (showAlbumArt && !canShowArt) {
             canShow = true;

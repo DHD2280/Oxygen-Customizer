@@ -243,7 +243,6 @@ public class LockscreenPeekDisplay extends XposedMods {
                 .run(param -> {
                     if (mPeekContainer == null || !mLegacyStatusView) return;
                     int top = (int) param.args[3];
-                    Logger.log("LockscreenPeekDisplay, NotificationPanelViewControllerExImp setNotificationsConstraints, top=" + top + ", mTopHeight=" + mTopHeight + ", mStackScrollerPaddingExpanded=" + mStackScrollerPaddingExpanded);
                     setMarginsNoConvert(mPeekContainer, mContext, 0, (top == 0 ? mStackScrollerPaddingExpanded + mTopHeight : top) + dp2px(mContext, mTopMargin), 0, 0);
                 });
 
