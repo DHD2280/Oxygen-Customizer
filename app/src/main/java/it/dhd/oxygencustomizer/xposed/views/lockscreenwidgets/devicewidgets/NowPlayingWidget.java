@@ -4,6 +4,7 @@ import static it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils.getPrimaryCo
 import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 
 import android.annotation.SuppressLint;
+import android.app.WallpaperColors;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,15 +15,20 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
@@ -44,7 +50,9 @@ import java.util.concurrent.Executors;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 
 @SuppressLint("ViewConstructor")
 public class NowPlayingWidget extends BaseDeviceWidget {
@@ -62,6 +70,10 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     private static final String KEY_BLUR = "blur_amount";
     private static final String KEY_TINT = "tint_amount";
     private static final String KEY_DIM = "dim_amount";
+    private static final String KEY_RIM_ART = "rim_art";
+    private static final String KEY_SWIPE = "swipe_tracks";
+    private static final int SWIPE_THRESHOLD_DP = 40;
+    private static final int SWIPE_VELOCITY_DP = 100;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -87,6 +99,27 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     private int mBlur = 30;
     private int mTint = 40;
     private int mDim = 40;
+    private boolean mRimArt = false;
+    private int mRimColor = Color.TRANSPARENT;
+    private Bitmap mRimSource;
+    private boolean mColorsListening = false;
+    private boolean mSwipe = true;
+    private GestureDetector mSwipeDetector;
+
+    private final AudioDataProvider.MediaMetadataListener mColorsListener = new AudioDataProvider.MediaMetadataListener() {
+        @Override
+        public void onMediaMetadataChanged() {
+        }
+
+        @Override
+        public void onPlaybackStateChanged() {
+        }
+
+        @Override
+        public void onMediaColorsChanged(int mediaColor, WallpaperColors wallpaperColors, Object colorScheme) {
+            mHandler.post(() -> updateRim(mRimSource));
+        }
+    };
     private Bitmap mSourceArt;
     private String mFilteredKey;
     private int mRequest = 0;
@@ -153,7 +186,44 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         mCard.addView(mContent, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         addView(mCard, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mSwipeDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onScroll(MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
+                if (e1 != null && Math.abs(e2.getX() - e1.getX()) > Math.abs(e2.getY() - e1.getY()) && getParent() != null)
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                if (e1 == null) return false;
+                float diffX = e2.getX() - e1.getX();
+                if (Math.abs(diffX) < dp2px(mContext, SWIPE_THRESHOLD_DP) || Math.abs(diffX) < Math.abs(e2.getY() - e1.getY()) || Math.abs(velocityX) < dp2px(mContext, SWIPE_VELOCITY_DP))
+                    return false;
+                return skipTrack(diffX < 0);
+            }
+        });
         render();
+    }
+
+    private boolean skipTrack(boolean next) {
+        if (mPreview || mController == null) return false;
+        if (next) mController.getTransportControls().skipToNext();
+        else mController.getTransportControls().skipToPrevious();
+        performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mSwipe && !mPreview && mSwipeDetector != null && mSwipeDetector.onTouchEvent(event)) {
+            MotionEvent cancel = MotionEvent.obtain(event);
+            cancel.setAction(MotionEvent.ACTION_CANCEL);
+            super.onTouchEvent(cancel);
+            cancel.recycle();
+            return true;
+        }
+        return super.onTouchEvent(event);
     }
 
     private int[] measureCard(int widthMeasureSpec, int heightMeasureSpec) {
@@ -261,6 +331,47 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         mArtist.setText(artist);
         mArtist.setVisibility(TextUtils.isEmpty(artist) ? GONE : VISIBLE);
         showArt(mShowArt ? art : null);
+        updateRim(art);
+    }
+
+    private void updateRim(Bitmap art) {
+        mRimSource = art;
+        if (!mRimArt || art == null || Build.VERSION.SDK_INT < 37) {
+            setRimColor(Color.TRANSPARENT);
+        } else if (mPreview) {
+            setRimColor(getPrimaryColor(mContext));
+        } else {
+            AudioDataProvider provider = AudioDataProvider.instance;
+            setRimColor(provider != null ? provider.getMediaColor() : Color.TRANSPARENT);
+        }
+    }
+
+    private void syncColorsListener(boolean attached) {
+        boolean wanted = mRimArt && !mPreview && attached && AudioDataProvider.instance != null && Build.VERSION.SDK_INT >= 37;
+        if (wanted == mColorsListening) return;
+        try {
+            if (wanted) AudioDataProvider.registerMediaMetadataListener(mColorsListener);
+            else AudioDataProvider.unregisterMediaMetadataListener(mColorsListener);
+            mColorsListening = wanted;
+        } catch (Throwable ignored) {
+        }
+    }
+
+    private void setRimColor(int color) {
+        mRimColor = color;
+        LiquidGlass.setRimColor(this, color);
+    }
+
+    @Override
+    protected void dispatchDraw(@NonNull Canvas canvas) {
+        super.dispatchDraw(canvas);
+        LiquidGlass.drawRim(this, canvas);
+    }
+
+    @Override
+    public void setBackground(Drawable background) {
+        super.setBackground(background);
+        LiquidGlass.setRimColor(this, mRimColor);
     }
 
     private void showArt(Bitmap art) {
@@ -344,6 +455,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        syncColorsListener(true);
         if (mPreview) return;
         if (!mListening) {
             try {
@@ -361,6 +473,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        syncColorsListener(false);
         if (mListening) {
             try {
                 MediaSessionManager manager = sessions();
@@ -422,6 +535,9 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         settings.add(new SettingItem(appContext.getString(R.string.albumart_blur_title), KEY_BLUR, SettingItem.Type.SEEKBAR_INT, mBlur, 10, 100));
         settings.add(new SettingItem(appContext.getString(R.string.albumart_tint_intensity_title), KEY_TINT, SettingItem.Type.SEEKBAR_INT, mTint, 10, 90));
         settings.add(new SettingItem(appContext.getString(R.string.now_playing_dim), KEY_DIM, SettingItem.Type.SEEKBAR_INT, mDim, 0, 80));
+        settings.add(new SettingItem(appContext.getString(R.string.now_playing_swipe), KEY_SWIPE, SettingItem.Type.BOOLEAN, mSwipe));
+        if (Build.VERSION.SDK_INT >= 37)
+            settings.add(new SettingItem(appContext.getString(R.string.now_playing_rim_art), KEY_RIM_ART, SettingItem.Type.BOOLEAN, mRimArt));
         return settings;
     }
 
@@ -434,6 +550,13 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         mBlur = intSetting(settings.get(KEY_BLUR), mBlur);
         mTint = intSetting(settings.get(KEY_TINT), mTint);
         mDim = intSetting(settings.get(KEY_DIM), mDim);
+        Object swipe = settings.get(KEY_SWIPE);
+        if (swipe != null)
+            mSwipe = swipe instanceof Boolean value ? value : Boolean.parseBoolean(String.valueOf(swipe));
+        Object rim = settings.get(KEY_RIM_ART);
+        if (rim != null)
+            mRimArt = rim instanceof Boolean value ? value : Boolean.parseBoolean(String.valueOf(rim));
+        syncColorsListener(isAttachedToWindow());
         mFilteredKey = null;
         if (mTitle != null) render();
     }
