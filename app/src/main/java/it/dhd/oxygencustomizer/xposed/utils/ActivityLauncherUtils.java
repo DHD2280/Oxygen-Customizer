@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.utils;
 
 import static it.dhd.oxygencustomizer.xposed.ResourceManager.modRes;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getActivityStarterExternal;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCalculatorTile;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.getCameraGestureHelper;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger.log;
@@ -172,6 +173,19 @@ public class ActivityLauncherUtils {
             return;
         }
         callMethod(mActivityStarter, fromQs ? "postStartActivityDismissingKeyguard" : "startActivity", launchIntent, fromQs ? 0 : false);
+    }
+
+    public static boolean openWeatherActivity(Context context) {
+        if (BuildConfig.APPLICATION_ID.equals(context.getPackageName())) return false;
+        Object starter;
+        try {
+            starter = getActivityStarterExternal();
+        } catch (Throwable t) {
+            return false;
+        }
+        if (starter == null) return false;
+        new ActivityLauncherUtils(context, starter).launchWeatherActivity(false);
+        return true;
     }
 
     /**

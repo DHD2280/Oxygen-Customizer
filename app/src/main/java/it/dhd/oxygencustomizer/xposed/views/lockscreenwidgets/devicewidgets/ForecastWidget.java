@@ -24,6 +24,7 @@ import java.util.Map;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 
 @SuppressLint("ViewConstructor")
 public class ForecastWidget extends BaseDeviceWidget implements OmniJawsClient.OmniJawsObserver {
@@ -159,6 +160,11 @@ public class ForecastWidget extends BaseDeviceWidget implements OmniJawsClient.O
             mWeatherClient.removeObserver(this);
             mObserving = false;
         }
+    }
+
+    @Override
+    protected boolean onWidgetTap() {
+        return !mSettingsInterface && ActivityLauncherUtils.openWeatherActivity(mContext);
     }
 
     @Override
