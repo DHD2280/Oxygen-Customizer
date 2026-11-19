@@ -151,7 +151,7 @@ public class AudioDataProvider extends XposedMods {
 
     public static void unregisterMediaMetadataListener(MediaMetadataListener listener) {
         instance.mMediaMetaDataListeners.remove(listener);
-        if (instance.mMediaMetaDataListeners.isEmpty()) {
+        if (instance.mMediaMetaDataListeners.isEmpty() && instance.mActiveController != null) {
             instance.mActiveController.unregisterCallback(instance.mediaControllerCallback);
             instance.mActiveController = null;
         }
