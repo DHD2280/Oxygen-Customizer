@@ -76,6 +76,7 @@ import android.widget.LinearLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.WorkerThread;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.TextUtilsCompat;
@@ -84,6 +85,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -100,7 +102,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class HeaderClock extends XposedMods {
@@ -117,6 +118,7 @@ public class HeaderClock extends XposedMods {
     private static LayerDrawable mDateChipDrawable;
     final ClickListener clickListener = new ClickListener();
     private final UserManager mUserManager;
+    private final ExecutorService mImageExecutor = Executors.newSingleThreadExecutor();
     private final ArrayList<LinearLayout> mClockContainers = new ArrayList<>();
     private Context appContext;
     private boolean mBroadcastRegistered = false;
@@ -382,7 +384,6 @@ public class HeaderClock extends XposedMods {
                 .after("onFractionUpdated")
                 .run(param -> {
                     if (!showHeaderClock) return;
-                    Logger.log("QsFragmentHelper onFractionUpdated");
 
                     float f = (float) param.args[0];
                     Interpolator mAlphaAnimInterpolator = (Interpolator) getObjectField(param.thisObject, "mAlphaAnimInterpolator");
@@ -1083,7 +1084,21 @@ public class HeaderClock extends XposedMods {
         switch (clockStyle) {
             case 6 -> {
                 ImageView imageView = clockView.findViewById(R.id.user_profile_image);
-                applyRoundedImage(imageView, mClockCustomUserImage ? getCustomUserImage() : getUserImage());
+                if (imageView == null) break;
+                if (mClockCustomUserImage) {
+                    mImageExecutor.execute(() -> {
+                        Drawable drawable = getCustomUserImage();
+                        imageView.post(() -> {
+                            if (drawable instanceof AnimatedImageDrawable animated) {
+                                animated.setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+                                animated.start();
+                            }
+                            applyRoundedImage(imageView, drawable);
+                        });
+                    });
+                } else {
+                    applyRoundedImage(imageView, getUserImage());
+                }
             }
         }
     }
@@ -1116,18 +1131,11 @@ public class HeaderClock extends XposedMods {
         }
     }
 
+    @WorkerThread
     private Drawable getCustomUserImage() {
         try {
             ImageDecoder.Source source = ImageDecoder.createSource(new File(Environment.getExternalStorageDirectory() + "/.oxygen_customizer/header_clock_user_image.png"));
-
-            Drawable drawable = ImageDecoder.decodeDrawable(source);
-
-            if (drawable instanceof AnimatedImageDrawable) {
-                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
-                ((AnimatedImageDrawable) drawable).start();
-            }
-
-            return drawable;
+            return ImageDecoder.decodeDrawable(source);
         } catch (Throwable ignored) {
             return ResourcesCompat.getDrawable(modRes, R.drawable.default_avatar, appContext.getTheme());
         }
