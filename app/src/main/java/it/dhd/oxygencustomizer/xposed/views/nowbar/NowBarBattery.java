@@ -38,7 +38,6 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 
 public class NowBarBattery extends RelativeLayout {
 
@@ -264,6 +263,14 @@ public class NowBarBattery extends RelativeLayout {
     }
 
     @Override
+    public void onVisibilityAggregated(boolean isVisible) {
+        super.onVisibilityAggregated(isVisible);
+        if (mColorAnimator == null) return;
+        if (isVisible) mColorAnimator.resume();
+        else mColorAnimator.pause();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mBroadcastRegistered) {
@@ -289,6 +296,7 @@ public class NowBarBattery extends RelativeLayout {
             setBarBackground(new int[]{lightenColor(animatedColor), animatedColor, darkenColor(animatedColor)});
         });
         mColorAnimator.start();
+        if (!isShown()) mColorAnimator.pause();
     }
 
     private void setBarBackground(int[] colors) {
@@ -334,7 +342,6 @@ public class NowBarBattery extends RelativeLayout {
 
     private void updateOplusBatteryStats(OplusBatteryStatus oplusBatteryStatus) {
         mOplusBatteryStatus = oplusBatteryStatus;
-        Logger.log("OplusBatteryStatus changed: " + oplusBatteryStatus.toString());
         mChargingString = getChargingStringByTechnology(mContext, NumberFormat.getPercentInstance().format(mExtraLevel / 100f));
         updateBatteryUI();
     }
