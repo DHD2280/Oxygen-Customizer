@@ -1,6 +1,9 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_AOD;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_LS;
+import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.LockscreenClock.CLOCK_UI_STATE_SHADE;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
@@ -9,6 +12,8 @@ import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.get
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -622,6 +627,16 @@ public class ControllersProvider extends XposedMods {
         KeyguardPlugin
                 .after("onUiStateChanged")
                 .run(param -> onUiStateChanged((int) param.args[0]));
+        if (Build.VERSION.SDK_INT >= 37) {
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            ReflectedClass.ofIfPossible("com.oplus.systemui.keyguard.clockstyle.KeyguardStyleClockControllerImpl$keyguardStyleServiceCallback$1")
+                    .after("onUiStateChanged")
+                    .run(param -> {
+                        if (!(param.args[0] instanceof Enum<?> uiState)) return;
+                        int state = smoothTransitionUiState(uiState.ordinal());
+                        mainHandler.post(() -> onUiStateChanged(state));
+                    });
+        }
 
     }
 
@@ -788,6 +803,15 @@ public class ControllersProvider extends XposedMods {
             } catch (Throwable ignored) {
             }
         }
+    }
+
+    private static int smoothTransitionUiState(int ordinal) {
+        return switch (ordinal) {
+            case 1 -> CLOCK_UI_STATE_SHADE;
+            case 2 -> CLOCK_UI_STATE_LS;
+            case 3, 4, 5, 6 -> CLOCK_UI_STATE_AOD;
+            default -> ordinal;
+        };
     }
 
     public void onUiStateChanged(int state) {
