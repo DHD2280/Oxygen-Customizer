@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.utils.json.WidgetConfig;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
+import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 
 public abstract class BaseDeviceWidget extends LinearLayout {
 
@@ -36,6 +38,7 @@ public abstract class BaseDeviceWidget extends LinearLayout {
     protected Context appContext;
     protected boolean mSettingsInterface;
     private OnWidgetClick mWidgetClickListener;
+    private final QsTileTouchAnim mTouchAnim = new QsTileTouchAnim();
 
     protected WidgetMode mCurrentMode = WidgetMode.BIG;
 
@@ -160,6 +163,12 @@ public abstract class BaseDeviceWidget extends LinearLayout {
 
     protected boolean onWidgetTap() {
         return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        mTouchAnim.doAction(event.getActionMasked(), this);
+        return super.dispatchTouchEvent(event);
     }
 
     protected Drawable tintedIcon(int res) {
