@@ -6,21 +6,33 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.dp2px;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
+import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 
 public class StatusbarIcons extends XposedMods {
 
     private final static String listenPackage = SYSTEM_UI;
     private boolean hideBluetooth, mHideWifiActivity = false, mHideMobileActivity = false;
     private boolean mIosSignal = false;
+    private final Set<Integer> mWifiActivityIds = new HashSet<>();
+    private final Set<Integer> mMobileActivityIds = new HashSet<>();
+    private static final String[] WIFI_ACTIVITY = {"wifi_in", "wifi_out", "wifi_inout", "wifi_none"};
+    private static final String[] MOBILE_ACTIVITY = {"default", "in", "out", "inout"};
 
     public StatusbarIcons(Context context) {
         super(context);
@@ -37,6 +49,8 @@ public class StatusbarIcons extends XposedMods {
 
     @Override
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        if (Build.VERSION.SDK_INT >= 37) hookActivityDrawables();
+
         try {
             ReflectedClass OplusPhoneStatusBarPolicyExImpl = ReflectedClass.of(
                     "com.oplus.systemui.statusbar.phone.OplusPhoneStatusBarPolicyExImpl" /* OOS15-14 */,
@@ -144,6 +158,40 @@ public class StatusbarIcons extends XposedMods {
             log(t);
         }
 
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void hookActivityDrawables() {
+        Resources res = mContext.getResources();
+        for (String name : WIFI_ACTIVITY) {
+            addDrawableId(res, mWifiActivityIds, "stat_signal_activity_" + name);
+            addDrawableId(res, mWifiActivityIds, "stat_signal_activity_" + name + "_os17");
+        }
+        for (String state : MOBILE_ACTIVITY) {
+            for (String style : new String[]{"activity_", "activity_soft_", "stacked_activity_", "soft_stacked_activity_"}) {
+                addDrawableId(res, mMobileActivityIds, "stat_signal_" + style + state + "_public");
+                addDrawableId(res, mMobileActivityIds, "stat_signal_" + style + state + "_public_os17");
+            }
+        }
+        if (mWifiActivityIds.isEmpty() && mMobileActivityIds.isEmpty()) return;
+        ReflectedClass.ReflectionConsumer hideActivity = param -> {
+            int id = (int) param.args[0];
+            if ((mHideWifiActivity && mWifiActivityIds.contains(id))
+                    || (mHideMobileActivity && mMobileActivityIds.contains(id)))
+                param.setResult(new ColorDrawable(Color.TRANSPARENT));
+        };
+        ReflectedClass.of(Resources.class)
+                .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawable", int.class, Resources.Theme.class))
+                .run(hideActivity);
+        ReflectedClass.of(Resources.class)
+                .before(ReflectionHelpers.findMethodExact(Resources.class, "getDrawableForDensity", int.class, int.class, Resources.Theme.class))
+                .run(hideActivity);
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private void addDrawableId(Resources res, Set<Integer> ids, String name) {
+        int id = res.getIdentifier(name, "drawable", SYSTEM_UI);
+        if (id != 0) ids.add(id);
     }
 
     @Override
