@@ -90,6 +90,8 @@ public class NowBarNotification extends RelativeLayout {
     private RecyclerView mIconsRecycler;
     private final NotificationAdapter mNotificationAdapter = new NotificationAdapter();
     private List<StatusBarNotification> lastFilteredNotifications = new ArrayList<>();
+    private List<String> mLastSignature = new ArrayList<>();
+    private String mLastAlertKey = null;
 
     // Vars
     private boolean mUseAppIcon = false,
@@ -342,9 +344,14 @@ public class NowBarNotification extends RelativeLayout {
                 true
         );
 
-        if (filteredNotifications.equals(lastFilteredNotifications)) {
+        List<String> signature = new ArrayList<>(filteredNotifications.size());
+        for (StatusBarNotification sbn : filteredNotifications) {
+            signature.add(sbn.getKey() + "@" + sbn.getPostTime());
+        }
+        if (signature.equals(mLastSignature)) {
             return;
         }
+        mLastSignature = signature;
         lastFilteredNotifications = filteredNotifications;
         mNotificationAdapter.clearSelection();
         mNotificationAdapter.submitList(filteredNotifications.isEmpty() ?
@@ -354,16 +361,12 @@ public class NowBarNotification extends RelativeLayout {
             switchView();
         }
         mNumText.setText(modRes.getQuantityString(R.plurals.notification_summary, filteredNotifications.size(), filteredNotifications.size()));
-        StatusBarNotification usefulNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
-        boolean isAlertOnce = usefulNotification == null ? false : (usefulNotification.getNotification().flags & Notification.FLAG_FOREGROUND_SERVICE) == Notification.FLAG_FOREGROUND_SERVICE;
-        if (usefulNotification != currentDisplayedNotification && usefulNotification != null && mLastNotificationTime < usefulNotification.getPostTime() && !isAlertOnce) {
-            mLastNotificationTime = usefulNotification.getPostTime();
-            currentDisplayedNotification = usefulNotification;
+        currentDisplayedNotification = filteredNotifications.isEmpty() ? null : filteredNotifications.get(0);
+        if (currentDisplayedNotification != null && isNewAlert(currentDisplayedNotification)) {
+            mLastNotificationTime = currentDisplayedNotification.getPostTime();
+            mLastAlertKey = currentDisplayedNotification.getKey();
             mOnUsefulNotificationListener.onUsefulNotification();
-        } else {
-            currentDisplayedNotification = null;
         }
-        if (isAlertOnce) return;
         if (currentDisplayedNotification == null) {
             mNotificationTitleText = modRes.getString(R.string.lockscreen_now_bar_no_notifications);
             mNotificationContentText = "";
@@ -380,6 +383,12 @@ public class NowBarNotification extends RelativeLayout {
                 NotificationUtils.resolveSmallIcon(currentDisplayedNotification, mContext));
     }
 
+    private boolean isNewAlert(StatusBarNotification sbn) {
+        if (sbn.getPostTime() <= mLastNotificationTime) return false;
+        boolean alertOnce = (sbn.getNotification().flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0;
+        return !alertOnce || !sbn.getKey().equals(mLastAlertKey);
+    }
+
     public interface OnUsefulNotificationListener {
         void onUsefulNotification();
     }
@@ -390,10 +399,11 @@ public class NowBarNotification extends RelativeLayout {
     }
 
     private void refreshText() {
-        mTitle.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
+        boolean showContent = currentDisplayedNotification == null || ignoreSecurity || mSystemAllowSecureNotifications || mUnlocked;
+        mTitle.setText(showContent ?
                 mNotificationTitleText :
                 modRes.getString(R.string.lockscreen_now_bar_new_notification));
-        mMessage.setText((ignoreSecurity || mSystemAllowSecureNotifications) || mUnlocked ?
+        mMessage.setText(showContent ?
                 mNotificationContentText :
                 modRes.getString(R.string.lockscreen_now_bar_new_notification_content));
         mTitle.setSelected(true);
