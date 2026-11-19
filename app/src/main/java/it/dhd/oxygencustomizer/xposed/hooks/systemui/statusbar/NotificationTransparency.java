@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATION_STYLE_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIF_TRANSPARENCY_VALUE;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
@@ -38,7 +39,7 @@ public class NotificationTransparency extends XposedMods {
     public void onPreferenceUpdated(String... Key) {
         notificationTransparency = Xprefs.getBoolean(NOTIF_TRANSPARENCY, false);
         notificationTransparencyValue = Xprefs.getSliderInt(NOTIF_TRANSPARENCY_VALUE, 25);
-        hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false);
+        hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false) || !Xprefs.getString(NOTIFICATION_STYLE_PACK, "").isEmpty();
     }
 
     @Override

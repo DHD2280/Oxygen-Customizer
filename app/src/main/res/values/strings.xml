@@ -1787,4 +1787,13 @@
     <string name="icon_pack_disclaimer_title">Disclaimer</string>
     <string name="icon_pack_disclaimer_desc">Icon packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for icon packs. Support regarding how OxygenCustomizer handles icon packs will only be provided to the respective pack developers.\n\nFor instructions on how to compile an icon pack, please refer to the guide here: %s</string>
 
+    <!-- Notification style packs -->
+    <string name="notification_style_packs_title">Notification style packs</string>
+    <string name="notification_style_pack_reset">Reset style</string>
+    <string name="no_notification_style_pack_installed">No notification style pack installed</string>
+    <string name="notification_style_pack_desc">%1$s · %2$s</string>
+    <string name="notification_style_pack_disclaimer_desc">Notification style packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for them. Support regarding how OxygenCustomizer handles notification style packs will only be provided to the respective pack developers.
+
+For instructions on how to make a notification style pack, please refer to the template here: %s</string>
+
 </resources>

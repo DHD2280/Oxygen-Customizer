@@ -1,6 +1,7 @@
 package it.dhd.oxygencustomizer.xposed.hooks.systemui.statusbar;
 
 import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.StatusbarNotificationPrefs.NOTIFICATION_STYLE_PACK;
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.ControllersProvider.isOOS1501;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
@@ -41,7 +42,7 @@ public class NotificationVanillaIceCream extends XposedMods {
 
     @Override
     public void onPreferenceUpdated(String... Key) {
-        hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false);
+        hasOverlays = Xprefs.getBoolean("hasNotificationOverlays", false) || !Xprefs.getString(NOTIFICATION_STYLE_PACK, "").isEmpty();
     }
 
     @Override
@@ -63,12 +64,14 @@ public class NotificationVanillaIceCream extends XposedMods {
                 .run(nullReturner);
         ViewBlurManager
                 .before("headsupCardMotionMixConfig")
-                .run(nullReturner);
+                .run(param -> {
+                    if (Build.VERSION.SDK_INT < 37 && hasOverlays) param.setResult(null);
+                });
 
         ViewBlurManager
                 .before("requireBlurProxyForView")
                 .run(param -> {
-                    if (!isOOS1501() && hasOverlays) {
+                    if (!isOOS1501() && Build.VERSION.SDK_INT < 37 && hasOverlays) {
                         View v = (View) param.args[0];
                         String className = v != null ? v.getClass().getName() : "";
                         if (v != null &&

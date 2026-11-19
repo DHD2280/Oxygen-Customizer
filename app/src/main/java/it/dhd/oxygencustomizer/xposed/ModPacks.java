@@ -37,6 +37,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.FluidMusic;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.IconPacks;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.NotificationStylePacks;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
@@ -163,6 +164,7 @@ public class ModPacks {
                     modPacks.add(StatusbarLogo.class);
                     modPacks.add(NotificationTransparency.class);
                     modPacks.add(NotificationVanillaIceCream.class);
+                    modPacks.add(NotificationStylePacks.class);
                     // QS
                     modPacks.add(HeaderImage.class); // Load first QS Header Image since we have to check ScrimView Alpha before set by QS Transparency
                     modPacks.add(DepthWallpaper.class); // Load first Depth Wallpaper since we have to check ScrimView Alpha before set by QS Transparency
