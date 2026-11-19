@@ -599,7 +599,6 @@ public class Launcher extends XposedMods {
                     if (!mSearchKeyboard) return;
                     Object toState = param.args[0];
                     if (toState == null) return;
-                    Logger.log("LauncherState: " + toState.toString());
                     if (!toState.toString().contains("AllApps")) return;
                     float progress = ReflectionHelpers.getFloatField(
                             param.thisObject, "mProgress");
