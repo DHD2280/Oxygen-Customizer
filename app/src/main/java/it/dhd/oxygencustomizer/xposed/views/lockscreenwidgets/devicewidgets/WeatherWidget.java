@@ -31,6 +31,7 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.json.SettingItem;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
+import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
@@ -311,6 +312,11 @@ public class WeatherWidget extends BaseDeviceWidget implements OmniJawsClient.Om
             inflateView();
         }
         enableUpdates();
+    }
+
+    @Override
+    protected boolean onWidgetTap() {
+        return !mSettingsInterface && ActivityLauncherUtils.openWeatherActivity(mContext);
     }
 
     @Override
