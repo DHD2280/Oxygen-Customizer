@@ -98,6 +98,7 @@ public class StatusbarMods extends XposedMods {
     private View mStatusBarContents = null;
     private boolean statusBarPadding;
     private Object NotificationPanelViewController;
+    private Object mShadeController;
     private int pullDownSide = PULLDOWN_SIDE_RIGHT;
     private float mMinimumBacklight;
     private float mMaximumBacklight;
@@ -277,6 +278,12 @@ public class StatusbarMods extends XposedMods {
                                 }
                             });
                 });
+
+        if (Build.VERSION.SDK_INT >= 37) {
+            ReflectedClass.ofIfPossible("com.android.systemui.shade.ShadeControllerImpl")
+                    .afterConstruction()
+                    .run(param -> mShadeController = param.thisObject);
+        }
 
         NotificationPanelViewControllerClass
                 .after("createTouchHandler")
@@ -554,6 +561,14 @@ public class StatusbarMods extends XposedMods {
     }
 
     private void openQuickSettings() {
+        if (mShadeController != null) {
+            try {
+                callMethod(mShadeController, "expandToQs");
+                return;
+            } catch (Throwable t) {
+                log(t);
+            }
+        }
         callMethod(NotificationPanelViewController, QSExpandMethodName);
     }
 
