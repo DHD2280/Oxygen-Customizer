@@ -21,7 +21,6 @@ package it.dhd.oxygencustomizer.weather;
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.utils.Constants.LockscreenWeather.LOCKSCREEN_WEATHER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.AodWeather.AOD_WEATHER_SWITCH;
-import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenClock.LOCKSCREEN_DESIGNER_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenWidgets.LOCKSCREEN_WIDGETS;
@@ -46,7 +45,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import it.dhd.oxygencustomizer.BuildConfig;
@@ -56,7 +54,6 @@ import it.dhd.oxygencustomizer.weather.providers.MeteoAMProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenMeteoProvider;
 import it.dhd.oxygencustomizer.weather.providers.OpenWeatherMapProvider;
 import it.dhd.oxygencustomizer.weather.providers.YandexProvider;
-import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WeatherWidget;
 
 public class WeatherConfig {
@@ -170,10 +167,11 @@ public class WeatherConfig {
         boolean weatherInBar = nowBar && weathrNowBar;
         boolean hasWeatherDeviceWidget = checkWeatherDeviceWidget(context);
         boolean weatherSeparateQs = separateWidgets.contains("weather");
-        boolean designerWeather = getPrefs(context).getBoolean(LOCKSCREEN_DESIGNER_MODE, false) &&
-                getPrefs(context).getString(DesignerClock.KEY_APPLIED, "").toLowerCase(Locale.ROOT).contains("weather");
+        /*boolean designerWeather = getPrefs(context).getBoolean(LOCKSCREEN_DESIGNER_MODE, false) &&
+                getPrefs(context).getString(DesignerClock.KEY_APPLIED, "").toLowerCase(Locale.ROOT).contains("weather")*/
+        ;
 
-        return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget || weatherSeparateQs || designerWeather;
+        return lsWeather || aodWeather || weatherWidget || qsWeather || weatherInBar || hasWeatherDeviceWidget || weatherSeparateQs/* || designerWeather*/;
     }
 
     private static boolean checkWeatherDeviceWidget(Context context) {
