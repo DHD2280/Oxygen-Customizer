@@ -59,14 +59,12 @@ public class AudioDataProvider extends XposedMods {
     private Class<?> mOplusMediaControllerImpl = null, mOp;
     public Object mMediaData = null;
 
+    private static final long CONTROLLER_UPDATE_DELAY = 150L;
     private final Handler handler = new Handler();
-    private final Runnable periodicTask = new Runnable() {
-        @Override
-        public void run() {
-            updateMediaController();
-            handler.postDelayed(this, 1000);
-        }
-    };
+    private final Runnable mControllerUpdate = this::updateMediaController;
+    private final MediaSessionManager.OnActiveSessionsChangedListener mSessionsListener = controllers -> requestControllerUpdate();
+    private boolean mSessionsListening = false;
+    private Bitmap mColorsArt = null;
 
     private final MediaController.Callback mediaControllerCallback = new MediaController.Callback() {
         @Override
@@ -87,6 +85,7 @@ public class AudioDataProvider extends XposedMods {
                 mMediaData = instance.selectPlayingOnes();
             } catch (Throwable ignored) {}
             instance.onPlaybackStateChanged();
+            requestControllerUpdate();
             if (mPlaybackState == PlaybackState.STATE_NONE) {
                 instance.mArt = null;
             }
@@ -137,21 +136,47 @@ public class AudioDataProvider extends XposedMods {
         }
     }
 
-    private void startPeriodicUpdate() {
-        handler.post(periodicTask);
+    private void startSessionTracking() {
+        if (!mSessionsListening && mMediaSessionManager != null) {
+            try {
+                mMediaSessionManager.addOnActiveSessionsChangedListener(mSessionsListener, null, handler);
+                mSessionsListening = true;
+            } catch (Throwable t) {
+                Logger.log("AudioDataProvider sessions listener: " + t.getMessage());
+            }
+        }
+        handler.post(mControllerUpdate);
+    }
+
+    private void stopSessionTracking() {
+        handler.removeCallbacks(mControllerUpdate);
+        if (!mSessionsListening) return;
+        try {
+            mMediaSessionManager.removeOnActiveSessionsChangedListener(mSessionsListener);
+        } catch (Throwable ignored) {
+        }
+        mSessionsListening = false;
+    }
+
+    private void requestControllerUpdate() {
+        if (mMediaMetaDataListeners.isEmpty()) return;
+        handler.removeCallbacks(mControllerUpdate);
+        handler.postDelayed(mControllerUpdate, CONTROLLER_UPDATE_DELAY);
     }
 
     public static void registerMediaMetadataListener(MediaMetadataListener listener) {
         boolean wasEmpty = instance.mMediaMetaDataListeners.isEmpty();
         instance.mMediaMetaDataListeners.add(listener);
         if (wasEmpty) {
-            instance.startPeriodicUpdate();
+            instance.startSessionTracking();
         }
     }
 
     public static void unregisterMediaMetadataListener(MediaMetadataListener listener) {
         instance.mMediaMetaDataListeners.remove(listener);
-        if (instance.mMediaMetaDataListeners.isEmpty() && instance.mActiveController != null) {
+        if (!instance.mMediaMetaDataListeners.isEmpty()) return;
+        instance.stopSessionTracking();
+        if (instance.mActiveController != null) {
             instance.mActiveController.unregisterCallback(instance.mediaControllerCallback);
             instance.mActiveController = null;
         }
@@ -177,6 +202,7 @@ public class AudioDataProvider extends XposedMods {
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
 
         mMediaSessionManager = mContext.getSystemService(MediaSessionManager.class);
+        if (!mMediaMetaDataListeners.isEmpty()) startSessionTracking();
         ReflectedClass colorScheme = ReflectedClass.of("com.android.systemui.monet.ColorScheme");
         mColorSchemeClass = colorScheme.getClazz();
 
@@ -192,6 +218,7 @@ public class AudioDataProvider extends XposedMods {
                             }
                             mPlaybackState = (int) param.args[1];
                             onPrimaryMetadataOrStateChanged((int) param.args[1]);
+                            requestControllerUpdate();
                         });
 
         // OplusQsMediaUtil
@@ -209,6 +236,7 @@ public class AudioDataProvider extends XposedMods {
                     mMediaData = param.args[2];
                     onMediaMetadataChanged();
                     setArtWork();
+                    requestControllerUpdate();
                 });
 
         ReflectedClass.ReflectionConsumer mediaDataRemove = param -> {
@@ -271,8 +299,12 @@ public class AudioDataProvider extends XposedMods {
     }
 
     public void updateMediaColors() {
-
-        WallpaperColors wallpaperColors = (instance.mArt != null) ? WallpaperColors.fromBitmap(instance.mArt) : null;
+        Bitmap art = instance.mArt;
+        if (art != null && art == mColorsArt) return;
+        if (art != null && mColorsArt != null && !art.isRecycled() && !mColorsArt.isRecycled() && art.sameAs(mColorsArt))
+            return;
+        mColorsArt = art;
+        WallpaperColors wallpaperColors = (art != null) ? WallpaperColors.fromBitmap(art) : null;
         if (wallpaperColors == null || wallpaperColors.equals(mWallpaperColors)) return;
 
         Configuration config = mContext.getResources().getConfiguration();
