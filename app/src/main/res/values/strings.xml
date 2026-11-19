@@ -1196,6 +1196,10 @@
     <string name="package_hook_no_response">Package not responding</string>
     <string name="package_hook_bootlooped">Package disabled because bootloops</string>
     <string name="package_not_found">Package not found</string>
+    <string name="package_not_in_scope">Not enabled in LSPosed</string>
+    <string name="menu_request_scope">Ask permission</string>
+    <string name="scope_request_approved">Enabled in LSPosed, restart the app to apply</string>
+    <string name="scope_request_failed">Permission request failed: %1$s</string>
     <string name="info_hooks">Hooks Info</string>
     <string name="info_hooks_desc">Explanation\n\n
         Package responsive means that everything works fine,\n\n

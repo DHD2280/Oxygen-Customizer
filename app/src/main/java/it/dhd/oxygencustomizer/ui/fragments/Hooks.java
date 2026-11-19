@@ -16,7 +16,9 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -51,6 +53,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import io.github.libxposed.service.XposedService;
 import it.dhd.oxygencustomizer.IRootProviderService;
 import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
@@ -61,6 +64,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.ReoptimizeDialog;
 import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.Constants;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
+import it.dhd.oxygencustomizer.utils.XposedScope;
 
 public class Hooks extends BaseFragment {
 
@@ -73,6 +77,8 @@ public class Hooks extends BaseFragment {
     private ServiceConnection mCoreRootServiceConnection;
     private IRootProviderService mRootServiceIPC = null;
     private final String reboot_key = "reboot_pending";
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+    private final Runnable mScopeListener = () -> mMainHandler.post(this::refreshScopeState);
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,6 +116,7 @@ public class Hooks extends BaseFragment {
         intentFilterHookedPackages.addAction(Constants.ACTION_XPOSED_CONFIRMED);
         requireContext().registerReceiver(receiverHookedPackages, intentFilterHookedPackages, Context.RECEIVER_EXPORTED);
         monitorPackageList = Arrays.asList(getResources().getStringArray(R.array.xposed_scope));
+        XposedScope.addListener(mScopeListener);
         checkHookedPackages();
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -203,7 +210,12 @@ public class Hooks extends BaseFragment {
 
             TextView desc = list.findViewById(R.id.desc);
             if (isAppInstalled(pack.get(i))) {
-                desc.setText(getString(R.string.package_checking, ""));
+                if (isNotInScope(pack.get(i))) {
+                    desc.setText(getText(R.string.package_not_in_scope));
+                    desc.setTextColor(requireContext().getColor(R.color.error));
+                } else {
+                    desc.setText(getString(R.string.package_checking, ""));
+                }
             } else {
                 desc.setText(getText(R.string.package_not_found));
                 desc.setTextColor(requireContext().getColor(R.color.design_default_color_error));
@@ -242,12 +254,16 @@ public class Hooks extends BaseFragment {
                     handleApplicationRestart(pack.get(finalI));
                 } else if (itemId == R.id.reoptimize_app) {
                     handleReoptimizeApp(pack.get(finalI));
+                } else if (itemId == R.id.request_scope) {
+                    requestScope(pack.get(finalI));
                 }
 
                 return true;
             });
 
             list.setOnLongClickListener(v -> {
+                popupMenu.getMenu().findItem(R.id.request_scope)
+                        .setVisible(isAppInstalled(pack.get(finalI)) && isNotInScope(pack.get(finalI)));
                 popupMenu.show();
                 return true;
             });
@@ -275,6 +291,49 @@ public class Hooks extends BaseFragment {
         }
     }
 
+    private boolean isNotInScope(String packageName) {
+        return Boolean.FALSE.equals(XposedScope.isInScope(packageName));
+    }
+
+    private void requestScope(String packageName) {
+        boolean sent = XposedScope.requestScope(packageName, new XposedService.OnScopeEventListener() {
+            @Override
+            public void onScopeRequestApproved(List<String> approved) {
+                mMainHandler.post(() -> {
+                    if (getContext() == null) return;
+                    Toast.makeText(requireContext(), R.string.scope_request_approved, Toast.LENGTH_LONG).show();
+                    refreshScopeState();
+                });
+            }
+
+            @Override
+            public void onScopeRequestFailed(String message) {
+                mMainHandler.post(() -> {
+                    if (getContext() == null) return;
+                    Toast.makeText(requireContext(), getString(R.string.scope_request_failed, message), Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+        if (!sent && getContext() != null)
+            Toast.makeText(requireContext(), getString(R.string.scope_request_failed, "LSPosed"), Toast.LENGTH_LONG).show();
+    }
+
+    private void refreshScopeState() {
+        if (binding == null || getContext() == null) return;
+        for (int i = 0; i < binding.content.getChildCount(); i++) {
+            View list = binding.content.getChildAt(i);
+            TextView desc = list.findViewById(R.id.desc);
+            String pkgName = ((TextView) list.findViewById(R.id.title)).getText().toString();
+            if (hookedPackageList.contains(pkgName) || !isAppInstalled(pkgName)) continue;
+            if (isNotInScope(pkgName)) {
+                desc.setText(getText(R.string.package_not_in_scope));
+                desc.setTextColor(requireContext().getColor(R.color.error));
+            } else if (getString(R.string.package_not_in_scope).contentEquals(desc.getText())) {
+                desc.setText(getText(R.string.package_hook_no_response));
+            }
+        }
+    }
+
     private void handleReoptimizeApp(String pkgName) {
         ReoptimizeDialog reoptimizeDialog = new ReoptimizeDialog(requireContext(), pkgName);
         reoptimizeDialog.show();
@@ -294,7 +353,9 @@ public class Hooks extends BaseFragment {
 
                 desc.setText(getText(
                         isAppInstalled(pkgName)
-                                ? isBootLooped(pkgName)
+                                ? isNotInScope(pkgName)
+                                ? R.string.package_not_in_scope
+                                : isBootLooped(pkgName)
                                 ? R.string.package_hook_bootlooped
                                 : R.string.package_hook_no_response
                                 : R.string.package_not_found));
@@ -397,6 +458,12 @@ public class Hooks extends BaseFragment {
     public void onStop() {
         super.onStop();
         countDownTimer.cancel();
+    }
+
+    @Override
+    public void onDestroyView() {
+        XposedScope.removeListener(mScopeListener);
+        super.onDestroyView();
     }
 
     @Override
