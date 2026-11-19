@@ -122,12 +122,18 @@ import com.oplus.systemui.qs.base.widget.QsTileViewInfoProvider;
 import com.oplus.systemui.qs.base.widget.QsViewBackgroundProxy;
 import com.oplus.systemui.qs.base.widget.QsViewOutlineProvider;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.function.Function;
 
 import io.github.libxposed.api.XposedModuleInterface;
@@ -242,6 +248,10 @@ public class QsTileCustomization extends XposedMods {
     private int mAnimDuration = 0;
     private boolean mTrasformationsEnabled = false;
     private int mTrasformations = 1;
+    private final Map<Object, WeakReference<ViewGroup>> mPagedLayouts = new WeakHashMap<>();
+    private final Set<Class<?>> mHookedPageListeners = new HashSet<>();
+    private final Set<View> mTransformedTiles = Collections.newSetFromMap(new WeakHashMap<>());
+    private View mPageProxy = null;
 
     // Qs Media Tile Album Art
     private boolean mQsWidgetsEnabled = false;
@@ -563,31 +573,112 @@ public class QsTileCustomization extends XposedMods {
             hookBrightnessIcon();
         }
 
-        try {
-            ReflectedClass PagedTileLayout = ReflectedClass.ofIfPossible("com.android.systemui.qs.PagedTileLayout");
+        hookPageTransitions();
+
+    }
+
+    private void hookPageTransitions() {
+        ReflectedClass PagedTileLayout = ReflectedClass.of(
+                "com.android.systemui.qs.PagedTileLayout",
+                "com.android.systemui.qs.deprecated.PagedTileLayout" /* COS17 */);
             PagedTileLayout
                     .afterConstruction()
                     .run(param -> {
-                        Object VPagerListener = getObjectField(param.thisObject, "mOnPageChangeListener");
-                        Object vPager = param.thisObject;
-                        ReflectedClass.of(VPagerListener.getClass())
+                        Object listener = getObjectField(param.thisObject, "mOnPageChangeListener");
+                        mPagedLayouts.put(listener, new WeakReference<>((ViewGroup) param.thisObject));
+                        if (!mHookedPageListeners.add(listener.getClass())) return;
+                        ReflectedClass.of(listener.getClass())
                                 .before("onPageScrolled")
                                 .run(param2 -> {
                                     if (!mTrasformationsEnabled) return;
-                                    final int childCount = (int) callMethod(vPager, "getChildCount");
-                                    for (int i = 0; i < childCount; i++) {
-                                        final View child = (View) callMethod(vPager, "getChildAt", i);
-                                        final Object lp = callMethod(child, "getLayoutParams");
-                                        if (getBooleanField(lp, "isDecor")) continue;
-                                        final float transformPos = (float) (child.getLeft() - (int) callMethod(vPager, "getScrollX")) / child.getWidth();
-                                        getCustomTransitions().transformPage(child, transformPos);
-                                    }
+                                    WeakReference<ViewGroup> pager = mPagedLayouts.get(param2.thisObject);
+                                    if (pager != null && pager.get() != null)
+                                        transformPagedTileLayout(pager.get());
                                 });
                     });
-        } catch (Throwable t) {
-            log(t);
-        }
 
+        ReflectedClass StaggeredPagerLayoutManager = ReflectedClass.ofIfPossible("com.oplus.systemui.qs.base.widget.recyclerview.StaggeredPagerLayoutManager");
+        StaggeredPagerLayoutManager
+                .after("scrollHorizontallyInternal")
+                .run(param -> {
+                    if (mTrasformationsEnabled) transformTilePages(param.thisObject);
+                });
+        StaggeredPagerLayoutManager
+                .after("onLayoutCompleted")
+                .run(param -> {
+                    if (mTrasformationsEnabled) transformTilePages(param.thisObject);
+                });
+    }
+
+    private void transformPagedTileLayout(ViewGroup pager) {
+        ViewPager.PageTransformer transformer = getCustomTransitions();
+        for (int i = 0; i < pager.getChildCount(); i++) {
+            View child = pager.getChildAt(i);
+            if (child.getWidth() == 0 || getBooleanField(child.getLayoutParams(), "isDecor"))
+                continue;
+            transformer.transformPage(child, (float) (child.getLeft() - pager.getScrollX()) / child.getWidth());
+        }
+    }
+
+    private void transformTilePages(Object layoutManager) {
+        ViewGroup recycler = (ViewGroup) callMethod(layoutManager, "getRecyclerView");
+        if (recycler == null || !(boolean) callMethod(layoutManager, "canScrollHorizontally"))
+            return;
+        int width = recycler.getMeasuredWidth();
+        int height = recycler.getMeasuredHeight();
+        if (width == 0 || height == 0) return;
+        int scrollX = ((int[]) callMethod(layoutManager, "currScrollOffset"))[0];
+        boolean rtl = recycler.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        float scroll = (rtl ? -scrollX : scrollX) / (float) width;
+        boolean settled = scrollX % width == 0 || (int) callMethod(layoutManager, "getPageCount") < 2;
+        ViewPager.PageTransformer transformer = settled ? null : getCustomTransitions();
+        View page = pageProxy(recycler.getContext(), width, height);
+        for (int i = 0; i < recycler.getChildCount(); i++) {
+            View child = recycler.getChildAt(i);
+            Integer pageIndex = null;
+            if (transformer != null) {
+                int position = (int) callMethod(recycler, "getChildAdapterPosition", child);
+                pageIndex = (Integer) callMethod(layoutManager, "getItemPageIndex", position);
+            }
+            if (pageIndex == null) {
+                resetTileTransform(child);
+                continue;
+            }
+            float position = rtl ? scroll - pageIndex : pageIndex - scroll;
+            float pageLeft = position * width;
+            transformer.transformPage(page, position);
+            mTransformedTiles.add(child);
+            child.setPivotX(pageLeft + page.getPivotX() - child.getLeft());
+            child.setPivotY(page.getPivotY() - child.getTop());
+            child.setTranslationX(page.getTranslationX());
+            child.setTranslationY(page.getTranslationY());
+            child.setRotation(page.getRotation());
+            child.setRotationX(page.getRotationX());
+            child.setRotationY(page.getRotationY());
+            child.setScaleX(page.getScaleX());
+            child.setScaleY(page.getScaleY());
+            child.setAlpha(page.getAlpha());
+        }
+    }
+
+    private View pageProxy(Context context, int width, int height) {
+        if (mPageProxy == null) mPageProxy = new View(context);
+        if (mPageProxy.getWidth() != width || mPageProxy.getHeight() != height)
+            mPageProxy.layout(0, 0, width, height);
+        return mPageProxy;
+    }
+
+    private void resetTileTransform(View tile) {
+        if (!mTransformedTiles.remove(tile)) return;
+        tile.resetPivot();
+        tile.setTranslationX(0f);
+        tile.setTranslationY(0f);
+        tile.setRotation(0f);
+        tile.setRotationX(0f);
+        tile.setRotationY(0f);
+        tile.setScaleX(1f);
+        tile.setScaleY(1f);
+        tile.setAlpha(1f);
     }
 
 
@@ -1027,6 +1118,24 @@ public class QsTileCustomization extends XposedMods {
         ReflectedClass OplusQSHighlightPluginTileView = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.tile.OplusQSHighlightTileViewImpl");
         if (OplusQSHighlightPluginTileView.getClazz() != null) {
             OplusQSHighlightPluginTileView.after("performViewClick").run(animationHook);
+        }
+
+        ReflectedClass ResizeableTileClick = ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileView$init$tileClick$1");
+        if (ResizeableTileClick.getClazz() != null) {
+            ResizeableTileClick
+                    .after("onClick")
+                    .run(param -> {
+                        if (getIntField(param.thisObject, "$r8$classId") != 0) return;
+                        View qsTile = (View) getObjectField(param.thisObject, "this$0");
+                        if (qsTile != null) qsTile.post(() -> getTileAnimation(qsTile));
+                    });
+        } else {
+            ReflectedClass.ofIfPossible("com.oplus.systemui.plugins.qs.customize.view.tile.OplusQSResizeableTileView")
+                    .after("access$performViewClick")
+                    .run(param -> {
+                        View qsTile = (View) param.args[0];
+                        qsTile.post(() -> getTileAnimation(qsTile));
+                    });
         }
     }
 
