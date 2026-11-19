@@ -126,18 +126,19 @@ public class LockscreenNowBar extends XposedMods {
             mNowBarNotification2LineColor = Color.WHITE,
             mNowBarNotificationIconColor = Color.WHITE;
 
+    private static final int AFFORDANCE_GAP_DP = 8;
     private int mAffordanceWidth = 0;
 
     public LockscreenNowBar(Context context) {
         super(context);
-        int resId = mContext.getResources().getIdentifier(
-                "keyguard_affordance_width", "dimen", SYSTEM_UI);
-        if (resId != 0) {
-            mAffordanceWidth = mContext.getResources().getDimensionPixelSize(resId);
-            mAffordanceWidth = (int) (mAffordanceWidth * 0.9f);
-        } else {
-            mAffordanceWidth = dp2px(mContext, 72);
-        }
+        int buttonWidth = systemUiDimen("keyguard_affordance_width", 80);
+        int innerPadding = systemUiDimen("keyguard_affordance_far_screen_edge_padding", 8);
+        mAffordanceWidth = buttonWidth - innerPadding + dp2px(mContext, AFFORDANCE_GAP_DP);
+    }
+
+    private int systemUiDimen(String name, int fallbackDp) {
+        int resId = mContext.getResources().getIdentifier(name, "dimen", SYSTEM_UI);
+        return resId != 0 ? mContext.getResources().getDimensionPixelSize(resId) : dp2px(mContext, fallbackDp);
     }
 
     @Override
@@ -356,12 +357,9 @@ public class LockscreenNowBar extends XposedMods {
 
     private void updateBarMargins() {
         boolean isLeftHidden = isLeftAffordanceHidden(mContext, mHideLeftAfforfance) || mHideLeftAfforfance;
+        int margin = isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth;
         NowBarController mNowBarController = NowBarController.getInstance();
-        mNowBarController.updateMargins(
-                isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
-                isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth,
-                dp2px(mContext, mNowBarBottomMargin)
-        );
+        mNowBarController.updateMargins(margin, margin, dp2px(mContext, mNowBarBottomMargin));
     }
 
     private void updateMusic() {
