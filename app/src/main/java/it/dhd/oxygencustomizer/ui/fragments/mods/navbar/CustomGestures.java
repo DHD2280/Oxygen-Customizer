@@ -10,13 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.preference.Preference;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import it.dhd.oxygencustomizer.R;
+import it.dhd.oxygencustomizer.ui.adapters.ActivitiesListAdapter;
+import it.dhd.oxygencustomizer.ui.adapters.PackageListAdapter;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 
 public class CustomGestures extends ControlledPreferenceFragmentCompat {
 
+    private static final String LONG_PRESS_LAUNCH = "navbar_long_press_launch";
+
     FrameLayout leftSwipeGestureIndicator, rightSwipeGestureIndicator;
+    private PackageListAdapter mPackageAdapter;
+    private ActivitiesListAdapter mActivitiesAdapter;
 
     @Override
     public String getTitle() {
@@ -50,6 +60,42 @@ public class CustomGestures extends ControlledPreferenceFragmentCompat {
 
         rightSwipeGestureIndicator = prepareSwipeGestureView(Gravity.RIGHT);
         leftSwipeGestureIndicator = prepareSwipeGestureView(Gravity.LEFT);
+
+        new Thread(() -> {
+            mPackageAdapter = new PackageListAdapter(requireActivity());
+            mActivitiesAdapter = new ActivitiesListAdapter(requireActivity());
+        }).start();
+
+        Preference launch = findPreference(LONG_PRESS_LAUNCH);
+        if (launch != null) {
+            launch.setOnPreferenceChangeListener((preference, newValue) -> {
+                String value = (String) newValue;
+                if (value.equals("app:")) showAppPicker(false);
+                else if (value.equals("activity:")) showAppPicker(true);
+                return false;
+            });
+        }
+    }
+
+    private void showAppPicker(boolean activity) {
+        if (mPackageAdapter == null) return;
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.select_app)
+                .setAdapter(mPackageAdapter, (dialog, which) -> {
+                    PackageListAdapter.PackageItem item = mPackageAdapter.getItem(which);
+                    if (activity) showActivityPicker(item.title, item.packageName);
+                    else mPreferences.putString(LONG_PRESS_LAUNCH, "app:" + item.packageName);
+                })
+                .show();
+    }
+
+    private void showActivityPicker(CharSequence appName, String packageName) {
+        mActivitiesAdapter.setPackageName(packageName);
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(appName)
+                .setAdapter(mActivitiesAdapter, (dialog, which) ->
+                        mPreferences.putString(LONG_PRESS_LAUNCH, "activity:" + packageName + "/" + mActivitiesAdapter.getItem(which).activityName))
+                .show();
     }
 
     @Override
