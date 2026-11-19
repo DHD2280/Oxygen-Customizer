@@ -32,7 +32,9 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +50,9 @@ import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.weather.OmniJawsClient;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.ThemeEnabler;
+import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
+import it.dhd.oxygencustomizer.xposed.utils.QsTileTouchAnim;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 
 
@@ -72,9 +76,13 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     private boolean mShowWeatherText;
     private boolean mShowWeatherHumidity, mShowWeatherWind;
     public static ArrayList<Object[]> instances = new ArrayList<>();
+    private final QsTileTouchAnim mTouchAnim = new QsTileTouchAnim();
     private int mWeatherHorPadding = 0, mWeatherVerPadding = 0;
     private final Context mContext;
     private Context appContext;
+    private final ThemeEnabler.OnThemeChangedListener mThemeListener = this::reloadWeatherBg;
+    private int mBgBaseAlpha = 255;
+    private float mBgVisibility = 1f;
 
     public CurrentWeatherView(Context context, String name) {
         super(context);
@@ -96,7 +104,42 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
 
         enableUpdates();
 
-        ThemeEnabler.registerThemeChangedListener(this::reloadWeatherBg);
+        ThemeEnabler.registerThemeChangedListener(mThemeListener);
+
+        if (!BuildConfig.APPLICATION_ID.equals(context.getPackageName()))
+            setOnClickListener(v -> ActivityLauncherUtils.openWeatherActivity(mContext));
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (isClickable()) mTouchAnim.doAction(event.getActionMasked(), this);
+        return super.dispatchTouchEvent(event);
+    }
+
+    public void setBackgroundVisibility(float visibility) {
+        if (mBgVisibility == visibility) return;
+        mBgVisibility = visibility;
+        applyBackgroundAlpha();
+    }
+
+    private void applyBackgroundAlpha() {
+        if (getBackground() != null)
+            getBackground().setAlpha(Math.round(mBgBaseAlpha * mBgVisibility));
+    }
+
+    public void setWeatherCentered(boolean centered) {
+        setGravity(centered ? Gravity.CENTER_HORIZONTAL : Gravity.START);
+        for (int i = 0; i < getChildCount(); i++) {
+            if (getChildAt(i) instanceof LinearLayout child) {
+                child.setGravity(centered ? Gravity.CENTER_HORIZONTAL : (Gravity.START | Gravity.CENTER_VERTICAL));
+            }
+        }
+    }
+
+    public void release() {
+        disableUpdates();
+        ThemeEnabler.unRegisterThemeChangedListener(mThemeListener);
+        instances.removeIf(obj -> obj[0] == this);
     }
 
     @SuppressLint("DiscouragedApi")
@@ -390,6 +433,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
         }
         if (mWeatherBgSelection == 9) {
             LiquidGlass.apply(this, ViewHelper.dp2px(mContext, 18), LiquidGlass.DEFAULT_COLOR);
+            mBgBaseAlpha = 255;
+            applyBackgroundAlpha();
         } else {
             setViewBackground(bg, (bg != null && mWeatherBgSelection == 5) ? 160 : 255);
         }
@@ -400,7 +445,8 @@ public class CurrentWeatherView extends LinearLayout implements OmniJawsClient.O
     public void setViewBackground(Drawable drawRes, int bgAlpha) {
         if (drawRes != null) drawRes.mutate();
         setBackground(drawRes);
-        if (drawRes != null) getBackground().setAlpha(bgAlpha);
+        mBgBaseAlpha = bgAlpha;
+        applyBackgroundAlpha();
     }
 
     public void updateWeatherSettings(boolean showLocation, boolean showText,
