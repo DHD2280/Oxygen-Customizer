@@ -18,7 +18,9 @@ import static it.dhd.oxygencustomizer.xposed.utils.ViewHelper.setMargins;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getBooleanField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getIntField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
+import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.newInstance;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setAdditionalInstanceField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.setObjectField;
 
@@ -63,7 +65,6 @@ import java.util.Locale;
 import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 /**
@@ -114,19 +115,31 @@ public class StatusbarClock extends XposedMods {
     private Object Clock = null;
     private float mClockDefaultLineSpacingExtra, mClockDefaultLineSpacingMultiplier;
     private boolean clockForFake = false;
+    private View mHomeClock;
+    private Object mHomeClockBinder, mHomeClockModel;
+    private boolean mIntervalHidden = false;
+    private final Runnable mIntervalToggle = () -> {
+        mIntervalHidden = !mIntervalHidden;
+        applyHomeClockVisibility();
+    };
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Clock == null) return;
-            Handler handler = (Handler) callMethod(Clock, "getHandler");
-            if (handler == null) return;
             String action = intent.getAction();
             if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 mScreenOn = false;
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenOn = true;
             }
+            if (mHomeClockBinder != null) {
+                mIntervalHidden = false;
+                autoHideHandler.post(StatusbarClock.this::applyHomeClockVisibility);
+                return;
+            }
+            if (Clock == null) return;
+            Handler handler = (Handler) callMethod(Clock, "getHandler");
+            if (handler == null) return;
             if (mScreenOn) {
                 if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility(Clock));
             }
@@ -247,7 +260,13 @@ public class StatusbarClock extends XposedMods {
 
         if (Key.length > 0) {
             switch (Key[0]) {
-                case "status_bar_clock_auto_hide" -> updateClockVisibility();
+                case "status_bar_clock_auto_hide",
+                     "status_bar_clock_auto_hide_launcher",
+                     "status_bar_clock_auto_hide_hduration",
+                     "status_bar_clock_auto_hide_sduration" -> {
+                    mIntervalHidden = false;
+                    updateClockVisibility();
+                }
                 case "status_bar_am_pm",
                      "status_bar_clock_date_display",
                      "status_bar_clock_date_position",
@@ -504,6 +523,28 @@ public class StatusbarClock extends XposedMods {
                     param.setResult(null);
                 });
 
+        if (Build.VERSION.SDK_INT >= 37) {
+            ReflectedClass HomeStatusBarViewBinderImpl = ReflectedClass.ofIfPossible("com.android.systemui.statusbar.pipeline.shared.ui.binder.HomeStatusBarViewBinderImpl");
+            int clockId = idOf("clock");
+            HomeStatusBarViewBinderImpl
+                    .before("animate")
+                    .run(param -> {
+                        if (!(param.args[0] instanceof TextView view) || view.getId() != clockId)
+                            return;
+                        if (mHomeClock != view) {
+                            mHomeClock = view;
+                            mIntervalHidden = false;
+                        }
+                        mHomeClockBinder = param.thisObject;
+                        mHomeClockModel = param.args[1];
+                        boolean stockVisible = getIntField(param.args[1], "visibility") == View.VISIBLE;
+                        scheduleIntervalHide(stockVisible);
+                        if (stockVisible && (isHiddenInLauncher() || mIntervalHidden)) {
+                            param.args[1] = newInstance(param.args[1].getClass(), View.GONE, getBooleanField(param.args[1], "shouldAnimateChange"));
+                        }
+                    });
+        }
+
         ClockClass
                 .before("shouldBeVisible")
                 .run(param -> {
@@ -674,7 +715,9 @@ public class StatusbarClock extends XposedMods {
     }
 
     private void updateClockVisibility() {
-        if (Clock != null) {
+        if (mHomeClockBinder != null) {
+            autoHideHandler.post(this::applyHomeClockVisibility);
+        } else if (Clock != null) {
             callMethod(Clock, "updateClockVisibility");
         }
     }
@@ -858,25 +901,59 @@ public class StatusbarClock extends XposedMods {
     }
 
     private void updateShowClock() {
-
-        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
-
-        String foregroundApp = null;
-        for (ActivityManager.RunningAppProcessInfo processInfo : processes) {
-            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                foregroundApp = processInfo.processName;
-                break;
-            }
-        }
-        Logger.log("StatusbarClock - foregroundApp: " + foregroundApp);
-
+        String foregroundApp = getForegroundPackage();
         if (TextUtils.isEmpty(foregroundApp)) return;
         final boolean clockAutoHide = foregroundApp.equals(getDefaultLauncherPackageName());
         if (mClockAutoHideLauncher != clockAutoHide) {
             mClockAutoHideLauncher = clockAutoHide;
             updateClock();
-            autoHideHandler.post(() -> updateClockVisibility(Clock));
+            if (mHomeClockBinder != null) {
+                autoHideHandler.post(this::applyHomeClockVisibility);
+            } else {
+                autoHideHandler.post(() -> updateClockVisibility(Clock));
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private String getForegroundPackage() {
+        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        try {
+            List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+            if (tasks != null && !tasks.isEmpty() && tasks.get(0).topActivity != null) {
+                return tasks.get(0).topActivity.getPackageName();
+            }
+        } catch (Throwable ignored) {
+        }
+        List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
+        if (processes == null) return null;
+        for (ActivityManager.RunningAppProcessInfo processInfo : processes) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return processInfo.processName;
+            }
+        }
+        return null;
+    }
+
+    private void scheduleIntervalHide(boolean stockVisible) {
+        autoHideHandler.removeCallbacks(mIntervalToggle);
+        if (!mClockAutoHide || !mScreenOn || !stockVisible || isHiddenInLauncher()) {
+            mIntervalHidden = false;
+            return;
+        }
+        autoHideHandler.postDelayed(mIntervalToggle, (mIntervalHidden ? mHideDuration : mShowDuration) * 1000L);
+    }
+
+    private boolean isHiddenInLauncher() {
+        return mClockAutoHideLauncherSwitch && mClockAutoHideLauncher;
+    }
+
+    private void applyHomeClockVisibility() {
+        if (mHomeClockBinder == null || mHomeClockModel == null || mHomeClock == null) return;
+        try {
+            callMethod(mHomeClockBinder, "animate", mHomeClock, mHomeClockModel);
+        } catch (Throwable t) {
+            log(t);
         }
     }
 
