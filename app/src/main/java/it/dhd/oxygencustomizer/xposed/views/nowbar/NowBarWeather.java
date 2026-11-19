@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,11 +62,8 @@ public class NowBarWeather extends RelativeLayout implements OmniJawsClient.Omni
         });
     }
 
-    private void setBarBackground() {
-        GradientDrawable background = new GradientDrawable();
-        background.setColor(mCustomColors ? mBackgroundColor : Color.parseColor("#0D47A1"));
-        background.setCornerRadius(100f);
-        setBackground(background);
+    void setBarBackground() {
+        NowBarBackground.apply(this, mCustomColors ? mBackgroundColor : Color.parseColor("#0D47A1"));
     }
 
     private void inflateView() {

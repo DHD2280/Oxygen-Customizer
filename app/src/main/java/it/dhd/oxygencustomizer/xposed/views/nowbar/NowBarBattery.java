@@ -74,6 +74,7 @@ public class NowBarBattery extends RelativeLayout {
     private int mFastChargingColor = Color.parseColor("#FF247CFF"), mPowerSaveColor = Color.parseColor("#FFA500");
     private int mChargingIconStyle = -1;
     private int mTextColor = Color.WHITE;
+    private int[] mBarColors;
     private boolean mIndicateFastCharging = false, mIndicatePowerSave = false;
 
     private SuperPowerSaveObserver.SuperPowerSaveListener mSuperPowerSaveListener = superPowerSave -> {
@@ -291,11 +292,12 @@ public class NowBarBattery extends RelativeLayout {
     }
 
     private void setBarBackground(int[] colors) {
-        GradientDrawable background = new GradientDrawable();
-        background.setCornerRadius(100f);
-        background.setColors(colors);
-        background.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-        setBackground(background);
+        mBarColors = colors;
+        NowBarBackground.apply(this, colors);
+    }
+
+    void refreshBarBackground() {
+        if (mBarColors != null) setBarBackground(mBarColors);
     }
 
     @SuppressLint("SetTextI18n")

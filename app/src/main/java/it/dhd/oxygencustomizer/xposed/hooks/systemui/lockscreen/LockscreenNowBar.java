@@ -21,6 +21,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_CUSTOM_FONT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_TOP_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_ENABLED;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS_RIM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_FORMAT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_POSITION;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_CLOCK_TEXT_SCALING;
@@ -52,6 +55,7 @@ import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.get
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -82,6 +86,9 @@ public class LockscreenNowBar extends XposedMods {
     private boolean mNowBarWeather = false;
     private boolean mNowBarNotification = false;
     private boolean mExpanded = false;
+    private boolean mNowBarGlass = false;
+    private int mNowBarGlassTint = 40;
+    private boolean mNowBarGlassRim = false;
 
     // Music
     private boolean mShowExtendedPlayer = true;
@@ -142,6 +149,9 @@ public class LockscreenNowBar extends XposedMods {
         mNowBarBottomMargin = Xprefs.getSliderInt(NOW_BAR_BOTTOM_MARGIN, 12);
         mNowBarWeather = Xprefs.getBoolean(NOW_BAR_WEATHER, false);
         mNowBarNotification = Xprefs.getBoolean(NOW_BAR_NOTIFICATIONS, false);
+        mNowBarGlass = Build.VERSION.SDK_INT >= 37 && Xprefs.getBoolean(NOW_BAR_GLASS, false);
+        mNowBarGlassTint = Xprefs.getSliderInt(NOW_BAR_GLASS_TINT, 40);
+        mNowBarGlassRim = Xprefs.getBoolean(NOW_BAR_GLASS_RIM, false);
 
         // Music
         mShowExtendedPlayer = Xprefs.getBoolean(NOW_BAR_MUSIC_EXTENDED_PLAYER, true);
@@ -191,6 +201,9 @@ public class LockscreenNowBar extends XposedMods {
                     Key[0].equals(NOW_BAR_WEATHER) ||
                     Key[0].equals(NOW_BAR_NOTIFICATIONS)) {
                 updateNowBar();
+            }
+            if (Key[0].equals(NOW_BAR_GLASS) || Key[0].equals(NOW_BAR_GLASS_TINT) || Key[0].equals(NOW_BAR_GLASS_RIM)) {
+                updateGlass();
             }
             for (String k : NOW_BAR_MUSIC_PREFS) {
                 if (Key[0].equals(k)) {
@@ -316,6 +329,13 @@ public class LockscreenNowBar extends XposedMods {
         updateBattery();
         updateWeather();
         updateNotification();
+        updateGlass();
+    }
+
+    private void updateGlass() {
+        NowBarController mNowBarController = NowBarController.getInstance();
+        if (mNowBarController == null) return;
+        mNowBarController.updateGlass(mNowBarGlass, mNowBarGlassTint, mNowBarGlassRim);
     }
 
     private void updateNowBar() {
