@@ -35,15 +35,12 @@ import android.widget.ImageView;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.ArcProgressWidget;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetTicker;
 
 @SuppressLint({"AppCompatCustomView", "ViewConstructor"})
 public class ProgressImageView extends ImageView {
@@ -54,9 +51,18 @@ public class ProgressImageView extends ImageView {
     private int progressPercent = -1;
     private int batteryLevel = -1;
     private int batteryTemperature = -1;
-    private ScheduledExecutorService scheduler;
-    private ScheduledFuture<?> updateTask;
+    private static final long MEMORY_REFRESH_MS = 5000L;
+    private static final String VOLUME_CHANGED_ACTION = "android.media.VOLUME_CHANGED_ACTION";
+    private WidgetTicker mMemoryTicker;
     private boolean receiverRegistered = false;
+    private boolean mVolumeReceiverRegistered = false;
+
+    private final BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateProgress();
+        }
+    };
     private String typeface = null;
     private int mProgressColor = Color.RED, mTextColor = Color.WHITE;
 
@@ -140,18 +146,24 @@ public class ProgressImageView extends ImageView {
     }
 
     private void startProgressUpdates() {
-        if (progressType == ProgressType.MEMORY || progressType == ProgressType.VOLUME) {
-            scheduler = Executors.newSingleThreadScheduledExecutor();
-            updateTask = scheduler.scheduleWithFixedDelay(this::updateProgress, 0, 1, TimeUnit.SECONDS);
+        stopProgressUpdates();
+        if (progressType == ProgressType.MEMORY) {
+            mMemoryTicker = new WidgetTicker(this, MEMORY_REFRESH_MS, this::updateProgress);
+            mMemoryTicker.start();
+        } else if (progressType == ProgressType.VOLUME) {
+            mContext.registerReceiver(mVolumeReceiver, new IntentFilter(VOLUME_CHANGED_ACTION), Context.RECEIVER_EXPORTED);
+            mVolumeReceiverRegistered = true;
         }
     }
 
     private void stopProgressUpdates() {
-        if (updateTask != null) {
-            updateTask.cancel(true);
+        if (mMemoryTicker != null) {
+            mMemoryTicker.stop();
+            mMemoryTicker = null;
         }
-        if (scheduler != null) {
-            scheduler.shutdown();
+        if (mVolumeReceiverRegistered) {
+            mContext.unregisterReceiver(mVolumeReceiver);
+            mVolumeReceiverRegistered = false;
         }
     }
 
