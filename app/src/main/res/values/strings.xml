@@ -1607,6 +1607,11 @@
     <string name="lockscreen_now_bar_notifications">Show Notifications</string>
     <string name="lockscreen_now_bar_notifications_summary">Show last received notification in now bar</string>
     <string name="lockscreen_now_bar_bottom_margin">Now bar bottom margin</string>
+    <string name="lockscreen_now_bar_liquid_glass">Liquid glass</string>
+    <string name="lockscreen_now_bar_liquid_glass_summary">Blur the wallpaper behind the bar, tinted with its background color</string>
+    <string name="lockscreen_now_bar_glass_tint">Glass color intensity</string>
+    <string name="lockscreen_now_bar_glass_rim">Tinted rim</string>
+    <string name="lockscreen_now_bar_glass_rim_summary">Color the glass border with the background color, or with the album accent for music</string>
     <string name="lockscreen_now_bar_music">Now bar music</string>
     <string name="lockscreen_now_bar_music_extended_player">Extended player</string>
     <string name="lockscreen_now_bar_music_extended_player_summary">Show extended player in now bar by tapping album art</string>

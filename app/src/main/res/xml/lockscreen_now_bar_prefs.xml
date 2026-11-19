@@ -43,6 +43,28 @@
             app:minVal="0"
             app:tickInterval="1" />
 
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_liquid_glass"
+            android:summary="@string/lockscreen_now_bar_liquid_glass_summary"
+            android:title="@string/lockscreen_now_bar_liquid_glass" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:key="lockscreen_now_bar_glass_tint"
+            android:title="@string/lockscreen_now_bar_glass_tint"
+            app:defaultValue="40"
+            app:maxVal="100"
+            app:minVal="0"
+            app:tickInterval="1"
+            app:valueFormat="%" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_now_bar_glass_rim_tint"
+            android:summary="@string/lockscreen_now_bar_glass_rim_summary"
+            android:title="@string/lockscreen_now_bar_glass_rim" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory android:title="@string/lockscreen_now_bar_music">

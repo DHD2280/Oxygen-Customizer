@@ -26,6 +26,9 @@ public class NowBarController {
     private boolean mWeatherEnabled = false;
     private boolean mNotificationEnabled = false;
     private int mLeftMargin, mRightMargin, mBottomMargin;
+    private boolean mGlass = false;
+    private int mGlassTint = 40;
+    private boolean mGlassTintRim = false;
 
     private NowBarController(Context context) {
         this.mContext = context;
@@ -51,6 +54,7 @@ public class NowBarController {
         mView.updateMargins(mLeftMargin, mRightMargin, mBottomMargin);
         mView.setWeatherEnabled(mWeatherEnabled);
         mView.setNotificationEnabled(mNotificationEnabled);
+        mView.updateGlass(mGlass, mGlassTint, mGlassTintRim);
         updateVisibility();
     }
 
@@ -165,6 +169,13 @@ public class NowBarController {
                     textColor
             );
         }
+    }
+
+    public void updateGlass(boolean glass, int tint, boolean tintRim) {
+        mGlass = glass;
+        mGlassTint = tint;
+        mGlassTintRim = tintRim;
+        if (mView != null) mView.updateGlass(glass, tint, tintRim);
     }
 
     public void updateWeather(boolean customColors, int textColor, int backgroundColor) {

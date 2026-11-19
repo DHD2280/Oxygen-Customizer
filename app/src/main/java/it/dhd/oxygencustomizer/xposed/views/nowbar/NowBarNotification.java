@@ -22,7 +22,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
@@ -95,6 +94,7 @@ public class NowBarNotification extends RelativeLayout {
     // Vars
     private boolean mUseAppIcon = false,
                     mCustomColors = false;
+    private int mBarColor = Color.BLACK;
     private int mBackgroundColor = Color.BLACK,
                 mTextColor1 = Color.WHITE,
                 mTextColor2 = Color.WHITE,
@@ -135,10 +135,7 @@ public class NowBarNotification extends RelativeLayout {
                 "keyguard_notification_visibility",
                 2) == 1;
 
-        GradientDrawable fallBack = new GradientDrawable();
-        fallBack.setCornerRadius(100f);
-        fallBack.setColor(Color.BLACK);
-        setBackground(fallBack);
+        setBarBackground(Color.BLACK);
 
     }
 
@@ -329,10 +326,12 @@ public class NowBarNotification extends RelativeLayout {
     }
 
     private void setBarBackground(int color) {
-        GradientDrawable background = new GradientDrawable();
-        background.setColor(color);
-        background.setCornerRadius(100f);
-        setBackground(background);
+        mBarColor = color;
+        NowBarBackground.apply(this, color);
+    }
+
+    void refreshBarBackground() {
+        setBarBackground(mBarColor);
     }
 
     public void updateNotifications(List<StatusBarNotification> notificationList) {

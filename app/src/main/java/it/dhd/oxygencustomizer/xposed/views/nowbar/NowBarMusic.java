@@ -398,13 +398,14 @@ public class NowBarMusic extends LinearLayout {
     }
 
     private void setBarBackground(int color) {
-        if (mBackgroundColor != color) mBackgroundColor = color;
-        GradientDrawable background = new GradientDrawable();
-        background.setColor(mBackgroundColor);
-        background.setCornerRadius(100f);
-        mBigMediaPlayer.setBackground(background);
-        mLittleMediaPlayer.setBackground(background);
+        mBackgroundColor = color;
+        int rim = getRimColor();
+        NowBarBackground.applyWithRim(mBigMediaPlayer, rim, mBackgroundColor);
+        NowBarBackground.applyWithRim(mLittleMediaPlayer, rim, mBackgroundColor);
+    }
 
+    void refreshBarBackground() {
+        setBarBackground(mBackgroundColor);
     }
 
     private void updateMediaPlaybackState() {
@@ -654,6 +655,11 @@ public class NowBarMusic extends LinearLayout {
         return (int) ((!isDark) ?
                 callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS100") :
                 callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS700"));
+    }
+
+    private int getRimColor() {
+        if (mCurrentColorScheme == null) return Color.TRANSPARENT;
+        return (int) callMethod(callMethod(mCurrentColorScheme, "getAccent1"), "getS300");
     }
 
     private int getColorOnContainer() {

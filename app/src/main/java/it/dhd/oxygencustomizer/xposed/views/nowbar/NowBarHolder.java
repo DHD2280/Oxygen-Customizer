@@ -379,6 +379,14 @@ public class NowBarHolder extends LinearLayout {
         }
     }
 
+    public void updateGlass(boolean glass, int tint, boolean tintRim) {
+        if (!NowBarBackground.update(glass, tint, tintRim)) return;
+        if (mNowBarMusic != null) mNowBarMusic.refreshBarBackground();
+        if (mNowBarBattery != null) mNowBarBattery.refreshBarBackground();
+        if (mNowBarWeather != null) mNowBarWeather.setBarBackground();
+        if (mNowBarNotification != null) mNowBarNotification.refreshBarBackground();
+    }
+
     public void updateWeather(boolean customColors, int textColor, int backgroundColor) {
         if (mNowBarWeather != null) {
             mNowBarWeather.setOptions(customColors, textColor, backgroundColor);
