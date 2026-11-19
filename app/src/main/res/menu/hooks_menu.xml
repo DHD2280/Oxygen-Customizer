@@ -9,5 +9,9 @@
     <item
         android:id="@+id/reoptimize_app"
         android:title="@string/menu_reoptimize" />
+    <item
+        android:id="@+id/request_scope"
+        android:title="@string/menu_request_scope"
+        android:visible="false" />
 
 </menu>
