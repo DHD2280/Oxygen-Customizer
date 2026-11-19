@@ -130,7 +130,7 @@ public final class WidgetsController implements OmniJawsClient.OmniJawsObserver 
     private MediaMetadata mMediaMetadata;
     private String mLastTrackTitle = null;
     private boolean mIsLongPress = false;
-    private final Runnable mMediaUpdater;
+    private static final long MEDIA_REFRESH_DELAY = 500L;
 
     private int mDarkColor, mDarkColorActive, mLightColor, mLightColorActive;
     private int mWidgetsStyle = 0;
@@ -246,14 +246,6 @@ public final class WidgetsController implements OmniJawsClient.OmniJawsObserver 
         mWidgetCircleSize = Build.VERSION.SDK_INT >= 35 ? (int) (circleSize * 0.85f) : circleSize;
         mWidgetMarginHorizontal = modRes.getDimensionPixelSize(R.dimen.kg_widgets_margin_horizontal);
         mWidgetIconPadding = modRes.getDimensionPixelSize(R.dimen.kg_widgets_icon_padding);
-
-        mMediaUpdater = new Runnable() {
-            @Override
-            public void run() {
-                updateMediaController();
-                mHandler.postDelayed(this, 1000);
-            }
-        };
 
         if (preview) return;
         mContext.registerReceiver(mRingerModeReceiver, new IntentFilter("android.media.INTERNAL_RINGER_MODE_CHANGED_ACTION"));
@@ -729,12 +721,12 @@ public final class WidgetsController implements OmniJawsClient.OmniJawsObserver 
 
     private void toggleMediaPlaybackState(View v) {
         if (isMediaPlaying()) {
-            mHandler.removeCallbacks(mMediaUpdater);
             dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PAUSE);
             updateMediaController();
         } else {
-            mMediaUpdater.run();
             dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY);
+            mHandler.postDelayed(this::updateMediaController, MEDIA_REFRESH_DELAY);
+            mHandler.postDelayed(this::updateMediaController, MEDIA_REFRESH_DELAY * 4);
         }
         vibrate(v, 1);
     }
