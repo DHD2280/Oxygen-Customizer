@@ -1130,4 +1130,11 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <string name="panorama_category">Vista sin límites</string>
+    <string name="panorama_three_split_title">Tres paneles</string>
+    <string name="panorama_three_split_summary">1 arriba · 2 abajo · tres apps</string>
+    <string name="panorama_floating_windows_title">Ventanas flotantes</string>
+    <string name="panorama_floating_windows_summary">Varias ventanas a la vez</string>
+    <string name="panorama_max_windows_title">Límite de visualización</string>
+    <string name="panorama_reboot_info">Reinicia el teléfono para aplicar</string>
 </resources>

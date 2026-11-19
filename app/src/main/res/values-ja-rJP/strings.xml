@@ -1156,4 +1156,11 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <string name="panorama_category">バウンドレスビュー</string>
+    <string name="panorama_three_split_title">3分割</string>
+    <string name="panorama_three_split_summary">上1・下2 · 3つのアプリを配置</string>
+    <string name="panorama_floating_windows_title">マルチウィンドウ</string>
+    <string name="panorama_floating_windows_summary">複数の小ウィンドウを同時に表示</string>
+    <string name="panorama_max_windows_title">表示数の上限</string>
+    <string name="panorama_reboot_info">変更後は再起動が必要です</string>
 </resources>

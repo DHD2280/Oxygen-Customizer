@@ -113,4 +113,11 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <string name="panorama_category">바운드리스 뷰</string>
+    <string name="panorama_three_split_title">3분할</string>
+    <string name="panorama_three_split_summary">위 1 · 아래 2 · 앱 3개 배치</string>
+    <string name="panorama_floating_windows_title">다중 창</string>
+    <string name="panorama_floating_windows_summary">여러 개의 작은 창을 동시에</string>
+    <string name="panorama_max_windows_title">표시 개수 제한</string>
+    <string name="panorama_reboot_info">변경 후 재부팅이 필요합니다</string>
 </resources>

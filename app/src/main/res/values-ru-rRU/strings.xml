@@ -1543,4 +1543,11 @@
     <string name="height">Высота</string>
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <string name="panorama_category">Безграничный вид</string>
+    <string name="panorama_three_split_title">Три части</string>
+    <string name="panorama_three_split_summary">1 сверху · 2 снизу · три приложения</string>
+    <string name="panorama_floating_windows_title">Плавающие окна</string>
+    <string name="panorama_floating_windows_summary">Несколько окон одновременно</string>
+    <string name="panorama_max_windows_title">Лимит отображения</string>
+    <string name="panorama_reboot_info">Перезагрузите телефон для применения</string>
 </resources>

@@ -1168,4 +1168,11 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <string name="panorama_category">視野無界</string>
+    <string name="panorama_three_split_title">三分屏</string>
+    <string name="panorama_three_split_summary">上 1 下 2 · 可拖入三個應用</string>
+    <string name="panorama_floating_windows_title">多浮窗</string>
+    <string name="panorama_floating_windows_summary">小窗可以同時存在多個</string>
+    <string name="panorama_max_windows_title">顯示數量上限</string>
+    <string name="panorama_reboot_info">修改後需重新啟動手機生效</string>
 </resources>
