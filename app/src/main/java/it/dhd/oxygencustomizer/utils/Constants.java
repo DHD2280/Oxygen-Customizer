@@ -623,6 +623,9 @@ public final class Constants {
             public static final String NOW_BAR_BOTTOM_MARGIN = "lockscreen_now_bar_bottom_margin";
             public static final String NOW_BAR_WEATHER = "lockscreen_now_bar_weather";
             public static final String NOW_BAR_NOTIFICATIONS = "lockscreen_now_bar_notifications";
+            public static final String NOW_BAR_GLASS = "lockscreen_now_bar_liquid_glass";
+            public static final String NOW_BAR_GLASS_TINT = "lockscreen_now_bar_glass_tint";
+            public static final String NOW_BAR_GLASS_RIM = "lockscreen_now_bar_glass_rim_tint";
 
             // Music
             public static final String NOW_BAR_MUSIC_EXTENDED_PLAYER = "lockscreen_now_bar_music_extended_player";

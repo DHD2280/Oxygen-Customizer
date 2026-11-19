@@ -133,6 +133,9 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_FAST;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS_RIM;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_GLASS_TINT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXDENDED_MODE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_BACKGROUND;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_MUSIC_EXTENDED_CLOCK;
@@ -819,6 +822,9 @@ public class PreferenceHelper {
             case "leftSwipeUpPercentage" -> {
                 return !instance.mPreferences.getString("leftSwipeUpAction", "-1").equals("-1");
             }
+            case "navbar_long_press_launch" -> {
+                return instance.mPreferences.getBoolean("navbar_long_press_custom", false);
+            }
             case "rightSwipeUpPercentage" -> {
                 return !instance.mPreferences.getString("rightSwipeUpAction", "-1").equals("-1");
             }
@@ -1066,6 +1072,12 @@ public class PreferenceHelper {
             }
 
             // Lockscreen Now Bar
+            case NOW_BAR_GLASS -> {
+                return Build.VERSION.SDK_INT >= 37;
+            }
+            case NOW_BAR_GLASS_TINT, NOW_BAR_GLASS_RIM -> {
+                return Build.VERSION.SDK_INT >= 37 && instance.mPreferences.getBoolean(NOW_BAR_GLASS, false);
+            }
             case NOW_BAR_MUSIC_EXDENDED_MODE,
                  NOW_BAR_MUSIC_EXTENDED_BACKGROUND,
                  NOW_BAR_MUSIC_EXTENDED_CLOCK -> {
@@ -1338,6 +1350,10 @@ public class PreferenceHelper {
     public static boolean isEnabled(String key) {
         return switch (key) {
             case "BBarTransitColors" -> !instance.mPreferences.getBoolean("BBarColorful", false);
+            case "circleToSearchEnabled" ->
+                    !instance.mPreferences.getBoolean("navbar_long_press_custom", false);
+            case "navbar_long_press_custom" ->
+                    !instance.mPreferences.getBoolean("circleToSearchEnabled", false);
             case "BBarColorful" -> !instance.mPreferences.getBoolean("BBarTransitColors", false);
             case "BIconColorful" -> !instance.mPreferences.getBoolean("BIconTransitColors", false);
             case "BIconTransitColors" -> !instance.mPreferences.getBoolean("BIconColorful", false);
