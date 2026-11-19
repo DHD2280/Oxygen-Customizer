@@ -574,7 +574,7 @@ public class Launcher extends XposedMods {
                         launchIntent.setComponent(new ComponentName(parts[0], parts[1]));
                     }
                     param.setResult(launchIntent);
-                }, true);
+                });
 
         ReflectedClass LauncherAppsSearchContainerLayout = ReflectedClass.of("com.android.launcher3.allapps.search.LauncherAppsSearchContainerLayout");
         LauncherAppsSearchContainerLayout
@@ -609,7 +609,7 @@ public class Launcher extends XposedMods {
                     Object searchContainer = ReflectionHelpers.getObjectField(
                             param.thisObject, "mSearchViewContainer");
                     ReflectionHelpers.callMethod(searchContainer, "onSearchBarClickInternal");
-                }, true);
+                });
 
         OplusAllAppsTransitionController
                 .after("onProgressAnimationEnd")
