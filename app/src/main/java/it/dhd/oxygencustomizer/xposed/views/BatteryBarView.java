@@ -142,7 +142,7 @@ public class BatteryBarView extends FrameLayout {
             chargingAnimationRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    animateChargingIndicator();
+                    if (isShown()) animateChargingIndicator();
                     animationHandler.postDelayed(this, ANIM_DELAY);
                 }
             };
