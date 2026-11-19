@@ -125,12 +125,10 @@ public class VolumePanel extends XposedMods {
                 .before("onShowSafetyWarning")
                 .run(panelDisabled);
 
-        ReflectedClass OplusSafetyWarningDialog = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.OplusSafetyWarningDialog");
-        if (OplusSafetyWarningDialog.getClazz() != null) {
-            OplusSafetyWarningDialog
-                    .before("getSafetyWarningDialog")
+        ReflectedClass SafetyWarningRepository = ReflectedClass.ofIfPossible("com.oplus.systemui.volume.repository.SafetyWarningRepository");
+        SafetyWarningRepository
+                .before("showSafetyWarningH")
                     .run(panelDisabled);
-        }
 
         try {
             ReflectedClass OplusQsVolumeController = ReflectedClass.of("com.oplus.systemui.qs.slider.OplusQsVolumeController");
