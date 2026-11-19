@@ -836,6 +836,9 @@
     <string name="gesture_nav_long_swipe_fc_title">Swipe to top of screen to kill foreground app</string>
     <string name="circle_to_search_title">Circle to search</string>
     <string name="circle_to_search_summary">Touch and hold gesture guide bar to start searching for content on the screen.</string>
+    <string name="gesture_nav_long_press_cat">Touch and hold gesture bar</string>
+    <string name="gesture_nav_long_press_custom">Custom action</string>
+    <string name="gesture_nav_long_press_custom_summary">Open an app or activity when touching and holding the gesture guide bar</string>
     <string name="gesture_nav_left_swipe_up_title">Swipe up action from left of Navbar</string>
     <string name="gesture_nav_right_swipe_up_title">Swipe up action from right of Navbar</string>
     <string name="gesture_nav_left_swipe_up_percent">Left swipe-up area width (%)</string>

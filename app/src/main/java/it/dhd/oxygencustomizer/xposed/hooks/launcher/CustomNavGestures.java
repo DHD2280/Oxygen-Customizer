@@ -34,6 +34,8 @@ import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Process;
+import android.os.VibrationAttributes;
+import android.os.VibrationEffect;
 import android.view.Display;
 import android.view.InputEvent;
 import android.view.MotionEvent;
@@ -92,6 +94,8 @@ public class CustomNavGestures extends XposedMods {
     private float mLongThreshold = 0;
     private static boolean FCLongSwipeEnabled = false;
     private static boolean mCircleToSearch = false;
+    private static boolean mLongPressCustom = false;
+    private static String mLongPressLaunch = "";
     private Object mSystemUIProxy = null, mRecentTask = null;
     private static int leftSwipeUpAction = NO_ACTION, rightSwipeUpAction = NO_ACTION, twoFingerSwipeUpAction = NO_ACTION;
     private Object currentFocusedTask = null;
@@ -108,7 +112,8 @@ public class CustomNavGestures extends XposedMods {
     private final Handler longPressHandler = new Handler();
     private final Runnable longPressRunnable = () -> {
         isLongPress = true;
-        if (isLongPress && mCircleToSearch) AppUtils.circleToSearch();
+        if (mLongPressCustom) launchLongPressAction();
+        else if (mCircleToSearch) AppUtils.circleToSearch();
     };
 
     private boolean mBroadcastRegistered = false;
@@ -161,10 +166,32 @@ public class CustomNavGestures extends XposedMods {
         rightSwipeUpPercentage = Xprefs.getSliderFloat("rightSwipeUpPercentage", 25f) / 100f;
         swipeUpPercentage = Xprefs.getSliderFloat("swipeUpPercentage", 25f) / 100f;
         mCircleToSearch = Xprefs.getBoolean("circleToSearchEnabled", false);
+        mLongPressCustom = Xprefs.getBoolean("navbar_long_press_custom", false);
+        mLongPressLaunch = Xprefs.getString("navbar_long_press_launch", "");
         mOverrideBack = Xprefs.getBoolean("gesture_override_holdback", false);
         overrideMode = Integer.parseInt(Xprefs.getString("gesture_override_holdback_mode", "0"));
         overrideLeft = Integer.parseInt(Xprefs.getString("gesture_override_holdback_left", "0"));
         overrideRight = Integer.parseInt(Xprefs.getString("gesture_override_holdback_right", "0"));
+    }
+
+    private void launchLongPressAction() {
+        try {
+            Intent intent;
+            if (mLongPressLaunch.startsWith("app:")) {
+                intent = mContext.getPackageManager().getLaunchIntentForPackage(mLongPressLaunch.substring(4));
+                if (intent == null) return;
+            } else if (mLongPressLaunch.startsWith("activity:")) {
+                String[] parts = mLongPressLaunch.substring(9).split("/", 2);
+                if (parts.length < 2) return;
+                intent = new Intent(Intent.ACTION_MAIN);
+                intent.setComponent(new ComponentName(parts[0], parts[1]));
+            } else return;
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            SystemUtils.vibrate(VibrationEffect.EFFECT_HEAVY_CLICK, VibrationAttributes.USAGE_ACCESSIBILITY);
+            mContext.startActivity(intent);
+        } catch (Throwable t) {
+            log(t);
+        }
     }
 
     private static int readAction(SharedPreferences xprefs, String prefName) {

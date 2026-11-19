@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
-    android:title="@string/gesture_nav_extra_cat"
-    app:iconSpaceReserved="false">
+        android:title="@string/gesture_nav_long_press_cat"
+        app:iconSpaceReserved="false">
 
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
@@ -13,7 +13,27 @@
             android:summary="@string/circle_to_search_summary"
             android:key="circleToSearchEnabled" />
 
-<!--    <it.dhd.oneplusui.preference.OplusSwitchPreference-->
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="navbar_long_press_custom"
+            android:summary="@string/gesture_nav_long_press_custom_summary"
+            android:title="@string/gesture_nav_long_press_custom"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusListPreference
+            android:entries="@array/launcher_global_search_intent_entries"
+            android:entryValues="@array/launcher_global_search_intent_values"
+            android:key="navbar_long_press_launch"
+            android:title="@string/custom_global_search_action"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/gesture_nav_extra_cat"
+        app:iconSpaceReserved="false">
+
+    <!--    <it.dhd.oneplusui.preference.OplusSwitchPreference-->
 <!--        android:defaultValue="false"-->
 <!--        android:key="FCLongSwipeEnabled"-->
 <!--        android:summaryOff="@string/general_off"-->
