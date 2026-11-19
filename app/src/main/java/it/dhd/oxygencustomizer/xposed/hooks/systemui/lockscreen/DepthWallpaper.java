@@ -20,6 +20,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.getLockScreenSubjectCacheP
 import static it.dhd.oxygencustomizer.xposed.XPrefs.Xprefs;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.canShowArt;
 import static it.dhd.oxygencustomizer.xposed.hooks.systemui.lockscreen.AlbumArtLockscreen.showAlbumArt;
+import static it.dhd.oxygencustomizer.xposed.utils.ReflectionTools.getObject;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.callMethod;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getFloatField;
 import static it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers.getObjectField;
@@ -45,11 +46,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.annotation.WorkerThread;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -81,6 +85,7 @@ public class DepthWallpaper extends XposedMods {
     private FrameLayout mWallpaperBitmapContainer;
     private FrameLayout mWallpaperDimmingOverlay;
     private boolean mLayersCreated = false;
+    private final ExecutorService mWallpaperExecutor = Executors.newSingleThreadExecutor();
     final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -251,7 +256,9 @@ public class DepthWallpaper extends XposedMods {
                                     }
                                     Bitmap wallpaperBitmap = Bitmap.createBitmap(DrawableConverter.drawableToBitmap(wallpaperDrawable));
 
-                                    Rect displayBounds = ((Context) getObjectField(mLockscreenWallpaper, "mContext")).getSystemService(WindowManager.class)
+                                    Context wallpaperContext = (Context) getObject(mLockscreenWallpaper, "mContext", "context");
+                                    if (wallpaperContext == null) wallpaperContext = mContext;
+                                    Rect displayBounds = wallpaperContext.getSystemService(WindowManager.class)
                                             .getCurrentWindowMetrics()
                                             .getBounds();
 
@@ -266,53 +273,13 @@ public class DepthWallpaper extends XposedMods {
                                         log("Error getting scale: " + t.getMessage());
                                     }
 
-                                    float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
-                                    float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
-
-                                    int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
-                                    int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
-
-                                    int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
-                                    int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
-
-                                    Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
-
-                                    //crop to display bounds
-                                    scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
-                                    Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
-
-                                    boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
-
                                     if (!mLayersCreated) {
                                         log("drawFrameOnCanvas Layers not created");
                                         createLayers();
                                     }
 
-                                    log("finalScaledWallpaperBitmap != null " + (finalScaledWallpaperBitmap != null));
-
-                                    mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
-
-                                    log("cacheIsValid " + cacheIsValid);
-
-                                    if (!cacheIsValid) {
-                                        XPLauncher.enqueueProxyCommand(proxy -> {
-                                            if (DWMode == 0) {
-                                                proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
-                                            } else if (DWMode == 2) {
-                                                try {
-                                                    Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
-                                                    intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
-                                                    intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
-                                                    intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
-                                                    intent.setPackage(mContext.getPackageName());
-                                                    intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                                                    mContext.sendBroadcast(intent);
-                                                } catch (Throwable t) {
-                                                    log(t);
-                                                }
-                                            }
-                                        });
-                                    }
+                                    float finalScale = scale;
+                                    mWallpaperExecutor.execute(() -> processWallpaper(wallpaperBitmap, displayBounds, finalScale));
                                 }
                             });
                 });
@@ -405,6 +372,50 @@ public class DepthWallpaper extends XposedMods {
 
     }
 
+    @WorkerThread
+    private void processWallpaper(Bitmap wallpaperBitmap, Rect displayBounds, float scale) {
+        float ratioW = scale * displayBounds.width() / wallpaperBitmap.getWidth();
+        float ratioH = scale * displayBounds.height() / wallpaperBitmap.getHeight();
+
+        int desiredHeight = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getHeight());
+        int desiredWidth = Math.round(Math.max(ratioH, ratioW) * wallpaperBitmap.getWidth());
+
+        int xPixelShift = (desiredWidth - displayBounds.width()) / 2;
+        int yPixelShift = (desiredHeight - displayBounds.height()) / 2;
+
+        Bitmap scaledWallpaperBitmap = Bitmap.createScaledBitmap(wallpaperBitmap, desiredWidth, desiredHeight, true);
+
+        scaledWallpaperBitmap = Bitmap.createBitmap(scaledWallpaperBitmap, xPixelShift, yPixelShift, displayBounds.width(), displayBounds.height());
+        Bitmap finalScaledWallpaperBitmap = scaledWallpaperBitmap;
+
+        boolean cacheIsValid = assertCache(finalScaledWallpaperBitmap);
+
+        mWallpaperBackground.post(() -> mWallpaperBitmapContainer.setBackground(new BitmapDrawable(mContext.getResources(), finalScaledWallpaperBitmap)));
+
+        log("cacheIsValid " + cacheIsValid);
+
+        if (!cacheIsValid) {
+            XPLauncher.enqueueProxyCommand(proxy -> {
+                if (DWMode == 0) {
+                    proxy.extractSubject(finalScaledWallpaperBitmap, getLockScreenSubjectCachePath());
+                } else if (DWMode == 2) {
+                    try {
+                        Intent intent = new Intent(ACTION_EXTRACT_SUBJECT);
+                        intent.setComponent(new ComponentName("it.dhd.oxygencustomizer.aiplugin", "it.dhd.oxygencustomizer.aiplugin.receivers.SubjectExtractionReceiver"));
+                        intent.putExtra("sourcePath", getLockScreenBitmapCachePath());
+                        intent.putExtra("destinationPath", getLockScreenSubjectCachePath());
+                        intent.setPackage(mContext.getPackageName());
+                        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                        mContext.sendBroadcast(intent);
+                    } catch (Throwable t) {
+                        log(t);
+                    }
+                }
+            });
+        }
+    }
+
+    @WorkerThread
     private boolean assertCache(Bitmap wallpaperBitmap) {
 
         boolean cacheIsValid = false;
