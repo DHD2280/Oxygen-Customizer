@@ -362,6 +362,7 @@ public class NowBarHolder extends LinearLayout {
         mViewPager.setAdapter(mPagerAdapter);
         if (mWeatherEnabled) mViewPager.setCurrentItem(2);
         else mViewPager.setCurrentItem(0);
+        mViewPager.post(this::applyPageTransforms);
     }
 
     public void setWeatherEnabled(boolean enabled) {

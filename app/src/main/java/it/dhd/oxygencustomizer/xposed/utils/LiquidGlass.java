@@ -75,12 +75,18 @@ public final class LiquidGlass {
         fillColors(fill, colors);
         view.setBackgroundTintList(null);
         RimDrawable rim = new RimDrawable(radius, Math.max(1f, view.getResources().getDisplayMetrics().density * 0.75f));
-        if (view.getBackground() instanceof GlassDrawable previous) rim.setTint(previous.rim.tint);
+        int alpha = 255;
+        if (view.getBackground() instanceof GlassDrawable previous) {
+            rim.setTint(previous.rim.tint);
+            alpha = previous.alpha;
+        }
         Drawable blur = createBackgroundBlur(view, radius);
         Drawable content = blur != null
                 ? new LayerDrawable(new Drawable[]{blur, fill, rim})
                 : new LayerDrawable(new Drawable[]{fill, rim});
-        view.setBackground(new GlassDrawable(content, fill, rim));
+        GlassDrawable glass = new GlassDrawable(content, fill, rim);
+        if (alpha != 255) glass.setAlpha(alpha);
+        view.setBackground(glass);
         if (blur != null) return;
         view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
@@ -142,11 +148,23 @@ public final class LiquidGlass {
     private static final class GlassDrawable extends DrawableWrapper {
         private final GradientDrawable fill;
         private final RimDrawable rim;
+        private int alpha = 255;
 
         GlassDrawable(Drawable content, GradientDrawable fill, RimDrawable rim) {
             super(content);
             this.fill = fill;
             this.rim = rim;
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+            this.alpha = alpha;
+            super.setAlpha(alpha);
+        }
+
+        @Override
+        public int getAlpha() {
+            return alpha;
         }
 
         @NonNull
