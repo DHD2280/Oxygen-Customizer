@@ -1614,7 +1614,13 @@
     <string name="lockscreen_now_bar_glass_tint">Glass color intensity</string>
     <string name="lockscreen_now_bar_glass_rim">Tinted rim</string>
     <string name="lockscreen_now_bar_glass_rim_summary">Color the glass border with the background color, or with the album accent for music</string>
+    <string name="lockscreen_now_bar_pages">Bars</string>
     <string name="lockscreen_now_bar_music">Now bar music</string>
+    <string name="lockscreen_now_bar_battery_voltage">Charger voltage</string>
+    <string name="lockscreen_now_bar_battery_voltage_summary">Show the charger voltage while charging</string>
+    <string name="lockscreen_now_bar_battery_time_remaining">Time to full</string>
+    <string name="lockscreen_now_bar_battery_time_remaining_summary">Show the estimated time until the battery is full while charging</string>
+    <string name="lockscreen_now_bar_battery_time_to_full">%s to full</string>
     <string name="lockscreen_now_bar_music_extended_player">Extended player</string>
     <string name="lockscreen_now_bar_music_extended_player_summary">Show extended player in now bar by tapping album art</string>
     <string name="lockscreen_now_bar_music_extended_player_background">Extended player background mode</string>
