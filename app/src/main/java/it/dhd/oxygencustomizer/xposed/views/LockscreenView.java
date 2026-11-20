@@ -15,6 +15,8 @@ import android.content.IntentFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
@@ -25,7 +27,12 @@ import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.LockscreenWidgetsV
 
 public class LockscreenView extends FrameLayout {
 
+    private static final long AOD_CLOCK_MS = 650;
+    private static final float AOD_CLOCK_SCALE = 0.9f;
+    private static final float AOD_SAFE_MARGIN_DP = 8f;
+
     private Context mContext;
+    private boolean mAodClock = false;
     private LinearLayout mViewsContainer;
     private LinearLayout mClockContainer;
     private LinearLayout mWeatherContainer;
@@ -68,6 +75,12 @@ public class LockscreenView extends FrameLayout {
         mClockContainer = new LinearLayout(mContext);
         mClockContainer.setOrientation(LinearLayout.VERTICAL);
         mClockContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        mClockContainer.setClipChildren(false);
+        mClockContainer.setClipToPadding(false);
+        mViewsContainer.setClipChildren(false);
+        mViewsContainer.setClipToPadding(false);
+        setClipChildren(false);
+        setClipToPadding(false);
 
         mWeatherContainer = new LinearLayout(mContext);
         mWeatherContainer.setOrientation(LinearLayout.VERTICAL);
@@ -175,6 +188,42 @@ public class LockscreenView extends FrameLayout {
         setMarginsNoConvert(mClockContainer, mContext, 0, top, 0, 0);
     }
 
+    public void setAodClock(boolean aod) {
+        if (mClockContainer == null) return;
+        mAodClock = aod;
+        mClockContainer.setPivotX(mClockContainer.getWidth() / 2f);
+        mClockContainer.setPivotY(0f);
+        float scale = aod ? AOD_CLOCK_SCALE : 1f;
+        ViewPropertyAnimator animator = mClockContainer.animate()
+                .scaleX(scale)
+                .scaleY(scale)
+                .setDuration(AOD_CLOCK_MS)
+                .setInterpolator(new PathInterpolator(0.2f, 0f, 0f, 1f));
+        if (!aod) animator.translationY(0f);
+        animator.start();
+    }
+
+    public void setBurnInOffset(float offset) {
+        if (mClockContainer == null || !mAodClock || !mClockContainer.isAttachedToWindow()) return;
+        View parent = (View) mClockContainer.getParent();
+        int[] location = new int[2];
+        parent.getLocationOnScreen(location);
+        float height = mClockContainer.getHeight();
+        float scaled = height * AOD_CLOCK_SCALE;
+        float top = location[1] - parent.getTranslationY() + mClockContainer.getTop();
+        float screen = mClockContainer.getRootView().getHeight();
+        float safe = safeInset();
+        float min = Math.min(0f, safe - top);
+        float max = Math.max(0f, screen - safe - (top + scaled));
+        mClockContainer.setTranslationY(Math.max(min, Math.min(max, offset)));
+    }
+
+    private float safeInset() {
+        int id = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int statusBar = id != 0 ? mContext.getResources().getDimensionPixelSize(id) : 0;
+        return statusBar + mContext.getResources().getDisplayMetrics().density * AOD_SAFE_MARGIN_DP;
+    }
+
     public int getClockHeight() {
         return mClockContainer.getHeight();
     }
@@ -210,10 +259,10 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void onUiStateChanged(int uiState) {
-        if (mLockscreenWeatherEnabled) {
+        if (weatherShown()) {
             post(() -> mWeatherContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
-        if (mLockscreenWidgetsEnabled) {
+        if (widgetsShown()) {
             post(() -> mWidgetsContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
 
@@ -226,8 +275,8 @@ public class LockscreenView extends FrameLayout {
 
         int fullHeight = 0;
         if (mLockscreenClockEnabled) fullHeight += clockHeight;
-        if (mLockscreenWeatherEnabled) fullHeight += weatherHeight;
-        if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
+        if (weatherShown()) fullHeight += weatherHeight;
+        if (widgetsShown()) fullHeight += widgetsHeight;
 
         return fullHeight;
     }
@@ -249,10 +298,10 @@ public class LockscreenView extends FrameLayout {
     private void updateVisibility() {
         post(() -> {
             mClockContainer.setVisibility(mLockscreenClockEnabled ? View.VISIBLE : View.GONE);
-            mWeatherContainer.setVisibility(mLockscreenWeatherEnabled ? View.VISIBLE : View.GONE);
-            mWidgetsContainer.setVisibility(mLockscreenWidgetsEnabled ? View.VISIBLE : View.GONE);
+            mWeatherContainer.setVisibility(weatherShown() ? View.VISIBLE : View.GONE);
+            mWidgetsContainer.setVisibility(widgetsShown() ? View.VISIBLE : View.GONE);
 
-            if (!mLockscreenClockEnabled && !mLockscreenWeatherEnabled && !mLockscreenWidgetsEnabled) {
+            if (!mLockscreenClockEnabled && !weatherShown() && !widgetsShown()) {
                 setVisibility(View.GONE);
             } else {
                 setVisibility(View.VISIBLE);
