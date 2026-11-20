@@ -37,6 +37,7 @@ import java.util.List;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.AudioDataProvider;
+import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.views.ExtendedViewPager;
@@ -203,7 +204,8 @@ public class NowBarHolder extends LinearLayout {
         }
         mPages.addAll(List.of(mNowBarMusic, mNowBarBattery));
         setupPager();
-        mViewPager.setPageTransformer(false, new PageTransitionTransformer());
+        mViewPager.setPageTransformer(false, mPageTransformer);
+        mViewPager.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> applyPageTransforms());
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -291,6 +293,18 @@ public class NowBarHolder extends LinearLayout {
         mContext.unregisterReceiver(batteryReceiver);
     }
 
+    private final PageTransitionTransformer mPageTransformer = new PageTransitionTransformer();
+
+    private void applyPageTransforms() {
+        int width = mViewPager.getWidth() - mViewPager.getPaddingLeft() - mViewPager.getPaddingRight();
+        if (width <= 0) return;
+        int scrollX = mViewPager.getScrollX();
+        for (int i = 0; i < mViewPager.getChildCount(); i++) {
+            View child = mViewPager.getChildAt(i);
+            mPageTransformer.transformPage(child, (float) (child.getLeft() - scrollX) / width);
+        }
+    }
+
     private static class PageTransitionTransformer implements ViewPager.PageTransformer {
 
         private static final float SCALE_FACTOR = 0.9f;
@@ -299,7 +313,10 @@ public class NowBarHolder extends LinearLayout {
 
         @Override
         public void transformPage(@NonNull View page, float position) {
-            if (position < -1 || position > 1) {
+            boolean onScreen = position > -1 && position < 1;
+            page.setVisibility(onScreen ? View.VISIBLE : View.INVISIBLE);
+            LiquidGlass.setGlassAlpha(page, onScreen ? 1f - Math.abs(position) : 0f);
+            if (!onScreen) {
                 page.setAlpha(0f);
             } else if (position <= 0) {
                 page.setScaleX(1f);

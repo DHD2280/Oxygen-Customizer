@@ -20,6 +20,7 @@ import android.graphics.drawable.DrawableWrapper;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,6 +108,16 @@ public final class LiquidGlass {
             colors[i] = Color.argb(TINTED_RIM_ALPHAS[i], Color.red(tint), Color.green(tint), Color.blue(tint));
         }
         return new LinearGradient(0, top, 0, bottom, colors, RIM_POSITIONS, Shader.TileMode.CLAMP);
+    }
+
+    public static void setGlassAlpha(View view, float alpha) {
+        int value = Math.round(Math.max(0f, Math.min(1f, alpha)) * 255);
+        if (view.getBackground() instanceof GlassDrawable glass && glass.getAlpha() != value)
+            glass.setAlpha(value);
+        if (view instanceof ViewGroup group) {
+            for (int i = 0; i < group.getChildCount(); i++)
+                setGlassAlpha(group.getChildAt(i), alpha);
+        }
     }
 
     private static void fillColors(GradientDrawable fill, int[] colors) {
