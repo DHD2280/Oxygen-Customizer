@@ -72,6 +72,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     private static final String KEY_DIM = "dim_amount";
     private static final String KEY_RIM_ART = "rim_art";
     private static final String KEY_SWIPE = "swipe_tracks";
+    private static final String KEY_IDLE_ART = "idle_art";
     private static final int SWIPE_THRESHOLD_DP = 40;
     private static final int SWIPE_VELOCITY_DP = 100;
 
@@ -105,6 +106,8 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     private Bitmap mRimSource;
     private boolean mColorsListening = false;
     private boolean mSwipe = true;
+    private boolean mIdleArt = true;
+    private boolean mShowingSample = false;
     private GestureDetector mSwipeDetector;
 
     private final AudioDataProvider.MediaMetadataListener mColorsListener = new AudioDataProvider.MediaMetadataListener() {
@@ -350,6 +353,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         } else if (metadata == null) {
             title = appContext.getString(R.string.now_playing_none);
             artist = "";
+            if (mIdleArt) art = sampleArt(getPrimaryColor(mContext));
         } else {
             title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
             artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
@@ -360,6 +364,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         mTitle.setText(title);
         mArtist.setText(artist);
         mArtist.setVisibility(TextUtils.isEmpty(artist) ? GONE : VISIBLE);
+        mShowingSample = art != null && art == sSampleArt;
         showArt(mShowArt ? art : null);
         updateRim(art);
     }
@@ -368,7 +373,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         mRimSource = art;
         if (!mRimArt || art == null || Build.VERSION.SDK_INT < 37) {
             setRimColor(Color.TRANSPARENT);
-        } else if (mPreview) {
+        } else if (mPreview || mShowingSample) {
             setRimColor(getPrimaryColor(mContext));
         } else {
             AudioDataProvider provider = AudioDataProvider.instance;
@@ -564,6 +569,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         settings.add(new SettingItem(appContext.getString(R.string.albumart_blur_title), KEY_BLUR, SettingItem.Type.SEEKBAR_INT, mBlur, 10, 100));
         settings.add(new SettingItem(appContext.getString(R.string.albumart_tint_intensity_title), KEY_TINT, SettingItem.Type.SEEKBAR_INT, mTint, 10, 90));
         settings.add(new SettingItem(appContext.getString(R.string.now_playing_dim), KEY_DIM, SettingItem.Type.SEEKBAR_INT, mDim, 0, 80));
+        settings.add(new SettingItem(appContext.getString(R.string.now_playing_idle_art), KEY_IDLE_ART, SettingItem.Type.BOOLEAN, mIdleArt));
         settings.add(new SettingItem(appContext.getString(R.string.now_playing_swipe), KEY_SWIPE, SettingItem.Type.BOOLEAN, mSwipe));
         if (Build.VERSION.SDK_INT >= 37)
             settings.add(new SettingItem(appContext.getString(R.string.now_playing_rim_art), KEY_RIM_ART, SettingItem.Type.BOOLEAN, mRimArt));
@@ -582,6 +588,9 @@ public class NowPlayingWidget extends BaseDeviceWidget {
         Object swipe = settings.get(KEY_SWIPE);
         if (swipe != null)
             mSwipe = swipe instanceof Boolean value ? value : Boolean.parseBoolean(String.valueOf(swipe));
+        Object idle = settings.get(KEY_IDLE_ART);
+        if (idle != null)
+            mIdleArt = idle instanceof Boolean value ? value : Boolean.parseBoolean(String.valueOf(idle));
         Object rim = settings.get(KEY_RIM_ART);
         if (rim != null)
             mRimArt = rim instanceof Boolean value ? value : Boolean.parseBoolean(String.valueOf(rim));

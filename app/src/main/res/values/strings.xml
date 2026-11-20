@@ -1593,6 +1593,7 @@
     <string name="now_playing_dim">Darken</string>
     <string name="now_playing_rim_art">Album color border</string>
     <string name="now_playing_swipe">Swipe to change track</string>
+    <string name="now_playing_idle_art">Artwork when nothing is playing</string>
     <string name="usage_access_required">Usage access needed</string>
     <string name="alarm_none">No alarm</string>
     <string name="alarm_today">Today</string>
