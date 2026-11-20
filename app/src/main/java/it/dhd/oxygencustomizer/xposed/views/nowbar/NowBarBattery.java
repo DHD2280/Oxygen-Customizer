@@ -19,6 +19,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.icu.text.MeasureFormat;
+import android.icu.util.Measure;
+import android.icu.util.MeasureUnit;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -29,7 +32,12 @@ import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
@@ -38,8 +46,13 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.SuperPowerSaveObserver;
 import it.dhd.oxygencustomizer.xposed.utils.ActivityLauncherUtils;
 import it.dhd.oxygencustomizer.xposed.utils.OplusBatteryStatus;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
+import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.devicewidgets.WidgetTicker;
 
 public class NowBarBattery extends RelativeLayout {
+
+    private static final String POWER_SUPPLY = "/sys/class/power_supply/";
+    private static final String[] CHARGER_SUPPLIES = {"usb", "wireless", "ac", "dc"};
+    private static final long INFO_REFRESH_MS = 5000;
 
     private final Context mContext;
     private Context appContext;
@@ -75,6 +88,10 @@ public class NowBarBattery extends RelativeLayout {
     private int mTextColor = Color.WHITE;
     private int[] mBarColors;
     private boolean mIndicateFastCharging = false, mIndicatePowerSave = false;
+    private boolean mShowVoltage = false, mShowTimeRemaining = false;
+    private boolean mInfoRefreshing = false;
+    private double mAverageCurrent = 0;
+    private final WidgetTicker mInfoTicker = new WidgetTicker(this, INFO_REFRESH_MS, this::updateInfoText);
 
     private SuperPowerSaveObserver.SuperPowerSaveListener mSuperPowerSaveListener = superPowerSave -> {
         mSuperPowerSave = superPowerSave;
@@ -171,6 +188,7 @@ public class NowBarBattery extends RelativeLayout {
                 mChargingSpeed = getChargingSpeedString(mExtraStatus, mExtraLevel);
                 mIsCharging = mExtraStatus == 2;
                 if (!mIsCharging) {
+                    mAverageCurrent = 0;
                     mChargingString = "";
                 }
                 mPowerCharged = mExtraStatus == 5;
@@ -280,6 +298,8 @@ public class NowBarBattery extends RelativeLayout {
         if (mColorAnimator != null && mColorAnimator.isRunning()) {
             mColorAnimator.cancel();
         }
+        mInfoTicker.stop();
+        mInfoRefreshing = false;
     }
 
     private void animateChargingBackground(int startColor) {
@@ -308,19 +328,12 @@ public class NowBarBattery extends RelativeLayout {
         if (mBarColors != null) setBarBackground(mBarColors);
     }
 
-    @SuppressLint("SetTextI18n")
     private void updateBatteryUI() {
         int color = getChargingColor(mExtraLevel);
-        String finalText = "";
-        if (mPowerCharged || mIsCharging) {
-            if (TextUtils.isEmpty(mChargingString)) {
-                finalText = getSystemUiString(mContext, "keyguard_charging_progress", NumberFormat.getPercentInstance().format(mExtraLevel / 100f)) + " " + mTemperature + "°C";
-            } else {
-                finalText = computePowerChargingStringIndication() + " " + mTemperature + "°C";
-            }
+        boolean charging = mPowerCharged || mIsCharging;
+        if (charging) {
             animateChargingBackground(color);
         } else {
-            finalText = mExtraLevel + "%";
             if (mColorAnimator != null && mColorAnimator.isRunning()) {
                 mColorAnimator.cancel();
                 mColorAnimator = null;
@@ -329,8 +342,93 @@ public class NowBarBattery extends RelativeLayout {
         }
         BlendModeColorFilter filter = new BlendModeColorFilter(color, BlendMode.SRC_IN);
         mChargingIconDrawable.getDrawable(1).setColorFilter(filter);
+        updateInfoText();
+        boolean refresh = charging && (mShowVoltage || mShowTimeRemaining) && isAttachedToWindow();
+        if (refresh == mInfoRefreshing) return;
+        mInfoRefreshing = refresh;
+        if (refresh) mInfoTicker.start();
+        else mInfoTicker.stop();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateInfoText() {
+        String finalText;
+        if (mPowerCharged || mIsCharging) {
+            if (TextUtils.isEmpty(mChargingString)) {
+                finalText = getSystemUiString(mContext, "keyguard_charging_progress", NumberFormat.getPercentInstance().format(mExtraLevel / 100f)) + " " + mTemperature + "°C";
+            } else {
+                finalText = computePowerChargingStringIndication() + " " + mTemperature + "°C";
+            }
+            List<String> extras = new ArrayList<>();
+            if (mShowVoltage) {
+                int millivolts = readChargerMillivolts();
+                if (millivolts > 0)
+                    extras.add(String.format(Locale.getDefault(), "%.1f V", millivolts / 1000f));
+            }
+            if (mShowTimeRemaining && mIsCharging) {
+                String time = formatTimeToFull();
+                if (time != null) extras.add(time);
+            }
+            if (!extras.isEmpty()) finalText += " • " + TextUtils.join(" • ", extras);
+        } else {
+            finalText = mExtraLevel + "%";
+        }
+        if (finalText.contentEquals(mChargingInfo.getText())) return;
         mChargingInfo.setText(finalText);
         mChargingInfo.setSelected(true);
+    }
+
+    private int readChargerMillivolts() {
+        for (String supply : CHARGER_SUPPLIES) {
+            if (!"1".equals(readNode(POWER_SUPPLY + supply + "/online"))) continue;
+            String value = readNode(POWER_SUPPLY + supply + "/voltage_now");
+            if (value == null) continue;
+            try {
+                long voltage = Long.parseLong(value);
+                if (voltage > 0) return (int) (voltage > 100000 ? voltage / 1000 : voltage);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return -1;
+    }
+
+    private static String readNode(String path) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line = reader.readLine();
+            return line == null ? null : line.trim();
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private long estimateTimeToFull(BatteryManager batteryManager) {
+        if (mExtraLevel <= 0 || mExtraLevel >= 100) return -1;
+        int counter = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER);
+        int current = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW);
+        if (counter <= 0 || current == 0 || current == Integer.MIN_VALUE) return -1;
+        double microAmps = Math.abs((double) current);
+        if (microAmps < 100000) microAmps *= 1000;
+        mAverageCurrent = mAverageCurrent <= 0 ? microAmps : mAverageCurrent * 0.8 + microAmps * 0.2;
+        double remainingCharge = counter * (100d - mExtraLevel) / mExtraLevel;
+        return Math.round(remainingCharge / mAverageCurrent * 3600000d);
+    }
+
+    private String formatTimeToFull() {
+        BatteryManager batteryManager = mContext.getSystemService(BatteryManager.class);
+        if (batteryManager == null) return null;
+        long remaining = batteryManager.computeChargeTimeRemaining();
+        if (remaining <= 0) remaining = estimateTimeToFull(batteryManager);
+        if (remaining <= 0) return null;
+        long total = Math.max(1, Math.round(remaining / 60000d));
+        long hours = total / 60;
+        long minutes = total % 60;
+        MeasureFormat format = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT);
+        String time;
+        if (hours == 0) time = format.format(new Measure(minutes, MeasureUnit.MINUTE));
+        else if (minutes == 0) time = format.format(new Measure(hours, MeasureUnit.HOUR));
+        else
+            time = format.formatMeasures(new Measure(hours, MeasureUnit.HOUR), new Measure(minutes, MeasureUnit.MINUTE));
+        return modRes.getString(R.string.lockscreen_now_bar_battery_time_to_full, time);
     }
 
     protected String computePowerChargingStringIndication() {
@@ -390,8 +488,10 @@ public class NowBarBattery extends RelativeLayout {
             int chargingIconStyle,
             boolean customColors, int color1, int color2, int color3, int color4,
             boolean indicateFast, int fastColor, boolean indicatePowerSave, int powerSaveColor,
-            int textColor
+            int textColor, boolean showVoltage, boolean showTimeRemaining
     ) {
+        this.mShowVoltage = showVoltage;
+        this.mShowTimeRemaining = showTimeRemaining;
         if (mChargingIconStyle != chargingIconStyle) {
             this.mChargingIconStyle = chargingIconStyle;
             updateChargingIcon();

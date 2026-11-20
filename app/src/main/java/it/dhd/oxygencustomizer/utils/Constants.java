@@ -654,6 +654,8 @@ public final class Constants {
             public static final String NOW_BAR_BATTERY_FAST_COLOR = "lockscreen_now_bar_battery_fastcharge_color";
             public static final String NOW_BAR_BATTERY_POWERSAVE_COLOR = "lockscreen_now_bar_battery_powersave_color";
             public static final String NOW_BAR_BATTERY_TEXT_COLOR = "lockscreen_now_bar_battery_text_color";
+            public static final String NOW_BAR_BATTERY_SHOW_VOLTAGE = "lockscreen_now_bar_battery_show_voltage";
+            public static final String NOW_BAR_BATTERY_SHOW_TIME_REMAINING = "lockscreen_now_bar_battery_show_time_remaining";
 
             // Weather
             public static final String NOW_BAR_WEATHER_CUSTOM_COLORS = "lockscreen_now_bar_weather_custom_colors";
@@ -692,7 +694,9 @@ public final class Constants {
                     NOW_BAR_BATTERY_INDICATE_POWERSAVE,
                     NOW_BAR_BATTERY_FAST_COLOR,
                     NOW_BAR_BATTERY_POWERSAVE_COLOR,
-                    NOW_BAR_BATTERY_TEXT_COLOR
+                    NOW_BAR_BATTERY_TEXT_COLOR,
+                    NOW_BAR_BATTERY_SHOW_VOLTAGE,
+                    NOW_BAR_BATTERY_SHOW_TIME_REMAINING
             };
 
             public static final String[] NOW_BAR_NOTIFICATIONS_PREFS = {

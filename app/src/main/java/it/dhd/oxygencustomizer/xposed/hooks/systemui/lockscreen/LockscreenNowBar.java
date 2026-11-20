@@ -16,6 +16,8 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_INDICATE_POWERSAVE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_POWERSAVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_PREFS;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_SHOW_TIME_REMAINING;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_SHOW_VOLTAGE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BATTERY_TEXT_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_BOTTOM_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_CLOCK_CUSTOM_FONT;
@@ -114,6 +116,8 @@ public class LockscreenNowBar extends XposedMods {
     private boolean mNowBarBatteryIndicateFastCharging = false, mNowBarBatteryIndicatePowerSave = false;
     private int mNowBarBatteryFastChargingColor, mNowBarBatteryPowerSaveColor;
     private int mNowBarBatteryTextColor = Color.WHITE;
+    private boolean mNowBarBatteryShowVoltage = false;
+    private boolean mNowBarBatteryShowTimeRemaining = false;
 
     // Weather
     private boolean mNowBarWeatherCustomColors = false;
@@ -181,6 +185,8 @@ public class LockscreenNowBar extends XposedMods {
         mNowBarBatteryFastChargingColor = Xprefs.getInt(NOW_BAR_BATTERY_FAST_COLOR, Color.parseColor("#FF247CFF"));
         mNowBarBatteryPowerSaveColor = Xprefs.getInt(NOW_BAR_BATTERY_POWERSAVE_COLOR, Color.parseColor("#FFA500"));
         mNowBarBatteryTextColor = Xprefs.getInt(NOW_BAR_BATTERY_TEXT_COLOR, Color.WHITE);
+        mNowBarBatteryShowVoltage = Xprefs.getBoolean(NOW_BAR_BATTERY_SHOW_VOLTAGE, false);
+        mNowBarBatteryShowTimeRemaining = Xprefs.getBoolean(NOW_BAR_BATTERY_SHOW_TIME_REMAINING, false);
 
         // Weather
         mNowBarWeatherCustomColors = Xprefs.getBoolean(NOW_BAR_WEATHER_CUSTOM_COLORS, false);
@@ -381,7 +387,7 @@ public class LockscreenNowBar extends XposedMods {
                 mNowBarCustomChargingIcon ? mNowBarBatteryChargingIconStyle : -1,
                 mNowBarBatteryCustomColors, mNowBarBatteryColor1, mNowBarBatteryColor2, mNowBarBatteryColor3, mNowBarBatteryColor4,
                 mNowBarBatteryIndicateFastCharging, mNowBarBatteryFastChargingColor, mNowBarBatteryIndicatePowerSave, mNowBarBatteryPowerSaveColor,
-                mNowBarBatteryTextColor
+                mNowBarBatteryTextColor, mNowBarBatteryShowVoltage, mNowBarBatteryShowTimeRemaining
         );
     }
 

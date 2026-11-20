@@ -386,13 +386,13 @@ public class NowBarHolder extends LinearLayout {
     public void updateBattery(int chargingIconStyle,
                               boolean customColors, int color1, int color2, int color3, int color4,
                               boolean indicateFast, int fastColor, boolean indicatePowerSave, int powerSaveColor,
-                              int textColor) {
+                              int textColor, boolean showVoltage, boolean showTimeRemaining) {
         if (mNowBarBattery != null) {
             mNowBarBattery.setBatteryBarOptions(
                     chargingIconStyle,
                     customColors, color1, color2, color3, color4,
                     indicateFast, fastColor, indicatePowerSave, powerSaveColor,
-                    textColor
+                    textColor, showVoltage, showTimeRemaining
             );
         }
     }
