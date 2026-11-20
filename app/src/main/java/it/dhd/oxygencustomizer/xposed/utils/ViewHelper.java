@@ -211,6 +211,34 @@ public class ViewHelper {
         }
     }
 
+    public static void applyLiquidGlassWithTag(View view, String tagContains) {
+        if (view == null) return;
+        if (hasTagToken(view, tagContains)) {
+            LiquidGlass.apply(view, getGlassRadius(view), LiquidGlass.DEFAULT_COLOR);
+        }
+        if (view instanceof ViewGroup viewGroup) {
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                applyLiquidGlassWithTag(viewGroup.getChildAt(i), tagContains);
+            }
+        }
+    }
+
+    public static boolean hasTagToken(View view, String token) {
+        Object tag = view.getTag();
+        if (tag == null) return false;
+        for (String part : tag.toString().split("\\|")) {
+            if (part.trim().equals(token)) return true;
+        }
+        return false;
+    }
+
+    private static float getGlassRadius(View view) {
+        if (view.getBackground() instanceof GradientDrawable gradientDrawable && gradientDrawable.getCornerRadius() > 0) {
+            return gradientDrawable.getCornerRadius();
+        }
+        return dp2px(view.getContext(), 24);
+    }
+
     public static void applyFontRecursively(ViewGroup viewGroup, Typeface typeface) {
         int childCount = viewGroup.getChildCount();
         for (int i = 0; i < childCount; i++) {
