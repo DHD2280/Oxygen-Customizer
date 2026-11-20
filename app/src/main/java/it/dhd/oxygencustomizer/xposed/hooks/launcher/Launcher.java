@@ -65,6 +65,7 @@ public class Launcher extends XposedMods {
     private boolean mDisablePreviousRecents = false;
     private boolean mReplaceLock = false;
     private boolean mDragEndHooked = false;
+    private boolean mSlideDragEnd = false;
     private boolean mCustomShelfBehavior = false;
     private int mShelfBehavior = 2;
     // 0 disable discover
@@ -476,14 +477,23 @@ public class Launcher extends XposedMods {
                     log("TaskViewTouchController: hooked " + onDragEnd);
                 });
 
+        ReflectedClass SlideController = ReflectedClass.ofIfPossible("com.android.quickstep.uioverrides.touchcontrollers.controller.SlideController");
+        SlideController
+                .before("onDragEnd")
+                .run(param -> mSlideDragEnd = mReplaceLock);
+        SlideController
+                .after("onDragEnd")
+                .run(param -> mSlideDragEnd = false);
+
         ReflectedClass.ReflectionConsumer killHook = param -> {
             if (!mReplaceLock) return;
 
             Object task = null;
             Object TaskView = param.args[0];
-            boolean shouldLock = false;
+            boolean shouldLock = mSlideDragEnd;
             try {
-                shouldLock = (boolean) getAdditionalInstanceField(TaskView, "mShouldKill");
+                if (!shouldLock)
+                    shouldLock = (boolean) getAdditionalInstanceField(TaskView, "mShouldKill");
             } catch (Throwable ignored) {
             }
 
