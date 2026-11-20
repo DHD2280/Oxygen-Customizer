@@ -1,0 +1,215 @@
+{
+  "name": "Sun & Moon",
+  "category": "analog",
+  "layers": [
+    {
+      "id": "n12",
+      "type": "TEXT",
+      "format": "☀",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "n3",
+      "type": "TEXT",
+      "format": "⭐",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "n6",
+      "type": "TEXT",
+      "format": "🌙",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "n9",
+      "type": "TEXT",
+      "format": "⭐",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "hour",
+      "type": "HAND_HOUR",
+      "weight": 1000,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "NONE",
+      "sleepStyle": "THIN",
+      "handLength": 0.3
+    },
+    {
+      "id": "minute",
+      "type": "HAND_MINUTE",
+      "weight": 450,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_100",
+      "change": "NONE",
+      "sleepStyle": "THIN",
+      "handLength": 0.45
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "n12",
+          "size": 0.14,
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "n3",
+          "size": 0.1,
+          "x": 0.9199999999999999,
+          "y": 0.37,
+          "anchor": "END"
+        },
+        {
+          "layer": "n6",
+          "size": 0.13,
+          "x": 0.5,
+          "y": 0.74,
+          "anchor": "CENTER",
+          "rotation": -20.0
+        },
+        {
+          "layer": "n9",
+          "size": 0.1,
+          "x": 0.08000000000000002,
+          "y": 0.37,
+          "anchor": "START"
+        },
+        {
+          "layer": "hour",
+          "size": 0.6,
+          "x": 0.5,
+          "y": 0.12,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "minute",
+          "size": 0.6,
+          "x": 0.5,
+          "y": 0.12,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "date",
+          "size": 0.06,
+          "x": 0.5,
+          "y": 0.95,
+          "anchor": "CENTER",
+          "rotation": -3.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "n12",
+                "size": 0.0441,
+                "x": 0.1575,
+                "y": 0.0,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "n3",
+                "size": 0.0315,
+                "x": 0.2898,
+                "y": 0.1166,
+                "anchor": "END"
+              },
+              {
+                "layer": "n6",
+                "size": 0.041,
+                "x": 0.1575,
+                "y": 0.2331,
+                "anchor": "CENTER",
+                "rotation": -20.0
+              },
+              {
+                "layer": "n9",
+                "size": 0.0315,
+                "x": 0.0252,
+                "y": 0.1166,
+                "anchor": "START"
+              },
+              {
+                "layer": "hour",
+                "size": 0.189,
+                "x": 0.1575,
+                "y": 0.0378,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "minute",
+                "size": 0.189,
+                "x": 0.1575,
+                "y": 0.0378,
+                "anchor": "CENTER"
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

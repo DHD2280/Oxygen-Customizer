@@ -221,6 +221,17 @@
         <item name="contentPadding">0dp</item>
     </style>
 
-
+    <!-- Clock designer -->
+    <style name="DesignerPill" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:paddingHorizontal">18dp</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
 
 </resources>

@@ -1,0 +1,127 @@
+{
+  "name": "Contrast",
+  "category": "classic",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE, d MMM",
+      "font": "",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "",
+      "weight": 1000,
+      "sleepWeight": 300,
+      "width": 120,
+      "height": 700,
+      "change": "WEIGHT",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "",
+      "weight": 220,
+      "sleepWeight": 100,
+      "width": 120,
+      "height": 700,
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "",
+      "weight": 220,
+      "sleepWeight": 100,
+      "width": 120,
+      "height": 700,
+      "change": "WEIGHT",
+      "sleepStyle": "OUTLINE"
+    }
+  ],
+  "large": {
+    "column": {
+      "gap": 0.05,
+      "align": "START",
+      "children": [
+        {
+          "layer": "date",
+          "size": 0.05
+        },
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.322
+              },
+              {
+                "layer": "colon",
+                "size": 0.322
+              },
+              {
+                "layer": "minutes",
+                "size": 0.322
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.0225,
+    "anchor": "START"
+  },
+  "small": {
+    "column": {
+      "gap": 0.045,
+      "align": "START",
+      "children": [
+        {
+          "layer": "date",
+          "size": 0.048
+        },
+        {
+          "column": {
+            "gap": 0.0337,
+            "align": "START",
+            "children": [
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "layer": "hours",
+                      "size": 0.217
+                    },
+                    {
+                      "layer": "colon",
+                      "size": 0.217
+                    },
+                    {
+                      "layer": "minutes",
+                      "size": 0.217
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.0225,
+    "anchor": "START"
+  }
+}

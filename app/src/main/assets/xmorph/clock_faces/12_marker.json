@@ -1,0 +1,199 @@
+{
+  "name": "Marker",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:mansalva",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:mansalva",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:mansalva",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "star1",
+      "type": "TEXT",
+      "format": "★",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "star2",
+      "type": "TEXT",
+      "format": "☆",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:mansalva",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "d MMMM",
+      "font": "res:mansalva",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "PILL_FILLED",
+      "badgePadding": 0.28,
+      "badgeColor": "neutral1_50",
+      "stroke": "neutral1_900"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "star1",
+          "size": 0.06,
+          "x": 0.08,
+          "y": 0.0,
+          "anchor": "START",
+          "rotation": -12.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.065,
+          "x": 0.5,
+          "y": 0.01,
+          "anchor": "CENTER",
+          "rotation": -4.0
+        },
+        {
+          "x": 0.5,
+          "y": 0.11,
+          "anchor": "CENTER",
+          "rotation": -4.0,
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.283,
+                "tracking": -0.12
+              },
+              {
+                "layer": "colon",
+                "size": 0.283,
+                "x": -0.01
+              },
+              {
+                "layer": "minutes",
+                "size": 0.283,
+                "tracking": -0.12,
+                "x": -0.02
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.56,
+          "y": 0.36686593562079944,
+          "anchor": "CENTER",
+          "rotation": -4.0
+        },
+        {
+          "layer": "star2",
+          "size": 0.05,
+          "x": 0.9,
+          "y": 0.35686593562079943,
+          "anchor": "END",
+          "rotation": 10.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1369
+              },
+              {
+                "layer": "colon",
+                "size": 0.1369
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1369
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

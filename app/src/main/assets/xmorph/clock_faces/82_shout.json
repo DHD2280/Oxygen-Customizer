@@ -1,0 +1,91 @@
+{
+  "name": "Shout",
+  "category": "words",
+  "layers": [
+    {
+      "id": "hour",
+      "type": "TEXT",
+      "format": "{hour_word}",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE",
+      "caps": true
+    },
+    {
+      "id": "minute",
+      "type": "TEXT",
+      "format": "{minute_word}",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#B3FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE",
+      "caps": true
+    },
+    {
+      "id": "day",
+      "type": "TEXT",
+      "format": "{EEEE}",
+      "font": "res:google_sans_flex",
+      "weight": 600,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE",
+      "caps": true,
+      "tracking": 0.12
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "day",
+          "size": 0.04
+        },
+        {
+          "layer": "hour",
+          "size": 0.22
+        },
+        {
+          "layer": "minute",
+          "size": 0.13
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "row": {
+      "gap": 0.025,
+      "align": "END",
+      "children": [
+        {
+          "layer": "hour",
+          "size": 0.11
+        },
+        {
+          "layer": "minute",
+          "size": 0.07
+        }
+      ]
+    }
+  }
+}

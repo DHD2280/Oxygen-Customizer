@@ -1,0 +1,87 @@
+{
+  "name": "Hybrid",
+  "category": "words",
+  "layers": [
+    {
+      "id": "hour",
+      "type": "TEXT",
+      "format": "{hour_word}",
+      "font": "res:fraunces",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "",
+      "weight": 300,
+      "sleepWeight": 150,
+      "width": 60,
+      "height": 700,
+      "color": "#B3FFFFFF",
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "TEXT",
+      "format": "{EEE d MMM}",
+      "font": "res:google_sans_flex",
+      "weight": 500,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "hour",
+          "size": 0.17
+        },
+        {
+          "layer": "minutes",
+          "size": 0.3
+        },
+        {
+          "layer": "date",
+          "size": 0.045,
+          "y": 0.02
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "row": {
+      "gap": 0.03,
+      "align": "END",
+      "children": [
+        {
+          "layer": "hour",
+          "size": 0.1
+        },
+        {
+          "layer": "minutes",
+          "size": 0.12
+        }
+      ]
+    }
+  }
+}

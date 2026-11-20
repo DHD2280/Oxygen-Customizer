@@ -1,0 +1,166 @@
+{
+  "name": "Graffiti",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:sedgwick",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "ROLL",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:sedgwick",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "ROLL",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:sedgwick",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "ROLL",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEE",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "CIRCLE",
+      "badgePadding": 0.36
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "d MMMM",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "spark",
+      "type": "TEXT",
+      "format": "💫",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.5167,
+          "x": 0.44,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "rotation": -7.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.5167,
+          "x": 0.56,
+          "y": 0.35368933333333336,
+          "anchor": "CENTER",
+          "rotation": -7.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.06,
+          "x": 0.88,
+          "y": 0.06,
+          "anchor": "CENTER",
+          "rotation": 10.0
+        },
+        {
+          "layer": "spark",
+          "size": 0.07,
+          "x": 0.06,
+          "y": 0.49352000000000007,
+          "anchor": "START",
+          "rotation": -10.0
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.5,
+          "y": 0.8249560000000002,
+          "anchor": "CENTER",
+          "rotation": -3.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1573
+              },
+              {
+                "layer": "colon",
+                "size": 0.1573
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1573
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

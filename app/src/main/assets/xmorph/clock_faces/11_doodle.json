@@ -1,0 +1,260 @@
+{
+  "name": "Doodle",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "hey",
+      "type": "TEXT",
+      "format": "HEY",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "smile",
+      "type": "TEXT",
+      "format": "🙂",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "today",
+      "type": "TEXT",
+      "format": "TODAY IS",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "PILL",
+      "badgePadding": 0.3
+    },
+    {
+      "id": "month",
+      "type": "DATE",
+      "format": "MMMM",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "day",
+      "type": "DATE",
+      "format": "d",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "CIRCLE",
+      "badgePadding": 0.32
+    },
+    {
+      "id": "spark",
+      "type": "TEXT",
+      "format": "✨",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hey",
+          "size": 0.06,
+          "x": 0.03,
+          "y": 0.06,
+          "anchor": "START",
+          "rotation": -10.0
+        },
+        {
+          "layer": "smile",
+          "size": 0.075,
+          "x": 0.05,
+          "y": 0.14,
+          "anchor": "START",
+          "rotation": -6.0
+        },
+        {
+          "layer": "today",
+          "size": 0.042,
+          "x": 0.03,
+          "y": 0.222,
+          "anchor": "START",
+          "rotation": -6.0
+        },
+        {
+          "layer": "hours",
+          "size": 0.2872,
+          "x": 0.25,
+          "y": 0.04,
+          "anchor": "START",
+          "rotation": -4.0
+        },
+        {
+          "layer": "colon",
+          "size": 0.2011,
+          "x": 0.525,
+          "y": 0.08770372340425532,
+          "anchor": "START"
+        },
+        {
+          "layer": "minutes",
+          "size": 0.2872,
+          "x": 0.5700000000000001,
+          "y": 0.11757042553191491,
+          "anchor": "START",
+          "rotation": 7.0
+        },
+        {
+          "layer": "month",
+          "size": 0.062,
+          "x": 0.97,
+          "y": 0.0,
+          "anchor": "END",
+          "rotation": -3.0
+        },
+        {
+          "layer": "day",
+          "size": 0.06,
+          "x": 0.9,
+          "y": 0.13,
+          "anchor": "CENTER",
+          "rotation": -8.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.05,
+          "x": 0.06,
+          "y": 0.30969148936170215,
+          "anchor": "START",
+          "rotation": -7.0
+        },
+        {
+          "layer": "spark",
+          "size": 0.05,
+          "x": 0.96,
+          "y": 0.27,
+          "anchor": "END"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.2012
+              },
+              {
+                "layer": "colon",
+                "size": 0.2012
+              },
+              {
+                "layer": "minutes",
+                "size": 0.2012
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

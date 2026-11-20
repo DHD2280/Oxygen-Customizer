@@ -1,0 +1,256 @@
+{
+  "name": "Party",
+  "category": "playful",
+  "layers": [
+    {
+      "id": "popper",
+      "type": "TEXT",
+      "format": "🎉",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "balloon",
+      "type": "TEXT",
+      "format": "🎈",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "accent3_200",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "spark",
+      "type": "TEXT",
+      "format": "✨",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "h1",
+      "type": "HOUR_TENS",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_100",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "h2",
+      "type": "HOUR_ONES",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent2_100",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "m1",
+      "type": "MINUTE_TENS",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent3_100",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "m2",
+      "type": "MINUTE_ONES",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEE d MMM",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "PILL_FILLED",
+      "badgePadding": 0.3,
+      "badgeColor": "neutral1_50",
+      "stroke": "neutral1_900"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "popper",
+          "size": 0.11,
+          "x": 0.04,
+          "y": 0.0,
+          "anchor": "START",
+          "rotation": -15.0
+        },
+        {
+          "layer": "balloon",
+          "size": 0.13,
+          "x": 0.96,
+          "y": 0.0,
+          "anchor": "END",
+          "rotation": 10.0
+        },
+        {
+          "x": 0.5,
+          "y": 0.13,
+          "anchor": "CENTER",
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "h1",
+                "size": 0.2557,
+                "rotation": -8.0,
+                "y": 0.01
+              },
+              {
+                "layer": "h2",
+                "size": 0.2557,
+                "rotation": 6.0,
+                "y": -0.015,
+                "x": -0.02
+              },
+              {
+                "layer": "colon",
+                "size": 0.2557,
+                "x": -0.02
+              },
+              {
+                "layer": "m1",
+                "size": 0.2557,
+                "rotation": -5.0,
+                "y": 0.015,
+                "x": -0.03
+              },
+              {
+                "layer": "m2",
+                "size": 0.2557,
+                "rotation": 9.0,
+                "y": -0.01,
+                "x": -0.05
+              }
+            ]
+          }
+        },
+        {
+          "layer": "spark",
+          "size": 0.06,
+          "x": 0.12,
+          "y": 0.33668970283344846,
+          "anchor": "START"
+        },
+        {
+          "layer": "weekday",
+          "size": 0.05,
+          "x": 0.5,
+          "y": 0.3766897028334485,
+          "anchor": "CENTER",
+          "rotation": -4.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "h1",
+                "size": 0.1406
+              },
+              {
+                "layer": "h2",
+                "size": 0.1406
+              },
+              {
+                "layer": "colon",
+                "size": 0.1406
+              },
+              {
+                "layer": "m1",
+                "size": 0.1406
+              },
+              {
+                "layer": "m2",
+                "size": 0.1406
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.04,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

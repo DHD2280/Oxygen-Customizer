@@ -8,9 +8,23 @@
         app:lottie_rawRes="@raw/lockscreen_illustration" />
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
-        android:title="@string/lockscreen_title"
         app:iconSpaceReserved="false"
-        search:ignore="true">
+        search:ignore="true"
+        android:title="@string/lockscreen_clock">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_designer_mode"
+            android:summary="@string/designer_mode_summary"
+            android:title="@string/designer_mode_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="lockscreen_keep_large_clock"
+            android:summary="@string/keep_large_clock_summary"
+            android:title="@string/keep_large_clock_title"
+            app:iconSpaceReserved="false" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenClockFragment"
@@ -30,7 +44,14 @@
             android:title="@string/lockscreen_widgets_title"
             app:iconSpaceReserved="false" />
 
-        <it.dhd.oneplusui.preference.OplusJumpPreference
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:title="@string/lockscreen_title"
+        app:iconSpaceReserved="false"
+        search:ignore="true">
+
+    <it.dhd.oneplusui.preference.OplusJumpPreference
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.lockscreen.LockscreenNowBarFragment"
             android:key="lockscreen_nowbar_jump"
             android:title="@string/lockscreen_now_bar_title" />

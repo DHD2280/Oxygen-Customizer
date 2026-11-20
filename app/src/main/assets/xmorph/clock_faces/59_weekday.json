@@ -1,0 +1,154 @@
+{
+  "name": "Weekday",
+  "category": "classic",
+  "layers": [
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:big_shoulders?opsz=72",
+      "weight": 900,
+      "sleepWeight": 900,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "sleepStyle": "THIN_OUTLINE",
+      "change": "FADE"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "d MMMM",
+      "font": "res:space_grotesk",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:space_grotesk",
+      "weight": 700,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:space_grotesk",
+      "weight": 700,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:space_grotesk",
+      "weight": 700,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "weekday",
+          "size": 0.2102,
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "alpha": 0.42
+        },
+        {
+          "x": 0.5,
+          "y": 0.051721419185282516,
+          "anchor": "CENTER",
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.2491
+              },
+              {
+                "layer": "colon",
+                "size": 0.2491
+              },
+              {
+                "layer": "minutes",
+                "size": 0.2491
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.5,
+          "y": 0.28309166139981534,
+          "anchor": "CENTER"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "stack": {
+      "children": [
+        {
+          "layer": "weekday",
+          "size": 0.1316,
+          "x": 0.313,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "alpha": 0.42
+        },
+        {
+          "x": 0.313,
+          "y": 0.0324,
+          "anchor": "CENTER",
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1559
+              },
+              {
+                "layer": "colon",
+                "size": 0.1559
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1559
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.0313,
+          "x": 0.313,
+          "y": 0.1772,
+          "anchor": "CENTER"
+        }
+      ]
+    }
+  }
+}

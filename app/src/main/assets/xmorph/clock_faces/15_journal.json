@@ -1,0 +1,188 @@
+{
+  "name": "Journal",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FLIP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FLIP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FLIP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "month",
+      "type": "DATE",
+      "format": "MMM",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "day",
+      "type": "DATE",
+      "format": "dd",
+      "font": "res:londrina",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE",
+      "badge": "CIRCLE_FILLED",
+      "badgePadding": 0.34,
+      "badgeColor": "neutral1_50",
+      "stroke": "neutral1_900"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "moon",
+      "type": "TEXT",
+      "format": "🌙",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.3899,
+          "x": 0.06,
+          "y": 0.0,
+          "anchor": "START",
+          "rotation": -3.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.3899,
+          "x": 0.1,
+          "y": 0.3099220272904484,
+          "anchor": "START",
+          "rotation": 2.0
+        },
+        {
+          "layer": "month",
+          "size": 0.08,
+          "x": 0.76,
+          "y": 0.03,
+          "anchor": "CENTER",
+          "rotation": 4.0
+        },
+        {
+          "layer": "day",
+          "size": 0.08,
+          "x": 0.76,
+          "y": 0.18744,
+          "anchor": "CENTER",
+          "rotation": -6.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.065,
+          "x": 0.76,
+          "y": 0.38488,
+          "anchor": "CENTER",
+          "rotation": -4.0
+        },
+        {
+          "layer": "moon",
+          "size": 0.07,
+          "x": 0.95,
+          "y": 0.5398440545808967,
+          "anchor": "END",
+          "rotation": -10.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1861
+              },
+              {
+                "layer": "colon",
+                "size": 0.1861
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1861
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

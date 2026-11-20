@@ -958,6 +958,7 @@
     <string name="depth_effect_ok_btn">OK</string>
 
     <!-- Lockscreen Clock Strings -->
+    <string name="lockscreen_clock_design">Design your Lockscreen Clock</string>
     <string name="lockscreen_clock">Lockscreen Clock</string>
     <string name="lockscreen_clock_switch">Custom Lockscreen Clock</string>
     <string name="lockscreen_clock_custom">Clock Style</string>
@@ -992,6 +993,21 @@
 
     <string name="welcome_back">Welcome Back</string>
     <string name="default_user_name">User</string>
+
+    <!-- Fuzzy clock -->
+    <string name="fuzzy_half_past" comment="%1$s = hour in words">half past %1$s</string>
+    <string name="fuzzy_lead_half_past">half past</string>
+    <string name="fuzzy_lead_past" comment="%1$s = minutes in words">%1$s past</string>
+    <string name="fuzzy_lead_quarter_past">quarter past</string>
+    <string name="fuzzy_lead_quarter_to">quarter to</string>
+    <string name="fuzzy_lead_to" comment="%1$s = minutes in words">%1$s to</string>
+    <string name="fuzzy_oclock" comment="%1$s = hour in words">%1$s o\'clock</string>
+    <string name="fuzzy_past" comment="%1$s = minutes in words, %2$s = hour in words">%1$s past %2$s</string>
+    <string name="fuzzy_quarter_past" comment="%1$s = hour in words">quarter past %1$s</string>
+    <string name="fuzzy_quarter_to" comment="%1$s = next hour in words">quarter to %1$s</string>
+    <string name="fuzzy_to" comment="%1$s = minutes in words, %2$s = next hour in words">%1$s to %2$s</string>
+    <string name="words_hundred" comment="Said after a whole 24-hour time, e.g. sixteen hundred">hundred</string>
+    <string name="words_language" comment="ISO 639-1 code of this translation; numbers in fuzzy phrases are spelled in this language">en</string>
 
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Time is</string>
@@ -1600,6 +1616,24 @@
     <string name="alarm_tomorrow">Tomorrow</string>
     <string name="alarm_in">in %1$s</string>
 
+    <!-- Clock face data -->
+    <string name="data_all_day">All day</string>
+    <string name="data_charged">Charged</string>
+    <string name="data_charging">Charging</string>
+    <string name="data_charging_left" comment="%1$s = time until full, e.g. 1 h 20 min">Charging · %1$s left</string>
+    <string name="data_happening_now">Now</string>
+    <string name="data_hours_minutes" comment="%1$d = hours, %2$d = minutes">%1$d h %2$d min</string>
+    <string name="data_in_minutes" comment="%1$d = minutes until the event starts">In %1$d min</string>
+    <string name="data_minutes" comment="%1$d = minutes">%1$d min</string>
+    <string name="data_no_alarm">No alarm</string>
+    <string name="data_no_events">No upcoming events</string>
+    <string name="data_no_media">Nothing playing</string>
+    <string name="data_not_charging">Not charging</string>
+    <string name="data_sunrise">Sunrise</string>
+    <string name="data_sunset">Sunset</string>
+    <string name="data_tomorrow" comment="%1$s = time or All day">Tomorrow %1$s</string>
+    <string name="data_uv" comment="%1$s = UV index number">UV %1$s</string>
+
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Lockscreen Now Bar</string>
     <string name="lockscreen_now_bar_enabled_title">Enable Lockscreen now bar</string>
@@ -1804,5 +1838,134 @@
     <string name="notification_style_pack_disclaimer_desc">Notification style packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for them. Support regarding how OxygenCustomizer handles notification style packs will only be provided to the respective pack developers.
 
 For instructions on how to make a notification style pack, please refer to the template here: %s</string>
+
+    <!-- Clock designer -->
+    <string name="designer_sheet_depth">Depth</string>
+    <string name="designer_depth_settings">Depth wallpaper settings</string>
+    <string name="designer_depth_missing">No subject yet: change the lock screen wallpaper to create it</string>
+    <string name="designer_above_subject">In front of the subject</string>
+    <string name="designer_undo">Undo</string>
+    <string name="designer_redo">Redo</string>
+    <string name="designer_save">Save</string>
+    <string name="designer_export">Export</string>
+    <string name="designer_import">Import</string>
+    <string name="designer_my_designs">My designs</string>
+    <string name="designer_save_title">Save design</string>
+    <string name="designer_export_title">Export design</string>
+    <string name="designer_design_name">Design %1$d</string>
+    <string name="designer_saved">Design saved</string>
+    <string name="designer_exported">Design exported</string>
+    <string name="designer_export_failed">Couldn\'t save the design</string>
+    <string name="designer_import_failed">Couldn\'t import this design</string>
+    <string name="designer_delete_design">Delete this design?</string>
+    <string name="designer_image_failed">Couldn\'t load this image</string>
+    <string name="designer_scope_large">Large</string>
+    <string name="designer_scope_small">Small</string>
+    <string name="designer_scope_aod">AOD</string>
+    <string name="designer_presets">Faces</string>
+    <string name="designer_add_element">Add element</string>
+    <string name="designer_items">Items</string>
+    <string name="designer_layers">Layers</string>
+    <string name="designer_clock">Clock</string>
+    <string name="designer_visible">Visible</string>
+    <string name="designer_size">Size</string>
+    <string name="designer_weight">Weight</string>
+    <string name="designer_width">Width</string>
+    <string name="designer_tracking">Letter spacing</string>
+    <string name="designer_line_height">Line height</string>
+    <string name="designer_tint">Effect strength</string>
+    <string name="designer_rotation">Rotation</string>
+    <string name="designer_opacity">Opacity</string>
+    <string name="designer_color">Color</string>
+    <string name="designer_font">Font</string>
+    <string name="designer_font_default">Default</string>
+    <string name="designer_glass">Liquid Glass</string>
+    <string name="designer_effect_solid">Solid</string>
+    <string name="designer_align_start">Start</string>
+    <string name="designer_align_center">Center</string>
+    <string name="designer_align_end">End</string>
+    <string name="designer_move_back">Send backward</string>
+    <string name="designer_move_front">Bring forward</string>
+    <string name="designer_move_to_back">Send to back</string>
+    <string name="designer_move_to_front">Bring to front</string>
+    <string name="designer_remove">Remove</string>
+    <string name="designer_reset">Reset</string>
+    <string name="designer_done">Done</string>
+    <string name="designer_back">Back</string>
+    <string name="designer_color_source">Color</string>
+    <string name="designer_color_custom">Custom color</string>
+    <string name="designer_color_text">Primary</string>
+    <string name="designer_color_accent1">Accent 1</string>
+    <string name="designer_color_accent2">Accent 2</string>
+    <string name="designer_color_accent3">Accent 3</string>
+    <string name="designer_effect">Effect</string>
+    <string name="designer_align">Alignment</string>
+    <string name="designer_order">Order</string>
+    <string name="designer_style">Style</string>
+    <string name="designer_text_section">Text</string>
+    <string name="designer_layout">Layout</string>
+    <string name="designer_actions">Actions</string>
+    <string name="designer_parent">Item</string>
+    <string name="designer_content">Text</string>
+    <string name="designer_date_format">Date format</string>
+    <string name="designer_text">Text</string>
+    <string name="designer_text_default">Hello</string>
+    <string name="designer_aod_style">AOD style</string>
+    <string name="designer_aod_none">Normal</string>
+    <string name="designer_aod_thin">Thin</string>
+    <string name="designer_aod_outline">Outline</string>
+    <string name="designer_aod_thin_outline">Thin outline</string>
+    <string name="designer_aod_hide">Hidden</string>
+    <string name="designer_element_time">Time</string>
+    <string name="designer_element_hours">Hours</string>
+    <string name="designer_element_minutes">Minutes</string>
+    <string name="designer_element_date">Date</string>
+    <string name="designer_element_hands">Hands</string>
+    <string name="designer_element_icon">Icon</string>
+    <string name="designer_element_card">Card</string>
+    <string name="designer_element_ring">Ring</string>
+    <string name="designer_element_bar">Bar</string>
+    <string name="designer_element_image">Image</string>
+    <string name="designer_element_spacer">Spacer</string>
+    <string name="designer_element_weather">Weather</string>
+    <string name="designer_element_device_widget">Device widget</string>
+    <string name="designer_element_widget_big">Big widget</string>
+    <string name="designer_element_widget_small">Small widget</string>
+    <string name="designer_widget">Widget</string>
+    <string name="designer_element_device_item">Device item</string>
+    <string name="designer_widget_size">Size</string>
+    <string name="designer_widget_big">Big</string>
+    <string name="designer_widget_small">Small</string>
+    <string name="designer_widget_settings">Widget settings</string>
+    <string name="designer_mode_title">Lockscreen designer</string>
+    <string name="designer_mode_summary">Place clock, weather and widgets in one design</string>
+    <string name="keep_large_clock_title">Keep large clock</string>
+    <string name="keep_large_clock_summary">Don\'t switch to the small clock when notifications arrive</string>
+    <string name="designer_cancel">Cancel</string>
+    <string name="designer_group_items">Group items</string>
+    <string name="designer_group">Group</string>
+    <string name="designer_ungroup">Ungroup</string>
+    <string name="designer_distribute_horizontal">Distribute horizontally</string>
+    <string name="designer_distribute_vertical">Distribute vertically</string>
+    <string name="designer_distribute_hint">Equal spacing needs at least 3 items in the group</string>
+    <string name="designer_apply">Apply</string>
+    <string name="designer_title">Lockscreen clock</string>
+    <string name="designer_sheet_style">Style</string>
+    <string name="designer_sheet_faces">Clock faces</string>
+    <string name="designer_position">Position</string>
+    <string name="designer_position_left">Align left</string>
+    <string name="designer_position_center">Center horizontally</string>
+    <string name="designer_position_right">Align right</string>
+    <string name="designer_faces_hint">Pick a clock face, then tap any part of it on the preview to customize it.</string>
+    <string name="designer_sheet_add">Add components</string>
+    <string name="designer_sheet_layers">Layers</string>
+    <string name="designer_faces">Faces</string>
+    <string name="designer_fonts">Fonts</string>
+    <string name="designer_effects_title">Effects</string>
+    <string name="designer_colors">Colors</string>
+    <string name="designer_your_designs">Your designs</string>
+    <string name="designer_your_designs_summary">Create your own clock for the large, small and AOD lockscreen</string>
+    <string name="designer_your_design">Your Design</string>
+    <string name="designer_font_import_failed">Unable to import the font</string>
 
 </resources>

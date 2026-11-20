@@ -1,0 +1,182 @@
+{
+  "name": "Outline Mix",
+  "category": "graphic",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE d MMM",
+      "font": "res:space_grotesk",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.08,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "h1",
+      "type": "HOUR_TENS",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "h2",
+      "type": "HOUR_ONES",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "m1",
+      "type": "MINUTE_TENS",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE",
+      "outline": true
+    },
+    {
+      "id": "m2",
+      "type": "MINUTE_ONES",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE",
+      "outline": true
+    }
+  ],
+  "large": {
+    "column": {
+      "gap": 0.055,
+      "align": "CENTER",
+      "children": [
+        {
+          "layer": "date",
+          "size": 0.05
+        },
+        {
+          "column": {
+            "gap": 0.045,
+            "align": "CENTER",
+            "children": [
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "layer": "h1",
+                      "size": 0.5059
+                    },
+                    {
+                      "layer": "h2",
+                      "size": 0.5059
+                    }
+                  ]
+                }
+              },
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "layer": "m1",
+                      "size": 0.5059
+                    },
+                    {
+                      "layer": "m2",
+                      "size": 0.5059
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.5,
+    "anchor": "CENTER"
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "column": {
+            "gap": 0.0118,
+            "align": "CENTER",
+            "children": [
+              {
+                "column": {
+                  "gap": 0.0097,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "row": {
+                        "gap": 0.0,
+                        "align": "CENTER",
+                        "children": [
+                          {
+                            "layer": "h1",
+                            "size": 0.1088
+                          },
+                          {
+                            "layer": "h2",
+                            "size": 0.1088
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "row": {
+                        "gap": 0.0,
+                        "align": "CENTER",
+                        "children": [
+                          {
+                            "layer": "m1",
+                            "size": 0.1088
+                          },
+                          {
+                            "layer": "m2",
+                            "size": 0.1088
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

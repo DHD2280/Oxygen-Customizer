@@ -1,0 +1,75 @@
+{
+  "name": "Note",
+  "category": "words",
+  "layers": [
+    {
+      "id": "time",
+      "type": "TEXT",
+      "format": "{fuzzy_time}",
+      "font": "res:caveat",
+      "weight": 600,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "TEXT",
+      "format": "{EEEE}",
+      "font": "res:caveat",
+      "weight": 500,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#B3FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "time",
+          "size": 0.13,
+          "rotation": -3.0
+        },
+        {
+          "layer": "date",
+          "size": 0.07,
+          "rotation": -3.0,
+          "y": 0.01
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "time",
+          "size": 0.08,
+          "rotation": -2.0
+        },
+        {
+          "layer": "date",
+          "size": 0.045,
+          "rotation": -2.0
+        }
+      ]
+    }
+  }
+}

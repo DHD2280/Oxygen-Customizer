@@ -1,0 +1,112 @@
+{
+  "name": "Diagonal",
+  "category": "graphic",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_DOWN",
+      "sleepStyle": "OUTLINE",
+      "outline": true
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:anton",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEE d MMM",
+      "font": "res:space_grotesk",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.12,
+      "color": "neutral1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.5059,
+          "x": 0.06,
+          "y": 0.0,
+          "anchor": "START",
+          "rotation": -10.0
+        },
+        {
+          "layer": "date",
+          "size": 0.042,
+          "x": 0.5,
+          "y": 0.4338339920948617,
+          "anchor": "CENTER",
+          "rotation": -10.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.5059,
+          "x": 0.94,
+          "y": 0.5138339920948617,
+          "anchor": "END",
+          "rotation": -10.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1058,
+                "x": 0.0125,
+                "y": 0.0,
+                "anchor": "START",
+                "rotation": -10.0
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1058,
+                "x": 0.1966,
+                "y": 0.1074,
+                "anchor": "END",
+                "rotation": -10.0
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

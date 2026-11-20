@@ -1,0 +1,160 @@
+{
+  "name": "Ivory",
+  "category": "elegant",
+  "layers": [
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:inter?opsz=32",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.3,
+      "color": "neutral1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "dd MMM",
+      "font": "res:inter?opsz=32",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.3,
+      "color": "accent1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.4286
+              },
+              {
+                "layer": "colon",
+                "size": 0.4286
+              },
+              {
+                "layer": "minutes",
+                "size": 0.4286
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.034,
+          "x": 0.06,
+          "y": 0.36676570871894787,
+          "anchor": "START"
+        },
+        {
+          "layer": "date",
+          "size": 0.034,
+          "x": 0.94,
+          "y": 0.36676570871894787,
+          "anchor": "END"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "stack": {
+      "children": [
+        {
+          "x": 0.2549,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.2185
+              },
+              {
+                "layer": "colon",
+                "size": 0.2185
+              },
+              {
+                "layer": "minutes",
+                "size": 0.2185
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.0173,
+          "x": 0.0306,
+          "y": 0.187,
+          "anchor": "START"
+        },
+        {
+          "layer": "date",
+          "size": 0.0173,
+          "x": 0.4792,
+          "y": 0.187,
+          "anchor": "END"
+        }
+      ]
+    }
+  }
+}

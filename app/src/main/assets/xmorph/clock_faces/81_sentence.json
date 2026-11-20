@@ -1,0 +1,88 @@
+{
+  "name": "Sentence",
+  "category": "words",
+  "layers": [
+    {
+      "id": "intro",
+      "type": "TEXT",
+      "format": "It's",
+      "font": "res:google_sans_flex",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    },
+    {
+      "id": "time",
+      "type": "TEXT",
+      "format": "{time_words}",
+      "font": "res:google_sans_flex",
+      "weight": 600,
+      "sleepWeight": 350,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "day",
+      "type": "TEXT",
+      "format": "on {EEEE}, {d MMMM}",
+      "font": "res:google_sans_flex",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#B3FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.005,
+      "align": "START",
+      "children": [
+        {
+          "layer": "intro",
+          "size": 0.06
+        },
+        {
+          "layer": "time",
+          "size": 0.085
+        },
+        {
+          "layer": "day",
+          "size": 0.05,
+          "y": 0.015
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.004,
+      "align": "START",
+      "children": [
+        {
+          "layer": "time",
+          "size": 0.06
+        },
+        {
+          "layer": "day",
+          "size": 0.035
+        }
+      ]
+    }
+  }
+}

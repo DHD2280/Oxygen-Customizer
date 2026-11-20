@@ -1,0 +1,108 @@
+{
+  "name": "Playbill",
+  "category": "elegant",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE d MMM",
+      "font": "res:playfair",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "color": "text1",
+      "font": "res:playfair",
+      "weight": 900,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "color": "text1",
+      "font": "res:playfair",
+      "weight": 900,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_UP",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "row": {
+      "gap": 0.05,
+      "align": "START",
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.4148
+        },
+        {
+          "column": {
+            "gap": 0.06,
+            "align": "START",
+            "children": [
+              {
+                "layer": "minutes",
+                "size": 0.1991
+              },
+              {
+                "layer": "date",
+                "size": 0.055
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "small": {
+    "column": {
+      "gap": 0.045,
+      "align": "START",
+      "children": [
+        {
+          "layer": "date",
+          "size": 0.048
+        },
+        {
+          "row": {
+            "gap": 0.0353,
+            "align": "START",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.2927
+              },
+              {
+                "column": {
+                  "gap": 0.0423,
+                  "align": "START",
+                  "children": [
+                    {
+                      "layer": "minutes",
+                      "size": 0.1405
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.0225,
+    "anchor": "START"
+  }
+}

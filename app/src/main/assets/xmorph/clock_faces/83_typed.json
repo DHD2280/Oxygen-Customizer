@@ -1,0 +1,88 @@
+{
+  "name": "Typed",
+  "category": "words",
+  "layers": [
+    {
+      "id": "prompt",
+      "type": "TEXT",
+      "format": "> it is",
+      "font": "res:jetbrains_mono",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    },
+    {
+      "id": "time",
+      "type": "TEXT",
+      "format": "{time_words}_",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "TEXT",
+      "format": "// {EEE d MMM}",
+      "font": "res:jetbrains_mono",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.01,
+      "align": "START",
+      "children": [
+        {
+          "layer": "prompt",
+          "size": 0.05
+        },
+        {
+          "layer": "time",
+          "size": 0.068
+        },
+        {
+          "layer": "date",
+          "size": 0.045,
+          "y": 0.02
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.006,
+      "align": "START",
+      "children": [
+        {
+          "layer": "time",
+          "size": 0.05
+        },
+        {
+          "layer": "date",
+          "size": 0.032
+        }
+      ]
+    }
+  }
+}

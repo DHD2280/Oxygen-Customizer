@@ -153,4 +153,10 @@
     <color name="peek_summary_text_color_light">#66000000</color>
     <color name="peek_summary_text_color_dark">#89ffffff</color>
 
+    <!-- Clock designer -->
+    <color name="designer_pill">#FF2C2C2E</color>
+    <color name="designer_accent">#FF4FB3F6</color>
+    <color name="designer_sheet">#FF1C1C1E</color>
+    <color name="designer_tile">#FF2C2C2E</color>
+
 </resources>

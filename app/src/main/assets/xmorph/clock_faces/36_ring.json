@@ -1,0 +1,220 @@
+{
+  "name": "Ring",
+  "category": "analog",
+  "layers": [
+    {
+      "id": "r12",
+      "type": "TEXT",
+      "format": "12",
+      "font": "res:google_sans_flex?ROND=100&opsz=144",
+      "weight": 800,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN",
+      "outline": true,
+      "outlineWidth": 1.4
+    },
+    {
+      "id": "r3",
+      "type": "TEXT",
+      "format": "3",
+      "font": "res:google_sans_flex?ROND=100&opsz=144",
+      "weight": 800,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN",
+      "outline": true,
+      "outlineWidth": 1.4
+    },
+    {
+      "id": "r6",
+      "type": "TEXT",
+      "format": "6",
+      "font": "res:google_sans_flex?ROND=100&opsz=144",
+      "weight": 800,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN",
+      "outline": true,
+      "outlineWidth": 1.4
+    },
+    {
+      "id": "r9",
+      "type": "TEXT",
+      "format": "9",
+      "font": "res:google_sans_flex?ROND=100&opsz=144",
+      "weight": 800,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN",
+      "outline": true,
+      "outlineWidth": 1.4
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:google_sans_flex?ROND=100&opsz=144",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hour",
+      "type": "HAND_HOUR",
+      "weight": 900,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "NONE",
+      "sleepStyle": "THIN",
+      "handLength": 0.28
+    },
+    {
+      "id": "minute",
+      "type": "HAND_MINUTE",
+      "weight": 450,
+      "sleepWeight": 180,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "NONE",
+      "sleepStyle": "THIN",
+      "handLength": 0.45
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "r12",
+          "size": 0.24,
+          "x": 0.5,
+          "y": -0.0086,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "r3",
+          "size": 0.24,
+          "x": 0.86,
+          "y": 0.3314,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "r6",
+          "size": 0.24,
+          "x": 0.5,
+          "y": 0.6714,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "r9",
+          "size": 0.24,
+          "x": 0.14,
+          "y": 0.3314,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.5,
+          "y": 0.9099999999999999,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "hour",
+          "size": 0.62,
+          "x": 0.5,
+          "y": 0.10999999999999999,
+          "anchor": "CENTER"
+        },
+        {
+          "layer": "minute",
+          "size": 0.62,
+          "x": 0.5,
+          "y": 0.10999999999999999,
+          "anchor": "CENTER"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "r12",
+                "size": 0.0764,
+                "x": 0.1591,
+                "y": -0.0027,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "r3",
+                "size": 0.0764,
+                "x": 0.2737,
+                "y": 0.1055,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "r6",
+                "size": 0.0764,
+                "x": 0.1591,
+                "y": 0.2136,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "r9",
+                "size": 0.0764,
+                "x": 0.0445,
+                "y": 0.1055,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "hour",
+                "size": 0.1973,
+                "x": 0.1591,
+                "y": 0.035,
+                "anchor": "CENTER"
+              },
+              {
+                "layer": "minute",
+                "size": 0.1973,
+                "x": 0.1591,
+                "y": 0.035,
+                "anchor": "CENTER"
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

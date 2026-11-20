@@ -1,0 +1,212 @@
+{
+  "name": "Kitty",
+  "category": "playful",
+  "layers": [
+    {
+      "id": "paw1",
+      "type": "TEXT",
+      "format": "🐾",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "paw2",
+      "type": "TEXT",
+      "format": "🐾",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "paw3",
+      "type": "TEXT",
+      "format": "🐾",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "cat",
+      "type": "TEXT",
+      "format": "🐱",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.39,
+          "x": 0.42,
+          "y": 0.06,
+          "anchor": "CENTER",
+          "rotation": -4.0,
+          "tracking": -0.04
+        },
+        {
+          "layer": "cat",
+          "size": 0.13,
+          "x": 0.86,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "rotation": 14.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.39,
+          "x": 0.56,
+          "y": 0.3079407176287051,
+          "anchor": "CENTER",
+          "rotation": 4.0,
+          "tracking": -0.04
+        },
+        {
+          "layer": "paw1",
+          "size": 0.05,
+          "x": 0.08,
+          "y": 0.3295007800312012,
+          "anchor": "START",
+          "rotation": -30.0
+        },
+        {
+          "layer": "paw2",
+          "size": 0.05,
+          "x": 0.13,
+          "y": 0.4238260530421216,
+          "anchor": "START",
+          "rotation": -20.0
+        },
+        {
+          "layer": "paw3",
+          "size": 0.05,
+          "x": 0.08,
+          "y": 0.518151326053042,
+          "anchor": "START",
+          "rotation": -30.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.06,
+          "x": 0.56,
+          "y": 0.6274414976599063,
+          "anchor": "CENTER",
+          "rotation": -4.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1445
+              },
+              {
+                "layer": "colon",
+                "size": 0.1445
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1445
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

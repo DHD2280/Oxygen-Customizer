@@ -103,10 +103,14 @@ import io.github.libxposed.api.XposedModuleInterface;
 import it.dhd.oxygencustomizer.BuildConfig;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.utils.Constants;
+import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
+import it.dhd.oxygencustomizer.xmorph.designer.LockscreenHosts;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.CircleFramedDrawable;
 import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter;
+import it.dhd.oxygencustomizer.xposed.utils.GlassTextEffect;
+import it.dhd.oxygencustomizer.xposed.utils.KeyguardWallpaper;
 import it.dhd.oxygencustomizer.xposed.utils.SystemUtils;
 import it.dhd.oxygencustomizer.xposed.utils.TimeUtils;
 import it.dhd.oxygencustomizer.xposed.utils.ViewHelper;
@@ -115,11 +119,6 @@ import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectionHelpers;
 import it.dhd.oxygencustomizer.xposed.views.LockscreenView;
 import it.dhd.oxygencustomizer.xposed.views.lockscreenwidgets.ProgressImageView;
-
-//import it.dhd.oxygencustomizer.xmorph.designer.DesignerClock;
-//import it.dhd.oxygencustomizer.xmorph.designer.LockscreenHosts;
-//import it.dhd.oxygencustomizer.xposed.utils.KeyguardWallpaper;
-//import it.dhd.oxygencustomizer.xposed.utils.GlassTextEffect;
 
 public class LockscreenClock extends XposedMods {
 

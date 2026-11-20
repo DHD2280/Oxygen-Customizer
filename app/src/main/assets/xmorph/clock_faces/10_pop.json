@@ -1,0 +1,169 @@
+{
+  "name": "Pop",
+  "category": "expressive",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE d MMM",
+      "font": "res:bagel_fat",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours_shadow",
+      "type": "HOURS",
+      "font": "res:bagel_fat",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_900",
+      "change": "SCALE",
+      "sleepStyle": "HIDE"
+    },
+    {
+      "id": "minutes_shadow",
+      "type": "MINUTES",
+      "font": "res:bagel_fat",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_900",
+      "change": "SCALE",
+      "sleepStyle": "HIDE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:bagel_fat",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent3_200",
+      "change": "SCALE",
+      "sleepStyle": "OUTLINE",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.045
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:bagel_fat",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "SCALE",
+      "sleepStyle": "OUTLINE",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.045
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours_shadow",
+          "size": 0.4473,
+          "x": 0.522,
+          "y": 0.022,
+          "anchor": "CENTER",
+          "rotation": -5.0
+        },
+        {
+          "layer": "hours",
+          "size": 0.4473,
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "rotation": -5.0
+        },
+        {
+          "layer": "minutes_shadow",
+          "size": 0.4473,
+          "x": 0.522,
+          "y": 0.32530793650793655,
+          "anchor": "CENTER",
+          "rotation": -5.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.4473,
+          "x": 0.5,
+          "y": 0.3033079365079365,
+          "anchor": "CENTER",
+          "rotation": -5.0
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.5,
+          "y": 0.6929904761904762,
+          "anchor": "CENTER"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "hours_shadow",
+                "size": 0.1366,
+                "x": 0.1594,
+                "y": 0.0067,
+                "anchor": "CENTER",
+                "rotation": -5.0
+              },
+              {
+                "layer": "hours",
+                "size": 0.1366,
+                "x": 0.1527,
+                "y": 0.0,
+                "anchor": "CENTER",
+                "rotation": -5.0
+              },
+              {
+                "layer": "minutes_shadow",
+                "size": 0.1366,
+                "x": 0.1594,
+                "y": 0.0993,
+                "anchor": "CENTER",
+                "rotation": -5.0
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1366,
+                "x": 0.1527,
+                "y": 0.0926,
+                "anchor": "CENTER",
+                "rotation": -5.0
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

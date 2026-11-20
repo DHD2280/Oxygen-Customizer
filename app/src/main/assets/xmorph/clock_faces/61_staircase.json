@@ -1,0 +1,153 @@
+{
+  "name": "Staircase",
+  "category": "graphic",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEE d MMM",
+      "font": "res:space_grotesk",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.12,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "h1",
+      "type": "HOUR_TENS",
+      "font": "res:oswald",
+      "weight": 600,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_DOWN",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "h2",
+      "type": "HOUR_ONES",
+      "font": "res:oswald",
+      "weight": 600,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_DOWN",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "m1",
+      "type": "MINUTE_TENS",
+      "font": "res:oswald",
+      "weight": 600,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_DOWN",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "m2",
+      "type": "MINUTE_ONES",
+      "font": "res:oswald",
+      "weight": 600,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "change": "SLIDE_DOWN",
+      "sleepStyle": "OUTLINE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "h1",
+          "size": 0.4052,
+          "x": 0.04,
+          "y": 0.0,
+          "anchor": "START"
+        },
+        {
+          "layer": "h2",
+          "size": 0.4052,
+          "x": 0.2644,
+          "y": 0.17591896869244933,
+          "anchor": "START"
+        },
+        {
+          "layer": "m1",
+          "size": 0.4052,
+          "x": 0.4888,
+          "y": 0.35183793738489866,
+          "anchor": "START"
+        },
+        {
+          "layer": "m2",
+          "size": 0.4052,
+          "x": 0.7132000000000001,
+          "y": 0.5277569060773479,
+          "anchor": "START"
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.04,
+          "y": 0.7138250460405156,
+          "anchor": "START"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "h1",
+                "size": 0.0936,
+                "x": 0.0092,
+                "y": 0.0,
+                "anchor": "START"
+              },
+              {
+                "layer": "h2",
+                "size": 0.0936,
+                "x": 0.0611,
+                "y": 0.0406,
+                "anchor": "START"
+              },
+              {
+                "layer": "m1",
+                "size": 0.0936,
+                "x": 0.1129,
+                "y": 0.0812,
+                "anchor": "START"
+              },
+              {
+                "layer": "m2",
+                "size": 0.0936,
+                "x": 0.1647,
+                "y": 0.1219,
+                "anchor": "START"
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

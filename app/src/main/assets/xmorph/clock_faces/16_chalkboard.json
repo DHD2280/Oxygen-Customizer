@@ -1,0 +1,176 @@
+{
+  "name": "Chalkboard",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE, d MMMM",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE",
+      "outline": true,
+      "outlineWidth": 1.6
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE",
+      "outline": true,
+      "outlineWidth": 1.6
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "OUTLINE",
+      "outline": true,
+      "outlineWidth": 1.6
+    },
+    {
+      "id": "squiggle",
+      "type": "TEXT",
+      "format": "~~~~~~~~~~~~~~",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_200",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "pencil",
+      "type": "TEXT",
+      "format": "✏",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "weekday",
+          "size": 0.06,
+          "x": 0.06,
+          "y": 0.0,
+          "anchor": "START",
+          "rotation": -3.0
+        },
+        {
+          "x": 0.5,
+          "y": 0.1,
+          "anchor": "CENTER",
+          "rotation": -2.0,
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.3249
+              },
+              {
+                "layer": "colon",
+                "size": 0.3249
+              },
+              {
+                "layer": "minutes",
+                "size": 0.3249
+              }
+            ]
+          }
+        },
+        {
+          "layer": "squiggle",
+          "size": 0.07,
+          "x": 0.5,
+          "y": 0.2716600566572238,
+          "anchor": "CENTER",
+          "rotation": -2.0
+        },
+        {
+          "layer": "pencil",
+          "size": 0.08,
+          "x": 0.95,
+          "y": 0.2816600566572238,
+          "anchor": "END",
+          "rotation": -30.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1624
+              },
+              {
+                "layer": "colon",
+                "size": 0.1624
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1624
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

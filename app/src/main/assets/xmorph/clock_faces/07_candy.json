@@ -1,0 +1,205 @@
+{
+  "name": "Candy",
+  "category": "expressive",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEE d MMM",
+      "font": "res:dynapuff",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 75,
+      "height": 700,
+      "color": "neutral1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "h1",
+      "type": "HOUR_TENS",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 75,
+      "height": 700,
+      "color": "accent1_200",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "h2",
+      "type": "HOUR_ONES",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 75,
+      "height": 700,
+      "color": "accent2_200",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "m1",
+      "type": "MINUTE_TENS",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 75,
+      "height": 700,
+      "color": "accent3_200",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "m2",
+      "type": "MINUTE_ONES",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 75,
+      "height": 700,
+      "color": "accent1_100",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:dynapuff",
+      "weight": 700,
+      "sleepWeight": 400,
+      "width": 75,
+      "height": 700,
+      "color": "neutral1_100",
+      "change": "SCALE",
+      "sleepStyle": "THIN",
+      "stroke": "neutral1_900",
+      "strokeWidth": 0.05
+    }
+  ],
+  "large": {
+    "column": {
+      "gap": 0.05,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "h1",
+                "size": 0.3974,
+                "rotation": -6.0,
+                "y": -0.01
+              },
+              {
+                "layer": "h2",
+                "size": 0.3974,
+                "rotation": 5.0,
+                "y": 0.025,
+                "x": -0.02
+              },
+              {
+                "layer": "colon",
+                "size": 0.3974,
+                "x": -0.02
+              },
+              {
+                "layer": "m1",
+                "size": 0.3974,
+                "rotation": -4.0,
+                "y": -0.015,
+                "x": -0.03
+              },
+              {
+                "layer": "m2",
+                "size": 0.3974,
+                "rotation": 7.0,
+                "y": 0.02,
+                "x": -0.05
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.05
+        }
+      ]
+    },
+    "x": 0.5,
+    "anchor": "CENTER"
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "column": {
+            "gap": 0.0349,
+            "align": "CENTER",
+            "children": [
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "layer": "h1",
+                      "size": 0.2775,
+                      "rotation": -6.0,
+                      "y": -0.007
+                    },
+                    {
+                      "layer": "h2",
+                      "size": 0.2775,
+                      "rotation": 5.0,
+                      "y": 0.0175,
+                      "x": -0.014
+                    },
+                    {
+                      "layer": "colon",
+                      "size": 0.2775,
+                      "x": -0.014
+                    },
+                    {
+                      "layer": "m1",
+                      "size": 0.2775,
+                      "rotation": -4.0,
+                      "y": -0.0105,
+                      "x": -0.021
+                    },
+                    {
+                      "layer": "m2",
+                      "size": 0.2775,
+                      "rotation": 7.0,
+                      "y": 0.014,
+                      "x": -0.0349
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

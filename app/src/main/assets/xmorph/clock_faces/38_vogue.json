@@ -1,0 +1,129 @@
+{
+  "name": "Vogue",
+  "category": "elegant",
+  "layers": [
+    {
+      "id": "mast",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:inter?opsz=32",
+      "weight": 800,
+      "sleepWeight": 800,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "color": "accent1_200",
+      "sleepStyle": "THIN_OUTLINE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:playfair",
+      "weight": 900,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:playfair",
+      "weight": 900,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "ROLL",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "d MMMM",
+      "font": "res:playfair",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_100",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "mast",
+          "size": 0.1505,
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "alpha": 0.5
+        },
+        {
+          "layer": "hours",
+          "size": 0.3307,
+          "x": 0.06,
+          "y": 0.1,
+          "anchor": "START"
+        },
+        {
+          "layer": "minutes",
+          "size": 0.3307,
+          "x": 0.94,
+          "y": 0.24586666666666668,
+          "anchor": "END"
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.06,
+          "y": 0.35587466666666673,
+          "anchor": "START"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "stack": {
+      "children": [
+        {
+          "layer": "mast",
+          "size": 0.0705,
+          "x": 0.2343,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "alpha": 0.5
+        },
+        {
+          "layer": "hours",
+          "size": 0.155,
+          "x": 0.0281,
+          "y": 0.0469,
+          "anchor": "START"
+        },
+        {
+          "layer": "minutes",
+          "size": 0.155,
+          "x": 0.4405,
+          "y": 0.1152,
+          "anchor": "END"
+        },
+        {
+          "layer": "date",
+          "size": 0.0234,
+          "x": 0.0281,
+          "y": 0.1668,
+          "anchor": "START"
+        }
+      ]
+    }
+  }
+}

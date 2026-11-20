@@ -42,6 +42,7 @@ public class LockscreenView extends FrameLayout {
     private LockscreenWidgetsView mWidgetsView;
 
     public boolean mLockscreenClockEnabled, mLockscreenWeatherEnabled, mLockscreenWidgetsEnabled;
+    private boolean mDesignerMode = false;
 
     @SuppressLint("StaticFieldLeak")
     public static LockscreenView instance = null;
@@ -259,10 +260,10 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void onUiStateChanged(int uiState) {
-        if (mLockscreenWeatherEnabled) {
+        if (weatherShown()) {
             post(() -> mWeatherContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
-        if (mLockscreenWidgetsEnabled) {
+        if (widgetsShown()) {
             post(() -> mWidgetsContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
 
@@ -275,8 +276,8 @@ public class LockscreenView extends FrameLayout {
 
         int fullHeight = 0;
         if (mLockscreenClockEnabled) fullHeight += clockHeight;
-        if (mLockscreenWeatherEnabled) fullHeight += weatherHeight;
-        if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
+        if (weatherShown()) fullHeight += weatherHeight;
+        if (widgetsShown()) fullHeight += widgetsHeight;
 
         return fullHeight;
     }
@@ -295,13 +296,27 @@ public class LockscreenView extends FrameLayout {
         return height;
     }
 
+    public void setDesignerMode(boolean designer) {
+        if (mDesignerMode == designer) return;
+        mDesignerMode = designer;
+        updateVisibility();
+    }
+
+    private boolean weatherShown() {
+        return mLockscreenWeatherEnabled && !mDesignerMode;
+    }
+
+    private boolean widgetsShown() {
+        return mLockscreenWidgetsEnabled && !mDesignerMode;
+    }
+
     private void updateVisibility() {
         post(() -> {
             mClockContainer.setVisibility(mLockscreenClockEnabled ? View.VISIBLE : View.GONE);
-            mWeatherContainer.setVisibility(mLockscreenWeatherEnabled ? View.VISIBLE : View.GONE);
-            mWidgetsContainer.setVisibility(mLockscreenWidgetsEnabled ? View.VISIBLE : View.GONE);
+            mWeatherContainer.setVisibility(weatherShown() ? View.VISIBLE : View.GONE);
+            mWidgetsContainer.setVisibility(widgetsShown() ? View.VISIBLE : View.GONE);
 
-            if (!mLockscreenClockEnabled && !mLockscreenWeatherEnabled && !mLockscreenWidgetsEnabled) {
+            if (!mLockscreenClockEnabled && !weatherShown() && !widgetsShown()) {
                 setVisibility(View.GONE);
             } else {
                 setVisibility(View.VISIBLE);

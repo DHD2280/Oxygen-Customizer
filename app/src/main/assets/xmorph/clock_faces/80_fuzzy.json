@@ -1,0 +1,88 @@
+{
+  "name": "Fuzzy",
+  "category": "words",
+  "layers": [
+    {
+      "id": "lead",
+      "type": "TEXT",
+      "format": "{fuzzy_lead}",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#B3FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    },
+    {
+      "id": "hour",
+      "type": "TEXT",
+      "format": "{fuzzy_hour}",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "TEXT",
+      "format": "{EEE d MMM}",
+      "font": "res:instrument_serif",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "#80FFFFFF",
+      "change": "FADE",
+      "sleepStyle": "NONE"
+    }
+  ],
+  "large": {
+    "x": 0.06,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "lead",
+          "size": 0.1
+        },
+        {
+          "layer": "hour",
+          "size": 0.2
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "y": 0.02
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "y": 0.0,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0,
+      "align": "START",
+      "children": [
+        {
+          "layer": "lead",
+          "size": 0.05
+        },
+        {
+          "layer": "hour",
+          "size": 0.1
+        }
+      ]
+    }
+  }
+}

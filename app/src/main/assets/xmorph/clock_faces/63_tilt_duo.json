@@ -1,0 +1,105 @@
+{
+  "name": "Tilt Duo",
+  "category": "graphic",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEE, d MMM",
+      "font": "res:montserrat",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:montserrat",
+      "weight": 800,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "change": "SCALE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:montserrat",
+      "weight": 500,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "change": "SCALE",
+      "sleepStyle": "THIN"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "hours",
+          "size": 0.3143,
+          "x": 0.05,
+          "y": 0.02,
+          "anchor": "START",
+          "rotation": -8.0
+        },
+        {
+          "layer": "minutes",
+          "size": 0.3143,
+          "x": 0.95,
+          "y": 0.21736000000000003,
+          "anchor": "END",
+          "rotation": -8.0
+        },
+        {
+          "layer": "date",
+          "size": 0.05,
+          "x": 0.05,
+          "y": 0.49904000000000004,
+          "anchor": "START"
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "stack": {
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.1421,
+                "x": 0.0226,
+                "y": 0.009,
+                "anchor": "START",
+                "rotation": -8.0
+              },
+              {
+                "layer": "minutes",
+                "size": 0.1421,
+                "x": 0.4295,
+                "y": 0.0983,
+                "anchor": "END",
+                "rotation": -8.0
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}

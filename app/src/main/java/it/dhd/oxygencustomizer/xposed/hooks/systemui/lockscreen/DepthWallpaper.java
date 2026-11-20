@@ -473,6 +473,7 @@ public class DepthWallpaper extends XposedMods {
         mLockScreenSubject.setTag(DEPTH_SUBJECT_TAG);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-1, -1);
         mLockScreenSubject.setLayoutParams(lp);
+        DepthSubjectOverlay.setSource(mLockScreenSubject);
 
         mLayersCreated = true;
     }

@@ -1,0 +1,279 @@
+{
+  "name": "Readout",
+  "category": "digital",
+  "layers": [
+    {
+      "id": "lbl_time",
+      "type": "TEXT",
+      "format": "TIME",
+      "font": "res:inter?opsz=32",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.22,
+      "color": "neutral1_400",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "lbl_date",
+      "type": "TEXT",
+      "format": "DATE",
+      "font": "res:inter?opsz=32",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.22,
+      "color": "neutral1_400",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "lbl_day",
+      "type": "TEXT",
+      "format": "DAY",
+      "font": "res:inter?opsz=32",
+      "weight": 600,
+      "sleepWeight": 600,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.22,
+      "color": "neutral1_400",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FLIP",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FLIP",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 200,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_100",
+      "change": "FLIP",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "yyyy-MM-dd",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE",
+      "font": "res:jetbrains_mono",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "caps": true,
+      "tracking": 0.08,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "column": {
+      "gap": 0.06,
+      "align": "START",
+      "children": [
+        {
+          "column": {
+            "gap": 0.02,
+            "align": "START",
+            "children": [
+              {
+                "layer": "lbl_time",
+                "size": 0.032
+              },
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "END",
+                  "children": [
+                    {
+                      "layer": "hours",
+                      "size": 0.2067
+                    },
+                    {
+                      "layer": "colon",
+                      "size": 0.2067
+                    },
+                    {
+                      "layer": "minutes",
+                      "size": 0.2067
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "row": {
+            "gap": 0.08,
+            "align": "START",
+            "children": [
+              {
+                "column": {
+                  "gap": 0.02,
+                  "align": "START",
+                  "children": [
+                    {
+                      "layer": "lbl_date",
+                      "size": 0.032
+                    },
+                    {
+                      "layer": "date",
+                      "size": 0.05
+                    }
+                  ]
+                }
+              },
+              {
+                "column": {
+                  "gap": 0.02,
+                  "align": "START",
+                  "children": [
+                    {
+                      "layer": "lbl_day",
+                      "size": 0.032
+                    },
+                    {
+                      "layer": "weekday",
+                      "size": 0.05
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.06,
+    "anchor": "START"
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "column": {
+      "gap": 0.0352,
+      "align": "START",
+      "children": [
+        {
+          "column": {
+            "gap": 0.0117,
+            "align": "START",
+            "children": [
+              {
+                "layer": "lbl_time",
+                "size": 0.0188
+              },
+              {
+                "row": {
+                  "gap": 0.0,
+                  "align": "END",
+                  "children": [
+                    {
+                      "layer": "hours",
+                      "size": 0.1214
+                    },
+                    {
+                      "layer": "colon",
+                      "size": 0.1214
+                    },
+                    {
+                      "layer": "minutes",
+                      "size": 0.1214
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "row": {
+            "gap": 0.047,
+            "align": "START",
+            "children": [
+              {
+                "column": {
+                  "gap": 0.0117,
+                  "align": "START",
+                  "children": [
+                    {
+                      "layer": "lbl_date",
+                      "size": 0.0188
+                    },
+                    {
+                      "layer": "date",
+                      "size": 0.0294
+                    }
+                  ]
+                }
+              },
+              {
+                "column": {
+                  "gap": 0.0117,
+                  "align": "START",
+                  "children": [
+                    {
+                      "layer": "lbl_day",
+                      "size": 0.0188
+                    },
+                    {
+                      "layer": "weekday",
+                      "size": 0.0294
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

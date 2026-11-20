@@ -1,0 +1,210 @@
+{
+  "name": "Daydream",
+  "category": "playful",
+  "layers": [
+    {
+      "id": "cloud1",
+      "type": "TEXT",
+      "format": "☁",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "cloud2",
+      "type": "TEXT",
+      "format": "☁",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "moon",
+      "type": "TEXT",
+      "format": "🌙",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "accent1_100",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "colon",
+      "type": "COLON",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "font": "res:caveat_brush",
+      "weight": 400,
+      "sleepWeight": 250,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "SLIDE_UP",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "zzz",
+      "type": "TEXT",
+      "format": "💤",
+      "font": "res:doodle",
+      "weight": 600,
+      "sleepWeight": 300,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "change": "FADE",
+      "sleepStyle": "THIN"
+    },
+    {
+      "id": "weekday",
+      "type": "DATE",
+      "format": "EEEE, d MMMM",
+      "font": "res:gochi",
+      "weight": 400,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "color": "neutral1_50",
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    }
+  ],
+  "large": {
+    "stack": {
+      "children": [
+        {
+          "layer": "cloud1",
+          "size": 0.16,
+          "x": 0.04,
+          "y": 0.0,
+          "anchor": "START"
+        },
+        {
+          "layer": "moon",
+          "size": 0.08,
+          "x": 0.5,
+          "y": 0.0,
+          "anchor": "CENTER",
+          "rotation": -15.0
+        },
+        {
+          "layer": "cloud2",
+          "size": 0.12,
+          "x": 0.96,
+          "y": 0.04,
+          "anchor": "END"
+        },
+        {
+          "x": 0.5,
+          "y": 0.13,
+          "anchor": "CENTER",
+          "rotation": -3.0,
+          "row": {
+            "gap": 0.0,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.3546
+              },
+              {
+                "layer": "colon",
+                "size": 0.3546
+              },
+              {
+                "layer": "minutes",
+                "size": 0.3546
+              }
+            ]
+          }
+        },
+        {
+          "layer": "zzz",
+          "size": 0.06,
+          "x": 0.92,
+          "y": 0.33799233349305224,
+          "anchor": "END",
+          "rotation": 10.0
+        },
+        {
+          "layer": "weekday",
+          "size": 0.055,
+          "x": 0.5,
+          "y": 0.41799233349305226,
+          "anchor": "CENTER",
+          "rotation": -2.0
+        }
+      ]
+    }
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.06,
+      "align": "CENTER",
+      "children": [
+        {
+          "row": {
+            "gap": 0.0,
+            "align": "END",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.2012
+              },
+              {
+                "layer": "colon",
+                "size": 0.2012
+              },
+              {
+                "layer": "minutes",
+                "size": 0.2012
+              }
+            ]
+          }
+        },
+        {
+          "layer": "weekday",
+          "size": 0.045,
+          "rotation": -6.0
+        }
+      ]
+    }
+  }
+}

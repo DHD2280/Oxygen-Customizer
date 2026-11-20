@@ -1,0 +1,110 @@
+{
+  "name": "Hand",
+  "category": "artistic",
+  "layers": [
+    {
+      "id": "date",
+      "type": "DATE",
+      "format": "EEEE, MMM d",
+      "font": "res:caveat",
+      "weight": 500,
+      "sleepWeight": 500,
+      "width": 100,
+      "height": 700,
+      "sleepStyle": "NONE",
+      "change": "FADE"
+    },
+    {
+      "id": "hours",
+      "type": "HOURS",
+      "color": "accent1",
+      "font": "res:caveat",
+      "weight": 600,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "change": "FADE",
+      "sleepStyle": "OUTLINE"
+    },
+    {
+      "id": "minutes",
+      "type": "MINUTES",
+      "color": "accent1",
+      "font": "res:caveat",
+      "weight": 600,
+      "sleepWeight": 400,
+      "width": 100,
+      "height": 700,
+      "change": "FADE",
+      "sleepStyle": "OUTLINE"
+    }
+  ],
+  "large": {
+    "column": {
+      "gap": 0.055,
+      "align": "CENTER",
+      "children": [
+        {
+          "layer": "date",
+          "size": 0.05
+        },
+        {
+          "column": {
+            "gap": 0.045,
+            "align": "CENTER",
+            "children": [
+              {
+                "layer": "hours",
+                "size": 0.6681
+              },
+              {
+                "layer": "minutes",
+                "size": 0.6681
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "x": 0.5,
+    "anchor": "CENTER"
+  },
+  "small": {
+    "x": 0.0225,
+    "anchor": "START",
+    "row": {
+      "gap": 0.04,
+      "align": "CENTER",
+      "children": [
+        {
+          "column": {
+            "gap": 0.0146,
+            "align": "CENTER",
+            "children": [
+              {
+                "column": {
+                  "gap": 0.0119,
+                  "align": "CENTER",
+                  "children": [
+                    {
+                      "layer": "hours",
+                      "size": 0.1771
+                    },
+                    {
+                      "layer": "minutes",
+                      "size": 0.1771
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "layer": "date",
+          "size": 0.048
+        }
+      ]
+    }
+  }
+}
