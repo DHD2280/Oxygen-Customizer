@@ -5,6 +5,7 @@ import it.dhd.oxygencustomizer.xmorph.domain.model.ColumnNode
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceAlign
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceBadge
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceChangeStyle
+import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImageFilter
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayer
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayerType
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceNode
@@ -101,6 +102,11 @@ object ClockFaceJsonMapper {
             sleepColor = json.optString("sleepColor").ifEmpty { null },
             aspect = json.optFloat("aspect", 1f).takeIf { it.isFinite() && it > 0f } ?: 1f,
             hostHeight = json.optFloat("hostHeight", 1f).takeIf { it.isFinite() && it > 0f } ?: 1f,
+            imageFilter = json.optString("imageFilter")
+                .let { name -> FaceImageFilter.entries.firstOrNull { it.name == name } }
+                ?: FaceImageFilter.NONE,
+            imageBlur = json.optInt("imageBlur", 30).coerceIn(10, 100),
+            imageTint = json.optInt("imageTint", 40).coerceIn(10, 90),
             radius = json.optFloat("radius", 0.5f),
             sleepScale = if (json.has("sleepScale")) json.optFloat("sleepScale", 1f) else null,
             sleepRotation = if (json.has("sleepRotation")) json.optFloat(
@@ -249,6 +255,11 @@ object ClockFaceJsonMapper {
             if (type == FaceLayerType.CARD || type == FaceLayerType.GAUGE || type == FaceLayerType.IMAGE || type == FaceLayerType.MEDIA_ART || type == FaceLayerType.SPACER) {
                 put("aspect", (aspect.takeIf { it.isFinite() && it > 0f } ?: 1f).toDouble())
                 put("radius", radius.toDouble())
+            }
+            if (type == FaceLayerType.IMAGE && imageFilter != FaceImageFilter.NONE) {
+                put("imageFilter", imageFilter.name)
+                put("imageBlur", imageBlur)
+                put("imageTint", imageTint)
             }
             if (type == FaceLayerType.DEVICE_ITEM) {
                 put("aspect", (aspect.takeIf { it.isFinite() && it > 0f } ?: 1f).toDouble())

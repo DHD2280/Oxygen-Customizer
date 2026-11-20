@@ -16,7 +16,6 @@ import it.dhd.oxygencustomizer.xmorph.domain.model.StackNode
 object CustomFaces {
 
     const val ELEMENT_CATEGORY = "element"
-    const val MINE_CATEGORY = "mine"
     const val OWNED_CATEGORY = "owned"
     const val GROUP_CATEGORY = "group"
 

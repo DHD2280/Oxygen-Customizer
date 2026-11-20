@@ -21,11 +21,6 @@ data class CompositionItem(
     fun scale(state: ItemState): Float =
         if (state == ItemState.LARGE || state == ItemState.AOD_LARGE) largeScale else smallScale
 
-    fun withScale(state: ItemState, value: Float): CompositionItem =
-        if (state == ItemState.LARGE || state == ItemState.AOD_LARGE) copy(largeScale = value) else copy(
-            smallScale = value
-        )
-
     val hasAod: Boolean
         get() = aodLarge != null || aodSmall != null || ItemState.AOD_LARGE in hidden || ItemState.AOD_SMALL in hidden
 

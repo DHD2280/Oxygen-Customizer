@@ -7,9 +7,6 @@ data class ItemBounds(val left: Float, val top: Float, val right: Float, val bot
     val height: Float
         get() = bottom - top
 
-    fun overlaps(other: ItemBounds): Boolean =
-        left < other.right && other.left < right && top < other.bottom && other.top < bottom
-
     companion object {
         fun of(placement: FacePlacement, width: Float, height: Float): ItemBounds {
             val left = when (placement.anchor) {

@@ -31,9 +31,6 @@ data class Composition(
 
     fun remove(id: Int): Composition = copy(items = items.filterNot { it.id == id })
 
-    fun removeStyle(style: Int): Composition =
-        copy(items = items.filterNot { !it.clock && it.style == style })
-
     fun place(id: Int, state: ItemState, placement: FacePlacement): Composition =
         copy(items = items.map { if (it.id == id) it.with(state, placement) else it })
 

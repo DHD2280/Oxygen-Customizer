@@ -120,6 +120,7 @@ import it.dhd.oxygencustomizer.xmorph.domain.model.ClockFace
 import it.dhd.oxygencustomizer.xmorph.domain.model.EditScope
 import it.dhd.oxygencustomizer.xmorph.domain.model.ElementKind
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceAlign
+import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImageFilter
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayer
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayerType
 import it.dhd.oxygencustomizer.xmorph.domain.model.FacePlacement
@@ -1222,6 +1223,12 @@ class LockscreenClockDesignFragment : Fragment() {
             }
         }
         section(panel, getString(R.string.designer_style), style)
+
+        if (layer.type == FaceLayerType.IMAGE) section(
+            panel,
+            getString(R.string.albumart_filter_title),
+            imageFilterControls(layer)
+        )
 
         val shape = mutableListOf<View>()
         if (layer.type != FaceLayerType.CARD && (!text || FaceFont.supportsWeight(layer.font))) {
@@ -2485,6 +2492,69 @@ class LockscreenClockDesignFragment : Fragment() {
         setSwitchChangeListener { _, value -> onChange(value) }
     }
 
+    private fun imageFilterControls(layer: FaceLayer): List<View> {
+        val controls = mutableListOf<View>()
+        controls += listWidget(
+            getString(R.string.albumart_filter_title),
+            IMAGE_FILTERS.map { getString(it.second) },
+            IMAGE_FILTERS.indexOfFirst { it.first == layer.imageFilter }
+        ) { index ->
+            viewModel.updateLayer(
+                layer.id,
+                "imageFilter"
+            ) { it.copy(imageFilter = IMAGE_FILTERS[index].first) }
+            refreshPanel()
+        }
+        if (layer.imageFilter == FaceImageFilter.BLUR || layer.imageFilter == FaceImageFilter.GRAY_BLUR) {
+            controls += layerSlider(
+                getString(R.string.albumart_blur_title),
+                layer.imageBlur,
+                10,
+                100
+            ) { value ->
+                viewModel.updateLayer(layer.id, "imageBlur") { it.copy(imageBlur = value) }
+            }
+        }
+        if (layer.imageFilter == FaceImageFilter.TINT) {
+            controls += layerSlider(
+                getString(R.string.albumart_tint_intensity_title),
+                layer.imageTint,
+                10,
+                90
+            ) { value ->
+                viewModel.updateLayer(layer.id, "imageTint") { it.copy(imageTint = value) }
+            }
+        }
+        return controls
+    }
+
+    private fun layerSlider(
+        title: String,
+        value: Int,
+        from: Int,
+        to: Int,
+        onChange: (Int) -> Unit
+    ): SliderWidget =
+        SliderWidget(requireContext()).apply {
+            setTitle(title)
+            setSliderValueFrom(from)
+            setSliderValueTo(to)
+            setSliderStepSize(1)
+            setSliderValue(value.coerceIn(from, to))
+            setOnSliderTouchListener(object : OplusSlider.OnSliderChangeListener {
+                override fun onProgressChanged(slider: OplusSlider, fromUser: Boolean) {}
+
+                override fun onStartTrackingTouch(slider: OplusSlider) {
+                    panelFrozen = true
+                }
+
+                override fun onStopTrackingTouch(slider: OplusSlider) {
+                    panelFrozen = false
+                    onChange(getSliderValue())
+                }
+            })
+        }
+
     private fun styleSlider(key: StyleKey, label: Int, from: Float, to: Float): SliderWidget {
         val value = viewModel.value(key)
         val scale = when (key) {
@@ -2730,6 +2800,14 @@ class LockscreenClockDesignFragment : Fragment() {
             FaceSleepStyle.OUTLINE to R.string.designer_aod_outline,
             FaceSleepStyle.THIN_OUTLINE to R.string.designer_aod_thin_outline,
             FaceSleepStyle.HIDE to R.string.designer_aod_hide
+        )
+
+        private val IMAGE_FILTERS = listOf(
+            FaceImageFilter.NONE to R.string.albumart_filter_none,
+            FaceImageFilter.GRAYSCALE to R.string.albumart_filter_grayscale,
+            FaceImageFilter.TINT to R.string.albumart_filter_tint,
+            FaceImageFilter.BLUR to R.string.albumart_filter_blur,
+            FaceImageFilter.GRAY_BLUR to R.string.albumart_filter_grayblur
         )
 
         private val ADDABLE = listOf(

@@ -360,32 +360,6 @@ object FaceEditor {
         }
     }
 
-    fun canAlign(face: ClockFace, large: Boolean, id: String): Boolean =
-        when (val parent = parentOf(if (large) face.large else face.small, id)) {
-            is ColumnNode, is RowNode -> true
-            is StackNode -> parent.width != null
-            else -> false
-        }
-
-    fun selfAlign(face: ClockFace, large: Boolean, id: String): FaceAlign? {
-        val root = if (large) face.large else face.small
-        find(root, id)?.align?.let { return it }
-        return when (val parent = parentOf(root, id)) {
-            is ColumnNode -> parent.align
-            is RowNode -> parent.align
-            is StackNode -> find(root, id)?.placement?.anchor
-            else -> null
-        }
-    }
-
-    fun contentAlign(face: ClockFace, large: Boolean, cardId: String): FaceAlign? {
-        val cell =
-            parentOf(if (large) face.large else face.small, cardId) as? StackNode ?: return null
-        val content =
-            cell.children.firstOrNull { !(it is LayerNode && it.id == cardId) } ?: return null
-        return (content as? LayerNode)?.align ?: content.placement.anchor
-    }
-
     fun setContentAlign(
         face: ClockFace,
         scope: EditScope,
@@ -441,25 +415,6 @@ object FaceEditor {
             EditScope.AOD -> updateBoth(face, id) { it.copy(align = align) }
             else -> updateNode(face, scope == EditScope.LARGE, id) { it.copy(align = align) }
         }
-
-    fun viewAlign(face: ClockFace, large: Boolean): FaceAlign =
-        (if (large) face.large else face.small).placement.anchor
-
-    fun setViewAlign(face: ClockFace, scope: EditScope, align: FaceAlign): ClockFace {
-        val x = when (align) {
-            FaceAlign.START -> 0f
-            FaceAlign.CENTER -> 0.5f
-            FaceAlign.END -> 1f
-        }
-
-        fun apply(root: FaceNode): FaceNode =
-            withPlacement(root, root.placement.copy(x = x, anchor = align))
-        return when (scope) {
-            EditScope.AOD -> face.copy(large = apply(face.large), small = apply(face.small))
-            EditScope.LARGE -> face.copy(large = apply(face.large))
-            EditScope.SMALL -> face.copy(small = apply(face.small))
-        }
-    }
 
     private fun writeOne(
         face: ClockFace,

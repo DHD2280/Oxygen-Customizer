@@ -45,7 +45,10 @@ data class FaceLayer(
     val sleepStretch: Float? = null,
     val sleepStretchX: Float? = null,
     val activeColor: String? = null,
-    val activeTint: Float? = null
+    val activeTint: Float? = null,
+    val imageFilter: FaceImageFilter = FaceImageFilter.NONE,
+    val imageBlur: Int = 30,
+    val imageTint: Int = 40
 ) {
     val isTime: Boolean
         get() = type in TIME_TYPES

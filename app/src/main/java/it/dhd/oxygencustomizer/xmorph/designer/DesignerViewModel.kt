@@ -36,8 +36,6 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
     private val repository = DesignerRepository(application)
 
 
-    fun setFont(family: String) = updateLayers("font") { it.copy(font = family) }
-
     private val state = MutableStateFlow(EditorUiState())
     private val undoStack = ArrayDeque<EditorSnapshot>()
     private val redoStack = ArrayDeque<EditorSnapshot>()
@@ -90,8 +88,6 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
         if (face.category != CustomFaces.ELEMENT_CATEGORY || face.layers.size != 1) return null
         return FaceComposer.prefix(id) + face.layers.first().id
     }
-
-    fun setEditingOn(on: Boolean) = state.update { it.copy(editingOn = on) }
 
     private fun onTarget(current: EditorUiState): Boolean =
         current.editingOn && current.scope != EditScope.AOD && current.face?.let { face ->
@@ -224,27 +220,9 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
         return FaceEditor.readEffect(face, id, current.scope)
     }
 
-    fun setDimensions(width: Float, height: Float) = edit("dimensions") { face, current ->
-        val id = current.primary ?: return@edit face
-        if (current.scope == EditScope.AOD || !width.isFinite() || !height.isFinite() || width <= 0f || height <= 0f) return@edit face
-        val aspect = (width / height).takeIf { it.isFinite() }?.coerceIn(MIN_ASPECT, MAX_ASPECT)
-            ?: return@edit face
-        val sized = FaceEditor.write(face, current.targets, current.scope, StyleKey.SIZE, width)
-        FaceEditor.updateLayers(sized, listOf(id)) { it.copy(aspect = aspect) }
-    }
-
     fun setEffect(effect: FaceTextEffect) = edit("effect") { face, current ->
         FaceEditor.writeEffect(face, current.targets, current.scope, effect)
     }
-
-    fun borderColor(): String {
-        val current = state.value
-        val face = current.face ?: return ""
-        val id = current.primary ?: return ""
-        return FaceEditor.layer(face, id)?.stroke.orEmpty()
-    }
-
-    fun setBorder(color: String) = updateLayers("stroke") { it.copy(stroke = color) }
 
     fun setColor(color: String) = edit("color") { face, current ->
         if (onTarget(current)) return@edit FaceEditor.updateLayers(face, current.targets) {
@@ -383,14 +361,6 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
         val id = ItemGroups.itemId(key) ?: return false
         val style = draft.parts.composition.item(id)?.style ?: return false
         return draft.parts.widgets[style]?.category == CustomFaces.GROUP_CATEGORY
-    }
-
-    fun groupedMember(layerId: String): Boolean =
-        ItemGrouping.memberOf(layerId) != null && isGroupItem(ItemGroups.keyOf(layerId))
-
-    fun startGrouping(key: String) {
-        val id = ItemGroups.itemId(key) ?: return
-        state.update { it.copy(grouping = setOf(id), selectedId = null, editingOn = false) }
     }
 
     fun toggleGrouping(key: String) {
@@ -606,10 +576,6 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
         )
     }
 
-    fun setHideIdle(ids: List<String>, hide: Boolean) = edit("hideIdle") { face, _ ->
-        FaceEditor.updateLayers(face, ids) { it.copy(hideIdle = hide) }
-    }
-
     fun updateLayer(id: String, key: Any, transform: (FaceLayer) -> FaceLayer) =
         edit(key) { face, _ ->
             FaceEditor.updateLayers(face, listOf(id), transform)
@@ -663,20 +629,6 @@ class DesignerViewModel(application: Application) : AndroidViewModel(application
         } else {
             FaceEditor.node(face, large, id)?.placement
         }
-    }
-
-    fun reportBounds(bounds: TargetBounds?) {
-        if (state.value.bounds != bounds) state.update { it.copy(bounds = bounds) }
-    }
-
-    fun setPositionX(id: String, x: Float) {
-        val placement = placementOf(state.value, id) ?: return
-        move(id, x - placement.x, 0f)
-    }
-
-    fun setPositionY(id: String, y: Float) {
-        val placement = placementOf(state.value, id) ?: return
-        move(id, 0f, y - placement.y)
     }
 
     fun resize(id: String, width: Float, height: Float) = edit("resize:$id") { face, current ->
@@ -977,7 +929,6 @@ private const val MIN_ASPECT = 0.05f
 private const val MIN_HOST_STRETCH = 0.4f
 private const val MAX_HOST_STRETCH = 4f
 private const val MAX_ASPECT = 120f
-private const val STOP_TIMEOUT = 5_000L
 private const val HISTORY_LIMIT = 60
 private const val MIN_SIZE = 0.02f
 private const val MAX_SIZE = 1.5f

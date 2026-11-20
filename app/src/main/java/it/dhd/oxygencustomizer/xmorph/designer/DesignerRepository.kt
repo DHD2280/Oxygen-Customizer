@@ -47,9 +47,6 @@ class DesignerRepository(context: Context) {
     fun face(style: Int): ClockFace? =
         (read(KEY_FACE_PREFIX + style) ?: defaultFace(style))?.let(DesignerFonts::sanitize)
 
-    fun isModified(style: Int): Boolean =
-        OCPreferences.getString(KEY_FACE_PREFIX + style, null) != null
-
     fun saveFace(style: Int, face: ClockFace) {
         if (face == defaultFace(style)) resetFace(style)
         else OCPreferences.putString(KEY_FACE_PREFIX + style, ClockFaceJsonMapper.toJson(face))

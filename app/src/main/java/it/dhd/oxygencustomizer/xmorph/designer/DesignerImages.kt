@@ -3,11 +3,14 @@ package it.dhd.oxygencustomizer.xmorph.designer
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.LruCache
 import androidx.core.graphics.scale
 import it.dhd.oxygencustomizer.utils.Constants
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImage
+import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImageFilter
+import it.dhd.oxygencustomizer.xposed.utils.DrawableConverter
 import java.io.File
 
 object DesignerImages {
@@ -16,6 +19,7 @@ object DesignerImages {
     private const val CACHE_BYTES = 12 * 1024 * 1024
     private const val PREFIX = "img_"
     private const val EXTENSION = "png"
+    private const val MAX_BLUR_RADIUS = 25f
 
     val directory: File
         get() = File(Constants.XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock/images")
@@ -32,6 +36,45 @@ object DesignerImages {
         val bitmap = BitmapFactory.decodeFile(file.path) ?: return null
         cache.put(id, bitmap)
         return bitmap
+    }
+
+    fun filtered(
+        context: Context,
+        id: String,
+        filter: FaceImageFilter,
+        blur: Int,
+        tint: Int,
+        accent: Int
+    ): Bitmap? {
+        val source = bitmap(id) ?: return null
+        if (filter == FaceImageFilter.NONE) return source
+        val key = "$id|$filter|$blur|$tint|$accent"
+        cache.get(key)?.let { return it }
+        val radius = blur / 100f * MAX_BLUR_RADIUS
+        val result = try {
+            when (filter) {
+                FaceImageFilter.GRAYSCALE -> DrawableConverter.toGrayscale(source)
+                FaceImageFilter.TINT -> DrawableConverter.getColoredBitmap(
+                    BitmapDrawable(
+                        context.resources,
+                        source
+                    ), accent, tint
+                )
+
+                FaceImageFilter.BLUR -> DrawableConverter.getBlurredImage(context, source, radius)
+                FaceImageFilter.GRAY_BLUR -> DrawableConverter.getGrayscaleBlurredImage(
+                    context,
+                    source,
+                    radius
+                )
+
+                FaceImageFilter.NONE -> source
+            }
+        } catch (_: Throwable) {
+            source
+        } ?: source
+        cache.put(key, result)
+        return result
     }
 
     fun import(context: Context, uri: Uri): FaceImage? {

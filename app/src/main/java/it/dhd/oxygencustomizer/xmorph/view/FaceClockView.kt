@@ -30,6 +30,7 @@ import it.dhd.oxygencustomizer.xmorph.domain.model.ClockFace
 import it.dhd.oxygencustomizer.xmorph.domain.model.ColumnNode
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceAlign
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceData
+import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImageFilter
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayer
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceLayerType
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceNode
@@ -47,6 +48,7 @@ import it.dhd.oxygencustomizer.xmorph.engine.render.Placement
 import it.dhd.oxygencustomizer.xmorph.engine.render.TextTokens
 import it.dhd.oxygencustomizer.xmorph.engine.render.WordPhrases
 import it.dhd.oxygencustomizer.xmorph.engine.render.withRomanNumerals
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils
 import it.dhd.oxygencustomizer.xposed.utils.GlassTextEffect
 import it.dhd.oxygencustomizer.xposed.utils.LiquidGlass
 import java.util.Calendar
@@ -695,10 +697,28 @@ class FaceClockView(context: Context, face: ClockFace) : FrameLayout(context) {
             view.layout(0, 0, w, h)
         }
         val radius = min(w, h) * layer.radius.coerceIn(0f, 0.5f)
-        val tag = layer.format to radius
+        val accent =
+            if (layer.imageFilter == FaceImageFilter.TINT) OpUtils.getPrimaryColor(context) else 0
+        val tag = listOf(
+            layer.format,
+            radius,
+            layer.imageFilter,
+            layer.imageBlur,
+            layer.imageTint,
+            accent
+        )
         if (view.tag != tag) {
             view.tag = tag
-            view.setImageBitmap(DesignerImages.bitmap(layer.format))
+            view.setImageBitmap(
+                DesignerImages.filtered(
+                    context,
+                    layer.format,
+                    layer.imageFilter,
+                    layer.imageBlur,
+                    layer.imageTint,
+                    accent
+                )
+            )
             view.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(target: View, outline: Outline) {
                     outline.setRoundRect(0, 0, target.width, target.height, radius)

@@ -8,18 +8,10 @@ import android.graphics.fonts.FontFamily
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import it.dhd.oxygencustomizer.R
-import it.dhd.oxygencustomizer.xmorph.domain.model.ClockFace
-import it.dhd.oxygencustomizer.xmorph.domain.model.ColumnNode
-import it.dhd.oxygencustomizer.xmorph.domain.model.FaceNode
-import it.dhd.oxygencustomizer.xmorph.domain.model.LayerNode
-import it.dhd.oxygencustomizer.xmorph.domain.model.RowNode
-import it.dhd.oxygencustomizer.xmorph.domain.model.StackNode
 import it.dhd.oxygencustomizer.xmorph.domain.model.UserFont
 import it.dhd.oxygencustomizer.xmorph.engine.render.FontAxes
-import it.dhd.oxygencustomizer.xmorph.engine.render.Request
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.Executors
 
 @SuppressLint("StaticFieldLeak")
 object FaceFont {
@@ -33,7 +25,6 @@ object FaceFont {
     private const val AXIS_JOIN = "&"
     private const val AXIS_ASSIGN = "="
     private const val AXIS_TAG_LENGTH = 4
-    private const val MAX_PREWARM = 400
     private const val WEIGHT_AXIS = "wght"
     private const val WIDTH_AXIS = "wdth"
     private const val RETRY_MS = 5_000L
@@ -59,11 +50,6 @@ object FaceFont {
 
     @Volatile
     private var userFonts: ((String) -> ParcelFileDescriptor?)? = null
-    private val warmer = Executors.newSingleThreadExecutor()
-
-    @Volatile
-    var isWarm = false
-        private set
 
     fun init(context: Context) {
         if (fontContext == null) fontContext = context
@@ -73,14 +59,6 @@ object FaceFont {
         userFonts = loader
     }
 
-    fun warmUp() {
-        warmer.execute {
-            flexFont
-            isWarm = true
-            BundledFonts.ids.keys.forEach { hasWeightAxis(BundledFonts.SCHEME + it) }
-        }
-    }
-
     fun hasWidthAxis(font: String): Boolean {
         if (font.isEmpty()) return true
         UserFont.idOf(font)?.let { return WIDTH_AXIS in userAxesOf(it) }
@@ -88,8 +66,6 @@ object FaceFont {
         return font.removePrefix(BundledFonts.SCHEME)
             .substringBefore(AXES_SEPARATOR) in BundledFonts.widthAxis
     }
-
-    fun hasHeightAxis(font: String): Boolean = font.isEmpty()
 
     fun supportsWeight(font: String): Boolean =
         !font.startsWith(BundledFonts.SCHEME) && !font.startsWith(UserFont.SCHEME) || hasWeightAxis(
@@ -128,55 +104,6 @@ object FaceFont {
             else -> fileTypeface(font, wght)
         }
         return synchronized(cache) { cache.getOrPut(key) { typeface } }
-    }
-
-    fun prewarm(face: ClockFace) {
-        val nodes = HashMap<String, MutableList<LayerNode>>()
-        fun collect(node: FaceNode) {
-            when (node) {
-                is LayerNode -> nodes.getOrPut(node.id) { mutableListOf() } += node
-                is RowNode -> node.children.forEach(::collect)
-                is ColumnNode -> node.children.forEach(::collect)
-                is StackNode -> node.children.forEach(::collect)
-            }
-        }
-        listOfNotNull(face.large, face.small, face.aodLarge, face.aodSmall).forEach(::collect)
-        val requests = face.layers.flatMap { layer ->
-            val placed = nodes[layer.id].orEmpty()
-            val weights = buildList {
-                add(layer.weight)
-                if (layer.sleepStyle.thin) add(layer.sleepWeight)
-                placed.mapNotNullTo(this) { it.weight }
-            }
-            val widths =
-                listOfNotNull(layer.width, layer.sleepWidth) + placed.mapNotNull { it.width }
-            val heights =
-                listOfNotNull(layer.height, layer.sleepHeight) + placed.mapNotNull { it.height }
-            val weightSteps = steps(weights, WEIGHT_STEP)
-            val widthSteps = steps(widths, WIDTH_STEP)
-            val heightSteps = steps(heights, HEIGHT_STEP)
-            weightSteps.flatMap { weight ->
-                widthSteps.flatMap { width ->
-                    heightSteps.map { height ->
-                        Request(
-                            layer.font,
-                            weight,
-                            width,
-                            height
-                        )
-                    }
-                }
-            }.take(MAX_PREWARM)
-        }.distinct()
-        warmer.execute {
-            requests.forEach { typeface(it.font, it.weight, it.width, it.height) }
-        }
-    }
-
-    private fun steps(values: List<Int>, step: Int): List<Int> {
-        val low = quantize(values.min(), step)
-        val high = quantize(values.max(), step)
-        return (low..high step step).toList()
     }
 
     private fun quantize(value: Int, step: Int): Int = (value + step / 2) / step * step
