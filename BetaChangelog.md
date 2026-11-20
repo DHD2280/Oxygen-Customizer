@@ -1,3 +1,32 @@
+**beta-213**  
+- Added charging voltage and remaining time on Now Bar Battery  
+- Fixed depth wallpaper also in AOD  
+- Added Lockscreen Now Bar side margin  
+- Improved Now Bar Notification  
+- Added notification styles as Xposed Notification Packs  
+- Fixed Lockscreen Now Bar positioning and margin on COS17  
+- Fixed auto hide clock on COS17  
+- Fixed Depth Wallpaper on COS17  
+- Fixed in/out wifi and mobile for COS17  
+- Added liquid glass to Lockscreen Now Bar on COS17  
+- Fixed open qs action on COS17  
+- Added custom activity/app launcher on pill longpress  
+- Fixed tile animations and tile page animations on COS17  
+- Added scope check for LSPosed API102  
+- Fixed SystemUI crashes on configuration changed and improved remove volume warning  
+- Added Meteo Aeronautica Militare weather provider  
+- Added more device widgets  
+- Added more weather data  
+- Added Boundless View  
+- Improved framework preferences handling  
+- Fixed material dock background  
+- Added Liquid Glass style for custom lockscreen elements on COS17  
+- Fixed Lockscreen Widgets on COS17  
+- Fixed Lockscreen Weather on COS17  
+- Fixed Lockscreen Clock on COS17  
+- Fixed tap on media tile while qs widgets on  
+- Fixed qs tiles count on COS17  
+  
 **beta-212**  
 - Bring back gesture to expand a notification on OOS16.0.7+  
 - Fixed launcher home grid on COS17  
