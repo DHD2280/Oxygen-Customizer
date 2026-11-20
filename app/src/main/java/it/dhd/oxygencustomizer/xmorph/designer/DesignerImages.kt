@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.LruCache
+import androidx.core.graphics.scale
 import it.dhd.oxygencustomizer.utils.Constants
 import it.dhd.oxygencustomizer.xmorph.domain.model.FaceImage
 import java.io.File
@@ -48,11 +49,9 @@ object DesignerImages {
                 BitmapFactory.Options().apply { inSampleSize = sample })
         } ?: return null
         val scale = MAX_SIDE.toFloat() / maxOf(decoded.width, decoded.height)
-        val bitmap = if (scale < 1f) Bitmap.createScaledBitmap(
-            decoded,
+        val bitmap = if (scale < 1f) decoded.scale(
             (decoded.width * scale).toInt().coerceAtLeast(1),
-            (decoded.height * scale).toInt().coerceAtLeast(1),
-            true
+            (decoded.height * scale).toInt().coerceAtLeast(1)
         ) else decoded
         if (!directory.isDirectory && !directory.mkdirs()) return null
         val target = uniqueFile("$PREFIX${System.currentTimeMillis()}")

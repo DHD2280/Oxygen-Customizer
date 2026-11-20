@@ -2,6 +2,7 @@ package it.dhd.oxygencustomizer.ui.activity;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static it.dhd.oxygencustomizer.ui.fragments.UpdateFragment.UPDATES_CHANNEL_ID;
+import static it.dhd.oxygencustomizer.utils.Constants.XPOSED_RESOURCE_DIRS;
 import static it.dhd.oxygencustomizer.utils.ModuleConstants.XPOSED_ONLY_MODE;
 
 import android.annotation.SuppressLint;
@@ -170,9 +171,11 @@ public class MainActivity extends BaseActivity implements PreferenceFragmentComp
         if (!AppUtils.hasStoragePermission()) {
             AppUtils.requestStoragePermission(this);
         }
-        File modDir = new File(Constants.XPOSED_RESOURCE_TEMP_DIR);
-        if (!modDir.exists()) {
-            Shell.cmd("mkdir -p " + Constants.XPOSED_RESOURCE_TEMP_DIR).exec();
+        for (String dir : XPOSED_RESOURCE_DIRS) {
+            File file = new File(dir);
+            if (!file.exists()) {
+                Shell.cmd("mkdir -p " + dir).exec();
+            }
         }
 
         ShortcutUtils shortcutUtils = new ShortcutUtils(this);

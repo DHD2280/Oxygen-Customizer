@@ -1051,6 +1051,13 @@ public final class Constants {
     public static final String HEADER_IMAGE_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_image.png";
     public static final String HEADER_CLOCK_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_user_image.png";
     public static final String HEADER_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/header_clock_font.ttf";
+    public static final String LOCKSCREEN_CLOCK_IMAGES = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock/images";
+    public static final String LOCKSCREEN_CLOCK_FONTS = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock/fonts";
+    public static final String[] XPOSED_RESOURCE_DIRS = new String[]{
+            XPOSED_RESOURCE_TEMP_DIR,
+            LOCKSCREEN_CLOCK_IMAGES,
+            LOCKSCREEN_CLOCK_FONTS
+    };
     public static final String LOCKSCREEN_CLOCK_FONT_DIR = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_clock_font.ttf";
     public static final String LOCKSCREEN_USER_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_user_image.png";
     public static final String LOCKSCREEN_CUSTOM_IMAGE = XPOSED_RESOURCE_TEMP_DIR + "/lockscreen_custom_image.png";
