@@ -150,6 +150,14 @@ public class BatteryDataProvider extends XposedMods {
             if (!(param.args.length > 0)) return;
             OplusBatteryStatus batteryStatus = new OplusBatteryStatus(param.args[0]);
             try {
+                boolean charging = batteryStatus.getPlugged() != 0 || batteryStatus.getBatteryCharging() || batteryStatus.isWirelessCharging();
+                if (charging != mCharging) {
+                    mCharging = charging;
+                    onBatteryInfoChanged();
+                }
+            } catch (Throwable ignored) {
+            }
+            try {
                 onOplusBatteryChanged(batteryStatus);
             } catch (Throwable t) {
                 Logger.log("BatteryDataProvider - additionalBatteryHook: " + Log.getStackTraceString(t));
