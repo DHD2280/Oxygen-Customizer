@@ -58,8 +58,19 @@ public class Buttons extends FrameworkMods {
     private static boolean volumeToTorchProximity = false;
     private static SensorManager sensorManager;
     private static Sensor proximitySensor;
-    private static SensorEventListener proximitySensorListener;
-    private static boolean shouldTorch = true;
+    private boolean mProximityCovered = false;
+    private boolean mProximityListening = false;
+    private int mPendingKeyCode = KeyEvent.KEYCODE_UNKNOWN;
+    private final SensorEventListener mProximityListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            mProximityCovered = proximitySensor != null && event.values[0] < proximitySensor.getMaximumRange();
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
     private static Object PWM;
     Handler mHandler;
     private long wakeTime = 0;
@@ -263,8 +274,26 @@ public class Buttons extends FrameworkMods {
         doublePressCameraScreenOffEnabled = (!TextUtils.isEmpty(actionValueDoubleCameraScreenOff) && !actionValueDoubleCameraScreenOff.equals("none")) || doublePressCameraEnabled;
     }
 
+    private void startProximity() {
+        if (!volumeToTorchProximity || mProximityListening) return;
+        mProximityCovered = false;
+        if (sensorManager == null) sensorManager = mContext.getSystemService(SensorManager.class);
+        if (sensorManager == null) return;
+        if (proximitySensor == null)
+            proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        if (proximitySensor == null) return;
+        mProximityListening = sensorManager.registerListener(mProximityListener, proximitySensor, SensorManager.SENSOR_DELAY_FASTEST, mHandler);
+    }
+
+    private void stopProximity() {
+        if (!mProximityListening) return;
+        sensorManager.unregisterListener(mProximityListener);
+        mProximityListening = false;
+    }
+
     @Override
     protected void onFrameworkLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
+        SystemUtils.CameraManager();
         ReflectedClass PhoneWindowManagerClass;
         ReflectedClass PhoneWindowManagerExtImpl;
 
@@ -304,42 +333,14 @@ public class Buttons extends FrameworkMods {
 
             Runnable mVolumeLongPressTorch = () -> {
                 try {
-                    if (volumeToTorchProximity) {
-                        sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-                        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-                        if (proximitySensor != null) {
-                            sensorManager.registerListener(proximitySensorListener, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                        }
-                        if (proximitySensor == null) {
-                            // nothing to do
-                            shouldTorch = true;
-                        } else {
-                            proximitySensorListener = new SensorEventListener() {
-                                @Override
-                                public void onSensorChanged(SensorEvent event) {
-                                    float distance = event.values[0];
-                                    shouldTorch = !(distance < proximitySensor.getMaximumRange());
-                                }
-
-                                @Override
-                                public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                                }
-                            };
-                        }
-                        if (proximitySensor != null) {
-                            sensorManager.unregisterListener(proximitySensorListener);
-                        }
-                    } else {
-                        shouldTorch = true;
-                    }
-                    if (volumeToTorchProximity && !shouldTorch) {
-                        return;
-                    }
+                    boolean covered = volumeToTorchProximity && mProximityCovered;
+                    stopProximity();
+                    if (covered) return;
+                    boolean turningOn = !SystemUtils.isFlashOn();
                     SystemUtils.toggleFlash();
                     SystemUtils.vibrate(VibrationEffect.EFFECT_TICK, VibrationAttributes.USAGE_ACCESSIBILITY);
                     if (mHandler.hasCallbacks(mToggleFlash)) mHandler.removeCallbacks(mToggleFlash);
-                    if (volumeToTorchHasTimeout && SystemUtils.isFlashOn()) {
+                    if (volumeToTorchHasTimeout && turningOn) {
                         mHandler.postDelayed(mToggleFlash, volumeToTorchTimeout);
                     }
                 } catch (Throwable t) {
@@ -380,8 +381,18 @@ public class Buttons extends FrameworkMods {
                             KeyEvent e = (KeyEvent) param.args[0];
                             int Keycode = e.getKeyCode();
 
+                            if (Keycode != KeyEvent.KEYCODE_VOLUME_DOWN && Keycode != KeyEvent.KEYCODE_VOLUME_UP)
+                                return;
+                            if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() > 0) {
+                                if (Keycode == mPendingKeyCode) param.setResult(0);
+                                return;
+                            }
+
                             switch (e.getAction()) {
                                 case KeyEvent.ACTION_UP -> {
+                                    if (Keycode != mPendingKeyCode) return;
+                                    mPendingKeyCode = KeyEvent.KEYCODE_UNKNOWN;
+                                    stopProximity();
                                     if (mHandler.hasCallbacks(mVolumeLongPress) || mHandler.hasCallbacks(mVolumeLongPressTorch)) {
                                         SystemUtils.AudioManager().adjustStreamVolume(AudioManager.STREAM_MUSIC, Keycode == KeyEvent.KEYCODE_VOLUME_DOWN ? AudioManager.ADJUST_LOWER : AudioManager.ADJUST_RAISE, SystemUtils.PowerManager().isInteractive() ? AudioManager.FLAG_SHOW_UI : 0);
                                         if (mHandler.hasCallbacks(mVolumeLongPress))
@@ -393,11 +404,13 @@ public class Buttons extends FrameworkMods {
                                     }
                                 }
                                 case KeyEvent.ACTION_DOWN -> {
-                                    if (Keycode != KeyEvent.KEYCODE_VOLUME_DOWN && Keycode != KeyEvent.KEYCODE_VOLUME_UP)
-                                        return;
+                                    mHandler.removeCallbacks(mVolumeLongPress);
+                                    mHandler.removeCallbacks(mVolumeLongPressTorch);
+                                    mPendingKeyCode = KeyEvent.KEYCODE_UNKNOWN;
                                     boolean interactive = SystemUtils.PowerManager().isInteractive();
                                     if (holdVolumeToSkip && (!interactive || holdVolumeToSkipScreenOn) && SystemUtils.AudioManager().isMusicActive()) {
                                         isVolDown = (Keycode == KeyEvent.KEYCODE_VOLUME_DOWN);
+                                        mPendingKeyCode = Keycode;
                                         mHandler.postDelayed(mVolumeLongPress, ViewConfiguration.getLongPressTimeout());
                                         param.setResult(0);
                                     } else if (!interactive) {
@@ -406,6 +419,9 @@ public class Buttons extends FrameworkMods {
                                                 audioMode == AudioManager.MODE_IN_COMMUNICATION ||
                                                 audioMode == AudioManager.MODE_RINGTONE) return;
                                         if (holdVolumeToTorch) {
+                                            SystemUtils.CameraManager();
+                                            mPendingKeyCode = Keycode;
+                                            startProximity();
                                             mHandler.postDelayed(mVolumeLongPressTorch, ViewConfiguration.getLongPressTimeout());
                                             param.setResult(0);
                                         }
