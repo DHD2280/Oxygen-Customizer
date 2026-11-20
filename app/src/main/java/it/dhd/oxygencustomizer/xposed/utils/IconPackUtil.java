@@ -290,9 +290,12 @@ public class IconPackUtil implements Serializable {
                     return null;
                 }
 
-                XmlPullParser parser = packResources.getXml(resID);
-
-                return Drawable.createFromXml(packResources, parser);
+                try {
+                    XmlPullParser parser = packResources.getXml(resID);
+                    return Drawable.createFromXml(packResources, parser);
+                } catch (Throwable ignored) {
+                }
+                return packResources.getDrawable(resID, null);
             } catch (Throwable ignored) {
             }
             return null;
