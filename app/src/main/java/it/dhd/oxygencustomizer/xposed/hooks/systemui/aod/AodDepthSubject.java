@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Method;
 import java.util.Random;
 
 import io.github.libxposed.api.XposedModuleInterface;
@@ -119,9 +120,18 @@ public class AodDepthSubject extends XposedMods {
             mReceiverRegistered = true;
         }
 
-        Class<?> AodRecord = findClassInArray(PRParam,
+        Class<?> AodRecord = null;
+        for (String name : new String[]{
+                "com.oplus.systemui.aod.controller.BaseAodController",
                 "com.oplus.systemui.aod.AodRecord",
-                "com.oplusos.systemui.aod.AodRecord");
+                "com.oplusos.systemui.aod.AodRecord"}) {
+            Class<?> candidate = findClassInArray(PRParam, name);
+            if (candidate != null && hasMethod(candidate, "createAndInitRootView")) {
+                AodRecord = candidate;
+                break;
+            }
+        }
+        if (AodRecord == null) return;
         ReflectedClass.of(AodRecord)
                 .after("createAndInitRootView")
                 .run(param -> {
@@ -151,6 +161,13 @@ public class AodDepthSubject extends XposedMods {
                     stopMoving();
                 });
 
+    }
+
+    private static boolean hasMethod(Class<?> clazz, String name) {
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (method.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     public void animateView(boolean show) {
@@ -193,6 +210,7 @@ public class AodDepthSubject extends XposedMods {
             v.removeView(mLockScreenSubject);
         } catch (Throwable ignored) {}
         mAodRootLayout.addView(mLockScreenSubject, 0);
+        mLockScreenSubject.setVisibility(mDepthWallpaper && mDepthOnAod ? View.VISIBLE : View.GONE);
         mOrignalX = mLockScreenSubject.getX();
         mOriginalY = mLockScreenSubject.getY();
     }
