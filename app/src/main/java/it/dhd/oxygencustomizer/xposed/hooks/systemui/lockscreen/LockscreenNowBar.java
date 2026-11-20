@@ -41,6 +41,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowB
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_ICON_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_IGNORE_SECURITY;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_NOTIFICATION_USE_APP_ICON;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_SIDE_MARGIN;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_BACKGROUND_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.LockscreenNowBar.NOW_BAR_WEATHER_CUSTOM_COLORS;
@@ -83,6 +84,7 @@ public class LockscreenNowBar extends XposedMods {
     private boolean mNowBarEnabled = true;
     private boolean mHideLeftAfforfance = false, mHideRightAffordance = false;
     private int mNowBarBottomMargin = 0;
+    private int mNowBarSideMargin = 0;
     private boolean mNowBarWeather = false;
     private boolean mNowBarNotification = false;
     private boolean mExpanded = false;
@@ -148,6 +150,7 @@ public class LockscreenNowBar extends XposedMods {
         mHideLeftAfforfance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE, false);
         mHideRightAffordance = Xprefs.getBoolean(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE, false);
         mNowBarBottomMargin = Xprefs.getSliderInt(NOW_BAR_BOTTOM_MARGIN, 12);
+        mNowBarSideMargin = Xprefs.getSliderInt(NOW_BAR_SIDE_MARGIN, 0);
         mNowBarWeather = Xprefs.getBoolean(NOW_BAR_WEATHER, false);
         mNowBarNotification = Xprefs.getBoolean(NOW_BAR_NOTIFICATIONS, false);
         mNowBarGlass = Build.VERSION.SDK_INT >= 37 && Xprefs.getBoolean(NOW_BAR_GLASS, false);
@@ -199,6 +202,7 @@ public class LockscreenNowBar extends XposedMods {
                     Key[0].equals(LOCKSCREEN_REMOVE_LEFT_AFFORDANCE) ||
                     Key[0].equals(LOCKSCREEN_REMOVE_RIGHT_AFFORDANCE) ||
                     Key[0].equals(NOW_BAR_BOTTOM_MARGIN) ||
+                    Key[0].equals(NOW_BAR_SIDE_MARGIN) ||
                     Key[0].equals(NOW_BAR_WEATHER) ||
                     Key[0].equals(NOW_BAR_NOTIFICATIONS)) {
                 updateNowBar();
@@ -358,6 +362,7 @@ public class LockscreenNowBar extends XposedMods {
     private void updateBarMargins() {
         boolean isLeftHidden = isLeftAffordanceHidden(mContext, mHideLeftAfforfance) || mHideLeftAfforfance;
         int margin = isLeftHidden && mHideRightAffordance ? dp2px(mContext, 12) : mAffordanceWidth;
+        margin = Math.max(0, margin + dp2px(mContext, mNowBarSideMargin));
         NowBarController mNowBarController = NowBarController.getInstance();
         mNowBarController.updateMargins(margin, margin, dp2px(mContext, mNowBarBottomMargin));
     }

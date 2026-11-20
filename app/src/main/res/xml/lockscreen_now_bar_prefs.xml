@@ -43,6 +43,16 @@
             app:minVal="0"
             app:tickInterval="1" />
 
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:dependency="lockscreen_now_bar_enabled"
+            android:key="lockscreen_now_bar_side_margin"
+            android:summary="@string/lockscreen_now_bar_side_margin_summary"
+            android:title="@string/lockscreen_now_bar_side_margin"
+            app:defaultValue="0"
+            app:maxVal="100"
+            app:minVal="-100"
+            app:tickInterval="1" />
+
         <it.dhd.oneplusui.preference.OplusSwitchPreference
             android:defaultValue="false"
             android:dependency="lockscreen_now_bar_enabled"

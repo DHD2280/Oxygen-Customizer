@@ -622,6 +622,7 @@ public final class Constants {
         public static class LockscreenNowBar {
             public static final String NOW_BAR_ENABLED = "lockscreen_now_bar_enabled";
             public static final String NOW_BAR_BOTTOM_MARGIN = "lockscreen_now_bar_bottom_margin";
+            public static final String NOW_BAR_SIDE_MARGIN = "lockscreen_now_bar_side_margin";
             public static final String NOW_BAR_WEATHER = "lockscreen_now_bar_weather";
             public static final String NOW_BAR_NOTIFICATIONS = "lockscreen_now_bar_notifications";
             public static final String NOW_BAR_GLASS = "lockscreen_now_bar_liquid_glass";
