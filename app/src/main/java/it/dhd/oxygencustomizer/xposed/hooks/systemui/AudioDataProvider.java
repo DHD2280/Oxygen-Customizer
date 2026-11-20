@@ -364,14 +364,14 @@ public class AudioDataProvider extends XposedMods {
     }
 
     public void seekTo(long time) {
-        MediaController controller = getActiveLocalMediaController();
+        MediaController controller = getCurrentLocalMediaController();
         if (controller != null) {
             controller.getTransportControls().seekTo(time);
         }
     }
 
     public long getCurrentTime() {
-        MediaController controller = getActiveLocalMediaController();
+        MediaController controller = getCurrentLocalMediaController();
         return controller != null ?
             controller.getPlaybackState() != null ?
                 controller.getPlaybackState().getPosition() :
@@ -380,7 +380,7 @@ public class AudioDataProvider extends XposedMods {
     }
 
     public static long getTotalDuration() {
-        MediaMetadata metadata = getMediaMetadata();
+        MediaMetadata metadata = getCurrentMediaMetadata();
         return (metadata != null) ? metadata.getLong(MediaMetadata.METADATA_KEY_DURATION) : 0L;
     }
 
@@ -472,6 +472,31 @@ public class AudioDataProvider extends XposedMods {
             return metadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
         }
         return null;
+    }
+
+    private MediaController getCurrentLocalMediaController() {
+        MediaController playing = getActiveLocalMediaController();
+        if (playing != null || mMediaSessionManager == null) return playing;
+        MediaController fallback = null;
+        for (MediaController controller : mMediaSessionManager.getActiveSessions(null)) {
+            MediaController.PlaybackInfo playbackInfo = controller.getPlaybackInfo();
+            if (playbackInfo == null || playbackInfo.getPlaybackType() != MediaController.PlaybackInfo.PLAYBACK_TYPE_LOCAL)
+                continue;
+            if (controller.getMetadata() == null) continue;
+            if (TextUtils.equals(controller.getPackageName(), lastSavedPackageName))
+                return controller;
+            if (fallback == null) fallback = controller;
+        }
+        return fallback;
+    }
+
+    public static MediaMetadata getCurrentMediaMetadata() {
+        try {
+            MediaController controller = instance.getCurrentLocalMediaController();
+            return controller != null ? controller.getMetadata() : null;
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     public static MediaMetadata getMediaMetadata() {
