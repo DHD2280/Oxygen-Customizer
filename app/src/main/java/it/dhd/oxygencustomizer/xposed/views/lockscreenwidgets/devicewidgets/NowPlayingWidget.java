@@ -92,6 +92,7 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     private final TextView mTitle;
     private final TextView mArtist;
     private MediaController mController;
+    private final List<MediaController> mWatched = new ArrayList<>();
     private boolean mListening = false;
 
     private boolean mShowArt = true;
@@ -281,26 +282,55 @@ public class NowPlayingWidget extends BaseDeviceWidget {
     }
 
     private void refresh() {
-        MediaController next = null;
+        List<MediaController> controllers = Collections.emptyList();
         try {
             MediaSessionManager manager = sessions();
-            List<MediaController> controllers = manager == null ? Collections.emptyList() : manager.getActiveSessions(null);
-            for (MediaController controller : controllers) {
-                PlaybackState state = controller.getPlaybackState();
-                if (state != null && state.getState() == PlaybackState.STATE_PLAYING) {
-                    next = controller;
-                    break;
-                }
-                if (next == null) next = controller;
-            }
+            if (manager != null) controllers = manager.getActiveSessions(null);
         } catch (Throwable ignored) {
         }
-        if (!sameSession(next)) {
-            if (mController != null) mController.unregisterCallback(mControllerCallback);
-            mController = next;
-            if (mController != null) mController.registerCallback(mControllerCallback, mHandler);
+        MediaController next = null;
+        MediaController current = null;
+        for (MediaController controller : controllers) {
+            PlaybackState state = controller.getPlaybackState();
+            if (next == null && state != null && state.getState() == PlaybackState.STATE_PLAYING)
+                next = controller;
+            if (current == null && sameSession(controller)) current = controller;
         }
+        if (next == null)
+            next = current != null ? current : (controllers.isEmpty() ? null : controllers.get(0));
+        watch(controllers);
+        mController = next;
         render();
+    }
+
+    private void watch(List<MediaController> controllers) {
+        List<MediaController> keep = new ArrayList<>();
+        for (MediaController watched : mWatched) {
+            boolean active = false;
+            for (MediaController controller : controllers) {
+                if (watched.getSessionToken().equals(controller.getSessionToken())) {
+                    active = true;
+                    break;
+                }
+            }
+            if (active) keep.add(watched);
+            else watched.unregisterCallback(mControllerCallback);
+        }
+        for (MediaController controller : controllers) {
+            boolean known = false;
+            for (MediaController watched : keep) {
+                if (watched.getSessionToken().equals(controller.getSessionToken())) {
+                    known = true;
+                    break;
+                }
+            }
+            if (!known) {
+                controller.registerCallback(mControllerCallback, mHandler);
+                keep.add(controller);
+            }
+        }
+        mWatched.clear();
+        mWatched.addAll(keep);
     }
 
     private boolean sameSession(MediaController next) {
@@ -483,10 +513,9 @@ public class NowPlayingWidget extends BaseDeviceWidget {
             }
             mListening = false;
         }
-        if (mController != null) {
-            mController.unregisterCallback(mControllerCallback);
-            mController = null;
-        }
+        for (MediaController watched : mWatched) watched.unregisterCallback(mControllerCallback);
+        mWatched.clear();
+        mController = null;
     }
 
     @Override
