@@ -298,10 +298,10 @@ public class LockscreenView extends FrameLayout {
     private void updateVisibility() {
         post(() -> {
             mClockContainer.setVisibility(mLockscreenClockEnabled ? View.VISIBLE : View.GONE);
-            mWeatherContainer.setVisibility(weatherShown() ? View.VISIBLE : View.GONE);
-            mWidgetsContainer.setVisibility(widgetsShown() ? View.VISIBLE : View.GONE);
+            mWeatherContainer.setVisibility(mLockscreenWeatherEnabled ? View.VISIBLE : View.GONE);
+            mWidgetsContainer.setVisibility(mLockscreenWidgetsEnabled ? View.VISIBLE : View.GONE);
 
-            if (!mLockscreenClockEnabled && !weatherShown() && !widgetsShown()) {
+            if (!mLockscreenClockEnabled && !mLockscreenWeatherEnabled && !mLockscreenWidgetsEnabled) {
                 setVisibility(View.GONE);
             } else {
                 setVisibility(View.VISIBLE);
