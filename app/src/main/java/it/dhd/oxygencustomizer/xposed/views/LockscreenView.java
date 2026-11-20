@@ -259,10 +259,10 @@ public class LockscreenView extends FrameLayout {
     }
 
     public void onUiStateChanged(int uiState) {
-        if (weatherShown()) {
+        if (mLockscreenWeatherEnabled) {
             post(() -> mWeatherContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
-        if (widgetsShown()) {
+        if (mLockscreenWidgetsEnabled) {
             post(() -> mWidgetsContainer.setVisibility(uiState == CLOCK_UI_STATE_AOD ? GONE : VISIBLE));
         }
 
@@ -275,8 +275,8 @@ public class LockscreenView extends FrameLayout {
 
         int fullHeight = 0;
         if (mLockscreenClockEnabled) fullHeight += clockHeight;
-        if (weatherShown()) fullHeight += weatherHeight;
-        if (widgetsShown()) fullHeight += widgetsHeight;
+        if (mLockscreenWeatherEnabled) fullHeight += weatherHeight;
+        if (mLockscreenWidgetsEnabled) fullHeight += widgetsHeight;
 
         return fullHeight;
     }
