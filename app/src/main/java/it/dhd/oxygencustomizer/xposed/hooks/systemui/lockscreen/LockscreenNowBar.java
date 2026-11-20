@@ -304,6 +304,15 @@ public class LockscreenNowBar extends XposedMods {
                     });
         }
 
+        ReflectedClass NsslSlideHotArea = ReflectedClass.ofIfPossible("com.oplus.systemui.util.LockscreenNotificationNsslSlideHotArea", PRParam.getClassLoader());
+        if (NsslSlideHotArea.getClazz() != null) {
+            NsslSlideHotArea
+                    .before("isInSlideDownHotArea")
+                    .run(param -> {
+                        if (mNowBarEnabled) param.setResult(false);
+                    });
+        }
+
         ControllersProvider.registerDozingCallback(mDozingChanged);
 
     }
