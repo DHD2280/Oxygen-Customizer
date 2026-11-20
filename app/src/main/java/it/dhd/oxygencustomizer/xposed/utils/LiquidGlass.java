@@ -240,6 +240,20 @@ public final class LiquidGlass {
         }
     }
 
+    public static Drawable windowBlur(View view, int blurRadius, float cornerRadius, int color) {
+        try {
+            Object viewRoot = callMethod(view, "getViewRootImpl");
+            if (viewRoot == null) return null;
+            Drawable blur = (Drawable) callMethod(viewRoot, "createBackgroundBlurDrawable");
+            callMethod(blur, "setBlurRadius", blurRadius);
+            callMethod(blur, "setCornerRadius", cornerRadius);
+            callMethod(blur, "setColor", color);
+            return blur;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
     private static Drawable createBackgroundBlur(View view, float radius) {
         try {
             Object viewRoot = callMethod(view, "getViewRootImpl");

@@ -270,7 +270,13 @@ public class NowBarHolder extends LinearLayout {
         AudioDataProvider.registerInfoCallback(this::showMusicNowBarIfNeeded);
         GradientDrawable background = new GradientDrawable();
         background.setColor(Color.parseColor("#6F161616"));
-        if (Build.VERSION.SDK_INT >= 35) {
+        Drawable windowBlur = Build.VERSION.SDK_INT >= 37
+                ? LiquidGlass.windowBlur(this, dp2px(mContext, GRAY_BLUR_RADIUS_DP), 0f, GRAY_BLUR_COLOR)
+                : null;
+        if (windowBlur != null) {
+            mAutoBlurredBackground.setBackground(windowBlur);
+            mBlurredBackground.setBackground(null);
+        } else if (Build.VERSION.SDK_INT >= 35) {
             try {
                 Drawable blurred = QsViewBackgroundKt.createMixColorDrawableForQsView(
                         mAutoBlurredBackground,
@@ -292,6 +298,9 @@ public class NowBarHolder extends LinearLayout {
         super.onDetachedFromWindow();
         mContext.unregisterReceiver(batteryReceiver);
     }
+
+    private static final int GRAY_BLUR_RADIUS_DP = 40;
+    private static final int GRAY_BLUR_COLOR = 0x6F161616;
 
     private final PageTransitionTransformer mPageTransformer = new PageTransitionTransformer();
 
